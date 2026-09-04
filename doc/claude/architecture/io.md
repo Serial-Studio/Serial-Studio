@@ -1,7 +1,7 @@
 # Architecture — IO & Drivers
 
 > Part of the architecture corpus ([index](../architecture.md)). Read this file in full
-> before touching `app/src/IO/` driver, manager, or protocol code. New drivers go through
+> before touching `core/Devices/IO/` driver, manager, or protocol code. New drivers go through
 > the `ss-new-driver` skill (BluetoothLE is the canonical reference).
 
 ## IO Architecture — No Singleton Drivers
@@ -110,7 +110,7 @@ namesake of a removed 0034 hook, but a different, much smaller thing (see below)
   long-lived run-loop-registered socket**: stale CFSocket sources fire into the freed engine and
   crash on macOS (observed 2026-08-10; same family as the 2026-06 socket ABA race). What changed
   is that none of it blocks the GUI thread any more. It lives in **`IO::AsyncTcpDial`**
-  (`app/src/IO/AsyncTcpDial.{h,cpp}`), a GUI-thread QObject that sequences one dial:
+  (`core/Devices/IO/AsyncTcpDial.{h,cpp}`), a GUI-thread QObject that sequences one dial:
   `QHostInfo::lookupHost` (skipped when the host is already an address literal), addresses
   reordered **IPv4 first** (a `localhost` resolving `::1` ahead of an IPv4-only listener used to
   cost a whole attempt), an optional QTimer-paced refusal probe on throwaway sockets, then one
@@ -296,15 +296,16 @@ namesake of a removed 0034 hook, but a different, much smaller thing (see below)
   still blocks until the controller answers, so the socket and the tag handles live on the worker
   thread only.
   **Both workers derive from `IO::Drivers::PolledPlcWorkerBase`**
-  (`app/src/IO/Drivers/PolledPlcWorkerBase.{h,cpp}`, spec 0075 E8), which owns the
+  (`core/Devices/IO/Drivers/PolledPlcWorkerBase.{h,cpp}`, spec 0075 E8), which owns the
   protocol-independent half: the `std::atomic<bool>` abort latch, the poll timer, the
   change-latch table (`latchChannel` — an unchanged value costs no wire entry), the `OpcUaWire`
   delta encoder (`publishDirtySlots`, double-buffered frames, dirty marks consumed by the
   publish), the report-once link loss, the one-shot dial verdict, and the three pulled counters
   `readsOk` / `readsFailed` / `framesPublished`. Subclasses implement exactly three hooks:
   `connectToPlc()`, `pollTick()`, `releaseResources()`. What stays per driver is the protocol:
-  `S7PollWorker` keeps the ISO-on-TCP handshake through the in-house `S7/IsoTsap` + `S7Pdu`
-  codec, its chunk plan, and its own two extra atomics `m_lastFault` / `m_itemErrors`;
+  `S7PollWorker` keeps the ISO-on-TCP handshake through the in-house `core/Protocols/S7/IsoTsap.h`
+  + `S7Pdu` codec (spec 0076), its chunk plan, and its own two extra atomics `m_lastFault` /
+  `m_itemErrors`;
   `EipPollWorker` keeps the vendored-libplctag seam (`kEipBackend`, so the TU reads the same with
   or without the lib; every `plc_tag_create`/read/destroy happens on the worker) and its
   dead-tick watchdog. `kEipBackend` is a label, not an injectable seam, which is why the worker
@@ -324,7 +325,7 @@ namesake of a removed 0034 hook, but a different, much smaller thing (see below)
   slots, and a report's live `kind` overwrites a restored one, so a measured value and a
   single-point indication on the same address can no longer overwrite each other. Monitor
   direction only: no control direction exists, `write()` returns -1. The in-house stack lives in
-  `Iec104/Apci` + `Iec104/Asdu`.
+  `core/Protocols/Iec104/Apci.h` + `Asdu` (spec 0076).
 - **All three industrial pollers publish through the OPC UA wire lane.** Dirty slots encode
   into `OpcUaWire` delta frames (`wireTypeFor`, `kMaxTags` cap) latched by the same native
   template family, stamped with the poll's own capture time and clamped monotonic on the GUI
@@ -353,7 +354,7 @@ namesake of a removed 0034 hook, but a different, much smaller thing (see below)
   (candleLight), Seeed/Waveshare USB-CAN Analyzer (CH340 serial), SLCAN/LAWICEL — each a
   `QCanBusDevice` backend keyed by a plugin key beside Qt's own plugins. The two **serial**
   adapters share `IO::Drivers::SerialCanBackendBase`
-  (`app/src/IO/Drivers/CANBus/SerialCanBackendBase.{h,cpp}`), which owns everything that is not
+  (`core/Devices/IO/Drivers/CANBus/SerialCanBackendBase.{h,cpp}`), which owns everything that is not
   the wire protocol: the `QSerialPort`, the open/close sequences with their open-ack timeout, the
   bounded receive buffer (`kMaxRxBufferSize` 65536; over-cap clears the buffer and counts a drop)
   and the fatal-versus-ignorable `errorOccurred` classification, so a dead adapter reports the
@@ -361,8 +362,8 @@ namesake of a removed 0034 hook, but a different, much smaller thing (see below)
   `drainBuffer` and optionally `openReplyIsError` / `sendShutdown`: `SlcanBackend` keeps the
   LAWICEL ASCII grammar (with the id and DLC parse flags now separated, D8, and the open verdict
   read from the adapter's BEL reply, D19), `SeeedCanBackend` the analyzer's variable-length
-  packets. `GsUsbCanBackend` is NOT a subclass — it is USB, not serial. `CanReassembly`
-  holds the two fixed-cap reassemblers (J1939-21 TP: TP.CM announcements plus BAM and
+  packets. `GsUsbCanBackend` is NOT a subclass — it is USB, not serial.
+  `core/Protocols/CAN/CanReassembly.h` (spec 0076) holds the two fixed-cap reassemblers (J1939-21 TP: TP.CM announcements plus BAM and
   RTS/CTS sessions; ISO 15765-2: FirstFrame + ConsecutiveFrames) with pulled counters
   (spec 0033), so >8-byte PGNs and multi-frame diagnostics decode like single frames instead
   of silently never appearing.
@@ -398,7 +399,8 @@ namesake of a removed 0034 hook, but a different, much smaller thing (see below)
   (a failed dial emits no `disconnected`); Process marshals a pipe-peer close to
   `onPipeClosed()` from the read thread. CANBus rate-limits its error box (one per 5 s) so a
   flapping bus cannot stack a modal storm. The CANable (gs_usb) backend negotiates CAN FD
-  when the firmware advertises it (spec 0049; wire vocabulary in `GsUsbProtocol.h`, shared
+  when the firmware advertises it (spec 0049; wire vocabulary in
+  `core/Protocols/CAN/GsUsbProtocol.h`, spec 0076, shared
   with `tst_gsusb_protocol`), detects mid-session unplug in its own read loop, and feeds a
   process-lifetime libusb hot-plug callback (delivered by a dedicated event-pump thread on the
   shared context — libusb only dispatches hot-plug from `libusb_handle_events()`) whose only
@@ -414,7 +416,7 @@ namesake of a removed 0034 hook, but a different, much smaller thing (see below)
 
 ## ConnectionManager's Sub-objects
 
-The facade owns its concerns as member sub-objects under `app/src/IO/ConnectionManager/`, one
+The facade owns its concerns as member sub-objects under `core/Devices/IO/ConnectionManager/`, one
 class per `.h/.cpp` pair (`ConnectFanOut`, `DeviceIoRouter`, `DeviceTableQuery`, `DriverFactory`,
 `DriverUiRegistry`, `ReplyCapture`, `StreamConfigBuilder`, `StreamWorkerPool`, `UiDriverSync`).
 The four that matter on the connect path:
@@ -461,7 +463,8 @@ Other IO invariants worth naming at the point of action:
   blocking two seconds on a child that ignores SIGTERM, `ps` enumeration is asynchronous, and the
   crash double-drop is guarded because a crashing process reports through BOTH `finished()` and
   `errorOccurred()`.
-- **Modbus RTU framing is its own Qt-Core-only unit.** `Modbus/ModbusRtuCodec.{h,cpp}` holds
+- **Modbus RTU framing is its own Qt-Core-only unit.**
+  `core/Protocols/Modbus/ModbusRtuCodec.{h,cpp}` (spec 0076) holds
   exactly two free functions, `functionCodeForType()` and `appendCrc()` (CRC-16/Modbus, low octet
   first), so what a consumer validates is testable without a device. **The request cap is
   type-aware**: `ModbusRegisterGroups::maxCountForType()` gives FC01/FC02 their own 2000-bit
@@ -470,7 +473,7 @@ Other IO invariants worth naming at the point of action:
   `[unit, fc, 0]` placeholder and steps the cursor from BOTH failure exits, so a dropped reply
   cannot put two frames of the same group back to back (E3).
 
-## The Async Task-Tree Engine (`app/src/Async/`)
+## The Async Task-Tree Engine (`core/Core/Async/`, spec 0076)
 
 The engine outlived the connection flows and is still built and unit-tested
 (`tst_async_engine`, `tst_async_combinators`): `TaskTree.{h,cpp}` (`Async::Task` base +
@@ -522,6 +525,8 @@ results.
 ## File Transmission (Pro)
 
 `IO::FileTransmission` + `IO::Protocols::*`: controller +
-XMODEM/YMODEM/ZMODEM. Incoming data routes from `ConnectionManager::onRawDataReceived` →
+XMODEM/YMODEM/ZMODEM (the protocol classes live in `core/Protocols/FileTransfer/`, spec 0076;
+the facade stays in `core/Devices/IO/FileTransmission.h/.cpp`). Incoming data routes from
+`ConnectionManager::onRawDataReceived` →
 `FileTransmission::onRawDataReceived` (guarded by `active()`). Protocols emit
 `writeRequested(QByteArray)`; controller calls `ConnectionManager::writeData()`.

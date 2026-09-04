@@ -1611,13 +1611,16 @@ def find_qml_underscore_property_violations(
 
 
 def _is_first_party(path: Path) -> bool:
-    """True when `path` lives under app/qml or app/src — the only trees whose
-    sources own the project's structural style. Vendored libraries (lib/),
-    embedded examples, and generated artifacts keep their upstream layout
-    even when they happen to match a tracked suffix."""
+    """True when `path` lives under app/qml, app/src, or the top-level core/
+    library tree — the only trees whose sources own the project's structural
+    style. Vendored libraries (lib/), embedded examples, and generated
+    artifacts keep their upstream layout even when they happen to match a
+    tracked suffix."""
     parts = path.resolve().parts
-    return ("app", "qml") in zip(parts, parts[1:]) or ("app", "src") in zip(
-        parts, parts[1:]
+    return (
+        ("app", "qml") in zip(parts, parts[1:])
+        or ("app", "src") in zip(parts, parts[1:])
+        or "core" in parts[:-1]
     )
 
 
@@ -1903,7 +1906,7 @@ def find_todouble_violations(
 # Q_ASSERT is compiled out under QT_NO_DEBUG, so every precondition it guards
 # is unchecked in the shipped binary — the assert reads as a guard while release
 # performs the unchecked subscript / shift / divide anyway. SS_ASSERT (from
-# app/src/SSAssert.h) keeps the debug abort and adds a release path that reports
+# core/Core/SSAssert.h) keeps the debug abort and adds a release path that reports
 # once per site and runs a caller-supplied recovery action. SSAssert.h defines
 # the wrapper; HotpathOptimization.h holds SS_ASSUME's debug fallback.
 _QASSERT_RE = re.compile(r"\bQ_ASSERT(?:_X)?\s*\(")
@@ -1950,26 +1953,26 @@ def find_qassert_violations(
 # macro is pinned to the hotpath TUs; growing this list is a review decision.
 _HOTPATH_ASSERT_RE = re.compile(r"\bSS_ASSERT_HOTPATH\s*\(")
 _HOTPATH_ASSERT_ALLOWED = (
-    "app/src/SSAssert.h",
-    "app/src/DSPSimd.h",
-    "app/src/DataModel/Frame.h",
-    "app/src/DataModel/Frame.cpp",
-    "app/src/DataModel/DataBlock.h",
-    "app/src/DataModel/FrameBuilder.h",
-    "app/src/DataModel/FrameBuilder.cpp",
-    "app/src/DataModel/FrameBuilder/BlockPublisher.cpp",
-    "app/src/DataModel/FrameBuilder/BlockStager.cpp",
-    "app/src/DataModel/FrameBuilder/ReplayIngest.cpp",
-    "app/src/IO/CircularBuffer.h",
-    "app/src/IO/CircularBuffer.cpp",
-    "app/src/IO/FrameReader.h",
-    "app/src/IO/FrameReader.cpp",
-    "app/src/IO/PipelineHost.h",
-    "app/src/IO/PipelineHost.cpp",
-    "app/src/IO/StreamWorker.h",
-    "app/src/IO/StreamWorker.cpp",
-    "app/src/UI/Dashboard.h",
-    "app/src/UI/Dashboard.cpp",
+    "core/Core/SSAssert.h",
+    "core/Core/DSPSimd.h",
+    "core/Pipeline/DataModel/Frame.h",
+    "core/Pipeline/DataModel/Frame.cpp",
+    "core/Pipeline/DataModel/DataBlock.h",
+    "core/Pipeline/DataModel/FrameBuilder.h",
+    "core/Pipeline/DataModel/FrameBuilder.cpp",
+    "core/Pipeline/DataModel/FrameBuilder/BlockPublisher.cpp",
+    "core/Pipeline/DataModel/FrameBuilder/BlockStager.cpp",
+    "core/Pipeline/DataModel/FrameBuilder/ReplayIngest.cpp",
+    "core/Core/CircularBuffer.h",
+    "core/Core/CircularBuffer.cpp",
+    "core/Pipeline/IO/FrameReader.h",
+    "core/Pipeline/IO/FrameReader.cpp",
+    "core/Pipeline/IO/PipelineHost.h",
+    "core/Pipeline/IO/PipelineHost.cpp",
+    "core/Pipeline/IO/StreamWorker.h",
+    "core/Pipeline/IO/StreamWorker.cpp",
+    "core/Ui/UI/Dashboard.h",
+    "core/Ui/UI/Dashboard.cpp",
 )
 
 
@@ -2002,6 +2005,36 @@ def find_hotpath_assert_scope_violations(
     return violations
 
 
+_BUS_ON_HOTPATH_RE = re.compile(r"\bMessageBus\b|Core/Bus/")
+
+
+def find_bus_on_hotpath_violations(
+    raw_lines: list[str], path: Path, fence_mask: list[bool]
+) -> list[Violation]:
+    """Flag the message bus inside a hotpath TU (error): publish allocates, blocks stay pooled."""
+    posix = path.as_posix()
+    if not any(posix.endswith(allowed) for allowed in _HOTPATH_ASSERT_ALLOWED):
+        return []
+
+    violations: list[Violation] = []
+    for i, line in enumerate(raw_lines):
+        if i < len(fence_mask) and fence_mask[i]:
+            continue
+        if _BUS_ON_HOTPATH_RE.search(line):
+            violations.append(
+                Violation(
+                    path,
+                    i + 1,
+                    "bus-on-hotpath",
+                    "`Core::Bus::MessageBus` is command/state/notification rate: a publish "
+                    "allocates one message and may queue a cross-thread call. The per-frame "
+                    "path keeps the pooled block publication (spec 0055); route the event "
+                    "from the display tick or a sink instead (spec 0076 R13).",
+                )
+            )
+    return violations
+
+
 # Trial parity: an active trial installs a valid CommercialToken, so every Pro
 # feature gate must count trial users as entitled -- SerialStudio::activated()
 # in C++, or the paid probe paired with Cpp_Licensing_Trial state in QML.
@@ -2024,9 +2057,9 @@ _TRIAL_PARITY_TRIAL_RE = re.compile(
 )
 _TRIAL_PARITY_WINDOW = 4
 _TRIAL_PARITY_ALLOWED = (
-    "app/src/Misc/Translator.cpp",
+    "core/Ui/Misc/Translator.cpp",
     "app/src/Misc/CLI.cpp",
-    "app/src/API/Handlers/LicensingHandler.cpp",
+    "core/Api/API/Handlers/LicensingHandler.cpp",
     "app/qml/main.qml",
     "app/qml/Dialogs/LicenseManagement.qml",
     "app/qml/Dialogs/Welcome.qml",
@@ -2184,6 +2217,7 @@ def process_file(path: Path, fix: bool) -> tuple[list[Violation], str | None]:
         violations.extend(find_qassert_violations(raw_lines, path, fence_mask))
         violations.extend(
             find_hotpath_assert_scope_violations(raw_lines, path, fence_mask)
+            + find_bus_on_hotpath_violations(raw_lines, path, fence_mask)
         )
         violations.extend(find_undo_scope_violations(raw_lines, path, fence_mask))
         violations.extend(
@@ -2371,6 +2405,7 @@ def default_targets() -> list[Path]:
     repo = Path(__file__).resolve().parent.parent
     targets: list[Path] = [
         repo / "app",
+        repo / "core",
         repo / "lib",
         repo / "examples",
         repo / "scripts",
@@ -2650,7 +2685,7 @@ the *why* survives.
 - **No bare `Q_ASSERT`.** It compiles out under `QT_NO_DEBUG`, so the
   precondition is unchecked in the shipped binary while the code reads
   as if it were guarded. Use `SS_ASSERT(cond, <recovery>)` from
-  `app/src/SSAssert.h` (debug abort kept, release reports once per site
+  `core/Core/SSAssert.h` (debug abort kept, release reports once per site
   then runs the recovery), `SS_ASSERT_LOG(cond)` when no recovery is
   meaningful, or `SS_ASSUME(cond)` for a guard that provably already ran
   in a zero-branch hot kernel. `continue` / `break` are not valid
@@ -2704,7 +2739,7 @@ the kinds below are short labels.
 - `qt-qassert-direct` — bare `Q_ASSERT` / `Q_ASSERT_X` outside a
   `// code-verify off` fence. It compiles out under `QT_NO_DEBUG`, so the
   shipped binary runs the guarded code unchecked. Use `SS_ASSERT(cond,
-  <recovery>)` / `SS_ASSERT_LOG(cond)` from `app/src/SSAssert.h`; an
+  <recovery>)` / `SS_ASSERT_LOG(cond)` from `core/Core/SSAssert.h`; an
   expensive predicate (walks a container, allocates) stays a fenced
   `Q_ASSERT`. Error since the 2026-07 sweep converted the last bare site.
 - `qml-hardcoded-color` — a hex (`"#2ecc71"`) or named (`"white"`) color
@@ -3250,8 +3285,8 @@ _SDK_GENERATED = (
 
 def _should_check_sdk(paths: list[Path], repo_root: Path) -> bool:
     """True when this run covers the SDK: a whole-tree default run, or any path
-    under app/ or scripts/ where the generator and its inputs live."""
-    sdk_roots = (repo_root / "app", repo_root / "scripts")
+    under app/, core/, or scripts/ where the generator and its inputs live."""
+    sdk_roots = (repo_root / "app", repo_root / "core", repo_root / "scripts")
     for p in paths:
         rp = p.resolve()
         if any(rp == r or r in rp.parents or rp in r.parents for r in sdk_roots):
@@ -3368,10 +3403,10 @@ def _sdk_staleness_violations(repo_root: Path) -> list[Violation]:
 _API_GENERATED = {
     "app/rcc/api/proto-fields.json": "never edit by hand",
     "doc/grpc/serialstudio-typed.proto": "Auto-generated by Serial Studio ProtoGenerator",
-    "app/src/DataModel/Generated/DatasetRegistry.h": "never edit by hand",
-    "app/src/DataModel/Generated/DatasetSerialization.cpp": "never edit by hand",
-    "app/src/DataModel/Generated/DatasetForm.cpp": "never edit by hand",
-    "app/src/API/Generated/DatasetApiFields.cpp": "never edit by hand",
+    "core/Pipeline/DataModel/Generated/DatasetRegistry.h": "never edit by hand",
+    "core/Pipeline/DataModel/Generated/DatasetSerialization.cpp": "never edit by hand",
+    "core/Pipeline/DataModel/Generated/DatasetForm.cpp": "never edit by hand",
+    "core/Api/API/Generated/DatasetApiFields.cpp": "never edit by hand",
 }
 
 _LEDGER_REL = "app/rcc/api/proto-fields.json"
@@ -3421,8 +3456,8 @@ _REGISTRY_MANIFEST = "app/rcc/properties/dataset.json"
 _REGISTRY_IDENTITY_KEYS = frozenset({"GroupId", "DatasetId", "UniqueId", "Title"})
 _REGISTRY_KEY_CLUSTER = 4
 _REGISTRY_GENERATED_DIRS = (
-    "app/src/DataModel/Generated/",
-    "app/src/API/Generated/",
+    "core/Pipeline/DataModel/Generated/",
+    "core/Api/API/Generated/",
 )
 
 # Non-generated files that legitimately name several dataset keys, each with the
@@ -3430,17 +3465,17 @@ _REGISTRY_GENERATED_DIRS = (
 _REGISTRY_KEY_ALLOWED = {
     # Home of the group/action/source serializers (Keys:: constants moved to FrameKeys.h,
     # spec 0070).
-    "app/src/DataModel/Frame.h": "sibling-entity serializers",
-    "app/src/DataModel/FrameKeys.h": "Keys:: declarations",
+    "core/Pipeline/DataModel/Frame.h": "sibling-entity serializers",
+    "core/Pipeline/DataModel/FrameKeys.h": "Keys:: declarations",
     # Alarm bands and FFT markers are nested entities the manifest routes to
     # hand-written readers through declared subEntity hooks.
-    "app/src/DataModel/Frame.cpp": "hand-written sub-entity readers declared as manifest hooks",
+    "core/Pipeline/DataModel/Frame.cpp": "hand-written sub-entity readers declared as manifest hooks",
     # Builds synthetic projects for the throughput gate; not a document surface.
     "app/src/Benchmark/HotpathBenchmark.cpp": "synthetic benchmark project fixtures",
     # The manifest's named escape hatches, split across two TUs so the unit
     # tier can link the ProjectModel-free validators alone.
-    "app/src/DataModel/Project/PropertyHooks.cpp": "the manifest's named escape hatches",
-    "app/src/DataModel/Project/PropertyValidators.cpp": "the ProjectModel-free validators",
+    "core/Pipeline/DataModel/Project/PropertyHooks.cpp": "the manifest's named escape hatches",
+    "core/Pipeline/DataModel/Project/PropertyValidators.cpp": "the ProjectModel-free validators",
 }
 
 
@@ -3479,7 +3514,8 @@ def _registry_field_map_violations(repo_root: Path) -> list[Violation]:
 
     pattern = re.compile(r"\bKeys::(" + "|".join(sorted(keys)) + r")\b")
     out: list[Violation] = []
-    for path in sorted((repo_root / "app" / "src").rglob("*")):
+    trees = (repo_root / "app" / "src", repo_root / "core")
+    for path in sorted(p for tree in trees for p in tree.rglob("*")):
         if path.suffix not in (".cpp", ".h"):
             continue
 
@@ -3592,14 +3628,14 @@ _CENSUS_SUFFIXES = (".cpp", ".cc", ".cxx", ".mm", ".h", ".hpp", ".hxx")
 
 
 def _collect_singleton_census(repo_root: Path) -> dict:
-    """Walk app/src and aggregate the per-file singleton census."""
-    tree = repo_root / "app" / "src"
+    """Walk app/src and core and aggregate the per-file singleton census."""
+    trees = [repo_root / "app" / "src", repo_root / "core"]
     buckets = {name: 0 for name in _SEMANTIC_RULES.SINGLETON_CENSUS_BUCKETS}
     per_file: dict[str, dict] = {}
     per_class: dict[str, int] = {}
     total = 0
 
-    for path in sorted(iter_source_files([tree])):
+    for path in sorted(iter_source_files(trees)):
         if path.suffix not in _CENSUS_SUFFIXES:
             continue
         try:
@@ -3726,7 +3762,7 @@ def _run_singleton_census(repo_root: Path, check: bool, accept: bool) -> int:
 
 _TU_CENSUS_BASELINE = Path(__file__).with_name("tu-census.json")
 _TU_CENSUS_SUFFIXES = (".cpp", ".h", ".qml")
-_TU_CENSUS_TREES = ("app/src", "app/qml")
+_TU_CENSUS_TREES = ("app/src", "app/qml", "core")
 _TU_CENSUS_THRESHOLD = 1500
 _TU_CENSUS_TIERS = (
     (4000, "critical"),
@@ -3889,7 +3925,7 @@ def _run_tu_census(repo_root: Path, check: bool, accept: bool) -> int:
 
 _DUP_CENSUS_BASELINE = Path(__file__).with_name("dup-census.json")
 _DUP_CENSUS_SUFFIXES = (".cpp", ".h", ".qml")
-_DUP_CENSUS_TREES = ("app/src", "app/qml")
+_DUP_CENSUS_TREES = ("app/src", "app/qml", "core")
 _DUP_WINDOW_LINES = 10
 _DUP_PAIR_THRESHOLD = 40
 

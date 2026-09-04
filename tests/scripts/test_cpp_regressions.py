@@ -13,27 +13,27 @@ ROOT = Path(__file__).resolve().parents[2]
 
 
 _SPEC_0070_SPLITS = {
-    "app/src/AI/ToolDispatcher.cpp": "app/src/AI/Tools",
-    "app/src/AI/Conversation.cpp": "app/src/AI/Conversation",
-    "app/src/Sessions/DatabaseManager.cpp": "app/src/Sessions/DatabaseManager",
-    "app/src/Sessions/Player.cpp": "app/src/Sessions/Player",
-    "app/src/IO/Drivers/BluetoothLE.cpp": "app/src/IO/Drivers/BluetoothLE",
-    "app/src/IO/Drivers/USB.cpp": "app/src/IO/Drivers/USB",
-    "app/src/IO/Drivers/Audio.cpp": "app/src/IO/Drivers/Audio",
-    "app/src/IO/Drivers/OpcUa.cpp": "app/src/IO/Drivers/OpcUa",
-    "app/src/IO/Drivers/Modbus.cpp": "app/src/IO/Drivers/Modbus",
-    "app/src/IO/ConnectionManager.cpp": "app/src/IO/ConnectionManager",
-    "app/src/UI/Widgets/Waterfall.cpp": "app/src/UI/Widgets/Waterfall",
-    "app/src/UI/Widgets/Terminal.cpp": "app/src/UI/Widgets/Terminal",
-    "app/src/UI/Taskbar.cpp": "app/src/UI/Taskbar",
-    "app/src/UI/WindowManager.cpp": "app/src/UI/WindowManager",
-    "app/src/UI/Dashboard.cpp": "app/src/UI/Dashboard",
-    "app/src/UI/Widgets/PainterContext.cpp": "app/src/UI/Widgets/Painter",
-    "app/src/API/Server.cpp": "app/src/API/Server",
-    "app/src/CSV/Player.cpp": "app/src/CSV/Player",
-    "app/src/DataModel/FrameBuilder.cpp": "app/src/DataModel/FrameBuilder",
-    "app/src/MQTT/Publisher.cpp": "app/src/MQTT",
-    "app/src/Misc/ExtensionManager.cpp": "app/src/Misc/Extensions",
+    "core/Ui/AI/ToolDispatcher.cpp": "core/Ui/AI/Tools",
+    "core/Ui/AI/Conversation.cpp": "core/Ui/AI/Conversation",
+    "core/Storage/Sessions/DatabaseManager.cpp": "core/Storage/Sessions/DatabaseManager",
+    "core/Storage/Sessions/Player.cpp": "core/Storage/Sessions/Player",
+    "core/Devices/IO/Drivers/BluetoothLE.cpp": "core/Devices/IO/Drivers/BluetoothLE",
+    "core/Devices/IO/Drivers/USB.cpp": "core/Devices/IO/Drivers/USB",
+    "core/Devices/IO/Drivers/Audio.cpp": "core/Devices/IO/Drivers/Audio",
+    "core/Devices/IO/Drivers/OpcUa.cpp": "core/Devices/IO/Drivers/OpcUa",
+    "core/Devices/IO/Drivers/Modbus.cpp": "core/Devices/IO/Drivers/Modbus",
+    "core/Devices/IO/ConnectionManager.cpp": "core/Devices/IO/ConnectionManager",
+    "core/Ui/UI/Widgets/Waterfall.cpp": "core/Ui/UI/Widgets/Waterfall",
+    "core/Ui/UI/Widgets/Terminal.cpp": "core/Ui/UI/Widgets/Terminal",
+    "core/Ui/UI/Taskbar.cpp": "core/Ui/UI/Taskbar",
+    "core/Ui/UI/WindowManager.cpp": "core/Ui/UI/WindowManager",
+    "core/Ui/UI/Dashboard.cpp": "core/Ui/UI/Dashboard",
+    "core/Ui/UI/Widgets/PainterContext.cpp": "core/Ui/UI/Widgets/Painter",
+    "core/Api/API/Server.cpp": "core/Api/API/Server",
+    "core/Storage/CSV/Player.cpp": "core/Storage/CSV/Player",
+    "core/Pipeline/DataModel/FrameBuilder.cpp": "core/Pipeline/DataModel/FrameBuilder",
+    "core/Devices/MQTT/Publisher.cpp": "core/Devices/MQTT",
+    "core/Ui/Misc/ExtensionManager.cpp": "core/Ui/Misc/Extensions",
 }
 
 
@@ -65,7 +65,7 @@ def test_project_model_save_returns_real_result():
     result of finalizeProjectSave() rather than a hardcoded `true`. The explanatory
     in-body comment was stripped by the comment-cleanup pass, so pin the behaviour to
     the code: the non-dialog tail of saveJsonFile returns finalizeProjectSave()."""
-    text = _read("app/src/DataModel/Project/ProjectPersistence.cpp")
+    text = _read("core/Pipeline/DataModel/Project/ProjectPersistence.cpp")
 
     body = re.search(
         r"bool DataModel::ProjectPersistence::saveJsonFile\(const bool askPath\)[\s\S]*?\n\}",
@@ -84,19 +84,19 @@ def test_project_model_save_returns_real_result():
 
 
 def test_hal_write_api_uses_signed_sizes():
-    hal = _read("app/src/IO/HAL_Driver.h")
+    hal = _read("core/Devices/IO/HAL_Driver.h")
     assert re.search(
         r"\[\[nodiscard\]\] virtual qint64 write\(const QByteArray& data\)\s*=\s*0;",
         hal,
     )
 
     for rel in [
-        "app/src/IO/Drivers/UART.h",
-        "app/src/IO/Drivers/Network.h",
-        "app/src/IO/Drivers/BluetoothLE.h",
-        "app/src/IO/Drivers/CANBus.h",
-        "app/src/IO/Drivers/Audio.h",
-        "app/src/IO/Drivers/Modbus.h",
+        "core/Devices/IO/Drivers/UART.h",
+        "core/Devices/IO/Drivers/Network.h",
+        "core/Devices/IO/Drivers/BluetoothLE.h",
+        "core/Devices/IO/Drivers/CANBus.h",
+        "core/Devices/IO/Drivers/Audio.h",
+        "core/Devices/IO/Drivers/Modbus.h",
     ]:
         assert "[[nodiscard]] qint64 write(const QByteArray& data) override;" in _read(
             rel
@@ -104,7 +104,7 @@ def test_hal_write_api_uses_signed_sizes():
 
 
 def test_io_manager_bounds_written_byte_count():
-    text = _read("app/src/IO/ConnectionManager.cpp")
+    text = _read("core/Devices/IO/ConnectionManager.cpp")
 
     assert (
         "const qint64 boundedBytes = qMin<qint64>(bytes, writtenData.size());" in text
@@ -117,7 +117,7 @@ def test_csv_player_catchup_uses_next_frame_timestamps():
     re-stamped wall clock. Spec 0022 replaced the in-memory while-loop with the streamed
     recomputeMsUntilNext + catchUpTargetRow pair; this pins the same invariant in that shape.
     """
-    text = _read("app/src/CSV/Player.cpp")
+    text = _read("core/Storage/CSV/Player.cpp")
 
     body = re.search(
         r"bool CSV::Player::recomputeMsUntilNext\(qint64& msUntilNext\)[\s\S]*?\n\}",
@@ -144,7 +144,7 @@ def test_mdf4_player_catchup_uses_next_frame_timestamp():
     """Same invariant for the MDF4 player: the playback delay and the catch-up scan read
     m_timestamps[pos + 1] (the recording's next-frame time), never a re-stamped clock.
     """
-    text = _read("app/src/MDF4/Player.cpp")
+    text = _read("core/Storage/MDF4/Player.cpp")
 
     update = re.search(r"void MDF4::Player::updateData\(\)[\s\S]*?\n\}", text)
     assert update is not None
@@ -163,7 +163,7 @@ def test_mdf4_player_catchup_uses_next_frame_timestamp():
 
 
 def test_api_server_enabled_state_tracks_listen_failure():
-    text = _read("app/src/API/Server.cpp")
+    text = _read("core/Api/API/Server.cpp")
 
     assert "bool effectiveEnabled = enabled;" in text
     assert "effectiveEnabled = false;" in text
@@ -173,10 +173,10 @@ def test_api_server_enabled_state_tracks_listen_failure():
 
 
 def test_mcp_schema_matches_registered_command_names():
-    network = _read("app/src/API/Handlers/NetworkHandler.cpp")
-    project = _read("app/src/API/Handlers/ProjectFileCommands.cpp")
-    csv = _read("app/src/API/Handlers/CSVExportHandler.cpp")
-    uart = _read("app/src/API/Handlers/UARTHandler.cpp")
+    network = _read("core/Api/API/Handlers/NetworkHandler.cpp")
+    project = _read("core/Api/API/Handlers/ProjectFileCommands.cpp")
+    csv = _read("core/Api/API/Handlers/CSVExportHandler.cpp")
+    uart = _read("core/Api/API/Handlers/UARTHandler.cpp")
 
     assert 'QStringLiteral("io.network.setRemoteAddress")' in network
     assert 'QStringLiteral("io.network.setUdpMulticast")' in network
@@ -195,23 +195,23 @@ def test_mcp_schema_matches_registered_command_names():
 
 
 def test_ble_characteristic_path_guards_index_before_at():
-    text = _read("app/src/IO/Drivers/BluetoothLE.cpp")
+    text = _read("core/Devices/IO/Drivers/BluetoothLE.cpp")
 
     assert "if (m_selectedCharacteristic == -1)" in text
     assert "m_selectedCharacteristic < m_characteristics.count()" in text
 
 
 def test_macos_native_window_validates_qwindow_before_winid():
-    text = _read("app/src/Platform/NativeWindow_macOS.mm")
+    text = _read("core/Ui/Platform/NativeWindow_macOS.mm")
 
     assert "if (!win)" in text
     assert "if (!view)" in text
 
 
 def test_hotpath_byte_array_ptrs_are_null_guarded():
-    frame_reader = _read("app/src/IO/FrameReader.cpp")
-    server = _read("app/src/API/Server.cpp")
-    console = _read("app/src/Console/Handler.cpp")
+    frame_reader = _read("core/Pipeline/IO/FrameReader.cpp")
+    server = _read("core/Api/API/Server.cpp")
+    console = _read("core/Ui/Console/Handler.cpp")
 
     # FrameReader::processData receives an IO::CapturedDataPtr whose `data`
     # field is now a QByteArray (the shared_ptr indirection was removed
@@ -226,14 +226,14 @@ def test_hotpath_byte_array_ptrs_are_null_guarded():
 
 
 def test_window_manager_taskbar_access_is_guarded():
-    text = _read("app/src/UI/WindowManager.cpp")
+    text = _read("core/Ui/UI/WindowManager.cpp")
 
     assert "m_taskbar = qobject_cast<UI::Taskbar*>(taskbar);" in text
     assert "if (m_taskbar)\n      m_taskbar->setActiveWindow(nullptr);" in text
 
 
 def test_usb_close_joins_threads_with_quit_then_wait():
-    text = _read("app/src/IO/Drivers/USB.cpp")
+    text = _read("core/Devices/IO/Drivers/USB.cpp")
 
     # The read and event threads run on the started + DirectConnection idiom,
     # so quit() before wait() is mandatory to drop out of exec().
@@ -245,8 +245,8 @@ def test_usb_close_joins_threads_with_quit_then_wait():
 
 
 def test_frame_parser_uses_qcoreapplication_event_forwarding():
-    text = _read("app/src/DataModel/Editors/JsCodeEditor.cpp")
-    bridge = _read("app/src/DataModel/Editors/EmbeddedCodeEditor.cpp")
+    text = _read("core/Pipeline/DataModel/Editors/JsCodeEditor.cpp")
+    bridge = _read("core/Pipeline/DataModel/Editors/EmbeddedCodeEditor.cpp")
 
     assert "QCoreApplication::sendEvent(&m_widget, event);" in bridge
     assert "DW_EXEC_EVENT" not in text
@@ -254,8 +254,10 @@ def test_frame_parser_uses_qcoreapplication_event_forwarding():
 
 
 def test_project_editor_bounds_checks_combo_indices():
-    text = _read("app/src/DataModel/ProjectEditor.cpp")
-    for tu in sorted((ROOT / "app/src/DataModel/Project").glob("ProjectEditor*.cpp")):
+    text = _read("core/Pipeline/DataModel/ProjectEditor.cpp")
+    for tu in sorted(
+        (ROOT / "core/Pipeline/DataModel/Project").glob("ProjectEditor*.cpp")
+    ):
         text += tu.read_text(encoding="utf-8")
 
     for expected in [
@@ -303,7 +305,7 @@ def test_license_guard_present_in_serial_studio_activated():
 
 def test_license_guard_present_in_mqtt_connect():
     """IO::Drivers::MQTT::open() must check SS_LICENSE_GUARD()."""
-    text = _read("app/src/IO/Drivers/MQTT.cpp")
+    text = _read("core/Devices/IO/Drivers/MQTT.cpp")
 
     assert "SS_LICENSE_GUARD()" in text
     assert re.search(
@@ -314,7 +316,7 @@ def test_license_guard_present_in_mqtt_connect():
 
 def test_license_guard_present_in_mqtt_hotpath():
     """MQTT::Publisher::licenseValid() must check SS_LICENSE_GUARD()."""
-    text = _read("app/src/MQTT/Publisher.cpp")
+    text = _read("core/Devices/MQTT/Publisher.cpp")
 
     assert re.search(
         r"token\.isValid\(\)\s*\n?\s*&&\s*SS_LICENSE_GUARD\(\)",
@@ -324,7 +326,7 @@ def test_license_guard_present_in_mqtt_hotpath():
 
 def test_license_guard_present_in_mdf4_export():
     """MDF4::ExportWorker::createFile() must check SS_LICENSE_GUARD()."""
-    text = _read("app/src/MDF4/Export.cpp")
+    text = _read("core/Storage/MDF4/Export.cpp")
 
     assert (
         text.count("SS_LICENSE_GUARD()") >= 2
@@ -333,7 +335,7 @@ def test_license_guard_present_in_mdf4_export():
 
 def test_license_guard_present_in_console_export():
     """Console::ExportWorker::createFile() must check SS_LICENSE_GUARD()."""
-    text = _read("app/src/Console/Export.cpp")
+    text = _read("core/Ui/Console/Export.cpp")
 
     assert (
         text.count("SS_LICENSE_GUARD()") >= 2
@@ -342,14 +344,14 @@ def test_license_guard_present_in_console_export():
 
 def test_license_guard_present_in_connection_manager():
     """IO::ConnectionManager::connectDevice() must check SS_LICENSE_GUARD()."""
-    text = _read("app/src/IO/ConnectionManager.cpp")
+    text = _read("core/Devices/IO/ConnectionManager.cpp")
 
     assert "SS_LICENSE_GUARD()" in text
 
 
 def test_license_guard_present_in_dashboard():
     """UI::Dashboard pro feature gates must check SS_LICENSE_GUARD()."""
-    text = _read("app/src/UI/Dashboard.cpp")
+    text = _read("core/Ui/UI/Dashboard.cpp")
 
     # Dashboard binds the commercial token to a short local (`tk`), so accept
     # either name as long as the guard is actually wired in.
@@ -361,7 +363,7 @@ def test_license_guard_present_in_dashboard():
 
 def test_license_guard_present_in_gps():
     """Widgets::GPS::setMapType() must check SS_LICENSE_GUARD()."""
-    text = _read("app/src/UI/Widgets/GPS.cpp")
+    text = _read("core/Ui/UI/Widgets/GPS.cpp")
 
     assert re.search(
         r"tk\.isValid\(\)\s*&&\s*SS_LICENSE_GUARD\(\)",
@@ -420,9 +422,9 @@ def test_license_guard_build_dir_is_gitignored():
 
 def test_session_report_series_preserve_raw_points_under_budget():
     """Session report charts should keep raw samples up to the 10k budget."""
-    report = _read("app/src/Sessions/ReportData.cpp")
-    manager = _read("app/src/Sessions/DatabaseManager.cpp")
-    worker = _read("app/src/Sessions/DatabaseWorker.cpp")
+    report = _read("core/Storage/Sessions/ReportData.cpp")
+    manager = _read("core/Storage/Sessions/DatabaseManager.cpp")
+    worker = _read("core/Storage/Sessions/DatabaseWorker.cpp")
     runtime = _read("app/rcc/templates/reports/session-report.js")
 
     assert "x.clear();" in report
@@ -440,14 +442,14 @@ def test_session_report_series_preserve_raw_points_under_budget():
 
 def test_timestamp_pipeline_starts_in_driver_and_shares_parsed_frames():
     """Driver timestamps should flow through FrameReader into one shared parsed frame object."""
-    hal = _read("app/src/IO/HAL_Driver.h")
-    reader_h = _read("app/src/IO/FrameReader.h")
-    reader_cpp = _read("app/src/IO/FrameReader.cpp")
-    builder_h = _read("app/src/DataModel/FrameBuilder.h")
-    builder_cpp = _read("app/src/DataModel/FrameBuilder.cpp")
-    publisher_cpp = _read("app/src/DataModel/FrameBuilder/BlockPublisher.cpp")
-    dashboard_h = _read("app/src/UI/Dashboard.h")
-    sessions_h = _read("app/src/Sessions/Export.h")
+    hal = _read("core/Devices/IO/HAL_Driver.h")
+    reader_h = _read("core/Pipeline/IO/FrameReader.h")
+    reader_cpp = _read("core/Pipeline/IO/FrameReader.cpp")
+    builder_h = _read("core/Pipeline/DataModel/FrameBuilder.h")
+    builder_cpp = _read("core/Pipeline/DataModel/FrameBuilder.cpp")
+    publisher_cpp = _read("core/Pipeline/DataModel/FrameBuilder/BlockPublisher.cpp")
+    dashboard_h = _read("core/Ui/UI/Dashboard.h")
+    sessions_h = _read("core/Storage/Sessions/Export.h")
 
     assert "struct CapturedData" in hal
     assert "void dataReceived(const IO::CapturedDataPtr& data);" in hal
@@ -550,7 +552,7 @@ def test_frame_reader_dropped_frame_log_is_throttled():
     """qWarning() inside the dropped-frame slot must sit behind the same 5 s gate
     as the user notification. Previously it fired unconditionally on every drop
     and flooded stderr at 10 kHz saturation."""
-    text = _read("app/src/IO/FrameReader.cpp")
+    text = _read("core/Pipeline/IO/FrameReader.cpp")
 
     # The throttle gate now precedes the qWarning. We assert order by requiring
     # the gate to appear before the warning string in the noteDroppedFrame body.
@@ -568,8 +570,8 @@ def test_frame_reader_dropped_frame_log_is_throttled():
 def test_frame_reader_buffer_overflow_log_is_throttled():
     """Buffer-overflow qWarning() must also throttle (separate timer) so a saturated
     ring buffer does not log per chunk."""
-    text = _read("app/src/IO/FrameReader.cpp")
-    header = _read("app/src/IO/FrameReader.h")
+    text = _read("core/Pipeline/IO/FrameReader.cpp")
+    header = _read("core/Pipeline/IO/FrameReader.h")
 
     assert "IO::CapturedData::SteadyTimePoint m_lastOverflowLog;" in header
     assert re.search(
@@ -586,7 +588,7 @@ def test_frame_builder_pool_scan_copies_no_shared_ptr():
     reads use_count() == 1 (the pool holds the only reference) without copying the
     slot, and the chosen slot is bound by const reference and mutated through a raw
     pointer -- no per-frame control block, no copy in the scan."""
-    text = _read("app/src/DataModel/FrameBuilder.cpp")
+    text = _read("core/Pipeline/DataModel/FrameBuilder.cpp")
 
     scan = re.search(
         r"size_t DataModel::FrameBuilder::claimPoolSlot\([^)]*\) noexcept\s*\{[\s\S]*?\n\}",
@@ -614,7 +616,7 @@ def test_frame_builder_pool_scan_copies_no_shared_ptr():
 
 
 def test_backup_manager_writes_versioned_wrapper():
-    text = _read("app/src/Misc/BackupManager.cpp")
+    text = _read("core/Ui/Misc/BackupManager.cpp")
 
     assert "static constexpr int kSnapshotFormat = 1;" in text
     assert 'static const QLatin1StringView kBackupMetaKey("_backupMeta");' in text
@@ -628,7 +630,7 @@ def test_backup_manager_writes_versioned_wrapper():
 
 
 def test_backup_manager_restore_refuses_newer_format():
-    text = _read("app/src/Misc/BackupManager.cpp")
+    text = _read("core/Ui/Misc/BackupManager.cpp")
 
     # restore() reads _backupMeta and refuses snapshots written by a newer build.
     assert re.search(
@@ -645,7 +647,7 @@ def test_backup_manager_restore_refuses_newer_format():
 
 
 def test_backup_manager_summarize_surfaces_wrapper():
-    text = _read("app/src/Misc/BackupManager.cpp")
+    text = _read("core/Ui/Misc/BackupManager.cpp")
 
     assert "if (project.contains(kBackupMetaKey))" in text
     assert re.search(
@@ -661,8 +663,8 @@ def test_backup_manager_snapshots_parser_only_edits_on_empty_project():
     contentTouched instead, and BackupManager arms the debounce off that signal. The whole-
     project hash in snapshot() is the sole arbiter of whether anything is actually written.
     """
-    model_h = _read("app/src/DataModel/ProjectModel.h")
-    model_cpp = _read("app/src/DataModel/ProjectModel.cpp")
+    model_h = _read("core/Pipeline/DataModel/ProjectModel.h")
+    model_cpp = _read("core/Pipeline/DataModel/ProjectModel.cpp")
 
     # The decoupling signal exists and fires from the empty-project branch of setModified().
     assert "void contentTouched();" in model_h
@@ -680,7 +682,7 @@ def test_backup_manager_snapshots_parser_only_edits_on_empty_project():
     ), "setModified must emit contentTouched in the empty-project branch"
 
     # BackupManager listens to it and arms the debounce (hash-only decision in flushDebounced).
-    backup_cpp = _read("app/src/Misc/BackupManager.cpp")
+    backup_cpp = _read("core/Ui/Misc/BackupManager.cpp")
     assert (
         "&DataModel::ProjectModel::contentTouched, this, "
         "&BackupManager::onProjectContentTouched" in backup_cpp
@@ -697,13 +699,13 @@ def test_crash_tracker_documents_local_only_telemetry():
     """The CrashTracker header @brief reminds reviewers that the class has no telemetry.
     Adding a network sink here without re-reviewing the contract is the failure we want
     to catch."""
-    text = _read("app/src/Misc/CrashTracker.h")
+    text = _read("core/Ui/Misc/CrashTracker.h")
 
     # @brief sentence carries the contract as a one-liner.
     assert "(no telemetry)" in text
 
     # No network / outbound transport headers exist in the cpp.
-    cpp = _read("app/src/Misc/CrashTracker.cpp")
+    cpp = _read("core/Ui/Misc/CrashTracker.cpp")
     for forbidden in ("QNetworkAccessManager", "QTcpSocket", "QUdpSocket", "curl_easy"):
         assert (
             forbidden not in cpp
@@ -716,7 +718,7 @@ def test_crash_tracker_documents_local_only_telemetry():
 
 
 def test_workspace_migration_copies_with_atomic_marker():
-    text = _read("app/src/Misc/WorkspaceManager.cpp")
+    text = _read("core/Ui/Misc/WorkspaceManager.cpp")
 
     # No destructive rename of the legacy folder.
     assert (
@@ -765,8 +767,8 @@ def test_frame_parser_pipeline_module_exists_with_shared_seam():
     """The shared module exposes the decoder seam, the QuickPlot splitter, and the two
     runners that the dialog and the dryRun call into. Anything else fragmenting that
     surface re-introduces the divergence we just removed."""
-    header = _read("app/src/DataModel/Scripting/FrameParserPipeline.h") + _read(
-        "app/src/DataModel/Scripting/ReplayRowCodec.h"
+    header = _read("core/Pipeline/DataModel/Scripting/FrameParserPipeline.h") + _read(
+        "core/Pipeline/DataModel/Scripting/ReplayRowCodec.h"
     )
 
     # Two-overload decoder seam: live-parser (FrameParser&) and engine-override (IScriptEngine&).
@@ -805,7 +807,7 @@ def test_frame_builder_uses_shared_seam_not_inline_decoder_switch():
     """FrameBuilder::decodeProjectChannels must delegate to the shared decoder seam.
     A re-inlined `case SerialStudio::Hexadecimal: parser.parseMultiFrame(...)` switch
     here means the hotpath has drifted from the dialog/dryRun path again."""
-    text = _read("app/src/DataModel/FrameBuilder.cpp")
+    text = _read("core/Pipeline/DataModel/FrameBuilder.cpp")
 
     # Must include the pipeline header.
     assert '#include "DataModel/Scripting/FrameParserPipeline.h"' in text
@@ -836,7 +838,7 @@ def test_frame_builder_uses_shared_seam_not_inline_decoder_switch():
 def test_frame_builder_quick_plot_uses_shared_splitter():
     """parseQuickPlotFrame must rely on the shared splitter so dialog / dryRun split
     bytes the same way the live QuickPlot mode does."""
-    text = _read("app/src/DataModel/FrameBuilder.cpp")
+    text = _read("core/Pipeline/DataModel/FrameBuilder.cpp")
 
     body = re.search(
         r"void DataModel::FrameBuilder::parseQuickPlotFrame\(const IO::CapturedDataPtr& data\)"
@@ -856,7 +858,7 @@ def test_frame_builder_quick_plot_uses_shared_splitter():
 def test_frame_parser_pipeline_dispatches_quick_plot_branch():
     """Both runners must comma-split on QuickPlot and only invoke the parser
     in non-QuickPlot modes."""
-    text = _read("app/src/DataModel/Scripting/FrameParserPipeline.cpp")
+    text = _read("core/Pipeline/DataModel/Scripting/FrameParserPipeline.cpp")
 
     # The per-frame helper short-circuits QuickPlot to splitQuickPlotChannels.
     helper = re.search(
@@ -890,7 +892,7 @@ def test_frame_parser_pipeline_dispatches_quick_plot_branch():
 def test_frame_parser_dry_run_requires_input_bytes():
     """project.frameParser.dryRun must reject calls without inputBytes / inputBytesHex
     and must not silently fall back to sampleFrame/sampleFrames anymore."""
-    text = _read("app/src/API/Handlers/ProjectDryRunCommands.cpp")
+    text = _read("core/Api/API/Handlers/ProjectDryRunCommands.cpp")
 
     body = re.search(
         r"API::CommandResponse API::Handlers::ProjectDryRunCommands::frameParserDryRun"
@@ -925,7 +927,7 @@ def test_frame_parser_dry_run_requires_input_bytes():
 def test_tool_dispatcher_routes_pipeline_inputs():
     """ToolDispatcher.frameParserDryRunCommand must forward the pipeline keys when bytes
     are supplied, and fall back to dryCompile when they aren't."""
-    text = _read("app/src/AI/ToolDispatcher.cpp")
+    text = _read("core/Ui/AI/ToolDispatcher.cpp")
 
     body = re.search(
         r"static QString frameParserDryRunCommand\([\s\S]*?\n\}",
@@ -962,7 +964,7 @@ def test_tool_dispatcher_routes_pipeline_inputs():
 def test_assistant_script_apply_strips_pipeline_keys():
     """assistant.script.apply must strip the dryRun-only pipeline keys before
     forwarding to setCode; otherwise setCode rejects them with InvalidParam."""
-    text = _read("app/src/API/Handlers/AssistantHandler.cpp")
+    text = _read("core/Api/API/Handlers/AssistantHandler.cpp")
 
     # The fallback is keyed off inputBytes(Hex), not the old sampleFrame(s) check.
     assert (
@@ -999,7 +1001,7 @@ def test_tester_runs_pipeline_and_writes_back_to_source():
     pipeline runners and must write delimiter / decoder / detection / checksum edits
     back to ProjectModel so the live driver reconfigures.
     """
-    text = _read("app/src/DataModel/Editors/FrameParserModel.cpp")
+    text = _read("core/Pipeline/DataModel/Editors/FrameParserModel.cpp")
 
     assert '#include "DataModel/Scripting/FrameParserPipeline.h"' in text
 
@@ -1045,7 +1047,7 @@ def test_proto_importer_parse_msg_uses_endpos_not_endp():
     The fix is a one-character rename. This test pins the loop guard to endPos.
     scoreDispatcher is a separate function with its OWN local endP, so we make
     sure we did not accidentally rename that one too."""
-    text = _read("app/src/DataModel/Importers/ProtoImporter.cpp")
+    text = _read("core/Pipeline/DataModel/Importers/ProtoImporter.cpp")
 
     # emitDecoderParseMsg uses endPos for the loop guard.
     parse_msg = re.search(
@@ -1102,8 +1104,8 @@ def test_dashboard_snapshots_and_restores_time_rings_on_reconfigure():
     etc.) used to wipe plots until reconnect because reconfigureDashboard runs
     resetData(false), which cleared every TimeRing. The snapshot/restore pair now
     preserves per-uniqueId ring contents across reconfigures."""
-    text = _read("app/src/UI/Dashboard.cpp")
-    header = _read("app/src/UI/Dashboard/ReplaySeekEngine.h")
+    text = _read("core/Ui/UI/Dashboard.cpp")
+    header = _read("core/Ui/UI/Dashboard/ReplaySeekEngine.h")
 
     # The four helpers live on UI::ReplaySeekEngine since the spec-0070 wave-7 extraction.
     # The ring type is DSP::EnvelopeRing since the spec 0057 cascading-envelope rework.
@@ -1117,7 +1119,7 @@ def test_dashboard_snapshots_and_restores_time_rings_on_reconfigure():
 
     # restorePlotTimeRings handles both same-shape splice and different-shape replay.
     # Shape/interval are read off the base level (level0) of the envelope ring.
-    engine = _read("app/src/UI/Dashboard/ReplaySeekEngine.cpp")
+    engine = _read("core/Ui/UI/Dashboard/ReplaySeekEngine.cpp")
     plot_restore = re.search(
         r"void UI::ReplaySeekEngine::restorePlotTimeRings\([\s\S]*?\n\}",
         engine,
@@ -1159,7 +1161,7 @@ _SNAPSHOT_DECL = re.compile(
 def test_dashboard_snapshots_around_every_clearing_trigger():
     """The three sites that previously dropped time-ring data on a project edit must
     snapshot before the rebuild and restore after."""
-    text = _read("app/src/UI/Dashboard.cpp")
+    text = _read("core/Ui/UI/Dashboard.cpp")
 
     # reconfigureDashboard: snapshot before resetData, restore after updateDataSeries.
     body = re.search(
@@ -1218,7 +1220,7 @@ def test_modbus_register_bool_decodes_whole_word():
     register-block bool decodes the whole 16-bit word with 0/1 truthiness, and only
     coil/discrete blocks use the packed-bit path.
     """
-    text = _read("app/src/DataModel/Importers/ModbusMapImporter.cpp")
+    text = _read("core/Pipeline/DataModel/Importers/ModbusMapImporter.cpp")
 
     # The generated Lua decodes a register-block bool as whole-word truthiness.
     assert (
@@ -1286,7 +1288,7 @@ def test_dbc_importer_endian_flag_not_inverted():
     LittleEndian, verbatim -- so the flag was backwards for BOTH endiannesses and
     every signal hit the wrong extractor branch. The flag now feeds the generated
     Lua spec's `be` field via signalSpecLine()."""
-    text = _read("app/src/DataModel/Importers/DBCImporter.cpp")
+    text = _read("core/Pipeline/DataModel/Importers/DBCImporter.cpp")
 
     spec_line = re.search(r"DBCImporter::signalSpecLine[\s\S]*?\n\}", text)
     assert spec_line is not None, "signalSpecLine must emit the Lua signal spec"
@@ -1303,7 +1305,7 @@ def test_dbc_extract_signal_uses_motorola_sawtooth():
     which is not the DBC Motorola layout. The fix steps the in-byte bit index DOWN
     and jumps +15 across byte boundaries (Qt's sawtooth). The extractor now lives in
     the Lua parser generated by the DBC importer."""
-    text = _read("app/src/DataModel/Importers/DBCImporter.cpp")
+    text = _read("core/Pipeline/DataModel/Importers/DBCImporter.cpp")
 
     # The sawtooth step is the heart of the fix (Lua spelling).
     assert "bit_pos = (bit_pos % 8 == 0) and (bit_pos + 15) or (bit_pos - 1)" in text
@@ -1403,7 +1405,7 @@ def test_can_driver_extended_id_header():
     extended frames now carry the full id as [0x80|ID28..24, ID23..16, ID15..8,
     ID7..0, DLC, ...], write() mirrors the header, and the DBC importer's generated
     Lua decodes both forms."""
-    text = _read("app/src/IO/Drivers/CANBus.cpp")
+    text = _read("core/Devices/IO/Drivers/CANBus.cpp")
 
     # RX: the id is masked per frame format and the extended header is flagged.
     assert "frame.hasExtendedFrameFormat()" in text
@@ -1414,7 +1416,7 @@ def test_can_driver_extended_id_header():
     assert "(static_cast<quint8>(data[0]) & 0x80) != 0" in text
 
     # The generated DBC Lua decodes both header forms and keys on 29-bit ids.
-    dbc = _read("app/src/DataModel/Importers/DBCImporter.cpp")
+    dbc = _read("core/Pipeline/DataModel/Importers/DBCImporter.cpp")
     assert "local function frame_id(frame)" in dbc
     # Spec 0051 migrated the generator off 5.3 bitwise syntax: the 29-bit id is now
     # assembled with bit.band + arithmetic shifts (values exceed bit.*'s 32-bit range).
@@ -1484,10 +1486,10 @@ def test_ai_history_sanitizer_strips_orphan_tool_results():
     between a tool_use and its results. The fixes: a bidirectional sanitizer that strips
     orphan results before every send, prune running BEFORE reconcile, a no-turn-in-flight
     guard on recordToolResult, and confirmation state cleared on reply errors."""
-    text = _read("app/src/AI/Conversation.cpp")
+    text = _read("core/Ui/AI/Conversation.cpp")
 
     # The orphan-strip pass exists and runs inside the reconciler.
-    surgery = _read("app/src/AI/Conversation/HistorySurgery.cpp")
+    surgery = _read("core/Ui/AI/Conversation/HistorySurgery.cpp")
     assert (
         "void AI::HistorySurgery::stripOrphanToolResults(QJsonArray& history)"
         in surgery
@@ -1622,7 +1624,7 @@ def test_control_script_connection_lifecycle():
     state (false 'comm loss' alarms after reconnect), a worker/GUI running-flag desync
     keeps an old engine alive, and a retained pre-disconnect frame leaks into the new
     connection's io.getLatestFrame when the API server keeps the capture flag on."""
-    cs = _read("app/src/DataModel/Scripting/ControlScript.cpp")
+    cs = _read("core/Pipeline/DataModel/Scripting/ControlScript.cpp")
 
     # Rising edge force-restarts (stop then start) via edge tracking.
     assert "m_shouldRun" in cs
@@ -1643,14 +1645,14 @@ def test_control_script_connection_lifecycle():
 
     # A setup() exception stops the worker so the loop never arms while the GUI shows
     # the script as stopped.
-    worker = _read("app/src/DataModel/Scripting/ControlScriptWorker.cpp")
+    worker = _read("core/Pipeline/DataModel/Scripting/ControlScriptWorker.cpp")
     setup_err = re.search(r"setup\(\) line %1: %2[\s\S]*?\n  \}", worker)
     assert setup_err is not None and "stop();" in setup_err.group(0)
 
     # FrameBuilder clears the latest-frame store on BOTH connection edges. The clear moved
     # behind clearLatestFrames(), which also advances the sequence so the GUI mirror
     # republishes the empty map -- assert the helper, and that the helper still clears.
-    fb = _read("app/src/DataModel/FrameBuilder.cpp")
+    fb = _read("core/Pipeline/DataModel/FrameBuilder.cpp")
     connected = re.search(
         r"void DataModel::FrameBuilder::onConnectedChanged\(\)[\s\S]*?\n\}", fb
     )
@@ -1668,7 +1670,7 @@ def test_control_script_connection_lifecycle():
 def test_control_script_agent_surface():
     """Agents must find the control-script commands by their conventional names, be able
     to validate before committing, and fetch the focused runtime reference."""
-    handler = _read("app/src/API/Handlers/ControlScriptHandler.cpp")
+    handler = _read("core/Api/API/Handlers/ControlScriptHandler.cpp")
     for cmd in (
         "controlScript.get",
         "controlScript.getCode",
@@ -1688,8 +1690,8 @@ def test_control_script_agent_surface():
     # ContextBuilder doc roster (scriptingDocFor) and the meta.fetchScriptingDocs
     # surface, which moved from ToolDispatcher into Conversation.cpp (2026-07 AI
     # hardening refactor).
-    assert "control_script_js" in _read("app/src/AI/ContextBuilder.cpp")
-    assert "control_script_js" in _read("app/src/AI/Conversation.cpp")
+    assert "control_script_js" in _read("core/Ui/AI/ContextBuilder.cpp")
+    assert "control_script_js" in _read("core/Ui/AI/Conversation.cpp")
     assert "ai/docs/control_script_js.md" in _read("app/rcc/rcc.qrc")
     doc = _read("app/rcc/ai/docs/control_script_js.md")
     assert "controlScript.dryRun" in doc and "ageMs" in doc
@@ -1718,7 +1720,7 @@ def test_modbus_failed_poll_keeps_group_attribution():
     the cycle. Old generated parsers see a zero-length payload and decode nothing, which
     is why no header byte was added.
     """
-    driver = _read("app/src/IO/Drivers/Modbus.cpp")
+    driver = _read("core/Devices/IO/Drivers/Modbus.cpp")
 
     assert (
         "advanceAfterFailedPoll" in driver
@@ -1739,7 +1741,7 @@ def test_modbus_failed_poll_keeps_group_attribution():
     assert on_ready is not None
     assert on_ready.group(0).count("advanceAfterFailedPoll();") == 2
 
-    gen = _read("app/src/IO/Drivers/Modbus/ModbusProjectGenerator.cpp")
+    gen = _read("core/Devices/IO/Drivers/Modbus/ModbusProjectGenerator.cpp")
     assert "local byteCount = frame[3]" in gen
     assert "if byteCount == 0 then" in gen
     assert "local function resync(fc, bytes, current)" in gen
@@ -1751,7 +1753,7 @@ def test_modbus_rtu_frames_carry_a_checksum_and_the_responding_unit():
     REQUESTED unit id, so the bytes were a header-shaped fragment and a gateway's reply
     was labelled with the address the poll asked for rather than the one that answered.
     """
-    driver = _read("app/src/IO/Drivers/Modbus.cpp")
+    driver = _read("core/Devices/IO/Drivers/Modbus.cpp")
 
     fn = re.search(
         r"QByteArray IO::Drivers::Modbus::buildRtuFrame\([\s\S]*?\n\}", driver
@@ -1762,7 +1764,7 @@ def test_modbus_rtu_frames_carry_a_checksum_and_the_responding_unit():
     assert "serverAddress" in body, "the responding unit id must reach the frame"
     assert "buildRtuFrame(unit, reply->serverAddress())" in driver
 
-    codec = _read("app/src/IO/Drivers/Modbus/ModbusRtuCodec.cpp")
+    codec = _read("core/Protocols/Modbus/ModbusRtuCodec.cpp")
     assert "0xA001" in codec, "CRC-16/Modbus uses the reflected 0xA001 polynomial"
 
 
@@ -1770,12 +1772,12 @@ def test_modbus_bit_reads_get_their_own_request_cap():
     """FC01/FC02 answer up to 2000 bits; sharing the 125-register ceiling refused four
     fifths of a legal coil read. The poll interval bound must also match the UI's own
     validator (50 ms), not advertise a floor the setter clamps away."""
-    groups = _read("app/src/IO/Drivers/Modbus/ModbusRegisterGroups.cpp")
+    groups = _read("core/Devices/IO/Drivers/Modbus/ModbusRegisterGroups.cpp")
     assert "kMaxBitCount      = 2000" in groups
     assert "maxCountForType(group.registerType)" in groups
     assert "maxCountForType(type)" in groups
 
-    driver = _read("app/src/IO/Drivers/Modbus.cpp")
+    driver = _read("core/Devices/IO/Drivers/Modbus.cpp")
     poll = re.search(
         r"poll\.value = m_pollInterval;\s*\n\s*poll\.min\s*=\s*(\d+);", driver
     )
@@ -1799,7 +1801,7 @@ def test_opcua_trust_is_checked_before_the_name_and_the_clock():
     Trust pins the exact bytes by SHA-256, so it is now read straight after the
     parse check and answers Good on its own.
     """
-    session = _read("app/src/IO/Drivers/OpcUaSession.cpp")
+    session = _read("core/Devices/IO/Drivers/OpcUaSession.cpp")
     fn = re.search(
         r"IO::Drivers::OpcUaTypes::StatusCode "
         r"IO::Drivers::OpcUaSession::verifyServerCertificate\([\s\S]*?\n\}",
@@ -1827,17 +1829,17 @@ def test_opcua_plaintext_password_needs_an_explicit_grant():
     it. It now follows a per-installation acknowledgement that starts off, and the
     acknowledgement is deliberately NOT a driver property: a security grant that
     travelled inside a project file would be given by opening the file."""
-    session = _read("app/src/IO/Drivers/OpcUaSession.cpp")
+    session = _read("core/Devices/IO/Drivers/OpcUaSession.cpp")
     assert (
         "config->allowNonePolicyPassword = identity.allowPlaintextPassword;" in session
     )
     assert "config->allowNonePolicyPassword = true;" not in session
 
-    security = _read("app/src/IO/Drivers/OpcUaSecurity.cpp")
+    security = _read("core/Devices/IO/Drivers/OpcUaSecurity.cpp")
     assert "plaintextPasswordAllowed" in security
     assert "value(QString::fromLatin1(kPlaintextPasswordKey), false)" in security
 
-    driver = _read("app/src/IO/Drivers/OpcUa.cpp")
+    driver = _read("core/Devices/IO/Drivers/OpcUa.cpp")
     props = re.search(
         r"QList<IO::DriverProperty> IO::Drivers::OpcUa::driverProperties\(\)[\s\S]*?\n\}",
         driver,
@@ -1849,7 +1851,7 @@ def test_opcua_plaintext_password_needs_an_explicit_grant():
 def test_opcua_write_reports_failure_like_its_siblings():
     """Read-only drivers return -1 from write() so a caller sees a hard failure; OPC UA
     returned 0, which reads as 'wrote nothing, no error'."""
-    header = (ROOT / "app/src/IO/Drivers/OpcUa.h").read_text(encoding="utf-8")
+    header = (ROOT / "core/Devices/IO/Drivers/OpcUa.h").read_text(encoding="utf-8")
     fn = re.search(
         r"qint64 write\(const QByteArray& data\) override\s*\{[\s\S]*?\}", header
     )
@@ -1868,10 +1870,10 @@ def test_iec104_slots_are_keyed_by_address_and_type():
     into the first one's slot and published it with the first one's wire type. The key is
     now the (address, type id) pair, and a report's LIVE kind overwrites the restored one
     because the station is the authority on what it is sending."""
-    asdu = _read("app/src/IO/Drivers/Iec104/Asdu.h")
+    asdu = _read("core/Protocols/Iec104/Asdu.h")
     assert "quint64 slotKey(quint32 ioa, std::uint8_t typeId)" in asdu
 
-    driver = _read("app/src/IO/Drivers/Iec104.cpp")
+    driver = _read("core/Devices/IO/Drivers/Iec104.cpp")
     assert "m_slotForIoa" not in driver, "the address-only index must be gone"
     assert "m_slotForKey.constFind(slotKey(point.ioa, point.typeId))" in driver
 
@@ -1879,7 +1881,7 @@ def test_iec104_slots_are_keyed_by_address_and_type():
     assert fn is not None
     assert "m_points[slot].kind = point.kind;" in fn.group(0)
 
-    header = (ROOT / "app/src/IO/Drivers/Iec104.h").read_text(encoding="utf-8")
+    header = (ROOT / "core/Devices/IO/Drivers/Iec104.h").read_text(encoding="utf-8")
     assert "QHash<quint64, int> m_slotForKey;" in header
 
 
@@ -1889,7 +1891,7 @@ def test_influx_counts_one_error_per_failed_write():
     reported once, by the finished handler. The wall-clock offset is also re-sampled when
     the sink re-opens: sampling it once at bootstrap shifted every later point after an
     NTP step."""
-    influx = _read("app/src/InfluxDB/Export.cpp")
+    influx = _read("core/Storage/InfluxDB/Export.cpp")
 
     ssl = re.search(r"void InfluxDB::ExportWorker::onSslErrors\([\s\S]*?\n\}", influx)
     assert ssl is not None
@@ -1918,7 +1920,7 @@ def test_no_user_facing_string_calls_the_credential_store_encrypted():
         "encrypted storage",
         "encrypted on this",
     )
-    for rel in ("app/qml", "app/src/MQTT", "app/src/AI"):
+    for rel in ("app/qml", "core/Devices/MQTT", "core/Ui/AI"):
         for path in sorted((ROOT / rel).rglob("*")):
             if path.suffix not in (".qml", ".cpp", ".h") or not path.is_file():
                 continue
@@ -1974,7 +1976,7 @@ def test_cli_reset_clears_the_store_the_application_reads():
     assert "QSettings(APP_SUPPORT_URL, APP_NAME).clear()" not in cli
     assert "CrashTracker::resetSettingsPreservingLicense" in cli
 
-    tracker = _read("app/src/Misc/CrashTracker.cpp")
+    tracker = _read("core/Ui/Misc/CrashTracker.cpp")
     body = tracker.split("resetSettingsPreservingLicense(QSettings& settings)", 1)[1]
     body = body.split("\n}", 1)[0]
     assert '"licensing"' in body and '"trial"' in body
@@ -2030,14 +2032,14 @@ def test_reply_handlers_do_not_open_modal_dialogs():
         ), f"{path} still opens a modal inline"
         assert "Utilities::postMessageBox" in text
 
-    utils = _read("app/src/Misc/Utilities.cpp")
+    utils = _read("core/Ui/Misc/Utilities.cpp")
     assert "void Misc::Utilities::postMessageBox" in utils
     assert "Qt::QueuedConnection" in utils
 
 
 def test_assistant_checkpoints_instead_of_writing_the_project():
     """With auto-approve on, an assistant edit must not reach the .ssproj (J2)."""
-    conversation = _read("app/src/AI/Conversation.cpp")
+    conversation = _read("core/Ui/AI/Conversation.cpp")
     assert (
         "saveJsonFile" not in conversation
     ), "the assistant must not save the document"
@@ -2054,7 +2056,7 @@ def test_assistant_checkpoints_instead_of_writing_the_project():
 
 def test_extension_install_verifies_digests_and_stages():
     """A partial or replaced download must never become the installed version (K3, K5)."""
-    installer = _read("app/src/Misc/Extensions/ExtensionInstaller.cpp")
+    installer = _read("core/Ui/Misc/Extensions/ExtensionInstaller.cpp")
     assert "parseFileList" in installer and "digestMatches" in installer
     assert ".staging" in installer and ".previous" in installer
 
@@ -2062,7 +2064,7 @@ def test_extension_install_verifies_digests_and_stages():
     write = write.split("\n}", 1)[0]
     assert "digestMatches" in write and "isPathSafe" in write
 
-    catalog = _read("app/src/Misc/Extensions/ExtensionCatalog.cpp")
+    catalog = _read("core/Ui/Misc/Extensions/ExtensionCatalog.cpp")
     assert (
         "QVersionNumber::compare" in catalog
     ), "updates compare numerically, not as strings"

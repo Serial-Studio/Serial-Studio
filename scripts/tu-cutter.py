@@ -17,8 +17,8 @@ resolved against the repository root, so the script is CWD-independent.
 
 Manifest format:
 {
- "dest_dir": "app/src/DataModel/Project",
- "residual": "app/src/DataModel/ProjectModel.cpp",
+ "dest_dir": "core/Pipeline/DataModel/Project",
+ "residual": "core/Pipeline/DataModel/ProjectModel.cpp",
  "static_namespace": "DataModel",
  "headers": [{"name": "SHARED", "path": ".../ProjectModelShared.h",
               "namespace": "DataModel", "promote_inline": true,

@@ -4,15 +4,15 @@
 > before adding a bulk numeric loop or annotating a function for the optimizer. The
 > `ss-hotpath` skill re-states these at edit time.
 
-## Portable SIMD Kernels (`app/src/DSPSimd.h`, spec 0021)
+## Portable SIMD Kernels (`core/Core/DSPSimd.h`, spec 0021, moved by spec 0076)
 
-**Portable SIMD kernels live in `app/src/DSPSimd.h`** (`namespace DSP`, spec 0021): x86-64-v2
+**Portable SIMD kernels live in `core/Core/DSPSimd.h`** (`namespace DSP`, spec 0021): x86-64-v2
 + NEON lanes + reference scalar fallback, per-lane bit-exact versus the scalar loop (full
 contract in the header). New bulk loops reuse these — never inline intrinsics at call sites.
 
-## Hotpath Optimization Macros (`app/src/DataModel/HotpathOptimization.h`)
+## Hotpath Optimization Macros (`core/Core/HotpathOptimization.h`)
 
-**Hotpath optimization macros live in `app/src/DataModel/HotpathOptimization.h`**
+**Hotpath optimization macros live in `core/Core/HotpathOptimization.h`**
 (`SS_FORCE_INLINE`, `SS_FLATTEN`, `SS_HOT`/`SS_COLD`, `SS_RESTRICT`, `SS_ASSUME`, ...); the
 header documents the toolchain cascade. Annotate `.h` declaration and `.cpp` definition in
 lockstep. Never add a fast-math / no-unwind / GCC `optimize("...")` macro (breaks the

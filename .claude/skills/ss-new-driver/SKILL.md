@@ -1,7 +1,7 @@
 ---
 name: ss-new-driver
 description: >-
-  Scaffold a new Serial Studio I/O driver (a new data source under app/src/IO/Drivers/). Use
+  Scaffold a new Serial Studio I/O driver (a new data source under core/Devices/IO/Drivers/). Use
   when adding support for a new bus/transport — e.g. "add a <X> driver", "support reading from
   <Y>", "new data source". Encodes the canonical driver pattern and every registration touch-point
   so the new driver actually shows up in the UI, CLI, and connection manager.
@@ -10,14 +10,14 @@ argument-hint: "[DriverName]"
 
 # Serial Studio — new I/O driver
 
-**Before writing anything, read `app/src/IO/Drivers/BluetoothLE.h` and `BluetoothLE.cpp` in
+**Before writing anything, read `core/Devices/IO/Drivers/BluetoothLE.h` and `BluetoothLE.cpp` in
 full.** They are the canonical reference for the driver contract — match their structure,
 signal/slot wiring, and `driverProperties()` shape rather than inventing a new layout. After
 the read, restate the driver contract in chat in 2-3 sentences (pure virtuals, publish path,
 timestamp-at-boundary) before scaffolding — a contract you've just named is one the new code
 follows, not one it drifts from (`doc/claude/j-space.md`).
 
-A driver subclasses `IO::HAL_Driver` (`app/src/IO/HAL_Driver.h`) and must implement the pure
+A driver subclasses `IO::HAL_Driver` (`core/Devices/IO/HAL_Driver.h`) and must implement the pure
 virtuals: `close`, `isOpen`, `isReadable`, `isWritable`, `configurationOk`, `write`, `open`,
 `driverProperties`, and `setDriverProperty`. Also consider the non-pure virtuals with default
 bodies — `deviceIdentifier()`, `selectByIdentifier()`, `applyConnectionSettings()` — which
@@ -27,27 +27,27 @@ see [ss-hotpath]). Never re-stamp downstream.
 
 ## Touch-points to wire (verify each against an existing driver)
 
-1. `app/src/IO/Drivers/<Name>.h` / `.cpp` — the driver class, SPDX header, `.h` ordering rules.
+1. `core/Devices/IO/Drivers/<Name>.h` / `.cpp` — the driver class, SPDX header, `.h` ordering rules.
 2. `app/src/SerialStudio.h` — add the value to the `BusType` enum (QML uses `SerialStudio.BusType.*`,
    never integer literals).
-3. `app/src/IO/ConnectionManager.{h,cpp}` — accessor (e.g. `network()` / `uart()` analogue)
+3. `core/Devices/IO/ConnectionManager.{h,cpp}` — accessor (e.g. `network()` / `uart()` analogue)
    plus signal forwarding; the bus lookups live in `ConnectionManager/DriverUiRegistry.cpp`
    (`forBusType()`) and the live-instance switch in `ConnectionManager/DriverFactory.cpp`
    (`DriverFactory::create()`, spec 0070). Update both.
-4. `app/CMakeLists.txt` — add `src/IO/Drivers/<Name>.cpp` to the `SOURCES` list (sources are
+4. `core/Devices/CMakeLists.txt` — add `IO/Drivers/<Name>.cpp` to the source list (sources are
    listed explicitly, not globbed; commercial drivers go in the guarded
-   `set(SOURCES ${SOURCES} ...)` block).
+   `if(BUILD_COMMERCIAL)` block).
 5. QML configuration UI — the driver panes are bespoke forms (nothing renders
    `driverProperties()` generically): create
    `app/qml/MainWindow/Panes/SetupPanes/Drivers/<Name>.qml`, add its `Loader` to the
    `StackLayout` in `SetupPanes/Hardware.qml` **at the bus's enum position** (the layout
    indexes by `Cpp_IO_Manager.busType`), and register the new .qml in the `QML_SOURCES` list
    in `app/CMakeLists.txt`.
-6. `app/src/API/EnumLabels.cpp` — add the bus to the `busTypeSlug()` and `busTypeLabel()`
+6. `core/Api/API/EnumLabels.cpp` — add the bus to the `busTypeSlug()` and `busTypeLabel()`
    switches (the API's string names for the bus; commercial buses go inside the
    `#ifdef BUILD_COMMERCIAL` block).
-7. `app/src/DataModel/Project/ProjectEditorIcons.h` — add the bus to the `busTypeIcon()`
-   switch, and `app/src/DataModel/Project/ProjectEditorForms.cpp` — add it to the `busTypes`
+7. `core/Pipeline/DataModel/Project/ProjectEditorIcons.h` — add the bus to the `busTypeIcon()`
+   switch, and `core/Pipeline/DataModel/Project/ProjectEditorForms.cpp` — add it to the `busTypes`
    combobox list in the source form model.
 8. Icon — add the driver SVG under `app/rcc/icons/devices/<tier>/` (16/24/32) and register it with a
    `<file>` entry in `app/rcc/rcc.qrc` (`busTypeIcon()` returns its `qrc:/` path).
@@ -57,7 +57,7 @@ see [ss-hotpath]). Never re-stamp downstream.
     reach it via `io.setBusType` (known drift: `mqtt` is missing from it today).
 
 The list above drifts as the app grows. Before declaring done, grep a recently added bus value
-(e.g. `grep -rn "BusType::HidDevice" app/src`) and mirror every switch/list it appears in.
+(e.g. `grep -rn "BusType::HidDevice" app/src core`) and mirror every switch/list it appears in.
 
 ## Rules
 

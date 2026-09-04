@@ -92,7 +92,8 @@ Three gates ratchet *growth* against a checked-in baseline instead of capping ab
 and `--accept` re-seeds each: `code-verify.py --singleton-census`, `code-verify.py
 --tu-census` (excess over 1500 lines), and `claim-verify.py`, which resolves every path,
 symbol and pinned constant in the AI-facing docs — the canary's values included — against the
-tree. Baselines, fences and anchor mechanics: [doc/claude/scripts.md](doc/claude/scripts.md).
+tree; `layer-verify.py` gates the `core/` layering the same way. Baselines, fences and anchor
+mechanics: [doc/claude/scripts.md](doc/claude/scripts.md).
 
 ## Tests
 
@@ -142,14 +143,19 @@ descriptor, no user code). Per-dataset value transforms in JS or Lua. Pro featur
 widgets, Modbus, CAN Bus, OPC UA, S7comm, EtherNet/IP, IEC 60870-5-104, Sparkplug B, MDF4,
 3D, ImageView, Waterfall, file-transfer protocols (X/Y/ZMODEM), Modbus map importer,
 Historian (per-session SQLite recording; "Session Database" pre-2026-08), InfluxDB 2.x sink
-(`app/src/InfluxDB/`, line protocol per published block).
+(`core/Storage/InfluxDB/`, line protocol per published block).
 User-facing renames of 2026-08-19 — internal identifiers unchanged: Historian (was Session
 Database; `Sessions::` namespace, `sessions.*` API, "Session Databases" folder stay), Variables
 (was Shared Memory; registers → variables in UI/docs, `RegisterDef`/`registers` JSON stay),
 Computed Dataset (was Virtual Dataset; `virtual_` field + `"Virtual"` JSON key stay), Canvas
 Widget (was Painter; `"painter"` widget key, `project.painter.*` API, Painter* classes stay).
 In doc/help the hotpath is called the "acquisition pipeline" — code, benchmarks, and internal
-docs keep "hotpath".
+docs keep "hotpath". The code base is seven static libraries under `core/`
+(`SerialStudio::Core`, `::Protocols` strict with prefixed includes; `::Pipeline`, `::Devices`,
+`::Storage`, `::Api`, `::Ui` transitional partitions keeping their relative include roots) plus
+the composition root in `app/src`; cross-library talk goes over `Core::Bus::MessageBus` (typed
+topics, shared-pointer messages, retained state) — never a new `instance()` reach;
+`scripts/layer-verify.py` ratchets every upward edge (spec 0076).
 
 ## Sub-Documentation
 
@@ -160,11 +166,11 @@ pointers, not substitutes.
 | Document | When to read it |
 |----------|-----------------|
 | [architecture.md](doc/claude/architecture.md) | Before touching any subsystem: the index into `doc/claude/architecture/` — dataflow (hotpath), startup, io, project, scripting, dashboard, kernels, export, mirror, ai, commands-icons. |
-| [architecture/ai.md](doc/claude/architecture/ai.md) | Before touching `app/src/AI/`, `app/rcc/ai/` or `app/qml/AI/`: the command safety tiers, checkpoint-not-save semantics, the meta-tool discovery seam, the provider/reply contract, and the `FileSandbox` / `KeyVault` trust boundaries. |
+| [architecture/ai.md](doc/claude/architecture/ai.md) | Before touching `core/Ui/AI/`, `app/rcc/ai/` or `app/qml/AI/`: the command safety tiers, checkpoint-not-save semantics, the meta-tool discovery seam, the provider/reply contract, and the `FileSandbox` / `KeyVault` trust boundaries. |
 | [common-mistakes.md](doc/claude/common-mistakes.md) | The silent-breakage lookup: gotchas the linter can't catch (timestamp capture, queued-vs-direct hotpath, `operator[]` inserts, macOS file-dialog reentrancy, the GUI-stall sampling recipe). |
 | [code-style.md](doc/claude/code-style.md) | Full style spec + NASA Power of Ten. The Code Style block below is the inline essentials. |
 | [trust-contract.md](doc/claude/trust-contract.md) | Full text of the Trust Contract above, with the incidents behind each rule. |
-| [directory-map.md](doc/claude/directory-map.md) | The `app/src` / `app/qml` / `lib` tree, one line of role per subsystem. |
+| [directory-map.md](doc/claude/directory-map.md) | The `core/` / `app/src` / `app/qml` / `lib` tree, one line of role per subsystem. |
 | [scripts.md](doc/claude/scripts.md) | The per-script table for `scripts/`. |
 | [working-relationship.md](doc/claude/working-relationship.md) | How to collaborate here: recommend don't enumerate, push back when a choice will cost, ground truth outranks on-paper reasoning. Read once per session. |
 | [j-space.md](doc/claude/j-space.md) | The verbalization discipline and its grounding. Read when tuning any AI-facing doc or skill. |
@@ -267,7 +273,7 @@ block caps, the time-ring/plot-clock rules, and the kernel macros.
   `IO::AsyncTcpDial` (`finished` exactly once per `start()`, `cancel()` reports nothing); the old
   blocking TCP dial is gone, and for TCP `io.connect`'s `connected` flag now means "the attempt
   started". NO reopen-on-config-edit machinery exists. Full
-  doctrine (probe sockets, drop recovery, `ResumePolicy`, the `app/src/Async/` task tree):
+  doctrine (probe sockets, drop recovery, `ResumePolicy`, the `core/Core/Async/` task tree):
   [doc/claude/architecture/io.md](doc/claude/architecture/io.md) "Opening a Link".
 - **Diagnostics are pulled, never pushed (specs 0033/0035).** `FrameReader` / `FrameBuilder`
   counters are plain `quint64` increments polled on the 1 Hz tick — never signal, allocate,
@@ -282,8 +288,11 @@ block caps, the time-ring/plot-clock rules, and the kernel macros.
   (1.024 MHz) down to JS mixed at 64 kHz, plus 0.5x consumer-path floors (full tier table in
   the `ss-hotpath` skill); `ci.yml` runs it per push/PR as a hard gate on the PGO-optimized
   binary. Don't regress it. `datasets+publish` is ~70-80% of per-frame time.
-- **Reuse the kernels; never inline intrinsics or invent a macro.** `app/src/DSPSimd.h`
-  (spec 0021, bit-exact per lane) and `app/src/DataModel/HotpathOptimization.h`
+- **The message bus is not a hotpath primitive.** `Core::Bus::MessageBus` publishes allocate once
+  and may queue a cross-thread call; hotpath TUs never touch it (`bus-on-hotpath` lint, spec 0076).
+  Frames and blocks keep the pooled SPSC path; the bus carries command/state/notification traffic.
+- **Reuse the kernels; never inline intrinsics or invent a macro.** `core/Core/DSPSimd.h`
+  (spec 0021, bit-exact per lane) and `core/Core/HotpathOptimization.h`
   (`SS_FORCE_INLINE`, `SS_ASSUME`, ...; never fast-math / no-unwind / GCC `optimize("...")`):
   [doc/claude/architecture/kernels.md](doc/claude/architecture/kernels.md).
 
@@ -331,11 +340,12 @@ area. The hazard column names what breaks silently — the doc holds the rule.
 | A dataset property or any API-surface generator (specs 0036, 0037) | [project.md](doc/claude/architecture/project.md) | `app/rcc/properties/dataset.json` generates six checked-in artifacts — **never hand-edit a generated file**. gRPC field numbers are append-only; a moved one fails CI. |
 | A toolbar button, palette entry, context menu, shortcut, or fixed icon (specs 0028/0063) | [commands-icons.md](doc/claude/architecture/commands-icons.md) | Icons resolve ONLY via `Misc::IconRegistry` — never hardcode `qrc:/icons/...`. New command = one manifest entry + one bindings entry; run `scripts/registry-verify.py`. Project Editor context menus are registry-driven too (`editor-menus.json` + `ProjectEditorMenuBindings.qml` + `CommandMenu.qml`) — never hand-write a `Menu` there. |
 | Installable widgets, `UI::WidgetExtensions` (spec 0038) | [dashboard.md](doc/claude/architecture/dashboard.md) | Packages resolve to `DashboardExtension = 100`, persist as `"ext:<id>"`; `readsStringValues` is what registers one in `string_targets`. Trust model is consent, not containment — never call an extension sandboxed. |
-| `app/src/Console/Annotations.*`, `ConsoleAnnotations.qml` (spec 0059) | [dashboard.md](doc/claude/architecture/dashboard.md) "Frame annotation layer" | `annotate()` stages, `commitPending()` publishes per tick — reading `count()` right after needs a commit. `reset()` clears the model *before* re-reading the offset. |
-| `app/src/API/Mirror/`, `streamAvailable()` (spec 0040) | [mirror.md](doc/claude/architecture/mirror.md) | Dataset ordering or `wireUniqueId` changes are wire breaks: bump `kWireVersion`, regenerate `tests/fixtures/mirror/`. Viewer frames never reach the export fan-out. |
+| `core/Ui/Console/Annotations.*`, `ConsoleAnnotations.qml` (spec 0059) | [dashboard.md](doc/claude/architecture/dashboard.md) "Frame annotation layer" | `annotate()` stages, `commitPending()` publishes per tick — reading `count()` right after needs a commit. `reset()` clears the model *before* re-reading the offset. |
+| `core/Api/API/Mirror/`, `streamAvailable()` (spec 0040) | [mirror.md](doc/claude/architecture/mirror.md) | Dataset ordering or `wireUniqueId` changes are wire breaks: bump `kWireVersion`, regenerate `tests/fixtures/mirror/`. Viewer frames never reach the export fan-out. |
 | An embedded code editor's render cadence | [scripting.md](doc/claude/architecture/scripting.md) "Embedded Code Editors" | Never give a main-window-embedded editor an unconditional per-tick `grab()` — cost 13% of the GUI thread (2026-08-17). |
 | The AI assistant: a tool tier, the checkpoint timer, a provider, the tool surface | [ai.md](doc/claude/architecture/ai.md) | A mutating tool call takes a **checkpoint**, never a save — the API descriptions and `app/rcc/ai/skills/` say so to the model, so a disk-contract change is incomplete until those strings change too. Every command sits in exactly one tier of `command_safety.json`; an unlisted name silently falls through to `Confirm`. |
 | Locating a god object's concerns (`ProjectModel`, `ProjectHandler`, `FrameBuilder`, `Dashboard`) | [directory-map.md](doc/claude/directory-map.md) | Spec 0070 re-formed the god objects into facades owning real sub-object classes (one class = one .h/.cpp, in a sibling dir named after the facade). Never split one class across TUs: decompose into member sub-objects instead. |
+| Anything under `core/` or a source that could move there (spec 0076) | [directory-map.md](doc/claude/directory-map.md) "core/" | A library never includes `app/src`; a moved `Q_OBJECT` header listed in both a library and the executable mocs twice; every `.h`/`.cpp` pair lives in one target; a relative include must resolve in exactly one root; an upward include beyond `scripts/layer-baseline.json` fails CI; the bus is never on the per-frame path. |
 
 ## Code Style — Essentials
 
@@ -368,7 +378,7 @@ rules. Full spec and the NASA Power of Ten live in
   zero warnings; no `reinterpret_cast`/`dynamic_cast` on the hotpath; SPDX header per file —
   first-party is `GPL-3.0-or-later` (relicensed from `-only`, 2026-07). The repo is
   REUSE-compliant: `REUSE.toml` + `LICENSES/`, `reuse lint` gates in CI.
-- **Assertions are `SS_ASSERT(cond, action)`** (`app/src/SSAssert.h`), not `Q_ASSERT`: the
+- **Assertions are `SS_ASSERT(cond, action)`** (`core/Core/SSAssert.h`), not `Q_ASSERT`: the
   condition evaluates in **every** build; debug aborts, release reports once per site and
   runs the recovery `action` instead of the guarded code. Condition side-effect-free and
   cheap; action side-effect-complete, single statement, no top-level comma, never

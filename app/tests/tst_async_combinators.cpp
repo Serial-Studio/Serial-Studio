@@ -28,8 +28,8 @@
 #include <QTest>
 #include <utility>
 
-#include "Async/RetryPolicy.h"
-#include "Async/TaskTree.h"
+#include "Core/Async/RetryPolicy.h"
+#include "Core/Async/TaskTree.h"
 
 // Every test function here is self-contained: no state is carried between slots, so Qt Test's
 // declaration-order execution is never load-bearing. This suite covers the free-function

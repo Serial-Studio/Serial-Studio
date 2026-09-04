@@ -2,7 +2,7 @@
   "rule": "cxx-tu-too-long",
   "regenerate": "python scripts/code-verify.py --tu-census --accept",
   "threshold": 1500,
-  "excess": 2793,
+  "excess": 2794,
   "files": 10,
   "worst": 3022,
   "buckets": {
@@ -11,15 +11,15 @@
     "oversized": 9
   },
   "per_file": {
-    "app/src/DataModel/FrameBuilder.cpp": 3022,
-    "app/src/UI/Widgets/Terminal.cpp": 1988,
-    "app/src/UI/Dashboard.cpp": 1856,
-    "app/src/IO/Drivers/OpcUa.cpp": 1623,
-    "app/src/IO/ConnectionManager.cpp": 1588,
-    "app/src/IO/Drivers/MQTT.cpp": 1572,
-    "app/src/CSV/Player.cpp": 1565,
-    "app/src/MQTT/Publisher.cpp": 1539,
-    "app/src/IO/Drivers/Audio.cpp": 1537,
-    "app/src/Misc/ExtensionManager.cpp": 1503
+    "core/Pipeline/DataModel/FrameBuilder.cpp": 3022,
+    "core/Ui/UI/Widgets/Terminal.cpp": 1988,
+    "core/Ui/UI/Dashboard.cpp": 1856,
+    "core/Devices/IO/Drivers/OpcUa.cpp": 1623,
+    "core/Devices/IO/ConnectionManager.cpp": 1589,
+    "core/Devices/IO/Drivers/MQTT.cpp": 1572,
+    "core/Storage/CSV/Player.cpp": 1565,
+    "core/Devices/MQTT/Publisher.cpp": 1539,
+    "core/Devices/IO/Drivers/Audio.cpp": 1537,
+    "core/Ui/Misc/ExtensionManager.cpp": 1503
   }
 }

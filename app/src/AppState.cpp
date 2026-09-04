@@ -23,11 +23,11 @@
 
 #include <QFileInfo>
 
+#include "Core/SSAssert.h"
 #include "DataModel/Frame.h"
 #include "DataModel/FrameBuilder.h"
 #include "DataModel/ProjectModel.h"
 #include "SessionContext.h"
-#include "SSAssert.h"
 
 //--------------------------------------------------------------------------------------------------
 // Constructor & singleton access

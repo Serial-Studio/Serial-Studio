@@ -30,9 +30,9 @@ Per the J-space discipline, state 3-5 of these in chat, in your own words, right
 edit:
 
 1. **The code is the ground truth.** Every default value, range, UI label, menu path, Pro
-   gate, and behavior claim is verified with `Grep`/`Read` against `app/src` / `app/qml`
-   before it is written — never copied from another doc or from memory. Procedure and verdict
-   format: [references/ground-truth-factcheck.md](references/ground-truth-factcheck.md).
+   gate, and behavior claim is verified with `Grep`/`Read` against `core/` / `app/src` /
+   `app/qml` before it is written — never copied from another doc or from memory. Procedure
+   and verdict format: [references/ground-truth-factcheck.md](references/ground-truth-factcheck.md).
 2. **Manual voice, not blog voice.** Declarative present tense, no tutorial "we/let's", no
    marketing adjectives, no meta-references ("in this guide"). `scripts/documentation-verify.py`
    is the phrase-level contract — run it, don't re-derive it.

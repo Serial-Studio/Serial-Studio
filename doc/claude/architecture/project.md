@@ -140,7 +140,7 @@
 ## Project File JSON Keys — `Keys::` Namespace
 
 Every JSON key used in `.json`/`.ssproj` files is declared in `namespace Keys` in
-**`app/src/DataModel/FrameKeys.h`** (which `Frame.h` includes — the namespace has not been in
+**`core/Pipeline/DataModel/FrameKeys.h`** (which `Frame.h` includes — the namespace has not been in
 `Frame.h` itself since spec 0070) as `inline constexpr QLatin1StringView` (alias `KeyView`).
 
 - **Never hardcode** `"busType"`, `"frameStart"`, etc. in writers/readers or MCP handlers —
@@ -178,7 +178,7 @@ and row, validator, enablement predicate, and API field name plus typed schema.
   generated file loses the change on the next run; editing only the struct leaves the property
   unserialized, unformed, and invisible to the API.
 - **Anything the manifest cannot express lives in
-  `app/src/DataModel/Project/PropertyHooks.{h,cpp}`** and is *referenced by name* from the
+  `core/Pipeline/DataModel/Project/PropertyHooks.{h,cpp}`** and is *referenced by name* from the
   manifest: option sources (fixed, parallel-list, and project-state-derived choice domains),
   validators, enablement predicates, dynamic placeholders, and commit side effects. A commit hook
   returns a `RebuildHint` instead of rebuilding a form itself, so the editor keeps owning the

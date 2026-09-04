@@ -51,7 +51,7 @@ for (const auto& g : frame.groups())
 
 ### C++ Headers
 
-Reference: `app/src/IO/Drivers/BluetoothLE.h`. Order: `Q_OBJECT` → `Q_PROPERTY` block
+Reference: `core/Devices/IO/Drivers/BluetoothLE.h`. Order: `Q_OBJECT` → `Q_PROPERTY` block
 (clang-format off, one attribute per line) → `signals:` → private ctor + deleted copy/move
 (singletons) → `public:` (`instance()` first, then `[[nodiscard]]` getters) → `public slots:`
 → `private slots:` → `private:` helpers → `private:` members.
@@ -190,7 +190,7 @@ Mission-critical telemetry. Hotpath violations are blockers.
    `dynamic_cast`, virtual calls, large stack buffers, false-sharing, recursion in hot loops.
 4. **Functions 40-80 lines, hard limit 100.** Nesting ≤3. Split into helpers.
 5. **Assertion density ≥2 per function.** Pre/post-conditions + invariants. Three tiers
-   (`app/src/SSAssert.h`): `SS_ASSERT(cond, action)` — the default; condition evaluates in
+   (`core/Core/SSAssert.h`): `SS_ASSERT(cond, action)` — the default; condition evaluates in
    every build, release reports once per site and runs the recovery. `SS_ASSERT_HOTPATH(cond)`
    — per-frame/per-cell kernels only; compiles out under `QT_NO_DEBUG`; admissible exactly
    where SS_ASSUME is (condition restates a guard that provably already ran), never on a

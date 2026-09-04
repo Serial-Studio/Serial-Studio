@@ -25,7 +25,7 @@
 
 #include "dsp_scalar_ref.h"
 
-#include "DSPSimd.h"
+#include "Core/DSPSimd.h"
 
 /**
  * @file dsp_scalar_ref.cpp

@@ -21,7 +21,7 @@
 
 #include <QTest>
 
-#include "IO/Drivers/CANBus/CanReassembly.h"
+#include "Protocols/CAN/CanReassembly.h"
 
 using namespace IO::Drivers;
 using SteadyTimePoint = J1939TransportReassembler::SteadyTimePoint;

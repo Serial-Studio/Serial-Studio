@@ -7,7 +7,7 @@
 
 ## Dashboard Ingest — Pre-resolved Push Tables
 
-**The ingest lives in `UI::DashboardIngest`** (`app/src/UI/Dashboard/DashboardIngest.{h,cpp}`,
+**The ingest lives in `UI::DashboardIngest`** (`core/Ui/UI/Dashboard/DashboardIngest.{h,cpp}`,
 spec 0075 F1), a member sub-object of the `UI::Dashboard` facade. It owns `applyBlock`, the
 `applyBlockValues` / `applyBlockColumn` split, the `feed*` helpers, `advancePlotClock`,
 `foldExtremes`, the `update*Series` family and **every push table**. Two seams hold it to the
@@ -481,7 +481,7 @@ the stream path; a multiplot mixing both lanes would be advanced by both clocks 
 
 ## Output Widgets (Pro)
 
-`app/src/UI/Widgets/Output/`, QML in `app/qml/Widgets/Dashboard/Output/`:
+`core/Ui/UI/Widgets/Output/`, QML in `app/qml/Widgets/Dashboard/Output/`:
 Button/Toggle/Slider/TextField/Panel sharing `Base`. User JS converts UI state → device
 bytes (`app/rcc/scripts/output/*.js`); `OutputCodeEditor` edits; `TransmitTestDialog`
 previews. Protocol helpers (CRC, NMEA, Modbus, SLCAN, GRBL, GCode, SCPI, binary packet)
@@ -518,7 +518,7 @@ deliberately mode-agnostic (persists across operation-mode switches within a ses
 ## Manual Layout Mode — Smart Guides & the 48x48 Floor (spec 0010)
 
 Manual-mode (auto-layout off) drag/resize snapping lives in `UI::Snap`
-(`app/src/UI/SnapGuides.h/.cpp`): a pure, stateless resolver (`resolveMoveSnap` /
+(`core/Ui/UI/SnapGuides.h/.cpp`): a pure, stateless resolver (`resolveMoveSnap` /
 `resolveResizeSnap`) that `WindowManager` feeds per mouse move with the candidate rect, the
 sibling rects cached at gesture start (`cacheSnapSiblings`), and the grid settings. Rules the
 resolver encodes: nearest candidate within 6 px per axis, edges beat centers beat spacing on
@@ -556,7 +556,7 @@ reaches it).
 ## Widget Extensions (spec 0038) — `UI::WidgetExtensions`
 
 Installable dashboard widgets: `info.json` + one QML file, validated eagerly, compiled lazily.
-Catalog = `UI::WidgetExtensions` (`app/src/UI/WidgetExtensions.{h,cpp}` + `WidgetExtensionManifest.cpp`),
+Catalog = `UI::WidgetExtensions` (`core/Ui/UI/WidgetExtensions.{h,cpp}`),
 built after ProjectModel and before Dashboard; its ctor is a leaf (member init only), and the
 first `rescan()` + the `ExtensionManager`/`WorkspaceManager` edges live in
 `setupCrossModuleConnections()`. `rescan()` reads `:/extensions/widget/*` first, then
@@ -601,7 +601,7 @@ gated by `registry-verify.py` + `tests/scripts/test_widget_manifests.py`.
   speed bump, exempted for bundled packages so the two conversions stay verbatim copies.
   `UI::WidgetExtensions::hostContextNames()` is no longer a hand-kept mirror: it returns
   `Misc::ContextRegistry::objectNames()`, the same table the composition root registers through.
-  `Misc::ContextRegistry` (`app/src/Misc/ContextRegistry.{h,cpp}`, spec 0075 G4) is the
+  `Misc::ContextRegistry` (`core/Ui/Misc/ContextRegistry.{h,cpp}`, spec 0075 G4) is the
   collect-then-apply helper `ModuleManager` fills with `registry.add(name, object)` and flushes
   once with `registry.apply(ctx)` — twice per session, once for the common globals and once for
   the commercial ones. `registry-verify.py` compares that table against the `registry.add` call

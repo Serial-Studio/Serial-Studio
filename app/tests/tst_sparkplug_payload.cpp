@@ -23,7 +23,7 @@
 #include <bit>
 #include <QTest>
 
-#include "IO/Drivers/MQTT/SparkplugPayload.h"
+#include "Protocols/Sparkplug/SparkplugPayload.h"
 
 using namespace IO::Drivers::SparkplugB;
 

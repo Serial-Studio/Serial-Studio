@@ -30,15 +30,10 @@ DOCS_YML = WORKFLOWS / "docs.yml"
 # The jobs that compile and run the throughput gate.
 BUILD_JOBS = ("build-linux", "build-linux-arm64", "build-macos-arm64", "build-windows")
 
-# The jobs that publish a self-contained package the test and retry jobs consume; the macOS
-# gate runs in build-macos-arm64 but the DMG is assembled by build-macos.
+# The jobs that publish a self-contained package the test job consumes; the macOS gate runs in
+# build-macos-arm64 but the DMG is assembled by build-macos. The benchmark-retry jobs were
+# dropped on 2026-09-04 (531c62427): the throughput gate is one hard step per build job.
 PACKAGE_JOBS = ("build-linux", "build-linux-arm64", "build-macos", "build-windows")
-RETRY_JOBS = (
-    "benchmark-retry-linux",
-    "benchmark-retry-linux-arm64",
-    "benchmark-retry-macos",
-    "benchmark-retry-windows",
-)
 
 # The jobs that configure and run the ctest tier. Both Linux arches, because DSPSimd.h picks its
 # SIMD lane from the target architecture; the macOS and Windows legs were dropped on 2026-09-03
@@ -160,12 +155,19 @@ def test_publication_has_a_per_ref_concurrency_group(ci):
     assert concurrency["cancel-in-progress"] is False
 
 
-def test_tests_run_before_publication(ci):
-    """The pre-0075 shape had test needing upload, so a red suite could not block a release."""
-    assert "test" in ci["upload"]["needs"]
-    assert "lint" in ci["upload"]["needs"]
+def test_publication_waits_on_the_builds_and_the_linters(ci):
+    """
+    Since 531c62427 the release goes out as soon as the last package exists; the pytest suite
+    reports on it in parallel (it consumes the same artifacts) without holding it. A red build
+    or a missed throughput gate still blocks: needs uses the default all-success semantics.
+    """
+    needs = set(ci["upload"]["needs"])
+    assert "lint" in needs
+    assert set(PACKAGE_JOBS) <= needs
+    assert "test" not in needs
     assert "upload" not in ci["test"]["needs"]
     assert set(PACKAGE_JOBS) <= set(ci["test"]["needs"])
+    assert "always()" not in str(ci["upload"].get("if", ""))
 
 
 def test_the_test_job_consumes_build_artifacts_not_a_release(ci):
@@ -185,22 +187,11 @@ def test_the_test_suite_is_not_soft(ci):
         pytest.fail("the run_tests step is gone")
 
 
-def test_the_publish_job_enforces_the_test_verdict(ci):
-    """always() in upload's if: means the pytest result must be checked explicitly."""
-    condition = ci["upload"]["if"]
-    assert "always()" in condition
-    guard = [
-        step
-        for step in _steps(ci["upload"])
-        if "REQUIRE_TESTS_TO_PUBLISH" in str(step.get("run", ""))
-    ]
-    assert guard, "no step consults REQUIRE_TESTS_TO_PUBLISH"
-    assert "needs['test'].result" in str(guard[0].get("if", ""))
-
-
-def test_tests_gate_publication_by_default():
-    """The flag exists as an escape hatch; its default is to block."""
-    assert _load(CI_YML)["env"]["REQUIRE_TESTS_TO_PUBLISH"] is True
+def test_no_publication_escape_hatch_remains(ci):
+    """The REQUIRE_TESTS_TO_PUBLISH flag went with the test gate; a stray guard step is drift."""
+    assert "REQUIRE_TESTS_TO_PUBLISH" not in _load(CI_YML).get("env", {})
+    for step in _steps(ci["upload"]):
+        assert "REQUIRE_TESTS_TO_PUBLISH" not in str(step.get("run", ""))
 
 
 # --------------------------------------------------------------------------------------------
@@ -266,26 +257,22 @@ def test_the_fuzz_corpora_replay_in_ci(ci):
     assert "-R '^fuzz_'" in runs
 
 
-@pytest.mark.parametrize("job", RETRY_JOBS)
-def test_every_platform_has_a_benchmark_retry_job(ci, job):
-    """One rerun against the packaged binary, so a noisy runner cannot fail an unrelated PR."""
-    assert job in ci
-    assert ci[job]["if"].endswith("== 'failure'")
-    runs = " ".join(str(step.get("run", "")) for step in _steps(ci[job]))
-    assert "--min-fps" in runs and "256000" in runs
-
-
-def test_publication_reads_both_benchmark_attempts(ci):
-    condition = ci["upload"]["if"]
-    for job in BUILD_JOBS:
-        assert f"needs['{job}'].outputs.benchmark" in condition
-    for job in RETRY_JOBS:
-        assert f"needs['{job}'].result" in condition
+def test_no_benchmark_retry_job_remains(ci):
+    """The retry jobs masked noisy runners; a reappearing one needs its own decision."""
+    assert not [job for job in ci if job.startswith("benchmark-retry")]
 
 
 @pytest.mark.parametrize("job", BUILD_JOBS)
-def test_every_build_job_publishes_its_benchmark_verdict(ci, job):
-    assert ci[job]["outputs"]["benchmark"] == "${{ steps.benchmark.outcome }}"
+def test_every_build_job_runs_the_throughput_gate_as_a_hard_step(ci, job):
+    """256 kHz is a CI gate: one --benchmark-hotpath step per build job, never soft."""
+    gates = []
+    for step in _steps(ci[job]):
+        run = str(step.get("run", "")).replace("'", "").replace(",", " ")
+        if "--benchmark-hotpath" in run and "--min-fps 256000" in run:
+            gates.append(step)
+    assert gates, f"{job} runs no 256 kHz benchmark step"
+    for step in gates:
+        assert "continue-on-error" not in step
 
 
 # --------------------------------------------------------------------------------------------

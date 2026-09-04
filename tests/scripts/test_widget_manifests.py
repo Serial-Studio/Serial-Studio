@@ -44,13 +44,13 @@ DENIALS = (
 
 # Files that make up the spec-0038 surface, wherever a promise about the trust model could hide.
 SPEC_FILES = (
-    "app/src/UI/WidgetExtensions.h",
-    "app/src/UI/WidgetExtensions.cpp",
+    "core/Ui/UI/WidgetExtensions.h",
+    "core/Ui/UI/WidgetExtensions.cpp",
     "app/src/UI/WidgetExtensionManifest.cpp",
-    "app/src/UI/Widgets/ExtensionData.h",
-    "app/src/UI/Widgets/ExtensionData.cpp",
-    "app/src/Misc/Problems/ExtensionCheckers.h",
-    "app/src/Misc/Problems/ExtensionCheckers.cpp",
+    "core/Ui/UI/Widgets/ExtensionData.h",
+    "core/Ui/UI/Widgets/ExtensionData.cpp",
+    "core/Ui/Misc/Problems/ExtensionCheckers.h",
+    "core/Ui/Misc/Problems/ExtensionCheckers.cpp",
     "app/qml/Dialogs/ExtensionConsent.qml",
     "app/qml/Widgets/Dashboard/ExtensionPlaceholder.qml",
     "app/qml/Widgets/Dashboard/ExtensionWidgetSettings.qml",

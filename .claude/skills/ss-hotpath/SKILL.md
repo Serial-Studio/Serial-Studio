@@ -7,17 +7,17 @@ description: >-
   path. Covers SPSC/pipeline-thread rules, DirectConnection requirement, the no-alloc/no-copy slot
   pool, source-owns-time, and how to measure throughput with --benchmark-hotpath.
 paths:
-  - app/src/IO/FrameReader.*
-  - app/src/IO/CircularBuffer.h
-  - app/src/IO/ConnectionManager.*
-  - app/src/IO/DeviceManager.*
-  - app/src/DataModel/FrameBuilder.*
-  - app/src/DataModel/HotpathOptimization.h
-  - app/src/UI/Dashboard.*
-  - app/src/DSP.h
-  - app/src/DSPSimd.h
-  - app/src/IO/StreamWorker.*
-  - app/src/IO/PipelineHost.*
+  - core/Pipeline/IO/FrameReader.*
+  - core/Core/CircularBuffer.h
+  - core/Devices/IO/ConnectionManager.*
+  - core/Devices/IO/DeviceManager.*
+  - core/Pipeline/DataModel/FrameBuilder.*
+  - core/Core/HotpathOptimization.h
+  - core/Ui/UI/Dashboard.*
+  - core/Pipeline/DSP.h
+  - core/Core/DSPSimd.h
+  - core/Pipeline/IO/StreamWorker.*
+  - core/Pipeline/IO/PipelineHost.*
 ---
 
 # Serial Studio — data hotpath
@@ -81,7 +81,7 @@ block. Never per-sample across a thread boundary.
   skips pinned slots) plus the channel tokens. Keep it gated and allocation-free.
 - **Source owns time.** Stamp at the driver boundary; never re-stamp in export/report workers
   (`monotonicFrameNs(...)` is the safety net only).
-- **Optimization macros come from `app/src/DataModel/HotpathOptimization.h`** (`SS_FORCE_INLINE`,
+- **Optimization macros come from `core/Core/HotpathOptimization.h`** (`SS_FORCE_INLINE`,
   `SS_FLATTEN`, `SS_HOT`/`SS_COLD`, `SS_RESTRICT`, `SS_ASSUME`, `SS_NO_UNROLL`, ...). Annotate
   the `.h` declaration and `.cpp` definition in lockstep. Never add a fast-math / no-unwind /
   GCC `optimize("...")` macro (breaks the IEEE-stable math + Lua-unwind invariants). `SS_ASSUME`
@@ -114,9 +114,9 @@ block. Never per-sample across a thread boundary.
   together via `Dashboard::resetPlotClocks()`, never one without the other. `appendDecimated`
   clamps sub-cell backward jitter forward; a jump back over a whole cell drops the retained span
   (clamping it wedges the ring shut). Detail: `doc/claude/architecture/dashboard.md`.
-- **Kernels and macros:** portable SIMD lives in `app/src/DSPSimd.h` (spec 0021, per-lane
+- **Kernels and macros:** portable SIMD lives in `core/Core/DSPSimd.h` (spec 0021, per-lane
   bit-exact vs scalar) — reuse it, never inline intrinsics at a call site. Optimizer macros live
-  in `app/src/DataModel/HotpathOptimization.h`; annotate `.h` and `.cpp` in lockstep, never add a
+  in `core/Core/HotpathOptimization.h`; annotate `.h` and `.cpp` in lockstep, never add a
   fast-math / no-unwind / GCC `optimize("...")` macro, and use `SS_ASSERT_HOTPATH` (not
   `SS_ASSERT`) on per-frame/per-cell kernels. Detail: `doc/claude/architecture/kernels.md`.
 

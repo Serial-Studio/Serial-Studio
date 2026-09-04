@@ -37,7 +37,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 ICONS = ROOT / "app" / "rcc" / "icons"
 CMDDIR = ROOT / "app" / "rcc" / "commands"
-SRC_ROOTS = (ROOT / "app" / "qml", ROOT / "app" / "src")
+SRC_ROOTS = (ROOT / "app" / "qml", ROOT / "app" / "src", ROOT / "core")
 TIERS = (16, 24, 32, 48)
 PALETTE_PX = (
     32  # command palette grid + Start menu render every command icon at this size

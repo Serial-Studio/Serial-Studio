@@ -22,7 +22,7 @@
 
 #include <QTest>
 
-#include "IO/Drivers/Iec104/Apci.h"
+#include "Protocols/Iec104/Apci.h"
 
 using namespace IO::Drivers::Iec104Proto;
 

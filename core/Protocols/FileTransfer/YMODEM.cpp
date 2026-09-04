@@ -1,0 +1,418 @@
+/*
+ * Serial Studio
+ * https://serial-studio.com/
+ *
+ * Copyright (C) 2020-2025 Alex Spataru
+ *
+ * This file is dual-licensed:
+ *
+ * - Under the GNU GPLv3 (or later) for builds that exclude Pro modules.
+ * - Under the Serial Studio Commercial License for builds that include
+ *   any Pro functionality.
+ *
+ * You must comply with the terms of one of these licenses, depending
+ * on your use case.
+ *
+ * For GPL terms, see <https://www.gnu.org/licenses/gpl-3.0.html>
+ * For commercial terms, see LICENSES/LicenseRef-SerialStudio-Commercial.txt.
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial
+ */
+
+#include "Protocols/FileTransfer/YMODEM.h"
+
+#include <QFileInfo>
+
+#include "Protocols/FileTransfer/CRC.h"
+
+//--------------------------------------------------------------------------------------------------
+// Constructor
+//--------------------------------------------------------------------------------------------------
+
+/**
+ * @brief Constructs a YMODEM protocol handler.
+ */
+IO::Protocols::YMODEM::YMODEM(QObject* parent) : XMODEM(parent), m_yState(YState::Idle)
+{
+  setUse1K(true);
+}
+
+//--------------------------------------------------------------------------------------------------
+// Protocol interface
+//--------------------------------------------------------------------------------------------------
+
+/**
+ * @brief Returns the human-readable protocol name.
+ */
+QString IO::Protocols::YMODEM::protocolName() const
+{
+  return QStringLiteral("YMODEM");
+}
+
+/**
+ * @brief Cancels the batch. The base class clears its own state; the batch state has to be reset
+ *        here too, or bytes arriving after the cancel resume the batch machine on a closed file.
+ */
+void IO::Protocols::YMODEM::cancelTransfer()
+{
+  m_yState = YState::Idle;
+  XMODEM::cancelTransfer();
+}
+
+/**
+ * @brief Starts a YMODEM file transfer.
+ */
+void IO::Protocols::YMODEM::startTransfer(const QString& filePath)
+{
+  if (isActive())
+    cancelTransfer();
+
+  m_file.setFileName(filePath);
+  if (!m_file.open(QIODevice::ReadOnly)) {
+    Q_EMIT finished(false, tr("Cannot open file: %1").arg(m_file.errorString()));
+    return;
+  }
+
+  m_filePath    = filePath;
+  m_fileSize    = m_file.size();
+  m_bytesSent   = 0;
+  m_blockNumber = 0;
+  m_retryCount  = 0;
+  m_yState      = YState::WaitingForInitialC;
+  m_state       = State::WaitingForStart;
+
+  Q_EMIT statusMessage(tr("Waiting for receiver…"));
+  Q_EMIT progressChanged(0, m_fileSize);
+
+  m_timeoutTimer.start(m_timeoutMs);
+}
+
+/**
+ * @brief Reacts to a byte received while waiting for ACK of block 0.
+ */
+void IO::Protocols::YMODEM::handleBlock0AckByte(quint8 ch)
+{
+  if (ch == kACK) {
+    m_timeoutTimer.stop();
+    m_retryCount = 0;
+    m_yState     = YState::WaitingForDataC;
+    m_timeoutTimer.start(m_timeoutMs);
+    return;
+  }
+
+  if (ch == kCAN) {
+    m_timeoutTimer.stop();
+    resetState();
+    m_yState = YState::Idle;
+    Q_EMIT statusMessage(tr("Transfer cancelled by receiver"));
+    Q_EMIT finished(false, tr("Receiver cancelled the transfer"));
+  }
+}
+
+/**
+ * @brief Reacts to a byte received while waiting for ACK of the second EOT.
+ */
+void IO::Protocols::YMODEM::handleSecondEotAckByte(quint8 ch)
+{
+  if (ch == kACK) {
+    m_timeoutTimer.stop();
+    m_retryCount = 0;
+    m_yState     = YState::WaitingForEndBatchC;
+    m_timeoutTimer.start(m_timeoutMs);
+    return;
+  }
+
+  if (ch == kCRC) {
+    m_timeoutTimer.stop();
+    sendEndOfBatch();
+  }
+}
+
+/**
+ * @brief Reacts to a byte received while waiting for ACK/NAK of a data block.
+ *        Returns false when processing must stop because the transfer ended.
+ */
+bool IO::Protocols::YMODEM::handleDataAckByte(quint8 ch)
+{
+  if (ch == kACK) {
+    m_timeoutTimer.stop();
+    m_retryCount  = 0;
+    m_blockNumber = static_cast<quint8>((m_blockNumber + 1) & 0xFF);
+
+    if (m_file.atEnd()) {
+      m_yState = YState::WaitingForFirstEOTResponse;
+      Q_EMIT writeRequested(QByteArray(1, static_cast<char>(kEOT)));
+      Q_EMIT statusMessage(tr("Sending first EOT…"));
+      m_timeoutTimer.start(m_timeoutMs);
+      return true;
+    }
+
+    m_yState = YState::SendingData;
+    sendDataBlock();
+    return true;
+  }
+
+  if (ch == kNAK) {
+    m_timeoutTimer.stop();
+    ++m_retryCount;
+    if (m_retryCount >= m_maxRetries) {
+      QByteArray cancel(5, static_cast<char>(kCAN));
+      Q_EMIT writeRequested(cancel);
+      resetState();
+      m_yState = YState::Idle;
+      Q_EMIT statusMessage(tr("Too many retries, transfer aborted"));
+      Q_EMIT finished(false, tr("Maximum retries exceeded"));
+      return false;
+    }
+
+    Q_EMIT protocolError();
+    Q_EMIT statusMessage(tr("NAK received, retrying block %1").arg(m_blockNumber));
+
+    m_bytesSent = qMax<qint64>(0, m_bytesSent - m_lastBlockBytes);
+    if (!m_file.seek(m_lastBlockStart)) [[unlikely]] {
+      resetState();
+      m_yState = YState::Idle;
+      Q_EMIT finished(false, tr("Failed to seek in file"));
+      return false;
+    }
+    m_yState = YState::SendingData;
+    sendDataBlock();
+    return true;
+  }
+
+  if (ch == kCAN) {
+    m_timeoutTimer.stop();
+    resetState();
+    m_yState = YState::Idle;
+    Q_EMIT statusMessage(tr("Transfer cancelled by receiver"));
+    Q_EMIT finished(false, tr("Receiver cancelled the transfer"));
+  }
+
+  return true;
+}
+
+/**
+ * @brief Processes bytes received from the remote device (YMODEM state machine).
+ */
+void IO::Protocols::YMODEM::processInput(const QByteArray& data)
+{
+  for (const char byte : data) {
+    const quint8 ch = static_cast<quint8>(byte);
+
+    switch (m_yState) {
+      case YState::WaitingForInitialC:
+        if (ch == kCRC) {
+          m_timeoutTimer.stop();
+          sendBlock0();
+        }
+        break;
+
+      case YState::WaitingForBlock0Ack:
+        handleBlock0AckByte(ch);
+        break;
+
+      case YState::WaitingForDataC:
+        if (ch == kCRC) {
+          m_timeoutTimer.stop();
+          m_retryCount  = 0;
+          m_blockNumber = 1;
+          m_yState      = YState::SendingData;
+          sendDataBlock();
+        }
+        break;
+
+      case YState::WaitingForDataAck:
+        if (!handleDataAckByte(ch))
+          return;
+
+        break;
+
+      case YState::WaitingForFirstEOTResponse:
+        if (ch == kNAK || ch == kACK) {
+          m_timeoutTimer.stop();
+          m_yState = YState::WaitingForSecondEOTAck;
+          Q_EMIT writeRequested(QByteArray(1, static_cast<char>(kEOT)));
+          Q_EMIT statusMessage(tr("Sending second EOT…"));
+          m_timeoutTimer.start(m_timeoutMs);
+        }
+        break;
+
+      case YState::WaitingForSecondEOTAck:
+        handleSecondEotAckByte(ch);
+        break;
+
+      case YState::WaitingForEndBatchC:
+        if (ch == kCRC) {
+          m_timeoutTimer.stop();
+          sendEndOfBatch();
+        }
+        break;
+
+      case YState::WaitingForEndBatchAck:
+        if (ch == kACK) {
+          m_timeoutTimer.stop();
+          m_yState = YState::Done;
+          Q_EMIT progressChanged(m_fileSize, m_fileSize);
+          resetState();
+          Q_EMIT statusMessage(tr("Transfer complete"));
+          Q_EMIT finished(true, QString());
+        }
+        break;
+
+      default:
+        break;
+    }
+  }
+}
+
+//--------------------------------------------------------------------------------------------------
+// YMODEM-specific block helpers
+//--------------------------------------------------------------------------------------------------
+
+/**
+ * @brief Sends block 0 containing the filename and file size.
+ */
+void IO::Protocols::YMODEM::sendBlock0()
+{
+  QFileInfo info(m_filePath);
+  QByteArray fileNameUtf8  = info.fileName().toUtf8();
+  const QByteArray sizeStr = QByteArray::number(m_fileSize);
+
+  static constexpr int kMaxFileNameBytes = 128 - 24;
+  if (fileNameUtf8.size() > kMaxFileNameBytes)
+    fileNameUtf8.truncate(kMaxFileNameBytes);
+
+  QByteArray payload;
+  payload.reserve(128);
+  payload.append(fileNameUtf8);
+  payload.append('\0');
+  payload.append(sizeStr);
+  payload.append('\0');
+
+  while (payload.size() < 128)
+    payload.append('\0');
+
+  QByteArray packet = buildBlock(payload, 0);
+
+  Q_EMIT writeRequested(packet);
+  Q_EMIT statusMessage(
+    tr("Sending file header: %1 (%2 bytes)").arg(info.fileName()).arg(m_fileSize));
+
+  m_yState = YState::WaitingForBlock0Ack;
+  m_timeoutTimer.start(m_timeoutMs);
+}
+
+/**
+ * @brief Sends an empty block 0 to signal end of batch.
+ */
+void IO::Protocols::YMODEM::sendEndOfBatch()
+{
+  QByteArray payload(128, '\0');
+  QByteArray packet = buildBlock(payload, 0);
+
+  Q_EMIT writeRequested(packet);
+  Q_EMIT statusMessage(tr("Sending end-of-batch marker…"));
+
+  m_yState = YState::WaitingForEndBatchAck;
+  m_timeoutTimer.start(m_timeoutMs);
+}
+
+/**
+ * @brief Reads and sends the next 1K data block.
+ */
+void IO::Protocols::YMODEM::sendDataBlock()
+{
+  m_lastBlockStart = m_file.pos();
+
+  QByteArray data = m_file.read(1024);
+  if (data.isEmpty()) {
+    if (m_file.error() != QFile::NoError) [[unlikely]] {
+      resetState();
+      m_yState = YState::Idle;
+      Q_EMIT finished(false, tr("File read error"));
+      return;
+    }
+    m_yState = YState::WaitingForFirstEOTResponse;
+    Q_EMIT writeRequested(QByteArray(1, static_cast<char>(kEOT)));
+    Q_EMIT statusMessage(tr("Sending first EOT…"));
+    m_timeoutTimer.start(m_timeoutMs);
+    return;
+  }
+
+  m_lastBlockBytes = data.size();
+
+  while (data.size() < 1024)
+    data.append(static_cast<char>(0x1A));
+
+  QByteArray packet = buildBlock(data, m_blockNumber);
+  Q_EMIT writeRequested(packet);
+  m_bytesSent = qMin(m_bytesSent + m_lastBlockBytes, m_fileSize);
+  Q_EMIT progressChanged(m_bytesSent, m_fileSize);
+  Q_EMIT statusMessage(tr("Sending block %1 (%2/%3 bytes)")
+                         .arg(QString::number(m_blockNumber),
+                              QString::number(m_bytesSent),
+                              QString::number(m_fileSize)));
+
+  m_yState = YState::WaitingForDataAck;
+  m_timeoutTimer.start(m_timeoutMs);
+}
+
+//--------------------------------------------------------------------------------------------------
+// Timeout handling
+//--------------------------------------------------------------------------------------------------
+
+/**
+ * @brief Handles a timeout while waiting for a receiver response (YMODEM state machine).
+ */
+void IO::Protocols::YMODEM::handleTimeout()
+{
+  if (!isActive())
+    return;
+
+  ++m_retryCount;
+  if (m_retryCount >= m_maxRetries) {
+    QByteArray cancel(5, static_cast<char>(kCAN));
+    Q_EMIT writeRequested(cancel);
+    resetState();
+    m_yState = YState::Idle;
+    Q_EMIT statusMessage(tr("Transfer timed out"));
+    Q_EMIT finished(false, tr("Timeout: no response from receiver"));
+    return;
+  }
+
+  Q_EMIT protocolError();
+  Q_EMIT statusMessage(tr("Timeout, retrying (%1/%2)…")
+                         .arg(QString::number(m_retryCount), QString::number(m_maxRetries)));
+
+  switch (m_yState) {
+    case YState::WaitingForBlock0Ack:
+      sendBlock0();
+      break;
+
+    case YState::WaitingForDataAck:
+      m_bytesSent = qMax<qint64>(0, m_bytesSent - m_lastBlockBytes);
+      if (!m_file.seek(m_lastBlockStart)) [[unlikely]] {
+        resetState();
+        m_yState = YState::Idle;
+        Q_EMIT finished(false, tr("Failed to seek in file"));
+        return;
+      }
+      m_yState = YState::SendingData;
+      sendDataBlock();
+      break;
+
+    case YState::WaitingForFirstEOTResponse:
+    case YState::WaitingForSecondEOTAck:
+      Q_EMIT writeRequested(QByteArray(1, static_cast<char>(kEOT)));
+      m_timeoutTimer.start(m_timeoutMs);
+      break;
+
+    case YState::WaitingForEndBatchAck:
+      sendEndOfBatch();
+      break;
+
+    default:
+      m_timeoutTimer.start(m_timeoutMs);
+      break;
+  }
+}

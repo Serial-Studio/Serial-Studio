@@ -23,7 +23,7 @@
 #include <QList>
 #include <QTest>
 
-#include "IO/CircularBuffer.h"
+#include "Core/CircularBuffer.h"
 
 // Capacity used by the pattern-scan tests: large enough for the fixtures, small enough that a
 // modest starting offset forces the payload across the wrap point.

@@ -26,7 +26,7 @@
 #include <QList>
 #include <QString>
 
-#include "IO/Drivers/S7/S7Pdu.h"
+#include "Protocols/S7/S7Pdu.h"
 
 using namespace IO::Drivers;
 

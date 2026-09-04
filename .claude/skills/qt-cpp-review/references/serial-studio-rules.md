@@ -47,7 +47,7 @@ sinks`. A violation here causes silent frame drops, not a compile error.
 
 ## Driver lifecycle
 
-Canonical reference: `app/src/IO/Drivers/BluetoothLE.{h,cpp}`. Read it before judging any
+Canonical reference: `core/Devices/IO/Drivers/BluetoothLE.{h,cpp}`. Read it before judging any
 driver.
 
 - **SS-DRV-1**: `~USB()` (and any driver with a worker thread) joins the worker thread BEFORE

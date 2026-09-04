@@ -28,8 +28,8 @@
 #include <QTest>
 #include <vector>
 
+#include "Core/DSPSimd.h"
 #include "dsp_scalar_ref.h"
-#include "DSPSimd.h"
 
 /**
  * @file tst_dsp_kernels.cpp

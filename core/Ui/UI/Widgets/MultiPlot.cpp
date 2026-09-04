@@ -1,0 +1,898 @@
+/*
+ * Serial Studio
+ * https://serial-studio.com/
+ *
+ * Copyright (C) 2020–2025 Alex Spataru
+ *
+ * This file is dual-licensed:
+ *
+ * - Under the GNU GPLv3 (or later) for builds that exclude Pro modules.
+ * - Under the Serial Studio Commercial License for builds that include
+ *   any Pro functionality.
+ *
+ * You must comply with the terms of one of these licenses, depending
+ * on your use case.
+ *
+ * For GPL terms, see <https://www.gnu.org/licenses/gpl-3.0.html>
+ * For commercial terms, see LICENSES/LicenseRef-SerialStudio-Commercial.txt.
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial
+ */
+
+#include "UI/Widgets/MultiPlot.h"
+
+#include <utility>
+
+#include "Core/DSPSimd.h"
+#include "Core/SSAssert.h"
+#include "DSP.h"
+#include "Misc/ThemeManager.h"
+#include "UI/Dashboard.h"
+#include "UI/Widgets/PlotAutoScale.h"
+#include "UI/Widgets/PlotLogScale.h"
+
+/**
+ * @brief Returns the shared simplified unit of every dataset in @p group, or
+ *        an empty string when datasets disagree or the first unit is empty.
+ */
+static QString sharedDatasetUnit(const DataModel::Group& group)
+{
+  if (group.datasets.empty())
+    return {};
+
+  const auto firstUnit = group.datasets[0].units.simplified();
+  if (firstUnit.isEmpty())
+    return {};
+
+  for (size_t i = 1; i < group.datasets.size(); ++i)
+    if (group.datasets[i].units.simplified() != firstUnit)
+      return {};
+
+  return firstUnit;
+}
+
+//--------------------------------------------------------------------------------------------------
+// Constructor & initialization
+//--------------------------------------------------------------------------------------------------
+
+/**
+ * @brief Constructs a MultiPlot widget.
+ */
+Widgets::MultiPlot::MultiPlot(const int index, QQuickItem* parent)
+  : QQuickItem(parent)
+  , m_index(index)
+  , m_dataW(0)
+  , m_dataH(0)
+  , m_yStepIndex(AutoScale::kNoStep)
+  , m_minX(0)
+  , m_maxX(0)
+  , m_minY(0)
+  , m_maxY(0)
+  , m_timeAxis(false)
+  , m_logX(false)
+  , m_logY(false)
+  , m_triggerSource(0)
+  , m_dashboard(UI::Dashboard::instance())
+  , m_themeManager(Misc::ThemeManager::instance())
+{
+  if (!VALIDATE_WIDGET(SerialStudio::DashboardMultiPlot, m_index))
+    return;
+
+  const auto& group = GET_GROUP(SerialStudio::DashboardMultiPlot, m_index);
+  m_minY            = std::numeric_limits<double>::max();
+  m_maxY            = std::numeric_limits<double>::lowest();
+
+  for (size_t i = 0; i < group.datasets.size(); ++i) {
+    const auto& dataset = group.datasets[i];
+    const bool isString = !dataset.isNumeric && !dataset.value.isEmpty();
+
+    m_stringCurves.append(isString);
+    m_visibleCurves.append(!isString);
+    m_labels.append(dataset.title);
+    if (!isString) {
+      m_minY = qMin(m_minY, qMin(dataset.pltMin, dataset.pltMax));
+      m_maxY = qMax(m_maxY, qMax(dataset.pltMin, dataset.pltMax));
+    }
+  }
+
+  m_yLabel                 = group.title;
+  const QString sharedUnit = sharedDatasetUnit(group);
+  if (!sharedUnit.isEmpty())
+    m_yLabel += " (" + sharedUnit + ")";
+
+  m_timeAxis = m_dashboard.useTimeXAxisGroup(group);
+  m_xLabel   = m_timeAxis ? tr("Time (s)") : tr("Samples");
+
+  if (!group.datasets.empty()) {
+    m_logX = !m_timeAxis && group.datasets.front().pltLogX;
+    m_logY = group.datasets.front().pltLogY;
+  }
+
+  m_data.resize(group.datasets.size());
+
+  connect(&m_dashboard, &UI::Dashboard::pointsChanged, this, &MultiPlot::updateRange);
+  connect(&m_dashboard, &UI::Dashboard::plotTimeRangeChanged, this, &MultiPlot::updateRange);
+
+  onThemeChanged();
+  connect(&m_themeManager, &Misc::ThemeManager::themeChanged, this, &MultiPlot::onThemeChanged);
+
+  calculateAutoScaleRange();
+  updateRange();
+}
+
+//--------------------------------------------------------------------------------------------------
+// Dimension getters
+//--------------------------------------------------------------------------------------------------
+
+/**
+ * @brief Returns the number of datasets in the multiplot.
+ */
+int Widgets::MultiPlot::count() const noexcept
+{
+  return m_data.count();
+}
+
+/**
+ * @brief Returns the size of the down-sampled X axis data.
+ */
+int Widgets::MultiPlot::dataW() const noexcept
+{
+  return m_dataW;
+}
+
+/**
+ * @brief Returns the size of the down-sampled Y axis data.
+ */
+int Widgets::MultiPlot::dataH() const noexcept
+{
+  return m_dataH;
+}
+
+//--------------------------------------------------------------------------------------------------
+// Axis range getters
+//--------------------------------------------------------------------------------------------------
+
+/**
+ * @brief Returns the minimum X-axis value.
+ */
+double Widgets::MultiPlot::minX() const noexcept
+{
+  return m_minX;
+}
+
+/**
+ * @brief Returns the maximum X-axis value.
+ */
+double Widgets::MultiPlot::maxX() const noexcept
+{
+  return m_maxX;
+}
+
+/**
+ * @brief Returns the minimum Y-axis value.
+ */
+double Widgets::MultiPlot::minY() const noexcept
+{
+  return m_minY;
+}
+
+/**
+ * @brief Returns the maximum Y-axis value.
+ */
+double Widgets::MultiPlot::maxY() const noexcept
+{
+  return m_maxY;
+}
+
+//--------------------------------------------------------------------------------------------------
+// State queries
+//--------------------------------------------------------------------------------------------------
+
+/**
+ * @brief Checks whether plot data updates are currently active.
+ */
+bool Widgets::MultiPlot::running() const noexcept
+{
+  return m_dashboard.multiplotRunning(m_index);
+}
+
+/**
+ * @brief Returns the current interpolation mode.
+ */
+SerialStudio::InterpolationMode Widgets::MultiPlot::interpolationMode() const noexcept
+{
+  return m_base.interpolationMode();
+}
+
+//--------------------------------------------------------------------------------------------------
+// Metadata getters
+//--------------------------------------------------------------------------------------------------
+
+/**
+ * @brief Returns the Y-axis label.
+ */
+const QString& Widgets::MultiPlot::yLabel() const noexcept
+{
+  return m_yLabel;
+}
+
+/**
+ * @brief Returns the X-axis label ("Samples" or "Time (s)").
+ */
+const QString& Widgets::MultiPlot::xLabel() const noexcept
+{
+  return m_xLabel;
+}
+
+/**
+ * @brief Returns true when this multiplot renders against a time (seconds-ago) X-axis.
+ */
+bool Widgets::MultiPlot::timeAxis() const noexcept
+{
+  return m_timeAxis;
+}
+
+/**
+ * @brief Returns true when the X axis renders in log10 space (Samples mode only).
+ */
+bool Widgets::MultiPlot::logX() const noexcept
+{
+  return m_logX;
+}
+
+/**
+ * @brief Returns true when the shared Y axis renders in log10 space.
+ */
+bool Widgets::MultiPlot::logY() const noexcept
+{
+  return m_logY;
+}
+
+/**
+ * @brief Returns the colors of the datasets.
+ */
+const QStringList& Widgets::MultiPlot::colors() const noexcept
+{
+  return m_colors;
+}
+
+/**
+ * @brief Returns the labels of the datasets.
+ */
+const QStringList& Widgets::MultiPlot::labels() const noexcept
+{
+  return m_labels;
+}
+
+/**
+ * @brief Returns the visibility state of all curves.
+ */
+const QList<bool>& Widgets::MultiPlot::visibleCurves() const noexcept
+{
+  return m_visibleCurves;
+}
+
+//--------------------------------------------------------------------------------------------------
+// Sweep / trigger getters
+//--------------------------------------------------------------------------------------------------
+
+/**
+ * @brief Returns whether sweep/trigger mode is active.
+ */
+bool Widgets::MultiPlot::sweepEnabled() const noexcept
+{
+  return m_base.sweepEnabled();
+}
+
+/**
+ * @brief Returns the trigger level on the trigger-source curve.
+ */
+double Widgets::MultiPlot::triggerLevel() const noexcept
+{
+  return m_base.triggerLevel();
+}
+
+/**
+ * @brief Returns the trigger holdoff in milliseconds.
+ */
+double Widgets::MultiPlot::holdoff() const noexcept
+{
+  return m_base.holdoffMs();
+}
+
+/**
+ * @brief Returns the per-sweep timebase in milliseconds; 0 means match time range.
+ */
+double Widgets::MultiPlot::sweepTimebase() const noexcept
+{
+  return m_base.timebaseMs();
+}
+
+/**
+ * @brief Returns the curve index used as the trigger source.
+ */
+int Widgets::MultiPlot::triggerSource() const noexcept
+{
+  return m_triggerSource;
+}
+
+/**
+ * @brief Returns the active sweep mode (auto/normal/single).
+ */
+SerialStudio::SweepMode Widgets::MultiPlot::sweepMode() const noexcept
+{
+  return m_base.sweepMode();
+}
+
+/**
+ * @brief Returns the trigger edge polarity.
+ */
+SerialStudio::TriggerEdge Widgets::MultiPlot::triggerEdge() const noexcept
+{
+  return m_base.triggerEdge();
+}
+
+//--------------------------------------------------------------------------------------------------
+// Rendering
+//--------------------------------------------------------------------------------------------------
+
+/**
+ * @brief Draws the data on the given QLineSeries.
+ */
+void Widgets::MultiPlot::draw(QXYSeries* series, const int index)
+{
+  if (!series || index < 0 || index >= count() || !m_visibleCurves[index])
+    return;
+
+  const auto& source         = m_data[index];
+  const QList<QPointF>* data = &source;
+  const int n                = source.size();
+
+  if (m_base.interpolationMode() == SerialStudio::InterpolationZoh && n >= 2) {
+    m_renderData.resize(2 * n - 1);
+    QPointF* out      = m_renderData.data();
+    const QPointF* in = source.constData();
+    out[0]            = in[0];
+    for (int i = 1; i < n; ++i) {
+      out[2 * i - 1] = QPointF(in[i].x(), in[i - 1].y());
+      out[2 * i]     = in[i];
+    }
+    data = &m_renderData;
+  }
+
+  else if (m_base.interpolationMode() == SerialStudio::InterpolationStem && n > 0) {
+    constexpr double kNan = std::numeric_limits<double>::quiet_NaN();
+    const double base     = (m_minY < 0.0 && m_maxY > 0.0) ? 0.0 : m_minY;
+
+    m_renderData.resize(3 * n);
+    QPointF* out      = m_renderData.data();
+    const QPointF* in = source.constData();
+    for (int i = 0; i < n; ++i) {
+      out[3 * i]     = in[i];
+      out[3 * i + 1] = QPointF(in[i].x(), base);
+      out[3 * i + 2] = QPointF(kNan, kNan);
+    }
+    data = &m_renderData;
+  }
+
+  series->replace(*data);
+  Q_EMIT series->update();
+}
+
+//--------------------------------------------------------------------------------------------------
+// Property setters
+//--------------------------------------------------------------------------------------------------
+
+/**
+ * @brief Updates the size of the down-sampled X axis data.
+ */
+void Widgets::MultiPlot::setDataW(const int width)
+{
+  if (m_dataW != width) {
+    m_dataW = width;
+    updateData();
+
+    Q_EMIT dataSizeChanged();
+  }
+}
+
+/**
+ * @brief Updates the size of the down-sampled Y axis data.
+ */
+void Widgets::MultiPlot::setDataH(const int height)
+{
+  if (m_dataH != height) {
+    m_dataH = height;
+    updateData();
+
+    Q_EMIT dataSizeChanged();
+  }
+}
+
+/**
+ * @brief Enables or disables plot data updates.
+ */
+void Widgets::MultiPlot::setRunning(const bool enabled)
+{
+  m_dashboard.setMultiplotRunning(m_index, enabled);
+  Q_EMIT runningChanged();
+}
+
+/**
+ * @brief Stores the visible X window pushed by the view (zoom/pan slice). Time-axis
+ *        draws downsample only this window at screen resolution, so zooming in scans
+ *        fewer samples instead of re-bucketing the full range at zoom resolution.
+ */
+void Widgets::MultiPlot::setVisibleXWindow(const double lo, const double hi)
+{
+  m_base.setVisibleXWindow(lo, hi);
+}
+
+/**
+ * @brief Updates the interpolation mode used by the multiplot.
+ */
+void Widgets::MultiPlot::setInterpolationMode(SerialStudio::InterpolationMode mode)
+{
+  if (!m_base.setInterpolationMode(mode))
+    return;
+
+  Q_EMIT interpolationModeChanged();
+}
+
+//--------------------------------------------------------------------------------------------------
+// Sweep / trigger setters
+//--------------------------------------------------------------------------------------------------
+
+/**
+ * @brief Enables or disables sweep/trigger mode and flips the X-axis window.
+ */
+void Widgets::MultiPlot::setSweepEnabled(const bool enabled)
+{
+  if (!m_base.setSweepEnabled(enabled))
+    return;
+
+  pushSweepConfig();
+  updateRange();
+  Q_EMIT sweepChanged();
+}
+
+/**
+ * @brief Updates the trigger level.
+ */
+void Widgets::MultiPlot::setTriggerLevel(const double level)
+{
+  if (!m_base.setTriggerLevel(level))
+    return;
+
+  pushSweepConfig();
+  Q_EMIT sweepChanged();
+}
+
+/**
+ * @brief Updates the trigger holdoff in milliseconds.
+ */
+void Widgets::MultiPlot::setHoldoff(const double milliseconds)
+{
+  if (!m_base.setHoldoff(milliseconds))
+    return;
+
+  pushSweepConfig();
+  Q_EMIT sweepChanged();
+}
+
+/**
+ * @brief Updates the per-sweep timebase in milliseconds and reflows the X-axis.
+ */
+void Widgets::MultiPlot::setSweepTimebase(const double milliseconds)
+{
+  if (!m_base.setSweepTimebase(milliseconds))
+    return;
+
+  pushSweepConfig();
+  updateRange();
+  Q_EMIT sweepChanged();
+}
+
+/**
+ * @brief Selects which curve drives the trigger.
+ */
+void Widgets::MultiPlot::setTriggerSource(const int curve)
+{
+  const int clamped = (curve < 0) ? 0 : (curve >= count() ? count() - 1 : curve);
+  if (m_triggerSource == clamped)
+    return;
+
+  m_triggerSource = clamped;
+  pushSweepConfig();
+  Q_EMIT sweepChanged();
+}
+
+/**
+ * @brief Updates the sweep mode (auto/normal/single).
+ */
+void Widgets::MultiPlot::setSweepMode(const SerialStudio::SweepMode mode)
+{
+  if (!m_base.setSweepMode(mode))
+    return;
+
+  pushSweepConfig();
+  Q_EMIT sweepChanged();
+}
+
+/**
+ * @brief Updates the trigger edge polarity.
+ */
+void Widgets::MultiPlot::setTriggerEdge(const SerialStudio::TriggerEdge edge)
+{
+  if (!m_base.setTriggerEdge(edge))
+    return;
+
+  pushSweepConfig();
+  Q_EMIT sweepChanged();
+}
+
+/**
+ * @brief Re-arms a single-shot capture.
+ */
+void Widgets::MultiPlot::armSweep()
+{
+  m_dashboard.armMultiplotSweep(m_index);
+}
+
+/**
+ * @brief Pushes the current trigger configuration into the Dashboard engine.
+ */
+void Widgets::MultiPlot::pushSweepConfig()
+{
+  m_dashboard.setMultiplotSweep(m_index,
+                                m_base.sweepEnabled(),
+                                m_base.triggerLevel(),
+                                static_cast<int>(m_base.triggerEdge()),
+                                static_cast<int>(m_base.sweepMode()),
+                                m_base.holdoffMs() * 0.001,
+                                m_triggerSource,
+                                m_base.timebaseMs() * 0.001);
+}
+
+//--------------------------------------------------------------------------------------------------
+// Data updates
+//--------------------------------------------------------------------------------------------------
+
+/**
+ * @brief Updates the data of the multiplot.
+ */
+void Widgets::MultiPlot::updateData()
+{
+  static thread_local DSP::DownsampleWorkspace ws;
+
+  if (!isEnabled() || !VALIDATE_WIDGET(SerialStudio::DashboardMultiPlot, m_index))
+    return;
+
+  syncStringCurves();
+
+  if (m_timeAxis && m_base.sweepEnabled()) {
+    double xLo = m_minX;
+    double xHi = m_maxX;
+    m_base.clampToVisibleX(xLo, xHi, m_dataW);
+
+    const auto& engine        = m_dashboard.multiplotSweep(m_index);
+    const qsizetype plotCount = static_cast<qsizetype>(engine.front.size());
+    if (m_data.size() != plotCount)
+      m_data.resize(plotCount);
+
+    for (qsizetype i = 0; i < plotCount; ++i) {
+      if (i >= m_visibleCurves.size() || !m_visibleCurves[i])
+        continue;
+
+      const auto& ring = engine.display(static_cast<size_t>(i));
+      (void)DSP::downsampleWindowAbsolute(
+        ring.time, ring.value, xLo, xHi, m_dataW, m_dataH, m_data[i], &ws);
+      applyLogYToCurve(m_data[i]);
+    }
+
+    calculateAutoScaleRange();
+    return;
+  }
+
+  if (m_timeAxis) {
+    double xLo = m_minX;
+    double xHi = m_maxX;
+    m_base.clampToVisibleX(xLo, xHi, m_dataW);
+
+    const auto& rings         = m_dashboard.multiplotTimeRings(m_index);
+    const qsizetype plotCount = static_cast<qsizetype>(rings.size());
+    if (m_data.size() != plotCount)
+      m_data.resize(plotCount);
+
+    for (qsizetype i = 0; i < plotCount; ++i) {
+      if (i >= m_visibleCurves.size() || !m_visibleCurves[i])
+        continue;
+
+      const auto& ring = rings[static_cast<size_t>(i)];
+      (void)DSP::downsampleTimeWindow(ring, xLo, xHi, m_dataW, m_dataH, m_data[i], &ws);
+      applyLogYToCurve(m_data[i]);
+    }
+
+    calculateAutoScaleRange();
+    return;
+  }
+
+  const auto& data = m_dashboard.multiplotData(m_index);
+  const auto& X    = *data.x;
+
+  const qsizetype plotCount = data.y.size();
+  if (m_data.size() != plotCount) {
+    if (m_data.size() > plotCount && m_data.size() > plotCount * 1.2) {
+      m_data.clear();
+      m_data.squeeze();
+    }
+    m_data.resize(plotCount);
+  }
+
+  if (m_logX)
+    m_base.buildLogXScratch(X, LogScale::kSampleFloor);
+
+  for (qsizetype i = 0; i < plotCount; ++i) {
+    if (i >= m_visibleCurves.size() || !m_visibleCurves[i])
+      continue;
+
+    DSP::downsampleMonotonic(
+      m_logX ? m_base.logXScratch() : X, data.y[i], m_dataW, m_dataH, m_data[i], &ws);
+    applyLogYToCurve(m_data[i]);
+  }
+
+  calculateAutoScaleRange();
+}
+
+/**
+ * @brief Rewrites a curve's downsampled points with log10 Y values when the shared Y
+ *        axis is logarithmic; log10 is monotonic, so per-column min/max envelopes
+ *        commute with the transform and NaN gap markers pass through unchanged.
+ */
+void Widgets::MultiPlot::applyLogYToCurve(QList<QPointF>& curve)
+{
+  if (!m_logY)
+    return;
+
+  QPointF* points = curve.data();
+  for (qsizetype i = 0; i < curve.size(); ++i)
+    points[i].setY(LogScale::clampedLog10(points[i].y()));
+}
+
+/**
+ * @brief Updates the range of the multiplot.
+ */
+void Widgets::MultiPlot::updateRange()
+{
+  if (!VALIDATE_WIDGET(SerialStudio::DashboardMultiPlot, m_index))
+    return;
+
+  const auto& data = m_dashboard.multiplotData(m_index);
+  m_data.clear();
+  m_data.squeeze();
+  m_data.resize(data.y.size());
+
+  if (m_timeAxis && m_base.sweepEnabled()) {
+    const double range    = m_dashboard.plotTimeRange();
+    const double timebase = m_base.timebaseMs() * 0.001;
+    m_minX                = 0;
+    m_maxX                = (timebase > 0 && timebase < range) ? timebase : range;
+  }
+
+  else if (m_timeAxis) {
+    m_minX = -m_dashboard.plotTimeRange();
+    m_maxX = 0;
+  }
+
+  else {
+    m_minX = 0;
+    m_maxX = m_logX ? LogScale::clampedLog10(m_dashboard.points(), LogScale::kSampleFloor)
+                    : m_dashboard.points();
+  }
+
+  Q_EMIT rangeChanged();
+}
+
+/**
+ * @brief Calculates the auto scale range of the multiplot.
+ */
+void Widgets::MultiPlot::calculateAutoScaleRange()
+{
+  const auto prevMinY = m_minY;
+  const auto prevMaxY = m_maxY;
+
+  if (m_data.isEmpty()) {
+    m_minY = 0;
+    m_maxY = 1;
+  }
+
+  else if (!computeRangeFromDatasets()) {
+    scanCurvesForRange();
+    padDerivedRange();
+  }
+
+  if (DSP::notEqual(prevMinY, m_minY) || DSP::notEqual(prevMaxY, m_maxY))
+    Q_EMIT rangeChanged();
+}
+
+/**
+ * @brief Computes Y range from dataset pltMin/pltMax bounds.
+ */
+bool Widgets::MultiPlot::computeRangeFromDatasets()
+{
+  if (!VALIDATE_WIDGET(SerialStudio::DashboardMultiPlot, m_index))
+    return false;
+
+  const auto& group = GET_GROUP(SerialStudio::DashboardMultiPlot, m_index);
+  m_minY            = std::numeric_limits<double>::max();
+  m_maxY            = std::numeric_limits<double>::lowest();
+
+  int index = 0;
+  for (const auto& dataset : group.datasets) {
+    const bool curveOk = DSP::notEqual(dataset.pltMin, dataset.pltMax)
+                      && index < m_visibleCurves.size() && m_visibleCurves[index];
+    if (!curveOk)
+      return false;
+
+    m_minY = qMin(m_minY, qMin(dataset.pltMin, dataset.pltMax));
+    m_maxY = qMax(m_maxY, qMax(dataset.pltMin, dataset.pltMax));
+    ++index;
+  }
+
+  if (m_logY)
+    return LogScale::resolveLogBounds(m_minY, m_maxY);
+
+  return true;
+}
+
+/**
+ * @brief Scans visible curves for finite min/max values.
+ */
+void Widgets::MultiPlot::scanCurvesForRange()
+{
+  m_minY = std::numeric_limits<double>::max();
+  m_maxY = std::numeric_limits<double>::lowest();
+
+  int index = 0;
+  for (const auto& curve : std::as_const(m_data)) {
+    if (index < m_visibleCurves.size() && m_visibleCurves[index])
+      DSP::simdFiniteMinMaxPointF<1>(curve.constData(), curve.count(), m_minY, m_maxY);
+
+    ++index;
+  }
+}
+
+/**
+ * @brief Pads the data-derived Y bounds and snaps them onto the 1-2-5 auto-scale ladder
+ *        (spec 0058); m_yStepIndex carries the step between draws so the shared axis grows at
+ *        once but shrinks only past the hysteresis margin.
+ */
+void Widgets::MultiPlot::padDerivedRange()
+{
+  applyDerivedYBounds();
+  if (AutoScale::quantizeRange(m_minY, m_maxY, m_yStepIndex))
+    return;
+
+  m_maxY = std::ceil(m_maxY);
+  m_minY = std::floor(m_minY);
+  if (DSP::almostEqual(m_maxY, m_minY)) {
+    m_minY -= 1;
+    m_maxY += 1;
+  }
+}
+
+/**
+ * @brief Selects the padding strategy for the current m_minY/m_maxY pair. An empty scan
+ *        leaves the min > max sentinels (no visible curves yet), which would otherwise
+ *        overflow the padding into an infinite axis range that spins QtGraphs' tick-anchor
+ *        loop forever.
+ */
+void Widgets::MultiPlot::applyDerivedYBounds()
+{
+  if (!std::isfinite(m_minY) || !std::isfinite(m_maxY) || m_minY > m_maxY) {
+    m_minY = 0;
+    m_maxY = 1;
+    return;
+  }
+
+  if (DSP::almostEqual(m_minY, m_maxY) && DSP::isZero(m_minY)) {
+    m_minY = -1;
+    m_maxY = 1;
+    return;
+  }
+
+  if (DSP::almostEqual(m_minY, m_maxY)) {
+    const double absValue = qAbs(m_minY);
+    m_minY                = m_minY - absValue * 0.1;
+    m_maxY                = m_maxY + absValue * 0.1;
+    return;
+  }
+
+  const double midY      = (m_minY + m_maxY) * 0.5;
+  const double halfRange = (m_maxY - m_minY) * 0.5;
+
+  double paddedRange = halfRange * 1.1;
+  if (DSP::isZero(paddedRange))
+    paddedRange = 1;
+
+  m_minY = midY - paddedRange;
+  m_maxY = midY + paddedRange;
+
+  if (DSP::almostEqual(m_minY, m_maxY)) {
+    m_minY -= 1;
+    m_maxY += 1;
+  }
+}
+
+//--------------------------------------------------------------------------------------------------
+// Curve management
+//--------------------------------------------------------------------------------------------------
+
+/**
+ * @brief Auto-hides curves whose dataset currently reports a non-numeric string value
+ *        (and restores them once numeric data returns) so a text channel in the group
+ *        cannot flatten the curves or skew the autoscale range; visibility toggles made
+ *        by the user while a curve's numeric state is unchanged are left untouched.
+ */
+void Widgets::MultiPlot::syncStringCurves()
+{
+  SS_ASSERT(VALIDATE_WIDGET(SerialStudio::DashboardMultiPlot, m_index), return);
+  SS_ASSERT_LOG(m_stringCurves.size() == m_visibleCurves.size());
+
+  const auto& group     = GET_GROUP(SerialStudio::DashboardMultiPlot, m_index);
+  const qsizetype count = qMin(static_cast<qsizetype>(group.datasets.size()),
+                               qMin(m_stringCurves.size(), m_visibleCurves.size()));
+
+  bool changed = false;
+  for (qsizetype i = 0; i < count; ++i) {
+    const auto& dataset = group.datasets[static_cast<size_t>(i)];
+    const bool isString = !dataset.isNumeric && !dataset.value.isEmpty();
+    if (isString == m_stringCurves[i])
+      continue;
+
+    m_stringCurves[i] = isString;
+    if (m_visibleCurves[i] == isString) {
+      m_visibleCurves[i] = !isString;
+      changed            = true;
+    }
+  }
+
+  if (changed)
+    Q_EMIT curvesChanged();
+}
+
+/**
+ * @brief Modifies the visibility state of a specific curve in the multi-plot.
+ */
+void Widgets::MultiPlot::modifyCurveVisibility(const int index, const bool visible)
+{
+  if (index >= 0 && index < m_visibleCurves.count()) {
+    m_visibleCurves[index] = visible;
+    Q_EMIT curvesChanged();
+  }
+}
+
+//--------------------------------------------------------------------------------------------------
+// Theme management
+//--------------------------------------------------------------------------------------------------
+
+/**
+ * @brief Updates the theme of the multiplot.
+ */
+void Widgets::MultiPlot::onThemeChanged()
+{
+  if (VALIDATE_WIDGET(SerialStudio::DashboardMultiPlot, m_index)) {
+    const auto& group = GET_GROUP(SerialStudio::DashboardMultiPlot, m_index);
+
+    m_colors.clear();
+    m_colors.resize(group.datasets.size());
+    for (size_t i = 0; i < group.datasets.size(); ++i) {
+      const auto& dataset = group.datasets[i];
+      const auto color    = SerialStudio::getDatasetColor(dataset);
+      m_colors[i]         = color.name();
+    }
+
+    Q_EMIT themeChanged();
+    Q_EMIT curvesChanged();
+  }
+}

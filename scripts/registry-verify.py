@@ -57,7 +57,7 @@ CATEGORIES = {
 }
 TIERS = {"16", "24", "32", "48"}
 
-SOURCE_ROOTS = (ROOT / "app" / "qml", ROOT / "app" / "src")
+SOURCE_ROOTS = (ROOT / "app" / "qml", ROOT / "app" / "src", ROOT / "core")
 SOURCE_EXTS = {".qml", ".cpp", ".h"}
 
 NAME_RE = re.compile(r"^[a-z0-9][a-z0-9-]*\.svg$")
@@ -699,13 +699,13 @@ def check_api_snapshot(errors: list[str]) -> None:
 # ---------------------------------------------------------------------------------------------------
 
 PROPERTY_SCHEMA = RCC / "properties" / "schema.json"
-FRAME_H = ROOT / "app" / "src" / "DataModel" / "Frame.h"
-FRAME_KEYS_H = ROOT / "app" / "src" / "DataModel" / "FrameKeys.h"
-HOOKS_H = ROOT / "app" / "src" / "DataModel" / "Project" / "PropertyHooks.h"
-EDITOR_H = ROOT / "app" / "src" / "DataModel" / "ProjectEditor.h"
-MODEL_H = ROOT / "app" / "src" / "DataModel" / "ProjectModel.h"
+FRAME_H = ROOT / "core" / "Pipeline" / "DataModel" / "Frame.h"
+FRAME_KEYS_H = ROOT / "core" / "Pipeline" / "DataModel" / "FrameKeys.h"
+HOOKS_H = ROOT / "core" / "Pipeline" / "DataModel" / "Project" / "PropertyHooks.h"
+EDITOR_H = ROOT / "core" / "Pipeline" / "DataModel" / "ProjectEditor.h"
+MODEL_H = ROOT / "core" / "Pipeline" / "DataModel" / "ProjectModel.h"
 GENERATED_REGISTRY = (
-    ROOT / "app" / "src" / "DataModel" / "Generated" / "DatasetRegistry.h"
+    ROOT / "core" / "Pipeline" / "DataModel" / "Generated" / "DatasetRegistry.h"
 )
 
 # Hooks the generated code never calls: the caller owns the dialog and the deferred form
@@ -877,7 +877,7 @@ def check_manifest_keys(errors: list[str], manifest: dict, keys: set[str]) -> No
             fail(
                 errors,
                 f"dataset.json: {owner} names jsonKey '{constant}', which is not a "
-                "Keys:: constant in app/src/DataModel/FrameKeys.h",
+                "Keys:: constant in core/Pipeline/DataModel/FrameKeys.h",
             )
 
 
@@ -927,7 +927,7 @@ def check_manifest_hooks(errors: list[str], manifest: dict) -> None:
             continue
         fail(
             errors,
-            f"dataset.json: hook '{name}' is not declared in app/src/DataModel/{home} "
+            f"dataset.json: hook '{name}' is not declared in core/Pipeline/DataModel/{home} "
             "and is not marked caller-owned",
         )
 
@@ -1100,17 +1100,17 @@ def check_property_manifests(errors: list[str]) -> None:
 EXTENSIONS = RCC / "extensions"
 CATALOG_SCHEMA = EXTENSIONS / "schema" / "catalog.json"
 EXTENSION_CATALOG_CPP = (
-    ROOT / "app" / "src" / "Misc" / "Extensions" / "ExtensionCatalog.cpp"
+    ROOT / "core" / "Ui" / "Misc" / "Extensions" / "ExtensionCatalog.cpp"
 )
 EXTENSION_INSTALLER_CPP = (
-    ROOT / "app" / "src" / "Misc" / "Extensions" / "ExtensionInstaller.cpp"
+    ROOT / "core" / "Ui" / "Misc" / "Extensions" / "ExtensionInstaller.cpp"
 )
 WIDGET_SCHEMA = EXTENSIONS / "schema" / "widget-manifest.json"
 BUNDLED_WIDGETS = EXTENSIONS / "widget"
-WIDGET_CATALOG_CPP = ROOT / "app" / "src" / "UI" / "WidgetExtensions.cpp"
+WIDGET_CATALOG_CPP = ROOT / "core" / "Ui" / "UI" / "WidgetExtensions.cpp"
 SERIALSTUDIO_CPP = ROOT / "app" / "src" / "SerialStudio.cpp"
 MODULE_MANAGER_CPP = ROOT / "app" / "src" / "Misc" / "ModuleManager.cpp"
-CONTEXT_REGISTRY_CPP = ROOT / "app" / "src" / "Misc" / "ContextRegistry.cpp"
+CONTEXT_REGISTRY_CPP = ROOT / "core" / "Ui" / "Misc" / "ContextRegistry.cpp"
 
 # Context properties that carry a build constant or a plain value rather than a host object.
 # Shadowing them in an extension's context would narrow nothing, so hostContextNames() omits them
@@ -1328,7 +1328,8 @@ def check_widget_reserved_ids(errors: list[str], schema: dict) -> None:
     catalog = catalog_reserved_ids()
     if not catalog:
         fail(
-            errors, "could not parse reservedIds() from app/src/UI/WidgetExtensions.cpp"
+            errors,
+            "could not parse reservedIds() from core/Ui/UI/WidgetExtensions.cpp",
         )
         return
 
@@ -1548,8 +1549,8 @@ def alias_reference_counts(aliases: dict[str, str]) -> dict[str, int]:
 # Spec 0040/0075: mirror wire version
 # ---------------------------------------------------------------------------------------------------
 
-MIRROR_PROTOCOL = ROOT / "app" / "src" / "API" / "Mirror" / "MirrorProtocol.h"
-MIRROR_PUBLISHER = ROOT / "app" / "src" / "API" / "Mirror" / "MirrorPublisher.cpp"
+MIRROR_PROTOCOL = ROOT / "core" / "Api" / "API" / "Mirror" / "MirrorProtocol.h"
+MIRROR_PUBLISHER = ROOT / "core" / "Api" / "API" / "Mirror" / "MirrorPublisher.cpp"
 MIRROR_BASELINE = ROOT / "scripts" / "mirror-wire.json"
 
 # The publisher functions that decide dataset identity and ordering on the wire

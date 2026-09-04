@@ -128,7 +128,7 @@ gating on the binding's `enabled` (never `visible`). A few chords that can't be 
 ### Translations
 
 Command titles/tooltips are translated through `QCoreApplication::translate("Commands", …)`.
-`scripts/generate-command-strings.py` emits `app/src/UI/CommandStrings.cpp`
+`scripts/generate-command-strings.py` emits `core/Ui/UI/CommandStrings.cpp`
 (a `QT_TRANSLATE_NOOP` stub) so lupdate sees them; it runs inside `sanitize-commit.py` and
 `--check` gates drift. Dynamic per-state strings (a toggle's changing tooltip) use `qsTr`
 in the binding.

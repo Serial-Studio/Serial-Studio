@@ -53,4 +53,6 @@ a restructure was due, a renamed symbol that still leaks the design problem).
 - Commit messages are Conventional Commits (`feat|fix|chore|docs|style|refactor|perf|test(scope): …`).
 - Markdown narration/marketing copy is linted by `scripts/documentation-verify.py` (writes
   `.doc-report`); CLAUDE.md is exempt.
+- Touching `core/` or a source that could move there: also run `python scripts/layer-verify.py`
+  (spec 0076) — it is not in the `sanitize-commit.py` chain but is a hard CI lint-job gate.
 - Only commit or push when the developer explicitly asks.

@@ -64,7 +64,7 @@ DOC_EXCLUDE_DIRS = frozenset({"specs", "build", "node_modules", "__pycache__"})
 
 # Trees searched for C++/QML symbols. `lib/` is vendored, so a symbol that only
 # resolves there is not a claim about first-party code.
-SOURCE_TREES = ("app/src", "app/qml")
+SOURCE_TREES = ("app/src", "app/qml", "core")
 SOURCE_SUFFIXES = (".cpp", ".h", ".qml")
 
 # Schema and manifest keys (`reservedId`, `jsonKey`, `formIdOrder`) are named in the
@@ -78,6 +78,7 @@ SOURCE_EXCLUDE_DIRS = frozenset({"ThirdParty"})
 # alone -- a false path finding costs more than the miss.
 PATH_PREFIXES = (
     "app/",
+    "core/",
     "lib/",
     "doc/",
     "cmake/",
@@ -196,7 +197,7 @@ DUAL_SUFFIX_RE = re.compile(
     r"^(?P<stem>.+)\.(?P<first>\w+)\s*[/|]\s*\.?(?P<second>\w+)$"
 )
 
-# Documentation writes templates as `app/src/IO/Drivers/<Name>.h` and
+# Documentation writes templates as `core/Devices/IO/Drivers/<Name>.h` and
 # `doc/claude/specs/NNNN-slug/spec.md`. Those are shapes, not paths.
 PLACEHOLDER_RE = re.compile(r"<[^>]*>|NNNN")
 
@@ -444,7 +445,7 @@ def check_symbols(
                             path,
                             i + 1,
                             "identifier-missing",
-                            f"`{text}` appears nowhere under app/src or app/qml",
+                            f"`{text}` appears nowhere under app/src, app/qml, or core",
                             False,
                         )
                     )
@@ -469,7 +470,7 @@ def check_symbols(
                         path,
                         i + 1,
                         "symbol-missing",
-                        f"`{text}`: `{member}` appears nowhere under app/src or app/qml",
+                        f"`{text}`: `{member}` appears nowhere under app/src, app/qml, or core",
                         True,
                     )
                 )

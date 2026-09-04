@@ -1,0 +1,795 @@
+/*
+ * Serial Studio
+ * https://serial-studio.com/
+ *
+ * Copyright (C) 2020-2025 Alex Spataru
+ *
+ * This file is dual-licensed:
+ *
+ * - Under the GNU GPLv3 (or later) for builds that exclude Pro modules.
+ * - Under the Serial Studio Commercial License for builds that include
+ *   any Pro functionality.
+ *
+ * You must comply with the terms of one of these licenses, depending
+ * on your use case.
+ *
+ * For GPL terms, see <https://www.gnu.org/licenses/gpl-3.0.html>
+ * For commercial terms, see LICENSES/LicenseRef-SerialStudio-Commercial.txt.
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial
+ */
+
+// clang-format off
+#ifdef _WIN32
+#  ifndef WIN32_LEAN_AND_MEAN
+#    define WIN32_LEAN_AND_MEAN
+#  endif
+#  include <windows.h>
+#  include <avrt.h>
+#  include <dbghelp.h>
+#  include <shlobj.h>
+#  include <psapi.h>
+#  include <io.h>
+#  include <fcntl.h>
+#  pragma comment(lib, "dbghelp")
+#endif
+
+#ifdef __linux__
+#  include <cstdint>
+#  include <sys/syscall.h>
+#  include <unistd.h>
+#endif
+
+#ifdef __APPLE__
+#  include <pthread.h>
+#  include <pthread/qos.h>
+#endif
+
+#if defined(__linux__) || defined(__APPLE__)
+#  include <sys/mman.h>
+#  include <sys/resource.h>
+#endif
+// clang-format on
+
+#include "Platform/AppPlatform.h"
+
+#include <cstdio>
+#include <cstdlib>
+#include <cstring>
+#include <QApplication>
+#include <QCoreApplication>
+#include <QCryptographicHash>
+#include <QSettings>
+#include <QWheelEvent>
+
+#include "Core/SSAssert.h"
+
+#ifdef Q_OS_LINUX
+#  include <QDBusConnection>
+#  include <QDBusInterface>
+#endif
+
+#ifdef Q_OS_MACOS
+#  include <IOKit/pwr_mgt/IOPMLib.h>
+#endif
+
+#ifdef SERIAL_STUDIO_WITH_WEBENGINE
+#  include <QtWebEngineQuick>
+#endif
+
+namespace Platform {
+
+//---------------------------------------------------------------------------------------------------
+// Constants
+//---------------------------------------------------------------------------------------------------
+
+// MMCSS characteristics are per thread, so the latch must be too (spec 0075, N2)
+static thread_local bool s_mmcssRegistered = false;
+
+//---------------------------------------------------------------------------------------------------
+// TrackpadScrollFilter
+//---------------------------------------------------------------------------------------------------
+
+/**
+ * @brief Initializes the trackpad scroll filter with reentry guard cleared.
+ */
+TrackpadScrollFilter::TrackpadScrollFilter(QObject* parent) : QObject(parent), m_reentry(false) {}
+
+/**
+ * @brief Scales trackpad pixelDelta (currently 1:1) and re-dispatches it; angleDelta untouched.
+ */
+bool TrackpadScrollFilter::eventFilter(QObject* obj, QEvent* event)
+{
+  if (event->type() != QEvent::Wheel || m_reentry)
+    return QObject::eventFilter(obj, event);
+
+  auto* wheel = static_cast<QWheelEvent*>(event);
+
+  const QPoint pixel = wheel->pixelDelta();
+  if (pixel.isNull())
+    return QObject::eventFilter(obj, event);
+
+  if (wheel->source() != Qt::MouseEventNotSynthesized)
+    return QObject::eventFilter(obj, event);
+
+  constexpr qreal kScale = 1.0;
+  const QPoint scaledPixel(static_cast<int>(pixel.x() * kScale),
+                           static_cast<int>(pixel.y() * kScale));
+
+  QWheelEvent amplified(wheel->position(),
+                        wheel->globalPosition(),
+                        scaledPixel,
+                        wheel->angleDelta(),
+                        wheel->buttons(),
+                        wheel->modifiers(),
+                        wheel->phase(),
+                        wheel->inverted(),
+                        wheel->source(),
+                        wheel->pointingDevice());
+
+  m_reentry            = true;
+  const bool delivered = QCoreApplication::sendEvent(obj, &amplified);
+  m_reentry            = false;
+
+  event->setAccepted(amplified.isAccepted());
+  return delivered && amplified.isAccepted();
+}
+
+//---------------------------------------------------------------------------------------------------
+// Windows-only helpers
+//---------------------------------------------------------------------------------------------------
+
+#ifdef Q_OS_WIN
+
+/**
+ * @brief Posts a synthetic Enter so the shell redraws its prompt after the process exits.
+ */
+static void redrawConsolePromptAtExit()
+{
+  const HANDLE in = GetStdHandle(STD_INPUT_HANDLE);
+  if (in == nullptr || in == INVALID_HANDLE_VALUE)
+    return;
+
+  INPUT_RECORD records[2]                     = {};
+  records[0].EventType                        = KEY_EVENT;
+  records[0].Event.KeyEvent.bKeyDown          = TRUE;
+  records[0].Event.KeyEvent.wRepeatCount      = 1;
+  records[0].Event.KeyEvent.wVirtualKeyCode   = VK_RETURN;
+  records[0].Event.KeyEvent.uChar.UnicodeChar = L'\r';
+  records[1]                                  = records[0];
+  records[1].Event.KeyEvent.bKeyDown          = FALSE;
+
+  DWORD written = 0;
+  (void)WriteConsoleInput(in, records, 2, &written);
+}
+
+/**
+ * @brief True when a std handle is wired to a pipe or disk file (redirection, not a console).
+ */
+static bool handleIsRedirected(DWORD stdHandle)
+{
+  const HANDLE h = GetStdHandle(stdHandle);
+  if (h == nullptr || h == INVALID_HANDLE_VALUE)
+    return false;
+
+  const DWORD type = GetFileType(h) & ~static_cast<DWORD>(FILE_TYPE_REMOTE);
+  return type == FILE_TYPE_DISK || type == FILE_TYPE_PIPE;
+}
+
+/**
+ * @brief Wires a CRT stream to the inherited std handle so a GUI-subsystem build honors
+ * redirection.
+ */
+static void bindStreamToStdHandle(DWORD stdHandle, FILE* stream)
+{
+  SS_ASSERT(stream != nullptr, return);
+
+  const HANDLE src = GetStdHandle(stdHandle);
+  if (src == nullptr || src == INVALID_HANDLE_VALUE)
+    return;
+
+  const HANDLE self = GetCurrentProcess();
+  HANDLE dup        = nullptr;
+  if (!DuplicateHandle(self, src, self, &dup, 0, FALSE, DUPLICATE_SAME_ACCESS))
+    return;
+
+  const int fd = _open_osfhandle(reinterpret_cast<intptr_t>(dup), _O_TEXT);
+  if (fd == -1) {
+    CloseHandle(dup);
+    return;
+  }
+
+  if (_dup2(fd, _fileno(stream)) == 0) {
+    clearerr(stream);
+    (void)setvbuf(stream, nullptr, _IONBF, 0);
+  }
+
+  (void)_close(fd);
+}
+
+/**
+ * @brief Attaches the application to the parent console and redirects stdout/stderr.
+ */
+static void attachToConsole()
+{
+  if (handleIsRedirected(STD_OUTPUT_HANDLE)) {
+    bindStreamToStdHandle(STD_OUTPUT_HANDLE, stdout);
+    bindStreamToStdHandle(STD_ERROR_HANDLE, stderr);
+    return;
+  }
+
+  if (AttachConsole(ATTACH_PARENT_PROCESS)) {
+    FILE* fp = nullptr;
+    (void)freopen_s(&fp, "CONOUT$", "w", stdout);
+    (void)freopen_s(&fp, "CONOUT$", "w", stderr);
+    // code-verify off  -- raw stdio is the only path before Qt is up
+    printf("\n");
+    // code-verify on
+
+    std::atexit(redrawConsolePromptAtExit);
+  }
+}
+
+/**
+ * @brief Pins the process to a stable Windows AppUserModelID.
+ */
+static void setWindowsAppUserModelId(const QString& shortcutPath)
+{
+  QString aumid = QStringLiteral("AlexSpataru.SerialStudio");
+  if (!shortcutPath.isEmpty())
+    aumid += QStringLiteral(".Shortcut.") + AppPlatform::shortcutIdentityHash(shortcutPath);
+
+  SetCurrentProcessExplicitAppUserModelID(reinterpret_cast<LPCWSTR>(aumid.utf16()));
+}
+
+/**
+ * @brief Enables SeIncreaseWorkingSetPrivilege (present in every user token) so the minimum
+ *        working set can grow enough for VirtualLock to pin the acquisition buffers.
+ */
+static void enableWorkingSetPrivilege()
+{
+  HANDLE token = nullptr;
+  if (!OpenProcessToken(GetCurrentProcess(), TOKEN_ADJUST_PRIVILEGES, &token))
+    return;
+
+  TOKEN_PRIVILEGES tp         = {};
+  tp.PrivilegeCount           = 1;
+  tp.Privileges[0].Attributes = SE_PRIVILEGE_ENABLED;
+  if (LookupPrivilegeValueW(nullptr, SE_INC_WORKING_SET_NAME, &tp.Privileges[0].Luid))
+    (void)AdjustTokenPrivileges(token, FALSE, &tp, 0, nullptr, nullptr);
+
+  CloseHandle(token);
+}
+
+/**
+ * @brief Opts the process out of EcoQoS throttling; idle-sleep inhibition lives in
+ *        inhibitIdleSleep().
+ */
+static void enableWindowsPerformanceMode()
+{
+  SetPriorityClass(GetCurrentProcess(), HIGH_PRIORITY_CLASS);
+
+#  if defined(PROCESS_POWER_THROTTLING_CURRENT_VERSION)
+  PROCESS_POWER_THROTTLING_STATE state = {};
+  state.Version                        = PROCESS_POWER_THROTTLING_CURRENT_VERSION;
+  state.ControlMask                    = PROCESS_POWER_THROTTLING_EXECUTION_SPEED;
+  state.StateMask                      = 0;
+  SetProcessInformation(GetCurrentProcess(), ProcessPowerThrottling, &state, sizeof(state));
+#  endif
+
+  enableWorkingSetPrivilege();
+}
+
+// code-verify off  (cold argv setup before QApplication exists; C malloc is intentional)
+
+// Snapshot of the heap-duplicated argv: QApplication compacts recognized arguments out of the
+// array in place (shifting pointers and shrinking its argc), so releasing by the live array and
+// count would double-free shifted entries and leak removed ones. The release path frees this
+// snapshot instead.
+static char** s_adjustedArgv    = nullptr;
+static char** s_adjustedStrings = nullptr;
+static int s_adjustedCount      = 0;
+
+/**
+ * @brief Forces the Qt windows platform plugin to use FreeType font rendering.
+ */
+static char** adjustArgumentsForFreeType(int& argc, char** argv)
+{
+  // Skip the override if a -platform is already set (offscreen for --headless/--benchmark, or an
+  // explicit choice): Qt takes the last -platform, so appending here would defeat it.
+  bool hasPlatform = false;
+  for (int i = 0; i < argc; ++i)
+    if (std::strcmp(argv[i], "-platform") == 0) {
+      hasPlatform = true;
+      break;
+    }
+
+  const int extra = hasPlatform ? 0 : 2;
+  char** newArgv  = static_cast<char**>(malloc(sizeof(char*) * (argc + extra)));
+  if (!newArgv)
+    return argv;
+
+  for (int i = 0; i < argc; ++i)
+    newArgv[i] = _strdup(argv[i]);
+
+  if (!hasPlatform) {
+    newArgv[argc]      = _strdup("-platform");
+    newArgv[argc + 1]  = _strdup("windows:fontengine=freetype");
+    argc              += 2;
+  }
+
+  char** snapshot = static_cast<char**>(malloc(sizeof(char*) * argc));
+  if (snapshot) {
+    std::memcpy(snapshot, newArgv, sizeof(char*) * argc);
+    s_adjustedArgv    = newArgv;
+    s_adjustedStrings = snapshot;
+    s_adjustedCount   = argc;
+  }
+
+  return newArgv;
+}
+
+// code-verify on
+#endif
+
+//---------------------------------------------------------------------------------------------------
+// Linux-only helpers
+//---------------------------------------------------------------------------------------------------
+
+#ifdef Q_OS_LINUX
+
+/**
+ * @brief Linux analog of the Windows EcoQoS opt-out: raises the scheduler utilization clamp so
+ *        EAS places the main thread on a big core. Unprivileged (>= 5.3); failures ignored.
+ */
+static void enableLinuxPerformanceMode()
+{
+#  ifdef SYS_sched_setattr
+  struct SchedAttr {
+    uint32_t size;
+    uint32_t sched_policy;
+    uint64_t sched_flags;
+    int32_t sched_nice;
+    uint32_t sched_priority;
+    uint64_t sched_runtime;
+    uint64_t sched_deadline;
+    uint64_t sched_period;
+    uint32_t sched_util_min;
+    uint32_t sched_util_max;
+  };
+
+  constexpr uint64_t kKeepPolicy   = 0x08;
+  constexpr uint64_t kKeepParams   = 0x10;
+  constexpr uint64_t kUtilClampMin = 0x20;
+
+  SchedAttr attr      = {};
+  attr.size           = sizeof(attr);
+  attr.sched_flags    = kKeepPolicy | kKeepParams | kUtilClampMin;
+  attr.sched_util_min = 1024;
+
+  (void)syscall(SYS_sched_setattr, 0, &attr, 0);
+#  endif
+}
+
+#endif
+
+//---------------------------------------------------------------------------------------------------
+// macOS-only helpers
+//---------------------------------------------------------------------------------------------------
+
+#ifdef Q_OS_MACOS
+
+/**
+ * @brief macOS analog of the Windows EcoQoS opt-out: pins the main thread's QoS class to
+ *        user-interactive so the scheduler prefers performance cores on Apple silicon.
+ */
+static void enableMacPerformanceMode()
+{
+  (void)pthread_set_qos_class_self_np(QOS_CLASS_USER_INTERACTIVE, 0);
+}
+
+#endif
+
+namespace AppPlatform {
+
+/**
+ * @brief Computes a stable 16-char SHA-1 prefix identifying a shortcut path.
+ */
+QString shortcutIdentityHash(const QString& shortcutPath)
+{
+  if (shortcutPath.isEmpty())
+    return QString();
+
+  const QByteArray digest =
+    QCryptographicHash::hash(shortcutPath.toUtf8(), QCryptographicHash::Sha1);
+  return QString::fromLatin1(digest.toHex().left(16));
+}
+
+// code-verify off  (cold argv setup before QApplication exists; C malloc is intentional)
+/**
+ * @brief Injects "-platform <platform>" into argv before Qt parses it.
+ */
+char** injectPlatformArg(int& argc, char** argv, const char* platform)
+{
+  char** newArgv = static_cast<char**>(malloc(sizeof(char*) * (argc + 3)));
+  if (!newArgv)
+    return argv;
+
+  newArgv[0] = argv[0];
+  newArgv[1] = const_cast<char*>("-platform");
+  newArgv[2] = const_cast<char*>(platform);
+
+  for (int i = 1; i < argc; ++i)
+    newArgv[i + 2] = argv[i];
+
+  newArgv[argc + 2]  = nullptr;
+  argc              += 2;
+  return newArgv;
+}
+
+// code-verify on
+
+/**
+ * @brief Performs platform fixups and WebEngine init. The performance
+ *        hints honor "App/PerformanceMode" (Misc::ModuleManager), read here via raw QSettings
+ *        because this runs before QApplication and the singletons exist.
+ */
+void prepareEnvironment(int& argc, char**& argv, const QString& shortcutPath)
+{
+  const bool performanceMode = QSettings().value("App/PerformanceMode", true).toBool();
+
+#if defined(Q_OS_WIN)
+  attachToConsole();
+  setWindowsAppUserModelId(shortcutPath);
+  if (performanceMode)
+    enableWindowsPerformanceMode();
+
+  argv = adjustArgumentsForFreeType(argc, argv);
+#else
+  Q_UNUSED(argc);
+  Q_UNUSED(argv);
+  Q_UNUSED(shortcutPath);
+#  if defined(Q_OS_LINUX)
+  if (performanceMode)
+    enableLinuxPerformanceMode();
+#  elif defined(Q_OS_MACOS)
+  if (performanceMode)
+    enableMacPerformanceMode();
+#  endif
+#endif
+
+#ifdef SERIAL_STUDIO_WITH_WEBENGINE
+#  if defined(Q_OS_LINUX)
+  if (!qEnvironmentVariableIsSet("QTWEBENGINE_DISABLE_SANDBOX")
+      && !qEnvironmentVariableIsSet("QTWEBENGINE_CHROMIUM_FLAGS"))
+    qputenv("QTWEBENGINE_CHROMIUM_FLAGS", "--disable-namespace-sandbox");
+#  endif
+  QtWebEngineQuick::initialize();
+#endif
+}
+
+/**
+ * @brief Keeps the system and display awake for the process lifetime so long recording
+ *        sessions survive an untouched laptop; the OS releases every inhibition on exit.
+ *        Call after QApplication exists (the Linux path needs the session D-Bus).
+ *        No-op when "App/InhibitIdleSleep" (Misc::ModuleManager) is disabled.
+ */
+void inhibitIdleSleep()
+{
+  if (!QSettings().value("App/InhibitIdleSleep", true).toBool())
+    return;
+
+#if defined(Q_OS_WIN)
+  (void)SetThreadExecutionState(ES_CONTINUOUS | ES_SYSTEM_REQUIRED | ES_DISPLAY_REQUIRED);
+#elif defined(Q_OS_MACOS)
+  static IOPMAssertionID assertion = kIOPMNullAssertionID;
+  if (assertion == kIOPMNullAssertionID)
+    (void)IOPMAssertionCreateWithName(kIOPMAssertionTypePreventUserIdleDisplaySleep,
+                                      kIOPMAssertionLevelOn,
+                                      CFSTR("Serial Studio data acquisition session"),
+                                      &assertion);
+#elif defined(Q_OS_LINUX)
+  if (!QDBusConnection::sessionBus().isConnected())
+    return;
+
+  const auto app    = QStringLiteral("Serial Studio");
+  const auto reason = QStringLiteral("Data acquisition session in progress");
+
+  QDBusInterface screenSaver(QStringLiteral("org.freedesktop.ScreenSaver"),
+                             QStringLiteral("/org/freedesktop/ScreenSaver"),
+                             QStringLiteral("org.freedesktop.ScreenSaver"));
+  if (screenSaver.isValid())
+    (void)screenSaver.call(QStringLiteral("Inhibit"), app, reason);
+
+  QDBusInterface powerManagement(QStringLiteral("org.freedesktop.PowerManagement"),
+                                 QStringLiteral("/org/freedesktop/PowerManagement/Inhibit"),
+                                 QStringLiteral("org.freedesktop.PowerManagement.Inhibit"));
+  if (powerManagement.isValid())
+    (void)powerManagement.call(QStringLiteral("Inhibit"), app, reason);
+#endif
+}
+
+/**
+ * @brief Registers .ssproj with this executable in the Windows registry (HKCU).
+ */
+void registerFileAssociation()
+{
+#ifdef Q_OS_WIN
+  const QString exePath = QCoreApplication::applicationFilePath().replace('/', '\\');
+  const QString progId  = QStringLiteral("SerialStudio.ssproj");
+  const QString openCmd =
+    QStringLiteral("\"%1\" --project \"%2\"").arg(exePath, QStringLiteral("%1"));
+
+  auto writeKey = [](const QString& path, const QString& value) {
+    HKEY hKey   = nullptr;
+    auto status = RegCreateKeyExW(HKEY_CURRENT_USER,
+                                  reinterpret_cast<LPCWSTR>(path.utf16()),
+                                  0,
+                                  nullptr,
+                                  0,
+                                  KEY_WRITE,
+                                  nullptr,
+                                  &hKey,
+                                  nullptr);
+
+    if (status == ERROR_SUCCESS) {
+      RegSetValueExW(hKey,
+                     nullptr,
+                     0,
+                     REG_SZ,
+                     reinterpret_cast<const BYTE*>(value.utf16()),
+                     static_cast<DWORD>((value.size() + 1) * sizeof(wchar_t)));
+      RegCloseKey(hKey);
+    }
+  };
+
+  const QString progIdPath = QStringLiteral("Software\\Classes\\%1").arg(progId);
+  writeKey(progIdPath, QStringLiteral("Serial Studio Project"));
+  writeKey(progIdPath + QStringLiteral("\\DefaultIcon"), QStringLiteral("\"%1\",0").arg(exePath));
+  writeKey(progIdPath + QStringLiteral("\\shell\\open\\command"), openCmd);
+  writeKey(QStringLiteral("Software\\Classes\\.ssproj"), progId);
+
+  SHChangeNotify(SHCNE_ASSOCCHANGED, SHCNF_IDLIST, nullptr, nullptr);
+#endif
+}
+
+// code-verify off  (crash-context Win32: no Qt calls, fixed buffers, dbghelp only)
+#ifdef Q_OS_WIN
+
+static wchar_t s_dumpPath[MAX_PATH];
+
+/**
+ * @brief Last-resort unhandled-exception filter: writes a minidump to the path prepared by
+ *        installCrashDumpWriter(), then lets the default handling continue so the process
+ *        still exits with the original exception code.
+ */
+static LONG WINAPI writeCrashDump(EXCEPTION_POINTERS* info)
+{
+  HANDLE file = CreateFileW(
+    s_dumpPath, GENERIC_WRITE, 0, nullptr, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, nullptr);
+  if (file != INVALID_HANDLE_VALUE) {
+    MINIDUMP_EXCEPTION_INFORMATION mei;
+    mei.ThreadId          = GetCurrentThreadId();
+    mei.ExceptionPointers = info;
+    mei.ClientPointers    = FALSE;
+
+    const auto type =
+      static_cast<MINIDUMP_TYPE>(MiniDumpWithIndirectlyReferencedMemory | MiniDumpWithThreadInfo);
+    MiniDumpWriteDump(
+      GetCurrentProcess(), GetCurrentProcessId(), file, type, &mei, nullptr, nullptr);
+    CloseHandle(file);
+
+    fprintf(stderr, "[crash] minidump written: %ls\n", s_dumpPath);
+    fflush(stderr);
+  }
+
+  return EXCEPTION_CONTINUE_SEARCH;
+}
+
+#endif
+
+/**
+ * @brief Installs the minidump-on-crash filter when SS_CRASH_DUMP_DIR is set (CI harness).
+ *        Independent of WER, which runner images ship disabled and which produced no dump
+ *        for the teardown crashes this exists to capture.
+ */
+void installCrashDumpWriter()
+{
+#ifdef Q_OS_WIN
+  const QByteArray dir = qgetenv("SS_CRASH_DUMP_DIR");
+  if (dir.isEmpty())
+    return;
+
+  const QString path      = QString::fromLocal8Bit(dir) + QStringLiteral("/crash_")
+                          + QString::number(GetCurrentProcessId()) + QStringLiteral(".dmp");
+  const std::wstring wide = path.toStdWString();
+  if (wide.size() >= MAX_PATH)
+    return;
+
+  wcsncpy_s(s_dumpPath, MAX_PATH, wide.c_str(), _TRUNCATE);
+  SetUnhandledExceptionFilter(writeCrashDump);
+#endif
+}
+
+// code-verify on
+
+// code-verify off  (mirrors malloc above; pair with adjustArgumentsForFreeType / injectPlatformArg)
+/**
+ * @brief Frees the heap-duplicated argv via the snapshot taken at adjustment time. Call only
+ *        after ~QApplication: Qt reads argv for the application's whole lifetime.
+ */
+void releaseAdjustedArgv()
+{
+#ifdef Q_OS_WIN
+  if (!s_adjustedStrings)
+    return;
+
+  for (int i = 0; i < s_adjustedCount; ++i)
+    free(s_adjustedStrings[i]);
+
+  free(s_adjustedStrings);
+  free(s_adjustedArgv);
+
+  s_adjustedArgv    = nullptr;
+  s_adjustedStrings = nullptr;
+  s_adjustedCount   = 0;
+#endif
+}
+
+// code-verify on
+
+/**
+ * @brief Pins @p len bytes at @p ptr into physical memory (best effort) so page faults on the
+ *        frame-scan buffers cannot spike latency at rate. Never inlined: the PGO pre-inliner
+ *        folding this body into only AppPlatform.cpp's unity TU gives that TU's copies of the
+ *        inline DSP::FixedQueue callers a different control-flow hash (profile discarded).
+ */
+SS_NEVER_INLINE bool lockMemoryResident(const void* ptr, size_t len)
+{
+  if (!ptr || len == 0) [[unlikely]]
+    return false;
+
+#if defined(Q_OS_WIN)
+  void* base = const_cast<void*>(ptr);
+  if (VirtualLock(base, len))
+    return true;
+
+  SIZE_T minWs = 0;
+  SIZE_T maxWs = 0;
+  if (!GetProcessWorkingSetSize(GetCurrentProcess(), &minWs, &maxWs))
+    return false;
+
+  const SIZE_T slack  = 2u * 1024u * 1024u;
+  const SIZE_T newMin = minWs + len + slack;
+  const SIZE_T newMax = (maxWs > newMin + slack) ? maxWs : (newMin + slack);
+  if (!SetProcessWorkingSetSize(GetCurrentProcess(), newMin, newMax))
+    return false;
+
+  return VirtualLock(base, len) != 0;
+#elif defined(Q_OS_LINUX) || defined(Q_OS_MACOS)
+  return mlock(ptr, len) == 0;
+#else
+  Q_UNUSED(ptr);
+  Q_UNUSED(len);
+  return false;
+#endif
+}
+
+/**
+ * @brief Registers the CALLING thread with an MMCSS task profile. Only ever call this from inside
+ *        the thread that needs the band -- a QThread never inherits it -- and only after the Qt
+ *        message handler is installed, so the benign InheritPriority warning is filtered
+ *        (common-mistakes.md).
+ */
+static void registerWithMmcss(const wchar_t* taskName)
+{
+  if (s_mmcssRegistered)
+    return;
+
+  s_mmcssRegistered = true;
+
+#if defined(Q_OS_WIN)
+  using SetCharacteristicsFn = HANDLE(WINAPI*)(LPCWSTR, LPDWORD);
+  using SetPriorityFn        = BOOL(WINAPI*)(HANDLE, AVRT_PRIORITY);
+
+  const HMODULE avrt = LoadLibraryW(L"avrt.dll");
+  if (!avrt)
+    return;
+
+  const auto setCharacteristics =
+    reinterpret_cast<SetCharacteristicsFn>(GetProcAddress(avrt, "AvSetMmThreadCharacteristicsW"));
+  const auto setPriority =
+    reinterpret_cast<SetPriorityFn>(GetProcAddress(avrt, "AvSetMmThreadPriority"));
+  if (!setCharacteristics)
+    return;
+
+  DWORD taskIndex    = 0;
+  const HANDLE mmcss = setCharacteristics(taskName, &taskIndex);
+  if (mmcss && setPriority)
+    (void)setPriority(mmcss, AVRT_PRIORITY_HIGH);
+#else
+  Q_UNUSED(taskName);
+#endif
+}
+
+/**
+ * @brief Claims the band for a thread carrying a sample deadline: the frame pipeline and the dense
+ *        stream workers. "Pro Audio" is the profile whose deadline is a dropped sample.
+ */
+void registerIngestThreadWithMmcss()
+{
+  registerWithMmcss(L"Pro Audio");
+}
+
+/**
+ * @brief Claims the band for the GUI thread, so another process cannot cost the user frames. The
+ *        profile is "Games" rather than "Pro Audio" deliberately: a missed repaint is a dropped
+ *        frame, a missed ingest deadline is a dropped measurement, and putting a 60 Hz renderer in
+ *        the audio band on a small machine starves everything else including our own pipeline.
+ */
+void registerRenderThreadWithMmcss()
+{
+  registerWithMmcss(L"Games");
+}
+
+/**
+ * @brief Whether registerIngestThreadWithMmcss() already ran on this thread. The latch is
+ *        recorded on every platform even though the boost is Windows-only, so the per-thread
+ *        guard -- the half that broke -- stays observable to the unit tier everywhere.
+ */
+bool mmcssRegisteredOnCurrentThread() noexcept
+{
+  return s_mmcssRegistered;
+}
+
+/**
+ * @brief Releases a lockMemoryResident() pin so the lock quota is returned before the
+ *        underlying allocation is freed or recycled. Never inlined, same reason as the pin.
+ */
+SS_NEVER_INLINE void unlockMemoryResident(const void* ptr, size_t len)
+{
+  if (!ptr || len == 0) [[unlikely]]
+    return;
+
+#if defined(Q_OS_WIN)
+  (void)VirtualUnlock(const_cast<void*>(ptr), len);
+#elif defined(Q_OS_LINUX) || defined(Q_OS_MACOS)
+  (void)munlock(ptr, len);
+#else
+  Q_UNUSED(ptr);
+  Q_UNUSED(len);
+#endif
+}
+
+/**
+ * @brief Process peak resident set size in bytes (0 when unexposed). The OS keeps the high-water
+ *        mark, so one late read spans a whole run; ru_maxrss is bytes on macOS, kilobytes on Linux.
+ */
+quint64 peakResidentBytes()
+{
+#if defined(Q_OS_WIN)
+  PROCESS_MEMORY_COUNTERS pmc = {};
+  if (K32GetProcessMemoryInfo(GetCurrentProcess(), &pmc, sizeof(pmc)))
+    return static_cast<quint64>(pmc.PeakWorkingSetSize);
+
+  return 0;
+#elif defined(Q_OS_MACOS)
+  struct rusage usage = {};
+  if (getrusage(RUSAGE_SELF, &usage) != 0)
+    return 0;
+
+  return static_cast<quint64>(usage.ru_maxrss);
+#elif defined(Q_OS_LINUX)
+  struct rusage usage = {};
+  if (getrusage(RUSAGE_SELF, &usage) != 0)
+    return 0;
+
+  return static_cast<quint64>(usage.ru_maxrss) * 1024ull;
+#else
+  return 0;
+#endif
+}
+
+}  // namespace AppPlatform
+
+}  // namespace Platform

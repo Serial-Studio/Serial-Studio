@@ -22,7 +22,7 @@
 
 #include <QTest>
 
-#include "IO/Drivers/S7/S7Pdu.h"
+#include "Protocols/S7/S7Pdu.h"
 
 using namespace IO::Drivers;
 using namespace IO::Drivers::S7Comm;

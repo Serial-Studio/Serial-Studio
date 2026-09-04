@@ -5,8 +5,8 @@ or passes review. The code is the truth; the doc is the suspect. This is the man
 sibling of `ss-ai-audit` (which audits the AI-facing docs with the same stance).
 
 Adapted from claude-blog's `blog-factcheck` skill (MIT): its claim-extraction table and
-verdict scoring, with WebFetch-against-cited-URLs replaced by `Grep`/`Read` against `app/src`,
-`app/qml`, and `doc/help/help.json` — a manual's sources are not on the web.
+verdict scoring, with WebFetch-against-cited-URLs replaced by `Grep`/`Read` against `core/`,
+`app/src`, `app/qml`, and `doc/help/help.json` — a manual's sources are not on the web.
 
 ## What counts as a claim
 
@@ -14,13 +14,13 @@ Extract anything a `Grep`/`Read` could settle:
 
 | Kind | Example | Typical ground truth |
 |------|---------|----------------------|
-| Default value | "Baud rate default: 9600" | Driver ctor init list / member init in `app/src/IO/Drivers/` |
+| Default value | "Baud rate default: 9600" | Driver ctor init list / member init in `core/Devices/IO/Drivers/` |
 | Range / options | "Data bits: 5, 6, 7, 8" | The enum, combo-box model, or validator that feeds the UI |
 | UI label / menu path | "Settings → Miscellaneous → Enable API Server" | `app/qml/**` strings; the label must match verbatim |
 | Edition gating | "Requires a Pro license" | `SerialStudio::activated()` / `commercialCfg()` call sites guarding the feature |
 | Behavior | "Reconnects automatically on disconnect" | The slot/handler implementing it |
 | File / format | "Exports MDF4" / port name examples | The exporter/driver code; platform-specific literals |
-| CLI flag | "`--benchmark-hotpath`" | Grep the exact flag string in `app/src` |
+| CLI flag | "`--benchmark-hotpath`" | Grep the exact flag string in `app/src` / `core/` |
 | Cross-reference | `[UART](Drivers-UART.md)` | Target file exists; entry registered in `help.json` |
 
 Skip opinions, theory primers, and protocol background — audit facts, not prose.

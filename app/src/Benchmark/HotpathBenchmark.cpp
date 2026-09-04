@@ -41,6 +41,7 @@
 
 #include "API/Server.h"
 #include "AppState.h"
+#include "Core/SSAssert.h"
 #include "CSV/Export.h"
 #include "DataModel/Frame.h"
 #include "DataModel/FrameBuilder.h"
@@ -55,7 +56,6 @@
 #include "Platform/AppPlatform.h"
 #include "SerialStudio.h"
 #include "SessionContext.h"
-#include "SSAssert.h"
 #include "UI/Dashboard.h"
 #ifdef BUILD_COMMERCIAL
 #  include "MDF4/Export.h"

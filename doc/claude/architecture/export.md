@@ -17,7 +17,7 @@
   (`FrameConsumerWorkerBase::monotonicSourceNs`), and a uniform-grid block never takes it at all:
   its offsets are exactly derived, so bumping them would falsify the grid. Two sources recorded
   into one file therefore keep their own clocks.
-- **`DataModel::ExportStructure`** (`app/src/DataModel/ExportStructure.{h,cpp}`) is the schema
+- **`DataModel::ExportStructure`** (`core/Pipeline/DataModel/ExportStructure.{h,cpp}`) is the schema
   half every worker owns by value: the template frame a file's columns are created from, the two
   ways it is adopted (`setTemplateFrame` from the pipeline, `applyPublishedStructure` from a
   structure snapshot, which only fills an **empty** slot so an open file keeps its schema and an
@@ -101,7 +101,7 @@
     are deleted, along with the float32 interleave round trip they required. Because no worker sits
     in front of a replay any more there is no precomputed FFT window, so `applyBlockColumn` falls
     back to feeding the FFT and waterfall series from the samples -- what the frame lane always did.
-- **The Historian lives in `app/src/Sessions/`** (`namespace Sessions` for all three classes):
+- **The Historian lives in `core/Storage/Sessions/`** (`namespace Sessions` for all three classes):
   - `Sessions::DatabaseManager` — singleton owning the open `.db`; backs `app/qml/DatabaseExplorer/`.
   - `Sessions::Export` (`Sessions/Export.h/.cpp`): `FrameConsumer`-based; tables
     `sessions` / `columns` / `blocks` / `raw_bytes` / `table_snapshots` (`readings` and

@@ -26,9 +26,9 @@
 #include <QTemporaryDir>
 #include <QTest>
 
-#include "IO/FileTransmission/CRC.h"
-#include "IO/FileTransmission/XMODEM.h"
-#include "IO/FileTransmission/YMODEM.h"
+#include "Protocols/FileTransfer/CRC.h"
+#include "Protocols/FileTransfer/XMODEM.h"
+#include "Protocols/FileTransfer/YMODEM.h"
 
 // Every test function here is self-contained: no state is carried between slots, so Qt Test's
 // declaration-order execution is never load-bearing. The senders are driven synchronously through

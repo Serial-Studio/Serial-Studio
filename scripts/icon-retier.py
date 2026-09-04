@@ -44,7 +44,7 @@ CSV_PATH = ROOT / "doc" / "claude" / "specs" / "0028-icon-registry" / "icon-map.
 
 EXEMPT_CATEGORIES = {"buttons", "system"}
 CONTEXT_WINDOW = 8
-SOURCE_DIRS = ("app/qml", "app/src")
+SOURCE_DIRS = ("app/qml", "app/src", "core")
 SOURCE_EXTS = {".qml", ".cpp", ".h"}
 
 ALIAS_RE = re.compile(r'<file alias="icons/([^"]+)">icons/([^<]+)</file>')
@@ -136,7 +136,7 @@ def scan_candidates(aliases_by_target: dict[str, list[str]]) -> list[Candidate]:
 
 
 def git_grep_head(pattern: str) -> list[tuple[str, int]]:
-    """Return (file, lineno) hits for `pattern` in HEAD under app/qml, app/src."""
+    """Return (file, lineno) hits for `pattern` in HEAD under app/qml, app/src, core."""
     result = subprocess.run(
         ["git", "grep", "-n", pattern, "HEAD", "--", *SOURCE_DIRS],
         cwd=ROOT,

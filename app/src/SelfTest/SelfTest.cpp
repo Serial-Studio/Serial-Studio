@@ -29,7 +29,7 @@
 #include <QtGlobal>
 #include <QVersionNumber>
 
-#include "SSAssert.h"
+#include "Core/SSAssert.h"
 
 namespace SelfTest {
 

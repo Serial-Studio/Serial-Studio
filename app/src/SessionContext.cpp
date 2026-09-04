@@ -23,13 +23,13 @@
 
 #include "AppState.h"
 #include "Console/Handler.h"
+#include "Core/SSAssert.h"
 #include "DataModel/FrameBuilder.h"
 #include "DataModel/NotificationCenter.h"
 #include "DataModel/ProjectModel.h"
 #include "DataModel/Scripting/FrameParser.h"
 #include "IO/ConnectionManager.h"
 #include "IO/PipelineHost.h"
-#include "SSAssert.h"
 #include "UI/Dashboard.h"
 
 //--------------------------------------------------------------------------------------------------

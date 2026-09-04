@@ -47,7 +47,7 @@ import sys
 from pathlib import Path
 
 SCRIPT_PATH = Path(__file__).resolve()
-SOURCE_DIRS = ("app", "doc", "examples")
+SOURCE_DIRS = ("app", "core", "doc", "examples")
 SOURCE_EXTS = (".cpp", ".h", ".c")
 SOURCE_SKIP = {"miniaudio.h", "fast_float.h"}
 PYTHON_DIRS = ("app", "examples", "tests", "scripts")

@@ -152,9 +152,10 @@ def create_ts(language, ts_dir, app_sources, lib_sources):
             print(e.output)
 
 
-def collect_sources(app_dir, lib_dir):
+def collect_sources(app_dir, lib_dir, core_dir=None):
     """
-    Collect all relevant .cpp, .h, and .qml files from app and lib directories.
+    Collect all relevant .cpp, .h, and .qml files from app, lib, and core
+    directories. `core_dir` is optional so existing callers keep working.
     """
     app_sources = []
     for root, dirs, files in os.walk(app_dir):
@@ -164,6 +165,15 @@ def collect_sources(app_dir, lib_dir):
         for file in files:
             if file.endswith((".cpp", ".h", ".qml")):
                 app_sources.append(os.path.join(root, file))
+
+    if core_dir and os.path.exists(core_dir):
+        for root, dirs, files in os.walk(core_dir):
+            dirs[:] = [
+                d for d in dirs if d not in EXCLUDED_DIRS and not d.startswith("build")
+            ]
+            for file in files:
+                if file.endswith((".cpp", ".h", ".qml")):
+                    app_sources.append(os.path.join(root, file))
 
     lib_sources = []
     if os.path.exists(lib_dir):
@@ -210,6 +220,7 @@ if __name__ == "__main__":
     translations_dir = os.path.dirname(os.path.abspath(__file__))
     app_dir = os.path.dirname(os.path.dirname(translations_dir))
     lib_dir = os.path.join(os.path.dirname(app_dir), "lib")
+    core_dir = os.path.join(os.path.dirname(app_dir), "core")
     ts_dir = os.path.join(translations_dir, "ts")
     qm_dir = os.path.join(translations_dir, "qm")
 
@@ -218,8 +229,8 @@ if __name__ == "__main__":
         print(f"Error: {ts_dir} directory does not exist.")
         exit(1)
 
-    # Collect source files from app and lib directories
-    app_sources, lib_sources = collect_sources(app_dir, lib_dir)
+    # Collect source files from app, lib, and core directories
+    app_sources, lib_sources = collect_sources(app_dir, lib_dir, core_dir)
 
     # Handle --new-ts option
     if args.new_ts:

@@ -33,8 +33,8 @@
 #include <QUrl>
 #include <vector>
 
+#include "Core/SSAssert.h"
 #include "SelfTest/SelfTest.h"
-#include "SSAssert.h"
 
 namespace SelfTest {
 

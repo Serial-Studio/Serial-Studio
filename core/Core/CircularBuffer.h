@@ -1,0 +1,712 @@
+/*
+ * Serial Studio
+ * https://serial-studio.com/
+ *
+ * Copyright (C) 2020–2025 Alex Spataru
+ *
+ * This file is dual-licensed:
+ *
+ * - Under the GNU GPLv3 (or later) for builds that exclude Pro modules.
+ * - Under the Serial Studio Commercial License for builds that include
+ *   any Pro functionality.
+ *
+ * You must comply with the terms of one of these licenses, depending
+ * on your use case.
+ *
+ * For GPL terms, see <https://www.gnu.org/licenses/gpl-3.0.html>
+ * For commercial terms, see LICENSES/LicenseRef-SerialStudio-Commercial.txt.
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial
+ */
+
+#pragma once
+
+#include <algorithm>
+#include <atomic>
+#include <cstddef>
+#include <cstring>
+#include <new>
+#include <QByteArray>
+#include <vector>
+
+#include "Core/Concepts.h"
+#include "Core/DSPSimd.h"
+#include "Core/SSAssert.h"
+
+namespace IO {
+
+/**
+ * @brief Rounds a positive size up to the next power of two (>= 2). Used so the
+ *        SPSC ring can mask wrap-around with `& (cap - 1)` instead of `% cap`.
+ */
+[[nodiscard]] inline qsizetype roundUpToPowerOfTwo(qsizetype value) noexcept
+{
+  qsizetype v = value < 2 ? 2 : value;
+  --v;
+  v |= v >> 1;
+  v |= v >> 2;
+  v |= v >> 4;
+  v |= v >> 8;
+  v |= v >> 16;
+  if constexpr (sizeof(qsizetype) > 4)
+    v |= v >> 32;
+  return v + 1;
+}
+
+/**
+ * @brief A lock-free circular buffer for high-throughput data streaming.
+ */
+template<typename T, Concepts::ByteLike StorageType = uint8_t>
+class CircularBuffer {
+public:
+  explicit CircularBuffer(qsizetype capacity = 1024 * 1024 * 16);
+
+  [[nodiscard]] StorageType& operator[](qsizetype index);
+
+  void clear();
+  void append(const T& data);
+  void setCapacity(const qsizetype capacity);
+
+  [[nodiscard]] qsizetype size() const noexcept;
+  [[nodiscard]] qsizetype freeSpace() const noexcept;
+
+  [[nodiscard]] qsizetype capacity() const noexcept { return m_capacity; }
+
+  // Raw backing-store pointer; owners use it to pin the buffer into physical memory
+  [[nodiscard]] const StorageType* storage() const noexcept { return m_buffer.data(); }
+
+  [[nodiscard]] T read(qsizetype size);
+  [[nodiscard]] T peek(qsizetype size) const;
+  [[nodiscard]] T peekRange(qsizetype offset, qsizetype size) const;
+  void peekRangeInto(qsizetype offset, qsizetype size, T& out) const;
+
+  void discard(qsizetype size);
+
+  [[nodiscard]] int findPatternKMP(const T& pattern, const int pos = 0);
+  [[nodiscard]] int findPatternKMP(const T& pattern,
+                                   const std::vector<int>& lps,
+                                   const int pos = 0);
+
+  [[nodiscard]] std::vector<int> buildKMPTable(const T& p) const { return computeKMPTable(p); }
+
+  /**
+   * @brief Single-pass multi-pattern scan result.
+   */
+  struct MultiMatchResult {
+    int position     = -1;
+    int patternIndex = -1;
+  };
+
+  [[nodiscard]] MultiMatchResult findFirstOfPatterns(const QVector<T>& patterns) const;
+
+  [[nodiscard]] qsizetype overflowCount() const noexcept
+  {
+    return m_overflowCount.load(std::memory_order_relaxed);
+  }
+
+  void resetOverflowCount() noexcept { m_overflowCount.store(0, std::memory_order_relaxed); }
+
+private:
+  static constexpr int kMaxPatterns           = 8;
+  static constexpr qsizetype kShortPatternMax = 8;
+
+  [[nodiscard]] std::vector<int> computeKMPTable(const T& p) const;
+  [[nodiscard]] static int collectFirstBytes(const QVector<T>& patterns, int count, quint8* out);
+  [[nodiscard]] static int byteScanLinear(const StorageType* base,
+                                          qsizetype current_size,
+                                          int pos,
+                                          typename T::value_type byte);
+  [[nodiscard]] int byteScanWrap(qsizetype current_size,
+                                 int pos,
+                                 qsizetype head,
+                                 typename T::value_type byte) const;
+  [[nodiscard]] static int shortPatternScanLinear(const StorageType* base,
+                                                  qsizetype current_size,
+                                                  int pos,
+                                                  const typename T::value_type* pData,
+                                                  qsizetype pSize);
+  [[nodiscard]] static int kmpScanLinear(const StorageType* base,
+                                         qsizetype current_size,
+                                         int pos,
+                                         const typename T::value_type* pData,
+                                         qsizetype pSize,
+                                         const std::vector<int>& lps);
+  [[nodiscard]] int kmpScanWrap(qsizetype current_size,
+                                int pos,
+                                qsizetype head,
+                                const typename T::value_type* pData,
+                                qsizetype pSize,
+                                const std::vector<int>& lps) const;
+
+private:
+  static constexpr std::size_t kCacheLine = 64;
+  alignas(kCacheLine) std::atomic<qsizetype> m_head;
+  alignas(kCacheLine) std::atomic<qsizetype> m_tail;
+  alignas(kCacheLine) std::atomic<qsizetype> m_overflowCount;
+  qsizetype m_capacity;
+  qsizetype m_capacityMask;
+  std::vector<StorageType> m_buffer;
+};
+}  // namespace IO
+
+/**
+ * @brief Constructs a CircularBuffer object with a given capacity.
+ */
+template<typename T, Concepts::ByteLike StorageType>
+IO::CircularBuffer<T, StorageType>::CircularBuffer(qsizetype capacity)
+  : m_head(0)
+  , m_tail(0)
+  , m_overflowCount(0)
+  , m_capacity(roundUpToPowerOfTwo(capacity))
+  , m_capacityMask(m_capacity - 1)
+{
+  m_buffer.resize(m_capacity);
+}
+
+/**
+ * @brief Provides direct access to elements in the circular buffer by index.
+ */
+template<typename T, Concepts::ByteLike StorageType>
+StorageType& IO::CircularBuffer<T, StorageType>::operator[](qsizetype index)
+{
+  const qsizetype current_size = size();
+  if (index < 0 || index >= current_size)
+    return m_buffer[0];
+
+  const qsizetype head           = m_head.load(std::memory_order_acquire);
+  const qsizetype effectiveIndex = (head + index) & m_capacityMask;
+  return m_buffer[effectiveIndex];
+}
+
+/**
+ * @brief Clears the circular buffer.
+ */
+template<typename T, Concepts::ByteLike StorageType>
+void IO::CircularBuffer<T, StorageType>::clear()
+{
+  m_head.store(0, std::memory_order_release);
+  m_tail.store(0, std::memory_order_release);
+  m_overflowCount.store(0, std::memory_order_relaxed);
+}
+
+/**
+ * @brief Appends data to the circular buffer (lock-free SPSC producer).
+ */
+template<typename T, Concepts::ByteLike StorageType>
+void IO::CircularBuffer<T, StorageType>::append(const T& data)
+{
+  const qsizetype dataSize = data.size();
+  if (dataSize == 0) [[unlikely]]
+    return;
+
+  const uint8_t* src = reinterpret_cast<const uint8_t*>(data.data());
+
+  qsizetype copySize = dataSize;
+  if (copySize > m_capacity) [[unlikely]] {
+    src      += (copySize - m_capacity);
+    copySize  = m_capacity;
+    m_overflowCount.fetch_add(dataSize - m_capacity, std::memory_order_relaxed);
+  }
+
+  const qsizetype head = m_head.load(std::memory_order_acquire);
+  const qsizetype tail = m_tail.load(std::memory_order_relaxed);
+
+  qsizetype current_size = (tail >= head) ? (tail - head) : (m_capacity - head + tail);
+  qsizetype free_space   = m_capacity - current_size;
+
+  if (copySize > free_space) [[unlikely]] {
+    const qsizetype overwrite = copySize - free_space;
+    m_overflowCount.fetch_add(overwrite, std::memory_order_relaxed);
+
+    const qsizetype new_head = (head + overwrite) & m_capacityMask;
+    m_head.store(new_head, std::memory_order_release);
+  }
+
+  const qsizetype firstChunk = std::min(copySize, m_capacity - tail);
+  std::memcpy(&m_buffer[tail], src, firstChunk);
+
+  if (copySize > firstChunk) [[unlikely]]
+    std::memcpy(&m_buffer[0], src + firstChunk, copySize - firstChunk);
+
+  const qsizetype new_tail = (tail + copySize) & m_capacityMask;
+  m_tail.store(new_tail, std::memory_order_release);
+}
+
+/**
+ * @brief Clears the buffer and modifies its maximum capacity.
+ */
+template<typename T, Concepts::ByteLike StorageType>
+void IO::CircularBuffer<T, StorageType>::setCapacity(const qsizetype capacity)
+{
+  clear();
+  m_capacity     = roundUpToPowerOfTwo(capacity);
+  m_capacityMask = m_capacity - 1;
+  m_buffer.resize(m_capacity);
+}
+
+/**
+ * @brief Returns the current size of the buffer.
+ */
+template<typename T, Concepts::ByteLike StorageType>
+qsizetype IO::CircularBuffer<T, StorageType>::size() const noexcept
+{
+  const qsizetype head = m_head.load(std::memory_order_acquire);
+  const qsizetype tail = m_tail.load(std::memory_order_acquire);
+
+  if (tail >= head)
+    return tail - head;
+  else
+    return m_capacity - head + tail;
+}
+
+/**
+ * @brief Returns the free space available in the buffer.
+ */
+template<typename T, Concepts::ByteLike StorageType>
+qsizetype IO::CircularBuffer<T, StorageType>::freeSpace() const noexcept
+{
+  return m_capacity - size();
+}
+
+/**
+ * @brief Reads data from the circular buffer (lock-free SPSC consumer).
+ */
+template<typename T, Concepts::ByteLike StorageType>
+T IO::CircularBuffer<T, StorageType>::read(qsizetype size)
+{
+  const qsizetype current_size = this->size();
+  if (size > current_size) [[unlikely]]
+    return T{};
+
+  T result;
+  result.resize(size);
+
+  const qsizetype head       = m_head.load(std::memory_order_relaxed);
+  const qsizetype firstChunk = std::min(size, m_capacity - head);
+  std::memcpy(result.data(), &m_buffer[head], firstChunk);
+
+  if (size > firstChunk) [[unlikely]]
+    std::memcpy(result.data() + firstChunk, &m_buffer[0], size - firstChunk);
+
+  const qsizetype new_head = (head + size) & m_capacityMask;
+  m_head.store(new_head, std::memory_order_release);
+
+  return result;
+}
+
+/**
+ * @brief Advances the read head by N bytes without copying. Cheaper than
+ *        read() when the caller already has the data (e.g. via peek).
+ */
+template<typename T, Concepts::ByteLike StorageType>
+void IO::CircularBuffer<T, StorageType>::discard(qsizetype size)
+{
+  const qsizetype current_size = this->size();
+  if (size <= 0 || current_size <= 0) [[unlikely]]
+    return;
+
+  const qsizetype toAdvance = std::min(size, current_size);
+  const qsizetype head      = m_head.load(std::memory_order_relaxed);
+  const qsizetype new_head  = (head + toAdvance) & m_capacityMask;
+  m_head.store(new_head, std::memory_order_release);
+}
+
+/**
+ * @brief Retrieves data from the buffer without removing it.
+ */
+template<typename T, Concepts::ByteLike StorageType>
+T IO::CircularBuffer<T, StorageType>::peek(qsizetype size) const
+{
+  return peekRange(0, size);
+}
+
+/**
+ * @brief Retrieves data from the buffer at the given logical offset without removing it.
+ */
+template<typename T, Concepts::ByteLike StorageType>
+T IO::CircularBuffer<T, StorageType>::peekRange(qsizetype offset, qsizetype size) const
+{
+  T result;
+  peekRangeInto(offset, size, result);
+  return result;
+}
+
+/**
+ * @brief peekRange twin that fills a caller-owned container, reusing its buffer when it is
+ *        unique and large enough (the pooled-frame steady state allocates nothing). A
+ *        non-detached out holds a COW copy still read by another holder, so it must be
+ *        replaced, never overwritten in place.
+ */
+template<typename T, Concepts::ByteLike StorageType>
+void IO::CircularBuffer<T, StorageType>::peekRangeInto(qsizetype offset,
+                                                       qsizetype size,
+                                                       T& out) const
+{
+  SS_ASSERT_HOTPATH(offset >= 0);
+
+  const qsizetype current_size = this->size();
+  if (offset >= current_size || size <= 0) [[unlikely]] {
+    out = T();
+    return;
+  }
+
+  size = std::min(size, current_size - offset);
+
+  if (!out.isDetached() || out.capacity() < size)
+    out = T();
+
+  out.resize(size);
+
+  const qsizetype head       = m_head.load(std::memory_order_acquire);
+  const qsizetype start      = (head + offset) & m_capacityMask;
+  const qsizetype firstChunk = std::min(size, m_capacity - start);
+  std::memcpy(out.data(), &m_buffer[start], firstChunk);
+
+  if (size > firstChunk) [[unlikely]] {
+    const qsizetype secondChunk = size - firstChunk;
+    std::memcpy(out.data() + firstChunk, &m_buffer[0], secondChunk);
+  }
+}
+
+/**
+ * @brief Searches for a pattern in the circular buffer using the KMP algorithm.
+ */
+template<typename T, Concepts::ByteLike StorageType>
+int IO::CircularBuffer<T, StorageType>::findPatternKMP(const T& pattern, const int pos)
+{
+  return findPatternKMP(pattern, computeKMPTable(pattern), pos);
+}
+
+/**
+ * @brief Pattern search: vectorized memchr paths for the common short delimiters, KMP otherwise.
+ */
+template<typename T, Concepts::ByteLike StorageType>
+int IO::CircularBuffer<T, StorageType>::findPatternKMP(const T& pattern,
+                                                       const std::vector<int>& lps,
+                                                       const int pos)
+{
+  const qsizetype current_size = size();
+  if (pattern.isEmpty() || current_size < pattern.size()) [[unlikely]]
+    return -1;
+
+  const qsizetype head = m_head.load(std::memory_order_acquire);
+  const auto pSize     = pattern.size();
+  const auto* pData    = pattern.constData();
+  const bool linear    = (head + current_size) <= m_capacity;
+
+  if (pSize == 1) {
+    if (linear) [[likely]]
+      return byteScanLinear(m_buffer.data() + head, current_size, pos, pData[0]);
+
+    return byteScanWrap(current_size, pos, head, pData[0]);
+  }
+
+  if (linear && pSize <= kShortPatternMax) [[likely]]
+    return shortPatternScanLinear(m_buffer.data() + head, current_size, pos, pData, pSize);
+
+  if (linear)
+    return kmpScanLinear(m_buffer.data() + head, current_size, pos, pData, pSize, lps);
+
+  return kmpScanWrap(current_size, pos, head, pData, pSize, lps);
+}
+
+/**
+ * @brief memchr scan over the linear region for a single-byte pattern.
+ */
+template<typename T, Concepts::ByteLike StorageType>
+int IO::CircularBuffer<T, StorageType>::byteScanLinear(const StorageType* base,
+                                                       qsizetype current_size,
+                                                       int pos,
+                                                       typename T::value_type byte)
+{
+  SS_ASSERT_HOTPATH(base != nullptr);
+  SS_ASSERT_HOTPATH(pos >= 0);
+
+  if (pos >= current_size) [[unlikely]]
+    return -1;
+
+  const void* hit = std::memchr(
+    base + pos, static_cast<unsigned char>(byte), static_cast<size_t>(current_size - pos));
+  if (!hit)
+    return -1;
+
+  return static_cast<int>(static_cast<const StorageType*>(hit) - base);
+}
+
+/**
+ * @brief memchr scan across the two linear segments of a wrapped buffer (single byte cannot
+ *        straddle the boundary, so two plain scans cover the logical range).
+ */
+template<typename T, Concepts::ByteLike StorageType>
+int IO::CircularBuffer<T, StorageType>::byteScanWrap(qsizetype current_size,
+                                                     int pos,
+                                                     qsizetype head,
+                                                     typename T::value_type byte) const
+{
+  SS_ASSERT_HOTPATH(pos >= 0);
+  SS_ASSERT_HOTPATH(head >= 0 && head < m_capacity);
+
+  const qsizetype firstLen = m_capacity - head;
+  const auto c             = static_cast<unsigned char>(byte);
+
+  if (pos < firstLen) {
+    const StorageType* base = m_buffer.data() + head + pos;
+    const void* hit         = std::memchr(base, c, static_cast<size_t>(firstLen - pos));
+    if (hit)
+      return static_cast<int>(pos + (static_cast<const StorageType*>(hit) - base));
+  }
+
+  const qsizetype start2 = std::max<qsizetype>(pos, firstLen);
+  if (start2 < current_size) {
+    const StorageType* base = m_buffer.data() + (start2 - firstLen);
+    const void* hit         = std::memchr(base, c, static_cast<size_t>(current_size - start2));
+    if (hit)
+      return static_cast<int>(start2 + (static_cast<const StorageType*>(hit) - base));
+  }
+
+  return -1;
+}
+
+/**
+ * @brief memchr-anchored scan for short multi-byte patterns over the linear region: vectorized
+ *        first-byte search + memcmp verify. Worst case is O(n * pSize) with pSize <= 8.
+ */
+template<typename T, Concepts::ByteLike StorageType>
+int IO::CircularBuffer<T, StorageType>::shortPatternScanLinear(const StorageType* base,
+                                                               qsizetype current_size,
+                                                               int pos,
+                                                               const typename T::value_type* pData,
+                                                               qsizetype pSize)
+{
+  SS_ASSERT_HOTPATH(base != nullptr);
+  SS_ASSERT_HOTPATH(pSize >= 2 && pSize <= kShortPatternMax);
+
+  const auto first     = static_cast<unsigned char>(pData[0]);
+  const qsizetype last = current_size - pSize;
+  if (pos > last)
+    return -1;
+
+  qsizetype i = pos;
+  for (qsizetype it = 0; it <= last - pos && i <= last; ++it) {
+    const void* hit = std::memchr(base + i, first, static_cast<size_t>(last - i + 1));
+    if (!hit)
+      return -1;
+
+    i = static_cast<const StorageType*>(hit) - base;
+    if (std::memcmp(base + i, pData, static_cast<size_t>(pSize)) == 0)
+      return static_cast<int>(i);
+
+    ++i;
+  }
+
+  return -1;
+}
+
+template<typename T, Concepts::ByteLike StorageType>
+int IO::CircularBuffer<T, StorageType>::kmpScanLinear(const StorageType* base,
+                                                      qsizetype current_size,
+                                                      int pos,
+                                                      const typename T::value_type* pData,
+                                                      qsizetype pSize,
+                                                      const std::vector<int>& lps)
+{
+  int i = pos, j = 0;
+  while (i < current_size) {
+    if (base[i] == static_cast<StorageType>(pData[j])) {
+      ++i;
+      ++j;
+    } else if (j != 0) [[likely]] {
+      j = lps[j - 1];
+      continue;
+    } else {
+      ++i;
+      continue;
+    }
+
+    if (j == pSize) [[unlikely]]
+      return i - j;
+  }
+
+  return -1;
+}
+
+template<typename T, Concepts::ByteLike StorageType>
+int IO::CircularBuffer<T, StorageType>::kmpScanWrap(qsizetype current_size,
+                                                    int pos,
+                                                    qsizetype head,
+                                                    const typename T::value_type* pData,
+                                                    qsizetype pSize,
+                                                    const std::vector<int>& lps) const
+{
+  qsizetype bufferIdx = (head + pos) & m_capacityMask;
+  int i = pos, j = 0;
+  while (i < current_size) {
+    if (m_buffer[bufferIdx] == static_cast<StorageType>(pData[j])) {
+      ++i;
+      ++j;
+      bufferIdx = (bufferIdx + 1) & m_capacityMask;
+    } else if (j != 0) [[likely]] {
+      j = lps[j - 1];
+      continue;
+    } else {
+      ++i;
+      bufferIdx = (bufferIdx + 1) & m_capacityMask;
+      continue;
+    }
+
+    if (j == pSize) [[unlikely]]
+      return i - j;
+  }
+
+  return -1;
+}
+
+/**
+ * @brief Computes the KMP table for a given pattern.
+ */
+template<typename T, Concepts::ByteLike StorageType>
+std::vector<int> IO::CircularBuffer<T, StorageType>::computeKMPTable(const T& p) const
+{
+  qsizetype m = p.size();
+  std::vector<int> lps(m, 0);
+
+  qsizetype len = 0;
+  qsizetype i   = 1;
+
+  while (i < m)
+    if (p[i] == p[len]) {
+      len++;
+      lps[i++] = len;
+    }
+
+    else if (len != 0)
+      len = lps[len - 1];
+
+    else
+      lps[i++] = 0;
+
+  return lps;
+}
+
+/**
+ * @brief Collects the distinct first bytes of the first @p count patterns into @p out (which
+ *        holds kMaxPatterns entries). A match at any position must start with one of them, so
+ *        anchoring the scan on this set cannot skip a match.
+ */
+template<typename T, Concepts::ByteLike StorageType>
+int IO::CircularBuffer<T, StorageType>::collectFirstBytes(const QVector<T>& patterns,
+                                                          int count,
+                                                          quint8* out)
+{
+  SS_ASSERT_HOTPATH(out != nullptr);
+  SS_ASSERT_HOTPATH(count >= 1 && count <= kMaxPatterns);
+
+  int unique = 0;
+  for (int p = 0; p < count; ++p) {
+    const auto c = static_cast<quint8>(patterns[p].constData()[0]);
+
+    bool seen = false;
+    for (int k = 0; k < unique; ++k)
+      if (out[k] == c) {
+        seen = true;
+        break;
+      }
+
+    if (!seen)
+      out[unique++] = c;
+  }
+
+  return unique;
+}
+
+/**
+ * @brief Single-pass multi-pattern scan over the circular buffer.
+ */
+template<typename T, Concepts::ByteLike StorageType>
+typename IO::CircularBuffer<T, StorageType>::MultiMatchResult IO::CircularBuffer<T, StorageType>::
+  findFirstOfPatterns(const QVector<T>& patterns) const
+{
+  const qsizetype bufSize = size();
+  if (patterns.isEmpty() || bufSize <= 0) [[unlikely]]
+    return {};
+
+  SS_ASSERT_LOG(patterns.size() <= kMaxPatterns);
+
+  struct PatInfo {
+    const StorageType* data;
+    qsizetype len;
+  };
+
+  PatInfo info[kMaxPatterns];
+  const int patCount = qMin(patterns.size(), kMaxPatterns);
+  qsizetype minLen   = bufSize;
+  for (int p = 0; p < patCount; ++p) {
+    info[p].data = reinterpret_cast<const StorageType*>(patterns[p].constData());
+    info[p].len  = patterns[p].size();
+    if (info[p].len < minLen)
+      minLen = info[p].len;
+  }
+
+  if (minLen <= 0 || bufSize < minLen) [[unlikely]]
+    return {};
+
+  const qsizetype head    = m_head.load(std::memory_order_acquire);
+  const qsizetype mask    = m_capacityMask;
+  const qsizetype scanEnd = bufSize - minLen + 1;
+
+  auto matchAt = [&](qsizetype i, auto byteAt) -> int {
+    for (int p = 0; p < patCount; ++p) {
+      const auto pLen = info[p].len;
+      if (i + pLen > bufSize)
+        continue;
+
+      const auto* pData = info[p].data;
+      bool match        = true;
+      for (qsizetype j = 0; j < pLen; ++j)
+        if (byteAt(i + j) != pData[j]) {
+          match = false;
+          break;
+        }
+
+      if (match)
+        return p;
+    }
+
+    return -1;
+  };
+
+  auto scan = [&](auto byteAt) -> MultiMatchResult {
+    for (qsizetype i = 0; i < scanEnd; ++i) {
+      const int hit = matchAt(i, byteAt);
+      if (hit >= 0)
+        return {static_cast<int>(i), hit};
+    }
+
+    return {};
+  };
+
+  if ((head + bufSize) <= m_capacity) [[likely]] {
+    quint8 firstBytes[kMaxPatterns];
+    const int anchors       = collectFirstBytes(patterns, patCount, firstBytes);
+    const StorageType* base = m_buffer.data() + head;
+    const char* raw         = reinterpret_cast<const char*>(base);
+
+    qsizetype i = 0;
+    for (qsizetype it = 0; it < scanEnd && i < scanEnd; ++it) {
+      const qsizetype rel = DSP::simdFindAnyByte(raw + i, scanEnd - i, firstBytes, anchors);
+      if (rel >= scanEnd - i)
+        break;
+
+      i             += rel;
+      const int hit  = matchAt(i, [base](qsizetype k) { return base[k]; });
+      if (hit >= 0)
+        return {static_cast<int>(i), hit};
+
+      ++i;
+    }
+
+    return {};
+  }
+
+  return scan([this, head, mask](qsizetype k) { return m_buffer[(head + k) & mask]; });
+}

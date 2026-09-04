@@ -22,7 +22,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 
-ROOTS = [ROOT / "app" / "src"]
+ROOTS = [ROOT / "app" / "src", ROOT / "core"]
 EXTS = {".cpp", ".cc", ".cxx", ".c", ".h", ".hpp", ".hh"}
 
 PATTERN = re.compile(r"^([ \t]*)/\*\*[ \t]+(.+?)[ \t]+\*/[ \t]*$")

@@ -25,10 +25,15 @@
 # Only reachable through -DSS_BUILD_TESTS=ON, so a default configure never looks for Qt6::Test and
 # never creates a target here.
 #
-# Each suite is a plain add_executable that links Qt6::Test plus the handful of production
-# translation units it actually exercises. The application target is deliberately NOT a dependency:
-# qt_add_executable(), the QML module, and the two-stage PGO/LTO flow stay untouched, and a suite
-# links in seconds.
+# Each suite is a plain add_executable that links Qt6::Test, the modular core libraries it needs
+# (SerialStudio::Core, SerialStudio::Protocols -- spec 0076), and the handful of production
+# translation units still living in app/src that it actually exercises. The application target is
+# deliberately NOT a dependency: qt_add_executable(), the QML module, and the two-stage PGO/LTO flow
+# stay untouched, and a suite links in seconds.
+#
+# A file that lives under core/ is never recompiled here: the suite links the archive the
+# application links, so the test and the shipped binary exercise the same objects and the same
+# definitions. Listing such a .cpp again would be a duplicate-symbol link error.
 #
 # This directory is a subdirectory of app/, so it inherits CMAKE_AUTOMOC, include_directories(src),
 # and the directory-level sanitizer/optimization options. That inheritance is why the tests live
@@ -43,6 +48,7 @@
 find_package(Qt6 REQUIRED COMPONENTS Test GuiPrivate)
 
 set(SS_APP_SRC "${CMAKE_CURRENT_SOURCE_DIR}/../src")
+set(SS_CORE_SRC "${CMAKE_SOURCE_DIR}/core")
 set(SS_UNIT_TEST_TARGETS "")
 set(SS_PLATFORM_LIBS "")
 
@@ -98,7 +104,9 @@ endif()
 # to link in the sanitizer tier -- in that tier only, on a suite that is green everywhere else.
 #
 # vptr is the one UBSan check a link-set carve-out cannot satisfy; every other check stays on, and
-# the application target keeps vptr too. Only the suites drop it.
+# the application target keeps vptr too. Only the suites drop it. The SerialStudio::Core /
+# SerialStudio::Protocols archives a suite links (spec 0076) keep vptr as well: their TUs reach
+# nothing outside core/ and QtCore, so every typeinfo they need is in the archive or in Qt.
 #
 #---------------------------------------------------------------------------------------------------
 
@@ -235,12 +243,12 @@ endfunction()
 
 #
 # Ring semantics of IO::CircularBuffer, the SPSC store the frame reader parses out of. The
-# buffer is header-only, so SSAssert.cpp is the entire production link set.
+# buffer is header-only, so SerialStudio::Core is the entire production link set.
 #
 ss_add_unit_test(tst_circular_buffer
   SOURCES tst_circular_buffer.cpp
-          ${SS_APP_SRC}/SSAssert.cpp
   LIBS    Qt6::Core
+          SerialStudio::Core
 )
 
 #
@@ -249,8 +257,8 @@ ss_add_unit_test(tst_circular_buffer
 #
 ss_add_unit_test(tst_checksums
   SOURCES tst_checksums.cpp
-          ${SS_APP_SRC}/IO/Checksum.cpp
   LIBS    Qt6::Core
+          SerialStudio::Core
 )
 
 #
@@ -279,7 +287,7 @@ ss_add_unit_test(tst_value_widget_hasdata
 #
 ss_add_unit_test(tst_layout_patterns
   SOURCES tst_layout_patterns.cpp
-          ${SS_APP_SRC}/UI/LayoutPatterns.cpp
+          ${SS_CORE_SRC}/Ui/UI/LayoutPatterns.cpp
   LIBS    Qt6::Core Qt6::Gui
 )
 
@@ -290,9 +298,9 @@ ss_add_unit_test(tst_layout_patterns
 #
 ss_add_unit_test(tst_lua_migration
   SOURCES tst_lua_migration.cpp
-          ${SS_APP_SRC}/DataModel/Scripting/LuaMigration.cpp
-          ${SS_APP_SRC}/SSAssert.cpp
+          ${SS_CORE_SRC}/Pipeline/DataModel/Scripting/LuaMigration.cpp
   LIBS    Qt6::Core
+          SerialStudio::Core
 )
 
 #
@@ -309,14 +317,14 @@ ss_add_unit_test(tst_lua_migration
 #
 ss_add_unit_test(tst_frame_serialization
   SOURCES tst_frame_serialization.cpp
-          ${SS_APP_SRC}/DataModel/Frame.cpp
-          ${SS_APP_SRC}/DataModel/Generated/DatasetSerialization.cpp
-          ${SS_APP_SRC}/DataModel/Project/PropertyValidators.cpp
+          ${SS_CORE_SRC}/Pipeline/DataModel/Frame.cpp
+          ${SS_CORE_SRC}/Pipeline/DataModel/Generated/DatasetSerialization.cpp
+          ${SS_CORE_SRC}/Pipeline/DataModel/Project/PropertyValidators.cpp
           ${SS_APP_SRC}/SerialStudioFrameSupport.cpp
-          ${SS_APP_SRC}/SSAssert.cpp
   LIBS    Qt6::Core
           Qt6::Core5Compat
           Qt6::Gui
+          SerialStudio::Core
 )
 
 #
@@ -338,8 +346,8 @@ set_source_files_properties(
 ss_add_unit_test(tst_dsp_kernels
   SOURCES tst_dsp_kernels.cpp
           dsp_scalar_ref.cpp
-          ${SS_APP_SRC}/SSAssert.cpp
   LIBS    Qt6::Core
+          SerialStudio::Core
 )
 
 #
@@ -360,10 +368,18 @@ ss_add_unit_test(tst_real_fft
 #
 ss_add_unit_test(tst_async_engine
   SOURCES tst_async_engine.cpp
-          ${SS_APP_SRC}/Async/TaskTree.cpp
-          ${SS_APP_SRC}/Async/RetryPolicy.cpp
-          ${SS_APP_SRC}/SSAssert.cpp
   LIBS    Qt6::Core
+          SerialStudio::Core
+)
+
+#
+# Spec 0076 R12 of the in-process message bus: pointer identity across subscribers, receiver-thread
+# affinity for queued delivery, retained state and replay, and the two lifetime ends (handle
+# destroyed, receiver destroyed). Core only -- the bus knows no module, which is its whole point.
+#
+ss_add_unit_test(tst_message_bus
+  SOURCES tst_message_bus.cpp
+  LIBS    SerialStudio::Core
 )
 
 #
@@ -381,11 +397,9 @@ ss_add_unit_test(tst_async_engine
 ss_add_unit_test(tst_frame_delimiters
   SOURCES tst_frame_delimiters.cpp
           session_context_stub.cpp
-          ${SS_APP_SRC}/IO/FrameReader.cpp
-          ${SS_APP_SRC}/IO/Checksum.cpp
-          ${SS_APP_SRC}/DataModel/NotificationCenter.cpp
-          ${SS_APP_SRC}/Platform/AppPlatform.cpp
-          ${SS_APP_SRC}/SSAssert.cpp
+          ${SS_CORE_SRC}/Pipeline/IO/FrameReader.cpp
+          ${SS_CORE_SRC}/Pipeline/DataModel/NotificationCenter.cpp
+          ${SS_CORE_SRC}/Pipeline/Platform/AppPlatform.cpp
           ${SS_LICENSING_SRC}
   LIBS    Qt6::Core
           Qt6::Gui
@@ -393,6 +407,7 @@ ss_add_unit_test(tst_frame_delimiters
           Qt6::Widgets
           luajit
           ${SS_PLATFORM_LIBS}
+          SerialStudio::Core
 )
 
 #---------------------------------------------------------------------------------------------------
@@ -406,12 +421,12 @@ ss_add_unit_test(tst_frame_delimiters
 
 #
 # Misc::JsonValidator's security bounds -- file size, nesting depth, array size -- and the parse
-# error plumbing around them. The validator is header-only, so nothing but SSAssert.cpp links.
+# error plumbing around them. The validator is header-only, so nothing but SerialStudio::Core links.
 #
 ss_add_unit_test(tst_json_validator
   SOURCES tst_json_validator.cpp
-          ${SS_APP_SRC}/SSAssert.cpp
   LIBS    Qt6::Core
+          SerialStudio::Core
 )
 
 #
@@ -421,18 +436,18 @@ ss_add_unit_test(tst_json_validator
 #
 ss_add_unit_test(tst_ring_wrap
   SOURCES tst_ring_wrap.cpp
-          ${SS_APP_SRC}/SSAssert.cpp
   LIBS    Qt6::Core
+          SerialStudio::Core
 )
 
 #
 # The spec-0051 fair-share parse-load governor, driven on a fabricated clock so the EWMA recovery
-# window is deterministic. ParseBudget.h is header-only: SSAssert.cpp is the only TU needed.
+# window is deterministic. ParseBudget.h is header-only: SerialStudio::Core is the only link needed.
 #
 ss_add_unit_test(tst_parse_budget
   SOURCES tst_parse_budget.cpp
-          ${SS_APP_SRC}/SSAssert.cpp
   LIBS    Qt6::Core
+          SerialStudio::Core
 )
 
 #
@@ -442,20 +457,20 @@ ss_add_unit_test(tst_parse_budget
 #
 ss_add_unit_test(tst_frame_pool_policy
   SOURCES tst_frame_pool_policy.cpp
-          ${SS_APP_SRC}/DataModel/FramePoolPolicy.cpp
+          ${SS_CORE_SRC}/Pipeline/DataModel/FramePoolPolicy.cpp
   LIBS    Qt6::Core
 )
 
 #
 # The unified publication payload (spec 0055). DataBlock.h is header-only and pulls Frame.h only
-# for the Frame that StructureSnapshot carries, so SSAssert.cpp is the entire production link set
+# for the Frame that StructureSnapshot carries, so SerialStudio::Core is the entire link set
 # -- keeping it that cheap is deliberate: the pool's no-reallocation property is the thing worth
 # checking on every build, and a suite that needed FrameBuilder could not run that often.
 #
 ss_add_unit_test(tst_data_block
   SOURCES tst_data_block.cpp
-          ${SS_APP_SRC}/SSAssert.cpp
   LIBS    Qt6::Core
+          SerialStudio::Core
 )
 
 #
@@ -466,13 +481,13 @@ ss_add_unit_test(tst_data_block
 # whole production link set -- the same carve-out tst_frame_delimiters documents.
 #
 #
-# The 1-2-5 auto-scale ladder behind the plot Y range (spec 0058): header-only, SSAssert.cpp is
-# the whole production link set.
+# The 1-2-5 auto-scale ladder behind the plot Y range (spec 0058): header-only, SerialStudio::Core
+# is the whole production link set.
 #
 ss_add_unit_test(tst_plot_autoscale
   SOURCES tst_plot_autoscale.cpp
-          ${SS_APP_SRC}/SSAssert.cpp
   LIBS    Qt6::Core
+          SerialStudio::Core
 )
 
 #
@@ -482,10 +497,10 @@ ss_add_unit_test(tst_plot_autoscale
 #
 ss_add_unit_test(tst_expression_transform
   SOURCES tst_expression_transform.cpp
-          ${SS_APP_SRC}/DataModel/Scripting/ExpressionTransform.cpp
-          ${SS_APP_SRC}/SSAssert.cpp
+          ${SS_CORE_SRC}/Pipeline/DataModel/Scripting/ExpressionTransform.cpp
   LIBS    Qt6::Core
           Qt6::Gui
+          SerialStudio::Core
 )
 
 #
@@ -496,28 +511,28 @@ ss_add_unit_test(tst_expression_transform
 #
 ss_add_unit_test(tst_console_annotations
   SOURCES tst_console_annotations.cpp
-          ${SS_APP_SRC}/Console/Annotations.cpp
-          ${SS_APP_SRC}/DataModel/Scripting/JsWatchdog.cpp
-          ${SS_APP_SRC}/DataModel/Scripting/JsWatchdogThread.cpp
-          ${SS_APP_SRC}/DataModel/Scripting/ScriptTemplates.cpp
-          ${SS_APP_SRC}/Misc/Translator.cpp
-          ${SS_APP_SRC}/Misc/LanguageTable.cpp
-          ${SS_APP_SRC}/SSAssert.cpp
+          ${SS_CORE_SRC}/Ui/Console/Annotations.cpp
+          ${SS_CORE_SRC}/Pipeline/DataModel/Scripting/JsWatchdog.cpp
+          ${SS_CORE_SRC}/Pipeline/DataModel/Scripting/JsWatchdogThread.cpp
+          ${SS_CORE_SRC}/Pipeline/DataModel/Scripting/ScriptTemplates.cpp
+          ${SS_CORE_SRC}/Ui/Misc/Translator.cpp
+          ${SS_CORE_SRC}/Ui/Misc/LanguageTable.cpp
           ${SS_LICENSING_SRC}
   LIBS    Qt6::Core
           Qt6::Gui
           Qt6::Qml
           Qt6::Widgets
+          SerialStudio::Core
 )
 
 ss_add_unit_test(tst_envelope_ring
   SOURCES tst_envelope_ring.cpp
-          ${SS_APP_SRC}/Platform/AppPlatform.cpp
-          ${SS_APP_SRC}/SSAssert.cpp
+          ${SS_CORE_SRC}/Pipeline/Platform/AppPlatform.cpp
   LIBS    Qt6::Core
           Qt6::Gui
           Qt6::Widgets
           ${SS_PLATFORM_LIBS}
+          SerialStudio::Core
 )
 
 #
@@ -526,25 +541,24 @@ ss_add_unit_test(tst_envelope_ring
 #
 ss_add_unit_test(tst_sweep_segments
   SOURCES tst_sweep_segments.cpp
-          ${SS_APP_SRC}/Platform/AppPlatform.cpp
-          ${SS_APP_SRC}/SSAssert.cpp
+          ${SS_CORE_SRC}/Pipeline/Platform/AppPlatform.cpp
   LIBS    Qt6::Core
           Qt6::Gui
           Qt6::Widgets
           ${SS_PLATFORM_LIBS}
+          SerialStudio::Core
 )
 
 #
 # Frozen pre-0055 session archives (spec 0055 R8). The build under test no longer writes the old
 # layout, so the legacy read path cannot be checked against a fixture it produces itself; these are
 # real 4.0.3 captures under tests/fixtures/sessions/. BlockReader.h is header-only, so Qt6::Sql plus
-# SSAssert.cpp is the whole link set -- adding the session worker here is the move that would turn a
-# seconds-long suite into an application link.
+# SerialStudio::Core is the whole link set -- adding the session worker here is the move that
+# turns a seconds-long suite into an application link.
 #
 ss_add_unit_test(tst_sessions_legacy_archive
   SOURCES tst_sessions_legacy_archive.cpp
-          ${SS_APP_SRC}/SSAssert.cpp
-  LIBS    Qt6::Core Qt6::Gui Qt6::Sql
+  LIBS    Qt6::Core Qt6::Gui Qt6::Sql SerialStudio::Core
 )
 
 if(TARGET tst_sessions_legacy_archive)
@@ -570,8 +584,8 @@ ss_add_unit_test(tst_republish_lanes
 #
 ss_add_unit_test(tst_csv_sparse_writer
   SOURCES tst_csv_sparse_writer.cpp
-          ${SS_APP_SRC}/SSAssert.cpp
   LIBS    Qt6::Core
+          SerialStudio::Core
 )
 
 #
@@ -591,11 +605,11 @@ ss_add_unit_test(tst_stream_block_codec
 #
 ss_add_unit_test(tst_enum_labels
   SOURCES tst_enum_labels.cpp
-          ${SS_APP_SRC}/API/EnumLabels.cpp
-          ${SS_APP_SRC}/UI/LayoutPatterns.cpp
-          ${SS_APP_SRC}/SSAssert.cpp
+          ${SS_CORE_SRC}/Api/API/EnumLabels.cpp
+          ${SS_CORE_SRC}/Ui/UI/LayoutPatterns.cpp
   LIBS    Qt6::Core
           Qt6::Gui
+          SerialStudio::Core
 )
 
 #
@@ -608,11 +622,11 @@ ss_add_unit_test(tst_enum_labels
 #
 ss_add_unit_test(tst_enum_labels_commercial
   SOURCES tst_enum_labels.cpp
-          ${SS_APP_SRC}/API/EnumLabels.cpp
-          ${SS_APP_SRC}/UI/LayoutPatterns.cpp
-          ${SS_APP_SRC}/SSAssert.cpp
+          ${SS_CORE_SRC}/Api/API/EnumLabels.cpp
+          ${SS_CORE_SRC}/Ui/UI/LayoutPatterns.cpp
   LIBS    Qt6::Core
           Qt6::Gui
+          SerialStudio::Core
 )
 if(TARGET tst_enum_labels_commercial)
   target_compile_definitions(tst_enum_labels_commercial PRIVATE BUILD_COMMERCIAL)
@@ -624,10 +638,10 @@ endif()
 #
 ss_add_unit_test(tst_password_hash
   SOURCES tst_password_hash.cpp
-          ${SS_APP_SRC}/Misc/PasswordHash.cpp
-          ${SS_APP_SRC}/SSAssert.cpp
+          ${SS_CORE_SRC}/Ui/Misc/PasswordHash.cpp
   LIBS    Qt6::Core
           Qt6::Network
+          SerialStudio::Core
 )
 
 #
@@ -637,9 +651,9 @@ ss_add_unit_test(tst_password_hash
 #
 ss_add_unit_test(tst_legacy_icons
   SOURCES tst_legacy_icons.cpp
-          ${SS_APP_SRC}/Misc/IconRegistryLegacy.cpp
-          ${SS_APP_SRC}/SSAssert.cpp
+          ${SS_CORE_SRC}/Ui/Misc/IconRegistryLegacy.cpp
   LIBS    Qt6::Core
+          SerialStudio::Core
 )
 
 #
@@ -649,10 +663,10 @@ ss_add_unit_test(tst_legacy_icons
 #
 ss_add_unit_test(tst_property_validators
   SOURCES tst_property_validators.cpp
-          ${SS_APP_SRC}/DataModel/Project/PropertyValidators.cpp
-          ${SS_APP_SRC}/SSAssert.cpp
+          ${SS_CORE_SRC}/Pipeline/DataModel/Project/PropertyValidators.cpp
   LIBS    Qt6::Core
           Qt6::Gui
+          SerialStudio::Core
 )
 
 
@@ -663,9 +677,9 @@ ss_add_unit_test(tst_property_validators
 #
 ss_add_unit_test(tst_mirror_protocol
   SOURCES tst_mirror_protocol.cpp
-          ${SS_APP_SRC}/SSAssert.cpp
   LIBS    Qt6::Core
           Qt6::Gui
+          SerialStudio::Core
 )
 
 #
@@ -675,10 +689,8 @@ ss_add_unit_test(tst_mirror_protocol
 #
 ss_add_unit_test(tst_async_combinators
   SOURCES tst_async_combinators.cpp
-          ${SS_APP_SRC}/Async/TaskTree.cpp
-          ${SS_APP_SRC}/Async/RetryPolicy.cpp
-          ${SS_APP_SRC}/SSAssert.cpp
   LIBS    Qt6::Core
+          SerialStudio::Core
 )
 
 #
@@ -688,11 +700,8 @@ ss_add_unit_test(tst_async_combinators
 #
 ss_add_unit_test(tst_xymodem
   SOURCES tst_xymodem.cpp
-          ${SS_APP_SRC}/IO/FileTransmission/Protocol.h
-          ${SS_APP_SRC}/IO/FileTransmission/XMODEM.cpp
-          ${SS_APP_SRC}/IO/FileTransmission/YMODEM.cpp
-          ${SS_APP_SRC}/SSAssert.cpp
   LIBS    Qt6::Core
+          SerialStudio::Protocols
 )
 
 #
@@ -702,10 +711,8 @@ ss_add_unit_test(tst_xymodem
 #
 ss_add_unit_test(tst_zmodem
   SOURCES tst_zmodem.cpp
-          ${SS_APP_SRC}/IO/FileTransmission/ZMODEM.cpp
-          ${SS_APP_SRC}/IO/FileTransmission/Protocol.h
-          ${SS_APP_SRC}/SSAssert.cpp
   LIBS    Qt6::Core
+          SerialStudio::Protocols
 )
 
 #
@@ -714,7 +721,7 @@ ss_add_unit_test(tst_zmodem
 #
 ss_add_unit_test(tst_tls_identity
   SOURCES tst_tls_identity.cpp
-          ${SS_APP_SRC}/MQTT/TlsIdentity.cpp
+          ${SS_CORE_SRC}/Devices/MQTT/TlsIdentity.cpp
   LIBS    Qt6::Core
           Qt6::Network
 )
@@ -731,25 +738,23 @@ endif()
 #
 ss_add_unit_test(tst_sparkplug_payload
   SOURCES tst_sparkplug_payload.cpp
-          ${SS_APP_SRC}/IO/Drivers/MQTT/SparkplugPayload.cpp
-          ${SS_APP_SRC}/SSAssert.cpp
   LIBS    Qt6::Core
+          SerialStudio::Protocols
 )
 
 #
 # SparkplugSession.{h,cpp} (spec 0073) is the birth-certificate state machine the codec above feeds:
 # alias tables, the bounded pre-birth buffer, sequence gaps and the synthetic Online metric. It is
 # QObject-free and header-only in its dependencies (OpcUaWire.h supplies the slot ceiling), so the
-# link set is the codec plus SSAssert.cpp and no BUILD_COMMERCIAL define is needed. Qt6::Gui is
-# headers-only fallout: OpcUaWire.h pulls SerialStudio.h for toDouble(), which includes QColor.
+# link set is the codec plus SerialStudio::Core and no BUILD_COMMERCIAL define is needed. Qt6::Gui
+# is headers-only fallout: OpcUaWire.h pulls SerialStudio.h for toDouble(), which includes QColor.
 #
 ss_add_unit_test(tst_sparkplug_session
   SOURCES tst_sparkplug_session.cpp
-          ${SS_APP_SRC}/IO/Drivers/MQTT/SparkplugSession.cpp
-          ${SS_APP_SRC}/IO/Drivers/MQTT/SparkplugPayload.cpp
-          ${SS_APP_SRC}/SSAssert.cpp
+          ${SS_CORE_SRC}/Devices/IO/Drivers/MQTT/SparkplugSession.cpp
   LIBS    Qt6::Core
           Qt6::Gui
+          SerialStudio::Protocols
 )
 
 #
@@ -761,11 +766,10 @@ ss_add_unit_test(tst_sparkplug_session
 #
 ss_add_unit_test(tst_sparkplug_publisher
   SOURCES tst_sparkplug_publisher.cpp
-          ${SS_APP_SRC}/MQTT/SparkplugPublisher.cpp
-          ${SS_APP_SRC}/IO/Drivers/MQTT/SparkplugPayload.cpp
-          ${SS_APP_SRC}/SSAssert.cpp
+          ${SS_CORE_SRC}/Devices/MQTT/SparkplugPublisher.cpp
   LIBS    Qt6::Core
           Qt6::Gui
+          SerialStudio::Protocols
 )
 
 #
@@ -776,9 +780,8 @@ ss_add_unit_test(tst_sparkplug_publisher
 #
 ss_add_unit_test(tst_s7_address
   SOURCES tst_s7_address.cpp
-          ${SS_APP_SRC}/IO/Drivers/S7Address.cpp
-          ${SS_APP_SRC}/SSAssert.cpp
   LIBS    Qt6::Core
+          SerialStudio::Protocols
 )
 
 #
@@ -789,9 +792,8 @@ ss_add_unit_test(tst_s7_address
 #
 ss_add_unit_test(tst_s7comm_isotsap
   SOURCES tst_s7comm_isotsap.cpp
-          ${SS_APP_SRC}/IO/Drivers/S7/IsoTsap.cpp
-          ${SS_APP_SRC}/SSAssert.cpp
   LIBS    Qt6::Core
+          SerialStudio::Protocols
 )
 
 #
@@ -804,10 +806,8 @@ ss_add_unit_test(tst_s7comm_isotsap
 #
 ss_add_unit_test(tst_s7comm_pdu
   SOURCES tst_s7comm_pdu.cpp
-          ${SS_APP_SRC}/IO/Drivers/S7/S7Pdu.cpp
-          ${SS_APP_SRC}/IO/Drivers/S7Address.cpp
-          ${SS_APP_SRC}/SSAssert.cpp
   LIBS    Qt6::Core
+          SerialStudio::Protocols
 )
 
 #
@@ -819,17 +819,17 @@ ss_add_unit_test(tst_s7comm_pdu
 #
 ss_add_unit_test(tst_export_structure
   SOURCES tst_export_structure.cpp
-          ${SS_APP_SRC}/DataModel/ExportStructure.cpp
-          ${SS_APP_SRC}/DataModel/Frame.cpp
-          ${SS_APP_SRC}/DataModel/Generated/DatasetSerialization.cpp
-          ${SS_APP_SRC}/DataModel/Project/PropertyValidators.cpp
-          ${SS_APP_SRC}/Misc/WorkspaceManager.cpp
+          ${SS_CORE_SRC}/Pipeline/DataModel/ExportStructure.cpp
+          ${SS_CORE_SRC}/Pipeline/DataModel/Frame.cpp
+          ${SS_CORE_SRC}/Pipeline/DataModel/Generated/DatasetSerialization.cpp
+          ${SS_CORE_SRC}/Pipeline/DataModel/Project/PropertyValidators.cpp
+          ${SS_CORE_SRC}/Ui/Misc/WorkspaceManager.cpp
           ${SS_APP_SRC}/SerialStudioFrameSupport.cpp
-          ${SS_APP_SRC}/SSAssert.cpp
   LIBS    Qt6::Core
           Qt6::Core5Compat
           Qt6::Gui
           Qt6::Widgets
+          SerialStudio::Core
 )
 
 #
@@ -841,10 +841,10 @@ ss_add_unit_test(tst_export_structure
 #
 ss_add_unit_test(tst_replay_playback_engine
   SOURCES tst_replay_playback_engine.cpp
-          ${SS_APP_SRC}/DataModel/ReplayPlaybackEngine.cpp
-          ${SS_APP_SRC}/SSAssert.cpp
+          ${SS_CORE_SRC}/Pipeline/DataModel/ReplayPlaybackEngine.cpp
   LIBS    Qt6::Core
           Qt6::Gui
+          SerialStudio::Core
 )
 
 #
@@ -857,10 +857,10 @@ ss_add_unit_test(tst_replay_playback_engine
 #
 ss_add_unit_test(tst_ethernetip_worker
   SOURCES tst_ethernetip_worker.cpp
-          ${SS_APP_SRC}/IO/Drivers/PolledPlcWorkerBase.cpp
-          ${SS_APP_SRC}/SSAssert.cpp
+          ${SS_CORE_SRC}/Devices/IO/Drivers/PolledPlcWorkerBase.cpp
   LIBS    Qt6::Core
           Qt6::Gui
+          SerialStudio::Core
 )
 
 #
@@ -871,9 +871,8 @@ ss_add_unit_test(tst_ethernetip_worker
 #
 ss_add_unit_test(tst_iec104_apci
   SOURCES tst_iec104_apci.cpp
-          ${SS_APP_SRC}/IO/Drivers/Iec104/Apci.cpp
-          ${SS_APP_SRC}/SSAssert.cpp
   LIBS    Qt6::Core
+          SerialStudio::Protocols
 )
 
 #
@@ -884,9 +883,8 @@ ss_add_unit_test(tst_iec104_apci
 #
 ss_add_unit_test(tst_iec104_asdu
   SOURCES tst_iec104_asdu.cpp
-          ${SS_APP_SRC}/IO/Drivers/Iec104/Asdu.cpp
-          ${SS_APP_SRC}/SSAssert.cpp
   LIBS    Qt6::Core
+          SerialStudio::Protocols
 )
 
 #
@@ -897,9 +895,8 @@ ss_add_unit_test(tst_iec104_asdu
 #
 ss_add_unit_test(tst_iec104_slots
   SOURCES tst_iec104_slots.cpp
-          ${SS_APP_SRC}/IO/Drivers/Iec104/Asdu.cpp
-          ${SS_APP_SRC}/SSAssert.cpp
   LIBS    Qt6::Core
+          SerialStudio::Protocols
 )
 
 #
@@ -922,9 +919,8 @@ ss_add_unit_test(tst_influx_lineprotocol
 #
 ss_add_unit_test(tst_can_reassembly
   SOURCES tst_can_reassembly.cpp
-          ${SS_APP_SRC}/IO/Drivers/CANBus/CanReassembly.cpp
-          ${SS_APP_SRC}/SSAssert.cpp
   LIBS    Qt6::Core
+          SerialStudio::Protocols
 )
 
 #
@@ -935,6 +931,7 @@ ss_add_unit_test(tst_can_reassembly
 ss_add_unit_test(tst_gsusb_protocol
   SOURCES tst_gsusb_protocol.cpp
   LIBS    Qt6::Core
+          SerialStudio::Protocols
 )
 
 #
@@ -944,43 +941,43 @@ ss_add_unit_test(tst_gsusb_protocol
 #
 ss_add_unit_test(tst_opcua_wire
   SOURCES tst_opcua_wire.cpp
-          ${SS_APP_SRC}/DataModel/Scripting/NativeTemplates/NativeTemplate.cpp
-          ${SS_APP_SRC}/DataModel/Scripting/NativeTemplates/NativeTemplateRegistry.cpp
-          ${SS_APP_SRC}/DataModel/Scripting/NativeTemplates/TextTemplates.cpp
-          ${SS_APP_SRC}/DataModel/Scripting/NativeTemplates/BinaryTemplates.cpp
-          ${SS_APP_SRC}/DataModel/Scripting/NativeTemplates/WireLatchTemplates.cpp
-          ${SS_APP_SRC}/DataModel/Scripting/NativeTemplates/MultiFrameTemplates.cpp
-          ${SS_APP_SRC}/DataModel/Scripting/NativeTemplates/NativeTemplateSupport.cpp
-          ${SS_APP_SRC}/DataModel/Scripting/NativeTemplates/BinaryRaw.cpp
-          ${SS_APP_SRC}/DataModel/Scripting/NativeTemplates/BinaryHex.cpp
-          ${SS_APP_SRC}/DataModel/Scripting/NativeTemplates/BinaryBase64.cpp
-          ${SS_APP_SRC}/DataModel/Scripting/NativeTemplates/BinaryTlv.cpp
-          ${SS_APP_SRC}/DataModel/Scripting/NativeTemplates/BinaryCobs.cpp
-          ${SS_APP_SRC}/DataModel/Scripting/NativeTemplates/BinarySlip.cpp
-          ${SS_APP_SRC}/DataModel/Scripting/NativeTemplates/BinaryUbx.cpp
-          ${SS_APP_SRC}/DataModel/Scripting/NativeTemplates/BinarySirf.cpp
-          ${SS_APP_SRC}/DataModel/Scripting/NativeTemplates/BinaryMavlink.cpp
-          ${SS_APP_SRC}/DataModel/Scripting/NativeTemplates/BinaryNmea2000.cpp
-          ${SS_APP_SRC}/DataModel/Scripting/NativeTemplates/BinaryRtcm.cpp
-          ${SS_APP_SRC}/DataModel/Scripting/NativeTemplates/BinaryModbus.cpp
-          ${SS_APP_SRC}/DataModel/Scripting/NativeTemplates/BinaryMessagePack.cpp
-          ${SS_APP_SRC}/DataModel/Scripting/NativeTemplates/TextDelimited.cpp
-          ${SS_APP_SRC}/DataModel/Scripting/NativeTemplates/TextFixedWidth.cpp
-          ${SS_APP_SRC}/DataModel/Scripting/NativeTemplates/TextKeyValue.cpp
-          ${SS_APP_SRC}/DataModel/Scripting/NativeTemplates/TextIniConfig.cpp
-          ${SS_APP_SRC}/DataModel/Scripting/NativeTemplates/TextAtCommands.cpp
-          ${SS_APP_SRC}/DataModel/Scripting/NativeTemplates/TextNmea0183.cpp
-          ${SS_APP_SRC}/DataModel/Scripting/NativeTemplates/TextUrlEncoded.cpp
-          ${SS_APP_SRC}/DataModel/Scripting/NativeTemplates/TextJsonData.cpp
-          ${SS_APP_SRC}/DataModel/Scripting/NativeTemplates/TextXmlData.cpp
-          ${SS_APP_SRC}/DataModel/Scripting/NativeTemplates/TextYamlData.cpp
-          ${SS_APP_SRC}/DataModel/Scripting/NativeTemplates/MultiFrameBatchedSensor.cpp
-          ${SS_APP_SRC}/DataModel/Scripting/NativeTemplates/MultiFrameTimeSeries2d.cpp
+          ${SS_CORE_SRC}/Pipeline/DataModel/Scripting/NativeTemplates/NativeTemplate.cpp
+          ${SS_CORE_SRC}/Pipeline/DataModel/Scripting/NativeTemplates/NativeTemplateRegistry.cpp
+          ${SS_CORE_SRC}/Pipeline/DataModel/Scripting/NativeTemplates/TextTemplates.cpp
+          ${SS_CORE_SRC}/Pipeline/DataModel/Scripting/NativeTemplates/BinaryTemplates.cpp
+          ${SS_CORE_SRC}/Pipeline/DataModel/Scripting/NativeTemplates/WireLatchTemplates.cpp
+          ${SS_CORE_SRC}/Pipeline/DataModel/Scripting/NativeTemplates/MultiFrameTemplates.cpp
+          ${SS_CORE_SRC}/Pipeline/DataModel/Scripting/NativeTemplates/NativeTemplateSupport.cpp
+          ${SS_CORE_SRC}/Pipeline/DataModel/Scripting/NativeTemplates/BinaryRaw.cpp
+          ${SS_CORE_SRC}/Pipeline/DataModel/Scripting/NativeTemplates/BinaryHex.cpp
+          ${SS_CORE_SRC}/Pipeline/DataModel/Scripting/NativeTemplates/BinaryBase64.cpp
+          ${SS_CORE_SRC}/Pipeline/DataModel/Scripting/NativeTemplates/BinaryTlv.cpp
+          ${SS_CORE_SRC}/Pipeline/DataModel/Scripting/NativeTemplates/BinaryCobs.cpp
+          ${SS_CORE_SRC}/Pipeline/DataModel/Scripting/NativeTemplates/BinarySlip.cpp
+          ${SS_CORE_SRC}/Pipeline/DataModel/Scripting/NativeTemplates/BinaryUbx.cpp
+          ${SS_CORE_SRC}/Pipeline/DataModel/Scripting/NativeTemplates/BinarySirf.cpp
+          ${SS_CORE_SRC}/Pipeline/DataModel/Scripting/NativeTemplates/BinaryMavlink.cpp
+          ${SS_CORE_SRC}/Pipeline/DataModel/Scripting/NativeTemplates/BinaryNmea2000.cpp
+          ${SS_CORE_SRC}/Pipeline/DataModel/Scripting/NativeTemplates/BinaryRtcm.cpp
+          ${SS_CORE_SRC}/Pipeline/DataModel/Scripting/NativeTemplates/BinaryModbus.cpp
+          ${SS_CORE_SRC}/Pipeline/DataModel/Scripting/NativeTemplates/BinaryMessagePack.cpp
+          ${SS_CORE_SRC}/Pipeline/DataModel/Scripting/NativeTemplates/TextDelimited.cpp
+          ${SS_CORE_SRC}/Pipeline/DataModel/Scripting/NativeTemplates/TextFixedWidth.cpp
+          ${SS_CORE_SRC}/Pipeline/DataModel/Scripting/NativeTemplates/TextKeyValue.cpp
+          ${SS_CORE_SRC}/Pipeline/DataModel/Scripting/NativeTemplates/TextIniConfig.cpp
+          ${SS_CORE_SRC}/Pipeline/DataModel/Scripting/NativeTemplates/TextAtCommands.cpp
+          ${SS_CORE_SRC}/Pipeline/DataModel/Scripting/NativeTemplates/TextNmea0183.cpp
+          ${SS_CORE_SRC}/Pipeline/DataModel/Scripting/NativeTemplates/TextUrlEncoded.cpp
+          ${SS_CORE_SRC}/Pipeline/DataModel/Scripting/NativeTemplates/TextJsonData.cpp
+          ${SS_CORE_SRC}/Pipeline/DataModel/Scripting/NativeTemplates/TextXmlData.cpp
+          ${SS_CORE_SRC}/Pipeline/DataModel/Scripting/NativeTemplates/TextYamlData.cpp
+          ${SS_CORE_SRC}/Pipeline/DataModel/Scripting/NativeTemplates/MultiFrameBatchedSensor.cpp
+          ${SS_CORE_SRC}/Pipeline/DataModel/Scripting/NativeTemplates/MultiFrameTimeSeries2d.cpp
           ${SS_APP_SRC}/SerialStudioFrameSupport.cpp
-          ${SS_APP_SRC}/SSAssert.cpp
   LIBS    Qt6::Core
           Qt6::Core5Compat
           Qt6::Gui
+          SerialStudio::Core
 )
 if(TARGET tst_opcua_wire)
   target_compile_definitions(tst_opcua_wire PRIVATE BUILD_COMMERCIAL)
@@ -999,10 +996,10 @@ endif()
 if(TARGET open62541)
   ss_add_unit_test(tst_opcua_marshal
     SOURCES tst_opcua_marshal.cpp
-            ${SS_APP_SRC}/IO/Drivers/OpcUaMarshal.cpp
-            ${SS_APP_SRC}/SSAssert.cpp
+            ${SS_CORE_SRC}/Devices/IO/Drivers/OpcUaMarshal.cpp
     LIBS    Qt6::Core
             open62541
+            SerialStudio::Core
   )
   if(TARGET tst_opcua_marshal)
     target_compile_definitions(tst_opcua_marshal PRIVATE BUILD_COMMERCIAL)
@@ -1018,11 +1015,11 @@ if(TARGET open62541)
   #
   ss_add_unit_test(tst_opcua_security
     SOURCES tst_opcua_security.cpp
-            ${SS_APP_SRC}/IO/Drivers/OpcUaSecurity.cpp
-            ${SS_APP_SRC}/SSAssert.cpp
+            ${SS_CORE_SRC}/Devices/IO/Drivers/OpcUaSecurity.cpp
     LIBS    Qt6::Core
             Qt6::Network
             open62541
+            SerialStudio::Core
   )
   if(TARGET tst_opcua_security)
     target_compile_definitions(tst_opcua_security PRIVATE BUILD_COMMERCIAL)
@@ -1038,16 +1035,16 @@ if(TARGET open62541)
   #
   ss_add_unit_test(tst_opcua_subscriptions
     SOURCES tst_opcua_subscriptions.cpp
-            ${SS_APP_SRC}/IO/Drivers/OpcUa/OpcUaSubscriptions.cpp
-            ${SS_APP_SRC}/IO/Drivers/OpcUa/OpcUaFrameAssembler.cpp
-            ${SS_APP_SRC}/IO/Drivers/OpcUaSession.cpp
-            ${SS_APP_SRC}/IO/Drivers/OpcUaMarshal.cpp
-            ${SS_APP_SRC}/IO/Drivers/OpcUaSecurity.cpp
-            ${SS_APP_SRC}/IO/AsyncTcpDial.cpp
-            ${SS_APP_SRC}/SSAssert.cpp
+            ${SS_CORE_SRC}/Devices/IO/Drivers/OpcUa/OpcUaSubscriptions.cpp
+            ${SS_CORE_SRC}/Devices/IO/Drivers/OpcUa/OpcUaFrameAssembler.cpp
+            ${SS_CORE_SRC}/Devices/IO/Drivers/OpcUaSession.cpp
+            ${SS_CORE_SRC}/Devices/IO/Drivers/OpcUaMarshal.cpp
+            ${SS_CORE_SRC}/Devices/IO/Drivers/OpcUaSecurity.cpp
+            ${SS_CORE_SRC}/Devices/IO/AsyncTcpDial.cpp
     LIBS    Qt6::Core
             Qt6::Gui
             Qt6::Network
+            SerialStudio::Core
             open62541
   )
   if(TARGET tst_opcua_subscriptions)
@@ -1062,10 +1059,10 @@ endif()
 #
 ss_add_unit_test(tst_lua_compat
   SOURCES tst_lua_compat.cpp
-          ${SS_APP_SRC}/DataModel/Scripting/LuaCompat.cpp
-          ${SS_APP_SRC}/SSAssert.cpp
+          ${SS_CORE_SRC}/Pipeline/DataModel/Scripting/LuaCompat.cpp
   LIBS    Qt6::Core
           luajit
+          SerialStudio::Core
 )
 
 #
@@ -1075,11 +1072,11 @@ ss_add_unit_test(tst_lua_compat
 #
 ss_add_unit_test(tst_js_watchdog
   SOURCES tst_js_watchdog.cpp
-          ${SS_APP_SRC}/DataModel/Scripting/JsWatchdog.cpp
-          ${SS_APP_SRC}/DataModel/Scripting/JsWatchdogThread.cpp
-          ${SS_APP_SRC}/SSAssert.cpp
+          ${SS_CORE_SRC}/Pipeline/DataModel/Scripting/JsWatchdog.cpp
+          ${SS_CORE_SRC}/Pipeline/DataModel/Scripting/JsWatchdogThread.cpp
   LIBS    Qt6::Core
           Qt6::Qml
+          SerialStudio::Core
 )
 
 #
@@ -1097,20 +1094,20 @@ ss_add_unit_test(tst_js_watchdog
 #
 ss_add_unit_test(tst_stream_worker
   SOURCES tst_stream_worker.cpp
-          ${SS_APP_SRC}/IO/HAL_Driver.h
-          ${SS_APP_SRC}/IO/StreamWorker.cpp
-          ${SS_APP_SRC}/DataModel/Scripting/ExpressionTransform.cpp
-          ${SS_APP_SRC}/DataModel/Scripting/JsWatchdog.cpp
-          ${SS_APP_SRC}/DataModel/Scripting/JsWatchdogThread.cpp
-          ${SS_APP_SRC}/DataModel/Scripting/LuaCompat.cpp
-          ${SS_APP_SRC}/Platform/AppPlatform.cpp
-          ${SS_APP_SRC}/SSAssert.cpp
+          ${SS_CORE_SRC}/Devices/IO/HAL_Driver.h
+          ${SS_CORE_SRC}/Pipeline/IO/StreamWorker.cpp
+          ${SS_CORE_SRC}/Pipeline/DataModel/Scripting/ExpressionTransform.cpp
+          ${SS_CORE_SRC}/Pipeline/DataModel/Scripting/JsWatchdog.cpp
+          ${SS_CORE_SRC}/Pipeline/DataModel/Scripting/JsWatchdogThread.cpp
+          ${SS_CORE_SRC}/Pipeline/DataModel/Scripting/LuaCompat.cpp
+          ${SS_CORE_SRC}/Pipeline/Platform/AppPlatform.cpp
   LIBS    Qt6::Core
           Qt6::Gui
           Qt6::Qml
           Qt6::Widgets
           luajit
           ${SS_PLATFORM_LIBS}
+          SerialStudio::Core
 )
 
 #
@@ -1120,15 +1117,15 @@ ss_add_unit_test(tst_stream_worker
 #
 ss_add_unit_test(tst_frame_consumer
   SOURCES tst_frame_consumer.cpp
-          ${SS_APP_SRC}/DataModel/FrameConsumer.cpp
-          ${SS_APP_SRC}/DataModel/Frame.cpp
-          ${SS_APP_SRC}/DataModel/Generated/DatasetSerialization.cpp
-          ${SS_APP_SRC}/DataModel/Project/PropertyValidators.cpp
+          ${SS_CORE_SRC}/Pipeline/DataModel/FrameConsumer.cpp
+          ${SS_CORE_SRC}/Pipeline/DataModel/Frame.cpp
+          ${SS_CORE_SRC}/Pipeline/DataModel/Generated/DatasetSerialization.cpp
+          ${SS_CORE_SRC}/Pipeline/DataModel/Project/PropertyValidators.cpp
           ${SS_APP_SRC}/SerialStudioFrameSupport.cpp
-          ${SS_APP_SRC}/SSAssert.cpp
   LIBS    Qt6::Core
           Qt6::Core5Compat
           Qt6::Gui
+          SerialStudio::Core
 )
 
 #
@@ -1137,14 +1134,14 @@ ss_add_unit_test(tst_frame_consumer
 #
 ss_add_unit_test(tst_frame_support
   SOURCES tst_frame_support.cpp
-          ${SS_APP_SRC}/DataModel/Frame.cpp
-          ${SS_APP_SRC}/DataModel/Generated/DatasetSerialization.cpp
-          ${SS_APP_SRC}/DataModel/Project/PropertyValidators.cpp
+          ${SS_CORE_SRC}/Pipeline/DataModel/Frame.cpp
+          ${SS_CORE_SRC}/Pipeline/DataModel/Generated/DatasetSerialization.cpp
+          ${SS_CORE_SRC}/Pipeline/DataModel/Project/PropertyValidators.cpp
           ${SS_APP_SRC}/SerialStudioFrameSupport.cpp
-          ${SS_APP_SRC}/SSAssert.cpp
   LIBS    Qt6::Core
           Qt6::Core5Compat
           Qt6::Gui
+          SerialStudio::Core
 )
 
 #
@@ -1154,14 +1151,14 @@ ss_add_unit_test(tst_frame_support
 #
 ss_add_unit_test(tst_frame_json_legacy
   SOURCES tst_frame_json_legacy.cpp
-          ${SS_APP_SRC}/DataModel/Frame.cpp
-          ${SS_APP_SRC}/DataModel/Generated/DatasetSerialization.cpp
-          ${SS_APP_SRC}/DataModel/Project/PropertyValidators.cpp
+          ${SS_CORE_SRC}/Pipeline/DataModel/Frame.cpp
+          ${SS_CORE_SRC}/Pipeline/DataModel/Generated/DatasetSerialization.cpp
+          ${SS_CORE_SRC}/Pipeline/DataModel/Project/PropertyValidators.cpp
           ${SS_APP_SRC}/SerialStudioFrameSupport.cpp
-          ${SS_APP_SRC}/SSAssert.cpp
   LIBS    Qt6::Core
           Qt6::Core5Compat
           Qt6::Gui
+          SerialStudio::Core
 )
 
 #
@@ -1170,47 +1167,47 @@ ss_add_unit_test(tst_frame_json_legacy
 #
 ss_add_unit_test(tst_cframe_parser
   SOURCES tst_cframe_parser.cpp
-          ${SS_APP_SRC}/DataModel/Scripting/CFrameParser.cpp
-          ${SS_APP_SRC}/DataModel/Scripting/NativeTemplates/NativeTemplate.cpp
-          ${SS_APP_SRC}/DataModel/Scripting/NativeTemplates/NativeTemplateRegistry.cpp
-          ${SS_APP_SRC}/DataModel/Scripting/NativeTemplates/TextTemplates.cpp
-          ${SS_APP_SRC}/DataModel/Scripting/NativeTemplates/BinaryTemplates.cpp
-          ${SS_APP_SRC}/DataModel/Scripting/NativeTemplates/WireLatchTemplates.cpp
-          ${SS_APP_SRC}/DataModel/Scripting/NativeTemplates/MultiFrameTemplates.cpp
-          ${SS_APP_SRC}/DataModel/Scripting/NativeTemplates/NativeTemplateSupport.cpp
-          ${SS_APP_SRC}/DataModel/Scripting/NativeTemplates/BinaryRaw.cpp
-          ${SS_APP_SRC}/DataModel/Scripting/NativeTemplates/BinaryHex.cpp
-          ${SS_APP_SRC}/DataModel/Scripting/NativeTemplates/BinaryBase64.cpp
-          ${SS_APP_SRC}/DataModel/Scripting/NativeTemplates/BinaryTlv.cpp
-          ${SS_APP_SRC}/DataModel/Scripting/NativeTemplates/BinaryCobs.cpp
-          ${SS_APP_SRC}/DataModel/Scripting/NativeTemplates/BinarySlip.cpp
-          ${SS_APP_SRC}/DataModel/Scripting/NativeTemplates/BinaryUbx.cpp
-          ${SS_APP_SRC}/DataModel/Scripting/NativeTemplates/BinarySirf.cpp
-          ${SS_APP_SRC}/DataModel/Scripting/NativeTemplates/BinaryMavlink.cpp
-          ${SS_APP_SRC}/DataModel/Scripting/NativeTemplates/BinaryNmea2000.cpp
-          ${SS_APP_SRC}/DataModel/Scripting/NativeTemplates/BinaryRtcm.cpp
-          ${SS_APP_SRC}/DataModel/Scripting/NativeTemplates/BinaryModbus.cpp
-          ${SS_APP_SRC}/DataModel/Scripting/NativeTemplates/BinaryMessagePack.cpp
-          ${SS_APP_SRC}/DataModel/Scripting/NativeTemplates/TextDelimited.cpp
-          ${SS_APP_SRC}/DataModel/Scripting/NativeTemplates/TextFixedWidth.cpp
-          ${SS_APP_SRC}/DataModel/Scripting/NativeTemplates/TextKeyValue.cpp
-          ${SS_APP_SRC}/DataModel/Scripting/NativeTemplates/TextIniConfig.cpp
-          ${SS_APP_SRC}/DataModel/Scripting/NativeTemplates/TextAtCommands.cpp
-          ${SS_APP_SRC}/DataModel/Scripting/NativeTemplates/TextNmea0183.cpp
-          ${SS_APP_SRC}/DataModel/Scripting/NativeTemplates/TextUrlEncoded.cpp
-          ${SS_APP_SRC}/DataModel/Scripting/NativeTemplates/TextJsonData.cpp
-          ${SS_APP_SRC}/DataModel/Scripting/NativeTemplates/TextXmlData.cpp
-          ${SS_APP_SRC}/DataModel/Scripting/NativeTemplates/TextYamlData.cpp
-          ${SS_APP_SRC}/DataModel/Scripting/NativeTemplates/MultiFrameBatchedSensor.cpp
-          ${SS_APP_SRC}/DataModel/Scripting/NativeTemplates/MultiFrameTimeSeries2d.cpp
+          ${SS_CORE_SRC}/Pipeline/DataModel/Scripting/CFrameParser.cpp
+          ${SS_CORE_SRC}/Pipeline/DataModel/Scripting/NativeTemplates/NativeTemplate.cpp
+          ${SS_CORE_SRC}/Pipeline/DataModel/Scripting/NativeTemplates/NativeTemplateRegistry.cpp
+          ${SS_CORE_SRC}/Pipeline/DataModel/Scripting/NativeTemplates/TextTemplates.cpp
+          ${SS_CORE_SRC}/Pipeline/DataModel/Scripting/NativeTemplates/BinaryTemplates.cpp
+          ${SS_CORE_SRC}/Pipeline/DataModel/Scripting/NativeTemplates/WireLatchTemplates.cpp
+          ${SS_CORE_SRC}/Pipeline/DataModel/Scripting/NativeTemplates/MultiFrameTemplates.cpp
+          ${SS_CORE_SRC}/Pipeline/DataModel/Scripting/NativeTemplates/NativeTemplateSupport.cpp
+          ${SS_CORE_SRC}/Pipeline/DataModel/Scripting/NativeTemplates/BinaryRaw.cpp
+          ${SS_CORE_SRC}/Pipeline/DataModel/Scripting/NativeTemplates/BinaryHex.cpp
+          ${SS_CORE_SRC}/Pipeline/DataModel/Scripting/NativeTemplates/BinaryBase64.cpp
+          ${SS_CORE_SRC}/Pipeline/DataModel/Scripting/NativeTemplates/BinaryTlv.cpp
+          ${SS_CORE_SRC}/Pipeline/DataModel/Scripting/NativeTemplates/BinaryCobs.cpp
+          ${SS_CORE_SRC}/Pipeline/DataModel/Scripting/NativeTemplates/BinarySlip.cpp
+          ${SS_CORE_SRC}/Pipeline/DataModel/Scripting/NativeTemplates/BinaryUbx.cpp
+          ${SS_CORE_SRC}/Pipeline/DataModel/Scripting/NativeTemplates/BinarySirf.cpp
+          ${SS_CORE_SRC}/Pipeline/DataModel/Scripting/NativeTemplates/BinaryMavlink.cpp
+          ${SS_CORE_SRC}/Pipeline/DataModel/Scripting/NativeTemplates/BinaryNmea2000.cpp
+          ${SS_CORE_SRC}/Pipeline/DataModel/Scripting/NativeTemplates/BinaryRtcm.cpp
+          ${SS_CORE_SRC}/Pipeline/DataModel/Scripting/NativeTemplates/BinaryModbus.cpp
+          ${SS_CORE_SRC}/Pipeline/DataModel/Scripting/NativeTemplates/BinaryMessagePack.cpp
+          ${SS_CORE_SRC}/Pipeline/DataModel/Scripting/NativeTemplates/TextDelimited.cpp
+          ${SS_CORE_SRC}/Pipeline/DataModel/Scripting/NativeTemplates/TextFixedWidth.cpp
+          ${SS_CORE_SRC}/Pipeline/DataModel/Scripting/NativeTemplates/TextKeyValue.cpp
+          ${SS_CORE_SRC}/Pipeline/DataModel/Scripting/NativeTemplates/TextIniConfig.cpp
+          ${SS_CORE_SRC}/Pipeline/DataModel/Scripting/NativeTemplates/TextAtCommands.cpp
+          ${SS_CORE_SRC}/Pipeline/DataModel/Scripting/NativeTemplates/TextNmea0183.cpp
+          ${SS_CORE_SRC}/Pipeline/DataModel/Scripting/NativeTemplates/TextUrlEncoded.cpp
+          ${SS_CORE_SRC}/Pipeline/DataModel/Scripting/NativeTemplates/TextJsonData.cpp
+          ${SS_CORE_SRC}/Pipeline/DataModel/Scripting/NativeTemplates/TextXmlData.cpp
+          ${SS_CORE_SRC}/Pipeline/DataModel/Scripting/NativeTemplates/TextYamlData.cpp
+          ${SS_CORE_SRC}/Pipeline/DataModel/Scripting/NativeTemplates/MultiFrameBatchedSensor.cpp
+          ${SS_CORE_SRC}/Pipeline/DataModel/Scripting/NativeTemplates/MultiFrameTimeSeries2d.cpp
           ${SS_APP_SRC}/SerialStudioFrameSupport.cpp
-          ${SS_APP_SRC}/Misc/Utilities.cpp
-          ${SS_APP_SRC}/SSAssert.cpp
+          ${SS_CORE_SRC}/Ui/Misc/Utilities.cpp
   LIBS    Qt6::Core
           Qt6::Core5Compat
           Qt6::Gui
           Qt6::Svg
           Qt6::Widgets
+          SerialStudio::Core
 )
 
 #
@@ -1221,11 +1218,9 @@ ss_add_unit_test(tst_cframe_parser
 ss_add_unit_test(tst_frame_reader_modes
   SOURCES tst_frame_reader_modes.cpp
           session_context_stub.cpp
-          ${SS_APP_SRC}/IO/FrameReader.cpp
-          ${SS_APP_SRC}/IO/Checksum.cpp
-          ${SS_APP_SRC}/DataModel/NotificationCenter.cpp
-          ${SS_APP_SRC}/Platform/AppPlatform.cpp
-          ${SS_APP_SRC}/SSAssert.cpp
+          ${SS_CORE_SRC}/Pipeline/IO/FrameReader.cpp
+          ${SS_CORE_SRC}/Pipeline/DataModel/NotificationCenter.cpp
+          ${SS_CORE_SRC}/Pipeline/Platform/AppPlatform.cpp
           ${SS_LICENSING_SRC}
   LIBS    Qt6::Core
           Qt6::Gui
@@ -1233,6 +1228,7 @@ ss_add_unit_test(tst_frame_reader_modes
           Qt6::Widgets
           luajit
           ${SS_PLATFORM_LIBS}
+          SerialStudio::Core
 )
 
 #
@@ -1261,7 +1257,7 @@ ss_add_unit_test(tst_frame_reader_modes
 #
 # ss_add_unit_test(tst_proto_importer
 #   SOURCES tst_proto_importer.cpp
-#           ${SS_APP_SRC}/DataModel/Importers/ProtoImporter.cpp
+#           ${SS_CORE_SRC}/Pipeline/DataModel/Importers/ProtoImporter.cpp
 #           ${SS_APP_SRC}/SessionContext.cpp
 #   LIBS    Qt6::Core
 #           Qt6::Gui
@@ -1292,13 +1288,13 @@ ss_add_unit_test(tst_frame_reader_modes
 #
 # ss_add_unit_test(tst_dbc_importer
 #   SOURCES tst_dbc_importer.cpp
-#           ${SS_APP_SRC}/DataModel/Importers/DBCImporter.cpp
+#           ${SS_CORE_SRC}/Pipeline/DataModel/Importers/DBCImporter.cpp
 #           ${SS_APP_SRC}/SessionContext.cpp
-#           ${SS_APP_SRC}/SSAssert.cpp
 #   LIBS    Qt6::Core
 #           Qt6::Gui
 #           Qt6::SerialBus
 #           Qt6::Widgets
+#           SerialStudio::Core
 # )
 #
 # if(TARGET tst_dbc_importer)
@@ -1315,9 +1311,8 @@ ss_add_unit_test(tst_frame_reader_modes
 #
 ss_add_unit_test(tst_plot3d_stereo
   SOURCES tst_plot3d_stereo.cpp
-          ${SS_APP_SRC}/UI/Widgets/Plot3D/Plot3DStereo.cpp
-          ${SS_APP_SRC}/SSAssert.cpp
-  LIBS    Qt6::Core Qt6::Gui
+          ${SS_CORE_SRC}/Ui/UI/Widgets/Plot3D/Plot3DStereo.cpp
+  LIBS    Qt6::Core Qt6::Gui SerialStudio::Core
 )
 
 if(TARGET tst_plot3d_stereo)
@@ -1331,9 +1326,9 @@ endif()
 #
 ss_add_unit_test(tst_ansi_palette
   SOURCES tst_ansi_palette.cpp
-          ${SS_APP_SRC}/UI/Widgets/Terminal/AnsiPalette.cpp
-          ${SS_APP_SRC}/SSAssert.cpp
+          ${SS_CORE_SRC}/Ui/UI/Widgets/Terminal/AnsiPalette.cpp
   LIBS    Qt6::Gui
+          SerialStudio::Core
 )
 
 #
@@ -1342,7 +1337,7 @@ ss_add_unit_test(tst_ansi_palette
 #
 ss_add_unit_test(tst_ansi_state_machine
   SOURCES tst_ansi_state_machine.cpp
-          ${SS_APP_SRC}/UI/Widgets/Terminal/AnsiStateMachine.cpp
+          ${SS_CORE_SRC}/Ui/UI/Widgets/Terminal/AnsiStateMachine.cpp
   LIBS    Qt6::Core
 )
 
@@ -1352,9 +1347,9 @@ ss_add_unit_test(tst_ansi_state_machine
 #
 ss_add_unit_test(tst_terminal_search
   SOURCES tst_terminal_search.cpp
-          ${SS_APP_SRC}/UI/Widgets/Terminal/TerminalSearch.cpp
-          ${SS_APP_SRC}/SSAssert.cpp
+          ${SS_CORE_SRC}/Ui/UI/Widgets/Terminal/TerminalSearch.cpp
   LIBS    Qt6::Core
+          SerialStudio::Core
 )
 
 #
@@ -1363,9 +1358,9 @@ ss_add_unit_test(tst_terminal_search
 #
 ss_add_unit_test(tst_tool_schemas
   SOURCES tst_tool_schemas.cpp
-          ${SS_APP_SRC}/AI/Tools/ToolSchemas.cpp
-          ${SS_APP_SRC}/SSAssert.cpp
+          ${SS_CORE_SRC}/Ui/AI/Tools/ToolSchemas.cpp
   LIBS    Qt6::Core
+          SerialStudio::Core
 )
 
 #
@@ -1374,9 +1369,9 @@ ss_add_unit_test(tst_tool_schemas
 #
 ss_add_unit_test(tst_tool_compact
   SOURCES tst_tool_compact.cpp
-          ${SS_APP_SRC}/AI/Tools/ToolCompact.cpp
-          ${SS_APP_SRC}/SSAssert.cpp
+          ${SS_CORE_SRC}/Ui/AI/Tools/ToolCompact.cpp
   LIBS    Qt6::Core
+          SerialStudio::Core
 )
 
 #
@@ -1385,9 +1380,9 @@ ss_add_unit_test(tst_tool_compact
 #
 ss_add_unit_test(tst_provider_json
   SOURCES tst_provider_json.cpp
-          ${SS_APP_SRC}/AI/Providers/ProviderJson.cpp
-          ${SS_APP_SRC}/SSAssert.cpp
+          ${SS_CORE_SRC}/Ui/AI/Providers/ProviderJson.cpp
   LIBS    Qt6::Core
+          SerialStudio::Core
 )
 
 #
@@ -1396,9 +1391,9 @@ ss_add_unit_test(tst_provider_json
 #
 ss_add_unit_test(tst_think_tag_splitter
   SOURCES tst_think_tag_splitter.cpp
-          ${SS_APP_SRC}/AI/Providers/ThinkTagSplitter.cpp
-          ${SS_APP_SRC}/SSAssert.cpp
+          ${SS_CORE_SRC}/Ui/AI/Providers/ThinkTagSplitter.cpp
   LIBS    Qt6::Core
+          SerialStudio::Core
 )
 
 #
@@ -1408,9 +1403,9 @@ ss_add_unit_test(tst_think_tag_splitter
 #
 ss_add_unit_test(tst_console_text_format
   SOURCES tst_console_text_format.cpp
-          ${SS_APP_SRC}/Console/TextFormat.cpp
-          ${SS_APP_SRC}/SSAssert.cpp
+          ${SS_CORE_SRC}/Ui/Console/TextFormat.cpp
   LIBS    Qt6::Core
+          SerialStudio::Core
 )
 
 #
@@ -1419,9 +1414,9 @@ ss_add_unit_test(tst_console_text_format
 #
 ss_add_unit_test(tst_waterfall_viewstate
   SOURCES tst_waterfall_viewstate.cpp
-          ${SS_APP_SRC}/UI/Widgets/Waterfall/WaterfallViewState.cpp
-          ${SS_APP_SRC}/SSAssert.cpp
+          ${SS_CORE_SRC}/Ui/UI/Widgets/Waterfall/WaterfallViewState.cpp
   LIBS    Qt6::Core
+          SerialStudio::Core
 )
 
 #
@@ -1430,7 +1425,7 @@ ss_add_unit_test(tst_waterfall_viewstate
 #
 ss_add_unit_test(tst_waterfall_ticks
   SOURCES tst_waterfall_ticks.cpp
-          ${SS_APP_SRC}/UI/Widgets/Waterfall/WaterfallTicks.cpp
+          ${SS_CORE_SRC}/Ui/UI/Widgets/Waterfall/WaterfallTicks.cpp
   LIBS    Qt6::Core
 )
 
@@ -1443,10 +1438,10 @@ ss_add_unit_test(tst_waterfall_ticks
 #
 ss_add_unit_test(tst_conversation_history
   SOURCES tst_conversation_history.cpp
-          ${SS_APP_SRC}/AI/Conversation/HistorySurgery.cpp
-          ${SS_APP_SRC}/AI/Logging.cpp
-          ${SS_APP_SRC}/SSAssert.cpp
+          ${SS_CORE_SRC}/Ui/AI/Conversation/HistorySurgery.cpp
+          ${SS_CORE_SRC}/Ui/AI/Logging.cpp
   LIBS    Qt6::Core
+          SerialStudio::Core
 )
 
 #
@@ -1455,11 +1450,11 @@ ss_add_unit_test(tst_conversation_history
 #
 ss_add_unit_test(tst_conversation_budget
   SOURCES tst_conversation_budget.cpp
-          ${SS_APP_SRC}/AI/Conversation/TokenBudget.cpp
-          ${SS_APP_SRC}/AI/Conversation/HistorySurgery.cpp
-          ${SS_APP_SRC}/AI/Logging.cpp
-          ${SS_APP_SRC}/SSAssert.cpp
+          ${SS_CORE_SRC}/Ui/AI/Conversation/TokenBudget.cpp
+          ${SS_CORE_SRC}/Ui/AI/Conversation/HistorySurgery.cpp
+          ${SS_CORE_SRC}/Ui/AI/Logging.cpp
   LIBS    Qt6::Core
+          SerialStudio::Core
 )
 
 #
@@ -1469,9 +1464,9 @@ ss_add_unit_test(tst_conversation_budget
 #
 ss_add_unit_test(tst_conversation_metatools
   SOURCES tst_conversation_metatools.cpp
-          ${SS_APP_SRC}/AI/Conversation/MetaToolCatalog.cpp
-          ${SS_APP_SRC}/SSAssert.cpp
+          ${SS_CORE_SRC}/Ui/AI/Conversation/MetaToolCatalog.cpp
   LIBS    Qt6::Core
+          SerialStudio::Core
 )
 
 #
@@ -1482,11 +1477,11 @@ ss_add_unit_test(tst_conversation_metatools
 #
 ss_add_unit_test(tst_server_auth
   SOURCES tst_server_auth.cpp
-          ${SS_APP_SRC}/API/Server/AuthPrimitives.cpp
-          ${SS_APP_SRC}/API/Server/ClientReception.cpp
-          ${SS_APP_SRC}/SSAssert.cpp
+          ${SS_CORE_SRC}/Api/API/Server/AuthPrimitives.cpp
+          ${SS_CORE_SRC}/Api/API/Server/ClientReception.cpp
   LIBS    Qt6::Core
           Qt6::Network
+          SerialStudio::Core
 )
 
 #
@@ -1497,10 +1492,10 @@ ss_add_unit_test(tst_server_auth
 #
 ss_add_unit_test(tst_client_reception
   SOURCES tst_client_reception.cpp
-          ${SS_APP_SRC}/API/Server/ClientReception.cpp
-          ${SS_APP_SRC}/SSAssert.cpp
+          ${SS_CORE_SRC}/Api/API/Server/ClientReception.cpp
   LIBS    Qt6::Core
           Qt6::Network
+          SerialStudio::Core
 )
 
 #
@@ -1510,7 +1505,7 @@ ss_add_unit_test(tst_client_reception
 #
 ss_add_unit_test(tst_path_policy_registry
   SOURCES tst_path_policy_registry.cpp
-          ${SS_APP_SRC}/API/PathPolicy.cpp
+          ${SS_CORE_SRC}/Api/API/PathPolicy.cpp
   LIBS    Qt6::Core
 )
 if(TARGET tst_path_policy_registry)
@@ -1535,17 +1530,17 @@ ss_add_unit_test(tst_grpc_pending_call
 #
 ss_add_unit_test(tst_server_worker_caps
   SOURCES tst_server_worker_caps.cpp
-          ${SS_APP_SRC}/API/Server/ServerWorker.cpp
-          ${SS_APP_SRC}/DataModel/FrameConsumer.cpp
-          ${SS_APP_SRC}/DataModel/Frame.cpp
-          ${SS_APP_SRC}/DataModel/Generated/DatasetSerialization.cpp
-          ${SS_APP_SRC}/DataModel/Project/PropertyValidators.cpp
+          ${SS_CORE_SRC}/Api/API/Server/ServerWorker.cpp
+          ${SS_CORE_SRC}/Pipeline/DataModel/FrameConsumer.cpp
+          ${SS_CORE_SRC}/Pipeline/DataModel/Frame.cpp
+          ${SS_CORE_SRC}/Pipeline/DataModel/Generated/DatasetSerialization.cpp
+          ${SS_CORE_SRC}/Pipeline/DataModel/Project/PropertyValidators.cpp
           ${SS_APP_SRC}/SerialStudioFrameSupport.cpp
-          ${SS_APP_SRC}/SSAssert.cpp
   LIBS    Qt6::Core
           Qt6::Core5Compat
           Qt6::Gui
           Qt6::Network
+          SerialStudio::Core
 )
 
 #
@@ -1555,15 +1550,15 @@ ss_add_unit_test(tst_server_worker_caps
 #
 ss_add_unit_test(tst_modbus_generation
   SOURCES tst_modbus_generation.cpp
-          ${SS_APP_SRC}/IO/Drivers/Modbus/ModbusProjectGenerator.cpp
-          ${SS_APP_SRC}/DataModel/Frame.cpp
-          ${SS_APP_SRC}/DataModel/Generated/DatasetSerialization.cpp
-          ${SS_APP_SRC}/DataModel/Project/PropertyValidators.cpp
+          ${SS_CORE_SRC}/Devices/IO/Drivers/Modbus/ModbusProjectGenerator.cpp
+          ${SS_CORE_SRC}/Pipeline/DataModel/Frame.cpp
+          ${SS_CORE_SRC}/Pipeline/DataModel/Generated/DatasetSerialization.cpp
+          ${SS_CORE_SRC}/Pipeline/DataModel/Project/PropertyValidators.cpp
           ${SS_APP_SRC}/SerialStudioFrameSupport.cpp
-          ${SS_APP_SRC}/SSAssert.cpp
   LIBS    Qt6::Core
           Qt6::Core5Compat
           Qt6::Gui
+          SerialStudio::Core
 )
 if(TARGET tst_modbus_generation)
   target_compile_definitions(tst_modbus_generation PRIVATE BUILD_COMMERCIAL)
@@ -1577,10 +1572,9 @@ endif()
 #
 ss_add_unit_test(tst_modbus_register_groups
   SOURCES tst_modbus_register_groups.cpp
-          ${SS_APP_SRC}/IO/Drivers/Modbus/ModbusRegisterGroups.cpp
-          ${SS_APP_SRC}/IO/Drivers/Modbus/ModbusRtuCodec.cpp
-          ${SS_APP_SRC}/SSAssert.cpp
+          ${SS_CORE_SRC}/Devices/IO/Drivers/Modbus/ModbusRegisterGroups.cpp
   LIBS    Qt6::Core
+          SerialStudio::Protocols
 )
 
 #
@@ -1589,7 +1583,7 @@ ss_add_unit_test(tst_modbus_register_groups
 #
 ss_add_unit_test(tst_serial_port_identity
   SOURCES tst_serial_port_identity.cpp
-          ${SS_APP_SRC}/IO/Drivers/SerialPortIdentity.cpp
+          ${SS_CORE_SRC}/Devices/IO/Drivers/SerialPortIdentity.cpp
   LIBS    Qt6::Core
           Qt6::SerialPort
 )
@@ -1600,7 +1594,7 @@ ss_add_unit_test(tst_serial_port_identity
 #
 ss_add_unit_test(tst_opcua_endpoint_selection
   SOURCES tst_opcua_endpoint_selection.cpp
-          ${SS_APP_SRC}/IO/Drivers/OpcUa/OpcUaEndpointSelection.cpp
+          ${SS_CORE_SRC}/Devices/IO/Drivers/OpcUa/OpcUaEndpointSelection.cpp
   LIBS    Qt6::Core
 )
 
@@ -1608,14 +1602,14 @@ ss_add_unit_test(tst_opcua_endpoint_selection
 # The MQTT publisher's dashboard payload transform (spec 0070): RFC 4180 escaping, the column
 # label the CSV header and the Sparkplug metric registry share, header/row assembly, and the
 # block->frame materialisation both dashboard modes feed on. CsvExpansion is QObject-free, so
-# SSAssert.cpp is the whole production link set; the TU is commercial-only, so the suite
+# SerialStudio::Core is the whole production link set; the TU is commercial-only, so the suite
 # defines the macro itself.
 #
 ss_add_unit_test(tst_mqtt_csv_expansion
   SOURCES tst_mqtt_csv_expansion.cpp
-          ${SS_APP_SRC}/MQTT/CsvExpansion.cpp
-          ${SS_APP_SRC}/SSAssert.cpp
+          ${SS_CORE_SRC}/Devices/MQTT/CsvExpansion.cpp
   LIBS    Qt6::Core
+          SerialStudio::Core
 )
 if(TARGET tst_mqtt_csv_expansion)
   target_compile_definitions(tst_mqtt_csv_expansion PRIVATE BUILD_COMMERCIAL)
@@ -1627,9 +1621,8 @@ endif()
 #
 ss_add_unit_test(tst_window_geometry
   SOURCES tst_window_geometry.cpp
-          ${SS_APP_SRC}/UI/WindowManager/WindowGeometry.cpp
-          ${SS_APP_SRC}/SSAssert.cpp
-  LIBS    Qt6::Core Qt6::Gui Qt6::Quick
+          ${SS_CORE_SRC}/Ui/UI/WindowManager/WindowGeometry.cpp
+  LIBS    Qt6::Core Qt6::Gui Qt6::Quick SerialStudio::Core
 )
 
 #
@@ -1639,11 +1632,10 @@ ss_add_unit_test(tst_window_geometry
 #
 ss_add_unit_test(tst_snap_overlay
   SOURCES tst_snap_overlay.cpp
-          ${SS_APP_SRC}/UI/WindowManager/SnapOverlay.cpp
-          ${SS_APP_SRC}/UI/WindowManager/WindowGeometry.cpp
-          ${SS_APP_SRC}/UI/SnapGuides.cpp
-          ${SS_APP_SRC}/SSAssert.cpp
-  LIBS    Qt6::Core Qt6::Gui Qt6::Quick
+          ${SS_CORE_SRC}/Ui/UI/WindowManager/SnapOverlay.cpp
+          ${SS_CORE_SRC}/Ui/UI/WindowManager/WindowGeometry.cpp
+          ${SS_CORE_SRC}/Ui/UI/SnapGuides.cpp
+  LIBS    Qt6::Core Qt6::Gui Qt6::Quick SerialStudio::Core
 )
 
 #
@@ -1652,7 +1644,7 @@ ss_add_unit_test(tst_snap_overlay
 #
 ss_add_unit_test(tst_usb_hex_parsing
   SOURCES tst_usb_hex_parsing.cpp
-          ${SS_APP_SRC}/IO/Drivers/USB/UsbHex.cpp
+          ${SS_CORE_SRC}/Devices/IO/Drivers/USB/UsbHex.cpp
   LIBS    Qt6::Core
 )
 
@@ -1663,9 +1655,9 @@ ss_add_unit_test(tst_usb_hex_parsing
 #
 ss_add_unit_test(tst_widget_manifest
   SOURCES tst_widget_manifest.cpp
-          ${SS_APP_SRC}/UI/WidgetManifestParser.cpp
-          ${SS_APP_SRC}/SSAssert.cpp
+          ${SS_CORE_SRC}/Ui/UI/WidgetManifestParser.cpp
   LIBS    Qt6::Core
+          SerialStudio::Core
 )
 
 #
@@ -1674,8 +1666,8 @@ ss_add_unit_test(tst_widget_manifest
 #
 ss_add_unit_test(tst_language_table
   SOURCES tst_language_table.cpp
-          ${SS_APP_SRC}/Misc/LanguageTable.cpp
-          ${SS_APP_SRC}/Misc/Translator.cpp
+          ${SS_CORE_SRC}/Ui/Misc/LanguageTable.cpp
+          ${SS_CORE_SRC}/Ui/Misc/Translator.cpp
           ${SS_LICENSING_SRC}
   LIBS    Qt6::Core
           Qt6::Widgets
@@ -1687,10 +1679,10 @@ ss_add_unit_test(tst_language_table
 #
 ss_add_unit_test(tst_theme_catalog
   SOURCES tst_theme_catalog.cpp
-          ${SS_APP_SRC}/Misc/ThemeCatalog.cpp
-          ${SS_APP_SRC}/Misc/LanguageTable.cpp
-          ${SS_APP_SRC}/SSAssert.cpp
+          ${SS_CORE_SRC}/Ui/Misc/ThemeCatalog.cpp
+          ${SS_CORE_SRC}/Ui/Misc/LanguageTable.cpp
   LIBS    Qt6::Core
+          SerialStudio::Core
 )
 
 #
@@ -1699,7 +1691,7 @@ ss_add_unit_test(tst_theme_catalog
 #
 ss_add_unit_test(tst_extension_catalog
   SOURCES tst_extension_catalog.cpp
-          ${SS_APP_SRC}/Misc/Extensions/ExtensionCatalog.cpp
+          ${SS_CORE_SRC}/Ui/Misc/Extensions/ExtensionCatalog.cpp
   LIBS    Qt6::Core
 )
 
@@ -1709,9 +1701,9 @@ ss_add_unit_test(tst_extension_catalog
 #
 ss_add_unit_test(tst_connection_reply_capture
   SOURCES tst_connection_reply_capture.cpp
-          ${SS_APP_SRC}/IO/ConnectionManager/ReplyCapture.cpp
-          ${SS_APP_SRC}/SSAssert.cpp
+          ${SS_CORE_SRC}/Devices/IO/ConnectionManager/ReplyCapture.cpp
   LIBS    Qt6::Core
+          SerialStudio::Core
 )
 
 #
@@ -1720,9 +1712,9 @@ ss_add_unit_test(tst_connection_reply_capture
 #
 ss_add_unit_test(tst_replay_row_codec
   SOURCES tst_replay_row_codec.cpp
-          ${SS_APP_SRC}/DataModel/Scripting/ReplayRowCodec.cpp
-          ${SS_APP_SRC}/SSAssert.cpp
+          ${SS_CORE_SRC}/Pipeline/DataModel/Scripting/ReplayRowCodec.cpp
   LIBS    Qt6::Core
+          SerialStudio::Core
 )
 
 #
@@ -1741,10 +1733,10 @@ ss_add_unit_test(tst_script_frame_shaping
 #
 ss_add_unit_test(tst_proto_parser
   SOURCES tst_proto_parser.cpp
-          ${SS_APP_SRC}/DataModel/Importers/ProtoLexer.cpp
-          ${SS_APP_SRC}/DataModel/Importers/ProtoParser.cpp
-          ${SS_APP_SRC}/SSAssert.cpp
+          ${SS_CORE_SRC}/Pipeline/DataModel/Importers/ProtoLexer.cpp
+          ${SS_CORE_SRC}/Pipeline/DataModel/Importers/ProtoParser.cpp
   LIBS    Qt6::Core
+          SerialStudio::Core
 )
 
 #
@@ -1753,19 +1745,19 @@ ss_add_unit_test(tst_proto_parser
 #
 ss_add_unit_test(tst_code_formatter
   SOURCES tst_code_formatter.cpp
-          ${SS_APP_SRC}/DataModel/Editors/CodeFormatter.cpp
+          ${SS_CORE_SRC}/Pipeline/DataModel/Editors/CodeFormatter.cpp
   LIBS    Qt6::Core
 )
 
 #
 # CSV row syntax (spec 0070): separator sniffing, top-level splitting under quotes, and the
-# timestamp unit-scale table. Pure functions + SSAssert only.
+# timestamp unit-scale table. Pure functions + SerialStudio::Core only.
 #
 ss_add_unit_test(tst_csv_rows
   SOURCES tst_csv_rows.cpp
-          ${SS_APP_SRC}/CSV/Player/RowSyntax.cpp
-          ${SS_APP_SRC}/SSAssert.cpp
+          ${SS_CORE_SRC}/Storage/CSV/Player/RowSyntax.cpp
   LIBS    Qt6::Core
+          SerialStudio::Core
 )
 
 #
@@ -1774,9 +1766,9 @@ ss_add_unit_test(tst_csv_rows
 #
 ss_add_unit_test(tst_csv_multisource
   SOURCES tst_csv_multisource.cpp
-          ${SS_APP_SRC}/CSV/Player/MultiSourceMap.cpp
-          ${SS_APP_SRC}/SSAssert.cpp
+          ${SS_CORE_SRC}/Storage/CSV/Player/MultiSourceMap.cpp
   LIBS    Qt6::Core
+          SerialStudio::Core
 )
 
 #
@@ -1785,12 +1777,12 @@ ss_add_unit_test(tst_csv_multisource
 #
 ss_add_unit_test(tst_csv_row_codec
   SOURCES tst_csv_row_codec.cpp
-          ${SS_APP_SRC}/CSV/Player/RowCodec.cpp
-          ${SS_APP_SRC}/CSV/Player/RowSyntax.cpp
-          ${SS_APP_SRC}/DataModel/Scripting/ReplayRowCodec.cpp
-          ${SS_APP_SRC}/SSAssert.cpp
+          ${SS_CORE_SRC}/Storage/CSV/Player/RowCodec.cpp
+          ${SS_CORE_SRC}/Storage/CSV/Player/RowSyntax.cpp
+          ${SS_CORE_SRC}/Pipeline/DataModel/Scripting/ReplayRowCodec.cpp
   LIBS    Qt6::Core
           Qt6::Gui
+          SerialStudio::Core
 )
 
 #
@@ -1799,9 +1791,9 @@ ss_add_unit_test(tst_csv_row_codec
 #
 ss_add_unit_test(tst_session_alignment
   SOURCES tst_session_alignment.cpp
-          ${SS_APP_SRC}/Sessions/Player/ReplayAlignment.cpp
-          ${SS_APP_SRC}/SSAssert.cpp
+          ${SS_CORE_SRC}/Storage/Sessions/Player/ReplayAlignment.cpp
   LIBS    Qt6::Core
+          SerialStudio::Core
 )
 if(TARGET tst_session_alignment)
   target_compile_definitions(tst_session_alignment PRIVATE BUILD_COMMERCIAL)
@@ -1813,10 +1805,9 @@ endif()
 #
 ss_add_unit_test(tst_session_synthesis
   SOURCES tst_session_synthesis.cpp
-          ${SS_APP_SRC}/Sessions/Player/ReplayFrameValues.cpp
-          ${SS_APP_SRC}/Sessions/Player/ReplayClock.cpp
-          ${SS_APP_SRC}/SSAssert.cpp
-  LIBS    Qt6::Core Qt6::Gui Qt6::Sql
+          ${SS_CORE_SRC}/Storage/Sessions/Player/ReplayFrameValues.cpp
+          ${SS_CORE_SRC}/Storage/Sessions/Player/ReplayClock.cpp
+  LIBS    Qt6::Core Qt6::Gui Qt6::Sql SerialStudio::Core
 )
 if(TARGET tst_session_synthesis)
   target_compile_definitions(tst_session_synthesis PRIVATE BUILD_COMMERCIAL)
@@ -1829,7 +1820,7 @@ endif()
 #
 ss_add_unit_test(tst_dashboard_viewstate
   SOURCES tst_dashboard_viewstate.cpp
-          ${SS_APP_SRC}/UI/Dashboard/DashboardViewState.cpp
+          ${SS_CORE_SRC}/Ui/UI/Dashboard/DashboardViewState.cpp
   LIBS    Qt6::Core Qt6::Qml
 )
 
@@ -1839,9 +1830,9 @@ ss_add_unit_test(tst_dashboard_viewstate
 #
 ss_add_unit_test(tst_project_nav_history
   SOURCES tst_project_nav_history.cpp
-          ${SS_APP_SRC}/DataModel/Project/ProjectNavHistory.cpp
-          ${SS_APP_SRC}/SSAssert.cpp
+          ${SS_CORE_SRC}/Pipeline/DataModel/Project/ProjectNavHistory.cpp
   LIBS    Qt6::Core
+          SerialStudio::Core
 )
 
 #
@@ -1850,9 +1841,9 @@ ss_add_unit_test(tst_project_nav_history
 #
 ss_add_unit_test(tst_project_folders
   SOURCES tst_project_folders.cpp
-          ${SS_APP_SRC}/SSAssert.cpp
   LIBS    Qt6::Core
           Qt6::Gui
+          SerialStudio::Core
 )
 
 #
@@ -1888,8 +1879,8 @@ endif()
 ss_add_unit_test(tst_cli_spec_parsers
   SOURCES tst_cli_spec_parsers.cpp
           ${SS_APP_SRC}/Misc/CLI/CliSpecParsers.cpp
-          ${SS_APP_SRC}/SSAssert.cpp
   LIBS    Qt6::Core
+          SerialStudio::Core
 )
 
 #
@@ -1899,10 +1890,10 @@ ss_add_unit_test(tst_cli_spec_parsers
 #
 ss_add_unit_test(tst_latest_frame_tap
   SOURCES tst_latest_frame_tap.cpp
-          ${SS_APP_SRC}/DataModel/FrameBuilder/LatestFrameTap.cpp
-          ${SS_APP_SRC}/IO/HAL_Driver.h
-          ${SS_APP_SRC}/SSAssert.cpp
+          ${SS_CORE_SRC}/Pipeline/DataModel/FrameBuilder/LatestFrameTap.cpp
+          ${SS_CORE_SRC}/Devices/IO/HAL_Driver.h
   LIBS    Qt6::Core
+          SerialStudio::Core
 )
 
 #
@@ -1911,15 +1902,15 @@ ss_add_unit_test(tst_latest_frame_tap
 #
 ss_add_unit_test(tst_table_snapshot_channel
   SOURCES tst_table_snapshot_channel.cpp
-          ${SS_APP_SRC}/DataModel/FrameBuilder/TableSnapshotChannel.cpp
-          ${SS_APP_SRC}/DataModel/DataTable.cpp
-          ${SS_APP_SRC}/DataModel/Frame.cpp
-          ${SS_APP_SRC}/DataModel/Generated/DatasetSerialization.cpp
-          ${SS_APP_SRC}/DataModel/Project/PropertyValidators.cpp
+          ${SS_CORE_SRC}/Pipeline/DataModel/FrameBuilder/TableSnapshotChannel.cpp
+          ${SS_CORE_SRC}/Pipeline/DataModel/DataTable.cpp
+          ${SS_CORE_SRC}/Pipeline/DataModel/Frame.cpp
+          ${SS_CORE_SRC}/Pipeline/DataModel/Generated/DatasetSerialization.cpp
+          ${SS_CORE_SRC}/Pipeline/DataModel/Project/PropertyValidators.cpp
           ${SS_APP_SRC}/SerialStudioFrameSupport.cpp
-          ${SS_APP_SRC}/SSAssert.cpp
           ${SS_MQTT_STUB_SRC}
   LIBS    Qt6::Core Qt6::Core5Compat Qt6::Gui Qt6::Qml ${SS_MQTT_LIBS}
+          SerialStudio::Core
 )
 
 #
@@ -1928,8 +1919,8 @@ ss_add_unit_test(tst_table_snapshot_channel
 #
 ss_add_unit_test(tst_chat_digest
   SOURCES tst_chat_digest.cpp
-          ${SS_APP_SRC}/AI/Conversation/ChatDigest.cpp
-          ${SS_APP_SRC}/AI/Redactor.cpp
+          ${SS_CORE_SRC}/Ui/AI/Conversation/ChatDigest.cpp
+          ${SS_CORE_SRC}/Ui/AI/Redactor.cpp
   LIBS    Qt6::Core
 )
 
@@ -1941,10 +1932,10 @@ ss_add_unit_test(tst_chat_digest
 #
 ss_add_unit_test(tst_terminal_buffer
   SOURCES tst_terminal_buffer.cpp
-          ${SS_APP_SRC}/UI/Widgets/Terminal/TerminalBuffer.cpp
-          ${SS_APP_SRC}/UI/Widgets/Terminal/AnsiPalette.cpp
-          ${SS_APP_SRC}/SSAssert.cpp
+          ${SS_CORE_SRC}/Ui/UI/Widgets/Terminal/TerminalBuffer.cpp
+          ${SS_CORE_SRC}/Ui/UI/Widgets/Terminal/AnsiPalette.cpp
   LIBS    Qt6::Gui
+          SerialStudio::Core
 )
 
 #
@@ -1959,10 +1950,10 @@ ss_add_unit_test(tst_terminal_buffer
 #
 ss_add_unit_test(tst_opcua_frame_assembler
   SOURCES tst_opcua_frame_assembler.cpp
-          ${SS_APP_SRC}/IO/Drivers/OpcUa/OpcUaFrameAssembler.cpp
-          ${SS_APP_SRC}/SSAssert.cpp
+          ${SS_CORE_SRC}/Devices/IO/Drivers/OpcUa/OpcUaFrameAssembler.cpp
   LIBS    Qt6::Core
           Qt6::Gui
+          SerialStudio::Core
 )
 if(TARGET tst_opcua_frame_assembler)
   target_compile_definitions(tst_opcua_frame_assembler PRIVATE BUILD_COMMERCIAL)
@@ -1970,15 +1961,15 @@ endif()
 
 ss_add_unit_test(tst_opcua_project_builder
   SOURCES tst_opcua_project_builder.cpp
-          ${SS_APP_SRC}/IO/Drivers/OpcUa/OpcUaProjectBuilder.cpp
-          ${SS_APP_SRC}/DataModel/Frame.cpp
-          ${SS_APP_SRC}/DataModel/Generated/DatasetSerialization.cpp
-          ${SS_APP_SRC}/DataModel/Project/PropertyValidators.cpp
+          ${SS_CORE_SRC}/Devices/IO/Drivers/OpcUa/OpcUaProjectBuilder.cpp
+          ${SS_CORE_SRC}/Pipeline/DataModel/Frame.cpp
+          ${SS_CORE_SRC}/Pipeline/DataModel/Generated/DatasetSerialization.cpp
+          ${SS_CORE_SRC}/Pipeline/DataModel/Project/PropertyValidators.cpp
           ${SS_APP_SRC}/SerialStudioFrameSupport.cpp
-          ${SS_APP_SRC}/SSAssert.cpp
   LIBS    Qt6::Core
           Qt6::Core5Compat
           Qt6::Gui
+          SerialStudio::Core
 )
 if(TARGET tst_opcua_project_builder)
   target_compile_definitions(tst_opcua_project_builder PRIVATE BUILD_COMMERCIAL)
@@ -1986,17 +1977,17 @@ endif()
 
 #
 # The replay seek engine (spec 0070): seek keys, series enumeration, ring snapshot/restore
-# including the same-uniqueId-two-sources case that once crashed replay. QtCore + SSAssert.
+# including the same-uniqueId-two-sources case that once crashed replay. QtCore + the Core library.
 #
 ss_add_unit_test(tst_replay_seek_engine
   SOURCES tst_replay_seek_engine.cpp
-          ${SS_APP_SRC}/UI/Dashboard/ReplaySeekEngine.cpp
-          ${SS_APP_SRC}/Platform/AppPlatform.cpp
-          ${SS_APP_SRC}/SSAssert.cpp
+          ${SS_CORE_SRC}/Ui/UI/Dashboard/ReplaySeekEngine.cpp
+          ${SS_CORE_SRC}/Pipeline/Platform/AppPlatform.cpp
   LIBS    Qt6::Core
           Qt6::Gui
           Qt6::Widgets
           ${SS_PLATFORM_LIBS}
+          SerialStudio::Core
 )
 
 #
@@ -2012,8 +2003,8 @@ ss_add_unit_test(tst_test_doubles
           support/FakeDriver.cpp
           support/FakeProvider.cpp
           support/FakeTransport.cpp
-          ${SS_APP_SRC}/IO/HAL_Driver.h
-          ${SS_APP_SRC}/AI/Providers/Provider.h
+          ${SS_CORE_SRC}/Devices/IO/HAL_Driver.h
+          ${SS_CORE_SRC}/Ui/AI/Providers/Provider.h
   LIBS    Qt6::Core
           Qt6::Gui
           Qt6::Network
@@ -2025,10 +2016,10 @@ ss_add_unit_test(tst_test_doubles
 #
 ss_add_unit_test(tst_lua_deadline_hook
   SOURCES tst_lua_deadline_hook.cpp
-          ${SS_APP_SRC}/DataModel/Scripting/LuaDeadlineHook.cpp
-          ${SS_APP_SRC}/SSAssert.cpp
+          ${SS_CORE_SRC}/Pipeline/DataModel/Scripting/LuaDeadlineHook.cpp
   LIBS    Qt6::Core
           luajit
+          SerialStudio::Core
 )
 
 #
@@ -2039,14 +2030,14 @@ ss_add_unit_test(tst_lua_deadline_hook
 #
 ss_add_unit_test(tst_script_dryrun
   SOURCES tst_script_dryrun.cpp
-          ${SS_APP_SRC}/DataModel/Scripting/ScriptDryRun.cpp
-          ${SS_APP_SRC}/DataModel/Scripting/LuaDeadlineHook.cpp
-          ${SS_APP_SRC}/DataModel/Scripting/JsWatchdog.cpp
-          ${SS_APP_SRC}/DataModel/Scripting/JsWatchdogThread.cpp
-          ${SS_APP_SRC}/SSAssert.cpp
+          ${SS_CORE_SRC}/Pipeline/DataModel/Scripting/ScriptDryRun.cpp
+          ${SS_CORE_SRC}/Pipeline/DataModel/Scripting/LuaDeadlineHook.cpp
+          ${SS_CORE_SRC}/Pipeline/DataModel/Scripting/JsWatchdog.cpp
+          ${SS_CORE_SRC}/Pipeline/DataModel/Scripting/JsWatchdogThread.cpp
   LIBS    Qt6::Core
           Qt6::Qml
           luajit
+          SerialStudio::Core
 )
 
 #---------------------------------------------------------------------------------------------------
@@ -2063,14 +2054,14 @@ ss_add_unit_test(tst_script_dryrun
 #
 # The provider stream parser (M10). Untrusted bytes arrive here from the model endpoint, so the
 # frame splitting, the CRLF carry-over and the two overflow reasons are checked byte by byte.
-# JsonValidator is header-only, so SSAssert.cpp plus the AI logging category is the whole link set.
+# JsonValidator is header-only, so SerialStudio::Core plus the AI logging category is the link set.
 #
 ss_add_unit_test(tst_sse_event_reader
   SOURCES tst_sse_event_reader.cpp
-          ${SS_APP_SRC}/AI/SseEventReader.cpp
-          ${SS_APP_SRC}/AI/Logging.cpp
-          ${SS_APP_SRC}/SSAssert.cpp
+          ${SS_CORE_SRC}/Ui/AI/SseEventReader.cpp
+          ${SS_CORE_SRC}/Ui/AI/Logging.cpp
   LIBS    Qt6::Core
+          SerialStudio::Core
 )
 
 #
@@ -2079,7 +2070,7 @@ ss_add_unit_test(tst_sse_event_reader
 #
 ss_add_unit_test(tst_redactor
   SOURCES tst_redactor.cpp
-          ${SS_APP_SRC}/AI/Redactor.cpp
+          ${SS_CORE_SRC}/Ui/AI/Redactor.cpp
   LIBS    Qt6::Core
 )
 
@@ -2090,8 +2081,8 @@ ss_add_unit_test(tst_redactor
 #
 ss_add_unit_test(tst_sentinel_probe
   SOURCES tst_sentinel_probe.cpp
-          ${SS_APP_SRC}/AI/SentinelProbe.cpp
-          ${SS_APP_SRC}/AI/Logging.cpp
+          ${SS_CORE_SRC}/Ui/AI/SentinelProbe.cpp
+          ${SS_CORE_SRC}/Ui/AI/Logging.cpp
   LIBS    Qt6::Core
 )
 
@@ -2102,16 +2093,16 @@ ss_add_unit_test(tst_sentinel_probe
 #
 ss_add_unit_test(tst_file_sandbox
   SOURCES tst_file_sandbox.cpp
-          ${SS_APP_SRC}/AI/FileSandbox.cpp
-          ${SS_APP_SRC}/AI/Conversation/AsyncToolRunner.cpp
-          ${SS_APP_SRC}/AI/Tools/ToolFilesystemTools.cpp
-          ${SS_APP_SRC}/AI/Tools/ToolSchemas.cpp
-          ${SS_APP_SRC}/AI/Logging.cpp
-          ${SS_APP_SRC}/Misc/WorkspaceManager.cpp
-          ${SS_APP_SRC}/SSAssert.cpp
+          ${SS_CORE_SRC}/Ui/AI/FileSandbox.cpp
+          ${SS_CORE_SRC}/Ui/AI/Conversation/AsyncToolRunner.cpp
+          ${SS_CORE_SRC}/Ui/AI/Tools/ToolFilesystemTools.cpp
+          ${SS_CORE_SRC}/Ui/AI/Tools/ToolSchemas.cpp
+          ${SS_CORE_SRC}/Ui/AI/Logging.cpp
+          ${SS_CORE_SRC}/Ui/Misc/WorkspaceManager.cpp
   LIBS    Qt6::Core
           Qt6::Gui
           Qt6::Widgets
+          SerialStudio::Core
 )
 
 #
@@ -2123,22 +2114,22 @@ ss_add_unit_test(tst_file_sandbox
 ss_add_unit_test(tst_reply_state_machine
   SOURCES tst_reply_state_machine.cpp
           support/FakeTransport.cpp
-          ${SS_APP_SRC}/AI/Providers/Provider.cpp
-          ${SS_APP_SRC}/AI/Providers/AnthropicReply.cpp
-          ${SS_APP_SRC}/AI/Providers/OpenAIReply.cpp
-          ${SS_APP_SRC}/AI/Providers/GeminiReply.cpp
-          ${SS_APP_SRC}/AI/Providers/ProviderJson.cpp
-          ${SS_APP_SRC}/AI/Providers/ThinkTagSplitter.cpp
-          ${SS_APP_SRC}/AI/SseEventReader.cpp
-          ${SS_APP_SRC}/AI/KeyVault.cpp
-          ${SS_APP_SRC}/AI/Logging.cpp
+          ${SS_CORE_SRC}/Ui/AI/Providers/Provider.cpp
+          ${SS_CORE_SRC}/Ui/AI/Providers/AnthropicReply.cpp
+          ${SS_CORE_SRC}/Ui/AI/Providers/OpenAIReply.cpp
+          ${SS_CORE_SRC}/Ui/AI/Providers/GeminiReply.cpp
+          ${SS_CORE_SRC}/Ui/AI/Providers/ProviderJson.cpp
+          ${SS_CORE_SRC}/Ui/AI/Providers/ThinkTagSplitter.cpp
+          ${SS_CORE_SRC}/Ui/AI/SseEventReader.cpp
+          ${SS_CORE_SRC}/Ui/AI/KeyVault.cpp
+          ${SS_CORE_SRC}/Ui/AI/Logging.cpp
           ${SS_APP_SRC}/Licensing/MachineID.cpp
           ${SS_APP_SRC}/Licensing/SimpleCrypt.cpp
-          ${SS_APP_SRC}/SSAssert.cpp
   LIBS    Qt6::Core
           Qt6::Gui
           Qt6::Network
           Qt6::Widgets
+          SerialStudio::Core
 )
 
 #
@@ -2150,14 +2141,14 @@ ss_add_unit_test(tst_reply_state_machine
 ss_add_unit_test(tst_extension_installer
   SOURCES tst_extension_installer.cpp
           support/FakeTransport.cpp
-          ${SS_APP_SRC}/Misc/Extensions/ExtensionInstaller.cpp
-          ${SS_APP_SRC}/Misc/Extensions/ExtensionCatalog.cpp
-          ${SS_APP_SRC}/Misc/WorkspaceManager.cpp
-          ${SS_APP_SRC}/SSAssert.cpp
+          ${SS_CORE_SRC}/Ui/Misc/Extensions/ExtensionInstaller.cpp
+          ${SS_CORE_SRC}/Ui/Misc/Extensions/ExtensionCatalog.cpp
+          ${SS_CORE_SRC}/Ui/Misc/WorkspaceManager.cpp
   LIBS    Qt6::Core
           Qt6::Gui
           Qt6::Network
           Qt6::Widgets
+          SerialStudio::Core
 )
 
 #
@@ -2169,14 +2160,14 @@ ss_add_unit_test(tst_extension_installer
 ss_add_unit_test(tst_conversation_turn
   SOURCES tst_conversation_turn.cpp
           support/FakeProvider.cpp
-          ${SS_APP_SRC}/AI/Conversation/TokenBudget.cpp
-          ${SS_APP_SRC}/AI/Conversation/HistorySurgery.cpp
-          ${SS_APP_SRC}/AI/Providers/Provider.cpp
-          ${SS_APP_SRC}/AI/SseEventReader.cpp
-          ${SS_APP_SRC}/AI/Logging.cpp
-          ${SS_APP_SRC}/SSAssert.cpp
+          ${SS_CORE_SRC}/Ui/AI/Conversation/TokenBudget.cpp
+          ${SS_CORE_SRC}/Ui/AI/Conversation/HistorySurgery.cpp
+          ${SS_CORE_SRC}/Ui/AI/Providers/Provider.cpp
+          ${SS_CORE_SRC}/Ui/AI/SseEventReader.cpp
+          ${SS_CORE_SRC}/Ui/AI/Logging.cpp
   LIBS    Qt6::Core
           Qt6::Network
+          SerialStudio::Core
 )
 
 #
@@ -2243,18 +2234,18 @@ ss_add_unit_test(tst_machine_id_identity
 #
 ss_add_unit_test(tst_dashboard_ingest
   SOURCES tst_dashboard_ingest.cpp
-          ${SS_APP_SRC}/UI/Dashboard/DashboardIngest.cpp
-          ${SS_APP_SRC}/DataModel/Frame.cpp
-          ${SS_APP_SRC}/DataModel/Generated/DatasetSerialization.cpp
-          ${SS_APP_SRC}/DataModel/Project/PropertyValidators.cpp
+          ${SS_CORE_SRC}/Ui/UI/Dashboard/DashboardIngest.cpp
+          ${SS_CORE_SRC}/Pipeline/DataModel/Frame.cpp
+          ${SS_CORE_SRC}/Pipeline/DataModel/Generated/DatasetSerialization.cpp
+          ${SS_CORE_SRC}/Pipeline/DataModel/Project/PropertyValidators.cpp
           ${SS_APP_SRC}/SerialStudioFrameSupport.cpp
-          ${SS_APP_SRC}/Platform/AppPlatform.cpp
-          ${SS_APP_SRC}/SSAssert.cpp
+          ${SS_CORE_SRC}/Pipeline/Platform/AppPlatform.cpp
   LIBS    Qt6::Core
           Qt6::Core5Compat
           Qt6::Gui
           Qt6::Widgets
           ${SS_PLATFORM_LIBS}
+          SerialStudio::Core
 )
 
 #
@@ -2263,7 +2254,7 @@ ss_add_unit_test(tst_dashboard_ingest
 #
 ss_add_unit_test(tst_colormap_lut
   SOURCES tst_colormap_lut.cpp
-          ${SS_APP_SRC}/UI/Widgets/Waterfall/WaterfallColorMap.cpp
+          ${SS_CORE_SRC}/Ui/UI/Widgets/Waterfall/WaterfallColorMap.cpp
   LIBS    Qt6::Gui
 )
 
@@ -2274,7 +2265,7 @@ ss_add_unit_test(tst_colormap_lut
 #
 ss_add_unit_test(tst_waterfall_tiles
   SOURCES tst_waterfall_tiles.cpp
-          ${SS_APP_SRC}/UI/Widgets/Waterfall/WaterfallTiles.cpp
+          ${SS_CORE_SRC}/Ui/UI/Widgets/Waterfall/WaterfallTiles.cpp
   LIBS    Qt6::Core
 )
 
@@ -2286,10 +2277,9 @@ ss_add_unit_test(tst_waterfall_tiles
 #
 ss_add_unit_test(tst_waterfall_ring_texture
   SOURCES tst_waterfall_ring_texture.cpp
-          ${SS_APP_SRC}/UI/Widgets/Waterfall/WaterfallRingTexture.cpp
-          ${SS_APP_SRC}/UI/Widgets/Waterfall/WaterfallTiles.cpp
-          ${SS_APP_SRC}/SSAssert.cpp
-  LIBS    Qt6::Core Qt6::Gui Qt6::GuiPrivate Qt6::Quick
+          ${SS_CORE_SRC}/Ui/UI/Widgets/Waterfall/WaterfallRingTexture.cpp
+          ${SS_CORE_SRC}/Ui/UI/Widgets/Waterfall/WaterfallTiles.cpp
+  LIBS    Qt6::Core Qt6::Gui Qt6::GuiPrivate Qt6::Quick SerialStudio::Core
 )
 
 #
@@ -2299,12 +2289,12 @@ ss_add_unit_test(tst_waterfall_ring_texture
 #
 ss_add_unit_test(tst_mmcss_registration
   SOURCES tst_mmcss_registration.cpp
-          ${SS_APP_SRC}/Platform/AppPlatform.cpp
-          ${SS_APP_SRC}/SSAssert.cpp
+          ${SS_CORE_SRC}/Pipeline/Platform/AppPlatform.cpp
   LIBS    Qt6::Core
           Qt6::Gui
           Qt6::Widgets
           ${SS_PLATFORM_LIBS}
+          SerialStudio::Core
 )
 
 #
@@ -2315,9 +2305,8 @@ ss_add_unit_test(tst_mmcss_registration
 #
 ss_add_unit_test(tst_plot_curve_geometry
   SOURCES tst_plot_curve_geometry.cpp
-          ${SS_APP_SRC}/UI/Widgets/GpuStroke.cpp
-          ${SS_APP_SRC}/SSAssert.cpp
-  LIBS    Qt6::Core Qt6::Gui Qt6::Quick
+          ${SS_CORE_SRC}/Ui/UI/Widgets/GpuStroke.cpp
+  LIBS    Qt6::Core Qt6::Gui Qt6::Quick SerialStudio::Core
 )
 
 #
@@ -2327,10 +2316,10 @@ ss_add_unit_test(tst_plot_curve_geometry
 #
 ss_add_unit_test(tst_terminal_selection
   SOURCES tst_terminal_selection.cpp
-          ${SS_APP_SRC}/UI/Widgets/Terminal/TerminalBuffer.cpp
-          ${SS_APP_SRC}/UI/Widgets/Terminal/AnsiPalette.cpp
-          ${SS_APP_SRC}/SSAssert.cpp
+          ${SS_CORE_SRC}/Ui/UI/Widgets/Terminal/TerminalBuffer.cpp
+          ${SS_CORE_SRC}/Ui/UI/Widgets/Terminal/AnsiPalette.cpp
   LIBS    Qt6::Gui
+          SerialStudio::Core
 )
 
 #
@@ -2367,10 +2356,10 @@ ss_add_unit_test(tst_project_bulk_ops
 #
 ss_add_unit_test(tst_project_history
   SOURCES tst_project_history.cpp
-          ${SS_APP_SRC}/DataModel/Project/ProjectHistory.cpp
-          ${SS_APP_SRC}/SSAssert.cpp
+          ${SS_CORE_SRC}/Pipeline/DataModel/Project/ProjectHistory.cpp
   LIBS    Qt6::Core
           Qt6::Gui
+          SerialStudio::Core
 )
 
 #
@@ -2397,15 +2386,15 @@ ss_add_unit_test(tst_project_history
 #
 ss_add_unit_test(tst_frame_builder_staging
   SOURCES tst_frame_builder_staging.cpp
-          ${SS_APP_SRC}/DataModel/FrameBuilder/BlockStager.cpp
-          ${SS_APP_SRC}/DataModel/Frame.cpp
-          ${SS_APP_SRC}/DataModel/Generated/DatasetSerialization.cpp
-          ${SS_APP_SRC}/DataModel/Project/PropertyValidators.cpp
+          ${SS_CORE_SRC}/Pipeline/DataModel/FrameBuilder/BlockStager.cpp
+          ${SS_CORE_SRC}/Pipeline/DataModel/Frame.cpp
+          ${SS_CORE_SRC}/Pipeline/DataModel/Generated/DatasetSerialization.cpp
+          ${SS_CORE_SRC}/Pipeline/DataModel/Project/PropertyValidators.cpp
           ${SS_APP_SRC}/SerialStudioFrameSupport.cpp
-          ${SS_APP_SRC}/SSAssert.cpp
   LIBS    Qt6::Core
           Qt6::Core5Compat
           Qt6::Gui
+          SerialStudio::Core
 )
 
 #
@@ -2415,7 +2404,7 @@ ss_add_unit_test(tst_frame_builder_staging
 #
 ss_add_unit_test(tst_sessions_export_worker
   SOURCES tst_sessions_export_worker.cpp
-          ${SS_APP_SRC}/Sessions/BlockFingerprint.cpp
+          ${SS_CORE_SRC}/Storage/Sessions/BlockFingerprint.cpp
   LIBS    Qt6::Core
 )
 
@@ -2426,15 +2415,15 @@ ss_add_unit_test(tst_sessions_export_worker
 #
 ss_add_unit_test(tst_csv_export_times
   SOURCES tst_csv_export_times.cpp
-          ${SS_APP_SRC}/DataModel/FrameConsumer.cpp
-          ${SS_APP_SRC}/DataModel/Frame.cpp
-          ${SS_APP_SRC}/DataModel/Generated/DatasetSerialization.cpp
-          ${SS_APP_SRC}/DataModel/Project/PropertyValidators.cpp
+          ${SS_CORE_SRC}/Pipeline/DataModel/FrameConsumer.cpp
+          ${SS_CORE_SRC}/Pipeline/DataModel/Frame.cpp
+          ${SS_CORE_SRC}/Pipeline/DataModel/Generated/DatasetSerialization.cpp
+          ${SS_CORE_SRC}/Pipeline/DataModel/Project/PropertyValidators.cpp
           ${SS_APP_SRC}/SerialStudioFrameSupport.cpp
-          ${SS_APP_SRC}/SSAssert.cpp
   LIBS    Qt6::Core
           Qt6::Core5Compat
           Qt6::Gui
+          SerialStudio::Core
 )
 
 #
@@ -2445,11 +2434,11 @@ ss_add_unit_test(tst_csv_export_times
 #
 ss_add_unit_test(tst_sessions_loader_index
   SOURCES tst_sessions_loader_index.cpp
-          ${SS_APP_SRC}/Sessions/PlayerLoaderWorker.cpp
-          ${SS_APP_SRC}/SSAssert.cpp
+          ${SS_CORE_SRC}/Storage/Sessions/PlayerLoaderWorker.cpp
   LIBS    Qt6::Core
           Qt6::Gui
           Qt6::Sql
+          SerialStudio::Core
 )
 
 if(TARGET tst_sessions_loader_index)
@@ -2467,22 +2456,20 @@ endif()
 if(COMMAND ss_add_fuzz_target)
   ss_add_fuzz_target(fuzz_block_codec
     SOURCES fuzz/fuzz_block_codec.cpp
-            ${SS_APP_SRC}/SSAssert.cpp
-    LIBS    Qt6::Core Qt6::Gui Qt6::Sql
+    LIBS    Qt6::Core Qt6::Gui Qt6::Sql SerialStudio::Core
   )
 
   ss_add_fuzz_target(fuzz_csv_row
     SOURCES fuzz/fuzz_csv_row.cpp
-            ${SS_APP_SRC}/CSV/Player/RowSyntax.cpp
-            ${SS_APP_SRC}/SSAssert.cpp
+            ${SS_CORE_SRC}/Storage/CSV/Player/RowSyntax.cpp
     LIBS    Qt6::Core
+            SerialStudio::Core
   )
 
   ss_add_fuzz_target(fuzz_mdf4_reader
     SOURCES fuzz/fuzz_mdf4_reader.cpp
-            ${SS_APP_SRC}/MDF4/PlayerLoaderWorker.cpp
-            ${SS_APP_SRC}/SSAssert.cpp
-    LIBS    Qt6::Core mdf
+            ${SS_CORE_SRC}/Storage/MDF4/PlayerLoaderWorker.cpp
+    LIBS    Qt6::Core mdf SerialStudio::Core
   )
 else()
   message(STATUS "Unit tests: skipping the spec-0075 fuzz targets, ss_add_fuzz_target lands in WP0")
@@ -2495,29 +2482,29 @@ endif()
 #
 # IO::AsyncTcpDial (spec 0075): the one-verdict-per-attempt contract of the non-blocking dial --
 # resolution, the paced refusal probe and the single connectToHost() on the caller's socket, all
-# under one deadline. The class owns no driver and no manager, so QtNetwork plus SSAssert.cpp is
-# the whole link set and the suite runs against a loopback listener it binds itself.
+# under one deadline. The class owns no driver and no manager, so QtNetwork plus SerialStudio::Core
+# is the whole link set and the suite runs against a loopback listener it binds itself.
 #
 ss_add_unit_test(tst_async_tcp_dial
   SOURCES tst_async_tcp_dial.cpp
-          ${SS_APP_SRC}/IO/AsyncTcpDial.cpp
-          ${SS_APP_SRC}/SSAssert.cpp
+          ${SS_CORE_SRC}/Devices/IO/AsyncTcpDial.cpp
   LIBS    Qt6::Core
           Qt6::Network
+          SerialStudio::Core
 )
 
 #
 # IO::ConnectFanOut: the connect-request bookkeeping the manager publishes its state from. The
-# class queries no device and emits nothing, so ConnectFanOut.cpp plus SSAssert.cpp is the whole
-# link set; QtWidgets comes with the wait cursor, which is QApplication state.
+# class queries no device and emits nothing, so ConnectFanOut.cpp plus SerialStudio::Core is the
+# whole link set; QtWidgets comes with the wait cursor, which is QApplication state.
 #
 ss_add_unit_test(tst_connect_fanout
   SOURCES tst_connect_fanout.cpp
-          ${SS_APP_SRC}/IO/ConnectionManager/ConnectFanOut.cpp
-          ${SS_APP_SRC}/SSAssert.cpp
+          ${SS_CORE_SRC}/Devices/IO/ConnectionManager/ConnectFanOut.cpp
   LIBS    Qt6::Core
           Qt6::Gui
           Qt6::Widgets
+          SerialStudio::Core
 )
 
 #
@@ -2531,12 +2518,12 @@ ss_add_unit_test(tst_connect_fanout
 ss_add_unit_test(tst_connection_verdicts
   SOURCES tst_connection_verdicts.cpp
           support/FakeDriver.cpp
-          ${SS_APP_SRC}/IO/HAL_Driver.h
-          ${SS_APP_SRC}/IO/ConnectionManager/ConnectFanOut.cpp
-          ${SS_APP_SRC}/SSAssert.cpp
+          ${SS_CORE_SRC}/Devices/IO/HAL_Driver.h
+          ${SS_CORE_SRC}/Devices/IO/ConnectionManager/ConnectFanOut.cpp
   LIBS    Qt6::Core
           Qt6::Gui
           Qt6::Widgets
+          SerialStudio::Core
 )
 
 #
@@ -2556,13 +2543,13 @@ ss_add_unit_test(tst_machine_id
 
 #
 # The audio playback ring (spec 0075): the SPSC seam between the GUI thread and the real-time
-# callback. Header-only, so SSAssert.cpp is the whole production link set and the wrap, underrun
-# and overflow rules are pinned without a sound card.
+# callback. Header-only, so SerialStudio::Core is the whole production link set and the wrap,
+# underrun and overflow rules are pinned without a sound card.
 #
 ss_add_unit_test(tst_playback_ring
   SOURCES tst_playback_ring.cpp
-          ${SS_APP_SRC}/SSAssert.cpp
   LIBS    Qt6::Core
+          SerialStudio::Core
 )
 
 #
@@ -2585,9 +2572,9 @@ ss_add_unit_test(tst_uart_policy
 if(TARGET Qt6::SerialBus)
   ss_add_unit_test(tst_serial_can_backend
     SOURCES tst_serial_can_backend.cpp
-            ${SS_APP_SRC}/IO/Drivers/CANBus/SlcanBackend.cpp
-            ${SS_APP_SRC}/IO/Drivers/CANBus/SeeedCanBackend.cpp
-            ${SS_APP_SRC}/IO/Drivers/CANBus/SerialCanBackendBase.cpp
+            ${SS_CORE_SRC}/Devices/IO/Drivers/CANBus/SlcanBackend.cpp
+            ${SS_CORE_SRC}/Devices/IO/Drivers/CANBus/SeeedCanBackend.cpp
+            ${SS_CORE_SRC}/Devices/IO/Drivers/CANBus/SerialCanBackendBase.cpp
     LIBS    Qt6::Core
             Qt6::SerialBus
             Qt6::SerialPort
@@ -2620,52 +2607,46 @@ if(COMMAND ss_add_fuzz_target)
   #
   ss_add_fuzz_target(fuzz_api_json
     SOURCES fuzz/fuzz_api_json.cpp
-            ${SS_APP_SRC}/API/Server/ClientReception.cpp
-            ${SS_APP_SRC}/SSAssert.cpp
+            ${SS_CORE_SRC}/Api/API/Server/ClientReception.cpp
     LIBS    Qt6::Core
             Qt6::Network
+            SerialStudio::Core
   )
   ss_add_fuzz_target(fuzz_s7_pdu
     SOURCES fuzz/fuzz_s7_pdu.cpp
-            ${SS_APP_SRC}/IO/Drivers/S7/S7Pdu.cpp
-            ${SS_APP_SRC}/IO/Drivers/S7Address.cpp
-            ${SS_APP_SRC}/SSAssert.cpp
     LIBS    Qt6::Core
+            SerialStudio::Protocols
   )
 
   ss_add_fuzz_target(fuzz_isotsap
     SOURCES fuzz/fuzz_isotsap.cpp
-            ${SS_APP_SRC}/IO/Drivers/S7/IsoTsap.cpp
-            ${SS_APP_SRC}/SSAssert.cpp
     LIBS    Qt6::Core
+            SerialStudio::Protocols
   )
 
   ss_add_fuzz_target(fuzz_iec104_apci
     SOURCES fuzz/fuzz_iec104_apci.cpp
-            ${SS_APP_SRC}/IO/Drivers/Iec104/Apci.cpp
-            ${SS_APP_SRC}/SSAssert.cpp
     LIBS    Qt6::Core
+            SerialStudio::Protocols
   )
 
   ss_add_fuzz_target(fuzz_iec104_asdu
     SOURCES fuzz/fuzz_iec104_asdu.cpp
-            ${SS_APP_SRC}/IO/Drivers/Iec104/Asdu.cpp
-            ${SS_APP_SRC}/SSAssert.cpp
     LIBS    Qt6::Core
+            SerialStudio::Protocols
   )
 
   ss_add_fuzz_target(fuzz_sparkplug_payload
     SOURCES fuzz/fuzz_sparkplug_payload.cpp
-            ${SS_APP_SRC}/IO/Drivers/MQTT/SparkplugPayload.cpp
-            ${SS_APP_SRC}/SSAssert.cpp
     LIBS    Qt6::Core
+            SerialStudio::Protocols
   )
 
   ss_add_fuzz_target(fuzz_opcua_wire
     SOURCES fuzz/fuzz_opcua_wire.cpp
-            ${SS_APP_SRC}/SSAssert.cpp
     LIBS    Qt6::Core
             Qt6::Gui
+            SerialStudio::Core
   )
 else()
   message(STATUS "Fuzz targets skipped: ss_add_fuzz_target() lands with the WP0 harness")
@@ -2682,10 +2663,10 @@ endif()
 #
 ss_add_fuzz_target(fuzz_sse_reader
   SOURCES fuzz/fuzz_sse_reader.cpp
-          ${SS_APP_SRC}/AI/SseEventReader.cpp
-          ${SS_APP_SRC}/AI/Logging.cpp
-          ${SS_APP_SRC}/SSAssert.cpp
+          ${SS_CORE_SRC}/Ui/AI/SseEventReader.cpp
+          ${SS_CORE_SRC}/Ui/AI/Logging.cpp
   LIBS    Qt6::Core
+          SerialStudio::Core
 )
 
 #---------------------------------------------------------------------------------------------------

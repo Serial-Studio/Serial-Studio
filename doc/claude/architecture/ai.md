@@ -1,7 +1,7 @@
 # Architecture — The In-App AI Assistant (Pro)
 
 > Part of the architecture corpus ([index](../architecture.md)). Read this file in full before
-> touching `app/src/AI/`, `app/rcc/ai/`, `app/qml/AI/`, or `API/Handlers/AssistantHandler.cpp`.
+> touching `core/Ui/AI/`, `app/rcc/ai/`, `app/qml/AI/`, or `API/Handlers/AssistantHandler.cpp`.
 > The assistant reaches the whole application through the same command registry the TCP API uses,
 > so a change here is usually also an API-surface change ([commands-icons.md](commands-icons.md)
 > for the command manifest, [project.md](project.md) for what a mutating call touches).

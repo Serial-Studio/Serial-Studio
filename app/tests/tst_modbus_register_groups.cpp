@@ -28,7 +28,7 @@
 #include <QTest>
 
 #include "IO/Drivers/Modbus/ModbusRegisterGroups.h"
-#include "IO/Drivers/Modbus/ModbusRtuCodec.h"
+#include "Protocols/Modbus/ModbusRtuCodec.h"
 
 using IO::Drivers::ModbusRegisterGroups;
 

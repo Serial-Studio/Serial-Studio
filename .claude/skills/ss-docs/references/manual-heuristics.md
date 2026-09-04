@@ -40,7 +40,7 @@ regardless of the other nine scores.
    variety, no drift from what the app actually displays.
 
 5. **Ground-truth prevention.** Every default, range, UI label, shortcut, file format, and
-   gating claim is verifiable against `app/src` / `app/qml` — and was verified (see
+   gating claim is verifiable against `core/` / `app/src` / `app/qml` — and was verified (see
    ground-truth-factcheck.md). "The app handles this automatically" without saying what it
    does is a 1; a wrong default is a 0.
 

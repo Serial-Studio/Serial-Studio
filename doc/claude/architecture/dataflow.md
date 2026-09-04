@@ -83,7 +83,7 @@ timebase that is either a uniform grid (`dt != 0`) or explicit per-sample offset
 ### FrameBuilder's Lane Sub-objects (specs 0070, 0075)
 
 `FrameBuilder` is a facade over member sub-objects, one class per `.h/.cpp` pair under
-`app/src/DataModel/FrameBuilder/`. Three of them sit on the publish path, so a change to the lane
+`core/Pipeline/DataModel/FrameBuilder/`. Three of them sit on the publish path, so a change to the lane
 usually belongs in one of them rather than in the facade:
 
 - **`DataModel::BlockStager` (`m_stager`)** owns everything between a parsed row and a finished
@@ -311,7 +311,7 @@ increments; nothing on it emits, allocates, locks, or calls into `Misc::ProblemC
 - **Reading them.** `DeviceManager::frameReader()` exposes the reader; `ConnectionManager::
   linkStats()` forwards to `IO::DeviceTableQuery::linkStats()`, which sums the per-device counters
   into an `IO::LinkStats` POD — the struct now lives in
-  `app/src/IO/ConnectionManager/DeviceTableQuery.h`, not in `ConnectionManager.h`. It is called
+  `core/Devices/IO/ConnectionManager/DeviceTableQuery.h`, not in `ConnectionManager.h`. It is called
   from the 1 Hz tick only — no caching, no signal, no call site on the frame path. Script health
   comes from `FrameParser::scriptStats()` (per-source engine counters) and `FrameBuilder::
   parsedFrameCount()`. The stream lane's own timeout counter (`StreamWorker::
@@ -330,7 +330,8 @@ processing.
 
 ## Parse-Load Governor (spec 0051)
 
-`FrameBuilder` owns one `DataModel::ParseBudget` (header-only, `ParseBudget.h`): parse time is
+`FrameBuilder` owns one `DataModel::ParseBudget` (header-only, `core/Core/ParseBudget.h`,
+spec 0076): parse time is
 charged **per source** into EWMA duty estimates (leaky integrator, tau 250 ms) plus a shared
 total. While total duty stays under 90% of one core nobody is thinned; past it, only sources
 above their fair share (`0.90 / active sources`) are decimated — every Nth frame processed, N

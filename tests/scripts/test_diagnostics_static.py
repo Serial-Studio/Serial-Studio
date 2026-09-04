@@ -30,40 +30,40 @@ BINDINGS_FILES = (
 BLOCKING_CALLS = ("waitFor", "QEventLoop", "processEvents", "msleep", "sleep(")
 
 DIAGNOSTICS_SOURCES = (
-    "app/src/Misc/ConnectionDiagnostics.cpp",
-    "app/src/Misc/ConnectionDiagnostics.h",
-    "app/src/Misc/Diagnostics/AudioChecks.cpp",
-    "app/src/Misc/Diagnostics/BluetoothChecks.cpp",
-    "app/src/Misc/Diagnostics/DeviceAccess.cpp",
-    "app/src/Misc/Diagnostics/DiagnosticsShared.h",
-    "app/src/Misc/Diagnostics/NetworkChecks.cpp",
-    "app/src/Misc/Diagnostics/SerialChecks.cpp",
-    "app/src/API/Handlers/DiagnosticsHandler.cpp",
+    "core/Ui/Misc/ConnectionDiagnostics.cpp",
+    "core/Ui/Misc/ConnectionDiagnostics.h",
+    "core/Ui/Misc/Diagnostics/AudioChecks.cpp",
+    "core/Ui/Misc/Diagnostics/BluetoothChecks.cpp",
+    "core/Ui/Misc/Diagnostics/DeviceAccess.cpp",
+    "core/Ui/Misc/Diagnostics/DiagnosticsShared.h",
+    "core/Ui/Misc/Diagnostics/NetworkChecks.cpp",
+    "core/Ui/Misc/Diagnostics/SerialChecks.cpp",
+    "core/Api/API/Handlers/DiagnosticsHandler.cpp",
 )
 
 
 _SPEC_0070_SPLITS = {
-    "app/src/AI/ToolDispatcher.cpp": "app/src/AI/Tools",
-    "app/src/AI/Conversation.cpp": "app/src/AI/Conversation",
-    "app/src/Sessions/DatabaseManager.cpp": "app/src/Sessions/DatabaseManager",
-    "app/src/Sessions/Player.cpp": "app/src/Sessions/Player",
-    "app/src/IO/Drivers/BluetoothLE.cpp": "app/src/IO/Drivers/BluetoothLE",
-    "app/src/IO/Drivers/USB.cpp": "app/src/IO/Drivers/USB",
-    "app/src/IO/Drivers/Audio.cpp": "app/src/IO/Drivers/Audio",
-    "app/src/IO/Drivers/OpcUa.cpp": "app/src/IO/Drivers/OpcUa",
-    "app/src/IO/Drivers/Modbus.cpp": "app/src/IO/Drivers/Modbus",
-    "app/src/IO/ConnectionManager.cpp": "app/src/IO/ConnectionManager",
-    "app/src/UI/Widgets/Waterfall.cpp": "app/src/UI/Widgets/Waterfall",
-    "app/src/UI/Widgets/Terminal.cpp": "app/src/UI/Widgets/Terminal",
-    "app/src/UI/Taskbar.cpp": "app/src/UI/Taskbar",
-    "app/src/UI/WindowManager.cpp": "app/src/UI/WindowManager",
-    "app/src/UI/Dashboard.cpp": "app/src/UI/Dashboard",
-    "app/src/UI/Widgets/PainterContext.cpp": "app/src/UI/Widgets/Painter",
-    "app/src/API/Server.cpp": "app/src/API/Server",
-    "app/src/CSV/Player.cpp": "app/src/CSV/Player",
-    "app/src/DataModel/FrameBuilder.cpp": "app/src/DataModel/FrameBuilder",
-    "app/src/MQTT/Publisher.cpp": "app/src/MQTT",
-    "app/src/Misc/ExtensionManager.cpp": "app/src/Misc/Extensions",
+    "core/Ui/AI/ToolDispatcher.cpp": "core/Ui/AI/Tools",
+    "core/Ui/AI/Conversation.cpp": "core/Ui/AI/Conversation",
+    "core/Storage/Sessions/DatabaseManager.cpp": "core/Storage/Sessions/DatabaseManager",
+    "core/Storage/Sessions/Player.cpp": "core/Storage/Sessions/Player",
+    "core/Devices/IO/Drivers/BluetoothLE.cpp": "core/Devices/IO/Drivers/BluetoothLE",
+    "core/Devices/IO/Drivers/USB.cpp": "core/Devices/IO/Drivers/USB",
+    "core/Devices/IO/Drivers/Audio.cpp": "core/Devices/IO/Drivers/Audio",
+    "core/Devices/IO/Drivers/OpcUa.cpp": "core/Devices/IO/Drivers/OpcUa",
+    "core/Devices/IO/Drivers/Modbus.cpp": "core/Devices/IO/Drivers/Modbus",
+    "core/Devices/IO/ConnectionManager.cpp": "core/Devices/IO/ConnectionManager",
+    "core/Ui/UI/Widgets/Waterfall.cpp": "core/Ui/UI/Widgets/Waterfall",
+    "core/Ui/UI/Widgets/Terminal.cpp": "core/Ui/UI/Widgets/Terminal",
+    "core/Ui/UI/Taskbar.cpp": "core/Ui/UI/Taskbar",
+    "core/Ui/UI/WindowManager.cpp": "core/Ui/UI/WindowManager",
+    "core/Ui/UI/Dashboard.cpp": "core/Ui/UI/Dashboard",
+    "core/Ui/UI/Widgets/PainterContext.cpp": "core/Ui/UI/Widgets/Painter",
+    "core/Api/API/Server.cpp": "core/Api/API/Server",
+    "core/Storage/CSV/Player.cpp": "core/Storage/CSV/Player",
+    "core/Pipeline/DataModel/FrameBuilder.cpp": "core/Pipeline/DataModel/FrameBuilder",
+    "core/Devices/MQTT/Publisher.cpp": "core/Devices/MQTT",
+    "core/Ui/Misc/ExtensionManager.cpp": "core/Ui/Misc/Extensions",
 }
 
 
@@ -110,14 +110,14 @@ def test_diagnostics_commands_are_in_exactly_one_tier():
 
 
 def test_diagnostics_commands_are_registered_in_cpp():
-    handler = read_text("app/src/API/Handlers/DiagnosticsHandler.cpp")
+    handler = read_text("core/Api/API/Handlers/DiagnosticsHandler.cpp")
 
     for name in COMMANDS:
         assert f'QStringLiteral("{name}")' in handler
 
 
 def test_diagnostics_handler_is_registered_in_the_gpl_block():
-    source = read_text("app/src/API/CommandHandler.cpp")
+    source = read_text("core/Api/API/CommandHandler.cpp")
 
     assert "API/Handlers/DiagnosticsHandler.h" in source
     assert "Handlers::DiagnosticsHandler::registerCommands();" in source
@@ -131,14 +131,14 @@ def test_diagnostics_handler_is_registered_in_the_gpl_block():
 
 def test_diagnostics_handler_carries_no_commercial_guard():
     for path in (
-        "app/src/API/Handlers/DiagnosticsHandler.h",
-        "app/src/API/Handlers/DiagnosticsHandler.cpp",
+        "core/Api/API/Handlers/DiagnosticsHandler.h",
+        "core/Api/API/Handlers/DiagnosticsHandler.cpp",
     ):
         assert "BUILD_COMMERCIAL" not in read_text(path), f"{path} must stay GPL-clean"
 
 
 def test_diagnostics_scope_has_a_description():
-    dispatcher = read_text("app/src/AI/ToolDispatcher.cpp")
+    dispatcher = read_text("core/Ui/AI/ToolDispatcher.cpp")
     marker = 'QStringLiteral("diagnostics")'
 
     assert marker in dispatcher
@@ -146,7 +146,7 @@ def test_diagnostics_scope_has_a_description():
 
 
 def test_bus_slugs_match_the_declared_bus_count():
-    shared = read_text("app/src/Misc/Diagnostics/DiagnosticsShared.h")
+    shared = read_text("core/Ui/Misc/Diagnostics/DiagnosticsShared.h")
     slugs = re.findall(r'return QStringLiteral\("(\w+)"\);', shared)
 
     for bus in BUSES:
@@ -156,8 +156,8 @@ def test_bus_slugs_match_the_declared_bus_count():
 
 
 def test_checker_ids_are_derived_from_the_bus_slugs():
-    shared = read_text("app/src/Misc/Diagnostics/DiagnosticsShared.h")
-    runner = read_text("app/src/Misc/ConnectionDiagnostics.cpp")
+    shared = read_text("core/Ui/Misc/Diagnostics/DiagnosticsShared.h")
+    runner = read_text("core/Ui/Misc/ConnectionDiagnostics.cpp")
 
     assert 'QStringLiteral("diagnostics.") + busSlug(bus)' in shared
     assert re.search(
@@ -167,7 +167,7 @@ def test_checker_ids_are_derived_from_the_bus_slugs():
 
 
 def test_handler_documents_every_checker_id():
-    handler = read_text("app/src/API/Handlers/DiagnosticsHandler.cpp")
+    handler = read_text("core/Api/API/Handlers/DiagnosticsHandler.cpp")
 
     for bus in BUSES:
         assert (
@@ -183,7 +183,7 @@ def test_diagnostics_never_block_the_event_loop():
 
 
 def test_remedy_commands_are_not_inside_translated_strings():
-    serial = read_text("app/src/Misc/Diagnostics/SerialChecks.cpp")
+    serial = read_text("core/Ui/Misc/Diagnostics/SerialChecks.cpp")
 
     assert 'QStringLiteral("sudo usermod -aG %1 %2")' in serial
     assert "sudo usermod" not in serial.replace(
@@ -245,7 +245,7 @@ def test_diagnostics_context_property_is_registered():
 
 
 def test_diagnostics_commands_are_not_destructive():
-    registry = read_text("app/src/API/CommandRegistry.cpp")
+    registry = read_text("core/Api/API/CommandRegistry.cpp")
     start = registry.index("destructiveCommandSet")
     window = registry[start : start + 20000]
 

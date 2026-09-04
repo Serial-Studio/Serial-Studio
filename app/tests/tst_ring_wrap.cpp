@@ -22,7 +22,7 @@
 #include <QByteArray>
 #include <QTest>
 
-#include "IO/CircularBuffer.h"
+#include "Core/CircularBuffer.h"
 
 // Capacity shared by the wrap-adjacent fixtures below: large enough to host the pattern-scan
 // fixtures, small enough that a modest starting offset forces the payload across the wrap point.

@@ -1,0 +1,23 @@
+{
+  "purpose": "Out-of-graph includes each ratcheted core/ layer carries today. scripts/layer-verify.py fails when an edge grows past its count, so new upward coupling blocks while this backlog is worked down.",
+  "regenerate": "python3 scripts/layer-verify.py --accept",
+  "generated": "2026-09-03",
+  "edges": {
+    "Api->App": 37,
+    "Api->Ui": 23,
+    "Devices->Api": 3,
+    "Devices->App": 44,
+    "Devices->Pipeline": 58,
+    "Devices->Storage": 4,
+    "Devices->Ui": 36,
+    "Pipeline->Api": 9,
+    "Pipeline->App": 91,
+    "Pipeline->Devices": 50,
+    "Pipeline->Storage": 14,
+    "Pipeline->Ui": 95,
+    "Storage->App": 35,
+    "Storage->Devices": 11,
+    "Storage->Ui": 21,
+    "Ui->App": 63
+  }
+}

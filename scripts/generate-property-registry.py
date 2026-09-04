@@ -4,10 +4,10 @@
 Reads app/rcc/properties/dataset.json -- the single declaration of every persisted
 or editable dataset property -- and emits four checked-in C++ translation units:
 
-    app/src/DataModel/Generated/DatasetRegistry.h        descriptor table + form-id enum
-    app/src/DataModel/Generated/DatasetSerialization.cpp project-JSON write + read
-    app/src/DataModel/Generated/DatasetForm.cpp          editor rows + commit dispatcher
-    app/src/API/Generated/DatasetApiFields.cpp           API field appliers + typed schema
+    core/Pipeline/DataModel/Generated/DatasetRegistry.h        descriptor table + form-id enum
+    core/Pipeline/DataModel/Generated/DatasetSerialization.cpp project-JSON write + read
+    core/Pipeline/DataModel/Generated/DatasetForm.cpp          editor rows + commit dispatcher
+    core/Api/API/Generated/DatasetApiFields.cpp                API field appliers + typed schema
 
 Output is deterministic (manifest order, LF endings) and each file is fenced with
 clang-format off/on so the sanitize pipeline's reformat pass cannot fight --check.
@@ -44,18 +44,20 @@ TYPED_PROTO = ROOT / "doc" / "grpc" / "serialstudio-typed.proto"
 
 SNAPSHOT_COMMAND = "project.dataset.update"
 
-# Declared by datasetUpdateSchema() in app/src/API/Handlers/ProjectUpdateCommands.cpp, not by the
+# Declared by datasetUpdateSchema() in core/Api/API/Handlers/ProjectUpdateCommands.cpp, not by the
 # manifest: the two identity params address the dataset the patch applies to.
 IDENTITY_PARAMS = ("groupId", "datasetId")
 
 MAX_REPORTED = 12
 
-OUT_REGISTRY = ROOT / "app" / "src" / "DataModel" / "Generated" / "DatasetRegistry.h"
-OUT_SERIAL = (
-    ROOT / "app" / "src" / "DataModel" / "Generated" / "DatasetSerialization.cpp"
+OUT_REGISTRY = (
+    ROOT / "core" / "Pipeline" / "DataModel" / "Generated" / "DatasetRegistry.h"
 )
-OUT_FORM = ROOT / "app" / "src" / "DataModel" / "Generated" / "DatasetForm.cpp"
-OUT_API = ROOT / "app" / "src" / "API" / "Generated" / "DatasetApiFields.cpp"
+OUT_SERIAL = (
+    ROOT / "core" / "Pipeline" / "DataModel" / "Generated" / "DatasetSerialization.cpp"
+)
+OUT_FORM = ROOT / "core" / "Pipeline" / "DataModel" / "Generated" / "DatasetForm.cpp"
+OUT_API = ROOT / "core" / "Api" / "API" / "Generated" / "DatasetApiFields.cpp"
 
 LICENSE = """/*
  * Serial Studio
@@ -279,9 +281,11 @@ def key(prop: dict) -> str:
 
 def key_constants() -> dict[str, str]:
     """Map every Keys:: literal to its constant name so emitted code never hard-codes a key."""
-    header = (ROOT / "app" / "src" / "DataModel" / "FrameKeys.h").read_text(
+    header = (ROOT / "core" / "Pipeline" / "DataModel" / "FrameKeys.h").read_text(
         encoding="utf-8"
-    ) + (ROOT / "app" / "src" / "DataModel" / "Frame.h").read_text(encoding="utf-8")
+    ) + (ROOT / "core" / "Pipeline" / "DataModel" / "Frame.h").read_text(
+        encoding="utf-8"
+    )
     found: dict[str, str] = {}
     for name, value in re.findall(
         r"inline constexpr KeyView (\w+)\(\"([^\"]*)\"\)", header

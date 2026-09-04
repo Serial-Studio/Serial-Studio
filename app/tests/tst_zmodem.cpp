@@ -28,7 +28,7 @@
 #include <QTemporaryFile>
 #include <QTest>
 
-#include "IO/FileTransmission/ZMODEM.h"
+#include "Protocols/FileTransfer/ZMODEM.h"
 
 // This suite plays the receiver. Every byte the sender emits is decoded by the local helpers below,
 // and every reply is rebuilt from the wire format rather than from the production builders, so a

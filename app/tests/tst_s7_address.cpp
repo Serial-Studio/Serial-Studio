@@ -22,7 +22,7 @@
 
 #include <QTest>
 
-#include "IO/Drivers/S7Address.h"
+#include "Protocols/S7/S7Address.h"
 
 using namespace IO::Drivers::S7Address;
 

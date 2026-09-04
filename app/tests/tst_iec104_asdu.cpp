@@ -25,7 +25,7 @@
 #include <QTest>
 #include <QTimeZone>
 
-#include "IO/Drivers/Iec104/Asdu.h"
+#include "Protocols/Iec104/Asdu.h"
 
 using namespace IO::Drivers::Iec104Proto;
 

@@ -3808,10 +3808,22 @@ def _parse_include_facts(text: str) -> tuple:
     )
 
 
+_CORE_LAYER_DIRS = ("Pipeline", "Devices", "Storage", "Api", "Ui")
+
+
 def _app_include_root(path: Path) -> Path | None:
-    """Locate `app/src` above @p path -- the one include root the app target
-    adds (`include_directories(src)` in app/CMakeLists.txt)."""
+    """Locate the include root above @p path: `app/src` for the app target
+    (`include_directories(src)` in app/CMakeLists.txt), the owning
+    `core/<Layer>` directory for a spec-0076 library target (each layer adds
+    itself as its own public include root), or `core/` itself for the
+    shared `Core`/`Protocols` layers (`target_include_directories(...
+    PUBLIC ${CMAKE_SOURCE_DIR}/core)`)."""
     for parent in path.parents:
+        if parent.parent.name == "core":
+            if parent.name in _CORE_LAYER_DIRS:
+                return parent
+            if parent.name in ("Core", "Protocols"):
+                return parent.parent
         candidate = parent / "app" / "src"
         if candidate.is_dir():
             return candidate
@@ -4341,18 +4353,18 @@ _DISCONNECT_WILDCARD_RE = re.compile(
 )
 
 _DISCONNECT_WILDCARD_BASELINE = {
-    "app/src/CSV/Player/FileIndexer.cpp": 1,
-    "app/src/IO/ConnectionManager.cpp": 3,
-    "app/src/IO/ConnectionManager/DriverUiRegistry.cpp": 1,
-    "app/src/IO/Drivers/BluetoothLE.cpp": 1,
-    "app/src/IO/Drivers/CANBus.cpp": 1,
-    "app/src/IO/Drivers/HID.cpp": 1,
-    "app/src/IO/Drivers/Modbus.cpp": 2,
-    "app/src/IO/Drivers/OpcUa.cpp": 1,
-    "app/src/IO/Drivers/OpcUa/OpcUaBrowser.cpp": 1,
-    "app/src/IO/Drivers/OpcUa/OpcUaSubscriptions.cpp": 1,
-    "app/src/IO/Drivers/OpcUaTagModel.cpp": 1,
-    "app/src/Platform/NativeWindow_CSD.cpp": 1,
+    "core/Storage/CSV/Player/FileIndexer.cpp": 1,
+    "core/Devices/IO/ConnectionManager.cpp": 3,
+    "core/Devices/IO/ConnectionManager/DriverUiRegistry.cpp": 1,
+    "core/Devices/IO/Drivers/BluetoothLE.cpp": 1,
+    "core/Devices/IO/Drivers/CANBus.cpp": 1,
+    "core/Devices/IO/Drivers/HID.cpp": 1,
+    "core/Devices/IO/Drivers/Modbus.cpp": 2,
+    "core/Devices/IO/Drivers/OpcUa.cpp": 1,
+    "core/Devices/IO/Drivers/OpcUa/OpcUaBrowser.cpp": 1,
+    "core/Devices/IO/Drivers/OpcUa/OpcUaSubscriptions.cpp": 1,
+    "core/Devices/IO/Drivers/OpcUaTagModel.cpp": 1,
+    "core/Ui/Platform/NativeWindow_CSD.cpp": 1,
 }
 
 

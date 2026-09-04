@@ -69,6 +69,7 @@ Each test connects to Serial Studio over TCP, configures it through the API, str
 | `test_widget_extensions.py`          | Spec 0038 widget extensions: `extension.widget` findings for uninstalled, malformed, incompatible, dependency-less and reserved-id packages, scope acceptance, no Pro bypass. Two tiers -- the seeded tier writes packages under `<workspace>/Extensions/widget` and skips until Serial Studio is restarted once (set `SS_WORKSPACE` for a non-default workspace, `SS_CLEAN_TEST_PACKAGES=1` to remove them) |
 | `test_connection_diagnostics.py`     | `diagnostics.*` connection self-checks: the three reachability verdicts, byte-free probe, ack-and-poll, bus scoping |
 | `test_console_configuration.py`      | Echo, timestamps, display and data modes, font, send, line endings |
+| `test_source_mirror.py` | Setup-pane → project mirror (single-source): a bus-type switch replaces source 0's connection settings with the new driver's; a driver option edit lands in source 0. |
 | `test_console_ansi_vt100.py`         | ANSI SGR colors (standard, bright, 256, RGB), VT100 cursor, edge cases |
 | `test_dashboard_configuration.py`    | FPS, data points, operation mode, status and data query fields |
 | `test_window_layout.py`              | Active group, window states, auto/manual layout, widget settings persistence |
@@ -214,7 +215,10 @@ pytest tests/scripts/test_cpp_regressions.py -v
 A separate tier from everything above: Qt Test suites compiled into small binaries and run by
 `ctest`, not by pytest. No Python, no Node.js, and no running Serial Studio. Each suite links only
 the production translation units it exercises, never the application target, so the tier configures
-and links in seconds.
+and links in seconds. As of spec 0076, a suite covering a unit that moved into `core/` (e.g.
+`tst_circular_buffer`, `tst_checksums`, `tst_dsp_kernels`, `tst_async_engine`) links
+`SerialStudio::Core` / `SerialStudio::Protocols` instead of recompiling that `.cpp`, so it
+exercises the exact object the application links too.
 
 The targets exist only when the build is configured with `-DSS_BUILD_TESTS=ON`. There are no
 CMake presets — configure by hand. Sanitizer builds (`-DDEBUG_SANITIZER=ON` for ASan+UBSan, or
@@ -330,8 +334,8 @@ Conventions and the fuzzing command line: [`app/tests/fuzz/README.md`](../app/te
 
 **Linter coverage.** `sanitize-commit.py` clang-formats `app/tests/` like the rest of `app/`, so the
 100-column, 2-space, pointer-binds-to-type formatting applies. `code-verify.py`'s structural,
-comment-style, and semantic rules do **not**: its first-party check matches `app/src` and `app/qml`
-only. Test code is held to the formatting contract, not the structural one — do not add
+comment-style, and semantic rules do **not**: its first-party check matches `app/src`, `core/`,
+and `app/qml` only. Test code is held to the formatting contract, not the structural one — do not add
 `// code-verify off` fences there on the assumption that the rules fire.
 
 ## Sanitizer tier (CI `sanitize` job)
@@ -460,6 +464,7 @@ tests/
 │   ├── test_problem_center.py          # problems.* diagnostics: project, link, script findings
 │   ├── test_widget_extensions.py       # Widget extension findings, scope rules, no Pro bypass
 │   ├── test_connection_diagnostics.py  # diagnostics.* self-checks: reachability, ack-and-poll
+│   ├── test_source_mirror.py           # Setup pane → source 0 mirror: bus switch, option edits
 │   ├── test_console_configuration.py   # Console settings: echo, timestamps, modes, font, send
 │   ├── test_console_ansi_vt100.py      # ANSI/VT100 color codes, cursor sequences, edge cases
 │   ├── test_dashboard_configuration.py # FPS, data points, operation mode, status/data queries

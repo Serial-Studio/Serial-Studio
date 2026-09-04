@@ -22,7 +22,7 @@
 
 #include <QTest>
 
-#include "IO/Drivers/S7/IsoTsap.h"
+#include "Protocols/S7/IsoTsap.h"
 
 using namespace IO::Drivers::S7Comm;
 

@@ -1,11 +1,11 @@
 {
   "spec": "0039-session-context",
   "regenerate": "python scripts/code-verify.py --singleton-census --accept",
-  "total": 1553,
-  "files": 237,
+  "total": 1554,
+  "files": 238,
   "buckets": {
     "root": 160,
-    "accessor": 69,
+    "accessor": 70,
     "ctor-capture": 123,
     "deferred": 34,
     "static-cache": 1071,
@@ -19,15 +19,15 @@
     "CommandRegistry": 81,
     "DataModel::FrameBuilder": 69,
     "Misc::IconRegistry": 48,
-    "DataModel::NotificationCenter": 31,
     "Misc::ThemeManager": 31,
+    "DataModel::NotificationCenter": 31,
     "Misc::TimerEvents": 27,
     "Misc::WorkspaceManager": 26,
     "API::CommandRegistry": 25,
-    "Console::Handler": 25,
     "Misc::Translator": 25,
-    "Licensing::LemonSqueezy": 24,
+    "Console::Handler": 25,
     "IO::PipelineHost": 24,
+    "Licensing::LemonSqueezy": 24,
     "Sessions::DatabaseManager": 23,
     "CSV::Player": 22,
     "Sessions::Export": 22,
@@ -41,247 +41,72 @@
     "DataModel::ControlScript": 15,
     "Misc::ExtensionManager": 14,
     "MQTT::Publisher": 14,
-    "Misc::ProblemCenter": 14,
     "Misc::CommonFonts": 14,
-    "UI::UISessionRegistry": 13,
+    "Misc::ProblemCenter": 14,
     "DataModel::ProjectEditor": 13,
+    "UI::UISessionRegistry": 13,
     "ConnectionManager": 12,
-    "AI::CommandRegistry": 11,
     "Console::Export": 11,
-    "Misc::BackupManager": 10,
+    "AI::CommandRegistry": 11,
     "API::GRPC::GRPCServer": 10,
     "Misc::CrashTracker": 10,
+    "Misc::BackupManager": 10,
     "MachineID": 9,
-    "InfluxDB::Export": 8,
     "Licensing::Trial": 8,
     "Widgets::AudioExport": 8,
-    "Licensing::MachineID": 7,
+    "InfluxDB::Export": 8,
     "API::CommandHandler": 7,
-    "AI::FileSandbox": 6,
+    "Licensing::MachineID": 7,
     "ProjectModel": 6,
+    "AI::FileSandbox": 6,
     "Licensing::OfflineLicense": 5,
     "IO::FileTransmission": 5,
     "Misc::ConnectionDiagnostics": 5,
-    "AI::Assistant": 4,
     "LemonSqueezy": 4,
     "UI::TaskbarSettings": 4,
+    "AI::Assistant": 4,
     "UI::WidgetRegistry": 4,
+    "Misc::ShortcutGenerator": 3,
+    "Widgets::ImageExport": 3,
+    "API::MirrorSession": 3,
     "ConnectionDiagnostics": 3,
     "MirrorPublisher": 3,
     "ProcessLauncher": 3,
-    "API::MirrorSession": 3,
-    "JsWatchdogThread": 3,
     "QCanBus": 3,
-    "Misc::ShortcutGenerator": 3,
-    "Widgets::ImageExport": 3,
+    "JsWatchdogThread": 3,
     "ImageExport": 3,
-    "AI::DocSearch": 2,
-    "Server": 2,
-    "API::MCPHandler": 2,
-    "API::MirrorPublisher": 2,
+    "OfflineLicense": 2,
     "API::ProcessLauncher": 2,
-    "MCPHandler": 2,
-    "NotificationCenter": 2,
+    "UI::AlarmMonitor": 2,
+    "API::MirrorPublisher": 2,
+    "Misc::Utilities": 2,
+    "DataModel::ProtoImporter": 2,
+    "Misc::Examples": 2,
+    "Misc::HelpCenter": 2,
+    "Misc::IconEngine": 2,
+    "UI::CommandRegistry": 2,
+    "Misc::GraphicsBackend": 2,
+    "Misc::HighDpiScaling": 2,
     "DataModel::DBCImporter": 2,
     "DataModel::ModbusMapImporter": 2,
-    "DataModel::ProtoImporter": 2,
-    "OfflineLicense": 2,
+    "Server": 2,
+    "API::MCPHandler": 2,
+    "MCPHandler": 2,
+    "NotificationCenter": 2,
+    "AI::DocSearch": 2,
     "QCoreApplication": 2,
-    "Misc::Examples": 2,
-    "Misc::GraphicsBackend": 2,
-    "Misc::HelpCenter": 2,
-    "Misc::HighDpiScaling": 2,
-    "Misc::IconEngine": 2,
-    "UI::AlarmMonitor": 2,
-    "Misc::Utilities": 2,
-    "UI::CommandRegistry": 2,
     "UISessionRegistry": 2,
-    "Assistant": 1,
-    "CommandHandler": 1,
     "BenchmarkRunner": 1,
-    "DataModel::JsWatchdogThread": 1,
-    "PipelineHost": 1,
     "Benchmark::BenchmarkRunner": 1,
+    "CommandHandler": 1,
+    "Core::Bus::MessageBus": 1,
+    "PipelineHost": 1,
+    "DataModel::JsWatchdogThread": 1,
+    "Assistant": 1,
     "Translator": 1,
     "WidgetRegistry": 1
   },
   "per_file": {
-    "app/src/AI/Assistant.cpp": {
-      "total": 8,
-      "buckets": {
-        "root": 0,
-        "accessor": 1,
-        "ctor-capture": 1,
-        "deferred": 0,
-        "static-cache": 6,
-        "loose": 0
-      }
-    },
-    "app/src/AI/CommandRegistry.cpp": {
-      "total": 1,
-      "buckets": {
-        "root": 0,
-        "accessor": 1,
-        "ctor-capture": 0,
-        "deferred": 0,
-        "static-cache": 0,
-        "loose": 0
-      }
-    },
-    "app/src/AI/ContextBuilder.cpp": {
-      "total": 2,
-      "buckets": {
-        "root": 0,
-        "accessor": 0,
-        "ctor-capture": 0,
-        "deferred": 0,
-        "static-cache": 2,
-        "loose": 0
-      }
-    },
-    "app/src/AI/Conversation.cpp": {
-      "total": 4,
-      "buckets": {
-        "root": 0,
-        "accessor": 0,
-        "ctor-capture": 2,
-        "deferred": 0,
-        "static-cache": 2,
-        "loose": 0
-      }
-    },
-    "app/src/AI/DocSearch.cpp": {
-      "total": 1,
-      "buckets": {
-        "root": 0,
-        "accessor": 1,
-        "ctor-capture": 0,
-        "deferred": 0,
-        "static-cache": 0,
-        "loose": 0
-      }
-    },
-    "app/src/AI/FileSandbox.cpp": {
-      "total": 3,
-      "buckets": {
-        "root": 0,
-        "accessor": 1,
-        "ctor-capture": 0,
-        "deferred": 0,
-        "static-cache": 2,
-        "loose": 0
-      }
-    },
-    "app/src/AI/KeyVault.cpp": {
-      "total": 1,
-      "buckets": {
-        "root": 0,
-        "accessor": 0,
-        "ctor-capture": 0,
-        "deferred": 0,
-        "static-cache": 1,
-        "loose": 0
-      }
-    },
-    "app/src/AI/Providers/LocalProvider.cpp": {
-      "total": 1,
-      "buckets": {
-        "root": 0,
-        "accessor": 0,
-        "ctor-capture": 0,
-        "deferred": 0,
-        "static-cache": 1,
-        "loose": 0
-      }
-    },
-    "app/src/AI/ToolDispatcher.cpp": {
-      "total": 3,
-      "buckets": {
-        "root": 0,
-        "accessor": 0,
-        "ctor-capture": 0,
-        "deferred": 0,
-        "static-cache": 3,
-        "loose": 0
-      }
-    },
-    "app/src/AI/Tools/ToolBulkTools.cpp": {
-      "total": 2,
-      "buckets": {
-        "root": 0,
-        "accessor": 0,
-        "ctor-capture": 0,
-        "deferred": 0,
-        "static-cache": 2,
-        "loose": 0
-      }
-    },
-    "app/src/AI/Tools/ToolCatalog.cpp": {
-      "total": 12,
-      "buckets": {
-        "root": 0,
-        "accessor": 0,
-        "ctor-capture": 0,
-        "deferred": 0,
-        "static-cache": 12,
-        "loose": 0
-      }
-    },
-    "app/src/AI/Tools/ToolDispatch.cpp": {
-      "total": 3,
-      "buckets": {
-        "root": 0,
-        "accessor": 0,
-        "ctor-capture": 0,
-        "deferred": 0,
-        "static-cache": 3,
-        "loose": 0
-      }
-    },
-    "app/src/AI/Tools/ToolFilesystemTools.cpp": {
-      "total": 1,
-      "buckets": {
-        "root": 0,
-        "accessor": 0,
-        "ctor-capture": 0,
-        "deferred": 0,
-        "static-cache": 1,
-        "loose": 0
-      }
-    },
-    "app/src/AI/Tools/ToolSupport.cpp": {
-      "total": 1,
-      "buckets": {
-        "root": 0,
-        "accessor": 0,
-        "ctor-capture": 0,
-        "deferred": 0,
-        "static-cache": 1,
-        "loose": 0
-      }
-    },
-    "app/src/API/CommandHandler.cpp": {
-      "total": 5,
-      "buckets": {
-        "root": 0,
-        "accessor": 1,
-        "ctor-capture": 0,
-        "deferred": 0,
-        "static-cache": 4,
-        "loose": 0
-      }
-    },
-    "app/src/API/CommandRegistry.cpp": {
-      "total": 4,
-      "buckets": {
-        "root": 0,
-        "accessor": 1,
-        "ctor-capture": 0,
-        "deferred": 0,
-        "static-cache": 3,
-        "loose": 0
-      }
-    },
     "app/src/API/GRPC/GRPCServer.cpp": {
       "total": 10,
       "buckets": {
@@ -301,655 +126,6 @@
         "ctor-capture": 0,
         "deferred": 0,
         "static-cache": 1,
-        "loose": 0
-      }
-    },
-    "app/src/API/Generated/DatasetApiFields.cpp": {
-      "total": 1,
-      "buckets": {
-        "root": 0,
-        "accessor": 0,
-        "ctor-capture": 0,
-        "deferred": 0,
-        "static-cache": 1,
-        "loose": 0
-      }
-    },
-    "app/src/API/Handlers/AssistantHandler.cpp": {
-      "total": 10,
-      "buckets": {
-        "root": 0,
-        "accessor": 0,
-        "ctor-capture": 0,
-        "deferred": 0,
-        "static-cache": 10,
-        "loose": 0
-      }
-    },
-    "app/src/API/Handlers/AudioHandler.cpp": {
-      "total": 16,
-      "buckets": {
-        "root": 0,
-        "accessor": 0,
-        "ctor-capture": 0,
-        "deferred": 0,
-        "static-cache": 16,
-        "loose": 0
-      }
-    },
-    "app/src/API/Handlers/BluetoothLEHandler.cpp": {
-      "total": 14,
-      "buckets": {
-        "root": 0,
-        "accessor": 0,
-        "ctor-capture": 0,
-        "deferred": 0,
-        "static-cache": 14,
-        "loose": 0
-      }
-    },
-    "app/src/API/Handlers/CANBusHandler.cpp": {
-      "total": 13,
-      "buckets": {
-        "root": 0,
-        "accessor": 0,
-        "ctor-capture": 0,
-        "deferred": 0,
-        "static-cache": 13,
-        "loose": 0
-      }
-    },
-    "app/src/API/Handlers/CSVExportHandler.cpp": {
-      "total": 5,
-      "buckets": {
-        "root": 0,
-        "accessor": 0,
-        "ctor-capture": 0,
-        "deferred": 0,
-        "static-cache": 5,
-        "loose": 0
-      }
-    },
-    "app/src/API/Handlers/CSVPlayerHandler.cpp": {
-      "total": 8,
-      "buckets": {
-        "root": 0,
-        "accessor": 0,
-        "ctor-capture": 0,
-        "deferred": 0,
-        "static-cache": 8,
-        "loose": 0
-      }
-    },
-    "app/src/API/Handlers/ConsoleHandler.cpp": {
-      "total": 22,
-      "buckets": {
-        "root": 0,
-        "accessor": 0,
-        "ctor-capture": 0,
-        "deferred": 0,
-        "static-cache": 22,
-        "loose": 0
-      }
-    },
-    "app/src/API/Handlers/ControlScriptHandler.cpp": {
-      "total": 5,
-      "buckets": {
-        "root": 0,
-        "accessor": 0,
-        "ctor-capture": 0,
-        "deferred": 0,
-        "static-cache": 5,
-        "loose": 0
-      }
-    },
-    "app/src/API/Handlers/DashboardHandler.cpp": {
-      "total": 25,
-      "buckets": {
-        "root": 0,
-        "accessor": 0,
-        "ctor-capture": 0,
-        "deferred": 0,
-        "static-cache": 25,
-        "loose": 0
-      }
-    },
-    "app/src/API/Handlers/DataTablesHandler.cpp": {
-      "total": 16,
-      "buckets": {
-        "root": 0,
-        "accessor": 0,
-        "ctor-capture": 0,
-        "deferred": 0,
-        "static-cache": 16,
-        "loose": 0
-      }
-    },
-    "app/src/API/Handlers/DiagnosticsHandler.cpp": {
-      "total": 4,
-      "buckets": {
-        "root": 0,
-        "accessor": 0,
-        "ctor-capture": 0,
-        "deferred": 0,
-        "static-cache": 4,
-        "loose": 0
-      }
-    },
-    "app/src/API/Handlers/EipHandler.cpp": {
-      "total": 8,
-      "buckets": {
-        "root": 0,
-        "accessor": 0,
-        "ctor-capture": 0,
-        "deferred": 0,
-        "static-cache": 8,
-        "loose": 0
-      }
-    },
-    "app/src/API/Handlers/ExtensionHandler.cpp": {
-      "total": 13,
-      "buckets": {
-        "root": 0,
-        "accessor": 0,
-        "ctor-capture": 0,
-        "deferred": 0,
-        "static-cache": 13,
-        "loose": 0
-      }
-    },
-    "app/src/API/Handlers/HIDHandler.cpp": {
-      "total": 4,
-      "buckets": {
-        "root": 0,
-        "accessor": 0,
-        "ctor-capture": 0,
-        "deferred": 0,
-        "static-cache": 4,
-        "loose": 0
-      }
-    },
-    "app/src/API/Handlers/IOManagerHandler.cpp": {
-      "total": 11,
-      "buckets": {
-        "root": 0,
-        "accessor": 0,
-        "ctor-capture": 0,
-        "deferred": 0,
-        "static-cache": 11,
-        "loose": 0
-      }
-    },
-    "app/src/API/Handlers/Iec104Handler.cpp": {
-      "total": 7,
-      "buckets": {
-        "root": 0,
-        "accessor": 0,
-        "ctor-capture": 0,
-        "deferred": 0,
-        "static-cache": 7,
-        "loose": 0
-      }
-    },
-    "app/src/API/Handlers/InfluxHandler.cpp": {
-      "total": 4,
-      "buckets": {
-        "root": 0,
-        "accessor": 0,
-        "ctor-capture": 0,
-        "deferred": 0,
-        "static-cache": 4,
-        "loose": 0
-      }
-    },
-    "app/src/API/Handlers/LicensingHandler.cpp": {
-      "total": 11,
-      "buckets": {
-        "root": 0,
-        "accessor": 0,
-        "ctor-capture": 0,
-        "deferred": 0,
-        "static-cache": 11,
-        "loose": 0
-      }
-    },
-    "app/src/API/Handlers/MDF4ExportHandler.cpp": {
-      "total": 4,
-      "buckets": {
-        "root": 0,
-        "accessor": 0,
-        "ctor-capture": 0,
-        "deferred": 0,
-        "static-cache": 4,
-        "loose": 0
-      }
-    },
-    "app/src/API/Handlers/MDF4PlayerHandler.cpp": {
-      "total": 7,
-      "buckets": {
-        "root": 0,
-        "accessor": 0,
-        "ctor-capture": 0,
-        "deferred": 0,
-        "static-cache": 7,
-        "loose": 0
-      }
-    },
-    "app/src/API/Handlers/MirrorHandler.cpp": {
-      "total": 3,
-      "buckets": {
-        "root": 0,
-        "accessor": 0,
-        "ctor-capture": 0,
-        "deferred": 0,
-        "static-cache": 3,
-        "loose": 0
-      }
-    },
-    "app/src/API/Handlers/ModbusHandler.cpp": {
-      "total": 27,
-      "buckets": {
-        "root": 0,
-        "accessor": 0,
-        "ctor-capture": 0,
-        "deferred": 0,
-        "static-cache": 27,
-        "loose": 0
-      }
-    },
-    "app/src/API/Handlers/MqttHandler.cpp": {
-      "total": 6,
-      "buckets": {
-        "root": 0,
-        "accessor": 0,
-        "ctor-capture": 0,
-        "deferred": 0,
-        "static-cache": 6,
-        "loose": 0
-      }
-    },
-    "app/src/API/Handlers/NetworkHandler.cpp": {
-      "total": 11,
-      "buckets": {
-        "root": 0,
-        "accessor": 0,
-        "ctor-capture": 0,
-        "deferred": 0,
-        "static-cache": 11,
-        "loose": 0
-      }
-    },
-    "app/src/API/Handlers/NotificationsHandler.cpp": {
-      "total": 9,
-      "buckets": {
-        "root": 0,
-        "accessor": 0,
-        "ctor-capture": 0,
-        "deferred": 0,
-        "static-cache": 9,
-        "loose": 0
-      }
-    },
-    "app/src/API/Handlers/OpcUaHandler.cpp": {
-      "total": 2,
-      "buckets": {
-        "root": 0,
-        "accessor": 0,
-        "ctor-capture": 0,
-        "deferred": 0,
-        "static-cache": 2,
-        "loose": 0
-      }
-    },
-    "app/src/API/Handlers/ProblemsHandler.cpp": {
-      "total": 4,
-      "buckets": {
-        "root": 0,
-        "accessor": 0,
-        "ctor-capture": 0,
-        "deferred": 0,
-        "static-cache": 4,
-        "loose": 0
-      }
-    },
-    "app/src/API/Handlers/ProcessHandler.cpp": {
-      "total": 8,
-      "buckets": {
-        "root": 0,
-        "accessor": 0,
-        "ctor-capture": 0,
-        "deferred": 0,
-        "static-cache": 8,
-        "loose": 0
-      }
-    },
-    "app/src/API/Handlers/ProjectActionCommands.cpp": {
-      "total": 3,
-      "buckets": {
-        "root": 0,
-        "accessor": 0,
-        "ctor-capture": 0,
-        "deferred": 0,
-        "static-cache": 3,
-        "loose": 0
-      }
-    },
-    "app/src/API/Handlers/ProjectApiSupport.cpp": {
-      "total": 4,
-      "buckets": {
-        "root": 0,
-        "accessor": 0,
-        "ctor-capture": 0,
-        "deferred": 0,
-        "static-cache": 4,
-        "loose": 0
-      }
-    },
-    "app/src/API/Handlers/ProjectBatchCommands.cpp": {
-      "total": 2,
-      "buckets": {
-        "root": 0,
-        "accessor": 0,
-        "ctor-capture": 0,
-        "deferred": 0,
-        "static-cache": 2,
-        "loose": 0
-      }
-    },
-    "app/src/API/Handlers/ProjectDatasetCommands.cpp": {
-      "total": 7,
-      "buckets": {
-        "root": 0,
-        "accessor": 0,
-        "ctor-capture": 0,
-        "deferred": 0,
-        "static-cache": 7,
-        "loose": 0
-      }
-    },
-    "app/src/API/Handlers/ProjectDatasetFieldCommands.cpp": {
-      "total": 6,
-      "buckets": {
-        "root": 0,
-        "accessor": 0,
-        "ctor-capture": 0,
-        "deferred": 0,
-        "static-cache": 6,
-        "loose": 0
-      }
-    },
-    "app/src/API/Handlers/ProjectDiscoveryCommands.cpp": {
-      "total": 7,
-      "buckets": {
-        "root": 0,
-        "accessor": 0,
-        "ctor-capture": 0,
-        "deferred": 0,
-        "static-cache": 7,
-        "loose": 0
-      }
-    },
-    "app/src/API/Handlers/ProjectDryRunCommands.cpp": {
-      "total": 2,
-      "buckets": {
-        "root": 0,
-        "accessor": 0,
-        "ctor-capture": 0,
-        "deferred": 0,
-        "static-cache": 2,
-        "loose": 0
-      }
-    },
-    "app/src/API/Handlers/ProjectFileCommands.cpp": {
-      "total": 18,
-      "buckets": {
-        "root": 0,
-        "accessor": 0,
-        "ctor-capture": 0,
-        "deferred": 0,
-        "static-cache": 18,
-        "loose": 0
-      }
-    },
-    "app/src/API/Handlers/ProjectGroupCommands.cpp": {
-      "total": 4,
-      "buckets": {
-        "root": 0,
-        "accessor": 0,
-        "ctor-capture": 0,
-        "deferred": 0,
-        "static-cache": 4,
-        "loose": 0
-      }
-    },
-    "app/src/API/Handlers/ProjectListCommands.cpp": {
-      "total": 8,
-      "buckets": {
-        "root": 0,
-        "accessor": 0,
-        "ctor-capture": 0,
-        "deferred": 0,
-        "static-cache": 8,
-        "loose": 0
-      }
-    },
-    "app/src/API/Handlers/ProjectOutputWidgetCommands.cpp": {
-      "total": 4,
-      "buckets": {
-        "root": 0,
-        "accessor": 0,
-        "ctor-capture": 0,
-        "deferred": 0,
-        "static-cache": 4,
-        "loose": 0
-      }
-    },
-    "app/src/API/Handlers/ProjectPainterCommands.cpp": {
-      "total": 2,
-      "buckets": {
-        "root": 0,
-        "accessor": 0,
-        "ctor-capture": 0,
-        "deferred": 0,
-        "static-cache": 2,
-        "loose": 0
-      }
-    },
-    "app/src/API/Handlers/ProjectParserCommands.cpp": {
-      "total": 18,
-      "buckets": {
-        "root": 0,
-        "accessor": 0,
-        "ctor-capture": 0,
-        "deferred": 0,
-        "static-cache": 18,
-        "loose": 0
-      }
-    },
-    "app/src/API/Handlers/ProjectUpdateCommands.cpp": {
-      "total": 4,
-      "buckets": {
-        "root": 0,
-        "accessor": 0,
-        "ctor-capture": 0,
-        "deferred": 0,
-        "static-cache": 4,
-        "loose": 0
-      }
-    },
-    "app/src/API/Handlers/S7Handler.cpp": {
-      "total": 8,
-      "buckets": {
-        "root": 0,
-        "accessor": 0,
-        "ctor-capture": 0,
-        "deferred": 0,
-        "static-cache": 8,
-        "loose": 0
-      }
-    },
-    "app/src/API/Handlers/ScriptsHandler.cpp": {
-      "total": 1,
-      "buckets": {
-        "root": 0,
-        "accessor": 0,
-        "ctor-capture": 0,
-        "deferred": 0,
-        "static-cache": 1,
-        "loose": 0
-      }
-    },
-    "app/src/API/Handlers/SessionsHandler.cpp": {
-      "total": 24,
-      "buckets": {
-        "root": 0,
-        "accessor": 0,
-        "ctor-capture": 0,
-        "deferred": 0,
-        "static-cache": 24,
-        "loose": 0
-      }
-    },
-    "app/src/API/Handlers/SourceHandler.cpp": {
-      "total": 16,
-      "buckets": {
-        "root": 0,
-        "accessor": 0,
-        "ctor-capture": 0,
-        "deferred": 0,
-        "static-cache": 16,
-        "loose": 0
-      }
-    },
-    "app/src/API/Handlers/StreamHandler.cpp": {
-      "total": 3,
-      "buckets": {
-        "root": 0,
-        "accessor": 0,
-        "ctor-capture": 0,
-        "deferred": 0,
-        "static-cache": 3,
-        "loose": 0
-      }
-    },
-    "app/src/API/Handlers/SystemHandler.cpp": {
-      "total": 6,
-      "buckets": {
-        "root": 0,
-        "accessor": 0,
-        "ctor-capture": 0,
-        "deferred": 0,
-        "static-cache": 6,
-        "loose": 0
-      }
-    },
-    "app/src/API/Handlers/UARTHandler.cpp": {
-      "total": 13,
-      "buckets": {
-        "root": 0,
-        "accessor": 0,
-        "ctor-capture": 0,
-        "deferred": 0,
-        "static-cache": 13,
-        "loose": 0
-      }
-    },
-    "app/src/API/Handlers/USBHandler.cpp": {
-      "total": 8,
-      "buckets": {
-        "root": 0,
-        "accessor": 0,
-        "ctor-capture": 0,
-        "deferred": 0,
-        "static-cache": 8,
-        "loose": 0
-      }
-    },
-    "app/src/API/Handlers/WindowHandler.cpp": {
-      "total": 18,
-      "buckets": {
-        "root": 0,
-        "accessor": 0,
-        "ctor-capture": 0,
-        "deferred": 0,
-        "static-cache": 18,
-        "loose": 0
-      }
-    },
-    "app/src/API/Handlers/WorkspacesHandler.cpp": {
-      "total": 21,
-      "buckets": {
-        "root": 0,
-        "accessor": 0,
-        "ctor-capture": 0,
-        "deferred": 0,
-        "static-cache": 21,
-        "loose": 0
-      }
-    },
-    "app/src/API/MCPHandler.cpp": {
-      "total": 6,
-      "buckets": {
-        "root": 0,
-        "accessor": 1,
-        "ctor-capture": 0,
-        "deferred": 0,
-        "static-cache": 5,
-        "loose": 0
-      }
-    },
-    "app/src/API/Mirror/MirrorPublisher.cpp": {
-      "total": 1,
-      "buckets": {
-        "root": 0,
-        "accessor": 1,
-        "ctor-capture": 0,
-        "deferred": 0,
-        "static-cache": 0,
-        "loose": 0
-      }
-    },
-    "app/src/API/Mirror/MirrorSession.cpp": {
-      "total": 1,
-      "buckets": {
-        "root": 0,
-        "accessor": 1,
-        "ctor-capture": 0,
-        "deferred": 0,
-        "static-cache": 0,
-        "loose": 0
-      }
-    },
-    "app/src/API/ProcessLauncher.cpp": {
-      "total": 3,
-      "buckets": {
-        "root": 0,
-        "accessor": 1,
-        "ctor-capture": 0,
-        "deferred": 2,
-        "static-cache": 0,
-        "loose": 0
-      }
-    },
-    "app/src/API/Server.cpp": {
-      "total": 10,
-      "buckets": {
-        "root": 0,
-        "accessor": 1,
-        "ctor-capture": 0,
-        "deferred": 0,
-        "static-cache": 8,
-        "loose": 1
-      }
-    },
-    "app/src/API/TerminalBridge.cpp": {
-      "total": 2,
-      "buckets": {
-        "root": 0,
-        "accessor": 0,
-        "ctor-capture": 2,
-        "deferred": 0,
-        "static-cache": 0,
         "loose": 0
       }
     },
@@ -984,820 +160,6 @@
         "deferred": 0,
         "static-cache": 20,
         "loose": 0
-      }
-    },
-    "app/src/CSV/Export.cpp": {
-      "total": 7,
-      "buckets": {
-        "root": 0,
-        "accessor": 1,
-        "ctor-capture": 0,
-        "deferred": 0,
-        "static-cache": 1,
-        "loose": 5
-      }
-    },
-    "app/src/CSV/Player.cpp": {
-      "total": 20,
-      "buckets": {
-        "root": 0,
-        "accessor": 1,
-        "ctor-capture": 0,
-        "deferred": 0,
-        "static-cache": 19,
-        "loose": 0
-      }
-    },
-    "app/src/Console/Export.cpp": {
-      "total": 8,
-      "buckets": {
-        "root": 0,
-        "accessor": 1,
-        "ctor-capture": 0,
-        "deferred": 0,
-        "static-cache": 5,
-        "loose": 2
-      }
-    },
-    "app/src/Console/Handler.cpp": {
-      "total": 7,
-      "buckets": {
-        "root": 0,
-        "accessor": 1,
-        "ctor-capture": 1,
-        "deferred": 3,
-        "static-cache": 1,
-        "loose": 1
-      }
-    },
-    "app/src/DataModel/DataTable.cpp": {
-      "total": 1,
-      "buckets": {
-        "root": 0,
-        "accessor": 0,
-        "ctor-capture": 0,
-        "deferred": 0,
-        "static-cache": 1,
-        "loose": 0
-      }
-    },
-    "app/src/DataModel/Dialogs/TransmitTestDialog.cpp": {
-      "total": 4,
-      "buckets": {
-        "root": 0,
-        "accessor": 0,
-        "ctor-capture": 4,
-        "deferred": 0,
-        "static-cache": 0,
-        "loose": 0
-      }
-    },
-    "app/src/DataModel/Editors/ControlScriptEditor.cpp": {
-      "total": 2,
-      "buckets": {
-        "root": 0,
-        "accessor": 0,
-        "ctor-capture": 2,
-        "deferred": 0,
-        "static-cache": 0,
-        "loose": 0
-      }
-    },
-    "app/src/DataModel/Editors/DatasetTransformEditor.cpp": {
-      "total": 7,
-      "buckets": {
-        "root": 0,
-        "accessor": 0,
-        "ctor-capture": 4,
-        "deferred": 0,
-        "static-cache": 3,
-        "loose": 0
-      }
-    },
-    "app/src/DataModel/Editors/EmbeddedCodeEditorItem.cpp": {
-      "total": 3,
-      "buckets": {
-        "root": 0,
-        "accessor": 0,
-        "ctor-capture": 3,
-        "deferred": 0,
-        "static-cache": 0,
-        "loose": 0
-      }
-    },
-    "app/src/DataModel/Editors/FrameParserModel.cpp": {
-      "total": 5,
-      "buckets": {
-        "root": 0,
-        "accessor": 0,
-        "ctor-capture": 3,
-        "deferred": 0,
-        "static-cache": 2,
-        "loose": 0
-      }
-    },
-    "app/src/DataModel/Editors/JsCodeEditor.cpp": {
-      "total": 3,
-      "buckets": {
-        "root": 0,
-        "accessor": 0,
-        "ctor-capture": 3,
-        "deferred": 0,
-        "static-cache": 0,
-        "loose": 0
-      }
-    },
-    "app/src/DataModel/Editors/OutputCodeEditor.cpp": {
-      "total": 3,
-      "buckets": {
-        "root": 0,
-        "accessor": 0,
-        "ctor-capture": 3,
-        "deferred": 0,
-        "static-cache": 0,
-        "loose": 0
-      }
-    },
-    "app/src/DataModel/Editors/PainterCodeEditor.cpp": {
-      "total": 3,
-      "buckets": {
-        "root": 0,
-        "accessor": 0,
-        "ctor-capture": 3,
-        "deferred": 0,
-        "static-cache": 0,
-        "loose": 0
-      }
-    },
-    "app/src/DataModel/ExportStructure.cpp": {
-      "total": 1,
-      "buckets": {
-        "root": 0,
-        "accessor": 0,
-        "ctor-capture": 0,
-        "deferred": 0,
-        "static-cache": 1,
-        "loose": 0
-      }
-    },
-    "app/src/DataModel/FrameBuilder/QuickPlotBuilder.cpp": {
-      "total": 3,
-      "buckets": {
-        "root": 0,
-        "accessor": 0,
-        "ctor-capture": 0,
-        "deferred": 0,
-        "static-cache": 3,
-        "loose": 0
-      }
-    },
-    "app/src/DataModel/FrameBuilder/TableScriptBridge.cpp": {
-      "total": 3,
-      "buckets": {
-        "root": 0,
-        "accessor": 0,
-        "ctor-capture": 0,
-        "deferred": 0,
-        "static-cache": 3,
-        "loose": 0
-      }
-    },
-    "app/src/DataModel/FrameBuilder/TransformCompiler.cpp": {
-      "total": 1,
-      "buckets": {
-        "root": 0,
-        "accessor": 0,
-        "ctor-capture": 0,
-        "deferred": 0,
-        "static-cache": 1,
-        "loose": 0
-      }
-    },
-    "app/src/DataModel/FrameBuilder.cpp": {
-      "total": 48,
-      "buckets": {
-        "root": 0,
-        "accessor": 1,
-        "ctor-capture": 0,
-        "deferred": 9,
-        "static-cache": 21,
-        "loose": 17
-      }
-    },
-    "app/src/DataModel/Generated/DatasetForm.cpp": {
-      "total": 5,
-      "buckets": {
-        "root": 0,
-        "accessor": 0,
-        "ctor-capture": 0,
-        "deferred": 0,
-        "static-cache": 5,
-        "loose": 0
-      }
-    },
-    "app/src/DataModel/Importers/DBCImporter.cpp": {
-      "total": 1,
-      "buckets": {
-        "root": 0,
-        "accessor": 1,
-        "ctor-capture": 0,
-        "deferred": 0,
-        "static-cache": 0,
-        "loose": 0
-      }
-    },
-    "app/src/DataModel/Importers/ImporterCommon.h": {
-      "total": 1,
-      "buckets": {
-        "root": 0,
-        "accessor": 0,
-        "ctor-capture": 0,
-        "deferred": 0,
-        "static-cache": 1,
-        "loose": 0
-      }
-    },
-    "app/src/DataModel/Importers/ModbusMapImporter.cpp": {
-      "total": 3,
-      "buckets": {
-        "root": 0,
-        "accessor": 1,
-        "ctor-capture": 0,
-        "deferred": 0,
-        "static-cache": 2,
-        "loose": 0
-      }
-    },
-    "app/src/DataModel/Importers/ProtoImporter.cpp": {
-      "total": 1,
-      "buckets": {
-        "root": 0,
-        "accessor": 1,
-        "ctor-capture": 0,
-        "deferred": 0,
-        "static-cache": 0,
-        "loose": 0
-      }
-    },
-    "app/src/DataModel/NotificationCenter.cpp": {
-      "total": 6,
-      "buckets": {
-        "root": 0,
-        "accessor": 1,
-        "ctor-capture": 0,
-        "deferred": 0,
-        "static-cache": 5,
-        "loose": 0
-      }
-    },
-    "app/src/DataModel/Project/ProjectEditorCommit.cpp": {
-      "total": 1,
-      "buckets": {
-        "root": 0,
-        "accessor": 0,
-        "ctor-capture": 0,
-        "deferred": 0,
-        "static-cache": 1,
-        "loose": 0
-      }
-    },
-    "app/src/DataModel/Project/ProjectEditorForms.cpp": {
-      "total": 11,
-      "buckets": {
-        "root": 0,
-        "accessor": 0,
-        "ctor-capture": 0,
-        "deferred": 0,
-        "static-cache": 11,
-        "loose": 0
-      }
-    },
-    "app/src/DataModel/Project/ProjectEditorIcons.h": {
-      "total": 1,
-      "buckets": {
-        "root": 0,
-        "accessor": 0,
-        "ctor-capture": 0,
-        "deferred": 0,
-        "static-cache": 1,
-        "loose": 0
-      }
-    },
-    "app/src/DataModel/Project/ProjectEditorMqtt.cpp": {
-      "total": 4,
-      "buckets": {
-        "root": 0,
-        "accessor": 0,
-        "ctor-capture": 0,
-        "deferred": 0,
-        "static-cache": 4,
-        "loose": 0
-      }
-    },
-    "app/src/DataModel/Project/ProjectEditorSummaries.cpp": {
-      "total": 3,
-      "buckets": {
-        "root": 0,
-        "accessor": 0,
-        "ctor-capture": 0,
-        "deferred": 0,
-        "static-cache": 3,
-        "loose": 0
-      }
-    },
-    "app/src/DataModel/Project/ProjectEditorTree.cpp": {
-      "total": 15,
-      "buckets": {
-        "root": 0,
-        "accessor": 0,
-        "ctor-capture": 0,
-        "deferred": 0,
-        "static-cache": 15,
-        "loose": 0
-      }
-    },
-    "app/src/DataModel/Project/ProjectEditorWiring.cpp": {
-      "total": 1,
-      "buckets": {
-        "root": 0,
-        "accessor": 0,
-        "ctor-capture": 0,
-        "deferred": 0,
-        "static-cache": 1,
-        "loose": 0
-      }
-    },
-    "app/src/DataModel/Project/ProjectFolders.cpp": {
-      "total": 6,
-      "buckets": {
-        "root": 0,
-        "accessor": 0,
-        "ctor-capture": 0,
-        "deferred": 0,
-        "static-cache": 6,
-        "loose": 0
-      }
-    },
-    "app/src/DataModel/Project/ProjectLoader.cpp": {
-      "total": 11,
-      "buckets": {
-        "root": 0,
-        "accessor": 0,
-        "ctor-capture": 0,
-        "deferred": 0,
-        "static-cache": 11,
-        "loose": 0
-      }
-    },
-    "app/src/DataModel/Project/ProjectPersistence.cpp": {
-      "total": 8,
-      "buckets": {
-        "root": 0,
-        "accessor": 0,
-        "ctor-capture": 0,
-        "deferred": 0,
-        "static-cache": 8,
-        "loose": 0
-      }
-    },
-    "app/src/DataModel/Project/ProjectPresentation.cpp": {
-      "total": 6,
-      "buckets": {
-        "root": 0,
-        "accessor": 0,
-        "ctor-capture": 0,
-        "deferred": 0,
-        "static-cache": 6,
-        "loose": 0
-      }
-    },
-    "app/src/DataModel/Project/ProjectSources.cpp": {
-      "total": 3,
-      "buckets": {
-        "root": 0,
-        "accessor": 0,
-        "ctor-capture": 0,
-        "deferred": 0,
-        "static-cache": 3,
-        "loose": 0
-      }
-    },
-    "app/src/DataModel/Project/ProjectTables.cpp": {
-      "total": 3,
-      "buckets": {
-        "root": 0,
-        "accessor": 0,
-        "ctor-capture": 0,
-        "deferred": 0,
-        "static-cache": 3,
-        "loose": 0
-      }
-    },
-    "app/src/DataModel/Project/ProjectWorkspaces.cpp": {
-      "total": 23,
-      "buckets": {
-        "root": 0,
-        "accessor": 0,
-        "ctor-capture": 0,
-        "deferred": 0,
-        "static-cache": 23,
-        "loose": 0
-      }
-    },
-    "app/src/DataModel/Project/PropertyHooks.cpp": {
-      "total": 1,
-      "buckets": {
-        "root": 0,
-        "accessor": 0,
-        "ctor-capture": 0,
-        "deferred": 0,
-        "static-cache": 1,
-        "loose": 0
-      }
-    },
-    "app/src/DataModel/ProjectEditor.cpp": {
-      "total": 7,
-      "buckets": {
-        "root": 0,
-        "accessor": 1,
-        "ctor-capture": 5,
-        "deferred": 0,
-        "static-cache": 1,
-        "loose": 0
-      }
-    },
-    "app/src/DataModel/ProjectModel.cpp": {
-      "total": 23,
-      "buckets": {
-        "root": 0,
-        "accessor": 1,
-        "ctor-capture": 0,
-        "deferred": 0,
-        "static-cache": 11,
-        "loose": 11
-      }
-    },
-    "app/src/DataModel/Scripting/ControlScript.cpp": {
-      "total": 9,
-      "buckets": {
-        "root": 0,
-        "accessor": 1,
-        "ctor-capture": 0,
-        "deferred": 0,
-        "static-cache": 3,
-        "loose": 5
-      }
-    },
-    "app/src/DataModel/Scripting/ControlScriptWorker.cpp": {
-      "total": 5,
-      "buckets": {
-        "root": 0,
-        "accessor": 0,
-        "ctor-capture": 0,
-        "deferred": 0,
-        "static-cache": 5,
-        "loose": 0
-      }
-    },
-    "app/src/DataModel/Scripting/DashboardApi.cpp": {
-      "total": 5,
-      "buckets": {
-        "root": 0,
-        "accessor": 0,
-        "ctor-capture": 0,
-        "deferred": 0,
-        "static-cache": 5,
-        "loose": 0
-      }
-    },
-    "app/src/DataModel/Scripting/DeviceWriteApi.cpp": {
-      "total": 2,
-      "buckets": {
-        "root": 0,
-        "accessor": 0,
-        "ctor-capture": 0,
-        "deferred": 0,
-        "static-cache": 2,
-        "loose": 0
-      }
-    },
-    "app/src/DataModel/Scripting/FrameParser.cpp": {
-      "total": 11,
-      "buckets": {
-        "root": 0,
-        "accessor": 1,
-        "ctor-capture": 0,
-        "deferred": 0,
-        "static-cache": 9,
-        "loose": 1
-      }
-    },
-    "app/src/DataModel/Scripting/FrameParserPipeline.cpp": {
-      "total": 1,
-      "buckets": {
-        "root": 0,
-        "accessor": 0,
-        "ctor-capture": 0,
-        "deferred": 0,
-        "static-cache": 1,
-        "loose": 0
-      }
-    },
-    "app/src/DataModel/Scripting/JsWatchdog.cpp": {
-      "total": 2,
-      "buckets": {
-        "root": 0,
-        "accessor": 0,
-        "ctor-capture": 0,
-        "deferred": 0,
-        "static-cache": 2,
-        "loose": 0
-      }
-    },
-    "app/src/DataModel/Scripting/JsWatchdogThread.cpp": {
-      "total": 2,
-      "buckets": {
-        "root": 0,
-        "accessor": 1,
-        "ctor-capture": 0,
-        "deferred": 0,
-        "static-cache": 1,
-        "loose": 0
-      }
-    },
-    "app/src/DataModel/Scripting/LuaScriptEngine.cpp": {
-      "total": 3,
-      "buckets": {
-        "root": 0,
-        "accessor": 0,
-        "ctor-capture": 0,
-        "deferred": 0,
-        "static-cache": 3,
-        "loose": 0
-      }
-    },
-    "app/src/DataModel/Scripting/MacroRunner.cpp": {
-      "total": 1,
-      "buckets": {
-        "root": 0,
-        "accessor": 0,
-        "ctor-capture": 1,
-        "deferred": 0,
-        "static-cache": 0,
-        "loose": 0
-      }
-    },
-    "app/src/DataModel/Scripting/MacroWorker.cpp": {
-      "total": 1,
-      "buckets": {
-        "root": 0,
-        "accessor": 0,
-        "ctor-capture": 1,
-        "deferred": 0,
-        "static-cache": 0,
-        "loose": 0
-      }
-    },
-    "app/src/DataModel/Scripting/ScriptApiCall.cpp": {
-      "total": 8,
-      "buckets": {
-        "root": 0,
-        "accessor": 0,
-        "ctor-capture": 0,
-        "deferred": 0,
-        "static-cache": 8,
-        "loose": 0
-      }
-    },
-    "app/src/DataModel/Scripting/ScriptTemplates.cpp": {
-      "total": 1,
-      "buckets": {
-        "root": 0,
-        "accessor": 0,
-        "ctor-capture": 0,
-        "deferred": 0,
-        "static-cache": 1,
-        "loose": 0
-      }
-    },
-    "app/src/IO/ConnectionManager.cpp": {
-      "total": 18,
-      "buckets": {
-        "root": 0,
-        "accessor": 1,
-        "ctor-capture": 3,
-        "deferred": 6,
-        "static-cache": 6,
-        "loose": 2
-      }
-    },
-    "app/src/IO/DeviceManager.cpp": {
-      "total": 1,
-      "buckets": {
-        "root": 0,
-        "accessor": 0,
-        "ctor-capture": 1,
-        "deferred": 0,
-        "static-cache": 0,
-        "loose": 0
-      }
-    },
-    "app/src/IO/Drivers/Audio.cpp": {
-      "total": 4,
-      "buckets": {
-        "root": 0,
-        "accessor": 0,
-        "ctor-capture": 0,
-        "deferred": 0,
-        "static-cache": 4,
-        "loose": 0
-      }
-    },
-    "app/src/IO/Drivers/BluetoothLE.cpp": {
-      "total": 1,
-      "buckets": {
-        "root": 0,
-        "accessor": 0,
-        "ctor-capture": 0,
-        "deferred": 0,
-        "static-cache": 1,
-        "loose": 0
-      }
-    },
-    "app/src/IO/Drivers/CANBus.cpp": {
-      "total": 5,
-      "buckets": {
-        "root": 0,
-        "accessor": 0,
-        "ctor-capture": 0,
-        "deferred": 0,
-        "static-cache": 4,
-        "loose": 1
-      }
-    },
-    "app/src/IO/Drivers/EthernetIp.cpp": {
-      "total": 3,
-      "buckets": {
-        "root": 0,
-        "accessor": 0,
-        "ctor-capture": 2,
-        "deferred": 0,
-        "static-cache": 1,
-        "loose": 0
-      }
-    },
-    "app/src/IO/Drivers/HID.cpp": {
-      "total": 1,
-      "buckets": {
-        "root": 0,
-        "accessor": 0,
-        "ctor-capture": 0,
-        "deferred": 0,
-        "static-cache": 1,
-        "loose": 0
-      }
-    },
-    "app/src/IO/Drivers/Iec104.cpp": {
-      "total": 3,
-      "buckets": {
-        "root": 0,
-        "accessor": 0,
-        "ctor-capture": 2,
-        "deferred": 0,
-        "static-cache": 1,
-        "loose": 0
-      }
-    },
-    "app/src/IO/Drivers/MQTT.cpp": {
-      "total": 3,
-      "buckets": {
-        "root": 0,
-        "accessor": 0,
-        "ctor-capture": 2,
-        "deferred": 0,
-        "static-cache": 1,
-        "loose": 0
-      }
-    },
-    "app/src/IO/Drivers/Modbus.cpp": {
-      "total": 4,
-      "buckets": {
-        "root": 0,
-        "accessor": 0,
-        "ctor-capture": 2,
-        "deferred": 0,
-        "static-cache": 0,
-        "loose": 2
-      }
-    },
-    "app/src/IO/Drivers/Network.cpp": {
-      "total": 1,
-      "buckets": {
-        "root": 0,
-        "accessor": 0,
-        "ctor-capture": 0,
-        "deferred": 0,
-        "static-cache": 1,
-        "loose": 0
-      }
-    },
-    "app/src/IO/Drivers/OpcUa.cpp": {
-      "total": 4,
-      "buckets": {
-        "root": 0,
-        "accessor": 0,
-        "ctor-capture": 0,
-        "deferred": 0,
-        "static-cache": 3,
-        "loose": 1
-      }
-    },
-    "app/src/IO/Drivers/Process.cpp": {
-      "total": 2,
-      "buckets": {
-        "root": 0,
-        "accessor": 0,
-        "ctor-capture": 0,
-        "deferred": 0,
-        "static-cache": 2,
-        "loose": 0
-      }
-    },
-    "app/src/IO/Drivers/S7.cpp": {
-      "total": 3,
-      "buckets": {
-        "root": 0,
-        "accessor": 0,
-        "ctor-capture": 2,
-        "deferred": 0,
-        "static-cache": 1,
-        "loose": 0
-      }
-    },
-    "app/src/IO/Drivers/UART.cpp": {
-      "total": 5,
-      "buckets": {
-        "root": 0,
-        "accessor": 0,
-        "ctor-capture": 0,
-        "deferred": 0,
-        "static-cache": 3,
-        "loose": 2
-      }
-    },
-    "app/src/IO/Drivers/USB.cpp": {
-      "total": 2,
-      "buckets": {
-        "root": 0,
-        "accessor": 0,
-        "ctor-capture": 0,
-        "deferred": 0,
-        "static-cache": 2,
-        "loose": 0
-      }
-    },
-    "app/src/IO/FileTransmission.cpp": {
-      "total": 3,
-      "buckets": {
-        "root": 0,
-        "accessor": 1,
-        "ctor-capture": 0,
-        "deferred": 1,
-        "static-cache": 0,
-        "loose": 1
-      }
-    },
-    "app/src/IO/FrameReader.cpp": {
-      "total": 1,
-      "buckets": {
-        "root": 0,
-        "accessor": 0,
-        "ctor-capture": 0,
-        "deferred": 0,
-        "static-cache": 1,
-        "loose": 0
-      }
-    },
-    "app/src/IO/PipelineHost.cpp": {
-      "total": 7,
-      "buckets": {
-        "root": 0,
-        "accessor": 1,
-        "ctor-capture": 0,
-        "deferred": 2,
-        "static-cache": 2,
-        "loose": 2
-      }
-    },
-    "app/src/InfluxDB/Export.cpp": {
-      "total": 5,
-      "buckets": {
-        "root": 0,
-        "accessor": 1,
-        "ctor-capture": 0,
-        "deferred": 0,
-        "static-cache": 1,
-        "loose": 3
       }
     },
     "app/src/Licensing/LemonSqueezy.cpp": {
@@ -1855,72 +217,6 @@
         "loose": 0
       }
     },
-    "app/src/MDF4/Export.cpp": {
-      "total": 9,
-      "buckets": {
-        "root": 0,
-        "accessor": 1,
-        "ctor-capture": 0,
-        "deferred": 0,
-        "static-cache": 3,
-        "loose": 5
-      }
-    },
-    "app/src/MDF4/Player.cpp": {
-      "total": 22,
-      "buckets": {
-        "root": 0,
-        "accessor": 1,
-        "ctor-capture": 0,
-        "deferred": 0,
-        "static-cache": 21,
-        "loose": 0
-      }
-    },
-    "app/src/MQTT/CredentialVault.cpp": {
-      "total": 1,
-      "buckets": {
-        "root": 0,
-        "accessor": 0,
-        "ctor-capture": 0,
-        "deferred": 0,
-        "static-cache": 1,
-        "loose": 0
-      }
-    },
-    "app/src/MQTT/Publisher.cpp": {
-      "total": 5,
-      "buckets": {
-        "root": 0,
-        "accessor": 1,
-        "ctor-capture": 0,
-        "deferred": 0,
-        "static-cache": 2,
-        "loose": 2
-      }
-    },
-    "app/src/MQTT/PublisherScriptEditor.cpp": {
-      "total": 4,
-      "buckets": {
-        "root": 0,
-        "accessor": 0,
-        "ctor-capture": 0,
-        "deferred": 0,
-        "static-cache": 4,
-        "loose": 0
-      }
-    },
-    "app/src/Misc/BackupManager.cpp": {
-      "total": 1,
-      "buckets": {
-        "root": 0,
-        "accessor": 1,
-        "ctor-capture": 0,
-        "deferred": 0,
-        "static-cache": 0,
-        "loose": 0
-      }
-    },
     "app/src/Misc/CLI.cpp": {
       "total": 30,
       "buckets": {
@@ -1929,160 +225,6 @@
         "ctor-capture": 0,
         "deferred": 0,
         "static-cache": 30,
-        "loose": 0
-      }
-    },
-    "app/src/Misc/CommonFonts.cpp": {
-      "total": 1,
-      "buckets": {
-        "root": 0,
-        "accessor": 1,
-        "ctor-capture": 0,
-        "deferred": 0,
-        "static-cache": 0,
-        "loose": 0
-      }
-    },
-    "app/src/Misc/ConnectionDiagnostics.cpp": {
-      "total": 2,
-      "buckets": {
-        "root": 0,
-        "accessor": 1,
-        "ctor-capture": 0,
-        "deferred": 0,
-        "static-cache": 0,
-        "loose": 1
-      }
-    },
-    "app/src/Misc/CrashTracker.cpp": {
-      "total": 1,
-      "buckets": {
-        "root": 0,
-        "accessor": 1,
-        "ctor-capture": 0,
-        "deferred": 0,
-        "static-cache": 0,
-        "loose": 0
-      }
-    },
-    "app/src/Misc/Diagnostics/AudioChecks.cpp": {
-      "total": 2,
-      "buckets": {
-        "root": 0,
-        "accessor": 0,
-        "ctor-capture": 0,
-        "deferred": 0,
-        "static-cache": 1,
-        "loose": 1
-      }
-    },
-    "app/src/Misc/Diagnostics/BluetoothChecks.cpp": {
-      "total": 2,
-      "buckets": {
-        "root": 0,
-        "accessor": 0,
-        "ctor-capture": 0,
-        "deferred": 0,
-        "static-cache": 1,
-        "loose": 1
-      }
-    },
-    "app/src/Misc/Diagnostics/NetworkChecks.cpp": {
-      "total": 1,
-      "buckets": {
-        "root": 0,
-        "accessor": 0,
-        "ctor-capture": 0,
-        "deferred": 0,
-        "static-cache": 1,
-        "loose": 0
-      }
-    },
-    "app/src/Misc/Examples.cpp": {
-      "total": 2,
-      "buckets": {
-        "root": 0,
-        "accessor": 1,
-        "ctor-capture": 0,
-        "deferred": 0,
-        "static-cache": 1,
-        "loose": 0
-      }
-    },
-    "app/src/Misc/ExtensionManager.cpp": {
-      "total": 5,
-      "buckets": {
-        "root": 0,
-        "accessor": 1,
-        "ctor-capture": 1,
-        "deferred": 0,
-        "static-cache": 3,
-        "loose": 0
-      }
-    },
-    "app/src/Misc/Extensions/PluginRunner.cpp": {
-      "total": 2,
-      "buckets": {
-        "root": 0,
-        "accessor": 0,
-        "ctor-capture": 0,
-        "deferred": 0,
-        "static-cache": 2,
-        "loose": 0
-      }
-    },
-    "app/src/Misc/GraphicsBackend.cpp": {
-      "total": 2,
-      "buckets": {
-        "root": 0,
-        "accessor": 1,
-        "ctor-capture": 0,
-        "deferred": 0,
-        "static-cache": 1,
-        "loose": 0
-      }
-    },
-    "app/src/Misc/HelpCenter.cpp": {
-      "total": 2,
-      "buckets": {
-        "root": 0,
-        "accessor": 1,
-        "ctor-capture": 1,
-        "deferred": 0,
-        "static-cache": 0,
-        "loose": 0
-      }
-    },
-    "app/src/Misc/HighDpiScaling.cpp": {
-      "total": 2,
-      "buckets": {
-        "root": 0,
-        "accessor": 1,
-        "ctor-capture": 0,
-        "deferred": 0,
-        "static-cache": 1,
-        "loose": 0
-      }
-    },
-    "app/src/Misc/IconEngine.cpp": {
-      "total": 1,
-      "buckets": {
-        "root": 0,
-        "accessor": 1,
-        "ctor-capture": 0,
-        "deferred": 0,
-        "static-cache": 0,
-        "loose": 0
-      }
-    },
-    "app/src/Misc/IconRegistry.cpp": {
-      "total": 1,
-      "buckets": {
-        "root": 0,
-        "accessor": 1,
-        "ctor-capture": 0,
-        "deferred": 0,
-        "static-cache": 0,
         "loose": 0
       }
     },
@@ -2097,171 +239,6 @@
         "loose": 0
       }
     },
-    "app/src/Misc/ProblemCenter.cpp": {
-      "total": 4,
-      "buckets": {
-        "root": 0,
-        "accessor": 1,
-        "ctor-capture": 0,
-        "deferred": 1,
-        "static-cache": 0,
-        "loose": 2
-      }
-    },
-    "app/src/Misc/Problems/ExtensionCheckers.cpp": {
-      "total": 3,
-      "buckets": {
-        "root": 0,
-        "accessor": 0,
-        "ctor-capture": 0,
-        "deferred": 0,
-        "static-cache": 3,
-        "loose": 0
-      }
-    },
-    "app/src/Misc/Problems/LinkCheckers.cpp": {
-      "total": 3,
-      "buckets": {
-        "root": 0,
-        "accessor": 0,
-        "ctor-capture": 0,
-        "deferred": 0,
-        "static-cache": 3,
-        "loose": 0
-      }
-    },
-    "app/src/Misc/Problems/ProjectCheckers.cpp": {
-      "total": 3,
-      "buckets": {
-        "root": 0,
-        "accessor": 0,
-        "ctor-capture": 0,
-        "deferred": 0,
-        "static-cache": 3,
-        "loose": 0
-      }
-    },
-    "app/src/Misc/Problems/ScriptCheckers.cpp": {
-      "total": 4,
-      "buckets": {
-        "root": 0,
-        "accessor": 0,
-        "ctor-capture": 0,
-        "deferred": 0,
-        "static-cache": 4,
-        "loose": 0
-      }
-    },
-    "app/src/Misc/ShortcutGenerator.cpp": {
-      "total": 3,
-      "buckets": {
-        "root": 0,
-        "accessor": 1,
-        "ctor-capture": 0,
-        "deferred": 0,
-        "static-cache": 2,
-        "loose": 0
-      }
-    },
-    "app/src/Misc/ThemeManager.cpp": {
-      "total": 5,
-      "buckets": {
-        "root": 0,
-        "accessor": 1,
-        "ctor-capture": 0,
-        "deferred": 0,
-        "static-cache": 4,
-        "loose": 0
-      }
-    },
-    "app/src/Misc/TimerEvents.cpp": {
-      "total": 1,
-      "buckets": {
-        "root": 0,
-        "accessor": 1,
-        "ctor-capture": 0,
-        "deferred": 0,
-        "static-cache": 0,
-        "loose": 0
-      }
-    },
-    "app/src/Misc/Translator.cpp": {
-      "total": 1,
-      "buckets": {
-        "root": 0,
-        "accessor": 1,
-        "ctor-capture": 0,
-        "deferred": 0,
-        "static-cache": 0,
-        "loose": 0
-      }
-    },
-    "app/src/Misc/Utilities.cpp": {
-      "total": 1,
-      "buckets": {
-        "root": 0,
-        "accessor": 1,
-        "ctor-capture": 0,
-        "deferred": 0,
-        "static-cache": 0,
-        "loose": 0
-      }
-    },
-    "app/src/Misc/WorkspaceManager.cpp": {
-      "total": 1,
-      "buckets": {
-        "root": 0,
-        "accessor": 1,
-        "ctor-capture": 0,
-        "deferred": 0,
-        "static-cache": 0,
-        "loose": 0
-      }
-    },
-    "app/src/Platform/CSD.cpp": {
-      "total": 4,
-      "buckets": {
-        "root": 0,
-        "accessor": 0,
-        "ctor-capture": 3,
-        "deferred": 0,
-        "static-cache": 1,
-        "loose": 0
-      }
-    },
-    "app/src/Platform/FileOpenEventFilter.cpp": {
-      "total": 2,
-      "buckets": {
-        "root": 0,
-        "accessor": 0,
-        "ctor-capture": 0,
-        "deferred": 0,
-        "static-cache": 2,
-        "loose": 0
-      }
-    },
-    "app/src/Platform/NativeWindow_CSD.cpp": {
-      "total": 2,
-      "buckets": {
-        "root": 0,
-        "accessor": 0,
-        "ctor-capture": 0,
-        "deferred": 0,
-        "static-cache": 2,
-        "loose": 0
-      }
-    },
-    "app/src/Platform/NativeWindow_macOS.mm": {
-      "total": 2,
-      "buckets": {
-        "root": 0,
-        "accessor": 0,
-        "ctor-capture": 0,
-        "deferred": 0,
-        "static-cache": 2,
-        "loose": 0
-      }
-    },
     "app/src/SerialStudio.cpp": {
       "total": 12,
       "buckets": {
@@ -2273,7 +250,40 @@
         "loose": 0
       }
     },
-    "app/src/Sessions/DatabaseManager/ReproducibilityVerifier.cpp": {
+    "app/src/main.cpp": {
+      "total": 6,
+      "buckets": {
+        "root": 6,
+        "accessor": 0,
+        "ctor-capture": 0,
+        "deferred": 0,
+        "static-cache": 0,
+        "loose": 0
+      }
+    },
+    "core/Api/API/CommandHandler.cpp": {
+      "total": 5,
+      "buckets": {
+        "root": 0,
+        "accessor": 1,
+        "ctor-capture": 0,
+        "deferred": 0,
+        "static-cache": 4,
+        "loose": 0
+      }
+    },
+    "core/Api/API/CommandRegistry.cpp": {
+      "total": 4,
+      "buckets": {
+        "root": 0,
+        "accessor": 1,
+        "ctor-capture": 0,
+        "deferred": 0,
+        "static-cache": 3,
+        "loose": 0
+      }
+    },
+    "core/Api/API/Generated/DatasetApiFields.cpp": {
       "total": 1,
       "buckets": {
         "root": 0,
@@ -2284,40 +294,62 @@
         "loose": 0
       }
     },
-    "app/src/Sessions/DatabaseManager.cpp": {
-      "total": 9,
+    "core/Api/API/Handlers/AssistantHandler.cpp": {
+      "total": 10,
       "buckets": {
         "root": 0,
-        "accessor": 1,
-        "ctor-capture": 0,
-        "deferred": 4,
-        "static-cache": 2,
-        "loose": 2
-      }
-    },
-    "app/src/Sessions/Export.cpp": {
-      "total": 17,
-      "buckets": {
-        "root": 0,
-        "accessor": 1,
-        "ctor-capture": 3,
-        "deferred": 3,
-        "static-cache": 1,
-        "loose": 9
-      }
-    },
-    "app/src/Sessions/Player.cpp": {
-      "total": 27,
-      "buckets": {
-        "root": 0,
-        "accessor": 1,
+        "accessor": 0,
         "ctor-capture": 0,
         "deferred": 0,
-        "static-cache": 26,
+        "static-cache": 10,
         "loose": 0
       }
     },
-    "app/src/Sessions/Verifier.cpp": {
+    "core/Api/API/Handlers/AudioHandler.cpp": {
+      "total": 16,
+      "buckets": {
+        "root": 0,
+        "accessor": 0,
+        "ctor-capture": 0,
+        "deferred": 0,
+        "static-cache": 16,
+        "loose": 0
+      }
+    },
+    "core/Api/API/Handlers/BluetoothLEHandler.cpp": {
+      "total": 14,
+      "buckets": {
+        "root": 0,
+        "accessor": 0,
+        "ctor-capture": 0,
+        "deferred": 0,
+        "static-cache": 14,
+        "loose": 0
+      }
+    },
+    "core/Api/API/Handlers/CANBusHandler.cpp": {
+      "total": 13,
+      "buckets": {
+        "root": 0,
+        "accessor": 0,
+        "ctor-capture": 0,
+        "deferred": 0,
+        "static-cache": 13,
+        "loose": 0
+      }
+    },
+    "core/Api/API/Handlers/CSVExportHandler.cpp": {
+      "total": 5,
+      "buckets": {
+        "root": 0,
+        "accessor": 0,
+        "ctor-capture": 0,
+        "deferred": 0,
+        "static-cache": 5,
+        "loose": 0
+      }
+    },
+    "core/Api/API/Handlers/CSVPlayerHandler.cpp": {
       "total": 8,
       "buckets": {
         "root": 0,
@@ -2328,7 +360,216 @@
         "loose": 0
       }
     },
-    "app/src/Sessions/VerifierRegression.cpp": {
+    "core/Api/API/Handlers/ConsoleHandler.cpp": {
+      "total": 22,
+      "buckets": {
+        "root": 0,
+        "accessor": 0,
+        "ctor-capture": 0,
+        "deferred": 0,
+        "static-cache": 22,
+        "loose": 0
+      }
+    },
+    "core/Api/API/Handlers/ControlScriptHandler.cpp": {
+      "total": 5,
+      "buckets": {
+        "root": 0,
+        "accessor": 0,
+        "ctor-capture": 0,
+        "deferred": 0,
+        "static-cache": 5,
+        "loose": 0
+      }
+    },
+    "core/Api/API/Handlers/DashboardHandler.cpp": {
+      "total": 25,
+      "buckets": {
+        "root": 0,
+        "accessor": 0,
+        "ctor-capture": 0,
+        "deferred": 0,
+        "static-cache": 25,
+        "loose": 0
+      }
+    },
+    "core/Api/API/Handlers/DataTablesHandler.cpp": {
+      "total": 16,
+      "buckets": {
+        "root": 0,
+        "accessor": 0,
+        "ctor-capture": 0,
+        "deferred": 0,
+        "static-cache": 16,
+        "loose": 0
+      }
+    },
+    "core/Api/API/Handlers/DiagnosticsHandler.cpp": {
+      "total": 4,
+      "buckets": {
+        "root": 0,
+        "accessor": 0,
+        "ctor-capture": 0,
+        "deferred": 0,
+        "static-cache": 4,
+        "loose": 0
+      }
+    },
+    "core/Api/API/Handlers/EipHandler.cpp": {
+      "total": 8,
+      "buckets": {
+        "root": 0,
+        "accessor": 0,
+        "ctor-capture": 0,
+        "deferred": 0,
+        "static-cache": 8,
+        "loose": 0
+      }
+    },
+    "core/Api/API/Handlers/ExtensionHandler.cpp": {
+      "total": 13,
+      "buckets": {
+        "root": 0,
+        "accessor": 0,
+        "ctor-capture": 0,
+        "deferred": 0,
+        "static-cache": 13,
+        "loose": 0
+      }
+    },
+    "core/Api/API/Handlers/HIDHandler.cpp": {
+      "total": 4,
+      "buckets": {
+        "root": 0,
+        "accessor": 0,
+        "ctor-capture": 0,
+        "deferred": 0,
+        "static-cache": 4,
+        "loose": 0
+      }
+    },
+    "core/Api/API/Handlers/IOManagerHandler.cpp": {
+      "total": 11,
+      "buckets": {
+        "root": 0,
+        "accessor": 0,
+        "ctor-capture": 0,
+        "deferred": 0,
+        "static-cache": 11,
+        "loose": 0
+      }
+    },
+    "core/Api/API/Handlers/Iec104Handler.cpp": {
+      "total": 7,
+      "buckets": {
+        "root": 0,
+        "accessor": 0,
+        "ctor-capture": 0,
+        "deferred": 0,
+        "static-cache": 7,
+        "loose": 0
+      }
+    },
+    "core/Api/API/Handlers/InfluxHandler.cpp": {
+      "total": 4,
+      "buckets": {
+        "root": 0,
+        "accessor": 0,
+        "ctor-capture": 0,
+        "deferred": 0,
+        "static-cache": 4,
+        "loose": 0
+      }
+    },
+    "core/Api/API/Handlers/LicensingHandler.cpp": {
+      "total": 11,
+      "buckets": {
+        "root": 0,
+        "accessor": 0,
+        "ctor-capture": 0,
+        "deferred": 0,
+        "static-cache": 11,
+        "loose": 0
+      }
+    },
+    "core/Api/API/Handlers/MDF4ExportHandler.cpp": {
+      "total": 4,
+      "buckets": {
+        "root": 0,
+        "accessor": 0,
+        "ctor-capture": 0,
+        "deferred": 0,
+        "static-cache": 4,
+        "loose": 0
+      }
+    },
+    "core/Api/API/Handlers/MDF4PlayerHandler.cpp": {
+      "total": 7,
+      "buckets": {
+        "root": 0,
+        "accessor": 0,
+        "ctor-capture": 0,
+        "deferred": 0,
+        "static-cache": 7,
+        "loose": 0
+      }
+    },
+    "core/Api/API/Handlers/MirrorHandler.cpp": {
+      "total": 3,
+      "buckets": {
+        "root": 0,
+        "accessor": 0,
+        "ctor-capture": 0,
+        "deferred": 0,
+        "static-cache": 3,
+        "loose": 0
+      }
+    },
+    "core/Api/API/Handlers/ModbusHandler.cpp": {
+      "total": 27,
+      "buckets": {
+        "root": 0,
+        "accessor": 0,
+        "ctor-capture": 0,
+        "deferred": 0,
+        "static-cache": 27,
+        "loose": 0
+      }
+    },
+    "core/Api/API/Handlers/MqttHandler.cpp": {
+      "total": 6,
+      "buckets": {
+        "root": 0,
+        "accessor": 0,
+        "ctor-capture": 0,
+        "deferred": 0,
+        "static-cache": 6,
+        "loose": 0
+      }
+    },
+    "core/Api/API/Handlers/NetworkHandler.cpp": {
+      "total": 11,
+      "buckets": {
+        "root": 0,
+        "accessor": 0,
+        "ctor-capture": 0,
+        "deferred": 0,
+        "static-cache": 11,
+        "loose": 0
+      }
+    },
+    "core/Api/API/Handlers/NotificationsHandler.cpp": {
+      "total": 9,
+      "buckets": {
+        "root": 0,
+        "accessor": 0,
+        "ctor-capture": 0,
+        "deferred": 0,
+        "static-cache": 9,
+        "loose": 0
+      }
+    },
+    "core/Api/API/Handlers/OpcUaHandler.cpp": {
       "total": 2,
       "buckets": {
         "root": 0,
@@ -2339,249 +580,513 @@
         "loose": 0
       }
     },
-    "app/src/UI/AlarmMonitor.cpp": {
+    "core/Api/API/Handlers/ProblemsHandler.cpp": {
       "total": 4,
+      "buckets": {
+        "root": 0,
+        "accessor": 0,
+        "ctor-capture": 0,
+        "deferred": 0,
+        "static-cache": 4,
+        "loose": 0
+      }
+    },
+    "core/Api/API/Handlers/ProcessHandler.cpp": {
+      "total": 8,
+      "buckets": {
+        "root": 0,
+        "accessor": 0,
+        "ctor-capture": 0,
+        "deferred": 0,
+        "static-cache": 8,
+        "loose": 0
+      }
+    },
+    "core/Api/API/Handlers/ProjectActionCommands.cpp": {
+      "total": 3,
+      "buckets": {
+        "root": 0,
+        "accessor": 0,
+        "ctor-capture": 0,
+        "deferred": 0,
+        "static-cache": 3,
+        "loose": 0
+      }
+    },
+    "core/Api/API/Handlers/ProjectApiSupport.cpp": {
+      "total": 4,
+      "buckets": {
+        "root": 0,
+        "accessor": 0,
+        "ctor-capture": 0,
+        "deferred": 0,
+        "static-cache": 4,
+        "loose": 0
+      }
+    },
+    "core/Api/API/Handlers/ProjectBatchCommands.cpp": {
+      "total": 2,
+      "buckets": {
+        "root": 0,
+        "accessor": 0,
+        "ctor-capture": 0,
+        "deferred": 0,
+        "static-cache": 2,
+        "loose": 0
+      }
+    },
+    "core/Api/API/Handlers/ProjectDatasetCommands.cpp": {
+      "total": 7,
+      "buckets": {
+        "root": 0,
+        "accessor": 0,
+        "ctor-capture": 0,
+        "deferred": 0,
+        "static-cache": 7,
+        "loose": 0
+      }
+    },
+    "core/Api/API/Handlers/ProjectDatasetFieldCommands.cpp": {
+      "total": 6,
+      "buckets": {
+        "root": 0,
+        "accessor": 0,
+        "ctor-capture": 0,
+        "deferred": 0,
+        "static-cache": 6,
+        "loose": 0
+      }
+    },
+    "core/Api/API/Handlers/ProjectDiscoveryCommands.cpp": {
+      "total": 7,
+      "buckets": {
+        "root": 0,
+        "accessor": 0,
+        "ctor-capture": 0,
+        "deferred": 0,
+        "static-cache": 7,
+        "loose": 0
+      }
+    },
+    "core/Api/API/Handlers/ProjectDryRunCommands.cpp": {
+      "total": 2,
+      "buckets": {
+        "root": 0,
+        "accessor": 0,
+        "ctor-capture": 0,
+        "deferred": 0,
+        "static-cache": 2,
+        "loose": 0
+      }
+    },
+    "core/Api/API/Handlers/ProjectFileCommands.cpp": {
+      "total": 18,
+      "buckets": {
+        "root": 0,
+        "accessor": 0,
+        "ctor-capture": 0,
+        "deferred": 0,
+        "static-cache": 18,
+        "loose": 0
+      }
+    },
+    "core/Api/API/Handlers/ProjectGroupCommands.cpp": {
+      "total": 4,
+      "buckets": {
+        "root": 0,
+        "accessor": 0,
+        "ctor-capture": 0,
+        "deferred": 0,
+        "static-cache": 4,
+        "loose": 0
+      }
+    },
+    "core/Api/API/Handlers/ProjectListCommands.cpp": {
+      "total": 8,
+      "buckets": {
+        "root": 0,
+        "accessor": 0,
+        "ctor-capture": 0,
+        "deferred": 0,
+        "static-cache": 8,
+        "loose": 0
+      }
+    },
+    "core/Api/API/Handlers/ProjectOutputWidgetCommands.cpp": {
+      "total": 4,
+      "buckets": {
+        "root": 0,
+        "accessor": 0,
+        "ctor-capture": 0,
+        "deferred": 0,
+        "static-cache": 4,
+        "loose": 0
+      }
+    },
+    "core/Api/API/Handlers/ProjectPainterCommands.cpp": {
+      "total": 2,
+      "buckets": {
+        "root": 0,
+        "accessor": 0,
+        "ctor-capture": 0,
+        "deferred": 0,
+        "static-cache": 2,
+        "loose": 0
+      }
+    },
+    "core/Api/API/Handlers/ProjectParserCommands.cpp": {
+      "total": 18,
+      "buckets": {
+        "root": 0,
+        "accessor": 0,
+        "ctor-capture": 0,
+        "deferred": 0,
+        "static-cache": 18,
+        "loose": 0
+      }
+    },
+    "core/Api/API/Handlers/ProjectUpdateCommands.cpp": {
+      "total": 4,
+      "buckets": {
+        "root": 0,
+        "accessor": 0,
+        "ctor-capture": 0,
+        "deferred": 0,
+        "static-cache": 4,
+        "loose": 0
+      }
+    },
+    "core/Api/API/Handlers/S7Handler.cpp": {
+      "total": 8,
+      "buckets": {
+        "root": 0,
+        "accessor": 0,
+        "ctor-capture": 0,
+        "deferred": 0,
+        "static-cache": 8,
+        "loose": 0
+      }
+    },
+    "core/Api/API/Handlers/ScriptsHandler.cpp": {
+      "total": 1,
+      "buckets": {
+        "root": 0,
+        "accessor": 0,
+        "ctor-capture": 0,
+        "deferred": 0,
+        "static-cache": 1,
+        "loose": 0
+      }
+    },
+    "core/Api/API/Handlers/SessionsHandler.cpp": {
+      "total": 24,
+      "buckets": {
+        "root": 0,
+        "accessor": 0,
+        "ctor-capture": 0,
+        "deferred": 0,
+        "static-cache": 24,
+        "loose": 0
+      }
+    },
+    "core/Api/API/Handlers/SourceHandler.cpp": {
+      "total": 16,
+      "buckets": {
+        "root": 0,
+        "accessor": 0,
+        "ctor-capture": 0,
+        "deferred": 0,
+        "static-cache": 16,
+        "loose": 0
+      }
+    },
+    "core/Api/API/Handlers/StreamHandler.cpp": {
+      "total": 3,
+      "buckets": {
+        "root": 0,
+        "accessor": 0,
+        "ctor-capture": 0,
+        "deferred": 0,
+        "static-cache": 3,
+        "loose": 0
+      }
+    },
+    "core/Api/API/Handlers/SystemHandler.cpp": {
+      "total": 6,
+      "buckets": {
+        "root": 0,
+        "accessor": 0,
+        "ctor-capture": 0,
+        "deferred": 0,
+        "static-cache": 6,
+        "loose": 0
+      }
+    },
+    "core/Api/API/Handlers/UARTHandler.cpp": {
+      "total": 13,
+      "buckets": {
+        "root": 0,
+        "accessor": 0,
+        "ctor-capture": 0,
+        "deferred": 0,
+        "static-cache": 13,
+        "loose": 0
+      }
+    },
+    "core/Api/API/Handlers/USBHandler.cpp": {
+      "total": 8,
+      "buckets": {
+        "root": 0,
+        "accessor": 0,
+        "ctor-capture": 0,
+        "deferred": 0,
+        "static-cache": 8,
+        "loose": 0
+      }
+    },
+    "core/Api/API/Handlers/WindowHandler.cpp": {
+      "total": 18,
+      "buckets": {
+        "root": 0,
+        "accessor": 0,
+        "ctor-capture": 0,
+        "deferred": 0,
+        "static-cache": 18,
+        "loose": 0
+      }
+    },
+    "core/Api/API/Handlers/WorkspacesHandler.cpp": {
+      "total": 21,
+      "buckets": {
+        "root": 0,
+        "accessor": 0,
+        "ctor-capture": 0,
+        "deferred": 0,
+        "static-cache": 21,
+        "loose": 0
+      }
+    },
+    "core/Api/API/MCPHandler.cpp": {
+      "total": 6,
+      "buckets": {
+        "root": 0,
+        "accessor": 1,
+        "ctor-capture": 0,
+        "deferred": 0,
+        "static-cache": 5,
+        "loose": 0
+      }
+    },
+    "core/Api/API/Mirror/MirrorPublisher.cpp": {
+      "total": 1,
+      "buckets": {
+        "root": 0,
+        "accessor": 1,
+        "ctor-capture": 0,
+        "deferred": 0,
+        "static-cache": 0,
+        "loose": 0
+      }
+    },
+    "core/Api/API/Mirror/MirrorSession.cpp": {
+      "total": 1,
+      "buckets": {
+        "root": 0,
+        "accessor": 1,
+        "ctor-capture": 0,
+        "deferred": 0,
+        "static-cache": 0,
+        "loose": 0
+      }
+    },
+    "core/Api/API/ProcessLauncher.cpp": {
+      "total": 3,
       "buckets": {
         "root": 0,
         "accessor": 1,
         "ctor-capture": 0,
         "deferred": 2,
         "static-cache": 0,
+        "loose": 0
+      }
+    },
+    "core/Api/API/Server.cpp": {
+      "total": 10,
+      "buckets": {
+        "root": 0,
+        "accessor": 1,
+        "ctor-capture": 0,
+        "deferred": 0,
+        "static-cache": 8,
         "loose": 1
       }
     },
-    "app/src/UI/CommandRegistry.cpp": {
+    "core/Api/API/TerminalBridge.cpp": {
       "total": 2,
       "buckets": {
         "root": 0,
+        "accessor": 0,
+        "ctor-capture": 2,
+        "deferred": 0,
+        "static-cache": 0,
+        "loose": 0
+      }
+    },
+    "core/Core/Bus/MessageBus.cpp": {
+      "total": 1,
+      "buckets": {
+        "root": 0,
         "accessor": 1,
+        "ctor-capture": 0,
+        "deferred": 0,
+        "static-cache": 0,
+        "loose": 0
+      }
+    },
+    "core/Devices/IO/ConnectionManager.cpp": {
+      "total": 18,
+      "buckets": {
+        "root": 0,
+        "accessor": 1,
+        "ctor-capture": 3,
+        "deferred": 6,
+        "static-cache": 6,
+        "loose": 2
+      }
+    },
+    "core/Devices/IO/DeviceManager.cpp": {
+      "total": 1,
+      "buckets": {
+        "root": 0,
+        "accessor": 0,
         "ctor-capture": 1,
         "deferred": 0,
         "static-cache": 0,
         "loose": 0
       }
     },
-    "app/src/UI/Dashboard.cpp": {
-      "total": 26,
-      "buckets": {
-        "root": 0,
-        "accessor": 1,
-        "ctor-capture": 7,
-        "deferred": 0,
-        "static-cache": 18,
-        "loose": 0
-      }
-    },
-    "app/src/UI/Dashboard.h": {
-      "total": 3,
-      "buckets": {
-        "root": 0,
-        "accessor": 0,
-        "ctor-capture": 0,
-        "deferred": 0,
-        "static-cache": 3,
-        "loose": 0
-      }
-    },
-    "app/src/UI/DashboardWidget.cpp": {
-      "total": 8,
-      "buckets": {
-        "root": 0,
-        "accessor": 0,
-        "ctor-capture": 3,
-        "deferred": 0,
-        "static-cache": 5,
-        "loose": 0
-      }
-    },
-    "app/src/UI/Taskbar.cpp": {
-      "total": 8,
-      "buckets": {
-        "root": 0,
-        "accessor": 0,
-        "ctor-capture": 6,
-        "deferred": 0,
-        "static-cache": 2,
-        "loose": 0
-      }
-    },
-    "app/src/UI/TaskbarSettings.cpp": {
-      "total": 1,
-      "buckets": {
-        "root": 0,
-        "accessor": 1,
-        "ctor-capture": 0,
-        "deferred": 0,
-        "static-cache": 0,
-        "loose": 0
-      }
-    },
-    "app/src/UI/UISessionRegistry.cpp": {
-      "total": 1,
-      "buckets": {
-        "root": 0,
-        "accessor": 1,
-        "ctor-capture": 0,
-        "deferred": 0,
-        "static-cache": 0,
-        "loose": 0
-      }
-    },
-    "app/src/UI/WidgetExtensions.cpp": {
+    "core/Devices/IO/Drivers/Audio.cpp": {
       "total": 4,
       "buckets": {
         "root": 0,
-        "accessor": 1,
+        "accessor": 0,
+        "ctor-capture": 0,
+        "deferred": 0,
+        "static-cache": 4,
+        "loose": 0
+      }
+    },
+    "core/Devices/IO/Drivers/BluetoothLE.cpp": {
+      "total": 1,
+      "buckets": {
+        "root": 0,
+        "accessor": 0,
+        "ctor-capture": 0,
+        "deferred": 0,
+        "static-cache": 1,
+        "loose": 0
+      }
+    },
+    "core/Devices/IO/Drivers/CANBus.cpp": {
+      "total": 5,
+      "buckets": {
+        "root": 0,
+        "accessor": 0,
+        "ctor-capture": 0,
+        "deferred": 0,
+        "static-cache": 4,
+        "loose": 1
+      }
+    },
+    "core/Devices/IO/Drivers/EthernetIp.cpp": {
+      "total": 3,
+      "buckets": {
+        "root": 0,
+        "accessor": 0,
+        "ctor-capture": 2,
+        "deferred": 0,
+        "static-cache": 1,
+        "loose": 0
+      }
+    },
+    "core/Devices/IO/Drivers/HID.cpp": {
+      "total": 1,
+      "buckets": {
+        "root": 0,
+        "accessor": 0,
+        "ctor-capture": 0,
+        "deferred": 0,
+        "static-cache": 1,
+        "loose": 0
+      }
+    },
+    "core/Devices/IO/Drivers/Iec104.cpp": {
+      "total": 3,
+      "buckets": {
+        "root": 0,
+        "accessor": 0,
+        "ctor-capture": 2,
+        "deferred": 0,
+        "static-cache": 1,
+        "loose": 0
+      }
+    },
+    "core/Devices/IO/Drivers/MQTT.cpp": {
+      "total": 3,
+      "buckets": {
+        "root": 0,
+        "accessor": 0,
+        "ctor-capture": 2,
+        "deferred": 0,
+        "static-cache": 1,
+        "loose": 0
+      }
+    },
+    "core/Devices/IO/Drivers/Modbus.cpp": {
+      "total": 4,
+      "buckets": {
+        "root": 0,
+        "accessor": 0,
+        "ctor-capture": 2,
+        "deferred": 0,
+        "static-cache": 0,
+        "loose": 2
+      }
+    },
+    "core/Devices/IO/Drivers/Network.cpp": {
+      "total": 1,
+      "buckets": {
+        "root": 0,
+        "accessor": 0,
+        "ctor-capture": 0,
+        "deferred": 0,
+        "static-cache": 1,
+        "loose": 0
+      }
+    },
+    "core/Devices/IO/Drivers/OpcUa.cpp": {
+      "total": 4,
+      "buckets": {
+        "root": 0,
+        "accessor": 0,
         "ctor-capture": 0,
         "deferred": 0,
         "static-cache": 3,
-        "loose": 0
+        "loose": 1
       }
     },
-    "app/src/UI/WidgetRegistry.cpp": {
-      "total": 1,
-      "buckets": {
-        "root": 0,
-        "accessor": 1,
-        "ctor-capture": 0,
-        "deferred": 0,
-        "static-cache": 0,
-        "loose": 0
-      }
-    },
-    "app/src/UI/Widgets/Accelerometer.cpp": {
-      "total": 1,
-      "buckets": {
-        "root": 0,
-        "accessor": 0,
-        "ctor-capture": 1,
-        "deferred": 0,
-        "static-cache": 0,
-        "loose": 0
-      }
-    },
-    "app/src/UI/Widgets/AudioExport.cpp": {
-      "total": 13,
-      "buckets": {
-        "root": 0,
-        "accessor": 1,
-        "ctor-capture": 0,
-        "deferred": 0,
-        "static-cache": 1,
-        "loose": 11
-      }
-    },
-    "app/src/UI/Widgets/Bar.cpp": {
-      "total": 1,
-      "buckets": {
-        "root": 0,
-        "accessor": 0,
-        "ctor-capture": 1,
-        "deferred": 0,
-        "static-cache": 0,
-        "loose": 0
-      }
-    },
-    "app/src/UI/Widgets/BarPanel.cpp": {
-      "total": 1,
-      "buckets": {
-        "root": 0,
-        "accessor": 0,
-        "ctor-capture": 1,
-        "deferred": 0,
-        "static-cache": 0,
-        "loose": 0
-      }
-    },
-    "app/src/UI/Widgets/Compass.cpp": {
-      "total": 1,
-      "buckets": {
-        "root": 0,
-        "accessor": 0,
-        "ctor-capture": 1,
-        "deferred": 0,
-        "static-cache": 0,
-        "loose": 0
-      }
-    },
-    "app/src/UI/Widgets/DataGrid.cpp": {
-      "total": 1,
-      "buckets": {
-        "root": 0,
-        "accessor": 0,
-        "ctor-capture": 1,
-        "deferred": 0,
-        "static-cache": 0,
-        "loose": 0
-      }
-    },
-    "app/src/UI/Widgets/ExtensionData.cpp": {
-      "total": 6,
-      "buckets": {
-        "root": 0,
-        "accessor": 0,
-        "ctor-capture": 1,
-        "deferred": 0,
-        "static-cache": 5,
-        "loose": 0
-      }
-    },
-    "app/src/UI/Widgets/FFTPlot.cpp": {
+    "core/Devices/IO/Drivers/Process.cpp": {
       "total": 2,
       "buckets": {
         "root": 0,
         "accessor": 0,
-        "ctor-capture": 2,
-        "deferred": 0,
-        "static-cache": 0,
-        "loose": 0
-      }
-    },
-    "app/src/UI/Widgets/GPS.cpp": {
-      "total": 3,
-      "buckets": {
-        "root": 0,
-        "accessor": 0,
-        "ctor-capture": 3,
-        "deferred": 0,
-        "static-cache": 0,
-        "loose": 0
-      }
-    },
-    "app/src/UI/Widgets/Gyroscope.cpp": {
-      "total": 1,
-      "buckets": {
-        "root": 0,
-        "accessor": 0,
-        "ctor-capture": 1,
-        "deferred": 0,
-        "static-cache": 0,
-        "loose": 0
-      }
-    },
-    "app/src/UI/Widgets/ImageExport.cpp": {
-      "total": 7,
-      "buckets": {
-        "root": 0,
-        "accessor": 1,
         "ctor-capture": 0,
         "deferred": 0,
         "static-cache": 2,
-        "loose": 4
-      }
-    },
-    "app/src/UI/Widgets/ImageView.cpp": {
-      "total": 5,
-      "buckets": {
-        "root": 0,
-        "accessor": 0,
-        "ctor-capture": 3,
-        "deferred": 0,
-        "static-cache": 2,
         "loose": 0
       }
     },
-    "app/src/UI/Widgets/LEDPanel.cpp": {
+    "core/Devices/IO/Drivers/S7.cpp": {
       "total": 3,
       "buckets": {
         "root": 0,
@@ -2592,29 +1097,40 @@
         "loose": 0
       }
     },
-    "app/src/UI/Widgets/MultiPlot.cpp": {
+    "core/Devices/IO/Drivers/UART.cpp": {
+      "total": 5,
+      "buckets": {
+        "root": 0,
+        "accessor": 0,
+        "ctor-capture": 0,
+        "deferred": 0,
+        "static-cache": 3,
+        "loose": 2
+      }
+    },
+    "core/Devices/IO/Drivers/USB.cpp": {
       "total": 2,
       "buckets": {
         "root": 0,
         "accessor": 0,
-        "ctor-capture": 2,
+        "ctor-capture": 0,
         "deferred": 0,
-        "static-cache": 0,
+        "static-cache": 2,
         "loose": 0
       }
     },
-    "app/src/UI/Widgets/Output/Base.cpp": {
-      "total": 1,
+    "core/Devices/IO/FileTransmission.cpp": {
+      "total": 3,
       "buckets": {
         "root": 0,
-        "accessor": 0,
-        "ctor-capture": 1,
-        "deferred": 0,
+        "accessor": 1,
+        "ctor-capture": 0,
+        "deferred": 1,
         "static-cache": 0,
-        "loose": 0
+        "loose": 1
       }
     },
-    "app/src/UI/Widgets/Output/PanelLayout.cpp": {
+    "core/Devices/MQTT/CredentialVault.cpp": {
       "total": 1,
       "buckets": {
         "root": 0,
@@ -2625,40 +1141,40 @@
         "loose": 0
       }
     },
-    "app/src/UI/Widgets/Painter.cpp": {
+    "core/Devices/MQTT/Publisher.cpp": {
       "total": 5,
       "buckets": {
         "root": 0,
-        "accessor": 0,
-        "ctor-capture": 5,
+        "accessor": 1,
+        "ctor-capture": 0,
         "deferred": 0,
-        "static-cache": 0,
+        "static-cache": 2,
+        "loose": 2
+      }
+    },
+    "core/Devices/MQTT/PublisherScriptEditor.cpp": {
+      "total": 4,
+      "buckets": {
+        "root": 0,
+        "accessor": 0,
+        "ctor-capture": 0,
+        "deferred": 0,
+        "static-cache": 4,
         "loose": 0
       }
     },
-    "app/src/UI/Widgets/PainterContext.cpp": {
+    "core/Pipeline/DataModel/DataTable.cpp": {
       "total": 1,
       "buckets": {
         "root": 0,
         "accessor": 0,
-        "ctor-capture": 1,
+        "ctor-capture": 0,
         "deferred": 0,
-        "static-cache": 0,
+        "static-cache": 1,
         "loose": 0
       }
     },
-    "app/src/UI/Widgets/Plot.cpp": {
-      "total": 1,
-      "buckets": {
-        "root": 0,
-        "accessor": 0,
-        "ctor-capture": 1,
-        "deferred": 0,
-        "static-cache": 0,
-        "loose": 0
-      }
-    },
-    "app/src/UI/Widgets/Plot3D.cpp": {
+    "core/Pipeline/DataModel/Dialogs/TransmitTestDialog.cpp": {
       "total": 4,
       "buckets": {
         "root": 0,
@@ -2669,29 +1185,711 @@
         "loose": 0
       }
     },
-    "app/src/UI/Widgets/Terminal.cpp": {
-      "total": 6,
+    "core/Pipeline/DataModel/Editors/ControlScriptEditor.cpp": {
+      "total": 2,
       "buckets": {
         "root": 0,
         "accessor": 0,
-        "ctor-capture": 6,
+        "ctor-capture": 2,
         "deferred": 0,
         "static-cache": 0,
         "loose": 0
       }
     },
-    "app/src/UI/Widgets/Waterfall.cpp": {
+    "core/Pipeline/DataModel/Editors/DatasetTransformEditor.cpp": {
+      "total": 7,
+      "buckets": {
+        "root": 0,
+        "accessor": 0,
+        "ctor-capture": 4,
+        "deferred": 0,
+        "static-cache": 3,
+        "loose": 0
+      }
+    },
+    "core/Pipeline/DataModel/Editors/EmbeddedCodeEditorItem.cpp": {
+      "total": 3,
+      "buckets": {
+        "root": 0,
+        "accessor": 0,
+        "ctor-capture": 3,
+        "deferred": 0,
+        "static-cache": 0,
+        "loose": 0
+      }
+    },
+    "core/Pipeline/DataModel/Editors/FrameParserModel.cpp": {
       "total": 5,
       "buckets": {
         "root": 0,
         "accessor": 0,
-        "ctor-capture": 5,
+        "ctor-capture": 3,
+        "deferred": 0,
+        "static-cache": 2,
+        "loose": 0
+      }
+    },
+    "core/Pipeline/DataModel/Editors/JsCodeEditor.cpp": {
+      "total": 3,
+      "buckets": {
+        "root": 0,
+        "accessor": 0,
+        "ctor-capture": 3,
         "deferred": 0,
         "static-cache": 0,
         "loose": 0
       }
     },
-    "app/src/UI/WindowManager.cpp": {
+    "core/Pipeline/DataModel/Editors/OutputCodeEditor.cpp": {
+      "total": 3,
+      "buckets": {
+        "root": 0,
+        "accessor": 0,
+        "ctor-capture": 3,
+        "deferred": 0,
+        "static-cache": 0,
+        "loose": 0
+      }
+    },
+    "core/Pipeline/DataModel/Editors/PainterCodeEditor.cpp": {
+      "total": 3,
+      "buckets": {
+        "root": 0,
+        "accessor": 0,
+        "ctor-capture": 3,
+        "deferred": 0,
+        "static-cache": 0,
+        "loose": 0
+      }
+    },
+    "core/Pipeline/DataModel/ExportStructure.cpp": {
+      "total": 1,
+      "buckets": {
+        "root": 0,
+        "accessor": 0,
+        "ctor-capture": 0,
+        "deferred": 0,
+        "static-cache": 1,
+        "loose": 0
+      }
+    },
+    "core/Pipeline/DataModel/FrameBuilder/QuickPlotBuilder.cpp": {
+      "total": 3,
+      "buckets": {
+        "root": 0,
+        "accessor": 0,
+        "ctor-capture": 0,
+        "deferred": 0,
+        "static-cache": 3,
+        "loose": 0
+      }
+    },
+    "core/Pipeline/DataModel/FrameBuilder/TableScriptBridge.cpp": {
+      "total": 3,
+      "buckets": {
+        "root": 0,
+        "accessor": 0,
+        "ctor-capture": 0,
+        "deferred": 0,
+        "static-cache": 3,
+        "loose": 0
+      }
+    },
+    "core/Pipeline/DataModel/FrameBuilder/TransformCompiler.cpp": {
+      "total": 1,
+      "buckets": {
+        "root": 0,
+        "accessor": 0,
+        "ctor-capture": 0,
+        "deferred": 0,
+        "static-cache": 1,
+        "loose": 0
+      }
+    },
+    "core/Pipeline/DataModel/FrameBuilder.cpp": {
+      "total": 48,
+      "buckets": {
+        "root": 0,
+        "accessor": 1,
+        "ctor-capture": 0,
+        "deferred": 9,
+        "static-cache": 21,
+        "loose": 17
+      }
+    },
+    "core/Pipeline/DataModel/Generated/DatasetForm.cpp": {
+      "total": 5,
+      "buckets": {
+        "root": 0,
+        "accessor": 0,
+        "ctor-capture": 0,
+        "deferred": 0,
+        "static-cache": 5,
+        "loose": 0
+      }
+    },
+    "core/Pipeline/DataModel/Importers/DBCImporter.cpp": {
+      "total": 1,
+      "buckets": {
+        "root": 0,
+        "accessor": 1,
+        "ctor-capture": 0,
+        "deferred": 0,
+        "static-cache": 0,
+        "loose": 0
+      }
+    },
+    "core/Pipeline/DataModel/Importers/ImporterCommon.h": {
+      "total": 1,
+      "buckets": {
+        "root": 0,
+        "accessor": 0,
+        "ctor-capture": 0,
+        "deferred": 0,
+        "static-cache": 1,
+        "loose": 0
+      }
+    },
+    "core/Pipeline/DataModel/Importers/ModbusMapImporter.cpp": {
+      "total": 3,
+      "buckets": {
+        "root": 0,
+        "accessor": 1,
+        "ctor-capture": 0,
+        "deferred": 0,
+        "static-cache": 2,
+        "loose": 0
+      }
+    },
+    "core/Pipeline/DataModel/Importers/ProtoImporter.cpp": {
+      "total": 1,
+      "buckets": {
+        "root": 0,
+        "accessor": 1,
+        "ctor-capture": 0,
+        "deferred": 0,
+        "static-cache": 0,
+        "loose": 0
+      }
+    },
+    "core/Pipeline/DataModel/NotificationCenter.cpp": {
+      "total": 6,
+      "buckets": {
+        "root": 0,
+        "accessor": 1,
+        "ctor-capture": 0,
+        "deferred": 0,
+        "static-cache": 5,
+        "loose": 0
+      }
+    },
+    "core/Pipeline/DataModel/Project/ProjectEditorCommit.cpp": {
+      "total": 1,
+      "buckets": {
+        "root": 0,
+        "accessor": 0,
+        "ctor-capture": 0,
+        "deferred": 0,
+        "static-cache": 1,
+        "loose": 0
+      }
+    },
+    "core/Pipeline/DataModel/Project/ProjectEditorForms.cpp": {
+      "total": 11,
+      "buckets": {
+        "root": 0,
+        "accessor": 0,
+        "ctor-capture": 0,
+        "deferred": 0,
+        "static-cache": 11,
+        "loose": 0
+      }
+    },
+    "core/Pipeline/DataModel/Project/ProjectEditorIcons.h": {
+      "total": 1,
+      "buckets": {
+        "root": 0,
+        "accessor": 0,
+        "ctor-capture": 0,
+        "deferred": 0,
+        "static-cache": 1,
+        "loose": 0
+      }
+    },
+    "core/Pipeline/DataModel/Project/ProjectEditorMqtt.cpp": {
+      "total": 4,
+      "buckets": {
+        "root": 0,
+        "accessor": 0,
+        "ctor-capture": 0,
+        "deferred": 0,
+        "static-cache": 4,
+        "loose": 0
+      }
+    },
+    "core/Pipeline/DataModel/Project/ProjectEditorSummaries.cpp": {
+      "total": 3,
+      "buckets": {
+        "root": 0,
+        "accessor": 0,
+        "ctor-capture": 0,
+        "deferred": 0,
+        "static-cache": 3,
+        "loose": 0
+      }
+    },
+    "core/Pipeline/DataModel/Project/ProjectEditorTree.cpp": {
+      "total": 15,
+      "buckets": {
+        "root": 0,
+        "accessor": 0,
+        "ctor-capture": 0,
+        "deferred": 0,
+        "static-cache": 15,
+        "loose": 0
+      }
+    },
+    "core/Pipeline/DataModel/Project/ProjectEditorWiring.cpp": {
+      "total": 1,
+      "buckets": {
+        "root": 0,
+        "accessor": 0,
+        "ctor-capture": 0,
+        "deferred": 0,
+        "static-cache": 1,
+        "loose": 0
+      }
+    },
+    "core/Pipeline/DataModel/Project/ProjectFolders.cpp": {
+      "total": 6,
+      "buckets": {
+        "root": 0,
+        "accessor": 0,
+        "ctor-capture": 0,
+        "deferred": 0,
+        "static-cache": 6,
+        "loose": 0
+      }
+    },
+    "core/Pipeline/DataModel/Project/ProjectLoader.cpp": {
+      "total": 11,
+      "buckets": {
+        "root": 0,
+        "accessor": 0,
+        "ctor-capture": 0,
+        "deferred": 0,
+        "static-cache": 11,
+        "loose": 0
+      }
+    },
+    "core/Pipeline/DataModel/Project/ProjectPersistence.cpp": {
+      "total": 8,
+      "buckets": {
+        "root": 0,
+        "accessor": 0,
+        "ctor-capture": 0,
+        "deferred": 0,
+        "static-cache": 8,
+        "loose": 0
+      }
+    },
+    "core/Pipeline/DataModel/Project/ProjectPresentation.cpp": {
+      "total": 6,
+      "buckets": {
+        "root": 0,
+        "accessor": 0,
+        "ctor-capture": 0,
+        "deferred": 0,
+        "static-cache": 6,
+        "loose": 0
+      }
+    },
+    "core/Pipeline/DataModel/Project/ProjectSources.cpp": {
+      "total": 3,
+      "buckets": {
+        "root": 0,
+        "accessor": 0,
+        "ctor-capture": 0,
+        "deferred": 0,
+        "static-cache": 3,
+        "loose": 0
+      }
+    },
+    "core/Pipeline/DataModel/Project/ProjectTables.cpp": {
+      "total": 3,
+      "buckets": {
+        "root": 0,
+        "accessor": 0,
+        "ctor-capture": 0,
+        "deferred": 0,
+        "static-cache": 3,
+        "loose": 0
+      }
+    },
+    "core/Pipeline/DataModel/Project/ProjectWorkspaces.cpp": {
+      "total": 23,
+      "buckets": {
+        "root": 0,
+        "accessor": 0,
+        "ctor-capture": 0,
+        "deferred": 0,
+        "static-cache": 23,
+        "loose": 0
+      }
+    },
+    "core/Pipeline/DataModel/Project/PropertyHooks.cpp": {
+      "total": 1,
+      "buckets": {
+        "root": 0,
+        "accessor": 0,
+        "ctor-capture": 0,
+        "deferred": 0,
+        "static-cache": 1,
+        "loose": 0
+      }
+    },
+    "core/Pipeline/DataModel/ProjectEditor.cpp": {
+      "total": 7,
+      "buckets": {
+        "root": 0,
+        "accessor": 1,
+        "ctor-capture": 5,
+        "deferred": 0,
+        "static-cache": 1,
+        "loose": 0
+      }
+    },
+    "core/Pipeline/DataModel/ProjectModel.cpp": {
+      "total": 23,
+      "buckets": {
+        "root": 0,
+        "accessor": 1,
+        "ctor-capture": 0,
+        "deferred": 0,
+        "static-cache": 11,
+        "loose": 11
+      }
+    },
+    "core/Pipeline/DataModel/Scripting/ControlScript.cpp": {
+      "total": 9,
+      "buckets": {
+        "root": 0,
+        "accessor": 1,
+        "ctor-capture": 0,
+        "deferred": 0,
+        "static-cache": 3,
+        "loose": 5
+      }
+    },
+    "core/Pipeline/DataModel/Scripting/ControlScriptWorker.cpp": {
+      "total": 5,
+      "buckets": {
+        "root": 0,
+        "accessor": 0,
+        "ctor-capture": 0,
+        "deferred": 0,
+        "static-cache": 5,
+        "loose": 0
+      }
+    },
+    "core/Pipeline/DataModel/Scripting/DashboardApi.cpp": {
+      "total": 5,
+      "buckets": {
+        "root": 0,
+        "accessor": 0,
+        "ctor-capture": 0,
+        "deferred": 0,
+        "static-cache": 5,
+        "loose": 0
+      }
+    },
+    "core/Pipeline/DataModel/Scripting/DeviceWriteApi.cpp": {
+      "total": 2,
+      "buckets": {
+        "root": 0,
+        "accessor": 0,
+        "ctor-capture": 0,
+        "deferred": 0,
+        "static-cache": 2,
+        "loose": 0
+      }
+    },
+    "core/Pipeline/DataModel/Scripting/FrameParser.cpp": {
+      "total": 11,
+      "buckets": {
+        "root": 0,
+        "accessor": 1,
+        "ctor-capture": 0,
+        "deferred": 0,
+        "static-cache": 9,
+        "loose": 1
+      }
+    },
+    "core/Pipeline/DataModel/Scripting/FrameParserPipeline.cpp": {
+      "total": 1,
+      "buckets": {
+        "root": 0,
+        "accessor": 0,
+        "ctor-capture": 0,
+        "deferred": 0,
+        "static-cache": 1,
+        "loose": 0
+      }
+    },
+    "core/Pipeline/DataModel/Scripting/JsWatchdog.cpp": {
+      "total": 2,
+      "buckets": {
+        "root": 0,
+        "accessor": 0,
+        "ctor-capture": 0,
+        "deferred": 0,
+        "static-cache": 2,
+        "loose": 0
+      }
+    },
+    "core/Pipeline/DataModel/Scripting/JsWatchdogThread.cpp": {
+      "total": 2,
+      "buckets": {
+        "root": 0,
+        "accessor": 1,
+        "ctor-capture": 0,
+        "deferred": 0,
+        "static-cache": 1,
+        "loose": 0
+      }
+    },
+    "core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp": {
+      "total": 3,
+      "buckets": {
+        "root": 0,
+        "accessor": 0,
+        "ctor-capture": 0,
+        "deferred": 0,
+        "static-cache": 3,
+        "loose": 0
+      }
+    },
+    "core/Pipeline/DataModel/Scripting/MacroRunner.cpp": {
+      "total": 1,
+      "buckets": {
+        "root": 0,
+        "accessor": 0,
+        "ctor-capture": 1,
+        "deferred": 0,
+        "static-cache": 0,
+        "loose": 0
+      }
+    },
+    "core/Pipeline/DataModel/Scripting/MacroWorker.cpp": {
+      "total": 1,
+      "buckets": {
+        "root": 0,
+        "accessor": 0,
+        "ctor-capture": 1,
+        "deferred": 0,
+        "static-cache": 0,
+        "loose": 0
+      }
+    },
+    "core/Pipeline/DataModel/Scripting/ScriptApiCall.cpp": {
+      "total": 8,
+      "buckets": {
+        "root": 0,
+        "accessor": 0,
+        "ctor-capture": 0,
+        "deferred": 0,
+        "static-cache": 8,
+        "loose": 0
+      }
+    },
+    "core/Pipeline/DataModel/Scripting/ScriptTemplates.cpp": {
+      "total": 1,
+      "buckets": {
+        "root": 0,
+        "accessor": 0,
+        "ctor-capture": 0,
+        "deferred": 0,
+        "static-cache": 1,
+        "loose": 0
+      }
+    },
+    "core/Pipeline/IO/FrameReader.cpp": {
+      "total": 1,
+      "buckets": {
+        "root": 0,
+        "accessor": 0,
+        "ctor-capture": 0,
+        "deferred": 0,
+        "static-cache": 1,
+        "loose": 0
+      }
+    },
+    "core/Pipeline/IO/PipelineHost.cpp": {
+      "total": 7,
+      "buckets": {
+        "root": 0,
+        "accessor": 1,
+        "ctor-capture": 0,
+        "deferred": 2,
+        "static-cache": 2,
+        "loose": 2
+      }
+    },
+    "core/Storage/CSV/Export.cpp": {
+      "total": 7,
+      "buckets": {
+        "root": 0,
+        "accessor": 1,
+        "ctor-capture": 0,
+        "deferred": 0,
+        "static-cache": 1,
+        "loose": 5
+      }
+    },
+    "core/Storage/CSV/Player.cpp": {
+      "total": 20,
+      "buckets": {
+        "root": 0,
+        "accessor": 1,
+        "ctor-capture": 0,
+        "deferred": 0,
+        "static-cache": 19,
+        "loose": 0
+      }
+    },
+    "core/Storage/InfluxDB/Export.cpp": {
+      "total": 5,
+      "buckets": {
+        "root": 0,
+        "accessor": 1,
+        "ctor-capture": 0,
+        "deferred": 0,
+        "static-cache": 1,
+        "loose": 3
+      }
+    },
+    "core/Storage/MDF4/Export.cpp": {
+      "total": 9,
+      "buckets": {
+        "root": 0,
+        "accessor": 1,
+        "ctor-capture": 0,
+        "deferred": 0,
+        "static-cache": 3,
+        "loose": 5
+      }
+    },
+    "core/Storage/MDF4/Player.cpp": {
+      "total": 22,
+      "buckets": {
+        "root": 0,
+        "accessor": 1,
+        "ctor-capture": 0,
+        "deferred": 0,
+        "static-cache": 21,
+        "loose": 0
+      }
+    },
+    "core/Storage/Sessions/DatabaseManager/ReproducibilityVerifier.cpp": {
+      "total": 1,
+      "buckets": {
+        "root": 0,
+        "accessor": 0,
+        "ctor-capture": 0,
+        "deferred": 0,
+        "static-cache": 1,
+        "loose": 0
+      }
+    },
+    "core/Storage/Sessions/DatabaseManager.cpp": {
+      "total": 9,
+      "buckets": {
+        "root": 0,
+        "accessor": 1,
+        "ctor-capture": 0,
+        "deferred": 4,
+        "static-cache": 2,
+        "loose": 2
+      }
+    },
+    "core/Storage/Sessions/Export.cpp": {
+      "total": 17,
+      "buckets": {
+        "root": 0,
+        "accessor": 1,
+        "ctor-capture": 3,
+        "deferred": 3,
+        "static-cache": 1,
+        "loose": 9
+      }
+    },
+    "core/Storage/Sessions/Player.cpp": {
+      "total": 27,
+      "buckets": {
+        "root": 0,
+        "accessor": 1,
+        "ctor-capture": 0,
+        "deferred": 0,
+        "static-cache": 26,
+        "loose": 0
+      }
+    },
+    "core/Storage/Sessions/Verifier.cpp": {
+      "total": 8,
+      "buckets": {
+        "root": 0,
+        "accessor": 0,
+        "ctor-capture": 0,
+        "deferred": 0,
+        "static-cache": 8,
+        "loose": 0
+      }
+    },
+    "core/Storage/Sessions/VerifierRegression.cpp": {
+      "total": 2,
+      "buckets": {
+        "root": 0,
+        "accessor": 0,
+        "ctor-capture": 0,
+        "deferred": 0,
+        "static-cache": 2,
+        "loose": 0
+      }
+    },
+    "core/Ui/AI/Assistant.cpp": {
+      "total": 8,
+      "buckets": {
+        "root": 0,
+        "accessor": 1,
+        "ctor-capture": 1,
+        "deferred": 0,
+        "static-cache": 6,
+        "loose": 0
+      }
+    },
+    "core/Ui/AI/CommandRegistry.cpp": {
+      "total": 1,
+      "buckets": {
+        "root": 0,
+        "accessor": 1,
+        "ctor-capture": 0,
+        "deferred": 0,
+        "static-cache": 0,
+        "loose": 0
+      }
+    },
+    "core/Ui/AI/ContextBuilder.cpp": {
+      "total": 2,
+      "buckets": {
+        "root": 0,
+        "accessor": 0,
+        "ctor-capture": 0,
+        "deferred": 0,
+        "static-cache": 2,
+        "loose": 0
+      }
+    },
+    "core/Ui/AI/Conversation.cpp": {
       "total": 4,
       "buckets": {
         "root": 0,
@@ -2702,14 +1900,828 @@
         "loose": 0
       }
     },
-    "app/src/main.cpp": {
-      "total": 6,
+    "core/Ui/AI/DocSearch.cpp": {
+      "total": 1,
       "buckets": {
-        "root": 6,
-        "accessor": 0,
+        "root": 0,
+        "accessor": 1,
         "ctor-capture": 0,
         "deferred": 0,
         "static-cache": 0,
+        "loose": 0
+      }
+    },
+    "core/Ui/AI/FileSandbox.cpp": {
+      "total": 3,
+      "buckets": {
+        "root": 0,
+        "accessor": 1,
+        "ctor-capture": 0,
+        "deferred": 0,
+        "static-cache": 2,
+        "loose": 0
+      }
+    },
+    "core/Ui/AI/KeyVault.cpp": {
+      "total": 1,
+      "buckets": {
+        "root": 0,
+        "accessor": 0,
+        "ctor-capture": 0,
+        "deferred": 0,
+        "static-cache": 1,
+        "loose": 0
+      }
+    },
+    "core/Ui/AI/Providers/LocalProvider.cpp": {
+      "total": 1,
+      "buckets": {
+        "root": 0,
+        "accessor": 0,
+        "ctor-capture": 0,
+        "deferred": 0,
+        "static-cache": 1,
+        "loose": 0
+      }
+    },
+    "core/Ui/AI/ToolDispatcher.cpp": {
+      "total": 3,
+      "buckets": {
+        "root": 0,
+        "accessor": 0,
+        "ctor-capture": 0,
+        "deferred": 0,
+        "static-cache": 3,
+        "loose": 0
+      }
+    },
+    "core/Ui/AI/Tools/ToolBulkTools.cpp": {
+      "total": 2,
+      "buckets": {
+        "root": 0,
+        "accessor": 0,
+        "ctor-capture": 0,
+        "deferred": 0,
+        "static-cache": 2,
+        "loose": 0
+      }
+    },
+    "core/Ui/AI/Tools/ToolCatalog.cpp": {
+      "total": 12,
+      "buckets": {
+        "root": 0,
+        "accessor": 0,
+        "ctor-capture": 0,
+        "deferred": 0,
+        "static-cache": 12,
+        "loose": 0
+      }
+    },
+    "core/Ui/AI/Tools/ToolDispatch.cpp": {
+      "total": 3,
+      "buckets": {
+        "root": 0,
+        "accessor": 0,
+        "ctor-capture": 0,
+        "deferred": 0,
+        "static-cache": 3,
+        "loose": 0
+      }
+    },
+    "core/Ui/AI/Tools/ToolFilesystemTools.cpp": {
+      "total": 1,
+      "buckets": {
+        "root": 0,
+        "accessor": 0,
+        "ctor-capture": 0,
+        "deferred": 0,
+        "static-cache": 1,
+        "loose": 0
+      }
+    },
+    "core/Ui/AI/Tools/ToolSupport.cpp": {
+      "total": 1,
+      "buckets": {
+        "root": 0,
+        "accessor": 0,
+        "ctor-capture": 0,
+        "deferred": 0,
+        "static-cache": 1,
+        "loose": 0
+      }
+    },
+    "core/Ui/Console/Export.cpp": {
+      "total": 8,
+      "buckets": {
+        "root": 0,
+        "accessor": 1,
+        "ctor-capture": 0,
+        "deferred": 0,
+        "static-cache": 5,
+        "loose": 2
+      }
+    },
+    "core/Ui/Console/Handler.cpp": {
+      "total": 7,
+      "buckets": {
+        "root": 0,
+        "accessor": 1,
+        "ctor-capture": 1,
+        "deferred": 3,
+        "static-cache": 1,
+        "loose": 1
+      }
+    },
+    "core/Ui/Misc/BackupManager.cpp": {
+      "total": 1,
+      "buckets": {
+        "root": 0,
+        "accessor": 1,
+        "ctor-capture": 0,
+        "deferred": 0,
+        "static-cache": 0,
+        "loose": 0
+      }
+    },
+    "core/Ui/Misc/CommonFonts.cpp": {
+      "total": 1,
+      "buckets": {
+        "root": 0,
+        "accessor": 1,
+        "ctor-capture": 0,
+        "deferred": 0,
+        "static-cache": 0,
+        "loose": 0
+      }
+    },
+    "core/Ui/Misc/ConnectionDiagnostics.cpp": {
+      "total": 2,
+      "buckets": {
+        "root": 0,
+        "accessor": 1,
+        "ctor-capture": 0,
+        "deferred": 0,
+        "static-cache": 0,
+        "loose": 1
+      }
+    },
+    "core/Ui/Misc/CrashTracker.cpp": {
+      "total": 1,
+      "buckets": {
+        "root": 0,
+        "accessor": 1,
+        "ctor-capture": 0,
+        "deferred": 0,
+        "static-cache": 0,
+        "loose": 0
+      }
+    },
+    "core/Ui/Misc/Diagnostics/AudioChecks.cpp": {
+      "total": 2,
+      "buckets": {
+        "root": 0,
+        "accessor": 0,
+        "ctor-capture": 0,
+        "deferred": 0,
+        "static-cache": 1,
+        "loose": 1
+      }
+    },
+    "core/Ui/Misc/Diagnostics/BluetoothChecks.cpp": {
+      "total": 2,
+      "buckets": {
+        "root": 0,
+        "accessor": 0,
+        "ctor-capture": 0,
+        "deferred": 0,
+        "static-cache": 1,
+        "loose": 1
+      }
+    },
+    "core/Ui/Misc/Diagnostics/NetworkChecks.cpp": {
+      "total": 1,
+      "buckets": {
+        "root": 0,
+        "accessor": 0,
+        "ctor-capture": 0,
+        "deferred": 0,
+        "static-cache": 1,
+        "loose": 0
+      }
+    },
+    "core/Ui/Misc/Examples.cpp": {
+      "total": 2,
+      "buckets": {
+        "root": 0,
+        "accessor": 1,
+        "ctor-capture": 0,
+        "deferred": 0,
+        "static-cache": 1,
+        "loose": 0
+      }
+    },
+    "core/Ui/Misc/ExtensionManager.cpp": {
+      "total": 5,
+      "buckets": {
+        "root": 0,
+        "accessor": 1,
+        "ctor-capture": 1,
+        "deferred": 0,
+        "static-cache": 3,
+        "loose": 0
+      }
+    },
+    "core/Ui/Misc/Extensions/PluginRunner.cpp": {
+      "total": 2,
+      "buckets": {
+        "root": 0,
+        "accessor": 0,
+        "ctor-capture": 0,
+        "deferred": 0,
+        "static-cache": 2,
+        "loose": 0
+      }
+    },
+    "core/Ui/Misc/GraphicsBackend.cpp": {
+      "total": 2,
+      "buckets": {
+        "root": 0,
+        "accessor": 1,
+        "ctor-capture": 0,
+        "deferred": 0,
+        "static-cache": 1,
+        "loose": 0
+      }
+    },
+    "core/Ui/Misc/HelpCenter.cpp": {
+      "total": 2,
+      "buckets": {
+        "root": 0,
+        "accessor": 1,
+        "ctor-capture": 1,
+        "deferred": 0,
+        "static-cache": 0,
+        "loose": 0
+      }
+    },
+    "core/Ui/Misc/HighDpiScaling.cpp": {
+      "total": 2,
+      "buckets": {
+        "root": 0,
+        "accessor": 1,
+        "ctor-capture": 0,
+        "deferred": 0,
+        "static-cache": 1,
+        "loose": 0
+      }
+    },
+    "core/Ui/Misc/IconEngine.cpp": {
+      "total": 1,
+      "buckets": {
+        "root": 0,
+        "accessor": 1,
+        "ctor-capture": 0,
+        "deferred": 0,
+        "static-cache": 0,
+        "loose": 0
+      }
+    },
+    "core/Ui/Misc/IconRegistry.cpp": {
+      "total": 1,
+      "buckets": {
+        "root": 0,
+        "accessor": 1,
+        "ctor-capture": 0,
+        "deferred": 0,
+        "static-cache": 0,
+        "loose": 0
+      }
+    },
+    "core/Ui/Misc/ProblemCenter.cpp": {
+      "total": 4,
+      "buckets": {
+        "root": 0,
+        "accessor": 1,
+        "ctor-capture": 0,
+        "deferred": 1,
+        "static-cache": 0,
+        "loose": 2
+      }
+    },
+    "core/Ui/Misc/Problems/ExtensionCheckers.cpp": {
+      "total": 3,
+      "buckets": {
+        "root": 0,
+        "accessor": 0,
+        "ctor-capture": 0,
+        "deferred": 0,
+        "static-cache": 3,
+        "loose": 0
+      }
+    },
+    "core/Ui/Misc/Problems/LinkCheckers.cpp": {
+      "total": 3,
+      "buckets": {
+        "root": 0,
+        "accessor": 0,
+        "ctor-capture": 0,
+        "deferred": 0,
+        "static-cache": 3,
+        "loose": 0
+      }
+    },
+    "core/Ui/Misc/Problems/ProjectCheckers.cpp": {
+      "total": 3,
+      "buckets": {
+        "root": 0,
+        "accessor": 0,
+        "ctor-capture": 0,
+        "deferred": 0,
+        "static-cache": 3,
+        "loose": 0
+      }
+    },
+    "core/Ui/Misc/Problems/ScriptCheckers.cpp": {
+      "total": 4,
+      "buckets": {
+        "root": 0,
+        "accessor": 0,
+        "ctor-capture": 0,
+        "deferred": 0,
+        "static-cache": 4,
+        "loose": 0
+      }
+    },
+    "core/Ui/Misc/ShortcutGenerator.cpp": {
+      "total": 3,
+      "buckets": {
+        "root": 0,
+        "accessor": 1,
+        "ctor-capture": 0,
+        "deferred": 0,
+        "static-cache": 2,
+        "loose": 0
+      }
+    },
+    "core/Ui/Misc/ThemeManager.cpp": {
+      "total": 5,
+      "buckets": {
+        "root": 0,
+        "accessor": 1,
+        "ctor-capture": 0,
+        "deferred": 0,
+        "static-cache": 4,
+        "loose": 0
+      }
+    },
+    "core/Ui/Misc/TimerEvents.cpp": {
+      "total": 1,
+      "buckets": {
+        "root": 0,
+        "accessor": 1,
+        "ctor-capture": 0,
+        "deferred": 0,
+        "static-cache": 0,
+        "loose": 0
+      }
+    },
+    "core/Ui/Misc/Translator.cpp": {
+      "total": 1,
+      "buckets": {
+        "root": 0,
+        "accessor": 1,
+        "ctor-capture": 0,
+        "deferred": 0,
+        "static-cache": 0,
+        "loose": 0
+      }
+    },
+    "core/Ui/Misc/Utilities.cpp": {
+      "total": 1,
+      "buckets": {
+        "root": 0,
+        "accessor": 1,
+        "ctor-capture": 0,
+        "deferred": 0,
+        "static-cache": 0,
+        "loose": 0
+      }
+    },
+    "core/Ui/Misc/WorkspaceManager.cpp": {
+      "total": 1,
+      "buckets": {
+        "root": 0,
+        "accessor": 1,
+        "ctor-capture": 0,
+        "deferred": 0,
+        "static-cache": 0,
+        "loose": 0
+      }
+    },
+    "core/Ui/Platform/CSD.cpp": {
+      "total": 4,
+      "buckets": {
+        "root": 0,
+        "accessor": 0,
+        "ctor-capture": 3,
+        "deferred": 0,
+        "static-cache": 1,
+        "loose": 0
+      }
+    },
+    "core/Ui/Platform/FileOpenEventFilter.cpp": {
+      "total": 2,
+      "buckets": {
+        "root": 0,
+        "accessor": 0,
+        "ctor-capture": 0,
+        "deferred": 0,
+        "static-cache": 2,
+        "loose": 0
+      }
+    },
+    "core/Ui/Platform/NativeWindow_CSD.cpp": {
+      "total": 2,
+      "buckets": {
+        "root": 0,
+        "accessor": 0,
+        "ctor-capture": 0,
+        "deferred": 0,
+        "static-cache": 2,
+        "loose": 0
+      }
+    },
+    "core/Ui/Platform/NativeWindow_macOS.mm": {
+      "total": 2,
+      "buckets": {
+        "root": 0,
+        "accessor": 0,
+        "ctor-capture": 0,
+        "deferred": 0,
+        "static-cache": 2,
+        "loose": 0
+      }
+    },
+    "core/Ui/UI/AlarmMonitor.cpp": {
+      "total": 4,
+      "buckets": {
+        "root": 0,
+        "accessor": 1,
+        "ctor-capture": 0,
+        "deferred": 2,
+        "static-cache": 0,
+        "loose": 1
+      }
+    },
+    "core/Ui/UI/CommandRegistry.cpp": {
+      "total": 2,
+      "buckets": {
+        "root": 0,
+        "accessor": 1,
+        "ctor-capture": 1,
+        "deferred": 0,
+        "static-cache": 0,
+        "loose": 0
+      }
+    },
+    "core/Ui/UI/Dashboard.cpp": {
+      "total": 26,
+      "buckets": {
+        "root": 0,
+        "accessor": 1,
+        "ctor-capture": 7,
+        "deferred": 0,
+        "static-cache": 18,
+        "loose": 0
+      }
+    },
+    "core/Ui/UI/Dashboard.h": {
+      "total": 3,
+      "buckets": {
+        "root": 0,
+        "accessor": 0,
+        "ctor-capture": 0,
+        "deferred": 0,
+        "static-cache": 3,
+        "loose": 0
+      }
+    },
+    "core/Ui/UI/DashboardWidget.cpp": {
+      "total": 8,
+      "buckets": {
+        "root": 0,
+        "accessor": 0,
+        "ctor-capture": 3,
+        "deferred": 0,
+        "static-cache": 5,
+        "loose": 0
+      }
+    },
+    "core/Ui/UI/Taskbar.cpp": {
+      "total": 8,
+      "buckets": {
+        "root": 0,
+        "accessor": 0,
+        "ctor-capture": 6,
+        "deferred": 0,
+        "static-cache": 2,
+        "loose": 0
+      }
+    },
+    "core/Ui/UI/TaskbarSettings.cpp": {
+      "total": 1,
+      "buckets": {
+        "root": 0,
+        "accessor": 1,
+        "ctor-capture": 0,
+        "deferred": 0,
+        "static-cache": 0,
+        "loose": 0
+      }
+    },
+    "core/Ui/UI/UISessionRegistry.cpp": {
+      "total": 1,
+      "buckets": {
+        "root": 0,
+        "accessor": 1,
+        "ctor-capture": 0,
+        "deferred": 0,
+        "static-cache": 0,
+        "loose": 0
+      }
+    },
+    "core/Ui/UI/WidgetExtensions.cpp": {
+      "total": 4,
+      "buckets": {
+        "root": 0,
+        "accessor": 1,
+        "ctor-capture": 0,
+        "deferred": 0,
+        "static-cache": 3,
+        "loose": 0
+      }
+    },
+    "core/Ui/UI/WidgetRegistry.cpp": {
+      "total": 1,
+      "buckets": {
+        "root": 0,
+        "accessor": 1,
+        "ctor-capture": 0,
+        "deferred": 0,
+        "static-cache": 0,
+        "loose": 0
+      }
+    },
+    "core/Ui/UI/Widgets/Accelerometer.cpp": {
+      "total": 1,
+      "buckets": {
+        "root": 0,
+        "accessor": 0,
+        "ctor-capture": 1,
+        "deferred": 0,
+        "static-cache": 0,
+        "loose": 0
+      }
+    },
+    "core/Ui/UI/Widgets/AudioExport.cpp": {
+      "total": 13,
+      "buckets": {
+        "root": 0,
+        "accessor": 1,
+        "ctor-capture": 0,
+        "deferred": 0,
+        "static-cache": 1,
+        "loose": 11
+      }
+    },
+    "core/Ui/UI/Widgets/Bar.cpp": {
+      "total": 1,
+      "buckets": {
+        "root": 0,
+        "accessor": 0,
+        "ctor-capture": 1,
+        "deferred": 0,
+        "static-cache": 0,
+        "loose": 0
+      }
+    },
+    "core/Ui/UI/Widgets/BarPanel.cpp": {
+      "total": 1,
+      "buckets": {
+        "root": 0,
+        "accessor": 0,
+        "ctor-capture": 1,
+        "deferred": 0,
+        "static-cache": 0,
+        "loose": 0
+      }
+    },
+    "core/Ui/UI/Widgets/Compass.cpp": {
+      "total": 1,
+      "buckets": {
+        "root": 0,
+        "accessor": 0,
+        "ctor-capture": 1,
+        "deferred": 0,
+        "static-cache": 0,
+        "loose": 0
+      }
+    },
+    "core/Ui/UI/Widgets/DataGrid.cpp": {
+      "total": 1,
+      "buckets": {
+        "root": 0,
+        "accessor": 0,
+        "ctor-capture": 1,
+        "deferred": 0,
+        "static-cache": 0,
+        "loose": 0
+      }
+    },
+    "core/Ui/UI/Widgets/ExtensionData.cpp": {
+      "total": 6,
+      "buckets": {
+        "root": 0,
+        "accessor": 0,
+        "ctor-capture": 1,
+        "deferred": 0,
+        "static-cache": 5,
+        "loose": 0
+      }
+    },
+    "core/Ui/UI/Widgets/FFTPlot.cpp": {
+      "total": 2,
+      "buckets": {
+        "root": 0,
+        "accessor": 0,
+        "ctor-capture": 2,
+        "deferred": 0,
+        "static-cache": 0,
+        "loose": 0
+      }
+    },
+    "core/Ui/UI/Widgets/GPS.cpp": {
+      "total": 3,
+      "buckets": {
+        "root": 0,
+        "accessor": 0,
+        "ctor-capture": 3,
+        "deferred": 0,
+        "static-cache": 0,
+        "loose": 0
+      }
+    },
+    "core/Ui/UI/Widgets/Gyroscope.cpp": {
+      "total": 1,
+      "buckets": {
+        "root": 0,
+        "accessor": 0,
+        "ctor-capture": 1,
+        "deferred": 0,
+        "static-cache": 0,
+        "loose": 0
+      }
+    },
+    "core/Ui/UI/Widgets/ImageExport.cpp": {
+      "total": 7,
+      "buckets": {
+        "root": 0,
+        "accessor": 1,
+        "ctor-capture": 0,
+        "deferred": 0,
+        "static-cache": 2,
+        "loose": 4
+      }
+    },
+    "core/Ui/UI/Widgets/ImageView.cpp": {
+      "total": 5,
+      "buckets": {
+        "root": 0,
+        "accessor": 0,
+        "ctor-capture": 3,
+        "deferred": 0,
+        "static-cache": 2,
+        "loose": 0
+      }
+    },
+    "core/Ui/UI/Widgets/LEDPanel.cpp": {
+      "total": 3,
+      "buckets": {
+        "root": 0,
+        "accessor": 0,
+        "ctor-capture": 2,
+        "deferred": 0,
+        "static-cache": 1,
+        "loose": 0
+      }
+    },
+    "core/Ui/UI/Widgets/MultiPlot.cpp": {
+      "total": 2,
+      "buckets": {
+        "root": 0,
+        "accessor": 0,
+        "ctor-capture": 2,
+        "deferred": 0,
+        "static-cache": 0,
+        "loose": 0
+      }
+    },
+    "core/Ui/UI/Widgets/Output/Base.cpp": {
+      "total": 1,
+      "buckets": {
+        "root": 0,
+        "accessor": 0,
+        "ctor-capture": 1,
+        "deferred": 0,
+        "static-cache": 0,
+        "loose": 0
+      }
+    },
+    "core/Ui/UI/Widgets/Output/PanelLayout.cpp": {
+      "total": 1,
+      "buckets": {
+        "root": 0,
+        "accessor": 0,
+        "ctor-capture": 0,
+        "deferred": 0,
+        "static-cache": 1,
+        "loose": 0
+      }
+    },
+    "core/Ui/UI/Widgets/Painter.cpp": {
+      "total": 5,
+      "buckets": {
+        "root": 0,
+        "accessor": 0,
+        "ctor-capture": 5,
+        "deferred": 0,
+        "static-cache": 0,
+        "loose": 0
+      }
+    },
+    "core/Ui/UI/Widgets/PainterContext.cpp": {
+      "total": 1,
+      "buckets": {
+        "root": 0,
+        "accessor": 0,
+        "ctor-capture": 1,
+        "deferred": 0,
+        "static-cache": 0,
+        "loose": 0
+      }
+    },
+    "core/Ui/UI/Widgets/Plot.cpp": {
+      "total": 1,
+      "buckets": {
+        "root": 0,
+        "accessor": 0,
+        "ctor-capture": 1,
+        "deferred": 0,
+        "static-cache": 0,
+        "loose": 0
+      }
+    },
+    "core/Ui/UI/Widgets/Plot3D.cpp": {
+      "total": 4,
+      "buckets": {
+        "root": 0,
+        "accessor": 0,
+        "ctor-capture": 4,
+        "deferred": 0,
+        "static-cache": 0,
+        "loose": 0
+      }
+    },
+    "core/Ui/UI/Widgets/Terminal.cpp": {
+      "total": 6,
+      "buckets": {
+        "root": 0,
+        "accessor": 0,
+        "ctor-capture": 6,
+        "deferred": 0,
+        "static-cache": 0,
+        "loose": 0
+      }
+    },
+    "core/Ui/UI/Widgets/Waterfall.cpp": {
+      "total": 5,
+      "buckets": {
+        "root": 0,
+        "accessor": 0,
+        "ctor-capture": 5,
+        "deferred": 0,
+        "static-cache": 0,
+        "loose": 0
+      }
+    },
+    "core/Ui/UI/WindowManager.cpp": {
+      "total": 4,
+      "buckets": {
+        "root": 0,
+        "accessor": 0,
+        "ctor-capture": 2,
+        "deferred": 0,
+        "static-cache": 2,
         "loose": 0
       }
     }

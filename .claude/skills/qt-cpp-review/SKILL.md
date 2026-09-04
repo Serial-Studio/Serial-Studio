@@ -37,7 +37,7 @@ changed lines plus context (read the surrounding +/-50 lines, but report only is
 changed lines). This is the default and the common case here — match it to the repo's
 "commit directly to master" workflow.
 
-**Codebase scope (wide)** — "review the codebase", "audit app/src/IO", or a bare path given
+**Codebase scope (wide)** — "review the codebase", "audit core/Devices/IO", or a bare path given
 without commit language. Glob `*.cpp` / `*.h` / `*.hpp` under the named scope and review all
 matches.
 
@@ -119,7 +119,7 @@ is a plain store, not a QAIM — check the models consuming it, not the store it
 ### Agent 2: Ownership & Lifecycle (+ NASA Power of Ten)
 
 **Scope**: memory ownership, parent-child, RAII, Rule of Five, and this repo's safety-critical
-rules. The canonical driver lifecycle reference is `app/src/IO/Drivers/BluetoothLE.{h,cpp}`.
+rules. The canonical driver lifecycle reference is `core/Devices/IO/Drivers/BluetoothLE.{h,cpp}`.
 
 **Check for**:
 - Raw `new` with no visible parent, smart-pointer wrapper, scope, or explicit delete.

@@ -30,7 +30,7 @@ brief, and deciding whether a function is dead. This tool only does the
 mechanical, reviewable bulk.
 
 Usage:
-    python3 scripts/strip-inbody-comments.py app/src/UI/Taskbar.cpp
+    python3 scripts/strip-inbody-comments.py core/Ui/UI/Taskbar.cpp
     python3 scripts/strip-inbody-comments.py app/src           # whole tree
     python3 scripts/strip-inbody-comments.py --check app/src   # count only
     python3 scripts/strip-inbody-comments.py --diff <path>     # show changes

@@ -4,7 +4,7 @@
 Collects every user-visible string from app/rcc/commands/*.json and
 app/rcc/commands/layouts/*.json (command title/titleChecked/tooltip/
 collapsedTitle, layout node title/tooltip overrides, submenu titles) and writes
-app/src/UI/CommandStrings.cpp as a block of QT_TRANSLATE_NOOP("Commands", ...)
+core/Ui/UI/CommandStrings.cpp as a block of QT_TRANSLATE_NOOP("Commands", ...)
 entries. UI::CommandRegistry translates at query time through the same
 "Commands" context, so this file is what makes the manifest strings reachable
 by the existing lupdate/lrelease pipeline (spec 0028 R13). Deterministic:
@@ -23,7 +23,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 COMMANDS = ROOT / "app" / "rcc" / "commands"
-OUTPUT = ROOT / "app" / "src" / "UI" / "CommandStrings.cpp"
+OUTPUT = ROOT / "core" / "Ui" / "UI" / "CommandStrings.cpp"
 
 MANIFESTS = sorted(p.name for p in COMMANDS.glob("*.json"))
 LAYOUTS = sorted(p.name for p in (COMMANDS / "layouts").glob("*.json"))

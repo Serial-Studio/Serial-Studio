@@ -27,7 +27,7 @@
 #include <QString>
 #include <QTest>
 
-#include "IO/Checksum.h"
+#include "Core/Checksum.h"
 #include "IO/FrameReader.h"
 
 // Companion to tst_frame_delimiters: that suite pins delimiter scanning and the CRC-16 end

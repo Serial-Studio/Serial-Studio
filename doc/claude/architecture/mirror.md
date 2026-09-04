@@ -1,13 +1,13 @@
 # Architecture — Remote Dashboard Mirror (spec 0040)
 
 > Part of the architecture corpus ([index](../architecture.md)). Read this file in full before
-> touching `app/src/API/Mirror/`, `MirrorHandler`, `RemoteAttach.qml`, or anything that feeds
+> touching `core/Api/API/Mirror/`, `MirrorHandler`, `RemoteAttach.qml`, or anything that feeds
 > `Dashboard::streamAvailable()`. The wire protocol's own spec lives in
 > `doc/claude/specs/0040-remote-dashboard/wire-protocol.md`.
 
 One Serial Studio instance (the *publisher*, attached to real hardware) streams its dashboard
 to another instance (the *viewer*) over the existing API server socket (port 7777). Four TUs
-in `app/src/API/Mirror/`: `MirrorProtocol.h` (header-only codec, no sockets/UI/singletons),
+in `core/Api/API/Mirror/`: `MirrorProtocol.h` (header-only codec, no sockets/UI/singletons),
 `MirrorPublisher` (capture side), `MirrorClient` (viewer transport), `MirrorSession` (viewer
 lifecycle); plus `API/Handlers/MirrorHandler` and `app/qml/Dialogs/RemoteAttach.qml`.
 

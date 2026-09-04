@@ -30,9 +30,9 @@ extern "C" {
 #include <QByteArray>
 #include <QTest>
 
+#include "Core/SSAssert.h"
 #include "DataModel/Scripting/LuaCompat.h"
 #include "DataModel/Scripting/LuaCompatJIT.h"
-#include "SSAssert.h"
 
 // Every test function here is self-contained: each opens its own lua_State (via LuaState below)
 // and installs only the shim pieces it exercises, so Qt Test's declaration-order execution is

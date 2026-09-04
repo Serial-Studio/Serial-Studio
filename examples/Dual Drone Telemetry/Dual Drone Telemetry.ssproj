@@ -1832,9 +1832,10 @@
         "Dual Drone Telemetry/Drone Alpha/Frame Parser": false,
         "Dual Drone Telemetry/Drone Bravo": true,
         "Dual Drone Telemetry/Drone Bravo/Frame Parser": false,
+        "Dual Drone Telemetry/InfluxDB Sink": false,
         "Dual Drone Telemetry/MQTT Publisher": false,
-        "Dual Drone Telemetry/Shared Memory": true,
-        "Dual Drone Telemetry/Shared Memory/Dataset Values": false,
+        "Dual Drone Telemetry/Variables": true,
+        "Dual Drone Telemetry/Variables/Dataset Values": false,
         "Dual Drone Telemetry/Workspaces": true,
         "Dual Drone Telemetry/Workspaces/All Data": false,
         "Dual Drone Telemetry/Workspaces/Alpha Attitude": false,
@@ -2507,8 +2508,8 @@
         "layout:5000": {
             "data": {
                 "autoLayout": true,
-                "canvasHeight": 546,
-                "canvasWidth": 1051,
+                "canvasHeight": 545,
+                "canvasWidth": 1139,
                 "geometries": [
                     {
                         "height": 273,
@@ -2516,7 +2517,7 @@
                         "relativeIndex": 0,
                         "state": "normal",
                         "widgetType": 18,
-                        "width": 351,
+                        "width": 380,
                         "x": 0,
                         "y": 0
                     },
@@ -2526,8 +2527,8 @@
                         "relativeIndex": 0,
                         "state": "normal",
                         "widgetType": 5,
-                        "width": 350,
-                        "x": 350,
+                        "width": 380,
+                        "x": 379,
                         "y": 0
                     },
                     {
@@ -2536,38 +2537,38 @@
                         "relativeIndex": 0,
                         "state": "normal",
                         "widgetType": 22,
-                        "width": 350,
-                        "x": 699,
+                        "width": 379,
+                        "x": 758,
                         "y": 0
                     },
                     {
-                        "height": 273,
+                        "height": 272,
                         "id": 10,
                         "relativeIndex": 1,
                         "state": "normal",
                         "widgetType": 18,
-                        "width": 351,
+                        "width": 380,
                         "x": 0,
                         "y": 272
                     },
                     {
-                        "height": 273,
+                        "height": 272,
                         "id": 6,
                         "relativeIndex": 1,
                         "state": "normal",
                         "widgetType": 5,
-                        "width": 350,
-                        "x": 350,
+                        "width": 380,
+                        "x": 379,
                         "y": 272
                     },
                     {
-                        "height": 273,
+                        "height": 272,
                         "id": 15,
                         "relativeIndex": 1,
                         "state": "normal",
                         "widgetType": 22,
-                        "width": 350,
-                        "x": 699,
+                        "width": 379,
+                        "x": 758,
                         "y": 272
                     }
                 ],

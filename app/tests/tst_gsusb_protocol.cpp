@@ -22,7 +22,7 @@
 #include <cstdint>
 #include <QTest>
 
-#include "IO/Drivers/CANBus/GsUsbProtocol.h"
+#include "Protocols/CAN/GsUsbProtocol.h"
 
 using namespace IO::Drivers::GsUsb;
 

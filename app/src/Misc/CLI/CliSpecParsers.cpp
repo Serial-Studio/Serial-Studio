@@ -25,7 +25,7 @@
 #include <QHash>
 #include <QStringList>
 
-#include "SSAssert.h"
+#include "Core/SSAssert.h"
 
 namespace Misc {
 namespace CliSpecParsers {

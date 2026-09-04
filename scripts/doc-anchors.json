@@ -58,7 +58,7 @@
     },
     {
       "name": "pipeline-queue-rule",
-      "source": "app/src/IO/PipelineHost.cpp",
+      "source": "core/Pipeline/IO/PipelineHost.cpp",
       "source_pattern": "65536-queue rule",
       "docs": [
         {
@@ -69,7 +69,7 @@
     },
     {
       "name": "api-tcp-port",
-      "source": "app/src/API/Server.h",
+      "source": "core/Api/API/Server.h",
       "source_pattern": "#define API_TCP_PORT 7777",
       "docs": [
         {
@@ -102,7 +102,7 @@
     },
     {
       "name": "frame-block-sample-cap",
-      "source": "app/src/DataModel/FrameBuilder/BlockStager.h",
+      "source": "core/Pipeline/DataModel/FrameBuilder/BlockStager.h",
       "source_pattern": "kFrameBlockSampleCap\\s*=\\s*64",
       "docs": [
         {
@@ -113,7 +113,7 @@
     },
     {
       "name": "stream-block-sample-cap",
-      "source": "app/src/IO/StreamWorker.h",
+      "source": "core/Pipeline/IO/StreamWorker.h",
       "source_pattern": "kStreamBlockSampleCap\\s*=\\s*4096",
       "docs": [
         {
@@ -124,7 +124,7 @@
     },
     {
       "name": "script-dry-run-budget",
-      "source": "app/src/DataModel/Scripting/ScriptDryRun.h",
+      "source": "core/Pipeline/DataModel/Scripting/ScriptDryRun.h",
       "source_pattern": "kScriptDryRunBudgetMs\\s*=\\s*2000",
       "docs": [
         {
@@ -146,7 +146,7 @@
     },
     {
       "name": "api-port-setting",
-      "source": "app/src/API/Server.cpp",
+      "source": "core/Api/API/Server.cpp",
       "source_pattern": "m_settings\\.value\\(\"API/Port\", API_TCP_PORT\\)",
       "docs": [
         {
@@ -157,7 +157,7 @@
     },
     {
       "name": "api-pending-write-cap",
-      "source": "app/src/API/Server/ServerWorker.cpp",
+      "source": "core/Api/API/Server/ServerWorker.cpp",
       "source_pattern": "kMaxApiPendingWriteBytes\\s*=\\s*16 \\* 1024 \\* 1024",
       "docs": [
         {

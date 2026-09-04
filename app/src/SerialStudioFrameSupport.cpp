@@ -22,8 +22,8 @@
 #include <QStringConverter>
 #include <QtCore5Compat/QTextCodec>
 
+#include "Core/SSAssert.h"
 #include "SerialStudio.h"
-#include "SSAssert.h"
 
 //--------------------------------------------------------------------------------------------------
 // The SerialStudio statics that DataModel/Frame.cpp reaches, kept apart from SerialStudio.cpp so

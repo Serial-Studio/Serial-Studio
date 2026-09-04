@@ -21,7 +21,7 @@
 
 #include <QTest>
 
-#include "DataModel/ParseBudget.h"
+#include "Core/ParseBudget.h"
 
 using DataModel::ParseBudget;
 
