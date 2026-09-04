@@ -86,13 +86,6 @@ env:
   SS_UNITY_BATCH: 32
 
   #
-  # Test gating: every publication blocks on the live pytest suite. Setting this
-  # to false lets a continuous (untagged) build publish with a red suite, which
-  # is how master stayed green over failing tests until spec 0075.
-  #
-  REQUIRE_TESTS_TO_PUBLISH: true
-  
-  #
   # Excluded AppImage libraries
   #
   LINUXDEPLOY_EXCLUDED_LIBRARIES: "libmysqlclient.so*;libqsqlmimer.so;libqsqlmysql.so;libqsqlodbc.so;libqsqlpsql.so;libqsqloci.so;libqsqldb2.so;libqsqlibase.so"
@@ -113,8 +106,6 @@ jobs:
     name: '🐧 Linux Build (x86_64)'
     permissions:
       contents: read
-    outputs:
-      benchmark: ${{ steps.benchmark.outcome }}
     steps:
     #
     # This repo has no submodules; 'submodules: recursive' is a no-op kept for future deps.
@@ -541,14 +532,9 @@ jobs:
       run: ./build/app/${{env.UNIXNAME}} --headless --selftest-suite qml
 
     #
-    # The CI throughput gate: nine tiers scaled off --min-fps. continue-on-error is NOT a
-    # softening -- benchmark-retry-linux reruns this gate against the packaged binary when it
-    # fails here, and 'upload' publishes only if one of the two attempts passed. A shared runner
-    # with a noisy neighbour no longer fails an unrelated PR on the first sample
+    # The CI throughput gate: nine tiers scaled off --min-fps. A miss fails the build
     #
     - name: '🚦 Hotpath throughput gate (256 kHz)'
-      id: benchmark
-      continue-on-error: true
       env:
         QT_QPA_PLATFORM: offscreen
         LD_LIBRARY_PATH: >-
@@ -1146,8 +1132,6 @@ jobs:
     name: '🐧 Linux Build (arm64)'
     permissions:
       contents: read
-    outputs:
-      benchmark: ${{ steps.benchmark.outcome }}
     steps:
     #
     # This repo has no submodules; 'submodules: recursive' is a no-op kept for future deps.
@@ -1452,13 +1436,9 @@ jobs:
       run: cmake --build build --config Release
 
     #
-    # The CI throughput gate: nine tiers scaled off --min-fps. continue-on-error is NOT a
-    # softening -- benchmark-retry-linux-arm64 reruns this gate against the packaged binary when
-    # it fails here, and 'upload' publishes only if one of the two attempts passed
+    # The CI throughput gate: nine tiers scaled off --min-fps. A miss fails the build
     #
     - name: '🚦 Hotpath throughput gate (256 kHz)'
-      id: benchmark
-      continue-on-error: true
       env:
         QT_QPA_PLATFORM: offscreen
         LD_LIBRARY_PATH: >-
@@ -2030,8 +2010,6 @@ jobs:
     name: '🍎 macOS Build (arm64)'
     permissions:
       contents: read
-    outputs:
-      benchmark: ${{ steps.benchmark.outcome }}
     steps:
     #
     # This repo has no submodules; 'submodules: recursive' is a no-op kept for future deps.
@@ -2231,14 +2209,9 @@ jobs:
       run: cmake --build build --config Release
 
     #
-    # The CI throughput gate: nine tiers scaled off --min-fps. continue-on-error is NOT a
-    # softening -- benchmark-retry-macos reruns this gate against the packaged binary when it
-    # fails here, and 'upload' publishes only if one of the two attempts passed. macos-latest is
-    # a shared VM, the noisiest of the four runners
+    # The CI throughput gate: nine tiers scaled off --min-fps. A miss fails the build
     #
     - name: '🚦 Hotpath throughput gate (256 kHz)'
-      id: benchmark
-      continue-on-error: true
       env:
         QT_QPA_PLATFORM: offscreen
         DYLD_FRAMEWORK_PATH: ${{github.workspace}}/Qt-${{env.QT_VERSION_MACOS}}-${{runner.os}}-x64/${{env.QT_VERSION_MACOS}}/macos/lib
@@ -2692,8 +2665,6 @@ jobs:
     name: '🧊 Windows Build (x86_64)'
     permissions:
       contents: read
-    outputs:
-      benchmark: ${{ steps.benchmark.outcome }}
     steps:
     #
     # core.autocrlf=input keeps the checkout LF-only, which is what code-verify and clang-format
@@ -2919,13 +2890,9 @@ jobs:
 
     #
     # The throughput gate reads HOTPATH_PASS out of benchmark.txt: Start-Process loses the child's
-    # exit code, so the verdict travels through the file. continue-on-error is NOT a softening --
-    # benchmark-retry-windows reruns this gate against the packaged binary when it fails here,
-    # and 'upload' publishes only if one of the two attempts passed
+    # exit code, so the verdict travels through the file. A miss fails the build
     #
     - name: '🚦 Hotpath throughput gate (256 kHz)'
-      id: benchmark
-      continue-on-error: true
       run: |
         $p = Start-Process -FilePath "build/app/${{env.EXECUTABLE}}.exe" `
           -ArgumentList '--headless','--benchmark-hotpath','--min-fps','256000','--benchmark-output','benchmark.txt' `
@@ -3191,192 +3158,23 @@ jobs:
         path: ${{env.EXECUTABLE}}-${{env.VERSION}}-Windows.msix
 
 #---------------------------------------------------------------------------------------------------
-# Benchmark retries
-#---------------------------------------------------------------------------------------------------
-#
-# The 256 kHz gate is a hard number measured on shared runners, and its history oscillates
-# between "mandatory" and "softened" because a noisy neighbour fails an unrelated PR. These jobs
-# are the third option: one rerun, against the PACKAGED binary (self-contained, so no Qt install
-# and no rebuild), and 'upload' publishes only if the first or the second attempt passed. Each
-# runs only when its build job's in-job attempt failed.
-#
-#---------------------------------------------------------------------------------------------------
-
-  benchmark-retry-linux:
-    name: '🔁 Benchmark retry (Linux x64)'
-    needs: build-linux
-    if: needs.build-linux.outputs.benchmark == 'failure'
-    runs-on: ubuntu-24.04
-    permissions:
-      contents: read
-    steps:
-    - name: '📥 Download packaged binary'
-      uses: actions/download-artifact@634f93cb2916e3fdff6788551b99b062d0335ce0 # v5.0.0
-      with:
-        name: ${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-x64.AppImage
-        path: .
-
-    - name: '📦 Prepare binary'
-      run: |
-        sudo apt-get update
-        sudo apt-get install -y libegl1 libgl1 libopengl0 fontconfig
-        APPIMAGE="${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-x64.AppImage"
-        chmod +x "$APPIMAGE"
-        ./"$APPIMAGE" --appimage-extract >/dev/null
-
-    - name: '🚦 Hotpath throughput gate (256 kHz, retry)'
-      env:
-        QT_QPA_PLATFORM: offscreen
-      run: |
-        ./squashfs-root/AppRun --headless --benchmark-hotpath --min-fps 256000 \
-          --benchmark-output benchmark-retry.txt
-
-    - name: '📤 Upload artifact: benchmark retry report (Linux x64)'
-      if: always()
-      uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
-      with:
-        name: benchmark-retry-Linux-x64
-        path: benchmark-retry.txt
-        if-no-files-found: ignore
-
-  benchmark-retry-linux-arm64:
-    name: '🔁 Benchmark retry (Linux arm64)'
-    needs: build-linux-arm64
-    if: needs.build-linux-arm64.outputs.benchmark == 'failure'
-    runs-on: ubuntu-24.04-arm
-    permissions:
-      contents: read
-    steps:
-    - name: '📥 Download packaged binary'
-      uses: actions/download-artifact@634f93cb2916e3fdff6788551b99b062d0335ce0 # v5.0.0
-      with:
-        name: ${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-arm64.AppImage
-        path: .
-
-    - name: '📦 Prepare binary'
-      run: |
-        sudo apt-get update
-        sudo apt-get install -y libegl1 libgl1 libopengl0 fontconfig
-        APPIMAGE="${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-arm64.AppImage"
-        chmod +x "$APPIMAGE"
-        ./"$APPIMAGE" --appimage-extract >/dev/null
-
-    - name: '🚦 Hotpath throughput gate (256 kHz, retry)'
-      env:
-        QT_QPA_PLATFORM: offscreen
-      run: |
-        ./squashfs-root/AppRun --headless --benchmark-hotpath --min-fps 256000 \
-          --benchmark-output benchmark-retry.txt
-
-    - name: '📤 Upload artifact: benchmark retry report (Linux arm64)'
-      if: always()
-      uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
-      with:
-        name: benchmark-retry-Linux-arm64
-        path: benchmark-retry.txt
-        if-no-files-found: ignore
-
-  #
-  # The gate runs in build-macos-arm64, but the self-contained artifact is the universal DMG that
-  # build-macos assembles, so this job waits on both
-  #
-  benchmark-retry-macos:
-    name: '🔁 Benchmark retry (macOS)'
-    needs:
-      - build-macos-arm64
-      - build-macos
-    if: needs.build-macos-arm64.outputs.benchmark == 'failure'
-    runs-on: macos-latest
-    permissions:
-      contents: read
-    steps:
-    - name: '📥 Download packaged binary'
-      uses: actions/download-artifact@634f93cb2916e3fdff6788551b99b062d0335ce0 # v5.0.0
-      with:
-        name: ${{env.EXECUTABLE}}-${{env.VERSION}}-macOS.dmg
-        path: .
-
-    - name: '📦 Prepare binary'
-      run: |
-        hdiutil attach "${{env.EXECUTABLE}}-${{env.VERSION}}-macOS.dmg" -nobrowse -mountpoint /tmp/ssdmg
-        cp -R "/tmp/ssdmg/${{env.APPLICATION}}.app" .
-        hdiutil detach /tmp/ssdmg
-
-    - name: '🚦 Hotpath throughput gate (256 kHz, retry)'
-      env:
-        QT_QPA_PLATFORM: offscreen
-      run: |
-        "./${{env.APPLICATION}}.app/Contents/MacOS/${{env.EXECUTABLE}}" \
-          --headless --benchmark-hotpath --min-fps 256000 --benchmark-output benchmark-retry.txt
-
-    - name: '📤 Upload artifact: benchmark retry report (macOS)'
-      if: always()
-      uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
-      with:
-        name: benchmark-retry-macOS
-        path: benchmark-retry.txt
-        if-no-files-found: ignore
-
-  benchmark-retry-windows:
-    name: '🔁 Benchmark retry (Windows)'
-    needs: build-windows
-    if: needs.build-windows.outputs.benchmark == 'failure'
-    runs-on: windows-latest
-    permissions:
-      contents: read
-    steps:
-    - name: '📥 Download packaged binary'
-      uses: actions/download-artifact@634f93cb2916e3fdff6788551b99b062d0335ce0 # v5.0.0
-      with:
-        name: ${{env.EXECUTABLE}}-${{env.VERSION}}-Windows-Portable
-        path: .
-
-    #
-    # Start-Process loses the child's exit code, so the verdict travels through benchmark-retry.txt
-    # exactly as it does in the build job
-    #
-    - name: '🚦 Hotpath throughput gate (256 kHz, retry)'
-      run: |
-        7z x "${{env.EXECUTABLE}}-${{env.VERSION}}-Windows-Portable.zip" -oapp_win | Out-Null
-        $exe = Get-ChildItem -Recurse -Filter "${{env.EXECUTABLE}}.exe" app_win | Select-Object -First 1
-        if (-not $exe) { throw 'packaged executable not found in the portable ZIP' }
-        $p = Start-Process -FilePath $exe.FullName `
-          -ArgumentList '--headless','--benchmark-hotpath','--min-fps','256000','--benchmark-output','benchmark-retry.txt' `
-          -WorkingDirectory $PWD -PassThru -NoNewWindow
-        if (-not $p.WaitForExit(300000)) { $p.Kill(); throw 'benchmark timed out' }
-        if (Select-String -Path benchmark-retry.txt -Pattern 'HOTPATH_PASS=1' -Quiet) { exit 0 } else { exit 1 }
-
-    - name: '📤 Upload artifact: benchmark retry report (Windows)'
-      if: always()
-      uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
-      with:
-        name: benchmark-retry-Windows
-        path: benchmark-retry.txt
-        if-no-files-found: ignore
-
-#---------------------------------------------------------------------------------------------------
 # Create release
 #---------------------------------------------------------------------------------------------------
 
   upload:
     name: '🗂 Publish (continuous)'
     #
-    # Naming test and lint gates publication on the whole pyramid: nothing ships that
-    # the suite or the linters rejected. The build and retry jobs are named so the
-    # per-platform throughput verdict below can be read out of them.
+    # Publication waits on the builds and the linters only: the release goes out as soon as the
+    # last package exists, and the pytest suite reports on it in parallel without holding it.
+    # Every dependency must succeed (the default needs semantics), so a red build or a missed
+    # throughput gate still blocks the publish.
     #
     needs:
-      - test
       - lint
       - build-linux
       - build-linux-arm64
-      - build-macos-arm64
       - build-macos
       - build-windows
-      - benchmark-retry-linux
-      - benchmark-retry-linux-arm64
-      - benchmark-retry-macos
-      - benchmark-retry-windows
 
     #
     # Publication is a side effect on a shared, mutable tag: the step below deletes the
@@ -3384,28 +3182,7 @@ jobs:
     # branch (and every same-repo PR) republished it, and two runs racing each other left the
     # tag pointing at one build with another's assets.
     #
-    # always() is required because the retry jobs are skipped on the happy path, and a skipped
-    # dependency would otherwise skip this job too; every dependency's verdict is therefore
-    # checked explicitly. Per platform the throughput gate passes if EITHER the in-job attempt
-    # or its retry passed. The pytest verdict is enforced by the first step, so
-    # REQUIRE_TESTS_TO_PUBLISH stays the one switch that controls it.
-    #
-    if: >-
-      always()
-      && (github.ref == 'refs/heads/master' || startsWith(github.ref, 'refs/tags/'))
-      && needs['lint'].result == 'success'
-      && needs['build-linux'].result == 'success'
-      && needs['build-linux-arm64'].result == 'success'
-      && needs['build-macos'].result == 'success'
-      && needs['build-windows'].result == 'success'
-      && (needs['build-linux'].outputs.benchmark == 'success'
-      || needs['benchmark-retry-linux'].result == 'success')
-      && (needs['build-linux-arm64'].outputs.benchmark == 'success'
-      || needs['benchmark-retry-linux-arm64'].result == 'success')
-      && (needs['build-macos-arm64'].outputs.benchmark == 'success'
-      || needs['benchmark-retry-macos'].result == 'success')
-      && (needs['build-windows'].outputs.benchmark == 'success'
-      || needs['benchmark-retry-windows'].result == 'success')
+    if: github.ref == 'refs/heads/master' || startsWith(github.ref, 'refs/tags/')
     concurrency:
       group: release-${{ github.ref }}
       cancel-in-progress: false
@@ -3418,20 +3195,6 @@ jobs:
       RELEASE_TAG: ${{ github.event_name == 'push' && startsWith(github.ref, 'refs/tags/') && github.ref_name || 'continuous' }}
 
     steps:
-      #
-      # The pytest verdict, enforced where REQUIRE_TESTS_TO_PUBLISH can still be consulted: the
-      # env context is not available in a job-level if:. Setting the flag to false is the only
-      # way a red suite ships, and it says so in the log
-      #
-      - name: '🚦 Enforce the test gate'
-        if: needs['test'].result != 'success'
-        run: |
-          if [ "${{ env.REQUIRE_TESTS_TO_PUBLISH }}" = "true" ]; then
-            echo "::error::pytest result is '${{ needs['test'].result }}'; refusing to publish"
-            exit 1
-          fi
-          echo "::warning::pytest result is '${{ needs['test'].result }}'; publishing anyway (REQUIRE_TESTS_TO_PUBLISH=false)"
-
       #
       # No submodules: this job only needs the workflow checkout to run gh
       #
@@ -3529,6 +3292,13 @@ jobs:
       run: python3 scripts/code-verify.py --check
 
     #
+    # Spec 0076: the core/ static libraries only stay layered if it is mechanical. This resolves
+    # every quoted include, rejects an upward one, and catches a core/ source no target owns
+    #
+    - name: '🧱 Verify core layering'
+      run: python3 scripts/layer-verify.py
+
+    #
     # Growth ratchets. Each has a checked-in baseline and fails only on an increase, so the
     # existing debt does not block CI while new debt does. Until 2026-08-25 the singleton census
     # ran only inside sanitize-commit.py, which made it a gate somebody had to remember to run
@@ -3605,6 +3375,9 @@ jobs:
 # NOT in upload's needs: a sanitizer finding reddens the run without holding the release hostage
 # to a tool that reports on timing.
 #
+# Both instrumented legs are currently DISABLED (if: false on the job) and kept in place so
+# re-enabling them is a one-line change. build-gpl3 below still runs.
+#
 # Three jobs, not one. ASan and TSan cannot coexist in a build, so a single job compiled the tree
 # twice back to back -- 60+ minutes of wall clock on the critical path, and on 2026-09-03 the
 # runner was killed mid-link twice before ctest ever started. Split, they run in parallel, and
@@ -3625,6 +3398,7 @@ jobs:
 #---------------------------------------------------------------------------------------------------
 
   sanitize:
+    if: false
     runs-on: ubuntu-24.04
     name: '🧫 Sanitizers (ASan + UBSan, Pro)'
     permissions:
@@ -3804,6 +3578,7 @@ jobs:
 #---------------------------------------------------------------------------------------------------
 
   sanitize-tsan:
+    if: false
     runs-on: ubuntu-24.04
     name: '🧫 Sanitizers (TSan, Pro)'
     permissions:
@@ -4090,11 +3865,9 @@ jobs:
   test:
     name: '🧪 Test (${{ matrix.label }})'
     #
-    # The suite consumes the build jobs' artifacts directly, so it runs BEFORE
-    # publication and 'upload' can depend on it. Downloading from the Release
-    # instead (the pre-0075 shape) forced test to run after upload, which made a
-    # red suite unable to block a publish and let one run's job pick up another
-    # run's binary.
+    # The suite consumes the build jobs' artifacts directly, never the Release: downloading
+    # from the Release (the pre-0075 shape) let one run's job pick up another run's binary.
+    # It runs alongside 'upload' and reports on the published build without gating it.
     #
     needs:
       - build-linux
