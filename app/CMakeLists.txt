@@ -229,6 +229,27 @@ endfunction()
 #
 #---------------------------------------------------------------------------------------------------
 
+#---------------------------------------------------------------------------------------------------
+# gRPC and Protobuf discovery (ENABLE_GRPC=ON)
+#---------------------------------------------------------------------------------------------------
+#
+# Found here, before add_subdirectory(core), and not in the gRPC server block further down. The
+# imported targets a find_package() creates are directory-scoped and only reach subdirectories
+# added after the call, and SerialStudio::Pipeline and SerialStudio::Devices link gRPC::grpc++
+# and protobuf::libprotobuf. Discovering them after the core tree left both archives pointing at
+# targets their directories could not see, and every ENABLE_GRPC=ON configure failed at generate
+# time. The protoc rule, the generated stubs and the server sources stay in the block below.
+#
+#---------------------------------------------------------------------------------------------------
+
+if(ENABLE_GRPC)
+  find_package(absl CONFIG REQUIRED)
+  find_package(utf8_range CONFIG QUIET)
+  find_package(re2 CONFIG REQUIRED)
+  find_package(Protobuf CONFIG REQUIRED)
+  find_package(gRPC CONFIG REQUIRED)
+endif()
+
 add_subdirectory(${CMAKE_SOURCE_DIR}/core ${CMAKE_BINARY_DIR}/core)
 
 #---------------------------------------------------------------------------------------------------
@@ -590,8 +611,7 @@ endif()
 # gRPC server support (optional)
 #---------------------------------------------------------------------------------------------------
 #
-# When ENABLE_GRPC=ON:
-#   - Finds gRPC and Protobuf packages
+# When ENABLE_GRPC=ON (the packages themselves are found above, before add_subdirectory(core)):
 #   - Compiles the static .proto file into C++ stubs
 #   - Adds the gRPC server, proto generator, and conversion utilities
 #   - Links gRPC and Protobuf libraries
@@ -603,12 +623,6 @@ endif()
 #---------------------------------------------------------------------------------------------------
 
 if(ENABLE_GRPC)
-  find_package(absl CONFIG REQUIRED)
-  find_package(utf8_range CONFIG QUIET)
-  find_package(re2 CONFIG REQUIRED)
-  find_package(Protobuf CONFIG REQUIRED)
-  find_package(gRPC CONFIG REQUIRED)
-
   get_target_property(GRPC_CPP_PLUGIN gRPC::grpc_cpp_plugin LOCATION)
   set(PROTO_FILE "${CMAKE_SOURCE_DIR}/doc/grpc/serialstudio.proto")
   set(PROTO_OUT_DIR "${CMAKE_CURRENT_BINARY_DIR}/proto")
