@@ -53,11 +53,6 @@
 static QString s_dbPathOverride;
 
 /**
- * @brief Warning severity of a Core::Bus::NotificationRaised (NotificationCenter::Warning).
- */
-static constexpr int kNotificationWarning = 1;
-
-/**
  * @brief True when @p sessionId is the session the historian is recording into right now. The
  *        explorer opens the same WAL database while a capture runs, so deleting or editing that
  *        row drops data the worker is still inserting and leaves finalizeSession updating nothing
@@ -78,7 +73,7 @@ static constexpr int kNotificationWarning = 1;
 
   SS_ASSERT(bus != nullptr, return true);
   bus->publish<Core::Bus::NotificationRaised>(
-    kNotificationWarning,
+    Core::Bus::kSeverityWarning,
     QStringLiteral("Historian"),
     QString(),
     QObject::tr("This session is being recorded"),

@@ -41,11 +41,6 @@
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Warning severity of a Core::Bus::NotificationRaised (NotificationCenter::Warning).
- */
-static constexpr int kNotificationWarning = 1;
-
-/**
  * @brief Calculates an ideal read buffer size for a serial port.
  */
 static size_t idealSerialBufferSize(const qint32 baud)
@@ -621,7 +616,7 @@ void IO::Drivers::UART::registerDevice(const QString& device)
     auto* bus = messageBus();
     if (bus)
       bus->publish<Core::Bus::NotificationRaised>(
-        kNotificationWarning,
+        Core::Bus::kSeverityWarning,
         QStringLiteral("UART"),
         QString(),
         tr("Serial device not registered"),

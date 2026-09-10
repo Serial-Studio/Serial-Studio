@@ -82,6 +82,16 @@ struct NotificationRaised final {
 };
 
 /**
+ * @brief The severity ordinals a NotificationRaised carries, mirroring the
+ *        DataModel::NotificationCenter::Level enum the center owns above Core: a publisher below
+ *        the center names one of these instead of redeclaring the ordinal in its own file, which
+ *        is a redefinition once two such files share a unity translation unit.
+ */
+inline constexpr int kSeverityInfo     = 0;
+inline constexpr int kSeverityWarning  = 1;
+inline constexpr int kSeverityCritical = 2;
+
+/**
  * @brief The notification center accepted an event (after dedup and clamping): what the history
  *        holds, for sinks that forward notifications (the MQTT publisher).
  */

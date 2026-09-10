@@ -39,10 +39,10 @@
 #include "Misc/ThemeManager.h"
 #include "Misc/Utilities.h"
 #include "UI/Dashboard.h"
+#include "UI/SerialStudioHelpers.h"
 
 #ifdef BUILD_COMMERCIAL
 #  include "Core/Licensing/CommercialToken.h"
-#  include "UI/SerialStudioHelpers.h"
 #endif
 
 //--------------------------------------------------------------------------------------------------

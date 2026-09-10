@@ -23,6 +23,7 @@
 
 #include "API/Mirror/MirrorSession.h"
 #include "AppState.h"
+#include "Core/License.h"
 #include "Core/Runtime.h"
 #include "Core/Services.h"
 #include "Core/SSAssert.h"
@@ -38,7 +39,6 @@
 
 #ifdef BUILD_COMMERCIAL
 #  include "Core/DataModel/FrameSupport.h"
-#  include "Core/License.h"
 #  include "UI/Widgets/AudioExport.h"
 #endif
 

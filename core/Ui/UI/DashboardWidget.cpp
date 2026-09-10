@@ -29,6 +29,7 @@
 
 #include "Misc/ThemeManager.h"
 #include "UI/Dashboard.h"
+#include "UI/SerialStudioHelpers.h"
 #include "UI/WidgetExtensions.h"
 #include "UI/WidgetRegistry.h"
 #include "UI/Widgets/Accelerometer.h"
@@ -83,7 +84,6 @@
 }
 
 #ifdef BUILD_COMMERCIAL
-#  include "UI/SerialStudioHelpers.h"
 #  include "UI/Widgets/ImageView.h"
 #  include "UI/Widgets/Output/Panel.h"
 #  include "UI/Widgets/Painter.h"

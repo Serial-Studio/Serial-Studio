@@ -53,6 +53,23 @@ struct Echo final {
   int value;
 };
 
+/**
+ * @brief A multi-field topic, so a test can read a payload field off the pointer it received.
+ */
+struct Loaded final {
+  QString path;
+  QString title;
+};
+
+/**
+ * @brief A one-field topic for the tests that only care about delivery, not payload. The bus
+ *        mechanics are exercised on topics this file owns, so a change to the Messages.h
+ *        vocabulary can only break the one test that deliberately names every topic.
+ */
+struct Flag final {
+  bool value;
+};
+
 //--------------------------------------------------------------------------------------------------
 // Suite
 //--------------------------------------------------------------------------------------------------
@@ -121,17 +138,14 @@ void MessageBusTests::everySubscriberReceivesTheSamePointer()
   Core::Bus::MessageBus bus;
   QObject receiver;
 
-  std::shared_ptr<const Core::Bus::ProjectLoaded> first;
-  std::shared_ptr<const Core::Bus::ProjectLoaded> second;
-  auto one = bus.subscribe<Core::Bus::ProjectLoaded>(
-    &receiver,
-    [&first](const std::shared_ptr<const Core::Bus::ProjectLoaded>& message) { first = message; });
-  auto two = bus.subscribe<Core::Bus::ProjectLoaded>(
-    &receiver, [&second](const std::shared_ptr<const Core::Bus::ProjectLoaded>& message) {
-      second = message;
-    });
+  std::shared_ptr<const Loaded> first;
+  std::shared_ptr<const Loaded> second;
+  auto one = bus.subscribe<Loaded>(
+    &receiver, [&first](const std::shared_ptr<const Loaded>& message) { first = message; });
+  auto two = bus.subscribe<Loaded>(
+    &receiver, [&second](const std::shared_ptr<const Loaded>& message) { second = message; });
 
-  bus.publish<Core::Bus::ProjectLoaded>(QStringLiteral("/tmp/x.ssproj"), QStringLiteral("X"));
+  bus.publish<Loaded>(QStringLiteral("/tmp/x.ssproj"), QStringLiteral("X"));
 
   QVERIFY(first != nullptr);
   QCOMPARE(first.get(), second.get());
@@ -151,12 +165,10 @@ void MessageBusTests::queuedDeliveryRunsOnTheReceiverThread()
   QVERIFY(worker.isRunning());
 
   std::atomic<QThread*> ran{nullptr};
-  auto subscription = bus.subscribe<Core::Bus::ProjectModified>(
-    &receiver, [&ran](const std::shared_ptr<const Core::Bus::ProjectModified>&) {
-      ran.store(QThread::currentThread());
-    });
+  auto subscription = bus.subscribe<Flag>(
+    &receiver, [&ran](const std::shared_ptr<const Flag>&) { ran.store(QThread::currentThread()); });
 
-  bus.publish<Core::Bus::ProjectModified>(true);
+  bus.publish<Flag>(true);
   QTRY_COMPARE(ran.load(), &worker);
   QVERIFY(ran.load() != QThread::currentThread());
 
@@ -188,8 +200,8 @@ void MessageBusTests::publishStateRetainsTheLatestMessage()
   bus.publishState<Core::Bus::LicenseStateChanged>(false);
   QCOMPARE(bus.latest<Core::Bus::LicenseStateChanged>()->activated, false);
 
-  bus.publish<Core::Bus::ProjectModified>(true);
-  QVERIFY(bus.latest<Core::Bus::ProjectModified>() == nullptr);
+  bus.publish<Flag>(true);
+  QVERIFY(bus.latest<Flag>() == nullptr);
 }
 
 void MessageBusTests::replayLatestDeliversTheRetainedMessage()
@@ -223,15 +235,14 @@ void MessageBusTests::destroyingTheSubscriptionStopsDelivery()
   int deliveries = 0;
 
   {
-    auto subscription = bus.subscribe<Core::Bus::SettingsChanged>(
-      &receiver,
-      [&deliveries](const std::shared_ptr<const Core::Bus::SettingsChanged>&) { ++deliveries; });
+    auto subscription = bus.subscribe<Flag>(
+      &receiver, [&deliveries](const std::shared_ptr<const Flag>&) { ++deliveries; });
 
-    bus.publish<Core::Bus::SettingsChanged>(QStringLiteral("io.baud"));
+    bus.publish<Flag>(true);
     QCOMPARE(deliveries, 1);
   }
 
-  bus.publish<Core::Bus::SettingsChanged>(QStringLiteral("io.baud"));
+  bus.publish<Flag>(true);
   QCOMPARE(deliveries, 1);
 }
 
@@ -266,11 +277,10 @@ void MessageBusTests::aHandlerMayPublishAnotherTopic()
 
   auto inner = bus.subscribe<Echo>(
     &receiver, [&echoes](const std::shared_ptr<const Echo>& message) { echoes += message->value; });
-  auto outer = bus.subscribe<Core::Bus::ProjectModified>(
-    &receiver,
-    [&bus](const std::shared_ptr<const Core::Bus::ProjectModified>&) { bus.publish<Echo>(5); });
+  auto outer = bus.subscribe<Flag>(
+    &receiver, [&bus](const std::shared_ptr<const Flag>&) { bus.publish<Echo>(5); });
 
-  bus.publish<Core::Bus::ProjectModified>(true);
+  bus.publish<Flag>(true);
 
   QCOMPARE(echoes, 5);
   QVERIFY(inner.isActive());
@@ -288,14 +298,12 @@ void MessageBusTests::blockingQueuedIsDowngradedToQueued()
   QObject receiver;
   int deliveries = 0;
 
-  auto subscription = bus.subscribe<Core::Bus::RecordingSessionBoundary>(
+  auto subscription = bus.subscribe<Flag>(
     &receiver,
-    [&deliveries](const std::shared_ptr<const Core::Bus::RecordingSessionBoundary>&) {
-      ++deliveries;
-    },
+    [&deliveries](const std::shared_ptr<const Flag>&) { ++deliveries; },
     Qt::BlockingQueuedConnection);
 
-  bus.publish<Core::Bus::RecordingSessionBoundary>(true, false);
+  bus.publish<Flag>(true);
   QCOMPARE(deliveries, 0);
   QTRY_COMPARE(deliveries, 1);
   QVERIFY(subscription.isActive());
@@ -309,22 +317,21 @@ void MessageBusTests::everyVocabularyTopicComposesByBracedInit()
 {
   Core::Bus::MessageBus bus;
   bus.publishState<Core::Bus::ConnectionStateChanged>(0, true, false, false, 0);
-  bus.publishState<Core::Bus::ProjectLoaded>(QString(), QString());
-  bus.publishState<Core::Bus::ProjectModified>(false);
-  bus.publish<Core::Bus::NotificationRaised>(1, QString(), QString(), QString(), QString());
-  bus.publish<Core::Bus::NotificationClearRequested>(QString());
-  bus.publish<Core::Bus::NotificationResolved>(QString(), QString(), QString());
+  bus.publish<Core::Bus::NotificationRaised>(
+    Core::Bus::kSeverityWarning, QString(), QString(), QString(), QString());
   bus.publish<Core::Bus::NotificationPosted>(qint64(0), 0, QString(), QString(), QString());
   bus.publishState<Core::Bus::DashboardStructureChanged>(1);
-  bus.publish<Core::Bus::RecordingSessionBoundary>(true, false);
-  bus.publish<Core::Bus::SettingsChanged>(QString());
+  bus.publish<Core::Bus::DashboardUpdated>(0);
+  bus.publish<Core::Bus::DashboardDataReset>(0);
+  bus.publishState<Core::Bus::MirrorAttachedChanged>(false);
   bus.publishState<Core::Bus::LicenseStateChanged>(false, 0, false);
   bus.publishState<Core::Bus::OperationModeChanged>(0);
   bus.publishState<Core::Bus::FrameConfigChanged>(IO::FrameConfig());
-  bus.publishState<Core::Bus::DeviceCatalogChanged>(1);
   bus.publishState<Core::Bus::ReplayPlayerStateChanged>(0, false);
   bus.publishState<Core::Bus::AudioCaptureFormat>(0, 48000, true);
-  bus.publishState<Core::Bus::WidgetExtensionCatalog>(QVector<Core::Bus::WidgetExtensionEntry>());
+  bus.publishState<Core::Bus::WidgetExtensionCatalog>(QVector<Core::Bus::WidgetExtensionEntry>{
+    {QString(), 0, QString(), QString()}
+  });
   bus.publishState<Core::Bus::DashboardViewState>(QString());
   bus.publish<Core::Bus::DashboardViewStateRestoreRequested>(QString());
   bus.publish<Core::Bus::DashboardViewStateClearRequested>(0);
@@ -334,14 +341,15 @@ void MessageBusTests::everyVocabularyTopicComposesByBracedInit()
   bus.publish<Core::Bus::LoadGeneratedProjectRequested>(QJsonDocument(), true, quint64(1));
   bus.publish<Core::Bus::GeneratedProjectLoadFinished>(quint64(1), true, true);
   bus.publish<Core::Bus::Source0ConnectionSettingsChanged>(0, QJsonObject(), true, false);
-  bus.publishState<Core::Bus::ProjectStructureSnapshot>(std::vector<DataModel::Source>(),
-                                                        std::vector<DataModel::Group>(),
-                                                        QString(),
-                                                        false,
-                                                        0,
-                                                        0,
-                                                        -1,
-                                                        quint64(1));
+  bus.publishState<Core::Bus::ProjectStructureSnapshot>(
+    std::vector<DataModel::Source>(),
+    std::vector<DataModel::Group>(),
+    QString(),
+    false,
+    0,
+    Core::Bus::ProjectStructureSnapshot::Content,
+    -1,
+    quint64(1));
   bus.publish<Core::Bus::ConnectionAboutToOpen>(0);
   bus.publishState<Core::Bus::ActiveUiDriverSettings>(0, QJsonObject());
   bus.publish<Core::Bus::SourceSettingsCaptureRequested>(0, 0);

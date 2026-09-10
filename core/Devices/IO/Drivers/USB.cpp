@@ -43,7 +43,6 @@ constexpr unsigned int kBulkWriteTimeout = 1000;
 constexpr int kDefaultIsoPacketSize      = 1024;
 constexpr int kHotplugFallbackIntervalMs = 2000;
 constexpr int kMaxControlLength          = 4096;
-constexpr int kNotificationWarning       = 1;
 
 //--------------------------------------------------------------------------------------------------
 // libusb status pinning
@@ -492,7 +491,7 @@ void IO::Drivers::USB::setTransferMode(const int mode)
     auto* bus = messageBus();
     if (bus)
       bus->publish<Core::Bus::NotificationRaised>(
-        kNotificationWarning,
+        Core::Bus::kSeverityWarning,
         QStringLiteral("USB"),
         QString(),
         tr("Advanced USB mode refused"),

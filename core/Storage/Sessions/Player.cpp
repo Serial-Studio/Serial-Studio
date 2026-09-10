@@ -46,15 +46,6 @@
 #  include "Sessions/Player/ReplayAlignment.h"
 
 //--------------------------------------------------------------------------------------------------
-// Constants
-//--------------------------------------------------------------------------------------------------
-
-/**
- * @brief Warning severity of a Core::Bus::NotificationRaised (NotificationCenter::Warning).
- */
-static constexpr int kNotificationWarning = 1;
-
-//--------------------------------------------------------------------------------------------------
 // Constructor & singleton access
 //--------------------------------------------------------------------------------------------------
 
@@ -638,7 +629,7 @@ void Sessions::Player::applyBundledViewState(const QString& viewState, const QSt
 
   SS_ASSERT(m_bus != nullptr, return);
   m_bus->publish<Core::Bus::NotificationRaised>(
-    kNotificationWarning,
+    Core::Bus::kSeverityWarning,
     tr("Sessions"),
     QString(),
     tr("Recording uses an older copy of the project"),
