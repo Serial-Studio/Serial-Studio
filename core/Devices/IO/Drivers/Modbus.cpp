@@ -37,6 +37,9 @@
 
 static constexpr int kDialDeadlineMs = 5000;
 
+// Registers one Write Multiple Registers request can carry, capped by its single-octet byte count.
+static constexpr int kMaxWriteRegisters = 123;
+
 #include "Core/Bus/MessageBus.h"
 #include "Core/Bus/Messages.h"
 #include "Core/Prompt/UserPrompt.h"
@@ -278,21 +281,26 @@ bool IO::Drivers::Modbus::configurationOk() const noexcept
 }
 
 /**
- * @brief Writes a single- or double-register holding write to the Modbus device.
+ * @brief Writes consecutive holding registers to the Modbus device, taking @p data as a big-endian
+ *        start address followed by one 16-bit value per register, so a caller that must reproduce
+ *        a device's exact block write is not capped at two.
  */
 qint64 IO::Drivers::Modbus::write(const QByteArray& data)
 {
-  if (!isWritable() || data.length() < 4)
+  if (!isWritable() || data.length() < 4 || (data.length() % 2) != 0)
     return 0;
 
-  quint16 address    = (static_cast<quint8>(data[0]) << 8) | static_cast<quint8>(data[1]);
-  int register_count = (data.length() >= 6) ? 2 : 1;
+  const quint16 address    = (static_cast<quint8>(data[0]) << 8) | static_cast<quint8>(data[1]);
+  const int register_count = (data.length() - 2) / 2;
+  if (register_count > kMaxWriteRegisters)
+    return 0;
 
   QModbusDataUnit write_unit(QModbusDataUnit::HoldingRegisters, address, register_count);
-  write_unit.setValue(0, (static_cast<quint8>(data[2]) << 8) | static_cast<quint8>(data[3]));
-
-  if (register_count == 2)
-    write_unit.setValue(1, (static_cast<quint8>(data[4]) << 8) | static_cast<quint8>(data[5]));
+  for (int i = 0; i < register_count; ++i) {
+    const int at = 2 + 2 * i;
+    write_unit.setValue(
+      i, (static_cast<quint8>(data[at]) << 8) | static_cast<quint8>(data[at + 1]));
+  }
 
   if (auto* reply = m_device->sendWriteRequest(write_unit, m_slaveAddress)) {
     if (!reply->isFinished())
@@ -729,13 +737,15 @@ void IO::Drivers::Modbus::setPollInterval(const quint16 interval)
 }
 
 /**
- * @brief Adds a register group to poll
+ * @brief Adds a register group to poll, read from @p slave when non-zero and from the driver's own
+ *        slave address otherwise.
  */
 void IO::Drivers::Modbus::addRegisterGroup(const quint8 type,
                                            const quint16 start,
-                                           const quint16 count)
+                                           const quint16 count,
+                                           const quint8 slave)
 {
-  if (m_registerGroups.add(type, start, count))
+  if (m_registerGroups.add(type, start, count, slave))
     Q_EMIT registerGroupsChanged();
 }
 
@@ -786,11 +796,16 @@ QString IO::Drivers::Modbus::registerGroupInfo(const int index) const
   const QString typeName = (group.registerType < types.count()) ? types[group.registerType] : "";
   // clang-format on
 
-  return QString("%1: %2 @ %3 (count: %4)")
-    .arg(index + 1)
-    .arg(typeName)
-    .arg(group.startAddress)
-    .arg(group.count);
+  const QString info = QString("%1: %2 @ %3 (count: %4)")
+                         .arg(index + 1)
+                         .arg(typeName)
+                         .arg(group.startAddress)
+                         .arg(group.count);
+
+  if (group.slaveAddress == 0)
+    return info;
+
+  return info + tr(" on slave %1").arg(group.slaveAddress);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -975,7 +990,10 @@ void IO::Drivers::Modbus::pollRegisters()
 }
 
 /**
- * @brief Polls the next register group in multi-group mode.
+ * @brief Polls the next register group in multi-group mode, reading a group that carries its own
+ *        slave address from that device instead of the driver's, which is how one connection
+ *        serves several units sharing a bus. The responding address is the first byte of the frame
+ *        the parser receives, so a script tells the devices apart by it.
  */
 void IO::Drivers::Modbus::pollNextGroup()
 {
@@ -1011,7 +1029,8 @@ void IO::Drivers::Modbus::pollNextGroup()
 
   QModbusDataUnit read_unit(registerType, group.startAddress, group.count);
 
-  auto* reply = m_device->sendReadRequest(read_unit, m_slaveAddress);
+  const int unit = group.slaveAddress != 0 ? group.slaveAddress : int(m_slaveAddress);
+  auto* reply    = m_device->sendReadRequest(read_unit, unit);
   if (!reply)
     return;
 
@@ -1100,9 +1119,11 @@ void IO::Drivers::Modbus::advanceAfterFailedPoll()
   if (m_currentGroupIndex >= 0 && m_currentGroupIndex < m_registerGroups.count()) {
     const auto& group = m_registerGroups.at(m_currentGroupIndex);
 
+    const quint8 unit = group.slaveAddress != 0 ? group.slaveAddress : m_slaveAddress;
+
     QByteArray placeholder;
     placeholder.reserve(5);
-    placeholder.append(static_cast<char>(m_slaveAddress));
+    placeholder.append(static_cast<char>(unit));
     placeholder.append(static_cast<char>(ModbusRtu::functionCodeForType(group.registerType)));
     placeholder.append(static_cast<char>(0));
     ModbusRtu::appendCrc(placeholder);
@@ -1503,6 +1524,7 @@ void IO::Drivers::Modbus::setDriverProperty(const QString& key, const QVariant& 
     const auto obj = item.toObject();
     addRegisterGroup(static_cast<quint8>(obj.value(QStringLiteral("type")).toInt()),
                      static_cast<quint16>(obj.value(QStringLiteral("start")).toInt()),
-                     static_cast<quint16>(obj.value(QStringLiteral("count")).toInt()));
+                     static_cast<quint16>(obj.value(QStringLiteral("count")).toInt()),
+                     static_cast<quint8>(obj.value(QStringLiteral("slave")).toInt()));
   }
 }

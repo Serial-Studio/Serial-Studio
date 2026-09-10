@@ -29,17 +29,21 @@
 namespace IO {
 namespace Drivers {
 /**
- * @brief A contiguous block of Modbus registers to poll.
+ * @brief A contiguous block of Modbus registers to poll, optionally from a slave of its own so one
+ *        connection can read several devices sharing a bus. Zero means "use the driver's address":
+ *        unit 0 is the Modbus broadcast address and never a legal read target, so it is a free
+ *        sentinel that leaves groups stored before this field existed behaving as they did.
  */
 struct ModbusRegisterGroup {
   quint8 registerType;
   quint16 startAddress;
   quint16 count;
+  quint8 slaveAddress;
 
-  ModbusRegisterGroup() : registerType(0), startAddress(0), count(0) {}
+  ModbusRegisterGroup() : registerType(0), startAddress(0), count(0), slaveAddress(0) {}
 
-  ModbusRegisterGroup(quint8 type, quint16 start, quint16 cnt)
-    : registerType(type), startAddress(start), count(cnt)
+  ModbusRegisterGroup(quint8 type, quint16 start, quint16 cnt, quint8 slave = 0)
+    : registerType(type), startAddress(start), count(cnt), slaveAddress(slave)
   {}
 };
 
@@ -68,7 +72,10 @@ public:
   [[nodiscard]] QJsonArray toJson() const;
   [[nodiscard]] const ModbusRegisterGroup& at(const int index) const;
   [[nodiscard]] const QVector<ModbusRegisterGroup>& groups() const;
-  [[nodiscard]] bool add(const quint8 type, const quint16 start, const quint16 count);
+  [[nodiscard]] bool add(const quint8 type,
+                         const quint16 start,
+                         const quint16 count,
+                         const quint8 slave = 0);
 
 private:
   void persist();

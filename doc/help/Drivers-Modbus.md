@@ -121,7 +121,7 @@ The standard Modbus TCP port is **502**.
 
 ## How Serial Studio uses it
 
-Serial Studio acts as the master (Modbus client). One connection polls one slave address; every configured register group is read from that slave. Writes from [Output Controls](Output-Controls.md) target holding registers on the same slave (one or two consecutive registers per write).
+Serial Studio acts as the master (Modbus client). Each connection has a slave address that its register groups follow by default, and any group may name a slave of its own, so one connection can read several devices sharing a bus. Writes from [Output Controls](Output-Controls.md) target holding registers on the connection's own slave. A write payload is a big-endian start address followed by one 16-bit value per register, so it covers anything from a single register up to the 123 a Write Multiple Registers request can carry; the `modbusWriteRegister` and `modbusWriteRegisters` helpers build it for you.
 
 ### Configuration model
 
@@ -130,11 +130,12 @@ Setup is a hierarchy:
 1. **Protocol.** Modbus RTU or Modbus TCP (default: TCP).
    - RTU: **Serial Port**, **Baud Rate** (default 9600), **Parity** (default None), **Data Bits** (default 8), **Stop Bits** (default 1).
    - TCP: **Host** (default `127.0.0.1`) and **Port**. Serial Studio defaults to port 5020, the unprivileged port most local simulators bind; real devices almost always listen on 502. This differs from the `--modbus-tcp` CLI flag, which defaults to 502 (the IANA-registered Modbus port) when no port is given — check which surface you are configuring before assuming the default.
-2. **Slave Address.** 1 to 247 for RTU, Unit ID for TCP. Default 1.
+2. **Slave Address.** 1 to 247 for RTU, Unit ID for TCP. Default 1. This is the address a register group uses unless it names its own.
 3. **Register groups** (the **Configure Register Groups…** button). One group per contiguous block of same-type registers to read. Each group has:
    - Register type (Holding Registers, Input Registers, Coils, Discrete Inputs).
    - Starting address (0-based, protocol numbering, 0-65535).
    - Count of entries to read in one request: 1 to 125. The cap applies to coil and discrete-input groups as well, even though the protocol allows more bits per read.
+   - Slave address, optional. Leave it empty and the group is read from the connection's own slave; set 1 to 247 to read that block from another device on the same bus. This is how one RS-485 pair carrying, say, a PLC on address 1 and a power meter on address 2 becomes a single connection. Every reply names the device that sent it in the first byte of the frame, so a frame parser tells them apart by that byte rather than by counting frames.
 4. **Poll Interval (ms).** How often Serial Studio restarts the read cycle. Default 100 ms. The driver clamps every value to 50-60000 ms regardless of where it comes from; the Setup panel field enforces that range directly, while the Socket API's own parameter validation still advertises a 10 ms minimum, which the driver silently raises to the 50 ms floor.
 
 On each poll tick, Serial Studio reads the groups sequentially: it sends the request for the first group, waits for the reply, then moves to the next. Each reply is published to the frame parser as its own binary frame in RTU layout, `[slave address, function code, byte count, data...]`, with no CRC appended; the same layout is used on TCP connections. Register data arrives big-endian (high byte first); coil and discrete-input data arrives as packed bits, least-significant bit first. A reply that reports an error produces no frame. If a reply is still outstanding when the timer fires again, that cycle is skipped, so a slow slave lowers the effective poll rate instead of queueing requests. Requests time out after 1000 ms with 3 retries.
@@ -153,7 +154,7 @@ The Modbus driver wraps Qt's `QModbusClient`; responses are handed off to the ac
 
 ### API control
 
-The [Socket API](API-Reference.md) and the in-app [AI Assistant](AI-Assistant.md) configure this driver through the `io.modbus.*` command scope. Mutations: `setProtocolIndex` (param `protocolIndex`: 0 = RTU, 1 = TCP), `setSlaveAddress` (`address`: 1-247), `setPollInterval` (`intervalMs`: minimum 10), `setHost` (`host`), `setPort` (`port`), `setSerialPortIndex` (`portIndex`), `setBaudRate` (`baudRate`), `setParityIndex` (`parityIndex`), `setDataBitsIndex` (`dataBitsIndex`), `setStopBitsIndex` (`stopBitsIndex`), `addRegisterGroup` (`type`: 0 = Holding Registers, 1 = Input Registers, 2 = Coils, 3 = Discrete Inputs; `startAddress`: 0-65535; `count`: 1-125), `removeRegisterGroup` (`groupIndex`), `clearRegisterGroups`. Read-only: `getConfig`, `listProtocols`, `listSerialPorts`, `listParities`, `listDataBits`, `listStopBits`, `listBaudRates`, `listRegisterTypes`, `listRegisterGroups`. For the AI Assistant the setters are device-gated: blocked until the user ticks **Allow device control**, and each call still requires confirmation.
+The [Socket API](API-Reference.md) and the in-app [AI Assistant](AI-Assistant.md) configure this driver through the `io.modbus.*` command scope. Mutations: `setProtocolIndex` (param `protocolIndex`: 0 = RTU, 1 = TCP), `setSlaveAddress` (`address`: 1-247), `setPollInterval` (`intervalMs`: minimum 10), `setHost` (`host`), `setPort` (`port`), `setSerialPortIndex` (`portIndex`), `setBaudRate` (`baudRate`), `setParityIndex` (`parityIndex`), `setDataBitsIndex` (`dataBitsIndex`), `setStopBitsIndex` (`stopBitsIndex`), `addRegisterGroup` (`type`: 0 = Holding Registers, 1 = Input Registers, 2 = Coils, 3 = Discrete Inputs; `startAddress`: 0-65535; `count`: 1-125; `slaveAddress`: optional, 1-247, or 0 and omitted to follow the connection's own), `removeRegisterGroup` (`groupIndex`), `clearRegisterGroups`. Read-only: `getConfig`, `listProtocols`, `listSerialPorts`, `listParities`, `listDataBits`, `listStopBits`, `listBaudRates`, `listRegisterTypes`, `listRegisterGroups`. For the AI Assistant the setters are device-gated: blocked until the user ticks **Allow device control**, and each call still requires confirmation.
 
 For step-by-step setup, see the [Protocol Setup Guides, Modbus section](Protocol-Setup-Guides.md).
 

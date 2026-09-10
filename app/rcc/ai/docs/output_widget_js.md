@@ -49,6 +49,7 @@ scripts below — they self-contain their protocol logic, they are NOT globals).
 
 ```js
 modbusWriteRegister(address, value)  // 16-bit holding register -> 4-byte payload
+modbusWriteRegisters(address, [..])  // consecutive holding registers -> 2 + 2N payload
 modbusWriteCoil(address, on)         // coil ON=0xFF00 / OFF=0x0000 -> 4-byte payload
 modbusWriteFloat(address, value)     // IEEE-754 float over two registers -> 6-byte payload
 canSendFrame(id, payload)            // payload = string or Array<number> -> [id_hi,id_lo,dlc,...data]

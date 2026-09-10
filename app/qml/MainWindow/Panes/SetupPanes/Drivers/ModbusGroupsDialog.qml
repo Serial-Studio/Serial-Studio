@@ -146,16 +146,29 @@ DriverTagPickerDialog {
             text: qsTr("Register Count:")
           }
 
+          Widgets.LineField {
+            id: _countField
+
+            Layout.fillWidth: true
+            placeholderText: qsTr("1-125")
+            validator: IntValidator { bottom: 1; top: 125 }
+          }
+
+          Label {
+            color: palette.text
+            text: qsTr("Slave Address:")
+          }
+
           RowLayout {
             spacing: 8
             Layout.fillWidth: true
 
             Widgets.LineField {
-              id: _countField
+              id: _slaveField
 
               Layout.fillWidth: true
-              placeholderText: qsTr("1-125")
-              validator: IntValidator { bottom: 1; top: 125 }
+              placeholderText: qsTr("Leave empty to use the device address")
+              validator: IntValidator { bottom: 1; top: 247 }
             }
 
             Button {
@@ -165,11 +178,13 @@ DriverTagPickerDialog {
                 const type = _typeCombo.currentIndex
                 const start = parseInt(_startField.text)
                 const count = parseInt(_countField.text)
+                const slave = _slaveField.text.length > 0 ? parseInt(_slaveField.text) : 0
 
                 if (!isNaN(start) && !isNaN(count) && count > 0 && count <= 125) {
-                  Cpp_IO_Modbus.addRegisterGroup(type, start, count)
+                  Cpp_IO_Modbus.addRegisterGroup(type, start, count, isNaN(slave) ? 0 : slave)
                   _startField.text = ""
                   _countField.text = ""
+                  _slaveField.text = ""
                 }
               }
             }

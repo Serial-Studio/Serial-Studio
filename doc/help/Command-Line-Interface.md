@@ -91,7 +91,7 @@ pipeline.
 | `--modbus-parity` | `type` | RTU parity: `none`, `even`, `odd`, `space`, `mark` (default `none`). |
 | `--modbus-databits` | `bits` | RTU data bits: `5`, `6`, `7`, `8` (default 8). |
 | `--modbus-stopbits` | `bits` | RTU stop bits: `1`, `1.5`, `2` (default 1). |
-| `--modbus-register` | `spec` | Add a register group `type:start:count`; type is `holding`, `input`, `coils`, or `discrete`; start 0-65535, count 1-125 (repeatable). |
+| `--modbus-register` | `spec` | Add a register group `type:start:count[:slave]`; type is `holding`, `input`, `coils`, or `discrete`; start 0-65535, count 1-125; the optional slave 1-247 reads that block from another device on the same bus (repeatable). |
 
 ## CAN Bus (Pro)
 

@@ -248,7 +248,8 @@ void API::Handlers::ProjectUpdateCommands::registerCommands()
                    "before authoring** for the function signature (transmit(value) "
                    "returning a Uint8Array / string), the per-widget value semantics, and "
                    "the injected Modbus/CAN helper globals (modbusWriteRegister / "
-                   "modbusWriteCoil / modbusWriteFloat / canSendFrame / canSendValue). "
+                   "modbusWriteRegisters / modbusWriteCoil / modbusWriteFloat / "
+                   "canSendFrame / canSendValue). "
                    "Validate first with project.outputWidget.dryRun."),
     makeSchema({
       { QStringLiteral("groupId"),QStringLiteral("integer"),QStringLiteral("Target group id")                           },

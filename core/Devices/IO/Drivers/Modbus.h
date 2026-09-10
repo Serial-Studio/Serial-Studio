@@ -193,7 +193,10 @@ public slots:
   void setSlaveAddress(const quint8 address);
   void setSerialPortIndex(const quint8 index);
   void setPollInterval(const quint16 interval);
-  void addRegisterGroup(const quint8 type, const quint16 start, const quint16 count);
+  void addRegisterGroup(const quint8 type,
+                        const quint16 start,
+                        const quint16 count,
+                        const quint8 slave = 0);
 
 private slots:
   void onReadReady();

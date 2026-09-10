@@ -61,7 +61,9 @@ IO::Drivers::ModbusRegisterGroups::ModbusRegisterGroups(QSettings& settings) : m
 
 /**
  * @brief Reloads the groups from the settings array, dropping any entry whose count is outside the
- *        range a single Modbus read of that register type can carry.
+ *        range a single Modbus read of that register type can carry. A per-group slave address
+ *        outside 1..247 falls back to zero, which polls the block from the driver's own address:
+ *        that is what every group written before the field existed reads back as.
  */
 void IO::Drivers::ModbusRegisterGroups::restore()
 {
@@ -75,6 +77,10 @@ void IO::Drivers::ModbusRegisterGroups::restore()
     group.registerType = static_cast<quint8>(m_settings.value("type", 0).toUInt());
     group.startAddress = static_cast<quint16>(m_settings.value("start", 0).toUInt());
     group.count        = static_cast<quint16>(m_settings.value("count", 0).toUInt());
+    group.slaveAddress = static_cast<quint8>(m_settings.value("slave", 0).toUInt());
+
+    if (group.slaveAddress > 247)
+      group.slaveAddress = 0;
 
     if (group.count > 0 && group.count <= maxCountForType(group.registerType))
       m_groups.append(group);
@@ -95,6 +101,7 @@ void IO::Drivers::ModbusRegisterGroups::persist()
     m_settings.setValue("type", m_groups[i].registerType);
     m_settings.setValue("start", m_groups[i].startAddress);
     m_settings.setValue("count", m_groups[i].count);
+    m_settings.setValue("slave", m_groups[i].slaveAddress);
   }
 
   m_settings.endArray();
@@ -106,22 +113,25 @@ void IO::Drivers::ModbusRegisterGroups::persist()
 
 /**
  * @brief Appends a group, returning whether the list actually changed: an out-of-range count and
- *        an exact duplicate are both refused, so the caller only announces a real edit. The count
- *        bound is validation, not an invariant: project files and the JSON-RPC API both reach
- *        here with whatever the caller wrote.
+ *        an exact duplicate are both refused, so the caller only announces a real edit. The slave
+ *        address is part of a group's identity, so one block read from two devices is two groups;
+ *        anything outside 1..247 becomes zero, which follows the driver's own address.
  */
 bool IO::Drivers::ModbusRegisterGroups::add(const quint8 type,
                                             const quint16 start,
-                                            const quint16 count)
+                                            const quint16 count,
+                                            const quint8 slave)
 {
   if (count == 0 || count > maxCountForType(type))
     return false;
 
+  const quint8 unit = (slave >= 1 && slave <= 247) ? slave : quint8(0);
   for (const auto& group : std::as_const(m_groups))
-    if (group.registerType == type && group.startAddress == start && group.count == count)
+    if (group.registerType == type && group.startAddress == start && group.count == count
+        && group.slaveAddress == unit)
       return false;
 
-  m_groups.append(ModbusRegisterGroup(type, start, count));
+  m_groups.append(ModbusRegisterGroup(type, start, count, unit));
   persist();
 
   return true;
@@ -200,7 +210,10 @@ const QVector<IO::Drivers::ModbusRegisterGroup>& IO::Drivers::ModbusRegisterGrou
 }
 
 /**
- * @brief Returns the groups as the JSON array the driver property model publishes.
+ * @brief Returns the groups as the JSON array the driver property model publishes, writing the
+ *        slave key only for a group that overrides the driver's address, so a project polling one
+ *        device serializes exactly as it did before per-group addressing existed and re-saving it
+ *        produces no diff.
  */
 QJsonArray IO::Drivers::ModbusRegisterGroups::toJson() const
 {
@@ -210,6 +223,9 @@ QJsonArray IO::Drivers::ModbusRegisterGroups::toJson() const
     object[QStringLiteral("type")]  = group.registerType;
     object[QStringLiteral("start")] = group.startAddress;
     object[QStringLiteral("count")] = group.count;
+    if (group.slaveAddress != 0)
+      object[QStringLiteral("slave")] = group.slaveAddress;
+
     array.append(object);
   }
 

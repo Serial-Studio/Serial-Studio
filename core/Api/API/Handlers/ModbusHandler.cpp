@@ -160,15 +160,18 @@ void API::Handlers::ModbusHandler::registerRegisterGroupCommands()
 
   registry.registerCommand(
     QStringLiteral("io.modbus.addRegisterGroup"),
-    QStringLiteral("Add register group (params: type, startAddress, count)"),
+    QStringLiteral("Add register group (params: type, startAddress, count, [slaveAddress])"),
     API::makeSchema({
-      {        QStringLiteral("type"),QStringLiteral("integer"),QStringLiteral("Register type index")                      },
+      {        QStringLiteral("type"),QStringLiteral("integer"),QStringLiteral("Register type index")                       },
       {QStringLiteral("startAddress"),
        QStringLiteral("integer"),
-       QStringLiteral("Start address (0-65535)")            },
+       QStringLiteral("Start address (0-65535)")             },
       {       QStringLiteral("count"),
        QStringLiteral("integer"),
-       QStringLiteral("Number of registers to read (1-125)")}
+       QStringLiteral("Number of registers to read (1-125)") },
+      {QStringLiteral("slaveAddress"),
+       QStringLiteral("integer"),
+       QStringLiteral("Slave to read this block from (1-247, 0 = the driver's own address)")}
   }),
     &addRegisterGroup);
   registry.registerCommand(QStringLiteral("io.modbus.removeRegisterGroup"),
@@ -546,6 +549,7 @@ API::CommandResponse API::Handlers::ModbusHandler::addRegisterGroup(const QStrin
   const int type         = params.value(QStringLiteral("type")).toInt();
   const int startAddress = params.value(QStringLiteral("startAddress")).toInt();
   const int count        = params.value(QStringLiteral("count")).toInt();
+  const int slaveAddress = params.value(QStringLiteral("slaveAddress")).toInt();
 
   auto& connectionManager = API::handlerContext().connectionManager;
   auto* modbus            = connectionManager.modbus();
@@ -580,14 +584,25 @@ API::CommandResponse API::Handlers::ModbusHandler::addRegisterGroup(const QStrin
                                         .arg(QString::number(count), QString::number(maxCount)));
   }
 
-  modbus->addRegisterGroup(
-    static_cast<quint8>(type), static_cast<quint16>(startAddress), static_cast<quint16>(count));
+  if (slaveAddress < 0 || slaveAddress > 247) {
+    return CommandResponse::makeError(
+      id,
+      ErrorCode::InvalidParam,
+      QStringLiteral("Invalid slaveAddress: %1. Valid range: 1-247, or 0 for the driver's own")
+        .arg(slaveAddress));
+  }
+
+  modbus->addRegisterGroup(static_cast<quint8>(type),
+                           static_cast<quint16>(startAddress),
+                           static_cast<quint16>(count),
+                           static_cast<quint8>(slaveAddress));
 
   QJsonObject result;
   result[QStringLiteral("type")]         = type;
   result[QStringLiteral("typeName")]     = typeList.at(type);
   result[QStringLiteral("startAddress")] = startAddress;
   result[QStringLiteral("count")]        = count;
+  result[QStringLiteral("slaveAddress")] = slaveAddress;
   return CommandResponse::makeSuccess(id, result);
 }
 

@@ -60,10 +60,11 @@ static void applyModbusRegister(IO::Drivers::Modbus* modbus, const QString& spec
   quint8 registerType = 0;
   quint16 start       = 0;
   quint16 count       = 0;
-  if (!CliSpecParsers::parseModbusRegisterSpec(spec, registerType, start, count))
+  quint8 slave        = 0;
+  if (!CliSpecParsers::parseModbusRegisterSpec(spec, registerType, start, count, &slave))
     return;
 
-  modbus->addRegisterGroup(registerType, start, count);
+  modbus->addRegisterGroup(registerType, start, count, slave);
 }
 
 /**

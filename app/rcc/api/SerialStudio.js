@@ -186,6 +186,15 @@ function modbusWriteRegister(address, value) {
   var a = address & 0xFFFF, v = Math.round(value) & 0xFFFF;
   return String.fromCharCode((a >> 8) & 0xFF, a & 0xFF, (v >> 8) & 0xFF, v & 0xFF);
 }
+function modbusWriteRegisters(address, values) {
+  var a = address & 0xFFFF;
+  var out = String.fromCharCode((a >> 8) & 0xFF, a & 0xFF);
+  for (var i = 0; i < values.length; i++) {
+    var v = Math.round(values[i]) & 0xFFFF;
+    out += String.fromCharCode((v >> 8) & 0xFF, v & 0xFF);
+  }
+  return out;
+}
 function modbusWriteCoil(address, on) {
   return modbusWriteRegister(address, on ? 0xFF00 : 0x0000);
 }

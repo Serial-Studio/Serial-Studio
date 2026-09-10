@@ -47,7 +47,8 @@ object. It returns either a string (encoded with the widget's TX encoding)
 or a byte array.
 
 The only injected protocol globals are `modbusWriteRegister`,
-`modbusWriteCoil`, `modbusWriteFloat`, `canSendFrame`, and `canSendValue`.
+`modbusWriteRegisters`, `modbusWriteCoil`, `modbusWriteFloat`, `canSendFrame`,
+and `canSendValue`.
 NMEA, GRBL, GCode, SCPI, SLCAN, CRC, and binary-packet logic are NOT
 globals — adapt a bundled reference script (next section) that self-contains
 that code. Full details: `meta.fetchScriptingDocs{kind: "output_widget_js"}`.

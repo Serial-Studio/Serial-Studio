@@ -58,6 +58,7 @@ private slots:
   void aRestoreDropsAnOutOfRangeEntry();
   void removalAndClearTruncateThePersistedArray();
   void jsonCarriesEveryFieldOfEveryGroup();
+  void perGroupSlaveAddressesSurviveAndStayDistinct();
   void functionCodesFollowTheRegisterType();
   void theChecksumIsTheModbusCrc();
 
@@ -248,6 +249,36 @@ void TstModbusRegisterGroups::jsonCarriesEveryFieldOfEveryGroup()
   QCOMPARE(object.value(QStringLiteral("type")).toInt(), int(kDiscrete));
   QCOMPARE(object.value(QStringLiteral("start")).toInt(), 300);
   QCOMPARE(object.value(QStringLiteral("count")).toInt(), 16);
+  QVERIFY(!object.contains(QStringLiteral("slave")));
+}
+
+/**
+ * @brief One bus can carry several devices, so the same block read from two slaves is two groups
+ *        and not a duplicate. Zero means "follow the driver's address" and stays out of the JSON,
+ *        which is what keeps a single-device project serializing exactly as it did before.
+ */
+void TstModbusRegisterGroups::perGroupSlaveAddressesSurviveAndStayDistinct()
+{
+  ModbusRegisterGroups groups(settings());
+  QVERIFY(groups.add(kHolding, 400, 50, 1));
+  QVERIFY(groups.add(kHolding, 400, 50, 2));
+  QVERIFY(!groups.add(kHolding, 400, 50, 2));
+  QVERIFY(groups.add(kHolding, 400, 50));
+  QCOMPARE(groups.count(), 3);
+
+  QCOMPARE(groups.at(0).slaveAddress, quint8(1));
+  QCOMPARE(groups.at(1).slaveAddress, quint8(2));
+  QCOMPARE(groups.at(2).slaveAddress, quint8(0));
+
+  const auto array = groups.toJson();
+  QCOMPARE(array.at(0).toObject().value(QStringLiteral("slave")).toInt(), 1);
+  QVERIFY(!array.at(2).toObject().contains(QStringLiteral("slave")));
+
+  ModbusRegisterGroups restored(settings());
+  restored.restore();
+  QCOMPARE(restored.count(), 3);
+  QCOMPARE(restored.at(1).slaveAddress, quint8(2));
+  QCOMPARE(restored.at(2).slaveAddress, quint8(0));
 }
 
 //--------------------------------------------------------------------------------------------------

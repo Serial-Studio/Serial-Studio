@@ -56,6 +56,7 @@ private slots:
   void registerSpecRejectsAWrongFieldCount();
   void registerSpecRejectsAnUnknownType();
   void registerSpecRejectsAnOutOfRangeCount();
+  void registerSpecTakesAnOptionalSlave();
 
   void serialIndexTablesMapKnownTokens();
   void serialIndexTablesRejectUnknownTokens();
@@ -267,6 +268,28 @@ void TstCliSpecParsers::registerSpecRejectsAnOutOfRangeCount()
                          QRegularExpression(QStringLiteral("Invalid register specification")));
     QVERIFY(!Misc::CliSpecParsers::parseModbusRegisterSpec(spec, type, start, count));
     QCOMPARE(static_cast<int>(type), 9);
+  }
+}
+
+void TstCliSpecParsers::registerSpecTakesAnOptionalSlave()
+{
+  quint8 type   = 255;
+  quint16 start = 0;
+  quint16 count = 0;
+  quint8 slave  = 255;
+
+  QVERIFY(Misc::CliSpecParsers::parseModbusRegisterSpec(
+    QStringLiteral("holding:400:50:1"), type, start, count, &slave));
+  QCOMPARE(static_cast<int>(slave), 1);
+
+  QVERIFY(Misc::CliSpecParsers::parseModbusRegisterSpec(
+    QStringLiteral("holding:400:50"), type, start, count, &slave));
+  QCOMPARE(static_cast<int>(slave), 0);
+
+  for (const QString& spec : {QStringLiteral("holding:0:4:0"), QStringLiteral("holding:0:4:248")}) {
+    QTest::ignoreMessage(QtWarningMsg,
+                         QRegularExpression(QStringLiteral("Invalid register slave address")));
+    QVERIFY(!Misc::CliSpecParsers::parseModbusRegisterSpec(spec, type, start, count, &slave));
   }
 }
 

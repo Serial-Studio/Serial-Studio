@@ -81,6 +81,9 @@ more slave devices on a fixed interval.
    - `type`: 0 = HoldingRegisters, 1 = InputRegisters, 2 = Coils,
      3 = DiscreteInputs
    - `startAddress` and `count`
+   - `slaveAddress`, optional: reads this block from another device on the
+     same bus instead of the connection's own slave. Omit it (or pass 0) to
+     follow the connection.
 6. `io.connect{}`.
 
 ### Modbus map import
@@ -98,9 +101,10 @@ formatted register values; the default parser is fine for most setups.
 
 - **CAN bitrate mismatch**: silent failure. The bus driver doesn't error;
   you just see no frames. Verify the wire bitrate first.
-- **Modbus RTU framing**: the slave address must match exactly; multiple
-  slaves on one bus are not handled by Serial Studio's driver — it polls
-  one slave per active source.
+- **Modbus RTU framing**: the slave address must match exactly. Several
+  slaves on one bus are fine — give each register group its own
+  `slaveAddress` — but the parser must then route on the first byte of the
+  frame, which names the device that answered.
 - **Modbus poll interval too aggressive**: cheap PLCs respond at
   ~50–100ms; faster intervals queue up, time out, and the dashboard
   reports stale data. Default 100ms is right for almost everything.
