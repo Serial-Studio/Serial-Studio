@@ -380,7 +380,6 @@ void EditorTree::appendDatasetChildren(QStandardItem* groupItem, const DataModel
   const bool filterActive = !q.isEmpty();
   const bool groupMatches = !filterActive || SerialStudio::searchMatches(q, group.title);
 
-  auto& registry = Core::services().iconRegistry;
   for (const auto& dataset : group.datasets) {
     if (filterActive && !groupMatches && !SerialStudio::searchMatches(q, dataset.title))
       continue;

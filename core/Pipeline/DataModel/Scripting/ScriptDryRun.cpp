@@ -242,9 +242,9 @@ int DataModel::ScriptDryRun::runLuaChunk(const QString& code, const char* chunkN
   m_timedOut            = false;
   const QByteArray utf8 = code.toUtf8();
   const int loadStatus  = luaL_loadbuffer(m_luaState,
-                                          utf8.constData(),
-                                          static_cast<size_t>(utf8.size()),
-                                          chunkName ? chunkName : "chunk");
+                                         utf8.constData(),
+                                         static_cast<size_t>(utf8.size()),
+                                         chunkName ? chunkName : "chunk");
   if (loadStatus != LUA_OK)
     return loadStatus;
 

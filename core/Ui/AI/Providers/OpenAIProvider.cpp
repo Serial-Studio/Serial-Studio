@@ -111,7 +111,7 @@ AI::ProviderCapabilities AI::OpenAIProvider::capabilities() const
   caps.developerRole         = prefersDeveloperRole(currentModel());
   caps.needsSmallToolSurface = currentModel().contains(QStringLiteral("mini"))
                             || currentModel().contains(QStringLiteral("4o-mini"));
-  caps.toolResultByteBudget  = caps.needsSmallToolSurface ? 4096 : 8192;
+  caps.toolResultByteBudget = caps.needsSmallToolSurface ? 4096 : 8192;
   return caps;
 }
 

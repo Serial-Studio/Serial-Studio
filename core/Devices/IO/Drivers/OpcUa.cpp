@@ -752,7 +752,7 @@ void IO::Drivers::OpcUa::generateProject()
   const int groupCount = project.value(Keys::Groups).toArray().size();
   const int datasets   = wireSchema().size();
   m_generatedProject.loadAndSave(
-    messageBus(), QJsonDocument(project), [this, groupCount, datasets](bool loaded, bool accepted) {
+    messageBus(), QJsonDocument(project), [groupCount, datasets](bool loaded, bool accepted) {
       if (!loaded) {
         logDriverError(tr("Failed to load generated project"),
                        tr("The generated project JSON could not be loaded."));

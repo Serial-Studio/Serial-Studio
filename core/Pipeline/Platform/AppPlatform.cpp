@@ -600,8 +600,8 @@ void installCrashDumpWriter()
   if (dir.isEmpty())
     return;
 
-  const QString path      = QString::fromLocal8Bit(dir) + QStringLiteral("/crash_")
-                          + QString::number(GetCurrentProcessId()) + QStringLiteral(".dmp");
+  const QString path = QString::fromLocal8Bit(dir) + QStringLiteral("/crash_")
+                     + QString::number(GetCurrentProcessId()) + QStringLiteral(".dmp");
   const std::wstring wide = path.toStdWString();
   if (wide.size() >= MAX_PATH)
     return;

@@ -107,8 +107,8 @@ private:
 
     crc                    &= 0xFFFFFF;
     const quint32 expected  = (static_cast<quint32>(u8At(frame, 3 + length)) << 16)
-                            | (static_cast<quint32>(u8At(frame, 3 + length + 1)) << 8)
-                            | static_cast<quint32>(u8At(frame, 3 + length + 2));
+                           | (static_cast<quint32>(u8At(frame, 3 + length + 1)) << 8)
+                           | static_cast<quint32>(u8At(frame, 3 + length + 2));
     return crc == expected;
   }
 

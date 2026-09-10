@@ -214,8 +214,8 @@ void IO::Drivers::J1939TransportReassembler::openSession(const quint16 key,
 
   dropSession(key, m_counters.aborted);
 
-  const int total_bytes   = static_cast<quint8>(payload.at(1))
-                          | (static_cast<int>(static_cast<quint8>(payload.at(2))) << 8);
+  const int total_bytes = static_cast<quint8>(payload.at(1))
+                        | (static_cast<int>(static_cast<quint8>(payload.at(2))) << 8);
   const int total_packets = static_cast<quint8>(payload.at(3));
 
   if (total_bytes < 1 || total_bytes > kJ1939MaxBytes) {
@@ -235,9 +235,9 @@ void IO::Drivers::J1939TransportReassembler::openSession(const quint16 key,
   }
 
   Session session;
-  session.pgn          = static_cast<quint32>(static_cast<quint8>(payload.at(5)))
-                       | (static_cast<quint32>(static_cast<quint8>(payload.at(6))) << 8)
-                       | (static_cast<quint32>(static_cast<quint8>(payload.at(7))) << 16);
+  session.pgn = static_cast<quint32>(static_cast<quint8>(payload.at(5)))
+              | (static_cast<quint32>(static_cast<quint8>(payload.at(6))) << 8)
+              | (static_cast<quint32>(static_cast<quint8>(payload.at(7))) << 16);
   session.priority     = priority;
   session.totalBytes   = total_bytes;
   session.totalPackets = total_packets;

@@ -266,7 +266,7 @@ void IO::Protocols::ZMODEM::processHexByte(quint8 ch)
 
     const quint16 calc_crc = CRC::crc16(payload, 5);
     const quint16 rx_crc   = static_cast<quint16>((static_cast<quint8>(crc_bytes[0]) << 8)
-                                                  | static_cast<quint8>(crc_bytes[1]));
+                                                | static_cast<quint8>(crc_bytes[1]));
     if (calc_crc != rx_crc) [[unlikely]] {
       Q_EMIT statusMessage(tr("Hex header CRC mismatch, dropping frame"));
       m_parseState = ParseState::Idle;

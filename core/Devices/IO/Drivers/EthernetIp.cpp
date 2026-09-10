@@ -1309,7 +1309,7 @@ QJsonObject IO::Drivers::EthernetIp::buildProject() const
   source[Keys::FrameParserLanguage]   = static_cast<int>(SerialStudio::Native);
   source[Keys::FrameParserTemplate]   = QStringLiteral("ethernetip");
   source[Keys::FrameParserParams]     = QJsonObject{
-    {QStringLiteral("schema"), wireSchema()}
+        {QStringLiteral("schema"), wireSchema()}
   };
 
   QJsonObject conn;
@@ -1379,7 +1379,7 @@ void IO::Drivers::EthernetIp::generateProject()
 
   const int datasets = wireSchema().size();
   m_generatedProject.loadAndSave(
-    messageBus(), QJsonDocument(buildProject()), [this, datasets](bool loaded, bool accepted) {
+    messageBus(), QJsonDocument(buildProject()), [datasets](bool loaded, bool accepted) {
       if (!loaded) {
         logDriverError(tr("Failed to load generated project"),
                        tr("The generated project JSON could not be loaded."));

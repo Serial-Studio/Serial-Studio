@@ -110,10 +110,10 @@ bool Misc::ShortcutGenerator::writeWindowsLnk(const QString& outputPath,
 
   IShellLinkW* link = nullptr;
   HRESULT hr        = CoCreateInstance(CLSID_ShellLink,
-                                       nullptr,
-                                       CLSCTX_INPROC_SERVER,
-                                       IID_IShellLinkW,
-                                       reinterpret_cast<void**>(&link));
+                                nullptr,
+                                CLSCTX_INPROC_SERVER,
+                                IID_IShellLinkW,
+                                reinterpret_cast<void**>(&link));
   if (FAILED(hr) || link == nullptr) {
     errorOut = tr("CoCreateInstance(IShellLink) failed (HRESULT 0x%1).")
                  .arg(static_cast<quint32>(hr), 8, 16, QLatin1Char('0'));

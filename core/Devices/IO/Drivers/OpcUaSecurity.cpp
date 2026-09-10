@@ -173,14 +173,14 @@ bool IO::Drivers::OpcUaSecurity::regenerateClientIdentity()
   UA_ByteString certificate = UA_BYTESTRING_NULL;
   UA_ByteString privateKey  = UA_BYTESTRING_NULL;
   const auto status         = UA_CreateCertificate(UA_Log_Stdout,
-                                                   subject,
-                                                   2,
-                                                   altName,
-                                                   2,
-                                                   UA_CERTIFICATEFORMAT_DER,
-                                                   &params,
-                                                   &privateKey,
-                                                   &certificate);
+                                           subject,
+                                           2,
+                                           altName,
+                                           2,
+                                           UA_CERTIFICATEFORMAT_DER,
+                                           &params,
+                                           &privateKey,
+                                           &certificate);
   UA_KeyValueMap_clear(&params);
   if (status != UA_STATUSCODE_GOOD)
     return false;

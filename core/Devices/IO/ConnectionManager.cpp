@@ -68,7 +68,7 @@ IO::ConnectionManager::ConnectionManager(Core::Bus::MessageBus& bus, IIngestBind
   , m_operationMode(SerialStudio::QuickPlot)
   , m_busBridge(m_bus, m_operationMode, m_frameConfig, m_project)
   , m_fileTransmission(nullptr)
-  , m_io(m_operationMode, m_binder, m_replyCapture, m_devices, m_paused, m_fileTransmission)
+  , m_io(m_binder, m_replyCapture, m_devices, m_paused, m_fileTransmission)
   , m_query(m_devices, m_project)
   , m_driverFactory(m_uiDrivers, m_bus)
   , m_streamConfigs(m_operationMode, m_frameConfig, m_project)
@@ -728,7 +728,9 @@ void IO::ConnectionManager::setupExternalConnections()
                    {[this] { rebuildDevices(); },
                     [this] { resetFrameReader(); },
                     [this](int sourceId) { onProjectSourceChanged(sourceId); },
-                    [this] { rebuildStreamWorkers(); }});
+                    [this] {
+                      rebuildStreamWorkers();
+                    }});
   m_uiSync.wire(*this, [this](int sourceId) { return driver(sourceId); });
 
   for (auto* driver : m_uiDrivers.all())

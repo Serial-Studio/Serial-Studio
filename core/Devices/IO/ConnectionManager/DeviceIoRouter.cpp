@@ -37,15 +37,13 @@ static const QByteArray kDefaultEnd   = QByteArray("*/");
  * @brief Binds the collaborators the payload and write paths reach; the file-transmission pointer
  *        is bound BY REFERENCE because the composition root fills it after this.
  */
-IO::DeviceIoRouter::DeviceIoRouter(const SerialStudio::OperationMode& operationMode,
-                                   IIngestBinder& binder,
+IO::DeviceIoRouter::DeviceIoRouter(IIngestBinder& binder,
                                    ReplyCapture& replyCapture,
                                    const DeviceTable& devices,
                                    const std::atomic<bool>& paused,
                                    FileTransmission* const& fileTransmission)
   : m_startSequence(kDefaultStart)
   , m_finishSequence(kDefaultEnd)
-  , m_operationMode(operationMode)
   , m_binder(binder)
   , m_replyCapture(replyCapture)
   , m_devices(devices)

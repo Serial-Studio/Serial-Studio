@@ -71,7 +71,7 @@ bool ed25519_verify(const std::uint8_t signature[64],
     std::memcpy(signedMessage.data() + 64, message, length);
 
   unsigned long long recoveredLength = 0;
-  const int rc = crypto_sign_ed25519_tweet_open(recovered.data(),
+  const int rc                       = crypto_sign_ed25519_tweet_open(recovered.data(),
                                                 &recoveredLength,
                                                 signedMessage.data(),
                                                 static_cast<unsigned long long>(signedLength),

@@ -170,7 +170,7 @@ static constexpr int kMaxRewrites  = 8192;
 {
   const qsizetype n = s.size();
   const bool hex    = (i + 1 < n) && s[i] == QLatin1Char('0')
-                   && (s[i + 1] == QLatin1Char('x') || s[i + 1] == QLatin1Char('X'));
+                && (s[i + 1] == QLatin1Char('x') || s[i + 1] == QLatin1Char('X'));
 
   qsizetype j = i;
   while (j < n && (s[j].isLetterOrNumber() || s[j] == QLatin1Char('.'))) {

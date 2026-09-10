@@ -820,9 +820,7 @@ void IO::Drivers::Modbus::generateProject()
   const int total_datasets = generator.totalDatasets();
   const int groupCount     = m_registerGroups.count();
   m_generatedProject.loadAndSave(
-    messageBus(),
-    QJsonDocument(project),
-    [this, groupCount, total_datasets](bool loaded, bool accepted) {
+    messageBus(), QJsonDocument(project), [groupCount, total_datasets](bool loaded, bool accepted) {
       if (!loaded) {
         logDriverError(tr("Failed to load generated project"),
                        tr("The generated project JSON could not be loaded."));

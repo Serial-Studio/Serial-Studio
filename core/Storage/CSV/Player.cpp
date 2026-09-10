@@ -328,9 +328,9 @@ void CSV::Player::openFile()
 {
   auto& workspaceManager = Core::services().workspaceManager;
   auto* dialog           = new QFileDialog(qApp->activeWindow(),
-                                           tr("Select CSV file"),
-                                           workspaceManager.path("CSV"),
-                                           tr("CSV files (*.csv)"));
+                                 tr("Select CSV file"),
+                                 workspaceManager.path("CSV"),
+                                 tr("CSV files (*.csv)"));
 
   dialog->setFileMode(QFileDialog::ExistingFile);
   dialog->setAttribute(Qt::WA_DeleteOnClose);

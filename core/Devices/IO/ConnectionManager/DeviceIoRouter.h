@@ -54,8 +54,7 @@ public:
 
   static constexpr std::size_t kMaxRawTaps = 6;
 
-  DeviceIoRouter(const SerialStudio::OperationMode& operationMode,
-                 IIngestBinder& binder,
+  DeviceIoRouter(IIngestBinder& binder,
                  ReplyCapture& replyCapture,
                  const DeviceTable& devices,
                  const std::atomic<bool>& paused,
@@ -95,7 +94,6 @@ private:
   QByteArray m_finishSequence;
   QString m_checksumAlgorithm;
 
-  const SerialStudio::OperationMode& m_operationMode;
   IIngestBinder& m_binder;
   ReplyCapture& m_replyCapture;
   const DeviceTable& m_devices;

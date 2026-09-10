@@ -68,9 +68,9 @@ static void boxBlurHorizontal(const QImage& src, QImage& dst, int radius)
       }
       const int64_t recip = inv[n];
       drow[x]             = qRgba(static_cast<int>((r * recip) >> kBlurReciprocalShift),
-                                  static_cast<int>((g * recip) >> kBlurReciprocalShift),
-                                  static_cast<int>((b * recip) >> kBlurReciprocalShift),
-                                  static_cast<int>((a * recip) >> kBlurReciprocalShift));
+                      static_cast<int>((g * recip) >> kBlurReciprocalShift),
+                      static_cast<int>((b * recip) >> kBlurReciprocalShift),
+                      static_cast<int>((a * recip) >> kBlurReciprocalShift));
     }
   }
 }
