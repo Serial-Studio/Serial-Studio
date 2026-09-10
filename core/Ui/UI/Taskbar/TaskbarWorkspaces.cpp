@@ -127,10 +127,10 @@ QVariantList UI::TaskbarWorkspaces::model() const
       continue;
 
     QVariantMap node;
-    const bool fixedIcon             = ws.icon.isEmpty();
-    const auto icon                  = fixedIcon
-                                       ? registry.icon(QStringLiteral("widgets"), QStringLiteral("workspace"), 16)
-                                       : Misc::IconEngine::resolveActionIconSource(ws.icon);
+    const bool fixedIcon = ws.icon.isEmpty();
+    const auto icon = fixedIcon
+                      ? registry.icon(QStringLiteral("widgets"), QStringLiteral("workspace"), 16)
+                      : Misc::IconEngine::resolveActionIconSource(ws.icon);
     node[QStringLiteral("isFolder")] = false;
     node[QStringLiteral("id")]       = ws.workspaceId;
     node[QStringLiteral("text")]     = ws.title;

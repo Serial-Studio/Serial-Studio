@@ -1,0 +1,17 @@
+<!--
+  SPDX-FileCopyrightText: 2020-2026 Alex Spataru <alex@serial-studio.com>
+  SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial
+
+  Misc::IconRegistry's constructor asserts that :/icons carries a populated catalog with a
+  "system" category, so any suite that binds the Core service set needs one in the binary. The
+  four tiers of the real missing.svg are aliased in rather than copied: no fixture asset to keep
+  in sync, and 3.8 MB of application icons stay out of the unit tier.
+-->
+<RCC>
+    <qresource prefix="/">
+        <file alias="icons/system/16/missing.svg">../../rcc/icons/system/16/missing.svg</file>
+        <file alias="icons/system/24/missing.svg">../../rcc/icons/system/24/missing.svg</file>
+        <file alias="icons/system/32/missing.svg">../../rcc/icons/system/32/missing.svg</file>
+        <file alias="icons/system/48/missing.svg">../../rcc/icons/system/48/missing.svg</file>
+    </qresource>
+</RCC>

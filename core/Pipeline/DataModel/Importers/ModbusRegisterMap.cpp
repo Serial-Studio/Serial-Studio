@@ -327,7 +327,7 @@ static void mapCsvHeaderColumn(const QString& col, int index, CsvColumnMap& map)
     obj.value(QStringLiteral("units")).toString(obj.value(QStringLiteral("unit")).toString());
   entry.min    = SerialStudio::toDouble(obj.value(QStringLiteral("min")), 0.0);
   entry.max    = SerialStudio::toDouble(obj.value(QStringLiteral("max")),
-                                     entry.dataType == QLatin1String("bool") ? 1.0 : 65535.0);
+                                        entry.dataType == QLatin1String("bool") ? 1.0 : 65535.0);
   entry.scale  = SerialStudio::toDouble(obj.value(QStringLiteral("scale")), 1.0);
   entry.offset = SerialStudio::toDouble(obj.value(QStringLiteral("offset")), 0.0);
 

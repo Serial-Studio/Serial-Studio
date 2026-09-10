@@ -56,8 +56,8 @@ struct Candidate {
   int gap           = 0;
   bool canvasTarget = false;
   bool afterPair    = false;
-  QRect pairA;
-  QRect pairB;
+  QRect pairA{};
+  QRect pairB{};
 };
 
 }  // namespace detail

@@ -81,9 +81,9 @@ QJsonObject compactProjectSnapshotResult(const QJsonObject& projectResult,
   compact[QStringLiteral("datasetCount")] = snapshot.value(QStringLiteral("datasetCount")).toInt();
   compact[QStringLiteral("projectEpoch")] = projectResult.value(QStringLiteral("projectEpoch"));
   compact[QStringLiteral("summary")]      = snapshot.value(QStringLiteral("_explanations"))
-                                         .toObject()
-                                         .value(QStringLiteral("summary"))
-                                         .toString();
+                                              .toObject()
+                                              .value(QStringLiteral("summary"))
+                                              .toString();
 
   QJsonArray groups;
   for (const auto& value : snapshot.value(QStringLiteral("groups")).toArray()) {

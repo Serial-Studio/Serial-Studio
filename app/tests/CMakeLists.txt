@@ -144,6 +144,7 @@ function(ss_add_unit_test NAME)
 
   add_executable(${NAME} ${resolved_sources})
   target_link_libraries(${NAME} PRIVATE Qt6::Test ${SS_TEST_LIBS})
+  target_include_directories(${NAME} PRIVATE ${SS_CORE_SRC})
   ss_relax_vptr_sanitizer(${NAME})
   add_test(NAME ${NAME} COMMAND ${NAME})
 
@@ -214,6 +215,7 @@ function(ss_add_fuzz_target NAME)
     add_test(NAME ${NAME} COMMAND ${NAME})
   endif()
 
+  target_include_directories(${NAME} PRIVATE ${SS_CORE_SRC})
   ss_relax_vptr_sanitizer(${NAME})
 
   list(APPEND SS_UNIT_TEST_TARGETS ${NAME})
@@ -2072,6 +2074,12 @@ ss_add_unit_test(tst_sentinel_probe
 # (J3, M10). WorkspaceManager::setTemporaryPath is what lets the suite redirect the sandbox at a
 # QTemporaryDir; it pulls QtWidgets for the folder picker it also owns.
 #
+# The suite binds a Core service set the way the composition root does, so Misc::IconRegistry
+# constructs here and asserts on an empty :/icons: support/core-icons.qrc aliases four real system
+# icons in to satisfy it without pulling the application resource tree into the unit tier.
+#
+qt_add_resources(SS_TEST_ICONS_RCC ${CMAKE_CURRENT_SOURCE_DIR}/support/core-icons.qrc)
+
 ss_add_unit_test(tst_file_sandbox
   SOURCES tst_file_sandbox.cpp
           ${SS_CORE_SRC}/Ui/AI/FileSandbox.cpp
@@ -2084,6 +2092,9 @@ ss_add_unit_test(tst_file_sandbox
           Qt6::Widgets
           SerialStudio::Core
 )
+if(TARGET tst_file_sandbox)
+  target_sources(tst_file_sandbox PRIVATE ${SS_TEST_ICONS_RCC})
+endif()
 
 #
 # The three streaming reply state machines against canned HTTP responses (J5/J6/J8). KeyVault.cpp

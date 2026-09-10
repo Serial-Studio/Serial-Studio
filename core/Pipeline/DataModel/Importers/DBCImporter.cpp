@@ -663,7 +663,7 @@ QString DataModel::DBCImporter::generateMessageSpec(const QCanMessageDescription
 
   QString out  = heading + QLatin1Char('\n');
   out         += QStringLiteral("  [0x%1] = {\n    table = %2,\n    signals = {\n")
-           .arg(hex, luaQuote(tableNameFor(message)));
+                   .arg(hex, luaQuote(tableNameFor(message)));
 
   for (const auto& entry : entries)
     out += signalSpecLine(entry, rootSelector);

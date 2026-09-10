@@ -170,7 +170,7 @@ QJsonObject IO::Drivers::ModbusProjectGenerator::buildProject(
     group.groupId = group_id;
     group.widget  = QStringLiteral("datagrid");
     group.title   = QStringLiteral("%1 @ %2").arg(registerTypeName(reg_group.registerType),
-                                                QString::number(reg_group.startAddress));
+                                                  QString::number(reg_group.startAddress));
 
     const bool is_reg = (reg_group.registerType <= 1);
 
@@ -309,28 +309,28 @@ QString IO::Drivers::ModbusProjectGenerator::buildFrameParser() const
 
     const QString keyword  = (g == 0) ? QStringLiteral("if") : QStringLiteral("elseif");
     code                  += QStringLiteral("  %1 currentGroup == %2 then -- %3 @ %4, count=%5\n")
-              .arg(keyword,
-                   QString::number(g),
-                   registerTypeLabel(reg_group.registerType),
-                   QString::number(reg_group.startAddress),
-                   QString::number(reg_group.count));
+                               .arg(keyword,
+                                    QString::number(g),
+                                    registerTypeLabel(reg_group.registerType),
+                                    QString::number(reg_group.startAddress),
+                                    QString::number(reg_group.count));
 
     for (quint16 i = 0; i < reg_group.count; ++i) {
       if (is_reg) {
         const int byte_off  = i * 2 + 1;
         code               += QStringLiteral("    values[%1] = (data[%2] << 8) | data[%3]\n")
-                  .arg(dataset_offset + i + 1)
-                  .arg(byte_off)
-                  .arg(byte_off + 1);
+                                .arg(dataset_offset + i + 1)
+                                .arg(byte_off)
+                                .arg(byte_off + 1);
       }
 
       else {
         const int byte_idx  = i / 8 + 1;
         const int bit_idx   = i % 8;
         code               += QStringLiteral("    values[%1] = (data[%2] >> %3) & 1\n")
-                  .arg(dataset_offset + i + 1)
-                  .arg(byte_idx)
-                  .arg(bit_idx);
+                                .arg(dataset_offset + i + 1)
+                                .arg(byte_idx)
+                                .arg(bit_idx);
       }
     }
 

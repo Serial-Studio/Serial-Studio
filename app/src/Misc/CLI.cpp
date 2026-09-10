@@ -412,7 +412,6 @@ CLI::ProcessResult CLI::runHotpathBenchmark()
   return rc == EXIT_SUCCESS ? ProcessResult::ExitSuccess : ProcessResult::ExitFailure;
 }
 
-#ifdef BUILD_COMMERCIAL
 /**
  * @brief Tears a headless CLI session down in the pinned order main() uses for the GUI run: the
  *        Sessions wiring, then every frame-consumer worker, then the adopted core modules. These
@@ -426,6 +425,7 @@ static void teardownHeadlessSession()
   SessionContext::current().shutdown();
 }
 
+#ifdef BUILD_COMMERCIAL
 /**
  * @brief Runs the spec-0044 verifier and exits: builds the pinned module order plus the
  *        headless session wiring, since the GUI wiring phase never runs here. Exit code is

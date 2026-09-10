@@ -28,10 +28,17 @@
 
 #include "AI/Conversation/AsyncToolRunner.h"
 #include "AI/FileSandbox.h"
+#include "Core/Bus/MessageBus.h"
+#include "Core/IconRegistry.h"
+#include "Core/Services.h"
+#include "Core/TimerEvents.h"
+#include "Core/Translator.h"
 #include "Core/WorkspaceManager.h"
 
 // The sandbox is a singleton over the live workspace, so the fixture points WorkspaceManager at a
-// temporary directory for the whole suite and every case works inside it.
+// temporary directory for the whole suite and every case works inside it. The sandbox reads the
+// workspace through the root-bound service set (spec 0077), so the fixture plays composition root
+// and binds one over the same four Core singletons ModuleManager::bootstrapCoreServices() uses.
 
 /**
  * @brief Pins the assistant's filesystem trust boundary -- what a model-supplied path may reach
@@ -73,6 +80,14 @@ void TstFileSandbox::initTestCase()
   QVERIFY(m_workspace.isValid());
   QVERIFY(m_outside.isValid());
 
+  static Core::Bus::MessageBus bus;
+  static Core::Services services{bus,
+                                 Misc::Translator::instance(),
+                                 Misc::TimerEvents::instance(),
+                                 Misc::WorkspaceManager::instance(),
+                                 Misc::IconRegistry::instance()};
+  Core::bindServices(&services);
+
   Misc::WorkspaceManager::instance().setTemporaryPath(m_workspace.path());
   QVERIFY(QDir(m_workspace.path()).mkpath(QStringLiteral("AI")));
 
@@ -88,12 +103,14 @@ void TstFileSandbox::initTestCase()
 }
 
 /**
- * @brief Restores the real workspace so nothing else in the run inherits the fixture's tree.
+ * @brief Restores the real workspace and releases the service set so nothing else in the run
+ *        inherits the fixture's tree or its binding.
  */
 void TstFileSandbox::cleanupTestCase()
 {
   AI::FileSandbox::instance().clearDroppedPaths();
   Misc::WorkspaceManager::instance().clearTemporaryPath();
+  Core::bindServices(nullptr);
 }
 
 //--------------------------------------------------------------------------------------------------

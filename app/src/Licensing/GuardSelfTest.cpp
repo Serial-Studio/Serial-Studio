@@ -106,7 +106,7 @@
 
   int fails  = 0;
   fails     += expect(QStringLiteral("synthetic trial token validates"),
-                  Licensing::CommercialToken::current().isValid());
+                      Licensing::CommercialToken::current().isValid());
   fails     += expect(QStringLiteral("activated() opens with trial token"), gatesOpen());
 
   auto tampered = token;
