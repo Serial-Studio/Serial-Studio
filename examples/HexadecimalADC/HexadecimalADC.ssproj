@@ -8,7 +8,7 @@
             "repeatCount": 3,
             "sourceId": 0,
             "timerIntervalMs": 5,
-            "timerMode": 1,
+            "timerMode": 3,
             "title": "Data Polling",
             "txData": "poll-data",
             "txEncoding": 0
@@ -446,16 +446,12 @@
                 "baudRate": 115200,
                 "dataBitsIndex": 3,
                 "deviceId": {
-                    "description": "USB Serial Device",
-                    "pid": "0043",
-                    "portName": "COM7",
-                    "serial": "1344A4741303512029F7",
-                    "vid": "2341"
+                    "portName": "cu.debug-console"
                 },
                 "dtr": true,
                 "flowControlIndex": 0,
                 "parityIndex": 0,
-                "portIndex": 2,
+                "portIndex": 1,
                 "stopBitsIndex": 0
             },
             "decoder": 3,
@@ -470,39 +466,6 @@
         }
     ],
     "title": "Hexadecimal ADC",
-    "treeExpansion": {
-        "": false,
-        "Hexadecimal ADC": true,
-        "Hexadecimal ADC/ ": false,
-        "Hexadecimal ADC/Control Loop": false,
-        "Hexadecimal ADC/Dashboard Widgets": true,
-        "Hexadecimal ADC/Dashboard Widgets/ADC Readings": true,
-        "Hexadecimal ADC/Dashboard Widgets/ADC Readings/ADC 0": false,
-        "Hexadecimal ADC/Dashboard Widgets/ADC Readings/ADC 1": false,
-        "Hexadecimal ADC/Dashboard Widgets/ADC Readings/ADC 2": false,
-        "Hexadecimal ADC/Dashboard Widgets/ADC Readings/ADC 3": false,
-        "Hexadecimal ADC/Dashboard Widgets/ADC Readings/ADC 4": false,
-        "Hexadecimal ADC/Dashboard Widgets/ADC Readings/ADC 5": false,
-        "Hexadecimal ADC/Data Polling": false,
-        "Hexadecimal ADC/Device A": true,
-        "Hexadecimal ADC/Device A/Frame Parser": false,
-        "Hexadecimal ADC/Disable Pull-Up Resistor": false,
-        "Hexadecimal ADC/Enable Pull-Up Resistor": false,
-        "Hexadecimal ADC/InfluxDB Sink": false,
-        "Hexadecimal ADC/MQTT Publisher": false,
-        "Hexadecimal ADC/Variables": true,
-        "Hexadecimal ADC/Variables/Dataset Values": false,
-        "Hexadecimal ADC/Workspaces": true,
-        "Hexadecimal ADC/Workspaces/ADC Readings": false,
-        "Hexadecimal ADC/Workspaces/All Data": false,
-        "Hexadecimal ADC/Workspaces/Overview": false
-    },
-    "widgetSettings": {
-        "externalWindows": {
-            "data": [
-            ]
-        }
-    },
     "writerVersion": "4.1.0",
     "writerVersionAtCreation": "4.0.3"
 }

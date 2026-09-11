@@ -167,7 +167,11 @@ def _publish(publisher, verb: str, node: str, payload: bytes) -> None:
 
 
 def _collect_values(api_client, seconds: float) -> dict:
-    """Merges every delta frame seen in the window into one {wire index: value} snapshot."""
+    """Merges every delta frame seen in the window into one {wire index: value} snapshot.
+
+    io.getLatestFrame holds ONE frame, and a birth publishes only its own node's slots, so the
+    window has to open before the next birth overwrites the frame under inspection.
+    """
     merged = {}
     deadline = time.time() + seconds
     seen = set()
@@ -330,11 +334,9 @@ def test_a_broker_cycle_keeps_every_slot_index(
     """
     publisher = sparkplug_publisher()
     _publish(publisher, "NBIRTH", NODE_A, _payload(0, [_metric("a", 1, 11.0)]))
-    time.sleep(0.4)
+    before = _collect_values(api_client, 1.0)
     _publish(publisher, "NBIRTH", NODE_B, _payload(0, [_metric("b", 1, 22.0)]))
-    time.sleep(0.6)
-
-    before = _collect_values(api_client, 2.0)
+    before.update(_collect_values(api_client, 1.0))
     index_a = next((i for i, v in before.items() if v == 11.0), None)
     index_b = next((i for i, v in before.items() if v == 22.0), None)
     assert index_a is not None, f"node A's metric never arrived: {before}"
@@ -352,11 +354,9 @@ def test_a_broker_cycle_keeps_every_slot_index(
 
     publisher = sparkplug_publisher()
     _publish(publisher, "NBIRTH", NODE_B, _payload(0, [_metric("b", 7, 222.0)]))
-    time.sleep(0.4)
+    after = _collect_values(api_client, 1.5)
     _publish(publisher, "NBIRTH", NODE_A, _payload(0, [_metric("a", 7, 111.0)]))
-    time.sleep(0.6)
-
-    after = _collect_values(api_client, 2.5)
+    after.update(_collect_values(api_client, 1.5))
     assert after.get(index_a) == 111.0, (
         f"index {index_a} was node A's metric and now carries {after.get(index_a)}: "
         "the broker cycle renumbered the slot table"

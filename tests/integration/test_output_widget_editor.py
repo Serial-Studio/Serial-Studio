@@ -26,6 +26,8 @@ from pathlib import Path
 
 import pytest
 
+from utils.api_client import APIError
+
 # ---------------------------------------------------------------------------
 # Structural guarantee (no running app required)
 # ---------------------------------------------------------------------------
@@ -80,14 +82,28 @@ def test_preview_uses_a_zero_interval_target():
 # ---------------------------------------------------------------------------
 
 
-def _first_output_widget(api_client):
-    """Return (groupId, widgetId) of any output widget in the loaded project."""
-    status = api_client.command("project.get", {})
-    for group in status.get("groups", []):
-        for widget in group.get("outputWidgets", []):
-            return group.get("groupId", 0), widget.get("widgetId", 0)
+def _fresh_output_widget(api_client):
+    """Return (groupId, widgetId) of a Button just added to the loaded project.
 
-    pytest.skip("loaded project has no output widget to exercise")
+    Adding rather than searching keeps the test independent of whatever project the suite left
+    loaded. The model files a new control into the project's output group (creating one when
+    none exists) whatever groupId the add names, so the widget is located after the fact.
+    """
+    group_id = api_client.add_group("Output feedback", widget_type=0)
+    try:
+        api_client.add_output_widget(group_id, 0)
+    except APIError as error:
+        if "licen" in str(error).lower() or "commercial" in str(error).lower():
+            pytest.skip(f"output widgets are gated on this build: {error}")
+        raise
+
+    config = api_client.command("project.exportJson")["config"]
+    for index, group in enumerate(config.get("groups", [])):
+        widgets = group.get("outputWidgets", [])
+        if widgets:
+            return index, len(widgets) - 1
+
+    pytest.fail("project.outputWidget.add reported success but no group holds a widget")
 
 
 @pytest.mark.integration
@@ -99,7 +115,7 @@ def test_api_still_accepts_an_invalid_transmit_script(api_client):
     first if the gate had leaked, so this asserts the permissive behaviour is
     still intact - and that the script really was stored.
     """
-    group_id, widget_id = _first_output_widget(api_client)
+    group_id, widget_id = _fresh_output_widget(api_client)
     broken = "function transmit(value) {\n  return [0x01,\n}"
 
     api_client.command(
@@ -119,6 +135,8 @@ def test_dry_run_reports_the_shared_verdict(api_client):
     T3: the dry run's response shape is frozen, and its verdict now comes from
     the same checker the editor reads. A syntax error keeps ok/compileError/line;
     a wrong entry point stays a distinct outcome rather than a compile error.
+    The sample run returns a byte-string, the payload form the manual documents
+    (a plain array of numbers transmits nothing).
     """
     syntax_error = api_client.command(
         "project.outputWidget.dryRun", {"code": "function transmit(v) { return [1,"}
@@ -135,7 +153,10 @@ def test_dry_run_reports_the_shared_verdict(api_client):
 
     good = api_client.command(
         "project.outputWidget.dryRun",
-        {"code": "function transmit(v) { return [1, v & 0xFF]; }", "inputValue": 7},
+        {
+            "code": "function transmit(v) { return String.fromCharCode(1, v & 0xFF); }",
+            "inputValue": 7,
+        },
     )
     assert good["ok"] is True
     assert good["hasTransmit"] is True

@@ -24,12 +24,26 @@ from pathlib import Path
 
 import pytest
 
+from utils.api_client import APIError
+
 # ---------------------------------------------------------------------------
 # Structural guarantees (no running app required)
 # ---------------------------------------------------------------------------
 
 _REPO_ROOT = Path(__file__).resolve().parents[2]
 _OUTPUT_DIR = _REPO_ROOT / "core" / "Ui" / "UI" / "Widgets" / "Output"
+
+
+def _function_body(text: str, name: str) -> str:
+    """The brace-delimited body of the member function `name` in a class .cpp.
+
+    Anchoring on the definition rather than the first mention keeps the doc comments (which
+    legitimately name the setter the function avoids) out of the scan.
+    """
+    definition = text.index(f"::{name}(")
+    opening = text.index("{", definition)
+    closing = text.index("\n}\n", opening)
+    return text[opening:closing]
 
 
 def test_state_binding_owns_no_transmit_target():
@@ -64,8 +78,8 @@ def test_controls_apply_feedback_without_their_own_setters():
     }
     for name, setter in forbidden.items():
         text = (_OUTPUT_DIR / name).read_text(encoding="utf-8")
-        start = text.index("applyStateVerdict")
-        assert setter not in text[start:], f"{name} transmits from its feedback path"
+        body = _function_body(text, "applyStateVerdict")
+        assert setter not in body, f"{name} transmits from its feedback path"
 
 
 def test_preview_builds_an_unbound_control():
@@ -81,14 +95,28 @@ def test_preview_builds_an_unbound_control():
 # ---------------------------------------------------------------------------
 
 
-def _first_output_widget(api_client):
-    """Return (groupId, widgetId) of any output widget in the loaded project."""
-    status = api_client.command("project.get", {})
-    for group in status.get("groups", []):
-        for widget in group.get("outputWidgets", []):
-            return group.get("groupId", 0), widget.get("widgetId", 0)
+def _fresh_output_widget(api_client):
+    """Return (groupId, widgetId) of a Button just added to the loaded project.
 
-    pytest.skip("loaded project has no output widget to exercise")
+    Adding rather than searching keeps the test independent of whatever project the suite left
+    loaded. The model files a new control into the project's output group (creating one when
+    none exists) whatever groupId the add names, so the widget is located after the fact.
+    """
+    group_id = api_client.add_group("Output feedback", widget_type=0)
+    try:
+        api_client.add_output_widget(group_id, 0)
+    except APIError as error:
+        if "licen" in str(error).lower() or "commercial" in str(error).lower():
+            pytest.skip(f"output widgets are gated on this build: {error}")
+        raise
+
+    config = api_client.command("project.exportJson")["config"]
+    for index, group in enumerate(config.get("groups", [])):
+        widgets = group.get("outputWidgets", [])
+        if widgets:
+            return index, len(widgets) - 1
+
+    pytest.fail("project.outputWidget.add reported success but no group holds a widget")
 
 
 @pytest.mark.integration
@@ -96,7 +124,7 @@ def test_binding_round_trips(api_client):
     """
     AC7: a binding survives a write/read cycle with the same source selected.
     """
-    group_id, widget_id = _first_output_widget(api_client)
+    group_id, widget_id = _fresh_output_widget(api_client)
 
     api_client.command(
         "project.outputWidget.update",
@@ -125,7 +153,7 @@ def test_an_unbound_widget_stays_unbound(api_client):
     AC4: clearing the source leaves the widget unbound, and the serializer omits the whole block
     so a project that never had a binding is byte-identical to one that had it removed.
     """
-    group_id, widget_id = _first_output_widget(api_client)
+    group_id, widget_id = _fresh_output_widget(api_client)
 
     api_client.command(
         "project.outputWidget.update",

@@ -334,7 +334,7 @@
             "visibleCurves": null
         },
         "6:1:-1": {
-            "anaglyphEnabled": false,
+            "anaglyphEnabled": true,
             "autoCenter": false,
             "eyeSeparation": 0.066,
             "interpolationEnabled": true,

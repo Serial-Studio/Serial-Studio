@@ -135,6 +135,43 @@ static void appendUnknownFieldsWarning(QJsonObject& result,
 }
 
 /**
+ * @brief Applies the spec-0080 state binding (where a control reads the state it displays) under
+ *        the same keys the project file uses, so a binding written here reads back through
+ *        project.outputWidget.get and survives a save.
+ */
+static void applyOutputStateFields(DataModel::OutputWidget& w,
+                                   const QJsonObject& params,
+                                   QSet<QString>& consumed)
+{
+  const auto take = [&](const QString& key) -> bool {
+    if (!params.contains(key))
+      return false;
+
+    consumed.insert(key);
+    return true;
+  };
+
+  if (take(Keys::OutputStateSource))
+    w.stateSource =
+      static_cast<DataModel::OutputStateSource>(params.value(Keys::OutputStateSource).toInt());
+
+  if (take(Keys::OutputStateDatasetId))
+    w.stateDatasetId = params.value(Keys::OutputStateDatasetId).toInt();
+
+  if (take(Keys::OutputStateTable))
+    w.stateTable = params.value(Keys::OutputStateTable).toString().simplified();
+
+  if (take(Keys::OutputStateVariable))
+    w.stateVariable = params.value(Keys::OutputStateVariable).toString().simplified();
+
+  if (take(Keys::OutputStateOnValue))
+    w.stateOnValue = params.value(Keys::OutputStateOnValue).toString();
+
+  if (take(Keys::OutputStateConfirmMs))
+    w.stateConfirmMs = params.value(Keys::OutputStateConfirmMs).toInt();
+}
+
+/**
  * @brief Applies every patchable output-widget field present in @p params, recording each key it
  *        consumed so the caller can warn about the rest. Finishes through DataModel::normalize, so
  *        this door enforces what read() enforces for a project file: an unclamped encoding fell
@@ -197,6 +234,7 @@ static void applyOutputWidgetFields(DataModel::OutputWidget& w,
   if (take(QStringLiteral("initialValue")))
     w.initialValue = SerialStudio::toDouble(params.value(QStringLiteral("initialValue")));
 
+  applyOutputStateFields(w, params, consumed);
   DataModel::normalize(w);
 }
 
@@ -309,10 +347,16 @@ void API::Handlers::ProjectUpdateCommands::registerCommands()
     QStringLiteral("Patch output-widget fields by id (params: groupId, widgetId, plus any "
                    "of title, icon, transmitFunction, sourceId, txEncoding, monoIcon, "
                    "checkable, color, size, onLabel, offLabel, minValue, maxValue, "
-                   "stepSize, initialValue). A checkable button latches and transmits 1 "
-                   "(on) / 0 (off) like a toggle, instead of pulsing a single value on "
-                   "click; color is a hex fill override (empty = group accent) and size "
-                   "is 0=small, 1=normal, 2=large, 3=extra large. The transmitFunction is "
+                   "stepSize, initialValue, stateSource, stateDatasetId, stateTable, "
+                   "stateVariable, stateOnValue, stateConfirmMs). A checkable button "
+                   "latches and transmits 1 (on) / 0 (off) like a toggle, instead of "
+                   "pulsing a single value on click; color is a hex fill override (empty "
+                   "= group accent) and size is 0=small, 1=normal, 2=large, 3=extra "
+                   "large. stateSource binds the displayed state to feedback (0=none, "
+                   "1=dataset via stateDatasetId, 2=variable via stateTable/"
+                   "stateVariable); stateOnValue is the value that reads as on (empty = "
+                   "any non-zero) and stateConfirmMs how long a request stays "
+                   "outstanding. The transmitFunction is "
                    "**JavaScript only** -- runs in QJSEngine to convert UI state into "
                    "device bytes. **Call meta.fetchScriptingDocs{kind:'output_widget_js'} "
                    "before authoring** for the function signature (transmit(value) "

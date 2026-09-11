@@ -3102,9 +3102,13 @@ Read the configuration of an output widget by id. Use this before rewriting
   "initialValue": 0,
   "sourceId": 0,
   "txEncoding": 0,
-  "transmitFunction": "function transmit(value) { return value ? [0x01] : [0x00]; }"
+  "transmitFunction": "function transmit(value) { return value ? [0x01] : [0x00]; }",
+  "stateSource": 0
 }
 ```
+A widget bound to feedback also reports `stateConfirmMs`, `stateOnValue`, and
+either `stateDatasetId` (`stateSource` 1) or `stateTable` and `stateVariable`
+(`stateSource` 2).
 
 #### 🟢 `project.outputWidget.update`
 Patch any subset of output-widget fields by id.
@@ -3135,6 +3139,17 @@ Patch any subset of output-widget fields by id.
 - `maxValue` (double, optional): Maximum allowed value
 - `stepSize` (double, optional): Value increment step
 - `initialValue` (double, optional): Initial widget value
+- `stateSource` (int, optional): Where the control reads the state it
+  displays (0 = none, 1 = a dataset, 2 = a variable)
+- `stateDatasetId` (int, optional): Unique id of the dataset driving the
+  display when `stateSource` is 1
+- `stateTable` (string, optional): Data table holding the state variable when
+  `stateSource` is 2
+- `stateVariable` (string, optional): Variable within `stateTable`
+- `stateOnValue` (string, optional): Value that reads as on; empty means any
+  non-zero value
+- `stateConfirmMs` (int, optional): How long a request stays outstanding
+  before the displayed state falls back to the feedback, in milliseconds
 
 **Returns:**
 ```json

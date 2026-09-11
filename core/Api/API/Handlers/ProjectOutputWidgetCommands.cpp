@@ -89,7 +89,9 @@ void API::Handlers::ProjectOutputWidgetCommands::registerCommands()
     QStringLiteral("Read the current configuration of an output widget "
                    "(params: groupId, widgetId). Returns title, icon, type, "
                    "checkable, color, size, on/offLabel, min/max/step/initialValue, "
-                   "transmitFunction. Use BEFORE "
+                   "transmitFunction, and the state binding (stateSource with its "
+                   "stateDatasetId or stateTable/stateVariable, stateOnValue, "
+                   "stateConfirmMs) when one is set. Use BEFORE "
                    "rewriting the transmitFunction so you preserve the user's "
                    "current ranges and labels."),
     makeSchema({
@@ -257,5 +259,19 @@ API::CommandResponse API::Handlers::ProjectOutputWidgetCommands::outputWidgetGet
   result[Keys::SourceId]                     = w.sourceId;
   result[QStringLiteral("txEncoding")]       = w.txEncoding;
   result[QStringLiteral("transmitFunction")] = w.transmitFunction;
+  result[Keys::OutputStateSource]            = static_cast<int>(w.stateSource);
+  if (w.stateSource != DataModel::OutputStateSource::None) {
+    result[Keys::OutputStateConfirmMs] = w.stateConfirmMs;
+    result[Keys::OutputStateOnValue]   = w.stateOnValue;
+  }
+
+  if (w.stateSource == DataModel::OutputStateSource::Dataset)
+    result[Keys::OutputStateDatasetId] = w.stateDatasetId;
+
+  if (w.stateSource == DataModel::OutputStateSource::Table) {
+    result[Keys::OutputStateTable]    = w.stateTable;
+    result[Keys::OutputStateVariable] = w.stateVariable;
+  }
+
   return CommandResponse::makeSuccess(id, result);
 }

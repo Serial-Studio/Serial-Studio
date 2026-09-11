@@ -30,7 +30,7 @@
     },
     {
       "path": "examples/HexadecimalADC/HexadecimalADC.ssproj",
-      "sha256": "0133ec4d6841afd55247b57c0c7eddecd6558499ffdc6bec19e2a908ec316e7e"
+      "sha256": "87859a7a367c92a15266d458a5e0b51d6aaf54377d75a5969c1e22b6fa0d0c72"
     },
     {
       "path": "examples/Hydrogen/Hydrogen.ssproj",
@@ -54,7 +54,7 @@
     },
     {
       "path": "examples/LorenzAttractor/LorenzAttractor.ssproj",
-      "sha256": "a996043a878e3b5bde861a607112a92b0ec7dccb74e2a53e032d499c575d5eda"
+      "sha256": "e0acf8acffd924636fb392048056e681d16c6cf07034018190a2545f1ff126f8"
     },
     {
       "path": "examples/MPU6050/MPU6050.ssproj",

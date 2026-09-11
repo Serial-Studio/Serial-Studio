@@ -89,7 +89,7 @@ Each test connects to Serial Studio over TCP, configures it through the API, str
 | `test_driver_drops.py`               | TCP peer close, reconnect after a drop, WebSocket server close, serial pty removal (needs `socat` / `websockets` for two of the four) |
 | `test_connection_verdicts.py`        | The spec-0050 verdict matrix over the API; TCP is treated as an **async** bus (read the verdict from the status, not from `io.connect`'s response) |
 | `test_audio_loopback.py`             | Capture survives with no output device; a written tone is accepted whole by the playback ring |
-| `test_modbus_groups.py`              | Stub Modbus TCP server with an injected dropped reply: every published frame is a valid RTU frame, a dropped poll never puts two group-B frames back to back |
+| `test_modbus_groups.py`              | Stub Modbus TCP server with an injected dropped reply, frames read one-per-sample off `stream.subscribe` through a CRC-checking JS parser: every published frame is a valid RTU frame, a dropped poll never puts two group-B frames back to back |
 | `test_sparkplug_host.py`             | Own mosquitto instance: every wire index survives a broker cycle when nodes re-birth in reverse order |
 | `test_script_deadlines.py`           | A looping script on every API-reachable surface times out and the app still answers (parser, transform per lane, control script, output widget, painter, dry runs) |
 | `test_project_integrity.py`          | Spec 0075 H-series: a display setting never writes the file, an action payload edit dirties and persists, template+params undo as one step, a new source's parser is not source 0's, the five legacy fixtures migrate, a corrupt external write leaves the document attached |

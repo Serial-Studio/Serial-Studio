@@ -44,6 +44,21 @@ def _snapshot(api_client) -> dict:
     return api_client.command("project.snapshot", {"sections": []})["snapshot"]
 
 
+def _wait_for_modified(api_client, timeout_s: float = 5.0) -> dict:
+    """Polls the snapshot until the document reports modified, or the timeout lapses.
+
+    The on-disk watcher debounces by 500 ms on top of the platform's notification latency, so a
+    fixed sleep is either wasteful or, on a loaded runner, short.
+    """
+    deadline = time.time() + timeout_s
+    snapshot = _snapshot(api_client)
+    while snapshot.get("modified") is not True and time.time() < deadline:
+        time.sleep(0.1)
+        snapshot = _snapshot(api_client)
+
+    return snapshot
+
+
 def _file_hash(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
@@ -361,9 +376,8 @@ def test_corrupt_external_write_keeps_document_attached(
     path = _seed_saved_project(api_client, tmp_path, "ExternalWrite")
 
     path.write_text("{ this is not valid json", encoding="utf-8")
-    time.sleep(1.0)
 
-    snapshot = _snapshot(api_client)
+    snapshot = _wait_for_modified(api_client)
     assert snapshot["filePath"] == str(path)
     assert snapshot["modified"] is True
 
