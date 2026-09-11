@@ -54,7 +54,7 @@
 static constexpr qint64 kReorderWindowNs = 250'000'000LL;
 
 // Distinct names tried before a session gives up on opening a recording for this second
-static constexpr int kMaxNameAttempts = 64;
+static constexpr int kMaxCsvNameAttempts = 64;
 
 /**
  * @brief Escapes a CSV field per RFC 4180 and neutralizes leading formula-injection chars.
@@ -370,7 +370,7 @@ void CSV::ExportWorker::writeSnapshotRowNow(
  */
 bool CSV::ExportWorker::openUniqueFile(const QDir& dir, const QString& base)
 {
-  for (int attempt = 1; attempt <= kMaxNameAttempts; ++attempt) {
+  for (int attempt = 1; attempt <= kMaxCsvNameAttempts; ++attempt) {
     const QString name = (attempt == 1)
                          ? QStringLiteral("%1.csv").arg(base)
                          : QStringLiteral("%1_%2.csv").arg(base, QString::number(attempt));

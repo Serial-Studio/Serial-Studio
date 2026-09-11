@@ -59,7 +59,7 @@
 #ifdef BUILD_COMMERCIAL
 
 // Distinct names tried before a session gives up on reserving a measurement for this second
-static constexpr int kMaxNameAttempts = 64;
+static constexpr int kMaxMf4NameAttempts = 64;
 
 /**
  * @brief Reserves a free ".mf4" path under @p dir by creating it exclusively, so mdflib is handed
@@ -69,7 +69,7 @@ static constexpr int kMaxNameAttempts = 64;
  */
 [[nodiscard]] static QString reserveMf4Path(const QDir& dir, const QString& base)
 {
-  for (int attempt = 1; attempt <= kMaxNameAttempts; ++attempt) {
+  for (int attempt = 1; attempt <= kMaxMf4NameAttempts; ++attempt) {
     const QString name = (attempt == 1)
                          ? QStringLiteral("%1.mf4").arg(base)
                          : QStringLiteral("%1_%2.mf4").arg(base, QString::number(attempt));

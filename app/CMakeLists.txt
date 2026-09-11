@@ -392,6 +392,7 @@ set(QML_SOURCES
   qml/ProjectEditor/Dialogs/ProtoPreviewDialog.qml
   qml/ProjectEditor/ProjectEditor.qml
   qml/Widgets/Dashboard/Accelerometer.qml
+  qml/Widgets/Dashboard/AlarmFlash.qml
   qml/Widgets/Dashboard/Bar.qml
   qml/Widgets/Dashboard/Clock.qml
   qml/Widgets/Dashboard/Compass.qml
