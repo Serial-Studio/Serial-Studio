@@ -21,6 +21,15 @@ import "../../Widgets/Dashboard/Output" as OutputControls
 Window {
   id: root
 
+  //
+  // Same accent rule as the dashboard panel: the widget's own color, else the dataset accent,
+  // so the preview shows the control the way it will look on the dashboard.
+  //
+  readonly property string widgetColor: preview.widget ? (preview.widget.color || "") : ""
+  readonly property color accentColor: root.widgetColor.length > 0
+                                       ? root.widgetColor
+                                       : SerialStudioHelpers.getDatasetAccentColor()
+
   Widgets.WindowMirror {}
 
   width: 1280
@@ -313,7 +322,7 @@ Window {
     OutputControls.DashboardButton {
       model: preview.model
       widget: preview.widget
-      color: Cpp_ThemeManager.colors["highlight"]
+      color: root.accentColor
     }
   }
 
@@ -323,7 +332,7 @@ Window {
     OutputControls.DashboardSlider {
       model: preview.model
       widget: preview.widget
-      color: Cpp_ThemeManager.colors["highlight"]
+      color: root.accentColor
     }
   }
 
@@ -333,7 +342,7 @@ Window {
     OutputControls.DashboardToggle {
       model: preview.model
       widget: preview.widget
-      color: Cpp_ThemeManager.colors["highlight"]
+      color: root.accentColor
     }
   }
 
@@ -343,7 +352,7 @@ Window {
     OutputControls.DashboardTextField {
       model: preview.model
       widget: preview.widget
-      color: Cpp_ThemeManager.colors["highlight"]
+      color: root.accentColor
     }
   }
 
@@ -353,7 +362,7 @@ Window {
     OutputControls.DashboardKnob {
       model: preview.model
       widget: preview.widget
-      color: Cpp_ThemeManager.colors["highlight"]
+      color: root.accentColor
     }
   }
 
