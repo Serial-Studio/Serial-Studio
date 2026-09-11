@@ -176,9 +176,21 @@ def first_function_or_decl(text: str, max_lines: int = 30):
 
 corpus = []  # list of {id, source, title, body}
 
+# Harvested READMEs and scripts carry SPDX headers. The index is one newline-free JSON line,
+# and `reuse lint` scans it in 64 KiB chunks, so a tag landing in a chunk reads "everything to
+# the chunk end" as the license expression and fails CI depending on where the cut falls.
+LICENSE_BOILERPLATE = re.compile(
+    r"^[ \t#*/<!-]*(?:SPDX-[A-Za-z-]+:|Copyright\s*(?:\(C\)|\xa9)?\s*\d{4}).*$",
+    re.IGNORECASE | re.MULTILINE,
+)
+
+
+def strip_license_boilerplate(text: str) -> str:
+    return LICENSE_BOILERPLATE.sub("", text)
+
 
 def add(source: str, title: str, body: str, doc_id: str):
-    body = body.strip()
+    body = strip_license_boilerplate(body).strip()
     if not body:
         return
     corpus.append(
