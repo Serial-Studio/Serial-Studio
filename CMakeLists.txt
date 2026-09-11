@@ -206,7 +206,10 @@ set(PROJECT_APPCAST             "https://raw.githubusercontent.com/Serial-Studio
 set(PROJECT_DESCRIPTION_FILE    "${PROJECT_ROOT_DIR}/README.md")
 set(PROJECT_FILE_NAME           "${PROJECT_EXECUTABLE}-v${PROJECT_VERSION}")
 set(SS_BUILD_COMMIT "" CACHE STRING "Full commit hash of a CI build; empty for local builds")
-if(NOT SS_BUILD_COMMIT STREQUAL "" AND NOT SS_BUILD_COMMIT MATCHES "^[0-9a-f]{7,40}$")
+string(LENGTH "${SS_BUILD_COMMIT}" SS_BUILD_COMMIT_LENGTH)
+if(NOT SS_BUILD_COMMIT STREQUAL ""
+   AND (NOT SS_BUILD_COMMIT MATCHES "^[0-9a-f]+$"
+        OR SS_BUILD_COMMIT_LENGTH LESS 7 OR SS_BUILD_COMMIT_LENGTH GREATER 40))
   message(FATAL_ERROR
     "SS_BUILD_COMMIT must be empty or a lowercase hexadecimal commit hash (7-40 chars); "
     "got '${SS_BUILD_COMMIT}'. It is spliced into help-page URLs and shown in About, so a "
