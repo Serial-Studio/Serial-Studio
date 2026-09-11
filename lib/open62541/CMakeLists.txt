@@ -67,6 +67,18 @@ if(WIN32)
 endif()
 
 #
+# The amalgamation dispatches its UA_Order comparators through a generic function-pointer type,
+# which UBSan's function check reports at the first call (open62541.c, stringOrder) and
+# halt_on_error turns into an abort of every OPC UA suite. That is upstream's calling convention,
+# not a memory fault, so only that one check is dropped for this target; ASan and the rest of
+# UBSan stay on it. Clang only: GCC has no function check and rejects the spelling.
+#
+if(DEBUG_SANITIZER)
+  target_compile_options(open62541 PRIVATE
+    $<$<C_COMPILER_ID:Clang,AppleClang>:-fno-sanitize=function>)
+endif()
+
+#
 # open62541.h defines _XOPEN_SOURCE 600 before the first POSIX header. On Apple platforms that
 # makes <sys/socket.h> and friends hide every BSD extension the stack uses (SO_REUSEPORT,
 # INADDR_LOOPBACK, struct ip_mreq, NI_MAXHOST, DT_REG), so the amalgamation does not compile.

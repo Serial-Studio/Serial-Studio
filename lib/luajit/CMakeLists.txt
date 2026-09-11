@@ -282,6 +282,17 @@ if(NOT MSVC)
   target_compile_options(luajit PRIVATE -fno-stack-protector)
 endif()
 
+#
+# LuaJIT is not UBSan-clean by design: tagged GCobj pointers (lj_parse.c, misaligned union
+# access) and the buffer shift arithmetic (lj_buf.c, left shift into the sign bit) are the VM's
+# own representation, and upstream lists sanitizers as unsupported. Every Lua suite aborted on
+# the first report under halt_on_error, so UBSan is off for this archive only; ASan stays on it,
+# and the engine, the compat shim and the suites that drive them remain fully instrumented.
+#
+if(DEBUG_SANITIZER)
+  target_compile_options(luajit PRIVATE -fno-sanitize=undefined)
+endif()
+
 if(APPLE AND CMAKE_C_COMPILER_ID MATCHES "^(Clang|AppleClang)$")
   target_compile_options(luajit PRIVATE -fno-lto -fno-whole-program-vtables)
 endif()

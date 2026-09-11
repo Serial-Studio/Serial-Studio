@@ -3463,11 +3463,18 @@ jobs:
 # cmake/Sanitizers.cmake names TSan the only tool that proves the lock-free SPSC hotpath
 # invariants, and until spec 0075 nothing ran it. These jobs are that proof plus the ASan/UBSan
 # leg, and they are where the fuzz corpora replay under instrumentation. They are deliberately
-# NOT in upload's needs: a sanitizer finding reddens the run without holding the release hostage
-# to a tool that reports on timing.
+# NOT in upload's needs, and both carry continue-on-error at the job level: a sanitizer finding
+# must neither hold the release hostage nor redden a run whose product is fine. GitHub renders
+# such a job green, so each leg ends with an annotation step that turns any failed step into a
+# warning on the run summary -- that annotation, not the job icon, is the signal to read.
 #
-# Both instrumented legs are currently DISABLED (if: false on the job) and kept in place so
-# re-enabling them is a one-line change. build-gpl3 below still runs.
+# Both legs were disabled from 2026-09-04 to 2026-09-11. What the last enabled run reported, and
+# what fixed it: UBSan findings inside vendored code (open62541's comparator dispatch, LuaJIT's
+# tagged pointers and shifts) now opt those two archives out of the one check each trips;
+# libplctag's Clang Debug branch hardwired ASan into its sources, a hard error next to
+# -fsanitize=thread, and lib/libplctag/CMakeLists.txt strips it; two enums without a fixed
+# underlying type made the out-of-range fallbacks the suites exercise undefined; and the CSV
+# fuzz harness fed the scanners the empty input libFuzzer always runs first.
 #
 # Three jobs, not one. ASan and TSan cannot coexist in a build, so a single job compiled the tree
 # twice back to back -- 60+ minutes of wall clock on the critical path, and on 2026-09-03 the
@@ -3489,7 +3496,7 @@ jobs:
 #---------------------------------------------------------------------------------------------------
 
   sanitize:
-    if: false
+    continue-on-error: true
     runs-on: ubuntu-24.04
     name: '🧫 Sanitizers (ASan + UBSan, Pro)'
     permissions:
@@ -3635,7 +3642,14 @@ jobs:
     - name: '🚧 Build ASan + UBSan tier'
       run: cmake --build build/asan
 
+    #
+    # Step-level continue-on-error on the four run steps: one failing suite must not skip the
+    # corpus replay, the pipeline pass and the QML pass, or a single finding hides three others.
+    # The annotation step at the end reads their outcomes
+    #
     - name: '🧪 Run ctest (ASan + UBSan)'
+      id: asan_ctest
+      continue-on-error: true
       run: ctest --test-dir build/asan --output-on-failure
 
     #
@@ -3643,6 +3657,8 @@ jobs:
     # an empty selection is not a failure
     #
     - name: '🧬 Replay fuzz corpora'
+      id: asan_fuzz
+      continue-on-error: true
       run: ctest --test-dir build/asan -R '^fuzz_' --output-on-failure --no-tests=ignore
 
     #
@@ -3650,6 +3666,8 @@ jobs:
     # whole parse pipeline under ASan/UBSan, which is what this leg is for
     #
     - name: '🏋️ Hotpath pipeline under ASan + UBSan'
+      id: asan_hotpath
+      continue-on-error: true
       run: ./build/asan/app/${{env.UNIXNAME}} --headless --benchmark-hotpath --min-fps 1
 
     #
@@ -3657,7 +3675,34 @@ jobs:
     # ships -- Plot3D, Waterfall, ImageView, the output widgets and the Pro driver panes included
     #
     - name: '🧪 QML instantiation self-test (Pro build)'
+      id: asan_qml
+      continue-on-error: true
       run: ./build/asan/app/${{env.UNIXNAME}} --headless --selftest-suite qml
+
+    #
+    # The job stays green whatever happened above, so this is where a finding becomes visible:
+    # one warning per failed step on the run summary, and a build or configure failure (which
+    # skips the run steps) reports through the job status the same way
+    #
+    - name: '⚠️ Annotate sanitizer findings'
+      if: always()
+      run: |
+        failed=0
+        for step in \
+          'ctest:${{steps.asan_ctest.outcome}}' \
+          'fuzz corpus replay:${{steps.asan_fuzz.outcome}}' \
+          'hotpath pipeline:${{steps.asan_hotpath.outcome}}' \
+          'QML self-test:${{steps.asan_qml.outcome}}'; do
+          name="${step%%:*}"
+          outcome="${step##*:}"
+          if [ "$outcome" = "failure" ]; then
+            echo "::warning title=ASan + UBSan (${name})::the step reported findings; see the job log"
+            failed=1
+          fi
+        done
+        if [ "${{job.status}}" = "failure" ] && [ "$failed" = "0" ]; then
+          echo "::warning title=ASan + UBSan (build)::the tier did not build; see the job log"
+        fi
 
 #---------------------------------------------------------------------------------------------------
 # ThreadSanitizer
@@ -3669,7 +3714,7 @@ jobs:
 #---------------------------------------------------------------------------------------------------
 
   sanitize-tsan:
-    if: false
+    continue-on-error: true
     runs-on: ubuntu-24.04
     name: '🧫 Sanitizers (TSan, Pro)'
     permissions:
@@ -3773,6 +3818,12 @@ jobs:
       with:
         useLocalCache: true
 
+    #
+    # link=1, not the ASan leg's 2: with the whole unit tier linking one instrumented executable
+    # per suite, two concurrent lld links beside four TSan compiles exceeded the runner's memory
+    # and the VM was shut down mid-link (2026-09-04, at test executable 1457 of 1482). Links are
+    # a small share of this build, so serializing them costs minutes, not the job
+    #
     - name: '🚧 Configure TSan tier (Pro)'
       env:
         ARCGIS_API_KEY: ${{secrets.ARCGIS_API_KEY}}
@@ -3795,7 +3846,7 @@ jobs:
           -DCMAKE_EXE_LINKER_FLAGS=-fuse-ld=lld \
           -DCMAKE_SHARED_LINKER_FLAGS=-fuse-ld=lld \
           -DCMAKE_MODULE_LINKER_FLAGS=-fuse-ld=lld \
-          -DCMAKE_JOB_POOLS=link=2 \
+          -DCMAKE_JOB_POOLS=link=1 \
           -DCMAKE_JOB_POOL_LINK=link \
           -DSS_SANITIZER_DEBUG_LEVEL=-gline-tables-only
 
@@ -3803,7 +3854,22 @@ jobs:
       run: cmake --build build/tsan --target ss_unit_tests
 
     - name: '🧪 Run ctest (TSan)'
+      id: tsan_ctest
+      continue-on-error: true
       run: ctest --test-dir build/tsan --output-on-failure
+
+    #
+    # Same contract as the ASan leg: the job is green by construction, the annotation is the
+    # signal
+    #
+    - name: '⚠️ Annotate sanitizer findings'
+      if: always()
+      run: |
+        if [ "${{steps.tsan_ctest.outcome}}" = "failure" ]; then
+          echo "::warning title=TSan (ctest)::the suites reported findings; see the job log"
+        elif [ "${{job.status}}" = "failure" ]; then
+          echo "::warning title=TSan (build)::the tier did not build; see the job log"
+        fi
 
 #---------------------------------------------------------------------------------------------------
 # GPLv3 build gate

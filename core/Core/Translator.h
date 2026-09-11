@@ -66,7 +66,11 @@ public:
   [[nodiscard]] static Translator& instance();
   void attachMessageBus(Core::Bus::MessageBus& bus);
 
-  enum Language {
+  /**
+   * @brief Shipped UI languages. The fixed underlying type keeps a value written by a build with
+   *        more languages representable, so LanguageTable can degrade it to English.
+   */
+  enum Language : int {
     English,
     Spanish,
     Chinese,

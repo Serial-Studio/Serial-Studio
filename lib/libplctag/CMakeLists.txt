@@ -107,6 +107,38 @@ foreach(_plctag_lib ${SS_LIBPLCTAG_TARGET} plctag_dyn plctag)
 endforeach()
 
 #
+# Upstream's Clang branch hardwires -fsanitize=address -fsanitize=undefined into every Debug
+# source (COMPILE_FLAGS) and into the archive's LINK_FLAGS. Instrumentation is decided once, at
+# directory scope in cmake/Sanitizers.cmake, so those are stripped back out: under ENABLE_TSAN
+# they are a hard clang error (address and thread cannot be combined), under a plain Debug
+# configure they instrument one archive nothing links a runtime for, and under DEBUG_SANITIZER
+# they only duplicate the directory options. Source properties are per directory, so the
+# rewrite names the subproject's directory explicitly.
+#
+foreach(_plctag_lib ${SS_LIBPLCTAG_TARGET} plctag_dyn plctag)
+  if(NOT TARGET ${_plctag_lib})
+    continue()
+  endif()
+
+  get_target_property(_plctag_link_flags ${_plctag_lib} LINK_FLAGS)
+  if(_plctag_link_flags)
+    string(REGEX REPLACE "-fsanitize=[^ ]+" "" _plctag_link_flags "${_plctag_link_flags}")
+    set_target_properties(${_plctag_lib} PROPERTIES LINK_FLAGS "${_plctag_link_flags}")
+  endif()
+
+  get_target_property(_plctag_sources ${_plctag_lib} SOURCES)
+  foreach(_plctag_src ${_plctag_sources})
+    get_source_file_property(_plctag_src_flags "${_plctag_src}"
+                             DIRECTORY "${libplctag_SOURCE_DIR}" COMPILE_FLAGS)
+    if(_plctag_src_flags AND _plctag_src_flags MATCHES "-fsanitize=")
+      string(REGEX REPLACE "-fsanitize=[^ ]+" "" _plctag_src_flags "${_plctag_src_flags}")
+      set_source_files_properties("${_plctag_src}" DIRECTORY "${libplctag_SOURCE_DIR}"
+                                  PROPERTIES COMPILE_FLAGS "${_plctag_src_flags}")
+    endif()
+  endforeach()
+endforeach()
+
+#
 # libplctag.h lives in src/lib; upstream's own target exports it, but the include directory is
 # restated SYSTEM so its diagnostics never reach the driver's translation unit.
 #

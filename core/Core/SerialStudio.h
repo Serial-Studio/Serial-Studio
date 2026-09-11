@@ -91,9 +91,11 @@ Q_ENUM_NS(FrameDetection)
 // clang-format on
 
 /**
- * @brief Character encoding used for QString/byte conversions.
+ * @brief Character encoding used for QString/byte conversions. The fixed underlying type makes
+ *        an out-of-range value (a settings file or project from a build with more codecs) a
+ *        representable value the codec lookup can fall back on, not undefined behavior.
  */
-enum TextEncoding {
+enum TextEncoding : int {
   EncUtf8 = 0,
   EncUtf16LE,
   EncUtf16BE,

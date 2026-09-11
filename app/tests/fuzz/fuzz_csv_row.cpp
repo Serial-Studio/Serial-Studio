@@ -28,7 +28,10 @@
 /**
  * @brief Drives the CSV replay row scanners with untrusted bytes (spec 0075 R14.3). A replayed
  *        file is user input: unbalanced quotes, embedded NULs, a header alone, a row alone and
- *        invalid UTF-8 all reach these scanners before anything validates the file.
+ *        invalid UTF-8 all reach these scanners before anything validates the file. The
+ *        scanners assert a non-empty row, header and unit text the way the replay loader
+ *        guarantees them, and a Debug assertion aborts, so the harness mirrors those guards
+ *        instead of reporting the empty seed libFuzzer always runs first as a crash.
  */
 extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size)
 {
@@ -39,10 +42,16 @@ extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size)
 
   for (const char separator : {',', ';', '\t', '|'}) {
     (void)CSV::firstTopLevelSeparator(header, separator);
-    (void)CSV::topLevelSeparatorCount(row, separator);
+    if (!row.isEmpty())
+      (void)CSV::topLevelSeparatorCount(row, separator);
   }
 
-  (void)CSV::sniffSeparator(header, row);
-  (void)CSV::timestampUnitScale(QString::fromUtf8(header));
+  if (!header.isEmpty() && !row.isEmpty())
+    (void)CSV::sniffSeparator(header, row);
+
+  const QString header_text = QString::fromUtf8(header);
+  if (!header_text.trimmed().isEmpty())
+    (void)CSV::timestampUnitScale(header_text);
+
   return 0;
 }
