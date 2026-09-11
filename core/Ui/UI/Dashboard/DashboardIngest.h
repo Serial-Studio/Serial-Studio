@@ -260,6 +260,7 @@ public:
 #ifdef BUILD_COMMERCIAL
   void setFftAudioTap(const int index, const bool enabled, const quint32 key);
   void setWaterfallAudioTap(const int index, const bool enabled, const quint32 key);
+  [[nodiscard]] quint64 waterfallGeneration(int index) const noexcept;
 #endif
 
 private:
@@ -293,6 +294,7 @@ private:
   void updatePlot3DSeries(int sourceId);
 #ifdef BUILD_COMMERCIAL
   void updateWaterfallSeries(int sourceId);
+  void bumpWaterfallGeneration(int index) noexcept;
 #endif
 
 private:
@@ -346,6 +348,7 @@ private:
 #ifdef BUILD_COMMERCIAL
   std::vector<SeriesPush> m_waterfallPushes;
   std::vector<Plot3DPush> m_plot3DPushes;
+  QVector<quint64> m_waterfallGenerations;
 #endif
 
   QHash<int, StreamTargets> m_streamTargets;

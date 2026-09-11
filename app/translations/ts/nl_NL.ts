@@ -541,27 +541,41 @@ Schakel dit alleen in op vertrouwde netwerken. Niet-vertrouwde clients kunnen li
 <context>
     <name>About</name>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="39"/>
+        <location filename="../../qml/Dialogs/About.qml" line="45"/>
         <source>About</source>
         <translation>Over</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="96"/>
         <source>Version %1</source>
-        <translation>Versie %1</translation>
+        <translation type="vanished">Versie %1</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="106"/>
+        <location filename="../../qml/Dialogs/About.qml" line="37"/>
+        <source>local build</source>
+        <translation>lokale build</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/About.qml" line="105"/>
+        <source>Version %1 (%2)</source>
+        <translation>Versie %1 (%2)</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/About.qml" line="109"/>
+        <source>Click to copy build identity</source>
+        <translation>Klik om build-identiteit te kopiëren</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/About.qml" line="127"/>
         <source>Copyright © %1 %2</source>
         <translation>Copyright © %1 %2</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="112"/>
+        <location filename="../../qml/Dialogs/About.qml" line="133"/>
         <source>All Rights Reserved</source>
         <translation>Alle Rechten Voorbehouden</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="127"/>
+        <location filename="../../qml/Dialogs/About.qml" line="148"/>
         <source>%1 is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 3 of the License, or (at your option) any later version.
 
 %1 is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.</source>
@@ -570,32 +584,32 @@ Schakel dit alleen in op vertrouwde netwerken. Niet-vertrouwde clients kunnen li
 %1 wordt gedistribueerd in de hoop dat het nuttig zal zijn, maar ZONDER ENIGE GARANTIE; zelfs zonder de impliciete garantie van VERKOOPBAARHEID of GESCHIKTHEID VOOR EEN BEPAALD DOEL. Zie de GNU General Public License voor meer details.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="146"/>
+        <location filename="../../qml/Dialogs/About.qml" line="167"/>
         <source>This configuration is licensed for commercial and proprietary use. It may be used in closed-source and commercial applications, subject to the terms of the commercial license.</source>
         <translation>Deze configuratie is gelicentieerd voor commercieel en eigendomsgebruik. Het mag worden gebruikt in closed-source en commerciële toepassingen, onder voorbehoud van de voorwaarden van de commerciële licentie.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="160"/>
+        <location filename="../../qml/Dialogs/About.qml" line="181"/>
         <source>This configuration is for personal and evaluation purposes only. Commercial use is prohibited unless a valid commercial license is activated.</source>
         <translation>Deze configuratie is uitsluitend voor persoonlijk gebruik en evaluatiedoeleinden. Commercieel gebruik is verboden tenzij een geldige commerciële licentie is geactiveerd.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="174"/>
+        <location filename="../../qml/Dialogs/About.qml" line="195"/>
         <source>This software is provided 'as is' without warranty of any kind, express or implied, including but not limited to the warranties of merchantability or fitness for a particular purpose. In no event shall the author be liable for any damages arising from the use of this software.</source>
         <translation>Deze software wordt geleverd 'zoals het is' zonder enige garantie, expliciet of impliciet, inclusief maar niet beperkt tot garanties van verkoopbaarheid of geschiktheid voor een bepaald doel. In geen geval is de auteur aansprakelijk voor schade voortvloeiend uit het gebruik van deze software.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="195"/>
+        <location filename="../../qml/Dialogs/About.qml" line="216"/>
         <source>Manage License</source>
         <translation>Licentie Beheren</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="203"/>
+        <location filename="../../qml/Dialogs/About.qml" line="224"/>
         <source>Donate</source>
         <translation>Doneren</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="214"/>
+        <location filename="../../qml/Dialogs/About.qml" line="235"/>
         <source>Check for Updates</source>
         <translation>Controleren op Updates</translation>
     </message>
@@ -612,32 +626,32 @@ Schakel dit alleen in op vertrouwde netwerken. Niet-vertrouwde clients kunnen li
         <translation type="vanished">Tips &amp; Trucs</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="223"/>
+        <location filename="../../qml/Dialogs/About.qml" line="244"/>
         <source>License Agreement</source>
         <translation>Licentieovereenkomst</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="232"/>
+        <location filename="../../qml/Dialogs/About.qml" line="253"/>
         <source>Report Bug</source>
         <translation>Fout Melden</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="241"/>
+        <location filename="../../qml/Dialogs/About.qml" line="262"/>
         <source>Acknowledgements</source>
         <translation>Dankbetuigingen</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="250"/>
+        <location filename="../../qml/Dialogs/About.qml" line="271"/>
         <source>Benchmark</source>
         <translation>Benchmark</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="258"/>
+        <location filename="../../qml/Dialogs/About.qml" line="279"/>
         <source>Website</source>
         <translation>Website</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="274"/>
+        <location filename="../../qml/Dialogs/About.qml" line="295"/>
         <source>Close</source>
         <translation>Sluiten</translation>
     </message>
@@ -7147,7 +7161,7 @@ Niet-opgeslagen wijzigingen gaan verloren. Doorgaan?</translation>
     <message>
         <location filename="../../../core/Ui/ProjectEditor/Editors/OutputCodeEditor.cpp" line="462"/>
         <source>The script did not finish compiling. Is there an endless loop at the top level?</source>
-        <translation type="unfinished">Het script is niet volledig gecompileerd. Is er een oneindige lus op het hoogste niveau?</translation>
+        <translation>Het script is niet volledig gecompileerd. Is er een oneindige lus op het hoogste niveau?</translation>
     </message>
     <message>
         <location filename="../../../core/Ui/ProjectEditor/Editors/OutputCodeEditor.cpp" line="465"/>
@@ -20728,6 +20742,19 @@ Wilt u de downloadpagina openen?</translation>
     </message>
 </context>
 <context>
+    <name>Misc::SimdSettings</name>
+    <message>
+        <location filename="../../../core/Ui/Misc/SimdSettings.cpp" line="56"/>
+        <source>Scalar</source>
+        <translation>Scalair</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/Misc/SimdSettings.cpp" line="206"/>
+        <source>Auto (%1)</source>
+        <translation>Auto (%1)</translation>
+    </message>
+</context>
+<context>
     <name>Misc::ThemeManager</name>
     <message>
         <location filename="../../../core/Ui/Misc/ThemeCatalog.cpp" line="187"/>
@@ -25686,22 +25713,22 @@ function parse(%1) { ... }
 De scheidingsteken-parameter is niet langer nodig.</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ModuleManager.cpp" line="257"/>
+        <location filename="../../src/Misc/ModuleManager.cpp" line="258"/>
         <source>Critical</source>
         <translation>Kritiek</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ModuleManager.cpp" line="257"/>
+        <location filename="../../src/Misc/ModuleManager.cpp" line="258"/>
         <source>Warning</source>
         <translation>Waarschuwing</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/CLI.cpp" line="843"/>
+        <location filename="../../src/Misc/CLI.cpp" line="851"/>
         <source>Project file not found</source>
         <translation>Projectbestand niet gevonden</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/CLI.cpp" line="844"/>
+        <location filename="../../src/Misc/CLI.cpp" line="852"/>
         <source>The project file referenced by this shortcut could not be found:
 
 %1</source>
@@ -25710,17 +25737,17 @@ De scheidingsteken-parameter is niet langer nodig.</translation>
 %1</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/CLI.cpp" line="847"/>
+        <location filename="../../src/Misc/CLI.cpp" line="855"/>
         <source>Would you like to delete this shortcut?</source>
         <translation>Wilt u deze snelkoppeling verwijderen?</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/CLI.cpp" line="851"/>
+        <location filename="../../src/Misc/CLI.cpp" line="859"/>
         <source>Delete Shortcut</source>
         <translation>Snelkoppeling Verwijderen</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/CLI.cpp" line="853"/>
+        <location filename="../../src/Misc/CLI.cpp" line="861"/>
         <source>Quit</source>
         <translation>Afsluiten</translation>
     </message>
@@ -28844,42 +28871,47 @@ Voeg hierboven absolute adressen toe om de controller te pollen.</translation>
         <translation>Systeem</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="196"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="195"/>
+        <source>SIMD Instruction Set</source>
+        <translation>Simd-instructieset</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="226"/>
         <source>Apply Performance Hints</source>
         <translation>Prestatietips Toepassen</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="219"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="249"/>
         <source>Keep Display Awake</source>
         <translation>Scherm Actief Houden</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="248"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="278"/>
         <source>Performance hints raise process priority and opt out of OS power throttling. Changes take effect the next time Serial Studio starts.</source>
         <translation>Prestatietips verhogen de procesprioriteit en schakelen OS-energiebeperking uit. Wijzigingen worden van kracht bij de volgende start van Serial Studio.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="259"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="289"/>
         <source>Updates &amp; News</source>
         <translation>Updates &amp; Nieuws</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="275"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="305"/>
         <source>Automatically Check for Updates</source>
         <translation>Automatisch Controleren op Updates</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="298"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="328"/>
         <source>Check for Extension Updates</source>
         <translation>Controleer op Extensie-updates</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="322"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="352"/>
         <source>Install Extension Updates Automatically</source>
         <translation>Extensie-updates Automatisch Installeren</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="352"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="382"/>
         <source>Installed extensions and themes are checked when Serial Studio starts, together with application updates. Serial Studio asks before installing them unless automatic installation is enabled.</source>
         <translation>Geïnstalleerde extensies en thema's worden gecontroleerd wanneer Serial Studio start, samen met applicatie-updates. Serial Studio vraagt om bevestiging voordat ze worden geïnstalleerd, tenzij automatische installatie is ingeschakeld.</translation>
     </message>
@@ -32192,47 +32224,47 @@ Ik begrijp dat ik bij het einde een licentie moet kopen of de GPLv3-versie moet 
 <context>
     <name>Widgets::Waterfall</name>
     <message>
-        <location filename="../../../core/Ui/UI/Widgets/Waterfall.cpp" line="290"/>
+        <location filename="../../../core/Ui/UI/Widgets/Waterfall.cpp" line="291"/>
         <source>Viridis</source>
         <translation>Viridis</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/Widgets/Waterfall.cpp" line="292"/>
+        <location filename="../../../core/Ui/UI/Widgets/Waterfall.cpp" line="293"/>
         <source>Inferno</source>
         <translation>Inferno</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/Widgets/Waterfall.cpp" line="294"/>
+        <location filename="../../../core/Ui/UI/Widgets/Waterfall.cpp" line="295"/>
         <source>Magma</source>
         <translation>Magma</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/Widgets/Waterfall.cpp" line="296"/>
+        <location filename="../../../core/Ui/UI/Widgets/Waterfall.cpp" line="297"/>
         <source>Plasma</source>
         <translation>Plasma</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/Widgets/Waterfall.cpp" line="298"/>
+        <location filename="../../../core/Ui/UI/Widgets/Waterfall.cpp" line="299"/>
         <source>Turbo</source>
         <translation>Turbo</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/Widgets/Waterfall.cpp" line="300"/>
+        <location filename="../../../core/Ui/UI/Widgets/Waterfall.cpp" line="301"/>
         <source>Jet</source>
         <translation>Jet</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/Widgets/Waterfall.cpp" line="302"/>
+        <location filename="../../../core/Ui/UI/Widgets/Waterfall.cpp" line="303"/>
         <source>Hot</source>
         <translation>Hot</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/Widgets/Waterfall.cpp" line="304"/>
+        <location filename="../../../core/Ui/UI/Widgets/Waterfall.cpp" line="305"/>
         <source>Grayscale</source>
         <translation>Grijswaarden</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/Widgets/Waterfall.cpp" line="306"/>
+        <location filename="../../../core/Ui/UI/Widgets/Waterfall.cpp" line="307"/>
         <source>Unknown</source>
         <translation>Onbekend</translation>
     </message>

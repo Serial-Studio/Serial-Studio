@@ -394,6 +394,8 @@ void UI::DashboardIngest::applyBlockColumn(const DataModel::BlockColumn& column,
     series.clear();
     for (const double sample : column.fftWindow)
       series.push(sample);
+
+    bumpWaterfallGeneration(fallIndex);
   }
 #endif
 }
@@ -431,6 +433,8 @@ void UI::DashboardIngest::feedFftFromSamples(const DataModel::BlockColumn& colum
     auto& series = m_waterfallValues[fallIndex];
     for (std::size_t i = 0; i < count; ++i)
       series.push(column.values[i]);
+
+    bumpWaterfallGeneration(fallIndex);
   }
 #endif
 }
@@ -970,7 +974,9 @@ void UI::DashboardIngest::updateWaterfallSeries(int sourceId)
   SS_ASSERT_LOG(static_cast<int>(m_waterfallPushes.size()) == m_waterfallValues.size());
   SS_ASSERT_LOG(m_activeWaterfalls.size() == m_waterfallValues.size());
 
+  int index = 0;
   for (const auto& p : m_waterfallPushes) {
+    const int fallIndex = index++;
     if (!*p.activeFlag)
       continue;
 
@@ -978,7 +984,33 @@ void UI::DashboardIngest::updateWaterfallSeries(int sourceId)
       continue;
 
     p.buf->push(*p.value);
+    bumpWaterfallGeneration(fallIndex);
   }
+}
+
+/**
+ * @brief Counts the blocks that fed one waterfall ring since the push tables were built. The
+ *        widget compares it across ticks to know whether samples arrived (spec 0075 R15.1),
+ *        which a bit-identical spectrum cannot tell it; one increment per widget per fed block.
+ */
+void UI::DashboardIngest::bumpWaterfallGeneration(const int index) noexcept
+{
+  SS_ASSERT_LOG(index >= 0 && index < m_waterfallGenerations.size());
+  if (index < 0 || index >= m_waterfallGenerations.size()) [[unlikely]]
+    return;
+
+  ++m_waterfallGenerations[index];
+}
+
+/**
+ * @brief The feed count of one waterfall ring; 0 for an index the layout does not have.
+ */
+quint64 UI::DashboardIngest::waterfallGeneration(const int index) const noexcept
+{
+  if (index < 0 || index >= m_waterfallGenerations.size())
+    return 0;
+
+  return m_waterfallGenerations[index];
 }
 
 /**
@@ -1126,6 +1158,7 @@ void UI::DashboardIngest::buildWaterfallPushes()
   const int waterfallCount = datasetWidgetCount(SerialStudio::DashboardWaterfall);
   SS_ASSERT(m_waterfallValues.size() == waterfallCount, return);
 
+  m_waterfallGenerations.fill(0, waterfallCount);
   m_waterfallPushes.reserve(static_cast<std::size_t>(waterfallCount));
   for (int i = 0; i < waterfallCount; ++i) {
     const auto& dataset = m_host.getDatasetWidget(SerialStudio::DashboardWaterfall, i);

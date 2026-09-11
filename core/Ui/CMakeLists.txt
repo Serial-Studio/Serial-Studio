@@ -69,6 +69,7 @@ qt_add_library(
   UI/CommandStrings.cpp
   Misc/GraphicsBackend.cpp
   Misc/HighDpiScaling.cpp
+  Misc/SimdSettings.cpp
   Misc/CrashTracker.cpp
   Misc/BackupManager.cpp
   ApiHandlers/UiHandlers.cpp
@@ -168,6 +169,7 @@ qt_add_library(
   UI/CommandRegistry.h
   Misc/GraphicsBackend.h
   Misc/HighDpiScaling.h
+  Misc/SimdSettings.h
   Misc/CrashTracker.h
   Misc/BackupManager.h
   ApiHandlers/UiHandlers.h

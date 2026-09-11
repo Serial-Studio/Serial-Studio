@@ -17,6 +17,7 @@
 #include <QTextDocument>
 
 #include "AI/Logging.h"
+#include "Core/AppInfo.h"
 #include "Core/SSAssert.h"
 
 /**
@@ -53,14 +54,57 @@ bool AI::HelpFetcher::urlAllowed(const QUrl& url)
 }
 
 /**
- * @brief Resolves a model-supplied help path to a URL: a full http(s) URL is taken as-is,
- *        anything else is normalized into a doc/help markdown page name.
+ * @brief Git ref the bare page names resolve against: the commit this binary was built from,
+ *        so a user on an older release reads that release's pages; a local build without a
+ *        stamped commit falls back to the development branch.
+ */
+QString AI::HelpFetcher::buildRef()
+{
+  return buildRef(QStringLiteral(APP_COMMIT));
+}
+
+/**
+ * @brief Maps a stamped commit to the fetch ref: the commit itself, or the development branch
+ *        when the stamp is empty. The stamp is validated at configure time (SS_BUILD_COMMIT is
+ *        empty or hexadecimal), so it is a safe URL segment here.
+ */
+QString AI::HelpFetcher::buildRef(const QString& stamped)
+{
+  return stamped.isEmpty() ? QStringLiteral("master") : stamped;
+}
+
+/**
+ * @brief Raw-GitHub base of the doc/help tree at one ref.
+ */
+QString AI::HelpFetcher::helpBase(const QString& ref)
+{
+  return QStringLiteral(
+           "https://raw.githubusercontent.com/Serial-Studio/Serial-Studio/%1/doc/help/")
+    .arg(ref);
+}
+
+/**
+ * @brief URL of help.json at one ref, the 404 fallback for a guessed page name.
+ */
+QUrl AI::HelpFetcher::indexUrl(const QString& ref)
+{
+  return QUrl(helpBase(ref) + QStringLiteral("help.json"));
+}
+
+/**
+ * @brief Resolves a model-supplied help path against the build's own ref.
  */
 QUrl AI::HelpFetcher::pageUrl(const QString& path)
 {
-  static const QString kHelpBase = QStringLiteral("https://raw.githubusercontent.com/Serial-Studio/"
-                                                  "Serial-Studio/master/doc/help/");
+  return pageUrl(path, buildRef());
+}
 
+/**
+ * @brief Resolves a model-supplied help path to a URL: a full http(s) URL is taken as-is,
+ *        anything else is normalized into a doc/help markdown page name at the given ref.
+ */
+QUrl AI::HelpFetcher::pageUrl(const QString& path, const QString& ref)
+{
   if (path.startsWith(QStringLiteral("http"), Qt::CaseInsensitive))
     return QUrl(path);
 
@@ -74,7 +118,7 @@ QUrl AI::HelpFetcher::pageUrl(const QString& path)
   if (!page.endsWith(QStringLiteral(".md"), Qt::CaseInsensitive))
     page += QStringLiteral(".md");
 
-  return QUrl(kHelpBase + page);
+  return QUrl(helpBase(ref) + page);
 }
 
 /**
@@ -211,13 +255,9 @@ void AI::HelpFetcher::completePage(const QString& callId, const QUrl& url, QNetw
  */
 void AI::HelpFetcher::fetchIndex(const QString& callId, const QUrl& missedUrl)
 {
-  static const QUrl kIndexUrl(
-    QStringLiteral("https://raw.githubusercontent.com/Serial-Studio/Serial-Studio/"
-                   "master/doc/help/help.json"));
-
   qCDebug(serialStudioAI) << "meta.fetchHelp redirect-to-index after 404:" << missedUrl.toString();
 
-  QNetworkRequest req(kIndexUrl);
+  QNetworkRequest req(indexUrl(buildRef()));
   req.setRawHeader("User-Agent", "SerialStudio-AIAssistant");
   req.setRawHeader("Accept", "application/json");
   req.setTransferTimeout(kFetchTimeoutMs);

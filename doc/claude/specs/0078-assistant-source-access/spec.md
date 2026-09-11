@@ -1,7 +1,7 @@
 ---
 spec: 0078-assistant-source-access
 title: Assistant reads the shipped source, build-pinned docs, commit shown in About
-status: draft
+status: in-progress  # 2026-09-11
 created: 2026-09-09
 author: Alex Spataru
 ---
@@ -93,10 +93,14 @@ Snapshot of the tree on 2026-09-09. **Recheck every row before planning** (see t
    running build, restricted to the hand-written application and core code, the help
    documentation and the example projects. The existing paged read and search tools apply
    unchanged; no new tool names are introduced for source access unless the plan finds a
-   concrete reason.
+   concrete reason. *(Amended 2026-09-11 during planning: the search tool gains one optional
+   scope argument so a source search and a workspace search do not pollute each other; the
+   tool names and every existing argument are unchanged.)*
 6. **R6** — The source is bundled with the build and produced from the very tree being
-   compiled, so it matches the binary by construction. It is available offline. First use may
-   unpack it to a per-version cache; a version change invalidates that cache.
+   compiled, so it matches the binary by construction. It is available offline and is read in
+   place from the bundle; nothing is unpacked to disk, so there is no cache to invalidate.
+   *(Amended 2026-09-11 during planning: the original text allowed a first-use unpack to a
+   per-version cache. The chosen design reads the bundle directly, which removes that clause.)*
 7. **R7** — The source root is read-only to the assistant. Write, append and delete refuse
    any path under it with a clear error.
 8. **R8** — The assistant's guidance tells it when to consult the source (documentation did
@@ -122,14 +126,16 @@ Snapshot of the tree on 2026-09-09. **Recheck every row before planning** (see t
 - [ ] **AC4** — Asking the assistant to write, append to or delete a file inside the source
       root is refused with an error naming the root as read-only, and the workspace write
       root still works.
-- [ ] **AC5** — The unit tests for the file sandbox cover the second read root, the read-only
-      refusal, and the version-keyed cache invalidation.
+- [ ] **AC5** — The unit tests for the file sandbox cover the second read root (list, read
+      and scoped search through the source prefix), the read-only refusal, and that a default
+      search still reaches only the workspace and dragged-in paths. *(Amended 2026-09-11: the
+      cache-invalidation clause was dropped with the cache; see R6.)*
 - [ ] **AC6** — The unit tests for the help fetcher cover bare-name resolution against a
       commit ref, the 404 fallback at that same ref, and the development-branch fallback when
       no commit is stamped.
 - [ ] **AC7** — The measured installer or package size delta is recorded in the plan and is
       within the bound the plan states.
-- [ ] **AC8** — Sanitize passes and the assistant-corpus lints accept the amended skill text.
+- [x] **AC8** — Sanitize passes and the assistant-corpus lints accept the amended skill text.
 
 ## Constraints & Invariants
 

@@ -192,6 +192,36 @@ Item {
     }
 
     Label {
+      text: qsTr("SIMD Instruction Set")
+      color: Cpp_ThemeManager.colors["text"]
+    } Widgets.Combo {
+      id: _simdLevel
+
+      Layout.fillWidth: true
+      model: Cpp_Misc_SimdSettings.availableLevels.map(e => e.label)
+      currentIndex: {
+        const list = Cpp_Misc_SimdSettings.availableLevels
+        for (let i = 0; i < list.length; ++i)
+          if (list[i].id === Cpp_Misc_SimdSettings.currentLevel)
+            return i
+
+        return 0
+      }
+
+      onActivated: (index) => {
+        const list = Cpp_Misc_SimdSettings.availableLevels
+        if (index < 0 || index >= list.length)
+          return
+
+        const id = list[index].id
+        if (id === Cpp_Misc_SimdSettings.currentLevel)
+          return
+
+        Cpp_Misc_SimdSettings.currentLevel = id
+      }
+    }
+
+    Label {
       color: Cpp_ThemeManager.colors["text"]
       text: qsTr("Apply Performance Hints")
     } Switch {

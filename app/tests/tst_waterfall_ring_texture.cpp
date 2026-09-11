@@ -44,8 +44,6 @@ private slots:
   void fullUploadSupersedesStagedRows();
   void rejectsRowsOutsideTheRing();
   void rejectsAForeignImage();
-  void idleGateSkipsAnIdenticalRow();
-  void idleGateFollowsASizeChange();
   void ringSpanTilesThePlotAcrossTheSeam();
 
 private:
@@ -171,45 +169,6 @@ void WaterfallRingTextureTest::rejectsAForeignImage()
 
   QCOMPARE(texture.stagedRowCount(), 0);
   QVERIFY(!texture.fullUploadPending());
-}
-
-//--------------------------------------------------------------------------------------------------
-// Idle gate
-//--------------------------------------------------------------------------------------------------
-
-/**
- * @brief The idle gate adopts the first row, then answers "unchanged" for a bit-identical one and
- *        "changed" again as soon as a single bin moves.
- */
-void WaterfallRingTextureTest::idleGateSkipsAnIdenticalRow()
-{
-  std::vector<float> cache;
-  const std::vector<float> row = {-10.0f, -20.0f, -30.0f, -40.0f};
-
-  QVERIFY(Widgets::WaterfallRingTexture::captureRowIfChanged(row.data(), 4, cache));
-  QVERIFY(!Widgets::WaterfallRingTexture::captureRowIfChanged(row.data(), 4, cache));
-  QVERIFY(!Widgets::WaterfallRingTexture::captureRowIfChanged(row.data(), 4, cache));
-
-  std::vector<float> moved = row;
-  moved[2]                 = -29.5f;
-  QVERIFY(Widgets::WaterfallRingTexture::captureRowIfChanged(moved.data(), 4, cache));
-  QVERIFY(!Widgets::WaterfallRingTexture::captureRowIfChanged(moved.data(), 4, cache));
-}
-
-/**
- * @brief A spectrum of a different width is always a change, so an FFT-size switch cannot leave
- *        the spectrogram frozen against a stale cache.
- */
-void WaterfallRingTextureTest::idleGateFollowsASizeChange()
-{
-  std::vector<float> cache;
-  const std::vector<float> narrow = {-10.0f, -20.0f};
-  const std::vector<float> wide   = {-10.0f, -20.0f, -30.0f, -40.0f};
-
-  QVERIFY(Widgets::WaterfallRingTexture::captureRowIfChanged(narrow.data(), 2, cache));
-  QVERIFY(Widgets::WaterfallRingTexture::captureRowIfChanged(wide.data(), 4, cache));
-  QVERIFY(!Widgets::WaterfallRingTexture::captureRowIfChanged(wide.data(), 4, cache));
-  QVERIFY(Widgets::WaterfallRingTexture::captureRowIfChanged(narrow.data(), 2, cache));
 }
 
 //--------------------------------------------------------------------------------------------------

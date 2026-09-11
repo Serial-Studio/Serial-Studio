@@ -29,19 +29,23 @@
 #include <vector>
 
 #include "Core/DSPSimd.h"
+#include "Core/SimdLevel.h"
 #include "dsp_scalar_ref.h"
 
 /**
  * @file tst_dsp_kernels.cpp
- * @brief Per-lane bit-exactness contract for every kernel in DSPSimd.h (spec 0032, T8).
+ * @brief Per-lane bit-exactness contract for every kernel in DSPSimd.h (spec 0032, T8; levels
+ *        per spec 0081).
  *
  * This translation unit sees the ordinary vector build of the header (namespace DSP); the scalar
  * build lives behind DspRef:: in dsp_scalar_ref.cpp, which is the only source compiled with
- * SS_SIMD_DISABLE. Every comparison is on raw bit patterns via std::bit_cast, never on == or
- * qFuzzyCompare, because the contract CLAUDE.md and spec 0021 state is bit-exactness and not
- * numeric closeness. The single divergence the header documents -- the sign of a min/max result
- * when -0.0 and +0.0 compare equal -- is asserted explicitly in its own test rather than papered
- * over by a looser comparison everywhere else.
+ * SS_SIMD_DISABLE. Every data table carries a "level" column spanning DSP::supportedSimdLevels(),
+ * so each row runs the kernel at one runtime lane (Scalar, SSE4, AVX2 or NEON) against the same
+ * oracle; cleanup() restores the best level after every row. Every comparison is on raw bit
+ * patterns via std::bit_cast, never on == or qFuzzyCompare, because the contract CLAUDE.md and spec
+ * 0021 state is bit-exactness and not numeric closeness. The single divergence the header documents
+ * -- the sign of a min/max result when -0.0 and +0.0 compare equal -- is asserted explicitly in its
+ * own test rather than papered over by a looser comparison everywhere else.
  *
  * Qt Test runs private slots in declaration order, so every test function here builds its own
  * inputs and carries no state to the next one.
@@ -53,7 +57,8 @@ namespace {
 // Matrix constants
 //--------------------------------------------------------------------------------------------------
 
-constexpr qsizetype kLengths[] = {0, 1, 3, 4, 7, 8, 15, 16, 17, 31, 63, 64, 255, 1024};
+constexpr qsizetype kLengths[] = {0,  1,  2,  3,  4,  5,  7,  8,  9,   15,  16,
+                                  17, 24, 31, 32, 33, 63, 64, 65, 255, 1024};
 constexpr int kOffsets         = 16;
 constexpr char kNeedle         = '*';
 
@@ -85,6 +90,22 @@ constexpr int kPayloadKinds[] = {
     default:
       return "mixed";
   }
+}
+
+/**
+ * @brief The stable id of a runtime lane as a C string (the ids are literals, so NUL-terminated).
+ */
+[[nodiscard]] const char* levelId(DSP::SimdLevel level)
+{
+  return DSP::simdLevelId(level).data();
+}
+
+/**
+ * @brief Installs the lane a data row asks for; false when the machine refuses it.
+ */
+[[nodiscard]] bool selectLevel(int level)
+{
+  return DSP::setActiveSimdLevel(static_cast<DSP::SimdLevel>(level));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -230,38 +251,107 @@ constexpr int kPayloadKinds[] = {
 }
 
 /**
- * @brief Fills a length/offset table shared by the byte-scanning and copy kernels.
+ * @brief Fills a level/length/offset table shared by the byte-scanning and copy kernels.
  */
 void addLengthOffsetRows()
 {
+  QTest::addColumn<int>("level");
   QTest::addColumn<qsizetype>("length");
   QTest::addColumn<int>("offset");
 
-  for (const qsizetype length : kLengths)
-    for (int offset = 0; offset < kOffsets; ++offset)
-      QTest::addRow("len=%lld off=%d", static_cast<long long>(length), offset) << length << offset;
+  for (const DSP::SimdLevel level : DSP::supportedSimdLevels())
+    for (const qsizetype length : kLengths)
+      for (int offset = 0; offset < kOffsets; ++offset)
+        QTest::addRow("%s len=%lld off=%d", levelId(level), static_cast<long long>(length), offset)
+          << static_cast<int>(level) << length << offset;
 }
 
 /**
- * @brief Fills the length/offset/payload table shared by the three f64 reductions, skipping the
- *        empty case because simdMinF64 and friends require n >= 1.
+ * @brief One level's slice of the reduction table, skipping the empty case because simdMinF64 and
+ *        friends require n >= 1.
  */
-void addReductionRows()
+void addReductionRowsFor(DSP::SimdLevel level)
 {
-  QTest::addColumn<qsizetype>("length");
-  QTest::addColumn<int>("offset");
-  QTest::addColumn<int>("kind");
-
   for (const qsizetype length : kLengths) {
     if (length == 0)
       continue;
 
     for (int offset = 0; offset < kOffsets; ++offset)
       for (const int kind : kPayloadKinds)
-        QTest::addRow(
-          "%s len=%lld off=%d", payloadName(kind), static_cast<long long>(length), offset)
-          << length << offset << kind;
+        QTest::addRow("%s %s len=%lld off=%d",
+                      levelId(level),
+                      payloadName(kind),
+                      static_cast<long long>(length),
+                      offset)
+          << static_cast<int>(level) << length << offset << kind;
   }
+}
+
+/**
+ * @brief Fills the level/length/offset/payload table shared by the three f64 reductions.
+ */
+void addReductionRows()
+{
+  QTest::addColumn<int>("level");
+  QTest::addColumn<qsizetype>("length");
+  QTest::addColumn<int>("offset");
+  QTest::addColumn<int>("kind");
+
+  for (const DSP::SimdLevel level : DSP::supportedSimdLevels())
+    addReductionRowsFor(level);
+}
+
+/**
+ * @brief One level's slice of the needle-count matrix.
+ */
+void addFindAnyByteRowsFor(DSP::SimdLevel level)
+{
+  for (const qsizetype length : kLengths)
+    for (int offset = 0; offset < kOffsets; ++offset)
+      for (int count = 1; count <= 8; count += (count == 1 ? 1 : 3))
+        QTest::addRow("%s len=%lld off=%d needles=%d",
+                      levelId(level),
+                      static_cast<long long>(length),
+                      offset,
+                      count)
+          << static_cast<int>(level) << length << offset << count;
+}
+
+/**
+ * @brief One level's slice of the widen matrix; the high-bit positions cross the 8, 16 and 32 byte
+ *        block edges.
+ */
+void addWidenAsciiRowsFor(DSP::SimdLevel level)
+{
+  for (const qsizetype length : kLengths)
+    for (int offset = 0; offset < kOffsets; ++offset)
+      for (const int highAt : {-1, 0, 1, 7, 8, 15, 16, 31, 32}) {
+        if (static_cast<qsizetype>(highAt) >= length)
+          continue;
+
+        QTest::addRow("%s len=%lld off=%d high=%d",
+                      levelId(level),
+                      static_cast<long long>(length),
+                      offset,
+                      highAt)
+          << static_cast<int>(level) << length << offset << highAt;
+      }
+}
+
+/**
+ * @brief One level's slice of the frame/channel matrix.
+ */
+void addDeinterleaveRowsFor(DSP::SimdLevel level)
+{
+  for (const qsizetype frames : kLengths)
+    for (const int channels : {1, 2, 3, 4, 8})
+      for (const int kind : kPayloadKinds)
+        QTest::addRow("%s %s frames=%lld ch=%d",
+                      levelId(level),
+                      payloadName(kind),
+                      static_cast<long long>(frames),
+                      channels)
+          << static_cast<int>(level) << frames << channels << kind;
 }
 
 }  // namespace
@@ -274,6 +364,10 @@ class TstDspKernels : public QObject {
 
 private slots:
   void initTestCase();
+  void cleanup();
+  void levelSelectionRefusesUnsupported();
+  void idRoundTrip();
+  void scalarOnlyBuildListsScalar();
   void forEachByteMatch_data();
   void forEachByteMatch();
   void forEachByteMatchAborts();
@@ -313,17 +407,87 @@ private slots:
  */
 void TstDspKernels::initTestCase()
 {
-#if defined(SS_SIMD_X86)
-  const char* lane = "x86 SSE2..SSE4.2";
-#elif defined(SS_SIMD_NEON)
-  const char* lane = "aarch64 NEON";
-#else
-  const char* lane = "scalar (no vector lane compiled for this target)";
-#endif
+  for (const DSP::SimdLevel level : DSP::supportedSimdLevels())
+    qInfo("DSP runtime lane under test: %s", levelId(level));
 
-  qInfo("DSP vector lane under test: %s", lane);
+  qInfo("DSP best lane: %s", levelId(DSP::bestSupportedSimdLevel()));
   qInfo("DSP reference lane: %s", DspRef::scalarLaneName());
   QCOMPARE(QByteArray(DspRef::scalarLaneName()), QByteArray("scalar"));
+  QVERIFY(DSP::setActiveSimdLevel(DSP::bestSupportedSimdLevel()));
+}
+
+/**
+ * @brief Restores the machine's best lane after every row, so a refused or forced level never
+ *        leaks into the next test.
+ */
+void TstDspKernels::cleanup()
+{
+  QVERIFY(DSP::setActiveSimdLevel(DSP::bestSupportedSimdLevel()));
+}
+
+//--------------------------------------------------------------------------------------------------
+// Runtime level selection (spec 0081)
+//--------------------------------------------------------------------------------------------------
+
+/**
+ * @brief Every enumerator outside the supported list is refused and leaves the active level
+ *        untouched; every supported one installs and reads back. Scalar is always supported and
+ *        the list's last entry is the best level.
+ */
+void TstDspKernels::levelSelectionRefusesUnsupported()
+{
+  const DSP::SimdLevel before = DSP::activeSimdLevel();
+  const DSP::SimdLevel all[]  = {
+    DSP::SimdLevel::Scalar, DSP::SimdLevel::Sse4, DSP::SimdLevel::Avx2, DSP::SimdLevel::Neon};
+
+  for (const DSP::SimdLevel level : all) {
+    const bool supported = DSP::isSimdLevelSupported(level);
+    QCOMPARE(DSP::setActiveSimdLevel(level), supported);
+    QVERIFY(DSP::activeSimdLevel() == (supported ? level : before));
+    QVERIFY(DSP::setActiveSimdLevel(before));
+  }
+
+  QVERIFY(DSP::isSimdLevelSupported(DSP::SimdLevel::Scalar));
+  QVERIFY(!DSP::supportedSimdLevels().empty());
+  QVERIFY(DSP::supportedSimdLevels().front() == DSP::SimdLevel::Scalar);
+  QVERIFY(DSP::supportedSimdLevels().back() == DSP::bestSupportedSimdLevel());
+}
+
+/**
+ * @brief simdLevelId and parseSimdLevelId invert each other; an unknown, empty or differently
+ *        cased id parses to nothing rather than to a default.
+ */
+void TstDspKernels::idRoundTrip()
+{
+  const DSP::SimdLevel all[] = {
+    DSP::SimdLevel::Scalar, DSP::SimdLevel::Sse4, DSP::SimdLevel::Avx2, DSP::SimdLevel::Neon};
+
+  for (const DSP::SimdLevel level : all) {
+    const auto parsed = DSP::parseSimdLevelId(DSP::simdLevelId(level));
+    QVERIFY(parsed.has_value());
+    QVERIFY(*parsed == level);
+  }
+
+  QCOMPARE(QByteArray(levelId(DSP::SimdLevel::Scalar)), QByteArray("scalar"));
+  QCOMPARE(QByteArray(levelId(DSP::SimdLevel::Sse4)), QByteArray("sse4"));
+  QCOMPARE(QByteArray(levelId(DSP::SimdLevel::Avx2)), QByteArray("avx2"));
+  QCOMPARE(QByteArray(levelId(DSP::SimdLevel::Neon)), QByteArray("neon"));
+  QVERIFY(!DSP::parseSimdLevelId("bogus").has_value());
+  QVERIFY(!DSP::parseSimdLevelId("").has_value());
+  QVERIFY(!DSP::parseSimdLevelId("AVX2").has_value());
+  QVERIFY(!DSP::parseSimdLevelId("auto").has_value());
+}
+
+/**
+ * @brief A build with no vector lane lists Scalar alone and resolves Auto to it.
+ */
+void TstDspKernels::scalarOnlyBuildListsScalar()
+{
+  if (DSP::supportedSimdLevels().size() != 1)
+    QSKIP("vector lanes are compiled in; the scalar-only listing needs the SS_SIMD_DISABLE build");
+
+  QVERIFY(DSP::bestSupportedSimdLevel() == DSP::SimdLevel::Scalar);
+  QVERIFY(DSP::activeSimdLevel() == DSP::SimdLevel::Scalar);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -340,8 +504,10 @@ void TstDspKernels::forEachByteMatch_data()
  */
 void TstDspKernels::forEachByteMatch()
 {
+  QFETCH(int, level);
   QFETCH(qsizetype, length);
   QFETCH(int, offset);
+  QVERIFY(selectLevel(level));
 
   const QByteArray bytes = makeBytes(offset, length, 3);
   const char* data       = bytes.constData() + offset;
@@ -370,34 +536,36 @@ void TstDspKernels::forEachByteMatchAborts()
   const QByteArray bytes = makeBytes(0, 1024, 5);
   const char* data       = bytes.constData();
 
-  QList<qsizetype> vec;
-  QList<qsizetype> ref;
-  const bool vec_ok = DSP::simdForEachByteMatch(data, 1024, kNeedle, [&vec](qsizetype pos) {
-    vec.append(pos);
-    return vec.size() < 3;
-  });
-  const bool ref_ok = DspRef::forEachByteMatch(data, 1024, kNeedle, [&ref](qsizetype pos) {
-    ref.append(pos);
-    return ref.size() < 3;
-  });
+  for (const DSP::SimdLevel level : DSP::supportedSimdLevels()) {
+    QVERIFY(DSP::setActiveSimdLevel(level));
 
-  QCOMPARE(vec_ok, false);
-  QCOMPARE(ref_ok, false);
-  QCOMPARE(vec, ref);
-  QCOMPARE(vec.size(), qsizetype(3));
+    QList<qsizetype> vec;
+    QList<qsizetype> ref;
+    const bool vec_ok = DSP::simdForEachByteMatch(data, 1024, kNeedle, [&vec](qsizetype pos) {
+      vec.append(pos);
+      return vec.size() < 3;
+    });
+    const bool ref_ok = DspRef::forEachByteMatch(data, 1024, kNeedle, [&ref](qsizetype pos) {
+      ref.append(pos);
+      return ref.size() < 3;
+    });
+
+    QCOMPARE(vec_ok, false);
+    QCOMPARE(ref_ok, false);
+    QCOMPARE(vec, ref);
+    QCOMPARE(vec.size(), qsizetype(3));
+  }
 }
 
 void TstDspKernels::findAnyByte_data()
 {
+  QTest::addColumn<int>("level");
   QTest::addColumn<qsizetype>("length");
   QTest::addColumn<int>("offset");
   QTest::addColumn<int>("count");
 
-  for (const qsizetype length : kLengths)
-    for (int offset = 0; offset < kOffsets; ++offset)
-      for (int count = 1; count <= 8; count += (count == 1 ? 1 : 3))
-        QTest::addRow("len=%lld off=%d needles=%d", static_cast<long long>(length), offset, count)
-          << length << offset << count;
+  for (const DSP::SimdLevel level : DSP::supportedSimdLevels())
+    addFindAnyByteRowsFor(level);
 }
 
 /**
@@ -406,9 +574,11 @@ void TstDspKernels::findAnyByte_data()
  */
 void TstDspKernels::findAnyByte()
 {
+  QFETCH(int, level);
   QFETCH(qsizetype, length);
   QFETCH(int, offset);
   QFETCH(int, count);
+  QVERIFY(selectLevel(level));
 
   const quint8 needles[8]  = {'*', 'Q', 'W', 0x00, 0x7F, 0xFE, 'K', 'M'};
   const QByteArray present = makeBytes(offset, length, 7);
@@ -436,9 +606,11 @@ void TstDspKernels::minF64_data()
  */
 void TstDspKernels::minF64()
 {
+  QFETCH(int, level);
   QFETCH(qsizetype, length);
   QFETCH(int, offset);
   QFETCH(int, kind);
+  QVERIFY(selectLevel(level));
 
   const auto n                      = static_cast<std::size_t>(length);
   const std::vector<double> payload = makePayload(kind, n + static_cast<std::size_t>(offset));
@@ -461,9 +633,11 @@ void TstDspKernels::maxF64_data()
  */
 void TstDspKernels::maxF64()
 {
+  QFETCH(int, level);
   QFETCH(qsizetype, length);
   QFETCH(int, offset);
   QFETCH(int, kind);
+  QVERIFY(selectLevel(level));
 
   const auto n                      = static_cast<std::size_t>(length);
   const std::vector<double> payload = makePayload(kind, n + static_cast<std::size_t>(offset));
@@ -487,9 +661,11 @@ void TstDspKernels::minMaxF64_data()
  */
 void TstDspKernels::minMaxF64()
 {
+  QFETCH(int, level);
   QFETCH(qsizetype, length);
   QFETCH(int, offset);
   QFETCH(int, kind);
+  QVERIFY(selectLevel(level));
 
   const auto n                      = static_cast<std::size_t>(length);
   const std::vector<double> payload = makePayload(kind, n + static_cast<std::size_t>(offset));
@@ -525,24 +701,27 @@ void TstDspKernels::minMaxF64()
  */
 void TstDspKernels::signedZeroReductions()
 {
-  for (const qsizetype length : kLengths) {
-    if (length == 0)
-      continue;
+  for (const DSP::SimdLevel level : DSP::supportedSimdLevels()) {
+    QVERIFY(DSP::setActiveSimdLevel(level));
+    for (const qsizetype length : kLengths) {
+      if (length == 0)
+        continue;
 
-    const auto n = static_cast<std::size_t>(length);
-    std::vector<double> zeros(n, 0.0);
-    for (std::size_t i = 0; i < n; ++i)
-      zeros[i] = (i % 3 == 0) ? -0.0 : 0.0;
+      const auto n = static_cast<std::size_t>(length);
+      std::vector<double> zeros(n, 0.0);
+      for (std::size_t i = 0; i < n; ++i)
+        zeros[i] = (i % 3 == 0) ? -0.0 : 0.0;
 
-    const double* p      = zeros.data();
-    const double vec_min = DSP::simdMinF64(p, n);
-    const double ref_min = DspRef::minF64(p, n);
-    const double vec_max = DSP::simdMaxF64(p, n);
-    const double ref_max = DspRef::maxF64(p, n);
+      const double* p      = zeros.data();
+      const double vec_min = DSP::simdMinF64(p, n);
+      const double ref_min = DspRef::minF64(p, n);
+      const double vec_max = DSP::simdMaxF64(p, n);
+      const double ref_max = DspRef::maxF64(p, n);
 
-    QVERIFY(bitEqual(vec_min, ref_min) || zeroSignDivergence(vec_min, ref_min));
-    QVERIFY(bitEqual(vec_max, ref_max) || zeroSignDivergence(vec_max, ref_max));
-    QVERIFY(vec_min == 0.0 && vec_max == 0.0);
+      QVERIFY(bitEqual(vec_min, ref_min) || zeroSignDivergence(vec_min, ref_min));
+      QVERIFY(bitEqual(vec_max, ref_max) || zeroSignDivergence(vec_max, ref_max));
+      QVERIFY(vec_min == 0.0 && vec_max == 0.0);
+    }
   }
 }
 
@@ -561,9 +740,11 @@ void TstDspKernels::finiteMinMaxPointF_data()
  */
 void TstDspKernels::finiteMinMaxPointF()
 {
+  QFETCH(int, level);
   QFETCH(qsizetype, length);
   QFETCH(int, offset);
   QFETCH(int, kind);
+  QVERIFY(selectLevel(level));
 
   const auto n                      = static_cast<std::size_t>(length);
   const std::vector<double> payload = makePayload(kind, 2 * (n + static_cast<std::size_t>(offset)));
@@ -607,8 +788,10 @@ void TstDspKernels::interleaveSpan_data()
  */
 void TstDspKernels::interleaveSpan()
 {
+  QFETCH(int, level);
   QFETCH(qsizetype, length);
   QFETCH(int, offset);
+  QVERIFY(selectLevel(level));
 
   const auto n                 = static_cast<std::size_t>(length);
   const auto pad               = static_cast<std::size_t>(offset);
@@ -640,9 +823,11 @@ void TstDspKernels::windowedRealSpan_data()
  */
 void TstDspKernels::windowedRealSpan()
 {
+  QFETCH(int, level);
   QFETCH(qsizetype, length);
   QFETCH(int, offset);
   QFETCH(int, kind);
+  QVERIFY(selectLevel(level));
 
   const auto n                      = static_cast<std::size_t>(length);
   const std::vector<double> payload = makePayload(kind, n + static_cast<std::size_t>(offset));
@@ -674,9 +859,11 @@ void TstDspKernels::windowedRealFill_data()
 
 void TstDspKernels::windowedRealFill()
 {
+  QFETCH(int, level);
   QFETCH(qsizetype, length);
   QFETCH(int, offset);
   QFETCH(int, kind);
+  QVERIFY(selectLevel(level));
 
   const auto n                   = static_cast<std::size_t>(length);
   const std::size_t cap          = roundPow2(n);
@@ -710,8 +897,10 @@ void TstDspKernels::ringsToPoints_data()
  */
 void TstDspKernels::ringsToPoints()
 {
+  QFETCH(int, level);
   QFETCH(qsizetype, length);
   QFETCH(int, offset);
+  QVERIFY(selectLevel(level));
 
   const auto n                 = static_cast<std::size_t>(length);
   const std::size_t xcap       = roundPow2(n);
@@ -751,12 +940,16 @@ void TstDspKernels::ringsToPoints()
 
 void TstDspKernels::asciiDots16_data()
 {
+  QTest::addColumn<int>("level");
   QTest::addColumn<int>("base");
 
-  for (int base = 0; base < 256; base += 16)
-    QTest::addRow("bytes 0x%02X..0x%02X", base, base + 15) << base;
+  for (const DSP::SimdLevel level : DSP::supportedSimdLevels()) {
+    for (int base = 0; base < 256; base += 16)
+      QTest::addRow("%s bytes 0x%02X..0x%02X", levelId(level), base, base + 15)
+        << static_cast<int>(level) << base;
 
-  QTest::addRow("printable boundary") << -1;
+    QTest::addRow("%s printable boundary", levelId(level)) << static_cast<int>(level) << -1;
+  }
 }
 
 /**
@@ -765,7 +958,9 @@ void TstDspKernels::asciiDots16_data()
  */
 void TstDspKernels::asciiDots16()
 {
+  QFETCH(int, level);
   QFETCH(int, base);
+  QVERIFY(selectLevel(level));
 
   const quint8 edges[16] = {
     0x00, 0x1F, 0x20, 0x21, 0x7D, 0x7E, 0x7F, 0x80, 0xFF, 0x41, 0x0A, 0x0D, 0x09, 0x2E, 0xC3, 0xA9};
@@ -790,26 +985,22 @@ void TstDspKernels::asciiDots16()
  */
 void TstDspKernels::widenAscii_data()
 {
+  QTest::addColumn<int>("level");
   QTest::addColumn<qsizetype>("length");
   QTest::addColumn<int>("offset");
   QTest::addColumn<int>("highAt");
 
-  for (const qsizetype length : kLengths)
-    for (int offset = 0; offset < kOffsets; ++offset)
-      for (const int highAt : {-1, 0, 1, 7, 8, 15, 16}) {
-        if (static_cast<qsizetype>(highAt) >= length)
-          continue;
-
-        QTest::addRow("len=%lld off=%d high=%d", static_cast<long long>(length), offset, highAt)
-          << length << offset << highAt;
-      }
+  for (const DSP::SimdLevel level : DSP::supportedSimdLevels())
+    addWidenAsciiRowsFor(level);
 }
 
 void TstDspKernels::widenAscii()
 {
+  QFETCH(int, level);
   QFETCH(qsizetype, length);
   QFETCH(int, offset);
   QFETCH(int, highAt);
+  QVERIFY(selectLevel(level));
 
   QByteArray bytes(offset + length + 16, 'z');
   for (qsizetype i = 0; i < length; ++i)
@@ -839,23 +1030,22 @@ void TstDspKernels::widenAscii()
  */
 void TstDspKernels::deinterleaveToF64_data()
 {
+  QTest::addColumn<int>("level");
   QTest::addColumn<qsizetype>("frames");
   QTest::addColumn<int>("channels");
   QTest::addColumn<int>("kind");
 
-  for (const qsizetype frames : kLengths)
-    for (const int channels : {1, 2, 3, 4, 8})
-      for (const int kind : kPayloadKinds)
-        QTest::addRow(
-          "%s frames=%lld ch=%d", payloadName(kind), static_cast<long long>(frames), channels)
-          << frames << channels << kind;
+  for (const DSP::SimdLevel level : DSP::supportedSimdLevels())
+    addDeinterleaveRowsFor(level);
 }
 
 void TstDspKernels::deinterleaveToF64()
 {
+  QFETCH(int, level);
   QFETCH(qsizetype, frames);
   QFETCH(int, channels);
   QFETCH(int, kind);
+  QVERIFY(selectLevel(level));
 
   const auto n     = static_cast<std::size_t>(frames);
   const auto total = n * static_cast<std::size_t>(channels);
@@ -883,19 +1073,24 @@ void TstDspKernels::deinterleaveToF64()
  */
 void TstDspKernels::powerSpectrumDb_data()
 {
+  QTest::addColumn<int>("level");
   QTest::addColumn<qsizetype>("length");
   QTest::addColumn<int>("kind");
 
-  for (const qsizetype length : kLengths)
-    for (const int kind : kPayloadKinds)
-      QTest::addRow("%s len=%lld", payloadName(kind), static_cast<long long>(length))
-        << length << kind;
+  for (const DSP::SimdLevel level : DSP::supportedSimdLevels())
+    for (const qsizetype length : kLengths)
+      for (const int kind : kPayloadKinds)
+        QTest::addRow(
+          "%s %s len=%lld", levelId(level), payloadName(kind), static_cast<long long>(length))
+          << static_cast<int>(level) << length << kind;
 }
 
 void TstDspKernels::powerSpectrumDb()
 {
+  QFETCH(int, level);
   QFETCH(qsizetype, length);
   QFETCH(int, kind);
+  QVERIFY(selectLevel(level));
 
   const auto n     = static_cast<std::size_t>(length);
   const auto inter = makeF32Payload(kind, 2 * n + 8);

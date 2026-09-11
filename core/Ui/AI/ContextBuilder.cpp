@@ -19,6 +19,7 @@
 #include "AI/Redactor.h"
 #include "AI/SentinelProbe.h"
 #include "AI/ToolDispatcher.h"
+#include "Core/AppInfo.h"
 
 /**
  * @brief Reads a Qt resource into a QString, returning empty on failure.
@@ -100,12 +101,39 @@ static QString buildRoleBlock(bool device_control, bool memory_on, bool probe_on
                        "yourself, point them to the 'Allow device control' checkbox in the AI "
                        "panel.\n");
 
-  return QStringLiteral(
-           "You are the in-app AI assistant for Serial Studio, a cross-platform "
-           "telemetry dashboard. You help the user build and edit telemetry projects: "
-           "data sources, groups, datasets, frame parsers, transforms, tables, output "
-           "widgets, painters, workspaces.\n"
-           "\n"
+  const QString commit = QStringLiteral(APP_COMMIT);
+  const QString build_identity =
+    commit.isEmpty()
+      ? QStringLiteral("Build identity\n"
+                       "This is %1 %2, a local developer build with no stamped commit. "
+                       "Bare help page names resolve against the development branch.\n"
+                       "\n")
+          .arg(QStringLiteral(APP_NAME), QStringLiteral(APP_VERSION))
+      : QStringLiteral("Build identity\n"
+                       "This is %1 %2, built from commit %3 (%4). The application source "
+                       "under source/ and every bare help page name are pinned to that "
+                       "commit; quote the short hash when you cite either.\n"
+                       "\n")
+          .arg(QStringLiteral(APP_NAME), QStringLiteral(APP_VERSION), commit.left(7), commit);
+  const QString source_ladder = QStringLiteral(
+    "When to read the application source\n"
+    "Answer from a skill or help page first, meta.searchDocs second. Read the source "
+    "(fs.search with path:'source/...', then fs.read one file) only when one of these "
+    "fires: the docs contradict what the user observes; the user quotes an error message "
+    "(grep the exact text, it lands on the line that raised it); the question is a limit, "
+    "default or threshold the docs do not state; or it is about the order in which things "
+    "happen. Never for how-to questions. Cite source/<path>:<line>, name the user-facing "
+    "feature rather than the internal identifier, and summarize code instead of pasting "
+    "it. Load the debugging skill for the per-subsystem folders.\n"
+    "\n");
+
+  return QStringLiteral("You are the in-app AI assistant for Serial Studio, a cross-platform "
+                        "telemetry dashboard. You help the user build and edit telemetry projects: "
+                        "data sources, groups, datasets, frame parsers, transforms, tables, output "
+                        "widgets, painters, workspaces.\n"
+                        "\n")
+       + build_identity + source_ladder
+       + QStringLiteral(
            "Skills -- load BEFORE the first tool call in that domain\n"
            "Skill bodies are NOT in this prompt. You must call meta.loadSkill{name: "
            "\"<id>\"} the first time the user's request touches a domain, BEFORE you "

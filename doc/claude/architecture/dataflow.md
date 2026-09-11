@@ -384,8 +384,8 @@ accepted with no live device). Each run lasts until both
 the `--benchmark-frames` floor (default 1M) and the `--benchmark-seconds` window (default 10) are
 met. Throughput = `FrameBuilder::parsedFrameCount()` / elapsed; `--benchmark-output FILE` mirrors
 the report to a file (default: stdout only). `ci.yml` (the only workflow) runs it per push/PR
-as a hard gate on the PGO-optimized binary. Don't regress the parse hotpath. (The `ss-hotpath` skill auto-activates
-on hotpath edits and re-states this check.)
+as a hard gate on the PGO-optimized binary. Don't regress the parse hotpath. (The `ss-hotpath` skill, invoked before
+a hotpath edit, re-states this check.)
 
 The optimization/hardening/sanitizer/allocator flags this gate is measured under live in four
 cmake modules (`cmake/Optimization.cmake`, `Hardening.cmake`, `Sanitizers.cmake`, `MiMalloc.cmake`),

@@ -537,27 +537,41 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
 <context>
     <name>About</name>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="39"/>
+        <location filename="../../qml/Dialogs/About.qml" line="45"/>
         <source>About</source>
         <translation>حول</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="96"/>
         <source>Version %1</source>
-        <translation>الإصدار %1</translation>
+        <translation type="vanished">الإصدار %1</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="106"/>
+        <location filename="../../qml/Dialogs/About.qml" line="37"/>
+        <source>local build</source>
+        <translation>بناء محلي</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/About.qml" line="105"/>
+        <source>Version %1 (%2)</source>
+        <translation>الإصدار %1 (%2)</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/About.qml" line="109"/>
+        <source>Click to copy build identity</source>
+        <translation>انقر للنسخ معرف البناء</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/About.qml" line="127"/>
         <source>Copyright © %1 %2</source>
         <translation>حقوق النشر © %1 %2</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="112"/>
+        <location filename="../../qml/Dialogs/About.qml" line="133"/>
         <source>All Rights Reserved</source>
         <translation>جميع الحقوق محفوظة</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="127"/>
+        <location filename="../../qml/Dialogs/About.qml" line="148"/>
         <source>%1 is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 3 of the License, or (at your option) any later version.
 
 %1 is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.</source>
@@ -566,32 +580,32 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
 يتم توزيع %1 على أمل أن يكون مفيداً، ولكن دون أي ضمان؛ حتى دون الضمان الضمني لقابلية التسويق أو الملاءمة لغرض معين. راجع رخصة GNU العمومية العامة لمزيد من التفاصيل.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="146"/>
+        <location filename="../../qml/Dialogs/About.qml" line="167"/>
         <source>This configuration is licensed for commercial and proprietary use. It may be used in closed-source and commercial applications, subject to the terms of the commercial license.</source>
         <translation>هذا التكوين مرخص للاستخدام التجاري والاحتكاري. يمكن استخدامه في التطبيقات المغلقة المصدر والتجارية، وفقاً لشروط الرخصة التجارية.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="160"/>
+        <location filename="../../qml/Dialogs/About.qml" line="181"/>
         <source>This configuration is for personal and evaluation purposes only. Commercial use is prohibited unless a valid commercial license is activated.</source>
         <translation>هذا التكوين للاستخدام الشخصي والتقييمي فقط. الاستخدام التجاري محظور ما لم يتم تفعيل رخصة تجارية صالحة.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="174"/>
+        <location filename="../../qml/Dialogs/About.qml" line="195"/>
         <source>This software is provided 'as is' without warranty of any kind, express or implied, including but not limited to the warranties of merchantability or fitness for a particular purpose. In no event shall the author be liable for any damages arising from the use of this software.</source>
         <translation>يتم توفير هذا البرنامج 'كما هو' دون ضمان من أي نوع، صريح أو ضمني، بما في ذلك على سبيل المثال لا الحصر ضمانات قابلية التسويق أو الملاءمة لغرض معين. لن يكون المؤلف مسؤولاً بأي حال عن أي أضرار ناشئة عن استخدام هذا البرنامج.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="195"/>
+        <location filename="../../qml/Dialogs/About.qml" line="216"/>
         <source>Manage License</source>
         <translation>إدارة الرخصة</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="203"/>
+        <location filename="../../qml/Dialogs/About.qml" line="224"/>
         <source>Donate</source>
         <translation>تبرع</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="214"/>
+        <location filename="../../qml/Dialogs/About.qml" line="235"/>
         <source>Check for Updates</source>
         <translation>التحقق من التحديثات</translation>
     </message>
@@ -608,32 +622,32 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
         <translation type="vanished">نصائح وحيل</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="223"/>
+        <location filename="../../qml/Dialogs/About.qml" line="244"/>
         <source>License Agreement</source>
         <translation>اتفاقية الترخيص</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="232"/>
+        <location filename="../../qml/Dialogs/About.qml" line="253"/>
         <source>Report Bug</source>
         <translation>الإبلاغ عن خطأ</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="241"/>
+        <location filename="../../qml/Dialogs/About.qml" line="262"/>
         <source>Acknowledgements</source>
         <translation>الشكر والتقدير</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="250"/>
+        <location filename="../../qml/Dialogs/About.qml" line="271"/>
         <source>Benchmark</source>
         <translation>قياس الأداء</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="258"/>
+        <location filename="../../qml/Dialogs/About.qml" line="279"/>
         <source>Website</source>
         <translation>الموقع الإلكتروني</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="274"/>
+        <location filename="../../qml/Dialogs/About.qml" line="295"/>
         <source>Close</source>
         <translation>إغلاق</translation>
     </message>
@@ -20230,6 +20244,19 @@ Would you like to open the download page?</source>
     </message>
 </context>
 <context>
+    <name>Misc::SimdSettings</name>
+    <message>
+        <location filename="../../../core/Ui/Misc/SimdSettings.cpp" line="56"/>
+        <source>Scalar</source>
+        <translation>قياسي</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/Misc/SimdSettings.cpp" line="206"/>
+        <source>Auto (%1)</source>
+        <translation>تلقائي (%1)</translation>
+    </message>
+</context>
+<context>
     <name>Misc::ThemeManager</name>
     <message>
         <location filename="../../../core/Ui/Misc/ThemeCatalog.cpp" line="187"/>
@@ -24838,22 +24865,22 @@ Reload it?</source>
         <translation>فشل تحميل نص الترحيب :(</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ModuleManager.cpp" line="257"/>
+        <location filename="../../src/Misc/ModuleManager.cpp" line="258"/>
         <source>Critical</source>
         <translation>حرج</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ModuleManager.cpp" line="257"/>
+        <location filename="../../src/Misc/ModuleManager.cpp" line="258"/>
         <source>Warning</source>
         <translation>تحذير</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/CLI.cpp" line="843"/>
+        <location filename="../../src/Misc/CLI.cpp" line="851"/>
         <source>Project file not found</source>
         <translation>ملف المشروع غير موجود</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/CLI.cpp" line="844"/>
+        <location filename="../../src/Misc/CLI.cpp" line="852"/>
         <source>The project file referenced by this shortcut could not be found:
 
 %1</source>
@@ -24862,17 +24889,17 @@ Reload it?</source>
 %1</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/CLI.cpp" line="847"/>
+        <location filename="../../src/Misc/CLI.cpp" line="855"/>
         <source>Would you like to delete this shortcut?</source>
         <translation>هل تريد حذف هذا الاختصار؟</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/CLI.cpp" line="851"/>
+        <location filename="../../src/Misc/CLI.cpp" line="859"/>
         <source>Delete Shortcut</source>
         <translation>حذف الاختصار</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/CLI.cpp" line="853"/>
+        <location filename="../../src/Misc/CLI.cpp" line="861"/>
         <source>Quit</source>
         <translation>إنهاء</translation>
     </message>
@@ -28264,42 +28291,47 @@ Add absolute addresses above to poll the controller.</source>
         <translation>النظام</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="196"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="195"/>
+        <source>SIMD Instruction Set</source>
+        <translation>مجموعة تعليمات SIMD</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="226"/>
         <source>Apply Performance Hints</source>
         <translation>تطبيق تلميحات الأداء</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="219"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="249"/>
         <source>Keep Display Awake</source>
         <translation>إبقاء الشاشة نشطة</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="248"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="278"/>
         <source>Performance hints raise process priority and opt out of OS power throttling. Changes take effect the next time Serial Studio starts.</source>
         <translation>تلميحات الأداء ترفع أولوية العملية وتلغي الاشتراك في تقييد الطاقة من النظام. تصبح التغييرات سارية عند بدء Serial Studio في المرة القادمة.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="259"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="289"/>
         <source>Updates &amp; News</source>
         <translation>التحديثات والأخبار</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="275"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="305"/>
         <source>Automatically Check for Updates</source>
         <translation>التحقق من التحديثات تلقائيًا</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="298"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="328"/>
         <source>Check for Extension Updates</source>
         <translation>التحقق من تحديثات الإضافات</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="322"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="352"/>
         <source>Install Extension Updates Automatically</source>
         <translation>تثبيت تحديثات الإضافات تلقائيًا</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="352"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="382"/>
         <source>Installed extensions and themes are checked when Serial Studio starts, together with application updates. Serial Studio asks before installing them unless automatic installation is enabled.</source>
         <translation>يتم التحقق من الإضافات والسمات المثبتة عند بدء Serial Studio، مع تحديثات التطبيق. يطلب Serial Studio الإذن قبل تثبيتها ما لم يتم تفعيل التثبيت التلقائي.</translation>
     </message>
@@ -31532,47 +31564,47 @@ I understand that when it ends, I'll need to buy a license or build the GPLv3 ve
 <context>
     <name>Widgets::Waterfall</name>
     <message>
-        <location filename="../../../core/Ui/UI/Widgets/Waterfall.cpp" line="290"/>
+        <location filename="../../../core/Ui/UI/Widgets/Waterfall.cpp" line="291"/>
         <source>Viridis</source>
         <translation>Viridis</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/Widgets/Waterfall.cpp" line="292"/>
+        <location filename="../../../core/Ui/UI/Widgets/Waterfall.cpp" line="293"/>
         <source>Inferno</source>
         <translation>Inferno</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/Widgets/Waterfall.cpp" line="294"/>
+        <location filename="../../../core/Ui/UI/Widgets/Waterfall.cpp" line="295"/>
         <source>Magma</source>
         <translation>Magma</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/Widgets/Waterfall.cpp" line="296"/>
+        <location filename="../../../core/Ui/UI/Widgets/Waterfall.cpp" line="297"/>
         <source>Plasma</source>
         <translation>Plasma</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/Widgets/Waterfall.cpp" line="298"/>
+        <location filename="../../../core/Ui/UI/Widgets/Waterfall.cpp" line="299"/>
         <source>Turbo</source>
         <translation>Turbo</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/Widgets/Waterfall.cpp" line="300"/>
+        <location filename="../../../core/Ui/UI/Widgets/Waterfall.cpp" line="301"/>
         <source>Jet</source>
         <translation>نفاث</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/Widgets/Waterfall.cpp" line="302"/>
+        <location filename="../../../core/Ui/UI/Widgets/Waterfall.cpp" line="303"/>
         <source>Hot</source>
         <translation>ساخن</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/Widgets/Waterfall.cpp" line="304"/>
+        <location filename="../../../core/Ui/UI/Widgets/Waterfall.cpp" line="305"/>
         <source>Grayscale</source>
         <translation>تدرج رمادي</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/Widgets/Waterfall.cpp" line="306"/>
+        <location filename="../../../core/Ui/UI/Widgets/Waterfall.cpp" line="307"/>
         <source>Unknown</source>
         <translation>غير معروف</translation>
     </message>

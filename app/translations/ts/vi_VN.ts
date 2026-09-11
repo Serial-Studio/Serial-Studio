@@ -537,27 +537,41 @@ Chỉ bật tính năng này trên các mạng đáng tin cậy. Các máy khác
 <context>
     <name>About</name>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="39"/>
+        <location filename="../../qml/Dialogs/About.qml" line="45"/>
         <source>About</source>
         <translation>Giới Thiệu</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="96"/>
         <source>Version %1</source>
-        <translation>Phiên Bản %1</translation>
+        <translation type="vanished">Phiên Bản %1</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="106"/>
+        <location filename="../../qml/Dialogs/About.qml" line="37"/>
+        <source>local build</source>
+        <translation>bản dựng cục bộ</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/About.qml" line="105"/>
+        <source>Version %1 (%2)</source>
+        <translation>Phiên Bản %1 (%2)</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/About.qml" line="109"/>
+        <source>Click to copy build identity</source>
+        <translation>Nhấp để sao chép định danh bản dựng</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/About.qml" line="127"/>
         <source>Copyright © %1 %2</source>
         <translation>Bản Quyền © %1 %2</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="112"/>
+        <location filename="../../qml/Dialogs/About.qml" line="133"/>
         <source>All Rights Reserved</source>
         <translation>Bảo Lưu Mọi Quyền</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="127"/>
+        <location filename="../../qml/Dialogs/About.qml" line="148"/>
         <source>%1 is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 3 of the License, or (at your option) any later version.
 
 %1 is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.</source>
@@ -566,32 +580,32 @@ Chỉ bật tính năng này trên các mạng đáng tin cậy. Các máy khác
 %1 được phân phối với hy vọng sẽ hữu ích, nhưng KHÔNG CÓ BẢO HÀNH NÀO; kể cả bảo hành ngụ ý về KHẢ NĂNG THƯƠNG MẠI hoặc PHÙ HỢP CHO MỤC ĐÍCH CỤ THỂ. Xem Giấy Phép Công Cộng GNU để biết thêm chi tiết.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="146"/>
+        <location filename="../../qml/Dialogs/About.qml" line="167"/>
         <source>This configuration is licensed for commercial and proprietary use. It may be used in closed-source and commercial applications, subject to the terms of the commercial license.</source>
         <translation>Cấu hình này được cấp phép cho mục đích thương mại và sở hữu độc quyền. Có thể sử dụng trong các ứng dụng mã nguồn đóng và thương mại, tuân theo các điều khoản của giấy phép thương mại.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="160"/>
+        <location filename="../../qml/Dialogs/About.qml" line="181"/>
         <source>This configuration is for personal and evaluation purposes only. Commercial use is prohibited unless a valid commercial license is activated.</source>
         <translation>Cấu hình này chỉ dành cho mục đích cá nhân và đánh giá. Nghiêm cấm sử dụng thương mại trừ khi đã kích hoạt giấy phép thương mại hợp lệ.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="174"/>
+        <location filename="../../qml/Dialogs/About.qml" line="195"/>
         <source>This software is provided 'as is' without warranty of any kind, express or implied, including but not limited to the warranties of merchantability or fitness for a particular purpose. In no event shall the author be liable for any damages arising from the use of this software.</source>
         <translation>Phần mềm này được cung cấp 'nguyên trạng' không có bảo hành dưới bất kỳ hình thức nào, rõ ràng hay ngụ ý, bao gồm nhưng không giới hạn ở các bảo hành về khả năng thương mại hoặc sự phù hợp cho mục đích cụ thể. Trong mọi trường hợp, tác giả sẽ không chịu trách nhiệm về bất kỳ thiệt hại nào phát sinh từ việc sử dụng phần mềm này.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="195"/>
+        <location filename="../../qml/Dialogs/About.qml" line="216"/>
         <source>Manage License</source>
         <translation>Quản Lý Giấy Phép</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="203"/>
+        <location filename="../../qml/Dialogs/About.qml" line="224"/>
         <source>Donate</source>
         <translation>Quyên Góp</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="214"/>
+        <location filename="../../qml/Dialogs/About.qml" line="235"/>
         <source>Check for Updates</source>
         <translation>Kiểm Tra Cập Nhật</translation>
     </message>
@@ -608,32 +622,32 @@ Chỉ bật tính năng này trên các mạng đáng tin cậy. Các máy khác
         <translation type="vanished">Mẹo &amp; Thủ Thuật</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="223"/>
+        <location filename="../../qml/Dialogs/About.qml" line="244"/>
         <source>License Agreement</source>
         <translation>Thỏa Thuận Giấy Phép</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="232"/>
+        <location filename="../../qml/Dialogs/About.qml" line="253"/>
         <source>Report Bug</source>
         <translation>Báo Cáo Lỗi</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="241"/>
+        <location filename="../../qml/Dialogs/About.qml" line="262"/>
         <source>Acknowledgements</source>
         <translation>Lời Cảm Ơn</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="250"/>
+        <location filename="../../qml/Dialogs/About.qml" line="271"/>
         <source>Benchmark</source>
         <translation>Đánh Giá Hiệu Năng</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="258"/>
+        <location filename="../../qml/Dialogs/About.qml" line="279"/>
         <source>Website</source>
         <translation>Trang Web</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="274"/>
+        <location filename="../../qml/Dialogs/About.qml" line="295"/>
         <source>Close</source>
         <translation>Đóng</translation>
     </message>
@@ -7063,7 +7077,7 @@ Mọi thay đổi chưa lưu sẽ bị mất. Tiếp tục?</translation>
     <message>
         <location filename="../../../core/Ui/ProjectEditor/Editors/OutputCodeEditor.cpp" line="462"/>
         <source>The script did not finish compiling. Is there an endless loop at the top level?</source>
-        <translation type="unfinished">Script chưa hoàn tất biên dịch. Có vòng lặp vô hạn ở cấp cao nhất không?</translation>
+        <translation>Script chưa hoàn tất biên dịch. Có vòng lặp vô hạn ở cấp cao nhất không?</translation>
     </message>
     <message>
         <location filename="../../../core/Ui/ProjectEditor/Editors/OutputCodeEditor.cpp" line="465"/>
@@ -20230,6 +20244,19 @@ Bạn có muốn mở trang tải xuống không?</translation>
     </message>
 </context>
 <context>
+    <name>Misc::SimdSettings</name>
+    <message>
+        <location filename="../../../core/Ui/Misc/SimdSettings.cpp" line="56"/>
+        <source>Scalar</source>
+        <translation>Vô Hướng</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/Misc/SimdSettings.cpp" line="206"/>
+        <source>Auto (%1)</source>
+        <translation>Tự Động (%1)</translation>
+    </message>
+</context>
+<context>
     <name>Misc::ThemeManager</name>
     <message>
         <location filename="../../../core/Ui/Misc/ThemeCatalog.cpp" line="187"/>
@@ -24838,22 +24865,22 @@ Tải lại tệp?</translation>
         <translation>Không thể tải văn bản chào mừng :(</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ModuleManager.cpp" line="257"/>
+        <location filename="../../src/Misc/ModuleManager.cpp" line="258"/>
         <source>Critical</source>
         <translation>Nghiêm Trọng</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ModuleManager.cpp" line="257"/>
+        <location filename="../../src/Misc/ModuleManager.cpp" line="258"/>
         <source>Warning</source>
         <translation>Cảnh Báo</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/CLI.cpp" line="843"/>
+        <location filename="../../src/Misc/CLI.cpp" line="851"/>
         <source>Project file not found</source>
         <translation>Không tìm thấy tệp dự án</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/CLI.cpp" line="844"/>
+        <location filename="../../src/Misc/CLI.cpp" line="852"/>
         <source>The project file referenced by this shortcut could not be found:
 
 %1</source>
@@ -24862,17 +24889,17 @@ Tải lại tệp?</translation>
 %1</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/CLI.cpp" line="847"/>
+        <location filename="../../src/Misc/CLI.cpp" line="855"/>
         <source>Would you like to delete this shortcut?</source>
         <translation>Bạn có muốn xóa lối tắt này không?</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/CLI.cpp" line="851"/>
+        <location filename="../../src/Misc/CLI.cpp" line="859"/>
         <source>Delete Shortcut</source>
         <translation>Xóa Lối Tắt</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/CLI.cpp" line="853"/>
+        <location filename="../../src/Misc/CLI.cpp" line="861"/>
         <source>Quit</source>
         <translation>Thoát</translation>
     </message>
@@ -28264,42 +28291,47 @@ Thêm địa chỉ tuyệt đối ở trên để truy vấn bộ điều khiể
         <translation>Hệ Thống</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="196"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="195"/>
+        <source>SIMD Instruction Set</source>
+        <translation>Bộ Lệnh SIMD</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="226"/>
         <source>Apply Performance Hints</source>
         <translation>Áp Dụng Gợi Ý Hiệu Năng</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="219"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="249"/>
         <source>Keep Display Awake</source>
         <translation>Giữ Màn Hình Luôn Bật</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="248"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="278"/>
         <source>Performance hints raise process priority and opt out of OS power throttling. Changes take effect the next time Serial Studio starts.</source>
         <translation>Gợi ý hiệu năng tăng mức ưu tiên tiến trình và loại trừ điều tiết nguồn của hệ điều hành. Thay đổi có hiệu lực khi Serial Studio khởi động lần tiếp theo.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="259"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="289"/>
         <source>Updates &amp; News</source>
         <translation>Cập Nhật &amp; Tin Tức</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="275"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="305"/>
         <source>Automatically Check for Updates</source>
         <translation>Tự Động Kiểm Tra Cập Nhật</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="298"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="328"/>
         <source>Check for Extension Updates</source>
         <translation>Kiểm Tra Cập Nhật Extension</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="322"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="352"/>
         <source>Install Extension Updates Automatically</source>
         <translation>Tự Động Cài Đặt Bản Cập Nhật Tiện Ích Mở Rộng</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="352"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="382"/>
         <source>Installed extensions and themes are checked when Serial Studio starts, together with application updates. Serial Studio asks before installing them unless automatic installation is enabled.</source>
         <translation>Các tiện ích mở rộng và giao diện đã cài đặt được kiểm tra khi Serial Studio khởi động, cùng với các bản cập nhật ứng dụng. Serial Studio sẽ hỏi trước khi cài đặt chúng trừ khi đã bật tính năng tự động cài đặt.</translation>
     </message>
@@ -30189,7 +30221,7 @@ Thêm địa chỉ tuyệt đối ở trên để truy vấn bộ điều khiể
     <message>
         <location filename="../../qml/ProjectEditor/Dialogs/TransmitCodeDialog.qml" line="167"/>
         <source>Import a transmit function from a .js file</source>
-        <translation type="unfinished"/>
+        <translation>Nhập hàm truyền từ tệp .js</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Dialogs/TransmitCodeDialog.qml" line="173"/>
@@ -30199,22 +30231,22 @@ Thêm địa chỉ tuyệt đối ở trên để truy vấn bộ điều khiể
     <message>
         <location filename="../../qml/ProjectEditor/Dialogs/TransmitCodeDialog.qml" line="178"/>
         <source>Verify that the script compiles and defines transmit(value)</source>
-        <translation type="unfinished"/>
+        <translation>Xác minh script biên dịch và định nghĩa transmit(value)</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Dialogs/TransmitCodeDialog.qml" line="216"/>
         <source>Produced Bytes</source>
-        <translation type="unfinished"/>
+        <translation>Byte Được Tạo</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Dialogs/TransmitCodeDialog.qml" line="238"/>
         <source>Interact with the control to see its output</source>
-        <translation type="unfinished"/>
+        <translation>Tương tác với điều khiển để xem đầu ra</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Dialogs/TransmitCodeDialog.qml" line="266"/>
         <source>%1 bytes, from the last version that compiled</source>
-        <translation type="unfinished"/>
+        <translation>%1 byte, từ phiên bản biên dịch cuối cùng</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Dialogs/TransmitCodeDialog.qml" line="267"/>
@@ -30229,7 +30261,7 @@ Thêm địa chỉ tuyệt đối ở trên để truy vấn bộ điều khiể
     <message>
         <location filename="../../qml/ProjectEditor/Dialogs/TransmitCodeDialog.qml" line="292"/>
         <source>Validate and store the transmit function</source>
-        <translation type="unfinished"/>
+        <translation>Xác thực và lưu hàm truyền</translation>
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Dialogs/TransmitCodeDialog.qml" line="301"/>
@@ -30239,7 +30271,7 @@ Thêm địa chỉ tuyệt đối ở trên để truy vấn bộ điều khiể
     <message>
         <location filename="../../qml/ProjectEditor/Dialogs/TransmitCodeDialog.qml" line="304"/>
         <source>Close without storing this edit</source>
-        <translation type="unfinished"/>
+        <translation>Đóng mà không lưu chỉnh sửa này</translation>
     </message>
 </context>
 <context>
@@ -31504,47 +31536,47 @@ Tôi hiểu rằng khi kết thúc, tôi cần mua bản quyền hoặc tự bi�
 <context>
     <name>Widgets::Waterfall</name>
     <message>
-        <location filename="../../../core/Ui/UI/Widgets/Waterfall.cpp" line="290"/>
+        <location filename="../../../core/Ui/UI/Widgets/Waterfall.cpp" line="291"/>
         <source>Viridis</source>
         <translation>Viridis</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/Widgets/Waterfall.cpp" line="292"/>
+        <location filename="../../../core/Ui/UI/Widgets/Waterfall.cpp" line="293"/>
         <source>Inferno</source>
         <translation>Inferno</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/Widgets/Waterfall.cpp" line="294"/>
+        <location filename="../../../core/Ui/UI/Widgets/Waterfall.cpp" line="295"/>
         <source>Magma</source>
         <translation>Magma</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/Widgets/Waterfall.cpp" line="296"/>
+        <location filename="../../../core/Ui/UI/Widgets/Waterfall.cpp" line="297"/>
         <source>Plasma</source>
         <translation>Plasma</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/Widgets/Waterfall.cpp" line="298"/>
+        <location filename="../../../core/Ui/UI/Widgets/Waterfall.cpp" line="299"/>
         <source>Turbo</source>
         <translation>Turbo</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/Widgets/Waterfall.cpp" line="300"/>
+        <location filename="../../../core/Ui/UI/Widgets/Waterfall.cpp" line="301"/>
         <source>Jet</source>
         <translation>Jet</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/Widgets/Waterfall.cpp" line="302"/>
+        <location filename="../../../core/Ui/UI/Widgets/Waterfall.cpp" line="303"/>
         <source>Hot</source>
         <translation>Nóng</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/Widgets/Waterfall.cpp" line="304"/>
+        <location filename="../../../core/Ui/UI/Widgets/Waterfall.cpp" line="305"/>
         <source>Grayscale</source>
         <translation>Thang Độ Xám</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/Widgets/Waterfall.cpp" line="306"/>
+        <location filename="../../../core/Ui/UI/Widgets/Waterfall.cpp" line="307"/>
         <source>Unknown</source>
         <translation>Không Xác Định</translation>
     </message>

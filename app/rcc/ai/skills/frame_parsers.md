@@ -264,3 +264,7 @@ Seven runtime UI helpers, all `{ ok, error? }`, NO logging:
 - `setActiveWorkspace(idOrName)`: switch the active workspace tab. Pass a numeric `workspaceId` (>= 1000) or a case-insensitive title string.
 
 Latch every call behind a state transition (a top-level `var` / `local` flag). Calling them per frame produces empty plots, flicker, or workspace-yank. They affect the active dashboard window only and do NOT persist to the project file or QSettings.
+
+## When this skill does not match what the user sees
+
+Frame detection, checksum validation, the Built-In parser templates and both script engines live in `source/core/Pipeline`. If a frame is dropped and nothing above explains why, or the user quotes a parser error verbatim, `fs.search` that text with `path:"source/core/Pipeline"` and read the one file it names; the `debugging` skill has the rules for citing it.

@@ -73,6 +73,7 @@ Widgets::Waterfall::Waterfall(const int index, QQuickItem* parent)
   , m_writeRow(0)
   , m_topRow(0)
   , m_filledOnce(false)
+  , m_lastGeneration(0)
   , m_center(0.0)
   , m_halfRange(1.0)
   , m_scaleIsValid(false)
@@ -587,7 +588,6 @@ void Widgets::Waterfall::rebuildHistoryImage()
   m_filledOnce    = false;
   m_imageReleased = false;
 
-  m_lastRow.clear();
   m_spectrogram.reset(height);
 }
 
@@ -599,8 +599,6 @@ void Widgets::Waterfall::rebuildHistoryImage()
 void Widgets::Waterfall::releaseHistoryImage()
 {
   m_image = QImage();
-  m_lastRow.clear();
-  m_lastRow.shrink_to_fit();
   m_spectrogram.release();
 
   m_topRow        = 0;
@@ -759,6 +757,12 @@ void Widgets::Waterfall::updateData()
   if (!m_plan)
     return;
 
+  const quint64 generation = m_dashboard.waterfallGeneration(m_index);
+  const bool new_samples   = generation != m_lastGeneration;
+  m_lastGeneration         = generation;
+  if (!new_samples && !m_campbellMode)
+    return;
+
   const int avail = static_cast<int>(std::min(data.size(), static_cast<std::size_t>(m_size)));
 
   const double* in       = data.raw();
@@ -793,17 +797,6 @@ void Widgets::Waterfall::updateData()
   const float* row_data = imageRow(m_smoothed.data(), spectrumSize);
   if (!row_data)
     return;
-
-  const bool row_changed =
-    WaterfallRingTexture::captureRowIfChanged(row_data, spectrumSize, m_lastRow);
-  const bool write_row = row_changed || m_campbellMode;
-  if (!write_row && !overlay_changed)
-    return;
-
-  if (!write_row) {
-    markAxisDirty();
-    return;
-  }
 
   if (m_campbellMode && m_image.height() > 0) {
     const auto& datasets = m_dashboard.datasets();

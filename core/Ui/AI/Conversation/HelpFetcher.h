@@ -40,8 +40,12 @@ public:
 
   explicit HelpFetcher(QObject* parent = nullptr);
 
+  [[nodiscard]] static QString buildRef();
   [[nodiscard]] static bool urlAllowed(const QUrl& url);
+  [[nodiscard]] static QUrl indexUrl(const QString& ref);
   [[nodiscard]] static QUrl pageUrl(const QString& path);
+  [[nodiscard]] static QString buildRef(const QString& stamped);
+  [[nodiscard]] static QUrl pageUrl(const QString& path, const QString& ref);
 
 signals:
   void fetchFinished(const QString& callId, const QJsonObject& result);
@@ -55,6 +59,7 @@ private:
   void completePage(const QString& callId, const QUrl& url, QNetworkReply* reply);
   void completeIndex(const QString& callId, const QUrl& missedUrl, QNetworkReply* reply);
   void harden(QNetworkReply* reply) const;
+  [[nodiscard]] static QString helpBase(const QString& ref);
 
   QNetworkAccessManager m_nam;
   quint64 m_epoch;

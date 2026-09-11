@@ -541,27 +541,41 @@ Activați doar în rețele de încredere. Clienții nesiguri pot citi date live 
 <context>
     <name>About</name>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="39"/>
+        <location filename="../../qml/Dialogs/About.qml" line="45"/>
         <source>About</source>
         <translation>Despre</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="96"/>
         <source>Version %1</source>
-        <translation>Versiunea %1</translation>
+        <translation type="vanished">Versiunea %1</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="106"/>
+        <location filename="../../qml/Dialogs/About.qml" line="37"/>
+        <source>local build</source>
+        <translation>compilare locală</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/About.qml" line="105"/>
+        <source>Version %1 (%2)</source>
+        <translation>Versiunea %1 (%2)</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/About.qml" line="109"/>
+        <source>Click to copy build identity</source>
+        <translation>Clic pentru a copia identitatea compilării</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/About.qml" line="127"/>
         <source>Copyright © %1 %2</source>
         <translation>Copyright © %1 %2</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="112"/>
+        <location filename="../../qml/Dialogs/About.qml" line="133"/>
         <source>All Rights Reserved</source>
         <translation>Toate Drepturile Rezervate</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="127"/>
+        <location filename="../../qml/Dialogs/About.qml" line="148"/>
         <source>%1 is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 3 of the License, or (at your option) any later version.
 
 %1 is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.</source>
@@ -570,32 +584,32 @@ Activați doar în rețele de încredere. Clienții nesiguri pot citi date live 
 %1 este distribuit în speranța că va fi util, dar FĂRĂ NICIO GARANȚIE; fără nici măcar garanția implicită de VANDABILITATE sau POTRIVIRE PENTRU UN ANUMIT SCOP. Consultați Licența Publică Generală GNU pentru mai multe detalii.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="146"/>
+        <location filename="../../qml/Dialogs/About.qml" line="167"/>
         <source>This configuration is licensed for commercial and proprietary use. It may be used in closed-source and commercial applications, subject to the terms of the commercial license.</source>
         <translation>Această configurație este licențiată pentru uz comercial și proprietar. Poate fi utilizată în aplicații cu sursă închisă și comerciale, sub rezerva termenilor licenței comerciale.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="160"/>
+        <location filename="../../qml/Dialogs/About.qml" line="181"/>
         <source>This configuration is for personal and evaluation purposes only. Commercial use is prohibited unless a valid commercial license is activated.</source>
         <translation>Această configurație este destinată exclusiv uzului personal și evaluării. Utilizarea comercială este interzisă decât dacă este activată o licență comercială validă.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="174"/>
+        <location filename="../../qml/Dialogs/About.qml" line="195"/>
         <source>This software is provided 'as is' without warranty of any kind, express or implied, including but not limited to the warranties of merchantability or fitness for a particular purpose. In no event shall the author be liable for any damages arising from the use of this software.</source>
         <translation>Acest software este furnizat „ca atare" fără nicio garanție de orice fel, expresă sau implicită, inclusiv, dar fără a se limita la, garanțiile de vandabilitate sau potrivire pentru un anumit scop. În niciun caz autorul nu va fi răspunzător pentru daune rezultate din utilizarea acestui software.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="195"/>
+        <location filename="../../qml/Dialogs/About.qml" line="216"/>
         <source>Manage License</source>
         <translation>Gestionare Licență</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="203"/>
+        <location filename="../../qml/Dialogs/About.qml" line="224"/>
         <source>Donate</source>
         <translation>Donează</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="214"/>
+        <location filename="../../qml/Dialogs/About.qml" line="235"/>
         <source>Check for Updates</source>
         <translation>Verificare Actualizări</translation>
     </message>
@@ -612,32 +626,32 @@ Activați doar în rețele de încredere. Clienții nesiguri pot citi date live 
         <translation type="vanished">Sfaturi și Trucuri</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="223"/>
+        <location filename="../../qml/Dialogs/About.qml" line="244"/>
         <source>License Agreement</source>
         <translation>Acord de Licență</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="232"/>
+        <location filename="../../qml/Dialogs/About.qml" line="253"/>
         <source>Report Bug</source>
         <translation>Raportează Eroare</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="241"/>
+        <location filename="../../qml/Dialogs/About.qml" line="262"/>
         <source>Acknowledgements</source>
         <translation>Mulțumiri</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="250"/>
+        <location filename="../../qml/Dialogs/About.qml" line="271"/>
         <source>Benchmark</source>
         <translation>Benchmark</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="258"/>
+        <location filename="../../qml/Dialogs/About.qml" line="279"/>
         <source>Website</source>
         <translation>Site Web</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="274"/>
+        <location filename="../../qml/Dialogs/About.qml" line="295"/>
         <source>Close</source>
         <translation>Închide</translation>
     </message>
@@ -8911,7 +8925,7 @@ Adaugă %4 set(uri) de date folosind valorile implicite ale șablonului?</transl
     <message>
         <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputStateRows.cpp" line="168"/>
         <source>Value that means on. Leave it empty and any non-zero number means on, which a device reporting text like RUN can never satisfy. Anything needing a threshold or a bitmask belongs in the dataset transform.</source>
-        <translation type="unfinished">Valoarea care înseamnă pornit. Lăsați gol și orice număr diferit de zero înseamnă pornit, ceea ce un dispozitiv care raportează text precum RUN nu poate satisface niciodată. Orice necesită un prag sau o mască de biți aparține transformării setului de date.</translation>
+        <translation>Valoarea care înseamnă pornit. Lăsați gol și orice număr diferit de zero înseamnă pornit, ceea ce un dispozitiv care raportează text precum RUN nu poate satisface niciodată. Orice necesită un prag sau o mască de biți aparține transformării setului de date.</translation>
     </message>
     <message>
         <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputStateRows.cpp" line="183"/>
@@ -20728,6 +20742,19 @@ Doriți să deschideți pagina de descărcare?</translation>
     </message>
 </context>
 <context>
+    <name>Misc::SimdSettings</name>
+    <message>
+        <location filename="../../../core/Ui/Misc/SimdSettings.cpp" line="56"/>
+        <source>Scalar</source>
+        <translation>Scalar</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/Misc/SimdSettings.cpp" line="206"/>
+        <source>Auto (%1)</source>
+        <translation>Automat (%1)</translation>
+    </message>
+</context>
+<context>
     <name>Misc::ThemeManager</name>
     <message>
         <location filename="../../../core/Ui/Misc/ThemeCatalog.cpp" line="187"/>
@@ -25686,22 +25713,22 @@ function parse(%1) { ... }
 Parametrul separator nu mai este necesar.</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ModuleManager.cpp" line="257"/>
+        <location filename="../../src/Misc/ModuleManager.cpp" line="258"/>
         <source>Critical</source>
         <translation>Critic</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ModuleManager.cpp" line="257"/>
+        <location filename="../../src/Misc/ModuleManager.cpp" line="258"/>
         <source>Warning</source>
         <translation>Avertisment</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/CLI.cpp" line="843"/>
+        <location filename="../../src/Misc/CLI.cpp" line="851"/>
         <source>Project file not found</source>
         <translation>Fișier proiect negăsit</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/CLI.cpp" line="844"/>
+        <location filename="../../src/Misc/CLI.cpp" line="852"/>
         <source>The project file referenced by this shortcut could not be found:
 
 %1</source>
@@ -25710,17 +25737,17 @@ Parametrul separator nu mai este necesar.</translation>
 %1</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/CLI.cpp" line="847"/>
+        <location filename="../../src/Misc/CLI.cpp" line="855"/>
         <source>Would you like to delete this shortcut?</source>
         <translation>Șterge această comandă rapidă?</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/CLI.cpp" line="851"/>
+        <location filename="../../src/Misc/CLI.cpp" line="859"/>
         <source>Delete Shortcut</source>
         <translation>Șterge Comanda Rapidă</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/CLI.cpp" line="853"/>
+        <location filename="../../src/Misc/CLI.cpp" line="861"/>
         <source>Quit</source>
         <translation>Închide</translation>
     </message>
@@ -28844,42 +28871,47 @@ Adaugă adrese absolute mai sus pentru a interoga controlerul.</translation>
         <translation>Sistem</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="196"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="195"/>
+        <source>SIMD Instruction Set</source>
+        <translation>Set de Instrucțiuni SIMD</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="226"/>
         <source>Apply Performance Hints</source>
         <translation>Aplică Sugestii de Performanță</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="219"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="249"/>
         <source>Keep Display Awake</source>
         <translation>Menține Ecranul Activ</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="248"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="278"/>
         <source>Performance hints raise process priority and opt out of OS power throttling. Changes take effect the next time Serial Studio starts.</source>
         <translation>Sugestiile de performanță cresc prioritatea procesului și dezactivează limitarea de putere a sistemului de operare. Modificările au efect la următoarea pornire a Serial Studio.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="259"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="289"/>
         <source>Updates &amp; News</source>
         <translation>Actualizări și Noutăți</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="275"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="305"/>
         <source>Automatically Check for Updates</source>
         <translation>Verificare Automată a Actualizărilor</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="298"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="328"/>
         <source>Check for Extension Updates</source>
         <translation>Verifică Actualizări Extensii</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="322"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="352"/>
         <source>Install Extension Updates Automatically</source>
         <translation>Instalare Automată A Actualizărilor de Extensii</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="352"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="382"/>
         <source>Installed extensions and themes are checked when Serial Studio starts, together with application updates. Serial Studio asks before installing them unless automatic installation is enabled.</source>
         <translation>Extensiile și temele instalate sunt verificate la pornirea Serial Studio, împreună cu actualizările aplicației. Serial Studio solicită confirmare înainte de instalare, cu excepția cazului în care instalarea automată este activată.</translation>
     </message>
@@ -32192,47 +32224,47 @@ I understand that when it ends, I'll need to buy a license or build the GPLv3 ve
 <context>
     <name>Widgets::Waterfall</name>
     <message>
-        <location filename="../../../core/Ui/UI/Widgets/Waterfall.cpp" line="290"/>
+        <location filename="../../../core/Ui/UI/Widgets/Waterfall.cpp" line="291"/>
         <source>Viridis</source>
         <translation>Viridis</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/Widgets/Waterfall.cpp" line="292"/>
+        <location filename="../../../core/Ui/UI/Widgets/Waterfall.cpp" line="293"/>
         <source>Inferno</source>
         <translation>Inferno</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/Widgets/Waterfall.cpp" line="294"/>
+        <location filename="../../../core/Ui/UI/Widgets/Waterfall.cpp" line="295"/>
         <source>Magma</source>
         <translation>Magma</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/Widgets/Waterfall.cpp" line="296"/>
+        <location filename="../../../core/Ui/UI/Widgets/Waterfall.cpp" line="297"/>
         <source>Plasma</source>
         <translation>Plasma</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/Widgets/Waterfall.cpp" line="298"/>
+        <location filename="../../../core/Ui/UI/Widgets/Waterfall.cpp" line="299"/>
         <source>Turbo</source>
         <translation>Turbo</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/Widgets/Waterfall.cpp" line="300"/>
+        <location filename="../../../core/Ui/UI/Widgets/Waterfall.cpp" line="301"/>
         <source>Jet</source>
         <translation>Jet</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/Widgets/Waterfall.cpp" line="302"/>
+        <location filename="../../../core/Ui/UI/Widgets/Waterfall.cpp" line="303"/>
         <source>Hot</source>
         <translation>Hot</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/Widgets/Waterfall.cpp" line="304"/>
+        <location filename="../../../core/Ui/UI/Widgets/Waterfall.cpp" line="305"/>
         <source>Grayscale</source>
         <translation>Tonuri de Gri</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/Widgets/Waterfall.cpp" line="306"/>
+        <location filename="../../../core/Ui/UI/Widgets/Waterfall.cpp" line="307"/>
         <source>Unknown</source>
         <translation>Necunoscut</translation>
     </message>

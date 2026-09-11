@@ -466,8 +466,9 @@ static QJsonObject fsListInputSchema()
   QJsonObject props;
   props[QStringLiteral("path")] = makeProperty(
     QStringLiteral("string"),
-    QStringLiteral("Directory path relative to the workspace folder (default '.'), or an "
-                   "absolute path the user dragged into the chat."));
+    QStringLiteral("Directory path relative to the workspace folder (default '.'), an "
+                   "absolute path the user dragged into the chat, or 'source/...' for the "
+                   "application's own source of this build (read-only)."));
   props[QStringLiteral("recursive")] = makeProperty(
     QStringLiteral("boolean"), QStringLiteral("Recurse into subdirectories (bounded depth)."));
   return makeObjectSchema(props);
@@ -481,8 +482,9 @@ static QJsonObject fsReadInputSchema()
   QJsonObject props;
   props[QStringLiteral("path")] =
     makeProperty(QStringLiteral("string"),
-                 QStringLiteral("File path relative to the workspace folder, or an absolute "
-                                "dragged-in path. Text files only."));
+                 QStringLiteral("File path relative to the workspace folder, an absolute "
+                                "dragged-in path, or 'source/...' for a file of the "
+                                "application's own source (read-only). Text files only."));
   props[QStringLiteral("offset")] =
     makeProperty(QStringLiteral("integer"),
                  QStringLiteral("Byte offset to start at; follow nextOffset to "
@@ -501,11 +503,15 @@ static QJsonObject fsSearchInputSchema()
   QJsonObject props;
   props[QStringLiteral("query")] =
     makeProperty(QStringLiteral("string"),
-                 QStringLiteral("Text to find (case-insensitive) across the "
-                                "workspace and dragged-in paths."));
+                 QStringLiteral("Text to find (case-insensitive) across the search scope."));
   props[QStringLiteral("isRegex")] = makeProperty(
     QStringLiteral("boolean"),
     QStringLiteral("Treat query as a regular expression instead of a literal string."));
+  props[QStringLiteral("path")] = makeProperty(
+    QStringLiteral("string"),
+    QStringLiteral("Directory to search, e.g. 'Projects', a dragged-in folder, or "
+                   "'source/core/Pipeline' for the application source. Default: the whole "
+                   "workspace and dragged-in paths (the source is searched only when named)."));
   return makeObjectSchema(props, QJsonArray{QStringLiteral("query")});
 }
 
@@ -544,17 +550,22 @@ const QVector<AssistantToolDef>& fsToolDefs()
 {
   static const QVector<AssistantToolDef> kDefs = {
     {  QStringLiteral("fs.list"),
-     QStringLiteral("List files and folders in the Serial Studio workspace folder (or a "
-     "dragged-in directory). Read-only."),
+     QStringLiteral(
+     "List files and folders in the Serial Studio workspace folder, a "
+     "dragged-in directory, or the application's own source under 'source/' (the exact "
+     "source of this build). Read-only."),
      fsListInputSchema()  },
     {  QStringLiteral("fs.read"),
-     QStringLiteral("Read a text file from the workspace folder (or a dragged-in path). "
-     "Paged: pass offset/limit and follow nextOffset for large files. Refuses "
-     "binary files."),
+     QStringLiteral(
+     "Read a text file from the workspace folder, a dragged-in path, or the "
+     "application source under 'source/'. Paged: pass offset/limit and follow nextOffset "
+     "for large files. Refuses binary files."),
      fsReadInputSchema()  },
     {QStringLiteral("fs.search"),
-     QStringLiteral("Search file contents across the workspace folder and dragged-in paths "
-     "(grep-like, literal or regex). Read-only."),
+     QStringLiteral(
+     "Search file contents (grep-like, literal or regex). Read-only. Default "
+     "scope is the workspace folder and dragged-in paths; pass path:'source/...' to grep "
+     "the application's own source for this build."),
      fsSearchInputSchema()},
     { QStringLiteral("fs.write"),
      QStringLiteral("Write a UTF-8 text file inside the workspace 'AI/' subfolder, replacing "

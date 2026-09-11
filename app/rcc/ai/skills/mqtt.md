@@ -143,3 +143,11 @@ walk the user to that form.
   metrics a birth certificate declared. If `metrics` is 0 while the
   link is open, the node has not (re)published a birth yet: check
   the group id, or restart the node.
+
+## When this skill does not match what the user sees
+
+The MQTT client, its TLS handling and the Sparkplug B codec live in
+`source/core/Devices`. If a connection fails for a reason the gotchas
+above do not cover, or the user quotes a broker or TLS error verbatim,
+`fs.search` that text with `path:"source/core/Devices"` and read the one
+file it names; the `debugging` skill has the rules for citing it.

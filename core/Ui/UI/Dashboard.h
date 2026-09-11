@@ -373,6 +373,11 @@ public:
     return m_plotControls.waterfallRunning(index);
   }
 
+  [[nodiscard]] quint64 waterfallGeneration(const int index) const noexcept
+  {
+    return m_ingest.waterfallGeneration(index);
+  }
+
   void setFftAudioTap(const int index, const bool enabled, const quint32 key);
   void setWaterfallAudioTap(const int index, const bool enabled, const quint32 key);
 #endif

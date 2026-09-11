@@ -32,6 +32,12 @@ Widgets.SmartDialog {
   // Custom properties
   //
   readonly property int year: new Date().getFullYear()
+  readonly property string buildTag: Cpp_AppCommit !== ""
+                                     ? Cpp_AppCommit.substring(0, 7)
+                                     : qsTr("local build")
+  readonly property string buildIdentity: Cpp_AppName + " " + Cpp_AppVersion + " ("
+                                          + (Cpp_AppCommit !== "" ? Cpp_AppCommit : buildTag)
+                                          + ")"
 
   //
   // Window options
@@ -92,9 +98,24 @@ Widgets.SmartDialog {
           }
 
           Label {
+            id: _version
+
             opacity: 0.8
-            text: qsTr("Version %1").arg(Cpp_AppVersion)
             font: Cpp_Misc_CommonFonts.customUiFont(1.5, false)
+            text: qsTr("Version %1 (%2)").arg(Cpp_AppVersion).arg(root.buildTag)
+
+            ToolTip.delay: 500
+            ToolTip.visible: _versionMouse.containsMouse
+            ToolTip.text: qsTr("Click to copy build identity")
+
+            MouseArea {
+              id: _versionMouse
+
+              hoverEnabled: true
+              anchors.fill: parent
+              cursorShape: Qt.PointingHandCursor
+              onClicked: Cpp_Misc_Utilities.copyText(root.buildIdentity)
+            }
           }
 
           Item {

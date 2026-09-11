@@ -149,3 +149,12 @@ JavaScript-only on purpose:
 Frame parsers and per-dataset transforms support BOTH Lua (preferred
 for hotpath performance) and JavaScript. The Lua nudge does NOT
 extend to output widgets or canvas scripts.
+
+## When this skill does not match what the user sees
+
+The output-widget host, the transmit script editor and the control
+state feedback live in `source/core/Ui`; the write itself goes through
+the driver in `source/core/Devices`. If a button's script behaves unlike
+the description above, or the user quotes a script error verbatim,
+`fs.search` that text with `path:"source/core/Ui"` and read the one file
+it names; the `debugging` skill has the rules for citing it.

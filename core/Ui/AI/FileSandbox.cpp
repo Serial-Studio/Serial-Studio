@@ -20,6 +20,7 @@
 
 #include "AI/Logging.h"
 #include "Core/Services.h"
+#include "Core/SSAssert.h"
 #include "Core/WorkspaceManager.h"
 
 //--------------------------------------------------------------------------------------------------
@@ -27,9 +28,10 @@
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Constructs the empty sandbox; roots are derived live from WorkspaceManager.
+ * @brief Constructs the sandbox; workspace roots are derived live from WorkspaceManager and the
+ *        source root is the resource tree the Pro build compiles in (absent in other builds).
  */
-AI::FileSandbox::FileSandbox() {}
+AI::FileSandbox::FileSandbox() : m_sourceRoot(QString::fromLatin1(kSourceResourceRoot)) {}
 
 /**
  * @brief Returns the process-wide filesystem sandbox.
@@ -73,6 +75,56 @@ static QString displayPath(const QString& absolute, const QString& root)
   return absolute;
 }
 
+/**
+ * @brief Display path under a named virtual prefix ('source/...'); the root alone shows as the
+ *        prefix itself.
+ */
+static QString prefixedDisplayPath(const QString& absolute,
+                                   const QString& root,
+                                   const QString& prefix)
+{
+  SS_ASSERT_LOG(!root.endsWith(QLatin1Char('/')));
+  const auto relative = displayPath(absolute, root);
+  if (prefix.isEmpty())
+    return relative;
+
+  if (relative == QStringLiteral("."))
+    return prefix;
+
+  return prefix + QLatin1Char('/') + relative;
+}
+
+/**
+ * @brief True when a model-facing path addresses the source bundle: the 'source' prefix (tail
+ *        returned without it) or a resource-scheme path (tail returned as given). A raw leading
+ *        './' opts out before normalization, which is how a real workspace folder named
+ *        'source' stays reachable.
+ */
+static bool splitSourcePath(const QString& input, QString& tail)
+{
+  if (input.startsWith(QLatin1String("./")))
+    return false;
+
+  const auto clean  = QDir::cleanPath(input);
+  const auto prefix = QString::fromLatin1(AI::FileSandbox::kSourcePrefix);
+  if (clean.startsWith(QLatin1String(":/"))) {
+    tail = clean;
+    return true;
+  }
+
+  if (clean == prefix) {
+    tail.clear();
+    return true;
+  }
+
+  if (clean.startsWith(prefix + QLatin1Char('/'))) {
+    tail = clean.mid(prefix.size() + 1);
+    return true;
+  }
+
+  return false;
+}
+
 //--------------------------------------------------------------------------------------------------
 // Roots
 //--------------------------------------------------------------------------------------------------
@@ -107,6 +159,50 @@ QStringList AI::FileSandbox::droppedPaths() const
 {
   const QMutexLocker locker(&m_dropMutex);
   return m_droppedPaths;
+}
+
+/**
+ * @brief Returns the read-only root of the bundled application source (a resource path in a
+ *        Pro build, a directory when a test points it elsewhere); may not exist in this build.
+ */
+QString AI::FileSandbox::sourceRoot() const
+{
+  const QMutexLocker locker(&m_dropMutex);
+  return m_sourceRoot;
+}
+
+/**
+ * @brief Repoints the source root; the unit tier uses it to stand a temporary tree in for the
+ *        compiled-in resource bundle. Call before any worker-lane read is in flight.
+ */
+void AI::FileSandbox::setSourceRoot(const QString& root)
+{
+  const QMutexLocker locker(&m_dropMutex);
+  m_sourceRoot = root;
+}
+
+/**
+ * @brief Picks the display root for a canonical path: the source root with its 'source' prefix
+ *        when the path lies under it, the workspace with no prefix otherwise. Evaluated once per
+ *        tool call; the listing and search loops reuse the pair.
+ */
+AI::FileSandbox::DisplayContext AI::FileSandbox::displayContext(const QString& canonical) const
+{
+  const auto source = sourceRoot();
+  if (!source.isEmpty() && isWithinRoot(canonical, source))
+    return {source, QString::fromLatin1(kSourcePrefix)};
+
+  return {workspaceRoot(), QString()};
+}
+
+/**
+ * @brief Model-facing display path for a canonical path: 'source/...' under the source root,
+ *        workspace-relative otherwise.
+ */
+QString AI::FileSandbox::displayFor(const QString& canonical) const
+{
+  const auto context = displayContext(canonical);
+  return prefixedDisplayPath(canonical, context.root, context.prefix);
 }
 
 /**
@@ -206,6 +302,10 @@ AI::FileSandbox::Resolved AI::FileSandbox::resolveRead(const QString& input) con
   if (input.isEmpty() || input.contains(QChar(QChar::Null)))
     return {false, {}, QStringLiteral("invalid_path"), {}};
 
+  QString tail;
+  if (splitSourcePath(input, tail))
+    return resolveSource(tail);
+
   const auto base      = workspaceRoot();
   const QString joined = QDir::isAbsolutePath(input) ? input : QDir(base).absoluteFilePath(input);
   const auto canonical = canonicalParentJoin(QDir::cleanPath(joined));
@@ -222,8 +322,43 @@ AI::FileSandbox::Resolved AI::FileSandbox::resolveRead(const QString& input) con
   return {false,
           {},
           QStringLiteral("outside_sandbox"),
-          QStringLiteral("Reads are limited to the Serial Studio workspace folder and files "
-                         "the user dragged into the chat this session.")};
+          QStringLiteral("Reads are limited to the Serial Studio workspace folder, files the "
+                         "user dragged into the chat this session, and the application "
+                         "source under source/.")};
+}
+
+/**
+ * @brief Resolves a tail under the source root (or a resource-scheme path) for reading; the
+ *        bundle is read-only and absent in builds that do not carry it.
+ */
+AI::FileSandbox::Resolved AI::FileSandbox::resolveSource(const QString& tail) const
+{
+  const auto root = sourceRoot();
+  if (root.isEmpty() || !QFileInfo::exists(root))
+    return {false,
+            {},
+            QStringLiteral("source_unavailable"),
+            QStringLiteral("This build carries no bundled application source.")};
+
+  SS_ASSERT_LOG(!root.endsWith(QLatin1Char('/')));
+  SS_ASSERT_LOG(!tail.contains(QChar(QChar::Null)));
+  QString joined = root;
+  if (tail.startsWith(QLatin1String(":/")))
+    joined = tail;
+  else if (!tail.isEmpty())
+    joined = root + QLatin1Char('/') + tail;
+
+  const auto canonical = canonicalParentJoin(QDir::cleanPath(joined));
+  if (canonical.isEmpty())
+    return {false, {}, QStringLiteral("not_found"), {}};
+
+  if (isWithinRoot(canonical, root))
+    return {true, canonical, {}, {}};
+
+  return {false,
+          {},
+          QStringLiteral("outside_sandbox"),
+          QStringLiteral("Source paths must stay under source/.")};
 }
 
 /**
@@ -246,6 +381,14 @@ AI::FileSandbox::Resolved AI::FileSandbox::resolveWrite(const QString& input) co
 {
   if (input.isEmpty() || input.contains(QChar(QChar::Null)))
     return {false, {}, QStringLiteral("invalid_path"), {}};
+
+  QString tail;
+  if (splitSourcePath(input, tail))
+    return {false,
+            {},
+            QStringLiteral("read_only_root"),
+            QStringLiteral("The application source under source/ is read-only; write under "
+                           "AI/ instead.")};
 
   const auto root = writeRoot();
   if (root.isEmpty())
@@ -334,6 +477,7 @@ void AI::FileSandbox::clearDroppedPaths()
  */
 static void collectEntries(const QString& dir,
                            const QString& root,
+                           const QString& prefix,
                            bool recursive,
                            int depth,
                            QJsonArray& rows,
@@ -351,7 +495,7 @@ static void collectEntries(const QString& dir,
     }
 
     QJsonObject row;
-    row[QStringLiteral("path")] = displayPath(info.absoluteFilePath(), root);
+    row[QStringLiteral("path")] = prefixedDisplayPath(info.absoluteFilePath(), root, prefix);
     row[QStringLiteral("type")] = info.isDir() ? QStringLiteral("dir") : QStringLiteral("file");
     if (info.isFile())
       row[QStringLiteral("sizeBytes")] = static_cast<double>(info.size());
@@ -360,7 +504,7 @@ static void collectEntries(const QString& dir,
     rows.append(row);
 
     if (recursive && info.isDir())
-      collectEntries(info.absoluteFilePath(), root, true, depth + 1, rows, truncated);
+      collectEntries(info.absoluteFilePath(), root, prefix, true, depth + 1, rows, truncated);
   }
 }
 
@@ -379,16 +523,17 @@ QJsonObject AI::FileSandbox::list(const QJsonObject& args) const
     return failure(QStringLiteral("not_a_directory"),
                    QStringLiteral("Use fs.read for files; fs.list expects a directory."));
 
+  const auto context   = displayContext(resolved.path);
   bool truncated       = false;
   const bool recursive = args.value(QStringLiteral("recursive")).toBool(false);
   QJsonArray rows;
-  collectEntries(resolved.path, workspaceRoot(), recursive, 0, rows, truncated);
+  collectEntries(resolved.path, context.root, context.prefix, recursive, 0, rows, truncated);
 
   QJsonObject out;
-  out[QStringLiteral("ok")]        = true;
-  out[QStringLiteral("path")]      = displayPath(resolved.path, workspaceRoot());
-  out[QStringLiteral("count")]     = rows.size();
-  out[QStringLiteral("entries")]   = rows;
+  out[QStringLiteral("ok")]      = true;
+  out[QStringLiteral("path")]    = prefixedDisplayPath(resolved.path, context.root, context.prefix);
+  out[QStringLiteral("count")]   = rows.size();
+  out[QStringLiteral("entries")] = rows;
   out[QStringLiteral("truncated")] = truncated;
   if (truncated)
     out[QStringLiteral("hint")] =
@@ -419,7 +564,9 @@ QJsonObject AI::FileSandbox::read(const QJsonObject& args) const
   if (!file.open(QIODevice::ReadOnly))
     return failure(QStringLiteral("open_failed"), file.errorString());
 
-  if (info.isSymLink() || !openedPathWithinRoots(file.fileName(), readRoots()))
+  auto roots = readRoots();
+  roots.append(sourceRoot());
+  if (info.isSymLink() || !openedPathWithinRoots(file.fileName(), roots))
     return failure(QStringLiteral("outside_sandbox"),
                    QStringLiteral("Refusing to read a symlinked or sandbox-escaping path."));
 
@@ -442,7 +589,7 @@ QJsonObject AI::FileSandbox::read(const QJsonObject& args) const
 
   QJsonObject out;
   out[QStringLiteral("ok")]            = true;
-  out[QStringLiteral("path")]          = displayPath(resolved.path, workspaceRoot());
+  out[QStringLiteral("path")]          = displayFor(resolved.path);
   out[QStringLiteral("content")]       = QString::fromUtf8(chunk);
   out[QStringLiteral("offset")]        = static_cast<double>(offset);
   out[QStringLiteral("bytesReturned")] = static_cast<double>(chunk.size());
@@ -463,6 +610,7 @@ QJsonObject AI::FileSandbox::read(const QJsonObject& args) const
  */
 static void searchFile(const QString& path,
                        const QString& root,
+                       const QString& prefix,
                        const QRegularExpression& needle,
                        QJsonArray& hits,
                        bool& truncated)
@@ -488,7 +636,7 @@ static void searchFile(const QString& path,
     }
 
     QJsonObject row;
-    row[QStringLiteral("file")] = displayPath(path, root);
+    row[QStringLiteral("file")] = prefixedDisplayPath(path, root, prefix);
     row[QStringLiteral("line")] = lineNo;
     row[QStringLiteral("text")] = line.left(400);
     hits.append(row);
@@ -536,7 +684,25 @@ QJsonObject AI::FileSandbox::search(const QJsonObject& args) const
   if (!needle.isValid())
     return failure(QStringLiteral("bad_regex"), needle.errorString());
 
-  const auto files = gatherSearchFiles(readRoots(), kMaxSearchFiles);
+  QStringList roots;
+  DisplayContext context;
+  const auto scope = args.value(QStringLiteral("path")).toString();
+  if (scope.isEmpty()) {
+    roots   = readRoots();
+    context = {workspaceRoot(), QString()};
+  } else {
+    const auto resolved = resolveRead(scope);
+    if (!resolved.ok)
+      return failure(resolved.error, resolved.hint);
+
+    roots   = {resolved.path};
+    context = displayContext(resolved.path);
+  }
+
+  const auto& root   = context.root;
+  const auto& prefix = context.prefix;
+
+  const auto files = gatherSearchFiles(roots, kMaxSearchFiles);
   bool truncated   = files.size() >= kMaxSearchFiles;
   QJsonArray hits;
   qint64 scannedBytes = 0;
@@ -556,7 +722,7 @@ QJsonObject AI::FileSandbox::search(const QJsonObject& args) const
 
     scannedBytes += size;
     ++filesScanned;
-    searchFile(file, workspaceRoot(), needle, hits, truncated);
+    searchFile(file, root, prefix, needle, hits, truncated);
     if (hits.size() >= kMaxSearchHits) {
       truncated = true;
       break;

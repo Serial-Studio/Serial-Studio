@@ -257,3 +257,11 @@ gradients per call (cache in a top-level `var`).
 
 Throwing inside `paint` logs a watchdog warning and the canvas keeps the
 last successful frame on screen.
+
+## When this skill does not match what the user sees
+
+The Canvas Widget host, its Canvas2D subset and the watchdog live in
+`source/core/Ui`. If a drawing call is missing or behaves unlike the
+subset above, or the user quotes a watchdog or script error verbatim,
+`fs.search` that text with `path:"source/core/Ui"` and read the one file
+it names; the `debugging` skill has the rules for citing it.

@@ -5,19 +5,8 @@ description: >-
   reviewing FrameReader, CircularBuffer, FrameBuilder, ConnectionManager, DeviceManager, or
   Dashboard frame-draw code — anything on the Driver → FrameReader → FrameBuilder → Dashboard
   path. Covers SPSC/pipeline-thread rules, DirectConnection requirement, the no-alloc/no-copy slot
-  pool, source-owns-time, and how to measure throughput with --benchmark-hotpath.
-paths:
-  - core/Pipeline/IO/FrameReader.*
-  - core/Core/CircularBuffer.h
-  - core/Devices/IO/ConnectionManager.*
-  - core/Devices/IO/DeviceManager.*
-  - core/Pipeline/DataModel/FrameBuilder.*
-  - core/Core/HotpathOptimization.h
-  - core/Ui/UI/Dashboard.*
-  - core/Pipeline/DSP.h
-  - core/Core/DSPSimd.h
-  - core/Pipeline/IO/StreamWorker.*
-  - core/Pipeline/IO/PipelineHost.*
+  pool, source-owns-time, and how to measure throughput with --benchmark-hotpath. Invoke it
+  explicitly: it is never loaded for you.
 ---
 
 # Serial Studio — data hotpath
@@ -36,8 +25,9 @@ action is the deliberate-mode interrupt. Do not proceed straight from pattern-ma
 ## Data flow
 
 `Driver → FrameReader::processData (pipeline thread) → PipelineHost::routeFrames →
-FrameBuilder → shared TimestampedFramePtr → PipelineHost dashboard ring →
-Dashboard::onDisplayTick (GUI) | CSV / MDF4 / API / Sessions (detached copy)`
+FrameBuilder parse → BlockStager::stage (pooled DataBlock) → BlockPublisher::publish →
+PipelineHost block ring → Dashboard::onDisplayTick (GUI) | CSV / MDF4 / API / Sessions
+(ONE clone_block_trimmed copy, only when a sink is on)`
 
 Dense typed sources (audio) skip all of that: driver `SampleBlock` → per-source
 `IO::StreamWorker` thread → bounded display update / export block / latest values, all per

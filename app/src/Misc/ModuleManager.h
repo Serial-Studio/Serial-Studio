@@ -21,6 +21,7 @@
 
 #pragma once
 
+#include <memory>
 #include <QObject>
 #include <QQmlApplicationEngine>
 #include <QSettings>
@@ -30,6 +31,8 @@
 class QQmlContext;
 
 namespace Misc {
+class SimdSettings;
+
 /**
  * @brief Manages application module lifecycle, QML engine setup, and headless operation.
  */
@@ -60,6 +63,7 @@ signals:
 
 public:
   ModuleManager();
+  ~ModuleManager() override;
   static void bootstrapCoreServices();
   static void instantiateCoreModules();
   static void bindInterfaces();
@@ -97,6 +101,7 @@ private:
   bool m_headless;
   bool m_quitHandled;
   QSettings m_settings;
+  std::unique_ptr<SimdSettings> m_simdSettings;
   bool m_ephemeralSession;
   bool m_automaticUpdates;
   bool m_performanceMode;

@@ -47,6 +47,9 @@ qt_add_library(
   SSAssert.cpp
   Concepts.h
   DSPSimd.h
+  DSPSimdAvx2.h
+  SimdLevel.h
+  SimdLevel.cpp
   HotpathOptimization.h
   ParseBudget.h
   CircularBuffer.h

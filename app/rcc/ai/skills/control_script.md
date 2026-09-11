@@ -332,3 +332,7 @@ function parse(frame) {
 ```
 
 For the full help page, fetch `Control-Script`.
+
+## When this skill does not match what the user sees
+
+The control-script host (`loop()` pacing, `io.*`, the table and device APIs) lives in `source/core/Pipeline`, and the drivers it talks to in `source/core/Devices`. If a call behaves unlike the description above, or the user quotes a script error verbatim, `fs.search` that text under the matching scope and read the one file it names; the `debugging` skill has the rules for citing it.

@@ -2115,3 +2115,55 @@ def test_extension_install_verifies_digests_and_stages():
         "QVersionNumber::compare" in catalog
     ), "updates compare numerically, not as strings"
     assert "isTrustedRepoUrl" in catalog
+
+
+# ---------------------------------------------------------------------------
+# Spec 0078: build identity (commit stamp) plumbing
+# ---------------------------------------------------------------------------
+
+
+def test_build_commit_reaches_about_dialog():
+    """The CI-supplied commit hash is registered next to the version and the About
+    dialog renders it; a build without the property would silently show only the
+    version again (spec 0078, AC1)."""
+    module_manager = _read("app/src/Misc/ModuleManager.cpp")
+    assert 'registry.add("Cpp_AppVersion"' in module_manager
+    assert (
+        'registry.add("Cpp_AppCommit", QVariant(QStringLiteral(APP_COMMIT)))'
+        in module_manager
+    )
+
+    # ContextRegistry::add asserts the name against its value table; a registration
+    # without the table entry logs an assertion at every startup (caught 2026-09-11).
+    registry = _read("core/Ui/Misc/ContextRegistry.cpp")
+    assert 'QStringLiteral("Cpp_AppCommit"),' in registry
+
+    app_info = _read("core/Core/AppInfo.h")
+    assert "#define APP_COMMIT      PROJECT_COMMIT" in app_info
+
+    root_cmake = _read("CMakeLists.txt")
+    assert 'add_definitions(-DPROJECT_COMMIT="${SS_BUILD_COMMIT}")' in root_cmake
+
+    about = _read("app/qml/Dialogs/About.qml")
+    assert "Cpp_AppCommit" in about
+    assert 'qsTr("local build")' in about
+    assert 'qsTr("Version %1 (%2)")' in about
+
+
+def test_ci_configures_pass_the_build_commit():
+    """Every shipping configure in ci.yml passes SS_BUILD_COMMIT, so a new build job
+    cannot ship a binary whose About dialog and help fetch fall back to master
+    (spec 0078, R1/R4). The unit-tier configures under build/unit-ci are exempt."""
+    text = _read(".github/workflows/ci.yml")
+    lines = text.splitlines()
+    sites = [
+        i
+        for i, line in enumerate(lines)
+        if line.strip().startswith("cmake -B build -G Ninja")
+    ]
+    assert len(sites) >= 9, "expected the nine shipping configure sites"
+    for i in sites:
+        window = " ".join(lines[i : i + 3])
+        assert (
+            "-DSS_BUILD_COMMIT=${{ github.sha }}" in window
+        ), f"ci.yml line {i + 1}: configure step lacks SS_BUILD_COMMIT"

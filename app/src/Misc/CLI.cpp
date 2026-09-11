@@ -129,6 +129,7 @@ void CLI::registerOptions()
   m_parser.addOption(m_opts.benchmarkSecondsOpt);
   m_parser.addOption(m_opts.benchmarkOutputOpt);
   m_parser.addOption(m_opts.exitAfterOpt);
+  m_parser.addOption(m_opts.simdLevelOpt);
 #ifdef SS_INAPP_TESTS
   m_parser.addOption(m_opts.selftestOpt);
   m_parser.addOption(m_opts.selftestSuiteOpt);
@@ -222,13 +223,20 @@ bool CLI::argvHasFlag(int argc, char** argv, const char* flag)
 }
 
 /**
- * @brief Reads the value following @p flag in raw argv (used before parsing).
+ * @brief Reads the value of @p flag from raw argv (used before parsing), in both the
+ *        "--flag value" and the "--flag=value" spellings QCommandLineParser accepts later, so a
+ *        pre-parse consumer never silently ignores the second form.
  */
 QString CLI::argvValueFor(int argc, char** argv, const char* flag)
 {
-  for (int i = 1; i < argc - 1; ++i)
-    if (std::strcmp(argv[i], flag) == 0)
+  const std::size_t flag_len = std::strlen(flag);
+  for (int i = 1; i < argc; ++i) {
+    if (std::strcmp(argv[i], flag) == 0 && i + 1 < argc)
       return QString::fromLocal8Bit(argv[i + 1]);
+
+    if (std::strncmp(argv[i], flag, flag_len) == 0 && argv[i][flag_len] == '=')
+      return QString::fromLocal8Bit(argv[i] + flag_len + 1);
+  }
 
   return QString();
 }

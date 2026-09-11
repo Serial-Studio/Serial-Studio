@@ -110,3 +110,12 @@ formatted register values; the default parser is fine for most setups.
   reports stale data. Default 100ms is right for almost everything.
 - **CAN-FD mismatch**: enabling CAN-FD on a 2.0-only bus causes the
   controller to error-frame the bus. Confirm with the user.
+
+## When this skill does not match what the user sees
+
+The CAN backends (Qt plugins, gs_usb, SLCAN), the J1939 and ISO-TP
+reassembly, the DBC decoder and the Modbus poller live in
+`source/core/Devices`. If a frame or register read behaves unlike the
+rules above, or the user quotes a driver error verbatim, `fs.search`
+that text with `path:"source/core/Devices"` and read the one file it
+names; the `debugging` skill has the rules for citing it.

@@ -736,6 +736,74 @@ qt_add_resources(RES_RCC ${CMAKE_CURRENT_SOURCE_DIR}/rcc/rcc.qrc)
 qt_add_resources(QTR_RCC ${CMAKE_CURRENT_SOURCE_DIR}/translations/translations.qrc)
 
 #---------------------------------------------------------------------------------------------------
+# Source bundle for the AI assistant (Pro, spec 0078)
+#---------------------------------------------------------------------------------------------------
+#
+# Compiles the hand-written text sources of THIS tree into the executable as a resource tree
+# under :/source, which AI::FileSandbox reads in place through the model-facing "source/" prefix
+# (read-only, search only when asked). The list is derived at configure time from an allowlist of
+# roots and extensions: the manifest is the tree itself, so no checked-in file can lag it, and
+# CONFIGURE_DEPENDS re-globs when a file is added. Third-party code, tests, CI and the example
+# screenshots stay out; nothing here invokes git. The .qrc is regenerated only when its content
+# changes, so a plain reconfigure does not rerun rcc. SS_BUNDLE_SOURCE=OFF skips the whole step
+# for a faster local iteration build; the sandbox then answers source_unavailable.
+#
+#---------------------------------------------------------------------------------------------------
+
+option(SS_BUNDLE_SOURCE "Bundle the application source for the AI assistant (Pro builds)" ON)
+
+set(SRC_RCC "")
+if(BUILD_COMMERCIAL AND SS_BUNDLE_SOURCE)
+  set(SS_SOURCE_BUNDLE_ROOTS
+    app/src
+    app/qml
+    core
+    doc/help
+    examples
+    cmake
+  )
+  set(SS_SOURCE_BUNDLE_EXTENSIONS
+    h cpp c hpp qml js lua md json txt cmake py ssproj csv dbc yml
+  )
+
+  set(ss_bundle_files
+    "${PROJECT_ROOT_DIR}/CMakeLists.txt"
+    "${PROJECT_ROOT_DIR}/app/CMakeLists.txt"
+    "${PROJECT_ROOT_DIR}/core/CMakeLists.txt"
+  )
+  foreach(root IN LISTS SS_SOURCE_BUNDLE_ROOTS)
+    set(ss_bundle_globs "")
+    foreach(ext IN LISTS SS_SOURCE_BUNDLE_EXTENSIONS)
+      list(APPEND ss_bundle_globs "${PROJECT_ROOT_DIR}/${root}/*.${ext}")
+    endforeach()
+    file(GLOB_RECURSE ss_bundle_root_files LIST_DIRECTORIES false CONFIGURE_DEPENDS
+      ${ss_bundle_globs})
+    list(APPEND ss_bundle_files ${ss_bundle_root_files})
+  endforeach()
+  list(FILTER ss_bundle_files EXCLUDE REGEX "/ThirdParty/")
+  list(FILTER ss_bundle_files EXCLUDE REGEX "/core/tests/")
+  list(FILTER ss_bundle_files EXCLUDE REGEX "/examples/[^/]+/doc/")
+  list(FILTER ss_bundle_files EXCLUDE REGEX "/__pycache__/")
+  list(REMOVE_DUPLICATES ss_bundle_files)
+  list(SORT ss_bundle_files)
+
+  set(ss_bundle_xml "<!DOCTYPE RCC><RCC version=\"1.0\">\n<qresource prefix=\"/source\">\n")
+  foreach(file IN LISTS ss_bundle_files)
+    file(RELATIVE_PATH ss_bundle_alias "${PROJECT_ROOT_DIR}" "${file}")
+    string(APPEND ss_bundle_xml "  <file alias=\"${ss_bundle_alias}\">${file}</file>\n")
+  endforeach()
+  string(APPEND ss_bundle_xml "</qresource>\n</RCC>\n")
+
+  set(ss_bundle_qrc "${CMAKE_CURRENT_BINARY_DIR}/source_bundle.qrc")
+  file(WRITE "${ss_bundle_qrc}.in" "${ss_bundle_xml}")
+  configure_file("${ss_bundle_qrc}.in" "${ss_bundle_qrc}" COPYONLY)
+  qt_add_resources(SRC_RCC "${ss_bundle_qrc}")
+
+  list(LENGTH ss_bundle_files ss_bundle_count)
+  message(STATUS "Source bundle for the AI assistant: ${ss_bundle_count} files")
+endif()
+
+#---------------------------------------------------------------------------------------------------
 # Executable target and library linking
 #---------------------------------------------------------------------------------------------------
 #
@@ -767,6 +835,7 @@ qt_add_executable(
   ${HEADERS}
   ${QML_RCC}
   ${RES_RCC}
+  ${SRC_RCC}
   ${QTR_RCC}
   ${QT_RCC_TRANSLATIONS}
   ${APP_RCC_TRANSLATIONS}
@@ -1067,7 +1136,7 @@ if(SS_UNITY_BUILD)
     target_compile_options(${PROJECT_EXECUTABLE} PRIVATE /bigobj)
   endif()
 
-  set_source_files_properties(${RES_RCC} ${QTR_RCC}
+  set_source_files_properties(${RES_RCC} ${SRC_RCC} ${QTR_RCC}
     PROPERTIES SKIP_UNITY_BUILD_INCLUSION ON
   )
 

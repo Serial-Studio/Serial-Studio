@@ -36,16 +36,55 @@ paths (`Projects/imu.ssproj`, `AI/notes.md`) and the sandbox resolves
 them. Absolute paths work only when they fall inside a root (e.g. a
 dragged-in folder).
 
+## The application source (read-only)
+
+A third root holds Serial Studio's own source code, the exact tree the
+running build was compiled from. Address it with the `source/` prefix:
+
+- `source/app/src`, `source/app/qml` -- the application entry point and
+  the QML user interface.
+- `source/core` -- the seven core libraries: drivers (`core/Devices`),
+  the frame pipeline and parsers (`core/Pipeline`), storage and export
+  (`core/Storage`), the API server (`core/Api`), the dashboard and this
+  assistant (`core/Ui`).
+- `source/doc/help` -- the help pages, as shipped with this build.
+- `source/examples` -- the example projects (without screenshots).
+- `source/cmake`, `source/CMakeLists.txt` -- the build definition.
+
+Third-party libraries, tests and CI are not included. The tree is
+read-only: `fs.write`, `fs.append` and `fs.delete` answer
+`read_only_root` for anything under `source/`. A real workspace folder
+named `source` is shadowed by the prefix; reach it as `./source`.
+
+`fs.search` does NOT walk the source by default. Pass
+`path:"source"` (or a narrower `path:"source/core/Pipeline"`) to grep it,
+so a search over the user's logs and projects never returns C++ hits.
+Search first, then `fs.read` the one file the hits point at; do not page
+through whole source files looking for something. When you cite the
+source, give the path and line (`source/core/Pipeline/IO/FrameReader.cpp:212`)
+and, when the build carries a commit hash, quote the short hash so the
+citation can be checked against the repository. Translate for the user:
+name the feature as the app shows it (Built-In parser, Historian,
+Variables, Canvas Widget), not the identifier the code uses (`Native`,
+`Sessions`, `registers`, `Painter`), and summarize what the code does in
+a sentence or two rather than pasting it.
+
+Some builds carry no bundle (local developer builds configured with
+`SS_BUNDLE_SOURCE=OFF`); the tools then answer `source_unavailable`, and
+you fall back to the help pages and the skills.
+
 ## Tools
 
 - `fs.list{path?, recursive?}` -- directory listing (name, type,
   sizeBytes, modified). Default path is the workspace root. `recursive`
   walks subdirectories within a depth cap. Start here to learn the layout.
 - `fs.read{path, offset?, limit?}` -- read a text file. See paging below.
-- `fs.search{query, isRegex?}` -- grep the read roots for a string (or a
-  regex when `isRegex:true`), case-insensitive. Returns `{file, line,
-  text}` rows. Use this to find where something lives before reading a
-  whole file.
+- `fs.search{query, isRegex?, path?}` -- grep for a string (or a regex
+  when `isRegex:true`), case-insensitive. Returns `{file, line, text}`
+  rows. Without `path` it walks the workspace and dragged-in paths; pass
+  `path` to narrow it to one folder, and `path:"source/..."` to search
+  the application source (never searched otherwise). Use this to find
+  where something lives before reading a whole file.
 - `fs.write{path, content}` -- replace a file under `AI/` atomically.
 - `fs.append{path, content}` -- append to a file under `AI/`, creating it
   and any parent folders if needed.
@@ -113,3 +152,7 @@ dragged-in folder is read-only to you.
 - "Summarize these logs" (user dragged a folder) -> `fs.list` the dropped
   folder, `fs.read` the relevant files, write the summary to
   `AI/log-summary.md`, and tell the user where it is.
+- "Why does the parser reject frames with a bad checksum?" ->
+  `fs.search{query:"checksum", path:"source/core/Pipeline"}`, `fs.read`
+  the file the hits name, then explain from the code and cite
+  `source/<path>:<line>` plus the build's short hash.

@@ -228,14 +228,18 @@ static void appendExecuteAndHelpTools(QJsonArray& out)
   out.append(makeMetaTool(
     QStringLiteral("meta.fetchHelp"),
     QStringLiteral("Fetch a Serial Studio documentation page from "
-                   "the canonical doc/help markdown source. Use "
-                   "whenever the user asks about features, "
-                   "concepts, or workflows -- always cite from the "
-                   "fetched page, never synthesize content from "
-                   "training data. If the response indicates a 404 "
-                   "redirect to help.json, pick the correct file "
-                   "from the index instead of answering from a "
-                   "near-miss page."),
+                   "the canonical doc/help markdown source, pinned "
+                   "to the commit this build was made from. Pass "
+                   "bare page names, never a branch URL: only a "
+                   "bare name gets the build's own version of the "
+                   "page. Use whenever the user asks about "
+                   "features, concepts, or workflows -- always cite "
+                   "from the fetched page, never synthesize content "
+                   "from training data. If the response indicates a "
+                   "404 redirect to help.json (always served at the "
+                   "build's own commit), pick the correct file from "
+                   "the index instead of answering from a near-miss "
+                   "page."),
     objectSchemaWithProperty(QStringLiteral("path"),
                              stringProp(QStringLiteral("A bare page name without the .md extension "
                                                        "(e.g. \"About\", \"FAQ\", "

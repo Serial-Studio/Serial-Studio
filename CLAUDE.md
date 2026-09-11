@@ -206,9 +206,9 @@ rules only steer an edit if *named at the point of action*, so:
 
 The rules most likely to cause silent breakage. Full detail (data flow, threading table,
 cached flags, benchmark mechanics) in
-[doc/claude/architecture/dataflow.md](doc/claude/architecture/dataflow.md); the
-`ss-hotpath` skill auto-activates on these paths and re-states them, including the spec-0055
-block caps, the time-ring/plot-clock rules, and the kernel macros.
+[doc/claude/architecture/dataflow.md](doc/claude/architecture/dataflow.md); invoke the
+`ss-hotpath` skill before editing these paths (nothing loads it for you) and it re-states them,
+including the spec-0055 block caps, the time-ring/plot-clock rules, and the kernel macros.
 
 - **The frame pipeline runs on `IO::PipelineHost`'s processing thread (spec 0051 M3), not the
   GUI thread.** FrameReaders, `FrameParser` and `FrameBuilder` all live there; the GUI drains
@@ -299,7 +299,10 @@ block caps, the time-ring/plot-clock rules, and the kernel macros.
 - **Reuse the kernels; never inline intrinsics or invent a macro.** `core/Core/DSPSimd.h`
   (spec 0021, bit-exact per lane) and `core/Core/HotpathOptimization.h`
   (`SS_FORCE_INLINE`, `SS_ASSUME`, ...; never fast-math / no-unwind / GCC `optimize("...")`):
-  [doc/claude/architecture/kernels.md](doc/claude/architecture/kernels.md).
+  [doc/claude/architecture/kernels.md](doc/claude/architecture/kernels.md). Lanes are picked at
+  runtime through `DSP::activeSimdLevel()` (spec 0081: Scalar / SSE4 / AVX2 on x86-64, Scalar /
+  NEON on aarch64); the AVX2 bodies live in `core/Core/DSPSimdAvx2.h` as `SS_NEVER_INLINE
+  SS_TARGET_AVX2` functions under the same bit-exact contract, and no TU is ever compiled wide.
 
 ## Startup & Composition Root — Non-Negotiable
 
@@ -350,7 +353,7 @@ area. The hazard column names what breaks silently — the doc holds the rule.
 | `core/Ui/Console/Annotations.*`, `ConsoleAnnotations.qml` (spec 0059) | [dashboard.md](doc/claude/architecture/dashboard.md) "Frame annotation layer" | `annotate()` stages, `commitPending()` publishes per tick — reading `count()` right after needs a commit. `reset()` clears the model *before* re-reading the offset. |
 | `core/Api/API/Mirror/`, `streamAvailable()` (spec 0040) | [mirror.md](doc/claude/architecture/mirror.md) | Dataset ordering or `wireUniqueId` changes are wire breaks: bump `kWireVersion`, regenerate `tests/fixtures/mirror/`. Viewer frames never reach the export fan-out. |
 | An embedded code editor's render cadence | [scripting.md](doc/claude/architecture/scripting.md) "Embedded Code Editors" | Never give a main-window-embedded editor an unconditional per-tick `grab()` — cost 13% of the GUI thread (2026-08-17). |
-| The AI assistant: a tool tier, the checkpoint timer, a provider, the tool surface | [ai.md](doc/claude/architecture/ai.md) | A mutating tool call takes a **checkpoint**, never a save — the API descriptions and `app/rcc/ai/skills/` say so to the model, so a disk-contract change is incomplete until those strings change too. Every command sits in exactly one tier of `command_safety.json`; an unlisted name silently falls through to `Confirm`. |
+| The AI assistant: a tool tier, the checkpoint timer, a provider, the tool surface, the sandbox roots | [ai.md](doc/claude/architecture/ai.md) | A mutating tool call takes a **checkpoint**, never a save — the API descriptions and `app/rcc/ai/skills/` say so to the model, so a disk-contract change is incomplete until those strings change too. Every command sits in exactly one tier of `command_safety.json`; an unlisted name silently falls through to `Confirm`. The bundled source behind the `source/` prefix (spec 0078) is read-only and joins a search ONLY through the `path` scope — never add it to the default walk. |
 | Locating a god object's concerns (`ProjectModel`, `ProjectHandler`, `FrameBuilder`, `Dashboard`) | [directory-map.md](doc/claude/directory-map.md) | Spec 0070 re-formed the god objects into facades owning real sub-object classes (one class = one .h/.cpp, in a sibling dir named after the facade). Never split one class across TUs: decompose into member sub-objects instead. |
 | Anything under `core/` or a source that could move there (spec 0076) | [directory-map.md](doc/claude/directory-map.md) "core/" | A library never includes `app/src`; a moved `Q_OBJECT` header listed in both a library and the executable mocs twice; every `.h`/`.cpp` pair lives in one target; a relative include must resolve in exactly one root; an upward include beyond `scripts/layer-baseline.json` fails CI; the bus is never on the per-frame path. |
 

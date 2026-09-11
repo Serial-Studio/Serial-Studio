@@ -77,9 +77,6 @@ public:
   void stageRow(const QImage& image, int row);
 
   [[nodiscard]] static bool supported(const QQuickWindow* window, const QSize& size);
-  [[nodiscard]] static bool captureRowIfChanged(const float* row,
-                                                int bins,
-                                                std::vector<float>& cache);
 
 private:
   QSize m_size;

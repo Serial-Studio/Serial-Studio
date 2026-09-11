@@ -50,6 +50,17 @@
 
 find_package(Qt6 REQUIRED COMPONENTS Test GuiPrivate)
 
+#
+# The unit tier never initialises WebEngine (CI configures it with WITH_WEBENGINE=OFF), but the
+# top-level SERIAL_STUDIO_WITH_WEBENGINE define is directory-inherited, so a suite that compiles
+# AppPlatform.cpp on a WebEngine-enabled kit would include a header no suite links. Drop the define
+# for this directory instead of linking Qt6::WebEngineQuick into eight test binaries. No archive a
+# suite links carries WebEngine-conditional code, so header and object stay consistent.
+#
+if(WITH_WEBENGINE)
+  remove_definitions(-DSERIAL_STUDIO_WITH_WEBENGINE)
+endif()
+
 set(SS_APP_SRC "${CMAKE_CURRENT_SOURCE_DIR}/../src")
 set(SS_CORE_SRC "${CMAKE_SOURCE_DIR}/core")
 set(SS_UNIT_TEST_TARGETS "")
@@ -326,6 +337,17 @@ set_source_files_properties(
 #
 ss_add_unit_test(tst_dsp_kernels
   SOURCES tst_dsp_kernels.cpp
+          dsp_scalar_ref.cpp
+  LIBS    Qt6::Core
+          SerialStudio::Core
+)
+
+#
+# Spec 0082 R3: single-chain versus two-chain cost of the reduction lane helpers, printed and never
+# gated. Shares the scalar-oracle TU so the numbers are only reported for bit-identical results.
+#
+ss_add_unit_test(tst_dsp_reduction_bench
+  SOURCES tst_dsp_reduction_bench.cpp
           dsp_scalar_ref.cpp
   LIBS    Qt6::Core
           SerialStudio::Core
@@ -2126,6 +2148,22 @@ ss_add_unit_test(tst_file_sandbox
 if(TARGET tst_file_sandbox)
   target_sources(tst_file_sandbox PRIVATE ${SS_TEST_ICONS_RCC})
 endif()
+
+#
+# The help-fetch URL policy of spec 0078 (AC6): bare page names and the help.json fallback resolve
+# against the stamped build commit, a local build falls back to master, full URLs pass through and
+# the host allowlist is unchanged. Only the static URL builders run; no request leaves the process.
+# QtGui is the QTextDocument the HTML branch of completePage() uses.
+#
+ss_add_unit_test(tst_help_fetcher
+  SOURCES tst_help_fetcher.cpp
+          ${SS_CORE_SRC}/Ui/AI/Conversation/HelpFetcher.cpp
+          ${SS_CORE_SRC}/Ui/AI/Logging.cpp
+  LIBS    Qt6::Core
+          Qt6::Gui
+          Qt6::Network
+          SerialStudio::Core
+)
 
 #
 # The three streaming reply state machines against canned HTTP responses (J5/J6/J8). KeyVault.cpp

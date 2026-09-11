@@ -2574,10 +2574,10 @@ void DataModel::FrameBuilder::setReplayColumnMap(
 }
 
 /**
- * @brief Rebuilds every per-dataset transform engine. Defers while a frame is in flight
- * (m_compileGuard > 0), since mutating the engine map under a dataset pass dangles the hot
- * pointers cached from it, keeps the engines down while a player is open, and no-ops after
- * aboutToQuit because rebuilding a QJSEngine once QCoreApplication is gone is a qFatal at exit.
+ * @brief Rebuilds every per-dataset transform engine. Defers while a frame is in flight (the
+ * engine map holds the cached hot pointers); keeps engines down while a player is open or the
+ * table store is uninitialized (the compile resolves table handles against it, and whoever
+ * re-initializes it recompiles); no-ops after aboutToQuit (a QJSEngine rebuild is then a qFatal).
  */
 void DataModel::FrameBuilder::compileTransforms()
 {
@@ -2592,7 +2592,7 @@ void DataModel::FrameBuilder::compileTransforms()
   destroyTransformEngines();
   SS_ASSERT_LOG(m_transforms.empty());
 
-  if (m_playerOpen)
+  if (m_playerOpen || !m_tableStore.isInitialized())
     return;
 
   m_transforms.compile();

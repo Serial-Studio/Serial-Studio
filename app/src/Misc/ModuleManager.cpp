@@ -108,6 +108,7 @@
 #include "Misc/HighDpiScaling.h"
 #include "Misc/IconEngine.h"
 #include "Misc/ProblemCenter.h"
+#include "Misc/SimdSettings.h"
 #include "Misc/ThemeManager.h"
 #include "Misc/Utilities.h"
 #include "Platform/AppPlatform.h"
@@ -280,11 +281,18 @@ Misc::ModuleManager::ModuleManager()
   , m_inhibitIdleSleep(m_settings.value("App/InhibitIdleSleep", true).toBool())
 {
   (void)Misc::Translator::instance();
+  m_simdSettings = std::make_unique<Misc::SimdSettings>();
 
   connect(&m_engine, &QQmlApplicationEngine::quit, this, &Misc::ModuleManager::onQuit);
 
   connect(qApp, &QCoreApplication::aboutToQuit, this, &Misc::ModuleManager::onQuit);
 }
+
+/**
+ * @brief Out of line so the forward-declared SimdSettings behind the unique_ptr is complete where
+ *        it is deleted, instead of relying on whichever TU happens to destroy the manager.
+ */
+Misc::ModuleManager::~ModuleManager() = default;
 
 //--------------------------------------------------------------------------------------------------
 // Settings access
@@ -1175,6 +1183,7 @@ void Misc::ModuleManager::registerCoreContextProperties(QQmlContext* ctx)
   registry.add("Cpp_UI_WidgetExtensions", &UI::WidgetExtensions::instance());
   registry.add("Cpp_Misc_GraphicsBackend", &Misc::GraphicsBackend::instance());
   registry.add("Cpp_Misc_HighDpiScaling", &Misc::HighDpiScaling::instance());
+  registry.add("Cpp_Misc_SimdSettings", m_simdSettings.get());
   registry.add("Cpp_Misc_CrashTracker", &Misc::CrashTracker::instance());
   registry.add("Cpp_Misc_BackupManager", &Misc::BackupManager::instance());
   registry.add("Cpp_Benchmark_Runner", &Benchmark::BenchmarkRunner::instance());
@@ -1254,6 +1263,7 @@ void Misc::ModuleManager::registerAppMetadataProperties(QQmlContext* ctx, bool g
   registry.add("Cpp_AppName", QVariant(QStringLiteral(APP_NAME)));
   registry.add("Cpp_ScreenList", QVariant(screenList));
   registry.add("Cpp_AppVersion", QVariant(QStringLiteral(APP_VERSION)));
+  registry.add("Cpp_AppCommit", QVariant(QStringLiteral(APP_COMMIT)));
   registry.add("Cpp_PrimaryScreen", QVariant(primaryScreen));
   registry.add("Cpp_AppUpdaterUrl", QVariant(QStringLiteral(APP_UPDATER_URL)));
   registry.add("Cpp_AppOrganization", QVariant(QStringLiteral(APP_DEVELOPER)));

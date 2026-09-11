@@ -245,6 +245,7 @@ private:
   int m_writeRow;
   int m_topRow;
   bool m_filledOnce;
+  quint64 m_lastGeneration;
 
   double m_center;
   double m_halfRange;
@@ -262,7 +263,6 @@ private:
   QSGSimpleTextureNode* m_overlayNode;
 
   std::vector<QRgb> m_colorLut;
-  std::vector<float> m_lastRow;
 
   bool m_campbellMode;
   int m_yDatasetUniqueId;

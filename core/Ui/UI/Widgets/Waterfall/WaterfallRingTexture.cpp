@@ -278,24 +278,3 @@ bool Widgets::WaterfallRingTexture::supported(const QQuickWindow* window, const 
   return size.width() <= maxDimension && size.height() <= maxDimension;
 #endif
 }
-
-/**
- * @brief Answers whether @p row differs from the last row handed to this cache and, when it does,
- *        adopts it. This is the spectrogram's idle gate (R15.1): a source that pushed no new
- *        samples re-runs the same FFT over the same ring and produces a bit-identical row, so the
- *        widget writes no scanline, dirties no texture and schedules no frame.
- */
-bool Widgets::WaterfallRingTexture::captureRowIfChanged(const float* row,
-                                                        const int bins,
-                                                        std::vector<float>& cache)
-{
-  SS_ASSERT(row != nullptr, return false);
-  SS_ASSERT(bins > 0, return false);
-
-  const auto count = static_cast<std::size_t>(bins);
-  if (cache.size() == count && std::memcmp(cache.data(), row, count * sizeof(float)) == 0)
-    return false;
-
-  cache.assign(row, row + count);
-  return true;
-}

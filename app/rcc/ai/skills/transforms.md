@@ -402,3 +402,7 @@ end
 ```
 
 Affects the active dashboard window only. Does NOT persist to the project file or QSettings.
+
+## When this skill does not match what the user sees
+
+The transform host, the execution order and the compiled-expression fast path live in `source/core/Pipeline`. If a transform's result contradicts the rules above, or the user quotes an engine error verbatim, `fs.search` that text with `path:"source/core/Pipeline"` and read the one file it names; the `debugging` skill has the rules for citing it.

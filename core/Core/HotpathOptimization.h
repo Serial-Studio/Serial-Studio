@@ -81,6 +81,26 @@
 #endif
 
 //--------------------------------------------------------------------------------------------------
+// Instruction-set targeting (spec 0081)
+//--------------------------------------------------------------------------------------------------
+
+/**
+ * @brief Compiles one function for AVX2 inside a translation unit that stays at the x86-64-v2
+ *        baseline, so the wide body exists in the binary without any TU being compiled wide. Two
+ *        rules bind every use: the target string is "avx2" alone (adding "fma" would let the
+ *        compiler contract multiply-add and break the per-lane bit-exact kernel contract), and the
+ *        function is always SS_NEVER_INLINE, never SS_FORCE_INLINE, so the runtime level check in
+ *        the caller is a call boundary no compiler can hoist an AVX instruction above. cl.exe
+ *        exposes every _mm256_* intrinsic without a flag, so its spelling is empty; the noinline
+ *        boundary and an explicit _mm256_zeroupper() carry the contract there.
+ */
+#if defined(__clang__) || defined(__GNUC__)
+#  define SS_TARGET_AVX2 __attribute__((target("avx2")))
+#else
+#  define SS_TARGET_AVX2
+#endif
+
+//--------------------------------------------------------------------------------------------------
 // Section placement hints
 //--------------------------------------------------------------------------------------------------
 

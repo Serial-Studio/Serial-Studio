@@ -177,3 +177,12 @@ values assembled from the wrong octets.
   EtherNet/IP, and a controller that cannot keep up queues, times out
   and reports stale data. The 200-250 ms defaults are right for
   almost everything.
+
+## When this skill does not match what the user sees
+
+The S7comm, EtherNet/IP and IEC 60870-5-104 clients live in
+`source/core/Devices`, including the address parsers and the poll
+workers. If an address is rejected or a poll fails for a reason the
+gotchas above do not cover, or the user quotes a driver error verbatim,
+`fs.search` that text with `path:"source/core/Devices"` and read the one
+file it names; the `debugging` skill has the rules for citing it.

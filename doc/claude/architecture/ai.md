@@ -177,6 +177,19 @@ can actually hold instead of letting the server do it.
   refuses symlinks and non-existent paths, cleared on conversation reset); dropped paths **never**
   widen the write root. Slice, file and scan sizes, entry counts and recursion depth are all
   capped by named constants.
+- **The source root (spec 0078)** is a third, read-only root: the Pro build compiles the
+  hand-written text sources of its own tree into the executable as a resource tree at
+  `:/source` (`app/CMakeLists.txt`, configure-time glob over explicit root and extension
+  allowlists, `SS_BUNDLE_SOURCE=OFF` to skip it), and the model addresses it through the virtual
+  `source/` prefix (`FileSandbox::kSourcePrefix`). `resolveRead` maps the prefix onto the root
+  *before* the workspace join, `resolveWrite` answers `read_only_root` for the prefix and for any
+  `:/` path *before* the `AI/` join, so nothing can land as `AI/source/...`. **The default
+  `fs.search` walk never includes the source**: the model reaches it only through the optional
+  `path` scope, so a grep over the user's logs never returns C++ hits. Nothing is unpacked and
+  there is no cache; an absent `:/source` at runtime answers `source_unavailable`. The build's
+  commit arrives as `SS_BUILD_COMMIT` on the CI configure line (`APP_COMMIT` in
+  `Core/AppInfo.h`, empty locally) and pins `HelpFetcher`'s bare-name base to that ref, feeds
+  the role block's "Build identity" paragraph, and shows in About as `Version X.Y.Z (abcdef1)`.
 - **`AI::KeyVault`**: per-machine **obfuscated** storage, `SimpleCrypt` under a machine-derived
   key. It is not encryption and no user-facing string may say it is — the wording of record is
   "stored obfuscated in this machine's settings" (spec 0075 K6/E14). `redact()` returns a constant
@@ -200,8 +213,11 @@ for the same reason: long conversations degrade silently.
 ## Test Coverage
 
 ctest suites (`app/tests/`): `tst_sse_event_reader`, `tst_redactor`, `tst_sentinel_probe`,
-`tst_file_sandbox` (roots, traversal, dropped-path allowlist, search, **and** the async worker
-lane's generation echo), `tst_reply_state_machine` (three backends against `FakeTransport`: one
+`tst_file_sandbox` (roots, traversal, dropped-path allowlist, search, the source root behind the
+`source/` prefix with its read-only refusal and opt-in search scope, **and** the async worker
+lane's generation echo), `tst_help_fetcher` (bare names and the help.json fallback at the build's
+commit ref, the `master` fallback, full-URL passthrough, the unchanged allowlist),
+`tst_reply_state_machine` (three backends against `FakeTransport`: one
 `finished` per reply, 401 vs 429, the unified parse and transport policies, redaction),
 `tst_conversation_turn` (the window arithmetic and `FakeProvider` event ordering),
 `tst_conversation_history`, `tst_conversation_budget`, `tst_conversation_metatools`,

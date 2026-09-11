@@ -382,6 +382,7 @@ jobs:
         SERIAL_STUDIO_INSTANCE_ID: ${{secrets.SERIAL_STUDIO_INSTANCE_ID}}
       run: |
         cmake -B build -G Ninja \
+          -DSS_BUILD_COMMIT=${{ github.sha }} \
           -DPRODUCTION_OPTIMIZATION=ON \
           -DENABLE_HARDENING=ON \
           -DENABLE_GRPC=ON \
@@ -498,6 +499,7 @@ jobs:
         SERIAL_STUDIO_INSTANCE_ID: ${{secrets.SERIAL_STUDIO_INSTANCE_ID}}
       run: |
         cmake -B build -G Ninja \
+          -DSS_BUILD_COMMIT=${{ github.sha }} \
           -DPRODUCTION_OPTIMIZATION=ON \
           -DENABLE_HARDENING=ON \
           -DENABLE_GRPC=ON \
@@ -543,12 +545,39 @@ jobs:
         ./build/app/${{env.UNIXNAME}} --headless --benchmark-hotpath --min-fps 256000 \
           --benchmark-output benchmark.txt
 
+    #
+    # Spec 0081: the runner takes the AVX2 lane on Auto, so the baseline SSE4 lane every older
+    # machine runs would otherwise never be gated. Pinned, same gate. The scalar run is a readout
+    # of the reference lane's cost, not a gate.
+    #
+    - name: '🚦 Hotpath throughput gate (256 kHz, SSE4 lane pinned)'
+      env:
+        QT_QPA_PLATFORM: offscreen
+        LD_LIBRARY_PATH: >-
+          ${{github.workspace}}/Qt-${{env.QT_VERSION_LINUX}}-${{runner.os}}-x64/${{env.QT_VERSION_LINUX}}/gcc_64/lib
+      run: |
+        ./build/app/${{env.UNIXNAME}} --headless --benchmark-hotpath --min-fps 256000 --simd sse4 \
+          --benchmark-output benchmark-sse4.txt
+
+    - name: '📈 Hotpath throughput (scalar lane, informational)'
+      continue-on-error: true
+      env:
+        QT_QPA_PLATFORM: offscreen
+        LD_LIBRARY_PATH: >-
+          ${{github.workspace}}/Qt-${{env.QT_VERSION_LINUX}}-${{runner.os}}-x64/${{env.QT_VERSION_LINUX}}/gcc_64/lib
+      run: |
+        ./build/app/${{env.UNIXNAME}} --headless --benchmark-hotpath --min-fps 1 --simd scalar \
+          --benchmark-output benchmark-scalar.txt
+
     - name: '📤 Upload artifact: benchmark report (Linux x64)'
       if: always()
       uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
       with:
         name: benchmark-Linux-x64
-        path: benchmark.txt
+        path: |
+          benchmark.txt
+          benchmark-sse4.txt
+          benchmark-scalar.txt
         if-no-files-found: ignore
 
     #
@@ -1344,6 +1373,7 @@ jobs:
         SERIAL_STUDIO_INSTANCE_ID: ${{secrets.SERIAL_STUDIO_INSTANCE_ID}}
       run: |
         cmake -B build -G Ninja \
+          -DSS_BUILD_COMMIT=${{ github.sha }} \
           -DPRODUCTION_OPTIMIZATION=ON \
           -DENABLE_HARDENING=ON \
           -DENABLE_GRPC=ON \
@@ -1414,6 +1444,7 @@ jobs:
         SERIAL_STUDIO_INSTANCE_ID: ${{secrets.SERIAL_STUDIO_INSTANCE_ID}}
       run: |
         cmake -B build -G Ninja \
+          -DSS_BUILD_COMMIT=${{ github.sha }} \
           -DPRODUCTION_OPTIMIZATION=ON \
           -DENABLE_HARDENING=ON \
           -DENABLE_GRPC=ON \
@@ -1447,12 +1478,27 @@ jobs:
         ./build/app/${{env.UNIXNAME}} --headless --benchmark-hotpath --min-fps 256000 \
           --benchmark-output benchmark.txt
 
+    #
+    # Spec 0081: Auto is already the NEON lane here; the scalar run is a readout, not a gate.
+    #
+    - name: '📈 Hotpath throughput (scalar lane, informational)'
+      continue-on-error: true
+      env:
+        QT_QPA_PLATFORM: offscreen
+        LD_LIBRARY_PATH: >-
+          ${{github.workspace}}/Qt-${{env.QT_VERSION_LINUX}}-${{runner.os}}-arm64/${{env.QT_VERSION_LINUX}}/gcc_arm64/lib
+      run: |
+        ./build/app/${{env.UNIXNAME}} --headless --benchmark-hotpath --min-fps 1 --simd scalar \
+          --benchmark-output benchmark-scalar.txt
+
     - name: '📤 Upload artifact: benchmark report (Linux arm64)'
       if: always()
       uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
       with:
         name: benchmark-Linux-arm64
-        path: benchmark.txt
+        path: |
+          benchmark.txt
+          benchmark-scalar.txt
         if-no-files-found: ignore
 
     #
@@ -2121,6 +2167,7 @@ jobs:
         SERIAL_STUDIO_INSTANCE_ID: ${{secrets.SERIAL_STUDIO_INSTANCE_ID}}
       run: |
         cmake -B build -G Ninja \
+          -DSS_BUILD_COMMIT=${{ github.sha }} \
           -DPRODUCTION_OPTIMIZATION=ON \
           -DENABLE_HARDENING=ON \
           -DENABLE_GRPC=ON \
@@ -2187,6 +2234,7 @@ jobs:
         SERIAL_STUDIO_INSTANCE_ID: ${{secrets.SERIAL_STUDIO_INSTANCE_ID}}
       run: |
         cmake -B build -G Ninja \
+          -DSS_BUILD_COMMIT=${{ github.sha }} \
           -DPRODUCTION_OPTIMIZATION=ON \
           -DENABLE_HARDENING=ON \
           -DENABLE_GRPC=ON \
@@ -2427,6 +2475,7 @@ jobs:
         SERIAL_STUDIO_INSTANCE_ID: ${{secrets.SERIAL_STUDIO_INSTANCE_ID}}
       run: |
         cmake -B build -G Ninja \
+          -DSS_BUILD_COMMIT=${{ github.sha }} \
           -DPRODUCTION_OPTIMIZATION=ON \
           -DENABLE_HARDENING=ON \
           -DENABLE_GRPC=ON \
@@ -2801,6 +2850,7 @@ jobs:
         SERIAL_STUDIO_INSTANCE_ID: ${{secrets.SERIAL_STUDIO_INSTANCE_ID}}
       run: |
         cmake -B build -G Ninja `
+          -DSS_BUILD_COMMIT=${{ github.sha }} `
           -DCMAKE_CXX_COMPILER=clang-cl `
           -DCMAKE_C_COMPILER=clang-cl `
           -DCMAKE_PREFIX_PATH="${{github.workspace}}/grpc-prefix" `
@@ -2867,6 +2917,7 @@ jobs:
         SERIAL_STUDIO_INSTANCE_ID: ${{secrets.SERIAL_STUDIO_INSTANCE_ID}}
       run: |
         cmake -B build -G Ninja `
+          -DSS_BUILD_COMMIT=${{ github.sha }} `
           -DCMAKE_CXX_COMPILER=clang-cl `
           -DCMAKE_C_COMPILER=clang-cl `
           -DCMAKE_PREFIX_PATH="${{github.workspace}}/grpc-prefix" `
@@ -2900,12 +2951,36 @@ jobs:
         if (-not $p.WaitForExit(300000)) { $p.Kill(); throw 'benchmark timed out' }
         if (Select-String -Path benchmark.txt -Pattern 'HOTPATH_PASS=1' -Quiet) { exit 0 } else { exit 1 }
 
+    #
+    # Spec 0081: the runner takes the AVX2 lane on Auto, so the baseline SSE4 lane every older
+    # machine runs would otherwise never be gated. Pinned, same gate. The scalar run is a readout
+    # of the reference lane's cost, not a gate.
+    #
+    - name: '🚦 Hotpath throughput gate (256 kHz, SSE4 lane pinned)'
+      run: |
+        $p = Start-Process -FilePath "build/app/${{env.EXECUTABLE}}.exe" `
+          -ArgumentList '--headless','--benchmark-hotpath','--min-fps','256000','--simd','sse4','--benchmark-output','benchmark-sse4.txt' `
+          -WorkingDirectory $PWD -PassThru -NoNewWindow
+        if (-not $p.WaitForExit(300000)) { $p.Kill(); throw 'benchmark timed out' }
+        if (Select-String -Path benchmark-sse4.txt -Pattern 'HOTPATH_PASS=1' -Quiet) { exit 0 } else { exit 1 }
+
+    - name: '📈 Hotpath throughput (scalar lane, informational)'
+      continue-on-error: true
+      run: |
+        $p = Start-Process -FilePath "build/app/${{env.EXECUTABLE}}.exe" `
+          -ArgumentList '--headless','--benchmark-hotpath','--min-fps','1','--simd','scalar','--benchmark-output','benchmark-scalar.txt' `
+          -WorkingDirectory $PWD -PassThru -NoNewWindow
+        if (-not $p.WaitForExit(300000)) { $p.Kill(); throw 'benchmark timed out' }
+
     - name: '📤 Upload artifact: benchmark report (Windows)'
       if: always()
       uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
       with:
         name: benchmark-Windows
-        path: benchmark.txt
+        path: |
+          benchmark.txt
+          benchmark-sse4.txt
+          benchmark-scalar.txt
         if-no-files-found: ignore
 
     #

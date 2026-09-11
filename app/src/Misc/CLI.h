@@ -123,6 +123,11 @@ struct CliOptions {
     "exit-after",
     "Quit gracefully after the given number of seconds (CI runs, PGO training)",
     "seconds"};
+  QCommandLineOption simdLevelOpt{
+    "simd",
+    "Pin the kernel optimization level for this run only (auto, scalar, sse4, avx2, neon); "
+    "overrides the saved preference, is not saved, unsupported values fall back to auto",
+    "level"};
 #ifdef SS_INAPP_TESTS
   QCommandLineOption selftestOpt{"selftest", "Run the built-in self-test suites and exit"};
   QCommandLineOption selftestSuiteOpt{

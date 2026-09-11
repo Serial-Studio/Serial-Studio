@@ -3,7 +3,7 @@
 > Part of the architecture corpus ([index](../architecture.md)). Read this file in full
 > before touching `UI::Dashboard`, any widget, the plot/time-ring/sweep/waterfall render
 > paths, alarms, workspaces, or output widgets. Dashboard ingest is hotpath — read
-> [dataflow.md](dataflow.md) too, and let the `ss-hotpath` skill fire.
+> [dataflow.md](dataflow.md) too, and invoke the `ss-hotpath` skill first.
 
 ## Dashboard Ingest — Pre-resolved Push Tables
 
@@ -658,13 +658,15 @@ of the visible span into per-band quads across the ring seam) and `WaterfallSpec
   widget's life. `WaterfallSpectrogramNodes::sync()` then draws the history as 64-row textured
   bands with per-band dirty flags. This path is fully correct, just more upload bytes.
 
-**Two behaviours that surprise people.** The **idle gate**:
-`WaterfallRingTexture::captureRowIfChanged()` memcmp's the smoothed row against the previous
-tick's, and an identical row writes no scanline and schedules no frame — so a disconnected or
-silent source sits still, and a *perfectly* constant live signal also stops scrolling (visually
-indistinguishable once the history is uniform, distinguishable during the first fill).
-**Campbell mode is exempt**, because its row position is driven by another dataset's value and
-moves independently of the spectrum. The **hidden release**: `itemChange(ItemVisibleHasChanged,
+**Two behaviours that surprise people.** The **idle gate**: the widget compares
+`UI::Dashboard::waterfallGeneration()` across ticks, a per-waterfall count that
+`UI::DashboardIngest::bumpWaterfallGeneration()` advances once per widget per fed block on all
+three feed sites (frame lane, producer window, raw samples). No new samples means no FFT and no
+scanline, so a disconnected or silent source sits still; new samples always write a row, even
+when the spectrum is bit-identical, so a constant live signal keeps scrolling. (Until
+2026-09-11 the gate memcmp'd the smoothed row instead, which froze the waterfall on any
+stationary sensor.) **Campbell mode is exempt**, because its row position is driven by another
+dataset's value and moves independently of the spectrum. The **hidden release**: `itemChange(ItemVisibleHasChanged,
 false)` calls `releaseHistoryImage()` and requests a GPU teardown, so **a hidden waterfall loses
 its history** — becoming visible again rebuilds the image at the floor color and it refills from
 live data. Switching workspace tabs is where a user sees it. That is what "a hidden widget

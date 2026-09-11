@@ -149,6 +149,9 @@ set(SERIAL_STUDIO_INSTANCE_ID
 #   - PROJECT_VERSION_MINOR: Minor version (new features)
 #   - PROJECT_VERSION_PATCH: Patch version (bug fixes)
 #   - PROJECT_VERSION: Combined semantic version string
+#   - SS_BUILD_COMMIT: Full hash of the commit a CI build was produced from, passed on the
+#     configure line (-DSS_BUILD_COMMIT=<sha>). Empty for a local build; nothing here ever
+#     invokes git. Shown in the About dialog and pins the assistant's help and source refs.
 #
 # Branding (varies by BUILD_COMMERCIAL flag):
 #   Commercial build:
@@ -202,6 +205,13 @@ set(PROJECT_VERSION             "${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINO
 set(PROJECT_APPCAST             "https://raw.githubusercontent.com/Serial-Studio/Serial-Studio/master/updates.json")
 set(PROJECT_DESCRIPTION_FILE    "${PROJECT_ROOT_DIR}/README.md")
 set(PROJECT_FILE_NAME           "${PROJECT_EXECUTABLE}-v${PROJECT_VERSION}")
+set(SS_BUILD_COMMIT "" CACHE STRING "Full commit hash of a CI build; empty for local builds")
+if(NOT SS_BUILD_COMMIT STREQUAL "" AND NOT SS_BUILD_COMMIT MATCHES "^[0-9a-f]{7,40}$")
+  message(FATAL_ERROR
+    "SS_BUILD_COMMIT must be empty or a lowercase hexadecimal commit hash (7-40 chars); "
+    "got '${SS_BUILD_COMMIT}'. It is spliced into help-page URLs and shown in About, so a "
+    "branch name or tag here would produce broken references.")
+endif()
 
 #---------------------------------------------------------------------------------------------------
 # Expose project metadata to source code
@@ -213,6 +223,7 @@ set(PROJECT_FILE_NAME           "${PROJECT_EXECUTABLE}-v${PROJECT_VERSION}")
 #   - PROJECT_VENDOR: Displayed in About dialog and copyright notices
 #   - PROJECT_CONTACT: Used for support links in UI
 #   - PROJECT_VERSION: Displayed in title bar, About dialog, logs
+#   - PROJECT_COMMIT: Build commit hash from SS_BUILD_COMMIT (empty for local builds)
 #   - PROJECT_APPCAST: URL for QSimpleUpdater to check for new versions
 #   - PROJECT_DISPNAME: Application display name in UI
 #   - PROJECT_DESCRIPTION_SUMMARY: Short description for About/Help
@@ -226,6 +237,7 @@ set(PROJECT_FILE_NAME           "${PROJECT_EXECUTABLE}-v${PROJECT_VERSION}")
 add_definitions(-DPROJECT_VENDOR="${PROJECT_VENDOR}")
 add_definitions(-DPROJECT_CONTACT="${PROJECT_CONTACT}")
 add_definitions(-DPROJECT_VERSION="${PROJECT_VERSION}")
+add_definitions(-DPROJECT_COMMIT="${SS_BUILD_COMMIT}")
 add_definitions(-DPROJECT_APPCAST="${PROJECT_APPCAST}")
 add_definitions(-DPROJECT_DISPNAME="${PROJECT_DISPNAME}")
 add_definitions(-DPROJECT_DESCRIPTION_SUMMARY="${PROJECT_DESCRIPTION_SUMMARY}")

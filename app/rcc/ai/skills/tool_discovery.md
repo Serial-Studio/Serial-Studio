@@ -38,10 +38,14 @@ name when the tool is already on your essentials list.
 ## Help center documentation
 
 `meta.fetchHelp{path}` pulls authoritative Serial Studio documentation
-from GitHub. Pass the page name bare without `.md` (e.g. `"Frame-Parser"`,
-`"API-Reference"`). Multi-word names use hyphens. **A 404 auto-redirects
-to `help.json`**, the safety net that makes a wrong path
-self-correcting at zero extra cost.
+from GitHub, pinned to the commit the running build was made from. Pass
+the page name bare without `.md` (e.g. `"Frame-Parser"`,
+`"API-Reference"`); a bare name is the only form that gets the build's
+own version of the page, so never invent a branch URL. Multi-word names
+use hyphens. **A 404 auto-redirects to `help.json`** at that same
+commit, the safety net that makes a wrong path self-correcting at zero
+extra cost. Only when the user explicitly asks for the current
+development text do you pass a full URL.
 
 How to pick `path`:
 

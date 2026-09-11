@@ -38,6 +38,7 @@
 #include "Misc/GraphicsBackend.h"
 #include "Misc/HighDpiScaling.h"
 #include "Misc/ModuleManager.h"
+#include "Misc/SimdSettings.h"
 #include "Platform/AppPlatform.h"
 #include "SessionContext.h"
 
@@ -255,6 +256,8 @@ int main(int argc, char** argv)
   const QString shortcutPath = Misc::CLI::argvValueFor(argc, argv, "--shortcut-path");
   Platform::AppPlatform::prepareEnvironment(argc, argv, shortcutPath);
   Platform::AppPlatform::installCrashDumpWriter();
+
+  Misc::SimdSettings::applyConfiguredLevel(Misc::CLI::argvValueFor(argc, argv, "--simd"));
 
   Misc::CrashTracker::instance().setCheckpoint(QStringLiteral("graphics-backend-apply"));
   Misc::GraphicsBackend::applyConfiguredBackend();
