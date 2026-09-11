@@ -46,3 +46,10 @@ tree-sitter-cpp>=0.23,<0.24
 # Workflow and licensing gates run by scripts/tests/ and the CI lint job
 PyYAML>=6.0
 reuse>=5.0
+
+# The formatter itself, pinned to an exact LLVM release: clang-format changes its own defaults
+# between versions, so .clang-format alone cannot make the output reproducible. These wheels
+# carry the real LLVM binary for Linux/macOS/Windows, which is what makes the formatting
+# identical on every contributor machine and every CI leg. sanitize-commit.py refuses to run a
+# clang-format that does not match this pin -- bump both together.
+clang-format==19.1.7

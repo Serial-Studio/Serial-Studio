@@ -168,6 +168,7 @@
 #  include "UI/Widgets/AudioExport.h"
 #  include "UI/Widgets/ImageExport.h"
 #  include "UI/Widgets/ImageView.h"
+#  include "UI/Widgets/Output/Preview.h"
 #  include "UI/Widgets/Painter.h"
 #  include "UI/Widgets/Plot3D.h"
 #  include "UI/Widgets/Waterfall.h"
@@ -629,6 +630,7 @@ void Misc::ModuleManager::registerQmlTypes()
   qmlRegisterType<Widgets::ImageView>("SerialStudio", 1, 0, "ImageViewModel");
   qmlRegisterType<Widgets::Waterfall>("SerialStudio", 1, 0, "WaterfallModel");
   qmlRegisterType<Widgets::Painter>("SerialStudio", 1, 0, "PainterWidget");
+  qmlRegisterType<Widgets::Output::Preview>("SerialStudio", 1, 0, "OutputWidgetPreview");
   qmlRegisterType<DataModel::PainterCodeEditor>("SerialStudio", 1, 0, "PainterCodeEditor");
   qmlRegisterType<Sessions::ReportOptionsModel>("SerialStudio", 1, 0, "ReportOptionsModel");
 #endif

@@ -24,14 +24,30 @@
 #include <QDir>
 #include <QFile>
 #include <QFileDialog>
-#include <QInputDialog>
+#include <QGuiApplication>
+#include <QInputMethod>
+#include <QJSEngine>
 
+#include "Core/Prompt/UserPrompt.h"
 #include "Core/Services.h"
+#include "Core/SSAssert.h"
 #include "Core/Translator.h"
 #include "DataModel/Editors/EditorFormatting.h"
 #include "DataModel/PipelineModules.h"
 #include "DataModel/ProjectModel.h"
+#include "DataModel/Scripting/TransmitScriptEnvironment.h"
 #include "ProjectEditor/ProjectEditor.h"
+
+#ifdef BUILD_COMMERCIAL
+#  include "UI/Widgets/Output/Preview.h"
+#endif
+
+//--------------------------------------------------------------------------------------------------
+// Constants
+//--------------------------------------------------------------------------------------------------
+
+// Idle gap before a keystroke is validated: an engine per character is far too expensive
+static constexpr int kValidateDebounceMs = 300;
 
 //--------------------------------------------------------------------------------------------------
 // Constructor
@@ -44,6 +60,7 @@
 DataModel::OutputCodeEditor::OutputCodeEditor(QQuickItem* parent)
   : EmbeddedCodeEditorItem(EmbeddedCodeEditor::RenderGate::WindowVisible, parent)
   , m_readingCode(false)
+  , m_validating(false)
   , m_translator(Core::services().translator)
   , m_projectEditor(DataModel::ProjectEditor::instance())
   , m_projectModel(DataModel::pipelineModules().projectModel)
@@ -60,15 +77,12 @@ DataModel::OutputCodeEditor::OutputCodeEditor(QQuickItem* parent)
     if (m_readingCode)
       return;
 
-    if (m_projectEditor.currentView() != DataModel::ProjectEditor::OutputWidgetView)
-      return;
-
-    const auto& sel = m_projectEditor.selectedOutputWidget();
-    if (sel.groupId < 0 || sel.widgetId < 0)
-      return;
-
-    m_projectEditor.setSelectedOutputWidgetTransmitFunction(text());
+    scheduleValidation();
   });
+
+  m_validateTimer.setSingleShot(true);
+  m_validateTimer.setInterval(kValidateDebounceMs);
+  connect(&m_validateTimer, &QTimer::timeout, this, &DataModel::OutputCodeEditor::validateNow);
 
   connect(&m_projectEditor,
           &DataModel::ProjectEditor::outputWidgetModelChanged,
@@ -252,53 +266,7 @@ void DataModel::OutputCodeEditor::readCode()
 
   m_readingCode = false;
   Q_EMIT modifiedChanged();
-}
-
-/**
- * @brief Shows a dialog to pick and load a built-in template.
- */
-void DataModel::OutputCodeEditor::selectTemplate()
-{
-  if (m_templates.isEmpty())
-    return;
-
-  bool ok;
-  const auto name = QInputDialog::getItem(nullptr,
-                                          tr("Select Output Widget Template"),
-                                          tr("Choose a template to load:"),
-                                          m_templates.names(),
-                                          0,
-                                          false,
-                                          &ok);
-
-  if (!ok)
-    return;
-
-  const int idx = m_templates.names().indexOf(name);
-  if (idx < 0 || idx >= m_templates.files().size())
-    return;
-
-  QFile file(m_templates.files().at(idx));
-  if (file.open(QFile::ReadOnly)) {
-    m_editor.setSourceText(QString::fromUtf8(file.readAll()));
-    Q_EMIT modifiedChanged();
-    file.close();
-  }
-}
-
-/**
- * @brief Opens the transmit test dialog with the current editor code. The dialog is a top-level
- *        widget built on first use: held by value it was constructed for every session that ever
- *        instantiated the Project Editor, whether or not anyone tested a transmit function.
- */
-void DataModel::OutputCodeEditor::testTransmitFunction()
-{
-  if (!m_testDialog)
-    m_testDialog = std::make_unique<TransmitTestDialog>(nullptr);
-
-  m_testDialog->setTransmitCode(text());
-  m_testDialog->clear();
-  m_testDialog->showNormal();
+  refreshVerdict(false);
 }
 
 /**
@@ -329,4 +297,239 @@ QString DataModel::OutputCodeEditor::defaultTemplate()
 void DataModel::OutputCodeEditor::loadTemplates()
 {
   m_templates.reload();
+  Q_EMIT templatesChanged();
+}
+
+/**
+ * @brief Restarts the validation debounce. Every keystroke would otherwise build a fresh engine and
+ *        install the whole host surface into it, which is far too expensive to do per character.
+ */
+void DataModel::OutputCodeEditor::scheduleValidation()
+{
+  m_validateTimer.start();
+}
+
+/**
+ * @brief Recomputes the verdict and persists the script only when it is valid, so an invalid edit
+ *        leaves the project holding the last version that compiled. The write guard stays as it
+ *        was: the editor is modal over the output-widget view, which is what makes the view and
+ *        selection checks sufficient.
+ */
+void DataModel::OutputCodeEditor::validateNow()
+{
+  refreshVerdict(false);
+}
+
+/**
+ * @brief Recomputes the verdict, persisting only when @p persist and the script may be stored.
+ *        Reading a widget passes false: selecting one must not write the default template into a
+ *        project the user only looked at. The latch guards re-entry, since compiling user code
+ *        can spin a nested event loop, and the notify is gated on a changed verdict.
+ */
+void DataModel::OutputCodeEditor::refreshVerdict(const bool persist)
+{
+  if (m_validating)
+    return;
+
+  m_validating = true;
+  m_validateTimer.stop();
+
+  const auto previous = m_verdict;
+  const auto code     = text();
+  m_verdict           = checkTransmitScript(code, [](QJSEngine& engine) {
+    return prepareTransmitScriptEngine(engine, 0, TransmitScriptSurface::Judging);
+  });
+
+  m_validating = false;
+  if (m_verdict.status != previous.status || m_verdict.line != previous.line
+      || m_verdict.message != previous.message)
+    Q_EMIT validityChanged();
+
+  if (m_verdict.persistable())
+    Q_EMIT scriptAccepted(code);
+
+  if (!persist || !m_verdict.persistable())
+    return;
+
+  if (m_projectEditor.currentView() != DataModel::ProjectEditor::OutputWidgetView)
+    return;
+
+  const auto& sel = m_projectEditor.selectedOutputWidget();
+  if (sel.groupId < 0 || sel.widgetId < 0)
+    return;
+
+  m_projectEditor.setSelectedOutputWidgetTransmitFunction(code);
+}
+
+/**
+ * @brief Flushes a pending input-method composition and validates immediately, so the last thing
+ *        typed before the window closes is judged and stored rather than left in the debounce.
+ */
+void DataModel::OutputCodeEditor::commit()
+{
+  if (m_readingCode)
+    return;
+
+  flushInputMethod();
+  refreshVerdict(false);
+}
+
+/**
+ * @brief Lands a pending input-method composition in the buffer, so the last thing typed is part
+ *        of what gets judged and stored.
+ */
+void DataModel::OutputCodeEditor::flushInputMethod()
+{
+  if (auto* ime = QGuiApplication::inputMethod()) {
+    if (ime->isVisible() || !ime->inputItemRectangle().isEmpty())
+      ime->commit();
+  }
+}
+
+/**
+ * @brief Hands the preview the widget this editor is bound to. The editor already owns the
+ *        selection, so routing the configuration through it keeps the preview free of any
+ *        project dependency of its own. Output controls are a Pro feature and the preview is
+ *        built only there, so a GPL build has nothing to bind.
+ */
+void DataModel::OutputCodeEditor::bindPreview(QObject* preview)
+{
+#ifdef BUILD_COMMERCIAL
+  auto* target = qobject_cast<Widgets::Output::Preview*>(preview);
+  SS_ASSERT(target != nullptr, return);
+
+  target->setConfig(m_projectEditor.selectedOutputWidget());
+#else
+  Q_UNUSED(preview);
+#endif
+}
+
+/**
+ * @brief Validates and stores the script, reporting why it was refused. The one path that writes
+ *        the project, so the dialog's Close discards by construction, matching the value-transform
+ *        editor. Returns whether the caller may close.
+ */
+bool DataModel::OutputCodeEditor::save()
+{
+  if (m_readingCode)
+    return false;
+
+  flushInputMethod();
+  refreshVerdict(true);
+  if (m_verdict.persistable())
+    return true;
+
+  reportVerdict();
+  return false;
+}
+
+/**
+ * @brief Says plainly what the verdict is, which is what the Validate action is for now that the
+ *        editor carries no status strip.
+ */
+void DataModel::OutputCodeEditor::reportVerdict()
+{
+  if (m_verdict.status == TransmitScriptStatus::Empty) {
+    Core::Prompt::showMessageBox(tr("No transmit function is defined."),
+                                 tr("The control will send nothing until one is written."),
+                                 Core::Prompt::Information,
+                                 tr("Transmit Function Editor"));
+    return;
+  }
+
+  if (m_verdict.ok()) {
+    Core::Prompt::showMessageBox(tr("transmit(value) is defined and compiles."),
+                                 QString(),
+                                 Core::Prompt::Information,
+                                 tr("Transmit Function Editor"));
+    return;
+  }
+
+  Core::Prompt::showMessageBox(tr("The transmit function was not applied."),
+                               verdictDetail(),
+                               Core::Prompt::Warning,
+                               tr("Transmit Function Editor"));
+}
+
+/**
+ * @brief Human wording for the current verdict; the editor owns it because the assistant needs a
+ *        different, longer correction for the same status.
+ */
+QString DataModel::OutputCodeEditor::verdictDetail() const
+{
+  switch (m_verdict.status) {
+    case TransmitScriptStatus::Timeout:
+      return tr("The script did not finish compiling. Is there an endless loop at the top level?");
+    case TransmitScriptStatus::CompileError:
+      return m_verdict.line > 0
+             ? tr("Line %1: %2").arg(QString::number(m_verdict.line), m_verdict.message)
+             : m_verdict.message;
+    case TransmitScriptStatus::HostUnavailable:
+      return tr("The script host is unavailable, so nothing can be validated right now.");
+    default:
+      break;
+  }
+
+  return tr("Define a function transmit(value) that returns the bytes to send.");
+}
+
+/**
+ * @brief Whether the script currently in the editor would be accepted.
+ */
+bool DataModel::OutputCodeEditor::scriptValid() const noexcept
+{
+  return m_verdict.persistable();
+}
+
+/**
+ * @brief The verdict as an int, so QML can distinguish a compile error from a missing entry point.
+ */
+int DataModel::OutputCodeEditor::scriptStatus() const noexcept
+{
+  return static_cast<int>(m_verdict.status);
+}
+
+/**
+ * @brief Line the compile error happened on, or zero when there is none.
+ */
+int DataModel::OutputCodeEditor::scriptErrorLine() const noexcept
+{
+  return m_verdict.line;
+}
+
+/**
+ * @brief The engine's own message for a compile error, empty for every other verdict.
+ */
+QString DataModel::OutputCodeEditor::scriptError() const
+{
+  return m_verdict.message;
+}
+
+/**
+ * @brief Display names of the built-in transmit templates, in catalog order.
+ */
+QStringList DataModel::OutputCodeEditor::templateNames() const
+{
+  return m_templates.names();
+}
+
+/**
+ * @brief Loads the template at @p index, replacing the script under edit.
+ */
+void DataModel::OutputCodeEditor::applyTemplate(const int index)
+{
+  if (index < 0 || index >= m_templates.files().size())
+    return;
+
+  QFile file(m_templates.files().at(index));
+  if (!file.open(QFile::ReadOnly)) {
+    qWarning() << "[Output] cannot read transmit template" << file.fileName();
+    return;
+  }
+
+  m_editor.setSourceText(QString::fromUtf8(file.readAll()));
+  file.close();
+
+  Q_EMIT modifiedChanged();
+  refreshVerdict(true);
 }

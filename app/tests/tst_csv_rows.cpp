@@ -38,6 +38,9 @@ class TstCsvRows : public QObject {
 private slots:
   void initTestCase();
 
+  void nextRecordEnd_data();
+  void nextRecordEnd();
+
   void firstTopLevelSeparator_data();
   void firstTopLevelSeparator();
 
@@ -60,6 +63,64 @@ private slots:
 void TstCsvRows::initTestCase()
 {
   qputenv("SS_ASSERT_NONFATAL", "1");
+}
+
+//--------------------------------------------------------------------------------------------------
+// nextRecordEnd
+//--------------------------------------------------------------------------------------------------
+
+void TstCsvRows::nextRecordEnd_data()
+{
+  QTest::addColumn<QByteArray>("data");
+  QTest::addColumn<int>("from");
+  QTest::addColumn<char>("separator");
+  QTest::addColumn<int>("cap");
+  QTest::addColumn<int>("expected");
+
+  constexpr int kCap = 4096;
+
+  QTest::newRow("plain row") << QByteArray("a,b\nc,d\n") << 0 << ',' << kCap << 3;
+  QTest::newRow("second row") << QByteArray("a,b\nc,d\n") << 4 << ',' << kCap << 7;
+  QTest::newRow("last row without a terminator") << QByteArray("a,b\nc,d") << 4 << ',' << kCap << 7;
+  QTest::newRow("empty input") << QByteArray("") << 0 << ',' << kCap << 0;
+  QTest::newRow("empty row") << QByteArray("\nx") << 0 << ',' << kCap << 0;
+  QTest::newRow("crlf ends at the lf") << QByteArray("a,b\r\nc") << 0 << ',' << kCap << 4;
+
+  QTest::newRow("newline inside a quoted cell is not a record end")
+    << QByteArray("a,\"two\nlines\",b\nnext") << 0 << ',' << kCap << 15;
+  QTest::newRow("quoted cell opening the record")
+    << QByteArray("\"x\ny\",b\nnext") << 0 << ',' << kCap << 7;
+  QTest::newRow("escaped quote keeps the cell open")
+    << QByteArray("a,\"he said \"\"hi\"\"\nend\",b\nnext") << 0 << ',' << kCap << 24;
+  QTest::newRow("whitespace before the quote still opens it")
+    << QByteArray("a,  \"x\ny\",b\nnext") << 0 << ',' << kCap << 11;
+
+  QTest::newRow("mid-cell quote is literal")
+    << QByteArray("a,12\" wide\nnext") << 0 << ',' << kCap << 10;
+  QTest::newRow("reopened quote in the same cell is literal")
+    << QByteArray("a,\"x\"y\"z\nnext") << 0 << ',' << kCap << 8;
+  QTest::newRow("unterminated quote falls back to the line")
+    << QByteArray("a,\"runaway\nnext\nlast") << 0 << ',' << 4 << 10;
+  QTest::newRow("semicolon file tracks its own cells")
+    << QByteArray("a;\"x\ny\";b\nnext") << 0 << ';' << kCap << 9;
+}
+
+/**
+ * @brief Record framing mirrors splitReplayRowSpans: only a quote that opens a cell can hide a
+ *        newline, so a foreign file's stray inch mark cannot glue two rows together, and a
+ *        recording of a multi-line text value survives the round trip. Broken quoting is capped
+ *        rather than allowed to swallow the file.
+ */
+void TstCsvRows::nextRecordEnd()
+{
+  QFETCH(QByteArray, data);
+  QFETCH(int, from);
+  QFETCH(char, separator);
+  QFETCH(int, cap);
+  QFETCH(int, expected);
+
+  const auto end = CSV::nextRecordEnd(QByteArrayView(data), from, separator, cap);
+  QCOMPARE(static_cast<int>(end), expected);
 }
 
 //--------------------------------------------------------------------------------------------------

@@ -28,13 +28,32 @@ Transmission is rate-limited to a minimum of 50 ms between sends, preventing dev
 
 ### Button
 
-Sends a single command on click.
+Sends a single command on click, or latches on and off when **Toggle Button** is enabled.
 
 | Property | Value |
 |----------|-------|
-| Value passed to `transmit()` | `1` (integer) |
-| Interaction | Single click |
-| Use cases | Reset, start/stop, trigger measurement |
+| Value passed to `transmit()` | `1` (integer), or `1` / `0` when Toggle Button is enabled |
+| Interaction | Single click, or click to latch and click again to release |
+| Use cases | Reset, start/stop, trigger measurement, relay and enable lines |
+
+| Property | Default | Description |
+|----------|---------|-------------|
+| Button Icon | (none) | Icon shown next to the caption |
+| Colorize Icon | off | Tint the icon with the button color |
+| Button Color | Automatic | Custom fill color; automatic uses the group accent color |
+| Button Size | Normal | Small, Normal, Large or Extra Large |
+| Toggle Button | off | Stay pressed between clicks and send `1` (on) / `0` (off) |
+| On Label | (empty) | Caption while latched; falls back to the widget label |
+| Off Label | (empty) | Caption while released; falls back to the widget label |
+
+A latching button is filled with the button color while it is on and drawn as a plain
+button while it is off, so its state is readable without opening the device. It sends
+the same values as a Toggle, so a transmit function written for one works for the other.
+
+Button Size scales the button, its icon and its caption together, and the panel packer
+reserves a proportionally larger cell for it, so a large button is never clipped by its
+neighbours. When a custom Button Color is set, the caption switches between black and
+white to stay readable on that fill.
 
 ### Slider
 
@@ -78,7 +97,7 @@ Rotary dial for continuous setpoint adjustment. Same numeric properties as Slide
 1. Open the Project Editor (toolbar wrench icon).
 2. Click one of the **Add Output** buttons in the toolbar (Button, Slider, Toggle, Text Field, or Knob).
 3. An **Output Panel** group is created automatically if one does not exist.
-4. Select the new control in the tree view to configure its properties and transmit function.
+4. Select the new control in the tree view to configure its properties, then click **Edit Code** in the toolbar to write its transmit function.
 
 Output controls live inside **Output Panel** groups. You can also add an Output Panel group first (via the toolbar), then add controls to it. Each Output Panel can hold multiple controls of mixed types, packed automatically into as many columns as fit the available width.
 
@@ -88,13 +107,19 @@ Every output control has a JavaScript `transmit(value)` function that defines ho
 
 ### Writing a Transmit Function
 
+Select the control and click **Edit Code** in the Project Editor toolbar. The transmit function opens in its own window, with the template list, import, validation and testing all in its header, a live preview of the control beside the code, and a status line that reports whether the script compiles and defines `transmit(value)` as you type.
+
+A script that does not compile, or that never defines `transmit(value)`, is not saved: the project keeps the last version that worked, and closing the window with a broken script asks before discarding it.
+
+The preview drives the real control through its own range, step size and labels, and shows the exact bytes the script produces. It never transmits: nothing reaches a connected device from the preview, so a relay or PWM script is safe to exercise with hardware attached.
+
 The function receives a single `value` parameter and must return a string:
 
 ```javascript
 function transmit(value) {
   // value is:
   //   1           for Button clicks
-  //   0 or 1      for Toggle state changes
+  //   0 or 1      for Toggle state changes and latching Buttons
   //   number       for Slider and Knob
   //   "string"    for TextField input
 
@@ -234,7 +259,37 @@ function transmit(value) {
 
 ### Importing from File
 
-Click the import button in the code editor toolbar to load a `.js` file from disk. This is useful for sharing transmit functions across projects or version-controlling them separately.
+Click **Import** in the transmit function window's header to load a `.js` file from disk. This is useful for sharing transmit functions across projects or version-controlling them separately.
+
+## State Feedback
+
+By default an output control shows the state **you** last set it to. The equipment can change on its own: an interlock trips, someone uses a local panel, a command is refused. The control keeps showing your last click and quietly says something untrue about the machine.
+
+Bind a control to a **state source** and it shows what the equipment reports instead. Select the control in the Project Editor and set **State Source** to a dataset or a table variable, then pick the source itself.
+
+A load bank makes the case. Stopping the bank also stops its cooling fan, because the two are interlocked in the equipment rather than in Serial Studio. Bind the fan's control to the dataset carrying fan status and it stops claiming the fan is running the moment the bank goes down.
+
+### On Value
+
+For a toggle or a latching button, **On Value** decides which readings mean on.
+
+Leave it empty and any non-zero number means on. That works for a dataset reporting `1` and `0`, but a device reporting text like `RUN` and `STOP` carries no number at all, so it would read as off even while running — fill in `RUN` and the control matches it exactly, comparing as text or as a number automatically.
+
+Anything more involved (a bit within a status word, a threshold, hysteresis) belongs in the dataset's own transform, which already exists for exactly this. Produce a clean `0` or `1` there and leave **On Value** empty.
+
+### Waiting and No Data
+
+A bound control shows three states rather than two.
+
+**live**: the source is reporting, and the control shows what it says.
+
+**waiting…**: you acted and the equipment has not confirmed yet. **Confirm Within (ms)** sets how long this lasts; a contactor may close in well under a second while a fan takes several. During this window the control keeps showing what you asked for, and feedback does not override it.
+
+**no data**: the source has not reported, or has gone quiet. The control dims and says so, because showing "off" when the truth is "we have not heard" is the failure this feature exists to remove.
+
+Feedback never transmits. Reflecting equipment state is not an operator action, so a bound control cannot command itself in a loop. Dragging a bound slider is also never interrupted: feedback is held until you let go.
+
+If you delete the dataset or variable a control was bound to, the project still loads and the control still works — it stops correcting itself, and the Problems list reports it.
 
 ## Protocol Helper Functions
 

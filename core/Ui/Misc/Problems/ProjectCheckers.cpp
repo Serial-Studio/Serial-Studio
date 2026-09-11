@@ -338,6 +338,51 @@ static void inspectWorkspaceReferences(const DataModel::Workspace& workspace,
 }
 
 /**
+ * @brief Flags a control bound to a state source the project no longer defines. The control still
+ *        works -- it just stops correcting itself, and silently, which is the failure state
+ *        feedback exists to remove (spec 0080 R10). Loading such a project must still succeed.
+ */
+static void inspectStateBindings(QList<Finding>& out)
+{
+  auto& project = projectModel();
+
+  QSet<int> datasetIds;
+  for (const auto& group : project.groups())
+    for (const auto& dataset : group.datasets)
+      datasetIds.insert(dataset.uniqueId);
+
+  QSet<QString> variables;
+  for (const auto& table : project.tables())
+    for (const auto& reg : table.registers)
+      variables.insert(table.name + QStringLiteral("/") + reg.name);
+
+  for (const auto& group : project.groups()) {
+    for (const auto& widget : group.outputWidgets) {
+      const bool dataset = widget.stateSource == DataModel::OutputStateSource::Dataset;
+      const bool table   = widget.stateSource == DataModel::OutputStateSource::Table;
+      const bool missing =
+        (dataset && !datasetIds.contains(widget.stateDatasetId))
+        || (table
+            && !variables.contains(widget.stateTable + QStringLiteral("/") + widget.stateVariable));
+      if (!missing)
+        continue;
+
+      out.append(makeFinding(
+        Misc::ProblemCenter::Warning,
+        "dangling-state-source",
+        trProblem("Output control follows a missing source"),
+        trProblem("\"%1\" in group \"%2\" displays the state of a source this project no longer "
+                  "defines, so it will show its own last setting instead of the equipment's.")
+          .arg(widget.title, groupLabel(group)),
+        trProblem("Point the control at an existing dataset or table variable, or clear its state "
+                  "source."),
+        group.uniqueId,
+        kJumpGroup));
+    }
+  }
+}
+
+/**
  * @brief Flags actions and output widgets that transmit to a source the project no longer
  *        defines; the command is then sent nowhere. A project that declares no sources at all
  *        still resolves everything to the implicit default, so it is left alone.
@@ -413,6 +458,7 @@ static void checkDanglingReferences(QList<Finding>& out)
     inspectWorkspaceReferences(workspace, groupIds, out);
 
   inspectSourceReferences(sourceIds, out);
+  inspectStateBindings(out);
   capFindings(out);
 }
 

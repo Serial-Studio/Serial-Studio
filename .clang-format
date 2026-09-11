@@ -24,6 +24,11 @@ ColumnLimit:                           100
 IndentWidth:                           2
 TabWidth:                              2
 UseTab:                                Never
+
+# Stated, not derived: the default (DeriveLF) copies whatever ending a file already has, which
+# makes the output a property of the checkout rather than of this config. .gitattributes keeps
+# the tree LF; this keeps clang-format from reintroducing CRLF on a Windows working copy.
+LineEnding:                            LF
 ContinuationIndentWidth:               2
 IndentCaseLabels:                      true
 IndentCaseBlocks:                      false

@@ -58,6 +58,15 @@ Widgets.SmartDialog {
   }
 
   //
+  // Clears any previous error before starting a new search
+  //
+  function search(query) {
+    errorLabel.visible = false
+    root.selectedIndex = -1
+    Cpp_Misc_IconEngine.searchIcons(query)
+  }
+
+  //
   // Download the selected icon when the user confirms
   //
   Connections {
@@ -70,6 +79,11 @@ Widgets.SmartDialog {
 
     function onIconDownloadFailed(error) {
       errorLabel.text = qsTr("Download failed: %1").arg(error)
+      errorLabel.visible = true
+    }
+
+    function onSearchFailed(error) {
+      errorLabel.text = error
       errorLabel.visible = true
     }
   }
@@ -97,10 +111,10 @@ Widgets.SmartDialog {
         placeholderText: qsTr("Search icons (e.g. temperature, arrow, play)…")
         color: Cpp_ThemeManager.colors["text"]
 
-        onAccepted: Cpp_Misc_IconEngine.searchIcons(text)
+        onAccepted: root.search(text)
 
-        Keys.onEnterPressed: Cpp_Misc_IconEngine.searchIcons(text)
-        Keys.onReturnPressed: Cpp_Misc_IconEngine.searchIcons(text)
+        Keys.onEnterPressed: root.search(text)
+        Keys.onReturnPressed: root.search(text)
       }
 
       Widgets.IconButton {
@@ -109,7 +123,7 @@ Widgets.SmartDialog {
         horizontalPadding: 8
         text: qsTr("Search…")
         icon.source: "qrc:/icons/buttons/search.svg"
-        onClicked: Cpp_Misc_IconEngine.searchIcons(searchField.text)
+        onClicked: root.search(searchField.text)
         enabled: !Cpp_Misc_IconEngine.busy && searchField.text.length > 0
       }
     }
@@ -185,18 +199,35 @@ Widgets.SmartDialog {
           }
 
           Image {
+            id: iconPreview
+
+            readonly property bool resolved: iconPreview.source.toString().length > 0
+
+            asynchronous: true
             anchors.centerIn: parent
             sourceSize: Qt.size(40, 40)
-            source: Cpp_Misc_IconEngine.iconPreviews[iconDelegate.index] || ""
             fillMode: Image.PreserveAspectFit
+            source: Cpp_Misc_IconEngine.iconPreviews[iconDelegate.index] || ""
 
             Label {
+              text: "?"
               anchors.centerIn: parent
-              visible: parent.status === Image.Error
               font: Cpp_Misc_CommonFonts.customUiFont(0.7, false)
               color: Cpp_ThemeManager.colors["placeholder_text"]
-              text: "?"
+              visible: iconPreview.status === Image.Error
+                       || (!iconPreview.resolved && !Cpp_Misc_IconEngine.loadingPreviews)
             }
+          }
+
+          //
+          // Per-tile spinner: previews arrive one icon set at a time
+          //
+          BusyIndicator {
+            width: 24
+            height: 24
+            running: visible
+            anchors.centerIn: parent
+            visible: !iconPreview.resolved && Cpp_Misc_IconEngine.loadingPreviews
           }
 
           MouseArea {

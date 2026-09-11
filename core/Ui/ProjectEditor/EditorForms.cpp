@@ -42,6 +42,7 @@
 #include "DataModel/ProjectModel.h"
 #include "DataModel/WidgetResolution.h"
 #include "IO/ConnectionManager.h"
+#include "ProjectEditor/EditorForms/OutputStateRows.h"
 #include "ProjectEditor/Editors/DatasetTransformEditor.h"
 #include "ProjectEditor/ProjectEditor.h"
 #include "ProjectEditor/ProjectEditorIcons.h"
@@ -1194,15 +1195,80 @@ void EditorForms::buildOutputWidgetCommonRows(const DataModel::OutputWidget& wid
     monoItem->setData(tr("Colorize Icon"), ParameterName);
     monoItem->setData(tr("Tint the icon with the button color"), ParameterDescription);
     m_editor.m_outputWidgetModel->appendRow(monoItem);
+
+    auto* colorItem = new QStandardItem();
+    colorItem->setEditable(true);
+    colorItem->setData(true, Active);
+    colorItem->setData(ColorPicker, WidgetType);
+    colorItem->setData(widget.color, EditableValue);
+    colorItem->setData(kOutputWidget_Color, ParameterType);
+    colorItem->setData(tr("Automatic"), PlaceholderValue);
+    colorItem->setData(tr("Button Color"), ParameterName);
+    colorItem->setData(tr("Custom fill color for this button; automatic uses the group accent"),
+                       ParameterDescription);
+    m_editor.m_outputWidgetModel->appendRow(colorItem);
+
+    auto* sizeItem = new QStandardItem();
+    sizeItem->setEditable(true);
+    sizeItem->setData(true, Active);
+    sizeItem->setData(ComboBox, WidgetType);
+    sizeItem->setData(SerialStudio::outputControlSizes(), ComboBoxData);
+    sizeItem->setData(static_cast<int>(widget.size), EditableValue);
+    sizeItem->setData(kOutputWidget_Size, ParameterType);
+    sizeItem->setData(tr("Button Size"), ParameterName);
+    sizeItem->setData(tr("Scales the button, its icon and its caption"), ParameterDescription);
+    m_editor.m_outputWidgetModel->appendRow(sizeItem);
+
+    auto* latchItem = new QStandardItem();
+    latchItem->setEditable(true);
+    latchItem->setData(true, Active);
+    latchItem->setData(CheckBox, WidgetType);
+    latchItem->setData(widget.checkable, EditableValue);
+    latchItem->setData(kOutputWidget_Checkable, ParameterType);
+    latchItem->setData(tr("Toggle Button"), ParameterName);
+    latchItem->setData(tr("Stay pressed and transmit 1 (on) / 0 (off) instead of a single click"),
+                       ParameterDescription);
+    m_editor.m_outputWidgetModel->appendRow(latchItem);
+
+    buildOutputWidgetLabelRows(widget);
   }
 }
 
 /**
- * @brief Appends initial value (when applicable) and text encoding rows for the output widget.
+ * @brief Appends the on/off caption rows shown for latching buttons and toggles.
+ */
+void EditorForms::buildOutputWidgetLabelRows(const DataModel::OutputWidget& widget)
+{
+  if (!widget.checkable)
+    return;
+
+  auto* onItem = new QStandardItem();
+  onItem->setEditable(true);
+  onItem->setData(true, Active);
+  onItem->setData(TextField, WidgetType);
+  onItem->setData(widget.onLabel, EditableValue);
+  onItem->setData(kOutputWidget_OnLabel, ParameterType);
+  onItem->setData(tr("On Label"), ParameterName);
+  onItem->setData(tr("Caption shown while latched (defaults to the label)"), PlaceholderValue);
+  m_editor.m_outputWidgetModel->appendRow(onItem);
+
+  auto* offItem = new QStandardItem();
+  offItem->setEditable(true);
+  offItem->setData(true, Active);
+  offItem->setData(TextField, WidgetType);
+  offItem->setData(widget.offLabel, EditableValue);
+  offItem->setData(kOutputWidget_OffLabel, ParameterType);
+  offItem->setData(tr("Off Label"), ParameterName);
+  offItem->setData(tr("Caption shown while released (defaults to the label)"), PlaceholderValue);
+  m_editor.m_outputWidgetModel->appendRow(offItem);
+}
+
+/**
+ * @brief Appends initial value (every type but a momentary button) and text encoding rows.
  */
 void EditorForms::buildOutputWidgetTransmitRow(const DataModel::OutputWidget& widget)
 {
-  if (widget.type != DataModel::OutputWidgetType::Button) {
+  if (widget.type != DataModel::OutputWidgetType::Button || widget.checkable) {
     auto* initItem = new QStandardItem();
     initItem->setEditable(true);
     initItem->setData(true, Active);
@@ -1290,6 +1356,7 @@ void EditorForms::buildOutputWidgetModel(const DataModel::OutputWidget& widget)
   buildOutputWidgetCommonRows(widget);
   buildOutputWidgetTransmitRow(widget);
   buildOutputWidgetValueRows(widget);
+  appendOutputStateRows(m_editor.m_outputWidgetModel, widget, m_model);
 
   QObject::connect(
     m_editor.m_outputWidgetModel,

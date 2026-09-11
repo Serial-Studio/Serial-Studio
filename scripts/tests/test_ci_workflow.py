@@ -330,6 +330,20 @@ def test_python_dependencies_install_from_the_hashed_lock(path):
     assert not unpinned, f"bare 'pip install <name>' is unpinned: {unpinned}"
 
 
+def test_clang_format_is_pinned_and_gated():
+    """The formatter is a dependency like any other: an unpinned one restyles the whole tree on
+    whoever upgrades first, and without a CI gate that restyle lands unnoticed."""
+    manifest = (REPO / "tests" / "requirements.txt").read_text(encoding="utf-8")
+    pin = re.search(r"^clang-format==(\S+)", manifest, re.M)
+    assert pin, "tests/requirements.txt must pin clang-format to an exact version"
+
+    lock = (REPO / "tests" / "requirements.lock").read_text(encoding="utf-8")
+    assert f"clang-format=={pin.group(1)}" in lock, "the lock is stale for clang-format"
+
+    runs = " ".join(str(step.get("run", "")) for _, step in _all_steps(CI_YML))
+    assert "sanitize-commit.py --check-format" in runs, "no CI clang-format gate"
+
+
 # --------------------------------------------------------------------------------------------
 # xfail policy (L14)
 # --------------------------------------------------------------------------------------------

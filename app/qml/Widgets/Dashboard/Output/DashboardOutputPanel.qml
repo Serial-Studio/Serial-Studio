@@ -7,11 +7,9 @@
  */
 
 import QtQuick
-import QtQuick.Layouts
 import QtQuick.Controls
 
 import SerialStudio
-import "../.." as Widgets
 
 Item {
   id: root
@@ -71,17 +69,23 @@ Item {
 
         radius: 4
         color: Cpp_ThemeManager.colors["groupbox_background"]
-        border.width: cell.txError ? 2 : 1
+        border.width: (cell.txError || cell.statePending) ? 2 : 1
         border.color: cell.txError ? Cpp_ThemeManager.colors["alarm"]
-                                   : Cpp_ThemeManager.colors["groupbox_border"]
+                      : cell.statePending ? cell.accentColor
+                      : Cpp_ThemeManager.colors["groupbox_border"]
 
         property var owData: root.model ? root.model.widgets[index] : null
         property var owModel: root.model ? root.model.models[index] : null
+
         property int owType: owData ? owData.type : 0
-        property bool owMono: owData ? (owData.monoIcon || false) : false
-        property string owIcon: owData ? (owData.icon || "") : ""
-        property string owTitle: owData ? owData.title : ""
-        property color accentColor: SerialStudioHelpers.getDatasetAccentColor()
+        property string owColor: owData ? (owData.color || "") : ""
+        property bool stateUnknown: cell.stateBound && !cell.stateKnown
+        property bool stateBound: cell.owModel ? cell.owModel.stateBound : false
+        property bool stateKnown: cell.owModel ? cell.owModel.stateKnown : false
+        property bool statePending: cell.owModel ? cell.owModel.statePending : false
+        property color accentColor: cell.owColor.length > 0
+                                    ? cell.owColor
+                                    : SerialStudioHelpers.getDatasetAccentColor()
 
         //
         // Transmit error indicator: flash a red border + tooltip when the
@@ -115,269 +119,87 @@ Item {
         }
 
         //
-        // Section label component: uppercase title + separator
+        // State readout: says plainly when the source has not been heard from, so an unknown
+        // state can never be mistaken for a settled one.
         //
-        component SectionLabel : ColumnLayout {
-          property string text: ""
-          property color labelColor: Cpp_ThemeManager.colors["pane_section_label"]
-
-          spacing: 2
-
-          Label {
-            text: parent.text
-            elide: Text.ElideRight
-            Layout.fillWidth: true
-            color: parent.labelColor
-            font: Cpp_Misc_CommonFonts.customUiFont(0.75, true)
-            Component.onCompleted: font.capitalization = Font.AllUppercase
-          }
-
-          Rectangle {
-            implicitHeight: 1
-            Layout.fillWidth: true
-            color: Cpp_ThemeManager.colors["groupbox_border"]
-          }
+        Label {
+          z: 5
+          visible: cell.stateBound
+          anchors.top: parent.top
+          anchors.right: parent.right
+          anchors.margins: 4
+          font: Cpp_Misc_CommonFonts.customUiFont(0.7, false)
+          color: cell.stateUnknown ? Cpp_ThemeManager.colors["alarm"]
+                                   : Cpp_ThemeManager.colors["placeholder_text"]
+          text: cell.stateUnknown ? qsTr("no data")
+                : cell.statePending ? qsTr("waiting…")
+                : qsTr("live")
         }
 
         //
-        // Button
+        // One control per cell, and the SAME control the transmit-function preview builds: two
+        // renderings of one widget is what let the panel and the preview drift apart.
         //
-        ColumnLayout {
-          spacing: 6
-          anchors.margins: 8
+        Loader {
           anchors.fill: parent
-          visible: cell.owType === SerialStudio.OutputButton
 
-          Item { Layout.fillHeight: true }
-
-          Widgets.IconButton {
-            iconSize: 16
-            text: cell.owTitle.length > 0 ? cell.owTitle : qsTr("Send")
-            icon.source: cell.owIcon.length > 0
-                         ? cell.owIcon
-                         : "qrc:/actions/Gears.svg"
-            icon.color: cell.owMono
-                        ? Cpp_ThemeManager.colors["highlighted_text"]
-                        : "transparent"
-            Layout.alignment: Qt.AlignHCenter
-            Layout.preferredWidth: Math.min(parent.width, 200)
-
-            palette.button: cell.accentColor
-            palette.buttonText: Cpp_ThemeManager.colors["highlighted_text"]
-
-            onClicked: {
-              if (cell.owModel)
-                cell.owModel.click()
-            }
+          sourceComponent: {
+            if (cell.owType === SerialStudio.OutputButton)    return buttonControl
+            if (cell.owType === SerialStudio.OutputSlider)    return sliderControl
+            if (cell.owType === SerialStudio.OutputToggle)    return toggleControl
+            if (cell.owType === SerialStudio.OutputTextField) return textFieldControl
+            if (cell.owType === SerialStudio.OutputKnob)      return knobControl
+            return null
           }
-
-          Item { Layout.fillHeight: true }
         }
 
-        //
-        // Slider
-        //
-        ColumnLayout {
-          spacing: 4
-          anchors.margins: 8
-          anchors.fill: parent
-          visible: cell.owType === SerialStudio.OutputSlider
+        Component {
+          id: buttonControl
 
-          SectionLabel {
-            text: cell.owTitle
-            labelColor: cell.accentColor
-          }
-
-          Item { Layout.fillHeight: true }
-
-          RowLayout {
-            spacing: 4
-            Layout.fillWidth: true
-
-            Label {
-              text: cell.owData ? cell.owData.minValue.toFixed(0) : "0"
-              color: Cpp_ThemeManager.colors["placeholder_text"]
-              font: Cpp_Misc_CommonFonts.customUiFont(0.7, false)
-            }
-
-            Slider {
-              id: slider
-
-              Layout.fillWidth: true
-              from: cell.owData ? cell.owData.minValue : 0
-              to: cell.owData ? cell.owData.maxValue : 100
-              stepSize: cell.owData ? cell.owData.stepSize : 1
-              value: cell.owData ? cell.owData.initialValue : 0
-
-              palette.dark: cell.accentColor
-              palette.highlight: cell.accentColor
-
-              onMoved: {
-                if (cell.owModel)
-                  cell.owModel.currentValue = slider.value
-              }
-            }
-
-            Label {
-              text: cell.owData ? cell.owData.maxValue.toFixed(0) : "100"
-              color: Cpp_ThemeManager.colors["placeholder_text"]
-              font: Cpp_Misc_CommonFonts.customUiFont(0.7, false)
-            }
-          }
-
-          Label {
+          DashboardButton {
+            model: cell.owModel
+            widget: cell.owData
             color: cell.accentColor
-            Layout.alignment: Qt.AlignHCenter
-            font: Cpp_Misc_CommonFonts.customMonoFont(0.8, true)
-            text: slider.value.toFixed(slider.stepSize < 1 ? 2 : 0)
           }
-
-          Item { Layout.fillHeight: true }
         }
 
-        //
-        // Toggle / Switch
-        //
-        ColumnLayout {
-          spacing: 4
-          anchors.margins: 8
-          anchors.fill: parent
-          visible: cell.owType === SerialStudio.OutputToggle
+        Component {
+          id: sliderControl
 
-          SectionLabel {
-            text: cell.owTitle
-            labelColor: cell.accentColor
-          }
-
-          Item { Layout.fillHeight: true }
-
-          Switch {
-            id: toggle
-
-            Layout.alignment: Qt.AlignHCenter
-            checked: cell.owData ? cell.owData.initialValue !== 0 : false
-
-            palette.highlight: cell.accentColor
-
-            onToggled: {
-              if (cell.owModel)
-                cell.owModel.checked = toggle.checked
-            }
-          }
-
-          Item { Layout.fillHeight: true }
-        }
-
-        //
-        // TextField
-        //
-        ColumnLayout {
-          spacing: 4
-          anchors.margins: 8
-          anchors.fill: parent
-          visible: cell.owType === SerialStudio.OutputTextField
-
-          SectionLabel {
-            text: cell.owTitle
-            labelColor: cell.accentColor
-          }
-
-          Item { Layout.fillHeight: true }
-
-          RowLayout {
-            spacing: 4
-            Layout.fillWidth: true
-
-            Widgets.LineField {
-              id: textInput
-
-              Layout.fillWidth: true
-              placeholderText: qsTr("Enter command…")
-              font: Cpp_Misc_CommonFonts.customMonoFont(0.8, false)
-
-              palette.highlight: cell.accentColor
-
-              onAccepted: textSendBtn.clicked()
-            }
-
-            Widgets.IconButton {
-              id: textSendBtn
-
-              iconSize: 16
-              text: qsTr("Send")
-              icon.source: "qrc:/icons/buttons/send.svg"
-              font: Cpp_Misc_CommonFonts.customUiFont(0.8, false)
-
-              palette.button: cell.accentColor
-              palette.buttonText: Cpp_ThemeManager.colors["highlighted_text"]
-
-              onClicked: {
-                if (cell.owModel && textInput.text.length > 0) {
-                  cell.owModel.sendText(textInput.text)
-                  textInput.clear()
-                }
-              }
-            }
-          }
-
-          Item { Layout.fillHeight: true }
-        }
-
-        //
-        // Knob / Dial
-        //
-        ColumnLayout {
-          spacing: 4
-          anchors.margins: 8
-          anchors.fill: parent
-          visible: cell.owType === SerialStudio.OutputKnob
-
-          SectionLabel {
-            text: cell.owTitle
-            labelColor: cell.accentColor
-          }
-
-          Dial {
-            id: knob
-
-            Layout.fillWidth: true
-            Layout.fillHeight: true
-            inputMode: Dial.Circular
-            Layout.maximumWidth: height
-            Layout.alignment: Qt.AlignHCenter
-            from: cell.owData ? cell.owData.minValue : 0
-            to: cell.owData ? cell.owData.maxValue : 100
-            stepSize: cell.owData ? cell.owData.stepSize : 1
-            value: cell.owData ? cell.owData.initialValue : 0
-
-            palette.dark: cell.accentColor
-            palette.highlight: cell.accentColor
-
-            onMoved: {
-              if (cell.owModel)
-                cell.owModel.currentValue = knob.value
-            }
-
-            background: Rectangle {
-              opacity: 0.5
-              height: width
-              border.width: 2
-              radius: width / 2
-              color: "transparent"
-              x: knob.width / 2 - width / 2
-              border.color: cell.accentColor
-              y: knob.height / 2 - height / 2
-              width: Math.min(knob.availableWidth, knob.availableHeight)
-            }
-          }
-
-          Label {
-            text: cell.owData
-                  ? knob.value.toFixed(knob.stepSize < 1 ? 2 : 0)
-                  : ""
+          DashboardSlider {
+            model: cell.owModel
+            widget: cell.owData
             color: cell.accentColor
-            font: Cpp_Misc_CommonFonts.customMonoFont(0.8, true)
-            Layout.alignment: Qt.AlignHCenter
+          }
+        }
+
+        Component {
+          id: toggleControl
+
+          DashboardToggle {
+            model: cell.owModel
+            widget: cell.owData
+            color: cell.accentColor
+          }
+        }
+
+        Component {
+          id: textFieldControl
+
+          DashboardTextField {
+            model: cell.owModel
+            widget: cell.owData
+            color: cell.accentColor
+          }
+        }
+
+        Component {
+          id: knobControl
+
+          DashboardKnob {
+            model: cell.owModel
+            widget: cell.owData
+            color: cell.accentColor
           }
         }
 

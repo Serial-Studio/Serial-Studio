@@ -16,81 +16,89 @@ Item {
   id: root
 
   required property color color
-  required property var windowRoot
   required property var model
-  required property string widgetId
+  required property var widget
+
+  readonly property real from: root.widget ? (root.widget.minValue || 0) : 0
+  readonly property real to: root.widget ? (root.widget.maxValue || 100) : 100
+  readonly property real step: root.widget ? (root.widget.stepSize || 1) : 1
+  readonly property string title: root.widget ? (root.widget.title || "") : ""
+  readonly property bool unknown: root.model
+                                  ? (root.model.stateBound && !root.model.stateKnown)
+                                  : false
+
+  //
+  // Restorable after a drag clears the binding, so feedback can move the handle again
+  //
+  readonly property real desiredValue: root.model
+                                       && root.model.currentValue !== undefined
+                                       ? root.model.currentValue
+                                       : root.from
 
   ColumnLayout {
-    spacing: 8
-    anchors.margins: 16
+    spacing: 4
+    anchors.margins: 8
     anchors.fill: parent
 
-    Item { Layout.fillHeight: true }
-
-    Label {
-      color: root.color
-      Layout.alignment: Qt.AlignHCenter
-      font: Cpp_Misc_CommonFonts.boldUiFont
-      text: root.model ? root.model.title : ""
+    OutputSectionLabel {
+      text: root.title
+      labelColor: root.color
     }
 
     RowLayout {
-      spacing: 8
+      spacing: 4
       Layout.fillWidth: true
-      Layout.alignment: Qt.AlignHCenter
 
       Label {
-        color: root.color
-        font: Cpp_Misc_CommonFonts.uiFont
-        text: root.model ? root.model.minValue.toFixed(1) : "0"
+        text: root.from.toFixed(0)
+        color: Cpp_ThemeManager.colors["placeholder_text"]
+        font: Cpp_Misc_CommonFonts.customUiFont(0.7, false)
       }
 
       Slider {
-        id: slider
+        id: control
 
+        to: root.to
+        from: root.from
+        stepSize: root.step
         Layout.fillWidth: true
-        from: root.model ? root.model.minValue : 0
-        to: root.model ? root.model.maxValue : 100
-        stepSize: root.model ? root.model.stepSize : 1
+        value: root.desiredValue
+        opacity: root.unknown ? 0.45 : 1.0
 
         palette.dark: root.color
         palette.highlight: root.color
 
         onMoved: {
           if (root.model)
-            root.model.currentValue = slider.value
+            root.model.currentValue = control.value
+        }
+
+        onPressedChanged: {
+          if (!root.model)
+            return
+
+          if (control.pressed) {
+            root.model.beginInteraction()
+            return
+          }
+
+          root.model.endInteraction()
+          control.value = Qt.binding(function() { return root.desiredValue })
         }
       }
 
       Label {
-        color: root.color
-        font: Cpp_Misc_CommonFonts.uiFont
-        text: root.model ? root.model.maxValue.toFixed(1) : "100"
+        text: root.to.toFixed(0)
+        color: Cpp_ThemeManager.colors["placeholder_text"]
+        font: Cpp_Misc_CommonFonts.customUiFont(0.7, false)
       }
     }
 
     Label {
-      text: {
-        if (!root.model)
-          return ""
-
-        var val = slider.value.toFixed(2)
-        var units = root.model.units
-        return val + (units.length > 0 ? " " + units : "")
-      }
       color: root.color
       Layout.alignment: Qt.AlignHCenter
-      font: Cpp_Misc_CommonFonts.boldUiFont
+      text: control.value.toFixed(root.step < 1 ? 2 : 0)
+      font: Cpp_Misc_CommonFonts.customMonoFont(0.8, true)
     }
-
-    Label {
-      color: Cpp_ThemeManager.colors["error"]
-      font: Cpp_Misc_CommonFonts.uiFont
-      Layout.alignment: Qt.AlignHCenter
-      text: qsTr("No transmit function defined")
-      visible: root.model && !root.model.hasTransmitFunction
-    }
-
-    Item { Layout.fillHeight: true }
   }
 }

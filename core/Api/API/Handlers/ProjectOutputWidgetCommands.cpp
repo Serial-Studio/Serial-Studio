@@ -88,7 +88,8 @@ void API::Handlers::ProjectOutputWidgetCommands::registerCommands()
     QStringLiteral("project.outputWidget.get"),
     QStringLiteral("Read the current configuration of an output widget "
                    "(params: groupId, widgetId). Returns title, icon, type, "
-                   "min/max/step/initialValue, transmitFunction. Use BEFORE "
+                   "checkable, color, size, on/offLabel, min/max/step/initialValue, "
+                   "transmitFunction. Use BEFORE "
                    "rewriting the transmitFunction so you preserve the user's "
                    "current ranges and labels."),
     makeSchema({
@@ -244,6 +245,11 @@ API::CommandResponse API::Handlers::ProjectOutputWidgetCommands::outputWidgetGet
   result[QStringLiteral("title")]            = w.title;
   result[QStringLiteral("icon")]             = w.icon;
   result[QStringLiteral("monoIcon")]         = w.monoIcon;
+  result[QStringLiteral("checkable")]        = w.checkable;
+  result[QStringLiteral("color")]            = w.color;
+  result[QStringLiteral("size")]             = static_cast<int>(w.size);
+  result[QStringLiteral("onLabel")]          = w.onLabel;
+  result[QStringLiteral("offLabel")]         = w.offLabel;
   result[QStringLiteral("minValue")]         = w.minValue;
   result[QStringLiteral("maxValue")]         = w.maxValue;
   result[QStringLiteral("stepSize")]         = w.stepSize;

@@ -1,12 +1,12 @@
 {
   "spec": "0039-session-context",
   "regenerate": "python scripts/code-verify.py --singleton-census --accept",
-  "total": 795,
+  "total": 794,
   "files": 198,
   "buckets": {
     "root": 205,
     "accessor": 71,
-    "ctor-capture": 63,
+    "ctor-capture": 62,
     "deferred": 6,
     "static-cache": 420,
     "loose": 30
@@ -16,8 +16,8 @@
   "per_class": {
     "CommandRegistry": 57,
     "AppState": 51,
-    "UI::Dashboard": 48,
-    "Misc::ThemeManager": 31,
+    "UI::Dashboard": 49,
+    "Misc::ThemeManager": 30,
     "DataModel::ProjectModel": 28,
     "Console::Handler": 25,
     "IO::PipelineHost": 23,
@@ -30,10 +30,10 @@
     "MDF4::Export": 15,
     "UI::WidgetExtensions": 15,
     "Misc::ExtensionManager": 14,
-    "Misc::CommonFonts": 14,
     "Misc::ProblemCenter": 14,
     "Licensing::LemonSqueezy": 13,
     "DataModel::FrameParser": 13,
+    "Misc::CommonFonts": 13,
     "UI::UISessionRegistry": 13,
     "CSV::Player": 12,
     "ConnectionManager": 12,
@@ -1800,17 +1800,6 @@
         "loose": 0
       }
     },
-    "core/Ui/ProjectEditor/Dialogs/TransmitTestDialog.cpp": {
-      "total": 2,
-      "buckets": {
-        "root": 0,
-        "accessor": 0,
-        "ctor-capture": 2,
-        "deferred": 0,
-        "static-cache": 0,
-        "loose": 0
-      }
-    },
     "core/Ui/ProjectEditor/EditorCommit.cpp": {
       "total": 1,
       "buckets": {
@@ -2191,6 +2180,17 @@
         "root": 0,
         "accessor": 0,
         "ctor-capture": 2,
+        "deferred": 0,
+        "static-cache": 0,
+        "loose": 0
+      }
+    },
+    "core/Ui/UI/Widgets/Output/Panel.cpp": {
+      "total": 1,
+      "buckets": {
+        "root": 0,
+        "accessor": 0,
+        "ctor-capture": 1,
         "deferred": 0,
         "static-cache": 0,
         "loose": 0

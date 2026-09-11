@@ -874,11 +874,12 @@ function io.listBuses()
   return apiCall('io.listBuses', p)
 end
 
-function io.modbus.addRegisterGroup(type, startAddress, count)
+function io.modbus.addRegisterGroup(type, startAddress, count, slaveAddress)
   local p = {}
   p['type'] = type
   p['startAddress'] = startAddress
   p['count'] = count
+  p['slaveAddress'] = slaveAddress
   return apiCall('io.modbus.addRegisterGroup', p)
 end
 

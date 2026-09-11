@@ -104,6 +104,8 @@ ColumnLayout {
         implicitHeight: root.iconWidth
 
         Canvas {
+          id: _canvas
+
           opacity: 0.8
           width: parent.width / 2
           anchors.centerIn: parent
@@ -135,7 +137,7 @@ ColumnLayout {
             target: Cpp_ThemeManager
 
             function onThemeChanged() {
-              requestPaint()
+              _canvas.requestPaint()
             }
           }
         }

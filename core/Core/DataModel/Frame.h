@@ -130,6 +130,52 @@ enum class OutputWidgetType : quint8 {
 };
 
 /**
+ * @brief Presentation size of an output widget, relative to the normal metrics.
+ */
+enum class OutputWidgetSize : quint8 {
+  Small,
+  Normal,
+  Large,
+  ExtraLarge,
+};
+
+/**
+ * @brief Ceiling for an output control's confirm-within window. A window longer than this
+ *        describes no real equipment, and every millisecond past it is one where the control
+ *        latches "request outstanding" and refuses to adopt what the plant reports.
+ */
+inline constexpr int kMaxOutputStateConfirmMs = 120000;
+
+/**
+ * @brief Returns the metric multiplier of a size class; the ONE definition shared by the panel
+ *        packing engine and the QML controls, so both agree on how large a control really is.
+ */
+[[nodiscard]] inline constexpr double outputSizeScale(OutputWidgetSize size)
+{
+  switch (size) {
+    case OutputWidgetSize::Small:
+      return 0.8;
+    case OutputWidgetSize::Large:
+      return 1.35;
+    case OutputWidgetSize::ExtraLarge:
+      return 1.75;
+    default:
+      return 1.0;
+  }
+}
+
+/**
+ * @brief Where a control reads the state it displays (spec 0080). None is the default, so a
+ *        project written before state feedback existed reads back unbound and behaves exactly
+ *        as it always did.
+ */
+enum class OutputStateSource : quint8 {
+  None    = 0,
+  Dataset = 1,
+  Table   = 2,
+};
+
+/**
  * @brief Represents an interactive output widget that sends data to the device.
  */
 struct alignas(8) OutputWidget {
@@ -139,15 +185,25 @@ struct alignas(8) OutputWidget {
   int txEncoding        = 0;                         ///< Encoding used for transmit payload
   OutputWidgetType type = OutputWidgetType::Button;  ///< Widget presentation/behavior type
   bool monoIcon         = false;                     ///< Use monochrome icon styling
+  bool checkable        = false;                     ///< Button latches on/off instead of pulsing
+  OutputWidgetSize size = OutputWidgetSize::Normal;  ///< Presentation size class
   double minValue       = 0;                         ///< Minimum allowed value
   double maxValue       = 100;                       ///< Maximum allowed value
   double stepSize       = 1;                         ///< Value increment step
   double initialValue   = 0;                         ///< Initial widget value
   QString icon;
+  QString color;  ///< Optional hex fill override; empty -> group accent colour
   QString title;
   QString onLabel;
   QString offLabel;
   QString transmitFunction;
+
+  OutputStateSource stateSource = OutputStateSource::None;  ///< Where displayed state comes from
+  int stateDatasetId            = -1;    ///< Dataset uniqueId driving the display, -1 = none
+  int stateConfirmMs            = 3000;  ///< How long a request stays outstanding, milliseconds
+  QString stateTable;                    ///< Data table holding the state variable
+  QString stateVariable;                 ///< Variable within stateTable
+  QString stateOnValue;                  ///< Empty -> any non-zero value means on
 };
 
 static_assert(sizeof(OutputWidget) % alignof(OutputWidget) == 0, "Unaligned OutputWidget struct");
@@ -175,8 +231,33 @@ static_assert(sizeof(OutputWidget) % alignof(OutputWidget) == 0, "Unaligned Outp
   if (w.monoIcon)
     obj.insert(Keys::OutputMonoIcon, true);
 
+  if (w.checkable)
+    obj.insert(Keys::OutputCheckable, true);
+
+  if (!w.color.isEmpty())
+    obj.insert(Keys::OutputColor, w.color);
+
+  if (w.size != OutputWidgetSize::Normal)
+    obj.insert(Keys::OutputSize, static_cast<int>(w.size));
+
   obj.insert(Keys::TransmitFunction, w.transmitFunction);
   obj.insert(Keys::OutputTxEncoding, w.txEncoding);
+
+  if (w.stateSource != OutputStateSource::None) {
+    obj.insert(Keys::OutputStateSource, static_cast<int>(w.stateSource));
+    obj.insert(Keys::OutputStateConfirmMs, w.stateConfirmMs);
+    if (!w.stateOnValue.isEmpty())
+      obj.insert(Keys::OutputStateOnValue, w.stateOnValue);
+
+    if (w.stateSource == OutputStateSource::Dataset)
+      obj.insert(Keys::OutputStateDatasetId, w.stateDatasetId);
+
+    else {
+      obj.insert(Keys::OutputStateTable, w.stateTable);
+      obj.insert(Keys::OutputStateVariable, w.stateVariable);
+    }
+  }
+
   return obj;
 }
 
@@ -184,6 +265,14 @@ static_assert(sizeof(OutputWidget) % alignof(OutputWidget) == 0, "Unaligned Outp
  * @brief Deserializes an OutputWidget from a QJsonObject (Frame.cpp: uses SerialStudio::toDouble).
  */
 [[nodiscard]] bool read(OutputWidget& w, const QJsonObject& obj);
+
+/**
+ * @brief Forces an output widget's numeric fields into the ranges the rest of the code assumes.
+ *        Every door into the model calls this: read() for a project file and the API's patch
+ *        handler for a live edit. Clamping in only one of them is how an out-of-range encoding,
+ *        a negative source id or an inverted min/max reached the widgets through the other.
+ */
+void normalize(OutputWidget& w);
 
 /**
  * @brief Severity tier for an alarm band; drives default colour and notification policy.
@@ -266,7 +355,8 @@ struct alignas(8) Dataset {
   double wgtMin        = 0;      ///< Minimum value (for widgets)
   double wgtMax        = 0;      ///< Maximum value (for widgets)
   double ledHigh       = 80;     ///< LED activation threshold
-  double numericValue  = 0;      ///< Parsed numeric value after transforms
+  qint64 displaySampleMs = 0;    ///< Transient GUI receipt time; never serialized
+  double numericValue    = 0;    ///< Parsed numeric value after transforms
   double rawNumericValue = 0;    ///< Parsed numeric value before transforms
   int displayTickCount   = 5;    ///< Preferred major-tick count on analog widgets (0 = auto)
   int decimalPoints = -1;  ///< Fixed value-display decimals; overrides displayFormat (-1 = auto)

@@ -594,6 +594,25 @@ QString SerialStudio::normalizeIconPath(const QString& path)
 }
 
 //--------------------------------------------------------------------------------------------------
+// Output control metrics
+//--------------------------------------------------------------------------------------------------
+
+/**
+ * @brief Returns the display labels of the output-control size classes, ordered as
+ *        DataModel::OutputWidgetSize.
+ */
+QStringList SerialStudio::outputControlSizes()
+{
+  static const QStringList list{
+    widgetTitle("Small"),
+    widgetTitle("Normal"),
+    widgetTitle("Large"),
+    widgetTitle("Extra Large"),
+  };
+  return list;
+}
+
+//--------------------------------------------------------------------------------------------------
 // Text encoding names
 //--------------------------------------------------------------------------------------------------
 

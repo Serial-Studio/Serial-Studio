@@ -636,32 +636,22 @@ void API::GRPC::GRPCServer::startServer()
 }
 
 /**
- * @brief Stops the gRPC server and cancels all active streams. Parked handler calls are abandoned
- *        FIRST: this runs on the GUI thread, and Shutdown() waits for the sync handlers, which
- *        were waiting on the GUI thread -- both sides waited on each other (spec 0075 I5).
+ * @brief Stops the gRPC server. Parked handler calls are abandoned FIRST (spec 0075 I5), then
+ *        Shutdown() runs BEFORE the writer join and nothing here takes a stream mutex: a client
+ *        that stops reading parks the writer inside a blocking Write() holding that mutex, so
+ *        taking it deadlocked the GUI against the very call that cancels the RPC.
  */
 void API::GRPC::GRPCServer::stopServer()
 {
   abandonPendingCalls();
 
-  {
-    std::lock_guard<std::mutex> lock(m_frameStreamsMutex);
-    for (auto& ctx : m_frameStreams)
-      ctx->cancelled.store(true);
-  }
-
-  {
-    std::lock_guard<std::mutex> lock(m_rawStreamsMutex);
-    for (auto& ctx : m_rawStreams)
-      ctx->cancelled.store(true);
-  }
-
   m_writerRunning.store(false);
-  if (m_writerThread.joinable())
-    m_writerThread.join();
 
   if (m_grpcServer)
     m_grpcServer->Shutdown(std::chrono::system_clock::now() + std::chrono::seconds(3));
+
+  if (m_writerThread.joinable())
+    m_writerThread.join();
 
   if (m_serverThread.joinable())
     m_serverThread.join();

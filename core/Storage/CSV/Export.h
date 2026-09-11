@@ -21,6 +21,7 @@
 
 #pragma once
 
+#include <QDir>
 #include <QFile>
 #include <QObject>
 #include <QSet>
@@ -72,6 +73,7 @@ protected:
 
 private:
   void createCsvFile(const DataModel::Frame& frame);
+  [[nodiscard]] bool openUniqueFile(const QDir& dir, const QString& base);
   void bufferBlock(const DataModel::DataBlockPtr& block);
   void flushReadyRows(qint64 cutoffNs);
   void writeSnapshotRowNow(const DataModel::TimestampedFrame::SteadyTimePoint& timestamp);

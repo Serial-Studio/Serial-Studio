@@ -21,13 +21,13 @@
 
 #pragma once
 
+#include <cmath>
 #include <QQuickItem>
 #include <QString>
 #include <QVariantList>
 #include <QVector>
 #include <vector>
 
-#include "DSP.h"
 #include "UI/Dashboard.h"
 
 namespace DataModel {
@@ -56,6 +56,7 @@ struct BarBand {
 class Bar : public QQuickItem {
   // clang-format off
   Q_OBJECT
+  Q_PROPERTY(bool validData READ validData NOTIFY updated)
   Q_PROPERTY(bool alarmsDefined
              READ alarmsDefined
              CONSTANT)
@@ -128,6 +129,7 @@ public:
 
   [[nodiscard]] bool alarmsDefined() const noexcept;
   [[nodiscard]] bool hasData() const noexcept;
+  [[nodiscard]] bool validData() const noexcept;
   [[nodiscard]] bool alarmTriggered() const noexcept;
   [[nodiscard]] int activeBandSeverity() const noexcept;
   [[nodiscard]] const QString& activeBandLabel() const noexcept;
@@ -163,7 +165,7 @@ private:
     const double max   = qMax(m_minValue, m_maxValue);
     const double range = max - min;
 
-    if (DSP::isZero(range))
+    if (!std::isfinite(value) || !std::isfinite(range) || range <= 0.0)
       return 0.0;
 
     const double clamped = qBound(min, value, max);
@@ -171,10 +173,10 @@ private:
   }
 
 protected:
+  void applySample(const DataModel::Dataset& dataset);
   void buildBands(const std::vector<DataModel::AlarmBand>& srcBands);
   void recomputeActiveBand(double value);
   bool refreshExtremes(const DataModel::Dataset& dataset);
-  [[nodiscard]] bool latchData();
 
   int m_index;
   int m_displayTickCount;
@@ -184,6 +186,8 @@ protected:
   QString m_displayFormat;
 
   bool m_hasData;
+  bool m_validData;
+  qint64 m_sampleMs;
   double m_value;
   double m_minValue;
   double m_maxValue;

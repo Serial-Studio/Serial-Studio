@@ -158,6 +158,7 @@ public slots:
   void setDeviceIndex(const int index);
   void setTransferMode(const int mode);
   void grantAdvancedTransferConsent();
+  void requestAdvancedTransferConsent();
   void setInEndpointIndex(const int index);
   void setOutEndpointIndex(const int index);
   void setIsoPacketSize(const int size);

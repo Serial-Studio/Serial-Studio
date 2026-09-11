@@ -165,6 +165,13 @@ superset, so the four Project-Editor editors now repaint on focus change too.
 - `keyPressEvent` reroutes to `completer()->popup()` while it's visible (the popup never has
   real focus in the embedded setup).
 
+**`OutputCodeEditor` is the exception to the retained-view story (spec 0079).** It no longer sits
+in the Output Widget view; it lives in `TransmitCodeDialog.qml`, an application-modal window behind
+a `Loader` that goes `active: false` on close. The item is therefore destroyed with the window
+rather than kept alive by the right-panel Loader, so its `WindowVisible` gate has nothing left to
+gate -- the cost is zero by construction, not by check. The other three Project-Editor hosts still
+live in retained views and still need the gate.
+
 **Every embedded editor is gated; none grabs unconditionally (2026-08-18).** The old rule here
 said the project-editor siblings could grab on every `uiTimeout` because "they live in modal
 editors, so the cost is bounded by the dialog". That was wrong twice over: the Project Editor is a

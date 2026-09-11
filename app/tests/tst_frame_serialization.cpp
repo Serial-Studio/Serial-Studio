@@ -381,12 +381,17 @@ void TstFrameSerialization::outputWidgetRoundTripsEveryField()
   w.txEncoding       = 1;
   w.type             = OutputWidgetType::Slider;
   w.monoIcon         = true;
+  w.checkable        = true;
+  w.size             = OutputWidgetSize::Large;
   w.minValue         = -5;
   w.maxValue         = 5;
   w.stepSize         = 0.5;
   w.initialValue     = 1;
   w.icon             = QStringLiteral("Send Property");
   w.title            = QStringLiteral("Throttle");
+  w.color            = QStringLiteral("#ff8800");
+  w.onLabel          = QStringLiteral("Open");
+  w.offLabel         = QStringLiteral("Closed");
   w.transmitFunction = QStringLiteral("return String(value)");
 
   const auto restored = fromJson<OutputWidget>(toJson(w));
@@ -395,12 +400,17 @@ void TstFrameSerialization::outputWidgetRoundTripsEveryField()
   QCOMPARE(restored->txEncoding, w.txEncoding);
   QCOMPARE(restored->type, w.type);
   QCOMPARE(restored->monoIcon, w.monoIcon);
+  QCOMPARE(restored->checkable, w.checkable);
+  QCOMPARE(restored->size, w.size);
   QCOMPARE(restored->minValue, w.minValue);
   QCOMPARE(restored->maxValue, w.maxValue);
   QCOMPARE(restored->stepSize, w.stepSize);
   QCOMPARE(restored->initialValue, w.initialValue);
   QCOMPARE(restored->icon, w.icon);
   QCOMPARE(restored->title, w.title);
+  QCOMPARE(restored->color, w.color);
+  QCOMPARE(restored->onLabel, w.onLabel);
+  QCOMPARE(restored->offLabel, w.offLabel);
   QCOMPARE(restored->transmitFunction, w.transmitFunction);
 }
 

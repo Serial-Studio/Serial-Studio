@@ -16,59 +16,55 @@ Item {
   id: root
 
   required property color color
-  required property var windowRoot
   required property var model
-  required property string widgetId
+  required property var widget
+
+  readonly property string title: root.widget ? (root.widget.title || "") : ""
+  readonly property bool unknown: root.model
+                                  ? (root.model.stateBound && !root.model.stateKnown)
+                                  : false
+
+  //
+  // Restorable after a toggle clears the binding; never initialValue, which cannot track
+  //
+  readonly property bool desiredChecked: {
+    if (!root.model)
+      return false
+
+    if (root.model.stateBound)
+      return root.model.stateKnown && root.model.stateOn
+
+    return root.model.checked === true
+  }
 
   ColumnLayout {
-    spacing: 8
-    anchors.margins: 16
+    spacing: 4
+    anchors.margins: 8
     anchors.fill: parent
+
+    OutputSectionLabel {
+      text: root.title
+      labelColor: root.color
+    }
 
     Item { Layout.fillHeight: true }
 
-    Label {
-      color: root.color
-      Layout.alignment: Qt.AlignHCenter
-      font: Cpp_Misc_CommonFonts.boldUiFont
-      text: root.model ? root.model.title : ""
-    }
-
     Switch {
-      id: toggle
+      id: control
 
+      checked: root.desiredChecked
       Layout.alignment: Qt.AlignHCenter
-      checked: root.model ? root.model.checked : false
+      opacity: root.unknown ? 0.45 : 1.0
 
       palette.highlight: root.color
 
       onToggled: {
-        if (root.model)
-          root.model.checked = toggle.checked
-      }
-    }
-
-    Label {
-      text: {
         if (!root.model)
-          return ""
+          return
 
-        if (toggle.checked)
-          return root.model.onLabel || qsTr("ON")
-
-        return root.model.offLabel || qsTr("OFF")
+        root.model.checked = !root.desiredChecked
+        control.checked = Qt.binding(function() { return root.desiredChecked })
       }
-      color: root.color
-      font: Cpp_Misc_CommonFonts.uiFont
-      Layout.alignment: Qt.AlignHCenter
-    }
-
-    Label {
-      color: Cpp_ThemeManager.colors["error"]
-      font: Cpp_Misc_CommonFonts.uiFont
-      Layout.alignment: Qt.AlignHCenter
-      text: qsTr("No transmit function defined")
-      visible: root.model && !root.model.hasTransmitFunction
     }
 
     Item { Layout.fillHeight: true }

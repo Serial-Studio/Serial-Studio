@@ -56,6 +56,7 @@ public:
   [[nodiscard]] QString text() const;
   [[nodiscard]] int language() const noexcept;
   [[nodiscard]] bool isModified() const noexcept;
+  [[nodiscard]] Q_INVOKABLE bool confirmDiscardIfModified();
 
 public slots:
   void cut();

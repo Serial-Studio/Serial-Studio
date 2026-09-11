@@ -41,6 +41,8 @@ Widgets::Bar::Bar(const int index, QQuickItem* parent, bool autoInitFromBarDatas
   , m_displayTickCount(5)
   , m_decimalPoints(-1)
   , m_hasData(false)
+  , m_validData(false)
+  , m_sampleMs(0)
   , m_value(0.0)
   , m_minValue(0.0)
   , m_maxValue(0.0)
@@ -97,8 +99,10 @@ void Widgets::Bar::buildBands(const std::vector<DataModel::AlarmBand>& srcBands)
     band.blink       = src.blink;
     band.customColor = src.color;
     band.label       = src.label;
-    band.fracMin     = DSP::isZero(range) ? 0.0 : qBound(0.0, (lo - m_minValue) / range, 1.0);
-    band.fracMax     = DSP::isZero(range) ? 0.0 : qBound(0.0, (hi - m_minValue) / range, 1.0);
+    band.fracMin =
+      (!std::isfinite(range) || range <= 0.0) ? 0.0 : qBound(0.0, (lo - m_minValue) / range, 1.0);
+    band.fracMax =
+      (!std::isfinite(range) || range <= 0.0) ? 0.0 : qBound(0.0, (hi - m_minValue) / range, 1.0);
     m_bands.append(band);
 
     QVariantMap entry;
@@ -127,7 +131,7 @@ bool Widgets::Bar::alarmsDefined() const noexcept
 }
 
 /**
- * @brief True once the widget has seen a finite sample. Until then the displayed 0.0 is a
+ * @brief True once the widget has received a sample. Until then the displayed 0.0 is a
  *        placeholder, not a measurement, and the band lookup's nearest-band clamp would resolve it
  *        to whatever band sits closest -- critical, on most projects (spec 0075, N3).
  */
@@ -150,7 +154,7 @@ bool Widgets::Bar::alarmTriggered() const noexcept
  */
 int Widgets::Bar::activeBandSeverity() const noexcept
 {
-  return Bands::reportedSeverity(m_bands, m_activeBandIndex, m_hasData);
+  return Bands::reportedSeverity(m_bands, m_activeBandIndex, m_hasData && m_validData);
 }
 
 /**
@@ -158,7 +162,7 @@ int Widgets::Bar::activeBandSeverity() const noexcept
  */
 const QString& Widgets::Bar::activeBandLabel() const noexcept
 {
-  if (!m_hasData || m_activeBandIndex < 0 || m_activeBandIndex >= m_bands.size())
+  if (!m_validData || m_activeBandIndex < 0 || m_activeBandIndex >= m_bands.size())
     return m_emptyLabel;
 
   return m_bands[m_activeBandIndex].label;
@@ -328,26 +332,14 @@ bool Widgets::Bar::refreshExtremes(const DataModel::Dataset& dataset)
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Latches the first finite sample and reports whether that latch just closed, so a first
- *        sample equal to the placeholder 0.0 still publishes the transition out of "no data".
- */
-bool Widgets::Bar::latchData()
-{
-  if (m_hasData)
-    return false;
-
-  m_hasData = true;
-  recomputeActiveBand(m_value);
-  return true;
-}
-
-/**
  * @brief Reopens the no-data latch when the dashboard drops its data, so a widget left on screen
  *        across a reconnect stops reporting the band its last sample resolved to.
  */
 void Widgets::Bar::resetData()
 {
   m_hasData         = false;
+  m_validData       = false;
+  m_sampleMs        = 0;
   m_value           = 0.0;
   m_extremesValid   = false;
   m_minSeen         = 0.0;
@@ -368,21 +360,48 @@ void Widgets::Bar::updateData()
 
   if (VALIDATE_WIDGET(SerialStudio::DashboardBar, m_index)) {
     const auto& dataset = GET_DATASET(SerialStudio::DashboardBar, m_index);
-    if (!std::isfinite(dataset.numericValue))
-      return;
-
-    const bool extremesChanged = refreshExtremes(dataset);
-    auto value                 = qMax(m_minValue, qMin(m_maxValue, dataset.numericValue));
-    const bool valueChanged    = DSP::notEqual(value, m_value);
-    if (valueChanged) {
-      m_value = value;
-      recomputeActiveBand(value);
-    }
-
-    const bool latched = latchData();
-    if ((valueChanged || extremesChanged || latched) && isEnabled())
-      Q_EMIT updated();
+    applySample(dataset);
   }
+}
+
+/**
+ * @brief Distinguishes invalid received measurements from the no-data placeholder.
+ */
+bool Widgets::Bar::validData() const noexcept
+{
+  return m_hasData && m_validData;
+}
+
+/**
+ * @brief Preserves the true reading; only normalized geometry is clamped to the scale. The sample
+ *        stamp gates re-reading the same sample, and is deliberately not part of the change test:
+ *        a fresh block carrying an unchanged value repaints nothing, so emitting on arrival alone
+ *        would re-evaluate every bound QML property for a reading that did not move.
+ */
+void Widgets::Bar::applySample(const DataModel::Dataset& dataset)
+{
+  if (dataset.displaySampleMs <= 0)
+    return;
+
+  if (m_hasData && dataset.displaySampleMs == m_sampleMs)
+    return;
+
+  const bool valid = dataset.isNumeric && std::isfinite(dataset.numericValue);
+  const bool changed =
+    !m_hasData || valid != m_validData || (valid && dataset.numericValue != m_value);
+  const bool extremes_changed = refreshExtremes(dataset);
+  m_hasData                   = true;
+  m_validData                 = valid;
+  m_sampleMs                  = dataset.displaySampleMs;
+  if (valid) {
+    m_value = dataset.numericValue;
+    recomputeActiveBand(m_value);
+  } else {
+    m_activeBandIndex = -1;
+  }
+
+  if ((changed || extremes_changed) && isEnabled())
+    Q_EMIT updated();
 }
 
 /**

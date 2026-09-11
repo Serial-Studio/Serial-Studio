@@ -66,6 +66,8 @@ qt_add_library(
   DataModel/Scripting/LuaMigration.cpp
   DataModel/Scripting/LuaDeadlineHook.cpp
   DataModel/Scripting/ScriptDryRun.cpp
+  DataModel/Scripting/TransmitScriptCheck.cpp
+  DataModel/Scripting/TransmitScriptEnvironment.cpp
   DataModel/Scripting/ExpressionTransform.cpp
   DataModel/Scripting/DashboardApi.cpp
   DataModel/Scripting/DeviceWriteApi.cpp
@@ -173,6 +175,8 @@ qt_add_library(
   DataModel/Scripting/LuaMigration.h
   DataModel/Scripting/LuaDeadlineHook.h
   DataModel/Scripting/ScriptDryRun.h
+  DataModel/Scripting/TransmitScriptCheck.h
+  DataModel/Scripting/TransmitScriptEnvironment.h
   DataModel/Scripting/ExpressionTransform.h
   DataModel/Scripting/DashboardApi.h
   DataModel/Scripting/DeviceWriteApi.h

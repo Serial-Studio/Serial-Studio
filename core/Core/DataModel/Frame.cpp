@@ -21,6 +21,10 @@
 
 #include "Core/DataModel/Frame.h"
 
+#include <cmath>
+#include <QDebug>
+#include <utility>
+
 #include "Core/AppInfo.h"
 #include "Core/DataModel/FrameSupport.h"
 #include "Core/DataModel/PropertyValidators.h"
@@ -190,6 +194,54 @@ QString DataModel::tableFullPath(const std::vector<TableFolder>& folders,
 }
 
 /**
+ * @brief @p value when it is finite, else @p fallback. The project's numeric parser accepts the
+ *        strings "nan" and "inf" and reports success, and a non-finite bound defeats every
+ *        comparison downstream: an inversion swap never fires, qBound's own precondition does not
+ *        trip, and the control publishes NaN to QML as its current value.
+ */
+[[nodiscard]] static double finiteOr(const double value, const double fallback)
+{
+  return std::isfinite(value) ? value : fallback;
+}
+
+/**
+ * @brief Forces an output widget's numeric fields into the ranges the rest of the code assumes;
+ *        see the header for why both doors into the model call it.
+ */
+void DataModel::normalize(OutputWidget& w)
+{
+  w.sourceId = qMax(0, w.sourceId);
+  w.type     = static_cast<OutputWidgetType>(
+    qBound(0, static_cast<int>(w.type), static_cast<int>(OutputWidgetType::Knob)));
+  w.size = static_cast<OutputWidgetSize>(
+    qBound(0, static_cast<int>(w.size), static_cast<int>(OutputWidgetSize::ExtraLarge)));
+
+  const int encoding = w.txEncoding;
+  w.txEncoding       = qBound(0, encoding, static_cast<int>(SerialStudio::EncEucKr));
+  if (w.txEncoding != encoding)
+    qWarning() << "[Project] output widget" << w.title << "has an unknown transmit encoding"
+               << encoding << "; using" << w.txEncoding;
+
+  w.minValue = finiteOr(w.minValue, 0);
+  w.maxValue = finiteOr(w.maxValue, 100);
+  if (w.minValue > w.maxValue) {
+    qWarning() << "[Project] output widget" << w.title << "has min > max; swapping";
+    std::swap(w.minValue, w.maxValue);
+  }
+
+  w.stepSize = finiteOr(w.stepSize, 1);
+  if (w.stepSize <= 0) {
+    qWarning() << "[Project] output widget" << w.title << "has a non-positive step; using 1";
+    w.stepSize = 1;
+  }
+
+  w.initialValue = finiteOr(w.initialValue, 0);
+  w.stateSource  = static_cast<OutputStateSource>(
+    qBound(0, static_cast<int>(w.stateSource), static_cast<int>(OutputStateSource::Table)));
+  w.stateConfirmMs = qBound(0, w.stateConfirmMs, kMaxOutputStateConfirmMs);
+}
+
+/**
  * @brief Deserializes an OutputWidget from a QJsonObject.
  */
 bool DataModel::read(OutputWidget& w, const QJsonObject& obj)
@@ -197,21 +249,31 @@ bool DataModel::read(OutputWidget& w, const QJsonObject& obj)
   if (obj.isEmpty())
     return false;
 
-  w.icon     = ss_jsr(obj, Keys::Icon, "").toString().simplified();
-  w.title    = ss_jsr(obj, Keys::Title, "").toString().simplified();
-  w.sourceId = ss_jsr(obj, Keys::SourceId, 0).toInt();
-  w.type     = static_cast<OutputWidgetType>(
-    qBound(0, ss_jsr(obj, Keys::OutputType, 0).toInt(), static_cast<int>(OutputWidgetType::Knob)));
-  w.minValue         = SerialStudio::toDouble(ss_jsr(obj, Keys::OutputMinValue, 0));
-  w.maxValue         = SerialStudio::toDouble(ss_jsr(obj, Keys::OutputMaxValue, 100));
-  w.stepSize         = SerialStudio::toDouble(ss_jsr(obj, Keys::OutputStepSize, 1));
-  w.initialValue     = SerialStudio::toDouble(ss_jsr(obj, Keys::OutputInitialValue, 0));
-  w.monoIcon         = ss_jsr(obj, Keys::OutputMonoIcon, false).toBool();
+  w.icon         = ss_jsr(obj, Keys::Icon, "").toString().simplified();
+  w.title        = ss_jsr(obj, Keys::Title, "").toString().simplified();
+  w.sourceId     = ss_jsr(obj, Keys::SourceId, 0).toInt();
+  w.type         = static_cast<OutputWidgetType>(ss_jsr(obj, Keys::OutputType, 0).toInt());
+  w.minValue     = SerialStudio::toDouble(ss_jsr(obj, Keys::OutputMinValue, 0));
+  w.maxValue     = SerialStudio::toDouble(ss_jsr(obj, Keys::OutputMaxValue, 100));
+  w.stepSize     = SerialStudio::toDouble(ss_jsr(obj, Keys::OutputStepSize, 1));
+  w.initialValue = SerialStudio::toDouble(ss_jsr(obj, Keys::OutputInitialValue, 0));
+  w.monoIcon     = ss_jsr(obj, Keys::OutputMonoIcon, false).toBool();
+  w.checkable    = ss_jsr(obj, Keys::OutputCheckable, false).toBool();
+  w.color        = ss_jsr(obj, Keys::OutputColor, "").toString().simplified();
+  w.size         = static_cast<OutputWidgetSize>(
+    ss_jsr(obj, Keys::OutputSize, static_cast<int>(OutputWidgetSize::Normal)).toInt());
   w.onLabel          = ss_jsr(obj, Keys::OutputOnLabel, "").toString().simplified();
   w.offLabel         = ss_jsr(obj, Keys::OutputOffLabel, "").toString().simplified();
   w.transmitFunction = obj.value(Keys::TransmitFunction).toString();
   w.txEncoding       = ss_jsr(obj, Keys::OutputTxEncoding, 0).toInt();
+  w.stateSource = static_cast<OutputStateSource>(ss_jsr(obj, Keys::OutputStateSource, 0).toInt());
+  w.stateDatasetId = ss_jsr(obj, Keys::OutputStateDatasetId, -1).toInt();
+  w.stateTable     = ss_jsr(obj, Keys::OutputStateTable, "").toString().simplified();
+  w.stateVariable  = ss_jsr(obj, Keys::OutputStateVariable, "").toString().simplified();
+  w.stateOnValue   = ss_jsr(obj, Keys::OutputStateOnValue, "").toString();
+  w.stateConfirmMs = ss_jsr(obj, Keys::OutputStateConfirmMs, 3000).toInt();
 
+  normalize(w);
   return !w.title.isEmpty();
 }
 

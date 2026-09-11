@@ -108,8 +108,8 @@ so cached pointers would dangle. Consequences:
   per-widget `NotificationCenter` posts (that double-fires when a dataset is both a band
   widget and `led: true`).
 - **A band consumer reports nothing until its first finite sample (spec 0075 N3).**
-  `Widgets::Bar` (which `Gauge` and `Meter` derive from) latches `hasData` on the first finite
-  value through `latchData()` and clears it only on `Dashboard::dataReset`, which also drops the
+  `Widgets::Bar` (which `Gauge` and `Meter` derive from) latches `hasData` on the first sample it
+  applies through `applySample()` and clears it only on `Dashboard::dataReset`, which also drops the
   extreme hold so a reconnect cannot keep the previous session's min/max. While unlatched
   `activeBandSeverity()` is **-1** and `activeBandLabel()` is **empty**, both through the shared
   pure gate `Widgets::Bands::reportedSeverity(bands, activeIndex, hasData)` in `UI/WidgetBands.h`
@@ -117,9 +117,9 @@ so cached pointers would dangle. Consequences:
   0.0 a widget shows before its first byte, which used to alarm forever on any project whose
   bands sit above zero. QML gates on the pair: both infinite blink animations and the digital
   box's `targetColor` read `alarmTriggered && hasData` in `Bar.qml`, `Gauge.qml` and `Meter.qml`.
-  `latchData()` returns whether the latch just closed, because `updateData` early-returns unless
-  the value *changed* and a first sample numerically equal to 0.0 would otherwise never publish
-  the transition. `UI::AlarmMonitor` is unchanged and stays dataset-level.
+  `applySample()` counts the first sample as a change on `!hasData` alone, because it only emits
+  when the reading *moved* and a first sample numerically equal to 0.0 would otherwise never
+  publish the transition. Finiteness rides separately on `validData()`. `UI::AlarmMonitor` is unchanged and stays dataset-level.
 - The value is clamped to the dataset's widget range before band lookup (mirrors analog-widget
   semantics); 3 s per-dataset, per-severity-tier cooldown.
 - `AlarmBand.blink` (`Keys::Blink`, JSON `blink`, default false) is rendering-only: LED panels

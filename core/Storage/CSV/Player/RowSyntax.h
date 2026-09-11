@@ -28,6 +28,20 @@
 namespace CSV {
 
 /**
+ * @brief Index of the newline that ends the record starting at @p from, or the file size when the
+ *        last record runs to EOF. Quoted fields may span newlines (RFC 4180), so the scan mirrors
+ *        splitReplayRowSpans' machine exactly -- a quote opens a field only at a cell start, which
+ *        is what keeps a stray inch mark ("12\"") from swallowing the rest of a foreign file. A
+ *        record that would exceed @p maxRecordBytes -- including one whose quote never closes
+ *        before EOF -- is treated as broken quoting and falls back to the first plain newline, so
+ *        a file with an unclosed quote stays line-aligned instead of collapsing into one row.
+ */
+[[nodiscard]] qsizetype nextRecordEnd(QByteArrayView data,
+                                      qsizetype from,
+                                      char separator,
+                                      qsizetype maxRecordBytes);
+
+/**
  * @brief Index of the first top-level @p separator of a raw row (quote-aware, mirroring the
  *        replay splitter's machine), or -1 when the row has a single cell.
  */

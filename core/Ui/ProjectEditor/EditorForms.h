@@ -62,6 +62,7 @@ public:
   void buildOutputWidgetModel(const DataModel::OutputWidget& widget);
   void buildOutputWidgetValueRows(const DataModel::OutputWidget& widget);
   void buildOutputWidgetCommonRows(const DataModel::OutputWidget& widget);
+  void buildOutputWidgetLabelRows(const DataModel::OutputWidget& widget);
   void buildOutputWidgetTransmitRow(const DataModel::OutputWidget& widget);
 
 private:

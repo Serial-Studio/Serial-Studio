@@ -25,7 +25,6 @@
 #include <QVariantMap>
 
 #include "Core/DataModel/Frame.h"
-#include "Core/SSAssert.h"
 #include "DSP.h"
 #include "UI/Dashboard.h"
 #include "UI/SerialStudioHelpers.h"
@@ -42,6 +41,7 @@
 Widgets::BarPanel::BarPanel(const int index, QQuickItem* parent)
   : QQuickItem(parent), m_index(index), m_revision(0), m_dashboard(UI::Dashboard::instance())
 {
+  connect(&m_dashboard, &UI::Dashboard::dataReset, this, &BarPanel::resetData);
   if (VALIDATE_WIDGET(SerialStudio::DashboardBarPanel, m_index)) {
     buildRows();
 
@@ -100,7 +100,7 @@ void Widgets::BarPanel::buildRows()
     row.extremeHold = dataset.extremeHold;
     row.min         = qMin(dataset.wgtMin, dataset.wgtMax);
     row.max         = qMax(dataset.wgtMin, dataset.wgtMax);
-    row.ranged      = !DSP::isZero(row.max - row.min);
+    row.ranged      = std::isfinite(row.max - row.min) && row.max > row.min;
     row.decimals    = rowDecimals(dataset, row.max - row.min);
 
     m_titles[idx]       = dataset.title;
@@ -224,12 +224,18 @@ double Widgets::BarPanel::frac(int row) const
 /**
  * @brief The fill colour a row uses outside any alarm band: the dataset's accent (an explicit
  *        override wins, else the theme palette), resolved on demand so a theme switch re-reads it.
+ *        A theme change re-evaluates the QML binding while the dashboard is rebuilding its model,
+ *        so a stale row or widget index is expected here and falls back to the default accent.
  */
 QString Widgets::BarPanel::rowColor(const int row) const
 {
-  SS_ASSERT(VALIDATE_WIDGET(SerialStudio::DashboardBarPanel, m_index), return QString());
+  if (!VALIDATE_WIDGET(SerialStudio::DashboardBarPanel, m_index))
+    return UI::SerialStudioHelpers::getDatasetAccentColor().name();
+
   const auto& group = GET_GROUP(SerialStudio::DashboardBarPanel, m_index);
-  SS_ASSERT(row >= 0 && row < static_cast<int>(group.datasets.size()), return QString());
+  if (row < 0 || row >= static_cast<int>(group.datasets.size()))
+    return UI::SerialStudioHelpers::getDatasetAccentColor().name();
+
   const auto& dataset = group.datasets[static_cast<size_t>(row)];
   return UI::SerialStudioHelpers::getDatasetAccentColor(dataset).name();
 }
@@ -327,8 +333,9 @@ double Widgets::BarPanel::rowFraction(const Row& row, double value) const noexce
  */
 bool Widgets::BarPanel::refreshRow(int index, const DataModel::Dataset& dataset)
 {
-  auto& row          = m_rows[static_cast<size_t>(index)];
-  const bool numeric = dataset.isNumeric && std::isfinite(dataset.numericValue);
+  auto& row = m_rows[static_cast<size_t>(index)];
+  const bool numeric =
+    dataset.displaySampleMs > 0 && dataset.isNumeric && std::isfinite(dataset.numericValue);
 
   int severity = -1;
   double frac  = 0.0;
@@ -347,7 +354,7 @@ bool Widgets::BarPanel::refreshRow(int index, const DataModel::Dataset& dataset)
     text = QString::number(dataset.numericValue, 'f', row.decimals);
     if (!dataset.units.isEmpty())
       text += QChar(' ') + dataset.units;
-  } else {
+  } else if (dataset.displaySampleMs > 0) {
     severity = row.bands.empty() ? -1 : 2;
     if (!dataset.value.isEmpty())
       text = dataset.value;
@@ -401,6 +408,22 @@ void Widgets::BarPanel::updateData()
       Q_EMIT updated();
     }
   }
+}
+
+/**
+ * @brief Clears the panel's measurements and peak markers across a reconnect.
+ */
+void Widgets::BarPanel::resetData()
+{
+  m_numeric.fill(false);
+  m_extremesOk.fill(false);
+  m_severities.fill(-1);
+  m_fracs.fill(0.0);
+  for (auto& text : m_valueTexts)
+    text = QStringLiteral("--");
+
+  ++m_revision;
+  Q_EMIT updated();
 }
 
 /**

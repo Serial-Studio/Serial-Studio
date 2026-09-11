@@ -43,6 +43,12 @@ constexpr int kMaxApiBytesPerWindow    = 128 * 1024 * 1024;
 constexpr int kMaxAuthAttempts         = 3;
 constexpr int kMaxBufferIterations     = 10000;
 
+// Longest method token the HTTP sniff must see in full before it can answer ("OPTIONS ")
+constexpr int kHttpMethodBytes = 8;
+
+static const char* kHttpMethods[] = {
+  "GET ", "PUT ", "HEAD ", "POST ", "PATCH ", "TRACE ", "DELETE ", "CONNECT ", "OPTIONS "};
+
 //--------------------------------------------------------------------------------------------------
 // Static functions
 //--------------------------------------------------------------------------------------------------
@@ -132,10 +138,10 @@ API::ClientReception::ClientReception(ReceptionHost& host) : m_host(host) {}
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Consumes one chunk of bytes for a connection: limits first, the HTTP sniff on the very
- *        first bytes, then the token handshake while unauthenticated, then newline framing over
- *        the accumulated buffer. The connection is addressed by (socket, sessionId) rather than by
- *        reference, because every dispatch below may erase the entry this data belongs to.
+ * @brief Consumes one chunk for a connection: limits, the HTTP sniff over the accumulated prefix
+ *        (a method token can straddle a read), the token handshake while unauthenticated, then
+ *        newline framing. The connection is addressed by (socket, sessionId), never by reference:
+ *        every dispatch below may erase the entry this data belongs to.
  */
 void API::ClientReception::consumeBytes(QTcpSocket* socket,
                                         const QString& sessionId,
@@ -151,10 +157,10 @@ void API::ClientReception::consumeBytes(QTcpSocket* socket,
   if (!validateRateLimits(socket, *state, data))
     return;
 
-  if (rejectHttpPreamble(socket, *state, data))
-    return;
-
   state->buffer.append(data);
+
+  if (interceptHttpPreamble(socket, *state))
+    return;
 
   if (!state->authenticated) {
     if (!handleAuthHandshake(socket, *state))
@@ -232,10 +238,7 @@ void API::ClientReception::reportBufferFlood(QTcpSocket* socket, const QString& 
  */
 bool API::ClientReception::looksLikeHttpRequest(const QByteArray& data)
 {
-  static const char* kMethods[] = {
-    "GET ", "PUT ", "HEAD ", "POST ", "PATCH ", "TRACE ", "DELETE ", "CONNECT ", "OPTIONS "};
-
-  for (const auto* method : kMethods)
+  for (const auto* method : kHttpMethods)
     if (data.startsWith(method))
       return true;
 
@@ -243,20 +246,39 @@ bool API::ClientReception::looksLikeHttpRequest(const QByteArray& data)
 }
 
 /**
- * @brief Closes a connection whose first bytes are an HTTP request. Nothing is written back: a
- *        readable response is exactly what a cross-origin script would want to see.
+ * @brief True while @p prefix is still a proper prefix of some request method, so the sniff has
+ *        not yet seen enough bytes to answer. Anything that cannot begin a method is decided.
  */
-bool API::ClientReception::rejectHttpPreamble(QTcpSocket* socket,
-                                              ConnectionState& state,
-                                              const QByteArray& data)
+bool API::ClientReception::isHttpMethodPrefix(const QByteArray& prefix)
+{
+  for (const auto* method : kHttpMethods)
+    if (QByteArrayView(method).startsWith(prefix))
+      return true;
+
+  return false;
+}
+
+/**
+ * @brief True when this chunk must not be framed: an HTTP request opened the connection and it
+ *        was closed (silently -- a readable reply is what a cross-origin script wants), or the
+ *        method token is incomplete and the bytes are held. Latching on the first read let a
+ *        boundary inside "POST " disarm the sniff, and loopback peers authenticate implicitly.
+ */
+bool API::ClientReception::interceptHttpPreamble(QTcpSocket* socket, ConnectionState& state)
 {
   SS_ASSERT(socket != nullptr, return true);
 
   if (state.firstBytesSeen) [[likely]]
     return false;
 
+  const QByteArray& prefix = state.buffer;
+  const bool decidable =
+    prefix.size() >= kHttpMethodBytes || prefix.contains('\n') || !isHttpMethodPrefix(prefix);
+  if (!decidable)
+    return true;
+
   state.firstBytesSeen = true;
-  if (!looksLikeHttpRequest(data))
+  if (!looksLikeHttpRequest(prefix))
     return false;
 
   qWarning() << "[API] HTTP request on the API socket:" << state.peerAddress << ":"

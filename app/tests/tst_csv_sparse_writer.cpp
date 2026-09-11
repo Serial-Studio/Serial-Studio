@@ -42,8 +42,12 @@ void CSV::appendCsvDouble(QByteArray& dst, double value, bool fixed, int precisi
 
 QByteArray CSV::escapeCsvBytes(const QString& field)
 {
-  QString out = field.simplified();
-  if (!out.contains(QChar(',')) && !out.contains(QChar('"')))
+  QString out       = field;
+  const bool padded = !out.isEmpty() && (out.front().isSpace() || out.back().isSpace());
+  const bool needs  = padded || out.contains(QChar(',')) || out.contains(QChar('"'))
+                  || out.contains(QChar('\n')) || out.contains(QChar('\r'))
+                  || out.contains(QChar('\t'));
+  if (!needs)
     return out.toUtf8();
 
   out.replace(QChar('"'), QStringLiteral("\"\""));
@@ -134,6 +138,7 @@ private slots:
   void windowHoldsBackRecentRows();
   void finalFlushDrainsEverything();
   void textColumnsAreEscaped();
+  void textCellsKeepTheirWhitespace();
 };
 
 /**
@@ -268,6 +273,34 @@ void CsvSparseWriterTest::textColumnsAreEscaped()
   RowSink sink;
   merger.flush(std::numeric_limits<qint64>::max(), sink.sink());
   QVERIFY(sink.rows().front().contains("\"a,b\""));
+}
+
+/**
+ * @brief A text cell reaches the file as it was sampled. simplified() used to trim the padding
+ *        and flatten inner runs before the escape could quote them, so a fixed-width field or a
+ *        multi-line payload was silently rewritten on its way into the recording.
+ */
+void CsvSparseWriterTest::textCellsKeepTheirWhitespace()
+{
+  CSV::SparseRowMerger merger;
+  merger.setSchema(makeSchema({10}));
+
+  auto padded   = makeBlock(0, 10, {0.0}, true);
+  auto& first   = const_cast<DataModel::BlockColumn&>(padded->columns.front());
+  first.text[0] = QStringLiteral("  12.5  ");
+
+  auto lines     = makeBlock(0, 10, {0.0}, true);
+  auto& second   = const_cast<DataModel::BlockColumn&>(lines->columns.front());
+  second.text[0] = QStringLiteral("two\nlines");
+
+  merger.addBlock(padded, {100});
+  merger.addBlock(lines, {200});
+
+  RowSink sink;
+  merger.flush(std::numeric_limits<qint64>::max(), sink.sink());
+  QCOMPARE(sink.rows().size(), std::size_t(2));
+  QVERIFY(sink.rows().at(0).contains("\"  12.5  \""));
+  QVERIFY(sink.rows().at(1).contains("\"two\nlines\""));
 }
 
 QTEST_APPLESS_MAIN(CsvSparseWriterTest)

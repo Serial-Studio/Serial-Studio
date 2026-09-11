@@ -21,7 +21,126 @@
 
 #include "CSV/Player/RowSyntax.h"
 
+#include "Core/DSPSimd.h"
 #include "Core/SSAssert.h"
+
+//--------------------------------------------------------------------------------------------------
+// Record framing
+//--------------------------------------------------------------------------------------------------
+
+/**
+ * @brief Whether every byte of [@p from, @p to) is ASCII whitespace; the cell-start test the
+ *        replay splitter applies before letting a quote open a field. Callers carry the answer
+ *        forward across a cell instead of re-asking from its start, so each byte is examined
+ *        once: rescanning per quote made a 4 MB record of unquoted JSON quadratic.
+ */
+[[nodiscard]] static bool onlySpaceBetween(QByteArrayView data, qsizetype from, qsizetype to)
+{
+  SS_ASSERT(from >= 0, return false);
+  SS_ASSERT(to <= data.size(), return false);
+
+  for (qsizetype i = from; i < to; ++i) {
+    const char c = data.at(i);
+    if (c != ' ' && c != '\t' && c != '\n' && c != '\v' && c != '\f' && c != '\r')
+      return false;
+  }
+
+  return true;
+}
+
+/**
+ * @brief Index just past the closing quote of the field whose content starts at @p from, or the
+ *        size when the file ends inside it. Doubled quotes escape and keep the field open.
+ */
+[[nodiscard]] static qsizetype skipQuotedField(QByteArrayView data, qsizetype from)
+{
+  static constexpr quint8 kQuote[] = {'"'};
+
+  const qsizetype size = data.size();
+  SS_ASSERT(from >= 0, return size);
+  SS_ASSERT(from <= size, return size);
+
+  qsizetype i = from;
+  while (i < size) {
+    const qsizetype hit = i + DSP::simdFindAnyByte(data.constData() + i, size - i, kQuote, 1);
+    if (hit >= size)
+      return size;
+
+    if (hit + 1 < size && data.at(hit + 1) == '"') {
+      i = hit + 2;
+      continue;
+    }
+
+    return hit + 1;
+  }
+
+  return size;
+}
+
+/**
+ * @brief Index of the first plain newline at or after @p from; the line-aligned fallback taken
+ *        when quote-aware framing overruns the record cap.
+ */
+[[nodiscard]] static qsizetype firstPlainNewline(QByteArrayView data, qsizetype from)
+{
+  static constexpr quint8 kNewline[] = {'\n'};
+
+  const qsizetype size = data.size();
+  SS_ASSERT(from >= 0, return size);
+  SS_ASSERT(from <= size, return size);
+
+  return from + DSP::simdFindAnyByte(data.constData() + from, size - from, kNewline, 1);
+}
+
+/**
+ * @brief Index of the newline ending the record at @p from, mirroring the replay splitter's
+ *        machine so the index and the cell split can never disagree about where a row ends.
+ */
+qsizetype CSV::nextRecordEnd(QByteArrayView data,
+                             qsizetype from,
+                             char separator,
+                             qsizetype maxRecordBytes)
+{
+  static constexpr int kEdgeCount = 3;
+
+  const qsizetype size = data.size();
+  SS_ASSERT(from >= 0 && from <= size, return size);
+  SS_ASSERT(maxRecordBytes > 0, return firstPlainNewline(data, from));
+
+  const quint8 edges[kEdgeCount] = {
+    static_cast<quint8>(separator), static_cast<quint8>('"'), static_cast<quint8>('\n')};
+
+  qsizetype i          = from;
+  bool was_quoted      = false;
+  bool only_space_seen = true;
+
+  while (i < size && i - from <= maxRecordBytes) {
+    const qsizetype hit =
+      i + DSP::simdFindAnyByte(data.constData() + i, size - i, edges, kEdgeCount);
+    if (hit >= size)
+      return size;
+
+    const char c = data.at(hit);
+    if (c == '\n')
+      return hit;
+
+    if (c == separator) {
+      was_quoted      = false;
+      only_space_seen = true;
+      i               = hit + 1;
+      continue;
+    }
+
+    only_space_seen  = only_space_seen && onlySpaceBetween(data, i, hit);
+    const bool opens = !was_quoted && only_space_seen;
+    was_quoted       = was_quoted || opens;
+    only_space_seen  = false;
+    i                = opens ? skipQuotedField(data, hit + 1) : hit + 1;
+  }
+
+  const bool overran = (size - from) > maxRecordBytes;
+  return overran ? firstPlainNewline(data, from) : size;
+}
 
 //--------------------------------------------------------------------------------------------------
 // Quote-aware scanning

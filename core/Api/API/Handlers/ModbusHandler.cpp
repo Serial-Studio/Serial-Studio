@@ -162,13 +162,13 @@ void API::Handlers::ModbusHandler::registerRegisterGroupCommands()
     QStringLiteral("io.modbus.addRegisterGroup"),
     QStringLiteral("Add register group (params: type, startAddress, count, [slaveAddress])"),
     API::makeSchema({
-      {        QStringLiteral("type"),QStringLiteral("integer"),QStringLiteral("Register type index")                       },
+      {        QStringLiteral("type"),QStringLiteral("integer"), QStringLiteral("Register type index")                           },
       {QStringLiteral("startAddress"),
        QStringLiteral("integer"),
-       QStringLiteral("Start address (0-65535)")             },
+       QStringLiteral("Start address (0-65535)")                                            },
       {       QStringLiteral("count"),
        QStringLiteral("integer"),
-       QStringLiteral("Number of registers to read (1-125)") },
+       QStringLiteral("Number of registers to read (1-125)")                                },
       {QStringLiteral("slaveAddress"),
        QStringLiteral("integer"),
        QStringLiteral("Slave to read this block from (1-247, 0 = the driver's own address)")}

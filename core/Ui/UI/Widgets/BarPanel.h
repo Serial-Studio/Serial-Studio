@@ -93,6 +93,7 @@ protected:
 
 private slots:
   void updateData();
+  void resetData();
 
 private:
   struct RowBand {

@@ -53,16 +53,24 @@
 // Reorder window keeping rows time-ordered across sources (spec 0055 D3/D7); T34 pins the sweep
 static constexpr qint64 kReorderWindowNs = 250'000'000LL;
 
+// Distinct names tried before a session gives up on opening a recording for this second
+static constexpr int kMaxNameAttempts = 64;
+
 /**
  * @brief Escapes a CSV field per RFC 4180 and neutralizes leading formula-injection chars.
- *        Numeric fields are exempt: a plain number is inert in every spreadsheet, and
- *        prefixing negatives ("-0.5" -> "'-0.5") silently corrupts recordings on replay.
+ *        Numbers are exempt: prefixing "-0.5" corrupts recordings on replay. The test skips
+ *        leading whitespace instead of reading byte zero, so " =HYPERLINK(...)" cannot walk
+ *        past the guard on a space, which simplified() used to prevent incidentally.
  */
 static QString escapeCsvField(const QString& s)
 {
-  QString out = s;
-  if (!out.isEmpty()) {
-    const QChar c     = out.at(0);
+  QString out     = s;
+  qsizetype first = 0;
+  while (first < out.size() && out.at(first).isSpace())
+    ++first;
+
+  if (first < out.size()) {
+    const QChar c     = out.at(first);
     const bool danger = c == QChar('=') || c == QChar('+') || c == QChar('-') || c == QChar('@')
                      || c == QChar('\t') || c == QChar('\r');
     if (danger) {
@@ -73,7 +81,8 @@ static QString escapeCsvField(const QString& s)
     }
   }
 
-  const bool needs = out.contains(QChar(',')) || out.contains(QChar('"'))
+  const bool padded = !out.isEmpty() && (out.front().isSpace() || out.back().isSpace());
+  const bool needs  = padded || out.contains(QChar(',')) || out.contains(QChar('"'))
                   || out.contains(QChar('\n')) || out.contains(QChar('\r'))
                   || out.contains(QChar('\t'));
   if (!needs)
@@ -117,11 +126,13 @@ void CSV::appendCsvDouble(QByteArray& dst, double value, bool fixed, int precisi
 }
 
 /**
- * @brief RFC-4180 field escape the sparse merger shares with the header writer.
+ * @brief RFC-4180 escape for one recorded value. Unlike the header labels, the text is kept
+ *        verbatim: simplified() used to drop the padding and inner runs of every text cell
+ *        before the escape could quote them, so the file disagreed with the wire.
  */
 QByteArray CSV::escapeCsvBytes(const QString& field)
 {
-  return escapeCsvField(field.simplified()).toUtf8();
+  return escapeCsvField(field).toUtf8();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -256,9 +267,8 @@ void CSV::ExportWorker::processItems(const std::vector<DataModel::DataBlockPtr>&
     if (m_snapshotIntervalMs > 0) {
       const auto last = static_cast<std::size_t>(block->samples - 1);
       for (const auto& column : block->columns)
-        m_lastFinalValues[column.uniqueId] = column.hasText
-                                             ? column.text[last].simplified()
-                                             : QString::number(column.values[last], 'g', 10);
+        m_lastFinalValues[column.uniqueId] =
+          column.hasText ? column.text[last] : QString::number(column.values[last], 'g', 10);
 
       continue;
     }
@@ -353,23 +363,40 @@ void CSV::ExportWorker::writeSnapshotRowNow(
 }
 
 /**
+ * @brief Opens a new file under @p dir named after @p base, suffixing when the name is taken.
+ *        NewOnly is the point: names have one-second resolution, so a quick pause/resume or a
+ *        second instance used to truncate the previous recording. Text mode is absent because a
+ *        value may now carry a newline that CRLF translation would rewrite.
+ */
+bool CSV::ExportWorker::openUniqueFile(const QDir& dir, const QString& base)
+{
+  for (int attempt = 1; attempt <= kMaxNameAttempts; ++attempt) {
+    const QString name = (attempt == 1)
+                         ? QStringLiteral("%1.csv").arg(base)
+                         : QStringLiteral("%1_%2.csv").arg(base, QString::number(attempt));
+
+    m_csvFile.setFileName(dir.filePath(name));
+    if (m_csvFile.open(QIODevice::WriteOnly | QIODevice::NewOnly))
+      return true;
+  }
+
+  qWarning() << "Cannot open a CSV file for writing in:" << dir.path();
+  return false;
+}
+
+/**
  * @brief Creates a new CSV file and writes the header row from the frame schema.
  */
 void CSV::ExportWorker::createCsvFile(const DataModel::Frame& frame)
 {
-  const auto dt       = QDateTime::currentDateTime();
-  const auto fileName = dt.toString("yyyy-MM-dd_HH-mm-ss") + ".csv";
-
   const QDir dir = DataModel::ExportStructure::sessionDir(
     QStringLiteral("CSV"), frame.title, QStringLiteral("Untitled"));
   if (!dir.exists())
     return;
 
-  m_csvFile.setFileName(dir.filePath(fileName));
-  if (!m_csvFile.open(QIODevice::WriteOnly | QIODevice::Text)) {
-    qWarning() << "Cannot open CSV file for writing:" << dir.filePath(fileName);
+  const auto dt = QDateTime::currentDateTime();
+  if (!openUniqueFile(dir, dt.toString(QStringLiteral("yyyy-MM-dd_HH-mm-ss"))))
     return;
-  }
 
   m_lastFinalValues.clear();
   m_schema = DataModel::buildExportSchema(frame);

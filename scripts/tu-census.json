@@ -2,7 +2,7 @@
   "rule": "cxx-tu-too-long",
   "regenerate": "python scripts/code-verify.py --tu-census --accept",
   "threshold": 1500,
-  "excess": 2622,
+  "excess": 2642,
   "files": 10,
   "worst": 2927,
   "buckets": {
@@ -19,7 +19,7 @@
     "core/Devices/IO/Drivers/MQTT.cpp": 1569,
     "core/Storage/MQTT/Publisher.cpp": 1568,
     "core/Devices/IO/Drivers/Audio.cpp": 1556,
-    "core/Devices/IO/Drivers/Modbus.cpp": 1510,
+    "core/Devices/IO/Drivers/Modbus.cpp": 1530,
     "core/Ui/Misc/ExtensionManager.cpp": 1505
   }
 }

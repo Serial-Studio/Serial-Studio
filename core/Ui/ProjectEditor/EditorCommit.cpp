@@ -38,6 +38,7 @@
 #include "DataModel/FrameBuilder.h"
 #include "DataModel/ProjectModel.h"
 #include "IO/ConnectionManager.h"
+#include "ProjectEditor/EditorForms/OutputStateRows.h"
 #include "ProjectEditor/ProjectEditor.h"
 #include "ProjectEditorItemIds.h"
 #include "UI/WidgetExtensions.h"
@@ -1005,8 +1006,38 @@ void EditorCommit::applyOutputWidgetField(QStandardItem* item, DataModel::Output
     case kOutputWidget_MonoIcon:
       widget.monoIcon = value.toBool();
       break;
+    case kOutputWidget_Checkable:
+      widget.checkable = value.toBool();
+      break;
+    case kOutputWidget_Color:
+      widget.color = value.toString();
+      break;
+    case kOutputWidget_Size:
+      widget.size = static_cast<DataModel::OutputWidgetSize>(
+        qBound(0, value.toInt(), static_cast<int>(DataModel::OutputWidgetSize::ExtraLarge)));
+      break;
+    case kOutputWidget_OnLabel:
+      widget.onLabel = value.toString();
+      break;
+    case kOutputWidget_OffLabel:
+      widget.offLabel = value.toString();
+      break;
     case kOutputWidget_Type:
       widget.type = static_cast<DataModel::OutputWidgetType>(value.toInt());
+      break;
+    case kOutputWidget_StateSource:
+      widget.stateSource = static_cast<DataModel::OutputStateSource>(
+        qBound(0, value.toInt(), static_cast<int>(DataModel::OutputStateSource::Table)));
+      DataModel::applyOutputStateTarget(widget, m_model, 0);
+      break;
+    case kOutputWidget_StateTarget:
+      DataModel::applyOutputStateTarget(widget, m_model, value.toInt());
+      break;
+    case kOutputWidget_StateOnValue:
+      widget.stateOnValue = value.toString();
+      break;
+    case kOutputWidget_StateConfirmMs:
+      widget.stateConfirmMs = qBound(0, value.toInt(), DataModel::kMaxOutputStateConfirmMs);
       break;
     case kOutputWidget_MinValue:
       widget.minValue = SerialStudio::toDouble(value);
@@ -1049,6 +1080,8 @@ void EditorCommit::onOutputWidgetItemChanged(QStandardItem* item)
     }
   } else {
     applyOutputWidgetField(item, m_editor.m_selectedOutputWidget);
+    if (param == kOutputWidget_Checkable || param == kOutputWidget_StateSource)
+      m_editor.m_forms.buildOutputWidgetModel(m_editor.m_selectedOutputWidget);
   }
 
   if (param == kOutputWidget_Title) {

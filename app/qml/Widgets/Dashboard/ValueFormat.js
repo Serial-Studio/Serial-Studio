@@ -31,8 +31,11 @@
 // and anything else falls back to the dashboard's range-driven formatter.
 //
 function formatValue(model, val) {
+  if (!isFinite(val))
+    return "—"
+
   if (model.decimalPoints >= 0)
-    return val.toFixed(model.decimalPoints)
+    return val.toFixed(Math.min(12, Math.floor(model.decimalPoints)))
 
   const fmt = model.displayFormat
   if (!fmt || fmt === "" || fmt === "auto")
@@ -44,9 +47,9 @@ function formatValue(model, val) {
   if (fmt === "3d") return val.toFixed(3)
   if (fmt === "sci") return val.toExponential(2)
   const fm = fmt.match(/^%[\d\.]*\.(\d+)f$/)
-  if (fm) return val.toFixed(parseInt(fm[1]))
+  if (fm) return val.toFixed(Math.min(12, parseInt(fm[1], 10)))
   const fe = fmt.match(/^%[\d\.]*\.(\d+)e$/)
-  if (fe) return val.toExponential(parseInt(fe[1]))
+  if (fe) return val.toExponential(Math.min(12, parseInt(fe[1], 10)))
   return Cpp_UI_Dashboard.formatValue(val, model.minValue, model.maxValue)
 }
 

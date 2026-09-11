@@ -12,9 +12,16 @@
 #include <QVariantList>
 
 #include "Core/DataModel/Frame.h"
+#include "UI/Dashboard.h"
+
+namespace DataModel {
+struct TableApiContext;
+}  // namespace DataModel
 
 namespace Widgets {
 namespace Output {
+
+class Base;
 
 /**
  * @brief Dashboard widget model for an output control panel.
@@ -49,8 +56,17 @@ public:
 
 public slots:
   void updateLayout(qreal width, qreal height);
+  void refreshStates();
+
+protected:
+  void itemChange(ItemChange change, const ItemChangeData& value) override;
 
 private:
+  void observeTableState(Base* model);
+
+private:
+  const DataModel::TableApiContext* m_tableContext;
+  UI::Dashboard& m_dashboard;
   QVariantList m_widgets;
   QVariantList m_models;
   QVariantList m_geometry;

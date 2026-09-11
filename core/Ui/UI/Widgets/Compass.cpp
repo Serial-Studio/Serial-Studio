@@ -23,7 +23,6 @@
 
 #include <cmath>
 
-#include "DSP.h"
 #include "UI/Dashboard.h"
 
 //--------------------------------------------------------------------------------------------------
@@ -37,10 +36,14 @@ Widgets::Compass::Compass(const int index, QQuickItem* parent)
   : QQuickItem(parent)
   , m_index(index)
   , m_decimalPoints(-1)
+  , m_hasData(false)
+  , m_validData(false)
+  , m_sampleMs(0)
   , m_value(0.0)
   , m_dashboard(UI::Dashboard::instance())
 {
   m_cardinal = cardinalDirection(0.0);
+  connect(&m_dashboard, &UI::Dashboard::dataReset, this, &Compass::resetData);
 
   if (VALIDATE_WIDGET(SerialStudio::DashboardCompass, m_index)) {
     const auto& dataset = GET_DATASET(SerialStudio::DashboardCompass, m_index);
@@ -130,7 +133,10 @@ int Widgets::Compass::decimalPoints() const noexcept
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Updates the compass heading from the dashboard source.
+ * @brief Updates the compass heading from the dashboard source. The sample stamp gates re-reading
+ *        the same sample rather than deciding whether to repaint: keeping it in the change test
+ *        made the heading and cardinal comparisons below unreachable, so a steady heading emitted
+ *        once per received sample.
  */
 void Widgets::Compass::updateData()
 {
@@ -141,15 +147,30 @@ void Widgets::Compass::updateData()
     return;
 
   const auto& dataset = GET_DATASET(SerialStudio::DashboardCompass, m_index);
-  if (!std::isfinite(dataset.numericValue))
+  if (dataset.displaySampleMs <= 0)
     return;
+
+  if (m_hasData && dataset.displaySampleMs == m_sampleMs)
+    return;
+
+  const bool valid   = dataset.isNumeric && std::isfinite(dataset.numericValue);
+  const bool changed = !m_hasData || valid != m_validData;
+  m_hasData          = true;
+  m_validData        = valid;
+  m_sampleMs         = dataset.displaySampleMs;
+  if (!valid) {
+    if (changed)
+      Q_EMIT updated();
+
+    return;
+  }
 
   double v = std::fmod(dataset.numericValue, 360.0);
   if (v < 0.0)
     v += 360.0;
 
   const auto card = cardinalDirection(v);
-  if (!DSP::notEqual(v, m_value) && card == m_cardinal)
+  if (!changed && v == m_value && card == m_cardinal)
     return;
 
   m_value    = v;
@@ -191,6 +212,19 @@ QString Widgets::Compass::cardinalDirection(double angle) const
     return tr("NW");
 
   return tr("N");
+}
+
+/**
+ * @brief Clears the compass measurement when its dashboard data is reset.
+ */
+void Widgets::Compass::resetData()
+{
+  m_hasData   = false;
+  m_validData = false;
+  m_sampleMs  = 0;
+  m_value     = 0.0;
+  m_cardinal  = cardinalDirection(0.0);
+  Q_EMIT updated();
 }
 
 /**

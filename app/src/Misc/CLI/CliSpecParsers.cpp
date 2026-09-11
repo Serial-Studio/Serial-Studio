@@ -97,11 +97,8 @@ bool parseModbusTcpAddress(const QString& tcpAddress, QString& host, quint16& po
  * @brief Parses a `type:start:count[:slave]` Modbus register spec into its validated fields, where
  *        the optional slave reads that block from another device on the same bus.
  */
-bool parseModbusRegisterSpec(const QString& spec,
-                             quint8& type,
-                             quint16& start,
-                             quint16& count,
-                             quint8* slave)
+bool parseModbusRegisterSpec(
+  const QString& spec, quint8& type, quint16& start, quint16& count, quint8* slave)
 {
   const QStringList parts = spec.split(':');
   if (parts.size() != 3 && parts.size() != 4) {
@@ -134,8 +131,8 @@ bool parseModbusRegisterSpec(const QString& spec,
 
   quint8 slaveValue = 0;
   if (parts.size() == 4) {
-    bool slaveOk            = false;
-    const uint parsedSlave  = parts[3].toUInt(&slaveOk);
+    bool slaveOk           = false;
+    const uint parsedSlave = parts[3].toUInt(&slaveOk);
     if (!slaveOk || parsedSlave < 1 || parsedSlave > 247) {
       qWarning() << "Invalid register slave address (1-247):" << spec;
       return false;

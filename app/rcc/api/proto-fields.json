@@ -860,11 +860,12 @@
     "io.modbus.addRegisterGroup": {
       "fields": {
         "count": 2,
+        "slaveAddress": 5,
         "startAddress": 3,
         "type": 4
       },
       "reserved": [],
-      "next": 5
+      "next": 6
     },
     "io.modbus.clearRegisterGroups": {
       "fields": {},

@@ -2023,6 +2023,37 @@ ss_add_unit_test(tst_script_dryrun
           SerialStudio::Core
 )
 
+#
+# The single transmit-script verdict (spec 0079) the editor and the assistant's dry run both read.
+# Links the dry-run session for the same reason that suite does: the checker reaches no singleton,
+# so the link set stays the session plus its two watchdog TUs.
+#
+#
+# Output control state feedback (spec 0080): the truth rule, the confirm-within window and the
+# unknown verdict, with no dashboard behind them -- the binding is fed values rather than
+# resolving them, which is what keeps this link set to one TU.
+#
+ss_add_unit_test(tst_output_state_binding
+  SOURCES tst_output_state_binding.cpp
+          ${SS_CORE_SRC}/Ui/UI/Widgets/Output/StateBinding.cpp
+  LIBS    Qt6::Core
+          Qt6::Gui
+          SerialStudio::Core
+)
+
+ss_add_unit_test(tst_transmit_script_check
+  SOURCES tst_transmit_script_check.cpp
+          ${SS_CORE_SRC}/Pipeline/DataModel/Scripting/TransmitScriptCheck.cpp
+          ${SS_CORE_SRC}/Pipeline/DataModel/Scripting/ScriptDryRun.cpp
+          ${SS_CORE_SRC}/Pipeline/DataModel/Scripting/LuaDeadlineHook.cpp
+          ${SS_CORE_SRC}/Pipeline/DataModel/Scripting/JsWatchdog.cpp
+          ${SS_CORE_SRC}/Pipeline/DataModel/Scripting/JsWatchdogThread.cpp
+  LIBS    Qt6::Core
+          Qt6::Qml
+          luajit
+          SerialStudio::Core
+)
+
 #---------------------------------------------------------------------------------------------------
 # Spec 0075 -- assistant, extensions, CLI and licensing (WP-H)
 #---------------------------------------------------------------------------------------------------

@@ -29,6 +29,7 @@
 
 #include "Core/Bus/MessageBus.h"
 #include "Core/Bus/Messages.h"
+#include "Core/Prompt/UserPrompt.h"
 #include "Core/SSAssert.h"
 #include "IO/ConnectionManager.h"
 #include "IO/Drivers/USB/UsbHex.h"
@@ -346,6 +347,30 @@ void IO::Drivers::USB::grantAdvancedTransferConsent()
   }
 
   setTransferMode(static_cast<int>(TransferMode::AdvancedControl));
+}
+
+/**
+ * @brief Asks the operator to enable advanced control transfers, and enables them on yes. Only the
+ *        setup pane calls this: setTransferMode() stays silent and refusing, because a project
+ *        load and the API reach it with nobody there to answer (spec 0056).
+ */
+void IO::Drivers::USB::requestAdvancedTransferConsent()
+{
+  const auto answer = Core::Prompt::showMessageBox(
+    tr("Enable advanced USB control transfers?"),
+    tr("This enables control transfers in addition to bulk transfers. Sending incorrect control "
+       "requests can crash or damage connected hardware. Only enable this if you know what you "
+       "are doing."),
+    Core::Prompt::Warning,
+    tr("USB"),
+    Core::Prompt::Yes | Core::Prompt::No,
+    Core::Prompt::No);
+
+  if (answer == Core::Prompt::Yes)
+    grantAdvancedTransferConsent();
+
+  else
+    Q_EMIT transferModeChanged();
 }
 
 /**

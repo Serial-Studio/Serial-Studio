@@ -3292,6 +3292,15 @@ jobs:
       run: python3 scripts/code-verify.py --check
 
     #
+    # clang-format is pinned in the lock installed above, so this compares the tree against one
+    # exact LLVM release rather than against whatever the runner ships. Without this gate a
+    # contributor running a different clang-format lands a tree-wide restyle as a side effect of
+    # sanitize-commit.py, which is how 54 unrelated files rode in on one commit (2026-09-10)
+    #
+    - name: '🎨 Verify clang-format'
+      run: python3 scripts/sanitize-commit.py --check-format
+
+    #
     # Spec 0076: the core/ static libraries only stay layered if it is mechanical. This resolves
     # every quoted include, rejects an upward one, and catches a core/ source no target owns
     #

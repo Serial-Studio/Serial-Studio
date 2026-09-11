@@ -134,6 +134,72 @@ static void appendUnknownFieldsWarning(QJsonObject& result,
   result[QStringLiteral("warnings")] = warnings;
 }
 
+/**
+ * @brief Applies every patchable output-widget field present in @p params, recording each key it
+ *        consumed so the caller can warn about the rest. Finishes through DataModel::normalize, so
+ *        this door enforces what read() enforces for a project file: an unclamped encoding fell
+ *        back to UTF-8 silently, and a negative source id tripped an assertion much later.
+ */
+static void applyOutputWidgetFields(DataModel::OutputWidget& w,
+                                    const QJsonObject& params,
+                                    QSet<QString>& consumed)
+{
+  const auto take = [&](const QString& key) -> bool {
+    if (!params.contains(key))
+      return false;
+
+    consumed.insert(key);
+    return true;
+  };
+
+  if (take(QStringLiteral("title")))
+    w.title = params.value(QStringLiteral("title")).toString();
+
+  if (take(QStringLiteral("icon")))
+    w.icon = params.value(QStringLiteral("icon")).toString();
+
+  if (take(QStringLiteral("transmitFunction")))
+    w.transmitFunction = params.value(QStringLiteral("transmitFunction")).toString();
+
+  if (take(Keys::SourceId))
+    w.sourceId = params.value(Keys::SourceId).toInt();
+
+  if (take(QStringLiteral("txEncoding")))
+    w.txEncoding = params.value(QStringLiteral("txEncoding")).toInt();
+
+  if (take(QStringLiteral("monoIcon")))
+    w.monoIcon = params.value(QStringLiteral("monoIcon")).toBool();
+
+  if (take(QStringLiteral("checkable")))
+    w.checkable = params.value(QStringLiteral("checkable")).toBool();
+
+  if (take(QStringLiteral("color")))
+    w.color = params.value(QStringLiteral("color")).toString();
+
+  if (take(QStringLiteral("size")))
+    w.size = static_cast<DataModel::OutputWidgetSize>(params.value(QStringLiteral("size")).toInt());
+
+  if (take(QStringLiteral("onLabel")))
+    w.onLabel = params.value(QStringLiteral("onLabel")).toString();
+
+  if (take(QStringLiteral("offLabel")))
+    w.offLabel = params.value(QStringLiteral("offLabel")).toString();
+
+  if (take(QStringLiteral("minValue")))
+    w.minValue = SerialStudio::toDouble(params.value(QStringLiteral("minValue")));
+
+  if (take(QStringLiteral("maxValue")))
+    w.maxValue = SerialStudio::toDouble(params.value(QStringLiteral("maxValue")));
+
+  if (take(QStringLiteral("stepSize")))
+    w.stepSize = SerialStudio::toDouble(params.value(QStringLiteral("stepSize")));
+
+  if (take(QStringLiteral("initialValue")))
+    w.initialValue = SerialStudio::toDouble(params.value(QStringLiteral("initialValue")));
+
+  DataModel::normalize(w);
+}
+
 }  // namespace API::Handlers
 
 //--------------------------------------------------------------------------------------------------
@@ -242,7 +308,11 @@ void API::Handlers::ProjectUpdateCommands::registerCommands()
     QStringLiteral("project.outputWidget.update"),
     QStringLiteral("Patch output-widget fields by id (params: groupId, widgetId, plus any "
                    "of title, icon, transmitFunction, sourceId, txEncoding, monoIcon, "
-                   "minValue, maxValue, stepSize, initialValue). The transmitFunction is "
+                   "checkable, color, size, onLabel, offLabel, minValue, maxValue, "
+                   "stepSize, initialValue). A checkable button latches and transmits 1 "
+                   "(on) / 0 (off) like a toggle, instead of pulsing a single value on "
+                   "click; color is a hex fill override (empty = group accent) and size "
+                   "is 0=small, 1=normal, 2=large, 3=extra large. The transmitFunction is "
                    "**JavaScript only** -- runs in QJSEngine to convert UI state into "
                    "device bytes. **Call meta.fetchScriptingDocs{kind:'output_widget_js'} "
                    "before authoring** for the function signature (transmit(value) "
@@ -501,55 +571,12 @@ API::CommandResponse API::Handlers::ProjectUpdateCommands::outputWidgetUpdate(
                                         .arg(QString::number(widgetId), QString::number(groupId)));
 
   DataModel::OutputWidget& w = g.outputWidgets[widgetId];
-  bool rebuildTree           = false;
   QSet<QString> consumed{QStringLiteral("groupId"), QStringLiteral("widgetId")};
   const auto identityKeyCount = consumed.size();
 
-  const auto take = [&](const QString& key) -> bool {
-    if (!params.contains(key))
-      return false;
+  applyOutputWidgetFields(w, params, consumed);
 
-    consumed.insert(key);
-    return true;
-  };
-
-  if (take(QStringLiteral("title"))) {
-    w.title     = params.value(QStringLiteral("title")).toString();
-    rebuildTree = true;
-  }
-  if (take(QStringLiteral("icon"))) {
-    w.icon      = params.value(QStringLiteral("icon")).toString();
-    rebuildTree = true;
-  }
-  if (take(QStringLiteral("transmitFunction")))
-    w.transmitFunction = params.value(QStringLiteral("transmitFunction")).toString();
-
-  if (take(Keys::SourceId))
-    w.sourceId = params.value(Keys::SourceId).toInt();
-
-  if (take(QStringLiteral("txEncoding")))
-    w.txEncoding = params.value(QStringLiteral("txEncoding")).toInt();
-
-  if (take(QStringLiteral("monoIcon"))) {
-    w.monoIcon  = params.value(QStringLiteral("monoIcon")).toBool();
-    rebuildTree = true;
-  }
-
-  if (take(QStringLiteral("minValue")))
-    w.minValue = SerialStudio::toDouble(params.value(QStringLiteral("minValue")));
-
-  if (take(QStringLiteral("maxValue")))
-    w.maxValue = SerialStudio::toDouble(params.value(QStringLiteral("maxValue")));
-
-  if (take(QStringLiteral("stepSize")))
-    w.stepSize = SerialStudio::toDouble(params.value(QStringLiteral("stepSize")));
-
-  if (take(QStringLiteral("initialValue")))
-    w.initialValue = SerialStudio::toDouble(params.value(QStringLiteral("initialValue")));
-
-  if (consumed.size() > identityKeyCount)
-    rebuildTree = true;
-
+  const bool rebuildTree = consumed.size() > identityKeyCount;
   project.updateGroup(groupId, g, rebuildTree);
 
   QJsonObject result;

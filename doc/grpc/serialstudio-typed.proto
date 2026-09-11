@@ -697,6 +697,7 @@ message IoModbusAddRegisterGroupRequest {
   int64 count = 2;
   int64 startAddress = 3;
   int64 type = 4;
+  int64 slaveAddress = 5;
 }
 
 message IoModbusClearRegisterGroupsRequest {
@@ -2713,7 +2714,7 @@ service SerialStudioTypedAPI {
   // Returns the list of bus types this build supports. Pro builds have all 9; GPL builds only ship UART/Network/BLE/Audio. Use before io.setBusType to confirm the bus is available.
   rpc IoListBuses(IoListBusesRequest) returns (CommandResponse);
 
-  // Add register group (params: type, startAddress, count)
+  // Add register group (params: type, startAddress, count, [slaveAddress])
   rpc IoModbusAddRegisterGroup(IoModbusAddRegisterGroupRequest) returns (CommandResponse);
 
   // Clear all register groups
@@ -3400,10 +3401,10 @@ service SerialStudioTypedAPI {
   // Duplicate an output widget by id (params: groupId, widgetId)
   rpc ProjectOutputWidgetDuplicate(ProjectOutputWidgetDuplicateRequest) returns (CommandResponse);
 
-  // Read the current configuration of an output widget (params: groupId, widgetId). Returns title, icon, type, min/max/step/initialValue, transmitFunction. Use BEFORE rewriting the transmitFunction so you preserve the user's current ranges and labels.
+  // Read the current configuration of an output widget (params: groupId, widgetId). Returns title, icon, type, checkable, color, size, on/offLabel, min/max/step/initialValue, transmitFunction. Use BEFORE rewriting the transmitFunction so you preserve the user's current ranges and labels.
   rpc ProjectOutputWidgetGet(ProjectOutputWidgetGetRequest) returns (CommandResponse);
 
-  // Patch output-widget fields by id (params: groupId, widgetId, plus any of title, icon, transmitFunction, sourceId, txEncoding, monoIcon, minValue, maxValue, stepSize, initialValue). The transmitFunction is **JavaScript only** -- runs in QJSEngine to convert UI state into device bytes. **Call meta.fetchScriptingDocs{kind:'output_widget_js'} before authoring** for the function signature (transmit(value) returning a Uint8Array / string), the per-widget value semantics, and the injected Modbus/CAN helper globals (modbusWriteRegister / modbusWriteCoil / modbusWriteFloat / canSendFrame / canSendValue). Validate first with project.outputWidget.dryRun.
+  // Patch output-widget fields by id (params: groupId, widgetId, plus any of title, icon, transmitFunction, sourceId, txEncoding, monoIcon, checkable, color, size, onLabel, offLabel, minValue, maxValue, stepSize, initialValue). A checkable button latches and transmits 1 (on) / 0 (off) like a toggle, instead of pulsing a single value on click; color is a hex fill override (empty = group accent) and size is 0=small, 1=normal, 2=large, 3=extra large. The transmitFunction is **JavaScript only** -- runs in QJSEngine to convert UI state into device bytes. **Call meta.fetchScriptingDocs{kind:'output_widget_js'} before authoring** for the function signature (transmit(value) returning a Uint8Array / string), the per-widget value semantics, and the injected Modbus/CAN helper globals (modbusWriteRegister / modbusWriteRegisters / modbusWriteCoil / modbusWriteFloat / canSendFrame / canSendValue). Validate first with project.outputWidget.dryRun.
   rpc ProjectOutputWidgetUpdate(ProjectOutputWidgetUpdateRequest) returns (CommandResponse);
 
   // Compile a painter program WITHOUT touching the live project. Verifies that paint(ctx, w, h) exists and that the script compiles cleanly; does NOT actually render to a canvas. Returns ok / lastError. Params: code (string).

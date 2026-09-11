@@ -3091,6 +3091,11 @@ Read the configuration of an output widget by id. Use this before rewriting
   "title": "Relay",
   "icon": "toggle-power",
   "monoIcon": false,
+  "checkable": false,
+  "color": "",
+  "size": 1,
+  "onLabel": "",
+  "offLabel": "",
   "minValue": 0,
   "maxValue": 100,
   "stepSize": 1,
@@ -3116,6 +3121,16 @@ Patch any subset of output-widget fields by id.
 - `txEncoding` (int, optional): Text encoding for string payloads
   (SerialStudio::TextEncoding enum, 0=UTF-8)
 - `monoIcon` (bool, optional): Use monochrome icon styling
+- `checkable` (bool, optional): Button latches on/off and transmits 1 (on) /
+  0 (off) instead of pulsing a single value on click
+- `color` (string, optional): Hex fill override for the control; empty uses
+  the group accent color
+- `size` (int, optional): Size class (0 = small, 1 = normal, 2 = large,
+  3 = extra large)
+- `onLabel` (string, optional): Caption shown while a latching button or
+  toggle is on
+- `offLabel` (string, optional): Caption shown while a latching button or
+  toggle is off
 - `minValue` (double, optional): Minimum allowed value
 - `maxValue` (double, optional): Maximum allowed value
 - `stepSize` (double, optional): Value increment step

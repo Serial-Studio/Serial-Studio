@@ -138,6 +138,8 @@ private slots:
   void pipelinedBytesAfterAuthAreCountedOnce();
 
   void httpRequestLineClosesTheConnection();
+  void httpRequestSplitAcrossChunksStillCloses();
+  void rawFirstLineIsDecidedWithoutWaiting();
   void looksLikeHttpRequest_data();
   void looksLikeHttpRequest();
 
@@ -298,6 +300,55 @@ void TstClientReception::httpRequestLineClosesTheConnection()
   QVERIFY(host.dispatchedCommands.isEmpty());
   QVERIFY(host.deviceWrites.isEmpty());
   QVERIFY(host.responses.isEmpty());
+}
+
+/**
+ * @brief The verdict survives a chunk boundary inside the method token. Latching "seen the first
+ *        bytes" on whatever the first read returned meant a request split after "P" disarmed the
+ *        sniff for the rest of the connection, and a loopback peer is authenticated implicitly.
+ */
+void TstClientReception::httpRequestSplitAcrossChunksStillCloses()
+{
+  QTcpSocket socket;
+  TableHost host;
+  auto state           = authenticatedState(QStringLiteral("14"));
+  state.firstBytesSeen = false;
+  state.handshakeSeen  = false;
+  host.connections.insert(&socket, state);
+
+  API::ClientReception reception(host);
+  reception.consumeBytes(&socket, QStringLiteral("14"), QByteArrayLiteral("P"));
+  QCOMPARE(host.closes, 0);
+
+  reception.consumeBytes(&socket,
+                         QStringLiteral("14"),
+                         QByteArrayLiteral("OST / HTTP/1.1\r\n"
+                                           "Host: 127.0.0.1:7777\r\n\r\n"
+                                           "{\"type\":\"command\",\"command\":\"a\"}\n"));
+
+  QCOMPARE(host.closes, 1);
+  QVERIFY(host.dispatchedCommands.isEmpty());
+  QVERIFY(host.deviceWrites.isEmpty());
+}
+
+/**
+ * @brief A first chunk that cannot begin a method is decided immediately, so waiting for a full
+ *        token never delays an ordinary client's first line.
+ */
+void TstClientReception::rawFirstLineIsDecidedWithoutWaiting()
+{
+  QTcpSocket socket;
+  TableHost host;
+  auto state           = authenticatedState(QStringLiteral("15"));
+  state.firstBytesSeen = false;
+  host.connections.insert(&socket, state);
+
+  API::ClientReception reception(host);
+  reception.consumeBytes(
+    &socket, QStringLiteral("15"), QByteArrayLiteral("{\"type\":\"command\",\"command\":\"a\"}\n"));
+
+  QCOMPARE(host.closes, 0);
+  QCOMPARE(host.dispatchedCommands.size(), qsizetype(1));
 }
 
 void TstClientReception::looksLikeHttpRequest_data()

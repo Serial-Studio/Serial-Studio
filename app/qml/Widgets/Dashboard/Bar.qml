@@ -71,6 +71,12 @@ Item {
                                          : root.color
 
   //
+  // Only a Critical band flashes; a Warning band holds a steady tint, so a persistent
+  // out-of-normal reading does not turn the whole dashboard into a strobe.
+  //
+  readonly property bool alarmBlinking: model.activeBandSeverity === 3 && model.hasData
+
+  //
   // Helper properties
   //
   readonly property bool isHorizontal: root.width > 1.5 * root.height
@@ -566,15 +572,21 @@ Item {
                 height: valueText.implicitHeight + 8
                 width: Math.min(parent.width, valueBoxMetrics.width + 18)
                 border.color: Qt.darker(Cpp_ThemeManager.colors["widget_border"], 1.35)
-                color: model.alarmTriggered
-                       ? (valueBox.alarmFlashOn
-                          ? Cpp_ThemeManager.alarmColorForSeverity(root.model.activeBandSeverity)
-                          : Cpp_ThemeManager.colors["console_base"])
+                color: valueBox.alarmFilled
+                       ? Cpp_ThemeManager.alarmColorForSeverity(root.model.activeBandSeverity)
                        : Cpp_ThemeManager.colors["console_base"]
 
                 Behavior on color { ColorAnimation { duration: 280; easing.type: Easing.InOutQuad } }
 
                 property bool alarmFlashOn: false
+
+                //
+                // A Warning band holds a steady filled tint, so the box reads as filled
+                // whenever it is not mid-blink; only a Critical band tracks the flash phase.
+                //
+                readonly property bool alarmFilled: model.alarmTriggered
+                                                    && (valueBox.alarmFlashOn
+                                                        || !root.alarmBlinking)
 
                 TextMetrics {
                   id: valueBoxMetrics
@@ -592,7 +604,8 @@ Item {
 
                 SequentialAnimation {
                   loops: Animation.Infinite
-                  running: model.alarmTriggered && model.hasData
+                  running: root.alarmBlinking
+                  onRunningChanged: if (!running) valueBox.alarmFlashOn = false
                   PropertyAction { target: valueBox; property: "alarmFlashOn"; value: true }
                   PauseAnimation { duration: 450 }
                   PropertyAction { target: valueBox; property: "alarmFlashOn"; value: false }
@@ -606,11 +619,11 @@ Item {
                   anchors.centerIn: parent
                   font.pixelSize: digitalFontSize * 1.05
                   font.family: Cpp_Misc_CommonFonts.widgetFontFamily
-                  color: model.alarmTriggered
-                         ? (valueBox.alarmFlashOn
-                            ? "#ffffff"
-                            : Cpp_ThemeManager.alarmColorForSeverity(root.model.activeBandSeverity))
-                         : Cpp_ThemeManager.colors["console_text"]
+                  color: valueBox.alarmFilled
+                         ? "#ffffff"
+                         : (model.alarmTriggered
+                            ? Cpp_ThemeManager.alarmColorForSeverity(root.model.activeBandSeverity)
+                            : Cpp_ThemeManager.colors["console_text"])
                   text: root.getPaddedFormattedText(model.value)
 
                   Behavior on color { ColorAnimation { duration: 280; easing.type: Easing.InOutQuad } }
@@ -677,13 +690,15 @@ Item {
         Behavior on color { ColorAnimation { duration: 280; easing.type: Easing.InOutQuad } }
 
         property bool alarmFlashOn: false
-        readonly property color targetColor: root.model.alarmTriggered && root.model.hasData
-                                              && digitalBox.alarmFlashOn
-                                              ? Cpp_ThemeManager.alarmColorForSeverity(root.model.activeBandSeverity)
-                                              : Cpp_ThemeManager.colors["console_base"]
+        readonly property bool alarmFilled: root.model.alarmTriggered && root.model.hasData
+                                            && (digitalBox.alarmFlashOn || !root.alarmBlinking)
+        readonly property color targetColor: digitalBox.alarmFilled
+                                             ? Cpp_ThemeManager.alarmColorForSeverity(root.model.activeBandSeverity)
+                                             : Cpp_ThemeManager.colors["console_base"]
         SequentialAnimation {
           loops: Animation.Infinite
-          running: root.model.alarmTriggered && root.model.hasData
+          running: root.alarmBlinking
+          onRunningChanged: if (!running) digitalBox.alarmFlashOn = false
           PropertyAction { target: digitalBox; property: "alarmFlashOn"; value: true }
           PauseAnimation { duration: 450 }
           PropertyAction { target: digitalBox; property: "alarmFlashOn"; value: false }
@@ -707,9 +722,11 @@ Item {
             font.family: Cpp_Misc_CommonFonts.monoFont.family
             font.bold: true
             font.pixelSize: digitalPage.bigValueFontPx
-            color: root.model.alarmTriggered
-                   ? (digitalBox.alarmFlashOn ? "#ffffff" : Cpp_ThemeManager.alarmColorForSeverity(root.model.activeBandSeverity))
-                   : root.color
+            color: digitalBox.alarmFilled
+                   ? "#ffffff"
+                   : (root.model.alarmTriggered
+                      ? Cpp_ThemeManager.alarmColorForSeverity(root.model.activeBandSeverity)
+                      : root.color)
             Behavior on color { ColorAnimation { duration: 280; easing.type: Easing.InOutQuad } }
           }
 
@@ -721,9 +738,11 @@ Item {
             horizontalAlignment: Text.AlignHCenter
             text: root.displayTitle
             visible: root.displayTitle.length > 0 && !root.titleFrozenOut
-            color: root.model.alarmTriggered
-                   ? (digitalBox.alarmFlashOn ? "#ffffff" : Cpp_ThemeManager.alarmColorForSeverity(root.model.activeBandSeverity))
-                   : root.color
+            color: digitalBox.alarmFilled
+                   ? "#ffffff"
+                   : (root.model.alarmTriggered
+                      ? Cpp_ThemeManager.alarmColorForSeverity(root.model.activeBandSeverity)
+                      : root.color)
             font.family: Cpp_Misc_CommonFonts.monoFont.family
             font.pixelSize: bigValueText.font.pixelSize * 0.30
             Behavior on color { ColorAnimation { duration: 280; easing.type: Easing.InOutQuad } }

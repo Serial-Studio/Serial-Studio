@@ -4,7 +4,7 @@
 <context>
     <name/>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorMultiSelect.cpp" line="366"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorMultiSelect.cpp" line="371"/>
         <source>Mixed</source>
         <translation>Gemengd</translation>
     </message>
@@ -5710,14 +5710,13 @@ Schakel dit alleen in op vertrouwde netwerken. Niet-vertrouwde clients kunnen li
 <context>
     <name>DashboardButton</name>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Output/DashboardButton.qml" line="40"/>
+        <location filename="../../qml/Widgets/Dashboard/Output/DashboardButton.qml" line="97"/>
         <source>Send</source>
         <translation>Verzenden</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Output/DashboardButton.qml" line="64"/>
         <source>No transmit function defined</source>
-        <translation>Geen zendfunctie gedefinieerd</translation>
+        <translation type="vanished">Geen zendfunctie gedefinieerd</translation>
     </message>
 </context>
 <context>
@@ -5832,59 +5831,66 @@ Schakel dit alleen in op vertrouwde netwerken. Niet-vertrouwde clients kunnen li
 <context>
     <name>DashboardOutputPanel</name>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Output/DashboardOutputPanel.qml" line="155"/>
-        <location filename="../../qml/Widgets/Dashboard/Output/DashboardOutputPanel.qml" line="307"/>
         <source>Send</source>
-        <translation>Verzenden</translation>
+        <translation type="vanished">Verzenden</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Output/DashboardOutputPanel.qml" line="295"/>
         <source>Enter command…</source>
-        <translation>Voer commando in…</translation>
+        <translation type="vanished">Voer commando in…</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Widgets/Dashboard/Output/DashboardOutputPanel.qml" line="134"/>
+        <source>no data</source>
+        <translation>geen gegevens</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Widgets/Dashboard/Output/DashboardOutputPanel.qml" line="135"/>
+        <source>waiting…</source>
+        <translation>wachten…</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Widgets/Dashboard/Output/DashboardOutputPanel.qml" line="136"/>
+        <source>live</source>
+        <translation>live</translation>
     </message>
 </context>
 <context>
     <name>DashboardSlider</name>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Output/DashboardSlider.qml" line="90"/>
         <source>No transmit function defined</source>
-        <translation>Geen verzendfunctie gedefinieerd</translation>
+        <translation type="vanished">Geen verzendfunctie gedefinieerd</translation>
     </message>
 </context>
 <context>
     <name>DashboardTextField</name>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Output/DashboardTextField.qml" line="47"/>
+        <location filename="../../qml/Widgets/Dashboard/Output/DashboardTextField.qml" line="44"/>
         <source>Enter command…</source>
         <translation>Voer commando in…</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Output/DashboardTextField.qml" line="57"/>
+        <location filename="../../qml/Widgets/Dashboard/Output/DashboardTextField.qml" line="56"/>
         <source>Send</source>
         <translation>Verzenden</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Output/DashboardTextField.qml" line="76"/>
         <source>No transmit function defined</source>
-        <translation>Geen verzendfunctie gedefinieerd</translation>
+        <translation type="vanished">Geen verzendfunctie gedefinieerd</translation>
     </message>
 </context>
 <context>
     <name>DashboardToggle</name>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Output/DashboardToggle.qml" line="57"/>
         <source>ON</source>
-        <translation>AAN</translation>
+        <translation type="vanished">AAN</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Output/DashboardToggle.qml" line="59"/>
         <source>OFF</source>
-        <translation>UIT</translation>
+        <translation type="vanished">UIT</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Output/DashboardToggle.qml" line="70"/>
         <source>No transmit function defined</source>
-        <translation>Geen verzendfunctie gedefinieerd</translation>
+        <translation type="vanished">Geen verzendfunctie gedefinieerd</translation>
     </message>
 </context>
 <context>
@@ -6894,6 +6900,24 @@ Niet-opgeslagen wijzigingen gaan verloren. Doorgaan?</translation>
     </message>
 </context>
 <context>
+    <name>DataModel::MacroEditor</name>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/MacroEditor.cpp" line="80"/>
+        <source>Discard changes?</source>
+        <translation>Wijzigingen verwerpen?</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/MacroEditor.cpp" line="81"/>
+        <source>The macro editor has unsaved changes.</source>
+        <translation>De macro-editor heeft niet-opgeslagen wijzigingen.</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/MacroEditor.cpp" line="83"/>
+        <source>Macros</source>
+        <translation>Macro's</translation>
+    </message>
+</context>
+<context>
     <name>DataModel::MacroRunner</name>
     <message>
         <location filename="../../../core/Pipeline/DataModel/Scripting/MacroRunner.cpp" line="273"/>
@@ -7089,19 +7113,64 @@ Niet-opgeslagen wijzigingen gaan verloren. Doorgaan?</translation>
 <context>
     <name>DataModel::OutputCodeEditor</name>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/OutputCodeEditor.cpp" line="220"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/OutputCodeEditor.cpp" line="234"/>
         <source>Select Javascript file to import</source>
         <translation>Selecteer Javascript-bestand om te importeren</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/OutputCodeEditor.cpp" line="267"/>
-        <source>Select Output Widget Template</source>
-        <translation>Selecteer Sjabloon voor Output Widget</translation>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/OutputCodeEditor.cpp" line="433"/>
+        <source>No transmit function is defined.</source>
+        <translation>Geen verzendfunctie gedefinieerd.</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/OutputCodeEditor.cpp" line="268"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/OutputCodeEditor.cpp" line="434"/>
+        <source>The control will send nothing until one is written.</source>
+        <translation>De besturing verzendt niets totdat er een is geschreven.</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/OutputCodeEditor.cpp" line="436"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/OutputCodeEditor.cpp" line="444"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/OutputCodeEditor.cpp" line="451"/>
+        <source>Transmit Function Editor</source>
+        <translation>Verzendfunctie-editor</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/OutputCodeEditor.cpp" line="441"/>
+        <source>transmit(value) is defined and compiles.</source>
+        <translation>transmit(value) is gedefinieerd en compileert.</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/OutputCodeEditor.cpp" line="448"/>
+        <source>The transmit function was not applied.</source>
+        <translation>De verzendfunctie is niet toegepast.</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/OutputCodeEditor.cpp" line="462"/>
+        <source>The script did not finish compiling. Is there an endless loop at the top level?</source>
+        <translation type="unfinished">Het script is niet volledig gecompileerd. Is er een oneindige lus op het hoogste niveau?</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/OutputCodeEditor.cpp" line="465"/>
+        <source>Line %1: %2</source>
+        <translation>Regel %1: %2</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/OutputCodeEditor.cpp" line="468"/>
+        <source>The script host is unavailable, so nothing can be validated right now.</source>
+        <translation>De scripthost is niet beschikbaar, dus er kan momenteel niets worden gevalideerd.</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/OutputCodeEditor.cpp" line="473"/>
+        <source>Define a function transmit(value) that returns the bytes to send.</source>
+        <translation>Definieer een functie transmit(value) die de te verzenden bytes retourneert.</translation>
+    </message>
+    <message>
+        <source>Select Output Widget Template</source>
+        <translation type="vanished">Selecteer Sjabloon voor Output Widget</translation>
+    </message>
+    <message>
         <source>Choose a template to load:</source>
-        <translation>Kies een sjabloon om te laden:</translation>
+        <translation type="vanished">Kies een sjabloon om te laden:</translation>
     </message>
 </context>
 <context>
@@ -8598,6 +8667,8 @@ Voeg %4 dataset(s) toe met de standaardwaarden van de sjabloon?</translation>
         <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="651"/>
         <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="654"/>
         <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="671"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputStateRows.cpp" line="121"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputStateRows.cpp" line="140"/>
         <source>None</source>
         <translation>Geen</translation>
     </message>
@@ -8796,6 +8867,61 @@ Voeg %4 dataset(s) toe met de standaardwaarden van de sjabloon?</translation>
     <message>
         <source>Edit Output Widget</source>
         <translation type="vanished">Outputwidget Bewerken</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputStateRows.cpp" line="111"/>
+        <source>State Feedback</source>
+        <translation>Statusfeedback</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputStateRows.cpp" line="122"/>
+        <source>Dataset</source>
+        <translation>Dataset</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputStateRows.cpp" line="123"/>
+        <source>Table Variable</source>
+        <translation>Tabelvariabele</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputStateRows.cpp" line="127"/>
+        <source>State Source</source>
+        <translation>Statusbron</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputStateRows.cpp" line="129"/>
+        <source>Where this control reads the state it displays. Unbound, it shows what you last set rather than what the equipment reports.</source>
+        <translation>Waar deze besturing de status leest die wordt weergegeven. Ongebonden toont deze wat u als laatste hebt ingesteld in plaats van wat de apparatuur rapporteert.</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputStateRows.cpp" line="150"/>
+        <source>Source</source>
+        <translation>Bron</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputStateRows.cpp" line="153"/>
+        <source>The dataset or table variable this control follows</source>
+        <translation>De dataset of tabelvariabele die deze besturing volgt</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputStateRows.cpp" line="166"/>
+        <source>On Value</source>
+        <translation>Aan-waarde</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputStateRows.cpp" line="168"/>
+        <source>Value that means on. Leave it empty and any non-zero number means on, which a device reporting text like RUN can never satisfy. Anything needing a threshold or a bitmask belongs in the dataset transform.</source>
+        <translation>Waarde die 'aan' betekent. Laat leeg en elk getal ongelijk aan nul betekent aan, wat een apparaat dat tekst zoals RUN rapporteert nooit kan voldoen. Alles wat een drempelwaarde of bitmasker nodig heeft hoort in de datasettransformatie.</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputStateRows.cpp" line="183"/>
+        <source>Confirm Within (ms)</source>
+        <translation>Bevestig Binnen (ms)</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputStateRows.cpp" line="184"/>
+        <source>How long the control shows a request as outstanding before it goes back to displaying what the source reports</source>
+        <translation>Hoe lang de besturing een verzoek als openstaand toont voordat deze terugkeert naar het weergeven van wat de bron rapporteert</translation>
     </message>
 </context>
 <context>
@@ -9812,109 +9938,88 @@ Opnieuw laden?</translation>
 <context>
     <name>DataModel::TransmitTestDialog</name>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Dialogs/TransmitTestDialog.cpp" line="168"/>
         <source>Invalid Hex Input</source>
-        <translation>Ongeldige Hex-invoer</translation>
+        <translation type="vanished">Ongeldige Hex-invoer</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Dialogs/TransmitTestDialog.cpp" line="169"/>
         <source>Please enter valid hexadecimal bytes.
 
 Valid format: 01 A2 FF 3C</source>
-        <translation>Voer geldige hexadecimale bytes in.
+        <translation type="vanished">Voer geldige hexadecimale bytes in.
 
 Geldig formaat: 01 A2 FF 3C</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Dialogs/TransmitTestDialog.cpp" line="174"/>
         <source>No transmit function code to evaluate.</source>
-        <translation>Geen verzendfunctiecode om te evalueren.</translation>
+        <translation type="vanished">Geen verzendfunctiecode om te evalueren.</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Dialogs/TransmitTestDialog.cpp" line="183"/>
         <source>Failed to create the test engine.</source>
-        <translation>Kan de test-engine niet aanmaken.</translation>
+        <translation type="vanished">Kan de test-engine niet aanmaken.</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Dialogs/TransmitTestDialog.cpp" line="198"/>
         <source>The transmit code did not finish evaluating within %1 ms.</source>
-        <translation>De transmissiecode heeft de evaluatie niet binnen %1 ms voltooid.</translation>
+        <translation type="vanished">De transmissiecode heeft de evaluatie niet binnen %1 ms voltooid.</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Dialogs/TransmitTestDialog.cpp" line="204"/>
         <source>transmit function is not callable</source>
-        <translation>verzendfunctie is niet aanroepbaar</translation>
+        <translation type="vanished">verzendfunctie is niet aanroepbaar</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Dialogs/TransmitTestDialog.cpp" line="224"/>
         <source>transmit() did not return within %1 ms.</source>
-        <translation>transmit() heeft niet binnen %1 ms geretourneerd.</translation>
+        <translation type="vanished">transmit() heeft niet binnen %1 ms geretourneerd.</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Dialogs/TransmitTestDialog.cpp" line="273"/>
         <source>HEX</source>
-        <translation>HEX</translation>
+        <translation type="vanished">HEX</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Dialogs/TransmitTestDialog.cpp" line="274"/>
         <source>Clear</source>
-        <translation>Wissen</translation>
+        <translation type="vanished">Wissen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Dialogs/TransmitTestDialog.cpp" line="275"/>
         <source>Evaluate</source>
-        <translation>Evalueren</translation>
+        <translation type="vanished">Evalueren</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Dialogs/TransmitTestDialog.cpp" line="276"/>
         <source>Input Value</source>
-        <translation>Invoerwaarde</translation>
+        <translation type="vanished">Invoerwaarde</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Dialogs/TransmitTestDialog.cpp" line="277"/>
         <source>Transmit Function Output</source>
-        <translation>Uitvoer Verzendfunctie</translation>
+        <translation type="vanished">Uitvoer Verzendfunctie</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Dialogs/TransmitTestDialog.cpp" line="278"/>
-        <location filename="../../../core/Ui/ProjectEditor/Dialogs/TransmitTestDialog.cpp" line="302"/>
         <source>Enter value to transmit…</source>
-        <translation>Voer waarde in om te verzenden…</translation>
+        <translation type="vanished">Voer waarde in om te verzenden…</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Dialogs/TransmitTestDialog.cpp" line="279"/>
         <source>Raw string output appears here</source>
-        <translation>Onbewerkte tekenreeksuitvoer verschijnt hier</translation>
+        <translation type="vanished">Onbewerkte tekenreeksuitvoer verschijnt hier</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Dialogs/TransmitTestDialog.cpp" line="280"/>
         <source>Hex byte output appears here</source>
-        <translation>Hexadecimale byte-uitvoer verschijnt hier</translation>
+        <translation type="vanished">Hexadecimale byte-uitvoer verschijnt hier</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Dialogs/TransmitTestDialog.cpp" line="283"/>
         <source>Test Transmit Function</source>
-        <translation>Test Verzendfunctie</translation>
+        <translation type="vanished">Test Verzendfunctie</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Dialogs/TransmitTestDialog.cpp" line="296"/>
         <source>Enter hex bytes (e.g., 01 A2 FF)</source>
-        <translation>Voer hexadecimale bytes in (bijv. 01 A2 FF)</translation>
+        <translation type="vanished">Voer hexadecimale bytes in (bijv. 01 A2 FF)</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Dialogs/TransmitTestDialog.cpp" line="400"/>
         <source>(empty) No data returned</source>
-        <translation>(leeg) Geen gegevens geretourneerd</translation>
+        <translation type="vanished">(leeg) Geen gegevens geretourneerd</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Dialogs/TransmitTestDialog.cpp" line="402"/>
         <source>0 bytes</source>
-        <translation>0 bytes</translation>
+        <translation type="vanished">0 bytes</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Dialogs/TransmitTestDialog.cpp" line="441"/>
         <source>%1 byte(s)</source>
-        <translation>%1 byte(s)</translation>
+        <translation type="vanished">%1 byte(s)</translation>
     </message>
 </context>
 <context>
@@ -10722,85 +10827,85 @@ Geldig formaat: 01 A2 FF 3C</translation>
 <context>
     <name>EditorCommit</name>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorCommit.cpp" line="99"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorCommit.cpp" line="100"/>
         <source>Rename Device</source>
         <translation>Apparaat Hernoemen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorCommit.cpp" line="259"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorCommit.cpp" line="260"/>
         <source>Edit Device</source>
         <translation>Apparaat Bewerken</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorCommit.cpp" line="356"/>
-        <location filename="../../../core/Ui/ProjectEditor/EditorCommit.cpp" line="379"/>
-        <location filename="../../../core/Ui/ProjectEditor/EditorCommit.cpp" line="385"/>
-        <location filename="../../../core/Ui/ProjectEditor/EditorCommit.cpp" line="460"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorCommit.cpp" line="357"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorCommit.cpp" line="380"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorCommit.cpp" line="386"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorCommit.cpp" line="461"/>
         <source>Edit Group</source>
         <translation>Groep Bewerken</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorCommit.cpp" line="402"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorCommit.cpp" line="403"/>
         <source>Rename Group</source>
         <translation>Groep Hernoemen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorCommit.cpp" line="608"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorCommit.cpp" line="609"/>
         <source>Edit Action</source>
         <translation>Actie Bewerken</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorCommit.cpp" line="650"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorCommit.cpp" line="651"/>
         <source>Rename Project</source>
         <translation>Project Hernoemen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorCommit.cpp" line="697"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorCommit.cpp" line="698"/>
         <source>Alias "%1" is already in use</source>
         <translation>Alias "%1" is al in gebruik</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorCommit.cpp" line="698"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorCommit.cpp" line="699"/>
         <source>Dataset aliases must be unique across the project. The change was not applied.</source>
         <translation>Dataset-aliassen moeten uniek zijn binnen het project. De wijziging is niet toegepast.</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorCommit.cpp" line="700"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorCommit.cpp" line="701"/>
         <source>Duplicate Alias</source>
         <translation>Dubbele Alias</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorCommit.cpp" line="711"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorCommit.cpp" line="712"/>
         <source>Alias "%1" contains only digits</source>
         <translation>Alias "%1" bevat alleen cijfers</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorCommit.cpp" line="712"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorCommit.cpp" line="713"/>
         <source>Scripts must quote it as a string, e.g. getDataset("%1"); a numeric argument is read as a uniqueId, not &amp;m_editor alias.</source>
         <translation>Scripts moeten het als string citeren, bijv. getDataset("%1"); een numeriek argument wordt gelezen als uniqueId, niet als deze alias.</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorCommit.cpp" line="716"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorCommit.cpp" line="717"/>
         <source>Numeric Alias</source>
         <translation>Numerieke Alias</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorCommit.cpp" line="769"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorCommit.cpp" line="770"/>
         <source>Edit Alarms</source>
         <translation>Alarmen Bewerken</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorCommit.cpp" line="909"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorCommit.cpp" line="910"/>
         <source>Rename Dataset</source>
         <translation>Dataset Hernoemen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorCommit.cpp" line="930"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorCommit.cpp" line="931"/>
         <source>Edit Dataset</source>
         <translation>Dataset Bewerken</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorCommit.cpp" line="1077"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorCommit.cpp" line="1110"/>
         <source>Edit Output Widget</source>
         <translation>Uitvoerwidget Bewerken</translation>
     </message>
@@ -10808,598 +10913,653 @@ Geldig formaat: 01 A2 FF 3C</translation>
 <context>
     <name>EditorForms</name>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="136"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="137"/>
         <source>Project Information</source>
         <translation>Projectinformatie</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="147"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="148"/>
         <source>Project Title</source>
         <translation>Projecttitel</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="148"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="149"/>
         <source>Untitled Project</source>
         <translation>Naamloos Project</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="149"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="150"/>
         <source>Name or description of the project</source>
         <translation>Naam of beschrijving van het project</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="168"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="169"/>
         <source>Group Information</source>
         <translation>Groepsinformatie</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="179"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="180"/>
         <source>Group Title</source>
         <translation>Groepstitel</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="180"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="181"/>
         <source>Untitled Group</source>
         <translation>Naamloze Groep</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="181"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="182"/>
         <source>Title or description of &amp;m_editor dataset group</source>
         <translation>Titel of beschrijving van deze datasetgroep</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="196"/>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="781"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="197"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="782"/>
         <source>Device %1</source>
         <translation>Apparaat %1</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="214"/>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="480"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="215"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="481"/>
         <source>Input Device</source>
         <translation>Invoerapparaat</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="215"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="216"/>
         <source>Select which connected device provides data for &amp;m_editor group</source>
         <translation>Selecteer welk aangesloten apparaat gegevens levert voor deze groep</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="232"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="233"/>
         <source>Image Configuration</source>
         <translation>Afbeelding Configuratie</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="246"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="247"/>
         <source>Detection Mode</source>
         <translation>Detectiemodus</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="248"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="249"/>
         <source>Auto-detect reads JPEG/PNG magic bytes; Manual uses explicit start/end sequences</source>
         <translation>Auto-detectie leest JPEG/PNG magic bytes; Handmatig gebruikt expliciete start-/eindreeksen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="258"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="259"/>
         <source>Start Sequence (Hex)</source>
         <translation>Startreeks (Hex)</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="259"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="260"/>
         <source>e.g. FF D8 FF</source>
         <translation>bijv. FF D8 FF</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="260"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="261"/>
         <source>Hex bytes marking the start of an image frame</source>
         <translation>Hexadecimale bytes die het begin van een imageframe markeren</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="269"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="270"/>
         <source>End Sequence (Hex)</source>
         <translation>Eindreeks (Hex)</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="270"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="271"/>
         <source>e.g. FF D9</source>
         <translation>bijv. FF D9</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="271"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="272"/>
         <source>Hex bytes marking the end of an image frame</source>
         <translation>Hexadecimale bytes die het einde van een imageframe markeren</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="290"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="291"/>
         <source>Datasets</source>
         <translation>Datasets</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="320"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="321"/>
         <source>Time</source>
         <translation>Tijd</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="320"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="321"/>
         <source>Samples</source>
         <translation>Samples</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="331"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="332"/>
         <source>X-Axis Source</source>
         <translation>X-as Bron</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="332"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="333"/>
         <source>Plot every curve against time or against the sample number</source>
         <translation>Plot elke curve tegen tijd of tegen het samplenummer</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="347"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="348"/>
         <source>Logarithmic X Axis</source>
         <translation>Logaritmische X-as</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="348"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="349"/>
         <source>Scale the X axis in decades; available when the X-Axis source is Samples (not Time)</source>
         <translation>Schaal de X-as in decaden; beschikbaar wanneer de X-as bron Samples is (niet Tijd)</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="360"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="361"/>
         <source>Logarithmic Y Axis</source>
         <translation>Logaritmische Y-as</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="361"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="362"/>
         <source>Scale the shared Y axis in decades; values at or below zero are clamped</source>
         <translation>Schaal de gedeelde Y-as in decaden; waarden op of onder nul worden begrensd</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="378"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="379"/>
         <source>URL</source>
         <translation>URL</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="380"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="381"/>
         <source>Web address to load in &amp;m_editor widget</source>
         <translation>Webadres om te laden in deze widget</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="399"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="400"/>
         <source>Auto</source>
         <translation>Auto</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="399"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="400"/>
         <source>Horizontal</source>
         <translation>Horizontaal</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="399"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="400"/>
         <source>Vertical</source>
         <translation>Verticaal</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="402"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="403"/>
         <source>Bar Style</source>
         <translation>Balkstijl</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="403"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="404"/>
         <source>Bar orientation: automatic, horizontal rows, or vertical columns</source>
         <translation>Balkoriëntatie: automatisch, horizontale rijen of verticale kolommen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="445"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="446"/>
         <source>Composite Widget</source>
         <translation>Samengestelde Widget</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="447"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="448"/>
         <source>Select how &amp;m_editor group of datasets should be visualized (optional)</source>
         <translation>Selecteer hoe deze groep datasets moet worden gevisualiseerd (optioneel)</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="491"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="492"/>
         <source>Device Name</source>
         <translation>Apparaatnaam</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="492"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="493"/>
         <source>Device 1</source>
         <translation>Apparaat 1</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="493"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="494"/>
         <source>Human-readable name for &amp;m_editor input device</source>
         <translation>Leesbare naam voor dit invoerapparaat</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="502"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="503"/>
         <source>Bus Type</source>
         <translation>Bustype</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="503"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="504"/>
         <source>Select the hardware interface for &amp;m_editor input device</source>
         <translation>Selecteer de hardware-interface voor dit invoerapparaat</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="506"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="507"/>
         <source>Serial Port</source>
         <translation>Seriële Poort</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="506"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="507"/>
         <source>Network</source>
         <translation>Netwerk</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="506"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="507"/>
         <source>Bluetooth LE</source>
         <translation>Bluetooth LE</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="508"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="509"/>
         <source>Audio Input</source>
         <translation>Audio-invoer</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="508"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="509"/>
         <source>Modbus</source>
         <translation>Modbus</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="508"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="509"/>
         <source>CAN Bus</source>
         <translation>CAN-bus</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="508"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="509"/>
         <source>Raw USB</source>
         <translation>Raw USB</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="509"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="510"/>
         <source>HID Device</source>
         <translation>HID-apparaat</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="509"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="510"/>
         <source>Process</source>
         <translation>Proces</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="509"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="510"/>
         <source>MQTT Subscriber</source>
         <translation>MQTT-abonnee</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="509"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="510"/>
         <source>OPC UA</source>
         <translation>OPC UA</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="510"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="511"/>
         <source>Siemens S7</source>
         <translation>Siemens S7</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="510"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="511"/>
         <source>EtherNet/IP</source>
         <translation>Ethernet/IP</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="510"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="511"/>
         <source>IEC 60870-5-104</source>
         <translation>IEC 60870-5-104</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="533"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="534"/>
         <source>Frame Detection</source>
         <translation>Framedetectie</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="548"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="549"/>
         <source>Frame Detection Method</source>
         <translation>Framedetectiemethode</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="549"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="550"/>
         <source>Select how incoming data frames are identified</source>
         <translation>Selecteer hoe inkomende dataframes worden geïdentificeerd</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="559"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="560"/>
         <source>Hexadecimal Delimiters</source>
         <translation>Hexadecimale Scheidingstekens</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="560"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="561"/>
         <source>Enter frame start/end sequences as hexadecimal values</source>
         <translation>Voer frame start/einde-sequenties in als hexadecimale waarden</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="576"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="577"/>
         <source>Frame Start Delimiter</source>
         <translation>Frame Startscheidingsteken</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="577"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="578"/>
         <source>e.g. /*</source>
         <translation>bijv. /*</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="578"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="579"/>
         <source>Sequence that marks the beginning of a data frame</source>
         <translation>Sequentie die het begin van een dataframe markeert</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="590"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="591"/>
         <source>Frame End Delimiter</source>
         <translation>Frame-eindscheidingsteken</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="591"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="592"/>
         <source>e.g. */</source>
         <translation>bijv. */</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="592"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="593"/>
         <source>Sequence that marks the end of a data frame</source>
         <translation>Reeks die het einde van een dataframe markeert</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="605"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="606"/>
         <source>Payload Processing &amp; Validation</source>
         <translation>Payload-verwerking &amp; Validatie</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="616"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="617"/>
         <source>Data Conversion Method</source>
         <translation>Dataconversiemethode</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="617"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="618"/>
         <source>Select how incoming binary data is decoded before parsing</source>
         <translation>Selecteer hoe binnenkomende binaire data wordt gedecodeerd vóór het parsen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="633"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="634"/>
         <source>Checksum Algorithm</source>
         <translation>Checksum-algoritme</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="634"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="635"/>
         <source>Select the checksum algorithm used to validate frames</source>
         <translation>Selecteer het checksum-algoritme dat wordt gebruikt om frames te valideren</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="687"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="688"/>
         <source>Connection Settings</source>
         <translation>Verbindingsinstellingen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="747"/>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1163"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="748"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1164"/>
         <source>General Information</source>
         <translation>Algemene Informatie</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="757"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="758"/>
         <source>Action Title</source>
         <translation>Actietitel</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="759"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="760"/>
         <source>Untitled Action</source>
         <translation>Naamloze Actie</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="760"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="761"/>
         <source>Name or description of &amp;m_editor action</source>
         <translation>Naam of beschrijving van deze actie</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="769"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="770"/>
         <source>Action Icon</source>
         <translation>Actiepictogram</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="770"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="771"/>
         <source>Default Icon</source>
         <translation>Standaardpictogram</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="771"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="772"/>
         <source>Icon displayed for &amp;m_editor action in the dashboard</source>
         <translation>Pictogram weergegeven voor deze actie in het dashboard</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="799"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="800"/>
         <source>Target Device</source>
         <translation>Doelapparaat</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="800"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="801"/>
         <source>Select which connected device &amp;m_editor action sends data to</source>
         <translation>Selecteer naar welk verbonden apparaat deze actie gegevens verzendt</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="813"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="814"/>
         <source>Data Payload</source>
         <translation>Gegevenslading</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="825"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="826"/>
         <source>Send as Binary</source>
         <translation>Verzenden als Binair</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="826"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="827"/>
         <source>Send raw binary data when &amp;m_editor action is triggered</source>
         <translation>Ruwe binaire gegevens verzenden wanneer deze actie wordt geactiveerd</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="837"/>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="849"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="838"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="850"/>
         <source>Command</source>
         <translation>Commando</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="838"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="839"/>
         <source>Transmit Data (Hex)</source>
         <translation>Gegevens Verzenden (Hex)</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="839"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="840"/>
         <source>Hexadecimal payload to send when the action is triggered</source>
         <translation>Hexadecimale lading om te verzenden wanneer de actie wordt geactiveerd</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="850"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="851"/>
         <source>Transmit Data</source>
         <translation>Gegevens Verzenden</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="851"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="852"/>
         <source>Text payload to send when the action is triggered</source>
         <translation>Tekstlading om te verzenden wanneer de actie wordt geactiveerd</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="862"/>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1223"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="863"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1289"/>
         <source>Text Encoding</source>
         <translation>Tekstcodering</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="863"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="864"/>
         <source>Character encoding used to serialize the text payload</source>
         <translation>Tekencodering gebruikt om de tekstlading te serialiseren</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="888"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="889"/>
         <source>End-of-Line Sequence</source>
         <translation>Regeleindigingsreeks</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="889"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="890"/>
         <source>EOL characters to append to the message (e.g. \n, \r\n)</source>
         <translation>EOL-tekens om aan het bericht toe te voegen (bijv. </translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="902"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="903"/>
         <source>Execution Behavior</source>
         <translation>Uitvoeringsgedrag</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="914"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="915"/>
         <source>Auto-Execute on Connect</source>
         <translation>Automatisch Uitvoeren bij Verbinding</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="915"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="916"/>
         <source>Automatically trigger &amp;m_editor action when the device connects</source>
         <translation>Deze actie automatisch activeren wanneer het apparaat verbinding maakt</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="921"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="922"/>
         <source>Timer Behavior</source>
         <translation>Timergedrag</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="930"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="931"/>
         <source>Timer Mode</source>
         <translation>Timermodus</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="933"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="934"/>
         <source>Choose when and how &amp;m_editor action should repeat automatically</source>
         <translation>Kies wanneer en hoe deze actie automatisch moet herhalen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="940"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="941"/>
         <source>Interval (ms)</source>
         <translation>Interval (ms)</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="944"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="945"/>
         <source>Timer Interval (ms)</source>
         <translation>Timerinterval (ms)</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="945"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="946"/>
         <source>Milliseconds between each repeated trigger of &amp;m_editor action</source>
         <translation>Milliseconden tussen elke herhaalde trigger van deze actie</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="952"/>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="956"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="953"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="957"/>
         <source>Repeat Count</source>
         <translation>Herhalingsaantal</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="957"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="958"/>
         <source>Number of times to send the command on each trigger</source>
         <translation>Aantal keren dat het commando bij elke trigger wordt verzonden</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1051"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1052"/>
         <source>On</source>
         <translation>Aan</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1174"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1175"/>
         <source>Label</source>
         <translation>Label</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1175"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1176"/>
         <source>Display label</source>
         <translation>Weergavelabel</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1185"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1186"/>
         <source>Button Icon</source>
         <translation>Knoppictogram</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1194"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1195"/>
         <source>Colorize Icon</source>
         <translation>Pictogram Inkleuren</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1195"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1196"/>
         <source>Tint the icon with the button color</source>
         <translation>Kleur het pictogram met de knopkleur</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1212"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1205"/>
+        <source>Automatic</source>
+        <translation>Automatisch</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1206"/>
+        <source>Button Color</source>
+        <translation>Knopkleur</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1207"/>
+        <source>Custom fill color for this button; automatic uses the group accent</source>
+        <translation>Aangepaste vulkleur voor deze knop; automatisch gebruikt het groepsaccent</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1218"/>
+        <source>Button Size</source>
+        <translation>Knopgrootte</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1219"/>
+        <source>Scales the button, its icon and its caption</source>
+        <translation>Schaalt de knop, het pictogram en het bijschrift</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1228"/>
+        <source>Toggle Button</source>
+        <translation>Schakelknop</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1229"/>
+        <source>Stay pressed and transmit 1 (on) / 0 (off) instead of a single click</source>
+        <translation>Blijf ingedrukt en verzend 1 (aan) / 0 (uit) in plaats van een enkele klik</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1251"/>
+        <source>On Label</source>
+        <translation>Aan-label</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1252"/>
+        <source>Caption shown while latched (defaults to the label)</source>
+        <translation>Bijschrift getoond terwijl vergrendeld (standaard het label)</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1261"/>
+        <source>Off Label</source>
+        <translation>Uit-label</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1262"/>
+        <source>Caption shown while released (defaults to the label)</source>
+        <translation>Bijschrift getoond terwijl losgelaten (standaard het label)</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1278"/>
         <source>Initial Value</source>
         <translation>Beginwaarde</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1224"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1290"/>
         <source>Character encoding used when transmit() returns a string value</source>
         <translation>Tekencodering gebruikt wanneer transmit() een tekenreekswaarde retourneert</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1243"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1309"/>
         <source>Value Range</source>
         <translation>Waardebereik</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1254"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1320"/>
         <source>Minimum Value</source>
         <translation>Minimumwaarde</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1263"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1329"/>
         <source>Maximum Value</source>
         <translation>Maximumwaarde</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1272"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1338"/>
         <source>Step Size</source>
         <translation>Stapgrootte</translation>
     </message>
@@ -11702,22 +11862,22 @@ Geldig formaat: 01 A2 FF 3C</translation>
     <name>EditorMultiSelect</name>
     <message>
         <location filename="../../../core/Ui/ProjectEditor/EditorMultiSelect.cpp" line="212"/>
-        <location filename="../../../core/Ui/ProjectEditor/EditorMultiSelect.cpp" line="321"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorMultiSelect.cpp" line="326"/>
         <source>(multiple)</source>
         <translation>(meerdere)</translation>
     </message>
     <message>
         <location filename="../../../core/Ui/ProjectEditor/EditorMultiSelect.cpp" line="226"/>
-        <location filename="../../../core/Ui/ProjectEditor/EditorMultiSelect.cpp" line="335"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorMultiSelect.cpp" line="340"/>
         <source>Mixed</source>
         <translation>Gemengd</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorMultiSelect.cpp" line="427"/>
-        <location filename="../../../core/Ui/ProjectEditor/EditorMultiSelect.cpp" line="428"/>
-        <location filename="../../../core/Ui/ProjectEditor/EditorMultiSelect.cpp" line="489"/>
-        <location filename="../../../core/Ui/ProjectEditor/EditorMultiSelect.cpp" line="490"/>
-        <location filename="../../../core/Ui/ProjectEditor/EditorMultiSelect.cpp" line="546"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorMultiSelect.cpp" line="432"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorMultiSelect.cpp" line="433"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorMultiSelect.cpp" line="494"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorMultiSelect.cpp" line="495"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorMultiSelect.cpp" line="551"/>
         <source>Edit Selection</source>
         <translation>Selectie Bewerken</translation>
     </message>
@@ -11805,52 +11965,52 @@ Geldig formaat: 01 A2 FF 3C</translation>
         <translation>Frame-parser</translation>
     </message>
     <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorTree.cpp" line="495"/>
         <location filename="../../../core/Ui/ProjectEditor/EditorTree.cpp" line="496"/>
-        <location filename="../../../core/Ui/ProjectEditor/EditorTree.cpp" line="497"/>
         <source>Dashboard Widgets</source>
         <translation>Dashboardwidgets</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorTree.cpp" line="625"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorTree.cpp" line="624"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorTree.cpp" line="637"/>
         <location filename="../../../core/Ui/ProjectEditor/EditorTree.cpp" line="638"/>
-        <location filename="../../../core/Ui/ProjectEditor/EditorTree.cpp" line="639"/>
-        <location filename="../../../core/Ui/ProjectEditor/EditorTree.cpp" line="664"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorTree.cpp" line="663"/>
         <source>Variables</source>
         <translation>Variabelen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorTree.cpp" line="625"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorTree.cpp" line="624"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorTree.cpp" line="647"/>
         <location filename="../../../core/Ui/ProjectEditor/EditorTree.cpp" line="648"/>
-        <location filename="../../../core/Ui/ProjectEditor/EditorTree.cpp" line="649"/>
         <source>Dataset Values</source>
         <translation>Datasetwaarden</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorTree.cpp" line="822"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorTree.cpp" line="821"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorTree.cpp" line="835"/>
         <location filename="../../../core/Ui/ProjectEditor/EditorTree.cpp" line="836"/>
-        <location filename="../../../core/Ui/ProjectEditor/EditorTree.cpp" line="837"/>
-        <location filename="../../../core/Ui/ProjectEditor/EditorTree.cpp" line="856"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorTree.cpp" line="855"/>
         <source>Workspaces</source>
         <translation>Werkruimten</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorTree.cpp" line="873"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorTree.cpp" line="872"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorTree.cpp" line="876"/>
         <location filename="../../../core/Ui/ProjectEditor/EditorTree.cpp" line="877"/>
-        <location filename="../../../core/Ui/ProjectEditor/EditorTree.cpp" line="878"/>
         <source>MQTT Publisher</source>
         <translation>MQTT Publisher</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorTree.cpp" line="899"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorTree.cpp" line="898"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorTree.cpp" line="902"/>
         <location filename="../../../core/Ui/ProjectEditor/EditorTree.cpp" line="903"/>
-        <location filename="../../../core/Ui/ProjectEditor/EditorTree.cpp" line="904"/>
         <source>InfluxDB Sink</source>
         <translation>Influxdb-sink</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorTree.cpp" line="925"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorTree.cpp" line="924"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorTree.cpp" line="928"/>
         <location filename="../../../core/Ui/ProjectEditor/EditorTree.cpp" line="929"/>
-        <location filename="../../../core/Ui/ProjectEditor/EditorTree.cpp" line="930"/>
         <source>Control Loop</source>
         <translation>Besturingslus</translation>
     </message>
@@ -15340,32 +15500,32 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
 <context>
     <name>IO::Drivers::Modbus</name>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="346"/>
+        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="354"/>
         <source>Invalid Serial Port</source>
         <translation>Ongeldige Seriële Poort</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="390"/>
+        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="398"/>
         <source>Modbus Initialization Failed</source>
         <translation>Modbus-initialisatie Mislukt</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="438"/>
+        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="446"/>
         <source>Nothing is listening at %1</source>
         <translation>Er luistert niets op %1</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="451"/>
+        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="459"/>
         <source>The Modbus client is gone</source>
         <translation>De Modbus-client is verdwenen</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="472"/>
+        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="480"/>
         <source>Modbus Connection Failed</source>
         <translation>Modbus-verbinding Mislukt</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="347"/>
+        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="355"/>
         <source>The selected serial port "%1" is no longer available. Refresh the port list and try again.</source>
         <translation>De geselecteerde seriële poort "%1" is niet langer beschikbaar. Ververs de poortenlijst en probeer opnieuw.</translation>
     </message>
@@ -15374,17 +15534,17 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
         <translation type="vanished">De Modbus-client weigerde de verbinding te starten.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="391"/>
+        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="399"/>
         <source>Unable to create Modbus device. Check your system configuration and try again.</source>
         <translation>Kan Modbus-apparaat niet aanmaken. Controleer de systeemconfiguratie en probeer opnieuw.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="474"/>
+        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="482"/>
         <source>Unable to connect to "%1". Check your connection settings.</source>
         <translation>Kan geen verbinding maken met "%1". Controleer de verbindingsinstellingen.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="475"/>
+        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="483"/>
         <source>"%1": %2</source>
         <translation>"%1": %2</translation>
     </message>
@@ -15393,63 +15553,68 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
         <translation type="vanished">Verbindingspoging verlopen</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="591"/>
+        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="599"/>
         <source>None</source>
         <translation>Geen</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="592"/>
+        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="600"/>
         <source>Even</source>
         <translation>Even</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="593"/>
+        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="601"/>
         <source>Odd</source>
         <translation>Oneven</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="594"/>
+        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="602"/>
         <source>Space</source>
         <translation>Spatie</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="595"/>
+        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="603"/>
         <source>Mark</source>
         <translation>Markering</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="647"/>
+        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="655"/>
         <source>Holding Registers (0x03)</source>
         <translation>Holding Registers (0x03)</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="648"/>
+        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="656"/>
         <source>Input Registers (0x04)</source>
         <translation>Input Registers (0x04)</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="649"/>
+        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="657"/>
         <source>Coils (0x01)</source>
         <translation>Coils (0x01)</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="650"/>
+        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="658"/>
         <source>Discrete Inputs (0x02)</source>
         <translation>Discrete Inputs (0x02)</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="806"/>
+        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="808"/>
+        <source> on slave %1</source>
+        <translation>op slave %1</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="821"/>
         <source>No register groups configured</source>
         <translation>Geen registergroepen geconfigureerd</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="807"/>
+        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="822"/>
         <source>Add at least one register group before generating a project.</source>
         <translation>Voeg minimaal één registergroep toe voordat een project wordt gegenereerd.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="809"/>
-        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="841"/>
+        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="824"/>
+        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="854"/>
         <source>Modbus Project Generator</source>
         <translation>Modbus Projectgenerator</translation>
     </message>
@@ -15462,22 +15627,22 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
         <translation type="vanished">Controleer schrijfrechten voor de tijdelijke map.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="827"/>
+        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="840"/>
         <source>Failed to load generated project</source>
         <translation>Gegenereerd project laden mislukt</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="828"/>
+        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="841"/>
         <source>The generated project JSON could not be loaded.</source>
         <translation>De gegenereerde project-JSON kon niet worden geladen.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="836"/>
+        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="849"/>
         <source>Successfully generated project with %1 groups and %2 datasets.</source>
         <translation>Project succesvol gegenereerd met %1 groepen en %2 datasets.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="839"/>
+        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="852"/>
         <source>The project editor is now open for customization.</source>
         <translation>De projecteditor is nu geopend voor aanpassing.</translation>
     </message>
@@ -15522,67 +15687,67 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
         <translation type="vanished">Discrete %1</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1216"/>
+        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1235"/>
         <source>Error code: %1</source>
         <translation>Foutcode: %1</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1218"/>
+        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1237"/>
         <source>Modbus Communication Error</source>
         <translation>Modbus Communicatiefout</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1230"/>
+        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1249"/>
         <source>Select Port</source>
         <translation>Selecteer Poort</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1320"/>
+        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1339"/>
         <source>Protocol</source>
         <translation>Protocol</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1328"/>
+        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1347"/>
         <source>Slave Address</source>
         <translation>Slave-adres</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1337"/>
+        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1356"/>
         <source>Poll Interval (ms)</source>
         <translation>Poll-Interval (ms)</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1365"/>
+        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1384"/>
         <source>Host / IP</source>
         <translation>Host / IP</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1372"/>
+        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1391"/>
         <source>Port</source>
         <translation>Poort</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1387"/>
+        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1406"/>
         <source>Serial Port</source>
         <translation>Seriële Poort</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1395"/>
+        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1414"/>
         <source>Baud Rate</source>
         <translation>Baudrate</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1403"/>
+        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1422"/>
         <source>Parity</source>
         <translation>Pariteit</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1411"/>
+        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1430"/>
         <source>Data Bits</source>
         <translation>Databits</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1419"/>
+        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1438"/>
         <source>Stop Bits</source>
         <translation>Stopbits</translation>
     </message>
@@ -16716,197 +16881,197 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
 <context>
     <name>IO::Drivers::UART</name>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="110"/>
-        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="111"/>
-        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="442"/>
-        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="481"/>
+        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="105"/>
+        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="106"/>
+        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="437"/>
+        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="476"/>
         <source>None</source>
         <translation>Geen</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="400"/>
-        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="807"/>
+        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="395"/>
+        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="802"/>
         <source>Select Port</source>
         <translation>Selecteer Poort</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="443"/>
+        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="438"/>
         <source>Even</source>
         <translation>Even</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="444"/>
+        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="439"/>
         <source>Odd</source>
         <translation>Oneven</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="445"/>
+        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="440"/>
         <source>Space</source>
         <translation>Spatie</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="446"/>
+        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="441"/>
         <source>Mark</source>
         <translation>Markering</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="482"/>
+        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="477"/>
         <source>RTS/CTS</source>
         <translation>RTS/CTS</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="483"/>
+        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="478"/>
         <source>XON/XOFF</source>
         <translation>XON/XOFF</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="618"/>
+        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="613"/>
         <source>"%1" is not a valid path</source>
         <translation>"%1" is geen geldig pad</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="619"/>
+        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="614"/>
         <source>Please type another path to register a custom serial device</source>
         <translation>Voer een ander pad in om een aangepast serieel apparaat te registreren</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="916"/>
+        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="911"/>
         <source>The specified device could not be found. Check the connection and try again.</source>
         <translation>Het opgegeven apparaat kon niet worden gevonden. Controleer de verbinding en probeer opnieuw.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="923"/>
+        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="918"/>
         <source>An unknown error occurred. Check the device and try again.</source>
         <translation>Er is een onbekende fout opgetreden. Controleer het apparaat en probeer opnieuw.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="925"/>
+        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="920"/>
         <source>The device is not open. Open the device before attempting this operation.</source>
         <translation>Het apparaat is niet geopend. Open het apparaat voordat u deze bewerking uitvoert.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="313"/>
+        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="308"/>
         <source>Failed to connect to serial port "%1"</source>
         <translation>Kan geen verbinding maken met seriële poort "%1"</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="293"/>
-        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="555"/>
+        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="288"/>
+        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="550"/>
         <source>Failed to set baud rate</source>
         <translation>Instellen baudrate mislukt</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="294"/>
+        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="289"/>
         <source>Baud rate %1 rejected for port "%2": %3</source>
         <translation>Baudrate %1 geweigerd voor poort "%2": %3</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="556"/>
+        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="551"/>
         <source>Baud rate %1 rejected: %2</source>
         <translation>Baudrate %1 geweigerd: %2</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="627"/>
+        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="622"/>
         <source>Serial device not registered</source>
         <translation>Serieel apparaat niet geregistreerd</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="628"/>
+        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="623"/>
         <source>"%1" is not a valid path; type another path to register a custom serial device.</source>
         <translation>"%1" is geen geldig pad; voer een ander pad in om een aangepast serieel apparaat te registreren.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="889"/>
+        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="884"/>
         <source>Unknown</source>
         <translation>Onbekend</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="890"/>
+        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="885"/>
         <source>Critical error on serial port "%1"</source>
         <translation>Kritieke fout op seriële poort "%1"</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="891"/>
+        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="886"/>
         <source>Unknown error</source>
         <translation>Onbekende fout</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="915"/>
+        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="910"/>
         <source>No error occurred.</source>
         <translation>Geen fout opgetreden.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="917"/>
+        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="912"/>
         <source>Permission denied. Ensure the application has the necessary access rights to the device.</source>
         <translation>Toegang geweigerd. Zorg ervoor dat de applicatie de benodigde toegangsrechten tot het apparaat heeft.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="918"/>
+        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="913"/>
         <source>Failed to open the device. It may already be in use or unavailable.</source>
         <translation>Openen van het apparaat mislukt. Het kan al in gebruik of niet beschikbaar zijn.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="919"/>
+        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="914"/>
         <source>An error occurred while writing data to the device.</source>
         <translation>Er is een fout opgetreden bij het schrijven van gegevens naar het apparaat.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="920"/>
+        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="915"/>
         <source>An error occurred while reading data from the device.</source>
         <translation>Er is een fout opgetreden bij het lezen van gegevens van het apparaat.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="921"/>
+        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="916"/>
         <source>A critical resource error occurred. The device may have been disconnected or is no longer accessible.</source>
         <translation>Er is een kritieke resourcefout opgetreden. Het apparaat kan losgekoppeld zijn of is niet langer toegankelijk.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="922"/>
+        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="917"/>
         <source>The requested operation is not supported on this device.</source>
         <translation>De gevraagde bewerking wordt niet ondersteund op dit apparaat.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="924"/>
+        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="919"/>
         <source>The operation timed out. The device may not be responding.</source>
         <translation>De bewerking is verlopen. Het apparaat reageert mogelijk niet.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="1013"/>
+        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="1008"/>
         <source>Serial Port</source>
         <translation>Seriële Poort</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="1021"/>
+        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="1016"/>
         <source>Baud Rate</source>
         <translation>Baudrate</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="1029"/>
+        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="1024"/>
         <source>Parity</source>
         <translation>Pariteit</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="1037"/>
+        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="1032"/>
         <source>Data Bits</source>
         <translation>Databits</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="1045"/>
+        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="1040"/>
         <source>Stop Bits</source>
         <translation>Stopbits</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="1053"/>
+        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="1048"/>
         <source>Flow Control</source>
         <translation>Stroomregeling</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="1061"/>
+        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="1056"/>
         <source>DTR</source>
         <translation>DTR</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="1068"/>
+        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="1063"/>
         <source>Auto-Reconnect</source>
         <translation>Automatisch Opnieuw Verbinden</translation>
     </message>
@@ -16926,9 +17091,9 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
     </message>
     <message>
         <location filename="../../../core/Devices/IO/Drivers/USB.cpp" line="204"/>
-        <location filename="../../../core/Devices/IO/Drivers/USB.cpp" line="613"/>
-        <location filename="../../../core/Devices/IO/Drivers/USB.cpp" line="1037"/>
-        <location filename="../../../core/Devices/IO/Drivers/USB.cpp" line="1048"/>
+        <location filename="../../../core/Devices/IO/Drivers/USB.cpp" line="637"/>
+        <location filename="../../../core/Devices/IO/Drivers/USB.cpp" line="1061"/>
+        <location filename="../../../core/Devices/IO/Drivers/USB.cpp" line="1072"/>
         <source>USB Device Error</source>
         <translation>USB-apparaatfout</translation>
     </message>
@@ -16957,23 +17122,33 @@ Controleer op Linux of u lees-/schrijfrechten hebt op het apparaatknooppunt (voe
         <translation>Kan "%1" niet openen</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/USB.cpp" line="488"/>
-        <location filename="../../../core/Devices/IO/Drivers/USB.cpp" line="498"/>
+        <location filename="../../../core/Devices/IO/Drivers/USB.cpp" line="360"/>
+        <source>Enable advanced USB control transfers?</source>
+        <translation>Geavanceerde USB-besturingsoverdrachten inschakelen?</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Devices/IO/Drivers/USB.cpp" line="365"/>
+        <source>USB</source>
+        <translation>USB</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Devices/IO/Drivers/USB.cpp" line="512"/>
+        <location filename="../../../core/Devices/IO/Drivers/USB.cpp" line="522"/>
         <source>Advanced USB mode refused</source>
         <translation>Geavanceerde USB-modus geweigerd</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/USB.cpp" line="489"/>
+        <location filename="../../../core/Devices/IO/Drivers/USB.cpp" line="513"/>
         <source>Advanced control transfers stay off until they are enabled from the USB setup pane: an incorrect control request can damage connected hardware.</source>
         <translation>Geavanceerde control transfers blijven uitgeschakeld totdat ze worden ingeschakeld vanuit het USB-configuratiepaneel: een onjuiste control request kan aangesloten hardware beschadigen.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/USB.cpp" line="499"/>
+        <location filename="../../../core/Devices/IO/Drivers/USB.cpp" line="523"/>
         <source>This project asked for advanced control transfers. Enable them from the USB setup pane if that is what you want.</source>
         <translation>Dit project vroeg om geavanceerde control transfers. Schakel ze in vanuit het USB-configuratiepaneel als dat is wat je wilt.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/USB.cpp" line="850"/>
+        <location filename="../../../core/Devices/IO/Drivers/USB.cpp" line="874"/>
         <source>No isochronous IN endpoint was found on this device, but bulk or interrupt endpoints are available.
 
 Switch the Transfer Mode to "Bulk/Interrupt Stream" and try again.</source>
@@ -16982,7 +17157,7 @@ Switch the Transfer Mode to "Bulk/Interrupt Stream" and try again.</source>
 Schakel de Overdrachtsmodus over naar "Bulk/Interrupt-stroom" en probeer opnieuw.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/USB.cpp" line="855"/>
+        <location filename="../../../core/Devices/IO/Drivers/USB.cpp" line="879"/>
         <source>No bulk or interrupt IN endpoint was found on this device, but isochronous endpoints are available.
 
 Switch the Transfer Mode to "Isochronous" and try again.</source>
@@ -16991,7 +17166,7 @@ Switch the Transfer Mode to "Isochronous" and try again.</source>
 Schakel de Overdrachtsmodus over naar "Isochroon" en probeer opnieuw.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/USB.cpp" line="859"/>
+        <location filename="../../../core/Devices/IO/Drivers/USB.cpp" line="883"/>
         <source>No usable IN endpoint was found on this device.
 
 The device may not expose data endpoints in its active configuration, or it may speak a dedicated protocol. Protocol adapters (e.g. CAN or Modbus interfaces) should be connected through their own driver.</source>
@@ -17000,7 +17175,7 @@ The device may not expose data endpoints in its active configuration, or it may 
 Het apparaat biedt mogelijk geen data-eindpunten in de actieve configuratie, of gebruikt een specifiek protocol. Protocoladapters (bijv. CAN- of Modbus-interfaces) moeten via hun eigen driver worden aangesloten.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/USB.cpp" line="1038"/>
+        <location filename="../../../core/Devices/IO/Drivers/USB.cpp" line="1062"/>
         <source>Could not claim interface %1 on the USB device.
 
 Another driver or application may already have it open. On Linux, try unloading the kernel driver (e.g. cdc_acm) or adding a udev rule.</source>
@@ -17009,82 +17184,82 @@ Another driver or application may already have it open. On Linux, try unloading 
 Een ander stuurprogramma of toepassing heeft deze mogelijk al geopend. Probeer op Linux het kernelstuurprogramma te verwijderen (bijv. cdc_acm) of voeg een udev-regel toe.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/USB.cpp" line="1049"/>
+        <location filename="../../../core/Devices/IO/Drivers/USB.cpp" line="1073"/>
         <source>Could not activate alternate setting %1 on interface %2. The selected endpoint is not reachable.</source>
         <translation>Kon alternatieve instelling %1 op interface %2 niet activeren. Het geselecteerde eindpunt is niet bereikbaar.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/USB.cpp" line="1079"/>
+        <location filename="../../../core/Devices/IO/Drivers/USB.cpp" line="1103"/>
         <source>USB Device Warning</source>
         <translation>USB-apparaat Waarschuwing</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/USB.cpp" line="1080"/>
+        <location filename="../../../core/Devices/IO/Drivers/USB.cpp" line="1104"/>
         <source>The selected OUT endpoint could not be activated. Continuing in read-only mode.</source>
         <translation>Het geselecteerde OUT-eindpunt kon niet worden geactiveerd. Doorgaan in alleen-lezen modus.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/USB.cpp" line="1109"/>
+        <location filename="../../../core/Devices/IO/Drivers/USB.cpp" line="1133"/>
         <source>No device connected in Advanced Control mode.</source>
         <translation>Geen apparaat verbonden in Geavanceerde Besturingsmodus.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/USB.cpp" line="1114"/>
+        <location filename="../../../core/Devices/IO/Drivers/USB.cpp" line="1138"/>
         <source>A control transfer is already in progress.</source>
         <translation>Een control transfer is al bezig.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/USB.cpp" line="1124"/>
+        <location filename="../../../core/Devices/IO/Drivers/USB.cpp" line="1148"/>
         <source>Invalid setup field: request type, request, wValue, and wIndex must be hex.</source>
         <translation>Ongeldig setup-veld: request type, request, wValue en wIndex moeten hexadecimaal zijn.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/USB.cpp" line="1134"/>
+        <location filename="../../../core/Devices/IO/Drivers/USB.cpp" line="1158"/>
         <source>Invalid data payload: expected a sequence of hex bytes.</source>
         <translation>Ongeldige data payload: verwacht een reeks hexadecimale bytes.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/USB.cpp" line="1140"/>
+        <location filename="../../../core/Devices/IO/Drivers/USB.cpp" line="1164"/>
         <source>Invalid transfer length (0-%1 bytes).</source>
         <translation>Ongeldige transferlengte (0-%1 bytes).</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/USB.cpp" line="1155"/>
+        <location filename="../../../core/Devices/IO/Drivers/USB.cpp" line="1179"/>
         <source>Could not allocate the control transfer.</source>
         <translation>Kon de control transfer niet toewijzen.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/USB.cpp" line="1160"/>
+        <location filename="../../../core/Devices/IO/Drivers/USB.cpp" line="1184"/>
         <source>Failed to submit control transfer: %1.</source>
         <translation>Control transfer indienen mislukt: %1.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/USB.cpp" line="638"/>
+        <location filename="../../../core/Devices/IO/Drivers/USB.cpp" line="662"/>
         <source>Transfer complete: %1 byte(s).</source>
         <translation>Overdracht voltooid: %1 byte(s).</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/USB.cpp" line="640"/>
+        <location filename="../../../core/Devices/IO/Drivers/USB.cpp" line="664"/>
         <source>Control transfer failed: %1.</source>
         <translation>Control transfer mislukt: %1.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/USB.cpp" line="374"/>
+        <location filename="../../../core/Devices/IO/Drivers/USB.cpp" line="398"/>
         <source>Select Device</source>
         <translation>Apparaat Selecteren</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/USB.cpp" line="396"/>
+        <location filename="../../../core/Devices/IO/Drivers/USB.cpp" line="420"/>
         <source>No Usable IN Endpoints</source>
         <translation>Geen Bruikbare In-eindpunten</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/USB.cpp" line="398"/>
+        <location filename="../../../core/Devices/IO/Drivers/USB.cpp" line="422"/>
         <source>Select IN Endpoint</source>
         <translation>In-eindpunt Selecteren</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/USB.cpp" line="410"/>
+        <location filename="../../../core/Devices/IO/Drivers/USB.cpp" line="434"/>
         <source>None (Read-only)</source>
         <translation>Geen (Alleen-lezen)</translation>
     </message>
@@ -17093,15 +17268,16 @@ Een ander stuurprogramma of toepassing heeft deze mogelijk al geopend. Probeer o
         <translation type="vanished">Geavanceerde USB-besturingsoverdrachten Inschakelen?</translation>
     </message>
     <message>
+        <location filename="../../../core/Devices/IO/Drivers/USB.cpp" line="361"/>
         <source>This enables control transfers in addition to bulk transfers. Sending incorrect control requests can crash or damage connected hardware. Only enable this if you know what you are doing.</source>
-        <translation type="vanished">Dit schakelt besturingsoverdrachten in naast bulkoverdrachten. Het verzenden van onjuiste besturingsverzoeken kan aangesloten hardware laten crashen of beschadigen. Schakel dit alleen in als u weet wat u doet.</translation>
+        <translation>Dit schakelt besturingsoverdrachten in naast bulkoverdrachten. Het verzenden van onjuiste besturingsverzoeken kan aangesloten hardware laten crashen of beschadigen. Schakel dit alleen in als u weet wat u doet.</translation>
     </message>
     <message>
         <source>Advanced USB Mode</source>
         <translation type="vanished">Geavanceerde USB-modus</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/USB.cpp" line="614"/>
+        <location filename="../../../core/Devices/IO/Drivers/USB.cpp" line="638"/>
         <source>The USB device was disconnected or encountered a fatal read error.</source>
         <translation>Het USB-apparaat is losgekoppeld of heeft een fatale leesfout ondervonden.</translation>
     </message>
@@ -17130,12 +17306,12 @@ The device may not expose data endpoints in its active configuration, or it may 
 Het apparaat biedt mogelijk geen data-eindpunten in zijn actieve configuratie, of vereist mogelijk een specifiek stuurprogramma.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/USB.cpp" line="1289"/>
+        <location filename="../../../core/Devices/IO/Drivers/USB.cpp" line="1313"/>
         <source>USB Device</source>
         <translation>USB-apparaat</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/USB.cpp" line="1297"/>
+        <location filename="../../../core/Devices/IO/Drivers/USB.cpp" line="1321"/>
         <source>Transfer Mode</source>
         <translation>Overdrachtsmodus</translation>
     </message>
@@ -17144,32 +17320,32 @@ Het apparaat biedt mogelijk geen data-eindpunten in zijn actieve configuratie, o
         <translation type="vanished">Bulkstroom</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/USB.cpp" line="1300"/>
+        <location filename="../../../core/Devices/IO/Drivers/USB.cpp" line="1324"/>
         <source>Advanced Control</source>
         <translation>Geavanceerde Besturing</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/USB.cpp" line="1300"/>
+        <location filename="../../../core/Devices/IO/Drivers/USB.cpp" line="1324"/>
         <source>Isochronous</source>
         <translation>Isochroon</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/USB.cpp" line="1300"/>
+        <location filename="../../../core/Devices/IO/Drivers/USB.cpp" line="1324"/>
         <source>Bulk/Interrupt Stream</source>
         <translation>Bulk/interrupt Stream</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/USB.cpp" line="1305"/>
+        <location filename="../../../core/Devices/IO/Drivers/USB.cpp" line="1329"/>
         <source>IN Endpoint</source>
         <translation>In-eindpunt</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/USB.cpp" line="1313"/>
+        <location filename="../../../core/Devices/IO/Drivers/USB.cpp" line="1337"/>
         <source>OUT Endpoint</source>
         <translation>Out-eindpunt</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/USB.cpp" line="1321"/>
+        <location filename="../../../core/Devices/IO/Drivers/USB.cpp" line="1345"/>
         <source>ISO Packet Size</source>
         <translation>ISO-pakketgrootte</translation>
     </message>
@@ -18565,12 +18741,12 @@ Om deze plaats op een ander apparaat te hergebruiken, stuur een e-mail naar alex
 <context>
     <name>MDF4::Export</name>
     <message>
-        <location filename="../../../core/Storage/MDF4/Export.cpp" line="735"/>
+        <location filename="../../../core/Storage/MDF4/Export.cpp" line="763"/>
         <source>MDF4 Export is a Pro feature.</source>
         <translation>MDF4-export is een Pro-functie.</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/MDF4/Export.cpp" line="736"/>
+        <location filename="../../../core/Storage/MDF4/Export.cpp" line="764"/>
         <source>Activate Serial Studio Pro or start the free trial to enable MDF4 export.</source>
         <translation>Activeer Serial Studio Pro of start de gratis proefperiode om MDF4-export in te schakelen.</translation>
     </message>
@@ -19674,52 +19850,50 @@ Geef de benodigde inloggegevens op.</translation>
         <translation>[macro] verificatie mislukt: %1</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Macros.qml" line="911"/>
         <source>Discard changes?</source>
-        <translation>Wijzigingen verwerpen?</translation>
+        <translation type="vanished">Wijzigingen verwerpen?</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Macros.qml" line="924"/>
         <source>The macro editor has unsaved changes.</source>
-        <translation>De macro-editor heeft niet-opgeslagen wijzigingen.</translation>
+        <translation type="vanished">De macro-editor heeft niet-opgeslagen wijzigingen.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Macros.qml" line="964"/>
+        <location filename="../../qml/Dialogs/Macros.qml" line="927"/>
         <source>JavaScript</source>
         <translation>Javascript</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Macros.qml" line="964"/>
+        <location filename="../../qml/Dialogs/Macros.qml" line="927"/>
         <source>Lua</source>
         <translation>Lua</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Macros.qml" line="982"/>
+        <location filename="../../qml/Dialogs/Macros.qml" line="945"/>
         <source>Load macro</source>
         <translation>Macro laden</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Macros.qml" line="992"/>
+        <location filename="../../qml/Dialogs/Macros.qml" line="958"/>
         <source>Save macro</source>
         <translation>Macro opslaan</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Macros.qml" line="1003"/>
+        <location filename="../../qml/Dialogs/Macros.qml" line="969"/>
         <source>Verify macro</source>
         <translation>Verifieer Macro</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Macros.qml" line="1014"/>
+        <location filename="../../qml/Dialogs/Macros.qml" line="980"/>
         <source>Run macro</source>
         <translation>Voer Macro Uit</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Macros.qml" line="1027"/>
+        <location filename="../../qml/Dialogs/Macros.qml" line="993"/>
         <source>Stop macro</source>
         <translation>Stop Macro</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Macros.qml" line="1037"/>
+        <location filename="../../qml/Dialogs/Macros.qml" line="1003"/>
         <source>Clear editor</source>
         <translation>Wis Editor</translation>
     </message>
@@ -20376,14 +20550,27 @@ Wilt u de downloadpagina openen?</translation>
 <context>
     <name>Misc::IconEngine</name>
     <message>
-        <location filename="../../../core/Ui/Misc/IconEngine.cpp" line="154"/>
         <source>Invalid icon identifier</source>
-        <translation>Ongeldige pictogram-identificatie</translation>
+        <translation type="vanished">Ongeldige pictogram-identificatie</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/Misc/IconEngine.cpp" line="224"/>
         <source>Empty SVG data received</source>
-        <translation>Lege SVG-gegevens ontvangen</translation>
+        <translation type="vanished">Lege SVG-gegevens ontvangen</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/Misc/IconEngine.cpp" line="216"/>
+        <source>The icon service returned a response that could not be read.</source>
+        <translation>De pictogramservice heeft een antwoord geretourneerd dat niet kon worden gelezen.</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/Misc/IconEngine.cpp" line="332"/>
+        <source>The icon service did not return %1.</source>
+        <translation>De pictogramservice heeft %1 niet geretourneerd.</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/Misc/IconEngine.cpp" line="339"/>
+        <source>The icon service is rate-limiting requests, please wait a moment before searching again.</source>
+        <translation>De pictogramservice beperkt het aantal verzoeken, wacht even voordat u opnieuw zoekt.</translation>
     </message>
 </context>
 <context>
@@ -20788,74 +20975,84 @@ Wilt u de downloadpagina openen?</translation>
         <translation>Aantal Registers:</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="157"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="153"/>
         <source>1-125</source>
         <translation>1-125</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="162"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="159"/>
+        <source>Slave Address:</source>
+        <translation>Slave-adres:</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="170"/>
+        <source>Leave empty to use the device address</source>
+        <translation>Laat leeg om het apparaatadres te gebruiken</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="175"/>
         <source>Add Group</source>
         <translation>Groep Toevoegen</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="185"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="200"/>
         <source>Configured Groups</source>
         <translation>Geconfigureerde Groepen</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="219"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="234"/>
         <source>#</source>
         <translation>#</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="226"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="241"/>
         <source>Type</source>
         <translation>Type</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="234"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="249"/>
         <source>Start</source>
         <translation>Start</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="241"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="256"/>
         <source>Count</source>
         <translation>Aantal</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="248"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="263"/>
         <source>Action</source>
         <translation>Actie</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="323"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="338"/>
         <source>Remove</source>
         <translation>Verwijderen</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="335"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="350"/>
         <source>No groups configured.
 Add groups above to poll multiple register types.</source>
         <translation>Geen groepen geconfigureerd.
 Voeg hierboven groepen toe om meerdere registertypes te pollen.</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="353"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="368"/>
         <source>Total groups: %1</source>
         <translation>Totaal aantal groepen: %1</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="357"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="372"/>
         <source>Generate Project</source>
         <translation>Project Genereren</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="363"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="378"/>
         <source>Clear All</source>
         <translation>Alles Wissen</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="369"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="384"/>
         <source>Close</source>
         <translation>Sluiten</translation>
     </message>
@@ -21837,17 +22034,17 @@ Voeg hierboven groepen toe om meerdere registertypes te pollen.</translation>
         <translation>Online Pictogrammen Zoeken</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/OnlineIconPicker.qml" line="72"/>
+        <location filename="../../qml/Dialogs/OnlineIconPicker.qml" line="81"/>
         <source>Download failed: %1</source>
         <translation>Download mislukt: %1</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/OnlineIconPicker.qml" line="97"/>
+        <location filename="../../qml/Dialogs/OnlineIconPicker.qml" line="111"/>
         <source>Search icons (e.g. temperature, arrow, play)…</source>
         <translation>Pictogrammen zoeken (bijv. temperatuur, pijl, afspelen)…</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/OnlineIconPicker.qml" line="110"/>
+        <location filename="../../qml/Dialogs/OnlineIconPicker.qml" line="124"/>
         <source>Search…</source>
         <translation>Zoeken…</translation>
     </message>
@@ -21856,17 +22053,17 @@ Voeg hierboven groepen toe om meerdere registertypes te pollen.</translation>
         <translation type="vanished">Zoeken</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/OnlineIconPicker.qml" line="148"/>
+        <location filename="../../qml/Dialogs/OnlineIconPicker.qml" line="162"/>
         <source>Search for icons above to get started</source>
         <translation>Zoek hierboven naar pictogrammen om te beginnen</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/OnlineIconPicker.qml" line="249"/>
+        <location filename="../../qml/Dialogs/OnlineIconPicker.qml" line="280"/>
         <source>OK</source>
         <translation>OK</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/OnlineIconPicker.qml" line="259"/>
+        <location filename="../../qml/Dialogs/OnlineIconPicker.qml" line="290"/>
         <source>Cancel</source>
         <translation>Annuleren</translation>
     </message>
@@ -22177,119 +22374,122 @@ Voeg hierboven groepen toe om meerdere registertypes te pollen.</translation>
 <context>
     <name>OutputWidgetView</name>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/OutputWidgetView.qml" line="100"/>
+        <location filename="../../qml/ProjectEditor/Views/OutputWidgetView.qml" line="107"/>
         <source>Output widgets require a Pro license.</source>
         <translation>Uitvoerwidgets vereisen een Pro-licentie.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/OutputWidgetView.qml" line="134"/>
+        <location filename="../../qml/ProjectEditor/Views/OutputWidgetView.qml" line="141"/>
         <source>Button</source>
         <translation>Knop</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/OutputWidgetView.qml" line="138"/>
+        <location filename="../../qml/ProjectEditor/Views/OutputWidgetView.qml" line="145"/>
         <source>Send a command on click</source>
         <translation>Stuur een commando bij klikken</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/OutputWidgetView.qml" line="143"/>
+        <location filename="../../qml/ProjectEditor/Views/OutputWidgetView.qml" line="150"/>
         <source>Slider</source>
         <translation>Schuifregelaar</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/OutputWidgetView.qml" line="147"/>
+        <location filename="../../qml/ProjectEditor/Views/OutputWidgetView.qml" line="154"/>
         <source>Send scaled numeric values</source>
         <translation>Stuur geschaalde numerieke waarden</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/OutputWidgetView.qml" line="152"/>
+        <location filename="../../qml/ProjectEditor/Views/OutputWidgetView.qml" line="159"/>
         <source>Toggle</source>
         <translation>Schakelaar</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/OutputWidgetView.qml" line="156"/>
+        <location filename="../../qml/ProjectEditor/Views/OutputWidgetView.qml" line="163"/>
         <source>Send on/off commands</source>
         <translation>Aan/uit-commando's verzenden</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/OutputWidgetView.qml" line="161"/>
+        <location filename="../../qml/ProjectEditor/Views/OutputWidgetView.qml" line="168"/>
         <source>Text Field</source>
         <translation>Tekstveld</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/OutputWidgetView.qml" line="165"/>
+        <location filename="../../qml/ProjectEditor/Views/OutputWidgetView.qml" line="172"/>
         <source>Type and send arbitrary commands</source>
         <translation>Willekeurige commando's typen en verzenden</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/OutputWidgetView.qml" line="169"/>
+        <location filename="../../qml/ProjectEditor/Views/OutputWidgetView.qml" line="176"/>
         <source>Knob</source>
         <translation>Draaiknop</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/OutputWidgetView.qml" line="174"/>
+        <location filename="../../qml/ProjectEditor/Views/OutputWidgetView.qml" line="181"/>
         <source>Rotary input for setpoints</source>
         <translation>Draai-invoer voor setpoints</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/OutputWidgetView.qml" line="102"/>
+        <location filename="../../qml/ProjectEditor/Views/OutputWidgetView.qml" line="109"/>
         <source>You can configure output widgets, but they only appear on the dashboard with a Pro license.</source>
         <translation>Uitvoerwidgets kunnen worden geconfigureerd, maar verschijnen alleen op het dashboard met een Pro-licentie.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/OutputWidgetView.qml" line="191"/>
+        <location filename="../../qml/ProjectEditor/Views/OutputWidgetView.qml" line="198"/>
+        <source>Edit Code</source>
+        <translation>Code Bewerken</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/OutputWidgetView.qml" line="202"/>
+        <source>Edit the JavaScript that turns this control into bytes</source>
+        <translation>Bewerk de JavaScript die deze besturing omzet naar bytes</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/OutputWidgetView.qml" line="211"/>
         <source>Duplicate</source>
         <translation>Dupliceren</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/OutputWidgetView.qml" line="194"/>
+        <location filename="../../qml/ProjectEditor/Views/OutputWidgetView.qml" line="214"/>
         <source>Duplicate this output widget</source>
         <translation>Deze uitvoerwidget dupliceren</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/OutputWidgetView.qml" line="204"/>
+        <location filename="../../qml/ProjectEditor/Views/OutputWidgetView.qml" line="224"/>
         <source>Delete</source>
         <translation>Verwijderen</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/OutputWidgetView.qml" line="206"/>
+        <location filename="../../qml/ProjectEditor/Views/OutputWidgetView.qml" line="226"/>
         <source>Delete this output widget</source>
         <translation>Deze uitvoerwidget verwijderen</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/OutputWidgetView.qml" line="284"/>
         <source>Transmit Function</source>
-        <translation>Verzendfunctie</translation>
+        <translation type="vanished">Verzendfunctie</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/OutputWidgetView.qml" line="294"/>
         <source>Import</source>
-        <translation>Importeren</translation>
+        <translation type="vanished">Importeren</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/OutputWidgetView.qml" line="300"/>
         <source>Import transmit function from a .js file</source>
-        <translation>Verzendfunctie importeren vanuit een .js-bestand</translation>
+        <translation type="vanished">Verzendfunctie importeren vanuit een .js-bestand</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/OutputWidgetView.qml" line="307"/>
         <source>Template</source>
-        <translation>Sjabloon</translation>
+        <translation type="vanished">Sjabloon</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/OutputWidgetView.qml" line="311"/>
         <source>Select a pre-built transmit function template</source>
-        <translation>Selecteer een voorgebouwde verzendfunctiesjabloon</translation>
+        <translation type="vanished">Selecteer een voorgebouwde verzendfunctiesjabloon</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/OutputWidgetView.qml" line="316"/>
         <source>Test</source>
-        <translation>Test</translation>
+        <translation type="vanished">Test</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/OutputWidgetView.qml" line="322"/>
         <source>Test the transmit function with sample input</source>
-        <translation>Test de verzendfunctie met voorbeeldinvoer</translation>
+        <translation type="vanished">Test de verzendfunctie met voorbeeldinvoer</translation>
     </message>
     <message>
         <source>Undo</source>
@@ -25486,12 +25686,12 @@ function parse(%1) { ... }
 De scheidingsteken-parameter is niet langer nodig.</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ModuleManager.cpp" line="256"/>
+        <location filename="../../src/Misc/ModuleManager.cpp" line="257"/>
         <source>Critical</source>
         <translation>Kritiek</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ModuleManager.cpp" line="256"/>
+        <location filename="../../src/Misc/ModuleManager.cpp" line="257"/>
         <source>Warning</source>
         <translation>Waarschuwing</translation>
     </message>
@@ -25954,12 +26154,12 @@ De scheidingsteken-parameter is niet langer nodig.</translation>
         <translation>Corrupt bloktiming in sessie %1</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="84"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="79"/>
         <source>This session is being recorded</source>
         <translation>Deze sessie wordt opgenomen</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="85"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="80"/>
         <source>Stop the recording before deleting or editing this session; its rows are still being written.</source>
         <translation>Stop de opname voordat u deze sessie verwijdert of bewerkt; de rijen worden nog steeds weggeschreven.</translation>
     </message>
@@ -27196,93 +27396,93 @@ Voeg hierboven absolute adressen toe om de controller te pollen.</translation>
         <translation type="vanished">Afbeeldingen (*.png *.jpg *.jpeg *.svg)</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="656"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="651"/>
         <source>Open Session File</source>
         <translation>Open Sessiebestand</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="658"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="653"/>
         <source>Session files (*.db)</source>
         <translation>Sessiebestanden (*.db)</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="1296"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="1291"/>
         <source>Cannot open session file</source>
         <translation>Kan sessiebestand niet openen</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="891"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="886"/>
         <source>Delete session from %1?</source>
         <translation>Sessie van %1 verwijderen?</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="894"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="889"/>
         <source>Delete Session</source>
         <translation>Sessie Verwijderen</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="1156"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="1151"/>
         <source>No project data</source>
         <translation>Geen projectgegevens</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="892"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="887"/>
         <source>All readings and raw data for this session are permanently removed.</source>
         <translation>Alle metingen en ruwe gegevens voor deze sessie worden permanent verwijderd.</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="714"/>
-        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="723"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="709"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="718"/>
         <source>Lock Session File</source>
         <translation>Sessiebestand Vergrendelen</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="715"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="710"/>
         <source>Choose a password to lock the session file:</source>
         <translation>Kies een wachtwoord om het sessiebestand te vergrendelen:</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="724"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="719"/>
         <source>Confirm the password:</source>
         <translation>Bevestig het wachtwoord:</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="732"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="727"/>
         <source>Passwords do not match</source>
         <translation>Wachtwoorden komen niet overeen</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="733"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="728"/>
         <source>The two passwords you entered do not match. The session file was not locked.</source>
         <translation>De twee ingevoerde wachtwoorden komen niet overeen. Het sessiebestand is niet vergrendeld.</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="769"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="764"/>
         <source>Unlock Session File</source>
         <translation>Ontgrendel Sessiebestand</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="770"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="765"/>
         <source>Enter the session file password:</source>
         <translation>Voer het sessiebestandwachtwoord in:</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="780"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="775"/>
         <source>Incorrect password</source>
         <translation>Onjuist wachtwoord</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="781"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="776"/>
         <source>The password you entered does not match the one stored in the session file.</source>
         <translation>Het ingevoerde wachtwoord komt niet overeen met het wachtwoord in het sessiebestand.</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="881"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="876"/>
         <source>Session file locked</source>
         <translation>Sessiebestand vergrendeld</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="882"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="877"/>
         <source>Unlock the session file before deleting recorded sessions.</source>
         <translation>Ontgrendel het sessiebestand voordat opgenomen sessies worden verwijderd.</translation>
     </message>
@@ -27353,37 +27553,37 @@ Voeg hierboven absolute adressen toe om de controller te pollen.</translation>
         <translation type="vanished">Kan het rapport niet genereren.</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="1157"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="1152"/>
         <source>This session file does not contain an embedded project.</source>
         <translation>Dit sessiebestand bevat geen ingesloten project.</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="1166"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="1161"/>
         <source>Invalid project data</source>
         <translation>Ongeldige projectgegevens</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="1167"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="1162"/>
         <source>The embedded project JSON is malformed and cannot be restored.</source>
         <translation>De ingesloten project-JSON is onjuist geformatteerd en kan niet worden hersteld.</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="1177"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="1172"/>
         <source>Restore Project</source>
         <translation>Project Herstellen</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="1177"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="1172"/>
         <source>Serial Studio projects (*.ssproj *.json)</source>
         <translation>Serial Studio-projecten (*.ssproj *.json)</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="1185"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="1180"/>
         <source>Cannot write file</source>
         <translation>Kan bestand niet schrijven</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="1185"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="1180"/>
         <source>Check file permissions and try again.</source>
         <translation>Controleer bestandsrechten en probeer opnieuw.</translation>
     </message>
@@ -27681,63 +27881,63 @@ Voeg hierboven absolute adressen toe om de controller te pollen.</translation>
 <context>
     <name>Sessions::Player</name>
     <message>
-        <location filename="../../../core/Storage/Sessions/Player.cpp" line="337"/>
+        <location filename="../../../core/Storage/Sessions/Player.cpp" line="328"/>
         <source>Open Session File</source>
         <translation>Open Sessiebestand</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/Player.cpp" line="339"/>
+        <location filename="../../../core/Storage/Sessions/Player.cpp" line="330"/>
         <source>Session files (*.db)</source>
         <translation>Sessiebestanden (*.db)</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/Player.cpp" line="421"/>
+        <location filename="../../../core/Storage/Sessions/Player.cpp" line="412"/>
         <source>Device Connection Active</source>
         <translation>Apparaatverbinding Actief</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/Player.cpp" line="422"/>
+        <location filename="../../../core/Storage/Sessions/Player.cpp" line="413"/>
         <source>To use this feature, you must disconnect from the device. Do you want to proceed?</source>
         <translation>Om deze functie te gebruiken moet de verbinding met het apparaat worden verbroken. Doorgaan?</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/Player.cpp" line="464"/>
-        <location filename="../../../core/Storage/Sessions/Player.cpp" line="491"/>
+        <location filename="../../../core/Storage/Sessions/Player.cpp" line="455"/>
+        <location filename="../../../core/Storage/Sessions/Player.cpp" line="482"/>
         <source>Cannot open session file</source>
         <translation>Kan sessiebestand niet openen</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/Player.cpp" line="465"/>
+        <location filename="../../../core/Storage/Sessions/Player.cpp" line="456"/>
         <source>Unknown error</source>
         <translation>Onbekende fout</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/Player.cpp" line="484"/>
+        <location filename="../../../core/Storage/Sessions/Player.cpp" line="475"/>
         <source>No project data</source>
         <translation>Geen projectgegevens</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/Player.cpp" line="485"/>
+        <location filename="../../../core/Storage/Sessions/Player.cpp" line="476"/>
         <source>This session does not contain an embedded project file — the dashboard falls back to a quick-plot layout.</source>
         <translation>Deze sessie bevat geen ingesloten projectbestand — het dashboard valt terug op een snelle-plot-indeling.</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/Player.cpp" line="492"/>
+        <location filename="../../../core/Storage/Sessions/Player.cpp" line="483"/>
         <source>Check file permissions and try again.</source>
         <translation>Controleer bestandsrechten en probeer opnieuw.</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/Player.cpp" line="642"/>
+        <location filename="../../../core/Storage/Sessions/Player.cpp" line="633"/>
         <source>Sessions</source>
         <translation>Sessies</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/Player.cpp" line="644"/>
+        <location filename="../../../core/Storage/Sessions/Player.cpp" line="635"/>
         <source>Recording uses an older copy of the project</source>
         <translation>Opname gebruikt een oudere kopie van het project</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/Player.cpp" line="645"/>
+        <location filename="../../../core/Storage/Sessions/Player.cpp" line="636"/>
         <source>The dashboard shown is the one embedded in the recording; the project on disk has changed since. Close the session to return to the current project.</source>
         <translation>Het getoonde dashboard is het dashboard dat in de opname is opgeslagen; het project op schijf is sindsdien gewijzigd. Sluit de sessie om terug te keren naar het huidige project.</translation>
     </message>
@@ -29670,48 +29870,48 @@ Schakel Project Insluiten in om het project in de snelkoppeling in te bakken, zo
         <translation type="vanished">Zoeken…</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/TableDelegate.qml" line="155"/>
+        <location filename="../../qml/ProjectEditor/Views/TableDelegate.qml" line="157"/>
         <source>Parameter</source>
         <translation>Parameter</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/TableDelegate.qml" line="176"/>
+        <location filename="../../qml/ProjectEditor/Views/TableDelegate.qml" line="178"/>
         <source>Value</source>
         <translation>Waarde</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/TableDelegate.qml" line="576"/>
+        <location filename="../../qml/ProjectEditor/Views/TableDelegate.qml" line="578"/>
         <source>(Custom Icon)</source>
         <translation>(Aangepast Pictogram)</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/TableDelegate.qml" line="661"/>
+        <location filename="../../qml/ProjectEditor/Views/TableDelegate.qml" line="663"/>
         <source>Choose Dataset Color</source>
         <translation>Kies Datasetkleur</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/TableDelegate.qml" line="681"/>
+        <location filename="../../qml/ProjectEditor/Views/TableDelegate.qml" line="683"/>
         <source>Automatic</source>
         <translation>Automatisch</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/TableDelegate.qml" line="844"/>
-        <location filename="../../qml/ProjectEditor/Views/TableDelegate.qml" line="850"/>
+        <location filename="../../qml/ProjectEditor/Views/TableDelegate.qml" line="846"/>
+        <location filename="../../qml/ProjectEditor/Views/TableDelegate.qml" line="852"/>
         <source>Auto</source>
         <translation>Auto</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/TableDelegate.qml" line="1036"/>
+        <location filename="../../qml/ProjectEditor/Views/TableDelegate.qml" line="1038"/>
         <source>No</source>
         <translation>Nee</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/TableDelegate.qml" line="1036"/>
+        <location filename="../../qml/ProjectEditor/Views/TableDelegate.qml" line="1038"/>
         <source>Yes</source>
         <translation>Ja</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/TableDelegate.qml" line="1238"/>
+        <location filename="../../qml/ProjectEditor/Views/TableDelegate.qml" line="1240"/>
         <source>No options match your search.</source>
         <translation>Geen opties komen overeen met uw zoekopdracht.</translation>
     </message>
@@ -30646,6 +30846,79 @@ Schakel Project Insluiten in om het project in de snelkoppeling in te bakken, zo
     </message>
 </context>
 <context>
+    <name>TransmitCodeDialog</name>
+    <message>
+        <location filename="../../qml/ProjectEditor/Dialogs/TransmitCodeDialog.qml" line="32"/>
+        <source>Transmit Function Editor</source>
+        <translation>Transmissiefunctie-editor</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Dialogs/TransmitCodeDialog.qml" line="150"/>
+        <source>Select Template</source>
+        <translation>Selecteer Sjabloon</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Dialogs/TransmitCodeDialog.qml" line="161"/>
+        <source>Import</source>
+        <translation>Importeren</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Dialogs/TransmitCodeDialog.qml" line="167"/>
+        <source>Import a transmit function from a .js file</source>
+        <translation>Een verzendfunctie importeren vanuit een .js-bestand</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Dialogs/TransmitCodeDialog.qml" line="173"/>
+        <source>Validate</source>
+        <translation>Valideren</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Dialogs/TransmitCodeDialog.qml" line="178"/>
+        <source>Verify that the script compiles and defines transmit(value)</source>
+        <translation>Controleer of het script compileert en transmit(value) definieert</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Dialogs/TransmitCodeDialog.qml" line="216"/>
+        <source>Produced Bytes</source>
+        <translation>Geproduceerde Bytes</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Dialogs/TransmitCodeDialog.qml" line="238"/>
+        <source>Interact with the control to see its output</source>
+        <translation>Interactie met de besturing om de uitvoer te zien</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Dialogs/TransmitCodeDialog.qml" line="266"/>
+        <source>%1 bytes, from the last version that compiled</source>
+        <translation>%1 bytes, van de laatst gecompileerde versie</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Dialogs/TransmitCodeDialog.qml" line="267"/>
+        <source>%1 bytes</source>
+        <translation>%1 bytes</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Dialogs/TransmitCodeDialog.qml" line="289"/>
+        <source>Save</source>
+        <translation>Opslaan</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Dialogs/TransmitCodeDialog.qml" line="292"/>
+        <source>Validate and store the transmit function</source>
+        <translation>Verzendfunctie valideren en opslaan</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Dialogs/TransmitCodeDialog.qml" line="301"/>
+        <source>Close</source>
+        <translation>Sluiten</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Dialogs/TransmitCodeDialog.qml" line="304"/>
+        <source>Close without storing this edit</source>
+        <translation>Sluiten zonder deze bewerking op te slaan</translation>
+    </message>
+</context>
+<context>
     <name>TriggerDialog</name>
     <message>
         <location filename="../../qml/Dialogs/TriggerDialog.qml" line="50"/>
@@ -31002,17 +31275,17 @@ Schakel Project Insluiten in om het project in de snelkoppeling in te bakken, zo
         <translation>Isochroon</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="286"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="266"/>
         <source>Connect to USB devices using bulk, control, or isochronous transfers. Suitable for data loggers, custom firmware devices, and USB instruments.</source>
         <translation>Maak verbinding met USB-apparaten via bulk-, control- of isochrone overdrachten. Geschikt voor dataloggers, apparaten met aangepaste firmware en USB-instrumenten.</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="295"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="275"/>
         <source>USB specifications (USB.org)</source>
         <translation>USB-specificaties (USB.org)</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="147"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="127"/>
         <source>IN Endpoint</source>
         <translation>In-eindpunt</translation>
     </message>
@@ -31022,47 +31295,45 @@ Schakel Project Insluiten in om het project in de snelkoppeling in te bakken, zo
         <translation>Bulk-/interruptstroom</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="127"/>
         <source>Enable Advanced USB Control Transfers?</source>
-        <translation>Geavanceerde USB-besturingsoverdrachten Inschakelen?</translation>
+        <translation type="vanished">Geavanceerde USB-besturingsoverdrachten Inschakelen?</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="132"/>
         <source>This enables control transfers in addition to bulk transfers. Sending incorrect control requests can crash or damage connected hardware. Only enable this if you know what you are doing.</source>
-        <translation>Dit schakelt besturingsoverdrachten in naast bulkoverdrachten. Het verzenden van onjuiste besturingsverzoeken kan aangesloten hardware laten crashen of beschadigen. Schakel dit alleen in als u weet wat u doet.</translation>
+        <translation type="vanished">Dit schakelt besturingsoverdrachten in naast bulkoverdrachten. Het verzenden van onjuiste besturingsverzoeken kan aangesloten hardware laten crashen of beschadigen. Schakel dit alleen in als u weet wat u doet.</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="183"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="163"/>
         <source>OUT Endpoint</source>
         <translation>Out-eindpunt</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="219"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="199"/>
         <source>Max Packet Size</source>
         <translation>Maximale Pakketgrootte</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="329"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="309"/>
         <source>No compatible data endpoints were found for this transfer mode. Try another transfer mode. Devices that speak a dedicated protocol (e.g. CAN or Modbus adapters) should be connected through their own driver instead.</source>
         <translation>Geen compatibele data-eindpunten gevonden voor deze overdrachtsmodus. Probeer een andere overdrachtsmodus. Apparaten die een specifiek protocol gebruiken (bijv. CAN- of Modbus-adapters) moeten via hun eigen driver worden aangesloten.</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="370"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="350"/>
         <source>Control Transfers Enabled</source>
         <translation>Besturingsoverdrachten Ingeschakeld</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="379"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="359"/>
         <source>Sending incorrect control requests may crash or damage connected hardware. Use with caution.</source>
         <translation>Het verzenden van onjuiste besturingsverzoeken kan aangesloten hardware laten crashen of beschadigen. Gebruik met voorzichtigheid.</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="386"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="366"/>
         <source>Learn about USB control transfers</source>
         <translation>Meer informatie over USB-besturingsoverdrachten</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="420"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="400"/>
         <source>Packet size should match the maximum transfer size reported by the endpoint. Typical values: 192 B (FS audio), 1024 B (HS).</source>
         <translation>Pakketgrootte moet overeenkomen met de maximale overdrachtsgrootte gerapporteerd door het eindpunt. Typische waarden: 192 B (FS audio), 1024 B (HS).</translation>
     </message>
@@ -31748,43 +32019,43 @@ Ik begrijp dat ik bij het einde een licentie moet kopen of de GPLv3-versie moet 
 <context>
     <name>Widgets::Compass</name>
     <message>
-        <location filename="../../../core/Ui/UI/Widgets/Compass.cpp" line="170"/>
-        <location filename="../../../core/Ui/UI/Widgets/Compass.cpp" line="193"/>
+        <location filename="../../../core/Ui/UI/Widgets/Compass.cpp" line="191"/>
+        <location filename="../../../core/Ui/UI/Widgets/Compass.cpp" line="214"/>
         <source>N</source>
         <translation>N</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/Widgets/Compass.cpp" line="173"/>
+        <location filename="../../../core/Ui/UI/Widgets/Compass.cpp" line="194"/>
         <source>NE</source>
         <translation>NO</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/Widgets/Compass.cpp" line="176"/>
+        <location filename="../../../core/Ui/UI/Widgets/Compass.cpp" line="197"/>
         <source>E</source>
         <translation>O</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/Widgets/Compass.cpp" line="179"/>
+        <location filename="../../../core/Ui/UI/Widgets/Compass.cpp" line="200"/>
         <source>SE</source>
         <translation>ZO</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/Widgets/Compass.cpp" line="182"/>
+        <location filename="../../../core/Ui/UI/Widgets/Compass.cpp" line="203"/>
         <source>S</source>
         <translation>Z</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/Widgets/Compass.cpp" line="185"/>
+        <location filename="../../../core/Ui/UI/Widgets/Compass.cpp" line="206"/>
         <source>SW</source>
         <translation>ZW</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/Widgets/Compass.cpp" line="188"/>
+        <location filename="../../../core/Ui/UI/Widgets/Compass.cpp" line="209"/>
         <source>W</source>
         <translation>W</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/Widgets/Compass.cpp" line="191"/>
+        <location filename="../../../core/Ui/UI/Widgets/Compass.cpp" line="212"/>
         <source>NW</source>
         <translation>NW</translation>
     </message>
@@ -31875,12 +32146,12 @@ Ik begrijp dat ik bij het einde een licentie moet kopen of de GPLv3-versie moet 
 <context>
     <name>Widgets::Output::Base</name>
     <message>
-        <location filename="../../../core/Ui/UI/Widgets/Output/Base.cpp" line="173"/>
+        <location filename="../../../core/Ui/UI/Widgets/Output/Base.cpp" line="395"/>
         <source>Transmit script timed out after %1 ms</source>
         <translation>Verzendscript time-out na %1 ms</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/Widgets/Output/Base.cpp" line="189"/>
+        <location filename="../../../core/Ui/UI/Widgets/Output/Base.cpp" line="411"/>
         <source>Payload exceeds maximum size</source>
         <translation>Payload overschrijdt maximale grootte</translation>
     </message>

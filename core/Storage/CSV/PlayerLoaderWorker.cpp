@@ -25,9 +25,9 @@
 #include <cmath>
 #include <QDateTime>
 
-#include "Core/DSPSimd.h"
 #include "Core/SerialStudio.h"
 #include "Core/SSAssert.h"
+#include "CSV/Player/RowSyntax.h"
 
 static constexpr qsizetype kBatchRows = 65536;
 
@@ -230,8 +230,10 @@ void CSV::PlayerLoaderWorker::processRow(const PlayerIndexRequest& request,
 }
 
 /**
- * @brief Indexes the mapped file: SIMD newline scan from the data offset, per-row validity +
+ * @brief Indexes the mapped file: quote-aware record scan from the data offset, per-row validity +
  *        seconds, batched emission, cooperative cancel. Emits finished(false) when cancelled.
+ *        Record framing goes through CSV::nextRecordEnd rather than a bare newline scan, so a
+ *        quoted cell carrying a newline stays one row instead of being torn into two.
  */
 void CSV::PlayerLoaderWorker::indexFile(const CSV::PlayerIndexRequestPtr& request)
 {
@@ -251,42 +253,38 @@ void CSV::PlayerLoaderWorker::indexFile(const CSV::PlayerIndexRequestPtr& reques
   QByteArray scratch;
   auto batch = std::make_shared<PlayerIndexBatch>();
 
-  constexpr qint64 kScanChunkBytes = 4 * 1024 * 1024;
-
   const qint64 size = request->size;
-  const char* data  = request->data;
-  qint64 rowStart   = request->dataOffset;
-  bool stopped      = false;
+  const QByteArrayView mapped(request->data, static_cast<qsizetype>(size));
+  qint64 rowStart = request->dataOffset;
 
-  for (qint64 chunkStart  = request->dataOffset; chunkStart < size && !stopped;
-       chunkStart        += kScanChunkBytes) {
-    const qint64 chunkLen = qMin(kScanChunkBytes, size - chunkStart);
-    const bool scanned =
-      DSP::simdForEachByteMatch(data + chunkStart, chunkLen, '\n', [&](qsizetype pos) {
-        const qint64 rowEnd = chunkStart + pos;
-        processRow(*request, rowStart, rowEnd, cells, scratch, *batch);
-        rowStart = rowEnd + 1;
+  while (rowStart < size && !m_rowLimitHit) {
+    if (m_cancelRequested.load(std::memory_order_relaxed)) {
+      Q_EMIT finished(false, request->generation);
+      return;
+    }
 
-        if (batch->rowOffsets.size() >= kBatchRows) {
-          batch->bytesIndexed = rowStart;
-          batch->generation   = request->generation;
-          Q_EMIT batchReady(batch);
-          batch = std::make_shared<PlayerIndexBatch>();
-        }
+    const auto rowEnd = static_cast<qint64>(CSV::nextRecordEnd(
+      mapped, static_cast<qsizetype>(rowStart), request->separator, kMaxCsvRowBytes));
+    SS_ASSERT_LOG(rowEnd >= rowStart);
+    if (rowEnd < rowStart)
+      break;
 
-        return !m_cancelRequested.load(std::memory_order_relaxed) && !m_rowLimitHit;
-      });
+    processRow(*request, rowStart, rowEnd, cells, scratch, *batch);
+    rowStart = rowEnd + 1;
 
-    stopped = !scanned || m_cancelRequested.load(std::memory_order_relaxed) || m_rowLimitHit;
+    if (batch->rowOffsets.size() < kBatchRows)
+      continue;
+
+    batch->bytesIndexed = rowStart;
+    batch->generation   = request->generation;
+    Q_EMIT batchReady(batch);
+    batch = std::make_shared<PlayerIndexBatch>();
   }
 
   if (m_cancelRequested.load(std::memory_order_relaxed)) {
     Q_EMIT finished(false, request->generation);
     return;
   }
-
-  if (!m_rowLimitHit)
-    processRow(*request, rowStart, size, cells, scratch, *batch);
 
   if (m_rowLimitHit) [[unlikely]]
     qWarning() << "[CSV::PlayerLoaderWorker] Row limit reached (" << kMaxIndexedRows

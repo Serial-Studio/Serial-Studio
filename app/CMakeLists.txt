@@ -534,11 +534,14 @@ if(BUILD_COMMERCIAL)
     qml/Widgets/Dashboard/Painter.qml
     qml/Widgets/Dashboard/Waterfall.qml
     qml/ProjectEditor/Dialogs/PainterCodeDialog.qml
+    qml/ProjectEditor/Dialogs/TransmitCodeDialog.qml
     qml/ProjectEditor/Dialogs/PainterTestDialog.qml
     qml/Widgets/Dashboard/Output/DashboardButton.qml
     qml/Widgets/Dashboard/Output/DashboardSlider.qml
     qml/Widgets/Dashboard/Output/DashboardToggle.qml
     qml/Widgets/Dashboard/Output/DashboardTextField.qml
+    qml/Widgets/Dashboard/Output/DashboardKnob.qml
+    qml/Widgets/Dashboard/Output/OutputSectionLabel.qml
     qml/Widgets/Dashboard/Output/DashboardOutputPanel.qml
     qml/AI/AssistantPanel.qml
     qml/AI/AssistantPanel/AssistantTopBar.qml

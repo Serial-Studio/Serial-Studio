@@ -267,7 +267,9 @@ private:
   [[nodiscard]] int datasetWidgetCount(const SerialStudio::DashboardWidget widget) const;
 
   [[nodiscard]] const StreamTargets& streamTargetsFor(int uniqueId);
-  [[nodiscard]] bool applyBlockValues(const DataModel::DataBlock& block, qsizetype index);
+  [[nodiscard]] bool applyBlockValues(const DataModel::DataBlock& block,
+                                      qsizetype index,
+                                      qint64 receivedMs);
   void applyBlockColumn(const DataModel::BlockColumn& column,
                         const DataModel::DataBlock& block,
                         double baseSec);

@@ -533,12 +533,12 @@ bool CSV::Player::runQuickPass()
   qint64 header_end = pos;
 
   for (qint64 guard = 0; guard <= m_mappedSize && pos <= m_mappedSize; ++guard) {
-    const char* nl = static_cast<const char*>(
-      std::memchr(m_mapped + pos, '\n', static_cast<size_t>(m_mappedSize - pos)));
-    const qint64 end  = nl ? (nl - m_mapped) : m_mappedSize;
+    const QByteArrayView mapped(m_mapped, static_cast<qsizetype>(m_mappedSize));
+    const auto end = static_cast<qint64>(
+      nextRecordEnd(mapped, static_cast<qsizetype>(pos), m_rows.separator(), kMaxCsvRowBytes));
     const auto row    = QByteArrayView(m_mapped + pos, static_cast<qsizetype>(end - pos));
     const qint64 next = end + 1;
-    const bool last   = (nl == nullptr);
+    const bool last   = (end >= m_mappedSize);
 
     bool valid = false;
     if (!row.isEmpty() && row.size() <= kMaxCsvRowBytes) {
@@ -1286,9 +1286,9 @@ QByteArrayView CSV::Player::rawRow(int row) const
     return {};
 
   const qint64 begin = static_cast<qint64>(m_rowOffsets[row]);
-  const char* nl     = static_cast<const char*>(
-    std::memchr(m_mapped + begin, '\n', static_cast<size_t>(m_mappedSize - begin)));
-  const qint64 end = nl ? (nl - m_mapped) : m_mappedSize;
+  const QByteArrayView mapped(m_mapped, static_cast<qsizetype>(m_mappedSize));
+  const auto end = static_cast<qint64>(
+    nextRecordEnd(mapped, static_cast<qsizetype>(begin), m_rows.separator(), kMaxCsvRowBytes));
 
   return QByteArrayView(m_mapped + begin, static_cast<qsizetype>(end - begin));
 }

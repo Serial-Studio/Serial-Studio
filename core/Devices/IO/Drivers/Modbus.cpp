@@ -298,8 +298,8 @@ qint64 IO::Drivers::Modbus::write(const QByteArray& data)
   QModbusDataUnit write_unit(QModbusDataUnit::HoldingRegisters, address, register_count);
   for (int i = 0; i < register_count; ++i) {
     const int at = 2 + 2 * i;
-    write_unit.setValue(
-      i, (static_cast<quint8>(data[at]) << 8) | static_cast<quint8>(data[at + 1]));
+    write_unit.setValue(i,
+                        (static_cast<quint8>(data[at]) << 8) | static_cast<quint8>(data[at + 1]));
   }
 
   if (auto* reply = m_device->sendWriteRequest(write_unit, m_slaveAddress)) {

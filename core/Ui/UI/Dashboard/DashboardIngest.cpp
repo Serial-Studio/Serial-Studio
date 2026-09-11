@@ -195,6 +195,10 @@ void UI::DashboardIngest::applyBlock(const DataModel::DataBlockPtr& block)
   } else if (!m_sourceRawFrames.contains(sid)) [[unlikely]]
     return;
 
+  const auto receivedMs = static_cast<qint64>(std::chrono::duration_cast<std::chrono::milliseconds>(
+                                                std::chrono::steady_clock::now().time_since_epoch())
+                                                .count());
+
   if (DataModel::uniform_grid(*block)) {
     const double spanSec =
       std::chrono::duration<double>(block->dt).count() * static_cast<double>(block->samples);
@@ -207,7 +211,7 @@ void UI::DashboardIngest::applyBlock(const DataModel::DataBlockPtr& block)
       if (it.value().enabled && m_activeMultiplots.value(it.key(), false))
         feedMultiplotBlockSweep(it.key(), *block, baseSec);
 
-    if (!applyBlockValues(*block, block->samples - 1)) [[unlikely]]
+    if (!applyBlockValues(*block, block->samples - 1, receivedMs)) [[unlikely]]
       return;
 
     if (m_gpsValues.size() != groupWidgetCount(SerialStudio::DashboardGPS)) [[unlikely]]
@@ -230,7 +234,7 @@ void UI::DashboardIngest::applyBlock(const DataModel::DataBlockPtr& block)
   } else {
     for (qsizetype i = 0; i < block->samples; ++i) {
       (void)advancePlotClock(sid, DataModel::sample_time(*block, i));
-      if (!applyBlockValues(*block, i)) [[unlikely]]
+      if (!applyBlockValues(*block, i, receivedMs)) [[unlikely]]
         return;
 
       foldExtremes(sid);
@@ -242,11 +246,14 @@ void UI::DashboardIngest::applyBlock(const DataModel::DataBlockPtr& block)
 }
 
 /**
- * @brief Propagates sample @p index of every column into its widget copies. Returns false when the
- *        push table no longer lines up with the block, which hands the source to the rebuild-once
- *        then quarantine path rather than writing values into the wrong widgets.
+ * @brief Propagates sample @p index of every column into its widget copies, stamped with the
+ *        block's own receipt time. Returns false when the push table no longer lines up with the
+ *        block, which quarantines the source instead of writing values into the wrong widgets.
+ *        @p receivedMs is the steady-clock domain StateBinding::nowMs() measures silence in.
  */
-bool UI::DashboardIngest::applyBlockValues(const DataModel::DataBlock& block, qsizetype index)
+bool UI::DashboardIngest::applyBlockValues(const DataModel::DataBlock& block,
+                                           qsizetype index,
+                                           qint64 receivedMs)
 {
   const auto pit = m_valuePushes.constFind(block.sourceId);
   if (pit == m_valuePushes.cend()) [[unlikely]] {
@@ -276,8 +283,9 @@ bool UI::DashboardIngest::applyBlockValues(const DataModel::DataBlock& block, qs
 
     const bool numeric = DataModel::sample_is_numeric(column, index);
     for (auto* ptr : push.targets) {
-      ptr->isNumeric    = numeric;
-      ptr->numericValue = column.values[slot];
+      ptr->isNumeric       = numeric;
+      ptr->numericValue    = column.values[slot];
+      ptr->displaySampleMs = receivedMs;
     }
 
     if (!column.hasText) {

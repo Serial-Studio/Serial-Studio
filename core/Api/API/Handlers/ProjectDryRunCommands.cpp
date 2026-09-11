@@ -50,8 +50,9 @@
 #include "DataModel/Scripting/JsScriptEngine.h"
 #include "DataModel/Scripting/LuaScriptEngine.h"
 #include "DataModel/Scripting/NativeTemplates/NativeTemplate.h"
-#include "DataModel/Scripting/ScriptApiCall.h"
 #include "DataModel/Scripting/ScriptDryRun.h"
+#include "DataModel/Scripting/TransmitScriptCheck.h"
+#include "DataModel/Scripting/TransmitScriptEnvironment.h"
 #ifdef BUILD_COMMERCIAL
 #endif
 
@@ -762,17 +763,15 @@ API::CommandResponse API::Handlers::ProjectDryRunCommands::outputWidgetDryRun(
 
   QJSEngine& engine = *session.jsEngine();
   engine.installExtensions(QJSEngine::ConsoleExtension | QJSEngine::GarbageCollectionExtension);
-#ifdef BUILD_COMMERCIAL
-  DataModel::ScriptApiCall::installAll(&engine, 0);
-#endif
-  frameBuilder.injectTableApiJS(&engine);
+  if (!DataModel::prepareTransmitScriptEngine(engine, 0, DataModel::TransmitScriptSurface::Judging))
+    return CommandResponse::makeError(
+      id,
+      ErrorCode::ExecutionError,
+      QStringLiteral("Could not establish the validation host surface for the transmit script"));
 
-  const auto wrapped =
-    QStringLiteral("(function() { %1\n"
-                   "return typeof transmit === 'function' ? transmit : undefined; })()")
-      .arg(code);
-  auto transmitFn = session.evaluate(wrapped, QStringLiteral("output_widget_dryrun.js"));
-  if (session.timedOut())
+  QJSValue transmitFn;
+  const auto verdict = DataModel::compileTransmitScript(code, session, transmitFn);
+  if (verdict.status == DataModel::TransmitScriptStatus::Timeout)
     return CommandResponse::makeError(
       id,
       ErrorCode::ScriptTimeout,
@@ -780,16 +779,24 @@ API::CommandResponse API::Handlers::ProjectDryRunCommands::outputWidgetDryRun(
                      "top level?)")
         .arg(session.budgetMs()));
 
-  if (transmitFn.isError()) {
+  if (verdict.status == DataModel::TransmitScriptStatus::CompileError) {
     QJsonObject result;
-    result[QStringLiteral("ok")] = false;
-    result[QStringLiteral("compileError")] =
-      transmitFn.property(QStringLiteral("message")).toString();
-    result[QStringLiteral("line")] = transmitFn.property(QStringLiteral("lineNumber")).toInt();
+    result[QStringLiteral("ok")]           = false;
+    result[QStringLiteral("compileError")] = verdict.message;
+    result[QStringLiteral("line")]         = verdict.line;
     return CommandResponse::makeSuccess(id, result);
   }
 
-  if (!transmitFn.isCallable()) {
+  if (verdict.status == DataModel::TransmitScriptStatus::Empty) {
+    QJsonObject result;
+    result[QStringLiteral("ok")]           = false;
+    result[QStringLiteral("compileError")] = QStringLiteral(
+      "No transmit code was provided. An empty transmit function is a valid project state (the "
+      "control then sends nothing), but there is nothing here to dry-run.");
+    return CommandResponse::makeSuccess(id, result);
+  }
+
+  if (verdict.status == DataModel::TransmitScriptStatus::NoEntryPoint) {
     QJsonObject result;
     result[QStringLiteral("ok")] = false;
     result[QStringLiteral("compileError")] =
@@ -799,6 +806,10 @@ API::CommandResponse API::Handlers::ProjectDryRunCommands::outputWidgetDryRun(
                      "is named `transmit`, not `output` or `send`.");
     return CommandResponse::makeSuccess(id, result);
   }
+
+  if (verdict.status != DataModel::TransmitScriptStatus::Ok)
+    return CommandResponse::makeError(
+      id, ErrorCode::ExecutionError, QStringLiteral("Transmit script could not be validated"));
 
   QJsonObject result;
   result[QStringLiteral("ok")]          = true;

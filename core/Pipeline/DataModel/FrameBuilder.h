@@ -150,6 +150,15 @@ public:
 
   void injectTableApiLua(lua_State* L);
   void injectTableApiJS(QJSEngine* js);
+
+  /**
+   * @brief Installs only the table API's names, for an engine that compiles a script but never
+   *        runs one that reads a table. injectTableApiJS() additionally blocking-marshals to the
+   *        pipeline thread and latches per-dataset capture for the whole session; an engine that
+   *        is destroyed microseconds later must pay neither (spec 0079).
+   */
+  void installTableApiNames(QJSEngine* js) { m_tableApi.installJs(js); }
+
   void refreshTableStoreFromProjectModel();
   void setReplayColumnMap(std::unordered_map<int, std::unordered_map<int, int>> map);
   void replayChannels(int sourceId,

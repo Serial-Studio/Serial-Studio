@@ -99,13 +99,22 @@ typedef enum {
   kOutputWidget_Title,
   kOutputWidget_Icon,
   kOutputWidget_MonoIcon,
+  kOutputWidget_Color,
+  kOutputWidget_Size,
+  kOutputWidget_Checkable,
+  kOutputWidget_OnLabel,
+  kOutputWidget_OffLabel,
   kOutputWidget_Type,
   kOutputWidget_MinValue,
   kOutputWidget_MaxValue,
   kOutputWidget_StepSize,
   kOutputWidget_InitialValue,
   kOutputWidget_TransmitFunction,
-  kOutputWidget_TxEncoding
+  kOutputWidget_TxEncoding,
+  kOutputWidget_StateSource,
+  kOutputWidget_StateTarget,
+  kOutputWidget_StateOnValue,
+  kOutputWidget_StateConfirmMs
 } OutputWidgetItem;
 
 /**

@@ -21,6 +21,7 @@
 
 #include "ProjectEditor/Editors/MacroEditor.h"
 
+#include "Core/Prompt/UserPrompt.h"
 #include "Core/SerialStudio.h"
 
 //--------------------------------------------------------------------------------------------------
@@ -65,6 +66,25 @@ int DataModel::MacroEditor::language() const noexcept
 bool DataModel::MacroEditor::isModified() const noexcept
 {
   return m_editor.isModified();
+}
+
+/**
+ * @brief Whether the caller may throw the buffer away: true when nothing was typed, otherwise
+ *        whatever the operator answers. Loading another macro and clearing both destroy edits.
+ */
+bool DataModel::MacroEditor::confirmDiscardIfModified()
+{
+  if (!isModified())
+    return true;
+
+  const auto answer = Core::Prompt::showMessageBox(tr("Discard changes?"),
+                                                   tr("The macro editor has unsaved changes."),
+                                                   Core::Prompt::Warning,
+                                                   tr("Macros"),
+                                                   Core::Prompt::Yes | Core::Prompt::No,
+                                                   Core::Prompt::No);
+
+  return answer == Core::Prompt::Yes;
 }
 
 //--------------------------------------------------------------------------------------------------

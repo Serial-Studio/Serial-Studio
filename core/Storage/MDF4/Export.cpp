@@ -23,6 +23,7 @@
 
 #include <QDateTime>
 #include <QDir>
+#include <QFile>
 #include <QTimer>
 
 #include "Core/Bus/MessageBus.h"
@@ -56,6 +57,33 @@
 //--------------------------------------------------------------------------------------------------
 
 #ifdef BUILD_COMMERCIAL
+
+// Distinct names tried before a session gives up on reserving a measurement for this second
+static constexpr int kMaxNameAttempts = 64;
+
+/**
+ * @brief Reserves a free ".mf4" path under @p dir by creating it exclusively, so mdflib is handed
+ *        a name no other session holds. The name has one-second resolution, so a quick
+ *        pause/resume or a second instance on the same project title used to overwrite the
+ *        measurement that was just written. Empty when no name could be reserved.
+ */
+[[nodiscard]] static QString reserveMf4Path(const QDir& dir, const QString& base)
+{
+  for (int attempt = 1; attempt <= kMaxNameAttempts; ++attempt) {
+    const QString name = (attempt == 1)
+                         ? QStringLiteral("%1.mf4").arg(base)
+                         : QStringLiteral("%1_%2.mf4").arg(base, QString::number(attempt));
+
+    QFile placeholder(dir.filePath(name));
+    if (placeholder.open(QIODevice::WriteOnly | QIODevice::NewOnly)) {
+      placeholder.close();
+      return placeholder.fileName();
+    }
+  }
+
+  qWarning() << "[MDF4] Cannot reserve a measurement file name in:" << dir.path();
+  return QString();
+}
 
 /**
  * @brief Constructor for the MDF4 export worker
@@ -462,8 +490,6 @@ void MDF4::ExportWorker::createFile(const DataModel::Frame& frame)
     return;
 
   const auto dateTime = QDateTime::currentDateTime();
-  const auto fileName =
-    dateTime.toString(QStringLiteral("yyyy-MM-dd_HH-mm-ss")) + QStringLiteral(".mf4");
   const QString frameName =
     DataModel::ExportStructure::sanitizeTitle(frame.title, QStringLiteral("SerialStudio"));
 
@@ -472,7 +498,9 @@ void MDF4::ExportWorker::createFile(const DataModel::Frame& frame)
   if (!dir.exists())
     return;
 
-  m_filePath = dir.filePath(fileName);
+  m_filePath = reserveMf4Path(dir, dateTime.toString(QStringLiteral("yyyy-MM-dd_HH-mm-ss")));
+  if (m_filePath.isEmpty())
+    return;
 
   try {
     if (!initWriterAndHeader(frameName, dateTime))

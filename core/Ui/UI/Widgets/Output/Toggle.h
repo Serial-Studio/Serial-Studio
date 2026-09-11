@@ -32,12 +32,17 @@ signals:
   void checkedChanged();
 
 public:
-  explicit Toggle(const DataModel::OutputWidget& config, QQuickItem* parent = nullptr);
+  Toggle(const DataModel::OutputWidget& config,
+         TransmitTarget target,
+         QQuickItem* parent = nullptr);
 
   [[nodiscard]] bool isChecked() const noexcept;
 
 public slots:
   void setChecked(bool checked);
+
+protected:
+  void applyStateVerdict(const StateBinding::Verdict& verdict) override;
 
 private:
   bool m_checked;

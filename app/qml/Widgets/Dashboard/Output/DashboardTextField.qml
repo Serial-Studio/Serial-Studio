@@ -11,54 +11,54 @@ import QtQuick.Layouts
 import QtQuick.Controls
 
 import SerialStudio
+
 import "../.." as Widgets
 
 Item {
   id: root
 
   required property color color
-  required property var windowRoot
   required property var model
-  required property string widgetId
+  required property var widget
+
+  readonly property string title: root.widget ? (root.widget.title || "") : ""
 
   ColumnLayout {
-    spacing: 8
-    anchors.margins: 16
+    spacing: 4
+    anchors.margins: 8
     anchors.fill: parent
 
-    Item { Layout.fillHeight: true }
-
-    Label {
-      color: root.color
-      Layout.alignment: Qt.AlignHCenter
-      font: Cpp_Misc_CommonFonts.boldUiFont
-      text: root.model ? root.model.title : ""
+    OutputSectionLabel {
+      text: root.title
+      labelColor: root.color
     }
 
     RowLayout {
-      spacing: 8
+      spacing: 4
       Layout.fillWidth: true
 
       Widgets.LineField {
         id: input
 
         Layout.fillWidth: true
-        font: Cpp_Misc_CommonFonts.monoFont
         placeholderText: qsTr("Enter command…")
+        font: Cpp_Misc_CommonFonts.customMonoFont(0.8, false)
 
         palette.highlight: root.color
 
         onAccepted: sendButton.clicked()
       }
 
-      Button {
+      Widgets.IconButton {
         id: sendButton
 
+        iconSize: 16
         text: qsTr("Send")
-        Layout.preferredWidth: 80
+        icon.source: "qrc:/icons/buttons/send.svg"
+        font: Cpp_Misc_CommonFonts.customUiFont(0.8, false)
 
         palette.button: root.color
-        palette.buttonText: "white"
+        palette.buttonText: Cpp_ThemeManager.colors["highlighted_text"]
 
         onClicked: {
           if (root.model && input.text.length > 0) {
@@ -68,15 +68,5 @@ Item {
         }
       }
     }
-
-    Label {
-      color: Cpp_ThemeManager.colors["error"]
-      font: Cpp_Misc_CommonFonts.uiFont
-      Layout.alignment: Qt.AlignHCenter
-      text: qsTr("No transmit function defined")
-      visible: root.model && !root.model.hasTransmitFunction
-    }
-
-    Item { Layout.fillHeight: true }
   }
 }

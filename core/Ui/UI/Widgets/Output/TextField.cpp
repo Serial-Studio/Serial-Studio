@@ -11,6 +11,8 @@
 
 #include "UI/Widgets/Output/TextField.h"
 
+#include <utility>
+
 //--------------------------------------------------------------------------------------------------
 // Constructor
 //--------------------------------------------------------------------------------------------------
@@ -18,8 +20,10 @@
 /**
  * @brief Constructs a text field output widget.
  */
-Widgets::Output::TextField::TextField(const DataModel::OutputWidget& config, QQuickItem* parent)
-  : Base(config, parent)
+Widgets::Output::TextField::TextField(const DataModel::OutputWidget& config,
+                                      TransmitTarget target,
+                                      QQuickItem* parent)
+  : Base(config, std::move(target), parent)
 {}
 
 //--------------------------------------------------------------------------------------------------
@@ -32,4 +36,29 @@ Widgets::Output::TextField::TextField(const DataModel::OutputWidget& config, QQu
 void Widgets::Output::TextField::sendText(const QString& text)
 {
   sendValue(text);
+}
+
+//--------------------------------------------------------------------------------------------------
+// State feedback
+//--------------------------------------------------------------------------------------------------
+
+/**
+ * @brief The text the source reports. A bound text field shows this beside the input rather than
+ *        overwriting what the operator is typing, which is the same rule the slider follows.
+ */
+QString Widgets::Output::TextField::reportedText() const
+{
+  return m_reportedText;
+}
+
+/**
+ * @brief Adopts the reported text without transmitting.
+ */
+void Widgets::Output::TextField::applyStateVerdict(const StateBinding::Verdict& verdict)
+{
+  if (!verdict.known || m_reportedText == verdict.text)
+    return;
+
+  m_reportedText = verdict.text;
+  Q_EMIT reportedTextChanged();
 }

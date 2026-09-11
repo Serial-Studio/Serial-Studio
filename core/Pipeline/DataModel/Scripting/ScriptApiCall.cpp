@@ -610,14 +610,20 @@ void DataModel::ScriptApiCall::bindSourceIdJS(QJSEngine* js, const int* sourceId
 /**
  * @brief Installs the convenience host bridges (no apiCall bridge, no SDK eval).
  */
-void DataModel::ScriptApiCall::installHelperBridgesJS(QJSEngine* js, int sourceId)
+void DataModel::ScriptApiCall::installHelperBridgesJS(QJSEngine* js,
+                                                      int sourceId,
+                                                      TableApi tableApi)
 {
   SS_ASSERT(js != nullptr, return);
 
   static auto& frameBuilder = DataModel::FrameBuilder::instance();
 
   DataModel::NotificationCenter::installScriptApi(js);
-  frameBuilder.injectTableApiJS(js);
+  if (tableApi == TableApi::ArmCapture)
+    frameBuilder.injectTableApiJS(js);
+  else
+    frameBuilder.installTableApiNames(js);
+
   DataModel::DeviceWriteApi::installJS(js, sourceId);
   DataModel::ActionFireApi::installJS(js);
   DataModel::DashboardApi::installJS(js);
@@ -626,11 +632,11 @@ void DataModel::ScriptApiCall::installHelperBridgesJS(QJSEngine* js, int sourceI
 /**
  * @brief Installs every host bridge and the full SDK into a QJSEngine in one call.
  */
-void DataModel::ScriptApiCall::installAll(QJSEngine* js, int sourceId)
+void DataModel::ScriptApiCall::installAll(QJSEngine* js, int sourceId, TableApi tableApi)
 {
   SS_ASSERT(js != nullptr, return);
 
-  installHelperBridgesJS(js, sourceId);
+  installHelperBridgesJS(js, sourceId, tableApi);
   installJS(js, sourceId);
 }
 

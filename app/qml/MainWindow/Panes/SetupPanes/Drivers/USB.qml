@@ -101,7 +101,7 @@ Item {
         // said yes here, so a project or an API client cannot turn them on behind their back.
         //
         if (index === 1 && !Cpp_IO_USB.advancedTransferConsent) {
-          _advancedConsentDialog.open()
+          Cpp_IO_USB.requestAdvancedTransferConsent()
           return
         }
 
@@ -117,26 +117,6 @@ Item {
         }
       }
 
-      Dialog {
-        id: _advancedConsentDialog
-
-        modal: true
-        parent: Overlay.overlay
-        anchors.centerIn: Overlay.overlay
-        standardButtons: Dialog.Yes | Dialog.No
-        title: qsTr("Enable Advanced USB Control Transfers?")
-
-        Label {
-          width: 360
-          wrapMode: Text.WordWrap
-          text: qsTr("This enables control transfers in addition to bulk transfers. Sending " +
-                     "incorrect control requests can crash or damage connected hardware. Only " +
-                     "enable this if you know what you are doing.")
-        }
-
-        onAccepted: Cpp_IO_USB.grantAdvancedTransferConsent()
-        onRejected: modeCombo.currentIndex = Cpp_IO_USB.transferMode
-      }
     }
 
     //

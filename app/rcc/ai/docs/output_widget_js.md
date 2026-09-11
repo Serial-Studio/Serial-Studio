@@ -20,7 +20,7 @@ function transmit(value) {
 
 | Widget kind   | `value` passed to `transmit()`        |
 |---------------|---------------------------------------|
-| Button (0)    | the number `1` on each press          |
+| Button (0)    | the number `1` on each press; `1` (on) / `0` (off) when `checkable` |
 | Slider (1)    | the current numeric value (after step rounding) |
 | Toggle (2)    | the number `1` (on) or `0` (off)      |
 | TextField (3) | the submitted string                  |

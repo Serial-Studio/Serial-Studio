@@ -32,12 +32,17 @@ signals:
   void currentValueChanged();
 
 public:
-  explicit Slider(const DataModel::OutputWidget& config, QQuickItem* parent = nullptr);
+  Slider(const DataModel::OutputWidget& config,
+         TransmitTarget target,
+         QQuickItem* parent = nullptr);
 
   [[nodiscard]] double currentValue() const noexcept;
 
 public slots:
   void setCurrentValue(double value);
+
+protected:
+  void applyStateVerdict(const StateBinding::Verdict& verdict) override;
 
 private:
   double m_currentValue;

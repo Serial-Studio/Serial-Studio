@@ -26,8 +26,8 @@
 #include "Core/IconRegistry.h"
 #include "Core/Services.h"
 #include "DataModel/Generated/DatasetRegistry.h"
-#include "ProjectEditor/ProjectEditor.h"
 #include "DataModel/ProjectModel.h"
+#include "ProjectEditor/ProjectEditor.h"
 
 // clang-format off
 

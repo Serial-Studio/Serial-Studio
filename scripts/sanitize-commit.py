@@ -5,7 +5,8 @@
 # Mirrors the previous bash/cmd pipeline:
 #  - Normalize file permissions on tracked files (POSIX only)
 #  - expand-doxygen.py        -> one-liner /** ... */ to canonical 3-line form
-#  - clang-format pass 1      -> normalize layout
+#  - clang-format pass 1      -> normalize layout, at the exact version tests/requirements.txt
+#                                pins; a mismatch stops the run instead of restyling the tree
 #  - code-verify.py --fix     -> rules clang-format can't express
 #  - clang-format pass 2      -> reflow after code-verify's edits
 #  - clang-tidy-verify.py     -> opt-in (--clang-tidy): advisory .tidy-report over the changed
@@ -35,6 +36,7 @@
 # Sanitize only: committing and pushing are left to the developer.
 #
 # Usage:  ./scripts/sanitize-commit.py [--clang-tidy]
+#         ./scripts/sanitize-commit.py --check-format   (CI gate: reports drift, writes nothing)
 #
 # License: GNU General Public License v3.0
 # https://www.gnu.org/licenses/gpl-3.0.html
@@ -47,6 +49,7 @@ import argparse
 import hashlib
 import json
 import os
+import re
 import shutil
 import subprocess
 import sys
@@ -111,11 +114,66 @@ def iter_source_files(root: Path):
             yield path
 
 
-def run_clang_format(root: Path) -> None:
-    if shutil.which("clang-format") is None:
-        print("clang-format not on PATH -- skipping.")
-        return
+def clang_format_pin(root: Path) -> str:
+    """Reads the exact clang-format release tests/requirements.txt pins."""
+    manifest = root / "tests" / "requirements.txt"
+    match = re.search(
+        r"^clang-format==(\S+)", manifest.read_text(encoding="utf-8"), re.MULTILINE
+    )
+    if match is None:
+        print(f"Error: no 'clang-format==' pin in {manifest}.", file=sys.stderr)
+        sys.exit(1)
+    return match.group(1)
 
+
+def clang_format_version(binary: str) -> str | None:
+    """Reports the x.y.z a clang-format binary identifies as, or None if it will not run."""
+    try:
+        out = capture([binary, "--version"])
+    except (subprocess.CalledProcessError, OSError):
+        return None
+    match = re.search(r"version\s+(\d+\.\d+\.\d+)", out)
+    return match.group(1) if match else None
+
+
+def clang_format_candidates() -> list[str]:
+    """The pinned wheel installed alongside this interpreter first, then PATH: PATH order is a
+    property of the contributor's machine, the wheel is a property of the lock file."""
+    found = []
+    try:
+        import clang_format
+
+        found.append(clang_format._get_executable("clang-format"))
+    except (ImportError, AttributeError, OSError):
+        pass
+
+    on_path = shutil.which("clang-format")
+    if on_path is not None:
+        found.append(on_path)
+    return found
+
+
+def resolve_clang_format(root: Path) -> str:
+    """Picks a clang-format whose version matches the pin. clang-format changes its own defaults
+    between releases, so formatting with any other one silently restyles the whole tree -- a
+    mismatch has to stop the run, not proceed with whatever happens to be installed."""
+    pin = clang_format_pin(root)
+    rejected = []
+    for binary in clang_format_candidates():
+        version = clang_format_version(binary)
+        if version == pin:
+            return binary
+        rejected.append(f"  {binary} -> {version or 'not runnable'}")
+
+    print(f"Error: clang-format {pin} is required, and was not found.", file=sys.stderr)
+    for line in rejected or ["  (none installed)"]:
+        print(line, file=sys.stderr)
+    print("Install the pinned build:", file=sys.stderr)
+    print("  pip install --require-hashes -r tests/requirements.lock", file=sys.stderr)
+    sys.exit(1)
+
+
+def run_clang_format(root: Path, binary: str) -> None:
     files = [str(p) for p in iter_source_files(root)]
     if not files:
         return
@@ -123,7 +181,7 @@ def run_clang_format(root: Path) -> None:
     batch = 200
     for i in range(0, len(files), batch):
         chunk = files[i : i + batch]
-        result = run(["clang-format", "-i", *chunk])
+        result = run([binary, "-i", *chunk])
         if result.returncode != 0:
             print("clang-format failed on one of: " + ", ".join(chunk))
 
@@ -248,7 +306,59 @@ def parse_args(argv: list[str] | None) -> argparse.Namespace:
         action="store_true",
         help="also run clang-tidy-verify.py on the changed files (advisory .tidy-report)",
     )
+    parser.add_argument(
+        "--check-format",
+        action="store_true",
+        help="report clang-format drift and exit; writes nothing (the CI formatting gate)",
+    )
     return parser.parse_args(argv)
+
+
+VIOLATION_RE = re.compile(
+    r"^(.+?):\d+:\d+: (?:error|warning): code should be clang-formatted",
+    re.MULTILINE,
+)
+
+
+def check_clang_format(root: Path, binary: str) -> int:
+    """Fails on any file clang-format would rewrite, without rewriting it. This is what keeps a
+    contributor's differently-versioned formatter from landing a tree-wide restyle."""
+    files = [str(p) for p in iter_source_files(root)]
+    if not files:
+        return 0
+
+    drifted = set()
+    unparsed = []
+    batch = 200
+    for i in range(0, len(files), batch):
+        chunk = files[i : i + batch]
+        result = run(
+            [binary, "--dry-run", "-Werror", *chunk],
+            capture_output=True,
+            text=True,
+        )
+        if result.returncode == 0:
+            continue
+
+        hits = VIOLATION_RE.findall(result.stderr)
+        drifted.update(hits)
+        if not hits:
+            unparsed.append(result.stderr.strip())
+
+    if not drifted and not unparsed:
+        print(f"clang-format {clang_format_version(binary)}: no drift.")
+        return 0
+
+    if drifted:
+        print(f"clang-format drift in {len(drifted)} file(s):", file=sys.stderr)
+        for path in sorted(drifted):
+            print(f"  {os.path.relpath(path, root)}", file=sys.stderr)
+
+    for stderr in unparsed:
+        print(f"clang-format failed:\n{stderr}", file=sys.stderr)
+
+    print("Fix with: python3 scripts/sanitize-commit.py", file=sys.stderr)
+    return 1
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -256,19 +366,23 @@ def main(argv: list[str] | None = None) -> int:
     root = repo_root()
     os.chdir(root)
 
+    if args.check_format:
+        return check_clang_format(root, resolve_clang_format(root))
+
     sanitize_permissions(root)
+    clang_format = resolve_clang_format(root)
 
     run_python_step(
         "Expanding single-line doxygen comments", root / "scripts" / "expand-doxygen.py"
     )
 
     print("Running clang-format (pass 1)...")
-    run_clang_format(root)
+    run_clang_format(root, clang_format)
 
     run_python_step("Running code-verify", root / "scripts" / "code-verify.py", "--fix")
 
     print("Running clang-format (pass 2)...")
-    run_clang_format(root)
+    run_clang_format(root, clang_format)
 
     if args.clang_tidy:
         run_clang_tidy_advisories(root)

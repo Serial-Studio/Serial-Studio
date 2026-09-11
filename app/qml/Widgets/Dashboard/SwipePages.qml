@@ -44,8 +44,9 @@ Item {
   Component.onCompleted: {
     root.restoring = true
     const s = Cpp_JSON_ProjectModel.widgetSettings(root.widgetId)
-    if (s["page"] !== undefined)
-      root.view.currentIndex = parseInt(s["page"])
+    const page = Number(s["page"])
+    if (isFinite(page))
+      root.view.currentIndex = Math.max(0, Math.min(root.view.count - 1, Math.floor(page)))
 
     root.restoring = false
   }

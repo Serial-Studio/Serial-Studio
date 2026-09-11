@@ -22,7 +22,6 @@
 #include "UI/Widgets/Meter.h"
 
 #include "Core/DataModel/Frame.h"
-#include "DSP.h"
 #include "UI/Dashboard.h"
 
 //--------------------------------------------------------------------------------------------------
@@ -64,19 +63,6 @@ void Widgets::Meter::updateData()
 
   if (VALIDATE_WIDGET(SerialStudio::DashboardMeter, m_index)) {
     const auto& dataset = GET_DATASET(SerialStudio::DashboardMeter, m_index);
-    if (!std::isfinite(dataset.numericValue))
-      return;
-
-    const bool extremesChanged = refreshExtremes(dataset);
-    auto value                 = qMax(m_minValue, qMin(m_maxValue, dataset.numericValue));
-    const bool valueChanged    = DSP::notEqual(value, m_value);
-    if (valueChanged) {
-      m_value = value;
-      recomputeActiveBand(value);
-    }
-
-    const bool latched = latchData();
-    if ((valueChanged || extremesChanged || latched) && isEnabled())
-      Q_EMIT updated();
+    applySample(dataset);
   }
 }

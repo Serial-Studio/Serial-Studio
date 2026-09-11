@@ -206,9 +206,7 @@ struct CliOptions {
   QCommandLineOption modbusStopBitsOpt{
     "modbus-stopbits", "Sets ModBus RTU stop bits (1/1.5/2, default: 1)", "bits"};
   QCommandLineOption modbusRegisterOpt{
-    "modbus-register",
-    "Adds ModBus register group: type:start:count[:slave] (repeatable)",
-    "spec"};
+    "modbus-register", "Adds ModBus register group: type:start:count[:slave] (repeatable)", "spec"};
   QCommandLineOption canbusOpt{
     "canbus", "Connects to CAN bus (e.g., socketcan:can0, peakcan:pcan0)", "plugin:interface"};
   QCommandLineOption canbusBitrateOpt{

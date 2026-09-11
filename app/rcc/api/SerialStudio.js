@@ -1183,11 +1183,12 @@ io.listBuses = function() {
   return apiCall('io.listBuses', p);
 };
 
-io.modbus.addRegisterGroup = function(type, startAddress, count) {
+io.modbus.addRegisterGroup = function(type, startAddress, count, slaveAddress) {
   var p = {};
   p['type'] = type;
   p['startAddress'] = startAddress;
   p['count'] = count;
+  p['slaveAddress'] = slaveAddress;
   return apiCall('io.modbus.addRegisterGroup', p);
 };
 

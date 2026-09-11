@@ -351,6 +351,8 @@ struct XAxisPolicy {
 
 [[nodiscard]] QString normalizeIconPath(const QString& path);
 
+[[nodiscard]] QStringList outputControlSizes();
+
 [[nodiscard]] QStringList textEncodings();
 [[nodiscard]] QString textEncodingName(TextEncoding enc);
 [[nodiscard]] TextEncoding textEncodingFromName(const QString& name);

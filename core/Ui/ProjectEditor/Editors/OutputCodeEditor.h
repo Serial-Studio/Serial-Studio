@@ -22,10 +22,12 @@
 #pragma once
 
 #include <memory>
+#include <QStringList>
+#include <QTimer>
 
 #include "Core/DataModel/Frame.h"
 #include "DataModel/Editors/ScriptTemplateCatalog.h"
-#include "ProjectEditor/Dialogs/TransmitTestDialog.h"
+#include "DataModel/Scripting/TransmitScriptCheck.h"
 #include "ProjectEditor/Editors/EmbeddedCodeEditorItem.h"
 
 namespace Misc {
@@ -55,11 +57,29 @@ class OutputCodeEditor : public EmbeddedCodeEditorItem {
   Q_PROPERTY(QString text
              READ text
              NOTIFY textChanged)
+  Q_PROPERTY(QStringList templateNames
+             READ templateNames
+             NOTIFY templatesChanged)
+  Q_PROPERTY(bool scriptValid
+             READ scriptValid
+             NOTIFY validityChanged)
+  Q_PROPERTY(int scriptStatus
+             READ scriptStatus
+             NOTIFY validityChanged)
+  Q_PROPERTY(int scriptErrorLine
+             READ scriptErrorLine
+             NOTIFY validityChanged)
+  Q_PROPERTY(QString scriptError
+             READ scriptError
+             NOTIFY validityChanged)
   // clang-format on
 
 signals:
   void textChanged();
   void modifiedChanged();
+  void validityChanged();
+  void templatesChanged();
+  void scriptAccepted(const QString& code);
 
 public:
   explicit OutputCodeEditor(QQuickItem* parent = nullptr);
@@ -68,6 +88,12 @@ public:
   [[nodiscard]] bool undoAvailable() const noexcept;
   [[nodiscard]] bool redoAvailable() const noexcept;
   [[nodiscard]] QString text() const;
+  [[nodiscard]] bool scriptValid() const noexcept;
+  [[nodiscard]] int scriptStatus() const noexcept;
+  [[nodiscard]] int scriptErrorLine() const noexcept;
+  [[nodiscard]] QString scriptError() const;
+  [[nodiscard]] QStringList templateNames() const;
+  [[nodiscard]] Q_INVOKABLE bool save();
 
 public slots:
   void cut();
@@ -80,8 +106,10 @@ public slots:
   void readCode();
   void formatDocument();
   void formatSelection();
-  void selectTemplate();
-  void testTransmitFunction();
+  void commit();
+  void reportVerdict();
+  void bindPreview(QObject* preview);
+  void applyTemplate(const int index);
   void reload(bool guiTrigger = false);
 
 public:
@@ -89,14 +117,21 @@ public:
 
 private:
   void loadTemplates();
+  void flushInputMethod();
+  void validateNow();
+  void refreshVerdict(const bool persist);
+  [[nodiscard]] QString verdictDetail() const;
+  void scheduleValidation();
 
 private:
   bool m_readingCode;
+  bool m_validating;
+  QTimer m_validateTimer;
+  TransmitScriptVerdict m_verdict;
   Misc::Translator& m_translator;
   DataModel::ProjectEditor& m_projectEditor;
   DataModel::ProjectModel& m_projectModel;
   ScriptTemplateCatalog m_templates;
-  std::unique_ptr<TransmitTestDialog> m_testDialog;
 };
 
 }  // namespace DataModel

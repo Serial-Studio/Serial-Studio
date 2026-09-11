@@ -888,43 +888,6 @@ Widgets.SmartDialog {
                   terminalPane.appendText(qsTr("[macro] verify failed: %1").arg(verdict.error) + "\n")
               }
 
-              //
-              // Runs an action directly, or after confirmation when the editor has edits
-              //
-              function confirmDiscard(action) {
-                if (!macroEditor.isModified) {
-                  action()
-                  return
-                }
-
-                discardDialog.pendingAction = action
-                discardDialog.open()
-              }
-
-              //
-              // Unsaved-changes confirmation
-              //
-              Dialog {
-                id: discardDialog
-
-                modal: true
-                title: qsTr("Discard changes?")
-                anchors.centerIn: Overlay.overlay
-                standardButtons: Dialog.Yes | Dialog.No
-                onAccepted: {
-                  if (pendingAction)
-                    pendingAction()
-
-                  pendingAction = null
-                }
-
-                property var pendingAction: null
-
-                Label {
-                  text: qsTr("The macro editor has unsaved changes.")
-                }
-              }
-
               ColumnLayout {
                 spacing: 0
                 anchors.fill: parent
@@ -982,7 +945,10 @@ Widgets.SmartDialog {
                       ToolTip.text: qsTr("Load macro")
                       Layout.alignment: Qt.AlignVCenter
                       icon.source: "qrc:/icons/buttons/open.svg"
-                      onClicked: scriptPane.confirmDiscard(function() { macroRunner.loadMacro() })
+                      onClicked: {
+                        if (macroEditor.confirmDiscardIfModified())
+                          macroRunner.loadMacro()
+                      }
                     }
 
                     Widgets.IconButton {
@@ -1036,7 +1002,10 @@ Widgets.SmartDialog {
                       Layout.alignment: Qt.AlignVCenter
                       ToolTip.text: qsTr("Clear editor")
                       icon.source: "qrc:/icons/buttons/clear.svg"
-                      onClicked: scriptPane.confirmDiscard(function() { macroEditor.clear() })
+                      onClicked: {
+                        if (macroEditor.confirmDiscardIfModified())
+                          macroEditor.clear()
+                      }
                     }
                   }
                 }

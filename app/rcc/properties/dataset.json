@@ -1748,6 +1748,13 @@
   ],
   "runtimeFields": [
     {
+      "field": "displaySampleMs",
+      "type": "qint64",
+      "persist": "never",
+      "default": 0,
+      "reason": "Monotonic GUI receipt time for instrument freshness; never serialized."
+    },
+    {
       "field": "value",
       "type": "string",
       "jsonKey": "Value",

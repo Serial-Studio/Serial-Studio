@@ -94,9 +94,8 @@ public:
   [[nodiscard]] static bool looksLikeHttpRequest(const QByteArray& data);
 
 private:
-  [[nodiscard]] bool rejectHttpPreamble(QTcpSocket* socket,
-                                        ConnectionState& state,
-                                        const QByteArray& data);
+  [[nodiscard]] static bool isHttpMethodPrefix(const QByteArray& prefix);
+  [[nodiscard]] bool interceptHttpPreamble(QTcpSocket* socket, ConnectionState& state);
   [[nodiscard]] bool handleAuthHandshake(QTcpSocket* socket, ConnectionState& state);
   [[nodiscard]] bool authorizeRawWrite(QTcpSocket* socket, ConnectionState& state);
 

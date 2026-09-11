@@ -15,7 +15,9 @@ functions in JS, Lua will not compile.
 Output widgets live in a group's output panel. Each has a `type`:
 
 - **0 = Button**: click-to-send. Most common. Use for command triggers
-  ("home", "calibrate", "reset").
+  ("home", "calibrate", "reset"). Set `checkable: true` to make it latch
+  instead: it stays pressed and sends `1` (on) / `0` (off) like a toggle,
+  with `onLabel` / `offLabel` as the captions.
 - **1 = Slider**: a value in `[minValue, maxValue]` with `stepSize` and
   `initialValue`. Sends on drag-end.
 - **2 = Toggle**: boolean. Sends one of two payloads depending on state.
@@ -34,15 +36,20 @@ project.outputWidget.get{groupId, widgetId}    // read current config
 Each widget has:
 
 - `title`, `icon`: UI labels
+- `checkable`: button latches on/off instead of pulsing a single value
+- `color`: hex fill override for the control; empty = group accent color
+- `size`: 0 = small, 1 = normal, 2 = large, 3 = extra large
+- `onLabel`, `offLabel`: captions for a latching button or a toggle
 - `minValue`, `maxValue`, `stepSize`, `initialValue`: numeric range
-  (sliders, knobs)
+  (sliders, knobs); `initialValue != 0` starts a latching button on
 - `transmitFunction`: JS source that returns the bytes to send
 
 ## The transmit function
 
 The function name is `transmit` (NOT `output` / `send`). It receives a
 single scalar `value` — numeric for slider/knob, `1`/`0` for toggle, the
-string for textfield, and `1` for a button press. There is no `state`
+string for textfield, and `1` for a button press (`1`/`0` when the button
+is `checkable`). There is no `state`
 object. It returns either a string (encoded with the widget's TX encoding)
 or a byte array.
 

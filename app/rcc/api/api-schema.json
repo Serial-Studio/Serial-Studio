@@ -1676,11 +1676,15 @@
         ]
     },
     {
-        "description": "Add register group (params: type, startAddress, count)",
+        "description": "Add register group (params: type, startAddress, count, [slaveAddress])",
         "name": "io.modbus.addRegisterGroup",
         "properties": {
             "count": {
                 "description": "Number of registers to read (1-125)",
+                "type": "integer"
+            },
+            "slaveAddress": {
+                "description": "Slave to read this block from (1-247, 0 = the driver's own address)",
                 "type": "integer"
             },
             "startAddress": {
@@ -1695,7 +1699,8 @@
         "required": [
             "type",
             "startAddress",
-            "count"
+            "count",
+            "slaveAddress"
         ]
     },
     {
@@ -5174,7 +5179,7 @@
         ]
     },
     {
-        "description": "Read the current configuration of an output widget (params: groupId, widgetId). Returns title, icon, type, min/max/step/initialValue, transmitFunction. Use BEFORE rewriting the transmitFunction so you preserve the user's current ranges and labels.",
+        "description": "Read the current configuration of an output widget (params: groupId, widgetId). Returns title, icon, type, checkable, color, size, on/offLabel, min/max/step/initialValue, transmitFunction. Use BEFORE rewriting the transmitFunction so you preserve the user's current ranges and labels.",
         "name": "project.outputWidget.get",
         "properties": {
             "groupId": {
@@ -5192,7 +5197,7 @@
         ]
     },
     {
-        "description": "Patch output-widget fields by id (params: groupId, widgetId, plus any of title, icon, transmitFunction, sourceId, txEncoding, monoIcon, minValue, maxValue, stepSize, initialValue). The transmitFunction is **JavaScript only** -- runs in QJSEngine to convert UI state into device bytes. **Call meta.fetchScriptingDocs{kind:'output_widget_js'} before authoring** for the function signature (transmit(value) returning a Uint8Array / string), the per-widget value semantics, and the injected Modbus/CAN helper globals (modbusWriteRegister / modbusWriteCoil / modbusWriteFloat / canSendFrame / canSendValue). Validate first with project.outputWidget.dryRun.",
+        "description": "Patch output-widget fields by id (params: groupId, widgetId, plus any of title, icon, transmitFunction, sourceId, txEncoding, monoIcon, checkable, color, size, onLabel, offLabel, minValue, maxValue, stepSize, initialValue). A checkable button latches and transmits 1 (on) / 0 (off) like a toggle, instead of pulsing a single value on click; color is a hex fill override (empty = group accent) and size is 0=small, 1=normal, 2=large, 3=extra large. The transmitFunction is **JavaScript only** -- runs in QJSEngine to convert UI state into device bytes. **Call meta.fetchScriptingDocs{kind:'output_widget_js'} before authoring** for the function signature (transmit(value) returning a Uint8Array / string), the per-widget value semantics, and the injected Modbus/CAN helper globals (modbusWriteRegister / modbusWriteRegisters / modbusWriteCoil / modbusWriteFloat / canSendFrame / canSendValue). Validate first with project.outputWidget.dryRun.",
         "name": "project.outputWidget.update",
         "properties": {
             "groupId": {

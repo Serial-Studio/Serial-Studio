@@ -23,6 +23,16 @@ using OWT = DataModel::OutputWidgetType;
 //--------------------------------------------------------------------------------------------------
 
 /**
+ * @brief Whether a control should absorb a column's spare height. A button grows into the room it
+ *        is given and still reads as a button; a slider, a switch and a text field do not, and a
+ *        stretched cell just parks their content against the top edge with dead space below.
+ */
+bool PanelLayout::fillsHeight(OWT type)
+{
+  return type == OWT::Button || type == OWT::Knob;
+}
+
+/**
  * @brief Classifies a widget type as small (stackable) or tall (needs height).
  */
 PanelLayout::SizeClass PanelLayout::classify(OWT type)
@@ -36,10 +46,14 @@ PanelLayout::SizeClass PanelLayout::classify(OWT type)
 }
 
 /**
- * @brief Returns the minimum size (width, height) for a widget type.
+ * @brief Returns the minimum size (width, height) a widget needs, including the button size class:
+ *        an extra-large button that keeps a normal-sized cell is clipped by the packer.
  */
-QSizeF PanelLayout::minSize(OWT type)
+QSizeF PanelLayout::minSize(const DataModel::OutputWidget& widget)
 {
+  const auto type    = widget.type;
+  const double scale = type == OWT::Button ? DataModel::outputSizeScale(widget.size) : 1.0;
+
   static const auto& fonts = Misc::CommonFonts::instance();
   const QFontMetricsF fm(fonts.uiFont());
   const QFontMetricsF fmMono(fonts.monoFont());
@@ -49,7 +63,7 @@ QSizeF PanelLayout::minSize(OWT type)
   const qreal charW = fm.averageCharWidth();
 
   const qreal labelH  = std::ceil(fontH * 0.75) + 1 + 2;
-  const qreal btnH    = qMax(fontH + 8, 28.0);
+  const qreal btnH    = qMax(fontH * scale + 8 * scale, 28.0 * scale);
   const qreal inputH  = qMax(monoH + 10, 28.0);
   const qreal switchH = 24.0;
   const qreal sliderH = 24.0;
@@ -60,7 +74,7 @@ QSizeF PanelLayout::minSize(OWT type)
   const qreal s = 4;
   switch (type) {
     case OWT::Button:
-      return {charW * 14 + 2 * m, 2 * m + btnH};
+      return {charW * 14 * scale + 2 * m, 2 * m + btnH};
     case OWT::Slider:
       return {charW * 20 + 2 * m, 2 * m + labelH + s + sliderH + s + rangeH + s + valueH};
     case OWT::Toggle:
@@ -145,7 +159,9 @@ QVector<PanelLayout::Column> PanelLayout::buildColumns(const QVector<Item>& item
 }
 
 /**
- * @brief Places one row of columns into the result vector.
+ * @brief Places one row of columns into the result vector. A column's spare height goes to the
+ *        controls that grow well (see fillsHeight); the rest keep their natural height. A column
+ *        holding none of those shares the height proportionally, as every column used to.
  */
 void PanelLayout::layoutRow(QVector<Rect>& result,
                             const QVector<Column>& columns,
@@ -174,17 +190,40 @@ void PanelLayout::layoutRow(QVector<Rect>& result,
     const qreal gap_h = (n_items - 1) * gap;
     const qreal avail = row_h - gap_h;
 
+    int fillers = 0;
+    qreal slack = avail;
+    for (int i = 0; i < n_items; ++i) {
+      const auto& item  = items[col.itemIndices[i]];
+      slack            -= item.mh;
+      fillers          += fillsHeight(item.type) ? 1 : 0;
+    }
+
+    slack             = qMax(qreal(0), slack);
+    const qreal share = (fillers > 0) ? slack / fillers : 0;
+
+    int absorber = n_items - 1;
+    qreal used   = 0;
+    QVector<qreal> heights(n_items);
+    for (int i = 0; i < n_items; ++i) {
+      const auto& item = items[col.itemIndices[i]];
+      const bool grows = fillsHeight(item.type);
+      const qreal spread =
+        (col.totalMinH > 0) ? qMax(item.mh, avail * item.mh / col.totalMinH) : avail / n_items;
+
+      heights[i] = (fillers == 0) ? spread : (grows ? item.mh + share : item.mh);
+      if (grows)
+        absorber = i;
+
+      used += heights[i];
+    }
+
+    heights[absorber] += avail - used;
+
     qreal y = 0;
     for (int i = 0; i < n_items; ++i) {
-      int idx = col.itemIndices[i];
-      qreal itemH =
-        (n_items == 1) ? row_h : qMax(items[idx].mh, avail * items[idx].mh / col.totalMinH);
-
-      if (i == n_items - 1)
-        itemH = row_h - y;
-
-      result[idx]  = {x, row_y + y, col_w, itemH};
-      y           += itemH + gap;
+      const int idx  = col.itemIndices[i];
+      result[idx]    = {x, row_y + y, col_w, heights[i]};
+      y             += heights[i] + gap;
     }
 
     if (c == col_end - 1) {
@@ -213,7 +252,7 @@ QVector<PanelLayout::Rect> PanelLayout::compute(const std::vector<DataModel::Out
   items.reserve(n);
   for (int i = 0; i < n; ++i) {
     auto sc = classify(widgets[i].type);
-    auto ms = minSize(widgets[i].type);
+    auto ms = minSize(widgets[i]);
     items.append({i, sc, widgets[i].type, ms.width(), ms.height()});
   }
 

@@ -481,9 +481,10 @@ private:
   void connectStreamAvailableInputs();
   void connectViewStateResets(AppState& appState);
   void reconfigureDashboard(const DataModel::Frame& frame);
-  [[nodiscard]] DataModel::Frame combineSourceFrames(const DataModel::Frame& seed) const;
   void handleMissingDataset(const DataModel::Frame& frame) override;
   void registerXAxisIfNeeded(const DataModel::Dataset& dataset);
+
+  [[nodiscard]] DataModel::Frame combineSourceFrames(const DataModel::Frame& seed) const;
 
   void configureGpsSeries() override;
   void configureFftSeries() override;

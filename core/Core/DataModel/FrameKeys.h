@@ -137,9 +137,20 @@ inline constexpr KeyView OutputInitialValue("initialValue");
 inline constexpr KeyView OutputOnLabel("onLabel");
 inline constexpr KeyView OutputOffLabel("offLabel");
 inline constexpr KeyView OutputMonoIcon("monoIcon");
+inline constexpr KeyView OutputCheckable("checkable");
+inline constexpr KeyView OutputColor("outputColor");
+inline constexpr KeyView OutputSize("outputSize");
 inline constexpr KeyView OutputColumns("outputColumns");
 inline constexpr KeyView TransmitFunction("transmitFunction");
 inline constexpr KeyView OutputTxEncoding("outputTxEncoding");
+
+// Output widget state feedback (spec 0080): absent means unbound
+inline constexpr KeyView OutputStateSource("stateSource");
+inline constexpr KeyView OutputStateDatasetId("stateDatasetId");
+inline constexpr KeyView OutputStateTable("stateTable");
+inline constexpr KeyView OutputStateVariable("stateVariable");
+inline constexpr KeyView OutputStateOnValue("stateOnValue");
+inline constexpr KeyView OutputStateConfirmMs("stateConfirmMs");
 
 // Group keys
 inline constexpr KeyView GroupId("groupId");

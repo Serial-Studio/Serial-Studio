@@ -42,6 +42,7 @@ private slots:
   void gpsAdvancesOncePerBlock();
   void sampleFeedIsBoundedByRingCapacity();
   void stringsReachOnlyStringTargets();
+  void receiptTimeTracksSamples();
   void plotClockContinuesFromBlockSpan();
   void staleGenerationBlockIsDropped();
   void columnMismatchHandsOffToTheHost();
@@ -556,6 +557,45 @@ void DashboardIngestTest::columnMismatchHandsOffToTheHost()
 
   QCOMPARE(host.missingDatasets, 1);
   QVERIFY(!stores.updateRequired);
+}
+
+/**
+ * @brief Freshness follows received samples, including equal and invalid values, not repaint ticks.
+ */
+void DashboardIngestTest::receiptTimeTracksSamples()
+{
+  Stores stores;
+  buildLayout(stores);
+  buildValuePushes(stores);
+  HostStub host(stores);
+  UI::DashboardIngest ingest(stores.bindings(), host);
+  ingest.buildLinePushes();
+  ingest.buildMultiplotPushes();
+  ingest.buildGpsPushes();
+
+  auto& plot = stores.widgetDatasets[SerialStudio::DashboardPlot][0];
+  QCOMPARE(plot.displaySampleMs, qint64(0));
+  ingest.applyBlock(makeBlock(1));
+  QVERIFY(plot.displaySampleMs > 0);
+  const double value = plot.numericValue;
+
+  plot.displaySampleMs = 1;
+  ingest.applyBlock(makeBlock(1));
+  QCOMPARE(plot.numericValue, value);
+  QVERIFY(plot.displaySampleMs > 1);
+
+  auto invalid                = std::make_shared<DataModel::DataBlock>(*makeBlock(1));
+  invalid->columns[0].numeric = {0};
+  plot.displaySampleMs        = 1;
+  ingest.applyBlock(invalid);
+  QVERIFY(!plot.isNumeric);
+  QVERIFY(plot.displaySampleMs > 1);
+
+  const qint64 received         = plot.displaySampleMs;
+  auto obsolete                 = std::make_shared<DataModel::DataBlock>(*makeBlock(1));
+  obsolete->structureGeneration = kGeneration + 1;
+  ingest.applyBlock(obsolete);
+  QCOMPARE(plot.displaySampleMs, received);
 }
 
 QTEST_APPLESS_MAIN(DashboardIngestTest)

@@ -265,6 +265,7 @@ target_sources(
   ProjectEditor/EditorSelection.cpp
   ProjectEditor/EditorTree.cpp
   ProjectEditor/EditorForms.cpp
+  ProjectEditor/EditorForms/OutputStateRows.cpp
   ProjectEditor/EditorCommit.cpp
   ProjectEditor/EditorSummaries.cpp
   ProjectEditor/EditorMultiSelect.cpp
@@ -282,12 +283,12 @@ target_sources(
   ProjectEditor/Editors/ExpressionHighlighter.cpp
   ProjectEditor/Editors/OutputCodeEditor.cpp
   ProjectEditor/Editors/DatasetTransformEditor.cpp
-  ProjectEditor/Dialogs/TransmitTestDialog.cpp
   ProjectEditor/ProjectEditor.h
   ProjectEditor/EditorWiring.h
   ProjectEditor/EditorSelection.h
   ProjectEditor/EditorTree.h
   ProjectEditor/EditorForms.h
+  ProjectEditor/EditorForms/OutputStateRows.h
   ProjectEditor/EditorCommit.h
   ProjectEditor/EditorSummaries.h
   ProjectEditor/EditorMultiSelect.h
@@ -306,7 +307,6 @@ target_sources(
   ProjectEditor/Editors/FrameParserModel.h
   ProjectEditor/Editors/OutputCodeEditor.h
   ProjectEditor/Editors/DatasetTransformEditor.h
-  ProjectEditor/Dialogs/TransmitTestDialog.h
 )
 
 if(BUILD_COMMERCIAL)
@@ -362,6 +362,9 @@ if(BUILD_COMMERCIAL)
     UI/Widgets/Output/Toggle.h
     UI/Widgets/Output/TextField.h
     UI/Widgets/Output/Panel.h
+    UI/Widgets/Output/Preview.h
+    UI/Widgets/Output/StateBinding.h
+    UI/Widgets/Output/TransmitTarget.h
     UI/Widgets/Output/PanelLayout.h
     Misc/ShortcutGenerator.h
     AI/Logging.h
@@ -443,6 +446,8 @@ if(BUILD_COMMERCIAL)
     UI/Widgets/Output/Toggle.cpp
     UI/Widgets/Output/TextField.cpp
     UI/Widgets/Output/Panel.cpp
+    UI/Widgets/Output/Preview.cpp
+    UI/Widgets/Output/StateBinding.cpp
     UI/Widgets/Output/PanelLayout.cpp
     Misc/ShortcutGenerator.cpp
     AI/Logging.cpp

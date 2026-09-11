@@ -45,11 +45,8 @@ namespace CliSpecParsers {
 
 [[nodiscard]] bool parseModbusTcpAddress(const QString& tcpAddress, QString& host, quint16& port);
 
-[[nodiscard]] bool parseModbusRegisterSpec(const QString& spec,
-                                           quint8& type,
-                                           quint16& start,
-                                           quint16& count,
-                                           quint8* slave = nullptr);
+[[nodiscard]] bool parseModbusRegisterSpec(
+  const QString& spec, quint8& type, quint16& start, quint16& count, quint8* slave = nullptr);
 
 [[nodiscard]] int modbusParityIndex(const QString& parity);
 [[nodiscard]] int modbusDataBitsIndex(const QString& dataBits);

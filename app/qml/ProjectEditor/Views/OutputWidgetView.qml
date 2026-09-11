@@ -23,6 +23,26 @@ Widgets.Pane {
 
   actionComponent: EditorNavActions {}
 
+  //
+  // The transmit editor lives in its own window: the Loader goes inactive on close, so neither
+  // the window nor its code editor survives to repaint behind a view nobody is looking at.
+  //
+  Loader {
+    id: transmitCodeDialog
+
+    active: false
+    asynchronous: false
+    source: "qrc:/serial-studio.com/gui/qml/ProjectEditor/Dialogs/TransmitCodeDialog.qml"
+
+    onLoaded: transmitCodeDialog.item.dismissed.connect(() => transmitCodeDialog.active = false)
+
+    function showDialog() {
+      transmitCodeDialog.active = true
+      if (transmitCodeDialog.item)
+        transmitCodeDialog.item.showDialog()
+    }
+  }
+
   Connections {
     target: actionIconPicker
 
@@ -32,19 +52,6 @@ Widgets.Pane {
         Cpp_JSON_ProjectModel.setOutputWidgetIcon(icon)
       }
     }
-  }
-
-  //
-  // Shortcuts
-  //
-  Shortcut {
-    enabled: outputEditor.activeFocus
-    onActivated: outputEditor.formatSelection()
-    sequences: ["Ctrl+I"]
-  } Shortcut {
-    enabled: outputEditor.activeFocus
-    onActivated: outputEditor.formatDocument()
-    sequences: ["Ctrl+Shift+I"]
   }
 
   Page {
@@ -183,6 +190,19 @@ Widgets.Pane {
           }
 
           //
+          // Transmit function
+          //
+          Widgets.ToolbarButton {
+            iconSize: 24
+            toolbarButton: false
+            text: qsTr("Edit Code")
+            Layout.alignment: Qt.AlignVCenter
+            onClicked: transmitCodeDialog.showDialog()
+            icon.source: Cpp_Misc_IconRegistry.icon("editor", "edit-code", 24)
+            ToolTip.text: qsTr("Edit the JavaScript that turns this control into bytes")
+          }
+
+          //
           // Duplicate
           //
           Widgets.ToolbarButton {
@@ -219,148 +239,33 @@ Widgets.Pane {
       }
 
       //
-      // Properties table (minimum height, no scroll)
+      // Properties table, now the whole pane
       //
-      TableDelegate {
-        id: delegate
+      ScrollView {
+        id: view
 
-        searchable: true
-        spacerVisible: false
-        headerVisible: false
-        Layout.fillWidth: true
-        Layout.maximumHeight: implicitHeight
-        parameterWidth: Math.min(delegate.width * 0.3, 200)
-
-        Binding {
-          target: delegate
-          property: "modelPointer"
-          value: Cpp_JSON_ProjectEditor.outputWidgetModel
-        }
-      }
-
-      //
-      // Transmit Function header
-      //
-      Rectangle {
-        id: codeHeader
-
-        z: 999
-        implicitHeight: 30
-        Layout.fillWidth: true
-
-        gradient: Gradient {
-          GradientStop {
-            position: 0
-            color: Cpp_ThemeManager.colors["table_bg_header_top"]
-          }
-
-          GradientStop {
-            position: 1
-            color: Cpp_ThemeManager.colors["table_bg_header_bottom"]
-          }
-        }
-
-        Rectangle {
-          height: 1
-          anchors.left: parent.left
-          anchors.right: parent.right
-          anchors.bottom: parent.bottom
-          color: Cpp_ThemeManager.colors["table_border_header"]
-        }
-
-        RowLayout {
-          spacing: 4
-          anchors.fill: parent
-          anchors.leftMargin: 8
-          anchors.rightMargin: 8
-
-          Image {
-            sourceSize: Qt.size(18, 18)
-            Layout.alignment: Qt.AlignVCenter
-            source: Cpp_Misc_IconRegistry.icon("editor", "code", 16)
-          }
-
-          Label {
-            text: qsTr("Transmit Function")
-            Layout.alignment: Qt.AlignVCenter
-            font: Cpp_Misc_CommonFonts.boldUiFont
-            color: Cpp_ThemeManager.colors["table_fg_header"]
-          }
-
-          Item { Layout.fillWidth: true }
-
-          Widgets.ToolbarButton {
-            iconSize: 16
-            text: qsTr("Import")
-            toolbarButton: false
-            horizontalLayout: true
-            onClicked: outputEditor.importFile()
-            Layout.alignment: Qt.AlignVCenter
-            icon.source: Cpp_Misc_IconRegistry.icon("code", "open", 16)
-            ToolTip.text: qsTr("Import transmit function from a .js file")
-          }
-
-          Widgets.ToolbarButton {
-            iconSize: 16
-            toolbarButton: false
-            horizontalLayout: true
-            text: qsTr("Template")
-            Layout.alignment: Qt.AlignVCenter
-            onClicked: outputEditor.selectTemplate()
-            icon.source: Cpp_Misc_IconRegistry.icon("code", "template", 16)
-            ToolTip.text: qsTr("Select a pre-built transmit function template")
-          }
-
-          Widgets.ToolbarButton {
-            iconSize: 16
-            text: qsTr("Test")
-            toolbarButton: false
-            horizontalLayout: true
-            Layout.alignment: Qt.AlignVCenter
-            onClicked: outputEditor.testTransmitFunction()
-            icon.source: Cpp_Misc_IconRegistry.icon("code", "test", 16)
-            ToolTip.text: qsTr("Test the transmit function with sample input")
-          }
-        }
-      }
-
-      //
-      // Code editor (fills remaining height)
-      //
-      Item {
-        Layout.topMargin: -1
+        contentWidth: width
         Layout.fillWidth: true
         Layout.fillHeight: true
+        contentHeight: delegate.implicitHeight
+        ScrollBar.vertical.policy: delegate.implicitHeight > view.height ? ScrollBar.AlwaysOn
+                                                                        : ScrollBar.AsNeeded
 
-        OutputCodeEditor {
-          id: outputEditor
+        TableDelegate {
+          id: delegate
 
-          anchors.fill: parent
-        }
+          searchable: true
+          width: parent.width
+          spacerVisible: false
+          headerVisible: false
+          parameterWidth: Math.min(delegate.width * 0.3, 200)
 
-        MouseArea {
-          anchors.fill: parent
-          cursorShape: Qt.IBeamCursor
-          propagateComposedEvents: true
-          acceptedButtons: Qt.RightButton
-
-          onClicked: (mouse) => {
-            if (mouse.button === Qt.RightButton) {
-              contextMenu.popup()
-              mouse.accepted = true
-            }
+          Binding {
+            target: delegate
+            property: "modelPointer"
+            value: Cpp_JSON_ProjectEditor.outputWidgetModel
           }
         }
-      }
-
-      //
-      // Context menu for code editor
-      //
-      CodeEditorMenu {
-        id: contextMenu
-
-        restoreFocus: false
-        codeEditor: outputEditor
       }
     }
   }

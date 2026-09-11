@@ -247,6 +247,11 @@ QHash<int, QVariant> EditorMultiSelect::outputWidgetEditValues(
   out.insert(kOutputWidget_Title, widget.title);
   out.insert(kOutputWidget_Icon, widget.icon);
   out.insert(kOutputWidget_MonoIcon, widget.monoIcon);
+  out.insert(kOutputWidget_Checkable, widget.checkable);
+  out.insert(kOutputWidget_Color, widget.color);
+  out.insert(kOutputWidget_Size, static_cast<int>(widget.size));
+  out.insert(kOutputWidget_OnLabel, widget.onLabel);
+  out.insert(kOutputWidget_OffLabel, widget.offLabel);
   out.insert(kOutputWidget_MinValue, widget.minValue);
   out.insert(kOutputWidget_MaxValue, widget.maxValue);
   out.insert(kOutputWidget_StepSize, widget.stepSize);

@@ -78,12 +78,16 @@ protected:
 
 private slots:
   void updateData();
+  void resetData();
 
 private:
   [[nodiscard]] QString cardinalDirection(double angle) const;
 
   int m_index;
   int m_decimalPoints;
+  bool m_hasData;
+  bool m_validData;
+  qint64 m_sampleMs;
   double m_value;
   QString m_title;
   QString m_units;
