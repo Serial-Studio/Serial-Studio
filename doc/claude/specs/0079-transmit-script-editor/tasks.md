@@ -231,17 +231,17 @@ updated: 2026-09-10
 
 ## Definition of Done
 
-- [ ] Every acceptance criterion in `spec.md` is met and checked off there.
-- [ ] `python scripts/code-verify.py --check` is clean on all changed files (no new errors, no new
+- [x] Every acceptance criterion in `spec.md` is met and checked off there.
+- [x] `python scripts/code-verify.py --check` is clean on all changed files (no new errors, no new
       advisories in new code).
-- [ ] `python scripts/code-verify.py --singleton-census --check` has not grown. It holds at the
+- [x] `python scripts/code-verify.py --singleton-census --check` has not grown. It holds at the
       795 baseline rather than shrinking: `handlerContext()` is a root-bound module accessor,
       not an `::instance()` reach, so removing it was never going to move this counter.
-- [ ] `python scripts/layer-verify.py` clean for the new Pipeline TU.
-- [ ] `qt-cpp-review` run on the C++ diff; findings addressed or noted.
-- [ ] Hotpath untouched, as `plan.md` states; `--benchmark-hotpath` still passes in CI.
-- [ ] `pytest tests/integration/test_output_widget_editor.py` identified for the maintainer to run.
-- [ ] `python scripts/sanitize-commit.py` run; working tree clean of lint debt.
-- [ ] Diff is *what was asked, and only that* — the file list above is the lane; anything else is
+- [x] `python scripts/layer-verify.py` clean for the new Pipeline TU.
+- [x] `qt-cpp-review` run on the C++ diff; findings addressed or noted.
+- [x] Hotpath untouched, as `plan.md` states; `--benchmark-hotpath` still passes in CI.
+- [x] `pytest tests/integration/test_output_widget_editor.py` identified for the maintainer to run.
+- [x] `python scripts/sanitize-commit.py` run; working tree clean of lint debt.
+- [x] Diff is *what was asked, and only that* — the file list above is the lane; anything else is
       raised in chat, not slipped in.
-- [ ] `spec.md` status set to `done`.
+- [x] `spec.md` status set to `done`.

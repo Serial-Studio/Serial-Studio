@@ -272,6 +272,30 @@ SS_FORCE_INLINE void assign_string_owned(QString& dst, const QString& src)
 }
 
 /**
+ * @brief The ONE rule for whether a block column carries a pre-transform ("raw") twin (spec 0085):
+ *        only a transform or a computed dataset can make the final value differ from the parsed
+ *        one. The live writers skip the dataset-level raw copies under the same rule; the block
+ *        column is the gated site every consumer reads, falling back to the final value.
+ */
+[[nodiscard]] SS_FORCE_INLINE bool dataset_carries_raw(const Dataset& dataset) noexcept
+{
+  return dataset.virtual_ || !dataset.transformCode.isEmpty();
+}
+
+/**
+ * @brief Mirrors the just-parsed value into the dataset's raw twin, in place, for datasets that
+ *        carry one; a no-op for every other dataset (spec 0085).
+ */
+SS_FORCE_INLINE void mirror_raw_value(Dataset& dataset) noexcept
+{
+  if (!dataset_carries_raw(dataset)) [[likely]]
+    return;
+
+  dataset.rawNumericValue = dataset.numericValue;
+  assign_string_in_place(dataset.rawValue, dataset.value);
+}
+
+/**
  * @brief Writes one sample into @p column at @p index, keeping the text buffer owned so the
  *        producer's string stays uniquely referenced and writable in place.
  */

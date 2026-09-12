@@ -461,9 +461,11 @@ For full documentation on output controls, see [Output Controls](Output-Controls
 
 | Function | Description |
 |----------|-------------|
-| `modbusWriteRegister(address, value)` | Write a 16-bit integer to a holding register |
-| `modbusWriteCoil(address, on)` | Write a coil (ON = 0xFF00, OFF = 0x0000) |
-| `modbusWriteFloat(address, value)` | Write a 32-bit float across two consecutive registers |
+| `modbusWriteRegister(address, value, unit)` | Write a 16-bit integer to a holding register |
+| `modbusWriteCoil(address, on, unit)` | Write a coil (ON = 0xFF00, OFF = 0x0000) |
+| `modbusWriteFloat(address, value, unit)` | Write a 32-bit float across two consecutive registers |
+
+The trailing `unit` is optional (1 to 247). When given, the write targets that device instead of the connection's own unit, for a second device on a shared RS-485 bus; set the control's transmit encoding to Latin-1 so the prefix bytes survive. Details in [Output Controls](Output-Controls.md).
 
 ### CAN Bus
 

@@ -376,6 +376,21 @@ Window {
         }
 
         Widgets.IconButton {
+          horizontalPadding: 8
+          text: qsTr("Add to Project")
+          icon.source: "qrc:/icons/buttons/plus.svg"
+          enabled: Cpp_JSON_ProtoImporter.messageCount > 0 && Cpp_JSON_ProjectModel.groupCount > 0
+          ToolTip.visible: hovered
+          ToolTip.delay: 700
+          ToolTip.text: qsTr("Add the generated source, groups, tables and workspaces to the "
+                             + "project that is open, instead of creating a new file")
+          onClicked: {
+            Cpp_JSON_ProtoImporter.confirmMerge()
+            root.close()
+          }
+        }
+
+        Widgets.IconButton {
           highlighted: true
           horizontalPadding: 8
           text: qsTr("Create Project")

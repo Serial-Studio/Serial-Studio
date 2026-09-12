@@ -73,6 +73,10 @@ public:
   void selectInfluxSink();
   void selectMqttPublisher();
   void selectControlScript();
+  void selectTransformLibrary();
+  void selectJsLibrary();
+  void selectProjectScripts();
+  void selectDataExport();
   void selectWorkspace(int workspaceId);
   void selectGroupFolder(int folderId);
   void selectTableFolder(int folderId);

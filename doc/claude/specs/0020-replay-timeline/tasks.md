@@ -155,7 +155,7 @@ updated: 2026-07-19
 ## Definition of Done
 
 - [x] Every acceptance criterion in `spec.md` is met and checked off there — EXCEPT AC2/AC4,
-  which are maintainer-run: BADAQ scrub feel in-app + `--benchmark-hotpath` all tiers.
+  which are maintainer-run: field-project scrub feel in-app + `--benchmark-hotpath` all tiers.
 - [x] `python scripts/code-verify.py --check` is clean on all changed files (0 errors,
   0 advisories).
 - [x] `qt-cpp-review` run (6-agent pass, 2026-07-19): the confirmed findings were fixed

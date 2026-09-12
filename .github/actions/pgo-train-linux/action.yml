@@ -1,0 +1,66 @@
+#
+# SPDX-FileCopyrightText: 2020-2025 Alex Spataru
+# SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial
+#
+# The two profile-generating runs of the Linux PGO flow, plus the activation they depend on.
+# Both Linux build jobs train the instrumented binary exactly this way; only the Qt library
+# directory and the binary path differ.
+#
+
+name: 'PGO training runs (Linux)'
+description: 'Activates the licence and drives the two PGO training loads against the instrumented binary.'
+
+inputs:
+  app:
+    description: 'Path to the instrumented executable.'
+    required: true
+  qt-lib-dir:
+    description: 'Qt library directory placed on LD_LIBRARY_PATH for the training runs.'
+    required: true
+  license-key:
+    description: 'Serial Studio licence key (secrets.SERIAL_STUDIO_LICENSE_KEY).'
+    required: true
+
+runs:
+  using: 'composite'
+  steps:
+  #
+  # Pro widgets are license-gated, so an unactivated training run profiles the GPL subset and
+  # the shipped binary is optimized for code no Pro user runs. A failed activation is therefore
+  # a failed build, not a warning
+  #
+  - name: '🔑 Activate Serial Studio license (Pro hotpath training)'
+    shell: bash
+    env:
+      QT_QPA_PLATFORM: offscreen
+      SERIAL_STUDIO_LICENSE_KEY: ${{inputs.license-key}}
+      LD_LIBRARY_PATH: ${{inputs.qt-lib-dir}}
+      SS_APP: ${{inputs.app}}
+    run: |
+      "$SS_APP" --activate "$SERIAL_STUDIO_LICENSE_KEY"
+
+  #
+  # --min-fps 1 turns the benchmark into a profile generator: the real gate runs later, against
+  # the optimized binary
+  #
+  - name: '🏋️ PGO training run (hotpath)'
+    shell: bash
+    env:
+      QT_QPA_PLATFORM: offscreen
+      LD_LIBRARY_PATH: ${{inputs.qt-lib-dir}}
+      SS_APP: ${{inputs.app}}
+    run: |
+      "$SS_APP" --headless --benchmark-hotpath --min-fps 1 --benchmark-output pgo-train.txt
+
+  #
+  # Second profile: the big_db_test load exercises the project and dashboard paths that the
+  # hotpath benchmark never reaches
+  #
+  - name: '🏋️ PGO training run (big project)'
+    shell: bash
+    env:
+      QT_QPA_PLATFORM: offscreen
+      LD_LIBRARY_PATH: ${{inputs.qt-lib-dir}}
+      SS_APP: ${{inputs.app}}
+    run: |
+      bash tests/benchmarks/big_db_test/run_load.sh "$SS_APP" 25

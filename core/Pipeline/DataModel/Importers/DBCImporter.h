@@ -83,6 +83,7 @@ public slots:
   void importDBC();
   void cancelImport();
   void confirmImport();
+  void confirmMerge();
   void showPreview(const QString& filePath);
 
 private:

@@ -146,6 +146,7 @@ DataModel::TransformCompiler::TransformCompiler(const DataModel::Frame& frame,
   : m_frame(frame)
   , m_store(store)
   , m_installLuaTableApi(std::move(installLuaTableApi))
+  , m_referencesTableApi(false)
   , m_transformErrors(0)
   , m_lastTransformDatasetUniqueId(-1)
   , m_lastTransformError()
@@ -235,13 +236,19 @@ void DataModel::TransformCompiler::compile()
   destroy();
   SS_ASSERT_LOG(m_engines.empty());
 
+  m_referencesTableApi = DataModel::ScriptApiCall::referencesTableApi(m_frame.transformLibrary)
+                      || DataModel::ScriptApiCall::referencesTableApi(m_frame.transformLibraryJs);
+
   std::map<EngineKey, std::vector<TransformEntry>> byKey;
   for (const auto& group : m_frame.groups) {
     for (const auto& ds : group.datasets) {
       if (ds.transformCode.isEmpty())
         continue;
 
-      byKey[{ds.sourceId, ds.transformLanguage}].push_back({ds.uniqueId, ds.transformCode});
+      m_referencesTableApi =
+        m_referencesTableApi || DataModel::ScriptApiCall::referencesTableApi(ds.transformCode);
+      byKey[{ds.sourceId, ds.transformLanguage}].push_back(
+        {ds.uniqueId, ds.transformCode, ds.transformParams});
     }
   }
 
@@ -329,7 +336,9 @@ void DataModel::TransformCompiler::compileLua(TransformEngine& engine,
   }
 
   engine.luaDeadline.setRemainingTime(kTransformWatchdogMs);
+  compileLuaLibrary(L, m_frame.transformLibrary);
 
+  engine.luaDeadline.setRemainingTime(kTransformWatchdogMs);
   for (const auto& entry : entries)
     compileLuaEntry(L, engine, entry);
 
@@ -338,7 +347,42 @@ void DataModel::TransformCompiler::compileLua(TransformEngine& engine,
 }
 
 /**
- * @brief Compiles a single Lua dataset transform; logs and skips on any error.
+ * @brief Runs the shared Lua library once into _G (spec 0083) from the builder-local snapshot,
+ *        never ProjectModel, under its own deadline; entries reach it through their __index
+ *        fallthrough at no per-call cost, and a failure (kTransformLibraryErrorId) leaves them
+ *        compiling without it.
+ */
+void DataModel::TransformCompiler::compileLuaLibrary(lua_State* L, const QString& code)
+{
+  SS_ASSERT(L != nullptr, return);
+  if (code.trimmed().isEmpty())
+    return;
+
+  const int baseTop = lua_gettop(L);
+
+  try {
+    QString error;
+    if (!loadLuaLibraryChunk(L, code, error)) {
+      qWarning() << "[FrameBuilder] Shared Lua library failed:" << error;
+      noteTransformError(kTransformLibraryErrorId, error);
+      return;
+    }
+
+    SS_ASSERT(lua_gettop(L) == baseTop, lua_settop(L, baseTop));
+  } catch (const std::exception& e) {
+    qWarning() << "[FrameBuilder] Shared Lua library uncaught exception:" << e.what();
+    noteTransformError(kTransformLibraryErrorId, e.what());
+    lua_settop(L, baseTop);
+  } catch (...) {
+    qWarning() << "[FrameBuilder] Shared Lua library uncaught non-std exception";
+    noteTransformError(kTransformLibraryErrorId, "uncaught exception");
+    lua_settop(L, baseTop);
+  }
+}
+
+/**
+ * @brief Compiles a single Lua dataset transform; logs and skips on any error. The dataset's
+ *        parameter map is installed as `params` in the chunk environment before it runs.
  */
 void DataModel::TransformCompiler::compileLuaEntry(lua_State* L,
                                                    TransformEngine& engine,
@@ -352,6 +396,9 @@ void DataModel::TransformCompiler::compileLuaEntry(lua_State* L,
     lua_pushglobaltable(L);
     lua_setfield(L, -2, "__index");
     lua_setmetatable(L, -2);
+
+    pushTransformParams(L, entry.params);
+    lua_setfield(L, -2, "params");
 
     const QByteArray utf8 = entry.code.toUtf8();
     const QByteArray chunkName =
@@ -467,22 +514,26 @@ void DataModel::TransformCompiler::compileExpr(TransformEngine& engine,
 
 /**
  * @brief Compiles per-dataset JavaScript transforms into a shared QJSEngine; code is IIFE-wrapped
- * for isolation.
+ *        for isolation and receives the dataset's parameter map as the `params` argument.
  */
 void DataModel::TransformCompiler::compileJs(TransformEngine& engine,
                                              int sourceId,
                                              const std::vector<TransformEntry>& entries)
 {
-  auto* js = new QJSEngine();
+  auto* js        = new QJSEngine();
+  engine.jsEngine = js;
+  engine.jsWatchdog =
+    std::make_unique<JsWatchdog>(js, kTransformWatchdogMs, QStringLiteral("transform"));
 
-  DataModel::ScriptApiCall::installAll(js, sourceId);
+  DataModel::ScriptApiCall::installAll(js, sourceId, DataModel::ScriptApiCall::TableApi::NamesOnly);
+  compileJsLibrary(engine, m_frame.transformLibraryJs);
 
   for (const auto& entry : entries) {
     const QString wrapped =
-      QStringLiteral("(function() {%1\n"
+      QStringLiteral("(function(params) {%1\n"
                      ";return (typeof transform === 'function') ? transform : null;\n"
-                     "})();")
-        .arg(entry.code);
+                     "})(%2);")
+        .arg(entry.code, transformParamsJson(entry.params));
 
     auto evalResult = js->evaluate(wrapped);
     if (evalResult.isError()) {
@@ -502,10 +553,39 @@ void DataModel::TransformCompiler::compileJs(TransformEngine& engine,
     const bool acceptsInfo        = (evalResult.property(QStringLiteral("length")).toInt() >= 2);
     engine.jsRefs[entry.uniqueId] = JsTransformRef{evalResult, acceptsInfo};
   }
+}
 
-  engine.jsEngine = js;
-  engine.jsWatchdog =
-    std::make_unique<JsWatchdog>(js, kTransformWatchdogMs, QStringLiteral("transform"));
+/**
+ * @brief Runs the shared JavaScript library once into the engine's global object from the
+ *        builder-local snapshot, under the watchdog so a runaway top-level loop is interrupted;
+ *        the IIFE entries resolve its globals through the scope chain at no per-call cost, and a
+ *        failure (kTransformLibraryJsErrorId) leaves them compiling without it.
+ */
+void DataModel::TransformCompiler::compileJsLibrary(TransformEngine& engine, const QString& code)
+{
+  SS_ASSERT(engine.jsEngine != nullptr, return);
+  SS_ASSERT(engine.jsWatchdog != nullptr, return);
+  if (code.trimmed().isEmpty())
+    return;
+
+  engine.jsWatchdog->arm();
+  const auto result = engine.jsEngine->evaluate(code, QStringLiteral("library.js"));
+  engine.jsWatchdog->disarm();
+
+  if (engine.jsEngine->isInterrupted()) {
+    engine.jsEngine->setInterrupted(false);
+    qWarning() << "[FrameBuilder] Shared JavaScript library timed out";
+    noteTransformError(kTransformLibraryJsErrorId, "library timed out");
+    return;
+  }
+
+  if (result.isError()) {
+    const QString message = QStringLiteral("Line %1: %2")
+                              .arg(result.property(QStringLiteral("lineNumber")).toInt())
+                              .arg(result.toString());
+    qWarning() << "[FrameBuilder] Shared JavaScript library failed:" << message;
+    noteTransformError(kTransformLibraryJsErrorId, message);
+  }
 }
 
 //--------------------------------------------------------------------------------------------------

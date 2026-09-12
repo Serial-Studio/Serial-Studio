@@ -43,8 +43,11 @@ extern "C" {
 #include "Core/SerialStudio.h"
 #include "Core/SSAssert.h"
 #include "DataModel/FrameBuilder.h"
+#include "DataModel/FrameBuilder/TransformCompiler.h"
+#include "DataModel/FrameBuilder/TransformSupport.h"
 #include "DataModel/Scripting/LuaCompat.h"
 #include "DataModel/Scripting/LuaCompatJIT.h"
+#include "DataModel/Scripting/TableApiScan.h"
 #include "Platform/AppPlatform.h"
 
 //--------------------------------------------------------------------------------------------------
@@ -105,6 +108,8 @@ IO::StreamProcessor::StreamProcessor(const StreamConfig& config,
   , m_luaDeadline(QDeadlineTimer::Forever)
   , m_inBlock(false)
   , m_jsTimedOut(false)
+  , m_luaTableArmed(false)
+  , m_jsTableArmed(false)
   , m_observedChannels(0)
   , m_samplesProcessed(0)
   , m_blocksProcessed(0)
@@ -195,8 +200,11 @@ void IO::StreamProcessor::setupLuaState()
     return;
   }
 
-  if (m_frameBuilder)
+  if (m_frameBuilder && transformsReferenceTableApi(SerialStudio::Lua)) {
     m_frameBuilder->injectTableApiLua(L);
+    m_luaTableArmed = true;
+  } else if (m_frameBuilder)
+    m_frameBuilder->installTableApiNamesLua(L);
 
   if (m_config.luaFastMode) {
     luaJIT_setmode(L, 0, LUAJIT_MODE_ENGINE | LUAJIT_MODE_ON);
@@ -205,7 +213,18 @@ void IO::StreamProcessor::setupLuaState()
     lua_sethook(L, &StreamProcessor::luaWatchdogHook, LUA_MASKCOUNT, kHookInstrCount);
   }
 
-  m_lua = L;
+  QString libraryError;
+  m_luaDeadline.setRemainingTime(kWatchdogMs);
+  try {
+    if (!DataModel::loadLuaLibraryChunk(L, m_config.transformLibrary, libraryError))
+      qWarning() << "[StreamWorker] Shared Lua library failed:" << libraryError;
+  } catch (const std::exception& e) {
+    qWarning() << "[StreamWorker] Shared Lua library panic:" << e.what();
+    lua_settop(L, 0);
+  }
+
+  m_luaDeadline = QDeadlineTimer(QDeadlineTimer::Forever);
+  m_lua         = L;
 }
 
 /**
@@ -219,10 +238,35 @@ void IO::StreamProcessor::setupJsEngine()
   m_jsWatchdog =
     std::make_unique<DataModel::JsWatchdog>(m_js, kWatchdogMs, QStringLiteral("stream transform"));
 
-  if (!m_frameBuilder)
+  if (m_frameBuilder)
+    installJsTablePrelude();
+
+  if (m_config.transformLibraryJs.trimmed().isEmpty())
     return;
 
-  m_frameBuilder->injectTableApiJS(m_js);
+  m_jsWatchdog->arm();
+  const auto result = m_js->evaluate(m_config.transformLibraryJs, QStringLiteral("library.js"));
+  m_jsWatchdog->disarm();
+  if (m_js->isInterrupted()) {
+    m_js->setInterrupted(false);
+    qWarning() << "[StreamWorker] Shared JavaScript library timed out";
+  } else if (result.isError()) {
+    qWarning() << "[StreamWorker] Shared JavaScript library failed:"
+               << result.property(QStringLiteral("message")).toString();
+  }
+}
+
+/**
+ * @brief Binds the __ss table-API bridge and the friendly globals that mirror the SDK prelude.
+ */
+void IO::StreamProcessor::installJsTablePrelude()
+{
+  SS_ASSERT(m_frameBuilder != nullptr, return);
+  if (transformsReferenceTableApi(SerialStudio::JavaScript)) {
+    m_frameBuilder->injectTableApiJS(m_js);
+    m_jsTableArmed = true;
+  } else
+    m_frameBuilder->installTableApiNames(m_js);
 
   static const QString kTablePrelude =
     QStringLiteral("if (typeof __ss !== 'undefined') {"
@@ -318,6 +362,8 @@ void IO::StreamProcessor::compileLuaEntry(ChannelState& state)
   lua_pushglobaltable(L);
   lua_setfield(L, -2, "__index");
   lua_setmetatable(L, -2);
+  DataModel::pushTransformParams(L, state.config.transformParams);
+  lua_setfield(L, -2, "params");
 
   if (luaL_loadbufferx(L, utf8.constData(), utf8.size(), name.constData(), "t") != LUA_OK) {
     qWarning() << "[StreamWorker] transform compile error for dataset" << state.config.uniqueId
@@ -359,12 +405,13 @@ void IO::StreamProcessor::compileJsEntry(ChannelState& state)
     setupJsEngine();
 
   const QString wrapped =
-    QStringLiteral("(function() {%1\n"
+    QStringLiteral("(function(params) {%1\n"
                    ";return { block: (typeof transform_block === 'function') ? "
                    "transform_block : null, sample: (typeof transform === 'function') ? "
                    "transform : null };\n"
-                   "})();")
-      .arg(state.config.transformCode);
+                   "})(%2);")
+      .arg(state.config.transformCode,
+           DataModel::transformParamsJson(state.config.transformParams));
 
   auto evalResult = m_js->evaluate(wrapped);
   if (evalResult.isError()) {
@@ -411,6 +458,34 @@ void IO::StreamProcessor::teardownEngines()
 
   delete m_js;
   m_js = nullptr;
+
+  if (m_luaTableArmed && m_frameBuilder)
+    m_frameBuilder->releaseTableApiUser();
+
+  if (m_jsTableArmed && m_frameBuilder)
+    m_frameBuilder->releaseTableApiUser();
+
+  m_luaTableArmed = false;
+  m_jsTableArmed  = false;
+}
+
+/**
+ * @brief Whether any transform of @p language, or that language's shared library, names a
+ *        table-API helper (spec 0086): only then does this worker arm per-dataset capture.
+ */
+bool IO::StreamProcessor::transformsReferenceTableApi(int language) const
+{
+  const QString& library =
+    language == SerialStudio::Lua ? m_config.transformLibrary : m_config.transformLibraryJs;
+  if (DataModel::TableApiScan::referencesTableApi(library))
+    return true;
+
+  for (const auto& dataset : m_config.datasets)
+    if (dataset.transformLanguage == language
+        && DataModel::TableApiScan::referencesTableApi(dataset.transformCode))
+      return true;
+
+  return false;
 }
 
 //--------------------------------------------------------------------------------------------------

@@ -25,14 +25,21 @@
 #include "IO/StreamWorker.h"
 
 /**
- * StreamWorker.cpp references these two FrameBuilder members when a frame builder is injected;
- * every suite construction passes the default nullptr, so the calls never execute here. Defining
- * them as stubs satisfies the linker without dragging FrameBuilder.cpp's dependency web into the
- * lean test tier (they are the only FrameBuilder symbols this link set may reference).
+ * StreamWorker.cpp references these FrameBuilder members when a frame builder is injected; every
+ * suite construction passes the default nullptr, so the calls never execute here. Defining them as
+ * stubs satisfies the linker without dragging FrameBuilder.cpp's dependency web into the lean test
+ * tier (they are the only FrameBuilder symbols this link set may reference; the table-API scan the
+ * worker runs is header-only for the same reason).
  */
 void DataModel::FrameBuilder::injectTableApiLua(lua_State*) {}
 
 void DataModel::FrameBuilder::injectTableApiJS(QJSEngine*) {}
+
+void DataModel::FrameBuilder::installTableApiNamesLua(lua_State*) {}
+
+void DataModel::FrameBuilder::installTableApiNames(QJSEngine*) {}
+
+void DataModel::FrameBuilder::releaseTableApiUser() {}
 
 using DataModel::DataBlockPtr;
 using IO::SampleBlock;

@@ -1146,6 +1146,10 @@ _PROJECT_KEY_LITERALS = frozenset(
         "sourceId",
         "datasetId",
         "uniqueId",
+        "transformLibrary",
+        "transformParams",
+        "datasetUniqueId",
+        "workspaceProfiles",
     }
 )
 

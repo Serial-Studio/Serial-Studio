@@ -37,6 +37,7 @@
 #include "DataModel/Project/EntityKinds.h"
 #include "DataModel/Project/ProjectFolders.h"
 #include "DataModel/Project/ProjectPresentation.h"
+#include "DataModel/Project/WorkspaceKeys.h"
 #include "DataModel/ProjectModel.h"
 #include "DataModel/WidgetResolution.h"
 
@@ -228,6 +229,7 @@ void DataModel::ProjectWorkspaces::resetDocument()
   m_autoSnapshot.clear();
   m_hiddenGroupIds.clear();
   m_customizeWorkspaces = false;
+  m_model.m_profiles.clear();
 }
 
 /**
@@ -308,8 +310,24 @@ bool DataModel::ProjectWorkspaces::clearTransientState()
  */
 void DataModel::ProjectWorkspaces::notifyWorkspaceListChanged()
 {
+  (void)rebindWidgetRefs();
   Q_EMIT m_model.editorWorkspacesChanged();
   Q_EMIT m_model.activeWorkspacesChanged();
+}
+
+/**
+ * @brief Re-derives every ref's ordinal from its identity against the live groups (spec 0083).
+ *        Runs at load, after each list change, after a queued auto regeneration and before every
+ *        save, so a file edited outside the app opens with every tile in place and a saved file
+ *        is self-consistent for readers that only know the ordinal.
+ */
+int DataModel::ProjectWorkspaces::rebindWidgetRefs()
+{
+  if (m_workspaces.empty())
+    return 0;
+
+  const auto lookup = WorkspaceKeys::buildResolvedWidgetLookup(m_model);
+  return WorkspaceKeys::rebindWidgetRefs(m_workspaces, lookup);
 }
 
 /**
@@ -391,6 +409,7 @@ void DataModel::ProjectWorkspaces::deleteWorkspace(int workspaceId)
     return;
 
   m_workspaces.erase(it);
+  m_model.m_profiles.forgetWorkspace(workspaceId);
   m_model.setModified(true);
   notifyWorkspaceListChanged();
 }
@@ -573,10 +592,8 @@ void DataModel::ProjectWorkspaces::moveWorkspace(int workspaceId, int targetInde
 /**
  * @brief Appends a widget reference to the specified workspace.
  */
-void DataModel::ProjectWorkspaces::addWidgetToWorkspace(int workspaceId,
-                                                        int widgetType,
-                                                        int groupUniqueId,
-                                                        int relativeIndex)
+void DataModel::ProjectWorkspaces::addWidgetToWorkspace(
+  int workspaceId, int widgetType, int groupUniqueId, int relativeIndex, int datasetUniqueId)
 {
   static auto& appState = AppState::instance();
   if (appState.operationMode() != SerialStudio::ProjectFile)
@@ -595,9 +612,10 @@ void DataModel::ProjectWorkspaces::addWidgetToWorkspace(int workspaceId,
         return;
 
     DataModel::WidgetRef ref;
-    ref.widgetType    = widgetType;
-    ref.groupUniqueId = groupUniqueId;
-    ref.relativeIndex = relativeIndex;
+    ref.widgetType      = widgetType;
+    ref.groupUniqueId   = groupUniqueId;
+    ref.relativeIndex   = relativeIndex;
+    ref.datasetUniqueId = datasetUniqueId;
     ws.widgetRefs.push_back(ref);
 
     m_model.setModified(true);

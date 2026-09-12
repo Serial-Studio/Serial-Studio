@@ -160,11 +160,11 @@ class TestBatchResolve:
 
 
 # ---------------------------------------------------------------------------
-# BADAQ-shaped equivalence — handle parser == name parser
+# field-project-shaped equivalence — handle parser == name parser
 # ---------------------------------------------------------------------------
 
 
-class TestBadaqEquivalence:
+class TestFieldProjectEquivalence:
     def test_handle_and_name_versions_agree(self):
         # Eight channels written every frame; the handle version must leave the
         # store identical to the name version for the same input.

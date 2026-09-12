@@ -29,6 +29,8 @@
 
 namespace DataModel {
 
+class ScriptCellRows;
+
 /**
  * @brief Abstract script engine interface used by the frame parser.
  */
@@ -64,6 +66,19 @@ public:
     Q_UNUSED(maxSpans)
     return -1;
   }
+
+  // Typed cell lane (spec 0086): true = rows filled; false = list result left in fallback
+  [[nodiscard]] virtual bool parseUtf8Cells(const QByteArray& frame,
+                                            ScriptCellRows& rows,
+                                            QList<QStringList>& fallback)
+  {
+    Q_UNUSED(rows)
+    fallback = parseUtf8(frame);
+    return false;
+  }
+
+  // True when the loaded script names a table-API helper (spec 0086): arms per-dataset capture
+  [[nodiscard]] virtual bool referencesTableApi() const noexcept { return false; }
 
   [[nodiscard]] virtual bool isLoaded() const noexcept = 0;
   [[nodiscard]] virtual int language() const noexcept  = 0;

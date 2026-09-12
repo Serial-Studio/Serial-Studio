@@ -55,7 +55,9 @@ Structure travels separately
 There is ONE publication payload and ONE ingestion path. `DataModel::DataBlock` (`DataBlock.h`)
 carries N samples of M datasets: per-dataset `values` (float64), optional `text` + per-sample
 `numeric` flags, optional `rawValues`/`rawText` (the pre-transform twin MDF4's "(raw)" channels,
-the session `blocks` table and spec-0044's parse-vs-transform classification all need), and a
+the session `blocks` table and spec-0044's parse-vs-transform classification all need; carried
+only for datasets with a transform or computed datasets since spec 0085, every consumer reading
+the final value when `hasRaw` is false), and a
 timebase that is either a uniform grid (`dt != 0`) or explicit per-sample offsets (`dt == 0`).
 
 - **Parsing is unchanged and still per frame.** Delimiter scanning is inherently sequential; spec
@@ -87,8 +89,12 @@ timebase that is either a uniform grid (`dt != 0`) or explicit per-sample offset
 usually belongs in one of them rather than in the facade:
 
 - **`DataModel::BlockStager` (`m_stager`)** owns everything between a parsed row and a finished
-  block: the pooled block slots (`kBlockPoolSlots` 64), the per-source open-block map, the
-  `kFrameBlockSampleCap` (64) and flush-epoch rules, and `flushAll()`. It reaches the facade only
+  block: the pooled block slots (`kBlockPoolSlots` 64), the per-source open entries (a flat
+  vector that is never erased, so open/flush allocate nothing in steady state, spec 0085), the
+  `kFrameBlockSampleCap` (64) and flush-epoch rules, and `flushAll()`. At bind it sets a column's
+  `hasRaw` from `dataset_carries_raw()` (`DataBlock.h`, the ONE rule: transform or computed
+  dataset), and the builder's writers mirror the raw twin through `mirror_raw_value()` under the
+  same rule. It reaches the facade only
   through the four-hook `BlockStagerHost` interface (`noteStagingPoolExhausted`,
   `publishStagedBlock`, `announceStructure`, `stagingFlushEpoch`) — which is what lets
   `tst_frame_builder_staging` drive it against a stub host with none of FrameBuilder's link set.
@@ -290,6 +296,21 @@ carries the spec-0040 mirror input: a leading `[[unlikely]]` read of
   capture behind `io.getLatestFrame`: it retains one `CapturedDataPtr` per source (the
   FrameReader pool probe skips pinned slots) plus the channel tokens — keep it gated and
   allocation-free.
+- `m_captureDatasetValues` (spec 0086) mirrors every dataset's raw/final value into the
+  `DataTableStore`. Its inputs, all re-derived in `refreshDatasetCaptureFlag` on the existing
+  dirty/epoch path: `TransformCompiler::referencesTableApi()` (the shared library and every
+  transform scanned by `TableApiScan::referencesTableApi` at compile time),
+  `FrameParser::anyEngineReferencesTableApi()` (each engine scans its script in `loadScript`,
+  refreshed by the engine-epoch bump), and `m_externalTableUsers`, the counter every
+  `injectTableApi*` increments and `releaseTableApiUser()` decrements, both as queued posts,
+  never waits: `runOnObjectThread` skips its functor when the caller's loop was unwound by
+  `QThread::quit()` (a stream worker stopped mid-inject), which lost the arm while the worker's
+  flag said armed, and the release then hit zero (2026-09-12). Builder FIFO orders a thread's
+  release after its own arm (`TableApiUserLease` is the RAII form). The counter belongs to the
+  lease holders and is never reset by a project snapshot. Nothing else arms it: an engine that merely has the helpers installed
+  (`NamesOnly`) does not. The mirror write is slot-addressed (`datasetSlots()` once per dataset,
+  `setDatasetRawAt` / `setDatasetFinalAt`) and copies the string with `assign_string_in_place`,
+  so a steady frame shape mirrors without a heap operation (`tst_table_snapshot_channel`).
 
 ## Diagnostic Counters — Pulled at 1 Hz (spec 0033)
 
@@ -386,6 +407,37 @@ met. Throughput = `FrameBuilder::parsedFrameCount()` / elapsed; `--benchmark-out
 the report to a file (default: stdout only). `ci.yml` (the only workflow) runs it per push/PR
 as a hard gate on the PGO-optimized binary. Don't regress the parse hotpath. (The `ss-hotpath` skill, invoked before
 a hotpath edit, re-states this check.)
+
+**Allocations per frame (spec 0084).** Every run row also carries an `Alloc/frame` column and a
+`HOTPATH_<ROW>_ALLOC_PER_FRAME=` key: heap allocations made by the benchmark thread inside the
+timed loop, per parsed frame, with the event-loop pump subtracted and the captured chunk built
+once before the loop so the harness itself contributes nothing. The count is mimalloc's main-heap
+aggregate (`mi_heap_stats_get(mi_heap_main())`): the reading thread merges its counters in, other
+threads only when they exit or read statistics, so the Native rows, which run before any script
+engine, watchdog or exporter thread exists, count the benchmark thread alone. It exists only in a
+build configured with `-DSS_ALLOC_STATS=ON`
+(`cmake/MiMalloc.cmake` compiles mimalloc with `MI_STAT=2` and defines `SS_ALLOC_STATS`); any
+other build prints `n/a` and `HOTPATH_ALLOC_GATE=n/a`. CI turns the option on for the
+PGO-GENERATE configure only, so the `--min-fps 1` training run is where the gate fires: the
+Native numeric and Native mixed rows must read `0` or `HOTPATH_PASS` is `0` and the training
+step fails. Allocation count is a property of the code, not the optimization level, which is
+what makes gating on the instrumented build exact; the shipped PGO-USE binary is untouched.
+Script lanes print their count and are never gated on it.
+
+**Width (`--benchmark-channels N`, default 8).** Sets the numeric channel count of the
+synthetic project for every parser tier and the exporter floor; the dashboard rows keep the
+fixed all-widget project. The report prints `channels: N` and `HOTPATH_CHANNELS=N`, and at a
+non-default width the throughput tiers are printed but not gated (they were calibrated at 8).
+The Native span lane accepts at most `FrameBuilder::kMaxSpanFields` (128) fields per frame;
+above that `trySpanLane` returns `-1` and Native parses through the list path, so the report
+labels the run `native lane: span` or `native lane: list (> 128 fields)`. A 256- or
+635-channel run therefore measures the list lane, which is the cost a wide project pays today.
+
+**Symbols.** Production builds compile with line-table debug info (`-gline-tables-only` on the
+Clang flavours, `-g1` on GCC, `/Z7` on clang-cl); the commercial hardening block in
+`app/CMakeLists.txt` splits it into a `.dSYM` / `.debug` sidecar (Windows keeps its PDB) before
+stripping, and each release job uploads it as `symbols-<platform>`. A profile of a shipped
+binary symbolicates against that artifact.
 
 The optimization/hardening/sanitizer/allocator flags this gate is measured under live in four
 cmake modules (`cmake/Optimization.cmake`, `Hardening.cmake`, `Sanitizers.cmake`, `MiMalloc.cmake`),

@@ -29,10 +29,10 @@ namespace DataModel {
 class FrameBuilder;
 
 /**
- * @brief The frame builder's wiring to the facts published outside the pipeline (spec 0077): the
- *        replay players' open state, the operation mode, the link state and the licence. It lives
- *        beside the facade because FrameBuilder.cpp is a hotpath TU that must never see the bus;
- *        the two mirror hops write PipelineHost's atomics directly, the rest run on the builder.
+ * @brief The frame builder's wiring to facts published outside the pipeline (spec 0077): replay
+ *        players, operation mode, link state, licence, and the transform-engine inputs (Lua mode,
+ *        shared library). It lives beside the facade because FrameBuilder.cpp is a hotpath TU that
+ *        must never see the bus; the mirror hops write PipelineHost's atomics, the rest run here.
  */
 class ExternalWiring {
 public:
@@ -51,6 +51,7 @@ public:
   void watchOperationMode();
   void watchLinkState();
   void watchLicense();
+  void watchProjectScripting();
 
 private:
   FrameBuilder& m_owner;

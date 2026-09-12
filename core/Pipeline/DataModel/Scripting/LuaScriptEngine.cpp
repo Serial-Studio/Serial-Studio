@@ -44,10 +44,12 @@ extern "C" {
 #include "DataModel/ProjectModel.h"
 #include "DataModel/Scripting/DashboardApi.h"
 #include "DataModel/Scripting/DeviceWriteApi.h"
+#include "DataModel/Scripting/LuaCellCollector.h"
 #include "DataModel/Scripting/LuaCompat.h"
 #include "DataModel/Scripting/LuaCompatJIT.h"
 #include "DataModel/Scripting/LuaMigration.h"
 #include "DataModel/Scripting/ScriptApiCall.h"
+#include "DataModel/Scripting/ScriptCells.h"
 #include "DataModel/Scripting/ScriptFrameShaping.h"
 #include "IO/PipelineHost.h"
 
@@ -154,7 +156,7 @@ static int bootstrapEngineState(lua_State* L)
   DataModel::NotificationCenter::installScriptApi(L);
 
   static auto& frameBuilder = DataModel::FrameBuilder::instance();
-  frameBuilder.injectTableApiLua(L);
+  frameBuilder.installTableApiNamesLua(L);
 
   DataModel::DeviceWriteApi::installLua(L, ctx->sourceId);
   DataModel::ActionFireApi::installLua(L);
@@ -337,6 +339,7 @@ DataModel::LuaScriptEngine::LuaScriptEngine()
   : m_state(nullptr)
   , m_loaded(false)
   , m_disabled(false)
+  , m_referencesTableApi(false)
   , m_sourceId(0)
   , m_parseRef(LUA_NOREF)
   , m_consecutiveTimeouts(0)
@@ -587,8 +590,9 @@ bool DataModel::LuaScriptEngine::loadScript(const QString& script,
     m_deadline            = QDeadlineTimer(QDeadlineTimer::Forever);
   };
 
-  m_state    = nullptr;
-  m_sourceId = sourceId;
+  m_state              = nullptr;
+  m_sourceId           = sourceId;
+  m_referencesTableApi = DataModel::ScriptApiCall::referencesTableApi(script);
   createState();
 
   try {
@@ -753,36 +757,51 @@ bool DataModel::LuaScriptEngine::probeParseFunction(int sourceId, bool showMessa
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Shared driver: invokes the cached parse() over a raw byte buffer and converts the result.
+ * @brief Runs the loaded parse function on @p len bytes under the runtime watchdog and leaves its
+ *        result on the stack. Returns LUA_OK, or the pcall status after logging the error.
+ */
+int DataModel::LuaScriptEngine::runParse(const char* data, qsizetype len)
+{
+  SS_ASSERT(m_state != nullptr, return LUA_ERRRUN);
+  SS_ASSERT(data != nullptr, return LUA_ERRRUN);
+
+  if (!m_loaded || m_disabled)
+    return LUA_ERRRUN;
+
+  lua_rawgeti(m_state, LUA_REGISTRYINDEX, m_parseRef);
+  lua_pushlstring(m_state, data, static_cast<size_t>(len));
+
+  m_deadline.setRemainingTime(kRuntimeWatchdogMs);
+  const int status = guardedPcall(m_state, 1, 1, 0);
+  m_deadline       = QDeadlineTimer(QDeadlineTimer::Forever);
+
+  if (status != LUA_OK) [[unlikely]] {
+    const QString err = QString::fromUtf8(lua_tostring(m_state, -1));
+    lua_pop(m_state, 1);
+    qWarning() << "[LuaScriptEngine] Parse error:" << err;
+    noteError(err);
+    if (err.contains(QLatin1String("timed out")))
+      (void)noteTimeoutAndCheckDisabled(m_sourceId);
+
+    return status;
+  }
+
+  resetTimeoutCounter();
+  return LUA_OK;
+}
+
+/**
+ * @brief List-path parse: runs the script and converts its result to rows of strings.
  */
 QList<QStringList> DataModel::LuaScriptEngine::parseLuaText(const char* data, qsizetype len)
 {
   SS_ASSERT(m_state != nullptr, return {});
   SS_ASSERT(data != nullptr, return {});
 
-  if (!m_loaded || m_disabled)
-    return {};
-
   try {
-    lua_rawgeti(m_state, LUA_REGISTRYINDEX, m_parseRef);
-    lua_pushlstring(m_state, data, static_cast<size_t>(len));
-
-    m_deadline.setRemainingTime(kRuntimeWatchdogMs);
-    const int status = guardedPcall(m_state, 1, 1, 0);
-    m_deadline       = QDeadlineTimer(QDeadlineTimer::Forever);
-
-    if (status != LUA_OK) [[unlikely]] {
-      const QString err = QString::fromUtf8(lua_tostring(m_state, -1));
-      lua_pop(m_state, 1);
-      qWarning() << "[LuaScriptEngine] Parse error:" << err;
-      noteError(err);
-      if (err.contains(QLatin1String("timed out")))
-        (void)noteTimeoutAndCheckDisabled(m_sourceId);
-
+    if (runParse(data, len) != LUA_OK)
       return {};
-    }
 
-    resetTimeoutCounter();
     return convertResult();
   } catch (const std::exception& e) {
     qWarning() << "[LuaScriptEngine] parse uncaught exception:" << e.what();
@@ -793,6 +812,49 @@ QList<QStringList> DataModel::LuaScriptEngine::parseLuaText(const char* data, qs
   m_deadline = QDeadlineTimer(QDeadlineTimer::Forever);
   lua_settop(m_state, 0);
   return {};
+}
+
+/**
+ * @brief Cell-lane parse (spec 0086): one script run, then the collector reads the result as typed
+ *        cells; a mixed shape converts to the list result instead so the script never runs twice.
+ */
+bool DataModel::LuaScriptEngine::parseUtf8Cells(const QByteArray& frame,
+                                                ScriptCellRows& rows,
+                                                QList<QStringList>& fallback)
+{
+  SS_ASSERT(!frame.isEmpty(), return false);
+  SS_ASSERT(m_state != nullptr, return false);
+
+  fallback.clear();
+  try {
+    if (runParse(frame.constData(), frame.size()) != LUA_OK) {
+      rows.clear();
+      return true;
+    }
+
+    if (LuaCellCollector::collect(m_state, rows, kMaxElements))
+      return true;
+
+    fallback = convertResult();
+    return false;
+  } catch (const std::exception& e) {
+    qWarning() << "[LuaScriptEngine] parse uncaught exception:" << e.what();
+  } catch (...) {
+    qWarning() << "[LuaScriptEngine] parse uncaught non-std exception";
+  }
+
+  m_deadline = QDeadlineTimer(QDeadlineTimer::Forever);
+  lua_settop(m_state, 0);
+  rows.clear();
+  return true;
+}
+
+/**
+ * @brief Whether the loaded script names a table-API helper (set at load, spec 0086).
+ */
+bool DataModel::LuaScriptEngine::referencesTableApi() const noexcept
+{
+  return m_referencesTableApi;
 }
 
 /**

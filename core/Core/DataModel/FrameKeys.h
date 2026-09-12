@@ -116,6 +116,7 @@ inline constexpr KeyView WarningDb("warningDb");
 inline constexpr KeyView AlarmDb("alarmDb");
 inline constexpr KeyView TransformCode("transformCode");
 inline constexpr KeyView TransformLanguage("transformLanguage");
+inline constexpr KeyView TransformParams("transformParams");
 inline constexpr KeyView DatasetId("datasetId");
 inline constexpr KeyView UniqueId("uniqueId");
 inline constexpr KeyView NumericValue("numericValue");
@@ -127,6 +128,8 @@ inline constexpr KeyView Actions("actions");
 inline constexpr KeyView Datasets("datasets");
 inline constexpr KeyView OutputWidgets("outputWidgets");
 inline constexpr KeyView ControlScriptCode("controlScriptCode");
+inline constexpr KeyView TransformLibrary("transformLibrary");
+inline constexpr KeyView TransformLibraryJs("transformLibraryJs");
 
 // Output widget keys
 inline constexpr KeyView OutputType("outputType");
@@ -206,9 +209,14 @@ inline constexpr KeyView WorkspaceId("workspaceId");
 inline constexpr KeyView WidgetRefs("widgetRefs");
 inline constexpr KeyView WidgetType("widgetType");
 inline constexpr KeyView RelativeIndex("relativeIndex");
+inline constexpr KeyView DatasetUniqueId("datasetUniqueId");
 inline constexpr KeyView CustomizeWorkspaces("customizeWorkspaces");
 inline constexpr KeyView WorkspaceDescription("description");
 inline constexpr KeyView WorkspaceFolders("workspaceFolders");
+inline constexpr KeyView WorkspaceProfiles("workspaceProfiles");
+inline constexpr KeyView ProfileId("profileId");
+inline constexpr KeyView FolderIds("folderIds");
+inline constexpr KeyView WorkspaceIds("workspaceIds");
 inline constexpr KeyView FolderId("folderId");
 inline constexpr KeyView ParentFolderId("parentFolderId");
 

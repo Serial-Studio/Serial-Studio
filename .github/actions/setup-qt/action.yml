@@ -1,0 +1,149 @@
+#
+# SPDX-FileCopyrightText: 2020-2025 Alex Spataru
+# SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial
+#
+# The Qt bootstrap every build job shares: restore the cached installation, install it from the
+# online installer on a miss, save the entry the restore looks for, and publish bin/, libexec/
+# and CMAKE_PREFIX_PATH through GITHUB_PATH / GITHUB_ENV so every later step in the job sees the
+# same Qt.
+#
+
+name: 'Set up Qt'
+description: 'Restores or installs Qt and publishes its paths to the rest of the job.'
+
+inputs:
+  qt-version:
+    description: 'Qt version to restore or install, e.g. 6.11.2.'
+    required: true
+  qt-dir:
+    description: 'Directory the installation lives in (QT_OUTPUT_DIR for the install scripts).'
+    required: true
+  qt-arch:
+    description: "Architecture the online installer is asked for: 'x64' or 'arm64'."
+    required: true
+  qt-host:
+    description: "Host directory inside the installation: 'gcc_64', 'gcc_arm64', 'macos' or 'msvc2022_64'."
+    required: true
+  cache-key:
+    description: 'Cache key for the Qt installation. Never derived here: the jobs own their keys.'
+    required: true
+  cache-extra-path:
+    description: >-
+      Second path cached beside the Qt directory, normally the Qt account licence file. Pass an
+      empty string on the legs that cache the installation alone.
+    required: false
+    default: '~/.qt-license'
+  save-cache:
+    description: >-
+      'true' on the job that owns the save half of the entry, 'false' on a restore-only leg so
+      two jobs never race to write it.
+    required: false
+    default: 'true'
+  installer-shell:
+    description: "Shell the installer and the path export run in: 'bash' or 'pwsh'."
+    required: false
+    default: 'bash'
+  qt-username:
+    description: 'Qt account user name (secrets.QT_USERNAME); only read on a cache miss.'
+    required: false
+    default: ''
+  qt-password:
+    description: 'Qt account password (secrets.QT_PASSWORD); only read on a cache miss.'
+    required: false
+    default: ''
+
+runs:
+  using: 'composite'
+  steps:
+  #
+  # Restore-only half of the cache pair; the save step below is gated on a miss so a hit never
+  # rewrites the entry
+  #
+  - name: '⚙️ Restore Qt Cache'
+    id: qt_cache
+    uses: actions/cache/restore@caa296126883cff596d87d8935842f9db880ef25 # v5.1.0
+    with:
+      path: |
+        ${{inputs.qt-dir}}
+        ${{inputs.cache-extra-path}}
+      key: ${{inputs.cache-key}}
+
+  #
+  # Qt comes from the online installer driven by scripts/install-qt.sh, using the account
+  # secrets; only reached when the cache missed
+  #
+  - name: '⚙️ Install Qt (cache miss)'
+    shell: bash
+    if: steps.qt_cache.outputs.cache-hit != 'true' && inputs.installer-shell == 'bash'
+    env:
+      QT_VERSION: ${{inputs.qt-version}}
+      QT_ARCH: ${{inputs.qt-arch}}
+      QT_USERNAME: ${{inputs.qt-username}}
+      QT_PASSWORD: ${{inputs.qt-password}}
+      QT_OUTPUT_DIR: ${{inputs.qt-dir}}
+    run: |
+      chmod +x ./scripts/install-qt.sh
+      ./scripts/install-qt.sh
+
+  #
+  # Same install, driven by the PowerShell port on the Windows image
+  #
+  - name: '⚙️ Install Qt (cache miss)'
+    shell: pwsh
+    if: steps.qt_cache.outputs.cache-hit != 'true' && inputs.installer-shell == 'pwsh'
+    env:
+      QT_VERSION: ${{inputs.qt-version}}
+      QT_ARCH: ${{inputs.qt-arch}}
+      QT_USERNAME: ${{inputs.qt-username}}
+      QT_PASSWORD: ${{inputs.qt-password}}
+      QT_OUTPUT_DIR: ${{inputs.qt-dir}}
+    run: |
+      ./scripts/install-qt.ps1
+
+  #
+  # Writes the entry the restore step looks for, keyed by OS + Qt version + arch
+  #
+  - name: '⚙️ Save Qt Cache'
+    if: inputs.save-cache == 'true' && steps.qt_cache.outputs.cache-hit != 'true'
+    uses: actions/cache/save@caa296126883cff596d87d8935842f9db880ef25 # v5.1.0
+    with:
+      path: |
+        ${{inputs.qt-dir}}
+        ${{inputs.cache-extra-path}}
+      key: ${{inputs.cache-key}}
+
+  #
+  # Publishes bin/, libexec/ and CMAKE_PREFIX_PATH through GITHUB_PATH / GITHUB_ENV so every
+  # later step in the job sees the same Qt
+  #
+  - name: '⚙️ Add Qt to PATH'
+    shell: bash
+    if: inputs.installer-shell == 'bash'
+    env:
+      QT_VERSION: ${{inputs.qt-version}}
+      QT_OUTPUT_DIR: ${{inputs.qt-dir}}
+      QT_HOST: ${{inputs.qt-host}}
+    run: |
+      export QT_BIN_PATH="${QT_OUTPUT_DIR}/${QT_VERSION}/${QT_HOST}/bin"
+      export QT_LIBEXEC_PATH="${QT_OUTPUT_DIR}/${QT_VERSION}/${QT_HOST}/libexec"
+      export CMAKE_PREFIX_PATH="${QT_OUTPUT_DIR}/${QT_VERSION}/${QT_HOST}/lib/cmake"
+
+      echo "$QT_BIN_PATH" >> $GITHUB_PATH
+      echo "$QT_LIBEXEC_PATH" >> $GITHUB_PATH
+      echo "CMAKE_PREFIX_PATH=$CMAKE_PREFIX_PATH" >> $GITHUB_ENV
+
+  - name: '⚙️ Add Qt to PATH'
+    shell: pwsh
+    if: inputs.installer-shell == 'pwsh'
+    env:
+      QT_VERSION: ${{inputs.qt-version}}
+      QT_OUTPUT_DIR: ${{inputs.qt-dir}}
+      QT_HOST: ${{inputs.qt-host}}
+    run: |
+      $QT_BIN_PATH = "$env:QT_OUTPUT_DIR\$env:QT_VERSION\$env:QT_HOST\bin"
+      $QT_LIBEXEC_PATH = "$env:QT_OUTPUT_DIR\$env:QT_VERSION\$env:QT_HOST\libexec"
+      $CMAKE_PREFIX_PATH = "$env:QT_OUTPUT_DIR\$env:QT_VERSION\$env:QT_HOST\lib\cmake"
+
+      Write-Output "$QT_BIN_PATH" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+      Write-Output "$QT_LIBEXEC_PATH" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+      Write-Output "CMAKE_PREFIX_PATH=$CMAKE_PREFIX_PATH" >> $env:GITHUB_ENV

@@ -700,8 +700,8 @@ When a command is invoked through the AI Assistant rather than a raw TCP/JSON cl
 - CSV Player: 6 commands
 - Console Control: 17 commands
 - Dashboard Configuration: 13 commands
-- Project Management: 64 commands
-- Workspace Management: 15 commands
+- Project Management: 67 commands
+- Workspace Management: 20 commands
 - Problem Center: 3 commands
 
 **Pro Build Additional:**
@@ -1932,7 +1932,7 @@ python test_api.py send project.dashboard.setWidgetFreezeTitle -p widgetType=9 -
 - Requires ProjectFile mode with a loaded project
 - Only affects freeze mode; normal-mode chrome and titles are unchanged
 
-### Project Management Commands (63)
+### Project Management Commands (66)
 
 > This section documents 61 of the 64 commands the live Project
 > Management module registers. `project.new`, `project.open`, and
@@ -1949,7 +1949,7 @@ Project file and configuration management:
 > `project.dataset.*`, and `project.action.*` mutators documented below
 > (write) on the in-memory model. `project.workspace.*` is a separate
 > registered command family (see `WorkspacesHandler.cpp`); see [Workspace
-> Commands](#workspace-commands-15) below.
+> Commands](#workspace-commands-20) below.
 
 #### 🟢 `project.getStatus`
 Get project info.
@@ -3589,7 +3589,55 @@ Run one or more sample frames through the project's frame parser, then apply eve
 ```
 `rawCells[i]` maps to `dataset.index = i + 1`. The table API (`tableGet`/`tableSet`/`datasetGetRaw`/`datasetGetFinal`) is not injected here: transforms that read other datasets see 0/null; test those individually with `project.dataset.transform.dryRun`. If one or more dataset transforms fail to compile, the response still succeeds: their `final` value is `null`, their `uniqueId` is listed in `transformCompileFailures`, and a top-level `warning` is added. A frame-parser compile failure, a missing `sampleFrame`/`sampleFrames`, or an out-of-range `sourceId` returns an error response instead.
 
-### Workspace Commands (15)
+#### 🟢 `project.transformLibrary.get`
+Read one of the project's shared transform libraries: a chunk whose top-level
+functions every dataset transform of that language can call by name. Empty
+string when the project has none. See [Dataset Transforms](Dataset-Transforms.md),
+"The shared libraries".
+
+**Parameters:**
+- `language` (string, optional): `"lua"` (default) or `"js"`
+
+**Returns:**
+```json
+{"language": "lua", "code": "function rtd(raw, p)\n  return (raw * p.scale + p.offset) / p.r0\nend\n"}
+```
+Returns `INVALID_PARAM` for any other `language`.
+
+#### 🟢 `project.transformLibrary.set`
+Replace a shared library. Persisted in the project file (`transformLibrary` for
+Lua, `transformLibraryJs` for JavaScript); every transform engine of that
+language recompiles immediately. A library that fails to load reports through
+the Problem Center and the transforms compile without it. Validate with
+`project.transformLibrary.dryRun` first. An empty `code` clears the library.
+
+**Parameters:**
+- `code` (string, required): Library source
+- `language` (string, optional): `"lua"` (default) or `"js"`
+
+**Returns:**
+```json
+{"language": "lua", "length": 71}
+```
+
+#### 🟢 `project.transformLibrary.dryRun`
+Load and run library source in a throwaway sandboxed engine (Lua interpreter
+with the deadline hook, or a watchdogged `QJSEngine`) without installing it.
+Nothing in the project changes.
+
+**Parameters:**
+- `code` (string, required): Library source
+- `language` (string, optional): `"lua"` (default) or `"js"`
+
+**Returns:**
+```json
+{"language": "lua", "valid": false, "error": "[string \"library\"]:3: '=' expected near 'end'"}
+```
+`error` is present only when `valid` is false (JavaScript errors read
+`Line N: message`); a chunk that exceeds the dry-run budget reports
+`"library timed out"`.
+
+### Workspace Commands (20)
 
 > `project.workspace.*` is a separate registered command family
 > (`WorkspacesHandler.cpp`) from Project Management above. It manages
@@ -3845,8 +3893,11 @@ widget of the given `widgetType` fed by the given `groupId`. Requires
   "added": true
 }
 ```
-`datasetId` is echoed back when it was supplied. `widgetId` is the opaque
-identifier to pass to `project.workspace.removeWidget`. Returns
+`datasetId` and `datasetUniqueId` are echoed back when `datasetId` was
+supplied. The tile is stored by identity (`groupId` plus `datasetUniqueId`),
+and `relativeIndex` is re-derived from it whenever groups are added, removed or
+reordered, so a saved workspace keeps pointing at the same dataset. `widgetId`
+is the opaque identifier to pass to `project.workspace.removeWidget`. Returns
 `INVALID_PARAM` if the workspace or group does not exist, `widgetType` is
 unknown or a sentinel value (`0`=Terminal, `17`=NoWidget), `widgetType` is
 not in the group's `compatibleWidgetTypes`, or `datasetId` is not in
@@ -3940,6 +3991,82 @@ the group still exists but `compatibleWidgetTypes` has changed. Requires
 ```
 When `dryRun` is true, `removed` is the count of `removedRefs` and nothing
 is written.
+
+#### 🟢 `project.workspace.profile.list`
+List the project's workspace profiles (named subsets of workspace folders and
+workspaces, see [Project Editor](Project-Editor.md), "Workspace profiles") and
+which one is active. `activeProfile` is `-1` when every workspace is shown.
+
+**Parameters:** None
+
+**Returns:**
+```json
+{
+  "profiles": [
+    {"profileId": 1, "title": "Engine A", "folderIds": [3, 4], "workspaceIds": [5002]},
+    {"profileId": 2, "title": "Engine B", "folderIds": [3, 6], "workspaceIds": []}
+  ],
+  "activeProfile": 1
+}
+```
+
+#### 🟢 `project.workspace.profile.add`
+Add an empty profile. Requires `ProjectFile` mode. Fill it with
+`project.workspace.profile.update`.
+
+**Parameters:**
+- `title` (string, required): Profile title. Titles are not forced unique; keep them so, since `select{title}` and `--profile` match by title
+
+**Returns:**
+```json
+{"profileId": 3, "title": "Engine C", "added": true}
+```
+
+#### 🟢 `project.workspace.profile.update`
+Edit a profile's title and/or the folders and workspaces it shows. Requires
+`ProjectFile` mode. A listed folder shows its whole subtree; each id array
+replaces the stored list, so send the complete set.
+
+**Parameters:**
+- `profileId` (int, required): Profile id from `project.workspace.profile.list`
+- `title` (string, optional): New title
+- `folderIds` (array of int, optional): Workspace folder ids the profile shows
+- `workspaceIds` (array of int, optional): Individual workspace ids the profile shows
+
+**Returns:**
+```json
+{"profileId": 3, "title": "Engine C", "folderIds": [3, 8], "workspaceIds": [], "updated": true}
+```
+Returns `INVALID_PARAM` when the profile does not exist.
+
+#### 🟢 `project.workspace.profile.remove`
+Delete a profile. Requires `ProjectFile` mode. If the deleted profile was
+active, every workspace is shown again.
+
+**Parameters:**
+- `profileId` (int, required): Profile id
+
+**Returns:**
+```json
+{"profileId": 3, "removed": true}
+```
+
+#### 🟢 `project.workspace.profile.select`
+Show only the workspaces of one profile on the dashboard. Runtime state: it is
+remembered per project file on this machine, not written into the project.
+The same choice is available at launch through `--profile <title>`
+([Command-Line Interface](Command-Line-Interface.md)).
+
+**Parameters:**
+- `profileId` (int, optional): Profile id, `-1` shows every workspace
+- `title` (string, optional): Profile title; wins over `profileId` when both
+  are given, an empty title shows every workspace
+
+**Returns:**
+```json
+{"activeProfile": 1, "selected": true}
+```
+Returns `INVALID_PARAM` when neither an id nor a title matches a profile.
 
 ### Problems Commands (3)
 
@@ -5548,6 +5675,13 @@ See the **[MCP Client example](https://github.com/Serial-Studio/Serial-Studio/tr
 - **Issue Tracker**: https://github.com/Serial-Studio/Serial-Studio/issues
 
 ## Changelog
+
+### Version 4.1.0 (September 2026)
+- **Added**: `project.transformLibrary.get` / `set` / `dryRun` for the shared Lua and
+  JavaScript libraries (`language` parameter)
+- **Added**: `project.workspace.profile.list` / `add` / `update` / `remove` / `select`
+- **Changed**: `project.workspace.addWidget` stores tiles by dataset identity and echoes
+  `datasetUniqueId`; `relativeIndex` is re-derived when groups move
 
 ### Version 2.2.1 (January 2025)
 - **Added**: 7 new Dashboard Configuration commands:

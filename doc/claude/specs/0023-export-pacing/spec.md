@@ -19,7 +19,7 @@ author: Claude (with Alex Spataru)
 
 ## Problem / Motivation
 
-The BADAQ test-cell project (two sources: a 500 kbit/s CAN bus feeding ~582 table-driven
+The field project (two sources: a 500 kbit/s CAN bus feeding ~582 table-driven
 datasets, plus a 48 kHz audio source for IEPE vibration) produced a **2+ GB CSV in ~5
 seconds**, mostly empty or repeated cells. Ground truth from the code:
 
@@ -46,7 +46,7 @@ And `dashboardTick()` needs to be safe to call at arbitrary rates from control s
   the full schema every N ms, regardless of frame rate.
 - Default behavior is unchanged: per-frame CSV logging remains the out-of-the-box mode,
   and projects without control scripts see no behavioral difference except tick pacing.
-- The BADAQ project records a usable CSV trend log while audio-rate data still reaches
+- The field project records a usable CSV trend log while audio-rate data still reaches
   MDF4/session sinks at full rate, and its CAN watchdog + render tick stay driven by the
   CAN source rather than the 48 kHz audio stream.
 
@@ -80,7 +80,7 @@ And `dashboardTick()` needs to be safe to call at arbitrary rates from control s
 
 ## Acceptance Criteria
 
-- [x] **AC1** — With CSV interval = 100 ms and the BADAQ project running (CAN + audio),
+- [x] **AC1** — With CSV interval = 100 ms and the field project running (CAN + audio),
   the CSV grows at ~10 rows/s x ~583 columns (order of 100 KB/min, not GB/5 s), while
   MDF4/Sessions still record per-sample. (Maintainer observes in the running app.)
 - [x] **AC2** — A control script calling `dashboardTick()` in a tight loop produces at
@@ -112,10 +112,10 @@ And `dashboardTick()` needs to be safe to call at arbitrary rates from control s
 ## Open Questions
 
 None — CSV strategy (interval snapshot vs per-source files) and tick export fan-out
-(coalesced but kept) were decided with the maintainer on 2026-07-20. The BADAQ script
+(coalesced but kept) were decided with the maintainer on 2026-07-20. The field-project script
 mitigation was chosen as "gate the per-frame tick on the audio source", but
 implementation review found that gating the tick off would freeze and stop recording the
-CAN datasets: the BADAQ CAN parser writes only data tables and returns no channels, so
+CAN datasets: the field-project CAN parser writes only data tables and returns no channels, so
 the table-driven CAN datasets render/record exclusively via the tick. The mitigation was
 corrected to pin the watchdog and tick trigger to the CAN source (sourceId 0) — which
 achieves the actual goal (decoupling the tick from the audio firehose) without the

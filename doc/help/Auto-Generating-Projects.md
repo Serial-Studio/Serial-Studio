@@ -85,8 +85,10 @@ Modbus register maps come in a hundred ad-hoc formats. Serial Studio accepts the
 2. Click **Import Register Map…**.
 3. Pick a `.csv`, `.xml`, or `.json` file.
 4. Review the registers in the preview dialog: `1: Temperature @ 0 (Holding Registers, uint16) [°C]`, `2: Pressure @ 1 (Holding Registers, uint16) [PSI]`, ...
-5. Click **Create Project**. You'll be prompted to save the `.ssproj`.
+5. Click **Create Project** to start a new `.ssproj` (you'll be prompted to save it), or **Add to Project** to append the result to the project that is already open.
 6. The contiguous register blocks are also pushed into the live Modbus driver, so polling starts immediately when you connect.
+
+**Add to Project** keeps everything the open project already has and adds one new source, its groups, its tables and its workspaces, filed under a folder named after the imported file. Ids never collide: the new entities take fresh ids, and a table whose name the project already uses is renamed (with the generated parser and transforms updated to match). The same button exists in the DBC and Protobuf preview dialogs. It needs a project with at least one group open in Project mode, and a Pro build, because the result is a multi-source project.
 
 ### What it generates
 
@@ -161,7 +163,7 @@ Build the project by hand when:
 
 The generated project is a project like any other. Once it's open in the Project Editor, everything is editable: rename datasets, regroup them, swap widgets, add transforms, attach datasets to workspaces. The importer produces a starting layout, not a fixed one. DBC and Modbus imports configure a generated Lua parser whose signal/register map comes from the imported file: re-import to regenerate the map, edit the Lua directly, or switch the source's parser platform to JavaScript for custom decoding logic. The Protobuf parser is generated Lua and can be edited directly.
 
-If you need to re-import (the vendor published a new DBC, you added a register, the protobuf schema gained a field), the safest path is to import again as a new project and copy over your dashboard customizations, rather than trying to merge by hand.
+If you need to re-import (the vendor published a new DBC, you added a register, the protobuf schema gained a field), import again as a new project and copy over your dashboard customizations, rather than trying to merge by hand. To bring a second device into an existing dashboard, use **Add to Project** in the preview dialog instead: it appends the new source next to the ones you have.
 
 ## See also
 

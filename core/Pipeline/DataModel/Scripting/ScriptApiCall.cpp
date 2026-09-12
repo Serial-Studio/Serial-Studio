@@ -35,6 +35,7 @@ extern "C" {
 #include <QJsonArray>
 #include <QJsonObject>
 #include <QJsonValue>
+#include <QRegularExpression>
 #include <QString>
 #include <QUuid>
 #include <stdexcept>
@@ -49,6 +50,7 @@ extern "C" {
 #include "DataModel/Scripting/DeviceWriteApi.h"
 #include "DataModel/Scripting/LuaCompatJIT.h"
 #include "DataModel/Scripting/ScriptResult.h"
+#include "DataModel/Scripting/TableApiScan.h"
 #include "IO/PipelineHost.h"
 
 using namespace DataModel::ScriptResult;
@@ -641,16 +643,30 @@ void DataModel::ScriptApiCall::installAll(QJSEngine* js, int sourceId, TableApi 
 }
 
 /**
+ * @brief Word-boundary scan of @p source for the table-API helpers (spec 0086): a script that
+ *        names one may read dataset values back out of the store; the rule lives in
+ *        TableApiScan.h so the unit tier pins it without this TU's link set.
+ */
+bool DataModel::ScriptApiCall::referencesTableApi(const QString& source)
+{
+  return DataModel::TableApiScan::referencesTableApi(source);
+}
+
+/**
  * @brief Installs every host bridge and the full SDK into a Lua state in one call.
  */
-void DataModel::ScriptApiCall::installAll(lua_State* L, int sourceId)
+void DataModel::ScriptApiCall::installAll(lua_State* L, int sourceId, TableApi tableApi)
 {
   SS_ASSERT(L != nullptr, return);
 
   static auto& frameBuilder = DataModel::FrameBuilder::instance();
 
   DataModel::NotificationCenter::installScriptApi(L);
-  frameBuilder.injectTableApiLua(L);
+  if (tableApi == TableApi::ArmCapture)
+    frameBuilder.injectTableApiLua(L);
+  else
+    frameBuilder.installTableApiNamesLua(L);
+
   DataModel::DeviceWriteApi::installLua(L, sourceId);
   DataModel::ActionFireApi::installLua(L);
   DataModel::DashboardApi::installLua(L);

@@ -272,6 +272,27 @@ void DataModel::ProtoImporter::showPreview(const QString& filePath)
 }
 
 /**
+ * @brief Adds the generated source, groups, tables and workspaces to the open project instead of
+ *        creating a new file (spec 0083).
+ */
+void DataModel::ProtoImporter::confirmMerge()
+{
+  if (m_messages.isEmpty())
+    return;
+
+  const auto project  = projectFromMessages();
+  const QString label = QFileInfo(m_protoFilePath).baseName();
+  if (!m_projectModel.mergeImportedProject(project, label))
+    return;
+
+  Core::Prompt::showMessageBox(
+    tr("Added %1 messages to the open project.").arg(QString::number(m_messages.size())),
+    tr("The new source, groups, tables and workspaces are filed under \"%1\".").arg(label),
+    Core::Prompt::Information,
+    tr("Import Complete"));
+}
+
+/**
  * @brief Generates a project covering every top-level message and hands it to ProjectModel.
  */
 void DataModel::ProtoImporter::confirmImport()

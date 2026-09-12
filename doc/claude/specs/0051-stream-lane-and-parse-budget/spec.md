@@ -14,7 +14,7 @@ author: Alex Spataru
 
 ## Problem / Motivation
 
-A real industrial project (BADAQ: one CAN bus at ~10 Hz plus two stereo audio sources
+A real industrial project (the field project: one CAN bus at ~10 Hz plus two stereo audio sources
 running per-sample Lua transforms at 48 kHz) degraded the entire dashboard to a visible
 1 Hz update rate (`bug-report.md`, 2026-08-11). Two independent failures compound:
 
@@ -31,13 +31,13 @@ pipeline was designed for sparse structured telemetry (CAN, serial: one meaningf
 at a time, values as strings). Audio is a different data class: a dense, homogeneous,
 typed signal. Today each audio sample is individually formatted to CSV text by the driver,
 delimiter-scanned, re-parsed back to a number, stored as a string, run through one script
-call per transform-bearing dataset (~1–2 µs per call boundary — BADAQ's 8 datasets at
+call per transform-bearing dataset (~1–2 µs per call boundary — the field project's 8 datasets at
 48 kHz is ~384k boundaries/s, i.e. 400–800 ms of work per second on its own), then
 published as one dashboard frame per sample with a full deep copy per sample when any
 exporter is on. This costs microseconds per sample regardless of which thread runs it, so
 one core saturates at a few hundred kilosamples/s and every added channel makes it worse.
 The target the application must actually serve is *n* audio inputs at up to 96 kHz plus
-heavy per-dataset DSP — BADAQ had to degrade to 16 kHz capture and merged transforms just
+heavy per-dataset DSP — the field project had to degrade to 16 kHz capture and merged transforms just
 to stay under the breaker.
 
 The GUI thread also hosts all of this work today, so parse overload and UI responsiveness
@@ -48,7 +48,7 @@ what remains of the budget is per-source overload control.
 
 ## Goals
 
-- A cheap source is never starved by an expensive one: with BADAQ-class load (one
+- A cheap source is never starved by an expensive one: with field-project-class load (one
   overloaded scripted source + one light source), the light source's dashboard widgets
   keep updating at their natural rate.
 - Overload degrades smoothly instead of beating at 1 Hz: an over-budget source visibly
@@ -64,7 +64,7 @@ what remains of the budget is per-source overload control.
   transform that is invoked once per captured block instead of once per sample, with
   per-sample fallback preserved for existing projects.
 - Stream-source data still reaches everything it reaches today: plots/FFT/widgets,
-  CSV/MDF4/session exports, the data-table store (for BADAQ-style metric engines), and
+  CSV/MDF4/session exports, the data-table store (for field-project-style metric engines), and
   API consumers — at rates each consumer can actually use.
 - The GUI thread spends no per-sample time on stream sources; its work per stream source
   is bounded per display tick, independent of sample rate.
@@ -85,7 +85,7 @@ what remains of the budget is per-source overload control.
 - **No per-source parallelism *within* the frame pipeline.** The frame pipeline moves off
   the GUI thread as one unit (R16) but stays single-threaded internally: frame-lane
   sources share ordering guarantees (transforms see earlier datasets' finals) and the
-  data-table bus, and BADAQ-style metric engines read across sources through it —
+  data-table bus, and field-project-style metric engines read across sources through it —
   sharding it means locks or lost semantics for sources that, once streams leave the
   lane, are sparse (the CI gate already proves >1 MHz single-core native parse).
   Revisit only if a measured frame-lane workload saturates the processing thread.
@@ -174,7 +174,7 @@ what remains of the budget is per-source overload control.
 14. **R14 — Lane coexistence.** A project mixing frame-lane sources and stream sources
     behaves as the union: frame sources keep today's semantics and ordering; stream
     sources follow R6–R13; the combined dashboard updates all widgets at their natural
-    rates. BADAQ's original configuration (CAN + 2× stereo audio at 48 kHz with 8
+    rates. The field project's original configuration (CAN + 2× stereo audio at 48 kHz with 8
     transform-bearing datasets) runs without tripping any budget and with every widget
     live.
 15. **R15 — Mode coverage.** The stream lane serves both ProjectFile and QuickPlot modes
@@ -292,9 +292,9 @@ where the derated numbers still clear the R8 target in either mode.
 - [x] **AC11 (R13)** — A frame-lane virtual dataset whose transform reads a stream
   dataset's table slot updates at block rate with the stream's latest value; ThreadSanitizer
   (or equivalent maintainer-run race check) is clean over a mixed-lane session.
-- [x] **AC12 (R14)** — Restored BADAQ project (48 kHz, original 8 transform datasets,
+- [x] **AC12 (R14)** — Restored field project (48 kHz, original 8 transform datasets,
   un-merged metrics engine) on the maintainer's machine: no budget warning, CAN and audio
-  widgets all live, APS500 painter values advance at data rate. Maintainer observation —
+  widgets all live, synoptic painter values advance at data rate. Maintainer observation —
   this is the incident's definition of done.
 - [x] **AC13 (R15)** — QuickPlot with an audio device: waveform + FFT live at the
   configured sample rate, no text path in the trace. Maintainer observation.

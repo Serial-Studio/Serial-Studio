@@ -46,6 +46,7 @@ import time
 import pytest
 
 from utils import ChecksumType, DataGenerator
+from utils.api_client import APIError
 
 
 def _wait_for_dashboard_widgets(api_client, minimum: int, timeout: float = 2.0) -> int:
@@ -1249,6 +1250,43 @@ def test_frame_parser_dry_run_all_languages(api_client, clean_state, language, c
         "project.frameParser.dryCompile", {"code": code, "language": language}
     )
     assert compiled["ok"], f"dryCompile failed for language={language}"
+
+
+def test_frame_parser_dry_run_refuses_a_call_without_input_bytes(
+    api_client, clean_state
+):
+    """dryRun needs real bytes; it must not fall back to the project's sample frames.
+
+    The old handler silently substituted sampleFrame / sampleFrames when the caller
+    supplied none, so a dry run reported "ok" against bytes the caller never chose --
+    the assistant then reasoned about the wrong frame. The call is now refused.
+    """
+    with pytest.raises(APIError):
+        api_client.command(
+            "project.frameParser.dryRun",
+            {"code": JS_CSV_PARSER, "language": 0, "frameDetection": 0},
+        )
+
+
+def test_frame_parser_dry_run_quick_plot_needs_no_delimiters(api_client, clean_state):
+    """QuickPlot dry runs supply their own line-based defaults.
+
+    QuickPlot has no project delimiters to inherit, so without the defaults the extractor
+    found no frame at all and every QuickPlot dry run came back empty.
+    """
+    result = api_client.command(
+        "project.frameParser.dryRun",
+        {
+            "code": JS_CSV_PARSER,
+            "language": 0,
+            "operationMode": 2,  # SerialStudio::QuickPlot
+            "inputBytes": "1,2,3\n",
+        },
+    )
+
+    assert result["ok"], "QuickPlot dryRun must run without explicit delimiters"
+    assert result["frameCount"] == 1, f"Expected 1 frame, got {result['frameCount']}"
+    assert result["frames"][0]["rows"] == [["1", "2", "3"]]
 
 
 def test_native_template_catalog_and_schema(api_client, clean_state):

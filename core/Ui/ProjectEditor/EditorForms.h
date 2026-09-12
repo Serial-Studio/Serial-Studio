@@ -87,6 +87,8 @@ private:
   ProjectModel& m_model;
   DataModel::FrameBuilder& m_frameBuilder;
 
+  void ensureTransformEditor();
+
   DatasetTransformEditor* m_transformEditor;
   QMetaObject::Connection m_deviceListConn;
 };

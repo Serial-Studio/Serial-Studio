@@ -80,6 +80,7 @@ qt_add_library(
   ApiHandlers/ExtensionHandler.cpp
   ApiHandlers/ProblemsHandler.cpp
   ApiHandlers/WindowHandler.cpp
+  ApiHandlers/WorkspaceProfileHandler.cpp
   ApiHandlers/WorkspacesHandler.cpp
   Platform/FileOpenEventFilter.cpp
   UI/DashboardWidget.cpp
@@ -180,6 +181,7 @@ qt_add_library(
   ApiHandlers/ExtensionHandler.h
   ApiHandlers/ProblemsHandler.h
   ApiHandlers/WindowHandler.h
+  ApiHandlers/WorkspaceProfileHandler.h
   ApiHandlers/WorkspacesHandler.h
   UI/Dashboard.h
   UI/SerialStudioHelpers.h
@@ -271,6 +273,7 @@ target_sources(
   ProjectEditor/EditorCommit.cpp
   ProjectEditor/EditorSummaries.cpp
   ProjectEditor/EditorMultiSelect.cpp
+  ProjectEditor/EditorInflux.cpp
   ProjectEditor/EditorMqtt.cpp
   ProjectEditor/ProjectNavHistory.cpp
   ProjectEditor/Generated/DatasetForm.cpp
@@ -278,6 +281,7 @@ target_sources(
   ProjectEditor/Editors/EmbeddedCodeEditor.cpp
   ProjectEditor/Editors/EmbeddedCodeEditorItem.cpp
   ProjectEditor/Editors/ControlScriptEditor.cpp
+  ProjectEditor/Editors/TransformLibraryEditor.cpp
   ProjectEditor/Editors/PublisherScriptEditor.cpp
   ProjectEditor/Editors/MacroEditor.cpp
   ProjectEditor/Editors/SerialStudioCompleter.cpp
@@ -294,6 +298,7 @@ target_sources(
   ProjectEditor/EditorCommit.h
   ProjectEditor/EditorSummaries.h
   ProjectEditor/EditorMultiSelect.h
+  ProjectEditor/EditorInflux.h
   ProjectEditor/EditorMqtt.h
   ProjectEditor/ProjectEditorIcons.h
   ProjectEditor/ProjectEditorItemIds.h
@@ -302,6 +307,7 @@ target_sources(
   ProjectEditor/Editors/EmbeddedCodeEditor.h
   ProjectEditor/Editors/EmbeddedCodeEditorItem.h
   ProjectEditor/Editors/ControlScriptEditor.h
+  ProjectEditor/Editors/TransformLibraryEditor.h
   ProjectEditor/Editors/PublisherScriptEditor.h
   ProjectEditor/Editors/MacroEditor.h
   ProjectEditor/Editors/SerialStudioCompleter.h

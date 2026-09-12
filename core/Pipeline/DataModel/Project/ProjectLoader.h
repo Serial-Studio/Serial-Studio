@@ -68,6 +68,7 @@ public:
   [[nodiscard]] bool loadGeneratedProject(const QJsonDocument& document);
   void watchGeneratedProjectRequests();
   void importProjectFromJson(const QJsonObject& project, const QString& suggestedFileName);
+  [[nodiscard]] bool mergeImportedProject(const QJsonObject& project, const QString& label);
 
   [[nodiscard]] bool applyHistorySnapshot(const QByteArray& state);
 
@@ -107,6 +108,7 @@ private:
 private:
   ProjectModel& m_model;
   bool m_lastOpenReloaded;
+  bool m_interactiveOpen;
   Core::Bus::Subscription m_generatedProjectRequests;
 };
 

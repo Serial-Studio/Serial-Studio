@@ -328,6 +328,13 @@
           "writeHook": {
             "type": "string"
           },
+          "shape": {
+            "enum": [
+              "collection",
+              "map"
+            ],
+            "description": "collection (default): a std::vector of structs written through serialize(entry); map: a QVariantMap written and read through the named hooks as one JSON object."
+          },
           "apiName": {
             "type": "string"
           },
@@ -382,6 +389,7 @@
           "legacyRangePairs",
           "readAlarmBands",
           "readFrequencyMarkers",
+          "readTransformParams",
           "normalizeRanges"
         ]
       },

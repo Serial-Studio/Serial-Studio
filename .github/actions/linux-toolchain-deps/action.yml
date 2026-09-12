@@ -1,0 +1,62 @@
+#
+# SPDX-FileCopyrightText: 2020-2025 Alex Spataru
+# SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial
+#
+# apt payload for the compile-only legs: clang and lld (the sanitizer tiers need libFuzzer
+# and the lld link footprint), the xcb/xkb platform stack, and the two GStreamer runtime
+# libraries QtMultimedia links against. No packaging tools: nothing here builds a package
+#
+
+name: 'Install Linux toolchain dependencies'
+description: 'Lean clang/lld apt payload for the jobs that compile but never package.'
+
+runs:
+  using: 'composite'
+  steps:
+  - name: '⚙️ Install dependencies'
+    shell: bash
+    run: |
+      sudo apt-get update
+      sudo apt-get install -y \
+        build-essential \
+        clang \
+        lld \
+        ninja-build \
+        libcups2-dev \
+        libnss3 \
+        libegl1 \
+        libgl1-mesa-dev \
+        libasound2-dev \
+        libudev-dev \
+        libsecret-1-dev \
+        libzstd-dev \
+        zlib1g-dev \
+        libexpat1-dev \
+        libminizip-dev \
+        libopus-dev \
+        libxcb1 \
+        libxcb-cursor0 \
+        libxcb-cursor-dev \
+        libxcb-glx0 \
+        libxcb-icccm4 \
+        libxcb-image0 \
+        libxcb-image0-dev \
+        libxcb-keysyms1 \
+        libxcb-randr0 \
+        libxcb-render0 \
+        libxcb-render-util0 \
+        libxcb-shape0 \
+        libxcb-shm0 \
+        libxcb-sync1 \
+        libxcb-util0-dev \
+        libxcb-util1 \
+        libxcb-xfixes0 \
+        libxcb-xinerama0 \
+        libxcb-xkb-dev \
+        libxcb-xtest0 \
+        libxkbcommon-dev \
+        libxkbcommon-x11-0 \
+        libxkbcommon-x11-dev \
+        libpulse-dev \
+        libgstreamer1.0-0 \
+        libgstreamer-plugins-base1.0-0

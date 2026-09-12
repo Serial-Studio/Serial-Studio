@@ -23,6 +23,7 @@
 
 #include <algorithm>
 #include <chrono>
+#include <utility>
 
 #include "Core/SSAssert.h"
 #include "IO/PipelineHost.h"
@@ -44,6 +45,11 @@ DataModel::BlockStager::PooledBlockSlot::PooledBlockSlot()
 {}
 
 /**
+ * @brief Creates a source's open entry with no block held and no block published yet.
+ */
+DataModel::BlockStager::OpenEntry::OpenEntry(int source) : sourceId(source), blockNumber(0) {}
+
+/**
  * @brief Binds the stager to its host and materialises the block pool. @p generation and
  *        @p maskSinks are the facade's own members, read (never written) here, so a pool
  *        invalidation or a masked republish bracket is visible without a second copy of the state.
@@ -60,6 +66,8 @@ DataModel::BlockStager::BlockStager(DataModel::BlockStagerHost& host,
   m_pool.reserve(kBlockPoolSlots);
   for (int i = 0; i < kBlockPoolSlots; ++i)
     m_pool.emplace_back(std::make_shared<PooledBlockSlot>());
+
+  m_open.reserve(kOpenEntriesReserve);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -71,15 +79,36 @@ DataModel::BlockStager::BlockStager(DataModel::BlockStagerHost& host,
  */
 quint64 DataModel::BlockStager::blockNumber(int sourceId) const noexcept
 {
-  const auto it = m_blockNumbers.find(sourceId);
-  return it != m_blockNumbers.end() ? it->second : quint64(0);
+  const auto* entry = findOpen(sourceId);
+  return entry ? entry->blockNumber : quint64(0);
+}
+
+/**
+ * @brief Linear scan over the open entries: sources are few, so this beats a tree walk and, unlike
+ *        a node container, costs no heap operation per block (spec 0085).
+ */
+DataModel::BlockStager::OpenEntry* DataModel::BlockStager::findOpen(int sourceId) noexcept
+{
+  return const_cast<OpenEntry*>(std::as_const(*this).findOpen(sourceId));
+}
+
+const DataModel::BlockStager::OpenEntry* DataModel::BlockStager::findOpen(
+  int sourceId) const noexcept
+{
+  SS_ASSERT_HOTPATH(sourceId >= 0);
+
+  for (const auto& entry : m_open)
+    if (entry.sourceId == sourceId)
+      return &entry;
+
+  return nullptr;
 }
 
 /**
  * @brief Caps how many block slots may be materialised so a wide project cannot blow past
- *        kBlockPoolBudgetBytes: a slot's storage scales with the dataset count, and 64 of them
- *        is a lot of memory once a project carries hundreds of datasets. Never drops below the
- *        dashboard ring plus headroom, since starving staging is worse than exceeding the budget.
+ *        kBlockPoolBudgetBytes: a slot's storage scales with the dataset count. Never drops below
+ *        the dashboard ring plus headroom, since starving staging is worse than exceeding the
+ *        budget. Raw twins are budgeted pessimistically (most columns carry none, spec 0085).
  */
 void DataModel::BlockStager::refreshBudget(const DataModel::Frame& src) noexcept
 {
@@ -180,7 +209,7 @@ void DataModel::BlockStager::bindToFrame(PooledBlockSlot& slot,
       DataModel::BlockColumn column;
       column.uniqueId = dataset.uniqueId;
       column.hasText  = true;
-      column.hasRaw   = true;
+      column.hasRaw   = DataModel::dataset_carries_raw(dataset);
       block.columns.push_back(std::move(column));
     }
 
@@ -197,12 +226,12 @@ void DataModel::BlockStager::bindToFrame(PooledBlockSlot& slot,
 DataModel::BlockStager::PooledBlockSlot* DataModel::BlockStager::openBlockFor(
   int sourceId, const DataModel::Frame& src)
 {
-  const auto it = m_open.find(sourceId);
-  if (it != m_open.end()) [[likely]] {
+  OpenEntry* entry = findOpen(sourceId);
+  if (entry && entry->slot) [[likely]] {
     const bool reusable =
-      it->second->generation == m_generation && it->second->block.masked == m_maskSinks;
+      entry->slot->generation == m_generation && entry->slot->block.masked == m_maskSinks;
     if (reusable) [[likely]]
-      return it->second.get();
+      return entry->slot.get();
 
     flush(sourceId);
   }
@@ -221,8 +250,14 @@ DataModel::BlockStager::PooledBlockSlot* DataModel::BlockStager::openBlockFor(
   slot->block.structureGeneration = m_generation;
   slot->block.masked              = m_maskSinks;
 
-  const auto inserted = m_open.emplace(sourceId, std::move(slot));
-  return inserted.first->second.get();
+  if (!entry) {
+    m_open.emplace_back(sourceId);
+    entry = &m_open.back();
+  }
+
+  SS_ASSERT_HOTPATH(entry->sourceId == sourceId);
+  entry->slot = std::move(slot);
+  return entry->slot.get();
 }
 
 /**
@@ -280,17 +315,28 @@ SS_HOT void DataModel::BlockStager::stage(int sourceId,
  */
 void DataModel::BlockStager::flush(int sourceId)
 {
-  const auto it = m_open.find(sourceId);
-  if (it == m_open.end())
+  OpenEntry* entry = findOpen(sourceId);
+  if (!entry || !entry->slot)
     return;
 
-  auto slot = it->second;
-  m_open.erase(it);
+  flush(*entry);
+}
+
+/**
+ * @brief Publishes @p entry's open block (if it holds samples) and drops the stager's reference,
+ *        leaving the entry itself in place for the source's next block.
+ */
+void DataModel::BlockStager::flush(OpenEntry& entry)
+{
+  SS_ASSERT_HOTPATH(entry.slot != nullptr);
+
+  auto slot = std::move(entry.slot);
+  SS_ASSERT_HOTPATH(slot->sourceId == entry.sourceId);
 
   if (slot->block.samples == 0)
     return;
 
-  slot->block.blockNumber = ++m_blockNumbers[sourceId];
+  slot->block.blockNumber = ++entry.blockNumber;
   m_host.publishStagedBlock(DataModel::DataBlockPtr(slot, &slot->block));
 }
 
@@ -301,14 +347,7 @@ void DataModel::BlockStager::flush(int sourceId)
  */
 void DataModel::BlockStager::flushAll()
 {
-  if (m_open.empty()) [[likely]]
-    return;
-
-  std::vector<int> sources;
-  sources.reserve(m_open.size());
-  for (const auto& [sourceId, slot] : m_open)
-    sources.push_back(sourceId);
-
-  for (const int sourceId : sources)
-    flush(sourceId);
+  for (auto& entry : m_open)
+    if (entry.slot)
+      flush(entry);
 }

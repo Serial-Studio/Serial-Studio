@@ -23,6 +23,7 @@
 #pragma once
 
 #include <QJsonArray>
+#include <QJsonObject>
 #include <QSettings>
 #include <QVector>
 
@@ -76,6 +77,7 @@ public:
                          const quint16 start,
                          const quint16 count,
                          const quint8 slave = 0);
+  [[nodiscard]] bool addFromJson(const QJsonObject& block);
 
 private:
   void persist();

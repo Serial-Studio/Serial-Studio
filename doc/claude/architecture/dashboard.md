@@ -620,6 +620,17 @@ Persisted under `"workspaces"`. **Workspace IDs ≥ 1000**, group IDs < 1000.
 `Taskbar::deleteWorkspace(id)` branches on the threshold — don't cross-wire. Edits stage
 in memory + `setModified(true)`; no autosave.
 
+**Tile identity, then ordinal (spec 0083).** A `WidgetRef` carries `groupUniqueId` and
+`datasetUniqueId` (-1 for group-scope tiles); `relativeIndex` is the per-type dashboard ordinal
+and only a cache of that identity. `ProjectWorkspaces::rebindWidgetRefs()` re-derives it through
+`WorkspaceKeys::rebindWidgetRefs` at the end of `applyJsonDocumentCore`, inside
+`notifyWorkspaceListChanged`, after `flushWorkspaceRegen` and in `writeProjectFile` right after
+that flush (the order matters: a save must rebind against the regenerated list). A ref written
+before the identity existed resolves by its ordinal once and is back-filled, and `relativeIndex`
+keeps being written so older readers still resolve the tile. `TaskbarWorkspaces::resolveRefWindowId`
+keeps the ordinal fast path and falls back to `TaskbarWindowMap::findWindowIdByIdentity` when the
+ordinal's owner is not the ref's group. Pinned by `tst_workspace_rebind`.
+
 ## Waterfall / Spectrogram (Pro)
 
 `UI/Widgets/Waterfall.h/.cpp`: per-dataset Pro widget

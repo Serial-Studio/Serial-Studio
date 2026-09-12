@@ -57,6 +57,9 @@ qt_add_library(
   DataModel/Scripting/ReplayRowCodec.cpp
   DataModel/Scripting/ScriptDeviceWait.cpp
   DataModel/Scripting/ScriptResult.cpp
+  DataModel/Scripting/ScriptCells.cpp
+  DataModel/Scripting/LuaCellCollector.cpp
+  DataModel/Scripting/JsCellCollector.cpp
   DataModel/Scripting/FrameParserPipeline.cpp
   DataModel/Scripting/JsScriptEngine.cpp
   DataModel/Scripting/JsWatchdog.cpp
@@ -115,7 +118,9 @@ qt_add_library(
   DataModel/Project/ProjectPersistence.cpp
   DataModel/Project/ProjectPresentation.cpp
   DataModel/Project/ProjectLoader.cpp
+  DataModel/Project/ProjectMerge.cpp
   DataModel/Project/ProjectFolders.cpp
+  DataModel/Project/ProjectWorkspaceProfiles.cpp
   DataModel/Project/ProjectWorkspaces.cpp
   DataModel/Project/ProjectWorkspaceRefs.cpp
   DataModel/Project/ProjectFixedLayouts.cpp
@@ -140,6 +145,8 @@ qt_add_library(
   DataModel/FrameBuilder/TableSnapshotChannel.cpp
   DataModel/FrameBuilder/TableScriptBridge.cpp
   DataModel/FrameBuilder/TransformCompiler.cpp
+  DataModel/FrameBuilder/TransformSupport.cpp
+  DataModel/FrameBuilder/TransformDispatch.cpp
   DataModel/FramePoolPolicy.cpp
   Misc/PasswordHash.cpp
   DataModel/TextCodec.cpp
@@ -160,6 +167,10 @@ qt_add_library(
   DataModel/Scripting/ScriptDeviceWait.h
   DataModel/Scripting/ScriptFrameShaping.h
   DataModel/Scripting/ScriptResult.h
+  DataModel/Scripting/ScriptCells.h
+  DataModel/Scripting/LuaCellCollector.h
+  DataModel/Scripting/JsCellCollector.h
+  DataModel/Scripting/TableApiScan.h
   DataModel/Scripting/ControlScript.h
   DataModel/Scripting/ControlScriptWorker.h
   DataModel/Scripting/MacroWorker.h
@@ -225,7 +236,9 @@ qt_add_library(
   DataModel/Project/ProjectPersistence.h
   DataModel/Project/ProjectPresentation.h
   DataModel/Project/ProjectLoader.h
+  DataModel/Project/ProjectMerge.h
   DataModel/Project/ProjectFolders.h
+  DataModel/Project/ProjectWorkspaceProfiles.h
   DataModel/Project/ProjectWorkspaces.h
   DataModel/Project/ProjectWorkspaceRefs.h
   DataModel/Project/ProjectFixedLayouts.h
@@ -255,6 +268,8 @@ qt_add_library(
   DataModel/FrameBuilder/TableSnapshotChannel.h
   DataModel/FrameBuilder/TableScriptBridge.h
   DataModel/FrameBuilder/TransformCompiler.h
+  DataModel/FrameBuilder/TransformSupport.h
+  DataModel/FrameBuilder/TransformDispatch.h
   DataModel/FramePoolPolicy.h
   DataModel/DataTable.h
   DataModel/RowFilterProxy.h

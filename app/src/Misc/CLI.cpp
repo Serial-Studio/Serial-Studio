@@ -108,6 +108,7 @@ void CLI::registerOptions()
   m_parser.addOption(m_opts.apiPortOpt);
   m_parser.addOption(m_opts.dumpApiSchemaOpt);
   m_parser.addOption(m_opts.projectOpt);
+  m_parser.addOption(m_opts.profileOpt);
   m_parser.addOption(m_opts.quickPlotOpt);
   m_parser.addOption(m_opts.fpsOpt);
   m_parser.addOption(m_opts.pointsOpt);
@@ -128,6 +129,7 @@ void CLI::registerOptions()
   m_parser.addOption(m_opts.benchmarkFramesOpt);
   m_parser.addOption(m_opts.benchmarkSecondsOpt);
   m_parser.addOption(m_opts.benchmarkOutputOpt);
+  m_parser.addOption(m_opts.benchmarkChannelsOpt);
   m_parser.addOption(m_opts.exitAfterOpt);
   m_parser.addOption(m_opts.simdLevelOpt);
 #ifdef SS_INAPP_TESTS
@@ -279,7 +281,8 @@ bool CLI::isBenchmarkRequested(int argc, char** argv)
 {
   return argvHasFlag(argc, argv, "--benchmark-hotpath")
       || argvHasFlag(argc, argv, "--benchmark-frames")
-      || argvHasFlag(argc, argv, "--benchmark-seconds") || argvHasFlag(argc, argv, "--min-fps");
+      || argvHasFlag(argc, argv, "--benchmark-seconds")
+      || argvHasFlag(argc, argv, "--benchmark-channels") || argvHasFlag(argc, argv, "--min-fps");
 }
 
 //---------------------------------------------------------------------------------------------------
@@ -307,7 +310,8 @@ CLI::ProcessResult CLI::process(QApplication& app)
   }
 
   if (m_parser.isSet(m_opts.benchmarkHotpathOpt) || m_parser.isSet(m_opts.benchmarkFramesOpt)
-      || m_parser.isSet(m_opts.benchmarkSecondsOpt) || m_parser.isSet(m_opts.minFpsOpt))
+      || m_parser.isSet(m_opts.benchmarkSecondsOpt) || m_parser.isSet(m_opts.benchmarkChannelsOpt)
+      || m_parser.isSet(m_opts.minFpsOpt))
     return runHotpathBenchmark();
 
   if (m_parser.isSet(m_opts.dumpApiSchemaOpt))
@@ -412,11 +416,21 @@ CLI::ProcessResult CLI::runHotpathBenchmark()
   if (m_parser.isSet(m_opts.benchmarkOutputOpt))
     output = m_parser.value(m_opts.benchmarkOutputOpt).trimmed();
 
+  int channels = Benchmark::HotpathBenchmark::kDefaultChannels;
+  if (m_parser.isSet(m_opts.benchmarkChannelsOpt)) {
+    constexpr int kMaxChannels = 4096;
+    bool ok                    = false;
+    const int val              = m_parser.value(m_opts.benchmarkChannelsOpt).toInt(&ok);
+    if (ok && val >= 1)
+      channels = qMin(val, kMaxChannels);
+  }
+
   Misc::ModuleManager::instantiateCoreModules();
   Misc::ModuleManager::bindInterfaces();
   Misc::ModuleManager::registerApiHandlers();
 
-  const int rc = Benchmark::HotpathBenchmark::runAndReport(frames, minFps, seconds, output);
+  const int rc =
+    Benchmark::HotpathBenchmark::runAndReport(frames, minFps, seconds, output, channels);
   return rc == EXIT_SUCCESS ? ProcessResult::ExitSuccess : ProcessResult::ExitFailure;
 }
 
@@ -675,6 +689,9 @@ void CLI::applyProjectAndAutoConnect(QApplication& app)
     static auto& appState = AppState::instance();
     appState.setOperationMode(SerialStudio::ProjectFile);
     static auto& projectModel = DataModel::ProjectModel::instance();
+    if (m_parser.isSet(m_opts.profileOpt))
+      projectModel.setRequestedWorkspaceProfile(m_parser.value(m_opts.profileOpt));
+
     projectModel.openJsonFile(project);
   }
 

@@ -83,8 +83,8 @@ static QString escapeCsvField(const QString& s)
 
   const bool padded = !out.isEmpty() && (out.front().isSpace() || out.back().isSpace());
   const bool needs  = padded || out.contains(QChar(',')) || out.contains(QChar('"'))
-                  || out.contains(QChar('\n')) || out.contains(QChar('\r'))
-                  || out.contains(QChar('\t'));
+                   || out.contains(QChar('\n')) || out.contains(QChar('\r'))
+                   || out.contains(QChar('\t'));
   if (!needs)
     return out;
 

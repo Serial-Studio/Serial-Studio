@@ -19,11 +19,14 @@ Use this when:
 
 ## Where to configure it
 
-The Control Loop has its own node in the project editor's left tree, directly under the project root. Selecting it opens the code editor.
+The Control Loop has its own node in the project editor's left tree, under **Project Scripts** next to the two transform libraries. Selecting it opens the code editor.
 
 ```
 Project
-├─ Control Loop            <-- here
+├─ Project Scripts
+│   ├─ Control Loop        <-- here
+│   ├─ Lua Library
+│   └─ JavaScript Library
 ├─ Actions
 ├─ Device 1 (Bluetooth LE)
 ├─ Groups

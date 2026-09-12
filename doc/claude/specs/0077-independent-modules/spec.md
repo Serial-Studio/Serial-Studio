@@ -1,7 +1,7 @@
 ---
 spec: 0077-independent-modules
 title: Independent core modules — downward-only layering, bus-carried upward traffic, per-library compile
-status: in-progress
+status: done          # closed 2026-09-12: maintainer ran the build/run gates and closed
 created: 2026-09-08
 author: Alex Spataru
 ---
@@ -174,33 +174,33 @@ measure.
 
 ## Acceptance Criteria
 
-- [ ] **AC1** — `scripts/layer-verify.py` reports every edge at zero and the baseline file
+- [x] **AC1** — `scripts/layer-verify.py` reports every edge at zero and the baseline file
   holds no ratcheted edges; a scratch file with one upward include fails with a strict layering
   error on every partition layer.
-- [ ] **AC2** — A CI job builds each of the seven library targets alone from a fresh configure
+- [x] **AC2** — A CI job builds each of the seven library targets alone from a fresh configure
   (no application, no tests) and passes; deleting one library's lower-layer include root makes
   it fail, proving the roots are real.
-- [ ] **AC3** — `code-verify.py --singleton-census` shows zero cross-library reaches outside
+- [x] **AC3** — `code-verify.py --singleton-census` shows zero cross-library reaches outside
   the composition root, and the transitional bus accessor count matches the plan's allowed
   list exactly.
-- [ ] **AC4** — A publish/subscribe census (new `code-verify.py` mode) lists every topic with at
+- [x] **AC4** — A publish/subscribe census (new `code-verify.py` mode) lists every topic with at
   least one publisher and at least one subscriber, and no topic appears in a hotpath TU
   (`bus-on-hotpath` stays clean).
-- [ ] **AC5** — `--benchmark-hotpath` holds every tier at its current gate on the release
+- [x] **AC5** — `--benchmark-hotpath` holds every tier at its current gate on the release
   binary after the final phase and after the Devices↔Pipeline phase in particular.
-- [ ] **AC6** — `ctest` passes with the same or larger suite and fuzz counts; the number of
+- [x] **AC6** — `ctest` passes with the same or larger suite and fuzz counts; the number of
   registrations that recompile a partition source drops to the plan's residual list.
-- [ ] **AC7** — The full `pytest` integration, security and performance suites pass against a
+- [x] **AC7** — The full `pytest` integration, security and performance suites pass against a
   running build of the final phase; project files, CSV/MDF4/Historian recordings and API
   replies are byte-for-byte or field-for-field identical to the pre-program build on the
   fixture projects.
-- [ ] **AC8** — In the running app: switching operation mode, activating or deactivating a
+- [x] **AC8** — In the running app: switching operation mode, activating or deactivating a
   licence, changing language, connecting and pausing a device, loading a project, and replaying
   a recording all behave as before, observed by the maintainer against a checklist in the plan.
-- [ ] **AC9** — `claim-verify.py`, `registry-verify.py`, `documentation-verify.py` and
+- [x] **AC9** — `claim-verify.py`, `registry-verify.py`, `documentation-verify.py` and
   `reuse lint` are clean; `CLAUDE.md`, the directory map and the dataflow/startup docs describe
   the strict graph, the bus vocabulary rule and the injection contract.
-- [ ] **AC10** — The program lands as one commit on `master`; the plan's per-phase checklist
+- [x] **AC10** — The program lands as one commit on `master`; the plan's per-phase checklist
   records which gates were green at each checkpoint, since `git bisect` cannot isolate a phase.
 
 ## Constraints & Invariants

@@ -181,28 +181,37 @@ if (typeof __nc !== 'undefined') {
   notify = notifyInfo = notifyWarning = notifyCritical = notifyClear = __ssNoPro;
 }
 
-// Protocol encoders (pure helpers, always available).
-function modbusWriteRegister(address, value) {
-  var a = address & 0xFFFF, v = Math.round(value) & 0xFFFF;
-  return String.fromCharCode((a >> 8) & 0xFF, a & 0xFF, (v >> 8) & 0xFF, v & 0xFF);
+// Protocol encoders (pure helpers, always available). The optional trailing
+// `unit` (1..247) prefixes the payload with 0xFF 0x83 <unit>, which the Modbus
+// driver reads as "write to this unit instead of the connection's". Out-of-range
+// units are ignored and the write goes to the connection's own unit.
+function __ssModbusUnit(unit) {
+  return (unit !== undefined && unit !== null && unit >= 1 && unit <= 247)
+    ? String.fromCharCode(0xFF, 0x83, unit) : '';
 }
-function modbusWriteRegisters(address, values) {
+function modbusWriteRegister(address, value, unit) {
+  var a = address & 0xFFFF, v = Math.round(value) & 0xFFFF;
+  return __ssModbusUnit(unit)
+    + String.fromCharCode((a >> 8) & 0xFF, a & 0xFF, (v >> 8) & 0xFF, v & 0xFF);
+}
+function modbusWriteRegisters(address, values, unit) {
   var a = address & 0xFFFF;
-  var out = String.fromCharCode((a >> 8) & 0xFF, a & 0xFF);
+  var out = __ssModbusUnit(unit) + String.fromCharCode((a >> 8) & 0xFF, a & 0xFF);
   for (var i = 0; i < values.length; i++) {
     var v = Math.round(values[i]) & 0xFFFF;
     out += String.fromCharCode((v >> 8) & 0xFF, v & 0xFF);
   }
   return out;
 }
-function modbusWriteCoil(address, on) {
-  return modbusWriteRegister(address, on ? 0xFF00 : 0x0000);
+function modbusWriteCoil(address, on, unit) {
+  return modbusWriteRegister(address, on ? 0xFF00 : 0x0000, unit);
 }
-function modbusWriteFloat(address, value) {
+function modbusWriteFloat(address, value, unit) {
   var buf = new ArrayBuffer(4);
   new DataView(buf).setFloat32(0, value, false);
   var b = new Uint8Array(buf), a = address & 0xFFFF;
-  return String.fromCharCode((a >> 8) & 0xFF, a & 0xFF, b[0], b[1], b[2], b[3]);
+  return __ssModbusUnit(unit)
+    + String.fromCharCode((a >> 8) & 0xFF, a & 0xFF, b[0], b[1], b[2], b[3]);
 }
 function canSendFrame(id, payload) {
   var data = '';

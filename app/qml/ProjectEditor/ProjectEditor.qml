@@ -284,6 +284,10 @@ Widgets.SmartWindow {
               case ProjectEditor.MqttPublisherView:     return "Views/MqttPublisherView.qml"
               case ProjectEditor.InfluxSinkView:        return "Views/InfluxSinkView.qml"
               case ProjectEditor.ControlScriptView:     return "Views/ControlScriptView.qml"
+              case ProjectEditor.TransformLibraryView:  return "Views/TransformLibraryView.qml"
+              case ProjectEditor.JsLibraryView:         return "Views/TransformLibraryView.qml"
+              case ProjectEditor.ProjectScriptsView:    return "Views/ProjectScriptsView.qml"
+              case ProjectEditor.DataExportView:        return "Views/DataExportView.qml"
               case ProjectEditor.MultiSelectionView:    return "Views/MultiSelectionView.qml"
               }
               return ""

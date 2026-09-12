@@ -442,6 +442,13 @@ static void applyDatasetSubEntityFields(DataModel::Dataset& d,
         d.fftMarkers.push_back(std::move(parsed));
     }
   }
+
+  const auto key_transform_params = takeDatasetField(params, consumed, {Keys::TransformParams});
+  if (!key_transform_params.isEmpty()) {
+    QJsonObject nested;
+    nested.insert(Keys::TransformParams, params.value(key_transform_params));
+    readDatasetTransformParams(d, nested);
+  }
 }
 
 }  // namespace API::Handlers

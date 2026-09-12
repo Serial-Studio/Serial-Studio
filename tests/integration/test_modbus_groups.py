@@ -128,6 +128,7 @@ class ModbusTcpServer:
         self._srv.listen(4)
         self.port = self._srv.getsockname()[1]
         self.requests = []
+        self.writes = []
         self.accepts = 0
         self.drop_group_a = False
         self.dropped = 0
@@ -157,6 +158,12 @@ class ModbusTcpServer:
                     return
 
                 fc, start, count = struct.unpack(">BHH", body[:5])
+                if fc in (0x06, 0x10):
+                    self.writes.append((unit, fc, start))
+                    pdu = body[:5]
+                    conn.sendall(struct.pack(">HHHB", txn, 0, len(pdu) + 1, unit) + pdu)
+                    continue
+
                 self.requests.append((start, count))
                 if fc != 0x03:
                     continue
@@ -228,8 +235,12 @@ def collect_rows(api_client, seconds: float) -> list:
     sock = socket.create_connection((api_client.host, api_client.port), timeout=5.0)
     try:
         sock.sendall(
-            (json.dumps({"type": "command", "id": "sub", "command": "stream.subscribe"}) + "\n")
-            .encode()
+            (
+                json.dumps(
+                    {"type": "command", "id": "sub", "command": "stream.subscribe"}
+                )
+                + "\n"
+            ).encode()
         )
         sock.settimeout(0.2)
         pending = b""
@@ -251,7 +262,9 @@ def collect_rows(api_client, seconds: float) -> list:
 
                 raw = base64.b64decode(entry["data"])
                 values = struct.unpack(f"<{entry['count']}f", raw[: 4 * entry["count"]])
-                blocks.setdefault(entry["seq"], {})[column_ids[entry["uniqueId"]]] = values
+                blocks.setdefault(entry["seq"], {})[
+                    column_ids[entry["uniqueId"]]
+                ] = values
     finally:
         sock.close()
 
@@ -322,9 +335,16 @@ def test_every_published_frame_is_a_valid_rtu_frame(api_client, modbus_session):
 
     for number, row in enumerate(rows):
         assert row["crcOk"] == 1, f"frame {number} carries a wrong CRC-16/Modbus: {row}"
-        assert row["unit"] == 1, f"frame {number} does not carry the responding unit id: {row}"
-        assert row["function"] == 0x03, f"frame {number} lost the request's function code: {row}"
-        assert row["payload"] in (4, 6), f"frame {number} has an unexpected payload size: {row}"
+        assert (
+            row["unit"] == 1
+        ), f"frame {number} does not carry the responding unit id: {row}"
+        assert (
+            row["function"] == 0x03
+        ), f"frame {number} lost the request's function code: {row}"
+        assert row["payload"] in (
+            4,
+            6,
+        ), f"frame {number} has an unexpected payload size: {row}"
 
 
 def test_a_dropped_reply_keeps_group_attribution(api_client, modbus_session):
@@ -344,7 +364,9 @@ def test_a_dropped_reply_keeps_group_attribution(api_client, modbus_session):
         f"requests seen: {len(modbus_session.requests)}, dropped: {modbus_session.dropped})"
     )
 
-    assert all(row["crcOk"] == 1 for row in rows), "a published frame was not a valid RTU frame"
+    assert all(
+        row["crcOk"] == 1 for row in rows
+    ), "a published frame was not a valid RTU frame"
     sizes = [row["payload"] for row in rows]
     assert set(sizes) <= {0, 4, 6}, f"unexpected payload sizes: {sorted(set(sizes))}"
     assert 0 in sizes, f"the failed poll published no placeholder frame: {sizes}"
@@ -357,3 +379,60 @@ def test_a_dropped_reply_keeps_group_attribution(api_client, modbus_session):
 
     starts = [start for start, _count in modbus_session.requests]
     assert GROUP_A[1] in starts and GROUP_B[1] in starts
+
+
+# ---------------------------------------------------------------------------
+# Writes name their unit (spec 0083 AC7)
+# ---------------------------------------------------------------------------
+
+# Lua decimal escapes: "\2\0\10\0\42" is five bytes, so byte 0 (2) is the target unit and the
+# write lands on unit 2 register 10; "\0\11\0\43" is four bytes and goes to the connection's
+# own unit (1), register 11. Fired once, on the first frame the parser hands the transform.
+_WRITE_TRANSFORM = (
+    "local fired = false\n"
+    "function transform(v)\n"
+    "  if not fired then\n"
+    "    fired = true\n"
+    '    deviceWrite("\\255\\131\\2\\0\\10\\0\\42")\n'
+    '    deviceWrite("\\0\\11\\0\\43")\n'
+    "  end\n"
+    "  return v\n"
+    "end\n"
+)
+
+
+@pytest.fixture
+def modbus_write_session(api_client, modbus_server):
+    """The two-group project with a Lua transform on the unit column that writes two registers."""
+    if not api_client.command_exists("io.modbus.getConfig"):
+        pytest.skip("Modbus driver commands not available (Pro feature)")
+
+    _disconnect_quietly(api_client)
+    project = _modbus_project(modbus_server.port)
+    project["groups"][0]["datasets"][0]["transformLanguage"] = 1
+    project["groups"][0]["datasets"][0]["transformCode"] = _WRITE_TRANSFORM
+    api_client.load_project_from_json(project)
+    api_client.set_operation_mode("project")
+    api_client.set_bus_type("modbus")
+    api_client.source_configure(0, project["sources"][0]["connection"])
+    time.sleep(0.3)
+    api_client.command("io.connect")
+    time.sleep(1.0)
+    yield modbus_server
+    _disconnect_quietly(api_client)
+
+
+def test_a_unit_prefixed_write_targets_that_unit(api_client, modbus_write_session):
+    """A prefixed payload names its unit; a plain one still goes to the connection's unit."""
+    deadline = time.time() + 6.0
+    while time.time() < deadline and len(modbus_write_session.writes) < 2:
+        time.sleep(0.2)
+
+    writes = list(modbus_write_session.writes)
+    assert writes, "the transform's deviceWrite never reached the stub server"
+    assert (
+        2,
+        0x06,
+        10,
+    ) in writes, f"unit-prefixed write missing or on the wrong unit: {writes}"
+    assert (1, 0x06, 11) in writes, f"plain write left the connection's unit: {writes}"

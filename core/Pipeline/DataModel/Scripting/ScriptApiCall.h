@@ -76,7 +76,8 @@ public:
                                      int sourceId,
                                      TableApi tableApi = TableApi::ArmCapture);
   static void installAll(QJSEngine* js, int sourceId, TableApi tableApi = TableApi::ArmCapture);
-  static void installAll(lua_State* L, int sourceId);
+  static void installAll(lua_State* L, int sourceId, TableApi tableApi = TableApi::ArmCapture);
+  [[nodiscard]] static bool referencesTableApi(const QString& source);
 };
 
 }  // namespace DataModel

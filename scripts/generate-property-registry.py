@@ -104,6 +104,12 @@ def by_id(manifest: dict) -> dict:
     return {p["id"]: p for p in manifest["properties"]}
 
 
+def hook_symbol(manifest: dict, hook: str) -> str:
+    """The unqualified C++ function name a manifest hook's signature declares."""
+    signature = manifest["hooks"][hook]["signature"]
+    return signature.split("DataModel::")[1].split("(")[0]
+
+
 def snake(name: str) -> str:
     out = []
     for ch in name:
@@ -721,6 +727,10 @@ def render_serialization(manifest: dict) -> str:
     sub_body: list[str] = []
     for sub in manifest["subEntities"]:
         var = snake(sub["field"])
+        if sub.get("shape") == "map":
+            sub_body += [f"  {hook_symbol(manifest, sub['writeHook'])}(obj, d);", ""]
+            continue
+
         sub_body += [
             f"  if (!d.{sub['field']}.empty()) {{",
             f"    QJsonArray {var};",
@@ -849,10 +859,8 @@ def emit_post_read(step: str, manifest: dict, props: dict) -> list[str]:
             ]
         return out
 
-    if step in ("readAlarmBands", "readFrequencyMarkers"):
-        hook = manifest["hooks"][step]["signature"]
-        name = hook.split("DataModel::")[1].split("(")[0]
-        return [f"  {name}(d, obj);"]
+    if step in {sub["readHook"] for sub in manifest["subEntities"]}:
+        return [f"  {hook_symbol(manifest, step)}(d, obj);"]
 
     if step == "normalizeRanges":
         return ["  normalizeDatasetRanges(d);"]
@@ -1625,6 +1633,17 @@ def emit_api_sub_entities(manifest: dict) -> list[str]:
             f"const auto {var} = takeDatasetField(params, consumed,"
             f" {{{json_name(sub['apiName'])}}});",
         )
+        if sub.get("shape") == "map":
+            lines += [
+                f"  if (!{var}.isEmpty()) {{",
+                "    QJsonObject nested;",
+                f"    nested.insert(Keys::{sub['jsonKey']}, params.value({var}));",
+                f"    {hook_symbol(manifest, sub['readHook'])}(d, nested);",
+                "  }",
+                "",
+            ]
+            continue
+
         if legacy:
             for arg in legacy["args"]:
                 key_var = f"key_{snake(arg['name'])}"

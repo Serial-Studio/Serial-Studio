@@ -76,6 +76,7 @@ private slots:
   void resetClearsTheGenerationButNotCapacity();
   void footprintTracksMaterialisedStorage();
   void numericFlagIsPerSample();
+  void rawAbsentFallsBackToFinal();
 };
 
 /**
@@ -284,6 +285,35 @@ void DataBlockTest::numericFlagIsPerSample()
   auto dense = makeBlock(1, 4, false, false);
   QVERIFY(dense.columns[0].numeric.empty());
   QVERIFY(DataModel::sample_is_numeric(dense.columns[0], 0));
+}
+
+/**
+ * @brief A column without a raw twin (spec 0085) reads back its final value in the raw slots and
+ *        copies no raw storage when trimmed for the async sinks.
+ */
+void DataBlockTest::rawAbsentFallsBackToFinal()
+{
+  auto block = makeBlock(1, 4, false, true);
+  QVERIFY(!block.columns[0].hasRaw);
+  DataModel::write_block_sample(block.columns[0], 0, 7.5, QStringLiteral("7.5"), true);
+  DataModel::write_block_raw(block.columns[0], 0, 1.0, QStringLiteral("1"));
+  block.samples = 1;
+
+  DataModel::Dataset dataset;
+  dataset.uniqueId = 1000;
+  DataModel::FrameTemplate tpl;
+  tpl.byUniqueId.insert(1000, &dataset);
+  DataModel::apply_block_sample(tpl, block, 0);
+
+  QCOMPARE(dataset.numericValue, 7.5);
+  QCOMPARE(dataset.rawNumericValue, 7.5);
+  QCOMPARE(dataset.value, QStringLiteral("7.5"));
+  QCOMPARE(dataset.rawValue, QStringLiteral("7.5"));
+
+  const auto trimmed = DataModel::clone_block_trimmed(block);
+  QVERIFY(trimmed->columns[0].rawValues.empty());
+  QVERIFY(trimmed->columns[0].rawText.empty());
+  QCOMPARE(trimmed->columns[0].values[0], 7.5);
 }
 
 QTEST_APPLESS_MAIN(DataBlockTest)

@@ -92,6 +92,16 @@ For complex slave devices, the Project Editor has a Modbus Map Importer
 that takes CSV/XML/JSON register descriptions and generates groups +
 datasets. Surface this to the user when they have a vendor map file.
 
+Beyond `address`, `type`, `name`, `datatype`, `scale`, `units` the map
+accepts `slave` (unit id; rows are blocked per unit and the generated
+parser routes each reply on `(unit, function code, byte count)`, so two
+units on one RS-485 pair coexist), `bit` (a bit index inside a register
+row, for status words), `rw` (`rw`/`w` rows also get an output control,
+Latin-1 encoded, that writes back to the same unit) and `order`
+(`abcd`/`cdab`/`badc`/`dcba` word order for 32-bit types). The import
+dialog offers **Add to Project** (merge into the open project, ids
+remapped, names de-duplicated) next to **Create Project**.
+
 ### Without a map
 
 Each register group becomes one dataset entry. The frame parser sees the

@@ -32,6 +32,7 @@
 #include "API/CommandRegistry.h"
 #include "API/HandlerContext.h"
 #include "API/SchemaBuilder.h"
+#include "ApiHandlers/WorkspaceProfileHandler.h"
 #include "AppState.h"
 #include "Core/DataModel/Frame.h"
 #include "Core/EnumLabels.h"
@@ -138,6 +139,7 @@ struct ParsedWidgetId {
     entry[QStringLiteral("widgetTypeSlug")] = API::EnumLabels::dashboardWidgetSlug(r.widgetType);
     entry[QStringLiteral("groupId")]        = r.groupUniqueId;
     entry[QStringLiteral("relativeIndex")]  = r.relativeIndex;
+    entry[Keys::DatasetUniqueId]            = r.datasetUniqueId;
     entry[QStringLiteral("widgetId")] =
       widgetIdFor(workspaceId, r.widgetType, r.groupUniqueId, r.relativeIndex);
     arr.append(entry);
@@ -456,6 +458,7 @@ void API::Handlers::WorkspacesHandler::registerCommands()
 {
   registerWorkspaceCrudCommands();
   registerCustomizeCommands();
+  WorkspaceProfileHandler::registerCommands();
   registerWidgetRefCommands();
 }
 
@@ -753,6 +756,9 @@ API::CommandResponse API::Handlers::WorkspacesHandler::list(const QString& id,
 
   QJsonArray arr;
   for (const auto& ws : workspaces) {
+    if (!pm.workspaceVisibleInProfile(ws))
+      continue;
+
     QJsonObject entry;
     entry[QStringLiteral("id")]    = ws.workspaceId;
     entry[QStringLiteral("title")] = ws.title;
@@ -764,7 +770,7 @@ API::CommandResponse API::Handlers::WorkspacesHandler::list(const QString& id,
 
   QJsonObject result;
   result[QStringLiteral("workspaces")]       = arr;
-  result[QStringLiteral("count")]            = static_cast<int>(workspaces.size());
+  result[QStringLiteral("count")]            = arr.size();
   result[QStringLiteral("customizeEnabled")] = pm.customizeWorkspaces();
   return CommandResponse::makeSuccess(id, result);
 }
@@ -1175,15 +1181,23 @@ API::CommandResponse API::Handlers::WorkspacesHandler::widgetAdd(const QString& 
         .arg(wtype)
         .arg(gid));
 
-  pm.addWidgetToWorkspace(wid, wtype, gid, relIndex);
+  int datasetUniqueId = -1;
+  if (hasDatasetId)
+    for (const auto& ds : group_it->datasets)
+      if (ds.datasetId == targetDatasetId)
+        datasetUniqueId = ds.uniqueId;
+
+  pm.addWidgetToWorkspace(wid, wtype, gid, relIndex, datasetUniqueId);
 
   QJsonObject result;
   result[QStringLiteral("workspaceId")]    = wid;
   result[QStringLiteral("widgetType")]     = wtype;
   result[QStringLiteral("widgetTypeSlug")] = API::EnumLabels::dashboardWidgetSlug(wtype);
   result[QStringLiteral("groupId")]        = gid;
-  if (hasDatasetId)
-    result[Keys::DatasetId] = targetDatasetId;
+  if (hasDatasetId) {
+    result[Keys::DatasetId]       = targetDatasetId;
+    result[Keys::DatasetUniqueId] = datasetUniqueId;
+  }
 
   result[QStringLiteral("relativeIndex")]             = relIndex;
   result[QStringLiteral("relativeIndexAutoAssigned")] = relIndexAutoAssigned;
@@ -1319,6 +1333,7 @@ API::CommandResponse API::Handlers::WorkspacesHandler::validate(const QString& i
           API::EnumLabels::dashboardWidgetSlug(ref.widgetType);
         issue[QStringLiteral("groupId")]       = ref.groupUniqueId;
         issue[QStringLiteral("relativeIndex")] = ref.relativeIndex;
+        issue[Keys::DatasetUniqueId]           = ref.datasetUniqueId;
         issue[QStringLiteral("widgetId")] =
           widgetIdFor(ws.workspaceId, ref.widgetType, ref.groupUniqueId, ref.relativeIndex);
         issue[QStringLiteral("message")] =

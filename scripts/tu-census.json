@@ -2,16 +2,16 @@
   "rule": "cxx-tu-too-long",
   "regenerate": "python scripts/code-verify.py --tu-census --accept",
   "threshold": 1500,
-  "excess": 2642,
-  "files": 10,
-  "worst": 2927,
+  "excess": 2606,
+  "files": 11,
+  "worst": 2892,
   "buckets": {
     "critical": 0,
     "god": 1,
-    "oversized": 9
+    "oversized": 10
   },
   "per_file": {
-    "core/Pipeline/DataModel/FrameBuilder.cpp": 2927,
+    "core/Pipeline/DataModel/FrameBuilder.cpp": 2892,
     "core/Ui/UI/Widgets/Terminal.cpp": 1986,
     "core/Ui/UI/Dashboard.cpp": 1812,
     "core/Devices/IO/Drivers/OpcUa.cpp": 1615,
@@ -19,7 +19,8 @@
     "core/Devices/IO/Drivers/MQTT.cpp": 1569,
     "core/Storage/MQTT/Publisher.cpp": 1568,
     "core/Devices/IO/Drivers/Audio.cpp": 1556,
-    "core/Devices/IO/Drivers/Modbus.cpp": 1530,
-    "core/Ui/Misc/ExtensionManager.cpp": 1505
+    "core/Devices/IO/Drivers/Modbus.cpp": 1527,
+    "core/Ui/Misc/ExtensionManager.cpp": 1505,
+    "core/Core/DataModel/Frame.h": 1502
   }
 }

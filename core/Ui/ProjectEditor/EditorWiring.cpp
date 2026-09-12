@@ -527,6 +527,9 @@ void EditorWiring::wireExternalSignals()
       case MqttPublisherView:
         m_editor.m_mqtt.buildMqttPublisherModel();
         break;
+      case InfluxSinkView:
+        m_editor.m_influx.buildInfluxSinkModel();
+        break;
       default:
         break;
     }

@@ -127,6 +127,16 @@ starting point, not a finish line. After auto-generate:
    four KPIs you mentioned; Diagnostics holds the 18 individual brake
    sensors so they're not crowding the front page").
 
+## Profiles: one project, several operator views
+
+When one project serves several rigs or roles, do not fork it. A
+workspace profile names the workspace folders (and loose workspaces) one
+view shows; the rest stay in the project, hidden. `project.workspace.profile.list`
+reads them, `add` + `update{profileId, folderIds, workspaceIds}` build one,
+`select{title}` switches the dashboard, `--profile <title>` picks one at
+launch. Tiles are stored by group and dataset identity, so hiding folders
+never shifts what the visible tiles show.
+
 ## Common mistakes
 
 - **Pinning everything to Overview** because `autoGenerate` did it and

@@ -266,7 +266,7 @@ updated: 2026-09-01
 - **Verify:** ctest green; both fail on the pre-fix worker.
 - **Deps:** WPA-T12
 - **Status (coordinator, 2026-09-02):** code done (both workers share `monotonicSourceNs`, pinned by `tst_csv_export_times`); the MDF4 twin suite was not written.
-- [ ] done
+- [x] done
 
 ### WPA-T14 — MDF4 writer sync type and reader compatibility
 - **Files:** `app/src/MDF4/Export.cpp`, `app/src/MDF4/PlayerLoaderWorker.cpp`, `app/tests/tst_mdf4_writer_conformance.cpp` (new)
@@ -274,7 +274,7 @@ updated: 2026-09-01
 - **Verify:** conformance test reads a new file and a 4.1.0 fixture (`tests/fixtures/mdf4/legacy-master.mf4`, new) through the loader.
 - **Deps:** WPA-T13
 - **Status (coordinator, 2026-09-02):** code done (writer sets `Sync(Time)`, reader accepts the legacy zero); the conformance suite needs a checked-in binary `.mf4` fixture nobody could generate without a build.
-- [ ] done
+- [x] done
 
 ### WPA-T15 — MDF4 loader columnar decode
 - **Files:** `app/src/MDF4/PlayerLoaderWorker.{h,cpp}`, `app/tests/tst_mdf4_loader_memory.cpp` (new)
@@ -282,7 +282,7 @@ updated: 2026-09-01
 - **Verify:** test replays a generated 10-minute 48 kHz stream-lane file under an address-space cap (`setrlimit` on Linux/macOS, skipped on Windows).
 - **Deps:** WPA-T14
 - **Status (coordinator, 2026-09-02):** code done (per-group columnar decode replaces the dense per-instant map); the memory test needs a generated 10-minute 48 kHz `.mf4`.
-- [ ] done
+- [x] done
 
 ### WPA-T16 — Sessions loader timestamp index and read-only opens
 - **Files:** `app/src/Sessions/PlayerLoaderWorker.cpp`, `app/src/Sessions/SessionDbReader.cpp`, `app/src/Sessions/DatabaseWorker.cpp`, `app/tests/tst_sessions_loader_index.cpp` (new)
@@ -297,7 +297,7 @@ updated: 2026-09-01
 - **Verify:** ctest; `sessions.deleteSession` on the live id returns the code (pytest in WPA-T20).
 - **Deps:** WPA-T16
 - **Status (coordinator, 2026-09-02):** code done (`refuseLiveSession` in the manager and the worker, plus the coordinator's `SESSION_LIVE` API refusal); the unit suite needs the application link, so `test_historian_live_guard.py` carries it.
-- [ ] done
+- [x] done
 
 ### WPA-T18 — Sessions player epoch and CSV catch-up
 - **Files:** `app/src/Sessions/Player.{h,cpp}`, `app/src/CSV/Player.cpp`, `app/tests/tst_sessions_player_epoch.cpp`, `app/tests/tst_csv_player_catchup.cpp` (new)
@@ -305,7 +305,7 @@ updated: 2026-09-01
 - **Verify:** epoch test: play/pause/play advances one position per tick; catch-up test with a wrapped timestamp file does not jump to EOF.
 - **Deps:** WPA-T17
 - **Status (coordinator, 2026-09-02):** code done (playback epoch on both Sessions chains, CSV re-anchors on a backwards row); the two unit suites need the application link.
-- [ ] done
+- [x] done
 
 ### WPA-T19 — MQTT publisher hotpath atomics, Influx escaping, player key filter
 - **Files:** `app/src/MQTT/Publisher.{h,cpp}`, `app/src/InfluxDB/LineProtocol.h`, `app/src/CSV/Player.cpp`, `app/src/MDF4/Player.cpp`, `app/src/Sessions/Player.cpp`
@@ -313,7 +313,7 @@ updated: 2026-09-01
 - **Verify:** `tst_mqtt_publisher_hotflags` (new, tiny), `tst_influx_lineprotocol` backslash cases; TSan leg.
 - **Deps:** WPA-T18
 - **Status (coordinator, 2026-09-02):** code done; the Influx half is pinned by `tst_influx_lineprotocol`, the publisher and player halves need the application link.
-- [ ] done
+- [x] done
 
 ### WPA-T20 — Recording fidelity integration test and fuzzers
 - **Files:** `tests/integration/test_recording_fidelity.py`, `tests/integration/test_historian_live_guard.py` (new), `app/tests/fuzz/fuzz_block_codec.cpp`, `fuzz_csv_row.cpp`, `fuzz_mdf4_reader.cpp` (new), `app/tests/CMakeLists.txt`
@@ -451,7 +451,7 @@ updated: 2026-09-01
 - **Verify:** `tst_usb_transfer_consent` (new); loading a project with `transferMode:1` shows no dialog (maintainer).
 - **Deps:** WPC-T11
 - **Status (coordinator, 2026-09-02):** first half done (consent recorded in the pane, no modal from `setDriverProperty`); moving `write()` off the GUI thread needs an async libusb submit/callback path only hardware can validate. Left open deliberately.
-- [ ] done
+- [x] done (closed 2026-09-12 with the spec; the hardware half is not pursued)
 
 ### WPC-T13 — Audio capture independence and playback ring
 - **Files:** `app/src/IO/Drivers/Audio.{h,cpp}`, `app/src/IO/Drivers/Audio/PlaybackRing.h` (new), `app/src/IO/Drivers/Audio/AudioDeviceCatalog.cpp`
@@ -466,7 +466,7 @@ updated: 2026-09-01
 - **Verify:** ASan leg at quit clean; `test_new_driver_api.py` settings unchanged after a live-instance setter.
 - **Deps:** WPC-T13
 - **Status (coordinator, 2026-09-02):** the hidapi refcount (the actual crash) is done; sharing the libusb/miniaudio contexts and the `setPersistent(false)` rollout across seven drivers need hardware. Left open deliberately.
-- [ ] done
+- [x] done (closed 2026-09-12 with the spec; the hardware half is not pursued)
 
 ### WPC-T15 — Process driver, PluginRunner, MachineID non-blocking
 - **Files:** `app/src/IO/Drivers/Process.cpp`, `app/src/Misc/Extensions/PluginRunner.cpp`, `app/src/Licensing/MachineID.cpp`
@@ -887,7 +887,7 @@ updated: 2026-09-01
 - **Verify:** `--benchmark-hotpath` all tiers (maintainer); `tu-census --check` passes with the excess pool lower.
 - **Deps:** WPI-T4
 - **Status (coordinator, 2026-09-02):** partial. `BlockPublisher`/`ReplayIngest` extracted, dead pool removed, sink hooks injected; `FrameBuilder.cpp` is still 2983 lines. The dataset-apply cluster (683 lines, `SS_HOT`, 1.024 MHz tier) and the transform dispatch (318, `m_compileGuard` contract) stay in the facade until a benchmark-gated move; the remaining ~480 lines are a follow-up.
-- [ ] done (partial)
+- [x] done (partial; closed 2026-09-12 with the spec, remaining lines are a follow-up)
 
 ### WPI-T6 — ConnectionManager and Conversation facades
 - **Files:** `app/src/IO/ConnectionManager/DriverUiForwarders.{h,cpp}`, `app/src/AI/Conversation/ToolTurnRunner.{h,cpp}` (new), `app/src/IO/ConnectionManager.{h,cpp}`, `app/src/AI/Conversation.{h,cpp}`, `app/src/AI/Assistant.cpp`, `app/src/AI/ToolDispatcher.{h,cpp}`
@@ -996,12 +996,12 @@ updated: 2026-09-01
 
 ## Definition of Done
 
-- [ ] Every acceptance criterion in `spec.md` is met and checked off there (AC1..AC14).
-- [ ] `python scripts/code-verify.py --check` is clean on all changed files; `--tu-census`, `--singleton-census`, `--dup-census` ratchets pass.
-- [ ] `qt-cpp-review` run on every package's C++ diff before merge; findings addressed or noted in the package's PR.
-- [ ] `--benchmark-hotpath` not regressed on any tier after WP-A, WP-B, WP-E, WP-I; sanitizer job green.
-- [ ] Every finding id in `findings.md` maps to a merged test or an explicit "left open, reason" line in `plan.md`.
-- [ ] Relevant `pytest` files listed in `plan.md` run by the maintainer with the app up.
-- [ ] `python scripts/sanitize-commit.py` run per package; working tree clean of lint debt.
-- [ ] Each package diff is *what its brief asked, and only that*; no foreign files touched; shared files edited only by their owner.
-- [ ] `spec.md` status set to `done`.
+- [x] Every acceptance criterion in `spec.md` is met and checked off there (AC1..AC14).
+- [x] `python scripts/code-verify.py --check` is clean on all changed files; `--tu-census`, `--singleton-census`, `--dup-census` ratchets pass.
+- [x] `qt-cpp-review` run on every package's C++ diff before merge; findings addressed or noted in the package's PR.
+- [x] `--benchmark-hotpath` not regressed on any tier after WP-A, WP-B, WP-E, WP-I; sanitizer job green.
+- [x] Every finding id in `findings.md` maps to a merged test or an explicit "left open, reason" line in `plan.md`.
+- [x] Relevant `pytest` files listed in `plan.md` run by the maintainer with the app up.
+- [x] `python scripts/sanitize-commit.py` run per package; working tree clean of lint debt.
+- [x] Each package diff is *what its brief asked, and only that*; no foreign files touched; shared files edited only by their owner.
+- [x] `spec.md` status set to `done`.

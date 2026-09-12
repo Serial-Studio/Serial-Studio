@@ -25,6 +25,7 @@
 #include "Core/Bus/Messages.h"
 #include "Core/SSAssert.h"
 #include "DataModel/FrameBuilder.h"
+#include "DataModel/ProjectModel.h"
 #include "IO/PipelineHost.h"
 
 //--------------------------------------------------------------------------------------------------
@@ -135,4 +136,28 @@ void DataModel::ExternalWiring::watchLicense()
     &m_owner, [this](const std::shared_ptr<const Core::Bus::LicenseStateChanged>&) {
       m_owner.syncFromProjectModel();
     });
+}
+
+//--------------------------------------------------------------------------------------------------
+// Project scripting inputs
+//--------------------------------------------------------------------------------------------------
+
+/**
+ * @brief Rebuilds the transform engines when an input they bake in at compile time moves: the
+ *        Safe/Fast Lua mode recompiles in place, and the shared Lua library (spec 0083) re-syncs
+ *        the project snapshot first, because the library string is carried in that snapshot
+ *        rather than read from the GUI-owned model. Both run on the builder's own thread.
+ */
+void DataModel::ExternalWiring::watchProjectScripting()
+{
+  auto& project = DataModel::ProjectModel::instance();
+  QObject::connect(&project, &DataModel::ProjectModel::luaFastModeChanged, &m_owner, [this] {
+    m_owner.compileTransforms();
+  });
+  QObject::connect(&project, &DataModel::ProjectModel::transformLibraryChanged, &m_owner, [this] {
+    m_owner.syncFromProjectModel();
+  });
+  QObject::connect(&project, &DataModel::ProjectModel::transformLibraryJsChanged, &m_owner, [this] {
+    m_owner.syncFromProjectModel();
+  });
 }

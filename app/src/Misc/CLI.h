@@ -76,6 +76,8 @@ struct CliOptions {
     {"q", "quick-plot"},
     "Enables quick plot mode (auto-detect CSV data)"
   };
+  QCommandLineOption profileOpt{
+    "profile", "Opens the project under the named workspace profile (see --project)", "name"};
   QCommandLineOption fpsOpt{
     {"t", "fps"},
     "Sets visualization refresh rate", "Hz"
@@ -119,6 +121,10 @@ struct CliOptions {
     "benchmark-output",
     "File to write the hotpath benchmark report to (default: stdout only, no file)",
     "file"};
+  QCommandLineOption benchmarkChannelsOpt{
+    "benchmark-channels",
+    "Numeric channels in the synthetic hotpath benchmark project (default: 8, max: 4096)",
+    "count"};
   QCommandLineOption exitAfterOpt{
     "exit-after",
     "Quit gracefully after the given number of seconds (CI runs, PGO training)",

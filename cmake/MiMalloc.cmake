@@ -40,6 +40,11 @@ include_guard(GLOBAL)
 # Set -DSS_USE_MIMALLOC=OFF to skip the GitHub FetchContent entirely (e.g. Flathub/offline builds
 # with no network access); target_link_mimalloc() then becomes a no-op and the system heap is used.
 #
+# Set -DSS_ALLOC_STATS=ON to compile mimalloc with per-thread allocation statistics (MI_STAT=2) and
+# define SS_ALLOC_STATS for the app, which lets --benchmark-hotpath count allocations per frame and
+# gate the Native lanes on zero (spec 0084). The statistics cost on every malloc is why this is a
+# separate build (CI enables it on the PGO training configure only), never the shipped binary.
+#
 #---------------------------------------------------------------------------------------------------
 
 option(SS_MIMALLOC_ENABLE_APPLE "Enable mimalloc static override on macOS (advanced opt-out)" ON)
@@ -99,11 +104,20 @@ if(SS_MIMALLOC_PLATFORM)
   FetchContent_MakeAvailable(mimalloc)
 
   if(APPLE)
-    target_compile_options(mimalloc-static PRIVATE -w)
-  elseif(MSVC)
-    target_compile_options(mimalloc PRIVATE /w)
+    set(_ss_mi_target mimalloc-static)
   else()
-    target_compile_options(mimalloc PRIVATE -w)
+    set(_ss_mi_target mimalloc)
+  endif()
+
+  if(MSVC)
+    target_compile_options(${_ss_mi_target} PRIVATE /w)
+  else()
+    target_compile_options(${_ss_mi_target} PRIVATE -w)
+  endif()
+
+  if(SS_ALLOC_STATS)
+    target_compile_definitions(${_ss_mi_target} PRIVATE MI_STAT=2)
+    message(STATUS "mimalloc allocation statistics enabled (SS_ALLOC_STATS)")
   endif()
 
   if(WIN32 AND MSVC)
@@ -153,6 +167,9 @@ function(target_link_mimalloc target)
   # calls out of builds where the override is absent (SS_USE_MIMALLOC=OFF, sanitizers, other OSes).
   target_compile_definitions(${target} PRIVATE SS_MIMALLOC_ACTIVE=1)
   target_include_directories(${target} PRIVATE "${mimalloc_SOURCE_DIR}/include")
+  if(SS_ALLOC_STATS)
+    target_compile_definitions(${target} PRIVATE SS_ALLOC_STATS=1)
+  endif()
 
   if(WIN32 AND MSVC)
     target_link_libraries(${target} PRIVATE mimalloc)

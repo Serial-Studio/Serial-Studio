@@ -350,7 +350,7 @@ the standard `--dump-api-schema` → `generate-sdk.py` chain.
 - **Hotpath:** `--benchmark-hotpath` full gated suite per milestone (AC4); new
   stream-lane phase (AC5/AC6 throughput source); AC19 derated targets scripted.
 - **Golden session:** spec-0047 dual-replay before/after M3 (AC15).
-- **Maintainer observations:** AC5 (GUI profiling), AC12 (BADAQ un-degraded project —
+- **Maintainer observations:** AC5 (GUI profiling), AC12 (field-project un-degraded project —
   the incident's definition of done), AC14 (UI fluidity under saturated parser),
   AC9 visual impulse check.
 - **Static:** `code-verify.py --check` on every touched file (hotpath violations
@@ -366,4 +366,4 @@ the standard `--dump-api-schema` → `generate-sdk.py` chain.
    ACs 5–9, 13.
 5. **M5 stream exports + table-store** — typed MDF4/CSV, block-rate store; ACs 10, 11.
 6. **M6 block API** — subscribe verbs + SDK regen; AC 20.
-7. **M7 validation** — BADAQ project, scaling runs, floor derate closure; ACs 6, 12, 19.
+7. **M7 validation** — field project, scaling runs, floor derate closure; ACs 6, 12, 19.

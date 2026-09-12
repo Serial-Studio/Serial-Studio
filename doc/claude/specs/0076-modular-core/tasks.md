@@ -81,11 +81,11 @@ updated: 2026-09-03
 
 ## Definition of Done
 
-- [ ] AC1-AC5 in `spec.md` checked; AC6/AC7 left for the maintainer with exact commands.
-- [ ] `layer-verify.py`, `code-verify.py --check`, censuses, `claim-verify.py`,
+- [x] AC1-AC5 in `spec.md` checked; AC6/AC7 left for the maintainer with exact commands.
+- [x] `layer-verify.py`, `code-verify.py --check`, censuses, `claim-verify.py`,
   `registry-verify.py`, `documentation-verify.py` all clean.
-- [ ] `git diff -M` shows every moved file as a rename with include-only edits.
-- [ ] Diff is what was asked and only that; nothing committed.
+- [x] `git diff -M` shows every moved file as a rename with include-only edits.
+- [x] Diff is what was asked and only that; nothing committed.
 
 ## Wave 3 — stage 2 partition + bus (2026-09-04)
 

@@ -78,6 +78,7 @@ qt_add_library(
   API/Handlers/ProjectParserCommands.cpp
   API/Handlers/ProjectUpdateCommands.cpp
   API/Handlers/ControlScriptHandler.cpp
+  API/Handlers/TransformLibraryHandler.cpp
   API/Handlers/CSVPlayerHandler.cpp
   API/Handlers/DataTablesHandler.cpp
   API/Handlers/SourceHandler.cpp
@@ -130,6 +131,7 @@ qt_add_library(
   API/Handlers/ProjectParserCommands.h
   API/Handlers/ProjectUpdateCommands.h
   API/Handlers/ControlScriptHandler.h
+  API/Handlers/TransformLibraryHandler.h
   API/Handlers/CSVPlayerHandler.h
   API/Handlers/DataTablesHandler.h
   API/Handlers/SourceHandler.h

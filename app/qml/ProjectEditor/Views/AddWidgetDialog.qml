@@ -137,11 +137,11 @@ Window {
   // Data model: updated by refresh()
   //
   property var allWidgets: []
-  property var existingKeys: []   // keys like "widgetType:groupId:relativeIndex"
+  property var existingKeys: []   // keys like "widgetType:groupId:datasetUniqueId:relativeIndex"
   property string searchText: ""
 
   function widgetKey(row) {
-    return row.widgetType + ":" + row.groupId + ":" + row.relativeIndex
+    return row.widgetType + ":" + row.groupId + ":" + row.datasetUniqueId + ":" + row.relativeIndex
   }
 
   function refresh() {
@@ -358,7 +358,8 @@ Window {
                   root.workspaceId,
                   modelData.widgetType,
                   modelData.groupId,
-                  modelData.relativeIndex
+                  modelData.relativeIndex,
+                  modelData.datasetUniqueId
                 )
                 //
                 // Optimistic local update so the row greys out immediately;

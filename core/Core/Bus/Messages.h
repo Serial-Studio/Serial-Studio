@@ -228,10 +228,12 @@ struct DeviceOpenAttempted final {
 };
 
 /**
- * @brief A Modbus register map was imported into the project; the Modbus driver applies it.
+ * @brief A Modbus register map was imported into the project; the Modbus driver applies it,
+ *        replacing its groups, or appending to them when the map joined an open project.
  */
 struct ModbusRegisterGroupsLoaded final {
   QJsonDocument groups;
+  bool append;
 };
 
 /**
@@ -290,6 +292,8 @@ struct ProjectStructureSnapshot final {
   int change;
   int sourceId;
   quint64 generation;
+  QString transformLibrary;    ///< Shared Lua transform library (spec 0083)
+  QString transformLibraryJs;  ///< Shared JS transform library (spec 0083 addendum), appended last
 };
 
 /**

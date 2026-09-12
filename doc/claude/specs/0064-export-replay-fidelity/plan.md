@@ -89,9 +89,9 @@ has not yet been seeded elsewhere is never iterated. Seeding becomes per-source 
 every `sourceId` present in `m_frame.groups` gets a source frame, whether or not some other source
 already created one.
 
-**This seeding gap is a genuine latent defect but it does not by itself explain the BADAQ capture.**
+**This seeding gap is a genuine latent defect but it does not by itself explain the field-project capture.**
 `parseProjectFrame(int sourceId, ...)` calls `ensureSourceFrame(sourceId)` unconditionally, so a
-source whose frames parse at all is already seeded — and the BADAQ capture's 4516 recorded table
+source whose frames parse at all is already seeded — and the field-project capture's 4516 recorded table
 snapshots prove its Lua parser ran. Static reading has therefore **not** identified the step that
 drops the block, only eliminated candidates: the async-sink flag is correctly wired and shared
 across sources (and the stream sources' blocks do reach the sinks through it); pool starvation is
@@ -113,7 +113,7 @@ project group in project group order, and the loader strips master and `" (raw)"
 flattened channel order is project tree order — while `buildExportSchema` sorts CSV columns by
 `uniqueId`. Two writers, two orders, and `MDF4::Player::buildReplayLayout()` reconstructs one of
 them from `ProjectModel::groups()` by position while additionally skipping `widget == "image"`
-groups that the writer does not skip. For the BADAQ project the tree order and the uniqueId order
+groups that the writer does not skip. For the field project the tree order and the uniqueId order
 diverge at index 583 of 635, so any file whose reader and writer disagree silently misassigns the
 tail. The fix is to resolve each channel to its dataset by recorded identity and to remove the
 asymmetric skip, so neither writer's ordering choice is load-bearing.
@@ -195,7 +195,7 @@ the published-but-silent-source diagnostic, which needs no new component.
   landing on one that survives scrutiny. The parity rewrite is designed to be correct regardless of
   which step turns out to be at fault, but it is not a substitute for observing the failure.
   **Mitigation:** Task 0 of the implementation is instrumentation against the running app with the
-  real BADAQ project — a per-source block counter logged at the publish tail plus the existing
+  real field project — a per-source block counter logged at the publish tail plus the existing
   "Block pool exhausted" warning check — and no production line is edited until the drop point is
   observed. This is the repo's ground-truth-over-on-paper-reasoning rule applied literally: three
   plausible mechanisms have already been eliminated by reading, and the fourth will be too.
@@ -232,7 +232,7 @@ the published-but-silent-source diagnostic, which needs no new component.
   numeric elapsed column with no prompt; a genuinely non-numeric first cell still falls through to
   the date-time/interval path; bracketed and `_suffix` unit headers still resolve their scale.
 - `tst_export_schema_parity` — **AC3.** A synthetic project whose dataset tree order differs from
-  its uniqueId order (the BADAQ shape) produces a CSV column order, an MDF4 channel order and a
+  its uniqueId order (the field project shape) produces a CSV column order, an MDF4 channel order and a
   replay layout that all resolve the same dataset to the same values. Fails today.
 - `tst_csv_sparse_writer` (extended) — **AC2.** Multi-source batches whose blocks arrive out of t0
   order still yield a non-negative, non-decreasing elapsed column.
@@ -264,9 +264,9 @@ the published-but-silent-source diagnostic, which needs no new component.
 
 **Maintainer observation:**
 
-- **AC9.** Real BADAQ project: record a short capture, then replay the CSV, the MDF4 and the
+- **AC9.** Real field project: record a short capture, then replay the CSV, the MDF4 and the
   session recording, and generate the session report. Each replay opens with no time-column prompt
-  and a populated dashboard; the report plots the APS500 and CAN groups.
+  and a populated dashboard; the report plots the engine and CAN groups.
 
 **Static:**
 

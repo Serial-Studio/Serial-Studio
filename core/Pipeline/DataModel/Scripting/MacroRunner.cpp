@@ -47,6 +47,7 @@ extern "C" {
 #include "Core/SSAssert.h"
 #include "DataModel/DataTable.h"
 #include "DataModel/FrameBuilder.h"
+#include "DataModel/PipelineModules.h"
 #include "DataModel/Scripting/ControlScriptWorker.h"
 #include "DataModel/Scripting/LuaCompat.h"
 #include "DataModel/Scripting/LuaCompatJIT.h"
@@ -317,6 +318,7 @@ void DataModel::MacroRunner::runLua(const QString& source)
     DataModel::installLuaConsole(state);
     DataModel::installLuaCompat(state);
     DataModel::ScriptApiCall::installAll(state, 0);
+    DataModel::TableApiUserLease tableUser(DataModel::pipelineModules().frameBuilder);
 
     lua_pushlightuserdata(state, &context);
     lua_setfield(state, LUA_REGISTRYINDEX, "__ss_macro_ctx__");
@@ -512,9 +514,9 @@ void DataModel::MacroRunner::saveMacro(const QString& source, int language)
 {
   const bool lua = (language == SerialStudio::Lua);
   auto* dialog   = new QFileDialog(nullptr,
-                                 tr("Save macro"),
-                                 macrosDirectory(),
-                                 lua ? QStringLiteral("*.lua") : QStringLiteral("*.js"));
+                                   tr("Save macro"),
+                                   macrosDirectory(),
+                                   lua ? QStringLiteral("*.lua") : QStringLiteral("*.js"));
   dialog->setAcceptMode(QFileDialog::AcceptSave);
   dialog->setDefaultSuffix(lua ? QStringLiteral("lua") : QStringLiteral("js"));
   dialog->setAttribute(Qt::WA_DeleteOnClose);

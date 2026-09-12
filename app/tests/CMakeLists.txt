@@ -304,6 +304,30 @@ ss_add_unit_test(tst_lua_migration
 )
 
 #
+# Workspace tile identity (spec 0083): the pure rebind over WorkspaceKeys, exercised without the
+# project model. WidgetResolution.cpp supplies the widget-eligibility rules the lookup applies.
+#
+ss_add_unit_test(tst_workspace_rebind
+  SOURCES tst_workspace_rebind.cpp
+          ${SS_CORE_SRC}/Pipeline/DataModel/Project/WorkspaceKeys.cpp
+          ${SS_CORE_SRC}/Pipeline/DataModel/WidgetResolution.cpp
+  LIBS    Qt6::Core
+          Qt6::Gui
+          SerialStudio::Core
+)
+
+#
+# "Add to current project" (spec 0083): the pure id remap an importer's project goes through
+# before the loader appends it. Frame.h's serializers and readers come with SerialStudio::Core.
+#
+ss_add_unit_test(tst_project_merge
+  SOURCES tst_project_merge.cpp
+          ${SS_CORE_SRC}/Pipeline/DataModel/Project/ProjectMerge.cpp
+  LIBS    Qt6::Core
+          SerialStudio::Core
+)
+
+#
 # The frame value types, the generated serializer and the ProjectModel-free validators all live in
 # SerialStudio::Core (spec 0077), so the suite links without the icon registry, theme manager and
 # player singletons. Core5Compat comes with TextCodec.cpp: the East-Asian encodings go through
@@ -1072,6 +1096,41 @@ ss_add_unit_test(tst_js_watchdog
 )
 
 #
+# The typed cell lane (spec 0086): ScriptCellRows, the Lua and JS collectors driven on a bare
+# lua_State / QJSEngine, the Lua number formatter against QString::number, and the header-only
+# table-API scan. The engines themselves link the whole pipeline, which is why the collectors carry
+# no engine state.
+#
+ss_add_unit_test(tst_script_cells
+  SOURCES tst_script_cells.cpp
+          ${SS_CORE_SRC}/Pipeline/DataModel/Scripting/ScriptCells.cpp
+          ${SS_CORE_SRC}/Pipeline/DataModel/Scripting/LuaCellCollector.cpp
+          ${SS_CORE_SRC}/Pipeline/DataModel/Scripting/JsCellCollector.cpp
+  LIBS    Qt6::Core
+          Qt6::Qml
+          luajit
+          SerialStudio::Core
+)
+
+#
+# formatJsNumber against ECMAScript Number::toString (spec 0086 R5): the Node-generated corpus under
+# tests/fixtures (regenerate with tests/scripts/gen_js_number_corpus.py) and a QJSEngine parity
+# sweep. The corpus path is a compile definition, the same seam tst_sessions_legacy_archive uses.
+#
+ss_add_unit_test(tst_js_number_format
+  SOURCES tst_js_number_format.cpp
+          ${SS_CORE_SRC}/Pipeline/DataModel/Scripting/ScriptCells.cpp
+  LIBS    Qt6::Core
+          Qt6::Qml
+          SerialStudio::Core
+)
+
+if(TARGET tst_js_number_format)
+  target_compile_definitions(tst_js_number_format
+    PRIVATE SS_JS_NUMBER_CORPUS="${CMAKE_CURRENT_SOURCE_DIR}/../../tests/fixtures/js-number-format.json")
+endif()
+
+#
 # HAL_Driver.h is header-only, so AUTOMOC's same-basename rule never reaches it and the driver's
 # meta-object (openFinished, linkDropped, the vtable) goes undefined at link. Listing the header as
 # a source is what gets moc_HAL_Driver.cpp generated for this suite. Qt6::Gui covers the QColor
@@ -1088,6 +1147,7 @@ ss_add_unit_test(tst_stream_worker
   SOURCES tst_stream_worker.cpp
           ${SS_CORE_SRC}/Core/IO/HAL_Driver.h
           ${SS_CORE_SRC}/Pipeline/IO/StreamWorker.cpp
+          ${SS_CORE_SRC}/Pipeline/DataModel/FrameBuilder/TransformSupport.cpp
           ${SS_CORE_SRC}/Pipeline/DataModel/Scripting/ExpressionTransform.cpp
           ${SS_CORE_SRC}/Pipeline/DataModel/Scripting/JsWatchdog.cpp
           ${SS_CORE_SRC}/Pipeline/DataModel/Scripting/JsWatchdogThread.cpp

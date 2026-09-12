@@ -487,6 +487,54 @@ void EditorSummaries::selectControlScript()
 }
 
 /**
+ * @brief Selects the project-global Lua library node in the tree.
+ */
+void EditorSummaries::selectTransformLibrary()
+{
+  if (!m_editor.m_selectionModel || !m_editor.m_transformLibraryItem)
+    return;
+
+  m_editor.m_selectionModel->setCurrentIndex(m_editor.m_transformLibraryItem->index(),
+                                             QItemSelectionModel::ClearAndSelect);
+}
+
+/**
+ * @brief Selects the project-global JavaScript library node in the tree.
+ */
+void EditorSummaries::selectJsLibrary()
+{
+  if (!m_editor.m_selectionModel || !m_editor.m_jsLibraryItem)
+    return;
+
+  m_editor.m_selectionModel->setCurrentIndex(m_editor.m_jsLibraryItem->index(),
+                                             QItemSelectionModel::ClearAndSelect);
+}
+
+/**
+ * @brief Selects the Project Scripts node in the tree.
+ */
+void EditorSummaries::selectProjectScripts()
+{
+  if (!m_editor.m_selectionModel || !m_editor.m_scriptsRootItem)
+    return;
+
+  m_editor.m_selectionModel->setCurrentIndex(m_editor.m_scriptsRootItem->index(),
+                                             QItemSelectionModel::ClearAndSelect);
+}
+
+/**
+ * @brief Selects the Data Export node in the tree.
+ */
+void EditorSummaries::selectDataExport()
+{
+  if (!m_editor.m_selectionModel || !m_editor.m_exportRootItem)
+    return;
+
+  m_editor.m_selectionModel->setCurrentIndex(m_editor.m_exportRootItem->index(),
+                                             QItemSelectionModel::ClearAndSelect);
+}
+
+/**
  * @brief Updates the tree search query and rebuilds the tree to apply it.
  */
 void EditorSummaries::setTreeSearchQuery(const QString& query)
@@ -579,19 +627,20 @@ QVariantList EditorSummaries::widgetsForWorkspace(int workspaceId) const
     row["widgetType"]     = ref.widgetType;
     row["widgetTypeName"] = SerialStudio::dashboardWidgetTitle(
       static_cast<SerialStudio::DashboardWidget>(ref.widgetType));
-    row["groupId"]         = ref.groupUniqueId;
-    row["relativeIndex"]   = ref.relativeIndex;
-    row["groupTitle"]      = QString();
-    row["datasetTitle"]    = QString();
-    row[Keys::UniqueId]    = -1;
-    row["isGroupWidget"]   = false;
-    row["isLedPanel"]      = false;
-    row["displayTitle"]    = QString();
-    row["fallbackTitle"]   = QString();
-    row["freezeTitleMode"] = SerialStudio::dashboardWidgetPaintsTitle(
-                               static_cast<SerialStudio::DashboardWidget>(ref.widgetType))
-                             ? QStringLiteral("painted")
-                             : QStringLiteral("bar");
+    row["groupId"]             = ref.groupUniqueId;
+    row["relativeIndex"]       = ref.relativeIndex;
+    row[Keys::DatasetUniqueId] = ref.datasetUniqueId;
+    row["groupTitle"]          = QString();
+    row["datasetTitle"]        = QString();
+    row[Keys::UniqueId]        = -1;
+    row["isGroupWidget"]       = false;
+    row["isLedPanel"]          = false;
+    row["displayTitle"]        = QString();
+    row["fallbackTitle"]       = QString();
+    row["freezeTitleMode"]     = SerialStudio::dashboardWidgetPaintsTitle(
+                                   static_cast<SerialStudio::DashboardWidget>(ref.widgetType))
+                                 ? QStringLiteral("painted")
+                                 : QStringLiteral("bar");
 
     const auto it = lookup.constFind(
       WorkspaceKeys::workspaceWidgetKey(ref.widgetType, ref.groupUniqueId, ref.relativeIndex));
@@ -738,28 +787,30 @@ QVariantList EditorSummaries::allWidgetsSummary() const
 
     if (SerialStudio::groupWidgetEligibleForWorkspace(groupKey) && !isEmptyOutputPanel) {
       QVariantMap row;
-      row["widgetType"]    = static_cast<int>(groupKey);
-      row["groupId"]       = group.uniqueId;
-      row["relativeIndex"] = groupIdx.value(groupKey, 0);
-      row["groupTitle"]    = group.title;
-      row["datasetTitle"]  = QString();
-      row["isGroupWidget"] = true;
-      row["widgetLabel"]   = SerialStudio::dashboardWidgetTitle(groupKey);
-      groupIdx[groupKey]   = row["relativeIndex"].toInt() + 1;
+      row["widgetType"]          = static_cast<int>(groupKey);
+      row["groupId"]             = group.uniqueId;
+      row["relativeIndex"]       = groupIdx.value(groupKey, 0);
+      row[Keys::DatasetUniqueId] = -1;
+      row["groupTitle"]          = group.title;
+      row["datasetTitle"]        = QString();
+      row["isGroupWidget"]       = true;
+      row["widgetLabel"]         = SerialStudio::dashboardWidgetTitle(groupKey);
+      groupIdx[groupKey]         = row["relativeIndex"].toInt() + 1;
       result.append(row);
     }
 
     const auto recordDatasetWidget = [&](const DataModel::Dataset& ds,
                                          SerialStudio::DashboardWidget k) {
       QVariantMap row;
-      row["widgetType"]    = static_cast<int>(k);
-      row["groupId"]       = group.uniqueId;
-      row["relativeIndex"] = datasetIdx.value(k, 0);
-      row["groupTitle"]    = group.title;
-      row["datasetTitle"]  = ds.title;
-      row["isGroupWidget"] = false;
-      row["widgetLabel"]   = SerialStudio::dashboardWidgetTitle(k);
-      datasetIdx[k]        = row["relativeIndex"].toInt() + 1;
+      row["widgetType"]          = static_cast<int>(k);
+      row["groupId"]             = group.uniqueId;
+      row["relativeIndex"]       = datasetIdx.value(k, 0);
+      row[Keys::DatasetUniqueId] = ds.uniqueId;
+      row["groupTitle"]          = group.title;
+      row["datasetTitle"]        = ds.title;
+      row["isGroupWidget"]       = false;
+      row["widgetLabel"]         = SerialStudio::dashboardWidgetTitle(k);
+      datasetIdx[k]              = row["relativeIndex"].toInt() + 1;
       result.append(row);
     };
 
@@ -780,14 +831,15 @@ QVariantList EditorSummaries::allWidgetsSummary() const
     if (groupHasLed) {
       const auto ledKey = SerialStudio::DashboardLED;
       QVariantMap row;
-      row["widgetType"]    = static_cast<int>(ledKey);
-      row["groupId"]       = group.uniqueId;
-      row["relativeIndex"] = groupIdx.value(ledKey, 0);
-      row["groupTitle"]    = group.title;
-      row["datasetTitle"]  = QString();
-      row["isGroupWidget"] = true;
-      row["widgetLabel"]   = SerialStudio::dashboardWidgetTitle(ledKey);
-      groupIdx[ledKey]     = row["relativeIndex"].toInt() + 1;
+      row["widgetType"]          = static_cast<int>(ledKey);
+      row["groupId"]             = group.uniqueId;
+      row["relativeIndex"]       = groupIdx.value(ledKey, 0);
+      row[Keys::DatasetUniqueId] = -1;
+      row["groupTitle"]          = group.title;
+      row["datasetTitle"]        = QString();
+      row["isGroupWidget"]       = true;
+      row["widgetLabel"]         = SerialStudio::dashboardWidgetTitle(ledKey);
+      groupIdx[ledKey]           = row["relativeIndex"].toInt() + 1;
       result.append(row);
     }
   }

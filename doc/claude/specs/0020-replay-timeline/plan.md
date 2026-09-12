@@ -22,12 +22,12 @@ instead of the fixed 100-row batch, so heavy recordings keep pace losslessly and
 stays responsive. **(2) A bulk seek lane** for scrubbing: while the slider is dragged
 (coalesced to ~30 Hz), `Dashboard` bulk-loads only the plot rings — numeric-parsing the
 window's rows straight out of the player's existing in-memory storage for plot-enabled
-datasets only (~ms per tick at BADAQ scale), plus one fast-path inject of the cursor frame
+datasets only (~ms per tick at the field project scale), plus one fast-path inject of the cursor frame
 for scalar widgets — and a debounced at-rest pass replays the full trailing window through
 lane (1) so FFT/waterfall/GPS/3D end exact (spec Q3). Backward and forward scrub are the
 same operation (rebuild window ending at cursor), which is what makes tape semantics hold by
 construction. This shape was chosen over "budgeted pipeline-only" (misses the 50 ms drag
-budget at BADAQ scale) and "precomputed numeric matrix" (violates the memory bound).
+budget at the field project scale) and "precomputed numeric matrix" (violates the memory bound).
 
 ## Affected subsystems & files
 
@@ -109,7 +109,7 @@ named here so it is not lane creep.
 
 | Decision | Options | Chosen + why |
 |----------|---------|--------------|
-| Drag-scrub mechanism | (a) budgeted pipeline-only; (b) bulk plot-ring fill + at-rest pipeline pass; (c) precomputed numeric matrix | **(b)** — only shape that meets the 50 ms drag budget at BADAQ scale without decimation (a: ~100 ms+/window even after speedups) and without unbounded memory (c: ~GBs at 10M rows). |
+| Drag-scrub mechanism | (a) budgeted pipeline-only; (b) bulk plot-ring fill + at-rest pipeline pass; (c) precomputed numeric matrix | **(b)** — only shape that meets the 50 ms drag budget at the field project scale without decimation (a: ~100 ms+/window even after speedups) and without unbounded memory (c: ~GBs at 10M rows). |
 | Replay publish targets | (a) dashboard only; (b) dashboard + read-only observers (API/gRPC), no recorders/MQTT; (c) full fan-out with per-sink replay gates | **(b)** — R6 by construction while SDK/API consumers watching a replay keep working; (c) spreads the gate across five sinks and invites silent re-record regressions. |
 | At-rest rebuild scope | (a) plots only; (b) full window through lane 1 | **(b)** — spec Q3 requires FFT/waterfall/GPS/3D correctness at rest; one ~100–200 ms pass per gesture is within intent (budget applies to the drag). |
 | Catch-up batching | (a) bigger fixed batch; (b) wall-clock-budgeted batch (~20 ms/pass) | **(b)** — a fixed batch either starves throughput or blocks the GUI; a time budget adapts to project width and machine speed, and stretching (spec Q2) falls out naturally. |
@@ -150,7 +150,7 @@ named here so it is not lane creep.
       dashboard-delivered frame count == recorded rows (lossless).
     - AC5 — with CSV export enabled, replay + scrub; assert no export file growth and no
       new session rows.
-- **Maintainer observation:** AC2 — BADAQ.ssproj + a real capture: both-direction live
+- **Maintainer observation:** AC2 — The field project file + a real capture: both-direction live
   scrubbing, no multi-second freeze, event findable by eye.
 - **Hotpath:** AC4 — `--benchmark-hotpath` all gated tiers on the built binary.
 - **Static:** `python scripts/code-verify.py --check` on all touched files;

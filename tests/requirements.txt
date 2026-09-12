@@ -52,4 +52,4 @@ reuse>=5.0
 # carry the real LLVM binary for Linux/macOS/Windows, which is what makes the formatting
 # identical on every contributor machine and every CI leg. sanitize-commit.py refuses to run a
 # clang-format that does not match this pin -- bump both together.
-clang-format==19.1.7
+clang-format==23.1.0

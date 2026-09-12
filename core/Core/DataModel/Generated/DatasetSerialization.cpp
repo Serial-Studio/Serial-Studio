@@ -164,6 +164,8 @@ static void writeDatasetSubEntities(QJsonObject& obj, const Dataset& d)
 
     obj.insert(Keys::FFTMarkers, fft_markers);
   }
+
+  writeDatasetTransformParams(obj, d);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -268,6 +270,7 @@ static void finalizeDatasetRead(Dataset& d, const QJsonObject& obj)
 
   readDatasetAlarmBands(d, obj);
   readDatasetFrequencyMarkers(d, obj);
+  readDatasetTransformParams(d, obj);
   normalizeDatasetRanges(d);
 }
 

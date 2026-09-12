@@ -256,10 +256,23 @@ CSV is the most common format for Modbus register maps. Most PLC vendors, SCADA 
 | `scale`       | `factor`, `multiplier`                            | No       | 1.0        |
 | `offset`      |                                                   | No       | 0.0        |
 | `description` | `desc`, `comment` (used as name if no name column)| No       | None       |
+| `slave`       | `unit_id`, `unitid`, `device`                     | No       | connection's unit |
+| `bit`         | `bit_index`                                       | No       | whole word |
+| `rw`          | `access`, `writable`                              | No       | read-only  |
+| `order`       | `word_order`, `byte_order`                        | No       | abcd       |
+
+The last four columns describe how the device is wired rather than what a register holds:
+
+- **`slave`**: the unit the register lives on. Registers from different units become separate polled blocks, each read from its own unit, and the generated parser tells the replies apart by the unit byte they carry. Leave it empty for a single-device bus. (`unit` alone still means the units column.)
+- **`bit`**: a bit index inside a holding or input register (0 = least significant). The row becomes an LED dataset that follows that bit; the rest of the word stays untouched.
+- **`rw`**: `w`, `rw`, `write`, `yes` or `true` marks the register writable. A writable row also produces an output control in a generated Controls panel that writes the register (a toggle for coils and bit rows, a slider for numeric registers) and reads its state back from the block's table.
+- **`order`**: the word/byte order of a 32-bit or 64-bit value: `abcd` (big-endian, the default), `cdab` (word swap), `badc` (byte swap) or `dcba` (little-endian). `big`/`little`/`swap` are accepted as aliases.
 
 **Register type values:** `holding` (or `0x03`, `3`, `hr`), `input` (or `0x04`, `4`, `ir`), `coil` (or `0x01`, `1`), `discrete` (or `0x02`, `2`, `di`).
 
 **Data type values:** `uint16`, `int16`, `uint32`, `int32`, `uint64`, `int64`, `float32`, `float64`, `bool`. Unknown types fall back to `uint16`; `bool` defaults its range to 0-1.
+
+The same four optional fields are accepted as XML attributes and JSON keys under the same names (`slave`, `bit`, `rw`, `order`).
 
 Lines starting with `#` are treated as comments and skipped.
 

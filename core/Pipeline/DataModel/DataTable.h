@@ -135,6 +135,9 @@ public:
   void setDatasetRaw(int uniqueId, double numeric, const QString& str, bool isNum);
 
   void setDatasetFinal(int uniqueId, double numeric, const QString& str, bool isNum);
+  [[nodiscard]] std::pair<int, int> datasetSlots(int uniqueId) const;
+  void setDatasetRawAt(int slot, double numeric, const QString& str, bool isNum);
+  void setDatasetFinalAt(int slot, double numeric, const QString& str, bool isNum);
 
   [[nodiscard]] const RegisterValue* getDatasetRaw(int uniqueId) const;
   [[nodiscard]] const RegisterValue* getDatasetFinal(int uniqueId) const;

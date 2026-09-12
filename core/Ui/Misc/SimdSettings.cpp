@@ -143,7 +143,7 @@ Misc::SimdSettings::SimdSettings(QObject* parent) : QObject(parent), m_currentLe
   const auto preferred        = (m_currentLevel == kAutoId)
                                 ? std::optional(DSP::bestSupportedSimdLevel())
                                 : DSP::parseSimdLevelId(std::string_view(
-                             latin.constData(), static_cast<size_t>(latin.size())));
+                                    latin.constData(), static_cast<size_t>(latin.size())));
   if (!preferred.has_value() || *preferred != active)
     m_currentLevel = idString(active);
 

@@ -190,6 +190,27 @@ void DataModel::DBCImporter::showPreview(const QString& filePath)
 //--------------------------------------------------------------------------------------------------
 
 /**
+ * @brief Adds the generated source, groups, tables and workspaces to the open project instead of
+ *        creating a new file (spec 0083).
+ */
+void DataModel::DBCImporter::confirmMerge()
+{
+  if (m_messages.isEmpty())
+    return;
+
+  const auto project  = projectFromMessages(m_messages);
+  const QString label = QFileInfo(m_dbcFilePath).baseName();
+  if (!m_projectModel.mergeImportedProject(project, label))
+    return;
+
+  Core::Prompt::showMessageBox(
+    tr("Added %1 messages to the open project.").arg(QString::number(m_messages.size())),
+    tr("The new source, groups, tables and workspaces are filed under \"%1\".").arg(label),
+    Core::Prompt::Information,
+    tr("Import Complete"));
+}
+
+/**
  * @brief Generates a Serial Studio project from the parsed DBC messages.
  */
 void DataModel::DBCImporter::confirmImport()
@@ -663,7 +684,7 @@ QString DataModel::DBCImporter::generateMessageSpec(const QCanMessageDescription
 
   QString out  = heading + QLatin1Char('\n');
   out         += QStringLiteral("  [0x%1] = {\n    table = %2,\n    signals = {\n")
-           .arg(hex, luaQuote(tableNameFor(message)));
+                   .arg(hex, luaQuote(tableNameFor(message)));
 
   for (const auto& entry : entries)
     out += signalSpecLine(entry, rootSelector);

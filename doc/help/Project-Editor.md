@@ -13,7 +13,13 @@ The diagram below shows the tree structure of a Serial Studio project file and h
 ```mermaid
 flowchart TD
     Root["Project Root"]
-    Root --> CL["Control Loop"]
+    Root --> PS["Project Scripts"]
+    PS --> CL["Control Loop"]
+    PS --> LL["Lua Library"]
+    PS --> JL["JavaScript Library"]
+    Root --> DE["Data Export (Pro)"]
+    DE --> MQ["MQTT Publisher"]
+    DE --> IF["InfluxDB Sink"]
     Root --> A["Action: ..."]
     Root --> S["Source: ..."]
     Root --> DW["Dashboard Widgets"]
@@ -21,9 +27,11 @@ flowchart TD
     DW --> G["Group → Datasets"]
 ```
 
-Control Loop, every action, and every source sit directly under the project root — there is
-no intermediate "Actions" or "Sources" node. Groups are the exception: they are filed under a
-"Dashboard Widgets" node instead of sitting at the root.
+Every action and every source sit directly under the project root — there is no intermediate
+"Actions" or "Sources" node. Two exceptions: the project-level scripts (Control Loop, Lua Library,
+JavaScript Library) are filed under a "Project Scripts" node, the live data sinks (MQTT Publisher,
+InfluxDB Sink, Pro builds) under a "Data Export" node, and groups under a "Dashboard Widgets"
+node.
 
 ### Frame index mapping
 
@@ -60,7 +68,13 @@ Shows the project's hierarchical structure:
 
 ```
 Project Root
-  Control Loop
+  Project Scripts
+    Control Loop
+    Lua Library
+    JavaScript Library
+  Data Export
+    MQTT Publisher
+    InfluxDB Sink
   Action: "Reset Device"
   Source: "Main Device"
     Frame Parser
@@ -138,6 +152,14 @@ Groups
 - **Nest a folder.** Select an existing folder and click **Add Sub-folder**, or right-click it and choose **New Sub-Folder**. Folders nest to any depth.
 - **Move an item in.** Right-click a group, table, workspace, or folder and use the **Move to Folder** submenu. It mirrors the folder tree, so you can drop the item into any folder at any depth, or back to the top level.
 - **Add items directly into a folder.** With a folder selected, the matching add button (**Add Group**, **Add Shared Table**, **Add Workspace**) creates the new item already filed inside it.
+
+### Workspace profiles
+
+A workspace profile is a named subset of the workspace folders: the workspaces one operator, bench or machine variant should see. A project that serves several engine variants keeps every group and every workspace in one file and declares one profile per variant.
+
+- **Define them** in the Workspaces view (customised workspaces only): **Add Profile**, then tick the folders it shows. A ticked folder shows its whole subtree; a profile with nothing ticked shows everything. Profiles are saved with the project.
+- **Pick one at load.** A project with two or more profiles asks which one to show when it opens, and remembers the answer for that file. Start the application with `--profile <name>` to skip the question, or select one at runtime with `project.workspace.profile.select`.
+- **What it changes.** Only the taskbar's workspace list and switcher. The Project Editor always shows the whole project, the automatic per-group workspaces stay visible, and nothing about the project's data changes.
 
 ### Renaming and deleting
 

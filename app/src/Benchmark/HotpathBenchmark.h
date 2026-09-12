@@ -38,13 +38,17 @@ public:
    */
   struct Result {
     bool passed;
+    bool allocTainted;
     int language;
     double minFps;
     double framesPerSecond;
     double elapsedSeconds;
+    double allocationsPerFrame;
     quint64 framesParsed;
     quint64 framesSkipped;
   };
+
+  static constexpr int kDefaultChannels = 8;
 
   /**
    * @brief Per-stage attribution (ns/frame) for the native numeric run, measured by composition
@@ -65,14 +69,17 @@ public:
                                   bool withExporters,
                                   bool withStrings     = true,
                                   bool withDashboard   = false,
-                                  bool dashboardIngest = true);
+                                  bool dashboardIngest = true,
+                                  int channels         = kDefaultChannels);
   [[nodiscard]] static Result runDataPipeline(quint64 targetFrames,
                                               double minFps,
-                                              double minSeconds);
+                                              double minSeconds,
+                                              int channels = kDefaultChannels);
   [[nodiscard]] static int runAndReport(quint64 targetFrames,
                                         double minFps,
                                         double minSeconds,
-                                        const QString& outputFile = QString());
+                                        const QString& outputFile = QString(),
+                                        int channels              = kDefaultChannels);
 
   [[nodiscard]] static QString buildProvenance();
 
@@ -80,11 +87,9 @@ public:
   static void setActive(bool active) noexcept;
 
 private:
-  [[nodiscard]] static bool printReport(const Result* results,
-                                        const Result* coverage,
-                                        const StageBreakdown& stages,
-                                        const QString& outputFile);
-  [[nodiscard]] static StageBreakdown measureNativeStages(const Result& data, const Result& native);
+  [[nodiscard]] static StageBreakdown measureNativeStages(const Result& data,
+                                                          const Result& native,
+                                                          int channels);
   static void enableConsumers();
   static void disableConsumers();
   static void setupProject(int language, int channels, bool withStrings, bool dashboard);

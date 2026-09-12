@@ -32,6 +32,7 @@
 #include <QList>
 #include <QSet>
 #include <QStandardPaths>
+#include <utility>
 
 #include "Core/Bus/MessageBus.h"
 #include "Core/Bus/Messages.h"
@@ -43,6 +44,7 @@
 #include "DataModel/Importers/AxisTicks.h"
 #include "DataModel/Importers/ImporterCommon.h"
 #include "DataModel/Importers/ModbusRegisterMap.h"
+#include "DataModel/PipelineModules.h"
 #include "DataModel/ProjectModel.h"
 
 //--------------------------------------------------------------------------------------------------
@@ -101,14 +103,23 @@ QString DataModel::ModbusMapImporter::registerInfo(int index) const
 
   const auto& r = m_registers[index];
   QString info  = QStringLiteral("%1: %2 @ %3 (%4, %5)")
-                   .arg(index + 1)
-                   .arg(r.name)
-                   .arg(r.address)
-                   .arg(registerTypeName(r.registerType))
-                   .arg(r.dataType);
+                    .arg(index + 1)
+                    .arg(r.name)
+                    .arg(r.address)
+                    .arg(registerTypeName(r.registerType))
+                    .arg(r.dataType);
 
   if (!r.units.isEmpty())
     info += QStringLiteral(" [%1]").arg(r.units);
+
+  if (r.unitId != 0)
+    info += QStringLiteral(" unit %1").arg(r.unitId);
+
+  if (r.bitIndex >= 0)
+    info += QStringLiteral(" bit %1").arg(r.bitIndex);
+
+  if (r.writable)
+    info += QStringLiteral(" rw");
 
   return info;
 }
@@ -176,6 +187,9 @@ void DataModel::ModbusMapImporter::showPreview(const QString& filePath)
   std::sort(m_registers.begin(),
             m_registers.end(),
             [](const ModbusMap::RegisterEntry& a, const ModbusMap::RegisterEntry& b) {
+              if (a.unitId != b.unitId)
+                return a.unitId < b.unitId;
+
               if (a.registerType != b.registerType)
                 return a.registerType < b.registerType;
 
@@ -200,7 +214,7 @@ void DataModel::ModbusMapImporter::confirmImport()
   const auto project       = buildProject();
   const QString suggestion = QFileInfo(m_filePath).baseName();
 
-  loadRegisterGroups(blocks);
+  loadRegisterGroups(blocks, false);
 
   const int registerCount = m_registers.count();
   const int blockCount    = blocks.count();
@@ -224,6 +238,30 @@ void DataModel::ModbusMapImporter::confirmImport()
     Qt::SingleShotConnection);
 
   pm.importProjectFromJson(project, suggestion);
+}
+
+/**
+ * @brief Adds the generated source, groups, tables and workspaces to the open project (spec 0083)
+ *        and appends the polled blocks to the Modbus driver's groups.
+ */
+void DataModel::ModbusMapImporter::confirmMerge()
+{
+  if (m_registers.isEmpty())
+    return;
+
+  const auto blocks   = computeBlocks();
+  const auto project  = buildProject();
+  const QString label = QFileInfo(m_filePath).baseName();
+  if (!DataModel::pipelineModules().projectModel.mergeImportedProject(project, label))
+    return;
+
+  loadRegisterGroups(blocks, true);
+  Core::Prompt::showMessageBox(
+    tr("Added %1 registers in %2 groups to the open project.")
+      .arg(QString::number(m_registers.count()), QString::number(blocks.count())),
+    tr("The new source, groups, tables and workspaces are filed under \"%1\".").arg(label),
+    Core::Prompt::Information,
+    tr("Modbus Import Complete"));
 }
 
 /**
@@ -252,8 +290,8 @@ static quint16 clampedRegisterSpan(quint16 address, int registers)
 }
 
 /**
- * @brief Groups registers into contiguous blocks of the same type. End addresses are computed
- *        in int and clamped: a quint16 sum wraps for maps that pair high addresses with
+ * @brief Groups registers into contiguous blocks of the same unit and type. End addresses are
+ *        computed in int and clamped: a quint16 sum wraps for maps that pair high addresses with
  *        multi-register data types and silently corrupts the block counts.
  */
 QVector<DataModel::ModbusMapImporter::RegisterBlock> DataModel::ModbusMapImporter::computeBlocks()
@@ -268,13 +306,16 @@ QVector<DataModel::ModbusMapImporter::RegisterBlock> DataModel::ModbusMapImporte
   current.registerType = m_registers[0].registerType;
   current.startAddress = m_registers[0].address;
   current.count        = clampedRegisterSpan(current.startAddress, firstSpan);
+  current.slaveAddress = m_registers[0].unitId;
   current.entries.append(m_registers[0]);
 
   for (int i = 1; i < m_registers.count(); ++i) {
     const auto& entry = m_registers[i];
     const int endAddr = static_cast<int>(current.startAddress) + current.count;
+    const bool sameBlock =
+      entry.registerType == current.registerType && entry.unitId == current.slaveAddress;
 
-    if (entry.registerType == current.registerType && entry.address <= endAddr) {
+    if (sameBlock && entry.address <= endAddr) {
       const int entryEnd =
         static_cast<int>(entry.address) + ModbusMap::registersForDataType(entry.dataType);
       const int span = qMin(qMin(entryEnd, 0x10000) - current.startAddress, 0xFFFF);
@@ -286,6 +327,7 @@ QVector<DataModel::ModbusMapImporter::RegisterBlock> DataModel::ModbusMapImporte
       current.startAddress = entry.address;
       current.count =
         clampedRegisterSpan(entry.address, ModbusMap::registersForDataType(entry.dataType));
+      current.slaveAddress = entry.unitId;
       current.entries.clear();
       current.entries.append(entry);
     }
@@ -304,12 +346,13 @@ QVector<DataModel::ModbusMapImporter::RegisterBlock> DataModel::ModbusMapImporte
  */
 QJsonObject DataModel::ModbusMapImporter::buildProject() const
 {
-  const auto blocks = computeBlocks();
+  const auto blocks     = computeBlocks();
+  const bool multi_unit = spansSeveralUnits(blocks);
 
   QStringList table_names;
   QList<QStringList> register_names;
   for (const auto& block : blocks) {
-    table_names.append(blockTitle(block, blocks.size()));
+    table_names.append(blockTitle(block, blocks.size(), multi_unit));
     register_names.append(blockRegisterNames(block));
   }
 
@@ -336,6 +379,9 @@ QJsonObject DataModel::ModbusMapImporter::buildProject() const
     obj[QStringLiteral("type")]  = block.registerType;
     obj[QStringLiteral("start")] = block.startAddress;
     obj[QStringLiteral("count")] = block.count;
+    if (block.slaveAddress != 0)
+      obj[QStringLiteral("slave")] = block.slaveAddress;
+
     reg_groups.append(obj);
   }
 
@@ -370,16 +416,163 @@ QJsonObject DataModel::ModbusMapImporter::buildProject() const
       reg.defaultValue = QVariant(0.0);
       table.registers.push_back(reg);
 
+      const auto& entry = block.entries.at(e);
+      if (entry.writable && entry.bitIndex >= 0 && !is_bool) {
+        DataModel::RegisterDef word;
+        word.name         = rawWordRegisterName(reg_name);
+        word.type         = DataModel::RegisterType::Computed;
+        word.defaultValue = QVariant(0.0);
+        table.registers.push_back(word);
+      }
+
       group.datasets.push_back(
-        buildDatasetFromEntry(block.entries.at(e), is_bool, table.name, reg_name, dataset_index++));
+        buildDatasetFromEntry(entry, is_bool, table.name, reg_name, dataset_index++));
     }
 
     groups.push_back(group);
     tables.push_back(table);
   }
 
+  auto controls =
+    buildOutputGroup(blocks, table_names, register_names, static_cast<int>(groups.size()));
+  if (!controls.outputWidgets.empty())
+    groups.push_back(std::move(controls));
+
   finalizeImportedProject(project, groups, tables, tr("Overview"));
   return project;
+}
+
+/**
+ * @brief Builds the Controls panel (spec 0083): one output control per writable row, writing the
+ *        row's register on the row's unit and reading its state back from the block's table.
+ */
+DataModel::Group DataModel::ModbusMapImporter::buildOutputGroup(
+  const QVector<RegisterBlock>& blocks,
+  const QStringList& tableNames,
+  const QList<QStringList>& registerNames,
+  int groupIndex) const
+{
+  DataModel::Group group;
+  group.groupId   = groupIndex;
+  group.groupType = DataModel::GroupType::Output;
+  group.title     = tr("%1 Controls").arg(QFileInfo(m_filePath).baseName());
+
+  for (qsizetype b = 0; b < blocks.size(); ++b) {
+    const auto& block = blocks.at(b);
+    for (qsizetype e = 0; e < block.entries.size(); ++e) {
+      const auto& entry = block.entries.at(e);
+      if (!entry.writable)
+        continue;
+
+      group.outputWidgets.push_back(buildControl(block,
+                                                 entry,
+                                                 tableNames.at(b),
+                                                 registerNames.at(b).at(e),
+                                                 static_cast<int>(group.outputWidgets.size())));
+    }
+  }
+
+  return group;
+}
+
+/**
+ * @brief One control for a writable row: a toggle for coils and bit rows, a slider over the row's
+ *        engineering range otherwise. Latin-1 transmit encoding keeps the helper's byte string
+ *        one byte per character; the state binding follows the table register the parser fills.
+ */
+DataModel::OutputWidget DataModel::ModbusMapImporter::buildControl(
+  const RegisterBlock& block,
+  const ModbusMap::RegisterEntry& entry,
+  const QString& tableName,
+  const QString& regName,
+  int widgetId)
+{
+  const bool is_bit = block.registerType >= 2 || entry.bitIndex >= 0;
+
+  DataModel::OutputWidget control;
+  control.widgetId   = widgetId;
+  control.groupId    = -1;
+  control.sourceId   = 0;
+  control.txEncoding = static_cast<int>(SerialStudio::EncLatin1);
+  control.title      = entry.name;
+  control.type       = is_bit ? OutputWidgetType::Toggle : OutputWidgetType::Slider;
+  control.minValue   = is_bit ? 0.0 : entry.min;
+  control.maxValue   = is_bit ? 1.0 : entry.max;
+  control.stepSize = (!is_bit && std::isfinite(entry.scale) && entry.scale > 0) ? entry.scale : 1.0;
+  control.initialValue = control.minValue;
+  control.onLabel      = is_bit ? tr("On") : QString();
+  control.offLabel     = is_bit ? tr("Off") : QString();
+
+  control.stateSource      = OutputStateSource::Table;
+  control.stateTable       = tableName;
+  control.stateVariable    = regName;
+  control.transmitFunction = controlTransmitScript(block, entry, tableName, regName);
+  normalize(control);
+  return control;
+}
+
+/**
+ * @brief The JavaScript a generated control transmits with: engineering value back to raw words,
+ *        the row's unit as the helper's trailing argument, and a read-modify-write of the raw word
+ *        for a bit row so its neighbours stay untouched. Names are quoted with luaQuote, whose
+ *        three escapes are the same in a JavaScript string literal.
+ */
+QString DataModel::ModbusMapImporter::controlTransmitScript(const RegisterBlock& block,
+                                                            const ModbusMap::RegisterEntry& entry,
+                                                            const QString& tableName,
+                                                            const QString& regName)
+{
+  const QString unit    = entry.unitId != 0 ? QStringLiteral(", %1").arg(entry.unitId) : QString();
+  const QString address = QStringLiteral("0x%1").arg(entry.address, 4, 16, QLatin1Char('0'));
+
+  if (block.registerType >= 2)
+    return QStringLiteral(
+             "function transmit(value) {\n  return modbusWriteCoil(%1, !!value%2);\n}\n")
+      .arg(address, unit);
+
+  if (entry.bitIndex >= 0)
+    return QStringLiteral("var WORD_REGISTER = %1;\n"
+                          "var BIT = %2;\n\n"
+                          "function transmit(value) {\n"
+                          "  var word = tableGet(%3, WORD_REGISTER) | 0;\n"
+                          "  word = value ? (word | (1 << BIT)) : (word & ~(1 << BIT));\n"
+                          "  return modbusWriteRegister(%4, word & 0xFFFF%5);\n"
+                          "}\n")
+      .arg(luaQuote(rawWordRegisterName(regName)),
+           QString::number(entry.bitIndex),
+           luaQuote(tableName),
+           address,
+           unit);
+
+  const int words = ModbusMap::registersForDataType(entry.dataType);
+  const QString to_raw =
+    QStringLiteral("Math.round((value - %1) / %2)")
+      .arg(luaNumber(std::isfinite(entry.offset) ? entry.offset : 0.0),
+           luaNumber(std::isfinite(entry.scale) && entry.scale != 0.0 ? entry.scale : 1.0));
+  if (entry.dataType == QLatin1String("float32") && entry.wordOrder.isEmpty())
+    return QStringLiteral(
+             "function transmit(value) {\n  return modbusWriteFloat(%1, value%2);\n}\n")
+      .arg(address, unit);
+
+  if (words == 1)
+    return QStringLiteral(
+             "function transmit(value) {\n  return modbusWriteRegister(%1, %2%3);\n}\n")
+      .arg(address, to_raw, unit);
+
+  const QString swap =
+    entry.wordOrder == QLatin1String("cdab") ? QStringLiteral("  words.reverse();\n") : QString();
+  return QStringLiteral("var WORDS = %1;\n\n"
+                        "function transmit(value) {\n"
+                        "  var raw = %2;\n"
+                        "  var words = [];\n"
+                        "  for (var i = WORDS - 1; i >= 0; i--) {\n"
+                        "    words[i] = raw % 65536;\n"
+                        "    raw = Math.floor(raw / 65536);\n"
+                        "  }\n"
+                        "%3"
+                        "  return modbusWriteRegisters(%4, words%5);\n"
+                        "}\n")
+    .arg(QString::number(words), to_raw, swap, address, unit);
 }
 
 /**
@@ -400,7 +593,7 @@ DataModel::Dataset DataModel::ModbusMapImporter::buildDatasetFromEntry(
   dataset.log   = true;
   applyTableTransform(dataset, tableName, regName);
 
-  if (isBool || entry.dataType == QLatin1String("bool")) {
+  if (isBool || entry.dataType == QLatin1String("bool") || entry.bitIndex >= 0) {
     dataset.led     = true;
     dataset.ledHigh = 1;
     dataset.wgtMin  = 0;
@@ -430,16 +623,37 @@ DataModel::Dataset DataModel::ModbusMapImporter::buildDatasetFromEntry(
 }
 
 /**
- * @brief Returns the block's display title, doubling as its data-table name.
+ * @brief Returns the block's display title, doubling as its data-table name; a map that polls
+ *        more than one unit prefixes the unit so two devices' blocks stay apart.
  */
-QString DataModel::ModbusMapImporter::blockTitle(const RegisterBlock& block, qsizetype blockCount)
+QString DataModel::ModbusMapImporter::blockTitle(const RegisterBlock& block,
+                                                 qsizetype blockCount,
+                                                 bool multiUnit)
 {
-  if (blockCount == 1)
-    return registerTypeName(block.registerType);
+  const QString unit =
+    multiUnit ? QStringLiteral("Unit %1 ").arg(qMax<int>(1, block.slaveAddress)) : QString();
 
-  return QStringLiteral("%1 @ %2")
-    .arg(registerTypeName(block.registerType))
-    .arg(block.startAddress);
+  if (blockCount == 1)
+    return unit + registerTypeName(block.registerType);
+
+  return QStringLiteral("%1%2 @ %3")
+    .arg(unit, registerTypeName(block.registerType), QString::number(block.startAddress));
+}
+
+/**
+ * @brief True when the blocks name more than one unit (the connection's own unit counts as one).
+ */
+bool DataModel::ModbusMapImporter::spansSeveralUnits(const QVector<RegisterBlock>& blocks)
+{
+  if (blocks.isEmpty())
+    return false;
+
+  const quint8 first = blocks.first().slaveAddress;
+  for (const auto& block : blocks)
+    if (block.slaveAddress != first)
+      return true;
+
+  return false;
 }
 
 /**
@@ -468,13 +682,17 @@ QStringList DataModel::ModbusMapImporter::blockRegisterNames(const RegisterBlock
 
 /**
  * @brief Maps an entry to its Lua spec decode type: coil/discrete blocks always decode as
- *        packed bits; a bool on a register block decodes the whole 16-bit word.
+ *        packed bits; a bit row on a register block reads one bit of the word ("rbit"); a bool
+ *        on a register block decodes the whole 16-bit word.
  */
 QString DataModel::ModbusMapImporter::luaEntryType(const ModbusMap::RegisterEntry& entry,
                                                    bool bitBlock)
 {
   if (bitBlock)
     return QStringLiteral("bit");
+
+  if (entry.bitIndex >= 0)
+    return QStringLiteral("rbit");
 
   static const QSet<QString> kKnownTypes = {QStringLiteral("uint16"),
                                             QStringLiteral("int16"),
@@ -511,10 +729,28 @@ local SIZES = {
   bool = 2,
 }
 
-local function read_uint(frame, first, n)
+-- Byte permutations for multi-register values; the wire order is ABCD.
+local ORDERS = {
+  cdab = { [4] = { 3, 4, 1, 2 }, [8] = { 7, 8, 5, 6, 3, 4, 1, 2 } },
+  badc = { [4] = { 2, 1, 4, 3 }, [8] = { 2, 1, 4, 3, 6, 5, 8, 7 } },
+  dcba = { [4] = { 4, 3, 2, 1 }, [8] = { 8, 7, 6, 5, 4, 3, 2, 1 } },
+}
+
+-- Returns the entry's bytes in big-endian order after undoing its word order.
+local function ordered_bytes(frame, first, size, order)
+  local perm = order and ORDERS[order] and ORDERS[order][size]
+  local bytes = {}
+  for i = 1, size do
+    local src = perm and perm[i] or i
+    bytes[i] = string.byte(frame, first + src - 1)
+  end
+  return bytes
+end
+
+local function read_uint(bytes, n)
   local v = 0
-  for i = 0, n - 1 do
-    v = v * 256 + string.byte(frame, first + i)
+  for i = 1, n do
+    v = v * 256 + bytes[i]
   end
   return v
 end
@@ -526,11 +762,10 @@ local function to_signed(v, n)
   return v
 end
 
-local function read_float32(frame, first)
-  local b1, b2, b3, b4 = string.byte(frame, first, first + 3)
-  local sign = bit.band(b1, 0x80) ~= 0 and -1 or 1
-  local expo = bit.band(b1, 0x7F) * 2 + bit.rshift(b2, 7)
-  local mant = bit.band(b2, 0x7F) * 65536 + b3 * 256 + b4
+local function read_float32(b)
+  local sign = bit.band(b[1], 0x80) ~= 0 and -1 or 1
+  local expo = bit.band(b[1], 0x7F) * 2 + bit.rshift(b[2], 7)
+  local mant = bit.band(b[2], 0x7F) * 65536 + b[3] * 256 + b[4]
   if expo == 0 then
     return sign * mant * 2 ^ (-126 - 23)
   elseif expo == 255 then
@@ -540,13 +775,12 @@ local function read_float32(frame, first)
   return sign * (1 + mant / 2 ^ 23) * 2 ^ (expo - 127)
 end
 
-local function read_float64(frame, first)
-  local b1, b2 = string.byte(frame, first, first + 1)
-  local sign = bit.band(b1, 0x80) ~= 0 and -1 or 1
-  local expo = bit.band(b1, 0x7F) * 16 + bit.rshift(b2, 4)
-  local mant = bit.band(b2, 0x0F)
-  for i = 2, 7 do
-    mant = mant * 256 + string.byte(frame, first + i)
+local function read_float64(b)
+  local sign = bit.band(b[1], 0x80) ~= 0 and -1 or 1
+  local expo = bit.band(b[1], 0x7F) * 16 + bit.rshift(b[2], 4)
+  local mant = bit.band(b[2], 0x0F)
+  for i = 3, 8 do
+    mant = mant * 256 + b[i]
   end
   if expo == 0 then
     return sign * mant * 2 ^ (-1022 - 52)
@@ -558,7 +792,8 @@ local function read_float64(frame, first)
 end
 
 -- Decodes one entry; "bit" reads an LSB-first packed coil/discrete bit,
--- "bool" reads a whole 16-bit register as 0/1 truthiness.
+-- "rbit" reads one bit of a register word (and publishes the word too, so
+-- a control can write it back), "bool" reads a whole register as 0/1.
 local function decode(frame, limit, entry)
   if entry.type == "bit" then
     local byte_idx = 4 + math.floor(entry.offset / 8)
@@ -569,25 +804,33 @@ local function decode(frame, limit, entry)
     return bit.band(bit.rshift(string.byte(frame, byte_idx), entry.offset % 8), 1)
   end
 
-  local size = SIZES[entry.type] or 2
+  local size = entry.width or SIZES[entry.type] or 2
   local first = 4 + entry.offset * 2
   if first + size - 1 > limit then
     return nil
   end
 
+  local b = ordered_bytes(frame, first, size, entry.order)
   local raw
   if entry.type == "float32" then
-    raw = read_float32(frame, first)
+    raw = read_float32(b)
   elseif entry.type == "float64" then
-    raw = read_float64(frame, first)
+    raw = read_float64(b)
   elseif entry.type == "int16" or entry.type == "int32" or entry.type == "int64" then
-    raw = to_signed(read_uint(frame, first, size), size)
+    raw = to_signed(read_uint(b, size), size)
   else
-    raw = read_uint(frame, first, size)
+    raw = read_uint(b, size)
   end
 
   if entry.type == "bool" then
     return (raw ~= 0) and 1 or 0
+  end
+
+  if entry.type == "rbit" then
+    if entry.word then
+      tableSet(entry.table, entry.word, raw)
+    end
+    return math.floor(raw / 2 ^ entry.bit) % 2
   end
 
   return raw * (entry.scale or 1) + (entry.shift or 0)
@@ -595,8 +838,37 @@ end
 
 local cursor = 1
 
+-- Picks the block a reply belongs to from what the reply itself carries: the
+-- responding unit, the function code and the byte count. Only when several
+-- blocks share that signature does the driver's round-robin order decide.
+local function match_block(unit, func, count)
+  local first = nil
+  local candidates = 0
+  for i = 1, #BLOCKS do
+    local b = BLOCKS[i]
+    if b.func == func and b.bytes == count and (b.unit == 0 or b.unit == unit) then
+      candidates = candidates + 1
+      first = first or i
+    end
+  end
+
+  if candidates <= 1 then
+    return first
+  end
+
+  for probe = 0, #BLOCKS - 1 do
+    local i = ((cursor - 1 + probe) % #BLOCKS) + 1
+    local b = BLOCKS[i]
+    if b.func == func and b.bytes == count and (b.unit == 0 or b.unit == unit) then
+      return i
+    end
+  end
+
+  return nil
+end
+
 -- The Binary decoder hands parse() the frame as a 1-indexed table of byte
--- values; string.unpack needs a string, so convert once up front (Modbus
+-- values; string.byte needs a string, so convert once up front (Modbus
 -- ADUs are at most 256 bytes).
 function parse(frame)
   if type(frame) == "table" then
@@ -607,26 +879,21 @@ function parse(frame)
     return {}
   end
 
+  local unit = string.byte(frame, 1)
   local func = string.byte(frame, 2)
   if func >= 0x80 then
     return {} -- Modbus exception response
   end
 
-  local block = nil
-  for probe = 0, #BLOCKS - 1 do
-    local candidate = ((cursor - 1 + probe) % #BLOCKS) + 1
-    if BLOCKS[candidate].func == func then
-      block = BLOCKS[candidate]
-      cursor = (candidate % #BLOCKS) + 1
-      break
-    end
-  end
-
-  if not block then
+  local count = string.byte(frame, 3)
+  local index = match_block(unit, func, count)
+  if not index then
     return {}
   end
 
-  local limit = math.min(3 + string.byte(frame, 3), #frame)
+  cursor = (index % #BLOCKS) + 1
+  local block = BLOCKS[index]
+  local limit = math.min(3 + count, #frame)
   for _, entry in ipairs(block.entries) do
     local value = decode(frame, limit, entry)
     if value ~= nil then
@@ -642,9 +909,57 @@ end
 // code-verify on
 
 /**
+ * @brief Returns one BLOCKS entry line: name, word offset, decode type, then only the fields that
+ *        differ from the defaults (scale, shift, word order, the rbit bit index and width, and the
+ *        raw-word register a writable bit row publishes for its control).
+ */
+QString DataModel::ModbusMapImporter::luaEntryLine(const RegisterBlock& block,
+                                                   const QString& registerName,
+                                                   const QString& tableName,
+                                                   qsizetype index)
+{
+  const auto& entry  = block.entries.at(index);
+  const bool is_bits = (block.registerType >= 2);
+  const auto type    = luaEntryType(entry, is_bits);
+
+  QString line = QStringLiteral("      { name = %1, offset = %2, type = %3")
+                   .arg(luaQuote(registerName),
+                        QString::number(entry.address - block.startAddress),
+                        luaQuote(type));
+
+  if (type == QLatin1String("rbit")) {
+    line += QStringLiteral(", bit = %1, width = %2")
+              .arg(QString::number(entry.bitIndex),
+                   QString::number(2 * ModbusMap::registersForDataType(entry.dataType)));
+    if (entry.writable)
+      line += QStringLiteral(", table = %1, word = %2")
+                .arg(luaQuote(tableName), luaQuote(rawWordRegisterName(registerName)));
+  }
+
+  if (!entry.wordOrder.isEmpty() && ModbusMap::registersForDataType(entry.dataType) > 1)
+    line += QStringLiteral(", order = %1").arg(luaQuote(entry.wordOrder));
+
+  if (std::isfinite(entry.scale) && entry.scale != 1.0)
+    line += QStringLiteral(", scale = %1").arg(luaNumber(entry.scale));
+
+  if (std::isfinite(entry.offset) && entry.offset != 0.0)
+    line += QStringLiteral(", shift = %1").arg(luaNumber(entry.offset));
+
+  return line + QStringLiteral(" },\n");
+}
+
+/**
+ * @brief The table register a writable bit row's raw word is published under, so its control can
+ *        read-modify-write the word without disturbing the neighbouring bits.
+ */
+QString DataModel::ModbusMapImporter::rawWordRegisterName(const QString& registerName)
+{
+  return registerName + QStringLiteral(" (word)");
+}
+
+/**
  * @brief Generates the user-editable Lua frame parser: a documented header, the declarative
- *        BLOCKS spec, and the cursor-latching decode machinery mirroring the driver's
- *        round-robin polling.
+ *        BLOCKS spec, and the reply-matching decode machinery.
  */
 QString DataModel::ModbusMapImporter::buildLuaParser(const QVector<RegisterBlock>& blocks,
                                                      const QStringList& tableNames,
@@ -657,27 +972,17 @@ QString DataModel::ModbusMapImporter::buildLuaParser(const QVector<RegisterBlock
     const auto& block  = blocks.at(b);
     const bool is_bits = (block.registerType >= 2);
     const auto func    = kFunctionCodes[qBound<quint8>(0, block.registerType, 3)];
+    const int bytes    = is_bits ? (block.count + 7) / 8 : block.count * 2;
 
-    spec += QStringLiteral("  {\n    func = 0x%1,\n    table = %2,\n    entries = {\n")
+    spec += QStringLiteral("  {\n    func = 0x%1,\n    unit = %2,\n    bytes = %3,\n"
+                           "    table = %4,\n    entries = {\n")
               .arg(QString::number(func, 16).toUpper().rightJustified(2, QLatin1Char('0')),
+                   QString::number(block.slaveAddress),
+                   QString::number(bytes),
                    luaQuote(tableNames.at(b)));
 
-    for (qsizetype e = 0; e < block.entries.size(); ++e) {
-      const auto& entry = block.entries.at(e);
-
-      QString line = QStringLiteral("      { name = %1, offset = %2, type = %3")
-                       .arg(luaQuote(registerNames.at(b).at(e)),
-                            QString::number(entry.address - block.startAddress),
-                            luaQuote(luaEntryType(entry, is_bits)));
-
-      if (std::isfinite(entry.scale) && entry.scale != 1.0)
-        line += QStringLiteral(", scale = %1").arg(luaNumber(entry.scale));
-
-      if (std::isfinite(entry.offset) && entry.offset != 0.0)
-        line += QStringLiteral(", shift = %1").arg(luaNumber(entry.offset));
-
-      spec += line + QStringLiteral(" },\n");
-    }
+    for (qsizetype e = 0; e < block.entries.size(); ++e)
+      spec += luaEntryLine(block, registerNames.at(b).at(e), tableNames.at(b), e);
 
     spec += QStringLiteral("    },\n  },\n");
   }
@@ -686,11 +991,13 @@ QString DataModel::ModbusMapImporter::buildLuaParser(const QVector<RegisterBlock
   Modbus register-map parser generated by the Serial Studio Modbus importer.
   Source map: %1
 
-  Wire format (response ADU): [slave, function, byteCount, data...]
+  Wire format (response ADU): [unit, function, byteCount, data...]
 
-  The Modbus driver polls the configured register blocks round-robin.
-  Responses carry no block identity, so parse() advances a cursor through
-  BLOCKS and resyncs on the response function code when a reply is dropped.
+  The Modbus driver polls the configured register blocks round-robin, each
+  from the unit its map named. parse() matches a reply to its block by the
+  unit, function code and byte count the reply itself carries, so a dropped
+  reply never shifts the ones after it; only blocks that share all three
+  fall back to the driver's polling order.
 
   Data flow:
     parse() decodes every entry of the matched block and publishes the
@@ -704,9 +1011,14 @@ QString DataModel::ModbusMapImporter::buildLuaParser(const QVector<RegisterBlock
     3. Add a dataset whose transform reads it back with tableGet().
 ]]
 
+-- Block fields: func = function code, unit = responding unit (0 = the
+-- connection's), bytes = expected payload length, table = the data table
+-- the block publishes into.
 -- Entry fields: offset = register offset within the block (words for
--- registers, bit index for coils/discrete inputs); type drives decoding;
--- scale/shift convert raw values to engineering units (omitted = 1 / 0).
+-- registers, bit index for coils/discrete inputs); type drives decoding
+-- ("rbit" = one bit of a register word, with bit and width); order undoes
+-- a device's word order (cdab, badc, dcba); scale/shift convert raw values
+-- to engineering units (omitted = 1 / 0).
 local BLOCKS = {
 %2}
 )LUA")
@@ -717,9 +1029,11 @@ local BLOCKS = {
 
 /**
  * @brief Publishes the computed register blocks for the Modbus UI driver to adopt (spec 0077): one
- *        object per block with its type, start address and register count.
+ *        object per block with its type, start address and register count; @p append keeps the
+ *        driver's existing groups (a merge into an open project).
  */
-void DataModel::ModbusMapImporter::loadRegisterGroups(const QVector<RegisterBlock>& blocks) const
+void DataModel::ModbusMapImporter::loadRegisterGroups(const QVector<RegisterBlock>& blocks,
+                                                      bool append) const
 {
   auto* bus = &Core::services().bus;
   SS_ASSERT(bus != nullptr, return);
@@ -730,10 +1044,13 @@ void DataModel::ModbusMapImporter::loadRegisterGroups(const QVector<RegisterBloc
     group.insert(QStringLiteral("type"), static_cast<int>(block.registerType));
     group.insert(QStringLiteral("start"), static_cast<int>(block.startAddress));
     group.insert(QStringLiteral("count"), static_cast<int>(block.count));
+    if (block.slaveAddress != 0)
+      group.insert(QStringLiteral("slave"), static_cast<int>(block.slaveAddress));
+
     groups.append(group);
   }
 
-  bus->publish<Core::Bus::ModbusRegisterGroupsLoaded>(QJsonDocument(groups));
+  bus->publish<Core::Bus::ModbusRegisterGroupsLoaded>(QJsonDocument(groups), append);
 }
 
 //--------------------------------------------------------------------------------------------------

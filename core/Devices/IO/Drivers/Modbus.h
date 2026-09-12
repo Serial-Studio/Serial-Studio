@@ -200,7 +200,7 @@ public slots:
 
 private slots:
   void onReadReady();
-  void applyImportedRegisterGroups(const QJsonDocument& groups);
+  void applyImportedRegisterGroups(const QJsonDocument& groups, bool append);
   void pollRegisters();
   void pollNextGroup();
   void refreshSerialPorts();

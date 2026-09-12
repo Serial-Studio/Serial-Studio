@@ -42,6 +42,10 @@ public:
                                 bool showMessageBoxes) override;
 
   [[nodiscard]] QList<QStringList> parseString(const QString& frame) override;
+  [[nodiscard]] bool parseUtf8Cells(const QByteArray& frame,
+                                    ScriptCellRows& rows,
+                                    QList<QStringList>& fallback) override;
+  [[nodiscard]] bool referencesTableApi() const noexcept override;
   [[nodiscard]] QList<QStringList> parseBinary(const QByteArray& frame) override;
 
   [[nodiscard]] bool isLoaded() const noexcept override;
@@ -61,6 +65,7 @@ private:
   static constexpr int kMaxConsecutiveTimeouts = 3;
 
   [[nodiscard]] QJSValue guardedCall(QJSValueList& args);
+  [[nodiscard]] bool runParse(const QString& frame, QJSValue& result);
   [[nodiscard]] bool noteTimeoutAndCheckDisabled(int sourceId);
   void noteError(const QString& message);
   void resetTimeoutCounter() noexcept;
@@ -80,6 +85,7 @@ private:
   QJSValue m_hexToArray;
   JsWatchdog m_watchdog;
   bool m_disabled;
+  bool m_referencesTableApi;
   int m_sourceId;
   int m_consecutiveTimeouts;
   quint64 m_errorCount;

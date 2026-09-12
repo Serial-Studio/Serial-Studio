@@ -219,7 +219,7 @@ updated: 2026-08-06
       the 0044 verifier never did. Fix: reparseSession() disables the budget around the
       feed and restores it after — heals verify AND regression. Report now carries
       framesParsed/framesSkipped/transformErrors per side to prove a clean pass.
-      CONFIRMED 2026-08-09: BADAQ (317,262 frames,
+      CONFIRMED 2026-08-09: the field project (317,262 frames,
       583 datasets, control-script session) regresses `identical` against its own project;
       both replays clean (0 skipped, 0 transform errors). Second root cause fixed same day:
       Sessions::Export settings restore stored m_exportEnabled silently (no enabledChanged),
@@ -236,7 +236,7 @@ updated: 2026-08-06
       exports nothing (inverted asymmetry). Suspect the under-flush-threshold path
       (frames < FrameConsumerConfig flushThreshold 1024) interacting with the second
       enable/close cycle -- read Export::flushWorker()/closeFile() semantics. Real-world
-      BADAQ (317k frames) verdicts `identical`; the pytest suite's short recordings will
+      the field project (317k frames) verdicts `identical`; the pytest suite's short recordings will
       hit this class, so expect AC failures until fixed.
 
 ## Definition of Done

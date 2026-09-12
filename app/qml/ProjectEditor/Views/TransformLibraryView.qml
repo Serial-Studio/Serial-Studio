@@ -1,0 +1,253 @@
+/*
+ * Serial Studio
+ * https://serial-studio.com/
+ *
+ * Copyright (C) 2020-2026 Alex Spataru
+ *
+ * This file is dual-licensed:
+ *
+ * - Under the GNU GPLv3 (or later) for builds that exclude Pro modules.
+ * - Under the Serial Studio Commercial License for builds that include
+ *   any Pro functionality.
+ *
+ * You must comply with the terms of one of these licenses, depending
+ * on your use case.
+ *
+ * For GPL terms, see <https://www.gnu.org/licenses/gpl-3.0.html>
+ * For commercial terms, see LICENSES/LicenseRef-SerialStudio-Commercial.txt.
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial
+ */
+
+import QtQuick
+import QtQuick.Layouts
+import QtQuick.Controls
+import SerialStudio
+
+import "../../Widgets" as Widgets
+
+Widgets.Pane {
+  id: root
+
+  focus: true
+  title: root.lua ? qsTr("Lua Library") : qsTr("JavaScript Library")
+
+  icon: Cpp_JSON_ProjectEditor.selectedIcon
+  readonly property bool lua: Cpp_JSON_ProjectEditor.currentView === ProjectEditor.TransformLibraryView
+
+  actionComponent: EditorNavActions {}
+
+  //
+  // Right-click context menu
+  //
+  CodeEditorMenu {
+    id: contextMenu
+
+    codeEditor: editor
+  }
+
+  //
+  // User interface elements
+  //
+  Page {
+    anchors.fill: parent
+    palette.mid: Cpp_ThemeManager.colors["mid"]
+    palette.dark: Cpp_ThemeManager.colors["dark"]
+    palette.text: Cpp_ThemeManager.colors["text"]
+    palette.base: Cpp_ThemeManager.colors["base"]
+    palette.link: Cpp_ThemeManager.colors["link"]
+    palette.light: Cpp_ThemeManager.colors["light"]
+    palette.window: Cpp_ThemeManager.colors["window"]
+    palette.shadow: Cpp_ThemeManager.colors["shadow"]
+    palette.accent: Cpp_ThemeManager.colors["accent"]
+    palette.button: Cpp_ThemeManager.colors["button"]
+    palette.midlight: Cpp_ThemeManager.colors["midlight"]
+    palette.highlight: Cpp_ThemeManager.colors["highlight"]
+    palette.windowText: Cpp_ThemeManager.colors["window_text"]
+    palette.brightText: Cpp_ThemeManager.colors["bright_text"]
+    palette.buttonText: Cpp_ThemeManager.colors["button_text"]
+    palette.toolTipBase: Cpp_ThemeManager.colors["tooltip_base"]
+    palette.toolTipText: Cpp_ThemeManager.colors["tooltip_text"]
+    palette.linkVisited: Cpp_ThemeManager.colors["link_visited"]
+    palette.alternateBase: Cpp_ThemeManager.colors["alternate_base"]
+    palette.placeholderText: Cpp_ThemeManager.colors["placeholder_text"]
+    palette.highlightedText: Cpp_ThemeManager.colors["highlighted_text"]
+
+    ColumnLayout {
+      spacing: -1
+      anchors.fill: parent
+      anchors.topMargin: -16
+      anchors.leftMargin: -10
+      anchors.rightMargin: -10
+      anchors.bottomMargin: -9
+
+      //
+      // Editor toolbar
+      //
+      Rectangle {
+        Layout.fillWidth: true
+        Layout.maximumHeight: Layout.minimumHeight
+        color: Cpp_ThemeManager.colors["groupbox_background"]
+        Layout.minimumHeight: editorToolbar.implicitHeight + 12
+
+        RowLayout {
+          id: editorToolbar
+
+          spacing: 4
+
+          anchors {
+            margins: 8
+            left: parent.left
+            right: parent.right
+            verticalCenter: parent.verticalCenter
+          }
+
+          Widgets.ToolbarButton {
+            iconSize: 24
+            text: qsTr("Reset")
+            toolbarButton: false
+            onClicked: editor.reload()
+            Layout.alignment: Qt.AlignVCenter
+            ToolTip.text: qsTr("Reset to the commented starter")
+            icon.source: Cpp_Misc_IconRegistry.icon("code", "reload", 24)
+          }
+
+          Widgets.ToolbarButton {
+            iconSize: 24
+            text: qsTr("Open")
+            toolbarButton: false
+            onClicked: editor.importFile()
+            Layout.alignment: Qt.AlignVCenter
+            icon.source: Cpp_Misc_IconRegistry.icon("code", "open", 24)
+            ToolTip.text: root.lua ? qsTr("Import a Lua file") : qsTr("Import a JavaScript file")
+          }
+
+          Widgets.ToolbarButton {
+            iconSize: 24
+            text: qsTr("Undo")
+            toolbarButton: false
+            onClicked: editor.undo()
+            enabled: editor.undoAvailable
+            Layout.alignment: Qt.AlignVCenter
+            ToolTip.text: qsTr("Undo the last code edit")
+            icon.source: Cpp_Misc_IconRegistry.icon("code", "undo", 24)
+          }
+
+          Widgets.ToolbarButton {
+            iconSize: 24
+            text: qsTr("Redo")
+            toolbarButton: false
+            onClicked: editor.redo()
+            enabled: editor.redoAvailable
+            Layout.alignment: Qt.AlignVCenter
+            ToolTip.text: qsTr("Redo the previously undone edit")
+            icon.source: Cpp_Misc_IconRegistry.icon("code", "redo", 24)
+          }
+
+          Rectangle {
+            implicitWidth: 1
+            Layout.fillHeight: true
+            Layout.maximumHeight: 48
+            Layout.alignment: Qt.AlignVCenter
+            color: Cpp_ThemeManager.colors["groupbox_border"]
+          }
+
+          Widgets.ToolbarButton {
+            iconSize: 24
+            text: qsTr("Cut")
+            toolbarButton: false
+            onClicked: editor.cut()
+            Layout.alignment: Qt.AlignVCenter
+            ToolTip.text: qsTr("Cut selected code to clipboard")
+            icon.source: Cpp_Misc_IconRegistry.icon("code", "cut", 24)
+          }
+
+          Widgets.ToolbarButton {
+            iconSize: 24
+            text: qsTr("Copy")
+            toolbarButton: false
+            onClicked: editor.copy()
+            Layout.alignment: Qt.AlignVCenter
+            ToolTip.text: qsTr("Copy selected code to clipboard")
+            icon.source: Cpp_Misc_IconRegistry.icon("code", "copy", 24)
+          }
+
+          Widgets.ToolbarButton {
+            iconSize: 24
+            text: qsTr("Paste")
+            toolbarButton: false
+            onClicked: editor.paste()
+            Layout.alignment: Qt.AlignVCenter
+            ToolTip.text: qsTr("Paste code from clipboard")
+            icon.source: Cpp_Misc_IconRegistry.icon("code", "paste", 24)
+          }
+
+          Rectangle {
+            implicitWidth: 1
+            Layout.fillHeight: true
+            Layout.maximumHeight: 48
+            Layout.alignment: Qt.AlignVCenter
+            color: Cpp_ThemeManager.colors["groupbox_border"]
+          }
+
+          Widgets.ToolbarButton {
+            iconSize: 24
+            text: qsTr("Help")
+            toolbarButton: false
+            Layout.alignment: Qt.AlignVCenter
+            icon.source: Cpp_Misc_IconRegistry.icon("code", "help", 24)
+            onClicked: app.showHelpCenter("Dataset-Transforms")
+            ToolTip.text: qsTr("Open the dataset transforms documentation")
+          }
+
+          Item {
+            Layout.fillWidth: true
+          }
+
+          Widgets.ToolbarButton {
+            iconSize: 24
+            toolbarButton: false
+            text: qsTr("Validate")
+            onClicked: editor.evaluate()
+            Layout.alignment: Qt.AlignVCenter
+            icon.source: Cpp_Misc_IconRegistry.icon("code", "test", 24)
+            ToolTip.text: qsTr("Load the library in a sandbox and report the first error")
+          }
+        }
+      }
+
+      Rectangle {
+        z: 2
+        implicitHeight: 1
+        Layout.fillWidth: true
+        color: Cpp_ThemeManager.colors["groupbox_border"]
+      }
+
+      //
+      // Code editor
+      //
+      TransformLibraryEditor {
+        id: editor
+
+        lua: root.lua
+
+        Layout.fillWidth: true
+        Layout.fillHeight: true
+
+        MouseArea {
+          anchors.fill: parent
+          cursorShape: Qt.IBeamCursor
+          propagateComposedEvents: true
+          acceptedButtons: Qt.RightButton
+
+          onClicked: (mouse) => {
+                       if (mouse.button === Qt.RightButton) {
+                         contextMenu.popup()
+                         mouse.accepted = true
+                       }
+                     }
+        }
+      }
+    }
+  }
+}

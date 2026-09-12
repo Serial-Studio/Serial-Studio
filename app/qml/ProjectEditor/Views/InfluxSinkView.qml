@@ -144,123 +144,23 @@ Widgets.Pane {
         contentWidth: width
         Layout.fillWidth: true
         Layout.fillHeight: true
-        contentHeight: form.implicitHeight + 32
-        ScrollBar.vertical.policy: form.implicitHeight > view.height
+        contentHeight: delegate.implicitHeight
+        ScrollBar.vertical.policy: delegate.implicitHeight > view.height
                                    ? ScrollBar.AlwaysOn
                                    : ScrollBar.AsNeeded
 
-        GridLayout {
-          id: form
+        TableDelegate {
+          id: delegate
 
-          columns: 2
-          rowSpacing: 8
-          columnSpacing: 8
+          searchable: true
+          width: parent.width
+          headerVisible: false
+          parameterWidth: Math.min(delegate.width * 0.3, 256)
 
-          anchors {
-            margins: 16
-            top: parent.top
-            left: parent.left
-            right: parent.right
-          }
-
-          //
-          // Enabled
-          //
-          Label {
-            text: qsTr("Enabled") + ":"
-          } Switch {
-            Layout.leftMargin: -6
-            Layout.alignment: Qt.AlignLeft
-            checked: Cpp_InfluxDB_Export.exportEnabled
-            onCheckedChanged: {
-              if (Cpp_InfluxDB_Export.exportEnabled !== checked)
-                Cpp_InfluxDB_Export.exportEnabled = checked
-            }
-          }
-
-          //
-          // Server URL
-          //
-          Label {
-            text: qsTr("Server URL") + ":"
-          } Widgets.BoundField {
-            Layout.fillWidth: true
-            externalValue: Cpp_InfluxDB_Export.url
-            placeholderText: qsTr("e.g. http://localhost:8086")
-            onEdited: text => Cpp_InfluxDB_Export.url = text
-          }
-
-          //
-          // Organization
-          //
-          Label {
-            text: qsTr("Organization") + ":"
-          } Widgets.BoundField {
-            Layout.fillWidth: true
-            placeholderText: qsTr("e.g. my-org")
-            externalValue: Cpp_InfluxDB_Export.organization
-            onEdited: text => Cpp_InfluxDB_Export.organization = text
-          }
-
-          //
-          // Bucket
-          //
-          Label {
-            text: qsTr("Bucket") + ":"
-          } Widgets.BoundField {
-            Layout.fillWidth: true
-            placeholderText: qsTr("e.g. telemetry")
-            externalValue: Cpp_InfluxDB_Export.bucket
-            onEdited: text => Cpp_InfluxDB_Export.bucket = text
-          }
-
-          //
-          // Measurement
-          //
-          Label {
-            text: qsTr("Measurement") + ":"
-          } Widgets.BoundField {
-            Layout.fillWidth: true
-            placeholderText: qsTr("e.g. serial_studio")
-            externalValue: Cpp_InfluxDB_Export.measurement
-            onEdited: text => Cpp_InfluxDB_Export.measurement = text
-          }
-
-          //
-          // API token: write-only, never read back from the vault into this field
-          //
-          Label {
-            text: qsTr("API Token") + ":"
-          } Widgets.LineField {
-            id: tokenField
-
-            Layout.fillWidth: true
-            echoMode: TextInput.Password
-            onEditingFinished: {
-              if (text.length > 0) {
-                Cpp_InfluxDB_Export.setToken(text)
-                text = ""
-              }
-            }
-            placeholderText: Cpp_InfluxDB_Export.hasToken
-                             ? qsTr("Stored; type a new token to replace it")
-                             : qsTr("Paste the InfluxDB API token")
-          }
-
-          //
-          // Hint
-          //
-          Item {
-            implicitHeight: 1
-          } Label {
-            Layout.fillWidth: true
-            wrapMode: Label.WordWrap
-            color: Cpp_ThemeManager.colors["placeholder_text"]
-            text: qsTr("Points are written to the InfluxDB 2.x HTTP API with nanosecond precision. The token is stored obfuscated in this machine's settings and never saved into the project file.")
-          }
-
-          Item {
-            Layout.fillHeight: true
+          Binding {
+            target: delegate
+            property: "modelPointer"
+            value: Cpp_JSON_ProjectEditor.influxSinkModel
           }
         }
       }

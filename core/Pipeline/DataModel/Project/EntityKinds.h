@@ -49,6 +49,10 @@ enum EntityKind : int {
   KindSystemDatasets,
   KindWorkspacesRoot,
   KindInfluxSink,
+  KindTransformLibrary,
+  KindScriptsRoot,
+  KindJsLibrary,
+  KindExportRoot,
 };
 
 /**

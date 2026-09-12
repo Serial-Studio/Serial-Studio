@@ -49,6 +49,14 @@ static_assert(static_cast<int>(DataModel::ProjectEditor::KindMqttPublisher)
               == DataModel::KindMqttPublisher);
 static_assert(static_cast<int>(DataModel::ProjectEditor::KindControlScript)
               == DataModel::KindControlScript);
+static_assert(static_cast<int>(DataModel::ProjectEditor::KindTransformLibrary)
+              == DataModel::KindTransformLibrary);
+static_assert(static_cast<int>(DataModel::ProjectEditor::KindScriptsRoot)
+              == DataModel::KindScriptsRoot);
+static_assert(static_cast<int>(DataModel::ProjectEditor::KindJsLibrary)
+              == DataModel::KindJsLibrary);
+static_assert(static_cast<int>(DataModel::ProjectEditor::KindExportRoot)
+              == DataModel::KindExportRoot);
 static_assert(static_cast<int>(DataModel::ProjectEditor::KindGroupFolder)
               == DataModel::KindGroupFolder);
 static_assert(static_cast<int>(DataModel::ProjectEditor::KindUserTable)
@@ -97,6 +105,10 @@ DataModel::ProjectEditor::ProjectEditor()
   , m_mqttPublisherItem(nullptr)
   , m_influxSinkItem(nullptr)
   , m_controlScriptItem(nullptr)
+  , m_transformLibraryItem(nullptr)
+  , m_jsLibraryItem(nullptr)
+  , m_scriptsRootItem(nullptr)
+  , m_exportRootItem(nullptr)
   , m_seedExpansionFromModel(true)
   , m_treeModel(nullptr)
   , m_selectionModel(nullptr)
@@ -107,6 +119,7 @@ DataModel::ProjectEditor::ProjectEditor()
   , m_datasetModel(nullptr)
   , m_outputWidgetModel(nullptr)
   , m_mqttPublisherModel(nullptr)
+  , m_influxSinkModel(nullptr)
   , m_pendingSelectionKind(PendingSelectionKind::None)
   , m_pendingSelectionGroupId(-1)
   , m_pendingSelectionItemId(-1)
@@ -118,6 +131,7 @@ DataModel::ProjectEditor::ProjectEditor()
   , m_summaries(*this, m_projectModelRef)
   , m_multiSelect(*this, m_projectModelRef)
   , m_mqtt(*this)
+  , m_influx(*this)
 {
   generateComboBoxModels();
 
@@ -569,6 +583,14 @@ DataModel::CustomModel* DataModel::ProjectEditor::outputWidgetModel() const
 DataModel::CustomModel* DataModel::ProjectEditor::mqttPublisherModel() const
 {
   return m_mqttPublisherModel;
+}
+
+/**
+ * @brief Returns the InfluxDB Sink form model exposed to QML.
+ */
+DataModel::CustomModel* DataModel::ProjectEditor::influxSinkModel() const
+{
+  return m_influxSinkModel;
 }
 
 /**
@@ -1241,6 +1263,38 @@ void DataModel::ProjectEditor::selectInfluxSink()
 void DataModel::ProjectEditor::selectControlScript()
 {
   m_summaries.selectControlScript();
+}
+
+/**
+ * @brief Forwards to EditorSummaries.
+ */
+void DataModel::ProjectEditor::selectTransformLibrary()
+{
+  m_summaries.selectTransformLibrary();
+}
+
+/**
+ * @brief Forwards to EditorSummaries.
+ */
+void DataModel::ProjectEditor::selectJsLibrary()
+{
+  m_summaries.selectJsLibrary();
+}
+
+/**
+ * @brief Forwards to EditorSummaries.
+ */
+void DataModel::ProjectEditor::selectProjectScripts()
+{
+  m_summaries.selectProjectScripts();
+}
+
+/**
+ * @brief Forwards to EditorSummaries.
+ */
+void DataModel::ProjectEditor::selectDataExport()
+{
+  m_summaries.selectDataExport();
 }
 
 /**

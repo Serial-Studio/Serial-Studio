@@ -120,155 +120,37 @@ jobs:
     # QtMultimedia, and the packaging tools (rpm, fakeroot, python3-venv) linuxdeploy shells out to
     #
     - name: '⚙️ Install dependencies'
-      run: |
-        sudo apt-get update
-        sudo apt-get install -y \
-          build-essential \
-          ninja-build \
-          fakeroot \
-          libcups2-dev \
-          libnss3 \
-          libegl1 \
-          libfuse2 \
-          libgl1-mesa-dev \
-          libasound2-dev \
-          libudev-dev \
-          libsecret-1-dev \
-          libzstd-dev \
-          zlib1g-dev \
-          libexpat1-dev \
-          libminizip-dev \
-          libopus-dev \
-          rpm \
-          python3-venv \
-          libxcb1 \
-          libxcb-cursor0 \
-          libxcb-cursor-dev \
-          libxcb-glx0 \
-          libxcb-icccm4 \
-          libxcb-image0 \
-          libxcb-image0-dev \
-          libxcb-keysyms1 \
-          libxcb-randr0 \
-          libxcb-render0 \
-          libxcb-render-util0 \
-          libxcb-shape0 \
-          libxcb-shm0 \
-          libxcb-sync1 \
-          libxcb-util0-dev \
-          libxcb-util1 \
-          libxcb-xfixes0 \
-          libxcb-xinerama0 \
-          libxcb-xkb-dev \
-          libxcb-xtest0 \
-          libxkbcommon-dev \
-          libxkbcommon-x11-0 \
-          libxkbcommon-x11-dev \
-          libpulse-dev \
-          libpipewire-0.3-0 \
-          libgstreamer1.0-0 \
-          libgstreamer-plugins-base1.0-0 \
-          libgstreamer-plugins-bad1.0-0 \
-          libgstreamer-plugins-good1.0-0 \
-          libgstreamer-gl1.0-0 \
-          gstreamer1.0-plugins-base \
-          gstreamer1.0-plugins-good \
-          gstreamer1.0-plugins-bad \
-          gstreamer1.0-plugins-ugly \
-          gstreamer1.0-libav \
-          gstreamer1.0-tools \
-          gstreamer1.0-x \
-          gstreamer1.0-alsa \
-          gstreamer1.0-pulseaudio \
-          gstreamer1.0-gl \
-          
+      uses: ./.github/actions/linux-desktop-deps
+
     #
     # gRPC arrives as a prebuilt tarball from GRPC_REPO; building it from source would cost more
-    # than the rest of the job put together.
-    #
-    # Retried: the release-asset endpoint answers HTTP 500 often enough to redden a run on its own
-    # (2026-09-03, Linux arm64), and a single failed GET here costs the whole job. --clobber so a
-    # partial download from the previous attempt does not make the retry fail on an existing file.
+    # than the rest of the job put together. The retry policy lives in the action, which the
+    # macOS legs share
     #
     - name: '⚙️ Download prebuilt gRPC'
-      run: |
-        for attempt in 1 2 3 4 5; do
-          if gh release download v${{env.GRPC_VERSION}} \
-               -R ${{env.GRPC_REPO}} \
-               -p "grpc-${{env.GRPC_VERSION}}-linux-x86_64.tar.gz" \
-               --clobber; then
-            break
-          fi
-          if [ "$attempt" -eq 5 ]; then
-            echo "::error::gh release download failed after $attempt attempts"
-            exit 1
-          fi
-          sleep $((attempt * 15))
-        done
-        mkdir -p ${{github.workspace}}/grpc-prefix
-        tar -xzf grpc-${{env.GRPC_VERSION}}-linux-x86_64.tar.gz -C ${{github.workspace}}/grpc-prefix
-      env:
-        GH_TOKEN: ${{secrets.GITHUB_TOKEN}}
-
-    #
-    # Restore-only half of the cache pair; the save step below is gated on a miss so a hit never
-    # rewrites the entry
-    #
-    - name: '⚙️ Restore Qt Cache'
-      id: qt_cache
-      uses: actions/cache/restore@caa296126883cff596d87d8935842f9db880ef25 # v5.1.0
+      uses: ./.github/actions/download-grpc
       with:
-        path: |
-          ${{github.workspace}}/Qt-${{env.QT_VERSION_LINUX}}-${{runner.os}}-x64
-          ~/.qt-license
-        key: qt-${{runner.os}}-${{env.QT_VERSION_LINUX}}-x64
+        version: ${{env.GRPC_VERSION}}
+        repo: ${{env.GRPC_REPO}}
+        asset: grpc-${{env.GRPC_VERSION}}-linux-x86_64.tar.gz
+        prefix-dir: ${{github.workspace}}/grpc-prefix
+        workspace: ${{github.workspace}}
+        github-token: ${{secrets.GITHUB_TOKEN}}
 
     #
-    # Qt comes from the online installer driven by scripts/install-qt.sh, using the account
-    # secrets; only reached when the cache missed
+    # Cache restore, install-on-miss, cache save and the PATH / CMAKE_PREFIX_PATH export. This
+    # job owns the save half of the entry the restore-only legs read
     #
-    - name: '⚙️ Install Qt (cache miss)'
-      shell: bash
-      if: steps.qt_cache.outputs.cache-hit != 'true'
-      env:
-        QT_VERSION: ${{env.QT_VERSION_LINUX}}
-        QT_ARCH: x64
-        QT_USERNAME: ${{secrets.QT_USERNAME}}
-        QT_PASSWORD: ${{secrets.QT_PASSWORD}}
-        QT_OUTPUT_DIR: ${{github.workspace}}/Qt-${{env.QT_VERSION_LINUX}}-${{runner.os}}-x64
-      run: |
-        chmod +x ./scripts/install-qt.sh
-        ./scripts/install-qt.sh
-
-    #
-    # Writes the entry the restore step looks for, keyed by OS + Qt version + arch
-    #
-    - name: '⚙️ Save Qt Cache'
-      if: steps.qt_cache.outputs.cache-hit != 'true'
-      uses: actions/cache/save@caa296126883cff596d87d8935842f9db880ef25 # v5.1.0
+    - name: '⚙️ Set up Qt'
+      uses: ./.github/actions/setup-qt
       with:
-        path: |
-          ${{github.workspace}}/Qt-${{env.QT_VERSION_LINUX}}-${{runner.os}}-x64
-          ~/.qt-license
-        key: qt-${{runner.os}}-${{env.QT_VERSION_LINUX}}-x64
-
-    #
-    # Publishes bin/, libexec/ and CMAKE_PREFIX_PATH through GITHUB_PATH / GITHUB_ENV so every
-    # later step in the job sees the same Qt
-    #
-    - name: '⚙️ Add Qt to PATH'
-      shell: bash
-      env:
-        QT_VERSION: ${{env.QT_VERSION_LINUX}}
-        QT_OUTPUT_DIR: ${{github.workspace}}/Qt-${{env.QT_VERSION_LINUX}}-${{runner.os}}-x64
-      run: |
-        export QT_BIN_PATH="${QT_OUTPUT_DIR}/${QT_VERSION}/gcc_64/bin"
-        export QT_LIBEXEC_PATH="${QT_OUTPUT_DIR}/${QT_VERSION}/gcc_64/libexec"
-        export CMAKE_PREFIX_PATH="${QT_OUTPUT_DIR}/${QT_VERSION}/gcc_64/lib/cmake"
-
-        echo "$QT_BIN_PATH" >> $GITHUB_PATH
-        echo "$QT_LIBEXEC_PATH" >> $GITHUB_PATH
-        echo "CMAKE_PREFIX_PATH=$CMAKE_PREFIX_PATH" >> $GITHUB_ENV
+        qt-version: ${{env.QT_VERSION_LINUX}}
+        qt-dir: ${{github.workspace}}/Qt-${{env.QT_VERSION_LINUX}}-${{runner.os}}-x64
+        qt-arch: x64
+        qt-host: gcc_64
+        cache-key: qt-${{runner.os}}-${{env.QT_VERSION_LINUX}}-x64
+        qt-username: ${{secrets.QT_USERNAME}}
+        qt-password: ${{secrets.QT_PASSWORD}}
 
     #
     # get-cmake supplies a current CMake independently of whatever the runner image ships
@@ -388,6 +270,7 @@ jobs:
           -DENABLE_GRPC=ON \
           -DENABLE_PGO=ON \
           -DPGO_STAGE=GENERATE \
+          -DSS_ALLOC_STATS=ON \
           -DSS_UNITY_BUILD=ON \
           -DSS_UNITY_BATCH_SIZE=${{ env.SS_UNITY_BATCH }} \
           -DUSE_SYSTEM_ZLIB=ON \
@@ -451,42 +334,19 @@ jobs:
       run: cmake --build build --config Release
 
     #
-    # Pro widgets are license-gated, so an unactivated training run profiles the GPL subset and
-    # the shipped binary is optimized for code no Pro user runs. A failed activation is therefore
-    # a failed build, not a warning
+    # Pro widgets are license-gated, so an unactivated training run profiles the GPL subset
+    # and the shipped binary is optimized for code no Pro user runs. A failed activation is
+    # therefore a failed build, not a warning. The two training loads follow it: --min-fps 1
+    # turns the benchmark into a profile generator (the real gate runs later, against the
+    # optimized binary), and the big_db_test load exercises the project and dashboard paths
+    # the hotpath benchmark never reaches
     #
-    - name: '🔑 Activate Serial Studio license (Pro hotpath training)'
-      env:
-        QT_QPA_PLATFORM: offscreen
-        SERIAL_STUDIO_LICENSE_KEY: ${{secrets.SERIAL_STUDIO_LICENSE_KEY}}
-        LD_LIBRARY_PATH: >-
-          ${{github.workspace}}/Qt-${{env.QT_VERSION_LINUX}}-${{runner.os}}-x64/${{env.QT_VERSION_LINUX}}/gcc_64/lib
-      run: |
-        ./build/app/${{env.UNIXNAME}} --activate "$SERIAL_STUDIO_LICENSE_KEY"
-
-    #
-    # --min-fps 1 turns the benchmark into a profile generator: the real gate runs later, against
-    # the optimized binary
-    #
-    - name: '🏋️ PGO training run (hotpath)'
-      env:
-        QT_QPA_PLATFORM: offscreen
-        LD_LIBRARY_PATH: >-
-          ${{github.workspace}}/Qt-${{env.QT_VERSION_LINUX}}-${{runner.os}}-x64/${{env.QT_VERSION_LINUX}}/gcc_64/lib
-      run: |
-        ./build/app/${{env.UNIXNAME}} --headless --benchmark-hotpath --min-fps 1
-
-    #
-    # Second profile: the big_db_test load exercises the project and dashboard paths that the
-    # hotpath benchmark never reaches
-    #
-    - name: '🏋️ PGO training run (big project)'
-      env:
-        QT_QPA_PLATFORM: offscreen
-        LD_LIBRARY_PATH: >-
-          ${{github.workspace}}/Qt-${{env.QT_VERSION_LINUX}}-${{runner.os}}-x64/${{env.QT_VERSION_LINUX}}/gcc_64/lib
-      run: |
-        bash tests/benchmarks/big_db_test/run_load.sh "./build/app/${{env.UNIXNAME}}" 25
+    - name: '🏋️ PGO training runs'
+      uses: ./.github/actions/pgo-train-linux
+      with:
+        app: ./build/app/${{env.UNIXNAME}}
+        qt-lib-dir: ${{github.workspace}}/Qt-${{env.QT_VERSION_LINUX}}-${{runner.os}}-x64/${{env.QT_VERSION_LINUX}}/gcc_64/lib
+        license-key: ${{secrets.SERIAL_STUDIO_LICENSE_KEY}}
 
     #
     # Stage 2: identical flags with PGO_STAGE=USE so the compiler consumes the profiles just
@@ -578,6 +438,17 @@ jobs:
           benchmark.txt
           benchmark-sse4.txt
           benchmark-scalar.txt
+          pgo-train.txt
+
+    #
+    # Spec 0084: the line-table symbols objcopy split out of the stripped binary, so a profile or
+    # crash stack from this exact build can be symbolicated later
+    #
+    - name: '📤 Upload artifact: symbols (Linux x64)'
+      uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
+      with:
+        name: symbols-Linux-x64
+        path: build/app/${{env.UNIXNAME}}.debug
         if-no-files-found: ignore
 
     #
@@ -605,507 +476,31 @@ jobs:
         ./build/app/${{env.UNIXNAME}} --deactivate || true
 
     #
-    # Signing is opt-in on the secrets being present; without them the step exits clean and the
-    # packages ship unsigned
+    # The Linux packaging chain, shared with the other arch: signing identity, AppDir, the
+    # glibc-bundled AppImage (spec 0065, the ONLY Linux packaging path), the deb/rpm pair cut
+    # from that same converted tree, the glibc 2.28 smoke gate that proves the set installs on
+    # Debian 10 / RHEL 8, and the signatures. Only arch strings and checksums differ
     #
-    - name: '🔐 Prepare GPG signing (optional)'
-      env:
-        GPG_PRIVATE_KEY: ${{secrets.GPG_PRIVATE_KEY}}
-        GPG_PASSPHRASE: ${{secrets.GPG_PASSPHRASE}}
-        GPG_KEY_ID: ${{secrets.GPG_KEY_ID}}
-      run: |
-        set -euo pipefail
-        if [ -z "${GPG_KEY_ID:-}" ] || [ -z "${GPG_PRIVATE_KEY:-}" ]; then
-          echo "GPG signing secrets not set; packages will be unsigned."
-          exit 0
-        fi
-        mkdir -p ~/.gnupg && chmod 700 ~/.gnupg
-        echo "allow-preset-passphrase" >> ~/.gnupg/gpg-agent.conf
-        printf '%s\n' "$GPG_PRIVATE_KEY" | gpg --batch --import
-        gpg-connect-agent reloadagent /bye
-        if [ -n "${GPG_PASSPHRASE:-}" ]; then
-          for grip in $(gpg --batch --with-colons --with-keygrip \
-              --list-secret-keys "$GPG_KEY_ID" | awk -F: '$1=="grp"{print $10}'); do
-            printf '%s' "$GPG_PASSPHRASE" | \
-              /usr/lib/gnupg/gpg-preset-passphrase --preset "$grip"
-          done
-        fi
-        PASSFILE="$RUNNER_TEMP/gpg-pass"
-        touch "$PASSFILE" && chmod 600 "$PASSFILE"
-        printf '%s' "${GPG_PASSPHRASE:-}" > "$PASSFILE"
-        printf '%%_signature gpg\n' > ~/.rpmmacros
-        printf '%%_gpg_name %s\n' "$GPG_KEY_ID" >> ~/.rpmmacros
-        printf '%%_gpg_sign_cmd_extra_args --batch --pinentry-mode loopback --passphrase-file %s\n' \
-          "$PASSFILE" >> ~/.rpmmacros
-        echo "SS_GPG_SIGN=1" >> "$GITHUB_ENV"
-
-    #
-    # linuxdeploy plus its Qt plugin build the AppDir; the SQL drivers and the TIFF reader are
-    # pruned first so the image carries only what the app loads. linuxdeploy-plugin-qt deploys
-    # ONLY libqxcb by default, so the wayland platform plugin is requested explicitly via
-    # EXTRA_PLATFORM_PLUGINS (a single libqwayland.so since Qt 6.10 merged the generic/egl
-    # pair and moved the client into qtbase) and its shell/decoration/graphics integration
-    # plugin dirs are copied by hand — without them Plasma/GNOME wayland sessions are forced
-    # through XWayland+GLX. Two more things the tool cannot bundle by itself are added afterwards: the
-    # offscreen platform plugin (the integration tests run headless), and Qt WebEngine's NSS
-    # crypto backends, which NSS dlopen()s (softokn/freebl/nssckbi) so an ldd-based bundler
-    # never sees them and leaves a half-bundled NSS that crashes against the host's newer
-    # copies. No AppImage is packed here: the compat conversion below produces the only Linux
-    # AppImage shipped, so this AppDir is purely the input tree for the deb/rpm/compat steps
-    #
-    - name: '📦 Create AppDir'
-      run: |
-        cd "build/app"
-        wget https://github.com/linuxdeploy/linuxdeploy/releases/download/1-alpha-20240109-1/linuxdeploy-x86_64.AppImage
-        wget https://github.com/linuxdeploy/linuxdeploy-plugin-qt/releases/download/1-alpha-20250213-1/linuxdeploy-plugin-qt-x86_64.AppImage
-        chmod +x linuxdeploy-x86_64.AppImage
-        chmod +x linuxdeploy-plugin-qt-x86_64.AppImage
-
-        export QML_SOURCES_PATHS="${{env.QML_DIR}}"
-        export EXTRA_PLATFORM_PLUGINS="libqwayland.so"
-
-        QT_PLUGINS_PATH="${{github.workspace}}/Qt-${{env.QT_VERSION_LINUX}}-${{runner.os}}-x64/${{env.QT_VERSION_LINUX}}/gcc_64/plugins"
-        rm -f "$QT_PLUGINS_PATH/imageformats/libqtiff.so"
-        find "$QT_PLUGINS_PATH/sqldrivers" -name 'libqsql*.so' ! -name 'libqsqlite.so' -delete
-
-        ./linuxdeploy-x86_64.AppImage --appdir AppDir -e ${{env.UNIXNAME}} -i ../../app/deploy/linux/${{env.UNIXNAME}}.svg -d ../../app/deploy/linux/${{env.UNIXNAME}}.desktop --plugin qt
-        mkdir -p AppDir/usr/plugins/canbus
-        if [ -d "$QT_PLUGINS_PATH/canbus" ]; then
-          cp -r "$QT_PLUGINS_PATH/canbus/"* AppDir/usr/plugins/canbus/ || echo "Warning: Could not copy canbus plugins"
-        else
-          echo "Warning: Qt canbus plugins not found at $QT_PLUGINS_PATH/canbus"
-        fi
-
-        mkdir -p AppDir/usr/plugins/opcua
-        if [ -d "$QT_PLUGINS_PATH/opcua" ]; then
-          cp -r "$QT_PLUGINS_PATH/opcua/"* AppDir/usr/plugins/opcua/ || echo "Warning: Could not copy opcua plugins"
-        else
-          echo "Warning: Qt opcua plugins not found at $QT_PLUGINS_PATH/opcua"
-        fi
-
-        for d in wayland-decoration-client wayland-graphics-integration-client wayland-shell-integration; do
-          if [ -d "$QT_PLUGINS_PATH/$d" ]; then
-            mkdir -p "AppDir/usr/plugins/$d"
-            cp -r "$QT_PLUGINS_PATH/$d/"* "AppDir/usr/plugins/$d/"
-          fi
-        done
-        if [ ! -f AppDir/usr/plugins/platforms/libqwayland.so ]; then
-          echo "::error::wayland platform plugin missing from AppDir"
-          exit 1
-        fi
-
-        mkdir -p AppDir/usr/plugins/platforms
-        if [ -f "$QT_PLUGINS_PATH/platforms/libqoffscreen.so" ]; then
-          cp "$QT_PLUGINS_PATH/platforms/libqoffscreen.so" AppDir/usr/plugins/platforms/
-        else
-          echo "Warning: offscreen platform plugin not found at $QT_PLUGINS_PATH/platforms"
-        fi
-
-        have_softokn=0
-        for d in /usr/lib/*/nss /usr/lib/*-linux-gnu /usr/lib64; do
-          [ -d "$d" ] || continue
-          for m in libsoftokn3 libfreebl3 libfreeblpriv3 libnssckbi libnssdbm3; do
-            if [ -f "$d/$m.so" ]; then
-              cp -a "$d/$m.so" AppDir/usr/lib/
-              [ "$m" = libsoftokn3 ] && have_softokn=1
-            fi
-          done
-        done
-        if [ "$have_softokn" = 0 ]; then
-          echo "::error::libsoftokn3.so not found; NSS bundle incomplete (WebEngine will crash)"
-          exit 1
-        fi
-
-        rm linuxdeploy-x86_64.AppImage
-        rm linuxdeploy-plugin-qt-x86_64.AppImage
-
-    #
-    # Spec 0065: the glibc-bundled conversion is the ONLY Linux packaging path — every Linux
-    # artifact ships the build host's glibc as a matched set behind an in-process loader
-    # redirect, so one package set runs on everything from Debian 10 / RHEL 8 up. A COPY of
-    # the AppDir is converted with sharun/lib4bin: sharun hands library dirs to the bundled
-    # ld-linux via --library-path instead of exporting LD_LIBRARY_PATH, so QProcess children
-    # keep a clean host environment. The full library closure (executables plus every
-    # dlopened plugin/QML module) is consolidated into usr/shared/lib because moving the
-    # executables breaks their $ORIGIN-relative RUNPATH; usr/lib is dropped only after a
-    # coverage check proves every library it held is present there.
-    #
-    - name: '📦 Create AppImage (glibc-bundled)'
-      env:
-        GPG_KEY_ID: ${{secrets.GPG_KEY_ID}}
-      run: |
-        set -euo pipefail
-        cd build/app
-
-        SHARUN_VERSION=v0.8.1
-        SHARUN_SHA256=f35d4f59f2e0b1a5ec12ef126d78197fd4fd14c6f99b4b16dee6a5ddad6baa93
-        APPIMAGETOOL_VERSION=1.9.1
-        APPIMAGETOOL_SHA256=ed4ce84f0d9caff66f50bcca6ff6f35aae54ce8135408b3fa33abfc3cb384eb0
-
-        wget -q "https://github.com/VHSgunzo/sharun/releases/download/${SHARUN_VERSION}/sharun-x86_64-aio" -O sharun-aio
-        echo "${SHARUN_SHA256}  sharun-aio" | sha256sum -c -
-        chmod +x sharun-aio
-        wget -q "https://github.com/AppImage/appimagetool/releases/download/${APPIMAGETOOL_VERSION}/appimagetool-x86_64.AppImage" -O appimagetool
-        echo "${APPIMAGETOOL_SHA256}  appimagetool" | sha256sum -c -
-        chmod +x appimagetool
-
-        cp -a AppDir AppDir-compat
-        printf '{"packageType":"appimage","arch":"x86_64"}\n' > AppDir-compat/usr/bin/ss-config.json
-
-        BIN_SRC=$(mktemp -d)
-        mv "AppDir-compat/usr/bin/${{env.UNIXNAME}}" "$BIN_SRC/"
-        WEBPROC_DIR=""
-        WEBPROC=$(find AppDir-compat/usr -type f -name QtWebEngineProcess | head -n1 || true)
-        if [ -n "$WEBPROC" ]; then
-          WEBPROC_DIR=$(dirname "$WEBPROC")
-          mv "$WEBPROC" "$BIN_SRC/"
-        fi
-
-        # usr/lib rides along as explicit input: libraries that are only dlopened (NSS's
-        # libsoftokn3 and friends) are reachable from no executable or plugin, so ldd-driven
-        # dependency walking alone would drop them and their private deps (libsqlite3).
-        DLOPEN_LIBS=$(find AppDir-compat/usr/plugins AppDir-compat/usr/qml AppDir-compat/usr/lib \
-          -type f -name '*.so*' 2>/dev/null || true)
-
-        # Pre-create shared/lib as a real directory: when it is absent and usr/lib exists,
-        # lib4bin symlinks shared/lib -> ../lib, so the whole closure lands in usr/lib and
-        # the coverage checks below then delete the only copy.
-        mkdir -p AppDir-compat/usr/shared/lib
-
-        # lib4bin resolves dependencies with ldd and silently drops unresolved ones; the
-        # executables were moved out of the AppDir, which breaks their $ORIGIN RUNPATH, so
-        # the libraries only they need (Widgets, Bluetooth, Mqtt, mimalloc, ...) vanish from
-        # the closure unless the AppDir library dir is on LD_LIBRARY_PATH for the conversion.
-        # Qt's openssl TLS backend dlopens libssl at runtime (no NEEDED entry), so the ldd
-        # walk never sees it; on OpenSSL 1.1 hosts (Debian 10) the backend then rejects the
-        # host library and every HTTPS request fails. Bundle the build host's OpenSSL 3 pair
-        # explicitly; it is safe because the compat bundle carries the matching glibc.
-        TLS_LIBS=$(find /usr/lib/x86_64-linux-gnu /usr/lib/aarch64-linux-gnu /usr/lib64 \
-          -maxdepth 1 \( -name 'libssl.so.3*' -o -name 'libcrypto.so.3*' \) 2>/dev/null || true)
-        if [ -z "$TLS_LIBS" ]; then
-          echo "::error::libssl.so.3/libcrypto.so.3 not found on build host"
-          exit 1
-        fi
-
-        # The closure carries GLVND's dispatch libs (libGLX/libEGL/libOpenGL) but those
-        # resolve the actual vendor driver by dlopen, and sharun's loader never searches the
-        # host's /usr/lib — with no bundled vendor the GLX/EGL vendor list is empty and Qt
-        # aborts with "Could not initialize GLX" on every desktop host (offscreen smoke runs
-        # never see it). Bundle Mesa's vendor libs and DRI drivers explicitly (dlopen-only:
-        # the ldd walk cannot find them); sharun auto-sets LIBGL_DRIVERS_PATH,
-        # __EGL_VENDOR_LIBRARY_DIRS and GBM_BACKENDS_PATH when the bundled dirs exist.
-        # NVIDIA-driver hosts fall back to bundled Mesa instead of aborting.
-        sudo apt-get install -y -q libgl1-mesa-dri libglx-mesa0 libegl-mesa0 >/dev/null
-        GL_VENDOR_LIBS=$(find /usr/lib/x86_64-linux-gnu /usr/lib/aarch64-linux-gnu /usr/lib64 \
-          -maxdepth 1 \( -name 'libGLX_mesa.so*' -o -name 'libEGL_mesa.so*' \
-          -o -name 'libglapi.so*' -o -name 'libgallium*.so*' -o -name 'libgbm.so*' \) \
-          2>/dev/null || true)
-        if [ -z "$GL_VENDOR_LIBS" ]; then
-          echo "::error::Mesa GLX/EGL vendor libraries not found on build host"
-          exit 1
-        fi
-        DRI_DIR=$(find /usr/lib/x86_64-linux-gnu /usr/lib/aarch64-linux-gnu /usr/lib64 \
-          -maxdepth 1 -type d -name dri 2>/dev/null | head -n1 || true)
-        if [ -z "$DRI_DIR" ] || ! ls "$DRI_DIR"/*.so >/dev/null 2>&1; then
-          echo "::error::Mesa DRI driver directory not found on build host"
-          exit 1
-        fi
-        GBM_DIR=$(find /usr/lib/x86_64-linux-gnu /usr/lib/aarch64-linux-gnu /usr/lib64 \
-          -maxdepth 1 -type d -name gbm 2>/dev/null | head -n1 || true)
-        GBM_LIBS=""
-        [ -n "$GBM_DIR" ] && GBM_LIBS=$(ls "$GBM_DIR"/*.so 2>/dev/null || true)
-
-        # The bundled libasound carries the build host's plugin dir baked in
-        # (/usr/lib/<triplet>/alsa-lib), which does not exist on RHEL-family hosts; their
-        # alsa.conf routes the default PCM through "pulse", so every device probe logs a
-        # missing libasound_module_pcm_pulse.so and falls back to raw hw. Bundle the pulse
-        # plugins and point ALSA_PLUGIN_DIR at them through sharun's .env (PipeWire hosts
-        # reach them via pipewire-pulse).
-        sudo apt-get install -y -q libasound2-plugins >/dev/null
-        ALSA_PLUGIN_SRC=$(find /usr/lib/x86_64-linux-gnu /usr/lib/aarch64-linux-gnu /usr/lib64 \
-          -maxdepth 1 -type d -name alsa-lib 2>/dev/null | head -n1 || true)
-        ALSA_PLUGINS=""
-        [ -n "$ALSA_PLUGIN_SRC" ] && ALSA_PLUGINS=$(ls "$ALSA_PLUGIN_SRC"/libasound_module_*_pulse.so \
-          2>/dev/null || true)
-        if [ -z "$ALSA_PLUGINS" ]; then
-          echo "::error::ALSA pulse plugins not found on build host"
-          exit 1
-        fi
-
-        LD_LIBRARY_PATH="$PWD/AppDir-compat/usr/lib" \
-          ./sharun-aio lib4bin --dst-dir AppDir-compat/usr --with-sharun --hard-links --with-hooks \
-          "$BIN_SRC"/* $DLOPEN_LIBS $TLS_LIBS $GL_VENDOR_LIBS "$DRI_DIR"/*.so $GBM_LIBS \
-          $ALSA_PLUGINS
-
-        mkdir -p AppDir-compat/usr/shared/lib/alsa-lib
-        for f in $ALSA_PLUGINS; do
-          b=$(basename "$f")
-          dst="AppDir-compat/usr/shared/lib/alsa-lib/$b"
-          if [ ! -e "$dst" ]; then
-            src="AppDir-compat/usr/shared/lib/$b"
-            [ -f "$src" ] && ln -f "$src" "$dst"
-          fi
-          if [ ! -e "$dst" ]; then
-            echo "::error::ALSA plugin $b missing from compat closure"
-            exit 1
-          fi
-        done
-        if ! grep -q '^ALSA_PLUGIN_DIR=' AppDir-compat/usr/.env 2>/dev/null; then
-          echo 'ALSA_PLUGIN_DIR=${SHARUN_DIR}/shared/lib/alsa-lib' >> AppDir-compat/usr/.env
-        fi
-
-        if ! find AppDir-compat/usr/shared/lib -name 'libssl.so.3*' | grep -q .; then
-          echo "::error::libssl.so.3 missing from compat bundle; TLS would fail on legacy hosts"
-          exit 1
-        fi
-
-        if [ -L AppDir-compat/usr/shared/lib ]; then
-          echo "::error::usr/shared/lib is a symlink into usr/lib; compat conversion unsafe"
-          exit 1
-        fi
-
-        # Verify (and backfill) the vendor discovery layout sharun keys on: DRI drivers
-        # under shared/lib/dri, GBM backends under shared/lib/gbm, and the GLVND EGL
-        # vendor JSON under usr/share/glvnd with its library_path reduced to a bare
-        # soname so it resolves inside the bundle. lib4bin keys destinations off the
-        # SOURCE dir, so Mesa 25's symlinked per-driver names already land in
-        # shared/lib/dri pointing at the flattened dril/gallium megadriver — the loops
-        # only create the per-name link when lib4bin left the driver flattened in the
-        # closure root (pre-DRIL Mesa), and fail on names resolvable in neither spot.
-        mkdir -p AppDir-compat/usr/shared/lib/dri
-        for f in "$DRI_DIR"/*.so; do
-          b=$(basename "$f")
-          dst="AppDir-compat/usr/shared/lib/dri/$b"
-          if [ ! -e "$dst" ]; then
-            src="AppDir-compat/usr/shared/lib/$b"
-            [ -f "$src" ] || src="AppDir-compat/usr/shared/lib/$(basename "$(readlink -f "$f")")"
-            [ -f "$src" ] && ln -f "$src" "$dst"
-          fi
-          if [ ! -e "$dst" ]; then
-            echo "::error::DRI driver $b missing from compat closure"
-            exit 1
-          fi
-        done
-        if [ -n "$GBM_LIBS" ]; then
-          mkdir -p AppDir-compat/usr/shared/lib/gbm
-          for f in $GBM_LIBS; do
-            b=$(basename "$f")
-            dst="AppDir-compat/usr/shared/lib/gbm/$b"
-            [ -e "$dst" ] && continue
-            src="AppDir-compat/usr/shared/lib/$b"
-            [ -f "$src" ] || src="AppDir-compat/usr/shared/lib/$(basename "$(readlink -f "$f")")"
-            [ -f "$src" ] && ln -f "$src" "$dst"
-          done
-        fi
-        if [ ! -d /usr/share/glvnd/egl_vendor.d ]; then
-          echo "::error::/usr/share/glvnd/egl_vendor.d not found on build host"
-          exit 1
-        fi
-        mkdir -p AppDir-compat/usr/share/glvnd
-        cp -a /usr/share/glvnd/egl_vendor.d AppDir-compat/usr/share/glvnd/
-        sed -i -e 's|/usr/lib.*/||g' AppDir-compat/usr/share/glvnd/egl_vendor.d/*.json
-        grep -rq 'libEGL_mesa' AppDir-compat/usr/share/glvnd/egl_vendor.d
-        for probe in libGLX_mesa.so.0 libEGL_mesa.so.0; do
-          if ! find AppDir-compat/usr/shared/lib -maxdepth 1 -name "$probe*" | grep -q .; then
-            echo "::error::$probe missing from compat bundle; GL would abort on desktop hosts"
-            exit 1
-          fi
-        done
-
-        if [ -n "$WEBPROC_DIR" ] && [ "$WEBPROC_DIR" != "AppDir-compat/usr/bin" ]; then
-          ln -f AppDir-compat/usr/bin/QtWebEngineProcess "$WEBPROC_DIR/QtWebEngineProcess"
-        fi
-
-        for m in libsoftokn3 libfreebl3 libfreeblpriv3 libnssckbi libnssdbm3; do
-          src="AppDir-compat/usr/lib/$m.so"
-          dst="AppDir-compat/usr/shared/lib/$m.so"
-          [ -f "$src" ] || continue
-          [ -e "$dst" ] || mv "$src" "$dst"
-          rm -f "$src"
-        done
-
-        for m in libnss_files.so.2 libnss_dns.so.2 libnss_resolve.so.2; do
-          [ -e "AppDir-compat/usr/shared/lib/$m" ] && continue
-          src=$(find /usr/lib/x86_64-linux-gnu /usr/lib64 -maxdepth 1 -name "$m" 2>/dev/null | head -n1 || true)
-          [ -n "$src" ] && cp -a "$src" AppDir-compat/usr/shared/lib/ || true
-        done
-        for m in libnss_files.so.2 libnss_dns.so.2; do
-          if [ ! -e "AppDir-compat/usr/shared/lib/$m" ]; then
-            echo "::error::$m missing; bundled glibc NSS set incomplete"
-            exit 1
-          fi
-        done
-        if [ ! -d AppDir-compat/usr/shared/lib/gconv ]; then
-          gconv=$(find /usr/lib/x86_64-linux-gnu/gconv /usr/lib64/gconv -maxdepth 0 -type d 2>/dev/null | head -n1 || true)
-          if [ -z "$gconv" ]; then
-            echo "::error::gconv modules not found on build host"
-            exit 1
-          fi
-          cp -a "$gconv" AppDir-compat/usr/shared/lib/gconv
-        fi
-        if ! find AppDir-compat/usr/shared/lib -name 'ld-linux*.so*' | grep -q .; then
-          echo "::error::bundled dynamic loader missing; compat conversion failed"
-          exit 1
-        fi
-
-        missing=0
-        for lib in AppDir-compat/usr/lib/*.so*; do
-          [ -e "$lib" ] || continue
-          stem=$(basename "$lib")
-          stem="${stem%%.so*}"
-          if ! find AppDir-compat/usr/shared/lib -maxdepth 1 -name "${stem}.so*" | grep -q .; then
-            echo "::error::${stem} from usr/lib has no shared/lib counterpart"
-            missing=1
-          fi
-        done
-        [ "$missing" = 0 ] || exit 1
-        rm -rf AppDir-compat/usr/lib
-        rm -rf "$BIN_SRC"
-
-        APPIMAGE="${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-x64.AppImage"
-        if [ "${SS_GPG_SIGN:-0}" = "1" ]; then
-          ARCH=x86_64 ./appimagetool --sign --sign-key "$GPG_KEY_ID" AppDir-compat "$APPIMAGE"
-        else
-          ARCH=x86_64 ./appimagetool AppDir-compat "$APPIMAGE"
-        fi
-        rm sharun-aio appimagetool
-        mv "$APPIMAGE" "../../$APPIMAGE"
-
-    #
-    # linuxdeploy-plugin-native_packages over the converted AppDir. ldnp emits minimal
-    # metadata (no ELF find-requires), which is what keeps the packages installable on
-    # glibc 2.28 hosts; the smoke step below proves that per run instead of trusting it
-    #
-    - name: '📦 Create .deb and .rpm packages (glibc-bundled)'
-      run: |
-        set -euo pipefail
-        python3 -m venv /tmp/ldnp-venv
-        /tmp/ldnp-venv/bin/pip install --upgrade pip
-        /tmp/ldnp-venv/bin/pip install \
-          "git+https://github.com/linuxdeploy/linuxdeploy-plugin-native_packages.git@91638818c35a240d0874b7de9cdab0cb3d3655ea"
-
-        # ldnp writes %files entries unquoted, so rpmbuild splits paths that contain
-        # spaces (the converted AppDir bundles ALSA UCM profiles like
-        # "Google Nexus 7 ALC5642.conf"); quote every entry in the spec template
-        sed -i 's|^{{ file }}$|"{{ file }}"|' \
-          /tmp/ldnp-venv/lib/python3.*/site-packages/ldnp/templates/rpm/spec
-        grep -q '^"{{ file }}"$' /tmp/ldnp-venv/lib/python3.*/site-packages/ldnp/templates/rpm/spec
-
-        export LINUXDEPLOY_OUTPUT_APP_NAME="${{env.UNIXNAME}}"
-        export LINUXDEPLOY_OUTPUT_VERSION="${{env.VERSION}}"
-        export LDNP_META_PACKAGE_NAME="${{env.UNIXNAME}}"
-        export LDNP_META_DESCRIPTION="${{env.DESCRIPTION}}"
-        export LDNP_META_SHORT_DESCRIPTION="${{env.DESCRIPTION}}"
-        export LDNP_META_ARCHITECTURE="amd64"
-        export LDNP_META_BUILD_ARCH="x86_64"
-
-        printf '{"packageType":"deb","arch":"x86_64"}\n' > build/app/AppDir-compat/usr/bin/ss-config.json
-        /tmp/ldnp-venv/bin/linuxdeploy-plugin-native_packages \
-          --appdir build/app/AppDir-compat \
-          --build deb
-
-        printf '{"packageType":"rpm","arch":"x86_64"}\n' > build/app/AppDir-compat/usr/bin/ss-config.json
-        /tmp/ldnp-venv/bin/linuxdeploy-plugin-native_packages \
-          --appdir build/app/AppDir-compat \
-          --build rpm
-
-        mv "${{env.UNIXNAME}}"_*.deb "${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-x64.deb"
-        mv "${{env.UNIXNAME}}"_*.rpm "${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-x64.rpm"
-
-        dpkg-deb --fsys-tarfile "${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-x64.deb" \
-          | tar -xO --wildcards '*/ss-config.json' | grep -q '"packageType":"deb"'
-        rpm2cpio "${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-x64.rpm" \
-          | cpio --quiet -i --to-stdout '*ss-config.json' | grep -q '"packageType":"rpm"'
-
-    #
-    # The glibc-2.28 ground truth: bare rockylinux:8 (AppImage extract + rpm install) and
-    # debian:10 (deb install, EOL archive sources) containers, plus the modern-host check on
-    # the runner itself. A bare container has nothing preinstalled, so an incomplete bundle
-    # or an unsatisfiable dependency set fails here instead of on a user's machine
-    #
-    - name: '🧪 Smoke test packages (glibc 2.28 gate)'
-      run: |
-        set -euo pipefail
-        APPIMAGE="${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-x64.AppImage"
-        DEB="${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-x64.deb"
-        RPM="${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-x64.rpm"
-
-        chmod +x "$APPIMAGE"
-        ./"$APPIMAGE" --appimage-extract >/dev/null
-        grep -q '"packageType":"appimage"' squashfs-root/usr/bin/ss-config.json
-
-        env QT_QPA_PLATFORM=offscreen ./squashfs-root/AppRun --version
-        env QT_QPA_PLATFORM=offscreen ./squashfs-root/AppRun --selftest
-
-        docker run --rm -v "$PWD/squashfs-root:/app:ro" -e QT_QPA_PLATFORM=offscreen -e HOME=/tmp \
-          rockylinux:8 /app/AppRun --version
-        docker run --rm -v "$PWD/squashfs-root:/app:ro" -e QT_QPA_PLATFORM=offscreen -e HOME=/tmp \
-          rockylinux:8 /app/AppRun --selftest
-
-        docker run --rm -v "$PWD:/pkg:ro" -e QT_QPA_PLATFORM=offscreen -e HOME=/tmp rockylinux:8 \
-          bash -ec "dnf install -y -q --nogpgcheck /pkg/$RPM && ${{env.UNIXNAME}} --version"
-
-        docker run --rm -v "$PWD:/pkg:ro" -e QT_QPA_PLATFORM=offscreen -e HOME=/tmp debian:10 \
-          bash -ec "sed -i -e 's|deb.debian.org|archive.debian.org|g' -e '/security.debian.org/d' /etc/apt/sources.list; apt-get update -qq || true; apt-get install -y -q /pkg/$DEB || dpkg -i /pkg/$DEB; ${{env.UNIXNAME}} --version"
-
-        # Windowed gate: every check above runs offscreen, which is how a bundle with no
-        # GLX/EGL vendor libraries once sailed through CI and aborted on real desktops with
-        # "Could not initialize GLX". Xvfb + xcb forces the bundled GLVND stack to resolve a
-        # vendor and create a GL context; the GUI must still be alive when the kill fires.
-        command -v xvfb-run >/dev/null || sudo apt-get install -y -q xvfb
-        set +e
-        timeout -k 10 25 xvfb-run -a -s "-screen 0 1280x800x24" \
-          env QT_QPA_PLATFORM=xcb HOME=/tmp ./squashfs-root/AppRun
-        rc=$?
-        set -e
-        if [ "$rc" != 137 ] && [ "$rc" != 124 ]; then
-          echo "::error::windowed smoke exited early (rc=$rc); compat GL stack is broken"
-          exit 1
-        fi
-
-        rm -rf squashfs-root
-
-    #
-    # Every artifact is verified right after it is signed, so a broken signature fails here
-    # instead of on a user's machine
-    #
-    - name: '✍🏻 Sign Linux artifacts (GPG, optional)'
-      env:
-        GPG_PASSPHRASE: ${{secrets.GPG_PASSPHRASE}}
-        GPG_KEY_ID: ${{secrets.GPG_KEY_ID}}
-      run: |
-        set -euo pipefail
-        if [ "${SS_GPG_SIGN:-0}" != "1" ]; then
-          echo "GPG signing secrets not set; skipping Linux signing."
-          exit 0
-        fi
-        sudo apt-get install -y debsigs
-        APPIMAGE="${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-x64.AppImage"
-        DEB="${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-x64.deb"
-        RPM="${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-x64.rpm"
-        BIN="${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-x64"
-        cp "build/app/${{env.UNIXNAME}}" "$BIN"
-
-        gpg --export --armor "$GPG_KEY_ID" > signing-public-key.asc
-
-        rpm --import signing-public-key.asc
-        rpmsign --addsign "$RPM"
-        rpm -Kv "$RPM"
-        rpm -K "$RPM" | grep -qi 'signatures OK'
-
-        debsigs --sign=origin --default-key="$GPG_KEY_ID" "$DEB"
-        ar t "$DEB" | grep -q '_gpgorigin'
-
-        chmod +x "$APPIMAGE"
-        ./"$APPIMAGE" --appimage-signature | grep -q 'BEGIN PGP SIGNATURE'
-
-        for f in "$APPIMAGE" "$DEB" "$RPM" "$BIN"; do
-          gpg --batch --yes --pinentry-mode loopback \
-            ${GPG_PASSPHRASE:+--passphrase "$GPG_PASSPHRASE"} \
-            --local-user "$GPG_KEY_ID" \
-            --detach-sign --armor --output "$f.asc" "$f"
-          gpg --verify "$f.asc" "$f"
-        done
+    - name: '📦 Package for Linux'
+      uses: ./.github/actions/package-linux
+      with:
+        workspace: ${{github.workspace}}
+        arch-label: x64
+        machine-arch: x86_64
+        deb-arch: amd64
+        config-arch: x86_64
+        system-lib-dir: /usr/lib/x86_64-linux-gnu
+        qt-plugins-path: ${{github.workspace}}/Qt-${{env.QT_VERSION_LINUX}}-${{runner.os}}-x64/${{env.QT_VERSION_LINUX}}/gcc_64/plugins
+        qml-dir: ${{env.QML_DIR}}
+        sharun-sha256: f35d4f59f2e0b1a5ec12ef126d78197fd4fd14c6f99b4b16dee6a5ddad6baa93
+        appimagetool-sha256: ed4ce84f0d9caff66f50bcca6ff6f35aae54ce8135408b3fa33abfc3cb384eb0
+        executable: ${{env.EXECUTABLE}}
+        version: ${{env.VERSION}}
+        unixname: ${{env.UNIXNAME}}
+        description: ${{env.DESCRIPTION}}
+        gpg-private-key: ${{secrets.GPG_PRIVATE_KEY}}
+        gpg-passphrase: ${{secrets.GPG_PASSPHRASE}}
+        gpg-key-id: ${{secrets.GPG_KEY_ID}}
 
     #
     # Release artifact: the Linux AppImage users download — the glibc-bundled build (spec
@@ -1175,153 +570,38 @@ jobs:
     # QtMultimedia, and the packaging tools (rpm, fakeroot, python3-venv) linuxdeploy shells out to
     #
     - name: '⚙️ Install dependencies'
-      run: |
-        sudo apt-get update
-        sudo apt-get install -y \
-          build-essential \
-          ninja-build \
-          fakeroot \
-          libcups2-dev \
-          libnss3 \
-          libegl1 \
-          libfuse2 \
-          libgl1-mesa-dev \
-          libasound2-dev \
-          libudev-dev \
-          libsecret-1-dev \
-          libzstd-dev \
-          zlib1g-dev \
-          libexpat1-dev \
-          libminizip-dev \
-          libopus-dev \
-          rpm \
-          python3-venv \
-          libxcb1 \
-          libxcb-cursor0 \
-          libxcb-cursor-dev \
-          libxcb-glx0 \
-          libxcb-icccm4 \
-          libxcb-image0 \
-          libxcb-image0-dev \
-          libxcb-keysyms1 \
-          libxcb-randr0 \
-          libxcb-render0 \
-          libxcb-render-util0 \
-          libxcb-shape0 \
-          libxcb-shm0 \
-          libxcb-sync1 \
-          libxcb-util0-dev \
-          libxcb-util1 \
-          libxcb-xfixes0 \
-          libxcb-xinerama0 \
-          libxcb-xkb-dev \
-          libxcb-xtest0 \
-          libxkbcommon-dev \
-          libxkbcommon-x11-0 \
-          libxkbcommon-x11-dev \
-          libpulse-dev \
-          libpipewire-0.3-0 \
-          libgstreamer1.0-0 \
-          libgstreamer-plugins-base1.0-0 \
-          libgstreamer-plugins-bad1.0-0 \
-          libgstreamer-plugins-good1.0-0 \
-          libgstreamer-gl1.0-0 \
-          gstreamer1.0-plugins-base \
-          gstreamer1.0-plugins-good \
-          gstreamer1.0-plugins-bad \
-          gstreamer1.0-plugins-ugly \
-          gstreamer1.0-libav \
-          gstreamer1.0-tools \
-          gstreamer1.0-x \
-          gstreamer1.0-alsa \
-          gstreamer1.0-pulseaudio \
-          gstreamer1.0-gl \
-          
+      uses: ./.github/actions/linux-desktop-deps
+
     #
     # gRPC arrives as a prebuilt tarball from GRPC_REPO; building it from source would cost more
-    # than the rest of the job put together.
-    #
-    # Retried: the release-asset endpoint answers HTTP 500 often enough to redden a run on its own
-    # (2026-09-03, Linux arm64), and a single failed GET here costs the whole job. --clobber so a
-    # partial download from the previous attempt does not make the retry fail on an existing file.
+    # than the rest of the job put together. The retry policy lives in the action, which the
+    # macOS legs share
     #
     - name: '⚙️ Download prebuilt gRPC'
-      run: |
-        for attempt in 1 2 3 4 5; do
-          if gh release download v${{env.GRPC_VERSION}} \
-               -R ${{env.GRPC_REPO}} \
-               -p "grpc-${{env.GRPC_VERSION}}-linux-aarch64.tar.gz" \
-               --clobber; then
-            break
-          fi
-          if [ "$attempt" -eq 5 ]; then
-            echo "::error::gh release download failed after $attempt attempts"
-            exit 1
-          fi
-          sleep $((attempt * 15))
-        done
-        mkdir -p ${{github.workspace}}/grpc-prefix
-        tar -xzf grpc-${{env.GRPC_VERSION}}-linux-aarch64.tar.gz -C ${{github.workspace}}/grpc-prefix
-      env:
-        GH_TOKEN: ${{secrets.GITHUB_TOKEN}}
-
-    #
-    # Restore-only half of the cache pair; the save step below is gated on a miss so a hit never
-    # rewrites the entry
-    #
-    - name: '⚙️ Restore Qt Cache'
-      id: qt_cache
-      uses: actions/cache/restore@caa296126883cff596d87d8935842f9db880ef25 # v5.1.0
+      uses: ./.github/actions/download-grpc
       with:
-        path: |
-          ${{github.workspace}}/Qt-${{env.QT_VERSION_LINUX}}-${{runner.os}}-arm64
-        key: qt-${{runner.os}}-${{env.QT_VERSION_LINUX}}-arm64
+        version: ${{env.GRPC_VERSION}}
+        repo: ${{env.GRPC_REPO}}
+        asset: grpc-${{env.GRPC_VERSION}}-linux-aarch64.tar.gz
+        prefix-dir: ${{github.workspace}}/grpc-prefix
+        workspace: ${{github.workspace}}
+        github-token: ${{secrets.GITHUB_TOKEN}}
 
     #
-    # Qt comes from the online installer driven by scripts/install-qt.sh, using the account
-    # secrets; only reached when the cache missed
+    # Cache restore, install-on-miss, cache save and the PATH / CMAKE_PREFIX_PATH export. This
+    # job owns the save half of the entry the restore-only legs read
     #
-    - name: '⚙️ Install Qt (cache miss)'
-      shell: bash
-      if: steps.qt_cache.outputs.cache-hit != 'true'
-      env:
-        QT_VERSION: ${{env.QT_VERSION_LINUX}}
-        QT_ARCH: arm64
-        QT_USERNAME: ${{secrets.QT_USERNAME}}
-        QT_PASSWORD: ${{secrets.QT_PASSWORD}}
-        QT_OUTPUT_DIR: ${{github.workspace}}/Qt-${{env.QT_VERSION_LINUX}}-${{runner.os}}-arm64
-      run: |
-        chmod +x ./scripts/install-qt.sh
-        ./scripts/install-qt.sh
-
-    #
-    # Writes the entry the restore step looks for, keyed by OS + Qt version + arch
-    #
-    - name: '⚙️ Save Qt Cache'
-      uses: actions/cache/save@caa296126883cff596d87d8935842f9db880ef25 # v5.1.0
-      if: steps.qt_cache.outputs.cache-hit != 'true'
+    - name: '⚙️ Set up Qt'
+      uses: ./.github/actions/setup-qt
       with:
-        path: |
-          ${{github.workspace}}/Qt-${{env.QT_VERSION_LINUX}}-${{runner.os}}-arm64
-        key: qt-${{runner.os}}-${{env.QT_VERSION_LINUX}}-arm64
-
-    #
-    # Publishes bin/, libexec/ and CMAKE_PREFIX_PATH through GITHUB_PATH / GITHUB_ENV so every
-    # later step in the job sees the same Qt
-    #
-    - name: '⚙️ Add Qt to PATH'
-      shell: bash
-      env:
-        QT_VERSION: ${{env.QT_VERSION_LINUX}}
-        QT_OUTPUT_DIR: ${{github.workspace}}/Qt-${{env.QT_VERSION_LINUX}}-${{runner.os}}-arm64
-      run: |
-        export QT_BIN_PATH="${QT_OUTPUT_DIR}/${QT_VERSION}/gcc_arm64/bin"
-        export QT_LIBEXEC_PATH="${QT_OUTPUT_DIR}/${QT_VERSION}/gcc_arm64/libexec"
-        export CMAKE_PREFIX_PATH="${QT_OUTPUT_DIR}/${QT_VERSION}/gcc_arm64/lib/cmake"
-
-        echo "$QT_BIN_PATH" >> $GITHUB_PATH
-        echo "$QT_LIBEXEC_PATH" >> $GITHUB_PATH
-        echo "CMAKE_PREFIX_PATH=$CMAKE_PREFIX_PATH" >> $GITHUB_ENV
+        qt-version: ${{env.QT_VERSION_LINUX}}
+        qt-dir: ${{github.workspace}}/Qt-${{env.QT_VERSION_LINUX}}-${{runner.os}}-arm64
+        qt-arch: arm64
+        qt-host: gcc_arm64
+        cache-key: qt-${{runner.os}}-${{env.QT_VERSION_LINUX}}-arm64
+        cache-extra-path: ''
+        qt-username: ${{secrets.QT_USERNAME}}
+        qt-password: ${{secrets.QT_PASSWORD}}
 
     #
     # get-cmake supplies a current CMake independently of whatever the runner image ships
@@ -1379,6 +659,7 @@ jobs:
           -DENABLE_GRPC=ON \
           -DENABLE_PGO=ON \
           -DPGO_STAGE=GENERATE \
+          -DSS_ALLOC_STATS=ON \
           -DSS_UNITY_BUILD=ON \
           -DSS_UNITY_BATCH_SIZE=${{ env.SS_UNITY_BATCH }} \
           -DUSE_SYSTEM_ZLIB=ON \
@@ -1396,42 +677,19 @@ jobs:
       run: cmake --build build --config Release
 
     #
-    # Pro widgets are license-gated, so an unactivated training run profiles the GPL subset and
-    # the shipped binary is optimized for code no Pro user runs. A failed activation is therefore
-    # a failed build, not a warning
+    # Pro widgets are license-gated, so an unactivated training run profiles the GPL subset
+    # and the shipped binary is optimized for code no Pro user runs. A failed activation is
+    # therefore a failed build, not a warning. The two training loads follow it: --min-fps 1
+    # turns the benchmark into a profile generator (the real gate runs later, against the
+    # optimized binary), and the big_db_test load exercises the project and dashboard paths
+    # the hotpath benchmark never reaches
     #
-    - name: '🔑 Activate Serial Studio license (Pro hotpath training)'
-      env:
-        QT_QPA_PLATFORM: offscreen
-        SERIAL_STUDIO_LICENSE_KEY: ${{secrets.SERIAL_STUDIO_LICENSE_KEY}}
-        LD_LIBRARY_PATH: >-
-          ${{github.workspace}}/Qt-${{env.QT_VERSION_LINUX}}-${{runner.os}}-arm64/${{env.QT_VERSION_LINUX}}/gcc_arm64/lib
-      run: |
-        ./build/app/${{env.UNIXNAME}} --activate "$SERIAL_STUDIO_LICENSE_KEY"
-
-    #
-    # --min-fps 1 turns the benchmark into a profile generator: the real gate runs later, against
-    # the optimized binary
-    #
-    - name: '🏋️ PGO training run (hotpath)'
-      env:
-        QT_QPA_PLATFORM: offscreen
-        LD_LIBRARY_PATH: >-
-          ${{github.workspace}}/Qt-${{env.QT_VERSION_LINUX}}-${{runner.os}}-arm64/${{env.QT_VERSION_LINUX}}/gcc_arm64/lib
-      run: |
-        ./build/app/${{env.UNIXNAME}} --headless --benchmark-hotpath --min-fps 1
-
-    #
-    # Second profile: the big_db_test load exercises the project and dashboard paths that the
-    # hotpath benchmark never reaches
-    #
-    - name: '🏋️ PGO training run (big project)'
-      env:
-        QT_QPA_PLATFORM: offscreen
-        LD_LIBRARY_PATH: >-
-          ${{github.workspace}}/Qt-${{env.QT_VERSION_LINUX}}-${{runner.os}}-arm64/${{env.QT_VERSION_LINUX}}/gcc_arm64/lib
-      run: |
-        bash tests/benchmarks/big_db_test/run_load.sh "./build/app/${{env.UNIXNAME}}" 25
+    - name: '🏋️ PGO training runs'
+      uses: ./.github/actions/pgo-train-linux
+      with:
+        app: ./build/app/${{env.UNIXNAME}}
+        qt-lib-dir: ${{github.workspace}}/Qt-${{env.QT_VERSION_LINUX}}-${{runner.os}}-arm64/${{env.QT_VERSION_LINUX}}/gcc_arm64/lib
+        license-key: ${{secrets.SERIAL_STUDIO_LICENSE_KEY}}
 
     #
     # Stage 2: identical flags with PGO_STAGE=USE so the compiler consumes the profiles just
@@ -1499,6 +757,13 @@ jobs:
         path: |
           benchmark.txt
           benchmark-scalar.txt
+          pgo-train.txt
+
+    - name: '📤 Upload artifact: symbols (Linux arm64)'
+      uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
+      with:
+        name: symbols-Linux-arm64
+        path: build/app/${{env.UNIXNAME}}.debug
         if-no-files-found: ignore
 
     #
@@ -1526,481 +791,31 @@ jobs:
         ./build/app/${{env.UNIXNAME}} --deactivate || true
 
     #
-    # Signing is opt-in on the secrets being present; without them the step exits clean and the
-    # packages ship unsigned
+    # The Linux packaging chain, shared with the other arch: signing identity, AppDir, the
+    # glibc-bundled AppImage (spec 0065, the ONLY Linux packaging path), the deb/rpm pair cut
+    # from that same converted tree, the glibc 2.28 smoke gate that proves the set installs on
+    # Debian 10 / RHEL 8, and the signatures. Only arch strings and checksums differ
     #
-    - name: '🔐 Prepare GPG signing (optional)'
-      env:
-        GPG_PRIVATE_KEY: ${{secrets.GPG_PRIVATE_KEY}}
-        GPG_PASSPHRASE: ${{secrets.GPG_PASSPHRASE}}
-        GPG_KEY_ID: ${{secrets.GPG_KEY_ID}}
-      run: |
-        set -euo pipefail
-        if [ -z "${GPG_KEY_ID:-}" ] || [ -z "${GPG_PRIVATE_KEY:-}" ]; then
-          echo "GPG signing secrets not set; packages will be unsigned."
-          exit 0
-        fi
-        mkdir -p ~/.gnupg && chmod 700 ~/.gnupg
-        echo "allow-preset-passphrase" >> ~/.gnupg/gpg-agent.conf
-        printf '%s\n' "$GPG_PRIVATE_KEY" | gpg --batch --import
-        gpg-connect-agent reloadagent /bye
-        if [ -n "${GPG_PASSPHRASE:-}" ]; then
-          for grip in $(gpg --batch --with-colons --with-keygrip \
-              --list-secret-keys "$GPG_KEY_ID" | awk -F: '$1=="grp"{print $10}'); do
-            printf '%s' "$GPG_PASSPHRASE" | \
-              /usr/lib/gnupg/gpg-preset-passphrase --preset "$grip"
-          done
-        fi
-        PASSFILE="$RUNNER_TEMP/gpg-pass"
-        touch "$PASSFILE" && chmod 600 "$PASSFILE"
-        printf '%s' "${GPG_PASSPHRASE:-}" > "$PASSFILE"
-        printf '%%_signature gpg\n' > ~/.rpmmacros
-        printf '%%_gpg_name %s\n' "$GPG_KEY_ID" >> ~/.rpmmacros
-        printf '%%_gpg_sign_cmd_extra_args --batch --pinentry-mode loopback --passphrase-file %s\n' \
-          "$PASSFILE" >> ~/.rpmmacros
-        echo "SS_GPG_SIGN=1" >> "$GITHUB_ENV"
-
-    #
-    # linuxdeploy plus its Qt plugin build the AppDir; the SQL drivers and the TIFF reader are
-    # pruned first so the image carries only what the app loads. linuxdeploy-plugin-qt deploys
-    # ONLY libqxcb by default, so the wayland platform plugin is requested explicitly via
-    # EXTRA_PLATFORM_PLUGINS (a single libqwayland.so since Qt 6.10 merged the generic/egl
-    # pair and moved the client into qtbase) and its shell/decoration/graphics integration
-    # plugin dirs are copied by hand — without them Plasma/GNOME wayland sessions are forced
-    # through XWayland+GLX. Two more things the tool cannot bundle by itself are added afterwards: the
-    # offscreen platform plugin (the integration tests run headless), and Qt WebEngine's NSS
-    # crypto backends, which NSS dlopen()s (softokn/freebl/nssckbi) so an ldd-based bundler
-    # never sees them and leaves a half-bundled NSS that crashes against the host's newer
-    # copies. No AppImage is packed here: the compat conversion below produces the only Linux
-    # AppImage shipped, so this AppDir is purely the input tree for the deb/rpm/compat steps
-    #
-    - name: '📦 Create AppDir'
-      run: |
-        cd "build/app"
-        wget https://github.com/linuxdeploy/linuxdeploy/releases/download/1-alpha-20240109-1/linuxdeploy-aarch64.AppImage
-        wget https://github.com/linuxdeploy/linuxdeploy-plugin-qt/releases/download/1-alpha-20250213-1/linuxdeploy-plugin-qt-aarch64.AppImage
-        chmod +x linuxdeploy-aarch64.AppImage
-        chmod +x linuxdeploy-plugin-qt-aarch64.AppImage
-
-        export QML_SOURCES_PATHS="${{env.QML_DIR}}"
-        export EXTRA_PLATFORM_PLUGINS="libqwayland.so"
-
-        QT_PLUGINS_PATH="${{github.workspace}}/Qt-${{env.QT_VERSION_LINUX}}-${{runner.os}}-arm64/${{env.QT_VERSION_LINUX}}/gcc_arm64/plugins"
-        rm -f "$QT_PLUGINS_PATH/imageformats/libqtiff.so"
-        find "$QT_PLUGINS_PATH/sqldrivers" -name 'libqsql*.so' ! -name 'libqsqlite.so' -delete
-
-        ./linuxdeploy-aarch64.AppImage --appdir AppDir -e ${{env.UNIXNAME}} -i ../../app/deploy/linux/${{env.UNIXNAME}}.svg -d ../../app/deploy/linux/${{env.UNIXNAME}}.desktop --plugin qt
-        mkdir -p AppDir/usr/plugins/canbus
-        if [ -d "$QT_PLUGINS_PATH/canbus" ]; then
-          cp -r "$QT_PLUGINS_PATH/canbus/"* AppDir/usr/plugins/canbus/ || echo "Warning: Could not copy canbus plugins"
-        else
-          echo "Warning: Qt canbus plugins not found at $QT_PLUGINS_PATH/canbus"
-        fi
-
-        mkdir -p AppDir/usr/plugins/opcua
-        if [ -d "$QT_PLUGINS_PATH/opcua" ]; then
-          cp -r "$QT_PLUGINS_PATH/opcua/"* AppDir/usr/plugins/opcua/ || echo "Warning: Could not copy opcua plugins"
-        else
-          echo "Warning: Qt opcua plugins not found at $QT_PLUGINS_PATH/opcua"
-        fi
-
-        for d in wayland-decoration-client wayland-graphics-integration-client wayland-shell-integration; do
-          if [ -d "$QT_PLUGINS_PATH/$d" ]; then
-            mkdir -p "AppDir/usr/plugins/$d"
-            cp -r "$QT_PLUGINS_PATH/$d/"* "AppDir/usr/plugins/$d/"
-          fi
-        done
-        if [ ! -f AppDir/usr/plugins/platforms/libqwayland.so ]; then
-          echo "::error::wayland platform plugin missing from AppDir"
-          exit 1
-        fi
-
-        mkdir -p AppDir/usr/plugins/platforms
-        if [ -f "$QT_PLUGINS_PATH/platforms/libqoffscreen.so" ]; then
-          cp "$QT_PLUGINS_PATH/platforms/libqoffscreen.so" AppDir/usr/plugins/platforms/
-        else
-          echo "Warning: offscreen platform plugin not found at $QT_PLUGINS_PATH/platforms"
-        fi
-
-        have_softokn=0
-        for d in /usr/lib/*/nss /usr/lib/*-linux-gnu /usr/lib64; do
-          [ -d "$d" ] || continue
-          for m in libsoftokn3 libfreebl3 libfreeblpriv3 libnssckbi libnssdbm3; do
-            if [ -f "$d/$m.so" ]; then
-              cp -a "$d/$m.so" AppDir/usr/lib/
-              [ "$m" = libsoftokn3 ] && have_softokn=1
-            fi
-          done
-        done
-        if [ "$have_softokn" = 0 ]; then
-          echo "::error::libsoftokn3.so not found; NSS bundle incomplete (WebEngine will crash)"
-          exit 1
-        fi
-
-        rm linuxdeploy-aarch64.AppImage
-        rm linuxdeploy-plugin-qt-aarch64.AppImage
-
-    #
-    # Spec 0065: the glibc-bundled conversion is the ONLY Linux packaging path — faithful
-    # mirror of the x64 stage (see the x64 job for the full rationale); only arch strings
-    # differ
-    #
-    - name: '📦 Create AppImage (glibc-bundled)'
-      env:
-        GPG_KEY_ID: ${{secrets.GPG_KEY_ID}}
-      run: |
-        set -euo pipefail
-        cd build/app
-
-        SHARUN_VERSION=v0.8.1
-        SHARUN_SHA256=bf3b8cc04e3025ef9dcd2718ee4728ccc68c941dadeeac7fdf778fc2c99d8b31
-        APPIMAGETOOL_VERSION=1.9.1
-        APPIMAGETOOL_SHA256=f0837e7448a0c1e4e650a93bb3e85802546e60654ef287576f46c71c126a9158
-
-        wget -q "https://github.com/VHSgunzo/sharun/releases/download/${SHARUN_VERSION}/sharun-aarch64-aio" -O sharun-aio
-        echo "${SHARUN_SHA256}  sharun-aio" | sha256sum -c -
-        chmod +x sharun-aio
-        wget -q "https://github.com/AppImage/appimagetool/releases/download/${APPIMAGETOOL_VERSION}/appimagetool-aarch64.AppImage" -O appimagetool
-        echo "${APPIMAGETOOL_SHA256}  appimagetool" | sha256sum -c -
-        chmod +x appimagetool
-
-        cp -a AppDir AppDir-compat
-        printf '{"packageType":"appimage","arch":"arm64"}\n' > AppDir-compat/usr/bin/ss-config.json
-
-        BIN_SRC=$(mktemp -d)
-        mv "AppDir-compat/usr/bin/${{env.UNIXNAME}}" "$BIN_SRC/"
-        WEBPROC_DIR=""
-        WEBPROC=$(find AppDir-compat/usr -type f -name QtWebEngineProcess | head -n1 || true)
-        if [ -n "$WEBPROC" ]; then
-          WEBPROC_DIR=$(dirname "$WEBPROC")
-          mv "$WEBPROC" "$BIN_SRC/"
-        fi
-
-        # usr/lib rides along as explicit input: libraries that are only dlopened (NSS's
-        # libsoftokn3 and friends) are reachable from no executable or plugin, so ldd-driven
-        # dependency walking alone would drop them and their private deps (libsqlite3).
-        DLOPEN_LIBS=$(find AppDir-compat/usr/plugins AppDir-compat/usr/qml AppDir-compat/usr/lib \
-          -type f -name '*.so*' 2>/dev/null || true)
-
-        # Pre-create shared/lib as a real directory: when it is absent and usr/lib exists,
-        # lib4bin symlinks shared/lib -> ../lib, so the whole closure lands in usr/lib and
-        # the coverage checks below then delete the only copy.
-        mkdir -p AppDir-compat/usr/shared/lib
-
-        # lib4bin resolves dependencies with ldd and silently drops unresolved ones; the
-        # executables were moved out of the AppDir, which breaks their $ORIGIN RUNPATH, so
-        # the libraries only they need (Widgets, Bluetooth, Mqtt, mimalloc, ...) vanish from
-        # the closure unless the AppDir library dir is on LD_LIBRARY_PATH for the conversion.
-        # Qt's openssl TLS backend dlopens libssl at runtime (no NEEDED entry), so the ldd
-        # walk never sees it; on OpenSSL 1.1 hosts (Debian 10) the backend then rejects the
-        # host library and every HTTPS request fails. Bundle the build host's OpenSSL 3 pair
-        # explicitly; it is safe because the compat bundle carries the matching glibc.
-        TLS_LIBS=$(find /usr/lib/x86_64-linux-gnu /usr/lib/aarch64-linux-gnu /usr/lib64 \
-          -maxdepth 1 \( -name 'libssl.so.3*' -o -name 'libcrypto.so.3*' \) 2>/dev/null || true)
-        if [ -z "$TLS_LIBS" ]; then
-          echo "::error::libssl.so.3/libcrypto.so.3 not found on build host"
-          exit 1
-        fi
-
-        # GLVND dispatch is bundled but resolves vendors by dlopen, invisible to the host's
-        # /usr/lib under sharun — bundle Mesa vendors + DRI drivers or GL aborts on desktop
-        # hosts (see the x64 stage for the full rationale)
-        sudo apt-get install -y -q libgl1-mesa-dri libglx-mesa0 libegl-mesa0 >/dev/null
-        GL_VENDOR_LIBS=$(find /usr/lib/x86_64-linux-gnu /usr/lib/aarch64-linux-gnu /usr/lib64 \
-          -maxdepth 1 \( -name 'libGLX_mesa.so*' -o -name 'libEGL_mesa.so*' \
-          -o -name 'libglapi.so*' -o -name 'libgallium*.so*' -o -name 'libgbm.so*' \) \
-          2>/dev/null || true)
-        if [ -z "$GL_VENDOR_LIBS" ]; then
-          echo "::error::Mesa GLX/EGL vendor libraries not found on build host"
-          exit 1
-        fi
-        DRI_DIR=$(find /usr/lib/x86_64-linux-gnu /usr/lib/aarch64-linux-gnu /usr/lib64 \
-          -maxdepth 1 -type d -name dri 2>/dev/null | head -n1 || true)
-        if [ -z "$DRI_DIR" ] || ! ls "$DRI_DIR"/*.so >/dev/null 2>&1; then
-          echo "::error::Mesa DRI driver directory not found on build host"
-          exit 1
-        fi
-        GBM_DIR=$(find /usr/lib/x86_64-linux-gnu /usr/lib/aarch64-linux-gnu /usr/lib64 \
-          -maxdepth 1 -type d -name gbm 2>/dev/null | head -n1 || true)
-        GBM_LIBS=""
-        [ -n "$GBM_DIR" ] && GBM_LIBS=$(ls "$GBM_DIR"/*.so 2>/dev/null || true)
-
-        # The bundled libasound carries the build host's plugin dir baked in
-        # (/usr/lib/<triplet>/alsa-lib), which does not exist on RHEL-family hosts; their
-        # alsa.conf routes the default PCM through "pulse", so every device probe logs a
-        # missing libasound_module_pcm_pulse.so and falls back to raw hw. Bundle the pulse
-        # plugins and point ALSA_PLUGIN_DIR at them through sharun's .env (PipeWire hosts
-        # reach them via pipewire-pulse).
-        sudo apt-get install -y -q libasound2-plugins >/dev/null
-        ALSA_PLUGIN_SRC=$(find /usr/lib/x86_64-linux-gnu /usr/lib/aarch64-linux-gnu /usr/lib64 \
-          -maxdepth 1 -type d -name alsa-lib 2>/dev/null | head -n1 || true)
-        ALSA_PLUGINS=""
-        [ -n "$ALSA_PLUGIN_SRC" ] && ALSA_PLUGINS=$(ls "$ALSA_PLUGIN_SRC"/libasound_module_*_pulse.so \
-          2>/dev/null || true)
-        if [ -z "$ALSA_PLUGINS" ]; then
-          echo "::error::ALSA pulse plugins not found on build host"
-          exit 1
-        fi
-
-        LD_LIBRARY_PATH="$PWD/AppDir-compat/usr/lib" \
-          ./sharun-aio lib4bin --dst-dir AppDir-compat/usr --with-sharun --hard-links --with-hooks \
-          "$BIN_SRC"/* $DLOPEN_LIBS $TLS_LIBS $GL_VENDOR_LIBS "$DRI_DIR"/*.so $GBM_LIBS \
-          $ALSA_PLUGINS
-
-        mkdir -p AppDir-compat/usr/shared/lib/alsa-lib
-        for f in $ALSA_PLUGINS; do
-          b=$(basename "$f")
-          dst="AppDir-compat/usr/shared/lib/alsa-lib/$b"
-          if [ ! -e "$dst" ]; then
-            src="AppDir-compat/usr/shared/lib/$b"
-            [ -f "$src" ] && ln -f "$src" "$dst"
-          fi
-          if [ ! -e "$dst" ]; then
-            echo "::error::ALSA plugin $b missing from compat closure"
-            exit 1
-          fi
-        done
-        if ! grep -q '^ALSA_PLUGIN_DIR=' AppDir-compat/usr/.env 2>/dev/null; then
-          echo 'ALSA_PLUGIN_DIR=${SHARUN_DIR}/shared/lib/alsa-lib' >> AppDir-compat/usr/.env
-        fi
-
-        if ! find AppDir-compat/usr/shared/lib -name 'libssl.so.3*' | grep -q .; then
-          echo "::error::libssl.so.3 missing from compat bundle; TLS would fail on legacy hosts"
-          exit 1
-        fi
-
-        if [ -L AppDir-compat/usr/shared/lib ]; then
-          echo "::error::usr/shared/lib is a symlink into usr/lib; compat conversion unsafe"
-          exit 1
-        fi
-
-        mkdir -p AppDir-compat/usr/shared/lib/dri
-        for f in "$DRI_DIR"/*.so; do
-          b=$(basename "$f")
-          dst="AppDir-compat/usr/shared/lib/dri/$b"
-          if [ ! -e "$dst" ]; then
-            src="AppDir-compat/usr/shared/lib/$b"
-            [ -f "$src" ] || src="AppDir-compat/usr/shared/lib/$(basename "$(readlink -f "$f")")"
-            [ -f "$src" ] && ln -f "$src" "$dst"
-          fi
-          if [ ! -e "$dst" ]; then
-            echo "::error::DRI driver $b missing from compat closure"
-            exit 1
-          fi
-        done
-        if [ -n "$GBM_LIBS" ]; then
-          mkdir -p AppDir-compat/usr/shared/lib/gbm
-          for f in $GBM_LIBS; do
-            b=$(basename "$f")
-            dst="AppDir-compat/usr/shared/lib/gbm/$b"
-            [ -e "$dst" ] && continue
-            src="AppDir-compat/usr/shared/lib/$b"
-            [ -f "$src" ] || src="AppDir-compat/usr/shared/lib/$(basename "$(readlink -f "$f")")"
-            [ -f "$src" ] && ln -f "$src" "$dst"
-          done
-        fi
-        if [ ! -d /usr/share/glvnd/egl_vendor.d ]; then
-          echo "::error::/usr/share/glvnd/egl_vendor.d not found on build host"
-          exit 1
-        fi
-        mkdir -p AppDir-compat/usr/share/glvnd
-        cp -a /usr/share/glvnd/egl_vendor.d AppDir-compat/usr/share/glvnd/
-        sed -i -e 's|/usr/lib.*/||g' AppDir-compat/usr/share/glvnd/egl_vendor.d/*.json
-        grep -rq 'libEGL_mesa' AppDir-compat/usr/share/glvnd/egl_vendor.d
-        for probe in libGLX_mesa.so.0 libEGL_mesa.so.0; do
-          if ! find AppDir-compat/usr/shared/lib -maxdepth 1 -name "$probe*" | grep -q .; then
-            echo "::error::$probe missing from compat bundle; GL would abort on desktop hosts"
-            exit 1
-          fi
-        done
-
-        if [ -n "$WEBPROC_DIR" ] && [ "$WEBPROC_DIR" != "AppDir-compat/usr/bin" ]; then
-          ln -f AppDir-compat/usr/bin/QtWebEngineProcess "$WEBPROC_DIR/QtWebEngineProcess"
-        fi
-
-        for m in libsoftokn3 libfreebl3 libfreeblpriv3 libnssckbi libnssdbm3; do
-          src="AppDir-compat/usr/lib/$m.so"
-          dst="AppDir-compat/usr/shared/lib/$m.so"
-          [ -f "$src" ] || continue
-          [ -e "$dst" ] || mv "$src" "$dst"
-          rm -f "$src"
-        done
-
-        for m in libnss_files.so.2 libnss_dns.so.2 libnss_resolve.so.2; do
-          [ -e "AppDir-compat/usr/shared/lib/$m" ] && continue
-          src=$(find /usr/lib/aarch64-linux-gnu /usr/lib64 -maxdepth 1 -name "$m" 2>/dev/null | head -n1 || true)
-          [ -n "$src" ] && cp -a "$src" AppDir-compat/usr/shared/lib/ || true
-        done
-        for m in libnss_files.so.2 libnss_dns.so.2; do
-          if [ ! -e "AppDir-compat/usr/shared/lib/$m" ]; then
-            echo "::error::$m missing; bundled glibc NSS set incomplete"
-            exit 1
-          fi
-        done
-        if [ ! -d AppDir-compat/usr/shared/lib/gconv ]; then
-          gconv=$(find /usr/lib/aarch64-linux-gnu/gconv /usr/lib64/gconv -maxdepth 0 -type d 2>/dev/null | head -n1 || true)
-          if [ -z "$gconv" ]; then
-            echo "::error::gconv modules not found on build host"
-            exit 1
-          fi
-          cp -a "$gconv" AppDir-compat/usr/shared/lib/gconv
-        fi
-        if ! find AppDir-compat/usr/shared/lib -name 'ld-linux*.so*' | grep -q .; then
-          echo "::error::bundled dynamic loader missing; compat conversion failed"
-          exit 1
-        fi
-
-        missing=0
-        for lib in AppDir-compat/usr/lib/*.so*; do
-          [ -e "$lib" ] || continue
-          stem=$(basename "$lib")
-          stem="${stem%%.so*}"
-          if ! find AppDir-compat/usr/shared/lib -maxdepth 1 -name "${stem}.so*" | grep -q .; then
-            echo "::error::${stem} from usr/lib has no shared/lib counterpart"
-            missing=1
-          fi
-        done
-        [ "$missing" = 0 ] || exit 1
-        rm -rf AppDir-compat/usr/lib
-        rm -rf "$BIN_SRC"
-
-        APPIMAGE="${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-arm64.AppImage"
-        if [ "${SS_GPG_SIGN:-0}" = "1" ]; then
-          ARCH=aarch64 ./appimagetool --sign --sign-key "$GPG_KEY_ID" AppDir-compat "$APPIMAGE"
-        else
-          ARCH=aarch64 ./appimagetool AppDir-compat "$APPIMAGE"
-        fi
-        rm sharun-aio appimagetool
-        mv "$APPIMAGE" "../../$APPIMAGE"
-
-    #
-    # ldnp over the converted AppDir — mirror of the x64 packaging step
-    #
-    - name: '📦 Create .deb and .rpm packages (glibc-bundled)'
-      run: |
-        set -euo pipefail
-        python3 -m venv /tmp/ldnp-venv
-        /tmp/ldnp-venv/bin/pip install --upgrade pip
-        /tmp/ldnp-venv/bin/pip install \
-          "git+https://github.com/linuxdeploy/linuxdeploy-plugin-native_packages.git@91638818c35a240d0874b7de9cdab0cb3d3655ea"
-
-        # ldnp writes %files entries unquoted, so rpmbuild splits paths that contain
-        # spaces (the converted AppDir bundles ALSA UCM profiles like
-        # "Google Nexus 7 ALC5642.conf"); quote every entry in the spec template
-        sed -i 's|^{{ file }}$|"{{ file }}"|' \
-          /tmp/ldnp-venv/lib/python3.*/site-packages/ldnp/templates/rpm/spec
-        grep -q '^"{{ file }}"$' /tmp/ldnp-venv/lib/python3.*/site-packages/ldnp/templates/rpm/spec
-
-        export LINUXDEPLOY_OUTPUT_APP_NAME="${{env.UNIXNAME}}"
-        export LINUXDEPLOY_OUTPUT_VERSION="${{env.VERSION}}"
-        export LDNP_META_PACKAGE_NAME="${{env.UNIXNAME}}"
-        export LDNP_META_DESCRIPTION="${{env.DESCRIPTION}}"
-        export LDNP_META_SHORT_DESCRIPTION="${{env.DESCRIPTION}}"
-        export LDNP_META_ARCHITECTURE="arm64"
-        export LDNP_META_BUILD_ARCH="aarch64"
-
-        printf '{"packageType":"deb","arch":"arm64"}\n' > build/app/AppDir-compat/usr/bin/ss-config.json
-        /tmp/ldnp-venv/bin/linuxdeploy-plugin-native_packages \
-          --appdir build/app/AppDir-compat \
-          --build deb
-
-        printf '{"packageType":"rpm","arch":"arm64"}\n' > build/app/AppDir-compat/usr/bin/ss-config.json
-        /tmp/ldnp-venv/bin/linuxdeploy-plugin-native_packages \
-          --appdir build/app/AppDir-compat \
-          --build rpm
-
-        mv "${{env.UNIXNAME}}"_*.deb "${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-arm64.deb"
-        mv "${{env.UNIXNAME}}"_*.rpm "${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-arm64.rpm"
-
-        dpkg-deb --fsys-tarfile "${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-arm64.deb" \
-          | tar -xO --wildcards '*/ss-config.json' | grep -q '"packageType":"deb"'
-        rpm2cpio "${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-arm64.rpm" \
-          | cpio --quiet -i --to-stdout '*ss-config.json' | grep -q '"packageType":"rpm"'
-
-    #
-    # The glibc-2.28 ground truth on arm64 — mirror of the x64 smoke gate
-    #
-    - name: '🧪 Smoke test packages (glibc 2.28 gate)'
-      run: |
-        set -euo pipefail
-        APPIMAGE="${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-arm64.AppImage"
-        DEB="${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-arm64.deb"
-        RPM="${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-arm64.rpm"
-
-        chmod +x "$APPIMAGE"
-        ./"$APPIMAGE" --appimage-extract >/dev/null
-        grep -q '"packageType":"appimage"' squashfs-root/usr/bin/ss-config.json
-
-        env QT_QPA_PLATFORM=offscreen ./squashfs-root/AppRun --version
-        env QT_QPA_PLATFORM=offscreen ./squashfs-root/AppRun --selftest
-
-        docker run --rm -v "$PWD/squashfs-root:/app:ro" -e QT_QPA_PLATFORM=offscreen -e HOME=/tmp \
-          rockylinux:8 /app/AppRun --version
-        docker run --rm -v "$PWD/squashfs-root:/app:ro" -e QT_QPA_PLATFORM=offscreen -e HOME=/tmp \
-          rockylinux:8 /app/AppRun --selftest
-
-        docker run --rm -v "$PWD:/pkg:ro" -e QT_QPA_PLATFORM=offscreen -e HOME=/tmp rockylinux:8 \
-          bash -ec "dnf install -y -q --nogpgcheck /pkg/$RPM && ${{env.UNIXNAME}} --version"
-
-        docker run --rm -v "$PWD:/pkg:ro" -e QT_QPA_PLATFORM=offscreen -e HOME=/tmp debian:10 \
-          bash -ec "sed -i -e 's|deb.debian.org|archive.debian.org|g' -e '/security.debian.org/d' /etc/apt/sources.list; apt-get update -qq || true; apt-get install -y -q /pkg/$DEB || dpkg -i /pkg/$DEB; ${{env.UNIXNAME}} --version"
-
-        # Windowed gate — mirror of the x64 stage: offscreen checks cannot see a missing
-        # GLX/EGL vendor; Xvfb + xcb must keep the GUI alive until the kill fires
-        command -v xvfb-run >/dev/null || sudo apt-get install -y -q xvfb
-        set +e
-        timeout -k 10 25 xvfb-run -a -s "-screen 0 1280x800x24" \
-          env QT_QPA_PLATFORM=xcb HOME=/tmp ./squashfs-root/AppRun
-        rc=$?
-        set -e
-        if [ "$rc" != 137 ] && [ "$rc" != 124 ]; then
-          echo "::error::windowed smoke exited early (rc=$rc); compat GL stack is broken"
-          exit 1
-        fi
-
-        rm -rf squashfs-root
-
-    #
-    # Every artifact is verified right after it is signed, so a broken signature fails here
-    # instead of on a user's machine
-    #
-    - name: '✍🏻 Sign Linux artifacts (GPG, optional)'
-      env:
-        GPG_PASSPHRASE: ${{secrets.GPG_PASSPHRASE}}
-        GPG_KEY_ID: ${{secrets.GPG_KEY_ID}}
-      run: |
-        set -euo pipefail
-        if [ "${SS_GPG_SIGN:-0}" != "1" ]; then
-          echo "GPG signing secrets not set; skipping Linux signing."
-          exit 0
-        fi
-        sudo apt-get install -y debsigs
-        APPIMAGE="${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-arm64.AppImage"
-        DEB="${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-arm64.deb"
-        RPM="${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-arm64.rpm"
-        BIN="${{env.EXECUTABLE}}-${{env.VERSION}}-Linux-arm64"
-        cp "build/app/${{env.UNIXNAME}}" "$BIN"
-
-        gpg --export --armor "$GPG_KEY_ID" > signing-public-key.asc
-
-        rpm --import signing-public-key.asc
-        rpmsign --addsign "$RPM"
-        rpm -Kv "$RPM"
-        rpm -K "$RPM" | grep -qi 'signatures OK'
-
-        debsigs --sign=origin --default-key="$GPG_KEY_ID" "$DEB"
-        ar t "$DEB" | grep -q '_gpgorigin'
-
-        chmod +x "$APPIMAGE"
-        ./"$APPIMAGE" --appimage-signature | grep -q 'BEGIN PGP SIGNATURE'
-
-        for f in "$APPIMAGE" "$DEB" "$RPM" "$BIN"; do
-          gpg --batch --yes --pinentry-mode loopback \
-            ${GPG_PASSPHRASE:+--passphrase "$GPG_PASSPHRASE"} \
-            --local-user "$GPG_KEY_ID" \
-            --detach-sign --armor --output "$f.asc" "$f"
-          gpg --verify "$f.asc" "$f"
-        done
+    - name: '📦 Package for Linux'
+      uses: ./.github/actions/package-linux
+      with:
+        workspace: ${{github.workspace}}
+        arch-label: arm64
+        machine-arch: aarch64
+        deb-arch: arm64
+        config-arch: arm64
+        system-lib-dir: /usr/lib/aarch64-linux-gnu
+        qt-plugins-path: ${{github.workspace}}/Qt-${{env.QT_VERSION_LINUX}}-${{runner.os}}-arm64/${{env.QT_VERSION_LINUX}}/gcc_arm64/plugins
+        qml-dir: ${{env.QML_DIR}}
+        sharun-sha256: bf3b8cc04e3025ef9dcd2718ee4728ccc68c941dadeeac7fdf778fc2c99d8b31
+        appimagetool-sha256: f0837e7448a0c1e4e650a93bb3e85802546e60654ef287576f46c71c126a9158
+        executable: ${{env.EXECUTABLE}}
+        version: ${{env.VERSION}}
+        unixname: ${{env.UNIXNAME}}
+        description: ${{env.DESCRIPTION}}
+        gpg-private-key: ${{secrets.GPG_PRIVATE_KEY}}
+        gpg-passphrase: ${{secrets.GPG_PASSPHRASE}}
+        gpg-key-id: ${{secrets.GPG_KEY_ID}}
 
     #
     # Release artifact: the Linux AppImage users download — the glibc-bundled build (spec
@@ -2070,84 +885,29 @@ jobs:
     # Retried for the same reason as the Linux legs; see the x86_64 job.
     #
     - name: '⚙️ Download prebuilt gRPC (universal)'
-      run: |
-        for attempt in 1 2 3 4 5; do
-          if gh release download v${{env.GRPC_VERSION}} \
-               -R ${{env.GRPC_REPO}} \
-               -p "grpc-${{env.GRPC_VERSION}}-macos-universal.tar.gz" \
-               --clobber; then
-            break
-          fi
-          if [ "$attempt" -eq 5 ]; then
-            echo "::error::gh release download failed after $attempt attempts"
-            exit 1
-          fi
-          sleep $((attempt * 15))
-        done
-        mkdir -p ${{github.workspace}}/grpc-prefix
-        tar -xzf grpc-${{env.GRPC_VERSION}}-macos-universal.tar.gz -C ${{github.workspace}}/grpc-prefix
-      env:
-        GH_TOKEN: ${{secrets.GITHUB_TOKEN}}
+      uses: ./.github/actions/download-grpc
+      with:
+        version: ${{env.GRPC_VERSION}}
+        repo: ${{env.GRPC_REPO}}
+        asset: grpc-${{env.GRPC_VERSION}}-macos-universal.tar.gz
+        prefix-dir: ${{github.workspace}}/grpc-prefix
+        workspace: ${{github.workspace}}
+        github-token: ${{secrets.GITHUB_TOKEN}}
 
     #
     # Restore-only half of the cache pair; the save step below is gated on a miss so a hit never
     # rewrites the entry
     #
-    - name: '⚙️ Restore Qt Cache'
-      id: qt_cache
-      uses: actions/cache/restore@caa296126883cff596d87d8935842f9db880ef25 # v5.1.0
+    - name: '⚙️ Set up Qt'
+      uses: ./.github/actions/setup-qt
       with:
-        path: |
-          ${{github.workspace}}/Qt-${{env.QT_VERSION_MACOS}}-${{runner.os}}-x64
-          ~/.qt-license
-        key: qt-${{runner.os}}-${{env.QT_VERSION_MACOS}}-arm64
-
-    #
-    # Qt comes from the online installer driven by scripts/install-qt.sh, using the account
-    # secrets; only reached when the cache missed
-    #
-    - name: '⚙️ Install Qt (cache miss)'
-      shell: bash
-      if: steps.qt_cache.outputs.cache-hit != 'true'
-      env:
-        QT_VERSION: ${{env.QT_VERSION_MACOS}}
-        QT_ARCH: x64
-        QT_USERNAME: ${{secrets.QT_USERNAME}}
-        QT_PASSWORD: ${{secrets.QT_PASSWORD}}
-        QT_OUTPUT_DIR: ${{github.workspace}}/Qt-${{env.QT_VERSION_MACOS}}-${{runner.os}}-x64
-      run: |
-        chmod +x ./scripts/install-qt.sh
-        ./scripts/install-qt.sh
-
-    #
-    # Writes the entry the restore step looks for, keyed by OS + Qt version + arch
-    #
-    - name: '⚙️ Save Qt Cache'
-      if: steps.qt_cache.outputs.cache-hit != 'true'
-      uses: actions/cache/save@caa296126883cff596d87d8935842f9db880ef25 # v5.1.0
-      with:
-        path: |
-          ${{github.workspace}}/Qt-${{env.QT_VERSION_MACOS}}-${{runner.os}}-x64
-          ~/.qt-license
-        key: qt-${{runner.os}}-${{env.QT_VERSION_MACOS}}-arm64
-
-    #
-    # Publishes bin/, libexec/ and CMAKE_PREFIX_PATH through GITHUB_PATH / GITHUB_ENV so every
-    # later step in the job sees the same Qt
-    #
-    - name: '⚙️ Add Qt to PATH'
-      shell: bash
-      env:
-        QT_VERSION: ${{env.QT_VERSION_MACOS}}
-        QT_OUTPUT_DIR: ${{github.workspace}}/Qt-${{env.QT_VERSION_MACOS}}-${{runner.os}}-x64
-      run: |
-        export QT_BIN_PATH="${QT_OUTPUT_DIR}/${QT_VERSION}/macos/bin"
-        export QT_LIBEXEC_PATH="${QT_OUTPUT_DIR}/${QT_VERSION}/macos/libexec"
-        export CMAKE_PREFIX_PATH="${QT_OUTPUT_DIR}/${QT_VERSION}/macos/lib/cmake"
-
-        echo "$QT_BIN_PATH" >> $GITHUB_PATH
-        echo "$QT_LIBEXEC_PATH" >> $GITHUB_PATH
-        echo "CMAKE_PREFIX_PATH=$CMAKE_PREFIX_PATH" >> $GITHUB_ENV
+        qt-version: ${{env.QT_VERSION_MACOS}}
+        qt-dir: ${{github.workspace}}/Qt-${{env.QT_VERSION_MACOS}}-${{runner.os}}-x64
+        qt-arch: x64
+        qt-host: macos
+        cache-key: qt-${{runner.os}}-${{env.QT_VERSION_MACOS}}-arm64
+        qt-username: ${{secrets.QT_USERNAME}}
+        qt-password: ${{secrets.QT_PASSWORD}}
 
     #
     # get-cmake supplies a current CMake independently of whatever the runner image ships
@@ -2173,6 +933,7 @@ jobs:
           -DENABLE_GRPC=ON \
           -DENABLE_PGO=ON \
           -DPGO_STAGE=GENERATE \
+          -DSS_ALLOC_STATS=ON \
           -DSS_UNITY_BUILD=ON \
           -DSS_UNITY_BATCH_SIZE=${{ env.SS_UNITY_BATCH }} \
           -DCMAKE_BUILD_TYPE=Release \
@@ -2210,7 +971,8 @@ jobs:
         QT_QPA_PLATFORM: offscreen
         DYLD_FRAMEWORK_PATH: ${{github.workspace}}/Qt-${{env.QT_VERSION_MACOS}}-${{runner.os}}-x64/${{env.QT_VERSION_MACOS}}/macos/lib
       run: |
-        ./build/app/${{env.EXECUTABLE}}.app/Contents/MacOS/${{env.EXECUTABLE}} --headless --benchmark-hotpath --min-fps 1
+        ./build/app/${{env.EXECUTABLE}}.app/Contents/MacOS/${{env.EXECUTABLE}} --headless --benchmark-hotpath --min-fps 1 \
+          --benchmark-output pgo-train.txt
 
     #
     # Second profile: the big_db_test load exercises the project and dashboard paths that the
@@ -2272,7 +1034,15 @@ jobs:
       uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
       with:
         name: benchmark-macOS-arm64
-        path: benchmark.txt
+        path: |
+          benchmark.txt
+          pgo-train.txt
+
+    - name: '📤 Upload artifact: symbols (macOS arm64)'
+      uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
+      with:
+        name: symbols-macOS-arm64
+        path: build/app/${{env.EXECUTABLE}}.app/Contents/MacOS/${{env.EXECUTABLE}}.dSYM
         if-no-files-found: ignore
 
     #
@@ -2371,84 +1141,29 @@ jobs:
     # Retried for the same reason as the Linux legs; see the x86_64 job.
     #
     - name: '⚙️ Download prebuilt gRPC (universal)'
-      run: |
-        for attempt in 1 2 3 4 5; do
-          if gh release download v${{env.GRPC_VERSION}} \
-               -R ${{env.GRPC_REPO}} \
-               -p "grpc-${{env.GRPC_VERSION}}-macos-universal.tar.gz" \
-               --clobber; then
-            break
-          fi
-          if [ "$attempt" -eq 5 ]; then
-            echo "::error::gh release download failed after $attempt attempts"
-            exit 1
-          fi
-          sleep $((attempt * 15))
-        done
-        mkdir -p ${{github.workspace}}/grpc-prefix
-        tar -xzf grpc-${{env.GRPC_VERSION}}-macos-universal.tar.gz -C ${{github.workspace}}/grpc-prefix
-      env:
-        GH_TOKEN: ${{secrets.GITHUB_TOKEN}}
+      uses: ./.github/actions/download-grpc
+      with:
+        version: ${{env.GRPC_VERSION}}
+        repo: ${{env.GRPC_REPO}}
+        asset: grpc-${{env.GRPC_VERSION}}-macos-universal.tar.gz
+        prefix-dir: ${{github.workspace}}/grpc-prefix
+        workspace: ${{github.workspace}}
+        github-token: ${{secrets.GITHUB_TOKEN}}
 
     #
     # Restore-only half of the cache pair; the save step below is gated on a miss so a hit never
     # rewrites the entry
     #
-    - name: '⚙️ Restore Qt Cache'
-      id: qt_cache
-      uses: actions/cache/restore@caa296126883cff596d87d8935842f9db880ef25 # v5.1.0
+    - name: '⚙️ Set up Qt'
+      uses: ./.github/actions/setup-qt
       with:
-        path: |
-          ${{github.workspace}}/Qt-${{env.QT_VERSION_MACOS}}-${{runner.os}}-x64
-          ~/.qt-license
-        key: qt-${{runner.os}}-${{env.QT_VERSION_MACOS}}-x86_64
-
-    #
-    # Qt comes from the online installer driven by scripts/install-qt.sh, using the account
-    # secrets; only reached when the cache missed
-    #
-    - name: '⚙️ Install Qt (cache miss)'
-      shell: bash
-      if: steps.qt_cache.outputs.cache-hit != 'true'
-      env:
-        QT_VERSION: ${{env.QT_VERSION_MACOS}}
-        QT_ARCH: x64
-        QT_USERNAME: ${{secrets.QT_USERNAME}}
-        QT_PASSWORD: ${{secrets.QT_PASSWORD}}
-        QT_OUTPUT_DIR: ${{github.workspace}}/Qt-${{env.QT_VERSION_MACOS}}-${{runner.os}}-x64
-      run: |
-        chmod +x ./scripts/install-qt.sh
-        ./scripts/install-qt.sh
-
-    #
-    # Writes the entry the restore step looks for, keyed by OS + Qt version + arch
-    #
-    - name: '⚙️ Save Qt Cache'
-      if: steps.qt_cache.outputs.cache-hit != 'true'
-      uses: actions/cache/save@caa296126883cff596d87d8935842f9db880ef25 # v5.1.0
-      with:
-        path: |
-          ${{github.workspace}}/Qt-${{env.QT_VERSION_MACOS}}-${{runner.os}}-x64
-          ~/.qt-license
-        key: qt-${{runner.os}}-${{env.QT_VERSION_MACOS}}-x86_64
-
-    #
-    # Publishes bin/, libexec/ and CMAKE_PREFIX_PATH through GITHUB_PATH / GITHUB_ENV so every
-    # later step in the job sees the same Qt
-    #
-    - name: '⚙️ Add Qt to PATH'
-      shell: bash
-      env:
-        QT_VERSION: ${{env.QT_VERSION_MACOS}}
-        QT_OUTPUT_DIR: ${{github.workspace}}/Qt-${{env.QT_VERSION_MACOS}}-${{runner.os}}-x64
-      run: |
-        export QT_BIN_PATH="${QT_OUTPUT_DIR}/${QT_VERSION}/macos/bin"
-        export QT_LIBEXEC_PATH="${QT_OUTPUT_DIR}/${QT_VERSION}/macos/libexec"
-        export CMAKE_PREFIX_PATH="${QT_OUTPUT_DIR}/${QT_VERSION}/macos/lib/cmake"
-
-        echo "$QT_BIN_PATH" >> $GITHUB_PATH
-        echo "$QT_LIBEXEC_PATH" >> $GITHUB_PATH
-        echo "CMAKE_PREFIX_PATH=$CMAKE_PREFIX_PATH" >> $GITHUB_ENV
+        qt-version: ${{env.QT_VERSION_MACOS}}
+        qt-dir: ${{github.workspace}}/Qt-${{env.QT_VERSION_MACOS}}-${{runner.os}}-x64
+        qt-arch: x64
+        qt-host: macos
+        cache-key: qt-${{runner.os}}-${{env.QT_VERSION_MACOS}}-x86_64
+        qt-username: ${{secrets.QT_USERNAME}}
+        qt-password: ${{secrets.QT_PASSWORD}}
 
     #
     # get-cmake supplies a current CMake independently of whatever the runner image ships
@@ -2521,6 +1236,12 @@ jobs:
         name: macos-intel-exe
         path: ${{env.EXECUTABLE}}-x86_64
         retention-days: 1
+
+    - name: '📤 Upload artifact: symbols (macOS x86_64)'
+      uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
+      with:
+        name: symbols-macOS-x86_64
+        path: build/app/${{env.EXECUTABLE}}.app/Contents/MacOS/${{env.EXECUTABLE}}.dSYM
 
 #---------------------------------------------------------------------------------------------------
 # macOS universal merge + sign + notarize.
@@ -2732,60 +1453,17 @@ jobs:
     # Restore-only half of the cache pair; the save step below is gated on a miss so a hit never
     # rewrites the entry
     #
-    - name: '⚙️ Restore Qt Cache'
-      id: qt_cache
-      uses: actions/cache/restore@caa296126883cff596d87d8935842f9db880ef25 # v5.1.0
+    - name: '⚙️ Set up Qt'
+      uses: ./.github/actions/setup-qt
       with:
-        path: |
-          ${{github.workspace}}/Qt-${{env.QT_VERSION_WINDOWS}}-${{runner.os}}-x64
-          ~/.qt-license
-        key: qt-${{runner.os}}-${{env.QT_VERSION_WINDOWS}}-x64-msvc2022_64-v2
-
-    #
-    # Qt comes from the online installer driven by scripts/install-qt.sh, using the account
-    # secrets; only reached when the cache missed
-    #
-    - name: '⚙️ Install Qt (cache miss)'
-      shell: pwsh
-      if: steps.qt_cache.outputs.cache-hit != 'true'
-      env:
-        QT_VERSION: ${{env.QT_VERSION_WINDOWS}}
-        QT_ARCH: x64
-        QT_USERNAME: ${{secrets.QT_USERNAME}}
-        QT_PASSWORD: ${{secrets.QT_PASSWORD}}
-        QT_OUTPUT_DIR: ${{github.workspace}}/Qt-${{env.QT_VERSION_WINDOWS}}-${{runner.os}}-x64
-      run: |
-        ./scripts/install-qt.ps1
-
-    #
-    # Writes the entry the restore step looks for, keyed by OS + Qt version + arch
-    #
-    - name: '⚙️ Save Qt Cache'
-      if: steps.qt_cache.outputs.cache-hit != 'true'
-      uses: actions/cache/save@caa296126883cff596d87d8935842f9db880ef25 # v5.1.0
-      with:
-        path: |
-          ${{github.workspace}}/Qt-${{env.QT_VERSION_WINDOWS}}-${{runner.os}}-x64
-          ~/.qt-license
-        key: qt-${{runner.os}}-${{env.QT_VERSION_WINDOWS}}-x64-msvc2022_64-v2
-
-    #
-    # Publishes bin/, libexec/ and CMAKE_PREFIX_PATH through GITHUB_PATH / GITHUB_ENV so every
-    # later step in the job sees the same Qt
-    #
-    - name: '⚙️ Add Qt to PATH'
-      shell: pwsh
-      env:
-        QT_VERSION: ${{env.QT_VERSION_WINDOWS}}
-        QT_OUTPUT_DIR: ${{github.workspace}}/Qt-${{env.QT_VERSION_WINDOWS}}-${{runner.os}}-x64
-      run: |
-        $QT_BIN_PATH = "$env:QT_OUTPUT_DIR\$env:QT_VERSION\msvc2022_64\bin"
-        $QT_LIBEXEC_PATH = "$env:QT_OUTPUT_DIR\$env:QT_VERSION\msvc2022_64\libexec"
-        $CMAKE_PREFIX_PATH = "$env:QT_OUTPUT_DIR\$env:QT_VERSION\msvc2022_64\lib\cmake"
-
-        Write-Output "$QT_BIN_PATH" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
-        Write-Output "$QT_LIBEXEC_PATH" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
-        Write-Output "CMAKE_PREFIX_PATH=$CMAKE_PREFIX_PATH" >> $env:GITHUB_ENV
+        qt-version: ${{env.QT_VERSION_WINDOWS}}
+        qt-dir: ${{github.workspace}}/Qt-${{env.QT_VERSION_WINDOWS}}-${{runner.os}}-x64
+        qt-arch: x64
+        qt-host: msvc2022_64
+        cache-key: qt-${{runner.os}}-${{env.QT_VERSION_WINDOWS}}-x64-msvc2022_64-v2
+        installer-shell: pwsh
+        qt-username: ${{secrets.QT_USERNAME}}
+        qt-password: ${{secrets.QT_PASSWORD}}
 
     #
     # get-cmake supplies a current CMake; both of its caches are off on this image
@@ -2859,6 +1537,7 @@ jobs:
           -DENABLE_GRPC=ON `
           -DENABLE_PGO=ON `
           -DPGO_STAGE=GENERATE `
+          -DSS_ALLOC_STATS=ON `
           -DSS_UNITY_BUILD=ON `
           -DSS_UNITY_BATCH_SIZE=${{ env.SS_UNITY_BATCH }} `
           -DCMAKE_BUILD_TYPE=Release `
@@ -2893,9 +1572,10 @@ jobs:
     - name: '🏋️ PGO training run (hotpath)'
       run: |
         $p = Start-Process -FilePath "build/app/${{env.EXECUTABLE}}.exe" `
-          -ArgumentList '--headless','--benchmark-hotpath','--min-fps','1' `
+          -ArgumentList '--headless','--benchmark-hotpath','--min-fps','1','--benchmark-output','pgo-train.txt' `
           -WorkingDirectory $PWD -PassThru -NoNewWindow
         if (-not $p.WaitForExit(300000)) { $p.Kill(); throw 'benchmark timed out (no PGO profile)' }
+        if (-not (Select-String -Path pgo-train.txt -Pattern 'HOTPATH_PASS=1' -Quiet)) { throw 'hotpath allocation gate failed (see pgo-train.txt)' }
 
     #
     # continue-on-error: the second profile is a bonus, and this load is the flakiest step in the
@@ -2981,6 +1661,13 @@ jobs:
           benchmark.txt
           benchmark-sse4.txt
           benchmark-scalar.txt
+          pgo-train.txt
+
+    - name: '📤 Upload artifact: symbols (Windows)'
+      uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
+      with:
+        name: symbols-Windows
+        path: build/app/${{env.EXECUTABLE}}.pdb
         if-no-files-found: ignore
 
     #
@@ -3514,91 +2201,23 @@ jobs:
       uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.1.0
 
     - name: '⚙️ Install dependencies'
-      run: |
-        sudo apt-get update
-        sudo apt-get install -y \
-          build-essential \
-          clang \
-          lld \
-          ninja-build \
-          libcups2-dev \
-          libnss3 \
-          libegl1 \
-          libgl1-mesa-dev \
-          libasound2-dev \
-          libudev-dev \
-          libsecret-1-dev \
-          libzstd-dev \
-          zlib1g-dev \
-          libexpat1-dev \
-          libminizip-dev \
-          libopus-dev \
-          libxcb1 \
-          libxcb-cursor0 \
-          libxcb-cursor-dev \
-          libxcb-glx0 \
-          libxcb-icccm4 \
-          libxcb-image0 \
-          libxcb-image0-dev \
-          libxcb-keysyms1 \
-          libxcb-randr0 \
-          libxcb-render0 \
-          libxcb-render-util0 \
-          libxcb-shape0 \
-          libxcb-shm0 \
-          libxcb-sync1 \
-          libxcb-util0-dev \
-          libxcb-util1 \
-          libxcb-xfixes0 \
-          libxcb-xinerama0 \
-          libxcb-xkb-dev \
-          libxcb-xtest0 \
-          libxkbcommon-dev \
-          libxkbcommon-x11-0 \
-          libxkbcommon-x11-dev \
-          libpulse-dev \
-          libgstreamer1.0-0 \
-          libgstreamer-plugins-base1.0-0
+      uses: ./.github/actions/linux-toolchain-deps
 
     #
     # Restore-only: build-linux owns the save half of this entry, so two jobs never race to
     # write it
     #
-    - name: '⚙️ Restore Qt Cache'
-      id: qt_cache
-      uses: actions/cache/restore@caa296126883cff596d87d8935842f9db880ef25 # v5.1.0
+    - name: '⚙️ Set up Qt'
+      uses: ./.github/actions/setup-qt
       with:
-        path: |
-          ${{github.workspace}}/Qt-${{env.QT_VERSION_LINUX}}-${{runner.os}}-x64
-          ~/.qt-license
-        key: qt-${{runner.os}}-${{env.QT_VERSION_LINUX}}-x64
-
-    - name: '⚙️ Install Qt (cache miss)'
-      shell: bash
-      if: steps.qt_cache.outputs.cache-hit != 'true'
-      env:
-        QT_VERSION: ${{env.QT_VERSION_LINUX}}
-        QT_ARCH: x64
-        QT_USERNAME: ${{secrets.QT_USERNAME}}
-        QT_PASSWORD: ${{secrets.QT_PASSWORD}}
-        QT_OUTPUT_DIR: ${{github.workspace}}/Qt-${{env.QT_VERSION_LINUX}}-${{runner.os}}-x64
-      run: |
-        chmod +x ./scripts/install-qt.sh
-        ./scripts/install-qt.sh
-
-    - name: '⚙️ Add Qt to PATH'
-      shell: bash
-      env:
-        QT_VERSION: ${{env.QT_VERSION_LINUX}}
-        QT_OUTPUT_DIR: ${{github.workspace}}/Qt-${{env.QT_VERSION_LINUX}}-${{runner.os}}-x64
-      run: |
-        export QT_BIN_PATH="${QT_OUTPUT_DIR}/${QT_VERSION}/gcc_64/bin"
-        export QT_LIBEXEC_PATH="${QT_OUTPUT_DIR}/${QT_VERSION}/gcc_64/libexec"
-        export CMAKE_PREFIX_PATH="${QT_OUTPUT_DIR}/${QT_VERSION}/gcc_64/lib/cmake"
-
-        echo "$QT_BIN_PATH" >> $GITHUB_PATH
-        echo "$QT_LIBEXEC_PATH" >> $GITHUB_PATH
-        echo "CMAKE_PREFIX_PATH=$CMAKE_PREFIX_PATH" >> $GITHUB_ENV
+        qt-version: ${{env.QT_VERSION_LINUX}}
+        qt-dir: ${{github.workspace}}/Qt-${{env.QT_VERSION_LINUX}}-${{runner.os}}-x64
+        qt-arch: x64
+        qt-host: gcc_64
+        cache-key: qt-${{runner.os}}-${{env.QT_VERSION_LINUX}}-x64
+        save-cache: 'false'
+        qt-username: ${{secrets.QT_USERNAME}}
+        qt-password: ${{secrets.QT_PASSWORD}}
 
     - name: '⚙️ Install CMake'
       uses: lukka/get-cmake@fffaaafeea488556c2c12dad60690008bc1caacb # v4.4.2
@@ -3727,91 +2346,23 @@ jobs:
       uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.1.0
 
     - name: '⚙️ Install dependencies'
-      run: |
-        sudo apt-get update
-        sudo apt-get install -y \
-          build-essential \
-          clang \
-          lld \
-          ninja-build \
-          libcups2-dev \
-          libnss3 \
-          libegl1 \
-          libgl1-mesa-dev \
-          libasound2-dev \
-          libudev-dev \
-          libsecret-1-dev \
-          libzstd-dev \
-          zlib1g-dev \
-          libexpat1-dev \
-          libminizip-dev \
-          libopus-dev \
-          libxcb1 \
-          libxcb-cursor0 \
-          libxcb-cursor-dev \
-          libxcb-glx0 \
-          libxcb-icccm4 \
-          libxcb-image0 \
-          libxcb-image0-dev \
-          libxcb-keysyms1 \
-          libxcb-randr0 \
-          libxcb-render0 \
-          libxcb-render-util0 \
-          libxcb-shape0 \
-          libxcb-shm0 \
-          libxcb-sync1 \
-          libxcb-util0-dev \
-          libxcb-util1 \
-          libxcb-xfixes0 \
-          libxcb-xinerama0 \
-          libxcb-xkb-dev \
-          libxcb-xtest0 \
-          libxkbcommon-dev \
-          libxkbcommon-x11-0 \
-          libxkbcommon-x11-dev \
-          libpulse-dev \
-          libgstreamer1.0-0 \
-          libgstreamer-plugins-base1.0-0
+      uses: ./.github/actions/linux-toolchain-deps
 
     #
     # Restore-only: build-linux owns the save half of this entry, so two jobs never race to
     # write it
     #
-    - name: '⚙️ Restore Qt Cache'
-      id: qt_cache
-      uses: actions/cache/restore@caa296126883cff596d87d8935842f9db880ef25 # v5.1.0
+    - name: '⚙️ Set up Qt'
+      uses: ./.github/actions/setup-qt
       with:
-        path: |
-          ${{github.workspace}}/Qt-${{env.QT_VERSION_LINUX}}-${{runner.os}}-x64
-          ~/.qt-license
-        key: qt-${{runner.os}}-${{env.QT_VERSION_LINUX}}-x64
-
-    - name: '⚙️ Install Qt (cache miss)'
-      shell: bash
-      if: steps.qt_cache.outputs.cache-hit != 'true'
-      env:
-        QT_VERSION: ${{env.QT_VERSION_LINUX}}
-        QT_ARCH: x64
-        QT_USERNAME: ${{secrets.QT_USERNAME}}
-        QT_PASSWORD: ${{secrets.QT_PASSWORD}}
-        QT_OUTPUT_DIR: ${{github.workspace}}/Qt-${{env.QT_VERSION_LINUX}}-${{runner.os}}-x64
-      run: |
-        chmod +x ./scripts/install-qt.sh
-        ./scripts/install-qt.sh
-
-    - name: '⚙️ Add Qt to PATH'
-      shell: bash
-      env:
-        QT_VERSION: ${{env.QT_VERSION_LINUX}}
-        QT_OUTPUT_DIR: ${{github.workspace}}/Qt-${{env.QT_VERSION_LINUX}}-${{runner.os}}-x64
-      run: |
-        export QT_BIN_PATH="${QT_OUTPUT_DIR}/${QT_VERSION}/gcc_64/bin"
-        export QT_LIBEXEC_PATH="${QT_OUTPUT_DIR}/${QT_VERSION}/gcc_64/libexec"
-        export CMAKE_PREFIX_PATH="${QT_OUTPUT_DIR}/${QT_VERSION}/gcc_64/lib/cmake"
-
-        echo "$QT_BIN_PATH" >> $GITHUB_PATH
-        echo "$QT_LIBEXEC_PATH" >> $GITHUB_PATH
-        echo "CMAKE_PREFIX_PATH=$CMAKE_PREFIX_PATH" >> $GITHUB_ENV
+        qt-version: ${{env.QT_VERSION_LINUX}}
+        qt-dir: ${{github.workspace}}/Qt-${{env.QT_VERSION_LINUX}}-${{runner.os}}-x64
+        qt-arch: x64
+        qt-host: gcc_64
+        cache-key: qt-${{runner.os}}-${{env.QT_VERSION_LINUX}}-x64
+        save-cache: 'false'
+        qt-username: ${{secrets.QT_USERNAME}}
+        qt-password: ${{secrets.QT_PASSWORD}}
 
     - name: '⚙️ Install CMake'
       uses: lukka/get-cmake@fffaaafeea488556c2c12dad60690008bc1caacb # v4.4.2
@@ -3900,91 +2451,23 @@ jobs:
       uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.1.0
 
     - name: '⚙️ Install dependencies'
-      run: |
-        sudo apt-get update
-        sudo apt-get install -y \
-          build-essential \
-          clang \
-          lld \
-          ninja-build \
-          libcups2-dev \
-          libnss3 \
-          libegl1 \
-          libgl1-mesa-dev \
-          libasound2-dev \
-          libudev-dev \
-          libsecret-1-dev \
-          libzstd-dev \
-          zlib1g-dev \
-          libexpat1-dev \
-          libminizip-dev \
-          libopus-dev \
-          libxcb1 \
-          libxcb-cursor0 \
-          libxcb-cursor-dev \
-          libxcb-glx0 \
-          libxcb-icccm4 \
-          libxcb-image0 \
-          libxcb-image0-dev \
-          libxcb-keysyms1 \
-          libxcb-randr0 \
-          libxcb-render0 \
-          libxcb-render-util0 \
-          libxcb-shape0 \
-          libxcb-shm0 \
-          libxcb-sync1 \
-          libxcb-util0-dev \
-          libxcb-util1 \
-          libxcb-xfixes0 \
-          libxcb-xinerama0 \
-          libxcb-xkb-dev \
-          libxcb-xtest0 \
-          libxkbcommon-dev \
-          libxkbcommon-x11-0 \
-          libxkbcommon-x11-dev \
-          libpulse-dev \
-          libgstreamer1.0-0 \
-          libgstreamer-plugins-base1.0-0
+      uses: ./.github/actions/linux-toolchain-deps
 
     #
     # Restore-only: build-linux owns the save half of this entry, so two jobs never race to
     # write it
     #
-    - name: '⚙️ Restore Qt Cache'
-      id: qt_cache
-      uses: actions/cache/restore@caa296126883cff596d87d8935842f9db880ef25 # v5.1.0
+    - name: '⚙️ Set up Qt'
+      uses: ./.github/actions/setup-qt
       with:
-        path: |
-          ${{github.workspace}}/Qt-${{env.QT_VERSION_LINUX}}-${{runner.os}}-x64
-          ~/.qt-license
-        key: qt-${{runner.os}}-${{env.QT_VERSION_LINUX}}-x64
-
-    - name: '⚙️ Install Qt (cache miss)'
-      shell: bash
-      if: steps.qt_cache.outputs.cache-hit != 'true'
-      env:
-        QT_VERSION: ${{env.QT_VERSION_LINUX}}
-        QT_ARCH: x64
-        QT_USERNAME: ${{secrets.QT_USERNAME}}
-        QT_PASSWORD: ${{secrets.QT_PASSWORD}}
-        QT_OUTPUT_DIR: ${{github.workspace}}/Qt-${{env.QT_VERSION_LINUX}}-${{runner.os}}-x64
-      run: |
-        chmod +x ./scripts/install-qt.sh
-        ./scripts/install-qt.sh
-
-    - name: '⚙️ Add Qt to PATH'
-      shell: bash
-      env:
-        QT_VERSION: ${{env.QT_VERSION_LINUX}}
-        QT_OUTPUT_DIR: ${{github.workspace}}/Qt-${{env.QT_VERSION_LINUX}}-${{runner.os}}-x64
-      run: |
-        export QT_BIN_PATH="${QT_OUTPUT_DIR}/${QT_VERSION}/gcc_64/bin"
-        export QT_LIBEXEC_PATH="${QT_OUTPUT_DIR}/${QT_VERSION}/gcc_64/libexec"
-        export CMAKE_PREFIX_PATH="${QT_OUTPUT_DIR}/${QT_VERSION}/gcc_64/lib/cmake"
-
-        echo "$QT_BIN_PATH" >> $GITHUB_PATH
-        echo "$QT_LIBEXEC_PATH" >> $GITHUB_PATH
-        echo "CMAKE_PREFIX_PATH=$CMAKE_PREFIX_PATH" >> $GITHUB_ENV
+        qt-version: ${{env.QT_VERSION_LINUX}}
+        qt-dir: ${{github.workspace}}/Qt-${{env.QT_VERSION_LINUX}}-${{runner.os}}-x64
+        qt-arch: x64
+        qt-host: gcc_64
+        cache-key: qt-${{runner.os}}-${{env.QT_VERSION_LINUX}}-x64
+        save-cache: 'false'
+        qt-username: ${{secrets.QT_USERNAME}}
+        qt-password: ${{secrets.QT_PASSWORD}}
 
     - name: '⚙️ Install CMake'
       uses: lukka/get-cmake@fffaaafeea488556c2c12dad60690008bc1caacb # v4.4.2
@@ -4034,91 +2517,23 @@ jobs:
       uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.1.0
 
     - name: '⚙️ Install dependencies'
-      run: |
-        sudo apt-get update
-        sudo apt-get install -y \
-          build-essential \
-          clang \
-          lld \
-          ninja-build \
-          libcups2-dev \
-          libnss3 \
-          libegl1 \
-          libgl1-mesa-dev \
-          libasound2-dev \
-          libudev-dev \
-          libsecret-1-dev \
-          libzstd-dev \
-          zlib1g-dev \
-          libexpat1-dev \
-          libminizip-dev \
-          libopus-dev \
-          libxcb1 \
-          libxcb-cursor0 \
-          libxcb-cursor-dev \
-          libxcb-glx0 \
-          libxcb-icccm4 \
-          libxcb-image0 \
-          libxcb-image0-dev \
-          libxcb-keysyms1 \
-          libxcb-randr0 \
-          libxcb-render0 \
-          libxcb-render-util0 \
-          libxcb-shape0 \
-          libxcb-shm0 \
-          libxcb-sync1 \
-          libxcb-util0-dev \
-          libxcb-util1 \
-          libxcb-xfixes0 \
-          libxcb-xinerama0 \
-          libxcb-xkb-dev \
-          libxcb-xtest0 \
-          libxkbcommon-dev \
-          libxkbcommon-x11-0 \
-          libxkbcommon-x11-dev \
-          libpulse-dev \
-          libgstreamer1.0-0 \
-          libgstreamer-plugins-base1.0-0
+      uses: ./.github/actions/linux-toolchain-deps
 
     #
     # Restore-only: build-linux owns the save half of this entry, so two jobs never race to
     # write it
     #
-    - name: '⚙️ Restore Qt Cache'
-      id: qt_cache
-      uses: actions/cache/restore@caa296126883cff596d87d8935842f9db880ef25 # v5.1.0
+    - name: '⚙️ Set up Qt'
+      uses: ./.github/actions/setup-qt
       with:
-        path: |
-          ${{github.workspace}}/Qt-${{env.QT_VERSION_LINUX}}-${{runner.os}}-x64
-          ~/.qt-license
-        key: qt-${{runner.os}}-${{env.QT_VERSION_LINUX}}-x64
-
-    - name: '⚙️ Install Qt (cache miss)'
-      shell: bash
-      if: steps.qt_cache.outputs.cache-hit != 'true'
-      env:
-        QT_VERSION: ${{env.QT_VERSION_LINUX}}
-        QT_ARCH: x64
-        QT_USERNAME: ${{secrets.QT_USERNAME}}
-        QT_PASSWORD: ${{secrets.QT_PASSWORD}}
-        QT_OUTPUT_DIR: ${{github.workspace}}/Qt-${{env.QT_VERSION_LINUX}}-${{runner.os}}-x64
-      run: |
-        chmod +x ./scripts/install-qt.sh
-        ./scripts/install-qt.sh
-
-    - name: '⚙️ Add Qt to PATH'
-      shell: bash
-      env:
-        QT_VERSION: ${{env.QT_VERSION_LINUX}}
-        QT_OUTPUT_DIR: ${{github.workspace}}/Qt-${{env.QT_VERSION_LINUX}}-${{runner.os}}-x64
-      run: |
-        export QT_BIN_PATH="${QT_OUTPUT_DIR}/${QT_VERSION}/gcc_64/bin"
-        export QT_LIBEXEC_PATH="${QT_OUTPUT_DIR}/${QT_VERSION}/gcc_64/libexec"
-        export CMAKE_PREFIX_PATH="${QT_OUTPUT_DIR}/${QT_VERSION}/gcc_64/lib/cmake"
-
-        echo "$QT_BIN_PATH" >> $GITHUB_PATH
-        echo "$QT_LIBEXEC_PATH" >> $GITHUB_PATH
-        echo "CMAKE_PREFIX_PATH=$CMAKE_PREFIX_PATH" >> $GITHUB_ENV
+        qt-version: ${{env.QT_VERSION_LINUX}}
+        qt-dir: ${{github.workspace}}/Qt-${{env.QT_VERSION_LINUX}}-${{runner.os}}-x64
+        qt-arch: x64
+        qt-host: gcc_64
+        cache-key: qt-${{runner.os}}-${{env.QT_VERSION_LINUX}}-x64
+        save-cache: 'false'
+        qt-username: ${{secrets.QT_USERNAME}}
+        qt-password: ${{secrets.QT_PASSWORD}}
 
     - name: '⚙️ Install CMake'
       uses: lukka/get-cmake@fffaaafeea488556c2c12dad60690008bc1caacb # v4.4.2

@@ -271,7 +271,7 @@ code), V = missing verification.
 | M11 | infra | `SimpleCrypt` round-trip, `MonotonicClock::nowFloored` (has an injection seam that no test uses), `CommercialToken` HMAC, `MachineID` degraded-read fallback, LemonSqueezy rule chain on JSON fixtures, Trial state machine; `CLI::process` early-exit paths (K1, K2 are one-test bugs); `ExtensionInstaller` download pipeline (partial failure K3, write-time containment); `SessionContext` adopt/shutdown/pre-adoption fatal; `claim-verify` could pin `instantiateCoreModules()` order against startup.md; `ProblemCenter` dedup/notify. |
 | M12 | tiers | Pyramid: ctest 104 suites (Linux-only in CI); pytest 103 files / 1379 functions: integration 945 (post-publish, soft on untagged), security 108, scripts 302, unit 26, performance 5; `--selftest` one TU; benchmark as perf tier. Zero tests of any kind: BLE, gRPC, EthernetIp, HID, Taskbar, DataModel/Dialogs, Platform (stub), Benchmark, SelfTest. ctest-only: FileTransmission. pytest-only: Licensing, MDF4, Diagnostics, Problems, DatabaseManager, Output widgets, Audio, Network, API handlers. |
 
-## N. BADAQ profiling (2026-09-02, maintainer, Windows, 109 groups / 637 datasets / 4 waterfalls, CAN over USB, 4 x 48 kHz IEPE)
+## N. Field-project profiling (2026-09-02, maintainer, Windows, 109 groups / 637 datasets / 4 waterfalls, CAN over USB, 4 x 48 kHz IEPE)
 
 Five minutes of external sampling on the running dashboard (2.4 cores, 1.0 core kernel, 470 k soft
 page faults/s, working set 940-1020 MB oscillating, peak 6758 MB, GPU 3D 23% on an occluded window,

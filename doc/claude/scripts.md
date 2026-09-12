@@ -17,6 +17,11 @@ to run from any directory.
 | `generate-legacy-icons.py` | icon-map.csv -> `Misc::legacyIconPath()` table mapping pre-0028 icon URLs persisted in user project files. Rerun only if the migration manifest changes. |
 | `osv-scan.py` | Supply-chain gate over the vendored trees in [`lib/VERSIONS.json`](../../lib/VERSIONS.json). Two legs: `version-drift` (OSV's `determineversion` hashes the tree and compares the result to the declared version -- blocking) and `upstream-lag` (newest upstream GitHub release vs the declared one -- advisory, `--strict` promotes it). Writes `.osv-report`; `--accept` re-seeds `scripts/osv-baseline.json`. Exit 2 means the check could not run, which is a failure and not a pass. Not run by `sanitize-commit.py`: it needs the network, and the answer changes without a commit. `.github/workflows/supply-chain.yml` runs it weekly and on any PR touching `lib/`. |
 
+`scripts/ci/*.sh` is a separate tier: the long shell the CI workflow used to inline, one file per
+job (gRPC download, GPG identity, AppDir, the glibc-bundled AppImage, deb/rpm, the glibc 2.28 smoke
+gate, artifact signing). They are driven by the composite actions under `.github/actions/`, take
+every platform difference through environment variables, and are not meant to be run by hand.
+
 Suppression: wrap a region in `// code-verify off` / `// code-verify on` (C++ and QML);
 `<!-- doc-verify off -->` / `<!-- doc-verify on -->` (Markdown);
 `<!-- claim-verify off -->` / `<!-- claim-verify on -->` around a deliberate reference to

@@ -47,6 +47,9 @@ public:
   [[nodiscard]] int windowIdForWidget(UI::WidgetID widgetId) const;
   [[nodiscard]] int relativeIndexForWindow(int windowId) const;
   [[nodiscard]] int findWindowIdByGroupAndIndex(int widgetType, int relativeIndex) const;
+  [[nodiscard]] int findWindowIdByIdentity(int widgetType,
+                                           int groupUniqueId,
+                                           int datasetUniqueId) const;
 
   void clear();
   void map(UI::WidgetID widgetId, int windowId);

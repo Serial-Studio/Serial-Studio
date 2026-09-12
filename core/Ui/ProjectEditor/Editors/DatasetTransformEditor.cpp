@@ -32,6 +32,7 @@ extern "C" {
 #include <QFile>
 #include <QHash>
 #include <QHBoxLayout>
+#include <QHeaderView>
 #include <QIcon>
 #include <QJavascriptHighlighter>
 #include <QJSEngine>
@@ -46,6 +47,7 @@ extern "C" {
 #include "Core/Translator.h"
 #include "DataModel/Editors/EditorFormatting.h"
 #include "DataModel/FrameBuilder.h"
+#include "DataModel/FrameBuilder/TransformCompiler.h"
 #include "DataModel/NotificationCenter.h"
 #include "DataModel/PipelineModules.h"
 #include "DataModel/Scripting/ExpressionTransform.h"
@@ -71,6 +73,7 @@ constexpr int kEditorMinHeight     = 200;
 constexpr int kTestOutputMinWidth  = 120;
 constexpr int kToolbarSpacing      = 16;
 constexpr int kResultPrecision     = 15;
+constexpr int kParamsTableHeight   = 132;
 constexpr double kDisabledOpacity  = 0.5;
 
 //--------------------------------------------------------------------------------------------------
@@ -85,6 +88,8 @@ DataModel::DatasetTransformEditor::DatasetTransformEditor(QWidget* parent)
   , m_language(SerialStudio::Lua)
   , m_targetGroupId(-1)
   , m_targetDatasetId(-1)
+  , m_libraryCode()
+  , m_libraryCodeJs()
   , m_editor(nullptr)
   , m_languageCombo(nullptr)
   , m_templateCombo(nullptr)
@@ -95,6 +100,13 @@ DataModel::DatasetTransformEditor::DatasetTransformEditor(QWidget* parent)
   , m_applyButton(nullptr)
   , m_cancelButton(nullptr)
   , m_clearButton(nullptr)
+  , m_libraryButton(nullptr)
+  , m_testRow(nullptr)
+  , m_paramsBox(nullptr)
+  , m_paramsHint(nullptr)
+  , m_paramsTable(nullptr)
+  , m_addParamButton(nullptr)
+  , m_removeParamButton(nullptr)
   , m_commonFonts(Misc::CommonFonts::instance())
   , m_themeManager(Misc::ThemeManager::instance())
   , m_translator(Core::services().translator)
@@ -107,13 +119,15 @@ DataModel::DatasetTransformEditor::DatasetTransformEditor(QWidget* parent)
   buildEditorWidgets();
 
   auto* toolbarLayout = buildToolbarLayout();
-  auto* testLayout    = buildTestLayout();
+  auto* paramsBox     = buildParamsBox();
+  auto* testRow       = buildTestRow();
   auto* buttonLayout  = buildButtonLayout();
 
   auto* mainLayout = new QVBoxLayout(this);
   mainLayout->addLayout(toolbarLayout);
   mainLayout->addWidget(m_editor, 1);
-  mainLayout->addLayout(testLayout);
+  mainLayout->addWidget(paramsBox);
+  mainLayout->addWidget(testRow);
   mainLayout->addLayout(buttonLayout);
 
   wireSignals();
@@ -156,6 +170,11 @@ void DataModel::DatasetTransformEditor::buildEditorWidgets()
 
   m_applyButton  = new QPushButton(tr("Apply"), this);
   m_cancelButton = new QPushButton(tr("Cancel"), this);
+
+  m_libraryButton = new QPushButton(tr("Open Lua Library"), this);
+  m_libraryButton->setToolTip(tr("Show the project's shared library for this language in the "
+                                 "Project Editor. Functions defined there can be called from this "
+                                 "transform by name."));
 }
 
 /**
@@ -169,22 +188,74 @@ QHBoxLayout* DataModel::DatasetTransformEditor::buildToolbarLayout()
   toolbarLayout->addSpacing(kToolbarSpacing);
   toolbarLayout->addWidget(new QLabel(tr("Template:"), this));
   toolbarLayout->addWidget(m_templateCombo, 1);
+  toolbarLayout->addSpacing(kToolbarSpacing);
+  toolbarLayout->addWidget(m_libraryButton);
   return toolbarLayout;
 }
 
 /**
- * @brief Builds the input/output test row used to dry-run a transform.
+ * @brief Builds the input/output test row used to dry-run a transform, as one widget so library
+ *        mode can hide it whole.
  */
-QHBoxLayout* DataModel::DatasetTransformEditor::buildTestLayout()
+QWidget* DataModel::DatasetTransformEditor::buildTestRow()
 {
-  auto* testLayout = new QHBoxLayout();
-  testLayout->addWidget(new QLabel(tr("Input:"), this));
+  m_testRow        = new QWidget(this);
+  auto* testLayout = new QHBoxLayout(m_testRow);
+  testLayout->setContentsMargins(0, 0, 0, 0);
+  testLayout->addWidget(new QLabel(tr("Input:"), m_testRow));
   testLayout->addWidget(m_testInput, 1);
   testLayout->addWidget(m_testButton);
-  testLayout->addWidget(new QLabel(tr("Output:"), this));
+  testLayout->addWidget(new QLabel(tr("Output:"), m_testRow));
   testLayout->addWidget(m_testOutput, 1);
   testLayout->addWidget(m_clearButton);
-  return testLayout;
+  return m_testRow;
+}
+
+/**
+ * @brief Builds the named-parameter table (spec 0083): one row per `params` entry the transform
+ *        reads, edited as text and typed on commit (number, true/false, else string).
+ */
+QGroupBox* DataModel::DatasetTransformEditor::buildParamsBox()
+{
+  m_paramsBox = new QGroupBox(tr("Parameters"), this);
+  m_paramsBox->setToolTip(
+    tr("Constants that belong to this dataset. The transform reads them as params.<name>."));
+  m_paramsTable = new QTableWidget(0, 2, m_paramsBox);
+  m_paramsTable->setHorizontalHeaderLabels({tr("Name"), tr("Value")});
+  m_paramsTable->horizontalHeader()->setStretchLastSection(true);
+  m_paramsTable->verticalHeader()->setVisible(false);
+  m_paramsTable->setSelectionBehavior(QAbstractItemView::SelectRows);
+  m_paramsTable->setMaximumHeight(kParamsTableHeight);
+  m_paramsTable->setToolTip(
+    tr("Numbers and true/false keep their type; any other value is a string."));
+
+  m_paramsHint = new QLabel(
+    tr("<b>No Parameters</b><br>Parameters are constants that belong to this dataset, such as a "
+       "scale factor or a sensor offset. The transform reads them as <code>params.name</code>, "
+       "so one formula in the Lua Library can serve every dataset that differs only in its "
+       "constants."),
+    m_paramsBox);
+  m_paramsHint->setWordWrap(true);
+  m_paramsHint->setTextFormat(Qt::RichText);
+  m_paramsHint->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
+
+  m_addParamButton    = new QPushButton(tr("Add Parameter"), m_paramsBox);
+  m_removeParamButton = new QPushButton(tr("Remove"), m_paramsBox);
+
+  auto* buttons = new QVBoxLayout();
+  buttons->addWidget(m_addParamButton);
+  buttons->addWidget(m_removeParamButton);
+  buttons->addStretch();
+
+  auto* column = new QVBoxLayout();
+  column->addWidget(m_paramsHint);
+  column->addWidget(m_paramsTable, 1);
+
+  auto* layout = new QHBoxLayout(m_paramsBox);
+  layout->addLayout(column, 1);
+  layout->addLayout(buttons);
+  refreshParamsHint();
+  return m_paramsBox;
 }
 
 /**
@@ -209,6 +280,11 @@ void DataModel::DatasetTransformEditor::wireSignals()
   connect(m_testButton, &QPushButton::clicked, this, &DatasetTransformEditor::onTest);
   connect(m_clearButton, &QPushButton::clicked, this, &DatasetTransformEditor::onClear);
   connect(m_testInput, &QLineEdit::returnPressed, this, &DatasetTransformEditor::onTest);
+  connect(m_addParamButton, &QPushButton::clicked, this, &DatasetTransformEditor::onAddParam);
+  connect(m_removeParamButton, &QPushButton::clicked, this, &DatasetTransformEditor::onRemoveParam);
+  connect(m_libraryButton, &QPushButton::clicked, this, [this] {
+    Q_EMIT libraryEditRequested(m_language);
+  });
   connect(m_templateCombo,
           QOverload<int>::of(&QComboBox::activated),
           this,
@@ -251,14 +327,24 @@ void DataModel::DatasetTransformEditor::installShortcuts()
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Opens the dialog pre-populated with existing transform code.
+ * @brief Opens the dialog pre-populated with existing transform code, its parameters and the
+ *        project's shared library (which the Lua validation and test runs load first).
  */
-void DataModel::DatasetTransformEditor::displayDialog(
-  const QString& datasetTitle, const QString& currentCode, int language, int groupId, int datasetId)
+void DataModel::DatasetTransformEditor::displayDialog(const QString& datasetTitle,
+                                                      const QString& currentCode,
+                                                      int language,
+                                                      int groupId,
+                                                      int datasetId,
+                                                      const QVariantMap& params,
+                                                      const QString& luaLibrary,
+                                                      const QString& jsLibrary)
 {
   m_targetGroupId   = groupId;
   m_targetDatasetId = datasetId;
+  m_libraryCode     = luaLibrary;
+  m_libraryCodeJs   = jsLibrary;
 
+  setParams(params);
   setWindowTitle(tr("Transform — %1").arg(datasetTitle));
 
   const int comboIdx = comboIndexForLanguage(language);
@@ -291,6 +377,26 @@ void DataModel::DatasetTransformEditor::displayDialog(
 QString DataModel::DatasetTransformEditor::code() const
 {
   return m_editor->toPlainText();
+}
+
+/**
+ * @brief Returns the parameter table as a typed map; blank names are skipped.
+ */
+QVariantMap DataModel::DatasetTransformEditor::params() const
+{
+  QVariantMap params;
+  const int rows = m_paramsTable->rowCount();
+  for (int row = 0; row < rows; ++row) {
+    const auto* nameItem  = m_paramsTable->item(row, 0);
+    const auto* valueItem = m_paramsTable->item(row, 1);
+    const QString name    = nameItem ? nameItem->text().trimmed() : QString();
+    if (name.isEmpty())
+      continue;
+
+    params.insert(name, parseParamValue(valueItem ? valueItem->text() : QString()));
+  }
+
+  return params;
 }
 
 /**
@@ -330,13 +436,13 @@ void DataModel::DatasetTransformEditor::onApply()
   const QString code = m_editor->toPlainText();
 
   if (code.trimmed().isEmpty() || isDefaultPlaceholder(code, m_language)) {
-    Q_EMIT transformApplied(QString(), m_language, m_targetGroupId, m_targetDatasetId);
+    Q_EMIT transformApplied(QString(), m_language, m_targetGroupId, m_targetDatasetId, params());
     QDialog::accept();
     return;
   }
 
   QString error;
-  const TransformStatus status = validateTransform(code, m_language, error);
+  const TransformStatus status = validateTransform(code, m_language, libraryFor(m_language), error);
   if (status == TransformStatus::SyntaxError) {
     Core::Prompt::showMessageBox(tr("The value transform has a syntax error and was not applied."),
                                  error,
@@ -355,7 +461,7 @@ void DataModel::DatasetTransformEditor::onApply()
     return;
   }
 
-  Q_EMIT transformApplied(code, m_language, m_targetGroupId, m_targetDatasetId);
+  Q_EMIT transformApplied(code, m_language, m_targetGroupId, m_targetDatasetId, params());
   QDialog::accept();
 }
 
@@ -432,6 +538,34 @@ void DataModel::DatasetTransformEditor::onClear()
 }
 
 /**
+ * @brief Appends an empty parameter row and starts editing its name.
+ */
+void DataModel::DatasetTransformEditor::onAddParam()
+{
+  const int row = m_paramsTable->rowCount();
+  m_paramsTable->insertRow(row);
+  m_paramsTable->setItem(row, 0, new QTableWidgetItem());
+  m_paramsTable->setItem(row, 1, new QTableWidgetItem());
+  m_paramsTable->setCurrentCell(row, 0);
+  m_paramsTable->editItem(m_paramsTable->item(row, 0));
+  refreshParamsHint();
+}
+
+/**
+ * @brief Removes the selected parameter row, or the last one when nothing is selected.
+ */
+void DataModel::DatasetTransformEditor::onRemoveParam()
+{
+  const int rows = m_paramsTable->rowCount();
+  if (rows == 0)
+    return;
+
+  const int current = m_paramsTable->currentRow();
+  m_paramsTable->removeRow(current >= 0 ? current : rows - 1);
+  refreshParamsHint();
+}
+
+/**
  * @brief Loads the selected template's code (Lua or JS) into the editor.
  */
 void DataModel::DatasetTransformEditor::onTemplateSelected(int index)
@@ -461,7 +595,8 @@ void DataModel::DatasetTransformEditor::onLanguageChanged(int index)
   if (newLang == SerialStudio::Expression) {
     QString error;
     const bool compiles =
-      validateTransform(m_editor->toPlainText(), newLang, error) == TransformStatus::Ok;
+      validateTransform(m_editor->toPlainText(), newLang, libraryFor(newLang), error)
+      == TransformStatus::Ok;
     if (!compiles)
       m_editor->setPlainText(defaultPlaceholder(newLang));
 
@@ -515,6 +650,7 @@ void DataModel::DatasetTransformEditor::onThemeChanged()
 void DataModel::DatasetTransformEditor::applyLanguage(int language)
 {
   m_language = language;
+  refreshLibraryButton();
 
   const bool scripted = language != SerialStudio::Expression;
   m_templateCombo->setEnabled(scripted);
@@ -544,6 +680,102 @@ void DataModel::DatasetTransformEditor::applyLanguage(int language)
 
   if (old_highlighter)
     old_highlighter->deleteLater();
+}
+
+/**
+ * @brief Shows the Lua library shortcut only where it applies: a Lua transform.
+ */
+void DataModel::DatasetTransformEditor::refreshLibraryButton()
+{
+  m_libraryButton->setVisible(m_language != SerialStudio::Expression);
+  m_libraryButton->setText(m_language == SerialStudio::Lua ? tr("Open Lua Library")
+                                                           : tr("Open JavaScript Library"));
+}
+
+/**
+ * @brief Returns the shared library the given transform language sees; Expression sees none.
+ */
+QString DataModel::DatasetTransformEditor::libraryFor(int language) const
+{
+  if (language == SerialStudio::Lua)
+    return m_libraryCode;
+
+  if (language == SerialStudio::JavaScript)
+    return m_libraryCodeJs;
+
+  return QString();
+}
+
+/**
+ * @brief Shows the parameter hint while the table is empty, the table once it has rows.
+ */
+void DataModel::DatasetTransformEditor::refreshParamsHint()
+{
+  const bool empty = m_paramsTable->rowCount() == 0;
+  m_paramsHint->setVisible(empty);
+  m_paramsTable->setVisible(!empty);
+}
+
+/**
+ * @brief Replaces the library the validation and test runs load first, so an edit made in the
+ *        tree's Lua Library view reaches a dialog that stayed open.
+ */
+void DataModel::DatasetTransformEditor::setLibraryCode(const QString& luaLibrary,
+                                                       const QString& jsLibrary)
+{
+  m_libraryCode   = luaLibrary;
+  m_libraryCodeJs = jsLibrary;
+}
+
+/**
+ * @brief Fills the parameter table from a dataset's map.
+ */
+void DataModel::DatasetTransformEditor::setParams(const QVariantMap& params)
+{
+  m_paramsTable->setRowCount(0);
+  for (auto it = params.constBegin(); it != params.constEnd(); ++it) {
+    const int row = m_paramsTable->rowCount();
+    m_paramsTable->insertRow(row);
+    m_paramsTable->setItem(row, 0, new QTableWidgetItem(it.key()));
+    m_paramsTable->setItem(row, 1, new QTableWidgetItem(paramValueText(it.value())));
+  }
+
+  refreshParamsHint();
+}
+
+/**
+ * @brief Types a parameter cell: true/false become booleans, numeric text a number, the rest a
+ *        string, matching what the project reader accepts.
+ */
+QVariant DataModel::DatasetTransformEditor::parseParamValue(const QString& text)
+{
+  const QString trimmed = text.trimmed();
+  if (trimmed.compare(QLatin1String("true"), Qt::CaseInsensitive) == 0)
+    return QVariant(true);
+
+  if (trimmed.compare(QLatin1String("false"), Qt::CaseInsensitive) == 0)
+    return QVariant(false);
+
+  bool numeric       = false;
+  const double value = SerialStudio::toDouble(trimmed, &numeric);
+  if (numeric && !trimmed.isEmpty())
+    return QVariant(value);
+
+  return QVariant(trimmed);
+}
+
+/**
+ * @brief Renders a typed parameter value back into cell text.
+ */
+QString DataModel::DatasetTransformEditor::paramValueText(const QVariant& value)
+{
+  if (value.typeId() == QMetaType::Bool)
+    return value.toBool() ? QStringLiteral("true") : QStringLiteral("false");
+
+  if (value.typeId() == QMetaType::QString)
+    return value.toString();
+
+  return QString::number(SerialStudio::toDouble(value), 'g', kResultPrecision);
 }
 
 /**
@@ -734,7 +966,7 @@ DataModel::Expression::NameResolver DataModel::DatasetTransformEditor::expressio
  * @brief Compiles the code and reports whether it is valid, errored, or lacks transform().
  */
 DataModel::DatasetTransformEditor::TransformStatus DataModel::DatasetTransformEditor::
-  validateTransform(const QString& code, int language, QString& error)
+  validateTransform(const QString& code, int language, const QString& libraryCode, QString& error)
 {
   error.clear();
   if (code.trimmed().isEmpty())
@@ -762,7 +994,13 @@ DataModel::DatasetTransformEditor::TransformStatus DataModel::DatasetTransformEd
     lua_State* L = session.luaState();
     DataModel::installLuaCompat(L);
     DataModel::NotificationCenter::installScriptApi(L);
-    frameBuilder.injectTableApiLua(L);
+    frameBuilder.installTableApiNamesLua(L);
+
+    if (!libraryCode.trimmed().isEmpty() && session.runLuaChunk(libraryCode, "library") != LUA_OK)
+      qWarning() << "[DatasetTransformEditor] Shared library failed:" << session.luaError();
+
+    DataModel::pushTransformParams(L, QVariantMap());
+    lua_setglobal(L, "params");
 
     if (session.runLuaChunk(code, "transform") != LUA_OK) {
       error = session.luaError();
@@ -779,7 +1017,16 @@ DataModel::DatasetTransformEditor::TransformStatus DataModel::DatasetTransformEd
     return TransformStatus::SyntaxError;
   }
 
-  DataModel::ScriptApiCall::installAll(session.jsEngine(), 0);
+  DataModel::ScriptApiCall::installAll(
+    session.jsEngine(), 0, DataModel::ScriptApiCall::TableApi::NamesOnly);
+  if (!libraryCode.trimmed().isEmpty()) {
+    const auto libraryResult = session.evaluate(libraryCode, QStringLiteral("library.js"));
+    if (libraryResult.isError())
+      qWarning() << "[DatasetTransformEditor] Shared JS library failed:"
+                 << libraryResult.toString();
+  }
+
+  (void)session.evaluate(QStringLiteral("var params = {};"), QStringLiteral("params.js"));
   auto evalResult = session.evaluate(code, QStringLiteral("transform.js"));
   if (session.timedOut()) {
     error = tr("The transform did not finish evaluating within %1 ms.").arg(session.budgetMs());
@@ -849,6 +1096,14 @@ QString DataModel::DatasetTransformEditor::testTransform(const QString& code,
     DataModel::installLuaCompat(L);
     DataModel::NotificationCenter::installScriptApi(L);
     m_frameBuilder.injectTableApiLua(L);
+    DataModel::TableApiUserLease tableUser(m_frameBuilder);
+
+    if (!m_libraryCode.trimmed().isEmpty()
+        && session.runLuaChunk(m_libraryCode, "library") != LUA_OK)
+      return tr("Error in shared library: %1").arg(session.luaError());
+
+    DataModel::pushTransformParams(L, params());
+    lua_setglobal(L, "params");
 
     if (session.runLuaChunk(code, "transform") != LUA_OK)
       return tr("Error: %1").arg(session.luaError());
@@ -872,6 +1127,16 @@ QString DataModel::DatasetTransformEditor::testTransform(const QString& code,
     return tr("Engine error");
 
   DataModel::ScriptApiCall::installAll(session.jsEngine(), 0);
+  DataModel::TableApiUserLease tableUser(m_frameBuilder);
+  (void)session.evaluate(
+    QStringLiteral("var params = %1;").arg(DataModel::transformParamsJson(params())),
+    QStringLiteral("params.js"));
+  if (!m_libraryCodeJs.trimmed().isEmpty()) {
+    const auto libraryResult = session.evaluate(m_libraryCodeJs, QStringLiteral("library.js"));
+    if (libraryResult.isError())
+      return tr("Error in shared library: %1").arg(libraryResult.toString());
+  }
+
   auto evalResult = session.evaluate(code, QStringLiteral("transform.js"));
   if (session.timedOut())
     return tr("Error: the transform did not finish within %1 ms").arg(session.budgetMs());

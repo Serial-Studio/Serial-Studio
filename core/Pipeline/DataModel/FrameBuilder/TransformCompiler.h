@@ -34,11 +34,13 @@ extern "C" {
 #include <QJSEngine>
 #include <QJSValue>
 #include <QString>
+#include <QVariantMap>
 #include <vector>
 
 #include "Core/DataModel/Frame.h"
 #include "Core/HotpathOptimization.h"
 #include "DataModel/DataTable.h"
+#include "DataModel/FrameBuilder/TransformSupport.h"
 #include "DataModel/Scripting/ExpressionTransform.h"
 #include "DataModel/Scripting/JsWatchdog.h"
 
@@ -47,12 +49,18 @@ namespace DataModel {
 // Per-call budget for one dataset transform; also the JS watchdog's interrupt period
 inline constexpr int kTransformWatchdogMs = 100;
 
+// Dataset id the shared-library compile failure is reported under (-1 already means "none")
+inline constexpr int kTransformLibraryErrorId   = -2;
+// Dataset id the shared JavaScript library failure is reported under (spec 0083 addendum)
+inline constexpr int kTransformLibraryJsErrorId = -3;
+
 /**
  * @brief One dataset's transform source, paired with the dataset it belongs to.
  */
 struct TransformEntry {
   int uniqueId;
   QString code;
+  QVariantMap params;
 };
 
 /**
@@ -131,6 +139,9 @@ public:
   [[nodiscard]] const QString& lastError() const noexcept { return m_lastTransformError; }
 
   [[nodiscard]] bool hasScriptEngines() const noexcept;
+
+  [[nodiscard]] bool referencesTableApi() const noexcept { return m_referencesTableApi; }
+
   [[nodiscard]] TransformEngine* engineFor(int sourceId, int language) noexcept;
 
   void compile();
@@ -144,16 +155,19 @@ private:
   void compileLua(TransformEngine& engine,
                   int sourceId,
                   const std::vector<TransformEntry>& entries);
+  void compileLuaLibrary(lua_State* L, const QString& code);
   void compileLuaEntry(lua_State* L, TransformEngine& engine, const TransformEntry& entry);
   void compileExpr(TransformEngine& engine,
                    int sourceId,
                    const std::vector<TransformEntry>& entries);
   void compileJs(TransformEngine& engine, int sourceId, const std::vector<TransformEntry>& entries);
+  void compileJsLibrary(TransformEngine& engine, const QString& code);
 
 private:
   const DataModel::Frame& m_frame;
   DataModel::DataTableStore& m_store;
   LuaApiInstaller m_installLuaTableApi;
+  bool m_referencesTableApi;
 
   quint64 m_transformErrors;
   int m_lastTransformDatasetUniqueId;

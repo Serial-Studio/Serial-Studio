@@ -255,15 +255,15 @@ updated: 2026-09-11
 
 ## Definition of Done
 
-- [ ] Every acceptance criterion in `spec.md` is met and checked off there (AC1, AC2, AC3
+- [x] Every acceptance criterion in `spec.md` is met and checked off there (AC1, AC2, AC3
       and AC7 by maintainer observation on a built binary; AC4, AC5, AC6 by `ctest`; AC8 by
       the static gates).
-- [ ] `python scripts/code-verify.py --check` is clean on all changed files (no new errors).
-- [ ] `qt-cpp-review` run on the C++ diff; findings addressed or noted.
-- [ ] Hotpath untouched (plan states none); no `--benchmark-hotpath` run required.
-- [ ] Relevant tests identified for the maintainer: `ctest -R "tst_file_sandbox|
+- [x] `python scripts/code-verify.py --check` is clean on all changed files (no new errors).
+- [x] `qt-cpp-review` run on the C++ diff; findings addressed or noted.
+- [x] Hotpath untouched (plan states none); no `--benchmark-hotpath` run required.
+- [x] Relevant tests identified for the maintainer: `ctest -R "tst_file_sandbox|
       tst_help_fetcher|tst_tool_schemas"`, `pytest tests/scripts/test_cpp_regressions.py`.
-- [ ] `python scripts/sanitize-commit.py` run; `search_index.json` regenerated; working tree
+- [x] `python scripts/sanitize-commit.py` run; `search_index.json` regenerated; working tree
       clean of lint debt.
-- [ ] Diff is *what was asked, and only that* — no scope creep, no foreign files touched.
-- [ ] `spec.md` status set to `done`.
+- [x] Diff is *what was asked, and only that* — no scope creep, no foreign files touched.
+- [x] `spec.md` status set to `done`.

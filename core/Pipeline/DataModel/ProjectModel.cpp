@@ -82,6 +82,7 @@ DataModel::ProjectModel::ProjectModel(Core::Bus::MessageBus& bus)
   , m_folders(*this)
   , m_workspaces(*this)
   , m_tables(*this)
+  , m_profiles(*this)
   , m_loader(*this)
   , m_sourceOps(*this)
   , m_entities(*this)
@@ -717,7 +718,9 @@ void DataModel::ProjectModel::publishStructureSnapshot(int change, int sourceId)
                                                           static_cast<int>(m_frameDetection),
                                                           change,
                                                           sourceId,
-                                                          ++m_structureGeneration);
+                                                          ++m_structureGeneration,
+                                                          m_transformLibrary,
+                                                          m_transformLibraryJs);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -746,19 +749,21 @@ void DataModel::ProjectModel::newJsonFile()
   m_passwordHash.clear();
   m_locked = false;
 
-  m_frameEndSequence         = "\\n";
-  m_checksumAlgorithm        = "";
-  m_frameStartSequence       = "$";
-  m_writerVersionAtCreation  = "";
-  m_hexadecimalDelimiters    = false;
-  m_title                    = tr("Untitled Project");
-  m_pointCount               = 100;
-  m_plotTimeRange            = 10.0;
-  m_frozen                   = false;
-  m_changeDrivenTransforms   = false;
-  m_luaFastMode              = false;
-  m_nextUniqueId             = 1;
-  m_controlScriptCode        = "";
+  m_frameEndSequence        = "\\n";
+  m_checksumAlgorithm       = "";
+  m_frameStartSequence      = "$";
+  m_writerVersionAtCreation = "";
+  m_hexadecimalDelimiters   = false;
+  m_title                   = tr("Untitled Project");
+  m_pointCount              = 100;
+  m_plotTimeRange           = 10.0;
+  m_frozen                  = false;
+  m_changeDrivenTransforms  = false;
+  m_luaFastMode             = false;
+  m_nextUniqueId            = 1;
+  m_controlScriptCode       = "";
+  m_transformLibrary.clear();
+  m_transformLibraryJs.clear();
   static auto& controlScript = DataModel::ControlScript::instance();
   controlScript.setCode(m_controlScriptCode);
   m_frameDecoder   = SerialStudio::PlainText;
@@ -843,7 +848,9 @@ void DataModel::ProjectModel::flushWorkspaceRegen()
     return;
 
   if (m_workspaces.customizeWorkspaces()) {
-    if (m_workspaces.mergeAutoWorkspaceUpdates()) {
+    const bool merged = m_workspaces.mergeAutoWorkspaceUpdates();
+    (void)m_workspaces.rebindWidgetRefs();
+    if (merged) {
       Q_EMIT editorWorkspacesChanged();
       Q_EMIT activeWorkspacesChanged();
     }
@@ -852,6 +859,7 @@ void DataModel::ProjectModel::flushWorkspaceRegen()
   }
 
   m_workspaces.regenerateAutoWorkspacesUnnotified();
+  (void)m_workspaces.rebindWidgetRefs();
   Q_EMIT editorWorkspacesChanged();
   Q_EMIT activeWorkspacesChanged();
 }
@@ -937,6 +945,40 @@ void DataModel::ProjectModel::setControlScriptCode(const QString& code)
   controlScript.setCode(code);
   setModified(true);
   Q_EMIT controlScriptChanged();
+}
+
+/**
+ * @brief Stages a new shared Lua library (spec 0083); the frame builder recompiles every transform
+ *        engine on the notify, so the change reaches running transforms without a reconnect.
+ */
+void DataModel::ProjectModel::setTransformLibraryCode(const QString& code)
+{
+  if (m_transformLibrary == code)
+    return;
+
+  const ProjectUndoScope undo_scope{
+    *this, tr("Edit Shared Library"), QStringLiteral("transform-library")};
+
+  m_transformLibrary = code;
+  setModified(true);
+  Q_EMIT transformLibraryChanged();
+}
+
+/**
+ * @brief Stages a new shared JavaScript library (spec 0083 addendum); same recompile-on-notify
+ *        contract as the Lua one.
+ */
+void DataModel::ProjectModel::setTransformLibraryJsCode(const QString& code)
+{
+  if (m_transformLibraryJs == code)
+    return;
+
+  const ProjectUndoScope undo_scope{
+    *this, tr("Edit JavaScript Library"), QStringLiteral("transform-library-js")};
+
+  m_transformLibraryJs = code;
+  setModified(true);
+  Q_EMIT transformLibraryJsChanged();
 }
 
 /**
@@ -1200,4 +1242,51 @@ void DataModel::ProjectModel::setModified(const bool modified)
 
   m_modified = modified;
   Q_EMIT modifiedChanged();
+}
+
+//--------------------------------------------------------------------------------------------------
+// Workspace profiles (spec 0083)
+//--------------------------------------------------------------------------------------------------
+
+/**
+ * @brief The profile list as QML rows: id, title, folderIds, workspaceIds.
+ */
+QVariantList DataModel::ProjectModel::workspaceProfiles() const
+{
+  QVariantList rows;
+  for (const auto& p : m_profiles.list()) {
+    QVariantList folders;
+    for (const int id : p.folderIds)
+      folders.append(id);
+
+    QVariantList workspaces;
+    for (const int id : p.workspaceIds)
+      workspaces.append(id);
+
+    QVariantMap row;
+    row[QStringLiteral("id")]           = p.profileId;
+    row[QStringLiteral("title")]        = p.title;
+    row[QStringLiteral("folderIds")]    = folders;
+    row[QStringLiteral("workspaceIds")] = workspaces;
+    rows.append(row);
+  }
+
+  return rows;
+}
+
+/**
+ * @brief Every workspace folder as a checkable option: id plus its "/"-joined path.
+ */
+QVariantList DataModel::ProjectModel::workspaceProfileFolderOptions() const
+{
+  QVariantList rows;
+  const auto& folders = m_folders.workspaceFolders();
+  for (const auto& folder : folders) {
+    QVariantMap row;
+    row[QStringLiteral("id")]    = folder.folderId;
+    row[QStringLiteral("title")] = folderDisplayPath(folders, folder.folderId);
+    rows.append(row);
+  }
+
+  return rows;
 }

@@ -124,7 +124,7 @@ void MessageBusTests::directDeliveryHandsOverThePublishedPointer()
     });
 
   const auto published = std::make_shared<const Core::Bus::ConnectionStateChanged>(
-    Core::Bus::ConnectionStateChanged{3, true, false});
+    Core::Bus::ConnectionStateChanged{3, true, false, false, 0});
   bus.publish<Core::Bus::ConnectionStateChanged>(published);
 
   QCOMPARE(deliveries, 1);
@@ -192,12 +192,12 @@ void MessageBusTests::publishStateRetainsTheLatestMessage()
   Core::Bus::MessageBus bus;
   QVERIFY(bus.latest<Core::Bus::LicenseStateChanged>() == nullptr);
 
-  bus.publishState<Core::Bus::LicenseStateChanged>(true);
+  bus.publishState<Core::Bus::LicenseStateChanged>(true, 0, false);
   const auto activated = bus.latest<Core::Bus::LicenseStateChanged>();
   QVERIFY(activated != nullptr);
   QCOMPARE(activated->activated, true);
 
-  bus.publishState<Core::Bus::LicenseStateChanged>(false);
+  bus.publishState<Core::Bus::LicenseStateChanged>(false, 0, false);
   QCOMPARE(bus.latest<Core::Bus::LicenseStateChanged>()->activated, false);
 
   bus.publish<Flag>(true);
@@ -256,11 +256,13 @@ void MessageBusTests::destroyingTheReceiverStopsDelivery()
     receiver,
     [&deliveries](const std::shared_ptr<const Core::Bus::NotificationRaised>&) { ++deliveries; });
 
-  bus.publish<Core::Bus::NotificationRaised>(1, QStringLiteral("t"), QStringLiteral("b"));
+  bus.publish<Core::Bus::NotificationRaised>(
+    1, QStringLiteral("t"), QStringLiteral("b"), QString(), QString());
   QCOMPARE(deliveries, 1);
 
   delete receiver;
-  bus.publish<Core::Bus::NotificationRaised>(1, QStringLiteral("t"), QStringLiteral("b"));
+  bus.publish<Core::Bus::NotificationRaised>(
+    1, QStringLiteral("t"), QStringLiteral("b"), QString(), QString());
   QCOMPARE(deliveries, 1);
   QVERIFY(subscription.isActive());
 }
@@ -337,7 +339,7 @@ void MessageBusTests::everyVocabularyTopicComposesByBracedInit()
   bus.publish<Core::Bus::DashboardViewStateClearRequested>(0);
   bus.publish<Core::Bus::DisconnectRequested>(0);
   bus.publish<Core::Bus::DeviceOpenAttempted>(0, true, QString());
-  bus.publish<Core::Bus::ModbusRegisterGroupsLoaded>(QJsonDocument());
+  bus.publish<Core::Bus::ModbusRegisterGroupsLoaded>(QJsonDocument(), false);
   bus.publish<Core::Bus::LoadGeneratedProjectRequested>(QJsonDocument(), true, quint64(1));
   bus.publish<Core::Bus::GeneratedProjectLoadFinished>(quint64(1), true, true);
   bus.publish<Core::Bus::Source0ConnectionSettingsChanged>(0, QJsonObject(), true, false);
@@ -349,7 +351,9 @@ void MessageBusTests::everyVocabularyTopicComposesByBracedInit()
     0,
     Core::Bus::ProjectStructureSnapshot::Content,
     -1,
-    quint64(1));
+    quint64(1),
+    QString(),
+    QString());
   bus.publish<Core::Bus::ConnectionAboutToOpen>(0);
   bus.publishState<Core::Bus::ActiveUiDriverSettings>(0, QJsonObject());
   bus.publish<Core::Bus::SourceSettingsCaptureRequested>(0, 0);

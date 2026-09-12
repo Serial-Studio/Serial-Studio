@@ -25,6 +25,7 @@
 #include <QString>
 
 #include "DataModel/FrameBuilder.h"
+#include "DataModel/FrameBuilder/TransformCompiler.h"
 #include "DataModel/PipelineModules.h"
 #include "DataModel/ProjectModel.h"
 #include "DataModel/Scripting/FrameParser.h"
@@ -133,6 +134,12 @@ static const QString kScriptJumpDataset = QStringLiteral("dataset");
  */
 [[nodiscard]] static QString scriptDatasetLabel(int uniqueId)
 {
+  if (uniqueId == DataModel::kTransformLibraryErrorId)
+    return trScriptProblem("the shared Lua library");
+
+  if (uniqueId == DataModel::kTransformLibraryJsErrorId)
+    return trScriptProblem("the shared JavaScript library");
+
   const auto& groups = scriptProjectModel().groups();
   for (const auto& group : groups) {
     for (const auto& dataset : group.datasets)

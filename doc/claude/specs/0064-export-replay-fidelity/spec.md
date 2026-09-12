@@ -14,7 +14,7 @@ author: Alex Spataru
 
 ## Problem / Motivation
 
-A production capture of the BADAQ project (109 groups, 635 datasets, three sources: one CAN/UDP
+A production capture of the field project (109 groups, 635 datasets, three sources: one CAN/UDP
 source whose 631 datasets are script-driven and table-fed, plus two 48 kHz audio sources with four
 datasets between them) records almost nothing. Of 635 datasets, exactly **four** — the audio ones —
 reach any recording sink. This is true of all three sinks simultaneously, measured on the files
@@ -41,7 +41,7 @@ load and run, but the dashboard stays empty because the recordings themselves ar
 the four dense-stream datasets.
 
 The generated session report shows the same hole from a different angle. It lists every dataset the
-recording declares — all 635 — but plots only the four dense-stream ones. A group such as APS500
+recording declares — all 635 — but plots only the four dense-stream ones. A group such as an engine group
 appears in the report with no plot data behind it, because the report is a downstream reader of the
 same recorded samples that were never written. Anyone reading the report sees a complete-looking
 inventory of channels and an almost-empty set of charts, which is worse than an obviously truncated
@@ -127,7 +127,7 @@ run. Every symptom is a data-fidelity failure, so this spec treats them as one p
 - [x] **AC3** (R5) — A ctest case writes an MDF4 recording of a multi-source project, reads it back
       through the replay channel mapping, and asserts each channel's values land on the dataset they
       were recorded from. A case with a project whose dataset ordering differs from its identifier
-      ordering is included, because that is where the BADAQ project diverges.
+      ordering is included, because that is where the field project diverges.
 - [x] **AC4** (R6) — A ctest or pytest case records a session in the current capture format,
       reopens it, and asserts the recording contains blocks for every dataset and that replay
       restores them. Recording only the dense-stream datasets fails the check.
@@ -143,9 +143,9 @@ run. Every symptom is a data-fidelity failure, so this spec treats them as one p
       script/table-fed and dense-stream datasets, and asserts that every dataset the report lists
       also carries plot data and summary statistics. A report that lists a dataset with no samples
       behind it fails the check.
-- [x] **AC9** — Maintainer check on the real BADAQ project: record a short capture, then replay the
+- [x] **AC9** — Maintainer check on the real field project: record a short capture, then replay the
       CSV, the MDF4, and the session recording, and generate the session report. Each replay opens
-      without a time-column prompt and shows a populated dashboard; the report plots the APS500 and
+      without a time-column prompt and shows a populated dashboard; the report plots the engine and
       CAN groups, not only the vibration channels.
 - [x] **AC10** — `--benchmark-hotpath` still clears every tier at its default rate on the
       PGO-optimized binary. No gate regresses.
@@ -180,9 +180,9 @@ run. Every symptom is a data-fidelity failure, so this spec treats them as one p
   `f4e26ef04` and left two candidates: the cached "any async sink" flag read on the publish path,
   and the column binding used for a republished frame. This must be confirmed against a running app
   before `/ss-plan` commits to a fix, per the repo's ground-truth-over-on-paper-reasoning rule.
-  **Resolution owner: maintainer runs the app with the BADAQ project so the drop point can be
+  **Resolution owner: maintainer runs the app with the field project so the drop point can be
   instrumented directly.**
-- Recordings already on disk (the BADAQ CSV, MDF4, and session files) contain only four datasets and
+- Recordings already on disk (the field-project CSV, MDF4, and session files) contain only four datasets and
   cannot be repaired by this change. Should the spec require any user-visible signal when a
   recording is opened that contains structure for sources with no samples — a warning on open —
   or is silent replay of a sparse recording acceptable? **Recommendation: out of scope; a warning

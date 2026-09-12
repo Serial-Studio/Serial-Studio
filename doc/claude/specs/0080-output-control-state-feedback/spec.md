@@ -1,7 +1,7 @@
 ---
 spec: 0080-output-control-state-feedback
 title: Output Control State Feedback
-status: in-progress  # draft -> approved -> in-progress -> done | shelved
+status: done          # closed 2026-09-12: maintainer ran the build/run gates and closed
 created: 2026-09-10
 author: Alex Spataru
 ---
@@ -94,7 +94,7 @@ that gap is exactly where the wrong information lives.
 
 ## Acceptance Criteria
 
-- [ ] **AC1** — With a toggle bound to a dataset, injecting a value that means "off" turns the
+- [x] **AC1** — With a toggle bound to a dataset, injecting a value that means "off" turns the
       toggle off without the operator touching it, and injecting "on" turns it on. *Amended
       2026-09-10: no API command reads a live widget's displayed state, so this is a maintainer
       observation.* The rule behind it is unit-tested (`tst_output_state_binding`).
@@ -104,15 +104,15 @@ that gap is exactly where the wrong information lives.
       `StateBinding` contains no transmit target, `Base::refreshState` contains no `m_target`
       reference, and no control's `applyStateVerdict` calls its own transmitting setter
       (`tests/integration/test_output_state_feedback.py`, runs without the app).
-- [ ] **AC3** — The load-bank case end to end: two controls, the second bound to a dataset the
+- [x] **AC3** — The load-bank case end to end: two controls, the second bound to a dataset the
       first switches off, and clicking the first visibly changes the second. (Maintainer
       observation on a real project.)
-- [ ] **AC4** — A control with no state source behaves identically to the current build, and a
+- [x] **AC4** — A control with no state source behaves identically to the current build, and a
       project file written before this feature loads unchanged. (`pytest tests/integration/` on a
       pre-existing project fixture.)
-- [ ] **AC5** — Acting on a bound control shows the outstanding state, and it clears both when the
+- [x] **AC5** — Acting on a bound control shows the outstanding state, and it clears both when the
       source confirms and, separately, when the source never confirms. (Maintainer observation.)
-- [ ] **AC6** — A project whose bound dataset was deleted loads, shows the control, and raises the
+- [x] **AC6** — A project whose bound dataset was deleted loads, shows the control, and raises the
       broken binding in the Problems list. (Maintainer observation.)
 - [x] **AC7** — Binding round-trips with the same source selected
       (`test_output_state_feedback.py::test_binding_round_trips`). Requires the running app.

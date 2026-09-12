@@ -32,7 +32,9 @@
 #include "DataModel/NotificationCenter.h"
 #include "DataModel/Scripting/DashboardApi.h"
 #include "DataModel/Scripting/DeviceWriteApi.h"
+#include "DataModel/Scripting/JsCellCollector.h"
 #include "DataModel/Scripting/ScriptApiCall.h"
+#include "DataModel/Scripting/ScriptCells.h"
 #include "DataModel/Scripting/ScriptFrameShaping.h"
 
 //--------------------------------------------------------------------------------------------------
@@ -198,13 +200,15 @@ static QList<QStringList> convertJsResult(const QJSValue& jsResult)
 DataModel::JsScriptEngine::JsScriptEngine()
   : m_watchdog(&m_engine, kRuntimeWatchdogMs, QStringLiteral("JsScriptEngine"))
   , m_disabled(false)
+  , m_referencesTableApi(false)
   , m_sourceId(0)
   , m_consecutiveTimeouts(0)
   , m_errorCount(0)
 {
   m_engine.installExtensions(QJSEngine::ConsoleExtension | QJSEngine::GarbageCollectionExtension);
 
-  DataModel::ScriptApiCall::installAll(&m_engine, m_sourceId);
+  DataModel::ScriptApiCall::installAll(
+    &m_engine, m_sourceId, DataModel::ScriptApiCall::TableApi::NamesOnly);
   DataModel::ScriptApiCall::bindSourceIdJS(&m_engine, &m_sourceId);
 }
 
@@ -349,28 +353,75 @@ QList<QStringList> DataModel::JsScriptEngine::parseString(const QString& frame)
 {
   SS_ASSERT(!frame.isEmpty(), return {});
 
-  if (!m_parseFunction.isCallable() || m_disabled)
+  QJSValue jsResult;
+  if (!runParse(frame, jsResult))
     return {};
+
+  return convertJsResult(jsResult);
+}
+
+/**
+ * @brief Runs parse() over @p frame under the watchdog; false (after logging) on a timeout, a JS
+ *        error, or an engine that is not loaded.
+ */
+bool DataModel::JsScriptEngine::runParse(const QString& frame, QJSValue& result)
+{
+  SS_ASSERT(!frame.isEmpty(), return false);
+
+  if (!m_parseFunction.isCallable() || m_disabled)
+    return false;
 
   QJSValueList args;
   args << frame;
-  const auto jsResult = guardedCall(args);
+  result = guardedCall(args);
 
   if (m_watchdog.lastCallTimedOut()) [[unlikely]] {
     qWarning() << "[JsScriptEngine] parse() timed out after" << kRuntimeWatchdogMs << "ms";
     (void)noteTimeoutAndCheckDisabled(m_sourceId);
-    return {};
+    return false;
   }
 
-  if (jsResult.isError()) [[unlikely]] {
-    const auto message = jsResult.property("message").toString();
+  if (result.isError()) [[unlikely]] {
+    const auto message = result.property("message").toString();
     qWarning() << "[JsScriptEngine] JS error:" << message;
     noteError(message);
-    return {};
+    return false;
   }
 
   resetTimeoutCounter();
-  return convertJsResult(jsResult);
+  return true;
+}
+
+/**
+ * @brief Cell-lane parse (spec 0086): one script run, then the collector reads the array as typed
+ *        cells; a non-array or mixed result converts to the list rows instead, never re-running.
+ */
+bool DataModel::JsScriptEngine::parseUtf8Cells(const QByteArray& frame,
+                                               ScriptCellRows& rows,
+                                               QList<QStringList>& fallback)
+{
+  SS_ASSERT(!frame.isEmpty(), return false);
+
+  fallback.clear();
+  QJSValue jsResult;
+  if (!runParse(QString::fromUtf8(frame), jsResult)) {
+    rows.clear();
+    return true;
+  }
+
+  if (JsCellCollector::collect(jsResult, rows, ScriptCellRows::kMaxCellsPerResult))
+    return true;
+
+  fallback = convertJsResult(jsResult);
+  return false;
+}
+
+/**
+ * @brief Whether the loaded script names a table-API helper (set at load, spec 0086).
+ */
+bool DataModel::JsScriptEngine::referencesTableApi() const noexcept
+{
+  return m_referencesTableApi;
 }
 
 /**
@@ -583,12 +634,15 @@ bool DataModel::JsScriptEngine::loadScript(const QString& script,
   SS_ASSERT(sourceId >= 0, return false);
   SS_ASSERT(!script.isEmpty(), return false);
 
-  QJSValue prevParseFn  = m_parseFunction;
-  QJSValue prevHexToArr = m_hexToArray;
+  QJSValue prevParseFn      = m_parseFunction;
+  QJSValue prevHexToArr     = m_hexToArray;
+  const bool prevReferences = m_referencesTableApi;
+  m_referencesTableApi      = DataModel::ScriptApiCall::referencesTableApi(script);
 
   auto restorePrevious = [&]() {
-    m_parseFunction = prevParseFn;
-    m_hexToArray    = prevHexToArr;
+    m_parseFunction      = prevParseFn;
+    m_hexToArray         = prevHexToArr;
+    m_referencesTableApi = prevReferences;
   };
 
   if (!validateScriptSyntax(script, sourceId, showMessageBoxes)) {

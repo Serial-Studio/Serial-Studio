@@ -676,3 +676,107 @@ def test_add_group_dataset_action_together(api_client, clean_state):
     assert st["groupCount"] >= 1
     assert st["datasetCount"] >= 2
     assert st.get("actionCount", 0) >= 3
+
+
+# ---------------------------------------------------------------------------
+# Workspace profiles (spec 0083)
+# ---------------------------------------------------------------------------
+
+
+def _profile_project(api_client) -> tuple[int, int, int, int]:
+    """Two customised workspaces filed in two folders; returns (folder A, folder B, ws A, ws B).
+
+    Built as a document: workspace folders have no API of their own, so the folders and the
+    workspaces are declared in the JSON the same way the Project Editor saves them.
+    """
+    api_client.create_new_project()
+    time.sleep(0.2)
+    gid = api_client.add_group("G", widget_type=0)
+    api_client.add_dataset(gid, options=1)
+    api_client.set_operation_mode("project")
+    config = api_client.command("project.exportJson")["config"]
+    group_uid = config["groups"][0]["uniqueId"]
+
+    folder_a, folder_b, ws_a, ws_b = 1, 2, 5000, 5001
+    config["customizeWorkspaces"] = True
+    config["workspaceFolders"] = [
+        {"folderId": folder_a, "title": "A"},
+        {"folderId": folder_b, "title": "B"},
+    ]
+    config["workspaces"] = [
+        {
+            "workspaceId": ws_a,
+            "title": "Engine A",
+            "parentFolderId": folder_a,
+            "widgetRefs": [{"widgetType": 1, "groupId": group_uid, "relativeIndex": 0}],
+        },
+        {
+            "workspaceId": ws_b,
+            "title": "Engine B",
+            "parentFolderId": folder_b,
+            "widgetRefs": [{"widgetType": 1, "groupId": group_uid, "relativeIndex": 0}],
+        },
+    ]
+    api_client.command("project.loadJson", {"config": config})
+    time.sleep(0.3)
+    return folder_a, folder_b, ws_a, ws_b
+
+
+def _visible_titles(api_client) -> set:
+    return {
+        ws["title"] for ws in api_client.command("project.workspace.list")["workspaces"]
+    }
+
+
+def test_workspace_profile_selects_a_folder_subset(api_client, clean_state):
+    """Selecting a profile hides every user workspace outside its folders; -1 shows all again."""
+    folder_a, _folder_b, _ws_a, _ws_b = _profile_project(api_client)
+
+    profile = api_client.command(
+        "project.workspace.profile.add", {"title": "Profile A"}
+    )["profileId"]
+    api_client.command(
+        "project.workspace.profile.update",
+        {"profileId": profile, "folderIds": [folder_a]},
+    )
+
+    listed = api_client.command("project.workspace.profile.list")
+    assert [p["title"] for p in listed["profiles"]] == ["Profile A"]
+    assert listed["activeProfile"] == -1
+    assert {"Engine A", "Engine B"} <= _visible_titles(api_client)
+
+    api_client.command("project.workspace.profile.select", {"title": "Profile A"})
+    visible = _visible_titles(api_client)
+    assert "Engine A" in visible
+    assert "Engine B" not in visible
+
+    api_client.command("project.workspace.profile.select", {"profileId": -1})
+    assert {"Engine A", "Engine B"} <= _visible_titles(api_client)
+
+
+def test_workspace_profiles_persist_through_export_and_load(api_client, clean_state):
+    """Profiles round-trip through export/load and can be removed again."""
+    folder_a, folder_b, _ws_a, _ws_b = _profile_project(api_client)
+    profile = api_client.command("project.workspace.profile.add", {"title": "Both"})[
+        "profileId"
+    ]
+    api_client.command(
+        "project.workspace.profile.update",
+        {"profileId": profile, "folderIds": [folder_a, folder_b]},
+    )
+
+    config = api_client.command("project.exportJson")["config"]
+    assert config["workspaceProfiles"][0]["folderIds"] == [folder_a, folder_b]
+
+    api_client.create_new_project()
+    time.sleep(0.2)
+    api_client.command("project.loadJson", {"config": config})
+    time.sleep(0.3)
+    listed = api_client.command("project.workspace.profile.list")["profiles"]
+    assert listed[0]["title"] == "Both"
+    assert listed[0]["folderIds"] == [folder_a, folder_b]
+
+    api_client.command(
+        "project.workspace.profile.remove", {"profileId": listed[0]["profileId"]}
+    )
+    assert api_client.command("project.workspace.profile.list")["profiles"] == []

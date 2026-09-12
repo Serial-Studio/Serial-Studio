@@ -100,7 +100,7 @@ static constexpr auto kWrongTierCert =
 
   int fails  = 0;
   fails     += offlineExpect("good certificate accepted",
-                         statusIs(good, machine, kTestNowSecs, Licensing::CertStatus::Valid));
+                             statusIs(good, machine, kTestNowSecs, Licensing::CertStatus::Valid));
 
   auto decoded  = QByteArray::fromBase64(good);
   decoded[3]    = static_cast<char>(decoded[3] ^ 0x01);

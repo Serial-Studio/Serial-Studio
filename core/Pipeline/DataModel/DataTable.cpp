@@ -25,6 +25,7 @@
 #include <QDebug>
 #include <QThread>
 
+#include "Core/DataModel/Frame.h"
 #include "Core/IO/IMqttPublisher.h"
 #include "Core/SerialStudio.h"
 #include "Core/SSAssert.h"
@@ -513,53 +514,86 @@ bool DataModel::DataTableStore::setByHandle(qint64 handle, const RegisterValue& 
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Writes raw (pre-transform) values for a dataset; an identical value is a no-op that
- *        leaves the slot version untouched, matching the computed-register write paths.
+ * @brief Raw write by dataset id: one slot lookup, then the slot-addressed write.
  */
 void DataModel::DataTableStore::setDatasetRaw(int uniqueId,
                                               double numeric,
                                               const QString& str,
                                               bool isNum)
 {
-  SS_ASSERT(m_initialized, return);
-
-  const auto it = m_datasetIndex.constFind(uniqueId);
-  if (it == m_datasetIndex.constEnd()) [[unlikely]]
-    return;
-
-  auto& rv = m_storage[static_cast<size_t>(it->first)];
-  if (rv.isNumeric == isNum && (isNum ? rv.numericValue == numeric : rv.stringValue == str))
-    return;
-
-  rv.numericValue                           = numeric;
-  rv.stringValue                            = str;
-  rv.isNumeric                              = isNum;
-  m_version[static_cast<size_t>(it->first)] = ++m_writeClock;
+  setDatasetRawAt(datasetSlots(uniqueId).first, numeric, str, isNum);
 }
 
 /**
- * @brief Writes final (post-transform) values for a dataset; an identical value is a no-op that
- *        leaves the slot version untouched, matching the computed-register write paths.
+ * @brief Final write by dataset id: one slot lookup, then the slot-addressed write.
  */
 void DataModel::DataTableStore::setDatasetFinal(int uniqueId,
                                                 double numeric,
                                                 const QString& str,
                                                 bool isNum)
 {
-  SS_ASSERT(m_initialized, return);
+  setDatasetFinalAt(datasetSlots(uniqueId).second, numeric, str, isNum);
+}
+
+/**
+ * @brief The (raw, final) storage slots of a dataset, {-1, -1} when it is not in the store: one
+ *        lookup per dataset per frame instead of one per write (spec 0086).
+ */
+std::pair<int, int> DataModel::DataTableStore::datasetSlots(int uniqueId) const
+{
+  static constexpr std::pair<int, int> kNoSlots{-1, -1};
+  SS_ASSERT(m_initialized, return kNoSlots);
 
   const auto it = m_datasetIndex.constFind(uniqueId);
   if (it == m_datasetIndex.constEnd()) [[unlikely]]
+    return kNoSlots;
+
+  return *it;
+}
+
+/**
+ * @brief Slot-addressed raw write: an identical value is a no-op (the change-driven clock depends
+ *        on that), and the string is copied in place so the producer's buffer is never shared.
+ */
+void DataModel::DataTableStore::setDatasetRawAt(int slot,
+                                                double numeric,
+                                                const QString& str,
+                                                bool isNum)
+{
+  SS_ASSERT(m_initialized, return);
+  if (slot < 0 || slot >= static_cast<int>(m_storage.size())) [[unlikely]]
     return;
 
-  auto& rv = m_storage[static_cast<size_t>(it->second)];
+  auto& rv = m_storage[static_cast<size_t>(slot)];
   if (rv.isNumeric == isNum && (isNum ? rv.numericValue == numeric : rv.stringValue == str))
     return;
 
-  rv.numericValue                            = numeric;
-  rv.stringValue                             = str;
-  rv.isNumeric                               = isNum;
-  m_version[static_cast<size_t>(it->second)] = ++m_writeClock;
+  rv.numericValue = numeric;
+  assign_string_in_place(rv.stringValue, str);
+  rv.isNumeric                         = isNum;
+  m_version[static_cast<size_t>(slot)] = ++m_writeClock;
+}
+
+/**
+ * @brief Slot-addressed final write; same no-op and in-place rules as the raw write.
+ */
+void DataModel::DataTableStore::setDatasetFinalAt(int slot,
+                                                  double numeric,
+                                                  const QString& str,
+                                                  bool isNum)
+{
+  SS_ASSERT(m_initialized, return);
+  if (slot < 0 || slot >= static_cast<int>(m_storage.size())) [[unlikely]]
+    return;
+
+  auto& rv = m_storage[static_cast<size_t>(slot)];
+  if (rv.isNumeric == isNum && (isNum ? rv.numericValue == numeric : rv.stringValue == str))
+    return;
+
+  rv.numericValue = numeric;
+  assign_string_in_place(rv.stringValue, str);
+  rv.isNumeric                         = isNum;
+  m_version[static_cast<size_t>(slot)] = ++m_writeClock;
 }
 
 /**

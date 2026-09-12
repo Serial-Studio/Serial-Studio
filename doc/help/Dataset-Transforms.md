@@ -270,6 +270,42 @@ Persistent state (both top-level Lua/JS upvalues *and* Computed table variables)
 
 So filters and accumulators start from scratch on each new connection session, which is usually what you want. Within a connection session, Computed variables and transform upvalues hold their values indefinitely; they aren't wiped between frames.
 
+## Shared library and parameters
+
+A large project repeats the same formula in many datasets: forty RTD channels that each carry a copy of the same conversion, differing only in three constants. Two project-level features remove the copies.
+
+### The shared libraries
+
+The project can hold one Lua chunk that every Lua transform of the project can call, and one JavaScript chunk that every JavaScript transform can call. Both live under **Project Scripts** at the top of the Project Editor tree, next to the Control Loop, as **Lua Library** and **JavaScript Library**; a transform editor also has an **Open Lua Library** / **Open JavaScript Library** button that jumps to the one its language uses. The API exposes them as well (`project.transformLibrary.get`, `project.transformLibrary.set`, `project.transformLibrary.dryRun`, each with an optional `language` of `lua` or `js`).
+
+```lua
+-- Shared library
+function rtd(raw, p)
+  return (raw * p.scale + p.offset) / p.r0
+end
+```
+
+The chunk runs once, into the global table of each source's transform state, before the dataset transforms compile. Its top-level functions are visible from every Lua transform through the normal global lookup; a transform's own `local` values still stay private to that transform. Because the library is evaluated at compile time, calling one of its functions costs the same as calling a local helper.
+
+The JavaScript library works the same way: it is evaluated once into the global object of each source's transform engine, so its top-level functions are visible from every JavaScript transform closure of that source. Each library is seen only by transforms of its own language; Expression transforms have no functions to call.
+
+If the library fails to compile or run, the transforms still compile without it: a dataset that calls a missing function falls back to its raw value and the failure appears in the Problem Center under "the shared Lua library" or "the shared JavaScript library". Fix the library and the engines recompile on Apply, without reconnecting.
+
+### Dataset parameters
+
+Each dataset can carry named parameters that its transform reads as `params`. Add them in the **Parameters** table of the transform dialog, one name and value per row, or through the API (`project.dataset.update {transformParams: {...}}`). Values are typed: numeric text becomes a number, `true` and `false` become booleans, anything else stays a string.
+
+```lua
+-- Dataset transform: the same three lines on every RTD channel
+function transform(value)
+  return rtd(value, params)
+end
+```
+
+With `transformParams` set to `{"scale": 0.1, "offset": -40, "r0": 100}` on one dataset and `{"scale": 0.1, "offset": -40, "r0": 1000}` on the next, both channels share one formula and differ only in their table rows.
+
+`params` is available in Lua and JavaScript. In Lua it is a table in the transform's environment (`params.r0`); in JavaScript it is the object passed to the transform's closure (`params.r0`). Both are fixed at compile time: editing a parameter recompiles the transform. Expression transforms do not read `params`; use a table variable there instead.
+
 ## Table API
 
 Lua and JavaScript transforms have four built-in functions for reading and writing the project's shared tables. An Expression transform reads variables with `table(name, variable)` instead, and cannot write. Tables are covered in full in [Variables](Data-Tables.md). This section documents the API surface from the transform's point of view.
@@ -525,7 +561,8 @@ Full reference, including argument types and longer examples (GPS fix reset, mod
    - **Language selector.** Lua, JavaScript, or Expression. Defaults to the source's frame parser language, but each dataset can pick its own.
    - **Template dropdown.** 34 ready-made transforms for common operations. Disabled for Expression.
    - **Code editor.** Syntax-highlighted, with auto-completion.
-   - **Test area.** Enter a raw value, click Test, see the transformed output.
+   - **Parameters table.** Named values the transform reads as `params.<name>`; see [Dataset parameters](#dataset-parameters).
+   - **Test area.** Enter a raw value, click Test, see the transformed output. The test loads the shared library and the parameter table first, so a transform that calls a library function tests like it runs.
 4. Write or pick a `transform(value)` function.
 5. Click **Apply** to save the transform to the dataset.
 

@@ -139,6 +139,12 @@ void DataModel::ProjectPersistence::serializeDocumentScalars(QJsonObject& json) 
 
   if (!m_model.m_controlScriptCode.isEmpty())
     json.insert(Keys::ControlScriptCode, m_model.m_controlScriptCode);
+
+  if (!m_model.m_transformLibrary.isEmpty())
+    json.insert(Keys::TransformLibrary, m_model.m_transformLibrary);
+
+  if (!m_model.m_transformLibraryJs.isEmpty())
+    json.insert(Keys::TransformLibraryJs, m_model.m_transformLibraryJs);
 }
 
 /**
@@ -191,6 +197,13 @@ void DataModel::ProjectPersistence::serializeWorkspacesAndTables(QJsonObject& js
 
     if (!foldersArray.isEmpty())
       json.insert(Keys::WorkspaceFolders, foldersArray);
+
+    QJsonArray profilesArray;
+    for (const auto& profile : std::as_const(m_model.m_profiles.list()))
+      profilesArray.append(DataModel::serialize(profile));
+
+    if (!profilesArray.isEmpty())
+      json.insert(Keys::WorkspaceProfiles, profilesArray);
   }
 
   const auto& hiddenGroupIds = m_model.m_workspaces.hiddenGroupIds();
@@ -432,6 +445,7 @@ bool DataModel::ProjectPersistence::writeProjectFile(const QString& path)
   SS_ASSERT(!path.isEmpty(), return false);
 
   m_model.flushWorkspaceRegen();
+  (void)m_model.m_workspaces.rebindWidgetRefs();
 
   QSaveFile file(path);
   if (!file.open(QFile::WriteOnly)) {

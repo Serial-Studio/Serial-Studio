@@ -44,7 +44,12 @@ include_guard(GLOBAL)
 #                                 paired with --gc-sections (-dead_strip on macOS), and -flto=auto
 #                                 unless disabled. -fno-semantic-interposition on GCC/IntelLLVM only.
 #                                 macOS is the exception: it keeps the frame pointer (the Apple arm64
-#                                 ABI walks x29 chains).
+#                                 ABI walks x29 chains). Every branch also emits line-table debug
+#                                 info (-gline-tables-only on Clang flavours, -g1 on GCC): names,
+#                                 lines and inlined-frame records for profilers and symbolicated
+#                                 crash stacks, never a codegen change. The commercial hardening
+#                                 block in app/CMakeLists.txt splits it out of the shipped binary
+#                                 (spec 0084).
 #
 # Both Windows branches first strip CMake's injected /Ob2 (the *_RELEASE* flags) and /W3 (base
 # flags) so our inlining and per-target /W4 win without a flood of D9025 "overriding" diagnostics.
@@ -109,6 +114,7 @@ if(PRODUCTION_OPTIMIZATION)
          -fno-unsafe-math-optimizations
          -ffunction-sections
          -fdata-sections
+         -gline-tables-only
       )
       if(NOT DISABLE_LTO)
          add_compile_options(-flto=auto)
@@ -132,6 +138,7 @@ if(PRODUCTION_OPTIMIZATION)
          -fno-semantic-interposition
          -ffunction-sections
          -fdata-sections
+         -g1
       )
       if(NOT DISABLE_LTO)
          add_compile_options(-flto=auto)
@@ -257,6 +264,7 @@ if(PRODUCTION_OPTIMIZATION)
          -fno-unsafe-math-optimizations
          -ffunction-sections
          -fdata-sections
+         -gline-tables-only
       )
       if(NOT DISABLE_LTO)
          add_compile_options(
@@ -288,6 +296,7 @@ if(PRODUCTION_OPTIMIZATION)
          -fno-semantic-interposition
          -ffunction-sections
          -fdata-sections
+         -gline-tables-only
       )
       if(NOT DISABLE_LTO)
          add_compile_options(-flto=auto)
@@ -311,7 +320,9 @@ if(PRODUCTION_OPTIMIZATION)
          -fdata-sections
       )
       if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
-         add_compile_options(-fno-semantic-interposition)
+         add_compile_options(-fno-semantic-interposition -g1)
+      else()
+         add_compile_options(-gline-tables-only)
       endif()
       # Clang parity with the clang-cl/AppleClang branches: hidden visibility plus
       # -fwhole-program-vtables devirtualizes app-internal interfaces under LTO (safe: single

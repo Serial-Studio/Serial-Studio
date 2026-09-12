@@ -148,6 +148,7 @@ The cleanup treats macOS `.app` bundles as directories (recursive remove) and Wi
 - **Pair it with a project lock.** A locked `.ssproj` plus a runtime-mode deployment limits the editor surface available at the workstation. See [Project Lock](Project-Lock.md).
 - **Pre-flight your exports.** Toggle the recorders on in the Logging tab so files start collecting the moment the device connects.
 - **Use full-screen on dedicated displays.** Combine `--fullscreen` with the OS's autostart hook to bring up the dashboard on boot.
+- **One project, several benches.** When one `.ssproj` serves several machine variants, declare a [workspace profile](Project-Editor.md#workspace-profiles) per variant and start each bench with `--profile <name>`, so the operator only sees that variant's workspaces and you keep a single project file.
 - **Linux launcher integration.** Save the `.desktop` file to `~/.local/share/applications/` to make it appear in GNOME/KDE/etc. application menus. Most desktop environments pick up new entries automatically; some need an `update-desktop-database` run.
 - **Windows icon caching.** If a deployment keeps showing the previous icon after you regenerate it, that's the Windows icon cache — sign out and back in, or rebuild it with `ie4uinit.exe -show`.
 - **macOS Gatekeeper.** First launch of an unsigned `.app` deployment may prompt for confirmation. Right-click → Open works around it. Signed/notarized Serial Studio installs don't carry the warning over to their generated deployments because the launcher just `exec`s the original signed binary.

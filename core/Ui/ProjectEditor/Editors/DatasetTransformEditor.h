@@ -25,11 +25,15 @@
 #include <QComboBox>
 #include <QDialog>
 #include <QGraphicsOpacityEffect>
+#include <QGroupBox>
 #include <QLabel>
 #include <QLineEdit>
 #include <QPushButton>
 #include <QSyntaxStyle>
+#include <QTableWidget>
+#include <QVariantMap>
 #include <QVBoxLayout>
+#include <QWidget>
 
 #include "DataModel/Scripting/ExpressionTransform.h"
 
@@ -44,7 +48,8 @@ namespace DataModel {
 class FrameBuilder;
 
 /**
- * @brief Dialog for editing per-dataset value transform scripts (Lua or JS).
+ * @brief Dialog for editing per-dataset value transform scripts (Lua, JS or Expression) with their
+ *        named parameters (spec 0083); the project's Lua library is edited from the tree.
  */
 class DatasetTransformEditor : public QDialog {
   Q_OBJECT
@@ -54,18 +59,25 @@ public:
 
   [[nodiscard]] QString code() const;
   [[nodiscard]] int language() const;
+  [[nodiscard]] QVariantMap params() const;
   [[nodiscard]] int targetGroupId() const noexcept;
   [[nodiscard]] int targetDatasetId() const noexcept;
 
 signals:
-  void transformApplied(const QString& code, int language, int groupId, int datasetId);
+  void transformApplied(
+    const QString& code, int language, int groupId, int datasetId, const QVariantMap& params);
+  void libraryEditRequested(int language);
 
 public slots:
   void displayDialog(const QString& datasetTitle,
                      const QString& currentCode,
                      int language,
                      int groupId,
-                     int datasetId);
+                     int datasetId,
+                     const QVariantMap& params,
+                     const QString& luaLibrary,
+                     const QString& jsLibrary);
+  void setLibraryCode(const QString& luaLibrary, const QString& jsLibrary);
 
 private slots:
   void onApply();
@@ -73,6 +85,8 @@ private slots:
   void onClear();
   void onFormat();
   void onFormatLine();
+  void onAddParam();
+  void onRemoveParam();
   void buildTemplates();
   void onThemeChanged();
   void applyLanguage(int language);
@@ -98,11 +112,19 @@ private:
     DataModel::Expression::SlotTable& table);
   [[nodiscard]] static TransformStatus validateTransform(const QString& code,
                                                          int language,
+                                                         const QString& libraryCode,
                                                          QString& error);
+  [[nodiscard]] static QVariant parseParamValue(const QString& text);
+  [[nodiscard]] static QString paramValueText(const QVariant& value);
 
+  void setParams(const QVariantMap& params);
+  void refreshParamsHint();
+  void refreshLibraryButton();
+  [[nodiscard]] QString libraryFor(int language) const;
   void buildEditorWidgets();
   [[nodiscard]] QHBoxLayout* buildToolbarLayout();
-  [[nodiscard]] QHBoxLayout* buildTestLayout();
+  [[nodiscard]] QWidget* buildTestRow();
+  [[nodiscard]] QGroupBox* buildParamsBox();
   [[nodiscard]] QHBoxLayout* buildButtonLayout();
   void wireSignals();
   void installShortcuts();
@@ -111,6 +133,8 @@ private:
   int m_language;
   int m_targetGroupId;
   int m_targetDatasetId;
+  QString m_libraryCode;
+  QString m_libraryCodeJs;
 
   QSyntaxStyle m_style;
   QCodeEditor* m_editor;
@@ -126,6 +150,14 @@ private:
   QPushButton* m_applyButton;
   QPushButton* m_cancelButton;
   QPushButton* m_clearButton;
+  QPushButton* m_libraryButton;
+
+  QWidget* m_testRow;
+  QGroupBox* m_paramsBox;
+  QLabel* m_paramsHint;
+  QTableWidget* m_paramsTable;
+  QPushButton* m_addParamButton;
+  QPushButton* m_removeParamButton;
 
   struct Template {
     QString file;

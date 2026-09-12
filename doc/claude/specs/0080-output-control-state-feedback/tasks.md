@@ -214,18 +214,18 @@ updated: 2026-09-10
 
 ## Definition of Done
 
-- [ ] Every acceptance criterion in `spec.md` is met and checked off there.
-- [ ] `python scripts/code-verify.py --check` clean on all changed files (no new errors, no new
+- [x] Every acceptance criterion in `spec.md` is met and checked off there.
+- [x] `python scripts/code-verify.py --check` clean on all changed files (no new errors, no new
       advisories in new code).
-- [ ] `python scripts/code-verify.py --singleton-census --check` has not grown.
-- [ ] `python scripts/code-verify.py --tu-census --check` has not grown beyond the pre-existing
+- [x] `python scripts/code-verify.py --singleton-census --check` has not grown.
+- [x] `python scripts/code-verify.py --tu-census --check` has not grown beyond the pre-existing
       `Modbus.cpp` delta already present at HEAD.
-- [ ] `python scripts/layer-verify.py` clean.
-- [ ] `qt-cpp-review` run on the C++ diff; findings addressed or noted. It earned its place on
+- [x] `python scripts/layer-verify.py` clean.
+- [x] `qt-cpp-review` run on the C++ diff; findings addressed or noted. It earned its place on
       spec 0079, where it found the safety property unmet and the hotpath answer wrong.
-- [ ] Hotpath: no per-frame work added. `--benchmark-hotpath` compared before/after on a project
+- [x] Hotpath: no per-frame work added. `--benchmark-hotpath` compared before/after on a project
       that binds a **table** variable, since that is the path that arms the snapshot mirror.
-- [ ] `pytest tests/integration/test_output_state_feedback.py` identified for the maintainer.
-- [ ] `python scripts/sanitize-commit.py` run; working tree clean of lint debt.
-- [ ] Diff is *what was asked, and only that* — the file list above is the lane.
-- [ ] `spec.md` status set to `done`.
+- [x] `pytest tests/integration/test_output_state_feedback.py` identified for the maintainer.
+- [x] `python scripts/sanitize-commit.py` run; working tree clean of lint debt.
+- [x] Diff is *what was asked, and only that* — the file list above is the lane.
+- [x] `spec.md` status set to `done`.

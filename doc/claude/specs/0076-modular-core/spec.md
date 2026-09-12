@@ -1,7 +1,7 @@
 ---
 spec: 0076-modular-core
 title: Modular core — the seven static libraries under core/ and the in-process message bus
-status: in-progress
+status: done          # closed 2026-09-12: maintainer ran the build/run gates and closed
 created: 2026-09-03
 author: Alex Spataru (maintainer), Claude Fable 5.1 (manager)
 ---
@@ -160,9 +160,9 @@ readable by pointer), the "virtual CAN bus" the libraries talk over.
   the new library lists reports zero missing, zero extra, zero re-gated entries.
 - [x] **AC11** — `app/tests/tst_message_bus.cpp` is registered and covers direct, queued,
   retained, unsubscribe-on-destroy and multi-subscriber delivery (maintainer runs it).
-- [ ] **AC6** — (maintainer, morning) `cmake -B build … -DSS_BUILD_TESTS=ON` configures, the
+- [x] **AC6** — (maintainer, morning) `cmake -B build … -DSS_BUILD_TESTS=ON` configures, the
   application and `ss_unit_tests` build, `ctest` passes, `--benchmark-hotpath` holds.
-- [ ] **AC7** — (maintainer, morning) a `BUILD_COMMERCIAL=ON` configure builds; the GPL
+- [x] **AC7** — (maintainer, morning) a `BUILD_COMMERCIAL=ON` configure builds; the GPL
   configure's binary contains no Pro codec object.
 
 ## Constraints & Invariants

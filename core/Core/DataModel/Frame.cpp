@@ -398,3 +398,37 @@ void DataModel::readDatasetAlarmBands(Dataset& d, const QJsonObject& obj)
     d.alarmBands.push_back(std::move(high));
   }
 }
+
+/**
+ * @brief Populates @p d.transformParams from @p obj. Only numbers, strings and booleans have a
+ *        script-side shape, so a nested object or array is dropped with one warning rather than
+ *        reaching a transform as an opaque value.
+ */
+void DataModel::readDatasetTransformParams(Dataset& d, const QJsonObject& obj)
+{
+  d.transformParams.clear();
+  if (!obj.contains(Keys::TransformParams))
+    return;
+
+  const auto params = obj.value(Keys::TransformParams).toObject();
+  for (auto it = params.constBegin(); it != params.constEnd(); ++it) {
+    const auto& value = it.value();
+    SS_ASSERT_LOG(!it.key().isEmpty());
+    if (value.isDouble() || value.isString() || value.isBool())
+      d.transformParams.insert(it.key(), value.toVariant());
+    else
+      qWarning() << "[Frame] Dataset" << d.uniqueId << "transform parameter" << it.key()
+                 << "dropped: only numbers, strings and booleans are supported";
+  }
+}
+
+/**
+ * @brief Writes @p d.transformParams into @p obj as one JSON object when the dataset has any.
+ */
+void DataModel::writeDatasetTransformParams(QJsonObject& obj, const Dataset& d)
+{
+  if (d.transformParams.isEmpty())
+    return;
+
+  obj.insert(Keys::TransformParams, QJsonObject::fromVariantMap(d.transformParams));
+}

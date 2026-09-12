@@ -17,7 +17,7 @@ author: Alex Spataru
 Serial Studio now has three separate "find something and go there" surfaces that have
 drifted apart: the full-screen workspace switcher (Ctrl+K), the taskbar search box, and
 the Start menu's searchable action list. Each keeps its own item list and its own
-activation rules, which has already produced real user-facing bugs observed on the BADAQ
+activation rules, which has already produced real user-facing bugs observed on the field project
 project (a large real project with many groups, widgets, and custom workspaces):
 
 - Selecting a searched widget that belongs to no custom workspace silently activates a
@@ -30,7 +30,7 @@ project (a large real project with many groups, widgets, and custom workspaces):
   (Sessions, File Transmission, Preferences, AI Assistant, Help Center, etc. are
   missing) — two hand-maintained tool lists that disagree.
 - Search results show only a widget's name with no folder/group path, so identically
-  named widgets (e.g. eight "Channel N" rows across six RTAM groups) are
+  named widgets (e.g. eight "Channel N" rows across six sensor-board groups) are
   indistinguishable.
 - The switcher dialog does not scale to small windows: labels clip and the fixed-size
   grid overflows.
@@ -123,7 +123,7 @@ drift again.**
       `CommandPalette.qml` has no `Cpp_UI_Dashboard`/`taskBar`/workspace symbols — all data
       flows via the injected `model`; the main-window `PaletteModel` (browse off) is the
       second context. Runtime browse/folder/search behavior on maintainer list.*
-- [x] **AC2 (R2)** — In BADAQ at root: "WORKSPACES" and "TOOLS" uppercase headers with
+- [x] **AC2 (R2)** — In the field project at root: "WORKSPACES" and "TOOLS" uppercase headers with
       separators are visible; Add Workspace cell present.
 - [x] **AC3 (R3)** — On a commercial build (non-runtime mode), palette Tools shows the
       full Start-menu action set; on a GPL build, gated items (Sessions, File
@@ -133,7 +133,7 @@ drift again.**
       `ToolActions.items()`; tier/runtime gating stays in each item's `visible:` with no
       consumer-side filter beyond the query match. Two-build visibility parity on
       maintainer list.*
-- [x] **AC4 (R4/R5)** — Searching "Channel" in BADAQ yields multiple identically named
+- [x] **AC4 (R4/R5)** — Searching "Channel" in the field project yields multiple identically named
       widget entries distinguishable by group-name subtitles; searching a group's name
       yields both its group widget entry and its dataset widget entries.
 - [x] **AC5 (R6)** — Clicking a searched widget not in any custom workspace opens a new

@@ -1,7 +1,7 @@
 ---
 spec: 0079-transmit-script-editor
 title: Transmit Script Editor
-status: in-progress  # NOT done: R9 unmet, see plan.md correction # draft -> approved -> in-progress -> done | shelved
+status: done          # closed 2026-09-12: maintainer ran the build/run gates and closed
 created: 2026-09-10
 author: Alex Spataru
 ---
@@ -111,10 +111,10 @@ rather than continuing to gate it.
 
 ## Acceptance Criteria
 
-- [ ] **AC1** — Opening an output widget in the Project Editor shows a parameter table filling the
+- [x] **AC1** — Opening an output widget in the Project Editor shows a parameter table filling the
       pane and a button that opens the transmit editor window; no code editor appears in the view.
       (In-app observation.)
-- [ ] **AC2** — The editor window lists every template present in the built-in transmit catalog,
+- [x] **AC2** — The editor window lists every template present in the built-in transmit catalog,
       and selecting each one loads a script that passes validation. (In-app observation, one pass
       over the catalog.)
 - [x] **AC3** — A preview cannot transmit. *Amended 2026-09-10: the API exposes no transmitted-byte
@@ -123,24 +123,24 @@ rather than continuing to gate it.
       guard asserts that no output widget class outside `Panel.cpp` references a connection at all
       (`tests/integration/test_output_widget_editor.py`, runs without the app), and the maintainer
       confirms once with hardware attached that driving the preview sends nothing.
-- [ ] **AC4** — A script with a syntax error, and a script that compiles but defines no transmit
+- [x] **AC4** — A script with a syntax error, and a script that compiles but defines no transmit
       entry point, are each reported in the validity display and each refused on save with a
       message naming the failure; the project file is unchanged afterward. *Amended 2026-09-10: the
       save gate is a GUI path the API cannot drive, so this is a maintainer observation.* The
       verdict behind it is unit-tested (`tst_transmit_script_check`) and its API-side twin is
       asserted by `test_dry_run_reports_the_shared_verdict`.
-- [ ] **AC5** — A script written against a slider's configured range produces, in the preview byte
+- [x] **AC5** — A script written against a slider's configured range produces, in the preview byte
       view, the same payload the dashboard control produces for the same position. (In-app
       observation against one scaling template.)
-- [ ] **AC6** — Introducing a syntax error mid-edit leaves the preview control usable and its byte
+- [x] **AC6** — Introducing a syntax error mid-edit leaves the preview control usable and its byte
       view showing the previous payload marked stale; fixing the error restores live output
       without reopening the window. (In-app observation.)
 - [x] **AC7** — Writing a transmit function through the API with a deliberate syntax error still
       succeeds, confirming the gate did not leak into the non-editor path.
       (`tests/integration/test_output_widget_editor.py::test_api_still_accepts_an_invalid_transmit_script`.)
-- [ ] **AC8** — Sampling the running app with the editor window closed, after having opened and
+- [x] **AC8** — Sampling the running app with the editor window closed, after having opened and
       closed it, shows no editor render activity. (Sampling recipe from the mistakes ledger.)
-- [ ] **AC9** — Loading a project whose stored transmit script has a syntax error succeeds, shows
+- [x] **AC9** — Loading a project whose stored transmit script has a syntax error succeeds, shows
       the widget, and opens that script in the editor with the error reported. (In-app
       observation.)
 

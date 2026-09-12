@@ -41,6 +41,7 @@
 #include "Core/WorkspaceManager.h"
 #include "DataModel/NotificationCenter.h"
 #include "DataModel/Project/ProjectFolders.h"
+#include "DataModel/Project/ProjectMerge.h"
 #include "DataModel/Project/ProjectPersistence.h"
 #include "DataModel/Project/ProjectPresentation.h"
 #include "DataModel/Project/ProjectTables.h"
@@ -50,6 +51,16 @@
 #include "DataModel/Scripting/FrameParser.h"
 
 namespace DataModel {
+
+/**
+ * @brief The application state the loader consults for the operation mode: one reach shared by
+ *        the open and merge paths.
+ */
+[[nodiscard]] static AppState& appStateRef()
+{
+  static auto& appState = AppState::instance();
+  return appState;
+}
 
 /**
  * @brief Translates one dataset's legacy index-based waterfall Y-axis to a uniqueId.
@@ -223,7 +234,7 @@ static bool transformBodyReferencesValue(const QString& code, int language)
  * @brief Binds the loader to @p model.
  */
 DataModel::ProjectLoader::ProjectLoader(ProjectModel& model)
-  : m_model(model), m_lastOpenReloaded(false)
+  : m_model(model), m_lastOpenReloaded(false), m_interactiveOpen(false)
 {}
 
 //--------------------------------------------------------------------------------------------------
@@ -528,8 +539,7 @@ bool DataModel::ProjectLoader::openJsonFile(const QString& path)
     return true;
   }
 
-  static auto& appState = AppState::instance();
-  appState.setOperationMode(SerialStudio::ProjectFile);
+  appStateRef().setOperationMode(SerialStudio::ProjectFile);
 
   QFile file(resolved);
   QJsonDocument document;
@@ -549,7 +559,10 @@ bool DataModel::ProjectLoader::openJsonFile(const QString& path)
     file.close();
   }
 
-  return loadFromJsonDocument(document, resolved);
+  m_interactiveOpen = true;
+  const bool loaded = loadFromJsonDocument(document, resolved);
+  m_interactiveOpen = false;
+  return loaded;
 }
 
 /**
@@ -646,6 +659,7 @@ bool DataModel::ProjectLoader::loadFromJsonDocument(const QJsonDocument& documen
 
   m_model.m_workspaces.refreshAutoSnapshot();
   emitProjectLoadedSignals();
+  m_model.m_profiles.chooseAtLoad(m_interactiveOpen);
 
   if (!separatorMigrated && legacyUniqueIds && !m_model.m_filePath.isEmpty())
     persistLegacyMigration();
@@ -692,8 +706,10 @@ DataModel::ProjectLoader::DocumentLoadFlags DataModel::ProjectLoader::applyJsonD
   flags.loadedSchema    = ss_jsr(json, Keys::SchemaVersion, 0).toInt();
   flags.olderSchema     = flags.loadedSchema < DataModel::kSchemaVersion;
 
-  m_model.m_controlScriptCode = ss_jsr(json, Keys::ControlScriptCode, "").toString();
-  static auto& controlScript  = DataModel::ControlScript::instance();
+  m_model.m_controlScriptCode  = ss_jsr(json, Keys::ControlScriptCode, "").toString();
+  m_model.m_transformLibrary   = ss_jsr(json, Keys::TransformLibrary, "").toString();
+  m_model.m_transformLibraryJs = ss_jsr(json, Keys::TransformLibraryJs, "").toString();
+  static auto& controlScript   = DataModel::ControlScript::instance();
   controlScript.setCode(m_model.m_controlScriptCode);
 
   loadProjectRootScalars(json);
@@ -724,6 +740,7 @@ DataModel::ProjectLoader::DocumentLoadFlags DataModel::ProjectLoader::applyJsonD
   loadLuaFastMode(json);
   migrateLegacyLayoutKeys();
   migrateLegacyDashboardLayout(json);
+  (void)m_model.m_workspaces.rebindWidgetRefs();
 
   return flags;
 }
@@ -743,7 +760,9 @@ bool DataModel::ProjectLoader::applyHistorySnapshot(const QByteArray& state)
   m_model.m_persistence.setAutoSaveSuspended(true);
   m_model.m_persistence.stopAutoSaveTimer();
 
+  const int activeProfile = m_model.m_profiles.activeProfileId();
   (void)applyJsonDocumentCore(document.object());
+  m_model.m_profiles.setActiveProfile(activeProfile);
 
   m_model.m_workspaces.refreshAutoSnapshot();
   emitProjectLoadedSignals(false);
@@ -842,6 +861,107 @@ void DataModel::ProjectLoader::importProjectFromJson(const QJsonObject& project,
       dialog->open();
     },
     Qt::QueuedConnection);
+}
+
+/**
+ * @brief Reports why a merge cannot proceed, on the UI or the log depending on the suppression
+ * flag.
+ */
+static void reportMergeRefused(const DataModel::ProjectModel& model, const QString& reason)
+{
+  if (model.suppressMessageBoxes()) {
+    qWarning() << "[ProjectModel] Import into project refused:" << reason;
+    return;
+  }
+
+  Core::Prompt::showMessageBox(DataModel::ProjectModel::tr("Cannot add to the current project"),
+                               reason,
+                               Core::Prompt::Warning,
+                               DataModel::ProjectModel::tr("Import"));
+}
+
+/**
+ * @brief Appends an importer's standalone project to the open document as one undo step (spec
+ *        0083): ProjectMerge remaps the ids, the new groups and workspaces are filed under a folder
+ *        named @p label, and the load signals rebuild the editor and the pipeline. Refused outside
+ *        ProjectFile mode, on an empty document, and on a GPL build (two sources).
+ */
+bool DataModel::ProjectLoader::mergeImportedProject(const QJsonObject& project,
+                                                    const QString& label)
+{
+  if (appStateRef().operationMode() != SerialStudio::ProjectFile || m_model.m_groups.empty()) {
+    reportMergeRefused(m_model,
+                       ProjectModel::tr("Open a project with at least one group first, or choose "
+                                        "Create Project instead."));
+    return false;
+  }
+
+#ifndef BUILD_COMMERCIAL
+  Q_UNUSED(project)
+  Q_UNUSED(label)
+  reportMergeRefused(m_model,
+                     ProjectModel::tr("Adding a source to an open project makes it a multi-source "
+                                      "project, which this build does not support."));
+  return false;
+#else
+  ProjectMerge::Base base;
+  base.groupCount      = static_cast<int>(m_model.m_groups.size());
+  base.nextUniqueId    = m_model.m_nextUniqueId;
+  base.nextWorkspaceId = WorkspaceIds::UserStart;
+  for (const auto& source : m_model.m_sources)
+    base.nextSourceId = qMax(base.nextSourceId, source.sourceId + 1);
+
+  for (const auto& table : m_model.m_tables.list())
+    base.tableNames.insert(table.name);
+
+  for (const auto& workspace : m_model.m_workspaces.list()) {
+    base.workspaceTitles.insert(workspace.title);
+    base.nextWorkspaceId = qMax(base.nextWorkspaceId, workspace.workspaceId + 1);
+  }
+
+  auto merged = ProjectMerge::remap(project, base, label);
+  if (merged.groups.empty()) {
+    reportMergeRefused(m_model, ProjectModel::tr("The import produced no groups."));
+    return false;
+  }
+
+  const ProjectUndoScope undo_scope{m_model, ProjectModel::tr("Add Import to Project")};
+
+  auto& sources = m_model.m_sources;
+  sources.insert(sources.end(), merged.sources.begin(), merged.sources.end());
+
+  auto& groups          = m_model.m_groups;
+  const size_t firstNew = groups.size();
+  groups.insert(groups.end(), merged.groups.begin(), merged.groups.end());
+
+  auto& tables = m_model.m_tables.mutableList();
+  tables.insert(tables.end(), merged.tables.begin(), merged.tables.end());
+
+  auto& workspaces               = m_model.m_workspaces.mutableList();
+  const size_t firstNewWorkspace = workspaces.size();
+  workspaces.insert(workspaces.end(), merged.workspaces.begin(), merged.workspaces.end());
+
+  m_model.m_nextUniqueId = merged.nextUniqueId;
+  seedNextUniqueIdFromGroups();
+  resolveDatasetTransformLanguages();
+  resolveDatasetVirtualFlags();
+
+  const int groupFolder = m_model.m_folders.addGroupFolder(-1, label);
+  for (size_t g = firstNew; g < groups.size(); ++g)
+    groups[g].parentFolderId = groupFolder;
+
+  const int workspaceFolder = m_model.m_folders.addWorkspaceFolder(-1, label);
+  for (size_t w = firstNewWorkspace; w < workspaces.size(); ++w)
+    workspaces[w].parentFolderId = workspaceFolder;
+
+  (void)m_model.m_workspaces.rebindWidgetRefs();
+  m_model.m_workspaces.refreshAutoSnapshot();
+
+  m_model.setModified(true);
+  emitProjectLoadedSignals(false);
+  Q_EMIT m_model.importCompleted(true, m_model.m_filePath);
+  return true;
+#endif
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1049,6 +1169,7 @@ void DataModel::ProjectLoader::loadWidgetSettingsAndWorkspaces(const QJsonObject
   workspaces.setCustomizeFlagFromFile(json.value(Keys::CustomizeWorkspaces).toBool(false));
 
   loadCustomWorkspaces(json);
+  m_model.m_profiles.loadFromJson(json);
   loadWorkspaceAndGroupFolders(json);
   loadHiddenGroupsAndTables(json);
   loadSinkConfigs(json);

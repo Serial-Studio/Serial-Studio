@@ -22,7 +22,6 @@
 #pragma once
 
 #include <cstddef>
-#include <map>
 #include <memory>
 #include <vector>
 
@@ -98,20 +97,32 @@ private:
     int sourceId;
   };
 
+  // One entry per source ever staged, never erased (spec 0085); an empty slot means no open block
+  struct OpenEntry {
+    explicit OpenEntry(int source);
+    int sourceId;
+    quint64 blockNumber;
+    std::shared_ptr<PooledBlockSlot> slot;
+  };
+
   [[nodiscard]] std::shared_ptr<PooledBlockSlot> claimSlot(int sourceId) noexcept;
   void bindToFrame(PooledBlockSlot& slot, const DataModel::Frame& src, bool uniform);
   [[nodiscard]] PooledBlockSlot* openBlockFor(int sourceId, const DataModel::Frame& src);
+  void flush(OpenEntry& entry);
+  [[nodiscard]] OpenEntry* findOpen(int sourceId) noexcept;
+  [[nodiscard]] const OpenEntry* findOpen(int sourceId) const noexcept;
 
   // Memory ceiling for materialised block slots; a slot's storage scales with the dataset count
   static constexpr std::size_t kBlockPoolBudgetBytes = 192ULL * 1024ULL * 1024ULL;
+  // Open-entry capacity reserved once; a project with more sources grows it on first sight only
+  static constexpr std::size_t kOpenEntriesReserve   = 16;
 
   BlockStagerHost& m_host;
   const quint64& m_generation;
   const bool& m_maskSinks;
 
   std::vector<std::shared_ptr<PooledBlockSlot>> m_pool;
-  std::map<int, std::shared_ptr<PooledBlockSlot>> m_open;
-  std::map<int, quint64> m_blockNumbers;
+  std::vector<OpenEntry> m_open;
   std::size_t m_poolHint;
   int m_slotsUsable;
 };

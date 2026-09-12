@@ -77,6 +77,43 @@ int UI::TaskbarWindowMap::findWindowIdByGroupAndIndex(int widgetType, int relati
 }
 
 /**
+ * @brief Returns the windowId whose slot belongs to the given group (group scope) or dataset
+ *        (dataset scope) uniqueId, or -1: the fallback a workspace ref takes when the ordinal it
+ *        carries no longer points at its own widget (spec 0083).
+ */
+int UI::TaskbarWindowMap::findWindowIdByIdentity(int widgetType,
+                                                 int groupUniqueId,
+                                                 int datasetUniqueId) const
+{
+  const auto type       = static_cast<SerialStudio::DashboardWidget>(widgetType);
+  const auto& widgetMap = m_dashboard.widgetMap();
+  for (auto it = widgetMap.begin(); it != widgetMap.end(); ++it) {
+    if (static_cast<int>(it.value().first) != widgetType)
+      continue;
+
+    const int index = it.value().second;
+    const auto slot = m_dashboard.widgetSlot(type, index);
+    if (!slot.valid)
+      continue;
+
+    if (slot.group) {
+      if (m_dashboard.getGroupWidget(type, slot.bucketIndex).uniqueId == groupUniqueId)
+        return it.key();
+
+      continue;
+    }
+
+    if (datasetUniqueId < 0)
+      continue;
+
+    if (m_dashboard.getDatasetWidget(type, slot.bucketIndex).uniqueId == datasetUniqueId)
+      return it.key();
+  }
+
+  return -1;
+}
+
+/**
  * @brief Collects the (windowId, widgetType, relativeIndex) triples that belong to groupId.
  */
 void UI::TaskbarWindowMap::collectGroupWidgetIds(

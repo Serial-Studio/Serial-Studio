@@ -841,27 +841,27 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
         <translation>작업 공간에 추가</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="383"/>
+        <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="384"/>
         <source>No widgets available.</source>
         <translation>사용 가능한 위젯이 없습니다.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="384"/>
+        <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="385"/>
         <source>No widgets match.</source>
         <translation>일치하는 위젯이 없습니다.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="401"/>
+        <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="402"/>
         <source>%1 widgets</source>
         <translation>위젯 %1개</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="402"/>
+        <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="403"/>
         <source>%1 of %2 widgets</source>
         <translation>%2개 중 %1개 위젯</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="406"/>
+        <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="407"/>
         <source>Close</source>
         <translation>닫기</translation>
     </message>
@@ -5696,7 +5696,17 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
         <translation>취소</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="282"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="281"/>
+        <source>Add to Project</source>
+        <translation>프로젝트에 추가</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="286"/>
+        <source>Add the generated source, groups, tables and workspaces to the project that is open, instead of creating a new file</source>
+        <translation>새 파일을 생성하는 대신, 생성된 소스, 그룹, 테이블 및 작업 공간을 열려 있는 프로젝트에 추가합니다</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="297"/>
         <source>Create Project</source>
         <translation>프로젝트 생성</translation>
     </message>
@@ -5908,6 +5918,34 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
     </message>
 </context>
 <context>
+    <name>DataExportView</name>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/DataExportView.qml" line="34"/>
+        <source>Data Export</source>
+        <translation>데이터 내보내기</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/DataExportView.qml" line="47"/>
+        <source>MQTT Publisher</source>
+        <translation>MQTT 발행자</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/DataExportView.qml" line="48"/>
+        <source>Publish dataset values to an MQTT broker as they arrive, as plain topics or Sparkplug B.</source>
+        <translation>데이터셋 값이 도착하는 즉시 일반 토픽 또는 Sparkplug B 형식으로 MQTT 브로커에 발행합니다.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/DataExportView.qml" line="54"/>
+        <source>InfluxDB Sink</source>
+        <translation>InfluxDB 싱크</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/DataExportView.qml" line="55"/>
+        <source>Write every published block to an InfluxDB 2.x bucket as line protocol.</source>
+        <translation>발행된 모든 블록을 라인 프로토콜로 InfluxDB 2.x 버킷에 기록합니다.</translation>
+    </message>
+</context>
+<context>
     <name>DataGrid</name>
     <message>
         <location filename="../../rcc/extensions/widget/datagrid/DataGrid.qml" line="42"/>
@@ -5920,22 +5958,22 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
         <translation>값</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/DataGrid.qml" line="108"/>
         <location filename="../../rcc/extensions/widget/datagrid/DataGrid.qml" line="111"/>
         <location filename="../../rcc/extensions/widget/datagrid/DataGrid.qml" line="118"/>
+        <location filename="../../qml/Widgets/Dashboard/DataGrid.qml" line="108"/>
         <source>Pause</source>
         <translation>일시정지</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/DataGrid.qml" line="108"/>
         <location filename="../../rcc/extensions/widget/datagrid/DataGrid.qml" line="111"/>
         <location filename="../../rcc/extensions/widget/datagrid/DataGrid.qml" line="118"/>
+        <location filename="../../qml/Widgets/Dashboard/DataGrid.qml" line="108"/>
         <source>Resume</source>
         <translation>재개</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/DataGrid.qml" line="323"/>
         <location filename="../../rcc/extensions/widget/datagrid/DataGrid.qml" line="335"/>
+        <location filename="../../qml/Widgets/Dashboard/DataGrid.qml" line="323"/>
         <source>Awaiting data…</source>
         <translation>데이터 대기 중…</translation>
     </message>
@@ -6038,17 +6076,32 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
         <translation>DBC 가져오기 경고</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Importers/DBCImporter.cpp" line="218"/>
+        <location filename="../../../core/Pipeline/DataModel/Importers/DBCImporter.cpp" line="207"/>
+        <source>Added %1 messages to the open project.</source>
+        <translation>열린 프로젝트에 %1개의 메시지를 추가했습니다.</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Pipeline/DataModel/Importers/DBCImporter.cpp" line="208"/>
+        <source>The new source, groups, tables and workspaces are filed under "%1".</source>
+        <translation>새 소스, 그룹, 테이블 및 작업 공간은 "%1" 아래에 정리되었습니다.</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Pipeline/DataModel/Importers/DBCImporter.cpp" line="210"/>
+        <source>Import Complete</source>
+        <translation>가져오기 완료</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Pipeline/DataModel/Importers/DBCImporter.cpp" line="239"/>
         <source> Skipped %1 signal(s) whose multiplexing could not be resolved: a switch value outside the integer range, or a circular SG_MUL_VAL_ chain.</source>
         <translation>정수 범위를 벗어난 스위치 값 또는 순환 SG_MUL_VAL_ 체인으로 인해 멀티플렉싱을 해석할 수 없는 신호 %1개를 건너뛰었습니다.</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Importers/DBCImporter.cpp" line="269"/>
+        <location filename="../../../core/Pipeline/DataModel/Importers/DBCImporter.cpp" line="290"/>
         <source>Overview</source>
         <translation>개요</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Importers/DBCImporter.cpp" line="341"/>
+        <location filename="../../../core/Pipeline/DataModel/Importers/DBCImporter.cpp" line="362"/>
         <source>Active</source>
         <translation>활성</translation>
     </message>
@@ -6061,12 +6114,12 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
         <translation type="vanished">애플리케이션에 임시 디렉터리에 대한 쓰기 권한이 있는지 확인하십시오.</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Importers/DBCImporter.cpp" line="223"/>
+        <location filename="../../../core/Pipeline/DataModel/Importers/DBCImporter.cpp" line="244"/>
         <source>Successfully imported DBC file with %1 messages and %2 signals.</source>
         <translation>%1개의 메시지와 %2개의 신호가 포함된 DBC 파일을 성공적으로 가져왔습니다.</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Importers/DBCImporter.cpp" line="216"/>
+        <location filename="../../../core/Pipeline/DataModel/Importers/DBCImporter.cpp" line="237"/>
         <source>The project editor is now open for customization.</source>
         <translation>프로젝트 편집기가 사용자 지정을 위해 열렸습니다.</translation>
     </message>
@@ -6083,12 +6136,12 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
         <translation type="vanished">확장 멀티플렉싱(SG_MUL_VAL_)을 사용하는 신호 %1개를 건너뛰었습니다. 단순 멀티플렉싱만 지원됩니다.</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Importers/DBCImporter.cpp" line="228"/>
+        <location filename="../../../core/Pipeline/DataModel/Importers/DBCImporter.cpp" line="249"/>
         <source>DBC Import Complete</source>
         <translation>DBC 가져오기 완료</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Importers/DBCImporter.cpp" line="254"/>
+        <location filename="../../../core/Pipeline/DataModel/Importers/DBCImporter.cpp" line="275"/>
         <source>CAN Bus</source>
         <translation>CAN Bus</translation>
     </message>
@@ -6096,107 +6149,158 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
 <context>
     <name>DataModel::DatasetTransformEditor</name>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="103"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="115"/>
         <source>Dataset Value Transform</source>
         <translation>데이터셋 값 변환</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="140"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="154"/>
         <source>Lua</source>
         <translation>Lua</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="140"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="154"/>
         <source>JavaScript</source>
         <translation>JavaScript</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="167"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="186"/>
         <source>Language:</source>
         <translation>언어:</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="170"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="189"/>
         <source>Template:</source>
         <translation>템플릿:</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="149"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="163"/>
         <source>Enter raw value (e.g., 1024)</source>
         <translation>원시 값 입력 (예: 1024)</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="154"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="168"/>
         <source>Test</source>
         <translation>테스트</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="155"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="169"/>
         <source>Clear</source>
         <translation>지우기</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="181"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="205"/>
         <source>Input:</source>
         <translation>입력:</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="184"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="208"/>
         <source>Output:</source>
         <translation>출력:</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="157"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="171"/>
         <source>Apply</source>
         <translation>적용</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="140"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="154"/>
         <source>Expression</source>
         <translation>표현식</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="158"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="172"/>
         <source>Cancel</source>
         <translation>취소</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="262"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="174"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="691"/>
+        <source>Open Lua Library</source>
+        <translation>Lua 라이브러리 열기</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="175"/>
+        <source>Show the project's shared library for this language in the Project Editor. Functions defined there can be called from this transform by name.</source>
+        <translation>프로젝트 편집기에서 이 언어의 프로젝트 공유 라이브러리를 표시합니다. 여기에 정의된 함수는 이 변환에서 이름으로 호출할 수 있습니다.</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="220"/>
+        <source>Parameters</source>
+        <translation>매개변수</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="222"/>
+        <source>Constants that belong to this dataset. The transform reads them as params.&lt;name&gt;.</source>
+        <translation>이 데이터셋에 속한 상수입니다. 변환은 이를 params.&lt;이름&gt;으로 읽습니다.</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="224"/>
+        <source>Name</source>
+        <translation>이름</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="224"/>
+        <source>Value</source>
+        <translation>값</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="230"/>
+        <source>Numbers and true/false keep their type; any other value is a string.</source>
+        <translation>숫자와 true/false는 타입이 유지되며, 다른 값은 문자열입니다.</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="233"/>
+        <source>&lt;b&gt;No Parameters&lt;/b&gt;&lt;br&gt;Parameters are constants that belong to this dataset, such as a scale factor or a sensor offset. The transform reads them as &lt;code&gt;params.name&lt;/code&gt;, so one formula in the Lua Library can serve every dataset that differs only in its constants.</source>
+        <translation>&lt;b&gt;매개변수 없음&lt;/b&gt;&lt;br&gt;매개변수는 스케일 팩터나 센서 오프셋과 같이 이 데이터셋에 속한 상수입니다. 변환은 이를 &lt;code&gt;params.name&lt;/code&gt;으로 읽으므로, Lua 라이브러리의 하나의 수식이 상수만 다른 모든 데이터셋에 사용될 수 있습니다.</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="242"/>
+        <source>Add Parameter</source>
+        <translation>매개변수 추가</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="243"/>
+        <source>Remove</source>
+        <translation>제거</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="348"/>
         <source>Transform — %1</source>
         <translation>변환 — %1</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="341"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="447"/>
         <source>The value transform has a syntax error and was not applied.</source>
         <translation>값 변환에 구문 오류가 있어 적용되지 않았습니다.</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="350"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="456"/>
         <source>The value transform must define a transform(value) function.</source>
         <translation>값 변환은 transform(value) 함수를 정의해야 합니다.</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="351"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="457"/>
         <source>Define a transform(value) function that returns a number, or use Clear to remove the transform.</source>
         <translation>숫자를 반환하는 transform(value) 함수를 정의하거나, 지우기를 사용하여 변환을 제거하십시오.</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="369"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="475"/>
         <source>Enter a value</source>
         <translation>값 입력</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="376"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="482"/>
         <source>Invalid number</source>
         <translation>잘못된 숫자</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="417"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="523"/>
         <source>Format Document	Ctrl+Shift+I</source>
         <translation>문서 서식 지정	Ctrl+Shift+I</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="418"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="524"/>
         <source>Format Selection	Ctrl+I</source>
         <translation>선택 영역 서식 지정	Ctrl+I</translation>
     </message>
@@ -6261,7 +6365,7 @@ v
 </translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="589"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="821"/>
         <source>--
 -- Define a transform(value) function that receives the live
 -- dataset reading and returns a transformed number. If no
@@ -6320,7 +6424,7 @@ v
 </translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="617"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="849"/>
         <source>/*
  * Define a transform(value) function that receives the live
  * dataset reading and returns a transformed number. If no
@@ -6377,33 +6481,39 @@ v
  */</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="758"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="990"/>
         <source>Failed to create the Lua engine.</source>
         <translation>Lua 엔진 생성에 실패했습니다.</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="778"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1016"/>
         <source>Failed to create the JavaScript engine.</source>
         <translation>JavaScript 엔진 생성에 실패했습니다.</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="785"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1032"/>
         <source>The transform did not finish evaluating within %1 ms.</source>
         <translation>변환이 %1 ms 내에 평가를 완료하지 못했습니다.</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="790"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1037"/>
         <source>Line %1: %2</source>
         <translation>줄 %1: %2</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="877"/>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="890"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1103"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1137"/>
+        <source>Error in shared library: %1</source>
+        <translation>공유 라이브러리 오류: %1</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1142"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1155"/>
         <source>Error: the transform did not finish within %1 ms</source>
         <translation>오류: 변환이 %1 ms 내에 완료되지 않음</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="938"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1203"/>
         <source>Select Template…</source>
         <translation>템플릿 선택…</translation>
     </message>
@@ -6464,22 +6574,27 @@ v
  */</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="846"/>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="872"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1093"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1127"/>
         <source>Engine error</source>
         <translation>엔진 오류</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="836"/>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="854"/>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="862"/>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="880"/>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="893"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1083"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1109"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1117"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1145"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1158"/>
         <source>Error: %1</source>
         <translation>오류: %1</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="555"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="692"/>
+        <source>Open JavaScript Library</source>
+        <translation>JavaScript 라이브러리 열기</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="787"/>
         <source>#
 # An arithmetic expression evaluated once per sample. No function,
 # no statements: the value of the expression is the new reading.
@@ -6548,13 +6663,13 @@ v
 </translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="858"/>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="884"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1113"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1149"/>
         <source>Error: transform() not defined</source>
         <translation>오류: transform()이 정의되지 않음</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="865"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1120"/>
         <source>Error: transform() must return a number</source>
         <translation>오류: transform()은 숫자를 반환해야 함</translation>
     </message>
@@ -6562,7 +6677,7 @@ v
 <context>
     <name>DataModel::FrameBuilder</name>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/FrameBuilder.cpp" line="328"/>
+        <location filename="../../../core/Pipeline/DataModel/FrameBuilder.cpp" line="324"/>
         <source>A downstream consumer (dashboard, CSV/MDF4 export, historian, or API subscriber) is not draining fast enough, so data is being dropped from the display and from any active recording. Disable a heavy consumer or reduce the data rate.</source>
         <translation>다운스트림 소비자(대시보드, CSV/MDF4 내보내기, 히스토리안 또는 API 구독자)가 충분히 빠르게 처리하지 못하여 표시 및 활성 기록에서 데이터가 손실되고 있습니다. 부하가 큰 소비자를 비활성화하거나 데이터 전송률을 줄이십시오.</translation>
     </message>
@@ -6583,7 +6698,7 @@ v
         <translation type="vanished">빠른 플롯</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/FrameBuilder.cpp" line="326"/>
+        <location filename="../../../core/Pipeline/DataModel/FrameBuilder.cpp" line="322"/>
         <source>Block pool exhausted</source>
         <translation>블록 풀 소진</translation>
     </message>
@@ -6592,12 +6707,12 @@ v
         <translation type="vanished">다운스트림 소비자(대시보드, CSV/MDF4 내보내기, 세션 DB 또는 API 구독자)가 충분히 빠르게 처리하지 못하여 데이터가 화면 표시 및 활성 기록에서 손실되고 있습니다. 부하가 큰 소비자를 비활성화하거나 데이터 전송률을 줄이십시오.</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/FrameBuilder.cpp" line="2210"/>
+        <location filename="../../../core/Pipeline/DataModel/FrameBuilder.cpp" line="2329"/>
         <source>JavaScript transform exceeded budget</source>
         <translation>JavaScript 변환 예산 초과</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/FrameBuilder.cpp" line="2211"/>
+        <location filename="../../../core/Pipeline/DataModel/FrameBuilder.cpp" line="2330"/>
         <source>A dataset transform took longer than %1 ms; remaining datasets in the frame fell back to raw values until the next frame. Profile or simplify the transform code.</source>
         <translation>데이터셋 변환이 %1ms 이상 소요되어, 프레임의 나머지 데이터셋은 다음 프레임까지 원시 값으로 대체되었습니다. 변환 코드를 프로파일링하거나 단순화하세요.</translation>
     </message>
@@ -6934,63 +7049,63 @@ Any unsaved changes are lost. Continue?</source>
 <context>
     <name>DataModel::MacroRunner</name>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/MacroRunner.cpp" line="273"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/MacroRunner.cpp" line="274"/>
         <source>Failed to queue the macro onto the worker thread</source>
         <translation>작업자 스레드에 매크로를 대기열에 추가하지 못했습니다</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/MacroRunner.cpp" line="288"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/MacroRunner.cpp" line="289"/>
         <source>Macro is empty</source>
         <translation>매크로가 비어 있습니다</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/MacroRunner.cpp" line="300"/>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/MacroRunner.cpp" line="433"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/MacroRunner.cpp" line="301"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/MacroRunner.cpp" line="435"/>
         <source>Failed to create the Lua state</source>
         <translation>Lua 상태 생성에 실패했습니다</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/MacroRunner.cpp" line="349"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/MacroRunner.cpp" line="351"/>
         <source>Unknown Lua error</source>
         <translation>알 수 없는 Lua 오류</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/MacroRunner.cpp" line="398"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/MacroRunner.cpp" line="400"/>
         <source>Failed to create the JavaScript engine</source>
         <translation>JavaScript 엔진 생성에 실패했습니다</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/MacroRunner.cpp" line="407"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/MacroRunner.cpp" line="409"/>
         <source>The macro did not finish compiling within %1 ms</source>
         <translation>매크로가 %1 ms 내에 컴파일을 완료하지 못했습니다</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/MacroRunner.cpp" line="418"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/MacroRunner.cpp" line="420"/>
         <source>Line %1: %2</source>
         <translation>줄 %1: %2</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/MacroRunner.cpp" line="479"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/MacroRunner.cpp" line="481"/>
         <source>Select macro to load</source>
         <translation>불러올 매크로 선택</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/MacroRunner.cpp" line="492"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/MacroRunner.cpp" line="494"/>
         <source>Cannot open %1</source>
         <translation>%1을(를) 열 수 없음</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/MacroRunner.cpp" line="515"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/MacroRunner.cpp" line="517"/>
         <source>Save macro</source>
         <translation>매크로 저장</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/MacroRunner.cpp" line="531"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/MacroRunner.cpp" line="533"/>
         <source>Cannot write %1</source>
         <translation>%1을(를) 쓸 수 없음</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/MacroRunner.cpp" line="537"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/MacroRunner.cpp" line="539"/>
         <source>Failed to save %1: %2</source>
         <translation>%1 저장 실패: %2</translation>
     </message>
@@ -6998,39 +7113,60 @@ Any unsaved changes are lost. Continue?</source>
 <context>
     <name>DataModel::ModbusMapImporter</name>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Importers/ModbusMapImporter.cpp" line="127"/>
+        <location filename="../../../core/Pipeline/DataModel/Importers/ModbusMapImporter.cpp" line="138"/>
         <source>Import Modbus Register Map</source>
         <translation>Modbus 레지스터 맵 가져오기</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Importers/ModbusMapImporter.cpp" line="131"/>
+        <location filename="../../../core/Pipeline/DataModel/Importers/ModbusMapImporter.cpp" line="142"/>
         <source>Modbus Register Maps (*.csv *.xml *.json);;CSV Files (*.csv);;XML Files (*.xml);;JSON Files (*.json);;All Files (*)</source>
         <translation>Modbus 레지스터 맵 (*.CSV *.XML *.JSON);;CSV 파일 (*.CSV);;XML 파일 (*.XML);;JSON 파일 (*.JSON);;모든 파일 (*)</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Importers/ModbusMapImporter.cpp" line="169"/>
+        <location filename="../../../core/Pipeline/DataModel/Importers/ModbusMapImporter.cpp" line="180"/>
         <source>No registers found</source>
         <translation>레지스터를 찾을 수 없음</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Importers/ModbusMapImporter.cpp" line="170"/>
+        <location filename="../../../core/Pipeline/DataModel/Importers/ModbusMapImporter.cpp" line="181"/>
         <source>The file could not be parsed or contains no register definitions.</source>
         <translation>파일을 파싱할 수 없거나 레지스터 정의가 포함되어 있지 않습니다.</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Importers/ModbusMapImporter.cpp" line="172"/>
+        <location filename="../../../core/Pipeline/DataModel/Importers/ModbusMapImporter.cpp" line="183"/>
         <source>Modbus Import</source>
         <translation>Modbus 가져오기</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Importers/ModbusMapImporter.cpp" line="381"/>
+        <location filename="../../../core/Pipeline/DataModel/Importers/ModbusMapImporter.cpp" line="260"/>
+        <source>Added %1 registers in %2 groups to the open project.</source>
+        <translation>열린 프로젝트에 %2개 그룹의 %1개 레지스터를 추가했습니다.</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Pipeline/DataModel/Importers/ModbusMapImporter.cpp" line="262"/>
+        <source>The new source, groups, tables and workspaces are filed under "%1".</source>
+        <translation>새 소스, 그룹, 테이블 및 작업 공간은 "%1" 아래에 정리되었습니다.</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Pipeline/DataModel/Importers/ModbusMapImporter.cpp" line="441"/>
         <source>Overview</source>
         <translation>개요</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Importers/ModbusMapImporter.cpp" line="408"/>
+        <location filename="../../../core/Pipeline/DataModel/Importers/ModbusMapImporter.cpp" line="458"/>
+        <source>%1 Controls</source>
+        <translation>%1 제어</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Pipeline/DataModel/Importers/ModbusMapImporter.cpp" line="503"/>
+        <location filename="../../../core/Pipeline/DataModel/Importers/ModbusMapImporter.cpp" line="601"/>
         <source>On</source>
         <translation>켜짐</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Pipeline/DataModel/Importers/ModbusMapImporter.cpp" line="504"/>
+        <source>Off</source>
+        <translation>꺼짐</translation>
     </message>
     <message>
         <source>Failed to load imported project</source>
@@ -7049,22 +7185,23 @@ Any unsaved changes are lost. Continue?</source>
         <translation type="vanished">임시 디렉터리에 대한 쓰기 권한을 확인하십시오.</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Importers/ModbusMapImporter.cpp" line="218"/>
+        <location filename="../../../core/Pipeline/DataModel/Importers/ModbusMapImporter.cpp" line="232"/>
         <source>Successfully imported %1 registers in %2 groups.</source>
         <translation>%2개 그룹에서 %1개 레지스터를 성공적으로 가져왔습니다.</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Importers/ModbusMapImporter.cpp" line="220"/>
+        <location filename="../../../core/Pipeline/DataModel/Importers/ModbusMapImporter.cpp" line="234"/>
         <source>The project editor is now open for customization.</source>
         <translation>프로젝트 편집기가 사용자 지정을 위해 열렸습니다.</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Importers/ModbusMapImporter.cpp" line="222"/>
+        <location filename="../../../core/Pipeline/DataModel/Importers/ModbusMapImporter.cpp" line="236"/>
+        <location filename="../../../core/Pipeline/DataModel/Importers/ModbusMapImporter.cpp" line="264"/>
         <source>Modbus Import Complete</source>
         <translation>Modbus 가져오기 완료</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Importers/ModbusMapImporter.cpp" line="322"/>
+        <location filename="../../../core/Pipeline/DataModel/Importers/ModbusMapImporter.cpp" line="365"/>
         <source>Modbus</source>
         <translation>Modbus</translation>
     </message>
@@ -7430,12 +7567,12 @@ Add %4 dataset(s) using the template's defaults?</source>
         <translation>값 표시에 사용되는 고정 소수 자릿수; 형식을 재정의함(-1 = 자동)</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="633"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="655"/>
         <source>Auto-detect</source>
         <translation>자동 감지</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="633"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="655"/>
         <source>Manual Delimiters</source>
         <translation>수동 구분 기호</translation>
     </message>
@@ -8148,7 +8285,7 @@ Add %4 dataset(s) using the template's defaults?</source>
         <translation type="vanished">페인터 위젯</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="650"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="672"/>
         <source>Web View</source>
         <translation>웹 뷰</translation>
     </message>
@@ -8358,7 +8495,7 @@ Add %4 dataset(s) using the template's defaults?</source>
         <translation type="vanished">게이지 또는 막대 표시 범위의 상한값</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="663"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="685"/>
         <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="663"/>
         <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="690"/>
         <source>Auto</source>
@@ -8449,207 +8586,207 @@ Add %4 dataset(s) using the template's defaults?</source>
         <translation type="vanished">페인터 코드 편집</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="483"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="497"/>
         <source>Edit Canvas Code</source>
         <translation>캔버스 코드 편집</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="507"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="521"/>
         <source>Edit Transmit Function</source>
         <translation>전송 함수 편집</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="597"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="619"/>
         <source>Rectangular (None)</source>
         <translation>직사각형 (없음)</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="597"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="619"/>
         <source>Bartlett (Triangular)</source>
         <translation>Bartlett (삼각형)</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="597"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="619"/>
         <source>Hann</source>
         <translation>Hann</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="598"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="620"/>
         <source>Hamming</source>
         <translation>Hamming</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="598"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="620"/>
         <source>Blackman</source>
         <translation>Blackman</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="598"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="620"/>
         <source>Blackman-Harris</source>
         <translation>Blackman-Harris</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="598"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="620"/>
         <source>Nuttall</source>
         <translation>Nuttall</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="599"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="621"/>
         <source>Blackman-Nuttall</source>
         <translation>Blackman-Nuttall</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="599"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="621"/>
         <source>Flat Top</source>
         <translation>Flat Top</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="599"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="621"/>
         <source>Welch</source>
         <translation>Welch</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="599"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="621"/>
         <source>Bartlett-Hann</source>
         <translation>Bartlett-Hann</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="600"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="622"/>
         <source>Bohman</source>
         <translation>Bohman</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="600"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="622"/>
         <source>Cosine (Sine)</source>
         <translation>Cosine (Sine)</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="600"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="622"/>
         <source>Lanczos</source>
         <translation>Lanczos</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="600"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="622"/>
         <source>Parzen</source>
         <translation>Parzen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="611"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="633"/>
         <source>Off</source>
         <translation>꺼짐</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="611"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="633"/>
         <source>Auto Start</source>
         <translation>자동 시작</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="611"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="633"/>
         <source>Start on Trigger</source>
         <translation>트리거 시 시작</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="611"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="633"/>
         <source>Toggle on Trigger</source>
         <translation>트리거 시 토글</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="612"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="634"/>
         <source>Repeat N Times</source>
         <translation>N회 반복</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="615"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="637"/>
         <source>Plain Text (UTF8)</source>
         <translation>일반 텍스트 (UTF8)</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="615"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="637"/>
         <source>Hexadecimal</source>
         <translation>16진수</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="615"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="637"/>
         <source>Base64</source>
         <translation>Base64</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="616"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="638"/>
         <source>Binary (Direct)</source>
         <translation>바이너리 (직접)</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="621"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="643"/>
         <source>No Checksum</source>
         <translation>체크섬 없음</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="625"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="647"/>
         <source>End Delimiter Only</source>
         <translation>종료 구분자만</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="625"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="647"/>
         <source>Start Delimiter Only</source>
         <translation>시작 구분자만</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="626"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="648"/>
         <source>Start + End Delimiter</source>
         <translation>시작 + 종료 구분자</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="626"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="648"/>
         <source>No Delimiters</source>
         <translation>구분자 없음</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="636"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="658"/>
         <source>Button</source>
         <translation>버튼</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="636"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="658"/>
         <source>Slider</source>
         <translation>슬라이더</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="636"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="658"/>
         <source>Toggle</source>
         <translation>토글</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="636"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="658"/>
         <source>Text Field</source>
         <translation>텍스트 필드</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="637"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="659"/>
         <source>Knob</source>
         <translation>노브</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="641"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="663"/>
         <source>Bar Panel</source>
         <translation>바 패널</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="642"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="664"/>
         <source>Data Grid</source>
         <translation>데이터 그리드</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="643"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="665"/>
         <source>GPS Map</source>
         <translation>GPS 맵</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="644"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="666"/>
         <source>Gyroscope</source>
         <translation>자이로스코프</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="645"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="667"/>
         <source>Multi-Plot</source>
         <translation>다중 플롯</translation>
     </message>
@@ -8658,51 +8795,51 @@ Add %4 dataset(s) using the template's defaults?</source>
         <translation type="vanished">다중 플롯</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="646"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="668"/>
         <source>Accelerometer</source>
         <translation>가속도계</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="647"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="669"/>
         <source>3D Plot</source>
         <translation>3D 플롯</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="648"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="670"/>
         <source>Image View</source>
         <translation>이미지 뷰</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="649"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="671"/>
         <source>Canvas Widget</source>
         <translation>캔버스 위젯</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="651"/>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="654"/>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="671"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="673"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="676"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="693"/>
         <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputStateRows.cpp" line="121"/>
         <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputStateRows.cpp" line="140"/>
         <source>None</source>
         <translation>없음</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="655"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="677"/>
         <source>Bar</source>
         <translation>바</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="656"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="678"/>
         <source>Gauge</source>
         <translation>게이지</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="657"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="679"/>
         <source>Compass</source>
         <translation>나침반</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="658"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="680"/>
         <source>Meter</source>
         <translation>미터</translation>
     </message>
@@ -8711,52 +8848,52 @@ Add %4 dataset(s) using the template's defaults?</source>
         <translation type="vanished">온도계</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="664"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="686"/>
         <source>Integer (0 decimals)</source>
         <translation>정수 (소수점 0자리)</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="665"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="687"/>
         <source>1 decimal</source>
         <translation>소수점 1자리</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="666"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="688"/>
         <source>2 decimals</source>
         <translation>소수점 2자리</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="667"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="689"/>
         <source>3 decimals</source>
         <translation>소수점 3자리</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="668"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="690"/>
         <source>Scientific</source>
         <translation>과학적 표기법</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="672"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="694"/>
         <source>New Line (\n)</source>
         <translation>새 줄 (</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="673"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="695"/>
         <source>Carriage Return (\r)</source>
         <translation>캐리지 리턴 (\r)</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="674"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="696"/>
         <source>CRLF (\r\n)</source>
         <translation>CRLF (\r</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="677"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="699"/>
         <source>No</source>
         <translation>아니오</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="678"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="700"/>
         <source>Yes</source>
         <translation>예</translation>
     </message>
@@ -8925,7 +9062,7 @@ Add %4 dataset(s) using the template's defaults?</source>
     <message>
         <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputStateRows.cpp" line="168"/>
         <source>Value that means on. Leave it empty and any non-zero number means on, which a device reporting text like RUN can never satisfy. Anything needing a threshold or a bitmask belongs in the dataset transform.</source>
-        <translation type="unfinished">켜짐을 의미하는 값입니다. 비워두면 0이 아닌 모든 숫자가 켜짐을 의미하며, RUN과 같은 텍스트를 보고하는 장치는 이를 만족할 수 없습니다. 임계값이나 비트마스크가 필요한 경우 데이터셋 변환에서 처리해야 합니다.</translation>
+        <translation>ON을 의미하는 값입니다. 비워두면 0이 아닌 모든 숫자가 ON을 의미하며, RUN과 같은 텍스트를 보고하는 장치는 이를 만족할 수 없습니다. 임계값이나 비트마스크가 필요한 경우 데이터셋 변환에서 처리해야 합니다.</translation>
     </message>
     <message>
         <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputStateRows.cpp" line="183"/>
@@ -8935,59 +9072,59 @@ Add %4 dataset(s) using the template's defaults?</source>
     <message>
         <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputStateRows.cpp" line="184"/>
         <source>How long the control shows a request as outstanding before it goes back to displaying what the source reports</source>
-        <translation type="unfinished">컨트롤이 요청을 미처리 상태로 표시한 후 소스가 보고하는 내용을 다시 표시하기까지의 시간</translation>
+        <translation>컨트롤이 요청을 대기 중으로 표시한 후 소스가 보고하는 내용을 다시 표시하기까지의 시간</translation>
     </message>
 </context>
 <context>
     <name>DataModel::ProjectModel</name>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="277"/>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="286"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="278"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="287"/>
         <source>Lock Project</source>
         <translation>프로젝트 잠금</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="278"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="279"/>
         <source>Choose a password to lock the project:</source>
         <translation>프로젝트를 잠글 비밀번호를 선택하세요:</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="286"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="287"/>
         <source>Confirm the password:</source>
         <translation>비밀번호 확인:</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="291"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="292"/>
         <source>Passwords do not match</source>
         <translation>비밀번호 불일치</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="292"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="293"/>
         <source>The two passwords you entered do not match. The project was not locked.</source>
         <translation>입력한 두 비밀번호가 일치하지 않습니다. 프로젝트가 잠기지 않았습니다.</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="329"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="330"/>
         <source>Unlock Project</source>
         <translation>프로젝트 잠금 해제</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="330"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="331"/>
         <source>Enter the project password:</source>
         <translation>프로젝트 비밀번호를 입력하세요:</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="340"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="341"/>
         <source>Incorrect password</source>
         <translation>잘못된 비밀번호</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="341"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="342"/>
         <source>The password you entered does not match the one stored in the project file.</source>
         <translation>입력한 비밀번호가 프로젝트 파일에 저장된 비밀번호와 일치하지 않습니다.</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="422"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="423"/>
         <source>New Project</source>
         <translation>새 프로젝트</translation>
     </message>
@@ -8996,12 +9133,12 @@ Add %4 dataset(s) using the template's defaults?</source>
         <translation type="vanished">샘플</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="564"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="565"/>
         <source>Change MQTT Publisher</source>
         <translation>MQTT 발행자 변경</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="580"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="581"/>
         <source>Change InfluxDB Sink</source>
         <translation>InfluxDB Sink 변경</translation>
     </message>
@@ -9014,47 +9151,57 @@ Add %4 dataset(s) using the template's defaults?</source>
         <translation type="vanished">표시 제목 (비워두면 원래대로 복원됨):</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="917"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="925"/>
         <source>Change Project Title</source>
         <translation>프로젝트 제목 변경</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="933"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="941"/>
         <source>Edit Control Script</source>
         <translation>제어 스크립트 편집</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="951"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="960"/>
+        <source>Edit Shared Library</source>
+        <translation>공유 라이브러리 편집</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="977"/>
+        <source>Edit JavaScript Library</source>
+        <translation>JavaScript 라이브러리 편집</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="993"/>
         <source>Change Point Count</source>
         <translation>포인트 개수 변경</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="969"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1011"/>
         <source>Change Plot Time Range</source>
         <translation>플롯 시간 범위 변경</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="989"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1031"/>
         <source>Toggle Freeze</source>
         <translation>고정 전환</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1004"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1046"/>
         <source>Toggle Change-Driven Transforms</source>
         <translation>변경 기반 변환 전환</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1021"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1063"/>
         <source>Toggle Fast Lua Execution</source>
         <translation>고속 Lua 실행 전환</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1042"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1084"/>
         <source>Enable Fast Lua Execution?</source>
         <translation>고속 Lua 실행을 활성화하시겠습니까?</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1043"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1085"/>
         <source>Fast mode runs Lua parsers and transforms through the JIT compiler (up to ~40x faster), but the runaway-script watchdog cannot operate: a script stuck in an infinite loop will stall its data source until you disconnect.
 
 Enable it only for scripts you trust and have tested in Safe mode first.</source>
@@ -9063,37 +9210,37 @@ Enable it only for scripts you trust and have tested in Safe mode first.</source
 안전 모드에서 먼저 테스트하고 신뢰할 수 있는 스크립트에만 활성화하십시오.</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1048"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1090"/>
         <source>Fast Lua Execution</source>
         <translation>고속 Lua 실행</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1077"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1119"/>
         <source>Change Frame Start Sequence</source>
         <translation>프레임 시작 시퀀스 변경</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1096"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1138"/>
         <source>Change Frame End Sequence</source>
         <translation>프레임 종료 시퀀스 변경</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1115"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1157"/>
         <source>Change Checksum</source>
         <translation>체크섬 변경</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1134"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1176"/>
         <source>Change Frame Detection</source>
         <translation>프레임 감지 변경</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1153"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1195"/>
         <source>Change Decoder</source>
         <translation>디코더 변경</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1172"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1214"/>
         <source>Toggle Hex Delimiters</source>
         <translation>16진수 구분자 전환</translation>
     </message>
@@ -9166,54 +9313,54 @@ Enable it only for scripts you trust and have tested in Safe mode first.</source
         <translation type="vanished">이 프로젝트에 저장되지 않은 수정 사항이 있습니다!</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="171"/>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="180"/>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="194"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="172"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="181"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="195"/>
         <source>Project error</source>
         <translation>프로젝트 오류</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="171"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="172"/>
         <source>Project title cannot be empty!</source>
         <translation>프로젝트 제목은 비워둘 수 없습니다!</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="180"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="181"/>
         <source>You need to add at least one group!</source>
         <translation>최소 하나의 그룹을 추가해야 합니다!</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="194"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="195"/>
         <source>You need to add at least one dataset!</source>
         <translation>최소 하나의 데이터셋을 추가해야 합니다!</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="234"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="235"/>
         <source>Your project needs a title</source>
         <translation>프로젝트에 제목이 필요합니다</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="236"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="237"/>
         <source>Add a group to get started</source>
         <translation>시작하려면 그룹을 추가하세요</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="238"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="239"/>
         <source>Add a dataset to a group</source>
         <translation>그룹에 데이터셋을 추가하세요</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="252"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="253"/>
         <source>Open the Project view at the top of the tree and enter a name. You can rename the project at any time.</source>
         <translation>트리 상단의 프로젝트 보기를 열고 이름을 입력하세요. 프로젝트는 언제든지 이름을 변경할 수 있습니다.</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="255"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="256"/>
         <source>Groups organize datasets into dashboard widgets. Use the Group button in the toolbar above to create one, then add datasets to it.</source>
         <translation>그룹은 데이터셋을 대시보드 위젯으로 구성합니다. 위 도구 모음의 그룹 버튼을 사용하여 그룹을 생성한 다음 데이터셋을 추가하세요.</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="259"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="260"/>
         <source>Datasets are the values that appear on the dashboard. Select a group in the tree and use the Dataset button in the toolbar to add one.</source>
         <translation>데이터셋은 대시보드에 표시되는 값입니다. 트리에서 그룹을 선택하고 툴바의 데이터셋 버튼을 사용하여 추가하세요.</translation>
     </message>
@@ -9238,12 +9385,12 @@ Enable it only for scripts you trust and have tested in Safe mode first.</source
         <translation type="vanished">Serial Studio 프로젝트 파일 (*.ssproj)</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="754"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="757"/>
         <source>Untitled Project</source>
         <translation>제목 없는 프로젝트</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="770"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="775"/>
         <source>Device A</source>
         <translation>장치 A</translation>
     </message>
@@ -9820,6 +9967,16 @@ Reload it?</source>
         <source>File open error</source>
         <translation type="vanished">파일 열기 오류</translation>
     </message>
+    <message>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectLoader.cpp" line="877"/>
+        <source>Cannot add to the current project</source>
+        <translation>현재 프로젝트에 추가할 수 없습니다</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectLoader.cpp" line="880"/>
+        <source>Import</source>
+        <translation>가져오기</translation>
+    </message>
 </context>
 <context>
     <name>DataModel::ProtoImporter</name>
@@ -9886,6 +10043,21 @@ Reload it?</source>
         <translation>Protobuf 가져오기 경고</translation>
     </message>
     <message>
+        <location filename="../../../core/Pipeline/DataModel/Importers/ProtoImporter.cpp" line="289"/>
+        <source>Added %1 messages to the open project.</source>
+        <translation>열린 프로젝트에 %1개의 메시지를 추가했습니다.</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Pipeline/DataModel/Importers/ProtoImporter.cpp" line="290"/>
+        <source>The new source, groups, tables and workspaces are filed under "%1".</source>
+        <translation>새 소스, 그룹, 테이블 및 작업 공간이 "%1" 아래에 정리되었습니다.</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Pipeline/DataModel/Importers/ProtoImporter.cpp" line="292"/>
+        <source>Import Complete</source>
+        <translation>가져오기 완료</translation>
+    </message>
+    <message>
         <source>Failed to load imported project</source>
         <translation type="vanished">가져온 프로젝트 로드 실패</translation>
     </message>
@@ -9894,22 +10066,22 @@ Reload it?</source>
         <translation type="vanished">생성된 프로젝트 JSON을 로드할 수 없습니다.</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Importers/ProtoImporter.cpp" line="300"/>
+        <location filename="../../../core/Pipeline/DataModel/Importers/ProtoImporter.cpp" line="321"/>
         <source>Successfully imported %1 message(s) and %2 field(s) from the proto file.</source>
         <translation>proto 파일에서 %1개의 메시지와 %2개의 필드를 성공적으로 가져왔습니다.</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Importers/ProtoImporter.cpp" line="303"/>
+        <location filename="../../../core/Pipeline/DataModel/Importers/ProtoImporter.cpp" line="324"/>
         <source>The project editor is now open for customization.</source>
         <translation>프로젝트 편집기가 사용자 지정을 위해 열렸습니다.</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Importers/ProtoImporter.cpp" line="305"/>
+        <location filename="../../../core/Pipeline/DataModel/Importers/ProtoImporter.cpp" line="326"/>
         <source>Protobuf Import Complete</source>
         <translation>Protobuf 가져오기 완료</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Importers/ProtoImporter.cpp" line="367"/>
+        <location filename="../../../core/Pipeline/DataModel/Importers/ProtoImporter.cpp" line="388"/>
         <source>Protobuf</source>
         <translation>Protobuf</translation>
     </message>
@@ -9947,6 +10119,143 @@ Reload it?</source>
         <location filename="../../../core/Pipeline/DataModel/FrameBuilder/QuickPlotBuilder.cpp" line="296"/>
         <source>Audio Input</source>
         <translation>오디오 입력</translation>
+    </message>
+</context>
+<context>
+    <name>DataModel::TransformLibraryEditor</name>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/TransformLibraryEditor.cpp" line="140"/>
+        <source>//
+// JavaScript Library
+//
+// Functions defined here are available to every JavaScript value
+// transform in this project, so a formula lives in one place. Each
+// dataset can pass its own constants through its Parameters table,
+// which the transform reads as params.&lt;name&gt;.
+//
+// Example:
+//    function rtd(raw, p) {
+//      return (raw * p.scale + p.offset) / p.r0;
+//    }
+//
+// Dataset transform:
+//    function transform(value) {
+//      return rtd(value, params);
+//    }
+//
+</source>
+        <translation>//
+// JavaScript 라이브러리
+//
+// 여기에 정의된 함수는 이 프로젝트의 모든 JavaScript 값 변환에서
+// 사용할 수 있으므로 수식을 한 곳에서 관리할 수 있습니다. 각 데이터셋은
+// Parameters 테이블을 통해 고유한 상수를 전달할 수 있으며,
+// 변환은 이를 params.&lt;name&gt;으로 읽습니다.
+//
+// 예제:
+//    function rtd(raw, p) {
+//      return (raw * p.scale + p.offset) / p.r0;
+//    }
+//
+// 데이터셋 변환:
+//    function transform(value) {
+//      return rtd(value, params);
+//    }
+//
+</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/TransformLibraryEditor.cpp" line="159"/>
+        <source>--
+-- Lua Library
+--
+-- Functions defined here are available to every Lua value transform
+-- in this project, so a formula lives in one place. Each dataset can
+-- pass its own constants through its Parameters table, which the
+-- transform reads as params.&lt;name&gt;.
+--
+-- Example:
+--    function rtd(raw, p)
+--      return (raw * p.scale + p.offset) / p.r0
+--    end
+--
+-- Dataset transform:
+--    function transform(value)
+--      return rtd(value, params)
+--    end
+--
+</source>
+        <translation>--
+-- Lua 라이브러리
+--
+-- 여기에 정의된 함수는 이 프로젝트의 모든 Lua 값 변환에서
+-- 사용할 수 있으므로 수식을 한 곳에서 관리할 수 있습니다. 각 데이터셋은
+-- Parameters 테이블을 통해 고유한 상수를 전달할 수 있으며,
+-- 변환은 이를 params.&lt;name&gt;으로 읽습니다.
+--
+-- 예제:
+--    function rtd(raw, p)
+--      return (raw * p.scale + p.offset) / p.r0
+--    end
+--
+-- 데이터셋 변환:
+--    function transform(value)
+--      return rtd(value, params)
+--    end
+--
+</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/TransformLibraryEditor.cpp" line="255"/>
+        <source>Select Lua file to import</source>
+        <translation>가져올 Lua 파일 선택</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/TransformLibraryEditor.cpp" line="256"/>
+        <source>Select JavaScript file to import</source>
+        <translation>가져올 JavaScript 파일 선택</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/TransformLibraryEditor.cpp" line="340"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/TransformLibraryEditor.cpp" line="356"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/TransformLibraryEditor.cpp" line="373"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/TransformLibraryEditor.cpp" line="382"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/TransformLibraryEditor.cpp" line="391"/>
+        <source>Code Validation Failed</source>
+        <translation>코드 검증 실패</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/TransformLibraryEditor.cpp" line="341"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/TransformLibraryEditor.cpp" line="374"/>
+        <source>Failed to create the validation engine.</source>
+        <translation>검증 엔진 생성에 실패했습니다.</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/TransformLibraryEditor.cpp" line="352"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/TransformLibraryEditor.cpp" line="383"/>
+        <source>The library did not finish running within %1 ms. Check for an infinite loop at the top level.</source>
+        <translation>라이브러리가 %1 ms 내에 실행을 완료하지 못했습니다. 최상위 레벨의 무한 루프를 확인하세요.</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/TransformLibraryEditor.cpp" line="360"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/TransformLibraryEditor.cpp" line="399"/>
+        <source>Code Validation Successful</source>
+        <translation>코드 검증 성공</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/TransformLibraryEditor.cpp" line="361"/>
+        <source>No errors detected in the Lua library.</source>
+        <translation>Lua 라이브러리에서 오류가 감지되지 않았습니다.</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/TransformLibraryEditor.cpp" line="392"/>
+        <source>Line %1: %2</source>
+        <translation>줄 %1: %2</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/TransformLibraryEditor.cpp" line="400"/>
+        <source>No errors detected in the JavaScript library.</source>
+        <translation>JavaScript 라이브러리에서 오류가 감지되지 않았습니다.</translation>
     </message>
 </context>
 <context>
@@ -11579,6 +11888,89 @@ Valid format: 01 A2 FF 3C</source>
     </message>
 </context>
 <context>
+    <name>EditorInflux</name>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorInflux.cpp" line="105"/>
+        <source>Publishing</source>
+        <translation>게시 중</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorInflux.cpp" line="116"/>
+        <source>Enabled</source>
+        <translation>활성화됨</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorInflux.cpp" line="117"/>
+        <source>Write every published block to InfluxDB while connected</source>
+        <translation>연결된 동안 게시된 모든 블록을 InfluxDB에 기록</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorInflux.cpp" line="130"/>
+        <source>Server</source>
+        <translation>서버</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorInflux.cpp" line="136"/>
+        <source>Server URL</source>
+        <translation>서버 URL</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorInflux.cpp" line="139"/>
+        <source>Base URL of the InfluxDB 2.x HTTP API</source>
+        <translation>InfluxDB 2.x HTTP API의 기본 URL</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorInflux.cpp" line="142"/>
+        <source>Organization</source>
+        <translation>Organization</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorInflux.cpp" line="145"/>
+        <source>InfluxDB organization that owns the bucket</source>
+        <translation>버킷을 소유한 InfluxDB 조직</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorInflux.cpp" line="148"/>
+        <source>Bucket</source>
+        <translation>Bucket</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorInflux.cpp" line="151"/>
+        <source>Bucket the points are written into</source>
+        <translation>포인트가 기록되는 버킷</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorInflux.cpp" line="154"/>
+        <source>Measurement</source>
+        <translation>Measurement</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorInflux.cpp" line="157"/>
+        <source>Measurement name every point is filed under</source>
+        <translation>모든 포인트가 저장되는 측정 이름</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorInflux.cpp" line="166"/>
+        <source>API Token</source>
+        <translation>API 토큰</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorInflux.cpp" line="167"/>
+        <source>Stored; type a new token to replace it</source>
+        <translation>저장됨; 교체하려면 새 토큰을 입력하세요</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorInflux.cpp" line="168"/>
+        <source>Paste the InfluxDB API token</source>
+        <translation>InfluxDB API 토큰을 붙여넣으세요</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorInflux.cpp" line="170"/>
+        <source>Kept obfuscated in this machine's settings, never in the project file</source>
+        <translation>이 기기의 설정에서 난독화되어 보관되며, 프로젝트 파일에는 저장되지 않음</translation>
+    </message>
+</context>
+<context>
     <name>EditorMqtt</name>
     <message>
         <location filename="../../../core/Ui/ProjectEditor/EditorMqtt.cpp" line="146"/>
@@ -11950,22 +12342,22 @@ Valid format: 01 A2 FF 3C</source>
         <translation>&amp;m_editor 프로젝트에 정의된 공유 테이블</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorSummaries.cpp" line="697"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorSummaries.cpp" line="746"/>
         <source>Remove 1 widget reference whose target group or dataset no longer exists?</source>
         <translation>대상 그룹 또는 데이터셋이 더 이상 존재하지 않는 위젯 참조 1개를 제거하시겠습니까?</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorSummaries.cpp" line="698"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorSummaries.cpp" line="747"/>
         <source>Remove %1 widget references whose target groups or datasets no longer exist?</source>
         <translation>대상 그룹 또는 데이터셋이 더 이상 존재하지 않는 위젯 참조 %1개를 제거하시겠습니까?</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorSummaries.cpp" line="703"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorSummaries.cpp" line="752"/>
         <source>This will only affect workspace tile placement; no groups, datasets, or data are deleted.</source>
         <translation>작업 공간 타일 배치에만 영향을 미치며, 그룹, 데이터셋 또는 데이터는 삭제되지 않습니다.</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorSummaries.cpp" line="706"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorSummaries.cpp" line="755"/>
         <source>Clean Up Workspaces</source>
         <translation>작업 공간 정리</translation>
     </message>
@@ -11973,58 +12365,72 @@ Valid format: 01 A2 FF 3C</source>
 <context>
     <name>EditorTree</name>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorTree.cpp" line="327"/>
-        <location filename="../../../core/Ui/ProjectEditor/EditorTree.cpp" line="331"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorTree.cpp" line="339"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorTree.cpp" line="343"/>
         <source>Frame Parser</source>
         <translation>프레임 파서</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorTree.cpp" line="495"/>
-        <location filename="../../../core/Ui/ProjectEditor/EditorTree.cpp" line="496"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorTree.cpp" line="507"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorTree.cpp" line="508"/>
         <source>Dashboard Widgets</source>
         <translation>대시보드 위젯</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorTree.cpp" line="624"/>
-        <location filename="../../../core/Ui/ProjectEditor/EditorTree.cpp" line="637"/>
-        <location filename="../../../core/Ui/ProjectEditor/EditorTree.cpp" line="638"/>
-        <location filename="../../../core/Ui/ProjectEditor/EditorTree.cpp" line="663"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorTree.cpp" line="636"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorTree.cpp" line="649"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorTree.cpp" line="650"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorTree.cpp" line="675"/>
         <source>Variables</source>
         <translation>변수</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorTree.cpp" line="624"/>
-        <location filename="../../../core/Ui/ProjectEditor/EditorTree.cpp" line="647"/>
-        <location filename="../../../core/Ui/ProjectEditor/EditorTree.cpp" line="648"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorTree.cpp" line="636"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorTree.cpp" line="659"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorTree.cpp" line="660"/>
         <source>Dataset Values</source>
         <translation>데이터셋 값</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorTree.cpp" line="821"/>
-        <location filename="../../../core/Ui/ProjectEditor/EditorTree.cpp" line="835"/>
-        <location filename="../../../core/Ui/ProjectEditor/EditorTree.cpp" line="836"/>
-        <location filename="../../../core/Ui/ProjectEditor/EditorTree.cpp" line="855"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorTree.cpp" line="833"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorTree.cpp" line="847"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorTree.cpp" line="848"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorTree.cpp" line="867"/>
         <source>Workspaces</source>
         <translation>작업 공간</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorTree.cpp" line="872"/>
-        <location filename="../../../core/Ui/ProjectEditor/EditorTree.cpp" line="876"/>
-        <location filename="../../../core/Ui/ProjectEditor/EditorTree.cpp" line="877"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorTree.cpp" line="908"/>
+        <source>Project Scripts</source>
+        <translation>프로젝트 스크립트</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorTree.cpp" line="910"/>
+        <source>Lua Library</source>
+        <translation>Lua 라이브러리</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorTree.cpp" line="911"/>
+        <source>JavaScript Library</source>
+        <translation>JavaScript 라이브러리</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorTree.cpp" line="959"/>
+        <source>Data Export</source>
+        <translation>데이터 내보내기</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorTree.cpp" line="960"/>
         <source>MQTT Publisher</source>
         <translation>MQTT 발행자</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorTree.cpp" line="898"/>
-        <location filename="../../../core/Ui/ProjectEditor/EditorTree.cpp" line="902"/>
-        <location filename="../../../core/Ui/ProjectEditor/EditorTree.cpp" line="903"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorTree.cpp" line="961"/>
         <source>InfluxDB Sink</source>
         <translation>InfluxDB 싱크</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorTree.cpp" line="924"/>
-        <location filename="../../../core/Ui/ProjectEditor/EditorTree.cpp" line="928"/>
-        <location filename="../../../core/Ui/ProjectEditor/EditorTree.cpp" line="929"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorTree.cpp" line="909"/>
         <source>Control Loop</source>
         <translation>제어 루프</translation>
     </message>
@@ -14173,12 +14579,12 @@ Add controller tags above to poll them.</source>
         <translation>연결 시도 실패</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="1097"/>
+        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="1095"/>
         <source>This connection type requires an active license or trial.</source>
         <translation>이 연결 유형은 활성 라이선스 또는 평가판이 필요합니다.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="1098"/>
+        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="1096"/>
         <source>Activate Serial Studio Pro or start a trial to use this device type.</source>
         <translation>이 장치 유형을 사용하려면 Serial Studio Pro를 활성화하거나 평가판을 시작하십시오.</translation>
     </message>
@@ -15514,32 +15920,32 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
 <context>
     <name>IO::Drivers::Modbus</name>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="354"/>
+        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="353"/>
         <source>Invalid Serial Port</source>
         <translation>잘못된 시리얼 포트</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="398"/>
+        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="397"/>
         <source>Modbus Initialization Failed</source>
         <translation>Modbus 초기화 실패</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="446"/>
+        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="445"/>
         <source>Nothing is listening at %1</source>
         <translation>%1에서 수신 대기 중인 항목이 없습니다</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="459"/>
+        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="458"/>
         <source>The Modbus client is gone</source>
         <translation>Modbus 클라이언트가 사라졌습니다</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="480"/>
+        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="479"/>
         <source>Modbus Connection Failed</source>
         <translation>Modbus 연결 실패</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="355"/>
+        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="354"/>
         <source>The selected serial port "%1" is no longer available. Refresh the port list and try again.</source>
         <translation>선택한 시리얼 포트 "%1"을(를) 더 이상 사용할 수 없습니다. 포트 목록을 새로 고침하고 다시 시도하세요.</translation>
     </message>
@@ -15548,17 +15954,17 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
         <translation type="vanished">Modbus 클라이언트가 연결 시작을 거부했습니다.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="399"/>
+        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="398"/>
         <source>Unable to create Modbus device. Check your system configuration and try again.</source>
         <translation>Modbus 장치를 생성할 수 없습니다. 시스템 구성을 확인하고 다시 시도하세요.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="482"/>
+        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="481"/>
         <source>Unable to connect to "%1". Check your connection settings.</source>
         <translation>"%1"에 연결할 수 없습니다. 연결 설정을 확인하세요.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="483"/>
+        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="482"/>
         <source>"%1": %2</source>
         <translation>"%1": %2</translation>
     </message>
@@ -15567,68 +15973,68 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
         <translation type="vanished">연결 시도 시간 초과</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="599"/>
+        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="598"/>
         <source>None</source>
         <translation>없음</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="600"/>
+        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="599"/>
         <source>Even</source>
         <translation>짝수</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="601"/>
+        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="600"/>
         <source>Odd</source>
         <translation>홀수</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="602"/>
+        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="601"/>
         <source>Space</source>
         <translation>스페이스</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="603"/>
+        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="602"/>
         <source>Mark</source>
         <translation>마크</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="655"/>
+        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="654"/>
         <source>Holding Registers (0x03)</source>
         <translation>홀딩 레지스터 (0x03)</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="656"/>
+        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="655"/>
         <source>Input Registers (0x04)</source>
         <translation>입력 레지스터 (0x04)</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="657"/>
+        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="656"/>
         <source>Coils (0x01)</source>
         <translation>코일 (0x01)</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="658"/>
+        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="657"/>
         <source>Discrete Inputs (0x02)</source>
         <translation>이산 입력 (0x02)</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="808"/>
+        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="807"/>
         <source> on slave %1</source>
         <translation>슬레이브 %1에서</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="821"/>
+        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="820"/>
         <source>No register groups configured</source>
         <translation>레지스터 그룹이 구성되지 않음</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="822"/>
+        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="821"/>
         <source>Add at least one register group before generating a project.</source>
         <translation>프로젝트를 생성하기 전에 하나 이상의 레지스터 그룹을 추가하십시오.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="824"/>
-        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="854"/>
+        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="823"/>
+        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="853"/>
         <source>Modbus Project Generator</source>
         <translation>Modbus 프로젝트 생성기</translation>
     </message>
@@ -15641,22 +16047,22 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
         <translation type="vanished">임시 디렉터리에 대한 쓰기 권한을 확인하십시오.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="840"/>
+        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="839"/>
         <source>Failed to load generated project</source>
         <translation>생성된 프로젝트 로드 실패</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="841"/>
+        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="840"/>
         <source>The generated project JSON could not be loaded.</source>
         <translation>생성된 프로젝트 JSON을 로드할 수 없습니다.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="849"/>
+        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="848"/>
         <source>Successfully generated project with %1 groups and %2 datasets.</source>
         <translation>%1개 그룹과 %2개 데이터셋으로 프로젝트를 성공적으로 생성했습니다.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="852"/>
+        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="851"/>
         <source>The project editor is now open for customization.</source>
         <translation>프로젝트 편집기가 사용자 지정을 위해 열렸습니다.</translation>
     </message>
@@ -15701,67 +16107,67 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
         <translation type="vanished">이산 %1</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1235"/>
+        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1232"/>
         <source>Error code: %1</source>
         <translation>오류 코드: %1</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1237"/>
+        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1234"/>
         <source>Modbus Communication Error</source>
         <translation>Modbus 통신 오류</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1249"/>
+        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1246"/>
         <source>Select Port</source>
         <translation>포트 선택</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1339"/>
+        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1336"/>
         <source>Protocol</source>
         <translation>프로토콜</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1347"/>
+        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1344"/>
         <source>Slave Address</source>
         <translation>슬레이브 주소</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1356"/>
+        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1353"/>
         <source>Poll Interval (ms)</source>
         <translation>폴링 간격 (ms)</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1384"/>
+        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1381"/>
         <source>Host / IP</source>
         <translation>호스트 / IP</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1391"/>
+        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1388"/>
         <source>Port</source>
         <translation>포트</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1406"/>
+        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1403"/>
         <source>Serial Port</source>
         <translation>시리얼 포트</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1414"/>
+        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1411"/>
         <source>Baud Rate</source>
         <translation>보레이트</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1422"/>
+        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1419"/>
         <source>Parity</source>
         <translation>패리티</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1430"/>
+        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1427"/>
         <source>Data Bits</source>
         <translation>데이터 비트</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1438"/>
+        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1435"/>
         <source>Stop Bits</source>
         <translation>스톱 비트</translation>
     </message>
@@ -18051,69 +18457,56 @@ The device may not expose data endpoints in its active configuration, or it may 
         <translation>%1개 작성됨, %2개 삭제됨, %3개 오류</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/InfluxSinkView.qml" line="170"/>
         <source>Enabled</source>
-        <translation>활성화됨</translation>
+        <translation type="vanished">활성화됨</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/InfluxSinkView.qml" line="185"/>
         <source>Server URL</source>
-        <translation>서버 URL</translation>
+        <translation type="vanished">서버 URL</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/InfluxSinkView.qml" line="189"/>
         <source>e.g. http://localhost:8086</source>
-        <translation>예: http://localhost:8086</translation>
+        <translation type="vanished">예: http://localhost:8086</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/InfluxSinkView.qml" line="197"/>
         <source>Organization</source>
-        <translation>Organization</translation>
+        <translation type="vanished">Organization</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/InfluxSinkView.qml" line="200"/>
         <source>e.g. my-org</source>
-        <translation>예: my-org</translation>
+        <translation type="vanished">예: my-org</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/InfluxSinkView.qml" line="209"/>
         <source>Bucket</source>
-        <translation>Bucket</translation>
+        <translation type="vanished">Bucket</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/InfluxSinkView.qml" line="212"/>
         <source>e.g. telemetry</source>
-        <translation>예: telemetry</translation>
+        <translation type="vanished">예: telemetry</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/InfluxSinkView.qml" line="221"/>
         <source>Measurement</source>
-        <translation>Measurement</translation>
+        <translation type="vanished">Measurement</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/InfluxSinkView.qml" line="224"/>
         <source>e.g. serial_studio</source>
-        <translation>예: serial_studio</translation>
+        <translation type="vanished">예: serial_studio</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/InfluxSinkView.qml" line="233"/>
         <source>API Token</source>
-        <translation>API 토큰</translation>
+        <translation type="vanished">API 토큰</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/InfluxSinkView.qml" line="246"/>
         <source>Stored; type a new token to replace it</source>
-        <translation>저장됨; 교체하려면 새 토큰을 입력하세요</translation>
+        <translation type="vanished">저장됨; 교체하려면 새 토큰을 입력하세요</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/InfluxSinkView.qml" line="247"/>
         <source>Paste the InfluxDB API token</source>
-        <translation>InfluxDB API 토큰을 붙여넣으세요</translation>
+        <translation type="vanished">InfluxDB API 토큰을 붙여넣으세요</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/InfluxSinkView.qml" line="259"/>
         <source>Points are written to the InfluxDB 2.x HTTP API with nanosecond precision. The token is stored obfuscated in this machine's settings and never saved into the project file.</source>
-        <translation>포인트는 나노초 정밀도로 InfluxDB 2.x HTTP API에 기록됩니다. 토큰은 이 컴퓨터의 설정에 난독화되어 저장되며 프로젝트 파일에는 저장되지 않습니다.</translation>
+        <translation type="vanished">포인트는 나노초 정밀도로 InfluxDB 2.x HTTP API에 기록됩니다. 토큰은 이 컴퓨터의 설정에 난독화되어 저장되며 프로젝트 파일에는 저장되지 않습니다.</translation>
     </message>
     <message>
         <source>Points are written to the InfluxDB 2.x HTTP API with nanosecond precision. The token is stored encrypted on this machine and never saved into the project file.</source>
@@ -18755,12 +19148,12 @@ To reuse this seat on another device, email alex@serial-studio.com with your dev
 <context>
     <name>MDF4::Export</name>
     <message>
-        <location filename="../../../core/Storage/MDF4/Export.cpp" line="763"/>
+        <location filename="../../../core/Storage/MDF4/Export.cpp" line="765"/>
         <source>MDF4 Export is a Pro feature.</source>
         <translation>MDF4 내보내기는 Pro 기능입니다.</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/MDF4/Export.cpp" line="764"/>
+        <location filename="../../../core/Storage/MDF4/Export.cpp" line="766"/>
         <source>Activate Serial Studio Pro or start the free trial to enable MDF4 export.</source>
         <translation>MDF4 내보내기를 활성화하려면 Serial Studio Pro를 활성화하거나 무료 평가판을 시작하세요.</translation>
     </message>
@@ -20688,8 +21081,8 @@ Would you like to open the download page?</source>
         <translation>Info.plist를 쓸 수 없음: %1</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/Misc/ShortcutGenerator_Linux.cpp" line="140"/>
         <location filename="../../../core/Ui/Misc/ShortcutGenerator_macOS.cpp" line="271"/>
+        <location filename="../../../core/Ui/Misc/ShortcutGenerator_Linux.cpp" line="140"/>
         <source>Windows shortcut writer is not available on this platform.</source>
         <translation>Windows 바로가기 생성기는 이 플랫폼에서 사용할 수 없습니다.</translation>
     </message>
@@ -20720,8 +21113,8 @@ Would you like to open the download page?</source>
         <translation>.lnk 파일 저장 실패(HRESULT 0x%1).</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/Misc/ShortcutGenerator_Linux.cpp" line="154"/>
         <location filename="../../../core/Ui/Misc/ShortcutGenerator_Windows.cpp" line="185"/>
+        <location filename="../../../core/Ui/Misc/ShortcutGenerator_Linux.cpp" line="154"/>
         <source>macOS shortcut writer is not available on this platform.</source>
         <translation>macOS 바로가기 생성기는 이 플랫폼에서 사용할 수 없습니다.</translation>
     </message>
@@ -21152,7 +21545,17 @@ Add groups above to poll multiple register types.</source>
         <translation>취소</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusPreviewDialog.qml" line="302"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusPreviewDialog.qml" line="301"/>
+        <source>Add to Project</source>
+        <translation>프로젝트에 추가</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusPreviewDialog.qml" line="306"/>
+        <source>Add the generated source, groups, tables and workspaces to the project that is open, instead of creating a new file</source>
+        <translation>새 파일을 생성하는 대신, 생성된 소스, 그룹, 테이블 및 작업 공간을 열려 있는 프로젝트에 추가</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusPreviewDialog.qml" line="317"/>
         <source>Create Project</source>
         <translation>프로젝트 생성</translation>
     </message>
@@ -21447,38 +21850,38 @@ Add groups above to poll multiple register types.</source>
 <context>
     <name>NativeTemplates</name>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryHex.cpp" line="127"/>
         <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryRaw.cpp" line="116"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryHex.cpp" line="127"/>
         <source>Bytes per value</source>
         <translation>값당 바이트 수</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryHex.cpp" line="128"/>
         <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryRaw.cpp" line="117"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryHex.cpp" line="128"/>
         <source>Number of bytes combined into each channel value.</source>
         <translation>각 채널 값으로 결합되는 바이트 수입니다.</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryHex.cpp" line="136"/>
         <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryRaw.cpp" line="125"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryHex.cpp" line="136"/>
         <source>Endianness</source>
         <translation>엔디언</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryHex.cpp" line="137"/>
         <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryRaw.cpp" line="126"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryHex.cpp" line="137"/>
         <source>Byte order used when combining multi-byte values.</source>
         <translation>다중 바이트 값을 결합할 때 사용되는 바이트 순서.</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryHex.cpp" line="145"/>
         <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryRaw.cpp" line="134"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryHex.cpp" line="145"/>
         <source>Signed values</source>
         <translation>부호 있는 값</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryHex.cpp" line="146"/>
         <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryRaw.cpp" line="135"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryHex.cpp" line="146"/>
         <source>Interprets each value as two's-complement signed.</source>
         <translation>각 값을 2의 보수 부호 있는 값으로 해석합니다.</translation>
     </message>
@@ -21493,9 +21896,9 @@ Add groups above to poll multiple register types.</source>
         <translation>쉼표로 구분된 태그:인덱스 항목(예: 1:0,2:1,3:2). 태그는 10진수 또는 0x 접두사가 붙은 16진수일 수 있습니다.</translation>
     </message>
     <message>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/TextNmea0183.cpp" line="219"/>
         <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinarySirf.cpp" line="216"/>
         <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryUbx.cpp" line="226"/>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/TextNmea0183.cpp" line="219"/>
         <source>Validate checksum</source>
         <translation>체크섬 검증</translation>
     </message>
@@ -23426,47 +23829,47 @@ Click Refresh to update the list.</source>
         <translation type="vanished">명령</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="421"/>
+        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="425"/>
         <source>This project is password protected</source>
         <translation>이 프로젝트는 비밀번호로 보호되어 있습니다</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="422"/>
+        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="426"/>
         <source>Editing is available in Project mode</source>
         <translation>프로젝트 모드에서 편집 가능</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="433"/>
+        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="437"/>
         <source>Enter the password to make changes, or open a different project.</source>
         <translation>변경하려면 비밀번호를 입력하거나 다른 프로젝트를 여십시오.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="434"/>
+        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="438"/>
         <source>Switch to Project mode to load and edit a project.</source>
         <translation>프로젝트를 불러오고 편집하려면 프로젝트 모드로 전환하십시오.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="456"/>
+        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="460"/>
         <source>Unlock</source>
         <translation>잠금 해제</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="457"/>
+        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="461"/>
         <source>Switch to Project Mode</source>
         <translation>프로젝트 모드로 전환</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="476"/>
+        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="480"/>
         <source>Open Other Project</source>
         <translation>다른 프로젝트 열기</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="477"/>
+        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="481"/>
         <source>Close</source>
         <translation>닫기</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="493"/>
+        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="497"/>
         <source>Create New Project</source>
         <translation>새 프로젝트 생성</translation>
     </message>
@@ -23863,7 +24266,7 @@ Click Refresh to update the list.</source>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectBulkOps.cpp" line="300"/>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="493"/>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="520"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaces.cpp" line="792"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaces.cpp" line="810"/>
         <source>This action cannot be undone.</source>
         <translation>이 작업은 취소할 수 없습니다.</translation>
     </message>
@@ -23883,130 +24286,150 @@ Click Refresh to update the list.</source>
         <translation>선택 항목 토글</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectLoader.cpp" line="454"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectLoader.cpp" line="465"/>
         <source>Legacy frame parser function updated</source>
         <translation>레거시 프레임 파서 함수 업데이트됨</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectLoader.cpp" line="455"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectLoader.cpp" line="466"/>
         <source>Your project used a legacy frame parser function with a 'separator' argument. It has been automatically migrated to the new format.</source>
         <translation>프로젝트에서 'separator' 인수를 사용하는 레거시 프레임 파서 함수가 사용되었습니다. 새 형식으로 자동 마이그레이션되었습니다.</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectLoader.cpp" line="489"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectLoader.cpp" line="500"/>
         <source>Select Project File</source>
         <translation>프로젝트 파일 선택</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectLoader.cpp" line="491"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectLoader.cpp" line="502"/>
         <source>Project Files (*.json *.ssproj)</source>
         <translation>프로젝트 파일 (*.json *.ssproj)</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectLoader.cpp" line="543"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectLoader.cpp" line="553"/>
         <source>JSON validation error</source>
         <translation>JSON 유효성 검사 오류</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectLoader.cpp" line="657"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectLoader.cpp" line="671"/>
         <source>Project upgraded from an earlier file format</source>
         <translation>프로젝트가 이전 파일 형식에서 업그레이드됨</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectLoader.cpp" line="659"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectLoader.cpp" line="673"/>
         <source>This project was saved with schema version %1; the current version is %2. Defaults have been applied to any new fields. Save the project to lock in the upgrade.</source>
         <translation>이 프로젝트는 스키마 버전 %1(으)로 저장되었습니다. 현재 버전은 %2입니다. 새 필드에는 기본값이 적용되었습니다. 업그레이드를 확정하려면 프로젝트를 저장하세요.</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectLoader.cpp" line="775"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectPersistence.cpp" line="344"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectLoader.cpp" line="794"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectPersistence.cpp" line="357"/>
         <source>Untitled Project</source>
         <translation>제목 없는 프로젝트</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectLoader.cpp" line="782"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectLoader.cpp" line="801"/>
         <source>Save Imported Project</source>
         <translation>가져온 프로젝트 저장</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectLoader.cpp" line="784"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectPersistence.cpp" line="323"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectLoader.cpp" line="803"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectPersistence.cpp" line="336"/>
         <source>Serial Studio Project Files (*.ssproj)</source>
         <translation>Serial Studio 프로젝트 파일 (*.ssproj)</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectLoader.cpp" line="818"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectLoader.cpp" line="837"/>
         <source>File open error</source>
         <translation>파일 열기 오류</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectLoader.cpp" line="943"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectLoader.cpp" line="894"/>
+        <source>Open a project with at least one group first, or choose Create Project instead.</source>
+        <translation>먼저 하나 이상의 그룹이 있는 프로젝트를 열거나, 프로젝트 생성을 선택하십시오.</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectLoader.cpp" line="903"/>
+        <source>Adding a source to an open project makes it a multi-source project, which this build does not support.</source>
+        <translation>열려 있는 프로젝트에 소스를 추가하면 다중 소스 프로젝트가 되며, 이 빌드에서는 지원되지 않습니다.</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectLoader.cpp" line="924"/>
+        <source>The import produced no groups.</source>
+        <translation>가져오기에서 생성된 그룹이 없습니다.</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectLoader.cpp" line="928"/>
+        <source>Add Import to Project</source>
+        <translation>프로젝트에 가져오기 추가</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectLoader.cpp" line="1063"/>
         <source>Device A</source>
         <translation>장치 A</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectLoader.cpp" line="986"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectLoader.cpp" line="1106"/>
         <source>Multi-source projects require a Pro license</source>
         <translation>다중 소스 프로젝트는 Pro 라이선스가 필요합니다</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectLoader.cpp" line="987"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectLoader.cpp" line="1107"/>
         <source>This project contains multiple data sources. Only the first source has been loaded. A Serial Studio Pro license is required to use multi-source projects.</source>
         <translation>이 프로젝트는 여러 데이터 소스를 포함하고 있습니다. 첫 번째 소스만 로드되었습니다. 다중 소스 프로젝트를 사용하려면 Serial Studio Pro 라이선스가 필요합니다.</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectLoader.cpp" line="1097"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectLoader.cpp" line="1218"/>
         <source>Workspace IDs remapped on load</source>
         <translation>워크스페이스 ID가 로드 시 재매핑됨</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectLoader.cpp" line="1098"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectLoader.cpp" line="1219"/>
         <source>%1 custom workspace ID(s) overlapped the new reserved auto range and were moved into the user range. Save the project to make the remap permanent.</source>
         <translation>%1개의 사용자 지정 작업 공간 ID가 새로 예약된 자동 범위와 겹쳐 사용자 범위로 이동되었습니다. 프로젝트를 저장하여 이 매핑을 영구적으로 만드세요.</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectPersistence.cpp" line="281"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectPersistence.cpp" line="294"/>
         <source>Do you want to save your changes?</source>
         <translation>변경 사항을 저장하시겠습니까?</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectPersistence.cpp" line="282"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectPersistence.cpp" line="295"/>
         <source>You have unsaved modifications in this project!</source>
         <translation>이 프로젝트에 저장되지 않은 수정 사항이 있습니다!</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectPersistence.cpp" line="321"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectPersistence.cpp" line="334"/>
         <source>Save Serial Studio Project</source>
         <translation>Serial Studio 프로젝트 저장</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectPersistence.cpp" line="414"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectPersistence.cpp" line="427"/>
         <source>File save error</source>
         <translation>파일 저장 오류</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectPersistence.cpp" line="643"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectPersistence.cpp" line="657"/>
         <source>Project file removed from disk</source>
         <translation>프로젝트 파일이 디스크에서 제거됨</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectPersistence.cpp" line="644"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectPersistence.cpp" line="658"/>
         <source>%1 was deleted or renamed by another program. Save the project to recreate it.</source>
         <translation>%1이(가) 다른 프로그램에 의해 삭제되거나 이름이 변경되었습니다. 프로젝트를 저장하여 다시 생성하십시오.</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectPersistence.cpp" line="667"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectPersistence.cpp" line="689"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectPersistence.cpp" line="681"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectPersistence.cpp" line="703"/>
         <source>Project file changed on disk</source>
         <translation>프로젝트 파일이 디스크에서 변경됨</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectPersistence.cpp" line="668"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectPersistence.cpp" line="682"/>
         <source>%1 was modified by another program. The in-memory project was kept; reopen the file to load the external changes.</source>
         <translation>%1이(가) 다른 프로그램에 의해 수정되었습니다. 메모리 내 프로젝트가 유지되었습니다. 외부 변경 사항을 로드하려면 파일을 다시 여십시오.</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectPersistence.cpp" line="686"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectPersistence.cpp" line="700"/>
         <source>The project file was modified by another program.
 
 Reload it and discard your unsaved changes?</source>
@@ -24015,7 +24438,7 @@ Reload it and discard your unsaved changes?</source>
 다시 로드하고 저장하지 않은 변경 사항을 삭제하시겠습니까?</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectPersistence.cpp" line="688"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectPersistence.cpp" line="702"/>
         <source>The project file was modified by another program.
 
 Reload it?</source>
@@ -24024,12 +24447,12 @@ Reload it?</source>
 다시 로드하시겠습니까?</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectPersistence.cpp" line="728"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectPersistence.cpp" line="742"/>
         <source>Project file could not be reloaded</source>
         <translation>프로젝트 파일을 다시 로드할 수 없습니다</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectPersistence.cpp" line="729"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectPersistence.cpp" line="743"/>
         <source>%1 could not be read back: it is unreadable or no longer valid JSON. Your in-memory project was kept; save it to overwrite the file on disk.</source>
         <translation>%1을(를) 다시 읽을 수 없습니다: 읽을 수 없거나 더 이상 유효한 JSON이 아닙니다. 메모리의 프로젝트는 유지되었습니다. 저장하여 디스크의 파일을 덮어쓰세요.</translation>
     </message>
@@ -24095,10 +24518,10 @@ Reload it?</source>
         <translation>출력 위젯 "%1"을(를) 삭제하시겠습니까?</translation>
     </message>
     <message>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectOutputWidgets.cpp" line="239"/>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="313"/>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="355"/>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="390"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectOutputWidgets.cpp" line="239"/>
         <source>This action cannot be undone. Do you wish to proceed?</source>
         <translation>이 작업은 취소할 수 없습니다. 계속하시겠습니까?</translation>
     </message>
@@ -24367,7 +24790,7 @@ Reload it?</source>
     </message>
     <message>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="986"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="669"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="670"/>
         <source>Move Group</source>
         <translation>그룹 이동</translation>
     </message>
@@ -24387,26 +24810,89 @@ Reload it?</source>
         <translation>그룹 이름 변경</translation>
     </message>
     <message>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaceProfiles.cpp" line="200"/>
+        <source>Add Workspace Profile</source>
+        <translation>작업 공간 프로필 추가</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaceProfiles.cpp" line="208"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaceProfiles.cpp" line="375"/>
+        <source>Profile</source>
+        <translation>프로필</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaceProfiles.cpp" line="225"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaceProfiles.cpp" line="394"/>
+        <source>Rename Workspace Profile</source>
+        <translation>작업 공간 프로필 이름 변경</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaceProfiles.cpp" line="242"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaceProfiles.cpp" line="419"/>
+        <source>Delete Workspace Profile</source>
+        <translation>작업 공간 프로필 삭제</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaceProfiles.cpp" line="261"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaceProfiles.cpp" line="285"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaceProfiles.cpp" line="308"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaceProfiles.cpp" line="326"/>
+        <source>Edit Workspace Profile</source>
+        <translation>작업 공간 프로필 편집</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaceProfiles.cpp" line="372"/>
+        <source>New Workspace Profile</source>
+        <translation>새 작업 공간 프로필</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaceProfiles.cpp" line="373"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaceProfiles.cpp" line="395"/>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="1309"/>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="1338"/>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="1364"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="497"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="519"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="546"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="732"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="758"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="953"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="975"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="1001"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectSources.cpp" line="280"/>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="382"/>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="410"/>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="433"/>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="456"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaces.cpp" line="745"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaces.cpp" line="771"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectSources.cpp" line="280"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaces.cpp" line="763"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaces.cpp" line="789"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="498"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="520"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="547"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="733"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="759"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="954"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="976"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="1002"/>
         <source>Name:</source>
         <translation>이름:</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaceProfiles.cpp" line="415"/>
+        <source>Delete workspace profile "%1"?</source>
+        <translation>작업 공간 프로필 "%1"을(를) 삭제하시겠습니까?</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaceProfiles.cpp" line="416"/>
+        <source>The workspaces and folders it lists are kept; only the selection is removed.</source>
+        <translation>나열된 작업 공간과 폴더는 유지되며 선택 항목만 제거됩니다.</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaceProfiles.cpp" line="509"/>
+        <source>All workspaces</source>
+        <translation>모든 작업 공간</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaceProfiles.cpp" line="515"/>
+        <source>Workspace Profile</source>
+        <translation>작업 공간 프로필</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaceProfiles.cpp" line="516"/>
+        <source>Show the workspaces of:</source>
+        <translation>작업 공간 표시 대상:</translation>
     </message>
     <message>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="1337"/>
@@ -24424,9 +24910,9 @@ Reload it?</source>
         <translation>테이블 추가</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="977"/>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="123"/>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="384"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="978"/>
         <source>Shared Table</source>
         <translation>공유 테이블</translation>
     </message>
@@ -24464,8 +24950,8 @@ Reload it?</source>
         <translation>변수 편집</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="974"/>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="381"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="975"/>
         <source>New Shared Table</source>
         <translation>새 공유 테이블</translation>
     </message>
@@ -24487,7 +24973,7 @@ Reload it?</source>
     <message>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="498"/>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="519"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaces.cpp" line="791"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaces.cpp" line="809"/>
         <source>Delete "%1"?</source>
         <translation>"%1"을(를) 삭제하시겠습니까?</translation>
     </message>
@@ -24607,128 +25093,166 @@ Reload it?</source>
         <translation>스트림 레인 변경</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="521"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaces.cpp" line="366"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaces.cpp" line="747"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaces.cpp" line="384"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaces.cpp" line="765"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="522"/>
         <source>Workspace</source>
         <translation>작업 공간</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="518"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaces.cpp" line="744"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaces.cpp" line="762"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="519"/>
         <source>New Workspace</source>
         <translation>새 작업 공간</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaces.cpp" line="770"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaces.cpp" line="788"/>
         <source>Rename Workspace</source>
         <translation>작업 공간 이름 변경</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaces.cpp" line="794"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaces.cpp" line="812"/>
         <source>Delete Workspace</source>
         <translation>작업 공간 삭제</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaces.cpp" line="856"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaces.cpp" line="874"/>
         <source>Overview</source>
         <translation>개요</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaces.cpp" line="865"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaces.cpp" line="883"/>
         <source>All Data</source>
         <translation>모든 데이터</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaces.cpp" line="1134"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaces.cpp" line="1152"/>
         <source>Discard workspace customisations?</source>
         <translation>작업 공간 사용자 지정을 취소하시겠습니까?</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaces.cpp" line="1135"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaces.cpp" line="1153"/>
         <source>Switching off Customize discards your edits and rebuilds the workspace list from the project's groups.</source>
         <translation>사용자 지정을 끄면 편집 내용이 삭제되고 프로젝트의 그룹에서 작업 공간 목록이 다시 생성됩니다.</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaces.cpp" line="1138"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaces.cpp" line="1156"/>
         <source>Customize Workspaces</source>
         <translation>작업 공간 사용자 지정</translation>
     </message>
     <message>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="325"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="499"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="609"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="734"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="822"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="955"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="500"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="610"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="735"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="823"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="956"/>
         <source>Folder</source>
         <translation>폴더</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="496"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="731"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="952"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="497"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="732"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="953"/>
         <source>New Folder</source>
         <translation>새 폴더</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="545"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="622"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="757"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="835"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="1000"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="546"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="623"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="758"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="836"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="1001"/>
         <source>Rename Folder</source>
         <translation>폴더 이름 변경</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="567"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="779"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="1022"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="568"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="780"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="1023"/>
         <source>Delete folder "%1"?</source>
         <translation>"%1" 폴더를 삭제하시겠습니까?</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="568"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="569"/>
         <source>The folder is removed; its workspaces and sub-folders move up to the parent.</source>
         <translation>폴더가 제거되며, 해당 폴더의 작업 공간과 하위 폴더는 상위 폴더로 이동합니다.</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="571"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="642"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="782"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="856"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="1026"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="572"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="643"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="783"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="857"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="1027"/>
         <source>Delete Folder</source>
         <translation>폴더 삭제</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="600"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="811"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="601"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="812"/>
         <source>Add Folder</source>
         <translation>폴더 추가</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="690"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="716"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="911"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="937"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="691"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="717"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="912"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="938"/>
         <source>Move Folder</source>
         <translation>폴더 이동</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="780"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="781"/>
         <source>The folder is removed; its groups and sub-folders move up to the parent.</source>
         <translation>폴더가 제거되며, 해당 폴더의 그룹과 하위 폴더는 상위 폴더로 이동합니다.</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="883"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="884"/>
         <source>Move Table</source>
         <translation>테이블 이동</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="1023"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="1024"/>
         <source>The folder is removed; its tables and sub-folders move up to the parent. The accessor path of those tables changes accordingly.</source>
         <translation>폴더가 제거되며, 해당 폴더의 테이블과 하위 폴더는 상위 폴더로 이동합니다. 해당 테이블의 접근자 경로가 그에 따라 변경됩니다.</translation>
+    </message>
+</context>
+<context>
+    <name>ProjectScriptsView</name>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/ProjectScriptsView.qml" line="34"/>
+        <source>Project Scripts</source>
+        <translation>프로젝트 스크립트</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/ProjectScriptsView.qml" line="47"/>
+        <source>Control Loop</source>
+        <translation>제어 루프</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/ProjectScriptsView.qml" line="48"/>
+        <source>JavaScript setup() and loop() that run while the project is connected: timers, watchdogs, automated commands.</source>
+        <translation>프로젝트가 연결된 동안 실행되는 JavaScript setup() 및 loop(): 타이머, 워치독, 자동화된 명령.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/ProjectScriptsView.qml" line="54"/>
+        <source>Lua Library</source>
+        <translation>Lua 라이브러리</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/ProjectScriptsView.qml" line="55"/>
+        <source>Functions every Lua value transform of this project can call, so a formula lives in one place.</source>
+        <translation>이 프로젝트의 모든 Lua 값 변환이 호출할 수 있는 함수로, 수식을 한 곳에서 관리합니다.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/ProjectScriptsView.qml" line="61"/>
+        <source>JavaScript Library</source>
+        <translation>JavaScript 라이브러리</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/ProjectScriptsView.qml" line="62"/>
+        <source>Functions every JavaScript value transform of this project can call.</source>
+        <translation>이 프로젝트의 모든 JavaScript 값 변환이 호출할 수 있는 함수.</translation>
     </message>
 </context>
 <context>
@@ -25315,7 +25839,17 @@ Reload it?</source>
         <translation>취소</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/ProtoPreviewDialog.qml" line="381"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/ProtoPreviewDialog.qml" line="380"/>
+        <source>Add to Project</source>
+        <translation>프로젝트에 추가</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Dialogs/ProtoPreviewDialog.qml" line="385"/>
+        <source>Add the generated source, groups, tables and workspaces to the project that is open, instead of creating a new file</source>
+        <translation>새 파일을 생성하는 대신, 생성된 소스, 그룹, 테이블 및 작업 공간을 열려 있는 프로젝트에 추가</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Dialogs/ProtoPreviewDialog.qml" line="396"/>
         <source>Create Project</source>
         <translation>프로젝트 생성</translation>
     </message>
@@ -25453,7 +25987,7 @@ Reload it?</source>
         <translation>일반 I/O 오류</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="198"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="200"/>
         <source>
 
 This script may use Lua 5.3 bitwise syntax, which this runtime does not support. Replace: %1. The bit and bit32 libraries are available in every script.</source>
@@ -25462,13 +25996,13 @@ This script may use Lua 5.3 bitwise syntax, which this runtime does not support.
 </translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="226"/>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="486"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="489"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="230"/>
         <source>Frame Parser Disabled</source>
         <translation>프레임 파서 비활성화됨</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="487"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="490"/>
         <source>The Lua frame parser for source %1 timed out %2 frames in a row and has been disabled to keep Serial Studio responsive.
 
 Most likely cause: an infinite loop or extremely slow operation in the script body. Fix the script and reload the project to re-enable parsing.</source>
@@ -25477,13 +26011,13 @@ Most likely cause: an infinite loop or extremely slow operation in the script bo
 가장 가능성 높은 원인: 스크립트 본문의 무한 루프 또는 매우 느린 작업. 스크립트를 수정하고 프로젝트를 다시 로드하여 파싱을 재활성화하십시오.</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="265"/>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="305"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="267"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="307"/>
         <source>Lua Syntax Error</source>
         <translation>Lua 구문 오류</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="266"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="268"/>
         <source>The parser code contains an error:
 
 %1
@@ -25496,17 +26030,17 @@ Serial Studio can rewrite the unsupported operators as bit.* calls and reload th
 Serial Studio는 지원되지 않는 연산자를 bit.* 호출로 재작성하여 파서를 다시 로드할 수 있습니다. bit 라이브러리는 32비트 정수에서 작동하므로 32비트보다 큰 값은 재작성 후 래핑됩니다.</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="276"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="278"/>
         <source>Fix Automatically</source>
         <translation>자동으로 수정</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="277"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="279"/>
         <source>Leave Unchanged</source>
         <translation>변경하지 않음</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="306"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="308"/>
         <source>The parser code contains an error:
 
 %1</source>
@@ -25515,12 +26049,12 @@ Serial Studio는 지원되지 않는 연산자를 bit.* 호출로 재작성하�
 %1</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="654"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="658"/>
         <source>Lua Runtime Error</source>
         <translation>Lua 런타임 오류</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="655"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="659"/>
         <source>The parser code triggered an error:
 
 %1</source>
@@ -25529,13 +26063,13 @@ Serial Studio는 지원되지 않는 연산자를 bit.* 호출로 재작성하�
 %1</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="509"/>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="676"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="680"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="560"/>
         <source>Missing Parse Function</source>
         <translation>Parse 함수 누락</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="677"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="681"/>
         <source>The 'parse' function is not defined in the script.
 
 Please ensure your code includes:
@@ -25546,13 +26080,13 @@ function parse(frame) ... end</source>
 function parse(frame) ... end</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="561"/>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="739"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="743"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="612"/>
         <source>Parse Function Runtime Error</source>
         <translation>Parse 함수 런타임 오류</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="740"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="744"/>
         <source>The parse function contains an error:
 
 %1
@@ -25565,12 +26099,12 @@ Please fix the error in the function body.</source>
 함수 본문의 오류를 수정하십시오.</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="217"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="221"/>
         <source>parse() timed out after %1 ms</source>
         <translation>parse() 시간 초과 (%1 ms)</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="227"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="231"/>
         <source>The JavaScript frame parser for source %1 timed out %2 frames in a row and has been disabled to keep Serial Studio responsive.
 
 Most likely cause: an infinite loop or extremely slow operation in the script body. Fix the script and reload the project to re-enable parsing.</source>
@@ -25579,12 +26113,12 @@ Most likely cause: an infinite loop or extremely slow operation in the script bo
 가장 가능성 높은 원인: 스크립트 본문의 무한 루프 또는 매우 느린 작업. 스크립트를 수정하고 프로젝트를 다시 로드하여 파싱을 재활성화하십시오.</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="450"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="501"/>
         <source>JavaScript Timed Out</source>
         <translation>JavaScript 시간 초과</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="451"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="502"/>
         <source>The parser code did not finish evaluating within %1 ms and was interrupted.
 
 Most likely cause: an infinite loop at the top level of the script.</source>
@@ -25593,12 +26127,12 @@ Most likely cause: an infinite loop at the top level of the script.</source>
 가장 가능성 높은 원인: 스크립트 최상위 레벨의 무한 루프입니다.</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="468"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="519"/>
         <source>JavaScript Syntax Error</source>
         <translation>JavaScript 구문 오류</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="469"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="520"/>
         <source>The parser code contains a syntax error at line %1:
 
 %2</source>
@@ -25607,12 +26141,12 @@ Most likely cause: an infinite loop at the top level of the script.</source>
 %2</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="483"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="534"/>
         <source>JavaScript Exception Occurred</source>
         <translation>JavaScript 예외 발생</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="484"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="535"/>
         <source>The parser code triggered the following exceptions:
 
 %1</source>
@@ -25621,7 +26155,7 @@ Most likely cause: an infinite loop at the top level of the script.</source>
 %1</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="510"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="561"/>
         <source>The 'parse' function is not defined in the script.
 
 Please ensure your code includes:
@@ -25632,7 +26166,7 @@ function parse(frame) { ... }</source>
 function parse(frame) { ... }</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="562"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="613"/>
         <source>The parse function contains an error at line %1:
 
 %2
@@ -25645,12 +26179,12 @@ Please fix the error in the function body.</source>
 함수 본문의 오류를 수정하십시오.</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="661"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="715"/>
         <source>Invalid Function Declaration</source>
         <translation>잘못된 함수 선언</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="662"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="716"/>
         <source>No callable 'parse' export found.
 
 Define one of:
@@ -25663,7 +26197,7 @@ Define one of:
   const parse = (frame) =&gt; { ... }</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="678"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="732"/>
         <source>The 'parse' function must accept at least one parameter (the frame payload).</source>
         <translation>'parse' 함수는 최소 하나의 매개변수(프레임 페이로드)를 받아야 합니다.</translation>
     </message>
@@ -25678,7 +26212,7 @@ function parse(frame) { ... }</source>
 function parse(frame) { ... }</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="677"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="731"/>
         <source>Invalid Function Parameter</source>
         <translation>잘못된 함수 매개변수</translation>
     </message>
@@ -25693,12 +26227,12 @@ function parse(frame) { ... }</source>
 function parse(frame) { ... }</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="643"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="697"/>
         <source>Deprecated Function Signature</source>
         <translation>더 이상 사용되지 않는 함수 서명</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="644"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="698"/>
         <source>The 'parse' function uses the old two-parameter format: parse(%1, %2)
 
 This format is no longer supported. Please update to the new single-parameter format:
@@ -25713,22 +26247,22 @@ function parse(%1) { ... }
 구분 기호 매개변수는 더 이상 필요하지 않습니다.</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ModuleManager.cpp" line="258"/>
+        <location filename="../../src/Misc/ModuleManager.cpp" line="259"/>
         <source>Critical</source>
         <translation>심각</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ModuleManager.cpp" line="258"/>
+        <location filename="../../src/Misc/ModuleManager.cpp" line="259"/>
         <source>Warning</source>
         <translation>경고</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/CLI.cpp" line="851"/>
+        <location filename="../../src/Misc/CLI.cpp" line="868"/>
         <source>Project file not found</source>
         <translation>프로젝트 파일을 찾을 수 없음</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/CLI.cpp" line="852"/>
+        <location filename="../../src/Misc/CLI.cpp" line="869"/>
         <source>The project file referenced by this shortcut could not be found:
 
 %1</source>
@@ -25737,17 +26271,17 @@ function parse(%1) { ... }
 %1</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/CLI.cpp" line="855"/>
+        <location filename="../../src/Misc/CLI.cpp" line="872"/>
         <source>Would you like to delete this shortcut?</source>
         <translation>이 바로 가기를 삭제하시겠습니까?</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/CLI.cpp" line="859"/>
+        <location filename="../../src/Misc/CLI.cpp" line="876"/>
         <source>Delete Shortcut</source>
         <translation>바로 가기 삭제</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/CLI.cpp" line="861"/>
+        <location filename="../../src/Misc/CLI.cpp" line="878"/>
         <source>Quit</source>
         <translation>종료</translation>
     </message>
@@ -26054,39 +26588,39 @@ function parse(%1) { ... }
         <translation type="vanished">연결 시간 초과</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/ExpressionTransform.cpp" line="332"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/ExpressionTransform.cpp" line="326"/>
         <source>%1 (column %2)</source>
         <translation>%1 (열 %2)</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/ExpressionTransform.cpp" line="343"/>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/ExpressionTransform.cpp" line="602"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/ExpressionTransform.cpp" line="337"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/ExpressionTransform.cpp" line="596"/>
         <source>expression too long</source>
         <translation>표현식이 너무 김</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/ExpressionTransform.cpp" line="349"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/ExpressionTransform.cpp" line="343"/>
         <source>expression too deeply nested</source>
         <translation>표현식 중첩이 너무 깊음</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/ExpressionTransform.cpp" line="368"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/ExpressionTransform.cpp" line="362"/>
         <source>expected '%1'</source>
         <translation>'%1'이(가) 필요함</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/ExpressionTransform.cpp" line="408"/>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/ExpressionTransform.cpp" line="463"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/ExpressionTransform.cpp" line="402"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/ExpressionTransform.cpp" line="457"/>
         <source>unknown name '%1'</source>
         <translation>알 수 없는 이름 '%1'</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/ExpressionTransform.cpp" line="425"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/ExpressionTransform.cpp" line="419"/>
         <source>table() is not available for this source</source>
         <translation>table()은 이 소스에서 사용할 수 없습니다</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/ExpressionTransform.cpp" line="428"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/ExpressionTransform.cpp" line="422"/>
         <source>table() needs a table name first</source>
         <translation>table()에는 테이블 이름이 먼저 필요합니다</translation>
     </message>
@@ -26099,58 +26633,58 @@ function parse(%1) { ... }
         <translation type="vanished">알 수 없는 레지스터 '%1.%2'</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/ExpressionTransform.cpp" line="436"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/ExpressionTransform.cpp" line="430"/>
         <source>table() needs a variable name second</source>
         <translation>table()에는 변수 이름이 두 번째로 필요합니다</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/ExpressionTransform.cpp" line="441"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/ExpressionTransform.cpp" line="435"/>
         <source>unknown variable '%1.%2'</source>
         <translation>알 수 없는 변수 '%1.%2'</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/ExpressionTransform.cpp" line="459"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/ExpressionTransform.cpp" line="453"/>
         <source>sample() needs a dataset name first</source>
         <translation>sample()에는 데이터셋 이름이 먼저 필요합니다</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/ExpressionTransform.cpp" line="499"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/ExpressionTransform.cpp" line="493"/>
         <source>%1() takes %2 argument(s)</source>
         <translation>%1()은(는) %2개의 인수를 사용합니다</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/ExpressionTransform.cpp" line="529"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/ExpressionTransform.cpp" line="523"/>
         <source>unknown function '%1'</source>
         <translation>알 수 없는 함수 '%1'</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/ExpressionTransform.cpp" line="540"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/ExpressionTransform.cpp" line="534"/>
         <source>too many nested parentheses</source>
         <translation>중첩된 괄호가 너무 많습니다</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/ExpressionTransform.cpp" line="563"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/ExpressionTransform.cpp" line="557"/>
         <source>unexpected end of expression</source>
         <translation>예상치 못한 표현식 종료</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/ExpressionTransform.cpp" line="565"/>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/ExpressionTransform.cpp" line="658"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/ExpressionTransform.cpp" line="559"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/ExpressionTransform.cpp" line="652"/>
         <source>unexpected '%1'</source>
         <translation>예상치 못한 '%1'</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/ExpressionTransform.cpp" line="618"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/ExpressionTransform.cpp" line="612"/>
         <source>too many nested conditionals</source>
         <translation>중첩된 조건문이 너무 많습니다</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/ExpressionTransform.cpp" line="652"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/ExpressionTransform.cpp" line="646"/>
         <source>empty expression</source>
         <translation>빈 표현식</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/ExpressionTransform.cpp" line="661"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/ExpressionTransform.cpp" line="655"/>
         <source>malformed expression</source>
         <translation>잘못된 형식의 표현식</translation>
     </message>
@@ -30878,74 +31412,182 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
     </message>
 </context>
 <context>
-    <name>TransmitCodeDialog</name>
+    <name>TransformLibraryView</name>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/TransmitCodeDialog.qml" line="32"/>
-        <source>Transmit Function Editor</source>
-        <translation>전송 함수 편집기</translation>
+        <location filename="../../qml/ProjectEditor/Views/TransformLibraryView.qml" line="33"/>
+        <source>Lua Library</source>
+        <translation>Lua 라이브러리</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/TransmitCodeDialog.qml" line="150"/>
-        <source>Select Template</source>
-        <translation>템플릿 선택</translation>
+        <location filename="../../qml/ProjectEditor/Views/TransformLibraryView.qml" line="33"/>
+        <source>JavaScript Library</source>
+        <translation>JavaScript 라이브러리</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/TransmitCodeDialog.qml" line="161"/>
-        <source>Import</source>
-        <translation>가져오기</translation>
+        <location filename="../../qml/ProjectEditor/Views/TransformLibraryView.qml" line="107"/>
+        <source>Reset</source>
+        <translation>재설정</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/TransmitCodeDialog.qml" line="167"/>
-        <source>Import a transmit function from a .js file</source>
-        <translation>.js 파일에서 전송 함수 가져오기</translation>
+        <location filename="../../qml/ProjectEditor/Views/TransformLibraryView.qml" line="111"/>
+        <source>Reset to the commented starter</source>
+        <translation>주석 처리된 시작 템플릿으로 재설정</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/TransmitCodeDialog.qml" line="173"/>
+        <location filename="../../qml/ProjectEditor/Views/TransformLibraryView.qml" line="117"/>
+        <source>Open</source>
+        <translation>열기</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/TransformLibraryView.qml" line="122"/>
+        <source>Import a Lua file</source>
+        <translation>Lua 파일 가져오기</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/TransformLibraryView.qml" line="122"/>
+        <source>Import a JavaScript file</source>
+        <translation>JavaScript 파일 가져오기</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/TransformLibraryView.qml" line="127"/>
+        <source>Undo</source>
+        <translation>실행 취소</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/TransformLibraryView.qml" line="132"/>
+        <source>Undo the last code edit</source>
+        <translation>마지막 코드 편집 실행 취소</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/TransformLibraryView.qml" line="138"/>
+        <source>Redo</source>
+        <translation>다시 실행</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/TransformLibraryView.qml" line="143"/>
+        <source>Redo the previously undone edit</source>
+        <translation>이전에 실행 취소한 편집 다시 실행</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/TransformLibraryView.qml" line="157"/>
+        <source>Cut</source>
+        <translation>잘라내기</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/TransformLibraryView.qml" line="161"/>
+        <source>Cut selected code to clipboard</source>
+        <translation>선택한 코드를 클립보드로 잘라내기</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/TransformLibraryView.qml" line="167"/>
+        <source>Copy</source>
+        <translation>복사</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/TransformLibraryView.qml" line="171"/>
+        <source>Copy selected code to clipboard</source>
+        <translation>선택한 코드를 클립보드에 복사</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/TransformLibraryView.qml" line="177"/>
+        <source>Paste</source>
+        <translation>붙여넣기</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/TransformLibraryView.qml" line="181"/>
+        <source>Paste code from clipboard</source>
+        <translation>클립보드에서 코드 붙여넣기</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/TransformLibraryView.qml" line="195"/>
+        <source>Help</source>
+        <translation>도움말</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/TransformLibraryView.qml" line="200"/>
+        <source>Open the dataset transforms documentation</source>
+        <translation>데이터셋 변환 문서 열기</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/TransformLibraryView.qml" line="210"/>
         <source>Validate</source>
         <translation>검증</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/TransmitCodeDialog.qml" line="178"/>
+        <location filename="../../qml/ProjectEditor/Views/TransformLibraryView.qml" line="214"/>
+        <source>Load the library in a sandbox and report the first error</source>
+        <translation>샌드박스에서 라이브러리를 로드하고 첫 번째 오류 보고</translation>
+    </message>
+</context>
+<context>
+    <name>TransmitCodeDialog</name>
+    <message>
+        <location filename="../../qml/ProjectEditor/Dialogs/TransmitCodeDialog.qml" line="41"/>
+        <source>Transmit Function Editor</source>
+        <translation>전송 함수 편집기</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Dialogs/TransmitCodeDialog.qml" line="159"/>
+        <source>Select Template</source>
+        <translation>템플릿 선택</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Dialogs/TransmitCodeDialog.qml" line="170"/>
+        <source>Import</source>
+        <translation>가져오기</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Dialogs/TransmitCodeDialog.qml" line="176"/>
+        <source>Import a transmit function from a .js file</source>
+        <translation>.js 파일에서 전송 함수 가져오기</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Dialogs/TransmitCodeDialog.qml" line="182"/>
+        <source>Validate</source>
+        <translation>검증</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Dialogs/TransmitCodeDialog.qml" line="187"/>
         <source>Verify that the script compiles and defines transmit(value)</source>
         <translation>스크립트가 컴파일되고 transmit(value)를 정의하는지 확인</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/TransmitCodeDialog.qml" line="216"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/TransmitCodeDialog.qml" line="225"/>
         <source>Produced Bytes</source>
         <translation>생성된 바이트</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/TransmitCodeDialog.qml" line="238"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/TransmitCodeDialog.qml" line="247"/>
         <source>Interact with the control to see its output</source>
         <translation>컨트롤과 상호작용하여 출력 확인</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/TransmitCodeDialog.qml" line="266"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/TransmitCodeDialog.qml" line="275"/>
         <source>%1 bytes, from the last version that compiled</source>
         <translation>%1바이트, 마지막으로 컴파일된 버전 기준</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/TransmitCodeDialog.qml" line="267"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/TransmitCodeDialog.qml" line="276"/>
         <source>%1 bytes</source>
         <translation>%1바이트</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/TransmitCodeDialog.qml" line="289"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/TransmitCodeDialog.qml" line="298"/>
         <source>Save</source>
         <translation>저장</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/TransmitCodeDialog.qml" line="292"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/TransmitCodeDialog.qml" line="301"/>
         <source>Validate and store the transmit function</source>
         <translation>전송 함수 검증 및 저장</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/TransmitCodeDialog.qml" line="301"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/TransmitCodeDialog.qml" line="310"/>
         <source>Close</source>
         <translation>닫기</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/TransmitCodeDialog.qml" line="304"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/TransmitCodeDialog.qml" line="313"/>
         <source>Close without storing this edit</source>
         <translation>편집 내용을 저장하지 않고 닫기</translation>
     </message>
@@ -32178,12 +32820,12 @@ I understand that when it ends, I'll need to buy a license or build the GPLv3 ve
 <context>
     <name>Widgets::Output::Base</name>
     <message>
-        <location filename="../../../core/Ui/UI/Widgets/Output/Base.cpp" line="395"/>
+        <location filename="../../../core/Ui/UI/Widgets/Output/Base.cpp" line="403"/>
         <source>Transmit script timed out after %1 ms</source>
         <translation>전송 스크립트가 %1 ms 후 시간 초과됨</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/Widgets/Output/Base.cpp" line="411"/>
+        <location filename="../../../core/Ui/UI/Widgets/Output/Base.cpp" line="419"/>
         <source>Payload exceeds maximum size</source>
         <translation>페이로드가 최대 크기를 초과함</translation>
     </message>
@@ -32608,22 +33250,22 @@ I understand that when it ends, I'll need to buy a license or build the GPLv3 ve
         <translation>작업 공간</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/WorkspacesView.qml" line="144"/>
+        <location filename="../../qml/ProjectEditor/Views/WorkspacesView.qml" line="147"/>
         <source>Add Folder</source>
         <translation>폴더 추가</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/WorkspacesView.qml" line="146"/>
+        <location filename="../../qml/ProjectEditor/Views/WorkspacesView.qml" line="149"/>
         <source>Add a top-level folder</source>
         <translation>최상위 폴더 추가</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/WorkspacesView.qml" line="171"/>
+        <location filename="../../qml/ProjectEditor/Views/WorkspacesView.qml" line="174"/>
         <source>Customize</source>
         <translation>사용자 지정</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/WorkspacesView.qml" line="173"/>
+        <location filename="../../qml/ProjectEditor/Views/WorkspacesView.qml" line="176"/>
         <source>Edit workspaces manually</source>
         <translation>작업 공간 수동 편집</translation>
     </message>
@@ -32644,37 +33286,67 @@ I understand that when it ends, I'll need to buy a license or build the GPLv3 ve
         <translation type="vanished">선택한 작업 공간을 아래로 이동</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/WorkspacesView.qml" line="155"/>
+        <location filename="../../qml/ProjectEditor/Views/WorkspacesView.qml" line="158"/>
         <source>Add Workspace</source>
         <translation>작업 공간 추가</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/WorkspacesView.qml" line="157"/>
+        <location filename="../../qml/ProjectEditor/Views/WorkspacesView.qml" line="160"/>
         <source>Add workspace</source>
         <translation>작업 공간 추가</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/WorkspacesView.qml" line="187"/>
+        <location filename="../../qml/ProjectEditor/Views/WorkspacesView.qml" line="190"/>
         <source>Cleanup</source>
         <translation>정리</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/WorkspacesView.qml" line="190"/>
+        <location filename="../../qml/ProjectEditor/Views/WorkspacesView.qml" line="193"/>
         <source>Remove %1 widget reference(s) whose target group or dataset no longer exists</source>
         <translation>대상 그룹 또는 데이터셋이 더 이상 존재하지 않는 위젯 참조 %1개 제거</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/WorkspacesView.qml" line="193"/>
+        <location filename="../../qml/ProjectEditor/Views/WorkspacesView.qml" line="196"/>
         <source>No stale widget references in any workspace</source>
         <translation>모든 작업 공간에 오래된 위젯 참조 없음</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/WorkspacesView.qml" line="208"/>
+        <location filename="../../qml/ProjectEditor/Views/WorkspacesView.qml" line="239"/>
+        <source>Profiles</source>
+        <translation>프로파일</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/WorkspacesView.qml" line="252"/>
+        <source>A profile lists the folders an operator sees; a project with two or more asks which one to show when it opens.</source>
+        <translation>프로파일은 운영자에게 표시되는 폴더 목록을 정의하며, 두 개 이상의 프로파일이 있는 프로젝트는 열 때 표시할 프로파일을 선택합니다.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/WorkspacesView.qml" line="259"/>
+        <source>Add Profile</source>
+        <translation>프로파일 추가</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/WorkspacesView.qml" line="261"/>
+        <source>Add a workspace profile</source>
+        <translation>작업 공간 프로파일 추가</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/WorkspacesView.qml" line="309"/>
+        <source>Rename</source>
+        <translation>이름 변경</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/WorkspacesView.qml" line="318"/>
+        <source>Delete</source>
+        <translation>삭제</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/WorkspacesView.qml" line="334"/>
         <source>Title</source>
         <translation>제목</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/WorkspacesView.qml" line="209"/>
+        <location filename="../../qml/ProjectEditor/Views/WorkspacesView.qml" line="335"/>
         <source>Contents</source>
         <translation>콘텐츠</translation>
     </message>
@@ -32683,17 +33355,17 @@ I understand that when it ends, I'll need to buy a license or build the GPLv3 ve
         <translation type="vanished">위젯</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/WorkspacesView.qml" line="302"/>
+        <location filename="../../qml/ProjectEditor/Views/WorkspacesView.qml" line="428"/>
         <source>No workspaces. Add one with the toolbar above, or reset to the auto layout.</source>
         <translation>작업 공간이 없습니다. 위 도구 모음에서 추가하거나 자동 레이아웃으로 재설정하십시오.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/WorkspacesView.qml" line="304"/>
+        <location filename="../../qml/ProjectEditor/Views/WorkspacesView.qml" line="430"/>
         <source>Project has no eligible groups -- add a group with widgets to populate workspaces.</source>
         <translation>프로젝트에 적합한 그룹이 없습니다 -- 작업 공간을 채우려면 위젯이 있는 그룹을 추가하십시오.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/WorkspacesView.qml" line="310"/>
+        <location filename="../../qml/ProjectEditor/Views/WorkspacesView.qml" line="436"/>
         <source>Reset to Auto Layout</source>
         <translation>자동 레이아웃으로 재설정</translation>
     </message>

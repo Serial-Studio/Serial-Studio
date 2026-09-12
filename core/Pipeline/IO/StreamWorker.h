@@ -100,6 +100,8 @@ public:
 
   [[nodiscard]] quint64 transformTimeoutCount() const noexcept { return m_transformTimeouts; }
 
+  [[nodiscard]] bool transformsReferenceTableApi(int language) const;
+
 public slots:
   void onSampleBlock(const IO::SampleBlockPtr& block);
   void compileEngines();
@@ -144,6 +146,7 @@ private:
   void bindBlockColumns(DataModel::DataBlock& block) const;
   void setupLuaState();
   void setupJsEngine();
+  void installJsTablePrelude();
   static void luaWatchdogHook(lua_State* L, lua_Debug* ar);
 
 private:
@@ -160,6 +163,8 @@ private:
   QDeadlineTimer m_luaDeadline;
   bool m_inBlock;
   bool m_jsTimedOut;
+  bool m_luaTableArmed;
+  bool m_jsTableArmed;
 
   int m_observedChannels;
   quint64 m_samplesProcessed;

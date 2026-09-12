@@ -1,0 +1,77 @@
+#
+# SPDX-FileCopyrightText: 2020-2025 Alex Spataru
+# SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial
+#
+# apt payload for a Qt 6 desktop build: the xcb/xkb platform stack, GStreamer for
+# QtMultimedia, and the packaging tools (rpm, fakeroot, python3-venv) linuxdeploy shells out to
+#
+
+name: 'Install Linux desktop + packaging dependencies'
+description: 'apt payload for a Qt 6 desktop build that also packages the product.'
+
+runs:
+  using: 'composite'
+  steps:
+  - name: '⚙️ Install dependencies'
+    shell: bash
+    run: |
+      sudo apt-get update
+      sudo apt-get install -y \
+        build-essential \
+        ninja-build \
+        fakeroot \
+        libcups2-dev \
+        libnss3 \
+        libegl1 \
+        libfuse2 \
+        libgl1-mesa-dev \
+        libasound2-dev \
+        libudev-dev \
+        libsecret-1-dev \
+        libzstd-dev \
+        zlib1g-dev \
+        libexpat1-dev \
+        libminizip-dev \
+        libopus-dev \
+        rpm \
+        python3-venv \
+        libxcb1 \
+        libxcb-cursor0 \
+        libxcb-cursor-dev \
+        libxcb-glx0 \
+        libxcb-icccm4 \
+        libxcb-image0 \
+        libxcb-image0-dev \
+        libxcb-keysyms1 \
+        libxcb-randr0 \
+        libxcb-render0 \
+        libxcb-render-util0 \
+        libxcb-shape0 \
+        libxcb-shm0 \
+        libxcb-sync1 \
+        libxcb-util0-dev \
+        libxcb-util1 \
+        libxcb-xfixes0 \
+        libxcb-xinerama0 \
+        libxcb-xkb-dev \
+        libxcb-xtest0 \
+        libxkbcommon-dev \
+        libxkbcommon-x11-0 \
+        libxkbcommon-x11-dev \
+        libpulse-dev \
+        libpipewire-0.3-0 \
+        libgstreamer1.0-0 \
+        libgstreamer-plugins-base1.0-0 \
+        libgstreamer-plugins-bad1.0-0 \
+        libgstreamer-plugins-good1.0-0 \
+        libgstreamer-gl1.0-0 \
+        gstreamer1.0-plugins-base \
+        gstreamer1.0-plugins-good \
+        gstreamer1.0-plugins-bad \
+        gstreamer1.0-plugins-ugly \
+        gstreamer1.0-libav \
+        gstreamer1.0-tools \
+        gstreamer1.0-x \
+        gstreamer1.0-alsa \
+        gstreamer1.0-pulseaudio \
+        gstreamer1.0-gl

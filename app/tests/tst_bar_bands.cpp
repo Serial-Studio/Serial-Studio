@@ -50,13 +50,13 @@ private slots:
   void activeIndexPrefersContainmentOverDistance();
 
 private:
-  [[nodiscard]] static std::vector<TestBand> apuOilBands();
+  [[nodiscard]] static std::vector<TestBand> oilPressureBands();
 };
 
 /**
- * @brief The APS500 oil-pressure ladder: critical / warning / ok / warning / critical.
+ * @brief An oil-pressure ladder: critical / warning / ok / warning / critical.
  */
-std::vector<TestBand> TstBarBands::apuOilBands()
+std::vector<TestBand> TstBarBands::oilPressureBands()
 {
   return {
     { 0,  25, 3},
@@ -69,7 +69,7 @@ std::vector<TestBand> TstBarBands::apuOilBands()
 
 void TstBarBands::containmentFindsTheEnclosingBand()
 {
-  const auto bands = apuOilBands();
+  const auto bands = oilPressureBands();
   QCOMPARE(Widgets::Bands::indexFor(bands, 10.0), 0);
   QCOMPARE(Widgets::Bands::indexFor(bands, 40.0), 1);
   QCOMPARE(Widgets::Bands::indexFor(bands, 60.0), 2);
@@ -79,7 +79,7 @@ void TstBarBands::containmentFindsTheEnclosingBand()
 
 void TstBarBands::hintShortCircuitsWithoutChangingTheAnswer()
 {
-  const auto bands = apuOilBands();
+  const auto bands = oilPressureBands();
   QCOMPARE(Widgets::Bands::indexFor(bands, 60.0, 2), 2);
   QCOMPARE(Widgets::Bands::indexFor(bands, 60.0, 0), 2);
   QCOMPARE(Widgets::Bands::indexFor(bands, 60.0, 99), 2);
@@ -88,7 +88,7 @@ void TstBarBands::hintShortCircuitsWithoutChangingTheAnswer()
 
 void TstBarBands::boundariesAreInclusive()
 {
-  const auto bands = apuOilBands();
+  const auto bands = oilPressureBands();
   QCOMPARE(Widgets::Bands::indexFor(bands, 0.0), 0);
   QCOMPARE(Widgets::Bands::indexFor(bands, 25.0), 0);
   QCOMPARE(Widgets::Bands::indexFor(bands, 150.0), 4);
@@ -110,7 +110,7 @@ void TstBarBands::gapValuesClampToTheNearestBand()
 
 void TstBarBands::overrangeValuesClampToTheOutermostBand()
 {
-  const auto bands = apuOilBands();
+  const auto bands = oilPressureBands();
   QCOMPARE(Widgets::Bands::activeIndex(bands, -40.0), 0);
   QCOMPARE(Widgets::Bands::activeIndex(bands, 1472.0), 4);
 }

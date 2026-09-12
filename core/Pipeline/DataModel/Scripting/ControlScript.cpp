@@ -32,6 +32,8 @@
 #include "Core/SerialStudio.h"
 #include "Core/Services.h"
 #include "Core/SSAssert.h"
+#include "DataModel/FrameBuilder.h"
+#include "DataModel/PipelineModules.h"
 #include "DataModel/Scripting/ControlScriptWorker.h"
 #include "DataModel/Scripting/JsWatchdog.h"
 #include "DataModel/Scripting/ScriptApiCall.h"
@@ -227,6 +229,7 @@ void DataModel::ControlScript::runOnConnect()
   QJSEngine engine;
   engine.installExtensions(QJSEngine::ConsoleExtension | QJSEngine::GarbageCollectionExtension);
   DataModel::ScriptApiCall::installAll(&engine, 0);
+  DataModel::TableApiUserLease tableUser(DataModel::pipelineModules().frameBuilder);
 
   DataModel::JsWatchdog watchdog(&engine, 2000, QStringLiteral("Control script onConnect"));
   watchdog.arm();

@@ -47,6 +47,10 @@ public:
 
   [[nodiscard]] QList<QStringList> parseString(const QString& frame) override;
   [[nodiscard]] QList<QStringList> parseUtf8(const QByteArray& frame) override;
+  [[nodiscard]] bool parseUtf8Cells(const QByteArray& frame,
+                                    ScriptCellRows& rows,
+                                    QList<QStringList>& fallback) override;
+  [[nodiscard]] bool referencesTableApi() const noexcept override;
   [[nodiscard]] QList<QStringList> parseBinary(const QByteArray& frame) override;
 
   [[nodiscard]] bool isLoaded() const noexcept override;
@@ -69,6 +73,7 @@ private:
   [[nodiscard]] bool ensureParseFunction(int sourceId, bool showMessageBoxes);
   [[nodiscard]] bool probeParseFunction(int sourceId, bool showMessageBoxes);
 
+  [[nodiscard]] int runParse(const char* data, qsizetype len);
   [[nodiscard]] QList<QStringList> parseLuaText(const char* data, qsizetype len);
   [[nodiscard]] QList<QStringList> convertResult();
   [[nodiscard]] QList<QStringList> classifyTable(int len);
@@ -95,6 +100,7 @@ private:
   lua_State* m_state;
   bool m_loaded;
   bool m_disabled;
+  bool m_referencesTableApi;
   int m_sourceId;
   int m_parseRef;
   int m_consecutiveTimeouts;

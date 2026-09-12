@@ -91,43 +91,51 @@ class RecordingBinder : public IO::IIngestBinder {
 public:
   void attach(int deviceId, IO::HAL_Driver* driver, const IO::FrameConfig& config) override
   {
-    calls.push_back({QStringLiteral("attach"), deviceId, driver, config.checksumAlgorithm});
+    calls.push_back({.op       = QStringLiteral("attach"),
+                     .deviceId = deviceId,
+                     .driver   = driver,
+                     .checksum = config.checksumAlgorithm});
     ++live;
   }
 
   void reconfigure(int deviceId, const IO::FrameConfig& config) override
   {
-    calls.push_back({QStringLiteral("reconfigure"), deviceId, nullptr, config.checksumAlgorithm});
+    calls.push_back({.op       = QStringLiteral("reconfigure"),
+                     .deviceId = deviceId,
+                     .checksum = config.checksumAlgorithm});
   }
 
   void detach(int deviceId) override
   {
-    calls.push_back({QStringLiteral("detach"), deviceId});
+    calls.push_back({.op = QStringLiteral("detach"), .deviceId = deviceId});
     --live;
   }
 
   void rebuildStreams(const std::vector<IO::StreamAttachment>&, bool, bool) override
   {
-    calls.push_back({QStringLiteral("rebuildStreams")});
+    calls.push_back({.op = QStringLiteral("rebuildStreams")});
   }
 
-  void setStreamPaused(bool) override { calls.push_back({QStringLiteral("setStreamPaused")}); }
+  void setStreamPaused(bool) override
+  {
+    calls.push_back({.op = QStringLiteral("setStreamPaused")});
+  }
 
   void publishStreamTemplates() override
   {
-    calls.push_back({QStringLiteral("publishStreamTemplates")});
+    calls.push_back({.op = QStringLiteral("publishStreamTemplates")});
   }
 
-  void detachStreams() override { calls.push_back({QStringLiteral("detachStreams")}); }
+  void detachStreams() override { calls.push_back({.op = QStringLiteral("detachStreams")}); }
 
   void injectPayload(int sourceId, const IO::CapturedDataPtr&) override
   {
-    calls.push_back({QStringLiteral("inject"), sourceId});
+    calls.push_back({.op = QStringLiteral("inject"), .deviceId = sourceId});
   }
 
   void resetQuickPlotHeaders() override
   {
-    calls.push_back({QStringLiteral("resetQuickPlotHeaders")});
+    calls.push_back({.op = QStringLiteral("resetQuickPlotHeaders")});
   }
 
   [[nodiscard]] IO::LinkStats linkStats() const override { return {}; }

@@ -137,19 +137,43 @@ once at the top of `parse()`:
 parser templates (`app/rcc/scripts/parser/`) and `ProtoImporter`'s `bytesToString` are the
 reference patterns; both importers shipped this bug in 2026-06.
 
+## Typed Cell Lane (spec 0086)
+
+Lua and JS parsers on a PlainText decoder no longer round-trip through `QList<QStringList>`.
+`IScriptEngine::parseUtf8Cells(frame, rows, fallback)` fills a builder-owned
+`DataModel::ScriptCellRows` (offset/length cells into one reused scratch; `clear()` does
+`resize(0)` so the buffer survives; `kMaxCellsPerResult` 10000 is the old element cap) and returns
+`true`; on `false` the engine has already produced the legacy list result into `fallback`, so the
+script never runs twice. The collectors are engine-free classes (`LuaCellCollector::collect`
+on a `lua_State*`, `JsCellCollector::collect` on a `QJSValue`), which is what lets
+`tst_script_cells` drive them on a bare state. Result contract: a scalar is one cell, a flat
+table/array one row, a table of tables / array of arrays one row per inner one (a non-table inner
+element is skipped with the same warning as before); a mixed scalar-plus-table result declines and
+the list path's unzip handling owns it, as does a JS non-array result. Number cells keep the double
+the script produced **and** the text the list path would have shown: Lua through `formatLuaNumber`
+(`%lld` for `lua_isinteger` values, else `%.15g`, byte-equal to the old `QString::number` calls),
+JS through `formatJsNumber` (ECMAScript `Number::toString`, byte-equal to `QJSValue::toString()`,
+pinned by `tst_js_number_format` against the Node corpus in `tests/fixtures/js-number-format.json`;
+regenerate with `tests/scripts/gen_js_number_corpus.py`). `FrameBuilder::tryCellLane` sits between
+`trySpanLane` and the list path and shares the per-dataset tail (`applyDatasetToken`) with the span
+lane, so `assign_utf8_in_place`, the spec-0085 raw rule, transforms, capture and `m_stager.stage`
+are one body; numeric detection is skipped for `Number` cells. Binary decoders and Native keep
+their own lanes. `TransformDispatch` (the per-dataset transform call, formerly inline in
+`FrameBuilder.cpp`) moved to its own class to keep the TU under the census.
+
 ## Embedded Code Editors — Hidden-Widget Plumbing
 
 The QML-embedded code editors (`JsCodeEditor` & siblings) are an offscreen `QCodeEditor`
 grabbed into a `QQuickPaintedItem`, so three invariants hold them together.
 
-**All five hosts now derive from one base (spec 0075 H12).**
+**All six hosts now derive from one base (spec 0075 H12).**
 `DataModel::EmbeddedCodeEditorItem` (`Editors/EmbeddedCodeEditorItem.{h,cpp}`) is the
 `QQuickPaintedItem` that owns the `EmbeddedCodeEditor`, the theme hook, the gated per-tick grab,
 the resize forward, the render marks and the sixteen event overrides;
-`ControlScriptEditor`, `JsCodeEditor`, `MacroEditor`, `OutputCodeEditor` and `PainterCodeEditor`
-derive from it and keep only their own document wiring. Each host's render gate is a constructor
+`ControlScriptEditor`, `TransformLibraryEditor` (spec 0083), `JsCodeEditor`, `MacroEditor`,
+`OutputCodeEditor` and `PainterCodeEditor` derive from it and keep only their own document wiring. Each host's render gate is a constructor
 argument, carried across unchanged: `RenderGate::ItemVisible` for `MacroEditor`,
-`RenderGate::WindowVisible` for the four Project-Editor hosts. The three invariants below were
+`RenderGate::WindowVisible` for the five Project-Editor hosts. The three invariants below were
 never in the hosts to begin with — they live inside `EmbeddedCodeEditor`
 (`syncWidgetPosition()`, `handleShortcutOverride()`, `handleKeyPress()`), and the hosts only
 forwarded into them; the base forwards into exactly the same three. The five copies were
@@ -209,17 +233,43 @@ unconditionally — check with a sample first if you think you need to, and neve
   `transform` closure, so two datasets sharing the same Lua state don't clobber each other.
 - **JS isolation**: user code is wrapped in an IIFE at compile time so top-level `var`s are
   closure-scoped per dataset.
-- **Hotpath**: `applyTransform(language, uniqueId, rawValue, info)` → cached per-source
-  engine pointer (`m_luaEngineForSource` / `m_jsEngineForSource`, refreshed on `sourceId`
-  change in `applyDatasetValues`; **no `std::map::find` per dataset per frame**) →
+- **Shared library + `params` (spec 0083), compile-time only.** `ProjectModel::transformLibraryCode`
+  (`Keys::TransformLibrary`) is one Lua chunk `DataModel::loadLuaLibraryChunk` runs into `_G` of
+  every Lua transform state (frame lane: `TransformCompiler::compileLuaLibrary`; stream lane:
+  `StreamProcessor::setupLuaState` via `StreamConfig::transformLibrary`, carried by the
+  `ProjectStructureSnapshot`; editor: `DatasetTransformEditor::validateTransform`) before the
+  entries compile, so the existing `__index = _G` fallthrough resolves its functions at no per-call
+  cost. A failing library is `noteTransformError`'d under `kTransformLibraryErrorId` (-2; -1 already
+  means "none") and the entries still compile. `Dataset::transformParams` (`QVariantMap`, manifest
+  sub-entity `transformParams` with `shape: map` and the `readDatasetTransformParams` /
+  `writeDatasetTransformParams` hooks in `Frame.cpp`) is pushed as a `params` table into the entry
+  env (`pushTransformParams`) and handed to the JS IIFE as its `params` argument
+  (`transformParamsJson`). Expression transforms see neither. The frame lane reads the library
+  from `FrameBuilder::ProjectSnapshot` / `m_frame.transformLibrary` (collected on the GUI thread),
+  never from `ProjectModel` on the pipeline thread, so `transformLibraryChanged` re-syncs the
+  snapshot (`ExternalWiring::watchProjectScripting` -> `syncFromProjectModel`) while
+  `luaFastModeChanged` only recompiles; the library runs under its own compile deadline. Dry-run
+  sites (editor, API) run it through `ScriptDryRun::runLuaChunk`, which arms the deadline hook and
+  catches a panic. The JavaScript twin (addendum A) is `ProjectModel::transformLibraryJsCode`
+  (`Keys::TransformLibraryJs`): `TransformCompiler::compileJsLibrary` evaluates it into the
+  per-source `QJSEngine` global object before the IIFE entries, with the `JsWatchdog` created
+  first and armed around the evaluate (`kTransformLibraryJsErrorId`, -3); the stream lane does
+  the same in `StreamProcessor::setupJsEngine` under `m_jsWatchdog`. Both libraries are edited
+  from the Project Editor's **Project Scripts** node through one `TransformLibraryEditor`
+  (`lua` property picks the model field, highlighter and starter).
+- **Hotpath**: `TransformDispatch::apply(language, uniqueId, rawValue, info)` (spec 0086 moved
+  the per-dataset call out of `FrameBuilder.cpp` into `FrameBuilder/TransformDispatch`) → cached
+  per-source engine pointers (`TransformDispatch::select(sourceId)` refreshes `m_lua` / `m_js` /
+  `m_expr` on `sourceId` change; **no `std::map::find` per dataset per frame**) →
   `lua_pcall` / `QJSValue::call`. Single-arg transforms skip the info table / object
   allocation: `acceptsInfo` is detected at compile time via `lua_getinfo(">u")` (Lua) and
   `function.length` (JS) and stored on the per-dataset ref.
 - **JS watchdog is frame-level**, not per-call. `applyDatasetValues` arms the active source's
-  per-engine watchdog (`m_jsEngineForSource->jsWatchdog->arm()`) once, runs the dataset loop,
+  per-engine watchdog (`m_dispatch.jsEngine()->jsWatchdog->arm()`) once, runs the dataset loop,
   and disarms it. The 100 ms budget covers the whole frame's transforms collectively, and the
   interrupt is delivered off-thread by `JsWatchdogThread` (see Frame Parser). On timeout
-  `applyTransformJs` sets `m_jsTransformTimedOut`; the user-facing notification is posted once
+  `TransformDispatch::applyJs` latches `m_jsTimedOut` (read through `jsTimedOut()`, cleared
+  per pass); the user-facing notification is posted once
   from the main thread after the loop, never from the watchdog thread.
 - Non-finite numeric results are rejected (`[[unlikely]]` guarded) and `rawValue` is returned.
 - **Stream-lane datasets run their transform in the `IO::StreamWorker`, not here (spec 0051).**
@@ -284,7 +334,15 @@ User-facing naming (2026-08-19): the Project Editor section is **Variables**, ta
 
 - `DataModel::DataTableStore`: flat pre-allocated register store, **no hotpath allocation**.
 - **System table `__datasets__`**: auto-generated. Two registers per dataset:
-  `raw:<uniqueId>`, `final:<uniqueId>`. Populated by FrameBuilder during parsing.
+  `raw:<uniqueId>`, `final:<uniqueId>`. Populated by FrameBuilder during parsing **only while
+  capture is armed** (spec 0086, `m_captureDatasetValues` in [dataflow.md](dataflow.md) "Cached
+  Hotpath Flags"): a parser or transform script that *names* a table helper
+  (`TableApiScan::referencesTableApi`, scanned at load/compile time), or a live external user
+  holding a `FrameBuilder::TableApiUserLease` (control script, macro, Canvas painter, Live output
+  widget, the transform editor's preview). Parser and transform engines install the helper names
+  only (`ScriptApiCall::TableApi::NamesOnly`) and never arm; every `injectTableApi*` is paired
+  with `releaseTableApiUser()`. `project.dataTable.getValue` is a plain reader and does not arm,
+  so a `__datasets__` register read over the API is live only while something in-app reads it.
 - **User tables**: defined in project JSON under `"tables"`. Registers are `Constant`
   (read-only at runtime) or `Computed` (writable by transforms, **persists across frames** —
   no automatic per-frame reset). The `defaultValue` is the value at project load only.
@@ -319,7 +377,7 @@ User-facing naming (2026-08-19): the Project Editor section is **Variables**, ta
   across states — so off-thread callers take the QString-keyed lookups instead.
 - **Processing order**: group-array then dataset-array. A transform sees raw of ALL datasets,
   final of EARLIER datasets only.
-- `applyTransform` returns `QVariant` (double or QString). `Dataset` has
+- `TransformDispatch::apply` returns `QVariant` (double or QString). `Dataset` has
   `rawNumericValue`/`rawValue` snapshots and `virtual_` (no frame index — transform-only).
 
 ## Control Script — Worker Thread, apiCall Only

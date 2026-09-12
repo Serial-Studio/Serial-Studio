@@ -728,9 +728,7 @@ void IO::ConnectionManager::setupExternalConnections()
                    {[this] { rebuildDevices(); },
                     [this] { resetFrameReader(); },
                     [this](int sourceId) { onProjectSourceChanged(sourceId); },
-                    [this] {
-                      rebuildStreamWorkers();
-                    }});
+                    [this] { rebuildStreamWorkers(); }});
   m_uiSync.wire(*this, [this](int sourceId) { return driver(sourceId); });
 
   for (auto* driver : m_uiDrivers.all())

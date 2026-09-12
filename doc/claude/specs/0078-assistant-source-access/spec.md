@@ -1,7 +1,7 @@
 ---
 spec: 0078-assistant-source-access
 title: Assistant reads the shipped source, build-pinned docs, commit shown in About
-status: in-progress  # 2026-09-11
+status: done          # closed 2026-09-12: maintainer ran the build/run gates and closed
 created: 2026-09-09
 author: Alex Spataru
 ---
@@ -115,25 +115,25 @@ Snapshot of the tree on 2026-09-09. **Recheck every row before planning** (see t
 
 ## Acceptance Criteria
 
-- [ ] **AC1** — A CI-built binary's About dialog shows `Version X.Y.Z (abcdef1)` where the
+- [x] **AC1** — A CI-built binary's About dialog shows `Version X.Y.Z (abcdef1)` where the
       short hash matches the workflow's commit; a local build shows the placeholder.
-- [ ] **AC2** — With the network blocked, the assistant can answer "which file rejects a
+- [x] **AC2** — With the network blocked, the assistant can answer "which file rejects a
       frame whose checksum fails and what does it log" by searching and reading the bundled
       source, and names the file and function.
-- [ ] **AC3** — In a build from an older tag, asking the assistant for a help page returns
+- [x] **AC3** — In a build from an older tag, asking the assistant for a help page returns
       the page as it was at that tag, not the current development text; verified by picking a
       page that changed between the two.
-- [ ] **AC4** — Asking the assistant to write, append to or delete a file inside the source
+- [x] **AC4** — Asking the assistant to write, append to or delete a file inside the source
       root is refused with an error naming the root as read-only, and the workspace write
       root still works.
-- [ ] **AC5** — The unit tests for the file sandbox cover the second read root (list, read
+- [x] **AC5** — The unit tests for the file sandbox cover the second read root (list, read
       and scoped search through the source prefix), the read-only refusal, and that a default
       search still reaches only the workspace and dragged-in paths. *(Amended 2026-09-11: the
       cache-invalidation clause was dropped with the cache; see R6.)*
-- [ ] **AC6** — The unit tests for the help fetcher cover bare-name resolution against a
+- [x] **AC6** — The unit tests for the help fetcher cover bare-name resolution against a
       commit ref, the 404 fallback at that same ref, and the development-branch fallback when
       no commit is stamped.
-- [ ] **AC7** — The measured installer or package size delta is recorded in the plan and is
+- [x] **AC7** — The measured installer or package size delta is recorded in the plan and is
       within the bound the plan states.
 - [x] **AC8** — Sanitize passes and the assistant-corpus lints accept the amended skill text.
 

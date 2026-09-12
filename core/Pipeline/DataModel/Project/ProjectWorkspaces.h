@@ -87,7 +87,9 @@ public:
   void setWorkspaceIcon(int workspaceId, const QString& icon);
   void reorderWorkspaces(const QList<int>& userWorkspaceIds);
   void moveWorkspace(int workspaceId, int targetIndex);
-  void addWidgetToWorkspace(int workspaceId, int widgetType, int groupUniqueId, int relativeIndex);
+  void addWidgetToWorkspace(
+    int workspaceId, int widgetType, int groupUniqueId, int relativeIndex, int datasetUniqueId);
+  [[nodiscard]] int rebindWidgetRefs();
   void removeWidgetFromWorkspace(int workspaceId, int index);
   void removeWidgetFromWorkspace(int workspaceId,
                                  int widgetType,

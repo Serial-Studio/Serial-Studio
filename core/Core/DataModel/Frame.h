@@ -368,6 +368,7 @@ struct alignas(8) Dataset {
   QString color;           ///< Optional hex override; empty -> automatic (theme palette)
   QString alias;           ///< Optional stable script/API name; empty -> address by uniqueId
   QString transformCode;   ///< Optional per-dataset transform script
+  QVariantMap transformParams;  ///< Named values the transform reads as `params` (spec 0083)
   QString displayFormat =
     QStringLiteral("0d");  ///< Tick/value label format on analog widgets ("0d" = integer)
   std::vector<AlarmBand> alarmBands;        ///< Colour-banded alarm zones (empty = no alarms)
@@ -556,12 +557,14 @@ struct TableDef {
 }
 
 /**
- * @brief Reference to a specific widget in the dashboard, stable across group reorders.
+ * @brief Reference to a dashboard widget: the uniqueIds are the identity, relativeIndex the
+ *        per-type ordinal re-derived from them at load, on group edits and before save (0083).
  */
 struct WidgetRef {
-  int widgetType    = 0;
-  int groupUniqueId = -1;  ///< Group.uniqueId (stable identity, not the positional groupId)
-  int relativeIndex = -1;
+  int widgetType      = 0;
+  int groupUniqueId   = -1;  ///< Group.uniqueId (stable identity, not the positional groupId)
+  int relativeIndex   = -1;  ///< Per-type dashboard ordinal; a cache of the identity below
+  int datasetUniqueId = -1;  ///< Dataset.uniqueId for dataset-scope widgets, -1 for group scope
 };
 
 /**
@@ -599,6 +602,9 @@ struct Workspace {
     r.insert(Keys::WidgetType, ref.widgetType);
     r.insert(Keys::GroupId, ref.groupUniqueId);
     r.insert(Keys::RelativeIndex, ref.relativeIndex);
+    if (ref.datasetUniqueId >= 0)
+      r.insert(Keys::DatasetUniqueId, ref.datasetUniqueId);
+
     refs.append(r);
   }
 
@@ -625,9 +631,10 @@ struct Workspace {
   for (const auto& val : refs) {
     const auto r = val.toObject();
     WidgetRef ref;
-    ref.widgetType    = ss_jsr(r, Keys::WidgetType, 0).toInt();
-    ref.groupUniqueId = ss_jsr(r, Keys::GroupId, -1).toInt();
-    ref.relativeIndex = ss_jsr(r, Keys::RelativeIndex, -1).toInt();
+    ref.widgetType      = ss_jsr(r, Keys::WidgetType, 0).toInt();
+    ref.groupUniqueId   = ss_jsr(r, Keys::GroupId, -1).toInt();
+    ref.relativeIndex   = ss_jsr(r, Keys::RelativeIndex, -1).toInt();
+    ref.datasetUniqueId = ss_jsr(r, Keys::DatasetUniqueId, -1).toInt();
     w.widgetRefs.push_back(ref);
   }
 
@@ -778,6 +785,8 @@ struct alignas(8) Frame {
   std::vector<Source> sources;              ///< Sources/devices the frame was assembled from
   bool containsCommercialFeatures = false;  ///< Feature gating flag
   QString controlScriptCode;                ///< Project setup()/loop() control script
+  QString transformLibrary;                 ///< Shared Lua chunk every Lua transform sees
+  QString transformLibraryJs;               ///< Shared JS chunk every JS transform sees
 };
 
 static_assert(sizeof(Frame) % alignof(Frame) == 0, "Unaligned Frame struct");
@@ -804,6 +813,8 @@ inline void clear_frame(Frame& frame) noexcept
   frame.containsCommercialFeatures = false;
   frame.schemaVersion              = 0;
   frame.controlScriptCode.clear();
+  frame.transformLibrary.clear();
+  frame.transformLibraryJs.clear();
 }
 
 /**
@@ -1118,6 +1129,12 @@ void read_io_settings(QByteArray& frameStart,
   if (!f.controlScriptCode.isEmpty())
     obj.insert(Keys::ControlScriptCode, f.controlScriptCode);
 
+  if (!f.transformLibrary.isEmpty())
+    obj.insert(Keys::TransformLibrary, f.transformLibrary);
+
+  if (!f.transformLibraryJs.isEmpty())
+    obj.insert(Keys::TransformLibraryJs, f.transformLibraryJs);
+
   if (!f.writerVersion.isEmpty() || !f.writerVersionAtCreation.isEmpty() || f.schemaVersion > 0) {
     obj.insert(Keys::SchemaVersion, f.schemaVersion > 0 ? f.schemaVersion : kSchemaVersion);
     if (!f.writerVersion.isEmpty())
@@ -1216,6 +1233,12 @@ void readDatasetAlarmBands(Dataset& d, const QJsonObject& obj);
  * @brief Populates @p d.fftMarkers from @p obj, dropping invalid entries.
  */
 void readDatasetFrequencyMarkers(Dataset& d, const QJsonObject& obj);
+
+/**
+ * @brief Read/write @p d.transformParams (number, string and boolean values) as one JSON object.
+ */
+void readDatasetTransformParams(Dataset& d, const QJsonObject& obj);
+void writeDatasetTransformParams(QJsonObject& obj, const Dataset& d);
 
 /**
  * @brief Swaps inverted (min > max) FFT / plot / widget range pairs from legacy projects.
@@ -1347,6 +1370,8 @@ inline void normalizeDatasetRanges(Dataset& d)
   f.writerVersion           = ss_jsr(obj, Keys::WriterVersion, "").toString();
   f.writerVersionAtCreation = ss_jsr(obj, Keys::WriterVersionAtCreation, "").toString();
   f.controlScriptCode       = ss_jsr(obj, Keys::ControlScriptCode, "").toString();
+  f.transformLibrary        = ss_jsr(obj, Keys::TransformLibrary, "").toString();
+  f.transformLibraryJs      = ss_jsr(obj, Keys::TransformLibraryJs, "").toString();
 
   bool ok = true;
   for (qsizetype i = 0; i < groups.count(); ++i) {

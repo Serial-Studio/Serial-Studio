@@ -487,6 +487,16 @@
       "kind": "subEntity",
       "signature": "void DataModel::normalizeDatasetRanges(Dataset& d)",
       "origin": "Frame.h"
+    },
+    "readTransformParams": {
+      "kind": "subEntity",
+      "signature": "void DataModel::readDatasetTransformParams(Dataset& d, const QJsonObject& obj)",
+      "origin": "Frame.cpp"
+    },
+    "writeTransformParams": {
+      "kind": "subEntity",
+      "signature": "void DataModel::writeDatasetTransformParams(QJsonObject& obj, const Dataset& d)",
+      "origin": "Frame.cpp"
     }
   },
   "postRead": [
@@ -496,6 +506,7 @@
     "legacyRangePairs",
     "readAlarmBands",
     "readFrequencyMarkers",
+    "readTransformParams",
     "normalizeRanges"
   ],
   "sections": [
@@ -1833,6 +1844,15 @@
       "writeHook": "writeFrequencyMarkers",
       "apiName": "fftMarkers",
       "notes": "Collection of FrequencyMarker; validated by DataModel::read(FrequencyMarker&)."
+    },
+    {
+      "field": "transformParams",
+      "jsonKey": "TransformParams",
+      "shape": "map",
+      "readHook": "readTransformParams",
+      "writeHook": "writeTransformParams",
+      "apiName": "transformParams",
+      "notes": "Named scalar parameters (number | string | bool) the dataset transform reads as `params` (spec 0083); nested values are dropped by the reader."
     }
   ]
 }

@@ -530,8 +530,8 @@ QString Sessions::HtmlReport::buildSummarySection() const
                .arg(ds.units.isEmpty() ? QStringLiteral("dim") : QString(),
                     escapeHtml(ds.units.isEmpty() ? dash : ds.units));
     }
-    row += QStringLiteral("<td class=\"numeric\" data-sort-value=\"%1\">%2</td>")
-             .arg(QString::number(totalSamples), QString::number(totalSamples));
+    row  += QStringLiteral("<td class=\"numeric\" data-sort-value=\"%1\">%2</td>")
+              .arg(QString::number(totalSamples), QString::number(totalSamples));
     row  += numCell(ds.minValue);
     row  += numCell(ds.maxValue);
     row  += numCell(ds.mean);
@@ -571,8 +571,8 @@ QString Sessions::HtmlReport::buildChartsSection() const
 
     const double duration = s.timesSec.empty() ? 0.0 : s.timesSec.back();
     const QString sub     = tr("%1 samples over %2 seconds")
-                          .arg(QString::number(static_cast<qulonglong>(s.totalSamples)),
-                               QString::number(duration, 'f', 2));
+                              .arg(QString::number(static_cast<qulonglong>(s.totalSamples)),
+                                   QString::number(duration, 'f', 2));
 
     cards += QStringLiteral("<div class=\"chart-card\">"
                             "<h3>%1%2</h3>"

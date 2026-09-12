@@ -191,11 +191,13 @@ void MDF4::ExportWorker::writeBlockSample(const DataModel::DataBlock& block,
         target.channel->SetChannelValue(column.text[slot].toStdString());
     }
 
-    if (column.hasRaw && target.rawChannel) {
+    if (target.rawChannel) {
+      const auto& rawValues = column.hasRaw ? column.rawValues : column.values;
+      const auto& rawText   = column.hasRaw ? column.rawText : column.text;
       if (isNum || !column.hasText)
-        target.rawChannel->SetChannelValue(column.rawValues[slot]);
+        target.rawChannel->SetChannelValue(rawValues[slot]);
       else
-        target.rawChannel->SetChannelValue(column.rawText[slot].toStdString());
+        target.rawChannel->SetChannelValue(rawText[slot].toStdString());
     }
   }
 

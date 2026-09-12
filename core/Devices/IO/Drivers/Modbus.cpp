@@ -49,6 +49,7 @@ static constexpr int kMaxWriteRegisters = 123;
 #include "Core/TimerEvents.h"
 #include "Core/Translator.h"
 #include "IO/Drivers/Modbus/ModbusProjectGenerator.h"
+#include "IO/Drivers/Modbus/ModbusWritePayload.h"
 #include "IO/Drivers/SerialPortIdentity.h"
 #include "Protocols/Modbus/ModbusRtuCodec.h"
 
@@ -281,28 +282,26 @@ bool IO::Drivers::Modbus::configurationOk() const noexcept
 }
 
 /**
- * @brief Writes consecutive holding registers to the Modbus device, taking @p data as a big-endian
- *        start address followed by one 16-bit value per register, so a caller that must reproduce
- *        a device's exact block write is not capped at two.
+ * @brief Writes consecutive holding registers to the Modbus device: a big-endian start address and
+ *        one 16-bit value per register, aimed at the connection's unit unless the payload carries
+ *        the 0xFF 0x83 <unit> prefix (spec 0083), so a two-unit bus can be commanded on either
+ *        device. decodeModbusWritePayload holds the contract.
  */
 qint64 IO::Drivers::Modbus::write(const QByteArray& data)
 {
-  if (!isWritable() || data.length() < 4 || (data.length() % 2) != 0)
+  if (!isWritable())
     return 0;
 
-  const quint16 address    = (static_cast<quint8>(data[0]) << 8) | static_cast<quint8>(data[1]);
-  const int register_count = (data.length() - 2) / 2;
-  if (register_count > kMaxWriteRegisters)
+  const auto request = decodeModbusWritePayload(data, m_slaveAddress, kMaxWriteRegisters);
+  if (!request)
     return 0;
 
-  QModbusDataUnit write_unit(QModbusDataUnit::HoldingRegisters, address, register_count);
-  for (int i = 0; i < register_count; ++i) {
-    const int at = 2 + 2 * i;
-    write_unit.setValue(i,
-                        (static_cast<quint8>(data[at]) << 8) | static_cast<quint8>(data[at + 1]));
-  }
+  QModbusDataUnit write_unit(
+    QModbusDataUnit::HoldingRegisters, request->address, request->values.size());
+  for (int i = 0; i < request->values.size(); ++i)
+    write_unit.setValue(i, request->values.at(i));
 
-  if (auto* reply = m_device->sendWriteRequest(write_unit, m_slaveAddress)) {
+  if (auto* reply = m_device->sendWriteRequest(write_unit, request->unit)) {
     if (!reply->isFinished())
       connect(reply, &QModbusReply::finished, reply, &QModbusReply::deleteLater);
     else
@@ -941,27 +940,25 @@ void IO::Drivers::Modbus::setupExternalConnections()
     m_registerGroupImport = bus->subscribe<Core::Bus::ModbusRegisterGroupsLoaded>(
       this,
       [this](const std::shared_ptr<const Core::Bus::ModbusRegisterGroupsLoaded>& message) {
-        applyImportedRegisterGroups(message->groups);
+        applyImportedRegisterGroups(message->groups, message->append);
       },
       Qt::DirectConnection);
 }
 
 /**
- * @brief Replaces the register groups with the blocks a register-map import computed (spec 0077):
- *        the importer publishes them, and this UI-config driver is the one instance wired to
- *        adopt them.
+ * @brief Adopts the blocks a register-map import computed (spec 0077); a map merged into an open
+ *        project appends instead of replacing (spec 0083), and each block polls its own unit.
  */
-void IO::Drivers::Modbus::applyImportedRegisterGroups(const QJsonDocument& groups)
+void IO::Drivers::Modbus::applyImportedRegisterGroups(const QJsonDocument& groups, bool append)
 {
   SS_ASSERT(groups.isArray(), return);
 
-  clearRegisterGroups();
-  for (const auto& value : groups.array()) {
-    const auto group = value.toObject();
-    addRegisterGroup(static_cast<quint8>(group.value(QStringLiteral("type")).toInt()),
-                     static_cast<quint16>(group.value(QStringLiteral("start")).toInt()),
-                     static_cast<quint16>(group.value(QStringLiteral("count")).toInt()));
-  }
+  if (!append)
+    clearRegisterGroups();
+
+  for (const auto& value : groups.array())
+    if (m_registerGroups.addFromJson(value.toObject()))
+      Q_EMIT registerGroupsChanged();
 }
 
 //--------------------------------------------------------------------------------------------------

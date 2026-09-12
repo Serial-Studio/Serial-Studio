@@ -1,7 +1,7 @@
 ---
 spec: 0081-runtime-simd-dispatch
 title: Runtime SIMD Dispatch
-status: in-progress  # draft -> approved -> in-progress -> done | shelved
+status: done          # closed 2026-09-12: maintainer ran the build/run gates and closed
 created: 2026-09-11
 author: Alex Spataru
 ---
@@ -98,28 +98,28 @@ it without SIMD" from a rebuild into a dropdown.
 
 ## Acceptance Criteria
 
-- [ ] **AC1** (R1, R7) — A unit in the ctest tier runs every shared kernel at every level the
+- [x] **AC1** (R1, R7) — A unit in the ctest tier runs every shared kernel at every level the
       build supports against the scalar reference over randomized inputs and the edge-case set
       in R7, comparing results bitwise. It passes on the x86-64 and ARM CI hosts.
-- [ ] **AC2** (R2, R6) — The same unit forces each level through the public selection and
+- [x] **AC2** (R2, R6) — The same unit forces each level through the public selection and
       confirms an unsupported level is refused and reported as Auto rather than accepted.
-- [ ] **AC3** (R3, R4, R5) — Maintainer observation: on an AVX2 machine the combobox lists
+- [x] **AC3** (R3, R4, R5) — Maintainer observation: on an AVX2 machine the combobox lists
       Auto (AVX2), Scalar, SSE4, AVX2; on an Apple Silicon machine it lists Auto (NEON), Scalar,
       NEON. Choosing a level, restarting, and reopening the dialog shows the same choice.
-- [ ] **AC4** (R8) — Maintainer observation: with a live project on a plot, an FFT and a
+- [x] **AC4** (R8) — Maintainer observation: with a live project on a plot, an FFT and a
       waterfall, switching between every listed level produces no visible change and an
       exported CSV of the same window is byte-identical across levels.
-- [ ] **AC5** (R9) — `--benchmark-hotpath` runs with the level pinned to SSE4 and to Auto both
+- [x] **AC5** (R9) — `--benchmark-hotpath` runs with the level pinned to SSE4 and to Auto both
       clear the existing 256 kHz gate on the CI hosts; a run pinned to Scalar completes and
       reports its number (informational, not gated).
-- [ ] **AC6** (R9) — The pinned-level option is exercised in CI so a regression in dispatch
+- [x] **AC6** (R9) — The pinned-level option is exercised in CI so a regression in dispatch
       overhead on the baseline lane is caught, not only on the widest lane the runner happens
       to have.
-- [ ] **AC7** (R10) — Struck with R10: a headless run with a bad `--simd` value logs the
+- [x] **AC7** (R10) — Struck with R10: a headless run with a bad `--simd` value logs the
       rejection and nothing else about the level.
-- [ ] **AC8** (R11) — The scalar-only compile-time configuration builds and its ctest unit
+- [x] **AC8** (R11) — The scalar-only compile-time configuration builds and its ctest unit
       passes with the single Scalar level.
-- [ ] **AC9** — The macOS Intel binary running under Rosetta 2 (how CI already runs it) starts,
+- [x] **AC9** — The macOS Intel binary running under Rosetta 2 (how CI already runs it) starts,
       passes AC1 and clears the gate whether or not the translation layer advertises AVX2.
 
 ## Constraints & Invariants

@@ -265,6 +265,7 @@ set(SOURCES
   src/SelfTest/SelfTest.cpp
   src/SelfTest/QmlInstantiationSuite.cpp
   src/Benchmark/HotpathBenchmark.cpp
+  src/Benchmark/HotpathReport.cpp
   src/Benchmark/BenchmarkRunner.cpp
   src/main.cpp
   src/SessionContext.cpp
@@ -380,6 +381,8 @@ set(QML_SOURCES
   qml/ProjectEditor/Views/SourceFrameParserView.qml
   qml/ProjectEditor/Views/CodeEditorMenu.qml
   qml/ProjectEditor/Views/ControlScriptView.qml
+  qml/ProjectEditor/Views/TransformLibraryView.qml
+  qml/ProjectEditor/Views/ProjectScriptsView.qml
   qml/ProjectEditor/Views/TableDelegate.qml
   qml/ProjectEditor/Views/EditorSearchBand.qml
   qml/ProjectEditor/Views/WorkspaceFolderView.qml
@@ -526,6 +529,7 @@ if(BUILD_COMMERCIAL)
     qml/MainWindow/Panes/SetupPanes/Drivers/Iec104.qml
     qml/ProjectEditor/Views/MqttPublisherView.qml
     qml/ProjectEditor/Views/InfluxSinkView.qml
+    qml/ProjectEditor/Views/DataExportView.qml
     qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml
     qml/MainWindow/Panes/SetupPanes/Drivers/ModbusPreviewDialog.qml
     qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml
@@ -1227,19 +1231,41 @@ if(BUILD_COMMERCIAL AND PRODUCTION_OPTIMIZATION)
     VISIBILITY_INLINES_HIDDEN ON
   )
 
+  # The line-table debug info Optimization.cmake emits is split into a sidecar (.dSYM / .debug)
+  # BEFORE the strip below, so a profile or crash stack from a shipped build can be symbolicated
+  # from the CI artifact while the binary users download stays stripped (spec 0084). On Windows
+  # the PDB is already a sidecar; it is simply no longer discarded (cpack never installs it).
   if(APPLE)
+    find_program(SS_DSYMUTIL dsymutil)
+    if(SS_DSYMUTIL)
+      add_custom_command(TARGET ${PROJECT_EXECUTABLE} POST_BUILD
+        COMMAND ${SS_DSYMUTIL} "$<TARGET_FILE:${PROJECT_EXECUTABLE}>"
+                -o "$<TARGET_FILE:${PROJECT_EXECUTABLE}>.dSYM"
+        COMMENT "Splitting debug symbols into a dSYM bundle (macOS)"
+      )
+    else()
+      message(WARNING "dsymutil not found; the commercial binary ships without a symbol sidecar")
+    endif()
     add_custom_command(TARGET ${PROJECT_EXECUTABLE} POST_BUILD
       COMMAND ${CMAKE_STRIP} -x "$<TARGET_FILE:${PROJECT_EXECUTABLE}>"
       COMMENT "Stripping local symbols from commercial binary (macOS)"
     )
   elseif(UNIX)
+    find_program(SS_OBJCOPY objcopy)
+    if(SS_OBJCOPY)
+      add_custom_command(TARGET ${PROJECT_EXECUTABLE} POST_BUILD
+        COMMAND ${SS_OBJCOPY} --only-keep-debug "$<TARGET_FILE:${PROJECT_EXECUTABLE}>"
+                "$<TARGET_FILE:${PROJECT_EXECUTABLE}>.debug"
+        COMMAND ${SS_OBJCOPY} --add-gnu-debuglink="$<TARGET_FILE:${PROJECT_EXECUTABLE}>.debug"
+                "$<TARGET_FILE:${PROJECT_EXECUTABLE}>"
+        COMMENT "Splitting debug symbols into a .debug sidecar (Linux)"
+      )
+    else()
+      message(WARNING "objcopy not found; the commercial binary ships without a symbol sidecar")
+    endif()
     add_custom_command(TARGET ${PROJECT_EXECUTABLE} POST_BUILD
       COMMAND ${CMAKE_STRIP} --strip-unneeded "$<TARGET_FILE:${PROJECT_EXECUTABLE}>"
       COMMENT "Stripping unneeded symbols from commercial binary (Linux)"
-    )
-  elseif(WIN32)
-    target_link_options(${PROJECT_EXECUTABLE} PRIVATE
-      $<$<BOOL:${MSVC}>:/DEBUG:NONE>
     )
   endif()
 endif()

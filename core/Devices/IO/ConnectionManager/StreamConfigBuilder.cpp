@@ -105,7 +105,9 @@ IO::StreamConfig IO::StreamConfigBuilder::streamConfig(int deviceId, HAL_Driver*
   }
 #endif
 
-  config.luaFastMode = m_project->luaFastMode;
+  config.luaFastMode        = m_project->luaFastMode;
+  config.transformLibrary   = m_project->transformLibrary;
+  config.transformLibraryJs = m_project->transformLibraryJs;
 
   if (m_operationMode == SerialStudio::ProjectFile)
     appendProjectChannels(deviceId, config);
@@ -145,6 +147,7 @@ void IO::StreamConfigBuilder::appendProjectChannels(int deviceId, StreamConfig& 
       channel.fftSamples        = dataset.fftSamples;
       channel.transformLanguage = dataset.transformLanguage;
       channel.transformCode     = dataset.transformCode;
+      channel.transformParams   = dataset.transformParams;
       channel.title             = dataset.title;
       channel.alias             = dataset.alias;
       config.datasets.push_back(std::move(channel));

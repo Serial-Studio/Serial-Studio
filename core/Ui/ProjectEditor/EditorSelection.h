@@ -77,6 +77,9 @@ private:
   bool selectSourceParserItem(QStandardItem* item);
   bool selectOutputWidgetItem(QStandardItem* item);
   bool selectControlScriptItem(QStandardItem* item);
+  bool selectTransformLibraryItem(QStandardItem* item);
+  bool selectScriptsTreeItem(QStandardItem* item);
+  bool selectExportRootItem(QStandardItem* item);
   bool selectMqttPublisherItem(QStandardItem* item);
   bool selectWorkspaceTreeItem(QStandardItem* item);
 

@@ -23,6 +23,7 @@
 
 #include <QLatin1String>
 #include <QString>
+#include <QVariantMap>
 #include <vector>
 
 #include "Core/IO/HAL_Driver.h"
@@ -56,6 +57,7 @@ struct StreamChannelConfig {
   int fftSamples        = 0;
   int transformLanguage = 0;
   QString transformCode;
+  QVariantMap transformParams;
   QString title;
   QString alias;
 };
@@ -68,6 +70,8 @@ struct StreamConfig {
   int channels      = 1;
   double sampleRate = 0.0;
   bool luaFastMode  = false;
+  QString transformLibrary;
+  QString transformLibraryJs;
   std::vector<StreamChannelConfig> datasets;
 };
 

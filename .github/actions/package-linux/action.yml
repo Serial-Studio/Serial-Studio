@@ -1,0 +1,164 @@
+#
+# SPDX-FileCopyrightText: 2020-2025 Alex Spataru
+# SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial
+#
+# The Linux packaging chain both build jobs run, in one place: import the signing identity,
+# build the AppDir, convert it into the glibc-bundled AppImage (spec 0065), emit the deb and the
+# rpm from that same converted tree, prove the set installs on a glibc 2.28 host, and sign what
+# came out. Every step is one script under scripts/ci/; only the architecture strings and the
+# two checksums differ between x86_64 and aarch64.
+#
+
+name: 'Package Serial Studio for Linux'
+description: 'AppDir, glibc-bundled AppImage, deb/rpm, the glibc 2.28 smoke gate and GPG signing.'
+
+inputs:
+  workspace:
+    description: 'Repository checkout holding the build tree; the artifacts are written here.'
+    required: true
+  arch-label:
+    description: "Architecture in the artifact names: 'x64' or 'arm64'."
+    required: true
+  machine-arch:
+    description: "Tool asset architecture: 'x86_64' or 'aarch64' (linuxdeploy, sharun, appimagetool, rpm)."
+    required: true
+  deb-arch:
+    description: "Debian architecture for ldnp metadata: 'amd64' or 'arm64'."
+    required: true
+  config-arch:
+    description: "Architecture stamped into ss-config.json: 'x86_64' or 'arm64'."
+    required: true
+  system-lib-dir:
+    description: 'Host library triplet directory the bundled glibc NSS and gconv sets are taken from.'
+    required: true
+  qt-plugins-path:
+    description: 'Plugins directory of the Qt this job built against.'
+    required: true
+  qml-dir:
+    description: 'QML source path handed to linuxdeploy-plugin-qt, relative to build/app.'
+    required: true
+  sharun-sha256:
+    description: 'Checksum of the sharun all-in-one build for this architecture.'
+    required: true
+  appimagetool-sha256:
+    description: 'Checksum of the appimagetool build for this architecture.'
+    required: true
+  executable:
+    description: 'Artifact base name (env.EXECUTABLE).'
+    required: true
+  version:
+    description: 'Release version (env.VERSION).'
+    required: true
+  unixname:
+    description: 'Built executable and package name (env.UNIXNAME).'
+    required: true
+  description:
+    description: 'Package description (env.DESCRIPTION).'
+    required: true
+  gpg-private-key:
+    description: 'Armored signing key (secrets.GPG_PRIVATE_KEY); packages ship unsigned without it.'
+    required: false
+    default: ''
+  gpg-passphrase:
+    description: 'Passphrase for the signing key (secrets.GPG_PASSPHRASE).'
+    required: false
+    default: ''
+  gpg-key-id:
+    description: 'Signing key id (secrets.GPG_KEY_ID); packages ship unsigned without it.'
+    required: false
+    default: ''
+
+runs:
+  using: 'composite'
+  steps:
+  #
+  # Signing is opt-in on the secrets being present; without them the step exits clean and the
+  # packages ship unsigned
+  #
+  - name: '🔐 Prepare GPG signing (optional)'
+    shell: bash
+    env:
+      GPG_PRIVATE_KEY: ${{inputs.gpg-private-key}}
+      GPG_PASSPHRASE: ${{inputs.gpg-passphrase}}
+      GPG_KEY_ID: ${{inputs.gpg-key-id}}
+      SS_WORKSPACE: ${{inputs.workspace}}
+    run: bash "${SS_WORKSPACE}/scripts/ci/gpg-prepare.sh"
+
+  #
+  # linuxdeploy plus its Qt plugin build the AppDir the conversion below consumes
+  #
+  - name: '📦 Create AppDir'
+    shell: bash
+    env:
+      SS_WORKSPACE: ${{inputs.workspace}}
+      MACHINE_ARCH: ${{inputs.machine-arch}}
+      QT_PLUGINS_PATH: ${{inputs.qt-plugins-path}}
+      QML_DIR: ${{inputs.qml-dir}}
+      UNIXNAME: ${{inputs.unixname}}
+    run: bash "${SS_WORKSPACE}/scripts/ci/linux-create-appdir.sh"
+
+  #
+  # Spec 0065: the glibc-bundled conversion is the ONLY Linux packaging path
+  #
+  - name: '📦 Create AppImage (glibc-bundled)'
+    shell: bash
+    env:
+      SS_WORKSPACE: ${{inputs.workspace}}
+      MACHINE_ARCH: ${{inputs.machine-arch}}
+      CONFIG_ARCH: ${{inputs.config-arch}}
+      ARCH_LABEL: ${{inputs.arch-label}}
+      SYSTEM_LIB_DIR: ${{inputs.system-lib-dir}}
+      SHARUN_SHA256: ${{inputs.sharun-sha256}}
+      APPIMAGETOOL_SHA256: ${{inputs.appimagetool-sha256}}
+      EXECUTABLE: ${{inputs.executable}}
+      VERSION: ${{inputs.version}}
+      UNIXNAME: ${{inputs.unixname}}
+      GPG_KEY_ID: ${{inputs.gpg-key-id}}
+    run: bash "${SS_WORKSPACE}/scripts/ci/linux-create-appimage.sh"
+
+  #
+  # linuxdeploy-plugin-native_packages over the converted AppDir
+  #
+  - name: '📦 Create .deb and .rpm packages (glibc-bundled)'
+    shell: bash
+    env:
+      SS_WORKSPACE: ${{inputs.workspace}}
+      MACHINE_ARCH: ${{inputs.machine-arch}}
+      DEB_ARCH: ${{inputs.deb-arch}}
+      CONFIG_ARCH: ${{inputs.config-arch}}
+      ARCH_LABEL: ${{inputs.arch-label}}
+      EXECUTABLE: ${{inputs.executable}}
+      VERSION: ${{inputs.version}}
+      UNIXNAME: ${{inputs.unixname}}
+      DESCRIPTION: ${{inputs.description}}
+    run: bash "${SS_WORKSPACE}/scripts/ci/linux-native-packages.sh"
+
+  #
+  # The glibc-2.28 ground truth: bare rockylinux:8 and debian:10 containers, plus a windowed
+  # run on the runner itself
+  #
+  - name: '🧪 Smoke test packages (glibc 2.28 gate)'
+    shell: bash
+    env:
+      SS_WORKSPACE: ${{inputs.workspace}}
+      ARCH_LABEL: ${{inputs.arch-label}}
+      EXECUTABLE: ${{inputs.executable}}
+      VERSION: ${{inputs.version}}
+      UNIXNAME: ${{inputs.unixname}}
+    run: bash "${SS_WORKSPACE}/scripts/ci/linux-smoke-packages.sh"
+
+  #
+  # Every artifact is verified right after it is signed, so a broken signature fails here
+  # instead of on a user's machine
+  #
+  - name: '✍🏻 Sign Linux artifacts (GPG, optional)'
+    shell: bash
+    env:
+      SS_WORKSPACE: ${{inputs.workspace}}
+      GPG_PASSPHRASE: ${{inputs.gpg-passphrase}}
+      GPG_KEY_ID: ${{inputs.gpg-key-id}}
+      ARCH_LABEL: ${{inputs.arch-label}}
+      EXECUTABLE: ${{inputs.executable}}
+      VERSION: ${{inputs.version}}
+      UNIXNAME: ${{inputs.unixname}}
+    run: bash "${SS_WORKSPACE}/scripts/ci/linux-sign-artifacts.sh"

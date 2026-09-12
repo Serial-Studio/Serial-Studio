@@ -167,7 +167,7 @@ observation, mapped per AC:
   remaining `WorkspaceSwitcherOverlay` references, `searchableItems` list defined
   once (AC3 by review), `CommandPalette.qml` free of dashboard/workspace assumptions
   outside the model (AC1 by review).
-- **Maintainer observations (app):** AC2 (root headers in BADAQ), AC4 ("Channel"
+- **Maintainer observations (app):** AC2 (root headers in the field project), AC4 ("Channel"
   search shows group-name subtitles; a group-name search shows group + dataset rows),
   AC5 (orphan widget → single-widget window, active workspace unchanged), AC6
   (member widget → workspace switch + highlight), AC7 (Esc/Enter/arrows in palette +

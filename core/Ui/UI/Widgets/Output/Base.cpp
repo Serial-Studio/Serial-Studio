@@ -14,7 +14,9 @@
 #include <utility>
 
 #include "Core/Licensing/CommercialToken.h"
+#include "DataModel/FrameBuilder.h"
 #include "DataModel/NotificationCenter.h"
+#include "DataModel/PipelineModules.h"
 #include "DataModel/Scripting/TransmitScriptCheck.h"
 #include "DataModel/Scripting/TransmitScriptEnvironment.h"
 #include "DataModel/TextCodec.h"
@@ -71,9 +73,15 @@ Widgets::Output::Base::Base(const DataModel::OutputWidget& config,
 }
 
 /**
- * @brief Destructor.
+ * @brief Destructor: a live transmit surface armed per-dataset capture when its engine was
+ *        prepared (spec 0086), so it is released here with the engine. The source-id guard mirrors
+ *        prepareTransmitScriptEngine's precondition: a refused surface never armed.
  */
-Widgets::Output::Base::~Base() = default;
+Widgets::Output::Base::~Base()
+{
+  if (m_target.surface == DataModel::TransmitScriptSurface::Live && m_sourceId >= 0)
+    DataModel::pipelineModules().frameBuilder.releaseTableApiUser();
+}
 
 //--------------------------------------------------------------------------------------------------
 // Property getters

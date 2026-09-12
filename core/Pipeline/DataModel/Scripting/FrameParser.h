@@ -40,6 +40,8 @@ class SessionContext;
 
 namespace DataModel {
 
+class ScriptCellRows;
+
 struct Source;
 
 /**
@@ -99,8 +101,12 @@ public:
                                          int sourceId,
                                          QByteArrayView* out,
                                          qsizetype maxSpans);
+  [[nodiscard]] bool parseCellsUtf8(const QByteArray& frame,
+                                    int sourceId,
+                                    ScriptCellRows& rows,
+                                    QList<QStringList>& fallback);
 
-  [[nodiscard]] bool hasTableApiEngines() const noexcept;
+  [[nodiscard]] bool anyEngineReferencesTableApi() const noexcept;
   [[nodiscard]] int engineEpoch() const noexcept;
   [[nodiscard]] QList<ScriptStat> scriptStats();
 
@@ -140,7 +146,7 @@ private:
   static constexpr size_t kStatsMirrorSlots = 4;
 
   Core::Bus::MessageBus& m_bus;
-  bool m_hasLuaEngine;
+  bool m_anyReferencesTableApi;
   bool m_suppressMessageBoxes;
   mutable bool m_languagesDirty;
   int m_engineEpoch;

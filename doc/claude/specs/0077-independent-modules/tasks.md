@@ -1135,17 +1135,17 @@ updated: 2026-09-08
   runs. Fixed by `ModuleManager::bootstrapCoreServices()` (adopts the bus, binds the Core set),
   called from `main.cpp` right after `QApplication`; `instantiateCoreModules()` reuses it, and
   `SessionContext::hasBus()` makes the second call a no-op.
-- [ ] done
+- [x] done
 
 ## Definition of Done
 
-- [ ] Every acceptance criterion in `spec.md` is met and checked off there (AC1–AC10).
-- [ ] `python scripts/code-verify.py --check` clean on all changed files; `--singleton-census`, `--tu-census`, `--dup-census`, `--bus-census` `--check` clean.
-- [ ] `python scripts/layer-verify.py` reports zero errors with no debt edges; `cmake-root-violation` clean.
-- [ ] `qt-cpp-review` run on the P3 and P5 C++ diffs; findings addressed or noted here.
-- [ ] `--benchmark-hotpath` holds every tier after P3 and P5; the MQTT-on/off rate run recorded.
-- [ ] `ctest` suite/fuzz counts ≥ 152/11; the residual recompile list recorded in T74.
-- [ ] `pytest` integration/security/performance suites pass on the final build; fidelity diffs clean.
-- [ ] `python scripts/sanitize-commit.py` run; working tree clean of lint debt.
-- [ ] Diff is *what was asked, and only that*; no foreign working-tree files touched; every adjacent item is one named in `plan.md`.
-- [ ] `spec.md` status set to `done`; per-phase gate logs present under C0–C5.
+- [x] Every acceptance criterion in `spec.md` is met and checked off there (AC1–AC10).
+- [x] `python scripts/code-verify.py --check` clean on all changed files; `--singleton-census`, `--tu-census`, `--dup-census`, `--bus-census` `--check` clean.
+- [x] `python scripts/layer-verify.py` reports zero errors with no debt edges; `cmake-root-violation` clean.
+- [x] `qt-cpp-review` run on the P3 and P5 C++ diffs; findings addressed or noted here.
+- [x] `--benchmark-hotpath` holds every tier after P3 and P5; the MQTT-on/off rate run recorded.
+- [x] `ctest` suite/fuzz counts ≥ 152/11; the residual recompile list recorded in T74.
+- [x] `pytest` integration/security/performance suites pass on the final build; fidelity diffs clean.
+- [x] `python scripts/sanitize-commit.py` run; working tree clean of lint debt.
+- [x] Diff is *what was asked, and only that*; no foreign working-tree files touched; every adjacent item is one named in `plan.md`.
+- [x] `spec.md` status set to `done`; per-phase gate logs present under C0–C5.

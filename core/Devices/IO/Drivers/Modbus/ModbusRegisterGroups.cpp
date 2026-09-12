@@ -138,6 +138,20 @@ bool IO::Drivers::ModbusRegisterGroups::add(const quint8 type,
 }
 
 /**
+ * @brief Appends the block an importer published ({type, start, count, slave}); the same refusals
+ *        as add(), so a re-published map never duplicates a group.
+ */
+bool IO::Drivers::ModbusRegisterGroups::addFromJson(const QJsonObject& block)
+{
+  SS_ASSERT_LOG(!block.isEmpty());
+
+  return add(static_cast<quint8>(block.value(QStringLiteral("type")).toInt()),
+             static_cast<quint16>(block.value(QStringLiteral("start")).toInt()),
+             static_cast<quint16>(block.value(QStringLiteral("count")).toInt()),
+             static_cast<quint8>(block.value(QStringLiteral("slave")).toInt()));
+}
+
+/**
  * @brief Removes the group at @p index, returning whether the index named one.
  */
 bool IO::Drivers::ModbusRegisterGroups::remove(const int index)

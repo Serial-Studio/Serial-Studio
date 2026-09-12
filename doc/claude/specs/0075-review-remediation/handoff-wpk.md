@@ -159,7 +159,7 @@ dependency, the fallback path alone is still correct (and still WP-E's 9x improv
 ### 3. `AC15`'s thread-listing wording contradicts R15.2 (`spec.md`, your call)
 
 AC15 says "only the pipeline thread elevated". R15.2 and the WP-K plan row both say the dense
-**stream-worker** threads register too, and I implemented that. On the BADAQ repro (4 x 48 kHz
+**stream-worker** threads register too, and I implemented that. On the field-project repro (4 x 48 kHz
 IEPE) that is five elevated threads, not one. Either AC15 should read "only the pipeline and
 stream-worker threads", or the `StreamWorker.cpp` post should be dropped. I implemented what the
 plan and tasks say and left the spec text alone.

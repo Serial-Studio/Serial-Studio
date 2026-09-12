@@ -2,10 +2,12 @@
  * Modbus RTU write register using built-in protocol helpers.
  * Returns binary payload: [addr_hi, addr_lo, value_hi, value_lo].
  *
- * Available helpers:
- *   modbusWriteRegister(address, value)  - 16-bit holding register (4 bytes)
- *   modbusWriteCoil(address, on)         - coil ON=0xFF00 / OFF=0x0000 (4 bytes)
- *   modbusWriteFloat(address, value)     - IEEE-754 float, two registers (6 bytes)
+ * Available helpers (every one takes an optional trailing unit, 1..247, to
+ * write to that unit instead of the connection's own):
+ *   modbusWriteRegister(address, value, unit)   - 16-bit holding register (4 bytes)
+ *   modbusWriteRegisters(address, values, unit) - consecutive registers
+ *   modbusWriteCoil(address, on, unit)          - coil ON=0xFF00 / OFF=0x0000 (4 bytes)
+ *   modbusWriteFloat(address, value, unit)      - IEEE-754 float, two registers (6 bytes)
  *
  * Note: These produce raw binary payloads suitable for Modbus RTU.
  * For Modbus ASCII framing (:ADDR_FUNC_REG_VAL_LRC\r\n), frame manually.

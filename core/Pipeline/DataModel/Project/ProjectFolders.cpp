@@ -375,6 +375,7 @@ void DataModel::ProjectFolders::deleteWorkspaceFolder(int folderId)
       ws.parentFolderId = promoteTo;
 
   m_workspaceFolders.erase(it);
+  m_model.m_profiles.forgetFolder(folderId);
 
   m_model.setModified(true);
   Q_EMIT m_model.editorWorkspacesChanged();

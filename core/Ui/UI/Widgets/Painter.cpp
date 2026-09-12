@@ -202,9 +202,13 @@ Widgets::Painter::Painter(int index, QQuickItem* parent)
 }
 
 /**
- * @brief Destroys the painter widget; QJSEngine + child QObjects clean up automatically.
+ * @brief Destroys the painter widget and drops its table-API user (spec 0086); the QJSEngine and
+ *        child QObjects clean up automatically.
  */
-Widgets::Painter::~Painter() = default;
+Widgets::Painter::~Painter()
+{
+  m_frameBuilder.releaseTableApiUser();
+}
 
 //--------------------------------------------------------------------------------------------------
 // QQuickPaintedItem hook

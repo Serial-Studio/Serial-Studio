@@ -27,20 +27,20 @@
 #include <cmath>
 #include <cstdio>
 #include <cstdlib>
+#include <memory>
 #include <QByteArray>
 #include <QByteArrayView>
 #include <QCoreApplication>
 #include <QEventLoop>
-#include <QFile>
 #include <QJsonArray>
 #include <QJsonDocument>
 #include <QJsonObject>
-#include <QLocale>
 #include <QStringList>
 #include <vector>
 
 #include "API/Server.h"
 #include "AppState.h"
+#include "Benchmark/HotpathReport.h"
 #include "Core/DataModel/Frame.h"
 #include "Core/IO/HAL_Driver.h"
 #include "Core/Runtime.h"
@@ -64,6 +64,10 @@
 #endif
 #ifdef ENABLE_GRPC
 #  include "API/GRPC/GRPCServer.h"
+#endif
+#if defined(SS_ALLOC_STATS) && defined(SS_MIMALLOC_ACTIVE)
+#  include <mimalloc-stats.h>
+#  include <mimalloc.h>
 #endif
 
 // The benchmark hard-exits (skipping atexit), so PGO-instrumented builds flush the profile here.
@@ -96,59 +100,99 @@ static constexpr double kSpinIntervalSec = 0.016;
 // Constants
 //--------------------------------------------------------------------------------------------------
 
-// Named rows: gated parser tiers, floor-gated lua exporter/dashboard rows, ungated dashboard(off).
-enum ReportIndex {
-  kReportData,
-  kReportNative,
-  kReportNativeMix,
-  kReportLua,
-  kReportJs,
-  kReportLuaMix,
-  kReportJsMix,
-  kReportLuaX,
-  kReportLuaD,
-  kReportLuaDoff,
-  kReportCount
-};
+// Allocation counting needs mimalloc built with statistics (spec 0084, -DSS_ALLOC_STATS=ON)
+#if defined(SS_ALLOC_STATS) && defined(SS_MIMALLOC_ACTIVE)
+static constexpr bool kAllocStatsAvailable = true;
+#else
+static constexpr bool kAllocStatsAvailable = false;
+#endif
 
-static constexpr const char* kReportTags[kReportCount] = {"data-pipeline",
-                                                          "native(numeric)",
-                                                          "native(mixed)",
-                                                          "lua(numeric)",
-                                                          "js(numeric)",
-                                                          "lua(mixed)",
-                                                          "js(mixed)",
-                                                          "lua+exporters",
-                                                          "lua+dashboard",
-                                                          "lua+dashboard(off)"};
+// Latched when a statistics read fails, so a broken counter reports n/a instead of a false zero
+static bool s_allocStatsFailed = false;
 
-// One ungated coverage row: an engine x {numeric,mixed} x {exporters,dashboard} combination.
-struct CoverageRow {
-  int language;
-  bool strings;
-  bool exporters;
-  bool dashboard;
-  const char* tag;
-};
+#if defined(SS_ALLOC_STATS) && defined(SS_MIMALLOC_ACTIVE)
+/**
+ * @brief Allocations recorded so far in mimalloc's main heap (spec 0084): the read merges the
+ *        calling thread's counters in, other threads merge theirs only on exit or on their own
+ *        statistics read, so a window is this thread's alone while no thread ends inside it,
+ *        which the Native rows guarantee by running before any engine or worker thread exists.
+ */
+[[nodiscard]] static quint64 sampleAllocations() noexcept
+{
+  mi_stats_t stats;
+  mi_stats_init(&stats);
+  if (!mi_heap_stats_get(mi_heap_main(), &stats)) {
+    s_allocStatsFailed = true;
+    return 0;
+  }
 
-// The rest of the matrix the named rows do not cover; ungated, run for code-path coverage only.
-static constexpr CoverageRow kCoverageMatrix[] = {
-  {    SerialStudio::Native, false,  true, false, "native+exporters(numeric)"},
-  {       SerialStudio::Lua, false,  true, false,    "lua+exporters(numeric)"},
-  {SerialStudio::JavaScript, false,  true, false,     "js+exporters(numeric)"},
-  {    SerialStudio::Native,  true,  true, false,   "native+exporters(mixed)"},
-  {SerialStudio::JavaScript,  true,  true, false,       "js+exporters(mixed)"},
-  {    SerialStudio::Native, false, false,  true, "native+dashboard(numeric)"},
-  {SerialStudio::JavaScript, false, false,  true,     "js+dashboard(numeric)"},
-  {    SerialStudio::Native,  true, false,  true,   "native+dashboard(mixed)"},
-  {       SerialStudio::Lua,  true, false,  true,      "lua+dashboard(mixed)"},
-  {SerialStudio::JavaScript,  true, false,  true,       "js+dashboard(mixed)"},
-};
+  const auto normal = static_cast<quint64>(std::max<int64_t>(0, stats.malloc_normal_count.total));
+  const auto huge   = static_cast<quint64>(std::max<int64_t>(0, stats.malloc_huge_count.total));
+  return normal + huge;
+}
+#else
+/**
+ * @brief Stand-in for builds without allocation statistics; every run then reports n/a.
+ */
+[[nodiscard]] static quint64 sampleAllocations() noexcept
+{
+  return 0;
+}
+#endif
 
-static constexpr int kCoverageCount =
-  static_cast<int>(sizeof(kCoverageMatrix) / sizeof(CoverageRow));
+#if defined(SS_ALLOC_STATS) && defined(SS_MIMALLOC_ACTIVE)
+/**
+ * @brief Thread start/exit epoch of the process (mimalloc's subprocess thread counters): a change
+ *        across a timed window means some thread merged its lifetime counters into the heap
+ *        aggregate mid-window, so that window's count is tainted rather than gate-worthy.
+ */
+[[nodiscard]] static quint64 sampleThreadEpoch() noexcept
+{
+  mi_stats_t stats;
+  mi_stats_init(&stats);
+  if (!mi_subproc_stats_get(mi_subproc_main(), &stats))
+    return 0;
 
-static constexpr int kReportColumns = 7;
+  const auto total   = static_cast<quint64>(std::max<int64_t>(0, stats.threads.total));
+  const auto current = static_cast<quint64>(std::max<int64_t>(0, stats.threads.current));
+  return (total << 32) ^ current;
+}
+#else
+/**
+ * @brief Stand-in for builds without allocation statistics; no window is ever tainted.
+ */
+[[nodiscard]] static quint64 sampleThreadEpoch() noexcept
+{
+  return 0;
+}
+#endif
+
+/**
+ * @brief Per-frame allocation figure for a run; -1 marks a build that cannot count (no mimalloc
+ *        statistics, or a statistics read that failed), which the report prints as n/a and the
+ *        gate skips.
+ */
+[[nodiscard]] static double allocationsPerFrame(quint64 allocations, quint64 frames) noexcept
+{
+  if (!kAllocStatsAvailable || s_allocStatsFailed || frames == 0)
+    return -1.0;
+
+  return static_cast<double>(allocations) / static_cast<double>(frames);
+}
+
+/**
+ * @brief Allocations charged to a timed loop: the sample delta minus the pump windows, clamped so
+ *        a failed sample can never read as a huge count.
+ */
+[[nodiscard]] static quint64 countedAllocations(quint64 allocStart, quint64 allocsSkipped) noexcept
+{
+  const quint64 allocEnd = sampleAllocations();
+  if (allocEnd < allocStart)
+    return 0;
+
+  const quint64 delta = allocEnd - allocStart;
+  return delta > allocsSkipped ? delta - allocsSkipped : 0;
+}
 
 /**
  * @brief Pumps the GUI event loop once and returns the wall-clock it consumed (discounted from
@@ -518,16 +562,19 @@ void HotpathBenchmark::activateDashboardWidgets()
  */
 HotpathBenchmark::Result HotpathBenchmark::runDataPipeline(quint64 targetFrames,
                                                            double minFps,
-                                                           double minSeconds)
+                                                           double minSeconds,
+                                                           int channels)
 {
   SS_ASSERT(targetFrames > 0, return {});
   SS_ASSERT(minFps > 0.0, return {});
   SS_ASSERT(minSeconds >= 0.0, return {});
+  SS_ASSERT(channels > 0, return {});
 
-  constexpr int kChannels       = 8;
   constexpr int kFramesPerChunk = 1000;
 
-  const QByteArray chunk = buildChunk(kFramesPerChunk, kChannels);
+  const QByteArray chunk = buildChunk(kFramesPerChunk, channels);
+  auto captured          = std::make_shared<IO::CapturedData>();
+  captured->data         = chunk;
 
   IO::FrameReader reader;
   reader.setOperationMode(SerialStudio::QuickPlot);
@@ -540,14 +587,18 @@ HotpathBenchmark::Result HotpathBenchmark::runDataPipeline(quint64 targetFrames,
   const quint64 maxFrames = targetFrames + static_cast<quint64>(minSeconds * 1.0e9);
   const quint64 maxChunks = maxFrames / kFramesPerChunk + 1;
 
-  quint64 extracted = 0;
-  quint64 fed       = 0;
-  double seconds    = 0.0;
-  double spentSpin  = 0.0;
-  double lastSpin   = 0.0;
-  const auto start  = Clock::now();
+  quint64 extracted       = 0;
+  quint64 fed             = 0;
+  quint64 allocsSkipped   = 0;
+  double seconds          = 0.0;
+  double spentSpin        = 0.0;
+  double lastSpin         = 0.0;
+  const auto threadsStart = sampleThreadEpoch();
+  const auto allocStart   = sampleAllocations();
+  const auto start        = Clock::now();
   for (quint64 c = 0; c < maxChunks && (fed < targetFrames || seconds < minSeconds); ++c) {
-    reader.processData(IO::makeCapturedData(chunk));
+    captured->timestamp = Clock::now();
+    reader.processData(captured);
 
     // code-verify off
     while (queue.try_dequeue(drained))
@@ -558,21 +609,27 @@ HotpathBenchmark::Result HotpathBenchmark::runDataPipeline(quint64 targetFrames,
     seconds  = std::chrono::duration<double>(Clock::now() - start).count() - spentSpin;
 
     if (seconds - lastSpin >= kSpinIntervalSec) {
-      spentSpin += spinEventLoop();
-      lastSpin   = seconds;
+      const auto pumpStart  = sampleAllocations();
+      spentSpin            += spinEventLoop();
+      allocsSkipped        += sampleAllocations() - pumpStart;
+      lastSpin              = seconds;
     }
   }
 
-  const double fps = seconds > 0.0 ? static_cast<double>(extracted) / seconds : 0.0;
+  const quint64 allocations = countedAllocations(allocStart, allocsSkipped);
+  const bool tainted        = sampleThreadEpoch() != threadsStart;
+  const double fps          = seconds > 0.0 ? static_cast<double>(extracted) / seconds : 0.0;
 
   Result result;
-  result.passed          = fps >= minFps;
-  result.language        = -1;
-  result.minFps          = minFps;
-  result.framesPerSecond = fps;
-  result.elapsedSeconds  = seconds;
-  result.framesParsed    = extracted;
-  result.framesSkipped   = 0;
+  result.passed              = fps >= minFps;
+  result.language            = -1;
+  result.minFps              = minFps;
+  result.framesPerSecond     = fps;
+  result.elapsedSeconds      = seconds;
+  result.allocationsPerFrame = tainted ? -1.0 : allocationsPerFrame(allocations, extracted);
+  result.framesParsed        = extracted;
+  result.framesSkipped       = 0;
+  result.allocTainted        = tainted;
   return result;
 }
 
@@ -597,6 +654,30 @@ static void drainDashboardRings()
 }
 
 /**
+ * @brief Feeds one chunk through the builder with the dashboard accepting, so every widget has a
+ *        structure and a first block before its sub-hotpath is armed for the timed loop.
+ */
+static void primeDashboardRun(IO::FrameReader& reader,
+                              DataModel::FrameBuilder& builder,
+                              const IO::CapturedDataPtr& captured)
+{
+  SS_ASSERT(captured != nullptr, return);
+
+  auto& queue = reader.queue();
+  IO::CapturedDataPtr drained;
+  reader.processData(captured);
+
+  // code-verify off
+  while (queue.try_dequeue(drained))
+    builder.hotpathRxFrame(drained);
+  // code-verify on
+
+  builder.flushOpenBlocks();
+  drainDashboardRings();
+  SS_ASSERT_LOG(builder.parsedFrameCount() > 0);
+}
+
+/**
  * @brief Drives FrameReader -> FrameBuilder -> consumers end-to-end and measures parsed frames/sec.
  */
 HotpathBenchmark::Result HotpathBenchmark::run(quint64 targetFrames,
@@ -606,18 +687,19 @@ HotpathBenchmark::Result HotpathBenchmark::run(quint64 targetFrames,
                                                bool withExporters,
                                                bool withStrings,
                                                bool withDashboard,
-                                               bool dashboardIngest)
+                                               bool dashboardIngest,
+                                               int channels)
 {
   SS_ASSERT(targetFrames > 0, return {});
   SS_ASSERT(minFps > 0.0, return {});
   SS_ASSERT(minSeconds >= 0.0, return {});
+  SS_ASSERT(channels > 0, return {});
 
-  constexpr int kChannels       = 8;
   constexpr int kFramesPerChunk = 1000;
   const bool activateDashboard  = withDashboard && dashboardIngest;
 
-  const int channels = withDashboard ? kDashboardChannels : kChannels;
-  setupProject(language, channels, withStrings, withDashboard);
+  const int numericChannels = withDashboard ? kDashboardChannels : channels;
+  setupProject(language, numericChannels, withStrings, withDashboard);
   if (withExporters)
     enableConsumers();
 
@@ -625,7 +707,9 @@ HotpathBenchmark::Result HotpathBenchmark::run(quint64 targetFrames,
     setActive(true);
 
   const int stringColumns = withStrings ? kStringChannels : 0;
-  const QByteArray chunk  = buildChunk(kFramesPerChunk, channels, stringColumns);
+  const QByteArray chunk  = buildChunk(kFramesPerChunk, numericChannels, stringColumns);
+  auto captured           = std::make_shared<IO::CapturedData>();
+  captured->data          = chunk;
 
   IO::FrameReader reader;
   reader.setOperationMode(SerialStudio::QuickPlot);
@@ -638,16 +722,7 @@ HotpathBenchmark::Result HotpathBenchmark::run(quint64 targetFrames,
   IO::CapturedDataPtr drained;
 
   if (activateDashboard) {
-    reader.processData(IO::makeCapturedData(chunk));
-
-    // code-verify off
-    while (queue.try_dequeue(drained))
-      builder.hotpathRxFrame(drained);
-    // code-verify on
-
-    builder.flushOpenBlocks();
-    drainDashboardRings();
-
+    primeDashboardRun(reader, builder, captured);
     activateDashboardWidgets();
   }
 
@@ -657,13 +732,17 @@ HotpathBenchmark::Result HotpathBenchmark::run(quint64 targetFrames,
   const quint64 maxFrames = targetFrames + static_cast<quint64>(minSeconds * 1.0e9);
   const quint64 maxChunks = maxFrames / kFramesPerChunk + 1;
 
-  quint64 fed        = 0;
-  double seconds     = 0.0;
-  double spentSpin   = 0.0;
-  double lastSpinSec = 0.0;
-  const auto start   = Clock::now();
+  quint64 fed             = 0;
+  quint64 allocsSkipped   = 0;
+  double seconds          = 0.0;
+  double spentSpin        = 0.0;
+  double lastSpinSec      = 0.0;
+  const auto threadsStart = sampleThreadEpoch();
+  const auto allocStart   = sampleAllocations();
+  const auto start        = Clock::now();
   for (quint64 c = 0; c < maxChunks && (fed < targetFrames || seconds < minSeconds); ++c) {
-    reader.processData(IO::makeCapturedData(chunk));
+    captured->timestamp = Clock::now();
+    reader.processData(captured);
 
     // code-verify off
     while (queue.try_dequeue(drained))
@@ -677,14 +756,18 @@ HotpathBenchmark::Result HotpathBenchmark::run(quint64 targetFrames,
     seconds  = std::chrono::duration<double>(Clock::now() - start).count() - spentSpin;
 
     if (seconds - lastSpinSec >= kSpinIntervalSec) {
-      spentSpin   += spinEventLoop();
-      lastSpinSec  = seconds;
+      const auto pumpStart  = sampleAllocations();
+      spentSpin            += spinEventLoop();
+      allocsSkipped        += sampleAllocations() - pumpStart;
+      lastSpinSec           = seconds;
     }
   }
 
-  const quint64 parsed  = builder.parsedFrameCount();
-  const quint64 skipped = builder.skippedFrameCount();
-  const double fps      = seconds > 0.0 ? static_cast<double>(parsed) / seconds : 0.0;
+  const quint64 allocations = countedAllocations(allocStart, allocsSkipped);
+  const bool tainted        = sampleThreadEpoch() != threadsStart;
+  const quint64 parsed      = builder.parsedFrameCount();
+  const quint64 skipped     = builder.skippedFrameCount();
+  const double fps          = seconds > 0.0 ? static_cast<double>(parsed) / seconds : 0.0;
 
   builder.setParseBudgetEnabled(true);
 
@@ -695,13 +778,15 @@ HotpathBenchmark::Result HotpathBenchmark::run(quint64 targetFrames,
     setActive(false);
 
   Result result;
-  result.passed          = fps >= minFps;
-  result.language        = language;
-  result.minFps          = minFps;
-  result.framesPerSecond = fps;
-  result.elapsedSeconds  = seconds;
-  result.framesParsed    = parsed;
-  result.framesSkipped   = skipped;
+  result.passed              = fps >= minFps;
+  result.language            = language;
+  result.minFps              = minFps;
+  result.framesPerSecond     = fps;
+  result.elapsedSeconds      = seconds;
+  result.allocationsPerFrame = tainted ? -1.0 : allocationsPerFrame(allocations, parsed);
+  result.framesParsed        = parsed;
+  result.framesSkipped       = skipped;
+  result.allocTainted        = tainted;
   return result;
 }
 
@@ -710,20 +795,22 @@ HotpathBenchmark::Result HotpathBenchmark::run(quint64 targetFrames,
  *        publish derived), so the hotpath itself carries no instrumentation.
  */
 HotpathBenchmark::StageBreakdown HotpathBenchmark::measureNativeStages(const Result& data,
-                                                                       const Result& native)
+                                                                       const Result& native,
+                                                                       int channels)
 {
   SS_ASSERT(data.framesParsed > 0, return {});
+  SS_ASSERT(channels > 0, return {});
 
   StageBreakdown stages = {};
   if (data.framesPerSecond <= 0.0 || native.framesPerSecond <= 0.0) [[unlikely]]
     return stages;
 
-  constexpr int kChannels        = 8;
   constexpr int kFramesPerChunk  = 1000;
   constexpr size_t kSampleFrames = 100000;
   constexpr int kTimingPasses    = 5;
+  constexpr qsizetype kMaxSpans  = DataModel::FrameBuilder::kMaxSpanFields;
 
-  const QByteArray chunk = buildChunk(kFramesPerChunk, kChannels);
+  const QByteArray chunk = buildChunk(kFramesPerChunk, channels);
 
   IO::FrameReader reader;
   reader.setOperationMode(SerialStudio::QuickPlot);
@@ -744,14 +831,14 @@ HotpathBenchmark::StageBreakdown HotpathBenchmark::measureNativeStages(const Res
   }
 
   static auto& parser = DataModel::FrameParser::instance();
-  std::array<QByteArrayView, 64> spans;
+  std::array<QByteArrayView, kMaxSpans> spans;
 
   using Clock    = std::chrono::steady_clock;
   quint64 tokens = 0;
   const auto t0  = Clock::now();
   for (int pass = 0; pass < kTimingPasses; ++pass) {
     for (const auto& f : frames) {
-      const qsizetype n = parser.parseSpansUtf8(f->data, 0, spans.data(), 64);
+      const qsizetype n = parser.parseSpansUtf8(f->data, 0, spans.data(), kMaxSpans);
       if (n < 0) [[unlikely]]
         return stages;
 
@@ -773,7 +860,7 @@ HotpathBenchmark::StageBreakdown HotpathBenchmark::measureNativeStages(const Res
 }
 
 //--------------------------------------------------------------------------------------------------
-// Report generation
+// Build provenance
 //--------------------------------------------------------------------------------------------------
 
 /**
@@ -817,204 +904,6 @@ QString HotpathBenchmark::buildProvenance()
 #endif
 
   return QStringLiteral("%1 [%2]").arg(parts.join(QLatin1Char('+')), compiler);
-}
-
-/**
- * @brief Formats a count with thousands separators (fixed English grouping for stable CI logs).
- */
-[[nodiscard]] static QString groupedCount(double value)
-{
-  static const QLocale s_locale(QLocale::English);
-  return s_locale.toString(static_cast<qulonglong>(value > 0.0 ? std::llround(value) : 0));
-}
-
-/**
- * @brief Fills one report row: ungated runs (informational tiers) show n/a target and result.
- */
-static void fillReportRow(const HotpathBenchmark::Result& r, const char* tag, QString* cells)
-{
-  SS_ASSERT(tag != nullptr, return);
-  SS_ASSERT(cells != nullptr, return);
-
-  const bool gated = r.minFps > 1.0;
-  cells[0]         = QString::fromLatin1(tag);
-  cells[1]         = groupedCount(static_cast<double>(r.framesParsed));
-  cells[2]         = groupedCount(static_cast<double>(r.framesSkipped));
-  cells[3]         = QString::number(r.elapsedSeconds, 'f', 2);
-  cells[4]         = groupedCount(r.framesPerSecond);
-  cells[5]         = gated ? groupedCount(r.minFps) : QStringLiteral("n/a");
-  if (gated)
-    cells[6] = r.passed ? QStringLiteral("PASS") : QStringLiteral("FAIL");
-  else
-    cells[6] = QStringLiteral("n/a");
-}
-
-/**
- * @brief Prints the per-run throughput table through the shared stdout + file sink. The named
- *        rows (gated tiers + lua reference rows) print first, then the ungated coverage matrix.
- */
-template<typename PrintFn>
-static void printRunTable(const HotpathBenchmark::Result* results,
-                          const HotpathBenchmark::Result* coverage,
-                          const PrintFn& printData)
-{
-  SS_ASSERT(results != nullptr, return);
-  SS_ASSERT(coverage != nullptr, return);
-
-  static const QString s_headers[kReportColumns] = {QStringLiteral("Benchmark"),
-                                                    QStringLiteral("Parsed"),
-                                                    QStringLiteral("Skipped"),
-                                                    QStringLiteral("Time (s)"),
-                                                    QStringLiteral("Frames/s"),
-                                                    QStringLiteral("Target"),
-                                                    QStringLiteral("Result")};
-
-  constexpr int kRowCount = kReportCount + kCoverageCount;
-  QString cells[kRowCount][kReportColumns];
-  for (int i = 0; i < kReportCount; ++i)
-    fillReportRow(results[i], kReportTags[i], cells[i]);
-
-  for (int i = 0; i < kCoverageCount; ++i)
-    fillReportRow(coverage[i], kCoverageMatrix[i].tag, cells[kReportCount + i]);
-
-  qsizetype widths[kReportColumns];
-  for (int col = 0; col < kReportColumns; ++col) {
-    widths[col] = s_headers[col].size();
-    for (int row = 0; row < kRowCount; ++row)
-      widths[col] = qMax(widths[col], cells[row][col].size());
-  }
-
-  const auto formatRow = [&](const QString* row) {
-    QString line = QStringLiteral("|");
-    for (int col = 0; col < kReportColumns; ++col) {
-      const bool left  = (col == 0 || col == kReportColumns - 1);
-      line            += QStringLiteral(" ");
-      line += left ? row[col].leftJustified(widths[col]) : row[col].rightJustified(widths[col]);
-      line += QStringLiteral(" |");
-    }
-    return line;
-  };
-
-  QString separator = QStringLiteral("+");
-  for (int col = 0; col < kReportColumns; ++col)
-    separator += QString(widths[col] + 2, QLatin1Char('-')) + QLatin1Char('+');
-
-  printData("%s\n", separator.toUtf8().constData());
-  printData("%s\n", formatRow(s_headers).toUtf8().constData());
-  printData("%s\n", separator.toUtf8().constData());
-  for (int row = 0; row < kRowCount; ++row)
-    printData("%s\n", formatRow(cells[row]).toUtf8().constData());
-
-  printData("%s\n", separator.toUtf8().constData());
-}
-
-/**
- * @brief Prints the per-run, stage, ratio, and machine-readable readouts; true when every gate
- *        passed.
- */
-bool HotpathBenchmark::printReport(const Result* results,
-                                   const Result* coverage,
-                                   const StageBreakdown& stages,
-                                   const QString& outputFile)
-{
-  SS_ASSERT(results != nullptr, return false);
-  SS_ASSERT(coverage != nullptr, return false);
-
-  QFile file(outputFile);
-  const bool fileOpen  = !outputFile.isEmpty() && file.open(QIODevice::WriteOnly | QIODevice::Text);
-  const auto printData = [&](const char* fmt, auto... args) {
-    const QByteArray line = QString::asprintf(fmt, args...).toUtf8();
-    std::fputs(line.constData(), stdout);
-    if (fileOpen)
-      file.write(line);
-  };
-
-  printData("build: %s\n", buildProvenance().toUtf8().constData());
-  printRunTable(results, coverage, printData);
-
-  const Result& data      = results[kReportData];
-  const Result& native    = results[kReportNative];
-  const Result& nativeMix = results[kReportNativeMix];
-  const Result& lua       = results[kReportLua];
-  const Result& js        = results[kReportJs];
-  const Result& luaMix    = results[kReportLuaMix];
-  const Result& jsMix     = results[kReportJsMix];
-  const Result& luaX      = results[kReportLuaX];
-  const Result& luaD      = results[kReportLuaD];
-  const Result& luaDoff   = results[kReportLuaDoff];
-
-  if (stages.valid) {
-    printData("hotpath-stage[native]: extract %.0f ns, tokenize %.0f ns, datasets+publish %.0f ns "
-              "(total %.0f ns/frame)\n",
-              stages.extractNs,
-              stages.tokenizeNs,
-              stages.datasetsPublishNs,
-              stages.totalNs);
-  }
-
-  const double slowdown =
-    luaX.framesPerSecond > 0.0 ? luaMix.framesPerSecond / luaX.framesPerSecond : 0.0;
-  printData("hotpath: exporters cost %.2fx throughput\n", slowdown);
-
-  const double dashSlowdown =
-    luaD.framesPerSecond > 0.0 ? lua.framesPerSecond / luaD.framesPerSecond : 0.0;
-  printData("hotpath: dashboard costs %.2fx throughput\n", dashSlowdown);
-
-  const double dashIngest =
-    luaD.framesPerSecond > 0.0 ? luaDoff.framesPerSecond / luaD.framesPerSecond : 0.0;
-  printData("hotpath: dashboard ingest costs %.2fx throughput (same project, ingest on vs off)\n",
-            dashIngest);
-
-  const quint64 peakRssBytes = Platform::AppPlatform::peakResidentBytes();
-  printData("hotpath: peak rss %.1f MiB (%s bytes)\n",
-            static_cast<double>(peakRssBytes) / (1024.0 * 1024.0),
-            groupedCount(static_cast<double>(peakRssBytes)).toUtf8().constData());
-
-  const bool allPassed = data.passed && native.passed && nativeMix.passed && lua.passed && js.passed
-                      && luaMix.passed && jsMix.passed && luaX.passed && luaD.passed;
-  printData("HOTPATH_FPS=%.0f HOTPATH_TARGET=%.0f HOTPATH_JS_FPS=%.0f HOTPATH_JS_TARGET=%.0f "
-            "HOTPATH_PASS=%d HOTPATH_EXPORTER_FPS=%.0f HOTPATH_DASHBOARD_FPS=%.0f "
-            "HOTPATH_DATA_FPS=%.0f HOTPATH_DATA_TARGET=%.0f\n",
-            lua.framesPerSecond,
-            lua.minFps,
-            js.framesPerSecond,
-            js.minFps,
-            allPassed ? 1 : 0,
-            luaX.framesPerSecond,
-            luaD.framesPerSecond,
-            data.framesPerSecond,
-            data.minFps);
-  printData("HOTPATH_LUA_MIXED_FPS=%.0f HOTPATH_LUA_MIXED_TARGET=%.0f "
-            "HOTPATH_JS_MIXED_FPS=%.0f HOTPATH_JS_MIXED_TARGET=%.0f\n",
-            luaMix.framesPerSecond,
-            luaMix.minFps,
-            jsMix.framesPerSecond,
-            jsMix.minFps);
-  printData("HOTPATH_DASHBOARD_OFF_FPS=%.0f HOTPATH_DASHBOARD_INGEST_COST=%.2f\n",
-            luaDoff.framesPerSecond,
-            dashIngest);
-  printData("HOTPATH_NATIVE_FPS=%.0f HOTPATH_NATIVE_TARGET=%.0f "
-            "HOTPATH_NATIVE_MIXED_FPS=%.0f HOTPATH_NATIVE_MIXED_TARGET=%.0f\n",
-            native.framesPerSecond,
-            native.minFps,
-            nativeMix.framesPerSecond,
-            nativeMix.minFps);
-  if (stages.valid)
-    printData("HOTPATH_STAGE_EXTRACT_NS=%.0f HOTPATH_STAGE_TOKENIZE_NS=%.0f "
-              "HOTPATH_STAGE_PUBLISH_NS=%.0f\n",
-              stages.extractNs,
-              stages.tokenizeNs,
-              stages.datasetsPublishNs);
-
-  printData("HOTPATH_PEAK_RSS_BYTES=%llu\n", static_cast<unsigned long long>(peakRssBytes));
-
-  std::fflush(stdout);
-  if (fileOpen) {
-    file.flush();
-    file.close();
-  }
-
-  return allPassed;
 }
 
 /**
@@ -1136,32 +1025,32 @@ static void runStreamPhase(double minSeconds)
  *        consumer/engine combination.
  */
 SS_NO_PGO
-int HotpathBenchmark::runAndReport(quint64 targetFrames,
-                                   double minFps,
-                                   double minSeconds,
-                                   const QString& outputFile)
+int HotpathBenchmark::runAndReport(
+  quint64 targetFrames, double minFps, double minSeconds, const QString& outputFile, int channels)
 {
   SS_ASSERT(targetFrames > 0, return EXIT_FAILURE);
   SS_ASSERT(minFps > 0.0, return EXIT_FAILURE);
+  SS_ASSERT(channels > 0, return EXIT_FAILURE);
 
   Platform::AppPlatform::registerIngestThreadWithMmcss();
 
+  const auto parse = [&](double tier, int language, bool exporters, bool strings) {
+    return run(targetFrames, tier, minSeconds, language, exporters, strings, false, true, channels);
+  };
+
   Result results[kReportCount] = {};
-  results[kReportData]         = runDataPipeline(targetFrames, minFps * 4.0, minSeconds);
-  results[kReportNative] =
-    run(targetFrames, minFps * 4.0, minSeconds, SerialStudio::Native, false, false);
+  results[kReportData]         = runDataPipeline(targetFrames, minFps * 4.0, minSeconds, channels);
+  results[kReportNative]       = parse(minFps * 4.0, SerialStudio::Native, false, false);
 
-  const StageBreakdown stages = measureNativeStages(results[kReportData], results[kReportNative]);
+  const StageBreakdown stages =
+    measureNativeStages(results[kReportData], results[kReportNative], channels);
 
-  results[kReportNativeMix] =
-    run(targetFrames, minFps * 2.0, minSeconds, SerialStudio::Native, false);
-  results[kReportLua] = run(targetFrames, minFps, minSeconds, SerialStudio::Lua, false, false);
-  results[kReportJs] =
-    run(targetFrames, minFps * 0.5, minSeconds, SerialStudio::JavaScript, false, false);
-  results[kReportLuaMix] = run(targetFrames, minFps * 0.5, minSeconds, SerialStudio::Lua, false);
-  results[kReportJsMix] =
-    run(targetFrames, minFps * 0.25, minSeconds, SerialStudio::JavaScript, false);
-  results[kReportLuaX] = run(targetFrames, minFps * 0.5, minSeconds, SerialStudio::Lua, true);
+  results[kReportNativeMix] = parse(minFps * 2.0, SerialStudio::Native, false, true);
+  results[kReportLua]       = parse(minFps, SerialStudio::Lua, false, false);
+  results[kReportJs]        = parse(minFps * 0.5, SerialStudio::JavaScript, false, false);
+  results[kReportLuaMix]    = parse(minFps * 0.5, SerialStudio::Lua, false, true);
+  results[kReportJsMix]     = parse(minFps * 0.25, SerialStudio::JavaScript, false, true);
+  results[kReportLuaX]      = parse(minFps * 0.5, SerialStudio::Lua, true, true);
   results[kReportLuaD] =
     run(targetFrames, minFps * 0.5, minSeconds, SerialStudio::Lua, false, false, true);
 
@@ -1171,11 +1060,20 @@ int HotpathBenchmark::runAndReport(quint64 targetFrames,
   Result coverage[kCoverageCount] = {};
   for (int i = 0; i < kCoverageCount; ++i) {
     const CoverageRow& row = kCoverageMatrix[i];
-    coverage[i] =
-      run(targetFrames, 1.0, minSeconds, row.language, row.exporters, row.strings, row.dashboard);
+    coverage[i]            = run(targetFrames,
+                                 1.0,
+                                 minSeconds,
+                                 row.language,
+                                 row.exporters,
+                                 row.strings,
+                                 row.dashboard,
+                                 true,
+                                 channels);
   }
 
-  const int code = printReport(results, coverage, stages, outputFile) ? EXIT_SUCCESS : EXIT_FAILURE;
+  const int code = HotpathReport::print(results, coverage, stages, outputFile, channels)
+                   ? EXIT_SUCCESS
+                   : EXIT_FAILURE;
 
   runStreamPhase(minSeconds);
 

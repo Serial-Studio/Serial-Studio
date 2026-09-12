@@ -20,6 +20,7 @@ Options marked **(Pro)** are available only in commercial builds.
 | `--api-server` | | Enable the API server on startup (port 7777). |
 | `--dump-api-schema` | `file` | Write the API command registry (name, description, parameter schema per command) to a JSON file and exit. Input for SDK generators. |
 | `-p`, `--project` | `file` | Load the specified project file. |
+| `--profile` | `name` | Open the project under the named [workspace profile](Project-Editor.md#workspace-profiles) instead of asking which one to show. |
 | `-q`, `--quick-plot` | | Enable quick-plot mode (auto-detect CSV data). |
 | `-t`, `--fps` | `Hz` | Set the visualization refresh rate. |
 | `-n`, `--points` | `count` | Set the number of data points per plot. |
@@ -45,9 +46,13 @@ Options marked **(Pro)** are available only in commercial builds.
 | `--benchmark-frames` | `count` | Frames to push through the benchmark (default 1000000). |
 | `--benchmark-seconds` | `seconds` | Wall-clock seconds the benchmark must sustain (default 10). |
 | `--benchmark-output` | `file` | File the benchmark report is written to (default: stdout only, no file). |
+| `--benchmark-channels` | `count` | Numeric channels in the synthetic benchmark project (default 8, max 4096). |
 
-Passing any of `--min-fps`, `--benchmark-frames`, or `--benchmark-seconds` also runs the
-benchmark; `--benchmark-hotpath` alone uses the defaults shown above.
+Passing any of `--min-fps`, `--benchmark-frames`, `--benchmark-seconds`, or
+`--benchmark-channels` also runs the benchmark; `--benchmark-hotpath` alone uses the defaults
+shown above. At a width other than 8 the throughput targets are printed for reference but do
+not fail the run, because they were calibrated at 8 channels; the report states the width and
+which parser lane the Built-In rows took.
 
 This is the headless form used in CI and deployment gating. For the interactive version with a
 per-phase results table, run it from the GUI via **About > Benchmark**; see the

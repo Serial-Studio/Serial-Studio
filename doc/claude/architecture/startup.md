@@ -259,8 +259,10 @@ appcast key (repo-root `updates.json`) in three tiers: the CI-stamped `ss-config
 (`packageType` + `arch`) read from `applicationDirPath()` (macOS also `../Resources`), then
 runtime probing (`APPIMAGE` env var on Linux; `GetCurrentPackageFullName` on Windows so a
 Store install is never offered the MSI), then the legacy per-OS keys. `windows-msix` is
-open-url-only (Store owns updates). Three things must stay in sync: the ci.yml stamp steps
-(one per package; deb/rpm are two separate ldnp runs, macOS stamps before codesign, MSI via
-`-DSS_PACKAGE_TYPE` in `app/CMakeLists.txt`), the key table in `ModuleManager.cpp`, and the
-`updates.json` keys (shape pinned by `tests/unit/test_updates_manifest.py`). Dev builds have
+open-url-only (Store owns updates). Three things must stay in sync: the CI stamp steps
+(one per package; the Linux ones live in `scripts/ci/linux-create-appimage.sh` and
+`scripts/ci/linux-native-packages.sh` -- deb/rpm are two separate ldnp runs -- while the macOS
+stamp, before codesign, and the Windows portable/MSIX stamps stay inline in `ci.yml`, and MSI
+goes through `-DSS_PACKAGE_TYPE` in `app/CMakeLists.txt`), the key table in `ModuleManager.cpp`,
+and the `updates.json` keys (shape pinned by `tests/unit/test_updates_manifest.py`). Dev builds have
 no stamp and keep today's behavior.

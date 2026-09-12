@@ -338,6 +338,7 @@ bool EditorSelection::selectInfluxSinkItem(QStandardItem* item)
   if (item != m_editor.m_influxSinkItem || item == nullptr)
     return false;
 
+  m_editor.m_influx.buildInfluxSinkModel();
   m_editor.setCurrentView(InfluxSinkView);
   return true;
 }
@@ -351,6 +352,51 @@ bool EditorSelection::selectControlScriptItem(QStandardItem* item)
     return false;
 
   m_editor.setCurrentView(ControlScriptView);
+  return true;
+}
+
+/**
+ * @brief Switches to the Lua library view when its tree node is selected.
+ */
+bool EditorSelection::selectTransformLibraryItem(QStandardItem* item)
+{
+  if (item != m_editor.m_transformLibraryItem || item == nullptr)
+    return false;
+
+  m_editor.setCurrentView(TransformLibraryView);
+  return true;
+}
+
+/**
+ * @brief Routes the Project Scripts node and the JavaScript library child to their views.
+ */
+bool EditorSelection::selectScriptsTreeItem(QStandardItem* item)
+{
+  if (item == nullptr)
+    return false;
+
+  if (item == m_editor.m_scriptsRootItem) {
+    m_editor.setCurrentView(ProjectScriptsView);
+    return true;
+  }
+
+  if (item == m_editor.m_jsLibraryItem) {
+    m_editor.setCurrentView(JsLibraryView);
+    return true;
+  }
+
+  return false;
+}
+
+/**
+ * @brief Routes the Data Export node to its overview view.
+ */
+bool EditorSelection::selectExportRootItem(QStandardItem* item)
+{
+  if (item != m_editor.m_exportRootItem || item == nullptr)
+    return false;
+
+  m_editor.setCurrentView(DataExportView);
   return true;
 }
 
@@ -385,7 +431,9 @@ void EditorSelection::onCurrentSelectionChanged(const QModelIndex& current,
     selectSourceParserItem(item) || selectSourceItem(item) || selectGroupItem(item)
     || selectGroupFolderItem(item) || selectDatasetItem(item) || selectActionItem(item)
     || selectOutputWidgetItem(item) || selectDataTableItem(item) || selectWorkspaceTreeItem(item)
-    || selectMqttPublisherItem(item) || selectInfluxSinkItem(item) || selectControlScriptItem(item);
+    || selectMqttPublisherItem(item) || selectInfluxSinkItem(item) || selectControlScriptItem(item)
+    || selectTransformLibraryItem(item) || selectScriptsTreeItem(item)
+    || selectExportRootItem(item);
 
   if (!handled && m_editor.m_rootItems.contains(item)) {
     m_editor.setCurrentView(ProjectView);
@@ -522,6 +570,14 @@ QStandardItem* EditorSelection::resolveNavEntry(const NavEntry& entry) const
       return m_editor.m_influxSinkItem;
     case ProjectEditor::KindControlScript:
       return m_editor.m_controlScriptItem;
+    case ProjectEditor::KindTransformLibrary:
+      return m_editor.m_transformLibraryItem;
+    case ProjectEditor::KindJsLibrary:
+      return m_editor.m_jsLibraryItem;
+    case ProjectEditor::KindScriptsRoot:
+      return m_editor.m_scriptsRootItem;
+    case ProjectEditor::KindExportRoot:
+      return m_editor.m_exportRootItem;
     default:
       return nullptr;
   }

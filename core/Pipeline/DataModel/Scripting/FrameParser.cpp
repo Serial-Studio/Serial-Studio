@@ -36,6 +36,7 @@
 #include "DataModel/Scripting/JsScriptEngine.h"
 #include "DataModel/Scripting/LuaScriptEngine.h"
 #include "DataModel/Scripting/NativeTemplates/NativeTemplate.h"
+#include "DataModel/Scripting/ScriptCells.h"
 #include "IO/PipelineHost.h"
 
 DataModel::FrameParser* DataModel::FrameParser::s_instance = nullptr;
@@ -49,7 +50,7 @@ DataModel::FrameParser* DataModel::FrameParser::s_instance = nullptr;
  */
 DataModel::FrameParser::FrameParser(Core::Bus::MessageBus& bus)
   : m_bus(bus)
-  , m_hasLuaEngine(false)
+  , m_anyReferencesTableApi(false)
   , m_suppressMessageBoxes(false)
   , m_languagesDirty(true)
   , m_engineEpoch(0)
@@ -301,10 +302,10 @@ void DataModel::FrameParser::refreshEngineCaches() noexcept
   const auto it0 = m_engines.find(0);
   m_engine0Cache = (it0 != m_engines.end()) ? it0->second.get() : nullptr;
 
-  m_hasLuaEngine = false;
+  m_anyReferencesTableApi = false;
   for (const auto& [id, engine] : m_engines) {
-    if (engine->language() == SerialStudio::Lua) {
-      m_hasLuaEngine = true;
+    if (engine->referencesTableApi()) {
+      m_anyReferencesTableApi = true;
       break;
     }
   }
@@ -313,11 +314,12 @@ void DataModel::FrameParser::refreshEngineCaches() noexcept
 }
 
 /**
- * @brief Returns true while any live parser engine exposes the table/dataset script API.
+ * @brief True while any live parser engine's script names a table-API helper (spec 0086), which is
+ *        what the frame builder arms per-dataset capture on.
  */
-bool DataModel::FrameParser::hasTableApiEngines() const noexcept
+bool DataModel::FrameParser::anyEngineReferencesTableApi() const noexcept
 {
-  return m_hasLuaEngine;
+  return m_anyReferencesTableApi;
 }
 
 /**
@@ -485,6 +487,43 @@ QList<QStringList> DataModel::FrameParser::parseMultiFrame(const QByteArray& fra
 }
 
 /**
+ * @brief Cell-lane twin of parseMultiFrameUtf8 (spec 0086): same engine-0 cache and source
+ *        fallback rules; false when the engine has no cell lane or the result needs the list path,
+ *        with that list already in @p fallback so the script never runs twice.
+ */
+bool DataModel::FrameParser::parseCellsUtf8(const QByteArray& frame,
+                                            int sourceId,
+                                            ScriptCellRows& rows,
+                                            QList<QStringList>& fallback)
+{
+  SS_ASSERT_LOG(QThread::currentThread() == thread());
+
+  fallback.clear();
+  if (sourceId < 0 || frame.isEmpty()) [[unlikely]]
+    return false;
+
+  if (sourceId == 0 && m_engine0Cache) [[likely]] {
+    if (!m_engine0Cache->isLoaded() || m_engine0Cache->language() == SerialStudio::Native)
+      return false;
+
+    return m_engine0Cache->parseUtf8Cells(frame, rows, fallback);
+  }
+
+  auto it = m_engines.find(sourceId);
+  if (it == m_engines.end() || !it->second->isLoaded()) {
+    if (sourceId == 0 || languageForSource(sourceId) != languageForSource(0))
+      return false;
+
+    return parseCellsUtf8(frame, 0, rows, fallback);
+  }
+
+  if (it->second->language() == SerialStudio::Native)
+    return false;
+
+  return it->second->parseUtf8Cells(frame, rows, fallback);
+}
+
+/**
  * @brief Runs the source's engine over a UTF-8 text frame, skipping the QString round-trip.
  */
 QList<QStringList> DataModel::FrameParser::parseMultiFrameUtf8(const QByteArray& frame,
@@ -566,8 +605,10 @@ bool DataModel::FrameParser::loadScript(int sourceId, const QString& script, boo
     refreshEngineCaches();
   }
 
-  auto& engine = engineForSource(sourceId);
-  return engine.loadScript(script, sourceId, showMessageBoxes);
+  auto& engine      = engineForSource(sourceId);
+  const bool loaded = engine.loadScript(script, sourceId, showMessageBoxes);
+  refreshEngineCaches();
+  return loaded;
 }
 
 /**

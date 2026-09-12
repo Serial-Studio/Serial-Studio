@@ -24,9 +24,13 @@ The sink has its own node in the Project Editor's left tree, a top-level item al
 
 ```
 Project
-├─ Control Loop
-├─ MQTT Publisher
-├─ InfluxDB Sink           <-- here
+├─ Project Scripts
+│   ├─ Control Loop
+│   ├─ Lua Library
+│   └─ JavaScript Library
+├─ Data Export
+│   ├─ MQTT Publisher
+│   └─ InfluxDB Sink       <-- here
 ├─ Action 1
 ├─ Main Device (UART)
 └─ Dashboard Widgets

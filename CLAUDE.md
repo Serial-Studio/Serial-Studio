@@ -139,7 +139,8 @@ Frame parsers in JavaScript (`QJSEngine`), Lua (embedded LuaJIT 2.1, 5.1 + shims
 Safe/Fast execution mode — spec 0051), or Built-In ("Native"
 in all internal identifiers — `SerialStudio::Native`, `CFrameParser`, `NativeTemplate`; only
 user-facing strings/docs say Built-In. Parametrized C++ templates configured via a JSON
-descriptor, no user code). Per-dataset value transforms in JS or Lua. Pro features: Output
+descriptor, no user code). Per-dataset value transforms in JS or Lua, with one shared library per
+language per project and per-dataset `params` (spec 0083). Pro features: Output
 widgets, Modbus, CAN Bus, OPC UA, S7comm, EtherNet/IP, IEC 60870-5-104, Sparkplug B, MDF4,
 3D, ImageView, Waterfall, file-transfer protocols (X/Y/ZMODEM), Modbus map importer,
 Historian (per-session SQLite recording; "Session Database" pre-2026-08), InfluxDB 2.x sink

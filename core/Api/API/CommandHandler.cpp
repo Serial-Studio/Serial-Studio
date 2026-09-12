@@ -35,6 +35,7 @@
 #include "API/Handlers/SourceHandler.h"
 #include "API/Handlers/StreamHandler.h"
 #include "API/Handlers/SystemHandler.h"
+#include "API/Handlers/TransformLibraryHandler.h"
 #include "API/Handlers/UARTHandler.h"
 #include "API/Server.h"
 
@@ -279,6 +280,7 @@ void API::CommandHandler::registerCoreHandlers()
   Handlers::DataTablesHandler::registerCommands();
   Handlers::ScriptsHandler::registerCommands();
   Handlers::ControlScriptHandler::registerCommands();
+  Handlers::TransformLibraryHandler::registerCommands(registry);
   Handlers::SystemHandler::registerCommands();
   Handlers::StreamHandler::registerCommands();
   Handlers::MirrorHandler::registerCommands();

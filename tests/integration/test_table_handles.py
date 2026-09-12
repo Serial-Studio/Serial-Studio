@@ -12,7 +12,7 @@ control-script commands, covering what the Node-only tests/scripts unit cannot:
 - AC5 / R7: after a table-definition edit rebuilds the store, an old handle is a
   safe no-op (written=false), never touching the wrong register.
 
-AC4 (the >80% per-frame-time drop) is a maintainer in-app observation on the BADAQ
+AC4 (the >80% per-frame-time drop) is a maintainer in-app observation on the field project
 project; there is no stable automated timing assertion here.
 
 Requires the app up with Settings -> Miscellaneous -> Enable API Server.

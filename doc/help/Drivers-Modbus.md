@@ -81,7 +81,7 @@ Byte and word order are device-specific:
 - **Little-endian word swap**: register A = `0x5678`, register B = `0x1234`. Common on some legacy gear.
 - **Mixed**: byte-swap inside each register but not between them. Rare but it happens.
 
-Vendor documentation always specifies the order. Serial Studio's register-map importer assumes big-endian by default (the convention used by most modern devices); for anything else, edit the generated frame parser.
+Vendor documentation always specifies the order. Serial Studio's register-map importer assumes big-endian by default (the convention used by most modern devices); a register map can state another order per entry with an `order` column (`cdab`, `badc` or `dcba`), and the generated parser undoes it before decoding.
 
 ### RTU vs TCP
 
@@ -145,6 +145,10 @@ The frame parser extracts named datasets from those bytes through its `parse(fra
 ### Auto-generation
 
 For devices with documented register maps, the [Modbus map importer](Auto-Generating-Projects.md) (**Import Register Map…** in the setup panel) reads vendor CSV/XML/JSON files and generates the register groups, datasets, and a complete Lua frame parser automatically. This is the recommended starting point. Without a vendor file, the **Generate Project** button in the register-groups dialog builds an equivalent project from the groups configured by hand.
+
+A map can describe a whole bus: a `slave` column puts each register on its unit, so one connection polls several devices and the generated parser routes every reply by the unit, function code and byte count the reply carries rather than by polling order (a dropped reply no longer shifts the ones after it). `bit` rows expose one bit of a register as an LED, `rw` rows become output controls, and `order` fixes a device's word order. The full column reference is in [Protocol Setup Guides](Protocol-Setup-Guides.md#modbus-register-map-import-pro).
+
+**Writing to another unit.** A write payload normally targets the connection's unit. Prefix it with `0xFF 0x83 <unit>` (`[0xFF, 0x83, unit, addr_hi, addr_lo, value_hi, value_lo]`) to write to another device on the same bus; the SDK helpers take that unit as an optional last argument, for example `modbusWriteRegister(0x0010, value, 2)`. Any other odd-length payload is refused, as before.
 
 **Known limitation.** The importer groups contiguous same-type registers into one block per group and does not split a block once it exceeds 125 registers, the driver's per-request read limit. A generated group larger than 125 registers is silently dropped and never polled. If a vendor register map has a contiguous run that long, split it into multiple groups of 125 registers or fewer before or after import.
 

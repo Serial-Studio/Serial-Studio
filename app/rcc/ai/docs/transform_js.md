@@ -90,6 +90,12 @@ arg is ALWAYS an alias, a number ALWAYS a uniqueId — no coercion, so
 optional, unique, user-set name from the Project Editor; it survives `uniqueId`
 renumbering and mirrors as `__datasets__` variables `raw:<alias>` / `final:<alias>`.
 
+Naming any of these helpers (`tableGet`, `tableSet`, `tableHandle`, `tableHandleMany`, `tableGetH`,
+`tableSetH`, `datasetGetRaw`, `datasetGetFinal`) anywhere in a transform, the shared library, or a
+parser script is what switches on the per-frame `raw:`/`final:` mirror; a project that names none
+of them skips it entirely, and a helper name assembled at runtime (`globalThis["table" + "Get"]`)
+is not detected.
+
 For a transform that hits the same variables every call, resolve handles once in a top-level
 variable and use `tableGetH`/`tableSetH` instead of the name-keyed calls. A stale handle (after a
 table-definition edit) is a safe no-op; the script re-resolves on its next load.

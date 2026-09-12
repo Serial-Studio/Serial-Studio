@@ -296,10 +296,10 @@ qint64 IO::Drivers::CANBus::write(const QByteArray& data)
     quint32 can_id = 0;
     int dlc_index  = 2;
     if (extended) {
-      can_id = (static_cast<quint32>(static_cast<quint8>(data[0]) & 0x1F) << 24)
-             | (static_cast<quint32>(static_cast<quint8>(data[1])) << 16)
-             | (static_cast<quint32>(static_cast<quint8>(data[2])) << 8)
-             | static_cast<quint8>(data[3]);
+      can_id    = (static_cast<quint32>(static_cast<quint8>(data[0]) & 0x1F) << 24)
+                | (static_cast<quint32>(static_cast<quint8>(data[1])) << 16)
+                | (static_cast<quint32>(static_cast<quint8>(data[2])) << 8)
+                | static_cast<quint8>(data[3]);
       dlc_index = 4;
     } else
       can_id = ((static_cast<quint8>(data[0]) & 0x07) << 8) | static_cast<quint8>(data[1]);

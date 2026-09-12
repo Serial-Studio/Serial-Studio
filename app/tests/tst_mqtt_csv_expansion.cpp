@@ -206,8 +206,8 @@ void TstMqttCsvExpansion::headerFromSchema()
 {
   const auto frame  = makeFrame(QStringLiteral("Power, DC"),
                                 {
-                                 {1, QStringLiteral("Voltage")},
-                                 {2, QStringLiteral("Current")}
+                                  {1, QStringLiteral("Voltage")},
+                                  {2, QStringLiteral("Current")}
   });
   const auto schema = DataModel::buildExportSchema(frame);
   QCOMPARE(schema.columns.size(), std::size_t(2));
@@ -234,15 +234,15 @@ void TstMqttCsvExpansion::headerFollowsShapeChange()
 {
   const auto before  = makeFrame(QStringLiteral("IMU"),
                                  {
-                                  {1, QStringLiteral("Roll")}
+                                   {1, QStringLiteral("Roll")}
   });
   const auto headerA = MQTT::buildCsvHeader(DataModel::buildExportSchema(before));
   QCOMPARE(headerA, QByteArray("IMU/Roll\n"));
 
   const auto after   = makeFrame(QStringLiteral("IMU"),
                                  {
-                                 {1,  QStringLiteral("Roll")},
-                                 {2, QStringLiteral("Pitch")}
+                                   {1,  QStringLiteral("Roll")},
+                                   {2, QStringLiteral("Pitch")}
   });
   const auto headerB = MQTT::buildCsvHeader(DataModel::buildExportSchema(after));
   QCOMPARE(headerB, QByteArray("IMU/Roll,IMU/Pitch\n"));
@@ -261,8 +261,8 @@ void TstMqttCsvExpansion::rowFollowsSchemaOrder()
 {
   const auto frame  = makeFrame(QStringLiteral("IMU"),
                                 {
-                                 {1,  QStringLiteral("Roll")},
-                                 {2, QStringLiteral("Pitch")}
+                                  {1,  QStringLiteral("Roll")},
+                                  {2, QStringLiteral("Pitch")}
   });
   const auto schema = DataModel::buildExportSchema(frame);
 

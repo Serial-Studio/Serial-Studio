@@ -239,11 +239,41 @@ against it — never retyped. `API::CommandDefinition::inputSchema` is the runti
   dataset field name, a widget-option bit, or an enum value the code contradicts — including
   claiming the API rejects a spelling the manifest declares as an alias.
 
+## Workspace Profiles (spec 0083)
+
+`DataModel::ProjectWorkspaceProfiles` (`Project/ProjectWorkspaceProfiles.{h,cpp}`, owned by
+`ProjectModel` as `m_profiles`, struct in `core/Core/DataModel/WorkspaceProfile.h`, persisted under
+`Keys::WorkspaceProfiles` inside the customised-workspaces block) holds named folder/workspace
+subsets with undo-scoped CRUD. The active profile is runtime-only: `chooseAtLoad(interactive)` runs
+from `loadFromJsonDocument` when a file declares two or more profiles (CLI/API request via
+`ProjectModel::setRequestedWorkspaceProfile`, consumed once; then the choice remembered per file in
+`QSettings` under `workspaceProfiles/<sha1(path)>`; then, only for a user-initiated `openJsonFile`,
+a `QInputDialog::getItem` prompt posted with `QTimer::singleShot(0)` so it never spins inside the
+load). `loadFromJson` drops the selection with the list; `applyHistorySnapshot` captures and
+restores it around the apply, so undo never drops it and a file open never inherits the previous
+file's. Nothing caches a filtered list: `workspaceVisible(ws)` is a pure predicate
+(`activeWorkspaces()` is unchanged) applied by `TaskbarWorkspaces::model()/tree()` and
+`project.workspace.list`; the editor never filters. Deleting a folder or workspace forgets it in
+every profile.
+
 ## Modbus Map Importer (Pro)
 
 `DataModel::ModbusMapImporter` imports CSV/XML/JSON →
 auto-generates a Modbus project; preview in `ModbusPreviewDialog.qml`. Pairs with
 `IO::Drivers::Modbus::generateProject`.
+
+**Every importer has two exits (spec 0083).** `confirmImport()` keeps building a standalone
+project JSON and hands it to `importProjectFromJson` (save dialog, open). `confirmMerge()` hands
+the same JSON to `ProjectLoader::mergeImportedProject(project, label)`, which runs the pure
+`DataModel::ProjectMerge::remap` (`Project/ProjectMerge.{h,cpp}`, pinned by `tst_project_merge`):
+sources move past the document's ids, groups and datasets draw fresh uniqueIds from the allocator,
+a colliding table is renamed and the rename is applied to the imported parser and transform code
+by quoted-literal replacement, workspaces continue the user id range and keep only their ref
+identity (the workspace rebind derives the ordinal). The loader appends under one
+`ProjectUndoScope`, files groups and workspaces into folders named `label`, then
+`emitProjectLoadedSignals(false)`. Refused outside ProjectFile mode, on an empty document and on
+GPL builds. The Modbus path publishes `ModbusRegisterGroupsLoaded{append = true}` so the driver
+keeps its groups; `ModbusRegisterGroups::addFromJson` also reads each block's `slave`.
 
 ## Importer Parser Output
 

@@ -1,0 +1,44 @@
+#
+# SPDX-FileCopyrightText: 2020-2025 Alex Spataru
+# SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial
+#
+# gRPC arrives as a prebuilt tarball from GRPC_REPO; building it from source would cost more
+# than the rest of the job put together. The retry policy lives in scripts/ci/download-grpc.sh.
+#
+
+name: 'Download prebuilt gRPC'
+description: 'Fetches the prebuilt gRPC tarball for this platform and extracts it into a prefix.'
+
+inputs:
+  version:
+    description: 'gRPC release version; the tag is this value with a leading v.'
+    required: true
+  repo:
+    description: 'Repository the prebuilt release lives in.'
+    required: true
+  asset:
+    description: "Release asset for this platform, e.g. 'grpc-1.78.1-linux-x86_64.tar.gz'."
+    required: true
+  prefix-dir:
+    description: 'Directory the tarball is extracted into (the CMAKE_PREFIX_PATH entry).'
+    required: true
+  workspace:
+    description: 'Directory the asset is downloaded into.'
+    required: true
+  github-token:
+    description: 'Token the gh CLI authenticates with (secrets.GITHUB_TOKEN).'
+    required: true
+
+runs:
+  using: 'composite'
+  steps:
+  - name: '⚙️ Download prebuilt gRPC'
+    shell: bash
+    env:
+      SS_WORKSPACE: ${{inputs.workspace}}
+      GRPC_VERSION: ${{inputs.version}}
+      GRPC_REPO: ${{inputs.repo}}
+      GRPC_ASSET: ${{inputs.asset}}
+      GRPC_PREFIX: ${{inputs.prefix-dir}}
+      GH_TOKEN: ${{inputs.github-token}}
+    run: bash "${SS_WORKSPACE}/scripts/ci/download-grpc.sh"

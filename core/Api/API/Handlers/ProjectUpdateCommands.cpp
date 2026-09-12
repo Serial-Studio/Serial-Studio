@@ -362,7 +362,8 @@ void API::Handlers::ProjectUpdateCommands::registerCommands()
                    "before authoring** for the function signature (transmit(value) "
                    "returning a Uint8Array / string), the per-widget value semantics, and "
                    "the injected Modbus/CAN helper globals (modbusWriteRegister / "
-                   "modbusWriteRegisters / modbusWriteCoil / modbusWriteFloat / "
+                   "modbusWriteRegisters / modbusWriteCoil / modbusWriteFloat, each with an "
+                   "optional trailing unit 1..247 to write to another unit on the bus / "
                    "canSendFrame / canSendValue). "
                    "Validate first with project.outputWidget.dryRun."),
     makeSchema({

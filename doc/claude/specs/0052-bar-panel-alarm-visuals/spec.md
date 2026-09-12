@@ -14,8 +14,8 @@ author: Alex Spataru
 
 ## Problem / Motivation
 
-The BADAQ project (TAM-Firmware) needed a painter script (~900 lines of user JavaScript,
-"APS500 Synoptic") to get a readable multi-channel instrument panel: rows of labeled bars
+The field project (private repository) needed a painter script (~900 lines of user JavaScript,
+a synoptic panel) to get a readable multi-channel instrument panel: rows of labeled bars
 where the full alarm-band structure is visible as muted zones on the track, the fill takes
 the color of the band the value currently sits in, and gauge needles recolor the same way.
 The result is instantly legible — anyone can see at a glance which channel is OK, cautioned,
@@ -39,7 +39,7 @@ Serial Studio's built-in widgets cannot produce this today:
 
 - A user can drop one group-level widget ("Bar Panel") on a group and get a labeled bar per
   dataset — label, band-zoned track, severity-colored fill, live value — comparable to the
-  BADAQ painter panels, with zero scripting.
+  field-project painter panels, with zero scripting.
 - The Bar Panel renders both as horizontal rows (synoptic panel style) and vertical columns
   (EGT-rake style), selectable in the project editor with an automatic default.
 - On Bar, Gauge, Meter, and the Bar Panel, defined alarm bands are always visible in full

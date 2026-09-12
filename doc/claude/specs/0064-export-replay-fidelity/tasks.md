@@ -212,7 +212,7 @@ report generation works.
   `.claude/settings.json`. Every C++ change here is lint-clean and hand-reviewed but
   **uncompiled**. AC10 (`--benchmark-hotpath`) is unrun.
 - **MDF4/Sessions replay channel mapping** — dropped. The tree-order vs uniqueId-order mismatch is
-  real on paper (BADAQ diverges at index 583 of 635) but was never shown to misassign data once
+  real on paper (the field project diverges at index 583 of 635) but was never shown to misassign data once
   the true cause was found. Worth its own spec rather than a speculative rewrite here.
 - **`--verify-export-replay` CLI round-trip mode** — dropped; it cannot be written or verified
   without a build.
@@ -244,7 +244,7 @@ cmake -S . -B build/tests -DSS_BUILD_TESTS=ON && ctest --test-dir build/tests -R
 # 4. hotpath gate (AC10)
 .../Serial-Studio-Pro --headless --benchmark-hotpath --min-fps 256000
 
-# 5. real BADAQ: record with all three sources, expect ~635 populated CSV columns
+# 5. the real field project: record with all three sources, expect ~635 populated CSV columns
 ```
 
 ## Task 12 — Dense-lane session replay decimation (2026-08-20 amendment, R11)

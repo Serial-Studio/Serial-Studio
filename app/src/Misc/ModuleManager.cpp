@@ -117,6 +117,7 @@
 #include "ProjectEditor/Editors/JsCodeEditor.h"
 #include "ProjectEditor/Editors/MacroEditor.h"
 #include "ProjectEditor/Editors/OutputCodeEditor.h"
+#include "ProjectEditor/Editors/TransformLibraryEditor.h"
 #include "ProjectEditor/ProjectEditor.h"
 #include "SessionContext.h"
 #include "UI/AlarmMonitor.h"
@@ -645,6 +646,8 @@ void Misc::ModuleManager::registerQmlTypes()
 
   qmlRegisterType<DataModel::JsCodeEditor>("SerialStudio", 1, 0, "JsCodeEditor");
   qmlRegisterType<DataModel::ControlScriptEditor>("SerialStudio", 1, 0, "ControlScriptEditor");
+  qmlRegisterType<DataModel::TransformLibraryEditor>(
+    "SerialStudio", 1, 0, "TransformLibraryEditor");
   qmlRegisterType<DataModel::ProjectModel>("SerialStudio", 1, 0, "ProjectModel");
   qmlRegisterType<DataModel::ProjectEditor>("SerialStudio", 1, 0, "ProjectEditor");
   qmlRegisterType<DataModel::OutputCodeEditor>("SerialStudio", 1, 0, "OutputCodeEditor");

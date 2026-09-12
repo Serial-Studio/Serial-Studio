@@ -111,6 +111,7 @@ if(BUILD_COMMERCIAL)
     IO/Drivers/CANBus/SerialCanBackendBase.h
     IO/Drivers/Modbus.h
     IO/Drivers/Modbus/ModbusRegisterGroups.h
+  IO/Drivers/Modbus/ModbusWritePayload.h
     IO/Drivers/Modbus/ModbusProjectGenerator.h
     IO/Drivers/HID.h
     IO/Drivers/USB.h
@@ -148,6 +149,7 @@ if(BUILD_COMMERCIAL)
     IO/Drivers/CANBus/SerialCanBackendBase.cpp
     IO/Drivers/Modbus.cpp
     IO/Drivers/Modbus/ModbusRegisterGroups.cpp
+  IO/Drivers/Modbus/ModbusWritePayload.cpp
     IO/Drivers/Modbus/ModbusProjectGenerator.cpp
     IO/Drivers/HID.cpp
     IO/Drivers/USB.cpp

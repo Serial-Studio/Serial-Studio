@@ -23,6 +23,9 @@
 
 #include <QHash>
 #include <QString>
+#include <vector>
+
+#include "Core/DataModel/Frame.h"
 
 namespace DataModel {
 
@@ -41,13 +44,27 @@ namespace WorkspaceKeys {
 struct ResolvedWidget {
   QString groupTitle;
   QString datasetTitle;
-  int uniqueId       = -1;
+  int uniqueId       = -1;  ///< Dataset.uniqueId for dataset scope, Group.uniqueId otherwise
+  int groupUniqueId  = -1;
   bool isGroupWidget = false;
   bool isLedPanel    = false;
 };
 
 [[nodiscard]] qint64 workspaceWidgetKey(int widgetType, int groupId, int relIdx);
+[[nodiscard]] int widgetTypeOfKey(qint64 key);
+[[nodiscard]] int relativeIndexOfKey(qint64 key);
 [[nodiscard]] QHash<qint64, ResolvedWidget> buildResolvedWidgetLookup(const ProjectModel& pm);
+[[nodiscard]] QHash<qint64, ResolvedWidget> buildResolvedWidgetLookup(
+  const std::vector<Group>& groups, bool pro);
+
+/**
+ * @brief Re-derives every ref's relativeIndex from its (widgetType, groupUniqueId,
+ *        datasetUniqueId) identity against @p lookup (spec 0083); a legacy ref that carries no
+ *        datasetUniqueId is resolved by its ordinal once and back-filled. Returns how many refs
+ *        resolved to nothing and were left untouched.
+ */
+[[nodiscard]] int rebindWidgetRefs(std::vector<Workspace>& workspaces,
+                                   const QHash<qint64, ResolvedWidget>& lookup);
 
 }  // namespace WorkspaceKeys
 }  // namespace DataModel

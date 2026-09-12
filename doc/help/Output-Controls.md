@@ -297,7 +297,9 @@ Every output widget's JavaScript engine includes built-in helper functions for M
 
 ### Modbus Helpers
 
-#### `modbusWriteRegister(address, value)`
+#### `modbusWriteRegister(address, value, unit)`
+
+Every Modbus helper takes an optional trailing `unit` (1 to 247). When given, the payload is prefixed with `0xFF 0x83 <unit>` and the Modbus driver writes to that device instead of the connection's own unit, which is how a control commands the second device on a shared RS-485 bus. Because the helpers return a byte string, set the control's transmit encoding to Latin-1 so bytes above 127 are not re-encoded.
 
 Writes a 16-bit integer to a single holding register.
 

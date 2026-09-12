@@ -679,11 +679,11 @@ the AC3 badge visual check.
   that runs anywhere. Dev-machine figures recorded at T26. AC19's Safe-vs-hooked-5.4 ratio and
   the physical floor box stay maintainer/provisional per the spec's Constraints.
 
-### T32 — BADAQ definition-of-done + docs + CLAUDE.md
+### T32 — Field-project definition-of-done + docs + CLAUDE.md
 
 - **Files:** spec ACs, `doc/claude/architecture/{io,dashboard,export,startup}.md`,
   `CLAUDE.md` (threading section), memory dir
-- **Does:** Maintainer restores the original un-degraded BADAQ project (48 kHz,
+- **Does:** Maintainer restores the original un-degraded field project (48 kHz,
   un-merged metrics): no budget warning, all widgets live (AC12). Architecture docs +
   CLAUDE.md updated for: PipelineHost thread, stream lane, LuaJIT runtime, new budget.
   `bug-report.md` disposition decided by maintainer (their file — not touched without
@@ -698,7 +698,7 @@ the AC3 badge visual check.
   relocate-last rule; scripting.md the block-transform contract + LuaJIT engine line;
   CLAUDE.md's threading + composition-root blocks and the `ss-hotpath` skill re-stated for
   the pipeline thread; directory-map.md lists the two new IO modules. MAINTAINER REMAINING:
-  AC12 (restored un-degraded BADAQ project) and the `bug-report.md` disposition — that file
+  AC12 (restored un-degraded field project) and the `bug-report.md` disposition — that file
   is the maintainer's and was not touched.
 
 ### M4-M7 follow-up — slow-readings report (2026-08-12)

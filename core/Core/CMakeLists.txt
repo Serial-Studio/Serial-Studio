@@ -74,6 +74,7 @@ qt_add_library(
   DataModel/Frame.h
   DataModel/Frame.cpp
   DataModel/FrameKeys.h
+  DataModel/WorkspaceProfile.h
   DataModel/DataBlock.h
   DataModel/ExportSchema.h
   DataModel/FrameConsumer.h

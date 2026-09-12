@@ -565,7 +565,7 @@ void EditorForms::buildSourceFrameDetectionRows(const DataModel::Source& source)
   const bool showStart = (detection == SerialStudio::StartDelimiterOnly
                           || detection == SerialStudio::StartAndEndDelimiter);
   const bool showEnd   = (detection == SerialStudio::EndDelimiterOnly
-                        || detection == SerialStudio::StartAndEndDelimiter);
+                          || detection == SerialStudio::StartAndEndDelimiter);
 
   if (showStart) {
     auto* startSeqItem = new QStandardItem();
@@ -1400,46 +1400,83 @@ void EditorForms::openTransformEditorFor(int groupId, int datasetId)
       }
   }
 
-  if (!m_transformEditor) {
-    m_transformEditor = new DatasetTransformEditor(nullptr);
+  ensureTransformEditor();
+  m_transformEditor->displayDialog(dataset.title,
+                                   dataset.transformCode,
+                                   lang,
+                                   groupId,
+                                   datasetId,
+                                   dataset.transformParams,
+                                   pm.transformLibraryCode(),
+                                   pm.transformLibraryJsCode());
+}
 
-    QObject::connect(
-      m_transformEditor,
-      &DatasetTransformEditor::transformApplied,
-      &m_editor,
-      [this](const QString& code, int langId, int gId, int dId) {
-        auto& model     = m_model;
-        auto& groupList = model.groups();
-        if (gId < 0 || static_cast<size_t>(gId) >= groupList.size())
-          return;
+/**
+ * @brief Creates the transform editor on first use and wires its apply signal, the shortcut that
+ *        reveals the Lua Library node, and the model's library so an open dialog tests against it.
+ */
+void EditorForms::ensureTransformEditor()
+{
+  if (m_transformEditor)
+    return;
 
-        if (dId < 0 || static_cast<size_t>(dId) >= groupList[gId].datasets.size())
-          return;
+  m_transformEditor = new DatasetTransformEditor(nullptr);
+  QObject::connect(m_transformEditor,
+                   &DatasetTransformEditor::libraryEditRequested,
+                   &m_editor,
+                   [this](int language) {
+                     if (language == SerialStudio::Lua)
+                       m_editor.selectTransformLibrary();
+                     else
+                       m_editor.selectJsLibrary();
+                   });
 
-        auto updated              = groupList[gId].datasets[dId];
-        updated.transformCode     = code;
-        updated.transformLanguage = code.isEmpty() ? -1 : langId;
-        model.updateDataset(gId, dId, updated, false);
+  const auto refreshLibraries = [this] {
+    m_transformEditor->setLibraryCode(m_model.transformLibraryCode(),
+                                      m_model.transformLibraryJsCode());
+  };
+  QObject::connect(
+    &m_model, &ProjectModel::transformLibraryChanged, m_transformEditor, refreshLibraries);
+  QObject::connect(
+    &m_model, &ProjectModel::transformLibraryJsChanged, m_transformEditor, refreshLibraries);
 
-        if (m_editor.m_selectedDataset.groupId == gId
-            && m_editor.m_selectedDataset.datasetId == dId) {
-          m_editor.m_selectedDataset.transformCode     = code;
-          m_editor.m_selectedDataset.transformLanguage = updated.transformLanguage;
+  QObject::connect(
+    m_transformEditor,
+    &DatasetTransformEditor::transformApplied,
+    &m_editor,
+    [this](const QString& code, int langId, int gId, int dId, const QVariantMap& params) {
+      auto& model     = m_model;
+      auto& groupList = model.groups();
+      if (gId < 0 || static_cast<size_t>(gId) >= groupList.size())
+        return;
+
+      if (dId < 0 || static_cast<size_t>(dId) >= groupList[gId].datasets.size())
+        return;
+
+      auto updated              = groupList[gId].datasets[dId];
+      updated.transformCode     = code;
+      updated.transformParams   = params;
+      updated.transformLanguage = code.isEmpty() ? -1 : langId;
+      model.updateDataset(gId, dId, updated, false);
+
+      if (m_editor.m_selectedDataset.groupId == gId
+          && m_editor.m_selectedDataset.datasetId == dId) {
+        m_editor.m_selectedDataset.transformCode     = code;
+        m_editor.m_selectedDataset.transformParams   = params;
+        m_editor.m_selectedDataset.transformLanguage = updated.transformLanguage;
+      }
+
+      for (auto it = m_editor.m_datasetItems.begin(); it != m_editor.m_datasetItems.end(); ++it) {
+        if (it.value().groupId == gId && it.value().datasetId == dId) {
+          it.value().transformCode     = code;
+          it.value().transformParams   = params;
+          it.value().transformLanguage = updated.transformLanguage;
+          break;
         }
+      }
 
-        for (auto it = m_editor.m_datasetItems.begin(); it != m_editor.m_datasetItems.end(); ++it) {
-          if (it.value().groupId == gId && it.value().datasetId == dId) {
-            it.value().transformCode     = code;
-            it.value().transformLanguage = updated.transformLanguage;
-            break;
-          }
-        }
-
-        m_frameBuilder.syncFromProjectModel();
-      });
-  }
-
-  m_transformEditor->displayDialog(dataset.title, dataset.transformCode, lang, groupId, datasetId);
+      m_frameBuilder.syncFromProjectModel();
+    });
 }
 
 }  // namespace DataModel

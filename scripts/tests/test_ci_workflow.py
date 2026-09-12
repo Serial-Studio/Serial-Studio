@@ -27,6 +27,12 @@ WORKFLOWS = REPO / ".github" / "workflows"
 CI_YML = WORKFLOWS / "ci.yml"
 DOCS_YML = WORKFLOWS / "docs.yml"
 
+# The repeated build / profiling / packaging sequences live in repo-local composite actions, so
+# the supply-chain and secret-handling gates below have to walk them too: a third-party action
+# pinned in ci.yml and floating one directory away is the same hole.
+ACTIONS = sorted((REPO / ".github" / "actions").glob("*/action.yml"))
+PINNED_FILES = [CI_YML, DOCS_YML] + ACTIONS
+
 # The jobs that compile and run the throughput gate.
 BUILD_JOBS = ("build-linux", "build-linux-arm64", "build-macos-arm64", "build-windows")
 
@@ -64,9 +70,19 @@ def _steps(job):
 
 
 def _all_steps(path):
-    for name, job in _jobs(path).items():
+    data = _load(path)
+    if "jobs" not in data:
+        for step in data.get("runs", {}).get("steps", []) or []:
+            yield path.parent.name, step
+        return
+    for name, job in data["jobs"].items():
         for step in _steps(job):
             yield name, step
+
+
+def _file_id(path):
+    """Test id: the file name for a workflow, the directory name for a composite action."""
+    return path.name if path.parent.name == "workflows" else path.parent.name
 
 
 @pytest.fixture(scope="module")
@@ -79,18 +95,24 @@ def ci():
 # --------------------------------------------------------------------------------------------
 
 
-@pytest.mark.parametrize("path", [CI_YML, DOCS_YML], ids=lambda p: p.name)
+@pytest.mark.parametrize("path", PINNED_FILES, ids=_file_id)
 def test_every_action_is_sha_pinned(path):
-    """A mutable tag can be retargeted at any commit; these actions see the signing secrets."""
+    """A mutable tag can be retargeted at any commit; these actions see the signing secrets.
+
+    A './.github/actions/<name>' reference is exempt: it resolves inside this commit, so there
+    is no third party to retarget it -- and the action's own 'uses' entries are gated here too.
+    """
     unpinned = [
         (job, step["uses"])
         for job, step in _all_steps(path)
-        if "uses" in step and not re.fullmatch(r"[^@]+@[0-9a-f]{40}", step["uses"])
+        if "uses" in step
+        and not step["uses"].startswith("./.github/actions/")
+        and not re.fullmatch(r"[^@]+@[0-9a-f]{40}", step["uses"])
     ]
     assert not unpinned, f"actions must be pinned to a 40-hex commit SHA: {unpinned}"
 
 
-@pytest.mark.parametrize("path", [CI_YML, DOCS_YML], ids=lambda p: p.name)
+@pytest.mark.parametrize("path", PINNED_FILES, ids=_file_id)
 def test_every_pin_names_its_version(path):
     """A bare SHA is unreviewable; the trailing comment says which tag it was."""
     text = path.read_text(encoding="utf-8")
@@ -114,7 +136,7 @@ def test_every_job_declares_permissions(path):
     assert not missing, f"jobs without a permissions block: {missing}"
 
 
-@pytest.mark.parametrize("path", [CI_YML, DOCS_YML], ids=lambda p: p.name)
+@pytest.mark.parametrize("path", PINNED_FILES, ids=_file_id)
 def test_no_secret_is_interpolated_into_shell_text(path):
     """A secret expanded into a run: body reaches the shell as literal text."""
     offenders = [

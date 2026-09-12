@@ -17,12 +17,15 @@ If you have never used MQTT before, read [MQTT Topics & Semantics](MQTT-Topics.m
 
 ## Where to configure it
 
-The Publisher has its own node in the project editor's left tree, as a top-level item alongside **Control Loop**, each action, and each data source. Selecting it opens a form-style editor in the same table layout as a device source.
+The Publisher has its own node in the project editor's left tree, under **Data Export** next to the InfluxDB Sink. Selecting it opens a form-style editor in the same table layout as a device source.
 
 ```
 Project
-├─ Control Loop
-├─ MQTT Publisher          <-- here
+├─ Project Scripts
+│   └─ ...
+├─ Data Export
+│   ├─ MQTT Publisher      <-- here
+│   └─ InfluxDB Sink
 ├─ Action 1
 ├─ Main Device (UART)
 ├─ Device 2 (MQTT Subscriber)

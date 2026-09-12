@@ -196,6 +196,43 @@ Top-level `var/let/const` are private per dataset, even when several
 datasets in the same source share a JS engine. Two datasets can both
 declare `let alpha = 0.2` without clobbering each other.
 
+## Shared libraries and `params`
+
+Two project-level features stop a formula from being copied into every
+dataset:
+
+- **Shared libraries.** One Lua chunk and one JavaScript chunk per
+  project, read and written with `project.transformLibrary.get` /
+  `project.transformLibrary.set {code, language}` and checked with
+  `project.transformLibrary.dryRun {code, language}` (`language` is
+  `"lua"` by default or `"js"`). Each runs once into the global scope of
+  every source's transform engine of that language before the transforms
+  compile, so any top-level function it defines is callable from every
+  transform of that language (a Lua transform never sees the JS library
+  and vice versa; Expression transforms see neither). A broken library
+  does not blank the dashboard: the transforms still compile, a call into
+  a missing function falls back to the raw value, and the Problem Center
+  reports the library error. In the Project Editor both sit under the
+  **Project Scripts** tree node with the Control Loop.
+- **Dataset parameters.** `project.dataset.update {groupId, datasetId,
+  transformParams: {name: value, ...}}` stores a flat map of numbers,
+  strings and booleans (nested values are dropped). Lua reads it as the
+  `params` table in the transform environment, JavaScript as the `params`
+  object the closure receives. Fixed at compile time; editing a parameter
+  recompiles.
+
+```lua
+-- library (project.transformLibrary.set)
+function rtd(raw, p) return (raw * p.scale + p.offset) / p.r0 end
+
+-- every RTD dataset (transformCode, language 1)
+function transform(value) return rtd(value, params) end
+-- with transformParams {"scale": 0.1, "offset": -40, "r0": 100}
+```
+
+Prefer this over generating N copies of a transform, and over table
+variables when the value is per-dataset rather than shared.
+
 ## Iteration workflow
 
 1. Read the dataset's current transform:

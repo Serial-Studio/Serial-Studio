@@ -75,6 +75,9 @@ QVariantList UI::TaskbarWorkspaces::model() const
   QVariantList model;
   const auto& workspaces = m_projectModel.activeWorkspaces();
   for (const auto& ws : workspaces) {
+    if (!m_projectModel.workspaceVisibleInProfile(ws))
+      continue;
+
     QVariantMap entry;
     const bool fixedIcon = ws.icon.isEmpty();
     const auto icon =
@@ -98,7 +101,7 @@ QVariantList UI::TaskbarWorkspaces::model() const
 [[nodiscard]] static QVariantList buildWorkspaceTreeLevel(
   int parentFolderId,
   Misc::IconRegistry& registry,
-  const std::vector<DataModel::Workspace>& workspaces,
+  const std::vector<const DataModel::Workspace*>& workspaces,
   const std::vector<DataModel::WorkspaceFolder>& folders)
 {
   QVariantList level;
@@ -122,18 +125,18 @@ QVariantList UI::TaskbarWorkspaces::model() const
     level.append(node);
   }
 
-  for (const auto& ws : workspaces) {
-    if (ws.parentFolderId != parentFolderId || ws.widgetRefs.empty())
+  for (const auto* ws : workspaces) {
+    if (ws->parentFolderId != parentFolderId || ws->widgetRefs.empty())
       continue;
 
     QVariantMap node;
-    const bool fixedIcon             = ws.icon.isEmpty();
-    const auto icon                  = fixedIcon
-                                       ? registry.icon(QStringLiteral("widgets"), QStringLiteral("workspace"), 16)
-                                       : Misc::IconEngine::resolveActionIconSource(ws.icon);
+    const bool fixedIcon = ws->icon.isEmpty();
+    const auto icon = fixedIcon
+                      ? registry.icon(QStringLiteral("widgets"), QStringLiteral("workspace"), 16)
+                      : Misc::IconEngine::resolveActionIconSource(ws->icon);
     node[QStringLiteral("isFolder")] = false;
-    node[QStringLiteral("id")]       = ws.workspaceId;
-    node[QStringLiteral("text")]     = ws.title;
+    node[QStringLiteral("id")]       = ws->workspaceId;
+    node[QStringLiteral("text")]     = ws->title;
     node[QStringLiteral("icon")]     = icon;
     node[QStringLiteral("iconId")]   = fixedIcon ? QStringLiteral("widgets/workspace") : QString();
     node[QStringLiteral("children")] = QVariantList();
@@ -148,12 +151,15 @@ QVariantList UI::TaskbarWorkspaces::model() const
  */
 QVariantList UI::TaskbarWorkspaces::tree() const
 {
-  const auto& workspaces = m_projectModel.activeWorkspaces();
+  std::vector<const DataModel::Workspace*> visible;
+  for (const auto& ws : m_projectModel.activeWorkspaces())
+    if (m_projectModel.workspaceVisibleInProfile(ws))
+      visible.push_back(&ws);
 
   const std::vector<DataModel::WorkspaceFolder> noFolders;
   const bool projectMode = m_appState.operationMode() == SerialStudio::ProjectFile;
   const auto& folders    = projectMode ? m_projectModel.editorWorkspaceFolders() : noFolders;
-  return buildWorkspaceTreeLevel(-1, m_iconRegistry, workspaces, folders);
+  return buildWorkspaceTreeLevel(-1, m_iconRegistry, visible, folders);
 }
 
 /**
@@ -260,21 +266,25 @@ std::optional<int> UI::TaskbarWorkspaces::selectionAfterRebuild(bool independent
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Resolves a stored workspace widget reference to its live windowId, or -1 if absent.
+ * @brief Resolves a stored workspace widget reference to its live windowId, or -1 if absent: the
+ *        ordinal fast path first, then the identity scan when the ordinal's owner is not the
+ *        ref's group (a group was inserted or reordered since the ordinal was bound).
  */
 int UI::TaskbarWorkspaces::resolveRefWindowId(const DataModel::WidgetRef& ref) const
 {
   const auto& map    = m_taskbar.windowMap();
+  const int refGid   = m_dashboard.groupIdForUniqueId(ref.groupUniqueId);
   const int windowId = map.findWindowIdByGroupAndIndex(ref.widgetType, ref.relativeIndex);
-  if (windowId < 0)
+  if (windowId >= 0) {
+    auto* item = m_taskbar.findItemByWindowId(windowId);
+    if (item && item->data(TaskbarModel::GroupIdRole).toInt() == refGid)
+      return windowId;
+  }
+
+  if (refGid < 0)
     return -1;
 
-  const int refGid = m_dashboard.groupIdForUniqueId(ref.groupUniqueId);
-  auto* item       = m_taskbar.findItemByWindowId(windowId);
-  if (!item || item->data(TaskbarModel::GroupIdRole).toInt() != refGid)
-    return -1;
-
-  return windowId;
+  return map.findWindowIdByIdentity(ref.widgetType, ref.groupUniqueId, ref.datasetUniqueId);
 }
 
 /**

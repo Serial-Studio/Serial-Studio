@@ -314,16 +314,16 @@ updated: 2026-09-11
 
 ## Definition of Done
 
-- [ ] Every acceptance criterion in `spec.md` is met and checked off there (AC1/AC2/AC8 via
+- [x] Every acceptance criterion in `spec.md` is met and checked off there (AC1/AC2/AC8 via
       `tst_dsp_kernels` on Linux CI plus one Windows ctest run; AC3/AC4/AC7 maintainer
       observations; AC5/AC6 the new CI steps; AC9 the Rosetta informational step's log line).
-- [ ] `python scripts/code-verify.py --check` is clean on all changed files (no new errors).
-- [ ] `qt-cpp-review` run on the C++ diff; findings addressed or noted.
-- [ ] `--benchmark-hotpath` not regressed: T12's SSE4-pinned median inside the previous build's
+- [x] `python scripts/code-verify.py --check` is clean on all changed files (no new errors).
+- [x] `qt-cpp-review` run on the C++ diff; findings addressed or noted.
+- [x] `--benchmark-hotpath` not regressed: T12's SSE4-pinned median inside the previous build's
       band; Auto recorded.
-- [ ] Relevant `pytest` targets identified for the maintainer: `scripts/tests/test_ci_workflow.py`
+- [x] Relevant `pytest` targets identified for the maintainer: `scripts/tests/test_ci_workflow.py`
       (no `tests/integration` case applies; the feature has no API surface).
-- [ ] `python scripts/sanitize-commit.py` run; working tree clean of lint debt.
-- [ ] Diff is *what was asked, and only that* — no scope creep, no foreign files touched,
+- [x] `python scripts/sanitize-commit.py` run; working tree clean of lint debt.
+- [x] Diff is *what was asked, and only that* — no scope creep, no foreign files touched,
       no `.ts`/`.qm` edits.
-- [ ] `spec.md` status set to `done`.
+- [x] `spec.md` status set to `done`.

@@ -65,8 +65,10 @@ extern "C" {
 #include "DataModel/FrameBuilder/TableScriptBridge.h"
 #include "DataModel/FrameBuilder/TableSnapshotChannel.h"
 #include "DataModel/FrameBuilder/TransformCompiler.h"
+#include "DataModel/FrameBuilder/TransformDispatch.h"
 #include "DataModel/FramePoolPolicy.h"
 #include "DataModel/RepublishGate.h"
+#include "DataModel/Scripting/ScriptCells.h"
 #include "IO/PipelineHost.h"
 
 namespace Core::Bus {
@@ -123,6 +125,8 @@ private:
 public:
   using LatestFrameInfo = DataModel::LatestFrameInfo;
 
+  static constexpr qsizetype kMaxSpanFields = 128;
+
   [[nodiscard]] static FrameBuilder& instance();
 
   [[nodiscard]] const DataModel::Frame& frame() const noexcept;
@@ -150,14 +154,10 @@ public:
 
   void injectTableApiLua(lua_State* L);
   void injectTableApiJS(QJSEngine* js);
+  void releaseTableApiUser();
 
-  /**
-   * @brief Installs only the table API's names, for an engine that compiles a script but never
-   *        runs one that reads a table. injectTableApiJS() additionally blocking-marshals to the
-   *        pipeline thread and latches per-dataset capture for the whole session; an engine that
-   *        is destroyed microseconds later must pay neither (spec 0079).
-   */
-  void installTableApiNames(QJSEngine* js) { m_tableApi.installJs(js); }
+  void installTableApiNames(QJSEngine* js);
+  void installTableApiNamesLua(lua_State* L);
 
   void refreshTableStoreFromProjectModel();
   void setReplayColumnMap(std::unordered_map<int, std::unordered_map<int, int>> map);
@@ -245,14 +245,8 @@ private slots:
   void refreshProjectSourceSnapshot();
 
 private:
-  using BudgetClock                              = DataModel::ParseBudget::Clock;
-  static constexpr double kMillisecondsToSeconds = 1.0 / 1000.0;
-
-  struct TransformFrameInfo {
-    quint64 frameNumber = 0;
-    int sourceId        = 0;
-    qint64 timestampMs  = 0;
-  };
+  using BudgetClock        = DataModel::ParseBudget::Clock;
+  using TransformFrameInfo = DataModel::TransformFrameInfo;
 
   /**
    * @brief Change-driven dependency state for one transform dataset: the union-over-history set
@@ -277,7 +271,7 @@ private:
   std::array<bool, DataModel::ExternalWiring::kPlayerSlots> m_playerOpenMask;
   bool m_captureDatasetValues;
   bool m_captureFlagsDirty;
-  bool m_externalTableApiUsers;
+  int m_externalTableUsers;
   bool m_captureLatestFrame;
   bool m_changeDriven;
   bool m_shuttingDown;
@@ -288,8 +282,6 @@ private:
 
   quint64 m_parsedFrameCount;
   quint64 m_skippedFrameCount;
-
-  bool m_jsTransformTimedOut;
 
   DataModel::Frame m_frame;
   DataModel::DataTableStore m_tableStore;
@@ -305,6 +297,7 @@ private:
   DataModel::QuickPlotBuilder m_quickPlot;
   DataModel::TableScriptBridge m_tableApi;
   DataModel::TransformCompiler m_transforms;
+  DataModel::TransformDispatch m_dispatch;
   DataModel::ReplayIngest m_replay;
 
   bool m_streamValuesDirty;
@@ -321,11 +314,6 @@ private:
 
   // Mirrors the capture state declared above GUI-ward; the capture writes stay in this TU
   DataModel::LatestFrameTap m_latestTap;
-
-  int m_engineCacheSourceId;
-  DataModel::TransformEngine* m_luaEngineForSource;
-  DataModel::TransformEngine* m_jsEngineForSource;
-  DataModel::TransformEngine* m_exprEngineForSource;
 
   int m_compileGuard;
   bool m_compilePending;
@@ -364,6 +352,8 @@ private:
    */
   struct ProjectSnapshot {
     QString title;
+    QString transformLibrary;
+    QString transformLibraryJs;
     std::vector<DataModel::Group> groups;
     std::vector<DataModel::Action> actions;
     std::vector<DataModel::Source> sources;
@@ -400,8 +390,9 @@ private:
 private:
   // code-verify off
   // Parse pipeline
-  static constexpr qsizetype kMaxSpanFields = 128;
   std::array<QByteArrayView, kMaxSpanFields> m_spanScratch;
+  DataModel::ScriptCellRows m_cellRows;
+  QList<QStringList> m_cellFallback;
 
   DataModel::Frame& ensureSourceFrame(int sourceId);
   SerialStudio::DecoderMethod resolveDecoderMethod(int sourceId, bool applyPerSourceOverride) const;
@@ -426,6 +417,11 @@ private:
                   bool applyPerSourceOverride,
                   DataModel::Frame& frame,
                   const IO::CapturedDataPtr& data);
+  int tryCellLane(int sourceId,
+                  bool applyPerSourceOverride,
+                  DataModel::Frame& frame,
+                  const IO::CapturedDataPtr& data);
+  void captureLatestCells(int sourceId, const DataModel::ScriptCell* cells, qsizetype count);
   void decodeProjectChannels(int sourceId,
                              bool applyPerSourceOverride,
                              const IO::CapturedDataPtr& data,
@@ -455,6 +451,18 @@ private:
                                     const QByteArrayView* spans,
                                     qsizetype count,
                                     const TransformFrameInfo& info);
+  SS_HOT void applyDatasetValuesCells(DataModel::Frame& frame,
+                                      const DataModel::ScriptCell* cells,
+                                      qsizetype count,
+                                      const TransformFrameInfo& info);
+  SS_HOT void applyDatasetValueCell(Dataset& dataset,
+                                    const DataModel::ScriptCell* cells,
+                                    qsizetype count,
+                                    const TransformFrameInfo& info);
+  SS_HOT void applyDatasetToken(Dataset& dataset,
+                                const QByteArrayView* token,
+                                const double* number,
+                                const TransformFrameInfo& info);
 
   // Parser-load budget guard
   [[nodiscard]] bool parseBudgetSkipFrame(int sourceId);
@@ -463,28 +471,31 @@ private:
   void parseBudgetReset() noexcept;
 
   // Transform compile + dispatch
-  QVariant applyTransform(int language,
-                          int uniqueId,
-                          const QVariant& rawValue,
-                          const TransformFrameInfo& info);
-  QVariant applyTransformLua(DataModel::TransformEngine& engine,
-                             int uniqueId,
-                             const QVariant& rawValue,
-                             const TransformFrameInfo& info);
-  QVariant applyTransformExpr(DataModel::TransformEngine& engine,
-                              int uniqueId,
-                              const QVariant& rawValue,
-                              const TransformFrameInfo& info);
-  QVariant applyTransformJs(DataModel::TransformEngine& engine,
-                            int uniqueId,
-                            const QVariant& rawValue,
-                            const TransformFrameInfo& info);
 
   void compileTransforms();
   void destroyTransformEngines();
   void initializeTableStore();
   void rebuildTransformsForPlayback();
   // code-verify on
+};
+
+/**
+ * @brief Scope guard for an external table-API user (spec 0086): the owner arms capture through
+ *        injectTableApiLua/JS and this releases it when the engine's scope ends.
+ */
+class TableApiUserLease {
+public:
+  explicit TableApiUserLease(FrameBuilder& builder) : m_builder(builder) {}
+
+  ~TableApiUserLease() { m_builder.releaseTableApiUser(); }
+
+  TableApiUserLease(TableApiUserLease&&)                 = delete;
+  TableApiUserLease(const TableApiUserLease&)            = delete;
+  TableApiUserLease& operator=(TableApiUserLease&&)      = delete;
+  TableApiUserLease& operator=(const TableApiUserLease&) = delete;
+
+private:
+  FrameBuilder& m_builder;
 };
 
 }  // namespace DataModel

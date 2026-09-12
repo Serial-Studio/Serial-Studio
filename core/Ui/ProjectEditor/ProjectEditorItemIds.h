@@ -153,4 +153,16 @@ typedef enum {
   kMqttPublisher_SparkplugDevice,
 } MqttPublisherItem;
 
+/**
+ * @brief Form-field identifiers for the InfluxDB sink view.
+ */
+typedef enum {
+  kInfluxSink_Enabled,
+  kInfluxSink_Url,
+  kInfluxSink_Organization,
+  kInfluxSink_Bucket,
+  kInfluxSink_Measurement,
+  kInfluxSink_Token,
+} InfluxSinkItem;
+
 // clang-format on

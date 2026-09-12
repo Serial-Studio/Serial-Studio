@@ -19,7 +19,12 @@
  * SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial
  */
 
+#include <algorithm>
 #include <chrono>
+#include <cstddef>
+#include <cstdlib>
+#include <new>
+#include <QChar>
 #include <QTest>
 #include <vector>
 
@@ -37,23 +42,85 @@ using namespace DataModel;
 
 namespace {
 
+bool g_countAllocations       = false;
+std::size_t g_allocationCount = 0;
+
+}  // namespace
+
+/**
+ * @brief Counting global allocator for std container traffic (vector, map, shared_ptr nodes).
+ *        QString buffers go through malloc, not operator new, so the string side is pinned
+ *        separately by comparing buffer pointers across recycled blocks.
+ */
+void* operator new(std::size_t size)
+{
+  if (g_countAllocations)
+    ++g_allocationCount;
+
+  void* p = std::malloc(size == 0 ? 1 : size);
+  if (!p)
+    throw std::bad_alloc();
+
+  return p;
+}
+
+void operator delete(void* p) noexcept
+{
+  std::free(p);
+}
+
+void operator delete(void* p, std::size_t) noexcept
+{
+  std::free(p);
+}
+
+namespace {
+
 /**
  * @brief Records what the stager asked its facade to do, and hands out a flush epoch the test
  *        controls, so the display tick is a value in this suite rather than a timer.
  */
 class StubStagerHost : public BlockStagerHost {
 public:
-  StubStagerHost() : m_epoch(1), m_exhausted(0) {}
+  StubStagerHost()
+    : m_epoch(1), m_exhausted(0), m_publishCount(0), m_announceCount(0), m_retain(true)
+  {}
 
   void noteStagingPoolExhausted() override { ++m_exhausted; }
 
-  void publishStagedBlock(const DataBlockPtr& block) override { m_published.push_back(block); }
+  void publishStagedBlock(const DataBlockPtr& block) override
+  {
+    ++m_publishCount;
+    if (m_retain) {
+      m_published.push_back(block);
+      return;
+    }
 
-  void announceStructure(int sourceId, const Frame&) override { m_announced.push_back(sourceId); }
+    for (const auto& column : block->columns)
+      if (!column.text.empty() && m_textBuffers.size() < m_textBuffers.capacity())
+        m_textBuffers.push_back(column.text[0].constData());
+  }
+
+  void announceStructure(int sourceId, const Frame&) override
+  {
+    ++m_announceCount;
+    if (m_retain)
+      m_announced.push_back(sourceId);
+  }
 
   [[nodiscard]] quint64 stagingFlushEpoch() const override { return m_epoch; }
 
   void bumpEpoch() { ++m_epoch; }
+
+  void retainBlocks(bool retain) { m_retain = retain; }
+
+  void reserveTextBuffers(std::size_t n) { m_textBuffers.reserve(n); }
+
+  [[nodiscard]] std::size_t publishCount() const { return m_publishCount; }
+
+  [[nodiscard]] std::size_t announceCount() const { return m_announceCount; }
+
+  [[nodiscard]] const std::vector<const QChar*>& textBuffers() const { return m_textBuffers; }
 
   [[nodiscard]] int exhausted() const { return m_exhausted; }
 
@@ -64,8 +131,12 @@ public:
 private:
   quint64 m_epoch;
   int m_exhausted;
+  std::size_t m_publishCount;
+  std::size_t m_announceCount;
+  bool m_retain;
   std::vector<int> m_announced;
   std::vector<DataBlockPtr> m_published;
+  std::vector<const QChar*> m_textBuffers;
 };
 
 /**
@@ -117,6 +188,23 @@ void fillFrame(Frame& frame, double value)
   return DataBlock::SteadyTimePoint{} + std::chrono::nanoseconds(offsetNs);
 }
 
+/**
+ * @brief Gives dataset @p index of the first group a transform, so it carries a raw twin.
+ */
+void markTransformed(Frame& frame, std::size_t index)
+{
+  frame.groups.front().datasets.at(index).transformCode =
+    QStringLiteral("function transform(v) return v end");
+}
+
+/**
+ * @brief Marks dataset @p index of the first group as computed (script-produced, no parsed input).
+ */
+void markComputed(Frame& frame, std::size_t index)
+{
+  frame.groups.front().datasets.at(index).virtual_ = true;
+}
+
 }  // namespace
 
 /**
@@ -138,6 +226,8 @@ private slots:
   void perSampleTimesAreOffsetsFromTheFirstSample();
   void aFullPoolDropsTheBatchAndNotesExhaustion();
   void releaseIdleStorageKeepsBusySlots();
+  void rawPresenceFollowsTheTransformRule();
+  void steadyStateFlushesDoNotAllocate();
 };
 
 /**
@@ -423,6 +513,86 @@ void TstFrameBuilderStaging::releaseIdleStorageKeepsBusySlots()
   QCOMPARE(held->columns.size(), std::size_t(2));
   QCOMPARE(held->samples, qsizetype(1));
   QCOMPARE(held->columns[0].values[0], 3.0);
+}
+
+/**
+ * @brief A column carries pre-transform values only when its dataset has a transform or is
+ *        computed (spec 0085 R2); every other column marks raw absent and sizes no raw storage.
+ */
+void TstFrameBuilderStaging::rawPresenceFollowsTheTransformRule()
+{
+  StubStagerHost host;
+  quint64 generation = 1;
+  bool masked        = false;
+  BlockStager stager(host, generation, masked);
+
+  Frame frame = makeFrame(0, 3);
+  markTransformed(frame, 0);
+  markComputed(frame, 1);
+  fillFrame(frame, 4.0);
+  stager.stage(0, frame, at(0));
+  stager.flushAll();
+
+  QCOMPARE(host.published().size(), std::size_t(1));
+  const auto& columns = host.published().front()->columns;
+  QCOMPARE(columns.size(), std::size_t(3));
+  QVERIFY(columns[0].hasRaw);
+  QVERIFY(columns[1].hasRaw);
+  QVERIFY(!columns[2].hasRaw);
+  QCOMPARE(columns[0].rawValues.size(),
+           static_cast<std::size_t>(BlockStager::kFrameBlockSampleCap));
+  QCOMPARE(columns[0].rawValues[0], 4.0);
+  QVERIFY(columns[2].rawValues.empty());
+  QVERIFY(columns[2].rawText.empty());
+  QCOMPARE(columns[2].values[0], 4.0);
+}
+
+/**
+ * @brief Opening, filling and flushing blocks is heap-free once a source has staged its first
+ *        block (spec 0085 R1): the open-entry table is never erased, the slot hand-out is an
+ *        aliasing pointer, and a released slot is re-claimed for the same source, so twenty full
+ *        blocks per source allocate nothing on the std side while every published block's text
+ *        buffers stay the same two slots' buffers.
+ */
+void TstFrameBuilderStaging::steadyStateFlushesDoNotAllocate()
+{
+  constexpr int kBlocks = 20;
+  StubStagerHost host;
+  host.retainBlocks(false);
+  host.reserveTextBuffers(static_cast<std::size_t>(2 * (kBlocks + 1) * 4));
+  quint64 generation = 1;
+  bool masked        = false;
+  BlockStager stager(host, generation, masked);
+
+  Frame first  = makeFrame(0, 4);
+  Frame second = makeFrame(1, 4);
+  fillFrame(first, 1.0);
+  fillFrame(second, 2.0);
+  for (qsizetype i = 0; i < BlockStager::kFrameBlockSampleCap; ++i) {
+    stager.stage(0, first, at(i));
+    stager.stage(1, second, at(i));
+  }
+
+  QCOMPARE(host.publishCount(), std::size_t(2));
+
+  g_allocationCount  = 0;
+  g_countAllocations = true;
+  for (int b = 0; b < kBlocks; ++b) {
+    for (qsizetype i = 0; i < BlockStager::kFrameBlockSampleCap; ++i) {
+      stager.stage(0, first, at(1000 + b * 100 + i));
+      stager.stage(1, second, at(1000 + b * 100 + i));
+    }
+  }
+  g_countAllocations = false;
+
+  QCOMPARE(host.publishCount(), std::size_t(2 + 2 * kBlocks));
+  QCOMPARE(g_allocationCount, std::size_t(0));
+
+  std::vector<const QChar*> buffers = host.textBuffers();
+  std::sort(buffers.begin(), buffers.end());
+  buffers.erase(std::unique(buffers.begin(), buffers.end()), buffers.end());
+  QVERIFY2(buffers.size() <= std::size_t(8),
+           "text buffers were re-allocated instead of reused across recycled blocks");
 }
 
 QTEST_APPLESS_MAIN(TstFrameBuilderStaging)

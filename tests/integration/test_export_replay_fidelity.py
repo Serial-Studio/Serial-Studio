@@ -36,7 +36,7 @@ from pathlib import Path
 import pytest
 
 # The parser deliberately returns NO datasets: everything the dashboard shows comes from the
-# table via the virtual dataset's transform, which is the BADAQ shape and the only shape in
+# table via the virtual dataset's transform, which is the field project shape and the only shape in
 # which the republish lane is the sole publisher.
 _PARSER = """
 function parse(frame) {

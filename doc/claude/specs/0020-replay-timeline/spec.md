@@ -3,7 +3,7 @@ spec: 0020-replay-timeline
 title: Replay timeline rework — tape-style scrubbing and lossless catch-up
 status: done         # draft -> approved -> in-progress -> done | shelved
 # AC1/AC3/AC5 covered by tests/integration/test_replay_timeline.py (maintainer runs);
-# AC2 (BADAQ scrub observation) and AC4 (--benchmark-hotpath all tiers) verified by the
+# AC2 (field-project scrub observation) and AC4 (--benchmark-hotpath all tiers) verified by the
 # maintainer on the next build.
 created: 2026-07-19
 author: Alex Spataru
@@ -18,13 +18,13 @@ author: Alex Spataru
 ## Problem / Motivation
 
 Replaying a recording is how users find events after the fact, and both halves of that
-workflow degrade badly on real projects. Ground truth: BADAQ.ssproj (88 groups, 571
+workflow degrade badly on real projects. Ground truth: the field project file (88 groups, 571
 datasets, one recorded row per CAN message) replayed from CSV or MDF4 on 2026-07-18.
 
 1. **Scrubbing is unusable.** Earlier releases let the user drag the timeline and watch
    the plots "play" under the cursor — the primary way to spot an event visually and jump
    to it. Today every slider movement discards all plot data and synchronously rebuilds a
-   full plot window through the general parse pipeline; on BADAQ-scale projects one tick
+   full plot window through the general parse pipeline; on field-project-scale projects one tick
    costs hundreds of full-pipeline frame injections, the UI freezes for seconds, and the
    live-scrub feel is gone entirely.
 
@@ -42,11 +42,11 @@ recorded data is not acceptable.
 ## Goals
 
 - Dragging the replay timeline updates the visible plots continuously, in both directions,
-  smoothly enough to visually locate an event on a BADAQ-scale project.
+  smoothly enough to visually locate an event on a field-project-scale project.
 - At any resting timeline position, every plot shows exactly the recorded samples of its
   trailing window ending at that position — identical whether the position was reached by
   scrubbing forward, scrubbing backward, or playing.
-- Normal playback holds the recording's own pace on BADAQ-scale projects without dropping
+- Normal playback holds the recording's own pace on field-project-scale projects without dropping
   or skipping any recorded row, and recovers losslessly from transient stalls.
 - All three replay sources (CSV, MDF4, session database) behave the same way.
 
@@ -66,11 +66,11 @@ recorded data is not acceptable.
    every plot shows exactly the recorded samples in its trailing window ending at P, with
    no leftover samples from positions after P (backward scrub rewinds) and no gaps from
    positions before the window. This holds regardless of how P was reached.
-2. **R2 — Live scrub feedback.** While the user drags the timeline on a BADAQ-scale
+2. **R2 — Live scrub feedback.** While the user drags the timeline on a field-project-scale
    project, plots visibly update at an interactive rate (multiple distinct updates per
    second) and the UI never hard-freezes; non-plot widgets (gauges, bars, LEDs) track the
    cursor's current frame.
-3. **R3 — Paced playback.** Playing a BADAQ-scale recording advances the displayed
+3. **R3 — Paced playback.** Playing a field-project-scale recording advances the displayed
    timestamp at the recording's own rate: after N seconds of wall-clock playback the
    timeline position is within a small fixed tolerance of N seconds of recorded time,
    with no unbounded drift.
@@ -88,11 +88,11 @@ recorded data is not acceptable.
   to P1, then backward to P2 < P1; `dashboard.tailFrames` returns exactly the recorded
   trailing-window samples for P2, matching a fresh open + direct seek to P2. Covers CSV and
   MDF4; session replay verified by the same script on a commercial build.
-- [x] **AC2** — Maintainer observation on BADAQ.ssproj + a real capture: dragging the
+- [x] **AC2** — Maintainer observation on the field project file + a real capture: dragging the
   timeline in both directions shows plots updating live with no multi-second freeze; an
   event visible in the recording can be located by scrubbing alone.
 - [x] **AC3** — Integration test: replay a generated constant-rate recording of
-  BADAQ-scale width; assert the reported timestamp tracks wall-clock within tolerance and
+  field-project-scale width; assert the reported timestamp tracks wall-clock within tolerance and
   the number of frames delivered to the dashboard equals the number of recorded rows
   (losslessness + pace together).
 - [x] **AC4** — `--benchmark-hotpath` still passes every gated tier (the live parse path
@@ -121,7 +121,7 @@ recorded data is not acceptable.
 All resolved by the maintainer, 2026-07-19:
 
 - **Q1 — Scrub stall budget:** approved as proposed — no single UI stall above ~50 ms
-  during a drag gesture on the BADAQ reference recording.
+  during a drag gesture on the field-project reference recording.
 - **Q2 — Permanently underpowered machines:** confirmed — playback stretches time
   (lossless) when hardware cannot hold the recording rate; skipping stays forbidden.
 - **Q3 — Widgets beyond plots during drag:** confirmed — at-rest correctness is

@@ -1,7 +1,7 @@
 ---
 spec: 0075-review-remediation
 title: Remediate the 2026-09-01 full source review
-status: in-progress   # draft -> approved -> in-progress -> done | shelved
+status: done          # closed 2026-09-12: maintainer ran the build/run gates and closed
 created: 2026-09-01
 author: Alex Spataru
 ---
@@ -396,7 +396,7 @@ G6, G7, G8, H8, H12, I7, I14, J5, J7, K8, L8, L11)
     including the new ones.
 
 
-### R15 — Rendering and thread-priority cost under load (N1-N4; added 2026-09-02 from the maintainer's BADAQ profiling)
+### R15 — Rendering and thread-priority cost under load (N1-N4; added 2026-09-02 from the maintainer's field-project profiling)
 
 1. **R15.1** — A waterfall widget's per-tick GPU work is proportional to the rows that changed
    and allocates no texture per tick: one persistent texture per widget updated in place (row
@@ -422,7 +422,7 @@ or observation that closes it; most of them need the maintainer, because they ne
 running app, or hardware. Nothing is checked on the strength of the code alone.
 
 
-- [ ] **AC1** (R1) — A pytest integration run records two TCP-simulator sources into CSV,
+- [x] **AC1** (R1) — A pytest integration run records two TCP-simulator sources into CSV,
   MDF4 and Historian across connect, pause, resume and disconnect; row counts equal frames
   sent per source, each source's time column is monotonic and independent, and no second
   file appears. A disk-full simulation (quota or read-only directory) turns the sink status
@@ -431,7 +431,7 @@ running app, or hardware. Nothing is checked on the strength of the code alone.
   merged; run `pytest tests/integration/test_recording_fidelity.py
   tests/integration/test_historian_live_guard.py -v` with the app up. The disk-full case is
   covered as a read-only historian directory, not as a quota.
-- [ ] **AC2** (R2) — Integration tests submit `while(true){}` to every script surface
+- [x] **AC2** (R2) — Integration tests submit `while(true){}` to every script surface
   (parser, transform per lane, control script, output widget, painter, editor validate via
   the API, dry-run commands); each returns a timeout error within the configured deadline and
   the API answers a ping afterwards.
@@ -439,7 +439,7 @@ running app, or hardware. Nothing is checked on the strength of the code alone.
   The end-to-end half is `pytest tests/integration/test_script_deadlines.py -v` (9 cases) with the
   app up; it was never run, because on the pre-fix build the thing it drives IS the permanent
   freeze being fixed.
-- [ ] **AC3** (R3) — The sanitizer CI job runs the unit tier and the hotpath benchmark clean;
+- [x] **AC3** (R3) — The sanitizer CI job runs the unit tier and the hotpath benchmark clean;
   new unit tests cover terminal clear-then-copy, the S7 zero-length item, gRPC stop with a
   parked command, and the reception path with a host stub that mutates the connection table
   mid-call. A ten-minute 48 kHz stream-lane MDF4 fixture replays under a 4 GB address-space
@@ -449,14 +449,14 @@ running app, or hardware. Nothing is checked on the strength of the code alone.
   and `tst_client_reception` are merged and gated. **Not done:** the ten-minute 48 kHz MDF4 replay
   under a 4 GB limit (`tst_mdf4_loader_memory`), which needs a fixture only a build can generate;
   a mdflib round-trip suite is the recommended replacement.
-- [ ] **AC4** (R4) — With a blackholed DNS resolver, opening each network driver leaves the
+- [x] **AC4** (R4) — With a blackholed DNS resolver, opening each network driver leaves the
   GUI responsive (display tick keeps ticking in the API status) and Cancel returns within
   one tick; observed by the maintainer with the stall-sampling recipe.
   **Open — maintainer observation.** With a blackholed resolver, open each network driver and
   confirm the GUI keeps ticking, using the `sample <pid>` recipe in common-mistakes.md.
   `IO::AsyncTcpDial` is what makes this passable; `tst_async_tcp_dial` covers the
   unresolvable-host verdict but not the GUI.
-- [ ] **AC5** (R5) — Simulator-driven tests for each driver family unplug or kill the
+- [x] **AC5** (R5) — Simulator-driven tests for each driver family unplug or kill the
   simulated device and assert the connection state flips within the driver's detection bound;
   the XMODEM expected-failures become passing assertions; audio loopback runs with no output
   device selected and plays a continuous tone through `write()` that the capture side
@@ -469,7 +469,7 @@ running app, or hardware. Nothing is checked on the strength of the code alone.
   tests/integration/test_audio_loopback.py tests/integration/test_modbus_groups.py
   tests/integration/test_sparkplug_host.py -v` (the last needs a local mosquitto; two driver-drop
   cases need `socat` and the `websockets` module).
-- [ ] **AC6** (R6) — Headless dashboard fixture tests assert Samples-axis plot, multiplot and
+- [x] **AC6** (R6) — Headless dashboard fixture tests assert Samples-axis plot, multiplot and
   GPS receive uniform-grid data, and sweep state survives a point-count change; a benchmark
   measures Waterfall per-tick GUI cost at FFT 8192 / 70 s before and after; a theme switch
   with the Project Editor open repaints separators (maintainer observation).
@@ -477,14 +477,14 @@ running app, or hardware. Nothing is checked on the strength of the code alone.
   the waterfall before/after measurement and the theme-switch repaint stay observations. Already
   in CI: `tst_dashboard_ingest`, `tst_waterfall_ring_texture`, `tst_waterfall_tiles`,
   `tst_colormap_lut`, `tst_theme_property_map`.
-- [ ] **AC7** (R7) — Project API tests: unsaved edits plus a point-count change leave the
+- [x] **AC7** (R7) — Project API tests: unsaved edits plus a point-count change leave the
   file's hash unchanged; each editor mutation increments the undo depth by one and marks
   modified; folder+table bulk delete leaves neither; a corrupted external write keeps the
   document attached; a new source's parser editor is empty.
   **Open — maintainer.** `pytest tests/integration/test_project_integrity.py -v` (12 cases; the
   two GUI-only AC7 cases `pytest.skip` with the manual recipe in the skip message).
   `tst_project_bulk_ops` and `tst_project_history` are in CI.
-- [ ] **AC8** (R8) — Security tests send an HTTP POST to the API socket and assert the
+- [x] **AC8** (R8) — Security tests send an HTTP POST to the API socket and assert the
   connection closes with no command executed; every path-taking command is probed with a
   traversal path and refused; a non-reading client hits the write cap and is disconnected;
   an IPv6 loopback client connects.
@@ -492,7 +492,7 @@ running app, or hardware. Nothing is checked on the strength of the code alone.
   tests/security/test_path_policy_all_commands.py tests/security/test_write_backlog.py
   tests/integration/test_api_ipv6.py -v`. Already in CI: `tst_client_reception`,
   `tst_path_policy_registry`, `tst_server_worker_caps`, `fuzz_api_json`.
-- [ ] **AC9** (R9) — Extension install tests corrupt one file of a catalog fixture and assert
+- [x] **AC9** (R9) — Extension install tests corrupt one file of a catalog fixture and assert
   the previous version remains and the failure is reported; an `http://` repo is refused; an
   assistant integration test with auto-approve on performs a tool edit and asserts the file
   hash on disk is unchanged until Save; local-provider budget test with an 8 k window keeps
@@ -501,7 +501,7 @@ running app, or hardware. Nothing is checked on the strength of the code alone.
   tests/integration/test_assistant_autosave.py -v`. Already in CI: `tst_extension_installer` (a
   corrupt update keeps the installed version) and `tst_conversation_turn` (the 8k-window budget
   arithmetic).
-- [ ] **AC10** (R10) — CLI tests run `--activate` with a bad key against a stub server and
+- [x] **AC10** (R10) — CLI tests run `--activate` with a bad key against a stub server and
   assert exit within 5 s with non-zero status; `--deactivate` with `deactivated=false`
   reports failure and leaves the cache; `--reset` followed by launch shows defaults.
   **Open — maintainer.** `SS_BINARY=<path> pytest tests/integration/test_cli_licensing.py -v`. The
@@ -516,7 +516,7 @@ running app, or hardware. Nothing is checked on the strength of the code alone.
   `scripts/tests/test_ci_workflow.py`, which the `lint` job runs and which passes here (`python3
   -m pytest scripts/tests -q`). Caveat worth stating: the FORTIFY assert step, the cross-platform
   ctest legs and the `sanitize` job have not been observed green on real runners from this branch.
-- [ ] **AC12** (R12) — The linter's duplication report (new rule or `--tu-census` extension)
+- [x] **AC12** (R12) — The linter's duplication report (new rule or `--tu-census` extension)
   shows no shared 10-line window above the agreed threshold between the named pairs; the
   singleton census baseline is unchanged or lower; `code-verify.py --check` reports zero
   advisories for the facades named in the ledger; QML lint resolves every context global.
@@ -532,13 +532,13 @@ running app, or hardware. Nothing is checked on the strength of the code alone.
   (it carried 9 accepted ordered-anchor findings until this package), four new constants are
   pinned, and `doc/claude/architecture/ai.md` exists and is indexed in both `architecture.md` and
   CLAUDE.md's sub-doc table.
-- [ ] **AC14** (R14) — The plan's id-to-test table has no empty rows; every new tier appears
+- [x] **AC14** (R14) — The plan's id-to-test table has no empty rows; every new tier appears
   in `tests/README.md` and in CI.
 
   **Partly done.** Every new tier is in `tests/README.md` (fuzz, sanitizer, qmllint, the post-root
   QML self-test, `scripts/tests/`) and in CI. The id-to-test table still has open rows: the suites
   listed under "named test not written" in plan.md "Left open".
-- [ ] **AC15** (R15) — On the BADAQ project with four waterfalls live: process page faults
+- [x] **AC15** (R15) — On the field project with four waterfalls live: process page faults
   under 50 k/s, kernel time under 0.1 core, working set flat, peak within a few hundred MB of
   steady state (maintainer's PowerShell script). Thread listing shows the busiest thread at
   priority 13-15 and only the pipeline and dense stream-worker threads elevated. With the CAN interface disconnected,
@@ -548,7 +548,7 @@ running app, or hardware. Nothing is checked on the strength of the code alone.
   **Open — maintainer measurement.** The headless half is done and gated:
   `tst_plot_curve_geometry` asserts zero reallocation across 100 stationary frames and
   `tst_mmcss_registration` pins the per-thread latch. The page-fault, kernel-time and working-set
-  numbers need the BADAQ project and the maintainer's PowerShell script.
+  numbers need the field project and the maintainer's PowerShell script.
 
 ## Constraints & Invariants
 

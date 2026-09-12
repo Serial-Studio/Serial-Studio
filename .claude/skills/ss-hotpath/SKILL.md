@@ -139,6 +139,7 @@ exist to catch a consumer-path collapse, not to measure parsing:
 | js(numeric), lua(mixed) | 0.5x | 128 kHz |
 | js(mixed) | 0.25x | 64 kHz |
 | lua+exporters, lua+dashboard (floors) | 0.5x | 128 kHz |
+| native(numeric), native(mixed) allocations per frame (spec 0084) | 0 | fires in the `-DSS_ALLOC_STATS=ON` build only (CI: the PGO training run); every other build prints `n/a` |
 
 Mechanics and readouts:
 
@@ -161,6 +162,11 @@ Mechanics and readouts:
 - `--benchmark-frames N` sets the minimum workload; `--benchmark-seconds N` the minimum
   wall-clock window (default 10) — each run lasts until both floors are met.
   `--benchmark-output FILE` mirrors the report to a file (default: stdout only).
+- `--benchmark-channels N` (default 8) widens the synthetic project for the parser tiers and the
+  exporter floor; throughput tiers are printed but not gated at a non-default width. Above
+  `FrameBuilder::kMaxSpanFields` (128) the Native rows take the list lane and the report says so
+  (`native lane: list`). Every row prints `Alloc/frame`, counted only in a
+  `-DSS_ALLOC_STATS=ON` build (`n/a` otherwise); the Native rows must read 0 there.
 
 Source: `app/src/Benchmark/HotpathBenchmark.cpp`. CI (`ci.yml`, the only workflow) runs it on
 every push/PR as a hard gate on the PGO-optimized binary — the same binary that ships (PGO

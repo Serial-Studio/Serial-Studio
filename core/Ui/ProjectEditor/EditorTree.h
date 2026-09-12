@@ -80,9 +80,14 @@ private:
   void restoreTreeSelection();
   void appendSourceTreeItems(QStandardItem* root);
   void appendActionTreeItems(QStandardItem* root);
-  void appendInfluxSinkTreeItem(QStandardItem* root);
-  void appendMqttPublisherTreeItem(QStandardItem* root);
-  void appendControlScriptTreeItem(QStandardItem* root);
+  void appendExportTree(QStandardItem* root, QHash<QString, bool>& expandedStates);
+  void appendScriptsTree(QStandardItem* root, QHash<QString, bool>& expandedStates);
+  [[nodiscard]] QStandardItem* createSingleLeaf(
+    const QString& title,
+    const QString& iconName,
+    int kind,
+    const QString& iconSet = QStringLiteral("editor")) const;
+  void clearItemMaps();
   void buildTreeItems(QStandardItem* root, QHash<QString, bool>& expandedStates);
   void appendGroupTreeItems(QStandardItem* root, QHash<QString, bool>& expandedStates);
   void appendDatasetChildren(QStandardItem* groupItem, const DataModel::Group& group);

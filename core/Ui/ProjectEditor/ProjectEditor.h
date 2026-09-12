@@ -33,6 +33,7 @@
 #include "DataModel/Project/EntityKinds.h"
 #include "ProjectEditor/EditorCommit.h"
 #include "ProjectEditor/EditorForms.h"
+#include "ProjectEditor/EditorInflux.h"
 #include "ProjectEditor/EditorMqtt.h"
 #include "ProjectEditor/EditorMultiSelect.h"
 #include "ProjectEditor/EditorSelection.h"
@@ -78,6 +79,9 @@ class ProjectEditor : public QObject {
   Q_PROPERTY(QAbstractItemModel* mqttPublisherModel
              READ mqttPublisherModel
              NOTIFY mqttPublisherModelChanged)
+  Q_PROPERTY(QAbstractItemModel* influxSinkModel
+             READ influxSinkModel
+             NOTIFY influxSinkModelChanged)
   Q_PROPERTY(int selectedSourceId
              READ selectedSourceId
              NOTIFY sourceModelChanged)
@@ -201,6 +205,7 @@ signals:
   void editableOptionsChanged();
   void outputWidgetModelChanged();
   void mqttPublisherModelChanged();
+  void influxSinkModelChanged();
   void treeRebuildFinished(const QModelIndex& revealIndex);
   void openAlarmBandsEditor(
     int groupId, int datasetId, double rangeMin, double rangeMax, QVariantList currentBands);
@@ -212,6 +217,7 @@ signals:
 private:
   friend class EditorCommit;
   friend class EditorForms;
+  friend class EditorInflux;
   friend class EditorMqtt;
   friend class EditorMultiSelect;
   friend class EditorSelection;
@@ -249,6 +255,10 @@ public:
     MqttPublisherView,
     InfluxSinkView,
     ControlScriptView,
+    TransformLibraryView,
+    JsLibraryView,
+    ProjectScriptsView,
+    DataExportView,
     MultiSelectionView,
   };
   Q_ENUM(CurrentView)
@@ -310,26 +320,30 @@ public:
   Q_ENUM(CustomRoles)
 
   enum ItemKind {
-    KindNone            = DataModel::KindNone,
-    KindGroup           = DataModel::KindGroup,
-    KindDataset         = DataModel::KindDataset,
-    KindWorkspace       = DataModel::KindWorkspace,
-    KindWorkspaceFolder = DataModel::KindWorkspaceFolder,
-    KindAction          = DataModel::KindAction,
-    KindOutputWidget    = DataModel::KindOutputWidget,
-    KindMqttPublisher   = DataModel::KindMqttPublisher,
-    KindControlScript   = DataModel::KindControlScript,
-    KindGroupFolder     = DataModel::KindGroupFolder,
-    KindUserTable       = DataModel::KindUserTable,
-    KindTableFolder     = DataModel::KindTableFolder,
-    KindSource          = DataModel::KindSource,
-    KindProjectRoot     = DataModel::KindProjectRoot,
-    KindFrameParser     = DataModel::KindFrameParser,
-    KindGroupsRoot      = DataModel::KindGroupsRoot,
-    KindTablesRoot      = DataModel::KindTablesRoot,
-    KindSystemDatasets  = DataModel::KindSystemDatasets,
-    KindWorkspacesRoot  = DataModel::KindWorkspacesRoot,
-    KindInfluxSink      = DataModel::KindInfluxSink,
+    KindNone             = DataModel::KindNone,
+    KindGroup            = DataModel::KindGroup,
+    KindDataset          = DataModel::KindDataset,
+    KindWorkspace        = DataModel::KindWorkspace,
+    KindWorkspaceFolder  = DataModel::KindWorkspaceFolder,
+    KindAction           = DataModel::KindAction,
+    KindOutputWidget     = DataModel::KindOutputWidget,
+    KindMqttPublisher    = DataModel::KindMqttPublisher,
+    KindControlScript    = DataModel::KindControlScript,
+    KindGroupFolder      = DataModel::KindGroupFolder,
+    KindUserTable        = DataModel::KindUserTable,
+    KindTableFolder      = DataModel::KindTableFolder,
+    KindSource           = DataModel::KindSource,
+    KindProjectRoot      = DataModel::KindProjectRoot,
+    KindFrameParser      = DataModel::KindFrameParser,
+    KindGroupsRoot       = DataModel::KindGroupsRoot,
+    KindTablesRoot       = DataModel::KindTablesRoot,
+    KindSystemDatasets   = DataModel::KindSystemDatasets,
+    KindWorkspacesRoot   = DataModel::KindWorkspacesRoot,
+    KindInfluxSink       = DataModel::KindInfluxSink,
+    KindTransformLibrary = DataModel::KindTransformLibrary,
+    KindScriptsRoot      = DataModel::KindScriptsRoot,
+    KindJsLibrary        = DataModel::KindJsLibrary,
+    KindExportRoot       = DataModel::KindExportRoot,
   };
   Q_ENUM(ItemKind)
 
@@ -374,6 +388,7 @@ public:
   [[nodiscard]] CustomModel* datasetModel() const;
   [[nodiscard]] CustomModel* outputWidgetModel() const;
   [[nodiscard]] CustomModel* mqttPublisherModel() const;
+  [[nodiscard]] CustomModel* influxSinkModel() const;
   [[nodiscard]] const DataModel::OutputWidget& selectedOutputWidget() const noexcept;
 
   Q_INVOKABLE [[nodiscard]] QVariantList selectedTreeItems() const;
@@ -414,6 +429,10 @@ public slots:
   void selectMqttPublisher();
   void selectInfluxSink();
   void selectControlScript();
+  void selectTransformLibrary();
+  void selectJsLibrary();
+  void selectProjectScripts();
+  void selectDataExport();
   void openMqttScriptEditor();
   void setTreeSearchQuery(const QString& query);
   void confirmCleanupUnresolvedWorkspaceWidgets();
@@ -520,6 +539,10 @@ private:
   QStandardItem* m_mqttPublisherItem;
   QStandardItem* m_influxSinkItem;
   QStandardItem* m_controlScriptItem;
+  QStandardItem* m_transformLibraryItem;
+  QStandardItem* m_jsLibraryItem;
+  QStandardItem* m_scriptsRootItem;
+  QStandardItem* m_exportRootItem;
 
   QString m_treeSearchQuery;
   bool m_seedExpansionFromModel;
@@ -540,6 +563,7 @@ private:
   CustomModel* m_datasetModel;
   CustomModel* m_outputWidgetModel;
   CustomModel* m_mqttPublisherModel;
+  CustomModel* m_influxSinkModel;
 
   QStringList m_fftSamples;
   QStringList m_fftWindows;
@@ -580,6 +604,7 @@ private:
   EditorSummaries m_summaries;
   EditorMultiSelect m_multiSelect;
   EditorMqtt m_mqtt;
+  EditorInflux m_influx;
 };
 
 /**

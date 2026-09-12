@@ -139,9 +139,9 @@ void EditorTree::scheduleTreeRebuild()
 }
 
 /**
- * @brief Rebuilds the project-structure tree, restoring expansion and selection.
+ * @brief Forgets every item the previous build handed out; the tree is about to be rebuilt.
  */
-void EditorTree::buildTreeModel()
+void EditorTree::clearItemMaps()
 {
   m_editor.m_rootItems.clear();
   m_editor.m_groupItems.clear();
@@ -155,13 +155,25 @@ void EditorTree::buildTreeModel()
   m_editor.m_tableFolderItems.clear();
   m_editor.m_workspaceItems.clear();
   m_editor.m_workspaceFolderItems.clear();
-  m_editor.m_groupsRootItem     = nullptr;
-  m_editor.m_tablesRootItem     = nullptr;
-  m_editor.m_systemDatasetsItem = nullptr;
-  m_editor.m_workspacesRootItem = nullptr;
-  m_editor.m_mqttPublisherItem  = nullptr;
-  m_editor.m_influxSinkItem     = nullptr;
-  m_editor.m_controlScriptItem  = nullptr;
+  m_editor.m_groupsRootItem       = nullptr;
+  m_editor.m_tablesRootItem       = nullptr;
+  m_editor.m_systemDatasetsItem   = nullptr;
+  m_editor.m_workspacesRootItem   = nullptr;
+  m_editor.m_mqttPublisherItem    = nullptr;
+  m_editor.m_influxSinkItem       = nullptr;
+  m_editor.m_controlScriptItem    = nullptr;
+  m_editor.m_transformLibraryItem = nullptr;
+  m_editor.m_jsLibraryItem        = nullptr;
+  m_editor.m_scriptsRootItem      = nullptr;
+  m_editor.m_exportRootItem       = nullptr;
+}
+
+/**
+ * @brief Rebuilds the project-structure tree, restoring expansion and selection.
+ */
+void EditorTree::buildTreeModel()
+{
+  clearItemMaps();
 
   const bool seeding      = m_editor.m_seedExpansionFromModel;
   const bool filterActive = !m_editor.m_treeSearchQuery.trimmed().isEmpty();
@@ -861,81 +873,116 @@ void EditorTree::appendWorkspaceTreeItems(QStandardItem* root, QHash<QString, bo
 }
 
 /**
- * @brief Appends the single-instance "MQTT Publisher" node (Pro) to the project tree.
+ * @brief Creates one single-instance leaf (Project Scripts and Data Export children).
  */
-void EditorTree::appendMqttPublisherTreeItem(QStandardItem* root)
+QStandardItem* EditorTree::createSingleLeaf(const QString& title,
+                                            const QString& iconName,
+                                            int kind,
+                                            const QString& iconSet) const
 {
-  SS_ASSERT(root != nullptr, return);
-
-  const QString q         = m_editor.m_treeSearchQuery.trimmed();
-  const bool filterActive = !q.isEmpty();
-  if (filterActive && !SerialStudio::searchMatches(q, tr("MQTT Publisher")))
-    return;
-
   auto& registry = Core::services().iconRegistry;
-  auto* item     = new QStandardItem(tr("MQTT Publisher"));
-  item->setData(tr("MQTT Publisher"), TreeViewText);
-  item->setData(registry.icon(QStringLiteral("editor"), QStringLiteral("mqtt-publisher"), 16),
-                TreeViewIcon);
+  auto* item     = new QStandardItem(title);
+  item->setData(title, TreeViewText);
+  item->setData(registry.icon(iconSet, iconName, 16), TreeViewIcon);
   item->setData(-1, TreeViewFrameIndex);
-  item->setData(KindMqttPublisher, TreeItemKind);
+  item->setData(kind, TreeItemKind);
   item->setData(-1, TreeItemId);
   item->setData(-1, TreeItemParentId);
-
-  root->appendRow(item);
-  m_editor.m_mqttPublisherItem = item;
+  return item;
 }
 
 /**
- * @brief Appends the single InfluxDB sink node to the tree.
+ * @brief Appends the Project Scripts node (spec 0083 addendum) holding the control loop and the
+ *        two shared transform libraries; a search keeps it when the title or any child matches.
  */
-void EditorTree::appendInfluxSinkTreeItem(QStandardItem* root)
+void EditorTree::appendScriptsTree(QStandardItem* root, QHash<QString, bool>& expandedStates)
 {
   SS_ASSERT(root != nullptr, return);
 
   const QString q         = m_editor.m_treeSearchQuery.trimmed();
   const bool filterActive = !q.isEmpty();
-  if (filterActive && !SerialStudio::searchMatches(q, tr("InfluxDB Sink")))
+  const auto matches      = [&q, filterActive](const QString& s) {
+    return !filterActive || SerialStudio::searchMatches(q, s);
+  };
+
+  const QString rootTitle = tr("Project Scripts");
+  const QString loopTitle = tr("Control Loop");
+  const QString luaTitle  = tr("Lua Library");
+  const QString jsTitle   = tr("JavaScript Library");
+  const bool rootMatches  = matches(rootTitle);
+  if (filterActive && !rootMatches && !matches(loopTitle) && !matches(luaTitle)
+      && !matches(jsTitle))
     return;
 
-  auto& registry = Core::services().iconRegistry;
-  auto* item     = new QStandardItem(tr("InfluxDB Sink"));
-  item->setData(tr("InfluxDB Sink"), TreeViewText);
-  item->setData(registry.icon(QStringLiteral("editor"), QStringLiteral("influx"), 16),
-                TreeViewIcon);
-  item->setData(-1, TreeViewFrameIndex);
-  item->setData(KindInfluxSink, TreeItemKind);
-  item->setData(-1, TreeItemId);
-  item->setData(-1, TreeItemParentId);
+  auto* node = createSingleLeaf(
+    rootTitle, QStringLiteral("macro"), KindScriptsRoot, QStringLiteral("commands"));
+  if (rootMatches || matches(loopTitle)) {
+    m_editor.m_controlScriptItem =
+      createSingleLeaf(loopTitle, QStringLiteral("code"), KindControlScript);
+    node->appendRow(m_editor.m_controlScriptItem);
+  }
 
-  root->appendRow(item);
-  m_editor.m_influxSinkItem = item;
+  if (rootMatches || matches(luaTitle)) {
+    m_editor.m_transformLibraryItem =
+      createSingleLeaf(luaTitle, QStringLiteral("code"), KindTransformLibrary);
+    node->appendRow(m_editor.m_transformLibraryItem);
+  }
+
+  if (rootMatches || matches(jsTitle)) {
+    m_editor.m_jsLibraryItem = createSingleLeaf(jsTitle, QStringLiteral("code"), KindJsLibrary);
+    node->appendRow(m_editor.m_jsLibraryItem);
+  }
+
+  if (filterActive)
+    node->setData(true, TreeViewExpanded);
+  else
+    restoreExpandedStateMap(node, expandedStates, root->text() + "/" + rootTitle);
+
+  root->appendRow(node);
+  m_editor.m_scriptsRootItem = node;
 }
 
 /**
- * @brief Appends the project-global control-script node to the tree.
+ * @brief Appends the Data Export node (Pro) holding the MQTT publisher and the InfluxDB sink; a
+ *        search keeps it when the title or either child matches.
  */
-void EditorTree::appendControlScriptTreeItem(QStandardItem* root)
+void EditorTree::appendExportTree(QStandardItem* root, QHash<QString, bool>& expandedStates)
 {
   SS_ASSERT(root != nullptr, return);
 
   const QString q         = m_editor.m_treeSearchQuery.trimmed();
   const bool filterActive = !q.isEmpty();
-  if (filterActive && !SerialStudio::searchMatches(q, tr("Control Loop")))
+  const auto matches      = [&q, filterActive](const QString& s) {
+    return !filterActive || SerialStudio::searchMatches(q, s);
+  };
+
+  const QString rootTitle   = tr("Data Export");
+  const QString mqttTitle   = tr("MQTT Publisher");
+  const QString influxTitle = tr("InfluxDB Sink");
+  const bool rootMatches    = matches(rootTitle);
+  if (filterActive && !rootMatches && !matches(mqttTitle) && !matches(influxTitle))
     return;
 
-  auto& registry = Core::services().iconRegistry;
-  auto* item     = new QStandardItem(tr("Control Loop"));
-  item->setData(tr("Control Loop"), TreeViewText);
-  item->setData(registry.icon(QStringLiteral("editor"), QStringLiteral("control-script"), 16),
-                TreeViewIcon);
-  item->setData(-1, TreeViewFrameIndex);
-  item->setData(KindControlScript, TreeItemKind);
-  item->setData(-1, TreeItemId);
-  item->setData(-1, TreeItemParentId);
+  auto* node = createSingleLeaf(rootTitle, QStringLiteral("tx-data"), KindExportRoot);
+  if (rootMatches || matches(mqttTitle)) {
+    m_editor.m_mqttPublisherItem =
+      createSingleLeaf(mqttTitle, QStringLiteral("mqtt-publisher"), KindMqttPublisher);
+    node->appendRow(m_editor.m_mqttPublisherItem);
+  }
 
-  root->appendRow(item);
-  m_editor.m_controlScriptItem = item;
+  if (rootMatches || matches(influxTitle)) {
+    m_editor.m_influxSinkItem =
+      createSingleLeaf(influxTitle, QStringLiteral("influx"), KindInfluxSink);
+    node->appendRow(m_editor.m_influxSinkItem);
+  }
+
+  if (filterActive)
+    node->setData(true, TreeViewExpanded);
+  else
+    restoreExpandedStateMap(node, expandedStates, root->text() + "/" + rootTitle);
+
+  root->appendRow(node);
+  m_editor.m_exportRootItem = node;
 }
 
 /**
@@ -945,10 +992,9 @@ void EditorTree::buildTreeItems(QStandardItem* root, QHash<QString, bool>& expan
 {
   SS_ASSERT(root != nullptr, return);
 
-  appendControlScriptTreeItem(root);
+  appendScriptsTree(root, expandedStates);
 #ifdef BUILD_COMMERCIAL
-  appendMqttPublisherTreeItem(root);
-  appendInfluxSinkTreeItem(root);
+  appendExportTree(root, expandedStates);
 #endif
 
   appendActionTreeItems(root);
@@ -1076,6 +1122,18 @@ QStandardItem* EditorTree::containerSelectionItem() const
 
   if (m_editor.m_currentView == ControlScriptView)
     return m_editor.m_controlScriptItem;
+
+  if (m_editor.m_currentView == TransformLibraryView)
+    return m_editor.m_transformLibraryItem;
+
+  if (m_editor.m_currentView == JsLibraryView)
+    return m_editor.m_jsLibraryItem;
+
+  if (m_editor.m_currentView == ProjectScriptsView)
+    return m_editor.m_scriptsRootItem;
+
+  if (m_editor.m_currentView == DataExportView)
+    return m_editor.m_exportRootItem;
 
   return nullptr;
 }

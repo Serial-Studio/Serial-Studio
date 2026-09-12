@@ -43,6 +43,7 @@
 #include "DataModel/Project/ProjectPresentation.h"
 #include "DataModel/Project/ProjectSources.h"
 #include "DataModel/Project/ProjectTables.h"
+#include "DataModel/Project/ProjectWorkspaceProfiles.h"
 #include "DataModel/Project/ProjectWorkspaces.h"
 
 namespace Core::Bus {
@@ -72,6 +73,14 @@ class ProjectModel : public QObject {
              READ  controlScriptCode
              WRITE setControlScriptCode
              NOTIFY controlScriptChanged)
+  Q_PROPERTY(QString transformLibraryCode
+             READ  transformLibraryCode
+             WRITE setTransformLibraryCode
+             NOTIFY transformLibraryChanged)
+  Q_PROPERTY(QString transformLibraryJsCode
+             READ  transformLibraryJsCode
+             WRITE setTransformLibraryJsCode
+             NOTIFY transformLibraryJsChanged)
   Q_PROPERTY(QString jsonFilePath
              READ jsonFilePath
              NOTIFY jsonFileChanged)
@@ -125,6 +134,13 @@ class ProjectModel : public QObject {
   Q_PROPERTY(int tableCount
              READ tableCount
              NOTIFY tablesChanged)
+  Q_PROPERTY(QVariantList workspaceProfiles
+             READ workspaceProfiles
+             NOTIFY workspaceProfilesChanged)
+  Q_PROPERTY(int activeWorkspaceProfile
+             READ activeWorkspaceProfile
+             WRITE setActiveWorkspaceProfile
+             NOTIFY activeWorkspaceProfileChanged)
   Q_PROPERTY(bool customizeWorkspaces
              READ  customizeWorkspaces
              WRITE setCustomizeWorkspaces
@@ -169,6 +185,8 @@ class ProjectModel : public QObject {
 signals:
   void titleChanged();
   void controlScriptChanged();
+  void transformLibraryChanged();
+  void transformLibraryJsChanged();
   void saveStatusChanged();
   void pointCountChanged();
   void plotTimeRangeChanged();
@@ -202,6 +220,8 @@ signals:
   void activeWorkspacesChanged();
   void tablesChanged();
   void customizeWorkspacesChanged();
+  void workspaceProfilesChanged();
+  void activeWorkspaceProfileChanged();
   void lockedChanged();
   void mqttPublisherChanged();
   void influxSinkChanged();
@@ -252,6 +272,7 @@ private:
   friend class ProjectPresentation;
   friend class ProjectSources;
   friend class ProjectTables;
+  friend class ProjectWorkspaceProfiles;
   friend class ProjectWorkspaces;
 
   explicit ProjectModel(Core::Bus::MessageBus& bus);
@@ -298,6 +319,10 @@ public:
   [[nodiscard]] const QString& title() const noexcept { return m_title; }
 
   [[nodiscard]] QString controlScriptCode() const { return m_controlScriptCode; }
+
+  [[nodiscard]] QString transformLibraryCode() const { return m_transformLibrary; }
+
+  [[nodiscard]] QString transformLibraryJsCode() const { return m_transformLibraryJs; }
 
   [[nodiscard]] const QString& jsonFilePath() const noexcept { return m_filePath; }
 
@@ -402,6 +427,58 @@ public:
   [[nodiscard]] bool customizeWorkspaces() const noexcept
   {
     return m_workspaces.customizeWorkspaces();
+  }
+
+  [[nodiscard]] QVariantList workspaceProfiles() const;
+  [[nodiscard]] Q_INVOKABLE QVariantList workspaceProfileFolderOptions() const;
+
+  [[nodiscard]] const std::vector<WorkspaceProfile>& workspaceProfileList() const noexcept
+  {
+    return m_profiles.list();
+  }
+
+  [[nodiscard]] const WorkspaceProfile* workspaceProfile(int profileId) const
+  {
+    return m_profiles.profile(profileId);
+  }
+
+  [[nodiscard]] int workspaceProfileIdForTitle(const QString& title) const
+  {
+    return m_profiles.profileIdForTitle(title);
+  }
+
+  [[nodiscard]] int addWorkspaceProfile(const QString& title)
+  {
+    return m_profiles.addProfile(title);
+  }
+
+  void renameWorkspaceProfile(int profileId, const QString& title)
+  {
+    m_profiles.renameProfile(profileId, title);
+  }
+
+  void deleteWorkspaceProfile(int profileId) { m_profiles.deleteProfile(profileId); }
+
+  void setWorkspaceProfileFolders(int profileId, const std::vector<int>& folderIds)
+  {
+    m_profiles.setFolders(profileId, folderIds);
+  }
+
+  void setWorkspaceProfileWorkspaces(int profileId, const std::vector<int>& workspaceIds)
+  {
+    m_profiles.setWorkspaces(profileId, workspaceIds);
+  }
+
+  [[nodiscard]] int activeWorkspaceProfile() const noexcept { return m_profiles.activeProfileId(); }
+
+  [[nodiscard]] const QString& requestedWorkspaceProfile() const noexcept
+  {
+    return m_requestedWorkspaceProfile;
+  }
+
+  [[nodiscard]] bool workspaceVisibleInProfile(const Workspace& workspace) const
+  {
+    return m_profiles.workspaceVisible(workspace);
   }
 
   [[nodiscard]] const std::vector<TableDef>& tables() const noexcept { return m_tables.list(); }
@@ -593,10 +670,17 @@ public slots:
     m_loader.importProjectFromJson(project, suggestedFileName);
   }
 
+  [[nodiscard]] bool mergeImportedProject(const QJsonObject& project, const QString& label)
+  {
+    return m_loader.mergeImportedProject(project, label);
+  }
+
   Q_INVOKABLE [[nodiscard]] int seedDatasetAliases() { return m_entities.seedDatasetAliases(); }
 
   void setTitle(const QString& title);
   void setControlScriptCode(const QString& code);
+  void setTransformLibraryCode(const QString& code);
+  void setTransformLibraryJsCode(const QString& code);
   void setPointCount(const int points);
   void setPlotTimeRange(const double seconds);
   void setFrozen(const bool frozen);
@@ -963,9 +1047,11 @@ public slots:
     m_workspaces.reorderWorkspaces(userWorkspaceIds);
   }
 
-  void addWidgetToWorkspace(int workspaceId, int widgetType, int groupUniqueId, int relativeIndex)
+  void addWidgetToWorkspace(
+    int workspaceId, int widgetType, int groupUniqueId, int relativeIndex, int datasetUniqueId = -1)
   {
-    m_workspaces.addWidgetToWorkspace(workspaceId, widgetType, groupUniqueId, relativeIndex);
+    m_workspaces.addWidgetToWorkspace(
+      workspaceId, widgetType, groupUniqueId, relativeIndex, datasetUniqueId);
   }
 
   void removeWidgetFromWorkspace(int workspaceId,
@@ -982,6 +1068,26 @@ public slots:
   }
 
   void promptAddWorkspace() { m_workspaces.promptAddWorkspace(); }
+
+  void promptAddWorkspaceProfile() { m_profiles.promptAddProfile(); }
+
+  void promptRenameWorkspaceProfile(int profileId) { m_profiles.promptRenameProfile(profileId); }
+
+  void confirmDeleteWorkspaceProfile(int profileId) { m_profiles.confirmDeleteProfile(profileId); }
+
+  void setWorkspaceProfileFolder(int profileId, int folderId, bool included)
+  {
+    m_profiles.setFolder(profileId, folderId, included);
+  }
+
+  void setWorkspaceProfileWorkspace(int profileId, int workspaceId, bool included)
+  {
+    m_profiles.setWorkspace(profileId, workspaceId, included);
+  }
+
+  void setActiveWorkspaceProfile(int profileId) { m_profiles.setActiveProfile(profileId); }
+
+  void setRequestedWorkspaceProfile(const QString& title) { m_requestedWorkspaceProfile = title; }
 
   void promptRenameWorkspace(int workspaceId) { m_workspaces.promptRenameWorkspace(workspaceId); }
 
@@ -1239,6 +1345,9 @@ private:
   QString m_filePath;
   bool m_suppressMessageBoxes;
   QString m_controlScriptCode;
+  QString m_transformLibrary;
+  QString m_transformLibraryJs;
+  QString m_requestedWorkspaceProfile;
 
   std::vector<DataModel::Group> m_groups;
   std::vector<DataModel::Action> m_actions;
@@ -1264,6 +1373,7 @@ private:
   ProjectFolders m_folders;
   ProjectWorkspaces m_workspaces;
   ProjectTables m_tables;
+  ProjectWorkspaceProfiles m_profiles;
   ProjectLoader m_loader;
   ProjectSources m_sourceOps;
   ProjectEntities m_entities;

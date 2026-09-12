@@ -58,6 +58,10 @@ struct CsvColumnMap {
   int max      = -1;
   int scale    = -1;
   int offset   = -1;
+  int unitId   = -1;
+  int bit      = -1;
+  int access   = -1;
+  int order    = -1;
 };
 
 /**
@@ -73,10 +77,47 @@ struct CsvColumnMap {
 }
 
 /**
+ * @brief Maps the spec-0083 header cells (unit id, bit, access, word order); returns false when
+ *        the cell is none of them. "unit" alone stays the units column.
+ */
+[[nodiscard]] static bool mapCsvExtraColumn(const QString& col, int index, CsvColumnMap& map)
+{
+  if (matchAny(col,
+               {QLatin1String("slave"),
+                QLatin1String("unit_id"),
+                QLatin1String("unitid"),
+                QLatin1String("device")})) {
+    map.unitId = index;
+    return true;
+  }
+
+  if (matchAny(col, {QLatin1String("bit"), QLatin1String("bit_index")})) {
+    map.bit = index;
+    return true;
+  }
+
+  if (matchAny(col, {QLatin1String("rw"), QLatin1String("access"), QLatin1String("writable")})) {
+    map.access = index;
+    return true;
+  }
+
+  if (matchAny(
+        col, {QLatin1String("order"), QLatin1String("word_order"), QLatin1String("byte_order")})) {
+    map.order = index;
+    return true;
+  }
+
+  return false;
+}
+
+/**
  * @brief Maps a single header cell to its column-map slot.
  */
 static void mapCsvHeaderColumn(const QString& col, int index, CsvColumnMap& map)
 {
+  if (mapCsvExtraColumn(col, index, map))
+    return;
+
   if (matchAny(col,
                {QLatin1String("address"),
                 QLatin1String("addr"),
@@ -180,6 +221,103 @@ static void mapCsvHeaderColumn(const QString& col, int index, CsvColumnMap& map)
 }
 
 /**
+ * @brief Parses a bit cell against the entry's data type, so the index is dropped (with a note)
+ *        when it points past the value's width and the LED would never light.
+ */
+static int parseBitCell(const QString& text, const DataModel::ModbusMap::RegisterEntry& entry)
+{
+  if (text.trimmed().isEmpty())
+    return -1;
+
+  const int bit     = static_cast<int>(SerialStudio::toDouble(text));
+  const int clamped = DataModel::ModbusMap::clampBitIndex(
+    bit, DataModel::ModbusMap::registersForDataType(entry.dataType));
+  if (clamped < 0)
+    qWarning() << "[ModbusMapImporter] Register" << entry.name << "bit" << bit << "is outside its"
+               << entry.dataType << "width; reading the whole word";
+
+  return clamped;
+}
+
+/**
+ * @brief Reads the spec-0083 cells of a CSV row into @p entry; absent columns keep the defaults.
+ */
+static void parseCsvExtras(const QStringList& cols,
+                           const CsvColumnMap& map,
+                           DataModel::ModbusMap::RegisterEntry& entry)
+{
+  const int unit  = static_cast<int>(csvCellDouble(cols, map.unitId, 0.0));
+  entry.unitId    = DataModel::ModbusMap::clampUnitId(unit);
+  entry.bitIndex  = parseBitCell(csvCell(cols, map.bit, QString()), entry);
+  entry.writable  = DataModel::ModbusMap::parseWritable(csvCell(cols, map.access, QString()));
+  entry.wordOrder = DataModel::ModbusMap::normalizeWordOrder(csvCell(cols, map.order, QString()));
+}
+
+/**
+ * @brief Returns the first present attribute among @p keys, or an empty string.
+ */
+[[nodiscard]] static QString firstXmlAttribute(const QXmlStreamAttributes& attrs,
+                                               std::initializer_list<const char*> keys)
+{
+  for (const char* key : keys)
+    if (attrs.hasAttribute(QLatin1String(key)))
+      return attrs.value(QLatin1String(key)).toString();
+
+  return QString();
+}
+
+/**
+ * @brief Reads the spec-0083 attributes of an XML <register> element.
+ */
+static void parseXmlExtras(const QXmlStreamAttributes& attrs,
+                           DataModel::ModbusMap::RegisterEntry& entry)
+{
+  const QString unitText = firstXmlAttribute(attrs, {"slave", "unit_id", "unitid", "device"});
+  entry.unitId =
+    DataModel::ModbusMap::clampUnitId(static_cast<int>(SerialStudio::toDouble(unitText)));
+  entry.bitIndex = parseBitCell(attrs.value("bit").toString(), entry);
+  entry.writable =
+    DataModel::ModbusMap::parseWritable(firstXmlAttribute(attrs, {"rw", "access", "writable"}));
+  entry.wordOrder = DataModel::ModbusMap::normalizeWordOrder(
+    firstXmlAttribute(attrs, {"order", "word_order", "byte_order"}));
+}
+
+/**
+ * @brief Returns the first present key among @p keys as a string (booleans as "rw"/""), or empty.
+ */
+[[nodiscard]] static QString firstJsonKey(const QJsonObject& obj,
+                                          std::initializer_list<const char*> keys)
+{
+  for (const char* key : keys) {
+    if (!obj.contains(QLatin1String(key)))
+      continue;
+
+    const auto value = obj.value(QLatin1String(key));
+    if (value.isBool())
+      return value.toBool() ? QStringLiteral("rw") : QString();
+
+    return value.isDouble() ? QString::number(SerialStudio::toDouble(value)) : value.toString();
+  }
+
+  return QString();
+}
+
+/**
+ * @brief Reads the spec-0083 keys of a JSON register object.
+ */
+static void parseJsonExtras(const QJsonObject& obj, DataModel::ModbusMap::RegisterEntry& entry)
+{
+  const QString unitText = firstJsonKey(obj, {"slave", "unit_id", "unitid", "device"});
+  entry.unitId =
+    DataModel::ModbusMap::clampUnitId(static_cast<int>(SerialStudio::toDouble(unitText)));
+  entry.bitIndex = parseBitCell(firstJsonKey(obj, {"bit"}), entry);
+  entry.writable =
+    DataModel::ModbusMap::parseWritable(firstJsonKey(obj, {"rw", "access", "writable"}));
+  entry.wordOrder = DataModel::ModbusMap::normalizeWordOrder(
+    firstJsonKey(obj, {"order", "word_order", "byte_order"}));
+}
+
+/**
  * @brief Maps an XML container tag name to a register-type index, or -1 if not a container.
  */
 [[nodiscard]] static int xmlTagToType(const QString& tag)
@@ -242,6 +380,7 @@ static void mapCsvHeaderColumn(const QString& col, int index, CsvColumnMap& map)
   if (entry.dataType == QLatin1String("bool") && entry.max == 65535)
     entry.max = 1;
 
+  parseCsvExtras(cols, map, entry);
   return true;
 }
 
@@ -289,6 +428,7 @@ static void mapCsvHeaderColumn(const QString& col, int index, CsvColumnMap& map)
   if (entry.dataType == QLatin1String("bool") && entry.max == 65535)
     entry.max = 1;
 
+  parseXmlExtras(attrs, entry);
   return true;
 }
 
@@ -327,10 +467,11 @@ static void mapCsvHeaderColumn(const QString& col, int index, CsvColumnMap& map)
     obj.value(QStringLiteral("units")).toString(obj.value(QStringLiteral("unit")).toString());
   entry.min    = SerialStudio::toDouble(obj.value(QStringLiteral("min")), 0.0);
   entry.max    = SerialStudio::toDouble(obj.value(QStringLiteral("max")),
-                                     entry.dataType == QLatin1String("bool") ? 1.0 : 65535.0);
+                                        entry.dataType == QLatin1String("bool") ? 1.0 : 65535.0);
   entry.scale  = SerialStudio::toDouble(obj.value(QStringLiteral("scale")), 1.0);
   entry.offset = SerialStudio::toDouble(obj.value(QStringLiteral("offset")), 0.0);
 
+  parseJsonExtras(obj, entry);
   return true;
 }
 
@@ -363,6 +504,46 @@ quint8 DataModel::ModbusMap::parseRegisterType(const QString& str)
   // clang-format on
 
   return 0;
+}
+
+/**
+ * @brief Canonicalises a word-order cell to "abcd" (returned as ""), "cdab", "badc" or "dcba".
+ *        The common aliases map onto them; anything else keeps the default with one warning.
+ */
+QString DataModel::ModbusMap::normalizeWordOrder(const QString& text)
+{
+  const auto s = text.trimmed().toLower();
+  if (s.isEmpty() || s == QLatin1String("abcd") || s == QLatin1String("big")
+      || s == QLatin1String("be") || s == QLatin1String("big-endian"))
+    return QString();
+
+  if (s == QLatin1String("cdab") || s == QLatin1String("swap") || s == QLatin1String("word_swap")
+      || s == QLatin1String("wordswap") || s == QLatin1String("word-swap"))
+    return QStringLiteral("cdab");
+
+  if (s == QLatin1String("badc") || s == QLatin1String("byte_swap")
+      || s == QLatin1String("byteswap") || s == QLatin1String("byte-swap"))
+    return QStringLiteral("badc");
+
+  if (s == QLatin1String("dcba") || s == QLatin1String("little") || s == QLatin1String("le")
+      || s == QLatin1String("little-endian"))
+    return QStringLiteral("dcba");
+
+  qWarning() << "[ModbusMapImporter] Unknown word order" << text << "- using abcd";
+  return QString();
+}
+
+/**
+ * @brief Returns whether an access cell marks the register writable: w, rw, write, read/write,
+ *        true, yes or 1.
+ */
+bool DataModel::ModbusMap::parseWritable(const QString& text)
+{
+  const auto s = text.trimmed().toLower();
+  return s == QLatin1String("w") || s == QLatin1String("rw") || s == QLatin1String("wr")
+      || s == QLatin1String("write") || s == QLatin1String("read/write")
+      || s == QLatin1String("readwrite") || s == QLatin1String("true") || s == QLatin1String("yes")
+      || s == QLatin1String("1");
 }
 
 /**

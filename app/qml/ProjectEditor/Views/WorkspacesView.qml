@@ -40,6 +40,7 @@ Widgets.Pane {
   readonly property bool rtl: Cpp_Misc_Translator.rtl
 
   property var summary: []
+  property var profileFolderOptions: []
   readonly property var filteredSummary: {
     const q = searchBand.query.trim()
     if (q.length === 0)
@@ -51,6 +52,7 @@ Widgets.Pane {
 
   function refresh() {
     summary = Cpp_JSON_ProjectEditor.workspaceFolderContents(-1)
+    profileFolderOptions = Cpp_JSON_ProjectModel.workspaceProfileFolderOptions()
     unresolvedCount = Cpp_JSON_ProjectEditor.unresolvedWorkspaceWidgetCount()
   }
 
@@ -59,8 +61,9 @@ Widgets.Pane {
 
   Connections {
     target: Cpp_JSON_ProjectModel
-    function onEditorWorkspacesChanged() { Qt.callLater(root.refresh) }
-    function onGroupsChanged()           { Qt.callLater(root.refresh) }
+    function onEditorWorkspacesChanged()  { Qt.callLater(root.refresh) }
+    function onGroupsChanged()            { Qt.callLater(root.refresh) }
+    function onWorkspaceProfilesChanged() { Qt.callLater(root.refresh) }
   }
 
   Page {
@@ -195,6 +198,129 @@ Widgets.Pane {
                      && root.unresolvedCount > 0
             onClicked: Cpp_JSON_ProjectEditor.confirmCleanupUnresolvedWorkspaceWidgets()
             icon.source: Cpp_Misc_IconRegistry.icon("editor", "clear", 24)
+          }
+        }
+      }
+
+      //
+      // Workspace profiles (spec 0083): named folder subsets an operator picks at load
+      //
+      Rectangle {
+        id: profilesBar
+
+        Layout.fillWidth: true
+        visible: Cpp_JSON_ProjectModel.customizeWorkspaces
+        height: visible ? profilesLayout.implicitHeight + 16 : 0
+        color: Cpp_ThemeManager.colors["groupbox_background"]
+
+        Rectangle {
+          height: 1
+          width: parent.width
+          anchors.bottom: parent.bottom
+          color: Cpp_ThemeManager.colors["groupbox_border"]
+        }
+
+        ColumnLayout {
+          id: profilesLayout
+
+          spacing: 4
+          anchors {
+            margins: 8
+            left: parent.left
+            right: parent.right
+            verticalCenter: parent.verticalCenter
+          }
+
+          RowLayout {
+            spacing: 8
+            Layout.fillWidth: true
+
+            Label {
+              text: qsTr("Profiles")
+              font: Cpp_Misc_CommonFonts.boldUiFont
+              color: Cpp_ThemeManager.colors["text"]
+              Layout.alignment: Qt.AlignVCenter
+            }
+
+            Label {
+              opacity: 0.6
+              Layout.fillWidth: true
+              elide: Text.ElideRight
+              font: Cpp_Misc_CommonFonts.uiFont
+              color: Cpp_ThemeManager.colors["text"]
+              Layout.alignment: Qt.AlignVCenter
+              text: qsTr("A profile lists the folders an operator sees; a project with two "
+                         + "or more asks which one to show when it opens.")
+            }
+
+            Widgets.ToolbarButton {
+              iconSize: 24
+              toolbarButton: false
+              text: qsTr("Add Profile")
+              Layout.alignment: Qt.AlignVCenter
+              ToolTip.text: qsTr("Add a workspace profile")
+              onClicked: Cpp_JSON_ProjectModel.promptAddWorkspaceProfile()
+              icon.source: Cpp_Misc_IconRegistry.icon("editor", "add-folder", 24)
+            }
+          }
+
+          Repeater {
+            model: Cpp_JSON_ProjectModel.workspaceProfiles
+
+            delegate: RowLayout {
+              id: profileRow
+
+              required property var modelData
+
+              spacing: 8
+              Layout.fillWidth: true
+
+              Label {
+                text: profileRow.modelData.title
+                elide: Text.ElideRight
+                font: Cpp_Misc_CommonFonts.uiFont
+                color: Cpp_ThemeManager.colors["text"]
+                Layout.preferredWidth: 180
+                Layout.alignment: Qt.AlignVCenter
+              }
+
+              Flow {
+                spacing: 4
+                Layout.fillWidth: true
+
+                Repeater {
+                  model: root.profileFolderOptions
+
+                  delegate: CheckBox {
+                    required property var modelData
+
+                    text: modelData.title
+                    font: Cpp_Misc_CommonFonts.uiFont
+                    checked: profileRow.modelData.folderIds.indexOf(modelData.id) >= 0
+                    onToggled: Cpp_JSON_ProjectModel.setWorkspaceProfileFolder(
+                                 profileRow.modelData.id, modelData.id, checked)
+                  }
+                }
+              }
+
+              Widgets.ToolbarButton {
+                iconSize: 24
+                toolbarButton: false
+                text: qsTr("Rename")
+                Layout.alignment: Qt.AlignVCenter
+                onClicked: Cpp_JSON_ProjectModel.promptRenameWorkspaceProfile(profileRow.modelData.id)
+                icon.source: Cpp_Misc_IconRegistry.icon("editor", "customize", 24)
+              }
+
+              Widgets.ToolbarButton {
+                iconSize: 24
+                toolbarButton: false
+                text: qsTr("Delete")
+                Layout.alignment: Qt.AlignVCenter
+                onClicked: Cpp_JSON_ProjectModel.confirmDeleteWorkspaceProfile(profileRow.modelData.id)
+                icon.source: Cpp_Misc_IconRegistry.icon("editor", "delete", 24)
+              }
+            }
           }
         }
       }

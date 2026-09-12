@@ -318,10 +318,13 @@ static void inspectDatasetReferences(const DataModel::Dataset& dataset,
  */
 static void inspectWorkspaceReferences(const DataModel::Workspace& workspace,
                                        const QSet<int>& groupIds,
+                                       const QSet<int>& datasetIds,
                                        QList<Finding>& out)
 {
   for (const auto& ref : workspace.widgetRefs) {
-    if (ref.groupUniqueId < 0 || groupIds.contains(ref.groupUniqueId))
+    const bool groupAlive   = ref.groupUniqueId < 0 || groupIds.contains(ref.groupUniqueId);
+    const bool datasetAlive = ref.datasetUniqueId < 0 || datasetIds.contains(ref.datasetUniqueId);
+    if (groupAlive && datasetAlive)
       continue;
 
     out.append(makeFinding(Misc::ProblemCenter::Warning,
@@ -455,7 +458,7 @@ static void checkDanglingReferences(QList<Finding>& out)
       inspectDatasetReferences(dataset, datasetIds, out);
 
   for (const auto& workspace : project.editorWorkspaces())
-    inspectWorkspaceReferences(workspace, groupIds, out);
+    inspectWorkspaceReferences(workspace, groupIds, datasetIds, out);
 
   inspectSourceReferences(sourceIds, out);
   inspectStateBindings(out);
