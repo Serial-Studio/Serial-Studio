@@ -29,26 +29,18 @@ import "../../Widgets" as Widgets
 Widgets.Pane {
   id: root
 
-  focus: true
-  title: root.lua ? qsTr("Lua Library") : qsTr("JavaScript Library")
-
-  icon: Cpp_JSON_ProjectEditor.selectedIcon
-  readonly property bool lua: Cpp_JSON_ProjectEditor.currentView === ProjectEditor.TransformLibraryView
+  implicitWidth: 0
+  implicitHeight: 0
 
   actionComponent: EditorNavActions {}
 
-  //
-  // Right-click context menu
-  //
-  CodeEditorMenu {
-    id: contextMenu
-
-    codeEditor: editor
-  }
+  readonly property bool rtl: Cpp_Misc_Translator.rtl
 
   //
-  // User interface elements
+  // Rows of {icon, title, summary, open()} in tree order, one per project-level page
   //
+  property var entries: []
+
   Page {
     anchors.fill: parent
     palette.mid: Cpp_ThemeManager.colors["mid"]
@@ -74,55 +66,83 @@ Widgets.Pane {
     palette.highlightedText: Cpp_ThemeManager.colors["highlighted_text"]
 
     ColumnLayout {
-      spacing: -1
+      spacing: 0
       anchors.fill: parent
       anchors.topMargin: -16
       anchors.leftMargin: -10
       anchors.rightMargin: -10
       anchors.bottomMargin: -9
 
-      //
-      // Editor toolbar
-      //
-      CodeEditorToolbar {
-        codeEditor: editor
-        helpPage: "Dataset-Transforms"
-        resetTooltip: qsTr("Reset to the commented starter")
-        helpTooltip: qsTr("Open the dataset transforms documentation")
-        validateTooltip: qsTr("Load the library in a sandbox and report the first error")
-        importTooltip: root.lua ? qsTr("Import a Lua file") : qsTr("Import a JavaScript file")
-      }
+      ListView {
+        id: list
 
-      Rectangle {
-        z: 2
-        implicitHeight: 1
-        Layout.fillWidth: true
-        color: Cpp_ThemeManager.colors["groupbox_border"]
-      }
-
-      //
-      // Code editor
-      //
-      TransformLibraryEditor {
-        id: editor
-
-        lua: root.lua
-
+        clip: true
+        spacing: 0
+        model: root.entries
         Layout.fillWidth: true
         Layout.fillHeight: true
+        boundsBehavior: Flickable.StopAtBounds
 
-        MouseArea {
-          anchors.fill: parent
-          cursorShape: Qt.IBeamCursor
-          propagateComposedEvents: true
-          acceptedButtons: Qt.RightButton
+        delegate: Widgets.ProjectTableRow {
+          id: entryRow
 
-          onClicked: (mouse) => {
-                       if (mouse.button === Qt.RightButton) {
-                         contextMenu.popup()
-                         mouse.accepted = true
-                       }
-                     }
+          rowHeight: 44
+
+          MouseArea {
+            anchors.fill: parent
+            cursorShape: Qt.PointingHandCursor
+            onClicked: modelData.open()
+          }
+
+          RowLayout {
+            spacing: 0
+            anchors.fill: parent
+            LayoutMirroring.enabled: root.rtl
+            LayoutMirroring.childrenInherit: true
+
+            Item {
+              Layout.fillHeight: true
+              Layout.preferredWidth: 220
+
+              RowLayout {
+                spacing: 6
+                anchors.fill: parent
+                anchors.leftMargin: 8
+
+                Image {
+                  source: modelData.icon
+                  sourceSize: Qt.size(16, 16)
+                  Layout.alignment: Qt.AlignVCenter
+                }
+
+                Label {
+                  text: modelData.title
+                  elide: Text.ElideRight
+                  Layout.fillWidth: true
+                  color: entryRow.textColor
+                  Layout.alignment: Qt.AlignVCenter
+                  font: Cpp_Misc_CommonFonts.boldUiFont
+                }
+              }
+            }
+
+            Rectangle {
+              implicitWidth: 1
+              Layout.fillHeight: true
+              color: entryRow.separatorColor
+            }
+
+            Label {
+              Layout.leftMargin: 8
+              Layout.rightMargin: 8
+              Layout.fillWidth: true
+              text: modelData.summary
+              wrapMode: Text.WordWrap
+              color: entryRow.textColor
+              Layout.alignment: Qt.AlignVCenter
+              font: Cpp_Misc_CommonFonts.uiFont
+            }
+          }
         }
       }
     }

@@ -37,13 +37,6 @@ extern "C" {
 namespace DataModel {
 
 //--------------------------------------------------------------------------------------------------
-// Constants
-//--------------------------------------------------------------------------------------------------
-
-static constexpr qsizetype kNumberTextCapacity = 32;
-static constexpr qsizetype kBytesPerCellGuess  = 16;
-
-//--------------------------------------------------------------------------------------------------
 // Element conversion
 //--------------------------------------------------------------------------------------------------
 
@@ -59,10 +52,11 @@ void LuaCellCollector::appendTop(lua_State* L, ScriptCellRows& rows)
 
   const int type = lua_type(L, -1);
   if (type == LUA_TNUMBER) {
-    char text[kNumberTextCapacity];
+    char text[ScriptCellRows::kNumberTextCapacity];
     const double value  = lua_tonumber(L, -1);
     const bool integral = lua_isinteger(L, -1) != 0;
-    const qsizetype len = formatLuaNumber(value, integral, text, kNumberTextCapacity);
+    const qsizetype len =
+      formatLuaNumber(value, integral, text, ScriptCellRows::kNumberTextCapacity);
     SS_ASSERT_LOG(len > 0);
     rows.appendNumber(value, text, len);
     return;
@@ -124,7 +118,7 @@ bool LuaCellCollector::collect(lua_State* L, ScriptCellRows& rows, qsizetype max
   if (!lua_istable(L, -1)) {
     const int type = lua_type(L, -1);
     if (type == LUA_TSTRING || type == LUA_TNUMBER) {
-      rows.reserve(1, kNumberTextCapacity);
+      rows.reserve(1, ScriptCellRows::kNumberTextCapacity);
       rows.beginRow();
       appendTop(L, rows);
     }
@@ -140,7 +134,7 @@ bool LuaCellCollector::collect(lua_State* L, ScriptCellRows& rows, qsizetype max
   }
 
   const auto count = qMin(len, maxElements);
-  rows.reserve(count, count * kBytesPerCellGuess);
+  rows.reserve(count, count * ScriptCellRows::kBytesPerCellGuess);
   lua_rawgeti(L, -1, 1);
   const bool nested = lua_istable(L, -1);
   lua_pop(L, 1);

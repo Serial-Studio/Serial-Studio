@@ -380,9 +380,11 @@ set(QML_SOURCES
   qml/ProjectEditor/Views/SourceView.qml
   qml/ProjectEditor/Views/SourceFrameParserView.qml
   qml/ProjectEditor/Views/CodeEditorMenu.qml
+  qml/ProjectEditor/Views/CodeEditorToolbar.qml
   qml/ProjectEditor/Views/ControlScriptView.qml
   qml/ProjectEditor/Views/TransformLibraryView.qml
   qml/ProjectEditor/Views/ProjectScriptsView.qml
+  qml/ProjectEditor/Views/EntryListView.qml
   qml/ProjectEditor/Views/TableDelegate.qml
   qml/ProjectEditor/Views/EditorSearchBand.qml
   qml/ProjectEditor/Views/WorkspaceFolderView.qml

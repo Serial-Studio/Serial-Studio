@@ -57,7 +57,9 @@ struct ScriptCell {
  */
 class ScriptCellRows {
 public:
-  static constexpr qsizetype kMaxCellsPerResult = 10000;
+  static constexpr qsizetype kMaxCellsPerResult  = 10000;
+  static constexpr qsizetype kNumberTextCapacity = 32;
+  static constexpr qsizetype kBytesPerCellGuess  = 16;
 
   ScriptCellRows();
   ScriptCellRows(ScriptCellRows&&)                 = delete;

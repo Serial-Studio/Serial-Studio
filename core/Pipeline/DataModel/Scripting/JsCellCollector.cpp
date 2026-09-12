@@ -33,9 +33,7 @@ namespace DataModel {
 // Constants
 //--------------------------------------------------------------------------------------------------
 
-static constexpr qsizetype kNumberTextCapacity = 32;
-static constexpr qsizetype kBytesPerCellGuess  = 16;
-static const QString kLengthProperty           = QStringLiteral("length");
+static const QString kLengthProperty = QStringLiteral("length");
 
 //--------------------------------------------------------------------------------------------------
 // Element conversion
@@ -49,9 +47,9 @@ static const QString kLengthProperty           = QStringLiteral("length");
 void JsCellCollector::appendValue(const QJSValue& value, ScriptCellRows& rows)
 {
   if (value.isNumber()) {
-    char text[kNumberTextCapacity];
+    char text[ScriptCellRows::kNumberTextCapacity];
     const double number = value.toNumber();
-    const qsizetype len = formatJsNumber(number, text, kNumberTextCapacity);
+    const qsizetype len = formatJsNumber(number, text, ScriptCellRows::kNumberTextCapacity);
     SS_ASSERT_LOG(len > 0);
     rows.appendNumber(number, text, len);
     return;
@@ -120,7 +118,7 @@ bool JsCellCollector::collect(const QJSValue& result, ScriptCellRows& rows, qsiz
   if (count == 0)
     return true;
 
-  rows.reserve(count, count * kBytesPerCellGuess);
+  rows.reserve(count, count * ScriptCellRows::kBytesPerCellGuess);
   const bool nested = result.property(0u).isArray();
   if (!nested) {
     if (appendArrayRow(result, count, rows, true))
