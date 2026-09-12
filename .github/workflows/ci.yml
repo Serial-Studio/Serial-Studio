@@ -2370,10 +2370,12 @@ jobs:
         useLocalCache: true
 
     #
-    # link=1, not the ASan leg's 2: with the whole unit tier linking one instrumented executable
-    # per suite, two concurrent lld links beside four TSan compiles exceeded the runner's memory
-    # and the VM was shut down mid-link (2026-09-04, at test executable 1457 of 1482). Links are
-    # a small share of this build, so serializing them costs minutes, not the job
+    # link=1, not the ASan leg's 2: the whole unit tier links one instrumented executable per
+    # suite, and serializing those links costs minutes, not the job. It was introduced for the
+    # 2026-09-04 VM shutdown "mid-link" (test executable 1457 of 1482), but ninja prints an edge
+    # when it FINISHES, and the runs of 2026-09-11/12 died the same way with every link done: the
+    # edge still in flight each time was the TSan compile of lib/open62541/open62541.c, which
+    # lib/open62541/CMakeLists.txt now leaves uninstrumented under ENABLE_TSAN
     #
     - name: '🚧 Configure TSan tier (Pro)'
       env:

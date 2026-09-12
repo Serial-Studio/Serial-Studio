@@ -30,6 +30,7 @@
 
 #include "Core/DataModel/Frame.h"
 #include "DataModel/FrameBuilder/BlockStager.h"
+#include "sanitizer_features.h"
 
 // Block staging is the frame lane's producer: cap and epoch flushes, the mask split, the
 // disconnect/pause tail, the structureGeneration stamp and the pool's use_count()==1 free probe
@@ -46,6 +47,8 @@ bool g_countAllocations       = false;
 std::size_t g_allocationCount = 0;
 
 }  // namespace
+
+#if !SS_TSAN_ACTIVE
 
 /**
  * @brief Counting global allocator for std container traffic (vector, map, shared_ptr nodes).
@@ -73,6 +76,8 @@ void operator delete(void* p, std::size_t) noexcept
 {
   std::free(p);
 }
+
+#endif
 
 namespace {
 
@@ -556,6 +561,9 @@ void TstFrameBuilderStaging::rawPresenceFollowsTheTransformRule()
  */
 void TstFrameBuilderStaging::steadyStateFlushesDoNotAllocate()
 {
+  if (SS_TSAN_ACTIVE)
+    QSKIP("the counting operator new is not linked under ThreadSanitizer");
+
   constexpr int kBlocks = 20;
   StubStagerHost host;
   host.retainBlocks(false);

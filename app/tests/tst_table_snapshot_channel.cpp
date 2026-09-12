@@ -28,11 +28,14 @@
 
 #include "DataModel/FrameBuilder/TableSnapshotChannel.h"
 #include "IO/PipelineHost.h"
+#include "sanitizer_features.h"
 
 // The dataset the fixture store mirrors; the value is addressed by uniqueId, never by index
 static constexpr int kDatasetId    = 7;
 static constexpr int kSteadyWrites = 1000;
 static std::atomic<long> g_allocations{0};
+
+#if !SS_TSAN_ACTIVE
 
 /**
  * @brief Counting replacement for the TU's global operator new, so the spec-0086 slot-write case
@@ -62,6 +65,8 @@ void operator delete(void* p, std::size_t) noexcept
 {
   std::free(p);
 }
+
+#endif
 
 /**
  * @brief The two out-of-line statics DataTable.cpp reaches through readTableView/writeTableStore.
@@ -275,6 +280,9 @@ void TstTableSnapshotChannel::slotWritesReachTheIdPath()
  */
 void TstTableSnapshotChannel::steadySlotWritesDoNotAllocate()
 {
+  if (SS_TSAN_ACTIVE)
+    QSKIP("the counting operator new is not linked under ThreadSanitizer");
+
   DataModel::DataTableStore store;
   primeStore(store);
   const auto table_slots = store.datasetSlots(kDatasetId);

@@ -293,10 +293,17 @@ updated: 2026-09-12
 
 | Measurement | Before | After |
 |-------------|--------|-------|
-| lua(numeric) FPS / alloc per frame | 1,026,532 / (0084) | |
-| js(numeric) FPS / alloc per frame | 696,859 / (0084) | |
-| lua(mixed), js(mixed) FPS | 736,939 / 543,900 | |
-| Native rows | unchanged | |
+| lua(numeric) FPS / alloc per frame | 1,000,652 (PGO, 2026-09-12 before) | 1,680,039 (+68%) / alloc column pending stats build |
+| js(numeric) FPS / alloc per frame | 706,278 (PGO, 2026-09-12 before) | 653,410 (-7.5%) / pending |
+| lua(mixed), js(mixed) FPS | 739,565 / 548,900 | 1,244,559 (+68%) / 501,178 (-8.7%) |
+| Native rows | 3,317,222 numeric / 2,519,705 mixed | 4,653,499 (+40%) / 3,558,150 (+41%), includes 0085 |
+| Peak RSS | 380.6 MiB | 373.7 MiB |
+
+Same PGO-use commercial binary before and after specs 0084-0086 on macOS arm64 (clang 21); the
+data-pipeline row is flat (39.6M vs 39.9M), so the deltas are parse-lane deltas. The JS lane lost
+8%: the benchmark parser splits the frame into strings, so every cell now pays a UTF-16 to UTF-8
+encode into the scratch plus the widen back in `assign_utf8_in_place`, work the list path never did
+(it handed the QString through). Open item, see plan.md "Review fixes".
 
 ## Definition of Done
 

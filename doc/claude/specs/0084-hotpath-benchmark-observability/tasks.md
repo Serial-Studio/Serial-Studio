@@ -222,7 +222,7 @@ updated: 2026-09-11
 | Measurement | Value |
 |-------------|-------|
 | Native numeric alloc/frame, current tree (stats build) | |
-| Native numeric FPS, PGO-use build, before / after | |
+| Native numeric FPS, PGO-use build, before / after | 3,317,222 / 4,653,499 (2026-09-12, with 0085+0086 in the same binary) |
 | `--benchmark-channels 256` Native lane label | |
 | Link-step time delta on macOS arm64 CI | |
 

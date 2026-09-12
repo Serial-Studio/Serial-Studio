@@ -44,6 +44,7 @@ extern "C" {
 #include "DataModel/Scripting/LuaCompatJIT.h"
 #include "DataModel/Scripting/ScriptCells.h"
 #include "DataModel/Scripting/TableApiScan.h"
+#include "sanitizer_features.h"
 
 // Spec 0086: the typed cell lane against the list path it replaces. The collectors are driven on a
 // bare lua_State / QJSEngine on purpose: the engines' link sets pull the whole pipeline, and the
@@ -59,6 +60,8 @@ namespace {
 std::atomic<long> g_allocations{0};
 
 }  // namespace
+
+#if !SS_TSAN_ACTIVE
 
 /**
  * @brief Counting replacement for the TU's global operator new, armed by reading the counter
@@ -88,6 +91,8 @@ void operator delete(void* p, std::size_t) noexcept
 {
   std::free(p);
 }
+
+#endif
 
 //--------------------------------------------------------------------------------------------------
 // Harness
@@ -375,6 +380,9 @@ void TstScriptCells::luaMixedShapesFallBack()
  */
 void TstScriptCells::luaSteadyShapeDoesNotAllocate()
 {
+  if (SS_TSAN_ACTIVE)
+    QSKIP("the counting operator new is not linked under ThreadSanitizer");
+
   LuaState lua;
   DataModel::ScriptCellRows rows;
   const char* expr = "{1.25, 2, 3.5, 40000, 5e-3, 6, 7.75, 8}";

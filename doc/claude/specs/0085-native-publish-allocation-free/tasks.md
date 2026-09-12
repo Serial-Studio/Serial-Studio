@@ -165,7 +165,7 @@ updated: 2026-09-11
 | Measurement | Before | After |
 |-------------|--------|-------|
 | native(numeric) alloc/frame (stats build) | | |
-| native(numeric) FPS | 3,283,981 (2026-09-11, M2 Pro, shipped 4.1.0) | |
+| native(numeric) FPS | 3,283,981 (2026-09-11, M2 Pro, shipped 4.1.0); 3,317,222 (PGO before, 2026-09-12) | 4,653,499 (PGO after 0084-0086, +40%); mixed 2,519,705 -> 3,558,150 |
 | `datasets+publish` ns/frame | 265 | |
 | MDF4 transform-free recording channel-by-channel | identical | |
 

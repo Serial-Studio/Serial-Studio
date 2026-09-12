@@ -45,6 +45,7 @@
  */
 DataModel::TransformLibraryEditor::TransformLibraryEditor(QQuickItem* parent)
   : EmbeddedCodeEditorItem(EmbeddedCodeEditor::RenderGate::WindowVisible, parent)
+  , m_lua(true)
   , m_readingCode(false)
   , m_initialLoad(true)
   , m_projectModel(DataModel::pipelineModules().projectModel)

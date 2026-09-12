@@ -79,6 +79,20 @@ if(DEBUG_SANITIZER)
 endif()
 
 #
+# ThreadSanitizer never instruments the amalgamation. It is one 327k-line translation unit, and
+# under -fsanitize=thread -O1 its compile alone exhausted the CI runner's memory: both TSan runs of
+# 2026-09-11/12 died with "the runner has received a shutdown signal" while open62541.c.o was the
+# only edge still in flight, every other object built and the three OPC UA suites waiting on this
+# archive (the 2026-09-04 death attributed to concurrent links was the same compile). The tier
+# exists to prove the lock-free first-party hotpath; the OPC UA suites drive the stack from one
+# thread, so an uninstrumented open62541 costs them nothing, and TSan still intercepts every
+# pthread call it makes. The ASan/UBSan tier keeps instrumenting it: at -O0 the same compile fits.
+#
+if(ENABLE_TSAN)
+  ss_exclude_from_sanitizers(open62541)
+endif()
+
+#
 # open62541.h defines _XOPEN_SOURCE 600 before the first POSIX header. On Apple platforms that
 # makes <sys/socket.h> and friends hide every BSD extension the stack uses (SO_REUSEPORT,
 # INADDR_LOOPBACK, struct ip_mreq, NI_MAXHOST, DT_REG), so the amalgamation does not compile.
