@@ -236,8 +236,6 @@ static int runApplication(int argc, char** argv, bool headless, const QString& s
  */
 int main(int argc, char** argv)
 {
-  qputenv("QT_FATAL_WARNINGS", "1");
-
 #if defined(SS_MIMALLOC_ACTIVE)
   mi_option_set(mi_option_purge_delay, 250);
   mi_option_set(mi_option_page_reclaim_on_free, 1);
