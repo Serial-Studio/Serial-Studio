@@ -314,7 +314,12 @@ bool HotpathReport::print(const HotpathBenchmark::Result* results,
   QFile file(outputFile);
   const bool fileOpen  = !outputFile.isEmpty() && file.open(QIODevice::WriteOnly | QIODevice::Text);
   const auto printData = [&](const char* fmt, auto... args) {
-    const QByteArray line = QString::asprintf(fmt, args...).toUtf8();
+    QByteArray line;
+    if constexpr (sizeof...(args) == 0)
+      line = QByteArray(fmt);
+    else
+      line = QString::asprintf(fmt, args...).toUtf8();
+
     std::fputs(line.constData(), stdout);
     if (fileOpen)
       file.write(line);

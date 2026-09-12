@@ -30,6 +30,8 @@
 #include "Core/SSAssert.h"
 #include "Core/TimerEvents.h"
 #include "Core/Translator.h"
+#include "DataModel/FrameBuilder.h"
+#include "DataModel/PipelineModules.h"
 #include "DataModel/ProjectModel.h"
 #include "DataModel/Scripting/CFrameParser.h"
 #include "DataModel/Scripting/IScriptEngine.h"
@@ -37,6 +39,7 @@
 #include "DataModel/Scripting/LuaScriptEngine.h"
 #include "DataModel/Scripting/NativeTemplates/NativeTemplate.h"
 #include "DataModel/Scripting/ScriptCells.h"
+#include "DataModel/Scripting/TableApiScan.h"
 #include "IO/PipelineHost.h"
 
 DataModel::FrameParser* DataModel::FrameParser::s_instance = nullptr;
@@ -585,6 +588,21 @@ qsizetype DataModel::FrameParser::parseSpansUtf8(const QByteArray& frame,
 //--------------------------------------------------------------------------------------------------
 
 /**
+ * @brief Re-initializes an empty table store before a script that names the table API loads: a
+ *        disconnect clears the store, and a handle resolved at load time against an empty store
+ *        trips its assertion. An initialized store is left alone (a rebuild stales other handles).
+ */
+static void prepareTableStoreFor(const QString& script)
+{
+  if (!DataModel::TableApiScan::referencesTableApi(script))
+    return;
+
+  auto& frameBuilder = DataModel::pipelineModules().frameBuilder;
+  if (!frameBuilder.tableStore().isInitialized())
+    frameBuilder.refreshTableStoreFromProjectModel();
+}
+
+/**
  * @brief Validates and loads a frame parser script into the source's engine.
  */
 bool DataModel::FrameParser::loadScript(int sourceId, const QString& script, bool showMessageBoxes)
@@ -604,6 +622,8 @@ bool DataModel::FrameParser::loadScript(int sourceId, const QString& script, boo
     m_engines.erase(it);
     refreshEngineCaches();
   }
+
+  prepareTableStoreFor(script);
 
   auto& engine      = engineForSource(sourceId);
   const bool loaded = engine.loadScript(script, sourceId, showMessageBoxes);

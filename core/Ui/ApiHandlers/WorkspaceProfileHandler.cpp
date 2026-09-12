@@ -42,7 +42,7 @@
  * @brief Returns true when the project model is in ProjectFile mode, the only mode that owns a
  *        document a profile can belong to.
  */
-[[nodiscard]] static bool inProjectFileMode()
+[[nodiscard]] static bool hasProjectDocument()
 {
   auto& appState = DataModel::pipelineModules().appState;
   return appState.operationMode() == SerialStudio::ProjectFile;
@@ -174,7 +174,7 @@ API::CommandResponse API::Handlers::WorkspaceProfileHandler::profileList(const Q
 API::CommandResponse API::Handlers::WorkspaceProfileHandler::profileAdd(const QString& id,
                                                                         const QJsonObject& params)
 {
-  if (!inProjectFileMode())
+  if (!hasProjectDocument())
     return CommandResponse::makeError(
       id, ErrorCode::InvalidParam, QStringLiteral("Workspace mutations require ProjectFile mode"));
 
@@ -199,7 +199,7 @@ API::CommandResponse API::Handlers::WorkspaceProfileHandler::profileAdd(const QS
 API::CommandResponse API::Handlers::WorkspaceProfileHandler::profileUpdate(
   const QString& id, const QJsonObject& params)
 {
-  if (!inProjectFileMode())
+  if (!hasProjectDocument())
     return CommandResponse::makeError(
       id, ErrorCode::InvalidParam, QStringLiteral("Workspace mutations require ProjectFile mode"));
 
@@ -236,7 +236,7 @@ API::CommandResponse API::Handlers::WorkspaceProfileHandler::profileUpdate(
 API::CommandResponse API::Handlers::WorkspaceProfileHandler::profileRemove(
   const QString& id, const QJsonObject& params)
 {
-  if (!inProjectFileMode())
+  if (!hasProjectDocument())
     return CommandResponse::makeError(
       id, ErrorCode::InvalidParam, QStringLiteral("Workspace mutations require ProjectFile mode"));
 
