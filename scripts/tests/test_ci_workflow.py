@@ -419,18 +419,61 @@ CORE_LIBRARIES = (
 )
 
 
+def _core_library_links():
+    """The inter-library edges declared under core/, as {library: {libraries it links}}.
+
+    Read from the CMake sources rather than from the workflow text: which targets a job
+    spells out is a packaging choice, while what the job has to compile is the link graph.
+    """
+    links = {name: set() for name in CORE_LIBRARIES}
+    for cmake in sorted((REPO / "core").glob("*/CMakeLists.txt")):
+        text = cmake.read_text(encoding="utf-8")
+        for block in re.findall(r"target_link_libraries\((.*?)\)", text, re.S):
+            owner = re.match(r"\s*(SerialStudio\w+)", block)
+            if not owner or owner.group(1) not in links:
+                continue
+            for dep in re.findall(r"SerialStudio::(\w+)", block):
+                links[owner.group(1)].add("SerialStudio" + dep)
+    return links
+
+
+def _linked_closure(roots):
+    """Every core library a build of `roots` has to compile, roots included."""
+    links = _core_library_links()
+    seen, pending = set(), list(roots)
+    while pending:
+        target = pending.pop()
+        if target in seen:
+            continue
+        seen.add(target)
+        pending.extend(links.get(target, ()))
+    return seen
+
+
 def test_the_core_libraries_build_alone_in_dependency_order(ci):
-    """AC2: one job configures without the application and builds the seven archives in order."""
+    """AC2: one job configures without the application and compiles all seven archives.
+
+    The job names one target and lets CMake pull its dependencies, so asserting on the
+    spelled-out target list pins the workflow's shape instead of the build graph: it fails
+    when a step is collapsed (2026-09-12) and passes when a library drops out of the graph
+    entirely. What AC2 needs is that nothing but core/ configures and that every one of the
+    seven archives is reachable from what the job builds.
+    """
     assert "build-core-libraries" in ci
     runs = [str(step.get("run", "")) for step in _steps(ci["build-core-libraries"])]
     configure = [run for run in runs if "cmake -G Ninja -B build/core-libs" in run]
     assert configure and "-DBUILD_GPL3=ON" in configure[0]
-    targets = []
-    for run in runs:
-        match = re.search(r"--target (SerialStudio\w+)", run)
-        if match:
-            targets.append(match.group(1))
-    assert tuple(targets) == CORE_LIBRARIES
+
+    targets = set(re.findall(r"--target (\S+)", " ".join(runs)))
+    assert targets, "the job builds nothing"
+    stray = targets - set(CORE_LIBRARIES)
+    assert (
+        not stray
+    ), f"the library tier must build core/ targets only, got {sorted(stray)}"
+    missing = set(CORE_LIBRARIES) - _linked_closure(targets)
+    assert (
+        not missing
+    ), f"these libraries never get compiled by the job: {sorted(missing)}"
 
 
 def test_the_library_job_does_not_gate_publication(ci):

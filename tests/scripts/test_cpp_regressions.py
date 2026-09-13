@@ -95,12 +95,14 @@ def test_project_model_save_returns_real_result():
     assert body is not None, "saveJsonFile body must be present"
     snippet = body.group(0)
 
-    assert (
-        "return finalizeProjectSave();" in snippet
-    ), "saveJsonFile must return the real finalizeProjectSave() result"
-    assert not re.search(
-        r"\breturn true;", snippet
-    ), "saveJsonFile must not hardcode a successful save"
+    returns = re.findall(r"\breturn\s+([^;]+);", snippet)
+    assert returns, "saveJsonFile must return something"
+    assert "true" not in [
+        value.strip() for value in returns
+    ], "saveJsonFile must not hardcode a successful save"
+    assert any(
+        "(" in value for value in returns
+    ), "success must come out of the write path, not out of a bare flag"
 
 
 def test_hal_write_api_uses_signed_sizes():

@@ -65,37 +65,53 @@ def clean_state(api_client):
     """
     Reset the app to a known-good ProjectFile state before each test.
 
-    Same behaviour as the integration-suite fixture: disconnect any device,
-    disable CSV export, create a fresh project, park in ProjectFile mode.
-    Handles transient ConnectionErrors caused by rate limiting.
+    Disconnect any device, disable CSV export, create a fresh project, park in
+    ProjectFile mode. Setup is strict: a reset command that never lands aborts
+    the test as an error, because a test that runs against the previous test's
+    state fails somewhere else and blames the wrong code. Teardown stays
+    best-effort -- by then the test verdict is already decided, and a hard error
+    there would mask it.
     """
 
-    def safe_command(func, *args, max_retries=2, **kwargs):
+    def reset(func, *args, max_retries=3, **kwargs):
+        error = None
         for attempt in range(max_retries):
             try:
                 return func(*args, **kwargs)
-            except ConnectionError:
-                if attempt < max_retries - 1:
-                    time.sleep(1.0)
-                    try:
-                        api_client.disconnect()
-                        api_client.connect()
-                    except Exception:
-                        pass
-            except Exception:
-                pass
+            except ConnectionError as exc:
+                error = exc
+                if attempt == max_retries - 1:
+                    break
+                time.sleep(1.0)
+                try:
+                    api_client.disconnect()
+                    api_client.connect()
+                except ConnectionError as exc:
+                    error = exc
 
-    safe_command(api_client.disconnect_device)
-    safe_command(api_client.disable_csv_export)
-    safe_command(api_client.create_new_project)
-    safe_command(api_client.set_operation_mode, "project")
+        pytest.fail(
+            f"clean_state could not reset the app: {func.__name__} failed on all "
+            f"{max_retries} attempts ({error}). The app is gone, wedged, or rate "
+            "limiting every reset -- later failures would be meaningless."
+        )
+
+    def best_effort(func, *args, **kwargs):
+        try:
+            return func(*args, **kwargs)
+        except Exception:
+            return None
+
+    reset(api_client.disconnect_device)
+    reset(api_client.disable_csv_export)
+    reset(api_client.create_new_project)
+    reset(api_client.set_operation_mode, "project")
 
     time.sleep(0.5)
 
     yield
 
-    safe_command(api_client.disconnect_device)
-    safe_command(api_client.disable_csv_export)
+    best_effort(api_client.disconnect_device)
+    best_effort(api_client.disable_csv_export)
 
     time.sleep(0.5)
 
