@@ -12,3 +12,13 @@
 race:QtPrivate::QCallableObject
 race:QQueuedMetaCallEvent
 called_from_lib:libglib-2.0.so
+
+# Same blind spot, reported one frame lower: when the racing access is the QMetaCallEvent's own
+# allocation, frame #0 is TSan's operator new/delete interceptor and the Qt frames below it are
+# invokeImpl/invokeMethodImpl (posting thread) and sendPostedEvents (receiving thread) -- the
+# event symbol the entries above match on never appears. race_top, not race, and matched on the
+# interceptor rather than on the Qt frames: sendPostedEvents and invokeImpl sit in the stack of
+# every event-loop slot and every QTest test function, so a `race:` entry on either would blind
+# the whole suite. A first-party field race still reports, since its top frame is our own code.
+race_top:operator new
+race_top:operator delete

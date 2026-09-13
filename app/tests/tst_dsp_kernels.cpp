@@ -57,8 +57,8 @@ namespace {
 // Matrix constants
 //--------------------------------------------------------------------------------------------------
 
-constexpr qsizetype kLengths[] = {0,  1,  2,  3,  4,  5,  7,  8,  9,   15,  16,
-                                  17, 24, 31, 32, 33, 63, 64, 65, 255, 1024};
+constexpr qsizetype kLengths[] = {0,  1,  2,  3,  4,  5,  6,  7,  8,  9,   12,  15,
+                                  16, 17, 24, 31, 32, 33, 63, 64, 65, 255, 1024};
 constexpr int kOffsets         = 16;
 constexpr char kNeedle         = '*';
 

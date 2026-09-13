@@ -31,6 +31,7 @@
 #include <QPointF>
 #include <QtGlobal>
 
+#include "Core/HotpathOptimization.h"
 #include "Core/SimdLevel.h"
 #include "Core/SSAssert.h"
 
@@ -203,12 +204,12 @@ template<typename OnMatch>
  * @brief 16-byte blocks of simdWidenAscii; returns the OR of every byte's high bit.
  */
 [[nodiscard]] inline quint64 widenAscii(const char* src,
-                                        char16_t* out,
+                                        char16_t* SS_RESTRICT out,
                                         std::size_t n,
                                         std::size_t& i)
 {
-  SS_ASSERT(src != nullptr || n == 0, return 0);
-  SS_ASSERT(out != nullptr || n == 0, return 0);
+  SS_ASSERT_HOTPATH(src != nullptr || n == 0);
+  SS_ASSERT_HOTPATH(out != nullptr || n == 0);
 
   quint64 high_bits  = 0;
   const __m128i zero = _mm_setzero_si128();
@@ -536,12 +537,12 @@ template<typename OnMatch>
  * @brief 16-byte blocks of simdWidenAscii; returns the OR of every byte's high bit.
  */
 [[nodiscard]] inline quint64 widenAscii(const char* src,
-                                        char16_t* out,
+                                        char16_t* SS_RESTRICT out,
                                         std::size_t n,
                                         std::size_t& i)
 {
-  SS_ASSERT(src != nullptr || n == 0, return 0);
-  SS_ASSERT(out != nullptr || n == 0, return 0);
+  SS_ASSERT_HOTPATH(src != nullptr || n == 0);
+  SS_ASSERT_HOTPATH(out != nullptr || n == 0);
 
   uint8x16_t acc = vdupq_n_u8(0);
   for (; i + 16 <= n; i += 16) {
@@ -759,8 +760,12 @@ namespace SimdDetail {
  *        f32((src[i]+offset)*scale)*win[i] : 0. Per-lane ops replicate the scalar order
  *        exactly (add, mul in f64, convert, mul in f32).
  */
-inline void windowedRealSpan(
-  const double* src, const float* win, float* out, std::size_t n, double offset, double scale)
+inline void windowedRealSpan(const double* src,
+                             const float* win,
+                             float* SS_RESTRICT out,
+                             std::size_t n,
+                             double offset,
+                             double scale)
 {
   SS_ASSERT(src != nullptr || n == 0, return);
   SS_ASSERT(win != nullptr || n == 0, return);
@@ -790,7 +795,7 @@ inline void windowedRealSpan(
  * @brief Interleaves two contiguous f64 spans into (x, y) pairs: out[2i] = xs[i],
  *        out[2i+1] = ys[i]. Pure copy, bit-exact by construction.
  */
-inline void interleaveSpan(const double* xs, const double* ys, double* out, qsizetype n)
+inline void interleaveSpan(const double* xs, const double* ys, double* SS_RESTRICT out, qsizetype n)
 {
   SS_ASSERT(xs != nullptr || n == 0, return);
   SS_ASSERT(ys != nullptr || n == 0, return);
@@ -827,10 +832,26 @@ inline void interleaveSpan(const double* xs, const double* ys, double* out, qsiz
 }
 
 /**
+ * @brief Widens the four bytes at @p at and returns their high-bit OR. Idempotent, so two
+ *        overlapping calls cover any 4..7 byte span in place of a byte loop: the overlap
+ *        rewrites identical code units.
+ */
+[[nodiscard]] inline quint64 widenQuadAt(const char* src, char16_t* SS_RESTRICT out, std::size_t at)
+{
+  quint32 v = 0;
+  std::memcpy(&v, src + at, sizeof(v));
+
+  const quint64 w = widenFourBytes(v);
+  std::memcpy(out + at, &w, sizeof(w));
+
+  return v & UINT32_C(0x80808080);
+}
+
+/**
  * @brief Widens a contiguous f32 span to f64. Exact by construction: every finite or
  *        non-finite f32 has an exact f64 image, so the converts carry no rounding.
  */
-inline void widenF32Span(const float* src, double* out, std::size_t n)
+inline void widenF32Span(const float* src, double* SS_RESTRICT out, std::size_t n)
 {
   SS_ASSERT(src != nullptr || n == 0, return);
   SS_ASSERT(out != nullptr || n == 0, return);
@@ -945,13 +966,14 @@ template<typename OnMatch>
 
 /**
  * @brief Widens @p n bytes to UTF-16 code units one-for-one and reports whether every byte was
- *        ASCII. All @p n units are written either way, so a false return lets the caller redo
- *        the span through a real UTF-8 decoder without first restoring anything.
+ *        ASCII. All @p n units are written either way, so a false return lets the caller redo the
+ *        span through a real UTF-8 decoder. A 4..7 byte span, below every vector lane, closes in
+ *        two overlapping quads that stay inside @p n: the destination holds exactly @p n units.
  */
-[[nodiscard]] inline bool simdWidenAscii(const char* src, char16_t* out, std::size_t n)
+[[nodiscard]] inline bool simdWidenAscii(const char* src, char16_t* SS_RESTRICT out, std::size_t n)
 {
-  SS_ASSERT(src != nullptr || n == 0, return true);
-  SS_ASSERT(out != nullptr || n == 0, return true);
+  SS_ASSERT_HOTPATH(src != nullptr || n == 0);
+  SS_ASSERT_HOTPATH(out != nullptr || n == 0);
 
   std::size_t i                                 = 0;
   quint64 highBits                              = 0;
@@ -969,7 +991,7 @@ template<typename OnMatch>
 #endif
 
 #if !defined(SS_SIMD_DISABLE)
-  if constexpr (std::endian::native == std::endian::little)
+  if constexpr (std::endian::native == std::endian::little) {
     for (; i + 8 <= n; i += 8) {
       quint64 v = 0;
       std::memcpy(&v, src + i, sizeof(v));
@@ -980,6 +1002,13 @@ template<typename OnMatch>
       std::memcpy(out + i, &lo, sizeof(lo));
       std::memcpy(out + i + 4, &hi, sizeof(hi));
     }
+
+    if (n - i >= 4) {
+      highBits |= SimdDetail::widenQuadAt(src, out, i);
+      highBits |= SimdDetail::widenQuadAt(src, out, n - 4);
+      i         = n;
+    }
+  }
 #endif
 
   for (; i < n; ++i) {
