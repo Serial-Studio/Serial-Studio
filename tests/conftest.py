@@ -18,6 +18,7 @@ import pytest
 sys.path.insert(0, str(Path(__file__).parent))
 
 from utils import SerialStudioClient
+from utils.api_client import APIError
 
 
 @pytest.fixture(scope="session")
@@ -101,7 +102,15 @@ def clean_state(api_client):
         except Exception:
             return None
 
-    reset(api_client.disconnect_device)
+    def disconnect_device():
+        """io.disconnect answers EXECUTION_ERROR when no link is open; idle is the goal."""
+        try:
+            if api_client.is_connected():
+                api_client.disconnect_device()
+        except APIError:
+            pass
+
+    reset(disconnect_device)
     reset(api_client.disable_csv_export)
     reset(api_client.create_new_project)
     reset(api_client.set_operation_mode, "project")
