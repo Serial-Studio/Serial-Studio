@@ -241,7 +241,14 @@ endif()
 if(BUILD_COMMERCIAL)
   ss_apply_miniaudio_definitions(SerialStudioDevices)
 
-  if(MSVC)
+  # The timing helpers of the WIN32 backend are unused when MA_NO_GENERATION is set. cl.exe reports
+  # that as C4505, clang-cl as -Wunused-function: it is clang's frontend behind an MSVC driver, and
+  # a /wd<number> naming an MSVC-only warning silences nothing there.
+  if(MSVC AND CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+    set_source_files_properties(ThirdParty/miniaudio.cpp
+      PROPERTIES COMPILE_OPTIONS "/clang:-Wno-unused-function"
+    )
+  elseif(MSVC)
     set_source_files_properties(ThirdParty/miniaudio.cpp
       PROPERTIES COMPILE_OPTIONS "/wd4505"
     )

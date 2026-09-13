@@ -4,9 +4,14 @@ Spec 0086 AC5/AC6 -- per-dataset table capture is scoped to the scripts that can
 The store's dataset mirror registers (`__datasets__/raw:<uniqueId>`) are readable over the API
 without arming capture (`project.dataTable.getValue` is a plain reader), so they are the
 observable: in a parser-only project they never move while frames flow; a control script that
-names `tableGet` arms capture and they track the parsed values; clearing the script freezes them
-again. A transform that names `datasetGetRaw` arms capture on its own and reads the live raw value
-of another dataset within the same frame, observed on the stream wire.
+names `tableGet` arms capture and they track the parsed values; clearing the script stops the
+tracking. A transform that names `datasetGetRaw` arms capture on its own and reads the live raw
+value of another dataset within the same frame, observed on the stream wire.
+
+Clearing the script or the transform is a project edit, and a project edit rebuilds the store
+(FrameBuilder::applyProjectSnapshot), so a register may read its default again afterwards; the
+disarm assertions therefore check that the register no longer follows the frames, not that it
+kept its last value.
 
 Requires the app running with the API server on (localhost:7777).
 """
@@ -200,8 +205,9 @@ class TestTableCaptureScoping:
         time.sleep(0.5)
         _feed(device_simulator, 12.0, 22.0, 40)
         frozen = _raw_register(api_client, unique_a)
-        assert (
-            frozen == armed
+        assert frozen != (
+            True,
+            12.0,
         ), f"capture kept running after the script stopped: {frozen}"
 
     def test_transform_reading_the_store_arms_capture(
@@ -230,7 +236,6 @@ class TestTableCaptureScoping:
             assert _last_streamed(_recv_lines(sock, 1.0), unique_b) == pytest.approx(
                 20.0
             )
-            untouched = _raw_register(api_client, unique_a)
 
             api_client.command(
                 "project.dataset.setTransformCode",
@@ -261,6 +266,10 @@ class TestTableCaptureScoping:
             assert _last_streamed(_recv_lines(sock, 1.0), unique_b) == pytest.approx(
                 23.0
             )
-            assert _raw_register(api_client, unique_a) == (True, 10.0), untouched
+            stopped = _raw_register(api_client, unique_a)
+            assert stopped != (
+                True,
+                13.0,
+            ), f"capture kept running after the transform was removed: {stopped}"
         finally:
             sock.close()

@@ -276,7 +276,14 @@ if(PRODUCTION_OPTIMIZATION)
          -Wl,-dead_strip
       )
       if(NOT DISABLE_LTO)
-         add_link_options(-flto=auto)
+         # ld writes the LTO-merged objects to /tmp and unlinks them at exit, so the dSYM pass that
+         # follows the link reports "(arm64) /tmp/lto.o unable to open object file" and the debug
+         # symbols the CI job uploads cover only the non-LTO objects. -object_path_lto keeps them.
+         file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/lto.objects)
+         add_link_options(
+            -flto=auto
+            -Wl,-object_path_lto,${CMAKE_BINARY_DIR}/lto.objects
+         )
       endif()
 
       if(CMAKE_SYSTEM_PROCESSOR MATCHES "^(x86_64|amd64|AMD64)$")
@@ -540,6 +547,12 @@ if(ENABLE_PGO)
             /clang:-fprofile-use=${PROFDATA_FILE}
          )
       elseif(CMAKE_CXX_COMPILER_ID MATCHES "Clang|AppleClang")
+         # Same -Wbackend-plugin "function control flow change detected (hash mismatch)" note as
+         # the clang-cl branch above, and under ThinLTO it also covers inline functions defined in
+         # a header (SerialStudio::isAnyPlayerOpen, core/Storage/Replay/PlayerState.h): each TU
+         # carries its own COMDAT copy, one of them wins the profile and the others report their
+         # counts discarded. Left visible: the discarded count is the only measure of how much
+         # profile a real source change costs.
          add_compile_options(
             -fprofile-use=${PROFDATA_FILE}
          )

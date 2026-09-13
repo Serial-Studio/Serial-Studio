@@ -2317,15 +2317,17 @@ ss_add_unit_test(tst_monotonic_clock
 
 #
 # The capability token every Pro gate reads (M11): sealed-over-its-own-fields integrity, and the
-# process slot the entitlement latch watches. The suite supplies its own build salt, so the tier
-# stays independent of how the application was configured (tst_opcua_wire precedent).
+# process slot the entitlement latch watches. A GPL configure has no build salt, so the suite
+# supplies one and the tier stays independent of how the application was configured
+# (tst_opcua_wire precedent); a commercial configure already defines the macro globally, and a
+# second definition here would only redefine it.
 #
 ss_add_unit_test(tst_commercial_token
   SOURCES tst_commercial_token.cpp
           ${SS_CORE_SRC}/Core/Licensing/CommercialToken.cpp
   LIBS    Qt6::Core
 )
-if(TARGET tst_commercial_token)
+if(TARGET tst_commercial_token AND NOT BUILD_COMMERCIAL)
   target_compile_definitions(tst_commercial_token PRIVATE COMMERCIAL_BUILD_SALT=0x5350454330303735ULL)
 endif()
 

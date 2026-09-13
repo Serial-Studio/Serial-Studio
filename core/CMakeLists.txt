@@ -81,8 +81,10 @@ endif()
 #   MA_NO_NULL             - Disable null audio backend
 #
 # Platform backends: Linux links libasound (ALSA, in core/Devices); Windows uses WASAPI and macOS
-# CoreAudio, both built in. SIMD: MA_SUPPORT_SSE2 on x86-64, MA_SUPPORT_NEON on non-Apple ARM64.
-# Dropping the unused features saves ~200KB of binary and a good share of the compile time.
+# CoreAudio, both built in. SIMD support (SSE2 on x86-64, NEON on ARM64) is what the header
+# detects from the compiler's own macros; MA_SUPPORT_* are its internal results, and defining one
+# on the command line only redefines it. Dropping the unused features saves ~200KB of binary and a
+# good share of the compile time.
 #
 #---------------------------------------------------------------------------------------------------
 
@@ -100,14 +102,6 @@ function(ss_apply_miniaudio_definitions TARGET)
     MA_NO_CUSTOM
     MA_NO_NULL
   )
-
-  if(CMAKE_SYSTEM_PROCESSOR MATCHES "^(x86_64|amd64)$")
-    target_compile_definitions(${TARGET} PRIVATE MA_SUPPORT_SSE2)
-  endif()
-
-  if(CMAKE_SYSTEM_PROCESSOR MATCHES "^(arm64|aarch64)$" AND NOT APPLE)
-    target_compile_definitions(${TARGET} PRIVATE MA_SUPPORT_NEON)
-  endif()
 endfunction()
 
 add_subdirectory(Core)

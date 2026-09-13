@@ -81,7 +81,7 @@ struct BinderCall {
   QString op;
   int deviceId           = -1;
   IO::HAL_Driver* driver = nullptr;
-  QString checksum;
+  QString checksum       = {};
 };
 
 /**

@@ -351,7 +351,10 @@ both own malloc):
   `ASAN_OPTIONS=detect_leaks=0`, because Qt's plugin and QML machinery leaks by design at exit;
   the memory-error half is what the job is for.
 - **TSan** (`-DENABLE_TSAN=ON`) builds and runs the unit tier only. The SPSC and
-  DirectConnection invariants it proves live in the suites, not in the GUI.
+  DirectConnection invariants it proves live in the suites, not in the GUI. `TSAN_OPTIONS` points
+  at `app/tests/tsan.supp`, which suppresses one blind spot and nothing else: Qt's queued slot
+  handover and glib's event-loop wakeup fd sit in uninstrumented libraries whose happens-before
+  edges TSan cannot see. A race between two first-party objects carries neither frame and reports.
 
 ```bash
 cmake -G Ninja -B build/asan -DCMAKE_CXX_COMPILER=clang++ -DCMAKE_BUILD_TYPE=Debug \

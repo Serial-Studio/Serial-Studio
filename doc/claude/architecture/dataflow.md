@@ -301,13 +301,16 @@ carries the spec-0040 mirror input: a leading `[[unlikely]]` read of
   dirty/epoch path: `TransformCompiler::referencesTableApi()` (the shared library and every
   transform scanned by `TableApiScan::referencesTableApi` at compile time),
   `FrameParser::anyEngineReferencesTableApi()` (each engine scans its script in `loadScript`,
-  refreshed by the engine-epoch bump), and `m_externalTableUsers`, the counter every
-  `injectTableApi*` increments and `releaseTableApiUser()` decrements, both as queued posts,
-  never waits: `runOnObjectThread` skips its functor when the caller's loop was unwound by
-  `QThread::quit()` (a stream worker stopped mid-inject), which lost the arm while the worker's
-  flag said armed, and the release then hit zero (2026-09-12). Builder FIFO orders a thread's
-  release after its own arm (`TableApiUserLease` is the RAII form). The counter belongs to the
-  lease holders and is never reset by a project snapshot. Nothing else arms it: an engine that merely has the helpers installed
+  refreshed by the engine-epoch bump), and `m_externalTableUsers`, the counter
+  `acquireTableApiUser()` increments (every `injectTableApi*` goes through it, and so does
+  `ControlScript::startWorker()` for a script that names the table API: its reads go through the
+  API's GUI snapshot, not an engine of its own) and `releaseTableApiUser()` decrements, both as
+  queued posts, never waits: `runOnObjectThread` skips its functor when the caller's loop was
+  unwound by `QThread::quit()` (a stream worker stopped mid-inject), which lost the arm while the
+  worker's flag said armed, and the release then hit zero (2026-09-12). Builder FIFO orders a
+  thread's release after its own arm (`TableApiUserLease` is the RAII form). The counter belongs
+  to the lease holders and is never reset by a project snapshot. Nothing else arms it: an engine
+  that merely has the helpers installed
   (`NamesOnly`) does not. The mirror write is slot-addressed (`datasetSlots()` once per dataset,
   `setDatasetRawAt` / `setDatasetFinalAt`) and copies the string with `assign_string_in_place`,
   so a steady frame shape mirrors without a heap operation (`tst_table_snapshot_channel`).

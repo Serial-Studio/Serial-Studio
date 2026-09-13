@@ -37,6 +37,7 @@
 #include "DataModel/Scripting/ControlScriptWorker.h"
 #include "DataModel/Scripting/JsWatchdog.h"
 #include "DataModel/Scripting/ScriptApiCall.h"
+#include "DataModel/Scripting/TableApiScan.h"
 
 //--------------------------------------------------------------------------------------------------
 // Constants
@@ -61,6 +62,7 @@ DataModel::ControlScript::ControlScript()
   , m_shouldRun(false)
   , m_shutdown(false)
   , m_playerOpen(false)
+  , m_tableArmed(false)
   , m_playerOpenMask{}
   , m_worker(nullptr)
   , m_marshaller(nullptr)
@@ -312,7 +314,9 @@ void DataModel::ControlScript::onWorkerError(const QString& message)
 }
 
 /**
- * @brief Asks the worker thread to compile and run the current script.
+ * @brief Asks the worker thread to compile and run the current script. A script that names the
+ *        table API counts as a capture user (spec 0086 AC5): its reads go through the API's GUI
+ *        snapshot, which only tracks the datasets while the builder mirrors them into the store.
  */
 void DataModel::ControlScript::startWorker()
 {
@@ -321,6 +325,13 @@ void DataModel::ControlScript::startWorker()
 
   QMetaObject::invokeMethod(m_worker, "start", Qt::QueuedConnection, Q_ARG(QString, m_code));
   m_running = true;
+
+  SS_ASSERT_LOG(!m_tableArmed);
+  if (DataModel::TableApiScan::referencesTableApi(m_code)) {
+    DataModel::pipelineModules().frameBuilder.acquireTableApiUser();
+    m_tableArmed = true;
+  }
+
   Q_EMIT runningChanged();
 }
 
@@ -336,6 +347,11 @@ void DataModel::ControlScript::stopWorker()
     return;
 
   QMetaObject::invokeMethod(m_worker, "stop", Qt::QueuedConnection);
+
+  if (m_tableArmed) {
+    m_tableArmed = false;
+    DataModel::pipelineModules().frameBuilder.releaseTableApiUser();
+  }
 
   if (m_running) {
     m_running = false;

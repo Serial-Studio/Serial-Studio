@@ -301,17 +301,21 @@ def test_widget_add_and_get(api_client, clean_state):
 @pytest.mark.project
 def test_widget_remove_takes_triple_key(api_client, clean_state):
     """Widget removal matches the full (type, groupId, relativeIndex) triple."""
-    # GroupWidget::DataGrid (0) + DashboardWidget::DashboardDataGrid (1): the
-    # compatible pair (see test_widget_add_and_get).
-    gid = _add_group_with_datasets(api_client, "G", widget_type=0, dataset_count=3)
+    # Two Plot (9) tiles over two graph-enabled datasets of one group: a per-dataset
+    # widget keeps the two ordinals apart. A group widget would not -- spec 0083 rebinds
+    # its ordinal from (type, group) alone, so two DataGrid refs collapse onto index 0.
+    pos = api_client.add_group("G", widget_type=0)
+    api_client.add_dataset(pos, options=1)
+    api_client.add_dataset(pos, options=1)
+    gid = int(api_client.list_groups()[-1]["uniqueId"])
     wid = _add_workspace(api_client, "W")["id"]
     time.sleep(0.15)
 
-    _widget_add(api_client, wid, widget_type=1, group_id=gid, relative_index=0)
-    _widget_add(api_client, wid, widget_type=1, group_id=gid, relative_index=1)
+    _widget_add(api_client, wid, widget_type=9, group_id=gid, relative_index=0)
+    _widget_add(api_client, wid, widget_type=9, group_id=gid, relative_index=1)
     time.sleep(0.15)
 
-    _widget_remove(api_client, wid, widget_type=1, group_id=gid, relative_index=0)
+    _widget_remove(api_client, wid, widget_type=9, group_id=gid, relative_index=0)
     time.sleep(0.15)
 
     widgets = _get_workspace(api_client, wid)["widgets"]

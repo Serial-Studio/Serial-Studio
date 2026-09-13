@@ -2821,21 +2821,28 @@ void DataModel::FrameBuilder::refreshTableStoreFromProjectModel()
 }
 
 /**
- * @brief Injects the Lua table API into @p L and counts the engine as a capture user, as a queued
- *        post: a blocking marshal is skipped when the caller's loop is unwound (a stream worker
- *        stopped mid-inject), which lost the arm and put its release on zero. Builder FIFO
- *        orders the post ahead of the next frame and of the caller's own release.
+ * @brief Counts one more external capture user (spec 0086), posted rather than awaited: a blocking
+ *        marshal is skipped when the caller's loop is unwound (a stream worker stopped mid-inject),
+ *        losing the arm and putting its release on zero. Arms the GUI mirror too, for a user with
+ *        no engine of its own (the control script reads through the API snapshot).
  */
-void DataModel::FrameBuilder::injectTableApiLua(lua_State* L)
+void DataModel::FrameBuilder::acquireTableApiUser()
 {
-  SS_ASSERT(L, return);
-
   invokeOnBuilderThread([this] {
     ++m_externalTableUsers;
     m_captureFlagsDirty = true;
   });
 
   m_tableChannel.noteGuiUser();
+}
+
+/**
+ * @brief Injects the Lua table API into @p L and counts the engine as a capture user.
+ */
+void DataModel::FrameBuilder::injectTableApiLua(lua_State* L)
+{
+  SS_ASSERT(L, return);
+  acquireTableApiUser();
   m_tableApi.installLua(L);
 }
 
@@ -2861,26 +2868,19 @@ void DataModel::FrameBuilder::installTableApiNamesLua(lua_State* L)
 
 /**
  * @brief Installs the __ss table-API bridge (the SDK prelude exposes the friendly globals) and
- *        counts the engine as a capture user, queued for the same reason as the Lua injector.
+ *        counts the engine as a capture user.
  */
 void DataModel::FrameBuilder::injectTableApiJS(QJSEngine* js)
 {
   SS_ASSERT(js, return);
-
-  invokeOnBuilderThread([this] {
-    ++m_externalTableUsers;
-    m_captureFlagsDirty = true;
-  });
-
-  m_tableChannel.noteGuiUser();
+  acquireTableApiUser();
   m_tableApi.installJs(js);
 }
 
 /**
- * @brief Counterpart of injectTableApiLua/JS (spec 0086): drops the external-user count so capture
- *        stops once nothing can read the table. Posted, never awaited, like the arm: the callers
- *        are destructors and a stream worker mid-quit, and builder FIFO keeps every release after
- *        the arm the same thread posted before it.
+ * @brief Counterpart of acquireTableApiUser (spec 0086): drops the external-user count so capture
+ *        stops once nothing can read the table. Posted like the arm: the callers are destructors
+ *        and a stream worker mid-quit, and builder FIFO keeps every release after its arm.
  */
 void DataModel::FrameBuilder::releaseTableApiUser()
 {

@@ -90,6 +90,7 @@ private:
   bool m_shouldRun;
   bool m_shutdown;
   bool m_playerOpen;
+  bool m_tableArmed;
   std::array<bool, 3> m_playerOpenMask;
   QThread m_thread;
   ControlScriptWorker* m_worker;

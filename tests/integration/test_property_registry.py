@@ -126,6 +126,15 @@ def strip_live_connection(config):
     return config
 
 
+def strip_backfilled_identity(config):
+    """Drop the datasetUniqueId a load writes into every dataset-widget ref (spec
+    0083): a file may carry only the ordinal, so the re-export legitimately gains it."""
+    for workspace in config.get("workspaces", []):
+        for ref in workspace.get("widgetRefs", []):
+            ref.pop("datasetUniqueId", None)
+    return config
+
+
 def canonical(config):
     """Return a stable textual form of an exported project config."""
     return json.dumps(config, indent=2, sort_keys=True, ensure_ascii=False)
@@ -379,11 +388,15 @@ def test_round_trip_matches_baseline(api_client, clean_state):
             mismatched.append(f"{path.name}: missing baseline")
             continue
 
-        expected = strip_declared_deltas(
-            strip_live_connection(json.loads(target.read_text(encoding="utf-8")))
+        expected = strip_backfilled_identity(
+            strip_declared_deltas(
+                strip_live_connection(json.loads(target.read_text(encoding="utf-8")))
+            )
         )
-        actual = strip_declared_deltas(
-            strip_live_connection(export_project(api_client, path))
+        actual = strip_backfilled_identity(
+            strip_declared_deltas(
+                strip_live_connection(export_project(api_client, path))
+            )
         )
         if canonical(expected) != canonical(actual):
             mismatched.append(path.relative_to(REPO_ROOT).as_posix())

@@ -96,8 +96,9 @@ private:
   bool m_runtimeDirty;
 
   QFileSystemWatcher* m_fileWatcher;
-  bool m_diskCheckPending;
+  QTimer* m_diskCheckTimer;
   bool m_diskPromptActive;
+  int m_diskCheckRetries;
   QByteArray m_diskFileHash;
 };
 

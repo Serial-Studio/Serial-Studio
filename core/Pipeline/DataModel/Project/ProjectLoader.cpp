@@ -969,11 +969,16 @@ bool DataModel::ProjectLoader::mergeImportedProject(const QJsonObject& project,
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Reads project-wide scalar fields (title, delimiters, decoder, lock state) from JSON.
+ * @brief Reads project-wide scalar fields (title, delimiters, decoder, lock state) from JSON. A
+ *        document with no title takes the one a new project gets: the frame lane reads an empty
+ *        title as "no project" and republishes nothing for it.
  */
 void DataModel::ProjectLoader::loadProjectRootScalars(const QJsonObject& json)
 {
-  m_model.m_title                 = json.value(Keys::Title).toString();
+  m_model.m_title = json.value(Keys::Title).toString().trimmed();
+  if (m_model.m_title.isEmpty())
+    m_model.m_title = ProjectModel::tr("Untitled Project");
+
   m_model.m_frameEndSequence      = json.value(Keys::FrameEnd).toString();
   m_model.m_frameStartSequence    = json.value(Keys::FrameStart).toString();
   m_model.m_hexadecimalDelimiters = json.value(Keys::HexadecimalDelimiters).toBool();

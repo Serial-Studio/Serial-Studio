@@ -154,6 +154,7 @@ public:
 
   void injectTableApiLua(lua_State* L);
   void injectTableApiJS(QJSEngine* js);
+  void acquireTableApiUser();
   void releaseTableApiUser();
 
   void installTableApiNames(QJSEngine* js);

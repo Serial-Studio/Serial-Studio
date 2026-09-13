@@ -1,0 +1,14 @@
+# SPDX-FileCopyrightText: 2020-2026 Alex Spataru <alex@serial-studio.com>
+# SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial
+
+# ThreadSanitizer suppressions for the unit tier (ci.yml sanitize-tsan, TSAN_OPTIONS).
+#
+# libQt6Core and glib are not instrumented, and QMutex locks through futex syscalls rather than
+# pthread, so TSan never sees the happens-before edge Qt's event queue provides. Every entry is
+# that one blind spot, not a finding: a queued slot object built on the posting thread and run
+# or deleted on the receiver's (QMetaObject::invokeMethod with a lambda, a queued connection),
+# and the glib wakeup fd a QThread's event loop owns. A race between two first-party objects
+# still reports, since its stacks carry neither frame.
+race:QtPrivate::QCallableObject
+race:QQueuedMetaCallEvent
+called_from_lib:libglib-2.0.so

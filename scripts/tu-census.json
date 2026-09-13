@@ -2,7 +2,7 @@
   "rule": "cxx-tu-too-long",
   "regenerate": "python scripts/code-verify.py --tu-census --accept",
   "threshold": 1500,
-  "excess": 2606,
+  "excess": 2611,
   "files": 11,
   "worst": 2892,
   "buckets": {
@@ -15,7 +15,7 @@
     "core/Ui/UI/Widgets/Terminal.cpp": 1986,
     "core/Ui/UI/Dashboard.cpp": 1812,
     "core/Devices/IO/Drivers/OpcUa.cpp": 1615,
-    "core/Storage/CSV/Player.cpp": 1574,
+    "core/Storage/CSV/Player.cpp": 1579,
     "core/Devices/IO/Drivers/MQTT.cpp": 1569,
     "core/Storage/MQTT/Publisher.cpp": 1568,
     "core/Devices/IO/Drivers/Audio.cpp": 1556,

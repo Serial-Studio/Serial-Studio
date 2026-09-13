@@ -47,6 +47,15 @@
 #include "DataModel/Project/ProjectWorkspaces.h"
 #include "DataModel/ProjectModel.h"
 
+//--------------------------------------------------------------------------------------------------
+// Constants
+//--------------------------------------------------------------------------------------------------
+
+/**
+ * @brief How many times a disk check re-arms itself while the project file stays unreadable.
+ */
+static constexpr int kDiskCheckRetryLimit = 4;
+
 namespace DataModel {
 
 /**
@@ -69,8 +78,10 @@ static QJsonArray serializeFolders(const std::vector<Folder>& folders)
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Builds the autosave timer and the on-disk watcher for @p model. Runs inside ProjectModel's
- *        ctor closure, so it touches nothing but its own children.
+ * @brief Builds the autosave timer and the on-disk watcher for @p model, inside ProjectModel's
+ *        ctor closure, so it touches nothing but its own children. The disk check debounces on a
+ *        timer RESTARTED per notification: a latch that ignored events while a check was already
+ *        scheduled dropped an external edit landing inside a self-save's window.
  */
 DataModel::ProjectPersistence::ProjectPersistence(ProjectModel& model)
   : m_model(model)
@@ -79,20 +90,20 @@ DataModel::ProjectPersistence::ProjectPersistence(ProjectModel& model)
   , m_autoSaveHeld(false)
   , m_runtimeDirty(false)
   , m_fileWatcher(new QFileSystemWatcher(this))
-  , m_diskCheckPending(false)
+  , m_diskCheckTimer(new QTimer(this))
   , m_diskPromptActive(false)
+  , m_diskCheckRetries(0)
 {
   m_autoSaveTimer->setSingleShot(true);
   m_autoSaveTimer->setInterval(1500);
   connect(m_autoSaveTimer, &QTimer::timeout, this, &ProjectPersistence::autoSave);
 
-  connect(m_fileWatcher, &QFileSystemWatcher::fileChanged, this, [this] {
-    if (m_diskCheckPending)
-      return;
+  m_diskCheckTimer->setSingleShot(true);
+  m_diskCheckTimer->setInterval(500);
+  connect(m_diskCheckTimer, &QTimer::timeout, this, &ProjectPersistence::resolveDiskFileChange);
 
-    m_diskCheckPending = true;
-    QTimer::singleShot(500, this, &ProjectPersistence::resolveDiskFileChange);
-  });
+  connect(
+    m_fileWatcher, &QFileSystemWatcher::fileChanged, this, [this] { m_diskCheckTimer->start(); });
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -629,6 +640,7 @@ void DataModel::ProjectPersistence::watchProjectFile()
   if (!watched.isEmpty())
     m_fileWatcher->removePaths(watched);
 
+  m_diskCheckRetries = 0;
   m_diskFileHash.clear();
   if (m_model.m_filePath.isEmpty() || !QFile::exists(m_model.m_filePath))
     return;
@@ -639,11 +651,12 @@ void DataModel::ProjectPersistence::watchProjectFile()
 
 /**
  * @brief Debounced watcher handler: ignores self-saves (hash unchanged), flags deletion,
- *        and prompts to reload when another program modified the project file.
+ *        and prompts to reload when another program modified the project file. An unreadable file
+ *        is a writer holding it mid-rewrite, not an absent change, so the check re-arms itself a
+ *        bounded number of times instead of consuming the one notification that change will get.
  */
 void DataModel::ProjectPersistence::resolveDiskFileChange()
 {
-  m_diskCheckPending = false;
   if (m_diskPromptActive || m_model.m_filePath.isEmpty())
     return;
 
@@ -665,7 +678,17 @@ void DataModel::ProjectPersistence::resolveDiskFileChange()
     m_fileWatcher->addPath(m_model.m_filePath);
 
   const auto hash = hashProjectFile(m_model.m_filePath);
-  if (hash.isEmpty() || hash == m_diskFileHash)
+  if (hash.isEmpty()) {
+    if (m_diskCheckRetries < kDiskCheckRetryLimit) {
+      ++m_diskCheckRetries;
+      m_diskCheckTimer->start();
+    }
+
+    return;
+  }
+
+  m_diskCheckRetries = 0;
+  if (hash == m_diskFileHash)
     return;
 
   m_diskFileHash = hash;

@@ -319,6 +319,11 @@ public:
   };
   Q_ENUM(CustomRoles)
 
+  // Same-named aliases of DataModel::EntityKind (QML reads ProjectEditor.Kind*); clang flags them
+#if defined(__clang__)
+#  pragma clang diagnostic push
+#  pragma clang diagnostic ignored "-Wshadow"
+#endif
   enum ItemKind {
     KindNone             = DataModel::KindNone,
     KindGroup            = DataModel::KindGroup,
@@ -345,6 +350,9 @@ public:
     KindJsLibrary        = DataModel::KindJsLibrary,
     KindExportRoot       = DataModel::KindExportRoot,
   };
+#if defined(__clang__)
+#  pragma clang diagnostic pop
+#endif
   Q_ENUM(ItemKind)
 
   [[nodiscard]] CurrentView currentView() const;

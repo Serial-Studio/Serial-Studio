@@ -258,11 +258,14 @@ const QString& CSV::Player::timestamp() const
 
 /**
  * @brief Starts CSV playback at the original capture speed; a play request that reaches an
- *        empty (still-indexing) frontier arms the auto-resume instead.
+ *        empty (still-indexing) frontier arms the auto-resume instead. Playback control with no
+ *        file open is reachable -- the API verbs, and the dialog's slider while a file closes under
+ *        it -- so the open state guards here rather than asserting, as it does in MDF4::Player.
  */
 void CSV::Player::play()
 {
-  SS_ASSERT(isOpen(), return);
+  if (!isOpen())
+    return;
 
   if (frameCount() <= 0) {
     m_pausedAtFrontier = indexing();
@@ -289,7 +292,8 @@ void CSV::Player::play()
  */
 void CSV::Player::pause()
 {
-  SS_ASSERT(isOpen(), return);
+  if (!isOpen())
+    return;
 
   (void)m_engine.nextEpoch();
   m_playing = false;
@@ -723,7 +727,8 @@ void CSV::Player::onIndexFinished(bool ok, quint64 generation)
  */
 void CSV::Player::setProgress(const double progress)
 {
-  SS_ASSERT_LOG(isOpen());
+  if (!isOpen())
+    return;
 
   const auto validProgress = std::clamp(progress, 0.0, 1.0);
 

@@ -35,8 +35,12 @@ def _project_with_plot_groups(api_client, titles: list[str]) -> list[dict]:
 
 
 def _dataset_unique_id(api_client, group_unique_id: int) -> int:
+    """dataset.list rows carry the positional groupId, so resolve the group's ordinal first."""
+    positional = {g["uniqueId"]: g["groupId"] for g in api_client.list_groups()}
+    assert group_unique_id in positional, f"no group with uniqueId {group_unique_id}"
+
     for dataset in api_client.list_datasets():
-        if dataset.get("groupUniqueId", dataset.get("groupId")) == group_unique_id:
+        if dataset.get("groupId") == positional[group_unique_id]:
             return dataset["uniqueId"]
 
     raise AssertionError(f"no dataset in group {group_unique_id}")
