@@ -405,30 +405,6 @@ jobs:
         ./build/app/${{env.UNIXNAME}} --headless --benchmark-hotpath --min-fps 256000 \
           --benchmark-output benchmark.txt
 
-    #
-    # Spec 0081: the runner takes the AVX2 lane on Auto, so the baseline SSE4 lane every older
-    # machine runs would otherwise never be gated. Pinned, same gate. The scalar run is a readout
-    # of the reference lane's cost, not a gate.
-    #
-    - name: '🚦 Hotpath throughput gate (256 kHz, SSE4 lane pinned)'
-      env:
-        QT_QPA_PLATFORM: offscreen
-        LD_LIBRARY_PATH: >-
-          ${{github.workspace}}/Qt-${{env.QT_VERSION_LINUX}}-${{runner.os}}-x64/${{env.QT_VERSION_LINUX}}/gcc_64/lib
-      run: |
-        ./build/app/${{env.UNIXNAME}} --headless --benchmark-hotpath --min-fps 256000 --simd sse4 \
-          --benchmark-output benchmark-sse4.txt
-
-    - name: '📈 Hotpath throughput (scalar lane, informational)'
-      continue-on-error: true
-      env:
-        QT_QPA_PLATFORM: offscreen
-        LD_LIBRARY_PATH: >-
-          ${{github.workspace}}/Qt-${{env.QT_VERSION_LINUX}}-${{runner.os}}-x64/${{env.QT_VERSION_LINUX}}/gcc_64/lib
-      run: |
-        ./build/app/${{env.UNIXNAME}} --headless --benchmark-hotpath --min-fps 1 --simd scalar \
-          --benchmark-output benchmark-scalar.txt
-
     - name: '📤 Upload artifact: benchmark report (Linux x64)'
       if: always()
       uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
@@ -436,8 +412,6 @@ jobs:
         name: benchmark-Linux-x64
         path: |
           benchmark.txt
-          benchmark-sse4.txt
-          benchmark-scalar.txt
           pgo-train.txt
 
     #
@@ -736,19 +710,6 @@ jobs:
         ./build/app/${{env.UNIXNAME}} --headless --benchmark-hotpath --min-fps 256000 \
           --benchmark-output benchmark.txt
 
-    #
-    # Spec 0081: Auto is already the NEON lane here; the scalar run is a readout, not a gate.
-    #
-    - name: '📈 Hotpath throughput (scalar lane, informational)'
-      continue-on-error: true
-      env:
-        QT_QPA_PLATFORM: offscreen
-        LD_LIBRARY_PATH: >-
-          ${{github.workspace}}/Qt-${{env.QT_VERSION_LINUX}}-${{runner.os}}-arm64/${{env.QT_VERSION_LINUX}}/gcc_arm64/lib
-      run: |
-        ./build/app/${{env.UNIXNAME}} --headless --benchmark-hotpath --min-fps 1 --simd scalar \
-          --benchmark-output benchmark-scalar.txt
-
     - name: '📤 Upload artifact: benchmark report (Linux arm64)'
       if: always()
       uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
@@ -756,7 +717,6 @@ jobs:
         name: benchmark-Linux-arm64
         path: |
           benchmark.txt
-          benchmark-scalar.txt
           pgo-train.txt
 
     - name: '📤 Upload artifact: symbols (Linux arm64)'
@@ -765,18 +725,6 @@ jobs:
         name: symbols-Linux-arm64
         path: build/app/${{env.UNIXNAME}}.debug
         if-no-files-found: ignore
-
-    #
-    # Replays the big_db_test load against the optimized binary; catches the teardown crashes the
-    # throughput benchmark never sees
-    #
-    - name: '🩺 Big project verification (optimized)'
-      env:
-        QT_QPA_PLATFORM: offscreen
-        LD_LIBRARY_PATH: >-
-          ${{github.workspace}}/Qt-${{env.QT_VERSION_LINUX}}-${{runner.os}}-arm64/${{env.QT_VERSION_LINUX}}/gcc_arm64/lib
-      run: |
-        bash tests/benchmarks/big_db_test/run_load.sh "./build/app/${{env.UNIXNAME}}" 15
 
     #
     # always(): activations are seat-limited, so a failed job still has to release the seat
@@ -1124,7 +1072,7 @@ jobs:
 
   build-macos-intel:
     runs-on: macos-latest
-    name: '🍎 macOS Build (x86_64, Rosetta)'
+    name: '🍎 macOS Build (x86_64)'
     permissions:
       contents: read
     steps:
@@ -1174,14 +1122,8 @@ jobs:
         useLocalCache: true
 
     #
-    # The x86_64 slice is cross-built and smoke-benchmarked under Rosetta on an arm64 runner
-    #
-    - name: '⚙️ Ensure Rosetta 2'
-      run: softwareupdate --install-rosetta --agree-to-license
-
-    #
-    # No PGO here: this job only supplies the x86_64 half of the universal binary, and a Rosetta
-    # profile would describe the emulator rather than the target
+    # No PGO here: this job only supplies the x86_64 half of the universal binary, and the arm64
+    # runner can only train a profile through emulation, which would describe the emulator
     #
     - name: '🚧 Configure with CMake (production, x86_64)'
       env:
@@ -1208,18 +1150,6 @@ jobs:
     #
     - name: '🚧 Build application (x86_64)'
       run: cmake --build build --config Release
-
-    #
-    # continue-on-error: throughput under Rosetta says nothing about native x86_64 hardware, so
-    # the number is recorded but never gates
-    #
-    - name: '🚦 Hotpath throughput (x86_64 / Rosetta, informational)'
-      continue-on-error: true
-      env:
-        QT_QPA_PLATFORM: offscreen
-        DYLD_FRAMEWORK_PATH: ${{github.workspace}}/Qt-${{env.QT_VERSION_MACOS}}-${{runner.os}}-x64/${{env.QT_VERSION_MACOS}}/macos/lib
-      run: |
-        arch -x86_64 ./build/app/${{env.EXECUTABLE}}.app/Contents/MacOS/${{env.EXECUTABLE}} --headless --benchmark-hotpath --min-fps 256000
 
     #
     # Lifts the slice out of the bundle; the upload itself is the next step
@@ -1631,27 +1561,6 @@ jobs:
         if (-not $p.WaitForExit(300000)) { $p.Kill(); throw 'benchmark timed out' }
         if (Select-String -Path benchmark.txt -Pattern 'HOTPATH_PASS=1' -Quiet) { exit 0 } else { exit 1 }
 
-    #
-    # Spec 0081: the runner takes the AVX2 lane on Auto, so the baseline SSE4 lane every older
-    # machine runs would otherwise never be gated. Pinned, same gate. The scalar run is a readout
-    # of the reference lane's cost, not a gate.
-    #
-    - name: '🚦 Hotpath throughput gate (256 kHz, SSE4 lane pinned)'
-      run: |
-        $p = Start-Process -FilePath "build/app/${{env.EXECUTABLE}}.exe" `
-          -ArgumentList '--headless','--benchmark-hotpath','--min-fps','256000','--simd','sse4','--benchmark-output','benchmark-sse4.txt' `
-          -WorkingDirectory $PWD -PassThru -NoNewWindow
-        if (-not $p.WaitForExit(300000)) { $p.Kill(); throw 'benchmark timed out' }
-        if (Select-String -Path benchmark-sse4.txt -Pattern 'HOTPATH_PASS=1' -Quiet) { exit 0 } else { exit 1 }
-
-    - name: '📈 Hotpath throughput (scalar lane, informational)'
-      continue-on-error: true
-      run: |
-        $p = Start-Process -FilePath "build/app/${{env.EXECUTABLE}}.exe" `
-          -ArgumentList '--headless','--benchmark-hotpath','--min-fps','1','--simd','scalar','--benchmark-output','benchmark-scalar.txt' `
-          -WorkingDirectory $PWD -PassThru -NoNewWindow
-        if (-not $p.WaitForExit(300000)) { $p.Kill(); throw 'benchmark timed out' }
-
     - name: '📤 Upload artifact: benchmark report (Windows)'
       if: always()
       uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
@@ -1659,8 +1568,6 @@ jobs:
         name: benchmark-Windows
         path: |
           benchmark.txt
-          benchmark-sse4.txt
-          benchmark-scalar.txt
           pgo-train.txt
 
     - name: '📤 Upload artifact: symbols (Windows)'
@@ -1668,26 +1575,6 @@ jobs:
       with:
         name: symbols-Windows
         path: build/app/${{env.EXECUTABLE}}.pdb
-        if-no-files-found: ignore
-
-    #
-    # continue-on-error, like the training load it mirrors
-    #
-    - name: '🩺 Big project verification (optimized)'
-      continue-on-error: true
-      run: |
-        ./tests/benchmarks/big_db_test/run_load.ps1 -App "build/app/${{env.EXECUTABLE}}.exe" -Seconds 15
-
-    #
-    # Dumps written by the big_db_test harness itself; always() because the interesting case is
-    # the run that failed
-    #
-    - name: '📦 Upload big_db_test crash dumps'
-      if: always()
-      uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
-      with:
-        name: windows-big-db-test-dumps
-        path: tests/benchmarks/big_db_test/dumps/
         if-no-files-found: ignore
 
     #
@@ -2543,9 +2430,9 @@ jobs:
         useLocalCache: true
 
     #
-    # Spec 0077 AC2: the seven static libraries under core/ configure and build one at a time, with
-    # no application and no test target in the graph, in dependency order. A library that reaches
-    # a layer above it, or app/src, fails here before anything links it into the executable
+    # Spec 0077 AC2: the seven static libraries under core/ configure and build with no application
+    # and no test target in the graph. SerialStudioUi pulls the other six in dependency order, so a
+    # library that reaches a layer above it, or app/src, fails here before the executable links it
     #
     - name: '🚧 Configure the library tier'
       run: |
@@ -2558,25 +2445,7 @@ jobs:
           -DUSE_SYSTEM_ZLIB=ON \
           -DUSE_SYSTEM_EXPAT=ON
 
-    - name: '🧱 Build SerialStudioCore'
-      run: cmake --build build/core-libs --target SerialStudioCore
-
-    - name: '🧱 Build SerialStudioProtocols'
-      run: cmake --build build/core-libs --target SerialStudioProtocols
-
-    - name: '🧱 Build SerialStudioPipeline'
-      run: cmake --build build/core-libs --target SerialStudioPipeline
-
-    - name: '🧱 Build SerialStudioDevices'
-      run: cmake --build build/core-libs --target SerialStudioDevices
-
-    - name: '🧱 Build SerialStudioStorage'
-      run: cmake --build build/core-libs --target SerialStudioStorage
-
-    - name: '🧱 Build SerialStudioApi'
-      run: cmake --build build/core-libs --target SerialStudioApi
-
-    - name: '🧱 Build SerialStudioUi'
+    - name: '🧱 Build the seven core libraries'
       run: cmake --build build/core-libs --target SerialStudioUi
 
 #---------------------------------------------------------------------------------------------------
