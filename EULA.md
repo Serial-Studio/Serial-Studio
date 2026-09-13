@@ -14,8 +14,8 @@ activating, or using the Software you accept this Agreement.
 
 Subject to this Agreement, the Licensor grants the Licensee a non-exclusive,
 non-transferable license to install and use the Software on up to the number of
-activated devices in the purchased Seat Tier (Pro: 5, Small Business: 20,
-Enterprise: 100), on infrastructure under the Licensee's control.
+activated devices stated for the purchased Seat Tier at the time of purchase, on
+infrastructure under the Licensee's control.
 
 - Monthly and yearly plans: the grant runs while the subscription is paid and active.
 - Lifetime plans: the grant is perpetual and irrevocable, except upon termination

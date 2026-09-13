@@ -491,8 +491,8 @@ version too (see [Binary (Direct) Mode](#binary-direct-mode) above).
 **Serial Studio Pro**
 - Visit [serial-studio.com](https://serial-studio.com) for current pricing
 - Choose monthly, yearly, or lifetime billing
-- Three seat tiers per plan: Pro (5 device activations), Small Business
-  (20 device activations), and Enterprise (100 device activations)
+- Seat tiers: Pro (3 device activations), Small Business (10 device
+  activations), and Test Stand (20 offline device activations, one-time)
 - Monthly and yearly licenses renew until cancelled; the lifetime license
   is a one-time perpetual purchase (currently offered for individual use)
 
@@ -576,9 +576,9 @@ Pro features become locked. You can:
 
 Pro is offered as monthly, yearly, or lifetime licenses. The monthly and
 yearly plans renew until cancelled; the lifetime plan is a one-time perpetual
-purchase. Each plan comes in three seat tiers (Pro, Small Business,
-Enterprise) with different device-activation counts. Updates are included on
-every plan.
+purchase. Each plan comes in seat tiers (Pro, Small Business) with different
+device-activation counts, plus the one-time Test Stand license for industrial
+equipment. Updates are included on every plan.
 
 ### Do I get updates with Pro?
 
@@ -590,13 +590,13 @@ every plan.
 
 ### What if I need more licenses for my team?
 
-Pick the seat tier that fits the team size: Pro covers 5 device activations,
-Small Business covers 20, and Enterprise covers 100. For larger deployments,
-contact alex@serial-studio.com.
+Pick the seat tier that fits the team size: Pro covers 3 device activations
+and Small Business covers 10. For larger deployments, or for a purchase order,
+contact alex@serial-studio.com for a quote.
 
 ### Can I use Pro on multiple computers?
 
-Each plan includes a fixed number of device activations (5, 20, or 100
+Each plan includes a fixed number of device activations (3, 10, or 20
 depending on the tier). You can run Pro on that many machines at once and move
 activations between computers as needed (deactivate in the Licensing
 dialog, then activate elsewhere).

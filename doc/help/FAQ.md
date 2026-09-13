@@ -524,14 +524,17 @@ Current packages bundle their own glibc and run on any distribution from the Deb
 ### How much does Pro cost?
 
 Check current pricing at [serial-studio.com](https://serial-studio.com). Pro
-is sold as monthly, yearly, or lifetime licenses, each in three seat tiers:
+is sold as monthly, yearly, or lifetime licenses, in these seat tiers:
 
-- **Pro:** for individuals, 5 device activations.
-- **Small Business:** for small teams, 20 device activations.
-- **Enterprise:** for large teams, 100 device activations.
+- **Pro:** for individuals, 3 device activations.
+- **Small Business:** for small teams, 10 device activations.
+- **Test Stand:** a one-time license for industrial test benches and
+  production equipment, 20 offline device activations.
 
-Monthly and yearly plans renew until cancelled; the lifetime plan is a
-one-time perpetual purchase. The official binary includes a 14-day free trial.
+Monthly and yearly plans renew until cancelled; the lifetime and Test Stand
+plans are one-time perpetual purchases. The official binary includes a 14-day
+free trial. For teams that need more than 10 seats, email
+alex@serial-studio.com for a quote.
 
 ### Can I try Pro features before buying?
 
