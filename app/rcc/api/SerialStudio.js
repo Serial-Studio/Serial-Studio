@@ -429,7 +429,9 @@ project.outputWidget = project.outputWidget || {};
 project.painter = project.painter || {};
 project.source = project.source || {};
 project.template = project.template || {};
+project.transformLibrary = project.transformLibrary || {};
 project.workspace = project.workspace || {};
+project.workspace.profile = project.workspace.profile || {};
 var scripts = (typeof scripts !== 'undefined') ? scripts : {};
 var sessions = (typeof sessions !== 'undefined') ? sessions : {};
 var stream = (typeof stream !== 'undefined') ? stream : {};
@@ -2620,6 +2622,26 @@ project.template.list = function() {
   return apiCall('project.template.list', p);
 };
 
+project.transformLibrary.dryRun = function(code, options) {
+  var p = {};
+  p['code'] = code;
+  if (options) for (var k in options) p[k] = options[k];
+  return apiCall('project.transformLibrary.dryRun', p);
+};
+
+project.transformLibrary.get = function(options) {
+  var p = {};
+  if (options) for (var k in options) p[k] = options[k];
+  return apiCall('project.transformLibrary.get', p);
+};
+
+project.transformLibrary.set = function(code, options) {
+  var p = {};
+  p['code'] = code;
+  if (options) for (var k in options) p[k] = options[k];
+  return apiCall('project.transformLibrary.set', p);
+};
+
 project.undo = function() {
   var p = {};
   return apiCall('project.undo', p);
@@ -2683,6 +2705,36 @@ project.workspace.getCustomizeMode = function() {
 project.workspace.list = function() {
   var p = {};
   return apiCall('project.workspace.list', p);
+};
+
+project.workspace.profile.add = function(title) {
+  var p = {};
+  p['title'] = title;
+  return apiCall('project.workspace.profile.add', p);
+};
+
+project.workspace.profile.list = function() {
+  var p = {};
+  return apiCall('project.workspace.profile.list', p);
+};
+
+project.workspace.profile.remove = function(profileId) {
+  var p = {};
+  p['profileId'] = profileId;
+  return apiCall('project.workspace.profile.remove', p);
+};
+
+project.workspace.profile.select = function(options) {
+  var p = {};
+  if (options) for (var k in options) p[k] = options[k];
+  return apiCall('project.workspace.profile.select', p);
+};
+
+project.workspace.profile.update = function(profileId, options) {
+  var p = {};
+  p['profileId'] = profileId;
+  if (options) for (var k in options) p[k] = options[k];
+  return apiCall('project.workspace.profile.update', p);
 };
 
 project.workspace.removeWidget = function(options) {

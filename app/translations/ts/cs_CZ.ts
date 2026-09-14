@@ -45,26 +45,30 @@
     </message>
     <message>
         <location filename="../../../core/Ui/ProjectEditor/EditorMqtt.cpp" line="470"/>
-        <source>Passphrase for an encrypted private key (stored in the encrypted vault, never in the project file)</source>
-        <translation>Heslo pro šifrovaný soukromý klíč (uloženo v šifrovaném úložišti, nikdy v souboru projektu)</translation>
+        <source>Passphrase for an encrypted private key (stored obfuscated in this machine's credential vault, never in the project file)</source>
+        <translation>Heslo pro šifrovaný soukromý klíč (uloženo obfuskovaně v úložišti přihlašovacích údajů tohoto počítače, nikdy v souboru projektu)</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorMqtt.cpp" line="481"/>
+        <source>Passphrase for an encrypted private key (stored in the encrypted vault, never in the project file)</source>
+        <translation type="vanished">Heslo pro šifrovaný soukromý klíč (uloženo v šifrovaném úložišti, nikdy v souboru projektu)</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorMqtt.cpp" line="482"/>
         <source>ALPN (MQTT over port 443)</source>
         <translation>ALPN (MQTT přes port 443)</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorMqtt.cpp" line="482"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorMqtt.cpp" line="483"/>
         <source>Announce an ALPN protocol so brokers can serve MQTT on port 443 behind firewalls</source>
         <translation>Oznámit ALPN protokol, aby brokery mohly poskytovat MQTT na portu 443 za firewally</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorMqtt.cpp" line="496"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorMqtt.cpp" line="497"/>
         <source>ALPN Protocol</source>
         <translation>ALPN Protokol</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorMqtt.cpp" line="498"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorMqtt.cpp" line="499"/>
         <source>Protocol name announced during the TLS handshake (AWS IoT uses x-amzn-mqtt-ca)</source>
         <translation>Název protokolu oznámený během TLS handshake (AWS IoT používá x-amzn-mqtt-ca)</translation>
     </message>
@@ -2721,144 +2725,144 @@ Povolte pouze v důvěryhodných sítích. Nedůvěryhodní klienti mohou číst
 <context>
     <name>CSV::Player</name>
     <message>
-        <location filename="../../../core/Storage/CSV/Player.cpp" line="331"/>
+        <location filename="../../../core/Storage/CSV/Player.cpp" line="335"/>
         <source>Select CSV file</source>
         <translation>Vybrat soubor CSV</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/CSV/Player.cpp" line="333"/>
+        <location filename="../../../core/Storage/CSV/Player.cpp" line="337"/>
         <source>CSV files (*.csv)</source>
         <translation>Soubory CSV (*.CSV)</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/CSV/Player.cpp" line="462"/>
+        <location filename="../../../core/Storage/CSV/Player.cpp" line="466"/>
         <source>Device Connection Active</source>
         <translation>Aktivní Připojení k Zařízení</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/CSV/Player.cpp" line="463"/>
+        <location filename="../../../core/Storage/CSV/Player.cpp" line="467"/>
         <source>To use this feature, you must disconnect from the device. Do you want to proceed?</source>
         <translation>Pro použití této funkce je nutné odpojit zařízení. Pokračovat?</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/CSV/Player.cpp" line="472"/>
-        <location filename="../../../core/Storage/CSV/Player.cpp" line="491"/>
+        <location filename="../../../core/Storage/CSV/Player.cpp" line="476"/>
+        <location filename="../../../core/Storage/CSV/Player.cpp" line="495"/>
         <source>Check file permissions and location</source>
         <translation>Zkontrolovat oprávnění a umístění souboru</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/CSV/Player.cpp" line="480"/>
-        <location filename="../../../core/Storage/CSV/Player.cpp" line="567"/>
-        <location filename="../../../core/Storage/CSV/Player.cpp" line="706"/>
+        <location filename="../../../core/Storage/CSV/Player.cpp" line="484"/>
+        <location filename="../../../core/Storage/CSV/Player.cpp" line="571"/>
+        <location filename="../../../core/Storage/CSV/Player.cpp" line="710"/>
         <source>Insufficient Data in CSV File</source>
         <translation>Nedostatečná Data v Souboru CSV</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/CSV/Player.cpp" line="471"/>
-        <location filename="../../../core/Storage/CSV/Player.cpp" line="490"/>
+        <location filename="../../../core/Storage/CSV/Player.cpp" line="475"/>
+        <location filename="../../../core/Storage/CSV/Player.cpp" line="494"/>
         <source>Cannot read CSV file</source>
         <translation>Nelze přečíst soubor CSV</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/CSV/Player.cpp" line="481"/>
-        <location filename="../../../core/Storage/CSV/Player.cpp" line="568"/>
-        <location filename="../../../core/Storage/CSV/Player.cpp" line="707"/>
+        <location filename="../../../core/Storage/CSV/Player.cpp" line="485"/>
+        <location filename="../../../core/Storage/CSV/Player.cpp" line="572"/>
+        <location filename="../../../core/Storage/CSV/Player.cpp" line="711"/>
         <source>The CSV file must contain at least one data row to proceed. Check the file and try again.</source>
         <translation>Soubor CSV musí obsahovat alespoň jeden datový řádek. Zkontrolujte soubor a zkuste to znovu.</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/CSV/Player.cpp" line="700"/>
+        <location filename="../../../core/Storage/CSV/Player.cpp" line="704"/>
         <source>CSV Row Limit Reached</source>
         <translation>Dosažen Limit Řádků CSV</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/CSV/Player.cpp" line="701"/>
+        <location filename="../../../core/Storage/CSV/Player.cpp" line="705"/>
         <source>Playback is limited to %L1 rows; the rest of the file was not indexed.</source>
         <translation>Přehrávání je omezeno na %L1 řádků; zbytek souboru nebyl indexován.</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/CSV/Player.cpp" line="1167"/>
+        <location filename="../../../core/Storage/CSV/Player.cpp" line="1172"/>
         <source>Seconds (s)</source>
         <translation>Sekundy (s)</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/CSV/Player.cpp" line="1167"/>
+        <location filename="../../../core/Storage/CSV/Player.cpp" line="1172"/>
         <source>Milliseconds (ms)</source>
         <translation>Milisekundy (ms)</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/CSV/Player.cpp" line="1167"/>
+        <location filename="../../../core/Storage/CSV/Player.cpp" line="1172"/>
         <source>Microseconds (us)</source>
         <translation>Mikrosekundy (us)</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/CSV/Player.cpp" line="1171"/>
+        <location filename="../../../core/Storage/CSV/Player.cpp" line="1176"/>
         <source>Timestamp Units</source>
         <translation>Jednotky Časové Značky</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/CSV/Player.cpp" line="1172"/>
+        <location filename="../../../core/Storage/CSV/Player.cpp" line="1177"/>
         <source>The timestamp column does not declare a unit. How should it be interpreted?</source>
         <translation>Sloupec časové značky nedeklaruje jednotku. Jak má být interpretován?</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/CSV/Player.cpp" line="1197"/>
+        <location filename="../../../core/Storage/CSV/Player.cpp" line="1202"/>
         <source>Invalid CSV</source>
         <translation>Neplatný CSV</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/CSV/Player.cpp" line="1198"/>
+        <location filename="../../../core/Storage/CSV/Player.cpp" line="1203"/>
         <source>The CSV file does not contain any data or headers.</source>
         <translation>Soubor CSV neobsahuje žádná data ani záhlaví.</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/CSV/Player.cpp" line="1211"/>
+        <location filename="../../../core/Storage/CSV/Player.cpp" line="1216"/>
         <source>Select a date/time column</source>
         <translation>Vyberte sloupec data/času</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/CSV/Player.cpp" line="1211"/>
-        <location filename="../../../core/Storage/CSV/Player.cpp" line="1223"/>
+        <location filename="../../../core/Storage/CSV/Player.cpp" line="1216"/>
+        <location filename="../../../core/Storage/CSV/Player.cpp" line="1228"/>
         <source>Set interval manually</source>
         <translation>Nastavit interval ručně</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/CSV/Player.cpp" line="1213"/>
+        <location filename="../../../core/Storage/CSV/Player.cpp" line="1218"/>
         <source>CSV Date/Time Selection</source>
         <translation>Výběr Data/času CSV</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/CSV/Player.cpp" line="1214"/>
+        <location filename="../../../core/Storage/CSV/Player.cpp" line="1219"/>
         <source>Choose how to handle the date/time data:</source>
         <translation>Zvolte způsob zpracování dat data/času:</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/CSV/Player.cpp" line="1226"/>
+        <location filename="../../../core/Storage/CSV/Player.cpp" line="1231"/>
         <source>Set Interval</source>
         <translation>Nastavit Interval</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/CSV/Player.cpp" line="1227"/>
+        <location filename="../../../core/Storage/CSV/Player.cpp" line="1232"/>
         <source>Please enter the interval between rows in milliseconds:</source>
         <translation>Zadejte interval mezi řádky v milisekundách:</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/CSV/Player.cpp" line="1244"/>
+        <location filename="../../../core/Storage/CSV/Player.cpp" line="1249"/>
         <source>Select Date/Time Column</source>
         <translation>Vybrat Sloupec Data/času</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/CSV/Player.cpp" line="1245"/>
+        <location filename="../../../core/Storage/CSV/Player.cpp" line="1250"/>
         <source>Please select the column that contains the date/time data:</source>
         <translation>Vyberte sloupec, který obsahuje data data/času:</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/CSV/Player.cpp" line="1255"/>
+        <location filename="../../../core/Storage/CSV/Player.cpp" line="1260"/>
         <source>Invalid Selection</source>
         <translation>Neplatný Výběr</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/CSV/Player.cpp" line="1255"/>
+        <location filename="../../../core/Storage/CSV/Player.cpp" line="1260"/>
         <source>The selected column is not valid.</source>
         <translation>Vybraný sloupec není platný.</translation>
     </message>
@@ -2953,6 +2957,79 @@ Povolte pouze v důvěryhodných sítích. Nedůvěryhodní klienti mohou číst
         <location filename="../../qml/ProjectEditor/Views/CodeEditorMenu.qml" line="91"/>
         <source>Format Selection</source>
         <translation>Formátovat Výběr</translation>
+    </message>
+</context>
+<context>
+    <name>CodeEditorToolbar</name>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/CodeEditorToolbar.qml" line="60"/>
+        <source>Reset</source>
+        <translation>Resetovat</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/CodeEditorToolbar.qml" line="70"/>
+        <source>Open</source>
+        <translation>Otevřít</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/CodeEditorToolbar.qml" line="80"/>
+        <source>Undo</source>
+        <translation>Zpět</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/CodeEditorToolbar.qml" line="85"/>
+        <source>Undo the last code edit</source>
+        <translation>Vrátit poslední úpravu kódu</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/CodeEditorToolbar.qml" line="91"/>
+        <source>Redo</source>
+        <translation>Znovu</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/CodeEditorToolbar.qml" line="96"/>
+        <source>Redo the previously undone edit</source>
+        <translation>Znovu provést předchozí vrácenou úpravu</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/CodeEditorToolbar.qml" line="110"/>
+        <source>Cut</source>
+        <translation>Vyjmout</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/CodeEditorToolbar.qml" line="114"/>
+        <source>Cut selected code to clipboard</source>
+        <translation>Vyjmout vybraný kód do schránky</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/CodeEditorToolbar.qml" line="120"/>
+        <source>Copy</source>
+        <translation>Kopírovat</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/CodeEditorToolbar.qml" line="124"/>
+        <source>Copy selected code to clipboard</source>
+        <translation>Zkopírovat vybraný kód do schránky</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/CodeEditorToolbar.qml" line="130"/>
+        <source>Paste</source>
+        <translation>Vložit</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/CodeEditorToolbar.qml" line="134"/>
+        <source>Paste code from clipboard</source>
+        <translation>Vložit kód ze schránky</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/CodeEditorToolbar.qml" line="148"/>
+        <source>Help</source>
+        <translation>Nápověda</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/CodeEditorToolbar.qml" line="163"/>
+        <source>Validate</source>
+        <translation>Validovat</translation>
     </message>
 </context>
 <context>
@@ -5463,29 +5540,24 @@ Povolte pouze v důvěryhodných sítích. Nedůvěryhodní klienti mohou číst
         <translation>Řídicí Smyčka</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ControlScriptView.qml" line="125"/>
         <source>Undo</source>
-        <translation>Zpět</translation>
+        <translation type="vanished">Zpět</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ControlScriptView.qml" line="136"/>
         <source>Redo</source>
-        <translation>Znovu</translation>
+        <translation type="vanished">Znovu</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ControlScriptView.qml" line="155"/>
         <source>Cut</source>
-        <translation>Vyjmout</translation>
+        <translation type="vanished">Vyjmout</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ControlScriptView.qml" line="165"/>
         <source>Copy</source>
-        <translation>Kopírovat</translation>
+        <translation type="vanished">Kopírovat</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ControlScriptView.qml" line="175"/>
         <source>Paste</source>
-        <translation>Vložit</translation>
+        <translation type="vanished">Vložit</translation>
     </message>
     <message>
         <source>Select All</source>
@@ -5500,22 +5572,21 @@ Povolte pouze v důvěryhodných sítích. Nedůvěryhodní klienti mohou číst
         <translation type="vanished">Formátovat Výběr</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ControlScriptView.qml" line="105"/>
         <source>Reset</source>
-        <translation>Resetovat</translation>
+        <translation type="vanished">Resetovat</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ControlScriptView.qml" line="109"/>
+        <location filename="../../qml/ProjectEditor/Views/ControlScriptView.qml" line="89"/>
         <source>Reset to the default control loop</source>
         <translation>Obnovit výchozí řídicí smyčku</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ControlScriptView.qml" line="119"/>
+        <location filename="../../qml/ProjectEditor/Views/ControlScriptView.qml" line="88"/>
         <source>Import a control loop file</source>
         <translation>Importovat soubor řídicí smyčky</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ControlScriptView.qml" line="198"/>
+        <location filename="../../qml/ProjectEditor/Views/ControlScriptView.qml" line="90"/>
         <source>Open the control loop documentation</source>
         <translation>Otevřít dokumentaci řídicí smyčky</translation>
     </message>
@@ -5524,55 +5595,47 @@ Povolte pouze v důvěryhodných sítích. Nedůvěryhodní klienti mohou číst
         <translation type="vanished">Obnovit výchozí řídicí skript</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ControlScriptView.qml" line="115"/>
         <source>Open</source>
-        <translation>Otevřít</translation>
+        <translation type="vanished">Otevřít</translation>
     </message>
     <message>
         <source>Import a control script file</source>
         <translation type="vanished">Importovat soubor řídicího skriptu</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ControlScriptView.qml" line="130"/>
         <source>Undo the last code edit</source>
-        <translation>Vrátit poslední úpravu kódu</translation>
+        <translation type="vanished">Vrátit poslední úpravu kódu</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ControlScriptView.qml" line="141"/>
         <source>Redo the previously undone edit</source>
-        <translation>Znovu provést předchozí vrácenou úpravu</translation>
+        <translation type="vanished">Znovu provést předchozí vrácenou úpravu</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ControlScriptView.qml" line="159"/>
         <source>Cut selected code to clipboard</source>
-        <translation>Vyjmout vybraný kód do schránky</translation>
+        <translation type="vanished">Vyjmout vybraný kód do schránky</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ControlScriptView.qml" line="169"/>
         <source>Copy selected code to clipboard</source>
-        <translation>Zkopírovat vybraný kód do schránky</translation>
+        <translation type="vanished">Zkopírovat vybraný kód do schránky</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ControlScriptView.qml" line="179"/>
         <source>Paste code from clipboard</source>
-        <translation>Vložit kód ze schránky</translation>
+        <translation type="vanished">Vložit kód ze schránky</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ControlScriptView.qml" line="193"/>
         <source>Help</source>
-        <translation>Nápověda</translation>
+        <translation type="vanished">Nápověda</translation>
     </message>
     <message>
         <source>Open the control script documentation</source>
         <translation type="vanished">Otevřít dokumentaci řídicího skriptu</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ControlScriptView.qml" line="208"/>
         <source>Validate</source>
-        <translation>Validovat</translation>
+        <translation type="vanished">Validovat</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ControlScriptView.qml" line="212"/>
+        <location filename="../../qml/ProjectEditor/Views/ControlScriptView.qml" line="91"/>
         <source>Verify that the script compiles correctly</source>
         <translation>Ověřit, že se skript správně zkompiluje</translation>
     </message>
@@ -5920,27 +5983,27 @@ Povolte pouze v důvěryhodných sítích. Nedůvěryhodní klienti mohou číst
 <context>
     <name>DataExportView</name>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/DataExportView.qml" line="34"/>
+        <location filename="../../qml/ProjectEditor/Views/DataExportView.qml" line="25"/>
         <source>Data Export</source>
         <translation>Export Dat</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/DataExportView.qml" line="47"/>
+        <location filename="../../qml/ProjectEditor/Views/DataExportView.qml" line="34"/>
         <source>MQTT Publisher</source>
         <translation>Vydavatel MQTT</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/DataExportView.qml" line="48"/>
+        <location filename="../../qml/ProjectEditor/Views/DataExportView.qml" line="35"/>
         <source>Publish dataset values to an MQTT broker as they arrive, as plain topics or Sparkplug B.</source>
         <translation>Publikovat hodnoty datových sad do MQTT brokeru při jejich příchodu, jako jednoduché topicy nebo Sparkplug B.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/DataExportView.qml" line="54"/>
+        <location filename="../../qml/ProjectEditor/Views/DataExportView.qml" line="41"/>
         <source>InfluxDB Sink</source>
         <translation>Cíl Influxdb</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/DataExportView.qml" line="55"/>
+        <location filename="../../qml/ProjectEditor/Views/DataExportView.qml" line="42"/>
         <source>Write every published block to an InfluxDB 2.x bucket as line protocol.</source>
         <translation>Zapsat každý publikovaný blok do InfluxDB 2.x bucketu jako řádkový protokol.</translation>
     </message>
@@ -10124,7 +10187,7 @@ Načíst jej znovu?</translation>
 <context>
     <name>DataModel::TransformLibraryEditor</name>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/TransformLibraryEditor.cpp" line="140"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/TransformLibraryEditor.cpp" line="141"/>
         <source>//
 // JavaScript Library
 //
@@ -10165,7 +10228,7 @@ Načíst jej znovu?</translation>
 </translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/TransformLibraryEditor.cpp" line="159"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/TransformLibraryEditor.cpp" line="160"/>
         <source>--
 -- Lua Library
 --
@@ -10206,54 +10269,54 @@ Načíst jej znovu?</translation>
 </translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/TransformLibraryEditor.cpp" line="255"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/TransformLibraryEditor.cpp" line="256"/>
         <source>Select Lua file to import</source>
         <translation>Vyberte soubor Lua k importu</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/TransformLibraryEditor.cpp" line="256"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/TransformLibraryEditor.cpp" line="257"/>
         <source>Select JavaScript file to import</source>
         <translation>Vyberte soubor JavaScript k importu</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/TransformLibraryEditor.cpp" line="340"/>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/TransformLibraryEditor.cpp" line="356"/>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/TransformLibraryEditor.cpp" line="373"/>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/TransformLibraryEditor.cpp" line="382"/>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/TransformLibraryEditor.cpp" line="391"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/TransformLibraryEditor.cpp" line="341"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/TransformLibraryEditor.cpp" line="357"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/TransformLibraryEditor.cpp" line="374"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/TransformLibraryEditor.cpp" line="383"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/TransformLibraryEditor.cpp" line="392"/>
         <source>Code Validation Failed</source>
         <translation>Validace Kódu Selhala</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/TransformLibraryEditor.cpp" line="341"/>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/TransformLibraryEditor.cpp" line="374"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/TransformLibraryEditor.cpp" line="342"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/TransformLibraryEditor.cpp" line="375"/>
         <source>Failed to create the validation engine.</source>
         <translation>Nepodařilo se vytvořit validační engine.</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/TransformLibraryEditor.cpp" line="352"/>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/TransformLibraryEditor.cpp" line="383"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/TransformLibraryEditor.cpp" line="353"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/TransformLibraryEditor.cpp" line="384"/>
         <source>The library did not finish running within %1 ms. Check for an infinite loop at the top level.</source>
         <translation>Knihovna nedokončila běh do %1 ms. Zkontrolujte nekonečnou smyčku na nejvyšší úrovni.</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/TransformLibraryEditor.cpp" line="360"/>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/TransformLibraryEditor.cpp" line="399"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/TransformLibraryEditor.cpp" line="361"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/TransformLibraryEditor.cpp" line="400"/>
         <source>Code Validation Successful</source>
         <translation>Validace Kódu Úspěšná</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/TransformLibraryEditor.cpp" line="361"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/TransformLibraryEditor.cpp" line="362"/>
         <source>No errors detected in the Lua library.</source>
         <translation>V knihovně Lua nebyly zjištěny žádné chyby.</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/TransformLibraryEditor.cpp" line="392"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/TransformLibraryEditor.cpp" line="393"/>
         <source>Line %1: %2</source>
         <translation>Řádek %1: %2</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/TransformLibraryEditor.cpp" line="400"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/TransformLibraryEditor.cpp" line="401"/>
         <source>No errors detected in the JavaScript library.</source>
         <translation>V knihovně JavaScript nebyly zjištěny žádné chyby.</translation>
     </message>
@@ -12219,47 +12282,47 @@ Platný formát: 01 A2 FF 3C</translation>
         <translation>Heslo pro autentizaci brokera</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorMqtt.cpp" line="513"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorMqtt.cpp" line="514"/>
         <source>SSL / TLS</source>
         <translation>SSL / TLS</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorMqtt.cpp" line="524"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorMqtt.cpp" line="525"/>
         <source>Use SSL/TLS</source>
         <translation>Použít SSL/TLS</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorMqtt.cpp" line="525"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorMqtt.cpp" line="526"/>
         <source>Tunnel the broker connection over TLS</source>
         <translation>Tunelovat připojení k brokeru přes TLS</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorMqtt.cpp" line="538"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorMqtt.cpp" line="539"/>
         <source>Protocol</source>
         <translation>Protokol</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorMqtt.cpp" line="539"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorMqtt.cpp" line="540"/>
         <source>Negotiated TLS protocol family</source>
         <translation>Vyjednaná rodina TLS protokolu</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorMqtt.cpp" line="549"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorMqtt.cpp" line="550"/>
         <source>Peer Verify</source>
         <translation>Ověření Protějšku</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorMqtt.cpp" line="550"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorMqtt.cpp" line="551"/>
         <source>How strictly the broker's certificate chain is validated</source>
         <translation>Jak přísně je validován řetězec certifikátů brokeru</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorMqtt.cpp" line="560"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorMqtt.cpp" line="561"/>
         <source>Verify Depth</source>
         <translation>Hloubka Ověření</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorMqtt.cpp" line="561"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorMqtt.cpp" line="562"/>
         <source>Maximum certificate chain length accepted (0 = unlimited)</source>
         <translation>Maximální délka akceptovaného řetězce certifikátů (0 = neomezeno)</translation>
     </message>
@@ -18759,11 +18822,15 @@ Plans include Monthly, Yearly, and Lifetime options.</source>
 Plány zahrnují měsíční, roční a doživotní možnosti.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="138"/>
         <source>Your license includes 5 device activations.
 Yearly is the best value; Monthly and Lifetime plans are also available.</source>
-        <translation>Vaše licence zahrnuje 5 aktivací zařízení.
+        <translation type="vanished">Vaše licence zahrnuje 5 aktivací zařízení.
 Roční plán nabízí nejlepší hodnotu; k dispozici jsou také měsíční a doživotní plány.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="138"/>
+        <source>Yearly is the best value; Monthly and Lifetime plans are also available.</source>
+        <translation>Roční je nejlepší hodnota; k dispozici jsou také měsíční a doživotní plány.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="150"/>
@@ -24322,7 +24389,8 @@ Klikněte na Obnovit pro aktualizaci seznamu.</translation>
     </message>
     <message>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectLoader.cpp" line="794"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectPersistence.cpp" line="357"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectLoader.cpp" line="980"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectPersistence.cpp" line="368"/>
         <source>Untitled Project</source>
         <translation>Nepojmenovaný Projekt</translation>
     </message>
@@ -24333,7 +24401,7 @@ Klikněte na Obnovit pro aktualizaci seznamu.</translation>
     </message>
     <message>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectLoader.cpp" line="803"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectPersistence.cpp" line="336"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectPersistence.cpp" line="347"/>
         <source>Serial Studio Project Files (*.ssproj)</source>
         <translation>Soubory Projektů Serial Studio (*.ssproj)</translation>
     </message>
@@ -24363,73 +24431,73 @@ Klikněte na Obnovit pro aktualizaci seznamu.</translation>
         <translation>Přidat Import do Projektu</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectLoader.cpp" line="1063"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectLoader.cpp" line="1068"/>
         <source>Device A</source>
         <translation>Zařízení A</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectLoader.cpp" line="1106"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectLoader.cpp" line="1111"/>
         <source>Multi-source projects require a Pro license</source>
         <translation>Projekty s více zdroji vyžadují licenci Pro</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectLoader.cpp" line="1107"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectLoader.cpp" line="1112"/>
         <source>This project contains multiple data sources. Only the first source has been loaded. A Serial Studio Pro license is required to use multi-source projects.</source>
         <translation>Tento projekt obsahuje více zdrojů dat. Byl načten pouze první zdroj. Pro použití projektů s více zdroji je vyžadována licence Serial Studio Pro.</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectLoader.cpp" line="1218"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectLoader.cpp" line="1223"/>
         <source>Workspace IDs remapped on load</source>
         <translation>ID pracovních prostorů přemapována při načtení</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectLoader.cpp" line="1219"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectLoader.cpp" line="1224"/>
         <source>%1 custom workspace ID(s) overlapped the new reserved auto range and were moved into the user range. Save the project to make the remap permanent.</source>
         <translation>%1 vlastních ID pracovních prostorů se překrývalo s novým rezervovaným automatickým rozsahem a bylo přesunuto do uživatelského rozsahu. Uložte projekt, aby se přemapování stalo trvalým.</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectPersistence.cpp" line="294"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectPersistence.cpp" line="305"/>
         <source>Do you want to save your changes?</source>
         <translation>Uložit změny?</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectPersistence.cpp" line="295"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectPersistence.cpp" line="306"/>
         <source>You have unsaved modifications in this project!</source>
         <translation>Máte neuložené změny v tomto projektu!</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectPersistence.cpp" line="334"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectPersistence.cpp" line="345"/>
         <source>Save Serial Studio Project</source>
         <translation>Uložit Projekt Serial Studio</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectPersistence.cpp" line="427"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectPersistence.cpp" line="438"/>
         <source>File save error</source>
         <translation>Chyba při ukládání souboru</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectPersistence.cpp" line="657"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectPersistence.cpp" line="670"/>
         <source>Project file removed from disk</source>
         <translation>Soubor projektu odstraněn z disku</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectPersistence.cpp" line="658"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectPersistence.cpp" line="671"/>
         <source>%1 was deleted or renamed by another program. Save the project to recreate it.</source>
         <translation>%1 byl smazán nebo přejmenován jiným programem. Uložte projekt pro jeho opětovné vytvoření.</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectPersistence.cpp" line="681"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectPersistence.cpp" line="703"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectPersistence.cpp" line="704"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectPersistence.cpp" line="726"/>
         <source>Project file changed on disk</source>
         <translation>Soubor projektu změněn na disku</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectPersistence.cpp" line="682"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectPersistence.cpp" line="705"/>
         <source>%1 was modified by another program. The in-memory project was kept; reopen the file to load the external changes.</source>
         <translation>%1 byl upraven jiným programem. Projekt v paměti byl zachován; znovu otevřete soubor pro načtení externích změn.</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectPersistence.cpp" line="700"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectPersistence.cpp" line="723"/>
         <source>The project file was modified by another program.
 
 Reload it and discard your unsaved changes?</source>
@@ -24438,7 +24506,7 @@ Reload it and discard your unsaved changes?</source>
 Načíst jej znovu a zahodit neuložené změny?</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectPersistence.cpp" line="702"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectPersistence.cpp" line="725"/>
         <source>The project file was modified by another program.
 
 Reload it?</source>
@@ -24447,12 +24515,12 @@ Reload it?</source>
 Načíst jej znovu?</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectPersistence.cpp" line="742"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectPersistence.cpp" line="765"/>
         <source>Project file could not be reloaded</source>
         <translation>Soubor projektu nelze znovu načíst</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectPersistence.cpp" line="743"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectPersistence.cpp" line="766"/>
         <source>%1 could not be read back: it is unreadable or no longer valid JSON. Your in-memory project was kept; save it to overwrite the file on disk.</source>
         <translation>%1 nelze načíst zpět: soubor je nečitelný nebo již není platný JSON. Projekt v paměti byl zachován; uložte jej pro přepsání souboru na disku.</translation>
     </message>
@@ -25220,37 +25288,37 @@ Načíst jej znovu?</translation>
 <context>
     <name>ProjectScriptsView</name>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ProjectScriptsView.qml" line="34"/>
+        <location filename="../../qml/ProjectEditor/Views/ProjectScriptsView.qml" line="25"/>
         <source>Project Scripts</source>
         <translation>Skripty Projektu</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ProjectScriptsView.qml" line="47"/>
+        <location filename="../../qml/ProjectEditor/Views/ProjectScriptsView.qml" line="34"/>
         <source>Control Loop</source>
         <translation>Řídicí Smyčka</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ProjectScriptsView.qml" line="48"/>
+        <location filename="../../qml/ProjectEditor/Views/ProjectScriptsView.qml" line="35"/>
         <source>JavaScript setup() and loop() that run while the project is connected: timers, watchdogs, automated commands.</source>
         <translation>JavaScript setup() a loop(), které běží během připojení projektu: časovače, watchdogy, automatizované příkazy.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ProjectScriptsView.qml" line="54"/>
+        <location filename="../../qml/ProjectEditor/Views/ProjectScriptsView.qml" line="41"/>
         <source>Lua Library</source>
         <translation>Knihovna Lua</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ProjectScriptsView.qml" line="55"/>
+        <location filename="../../qml/ProjectEditor/Views/ProjectScriptsView.qml" line="42"/>
         <source>Functions every Lua value transform of this project can call, so a formula lives in one place.</source>
         <translation>Funkce, které může volat každá transformace hodnoty Lua v tomto projektu, takže vzorec existuje na jednom místě.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ProjectScriptsView.qml" line="61"/>
+        <location filename="../../qml/ProjectEditor/Views/ProjectScriptsView.qml" line="48"/>
         <source>JavaScript Library</source>
         <translation>Knihovna Javascript</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ProjectScriptsView.qml" line="62"/>
+        <location filename="../../qml/ProjectEditor/Views/ProjectScriptsView.qml" line="49"/>
         <source>Functions every JavaScript value transform of this project can call.</source>
         <translation>Funkce, které může volat každá transformace hodnoty Javascript v tomto projektu.</translation>
     </message>
@@ -31452,97 +31520,83 @@ Zapněte Vložit Projekt pro zabudování projektu do zástupce, aby fungoval i 
         <translation>Knihovna Javascript</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/TransformLibraryView.qml" line="107"/>
         <source>Reset</source>
-        <translation>Resetovat</translation>
+        <translation type="vanished">Resetovat</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/TransformLibraryView.qml" line="111"/>
+        <location filename="../../qml/ProjectEditor/Views/TransformLibraryView.qml" line="90"/>
         <source>Reset to the commented starter</source>
         <translation>Resetovat na komentovaný starter</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/TransformLibraryView.qml" line="117"/>
         <source>Open</source>
-        <translation>Otevřít</translation>
+        <translation type="vanished">Otevřít</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/TransformLibraryView.qml" line="122"/>
+        <location filename="../../qml/ProjectEditor/Views/TransformLibraryView.qml" line="93"/>
         <source>Import a Lua file</source>
         <translation>Importovat soubor Lua</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/TransformLibraryView.qml" line="122"/>
+        <location filename="../../qml/ProjectEditor/Views/TransformLibraryView.qml" line="93"/>
         <source>Import a JavaScript file</source>
         <translation>Importovat soubor JavaScript</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/TransformLibraryView.qml" line="127"/>
         <source>Undo</source>
-        <translation>Zpět</translation>
+        <translation type="vanished">Zpět</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/TransformLibraryView.qml" line="132"/>
         <source>Undo the last code edit</source>
-        <translation>Vrátit poslední úpravu kódu</translation>
+        <translation type="vanished">Vrátit poslední úpravu kódu</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/TransformLibraryView.qml" line="138"/>
         <source>Redo</source>
-        <translation>Znovu</translation>
+        <translation type="vanished">Znovu</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/TransformLibraryView.qml" line="143"/>
         <source>Redo the previously undone edit</source>
-        <translation>Znovu provést předchozí vrácenou úpravu</translation>
+        <translation type="vanished">Znovu provést předchozí vrácenou úpravu</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/TransformLibraryView.qml" line="157"/>
         <source>Cut</source>
-        <translation>Vyjmout</translation>
+        <translation type="vanished">Vyjmout</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/TransformLibraryView.qml" line="161"/>
         <source>Cut selected code to clipboard</source>
-        <translation>Vyjmout vybraný kód do schránky</translation>
+        <translation type="vanished">Vyjmout vybraný kód do schránky</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/TransformLibraryView.qml" line="167"/>
         <source>Copy</source>
-        <translation>Kopírovat</translation>
+        <translation type="vanished">Kopírovat</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/TransformLibraryView.qml" line="171"/>
         <source>Copy selected code to clipboard</source>
-        <translation>Zkopírovat vybraný kód do schránky</translation>
+        <translation type="vanished">Zkopírovat vybraný kód do schránky</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/TransformLibraryView.qml" line="177"/>
         <source>Paste</source>
-        <translation>Vložit</translation>
+        <translation type="vanished">Vložit</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/TransformLibraryView.qml" line="181"/>
         <source>Paste code from clipboard</source>
-        <translation>Vložit kód ze schránky</translation>
+        <translation type="vanished">Vložit kód ze schránky</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/TransformLibraryView.qml" line="195"/>
         <source>Help</source>
-        <translation>Nápověda</translation>
+        <translation type="vanished">Nápověda</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/TransformLibraryView.qml" line="200"/>
+        <location filename="../../qml/ProjectEditor/Views/TransformLibraryView.qml" line="91"/>
         <source>Open the dataset transforms documentation</source>
         <translation>Otevřít dokumentaci transformací datových sad</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/TransformLibraryView.qml" line="210"/>
         <source>Validate</source>
-        <translation>Validovat</translation>
+        <translation type="vanished">Validovat</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/TransformLibraryView.qml" line="214"/>
+        <location filename="../../qml/ProjectEditor/Views/TransformLibraryView.qml" line="92"/>
         <source>Load the library in a sandbox and report the first error</source>
         <translation>Načíst knihovnu v sandboxu a ohlásit první chybu</translation>
     </message>

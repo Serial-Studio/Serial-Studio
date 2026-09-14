@@ -224,6 +224,23 @@ reports sustained frames/second per stage and per parser language, gated against
 above. The same engine runs headless for CI; see
 [Command-Line Interface](Command-Line-Interface.md#acquisition-pipeline-benchmark).
 
+### SIMD instruction set
+
+The vector kernels that scan the byte stream for frame delimiters, reduce plot minima and
+maxima, and compute FFT magnitudes and waterfall rows are written once per instruction set and
+picked at startup. On x86-64 the candidates are Scalar, SSE4 and AVX2; on ARM64 they are Scalar
+and NEON. Serial Studio detects what the processor supports and runs the widest one.
+
+**Preferences > Startup > System > SIMD Instruction Set** overrides that choice. The list holds
+`Auto`, labelled with the level it currently resolves to, plus every level this machine supports;
+selecting one applies it immediately and persists it, and no restart is needed because every level
+produces bit-identical numbers. A level the machine cannot run is never offered, and a preference
+carried over from another machine falls back to `Auto` without rewriting the setting.
+
+`--simd <level>` pins the level for one run without touching the saved preference, which is the way
+to compare lanes or to rule the kernels out while diagnosing a numeric difference. See
+[Command-Line Interface](Command-Line-Interface.md#general).
+
 ## Where the parser and transforms fit
 
 The parser and transforms are the user-visible parts of the pipeline. Everything else is

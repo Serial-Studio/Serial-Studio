@@ -45,26 +45,30 @@
     </message>
     <message>
         <location filename="../../../core/Ui/ProjectEditor/EditorMqtt.cpp" line="470"/>
-        <source>Passphrase for an encrypted private key (stored in the encrypted vault, never in the project file)</source>
-        <translation>Cụm mật khẩu cho khóa riêng tư được mã hóa (lưu trong kho mã hóa, không bao giờ trong tệp dự án)</translation>
+        <source>Passphrase for an encrypted private key (stored obfuscated in this machine's credential vault, never in the project file)</source>
+        <translation>Cụm mật khẩu cho khóa riêng tư được mã hóa (lưu trữ làm rối trong kho thông tin xác thực của máy này, không bao giờ trong tệp dự án)</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorMqtt.cpp" line="481"/>
+        <source>Passphrase for an encrypted private key (stored in the encrypted vault, never in the project file)</source>
+        <translation type="vanished">Cụm mật khẩu cho khóa riêng tư được mã hóa (lưu trong kho mã hóa, không bao giờ trong tệp dự án)</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorMqtt.cpp" line="482"/>
         <source>ALPN (MQTT over port 443)</source>
         <translation>ALPN (MQTT qua cổng 443)</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorMqtt.cpp" line="482"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorMqtt.cpp" line="483"/>
         <source>Announce an ALPN protocol so brokers can serve MQTT on port 443 behind firewalls</source>
         <translation>Thông báo giao thức ALPN để các broker có thể phục vụ MQTT trên cổng 443 phía sau tường lửa</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorMqtt.cpp" line="496"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorMqtt.cpp" line="497"/>
         <source>ALPN Protocol</source>
         <translation>Giao Thức ALPN</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorMqtt.cpp" line="498"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorMqtt.cpp" line="499"/>
         <source>Protocol name announced during the TLS handshake (AWS IoT uses x-amzn-mqtt-ca)</source>
         <translation>Tên giao thức được thông báo trong quá trình bắt tay TLS (AWS IoT sử dụng x-amzn-mqtt-ca)</translation>
     </message>
@@ -2709,144 +2713,144 @@ Chỉ bật tính năng này trên các mạng đáng tin cậy. Các máy khác
 <context>
     <name>CSV::Player</name>
     <message>
-        <location filename="../../../core/Storage/CSV/Player.cpp" line="331"/>
+        <location filename="../../../core/Storage/CSV/Player.cpp" line="335"/>
         <source>Select CSV file</source>
         <translation>Chọn tệp CSV</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/CSV/Player.cpp" line="333"/>
+        <location filename="../../../core/Storage/CSV/Player.cpp" line="337"/>
         <source>CSV files (*.csv)</source>
         <translation>Tệp CSV (*.CSV)</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/CSV/Player.cpp" line="462"/>
+        <location filename="../../../core/Storage/CSV/Player.cpp" line="466"/>
         <source>Device Connection Active</source>
         <translation>Kết Nối Thiết Bị Đang Hoạt Động</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/CSV/Player.cpp" line="463"/>
+        <location filename="../../../core/Storage/CSV/Player.cpp" line="467"/>
         <source>To use this feature, you must disconnect from the device. Do you want to proceed?</source>
         <translation>Để sử dụng tính năng này, bạn phải ngắt kết nối khỏi thiết bị. Bạn có muốn tiếp tục không?</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/CSV/Player.cpp" line="471"/>
-        <location filename="../../../core/Storage/CSV/Player.cpp" line="490"/>
+        <location filename="../../../core/Storage/CSV/Player.cpp" line="475"/>
+        <location filename="../../../core/Storage/CSV/Player.cpp" line="494"/>
         <source>Cannot read CSV file</source>
         <translation>Không thể đọc tệp CSV</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/CSV/Player.cpp" line="472"/>
-        <location filename="../../../core/Storage/CSV/Player.cpp" line="491"/>
+        <location filename="../../../core/Storage/CSV/Player.cpp" line="476"/>
+        <location filename="../../../core/Storage/CSV/Player.cpp" line="495"/>
         <source>Check file permissions and location</source>
         <translation>Kiểm tra quyền truy cập và vị trí tệp</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/CSV/Player.cpp" line="480"/>
-        <location filename="../../../core/Storage/CSV/Player.cpp" line="567"/>
-        <location filename="../../../core/Storage/CSV/Player.cpp" line="706"/>
+        <location filename="../../../core/Storage/CSV/Player.cpp" line="484"/>
+        <location filename="../../../core/Storage/CSV/Player.cpp" line="571"/>
+        <location filename="../../../core/Storage/CSV/Player.cpp" line="710"/>
         <source>Insufficient Data in CSV File</source>
         <translation>Dữ Liệu Không Đủ trong Tệp CSV</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/CSV/Player.cpp" line="481"/>
-        <location filename="../../../core/Storage/CSV/Player.cpp" line="568"/>
-        <location filename="../../../core/Storage/CSV/Player.cpp" line="707"/>
+        <location filename="../../../core/Storage/CSV/Player.cpp" line="485"/>
+        <location filename="../../../core/Storage/CSV/Player.cpp" line="572"/>
+        <location filename="../../../core/Storage/CSV/Player.cpp" line="711"/>
         <source>The CSV file must contain at least one data row to proceed. Check the file and try again.</source>
         <translation>Tệp CSV phải chứa ít nhất một hàng dữ liệu để tiếp tục. Kiểm tra tệp và thử lại.</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/CSV/Player.cpp" line="700"/>
+        <location filename="../../../core/Storage/CSV/Player.cpp" line="704"/>
         <source>CSV Row Limit Reached</source>
         <translation>Đã Đạt Giới Hạn Dòng CSV</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/CSV/Player.cpp" line="701"/>
+        <location filename="../../../core/Storage/CSV/Player.cpp" line="705"/>
         <source>Playback is limited to %L1 rows; the rest of the file was not indexed.</source>
         <translation>Phát lại giới hạn ở %L1 dòng; phần còn lại của tệp chưa được lập chỉ mục.</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/CSV/Player.cpp" line="1167"/>
+        <location filename="../../../core/Storage/CSV/Player.cpp" line="1172"/>
         <source>Seconds (s)</source>
         <translation>Giây (s)</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/CSV/Player.cpp" line="1167"/>
+        <location filename="../../../core/Storage/CSV/Player.cpp" line="1172"/>
         <source>Milliseconds (ms)</source>
         <translation>Mili giây (ms)</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/CSV/Player.cpp" line="1167"/>
+        <location filename="../../../core/Storage/CSV/Player.cpp" line="1172"/>
         <source>Microseconds (us)</source>
         <translation>Micro giây (us)</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/CSV/Player.cpp" line="1171"/>
+        <location filename="../../../core/Storage/CSV/Player.cpp" line="1176"/>
         <source>Timestamp Units</source>
         <translation>Đơn Vị Dấu Thời Gian</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/CSV/Player.cpp" line="1172"/>
+        <location filename="../../../core/Storage/CSV/Player.cpp" line="1177"/>
         <source>The timestamp column does not declare a unit. How should it be interpreted?</source>
         <translation>Cột dấu thời gian không khai báo đơn vị. Nên diễn giải như thế nào?</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/CSV/Player.cpp" line="1197"/>
+        <location filename="../../../core/Storage/CSV/Player.cpp" line="1202"/>
         <source>Invalid CSV</source>
         <translation>CSV Không Hợp Lệ</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/CSV/Player.cpp" line="1198"/>
+        <location filename="../../../core/Storage/CSV/Player.cpp" line="1203"/>
         <source>The CSV file does not contain any data or headers.</source>
         <translation>Tệp CSV không chứa dữ liệu hoặc tiêu đề nào.</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/CSV/Player.cpp" line="1211"/>
+        <location filename="../../../core/Storage/CSV/Player.cpp" line="1216"/>
         <source>Select a date/time column</source>
         <translation>Chọn cột ngày/giờ</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/CSV/Player.cpp" line="1211"/>
-        <location filename="../../../core/Storage/CSV/Player.cpp" line="1223"/>
+        <location filename="../../../core/Storage/CSV/Player.cpp" line="1216"/>
+        <location filename="../../../core/Storage/CSV/Player.cpp" line="1228"/>
         <source>Set interval manually</source>
         <translation>Đặt khoảng thời gian thủ công</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/CSV/Player.cpp" line="1213"/>
+        <location filename="../../../core/Storage/CSV/Player.cpp" line="1218"/>
         <source>CSV Date/Time Selection</source>
         <translation>Chọn Ngày/giờ CSV</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/CSV/Player.cpp" line="1214"/>
+        <location filename="../../../core/Storage/CSV/Player.cpp" line="1219"/>
         <source>Choose how to handle the date/time data:</source>
         <translation>Chọn cách xử lý dữ liệu ngày/giờ:</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/CSV/Player.cpp" line="1226"/>
+        <location filename="../../../core/Storage/CSV/Player.cpp" line="1231"/>
         <source>Set Interval</source>
         <translation>Đặt Khoảng Thời Gian</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/CSV/Player.cpp" line="1227"/>
+        <location filename="../../../core/Storage/CSV/Player.cpp" line="1232"/>
         <source>Please enter the interval between rows in milliseconds:</source>
         <translation>Nhập khoảng thời gian giữa các hàng tính bằng mili giây:</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/CSV/Player.cpp" line="1244"/>
+        <location filename="../../../core/Storage/CSV/Player.cpp" line="1249"/>
         <source>Select Date/Time Column</source>
         <translation>Chọn Cột Ngày/giờ</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/CSV/Player.cpp" line="1245"/>
+        <location filename="../../../core/Storage/CSV/Player.cpp" line="1250"/>
         <source>Please select the column that contains the date/time data:</source>
         <translation>Vui lòng chọn cột chứa dữ liệu ngày/giờ:</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/CSV/Player.cpp" line="1255"/>
+        <location filename="../../../core/Storage/CSV/Player.cpp" line="1260"/>
         <source>Invalid Selection</source>
         <translation>Lựa Chọn Không Hợp Lệ</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/CSV/Player.cpp" line="1255"/>
+        <location filename="../../../core/Storage/CSV/Player.cpp" line="1260"/>
         <source>The selected column is not valid.</source>
         <translation>Cột đã chọn không hợp lệ.</translation>
     </message>
@@ -2941,6 +2945,79 @@ Chỉ bật tính năng này trên các mạng đáng tin cậy. Các máy khác
         <location filename="../../qml/ProjectEditor/Views/CodeEditorMenu.qml" line="91"/>
         <source>Format Selection</source>
         <translation>Định Dạng Vùng Chọn</translation>
+    </message>
+</context>
+<context>
+    <name>CodeEditorToolbar</name>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/CodeEditorToolbar.qml" line="60"/>
+        <source>Reset</source>
+        <translation>Đặt Lại</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/CodeEditorToolbar.qml" line="70"/>
+        <source>Open</source>
+        <translation>Mở</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/CodeEditorToolbar.qml" line="80"/>
+        <source>Undo</source>
+        <translation>Hoàn Tác</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/CodeEditorToolbar.qml" line="85"/>
+        <source>Undo the last code edit</source>
+        <translation>Hoàn tác chỉnh sửa mã gần nhất</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/CodeEditorToolbar.qml" line="91"/>
+        <source>Redo</source>
+        <translation>Làm Lại</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/CodeEditorToolbar.qml" line="96"/>
+        <source>Redo the previously undone edit</source>
+        <translation>Làm lại thao tác vừa hoàn tác</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/CodeEditorToolbar.qml" line="110"/>
+        <source>Cut</source>
+        <translation>Cắt</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/CodeEditorToolbar.qml" line="114"/>
+        <source>Cut selected code to clipboard</source>
+        <translation>Cắt mã đã chọn vào clipboard</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/CodeEditorToolbar.qml" line="120"/>
+        <source>Copy</source>
+        <translation>Sao Chép</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/CodeEditorToolbar.qml" line="124"/>
+        <source>Copy selected code to clipboard</source>
+        <translation>Sao chép mã đã chọn vào clipboard</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/CodeEditorToolbar.qml" line="130"/>
+        <source>Paste</source>
+        <translation>Dán</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/CodeEditorToolbar.qml" line="134"/>
+        <source>Paste code from clipboard</source>
+        <translation>Dán mã từ clipboard</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/CodeEditorToolbar.qml" line="148"/>
+        <source>Help</source>
+        <translation>Trợ Giúp</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/CodeEditorToolbar.qml" line="163"/>
+        <source>Validate</source>
+        <translation>Xác Thực</translation>
     </message>
 </context>
 <context>
@@ -5451,29 +5528,24 @@ Chỉ bật tính năng này trên các mạng đáng tin cậy. Các máy khác
         <translation>Vòng Lặp Điều Khiển</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ControlScriptView.qml" line="125"/>
         <source>Undo</source>
-        <translation>Hoàn Tác</translation>
+        <translation type="vanished">Hoàn Tác</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ControlScriptView.qml" line="136"/>
         <source>Redo</source>
-        <translation>Làm Lại</translation>
+        <translation type="vanished">Làm Lại</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ControlScriptView.qml" line="155"/>
         <source>Cut</source>
-        <translation>Cắt</translation>
+        <translation type="vanished">Cắt</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ControlScriptView.qml" line="165"/>
         <source>Copy</source>
-        <translation>Sao Chép</translation>
+        <translation type="vanished">Sao Chép</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ControlScriptView.qml" line="175"/>
         <source>Paste</source>
-        <translation>Dán</translation>
+        <translation type="vanished">Dán</translation>
     </message>
     <message>
         <source>Select All</source>
@@ -5488,22 +5560,21 @@ Chỉ bật tính năng này trên các mạng đáng tin cậy. Các máy khác
         <translation type="vanished">Định Dạng Vùng Chọn</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ControlScriptView.qml" line="105"/>
         <source>Reset</source>
-        <translation>Đặt Lại</translation>
+        <translation type="vanished">Đặt Lại</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ControlScriptView.qml" line="109"/>
+        <location filename="../../qml/ProjectEditor/Views/ControlScriptView.qml" line="89"/>
         <source>Reset to the default control loop</source>
         <translation>Đặt lại về vòng lặp điều khiển mặc định</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ControlScriptView.qml" line="119"/>
+        <location filename="../../qml/ProjectEditor/Views/ControlScriptView.qml" line="88"/>
         <source>Import a control loop file</source>
         <translation>Nhập file vòng lặp điều khiển</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ControlScriptView.qml" line="198"/>
+        <location filename="../../qml/ProjectEditor/Views/ControlScriptView.qml" line="90"/>
         <source>Open the control loop documentation</source>
         <translation>Mở tài liệu hướng dẫn vòng lặp điều khiển</translation>
     </message>
@@ -5512,55 +5583,47 @@ Chỉ bật tính năng này trên các mạng đáng tin cậy. Các máy khác
         <translation type="vanished">Đặt lại về script điều khiển mặc định</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ControlScriptView.qml" line="115"/>
         <source>Open</source>
-        <translation>Mở</translation>
+        <translation type="vanished">Mở</translation>
     </message>
     <message>
         <source>Import a control script file</source>
         <translation type="vanished">Nhập file script điều khiển</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ControlScriptView.qml" line="130"/>
         <source>Undo the last code edit</source>
-        <translation>Hoàn tác chỉnh sửa mã gần nhất</translation>
+        <translation type="vanished">Hoàn tác chỉnh sửa mã gần nhất</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ControlScriptView.qml" line="141"/>
         <source>Redo the previously undone edit</source>
-        <translation>Làm lại thao tác vừa hoàn tác</translation>
+        <translation type="vanished">Làm lại thao tác vừa hoàn tác</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ControlScriptView.qml" line="159"/>
         <source>Cut selected code to clipboard</source>
-        <translation>Cắt mã đã chọn vào clipboard</translation>
+        <translation type="vanished">Cắt mã đã chọn vào clipboard</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ControlScriptView.qml" line="169"/>
         <source>Copy selected code to clipboard</source>
-        <translation>Sao chép mã đã chọn vào clipboard</translation>
+        <translation type="vanished">Sao chép mã đã chọn vào clipboard</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ControlScriptView.qml" line="179"/>
         <source>Paste code from clipboard</source>
-        <translation>Dán mã từ clipboard</translation>
+        <translation type="vanished">Dán mã từ clipboard</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ControlScriptView.qml" line="193"/>
         <source>Help</source>
-        <translation>Trợ Giúp</translation>
+        <translation type="vanished">Trợ Giúp</translation>
     </message>
     <message>
         <source>Open the control script documentation</source>
         <translation type="vanished">Mở tài liệu hướng dẫn script điều khiển</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ControlScriptView.qml" line="208"/>
         <source>Validate</source>
-        <translation>Xác Thực</translation>
+        <translation type="vanished">Xác Thực</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ControlScriptView.qml" line="212"/>
+        <location filename="../../qml/ProjectEditor/Views/ControlScriptView.qml" line="91"/>
         <source>Verify that the script compiles correctly</source>
         <translation>Xác minh rằng script biên dịch chính xác</translation>
     </message>
@@ -5908,27 +5971,27 @@ Chỉ bật tính năng này trên các mạng đáng tin cậy. Các máy khác
 <context>
     <name>DataExportView</name>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/DataExportView.qml" line="34"/>
+        <location filename="../../qml/ProjectEditor/Views/DataExportView.qml" line="25"/>
         <source>Data Export</source>
         <translation>Xuất Dữ Liệu</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/DataExportView.qml" line="47"/>
+        <location filename="../../qml/ProjectEditor/Views/DataExportView.qml" line="34"/>
         <source>MQTT Publisher</source>
         <translation>MQTT Publisher</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/DataExportView.qml" line="48"/>
+        <location filename="../../qml/ProjectEditor/Views/DataExportView.qml" line="35"/>
         <source>Publish dataset values to an MQTT broker as they arrive, as plain topics or Sparkplug B.</source>
         <translation>Xuất bản giá trị dataset tới MQTT broker khi chúng đến, dưới dạng topic thông thường hoặc Sparkplug B.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/DataExportView.qml" line="54"/>
+        <location filename="../../qml/ProjectEditor/Views/DataExportView.qml" line="41"/>
         <source>InfluxDB Sink</source>
         <translation>Đích Influxdb</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/DataExportView.qml" line="55"/>
+        <location filename="../../qml/ProjectEditor/Views/DataExportView.qml" line="42"/>
         <source>Write every published block to an InfluxDB 2.x bucket as line protocol.</source>
         <translation>Ghi mọi khối đã xuất bản vào bucket InfluxDB 2.x dưới dạng line protocol.</translation>
     </message>
@@ -10028,7 +10091,7 @@ Tải lại tệp?</translation>
 <context>
     <name>DataModel::TransformLibraryEditor</name>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/TransformLibraryEditor.cpp" line="140"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/TransformLibraryEditor.cpp" line="141"/>
         <source>//
 // JavaScript Library
 //
@@ -10069,7 +10132,7 @@ Tải lại tệp?</translation>
 </translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/TransformLibraryEditor.cpp" line="159"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/TransformLibraryEditor.cpp" line="160"/>
         <source>--
 -- Lua Library
 --
@@ -10110,54 +10173,54 @@ Tải lại tệp?</translation>
 </translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/TransformLibraryEditor.cpp" line="255"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/TransformLibraryEditor.cpp" line="256"/>
         <source>Select Lua file to import</source>
         <translation>Chọn tệp Lua để nhập</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/TransformLibraryEditor.cpp" line="256"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/TransformLibraryEditor.cpp" line="257"/>
         <source>Select JavaScript file to import</source>
         <translation>Chọn tệp JavaScript để nhập</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/TransformLibraryEditor.cpp" line="340"/>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/TransformLibraryEditor.cpp" line="356"/>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/TransformLibraryEditor.cpp" line="373"/>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/TransformLibraryEditor.cpp" line="382"/>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/TransformLibraryEditor.cpp" line="391"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/TransformLibraryEditor.cpp" line="341"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/TransformLibraryEditor.cpp" line="357"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/TransformLibraryEditor.cpp" line="374"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/TransformLibraryEditor.cpp" line="383"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/TransformLibraryEditor.cpp" line="392"/>
         <source>Code Validation Failed</source>
         <translation>Xác Thực Mã Thất Bại</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/TransformLibraryEditor.cpp" line="341"/>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/TransformLibraryEditor.cpp" line="374"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/TransformLibraryEditor.cpp" line="342"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/TransformLibraryEditor.cpp" line="375"/>
         <source>Failed to create the validation engine.</source>
         <translation>Không thể tạo công cụ xác thực.</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/TransformLibraryEditor.cpp" line="352"/>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/TransformLibraryEditor.cpp" line="383"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/TransformLibraryEditor.cpp" line="353"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/TransformLibraryEditor.cpp" line="384"/>
         <source>The library did not finish running within %1 ms. Check for an infinite loop at the top level.</source>
         <translation>Thư viện không hoàn thành chạy trong vòng %1 ms. Kiểm tra vòng lặp vô hạn ở cấp cao nhất.</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/TransformLibraryEditor.cpp" line="360"/>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/TransformLibraryEditor.cpp" line="399"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/TransformLibraryEditor.cpp" line="361"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/TransformLibraryEditor.cpp" line="400"/>
         <source>Code Validation Successful</source>
         <translation>Xác Thực Mã Thành Công</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/TransformLibraryEditor.cpp" line="361"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/TransformLibraryEditor.cpp" line="362"/>
         <source>No errors detected in the Lua library.</source>
         <translation>Không phát hiện lỗi trong thư viện Lua.</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/TransformLibraryEditor.cpp" line="392"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/TransformLibraryEditor.cpp" line="393"/>
         <source>Line %1: %2</source>
         <translation>Dòng %1: %2</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/TransformLibraryEditor.cpp" line="400"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/TransformLibraryEditor.cpp" line="401"/>
         <source>No errors detected in the JavaScript library.</source>
         <translation>Không phát hiện lỗi trong thư viện JavaScript.</translation>
     </message>
@@ -12123,47 +12186,47 @@ Valid format: 01 A2 FF 3C</source>
         <translation>Mật khẩu để xác thực broker</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorMqtt.cpp" line="513"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorMqtt.cpp" line="514"/>
         <source>SSL / TLS</source>
         <translation>SSL / TLS</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorMqtt.cpp" line="524"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorMqtt.cpp" line="525"/>
         <source>Use SSL/TLS</source>
         <translation>Sử Dụng SSL/TLS</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorMqtt.cpp" line="525"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorMqtt.cpp" line="526"/>
         <source>Tunnel the broker connection over TLS</source>
         <translation>Đường hầm kết nối broker qua TLS</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorMqtt.cpp" line="538"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorMqtt.cpp" line="539"/>
         <source>Protocol</source>
         <translation>Giao Thức</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorMqtt.cpp" line="539"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorMqtt.cpp" line="540"/>
         <source>Negotiated TLS protocol family</source>
         <translation>Họ giao thức TLS được thương lượng</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorMqtt.cpp" line="549"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorMqtt.cpp" line="550"/>
         <source>Peer Verify</source>
         <translation>Xác Minh Peer</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorMqtt.cpp" line="550"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorMqtt.cpp" line="551"/>
         <source>How strictly the broker's certificate chain is validated</source>
         <translation>Mức độ nghiêm ngặt xác thực chuỗi chứng chỉ của broker</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorMqtt.cpp" line="560"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorMqtt.cpp" line="561"/>
         <source>Verify Depth</source>
         <translation>Độ Sâu Xác Minh</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorMqtt.cpp" line="561"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorMqtt.cpp" line="562"/>
         <source>Maximum certificate chain length accepted (0 = unlimited)</source>
         <translation>Độ dài chuỗi chứng chỉ tối đa được chấp nhận (0 = không giới hạn)</translation>
     </message>
@@ -18639,11 +18702,15 @@ Plans include Monthly, Yearly, and Lifetime options.</source>
 Các gói bao gồm tùy chọn Hàng tháng, Hàng năm và Trọn đời.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="138"/>
         <source>Your license includes 5 device activations.
 Yearly is the best value; Monthly and Lifetime plans are also available.</source>
-        <translation>Giấy phép của bạn bao gồm 5 lần kích hoạt thiết bị.
+        <translation type="vanished">Giấy phép của bạn bao gồm 5 lần kích hoạt thiết bị.
 Gói Hàng năm có giá trị tốt nhất; các gói Hàng tháng và Trọn đời cũng có sẵn.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="138"/>
+        <source>Yearly is the best value; Monthly and Lifetime plans are also available.</source>
+        <translation>Gói Hàng năm có giá trị tốt nhất; các gói Hàng tháng và Trọn đời cũng có sẵn.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="150"/>
@@ -23804,7 +23871,8 @@ Nhấn Làm Mới để cập nhật danh sách.</translation>
     </message>
     <message>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectLoader.cpp" line="794"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectPersistence.cpp" line="357"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectLoader.cpp" line="980"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectPersistence.cpp" line="368"/>
         <source>Untitled Project</source>
         <translation>Dự Án Chưa Đặt Tên</translation>
     </message>
@@ -23815,7 +23883,7 @@ Nhấn Làm Mới để cập nhật danh sách.</translation>
     </message>
     <message>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectLoader.cpp" line="803"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectPersistence.cpp" line="336"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectPersistence.cpp" line="347"/>
         <source>Serial Studio Project Files (*.ssproj)</source>
         <translation>Tệp Dự Án Serial Studio (*.ssproj)</translation>
     </message>
@@ -23845,73 +23913,73 @@ Nhấn Làm Mới để cập nhật danh sách.</translation>
         <translation>Thêm Nhập vào Dự Án</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectLoader.cpp" line="1063"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectLoader.cpp" line="1068"/>
         <source>Device A</source>
         <translation>Thiết Bị A</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectLoader.cpp" line="1106"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectLoader.cpp" line="1111"/>
         <source>Multi-source projects require a Pro license</source>
         <translation>Dự án đa nguồn yêu cầu giấy phép Pro</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectLoader.cpp" line="1107"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectLoader.cpp" line="1112"/>
         <source>This project contains multiple data sources. Only the first source has been loaded. A Serial Studio Pro license is required to use multi-source projects.</source>
         <translation>Dự án này chứa nhiều nguồn dữ liệu. Chỉ nguồn đầu tiên được tải. Cần có giấy phép Serial Studio Pro để sử dụng dự án đa nguồn.</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectLoader.cpp" line="1218"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectLoader.cpp" line="1223"/>
         <source>Workspace IDs remapped on load</source>
         <translation>ID Không Gian Làm Việc Được Ánh Xạ Lại Khi Tải</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectLoader.cpp" line="1219"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectLoader.cpp" line="1224"/>
         <source>%1 custom workspace ID(s) overlapped the new reserved auto range and were moved into the user range. Save the project to make the remap permanent.</source>
         <translation>%1 ID không gian làm việc tùy chỉnh bị trùng với dải tự động mới đã được chuyển sang dải người dùng. Lưu dự án để áp dụng ánh xạ vĩnh viễn.</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectPersistence.cpp" line="294"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectPersistence.cpp" line="305"/>
         <source>Do you want to save your changes?</source>
         <translation>Lưu các thay đổi?</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectPersistence.cpp" line="295"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectPersistence.cpp" line="306"/>
         <source>You have unsaved modifications in this project!</source>
         <translation>Dự án có các thay đổi chưa được lưu!</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectPersistence.cpp" line="334"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectPersistence.cpp" line="345"/>
         <source>Save Serial Studio Project</source>
         <translation>Lưu Dự Án Serial Studio</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectPersistence.cpp" line="427"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectPersistence.cpp" line="438"/>
         <source>File save error</source>
         <translation>Lỗi lưu tệp</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectPersistence.cpp" line="657"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectPersistence.cpp" line="670"/>
         <source>Project file removed from disk</source>
         <translation>Tệp dự án đã bị xóa khỏi đĩa</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectPersistence.cpp" line="658"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectPersistence.cpp" line="671"/>
         <source>%1 was deleted or renamed by another program. Save the project to recreate it.</source>
         <translation>%1 đã bị xóa hoặc đổi tên bởi chương trình khác. Lưu dự án để tạo lại tệp.</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectPersistence.cpp" line="681"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectPersistence.cpp" line="703"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectPersistence.cpp" line="704"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectPersistence.cpp" line="726"/>
         <source>Project file changed on disk</source>
         <translation>Tệp dự án đã thay đổi trên đĩa</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectPersistence.cpp" line="682"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectPersistence.cpp" line="705"/>
         <source>%1 was modified by another program. The in-memory project was kept; reopen the file to load the external changes.</source>
         <translation>%1 đã bị sửa đổi bởi chương trình khác. Dự án trong bộ nhớ được giữ nguyên; mở lại tệp để tải các thay đổi bên ngoài.</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectPersistence.cpp" line="700"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectPersistence.cpp" line="723"/>
         <source>The project file was modified by another program.
 
 Reload it and discard your unsaved changes?</source>
@@ -23920,7 +23988,7 @@ Reload it and discard your unsaved changes?</source>
 Tải lại và hủy các thay đổi chưa lưu?</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectPersistence.cpp" line="702"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectPersistence.cpp" line="725"/>
         <source>The project file was modified by another program.
 
 Reload it?</source>
@@ -23929,12 +23997,12 @@ Reload it?</source>
 Tải lại tệp?</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectPersistence.cpp" line="742"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectPersistence.cpp" line="765"/>
         <source>Project file could not be reloaded</source>
         <translation>Không thể tải lại tệp dự án</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectPersistence.cpp" line="743"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectPersistence.cpp" line="766"/>
         <source>%1 could not be read back: it is unreadable or no longer valid JSON. Your in-memory project was kept; save it to overwrite the file on disk.</source>
         <translation>Không thể đọc lại %1: tệp không đọc được hoặc không còn là JSON hợp lệ. Dự án trong bộ nhớ đã được giữ lại; lưu để ghi đè tệp trên đĩa.</translation>
     </message>
@@ -24702,37 +24770,37 @@ Tải lại tệp?</translation>
 <context>
     <name>ProjectScriptsView</name>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ProjectScriptsView.qml" line="34"/>
+        <location filename="../../qml/ProjectEditor/Views/ProjectScriptsView.qml" line="25"/>
         <source>Project Scripts</source>
         <translation>Tập Lệnh Dự Án</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ProjectScriptsView.qml" line="47"/>
+        <location filename="../../qml/ProjectEditor/Views/ProjectScriptsView.qml" line="34"/>
         <source>Control Loop</source>
         <translation>Vòng Lặp Điều Khiển</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ProjectScriptsView.qml" line="48"/>
+        <location filename="../../qml/ProjectEditor/Views/ProjectScriptsView.qml" line="35"/>
         <source>JavaScript setup() and loop() that run while the project is connected: timers, watchdogs, automated commands.</source>
         <translation>Hàm setup() và loop() JavaScript chạy khi dự án được kết nối: bộ đếm thời gian, watchdog, lệnh tự động.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ProjectScriptsView.qml" line="54"/>
+        <location filename="../../qml/ProjectEditor/Views/ProjectScriptsView.qml" line="41"/>
         <source>Lua Library</source>
         <translation>Thư Viện Lua</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ProjectScriptsView.qml" line="55"/>
+        <location filename="../../qml/ProjectEditor/Views/ProjectScriptsView.qml" line="42"/>
         <source>Functions every Lua value transform of this project can call, so a formula lives in one place.</source>
         <translation>Các hàm mà mọi phép biến đổi giá trị Lua của dự án này có thể gọi, để công thức chỉ tồn tại ở một nơi.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ProjectScriptsView.qml" line="61"/>
+        <location filename="../../qml/ProjectEditor/Views/ProjectScriptsView.qml" line="48"/>
         <source>JavaScript Library</source>
         <translation>Thư Viện Javascript</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ProjectScriptsView.qml" line="62"/>
+        <location filename="../../qml/ProjectEditor/Views/ProjectScriptsView.qml" line="49"/>
         <source>Functions every JavaScript value transform of this project can call.</source>
         <translation>Các hàm mà mọi phép biến đổi giá trị JavaScript của dự án này có thể gọi.</translation>
     </message>
@@ -30748,97 +30816,83 @@ Thêm địa chỉ tuyệt đối ở trên để truy vấn bộ điều khiể
         <translation>Thư Viện Javascript</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/TransformLibraryView.qml" line="107"/>
         <source>Reset</source>
-        <translation>Đặt Lại</translation>
+        <translation type="vanished">Đặt Lại</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/TransformLibraryView.qml" line="111"/>
+        <location filename="../../qml/ProjectEditor/Views/TransformLibraryView.qml" line="90"/>
         <source>Reset to the commented starter</source>
         <translation>Đặt lại về mẫu khởi đầu có chú thích</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/TransformLibraryView.qml" line="117"/>
         <source>Open</source>
-        <translation>Mở</translation>
+        <translation type="vanished">Mở</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/TransformLibraryView.qml" line="122"/>
+        <location filename="../../qml/ProjectEditor/Views/TransformLibraryView.qml" line="93"/>
         <source>Import a Lua file</source>
         <translation>Nhập tệp Lua</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/TransformLibraryView.qml" line="122"/>
+        <location filename="../../qml/ProjectEditor/Views/TransformLibraryView.qml" line="93"/>
         <source>Import a JavaScript file</source>
         <translation>Nhập tệp JavaScript</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/TransformLibraryView.qml" line="127"/>
         <source>Undo</source>
-        <translation>Hoàn Tác</translation>
+        <translation type="vanished">Hoàn Tác</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/TransformLibraryView.qml" line="132"/>
         <source>Undo the last code edit</source>
-        <translation>Hoàn tác chỉnh sửa mã gần nhất</translation>
+        <translation type="vanished">Hoàn tác chỉnh sửa mã gần nhất</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/TransformLibraryView.qml" line="138"/>
         <source>Redo</source>
-        <translation>Làm Lại</translation>
+        <translation type="vanished">Làm Lại</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/TransformLibraryView.qml" line="143"/>
         <source>Redo the previously undone edit</source>
-        <translation>Làm lại thao tác vừa hoàn tác</translation>
+        <translation type="vanished">Làm lại thao tác vừa hoàn tác</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/TransformLibraryView.qml" line="157"/>
         <source>Cut</source>
-        <translation>Cắt</translation>
+        <translation type="vanished">Cắt</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/TransformLibraryView.qml" line="161"/>
         <source>Cut selected code to clipboard</source>
-        <translation>Cắt mã đã chọn vào clipboard</translation>
+        <translation type="vanished">Cắt mã đã chọn vào clipboard</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/TransformLibraryView.qml" line="167"/>
         <source>Copy</source>
-        <translation>Sao Chép</translation>
+        <translation type="vanished">Sao Chép</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/TransformLibraryView.qml" line="171"/>
         <source>Copy selected code to clipboard</source>
-        <translation>Sao chép mã đã chọn vào clipboard</translation>
+        <translation type="vanished">Sao chép mã đã chọn vào clipboard</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/TransformLibraryView.qml" line="177"/>
         <source>Paste</source>
-        <translation>Dán</translation>
+        <translation type="vanished">Dán</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/TransformLibraryView.qml" line="181"/>
         <source>Paste code from clipboard</source>
-        <translation>Dán mã từ clipboard</translation>
+        <translation type="vanished">Dán mã từ clipboard</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/TransformLibraryView.qml" line="195"/>
         <source>Help</source>
-        <translation>Trợ Giúp</translation>
+        <translation type="vanished">Trợ Giúp</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/TransformLibraryView.qml" line="200"/>
+        <location filename="../../qml/ProjectEditor/Views/TransformLibraryView.qml" line="91"/>
         <source>Open the dataset transforms documentation</source>
         <translation>Mở tài liệu chuyển đổi dataset</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/TransformLibraryView.qml" line="210"/>
         <source>Validate</source>
-        <translation>Xác Thực</translation>
+        <translation type="vanished">Xác Thực</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/TransformLibraryView.qml" line="214"/>
+        <location filename="../../qml/ProjectEditor/Views/TransformLibraryView.qml" line="92"/>
         <source>Load the library in a sandbox and report the first error</source>
         <translation>Tải thư viện trong sandbox và báo cáo lỗi đầu tiên</translation>
     </message>

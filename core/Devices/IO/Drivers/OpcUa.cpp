@@ -1107,7 +1107,7 @@ void IO::Drivers::OpcUa::setUsername(const QString& username)
 }
 
 /**
- * @brief Stores the password in the encrypted vault keyed by the endpoint host:port.
+ * @brief Stores the password obfuscated in the credential vault, keyed by endpoint host:port.
  */
 void IO::Drivers::OpcUa::setPassword(const QString& password)
 {

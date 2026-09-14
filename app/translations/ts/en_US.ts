@@ -45,26 +45,30 @@
     </message>
     <message>
         <location filename="../../../core/Ui/ProjectEditor/EditorMqtt.cpp" line="470"/>
-        <source>Passphrase for an encrypted private key (stored in the encrypted vault, never in the project file)</source>
-        <translation>Passphrase for an encrypted private key (stored in the encrypted vault, never in the project file)</translation>
+        <source>Passphrase for an encrypted private key (stored obfuscated in this machine's credential vault, never in the project file)</source>
+        <translation>Passphrase for an encrypted private key (stored obfuscated in this machine's credential vault, never in the project file)</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorMqtt.cpp" line="481"/>
+        <source>Passphrase for an encrypted private key (stored in the encrypted vault, never in the project file)</source>
+        <translation type="vanished">Passphrase for an encrypted private key (stored in the encrypted vault, never in the project file)</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorMqtt.cpp" line="482"/>
         <source>ALPN (MQTT over port 443)</source>
         <translation>ALPN (MQTT over port 443)</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorMqtt.cpp" line="482"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorMqtt.cpp" line="483"/>
         <source>Announce an ALPN protocol so brokers can serve MQTT on port 443 behind firewalls</source>
         <translation>Announce an ALPN protocol so brokers can serve MQTT on port 443 behind firewalls</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorMqtt.cpp" line="496"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorMqtt.cpp" line="497"/>
         <source>ALPN Protocol</source>
         <translation>ALPN Protocol</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorMqtt.cpp" line="498"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorMqtt.cpp" line="499"/>
         <source>Protocol name announced during the TLS handshake (AWS IoT uses x-amzn-mqtt-ca)</source>
         <translation>Protocol name announced during the TLS handshake (AWS IoT uses x-amzn-mqtt-ca)</translation>
     </message>
@@ -2721,144 +2725,144 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
 <context>
     <name>CSV::Player</name>
     <message>
-        <location filename="../../../core/Storage/CSV/Player.cpp" line="331"/>
+        <location filename="../../../core/Storage/CSV/Player.cpp" line="335"/>
         <source>Select CSV file</source>
         <translation>Select CSV file</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/CSV/Player.cpp" line="333"/>
+        <location filename="../../../core/Storage/CSV/Player.cpp" line="337"/>
         <source>CSV files (*.csv)</source>
         <translation>CSV files (*.csv)</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/CSV/Player.cpp" line="462"/>
+        <location filename="../../../core/Storage/CSV/Player.cpp" line="466"/>
         <source>Device Connection Active</source>
         <translation>Device Connection Active</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/CSV/Player.cpp" line="463"/>
+        <location filename="../../../core/Storage/CSV/Player.cpp" line="467"/>
         <source>To use this feature, you must disconnect from the device. Do you want to proceed?</source>
         <translation>To use this feature, you must disconnect from the device. Do you want to proceed?</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/CSV/Player.cpp" line="472"/>
-        <location filename="../../../core/Storage/CSV/Player.cpp" line="491"/>
+        <location filename="../../../core/Storage/CSV/Player.cpp" line="476"/>
+        <location filename="../../../core/Storage/CSV/Player.cpp" line="495"/>
         <source>Check file permissions and location</source>
         <translation>Check file permissions and location</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/CSV/Player.cpp" line="480"/>
-        <location filename="../../../core/Storage/CSV/Player.cpp" line="567"/>
-        <location filename="../../../core/Storage/CSV/Player.cpp" line="706"/>
+        <location filename="../../../core/Storage/CSV/Player.cpp" line="484"/>
+        <location filename="../../../core/Storage/CSV/Player.cpp" line="571"/>
+        <location filename="../../../core/Storage/CSV/Player.cpp" line="710"/>
         <source>Insufficient Data in CSV File</source>
         <translation>Insufficient Data in CSV File</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/CSV/Player.cpp" line="471"/>
-        <location filename="../../../core/Storage/CSV/Player.cpp" line="490"/>
+        <location filename="../../../core/Storage/CSV/Player.cpp" line="475"/>
+        <location filename="../../../core/Storage/CSV/Player.cpp" line="494"/>
         <source>Cannot read CSV file</source>
         <translation>Cannot read CSV file</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/CSV/Player.cpp" line="481"/>
-        <location filename="../../../core/Storage/CSV/Player.cpp" line="568"/>
-        <location filename="../../../core/Storage/CSV/Player.cpp" line="707"/>
+        <location filename="../../../core/Storage/CSV/Player.cpp" line="485"/>
+        <location filename="../../../core/Storage/CSV/Player.cpp" line="572"/>
+        <location filename="../../../core/Storage/CSV/Player.cpp" line="711"/>
         <source>The CSV file must contain at least one data row to proceed. Check the file and try again.</source>
         <translation>The CSV file must contain at least one data row to proceed. Check the file and try again.</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/CSV/Player.cpp" line="700"/>
+        <location filename="../../../core/Storage/CSV/Player.cpp" line="704"/>
         <source>CSV Row Limit Reached</source>
         <translation>CSV Row Limit Reached</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/CSV/Player.cpp" line="701"/>
+        <location filename="../../../core/Storage/CSV/Player.cpp" line="705"/>
         <source>Playback is limited to %L1 rows; the rest of the file was not indexed.</source>
         <translation>Playback is limited to %L1 rows; the rest of the file was not indexed.</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/CSV/Player.cpp" line="1167"/>
+        <location filename="../../../core/Storage/CSV/Player.cpp" line="1172"/>
         <source>Seconds (s)</source>
         <translation>Seconds (s)</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/CSV/Player.cpp" line="1167"/>
+        <location filename="../../../core/Storage/CSV/Player.cpp" line="1172"/>
         <source>Milliseconds (ms)</source>
         <translation>Milliseconds (ms)</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/CSV/Player.cpp" line="1167"/>
+        <location filename="../../../core/Storage/CSV/Player.cpp" line="1172"/>
         <source>Microseconds (us)</source>
         <translation>Microseconds (us)</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/CSV/Player.cpp" line="1171"/>
+        <location filename="../../../core/Storage/CSV/Player.cpp" line="1176"/>
         <source>Timestamp Units</source>
         <translation>Timestamp Units</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/CSV/Player.cpp" line="1172"/>
+        <location filename="../../../core/Storage/CSV/Player.cpp" line="1177"/>
         <source>The timestamp column does not declare a unit. How should it be interpreted?</source>
         <translation>The timestamp column does not declare a unit. How should it be interpreted?</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/CSV/Player.cpp" line="1197"/>
+        <location filename="../../../core/Storage/CSV/Player.cpp" line="1202"/>
         <source>Invalid CSV</source>
         <translation>Invalid CSV</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/CSV/Player.cpp" line="1198"/>
+        <location filename="../../../core/Storage/CSV/Player.cpp" line="1203"/>
         <source>The CSV file does not contain any data or headers.</source>
         <translation>The CSV file does not contain any data or headers.</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/CSV/Player.cpp" line="1211"/>
+        <location filename="../../../core/Storage/CSV/Player.cpp" line="1216"/>
         <source>Select a date/time column</source>
         <translation>Select a date/time column</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/CSV/Player.cpp" line="1211"/>
-        <location filename="../../../core/Storage/CSV/Player.cpp" line="1223"/>
+        <location filename="../../../core/Storage/CSV/Player.cpp" line="1216"/>
+        <location filename="../../../core/Storage/CSV/Player.cpp" line="1228"/>
         <source>Set interval manually</source>
         <translation>Set interval manually</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/CSV/Player.cpp" line="1213"/>
+        <location filename="../../../core/Storage/CSV/Player.cpp" line="1218"/>
         <source>CSV Date/Time Selection</source>
         <translation>CSV Date/Time Selection</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/CSV/Player.cpp" line="1214"/>
+        <location filename="../../../core/Storage/CSV/Player.cpp" line="1219"/>
         <source>Choose how to handle the date/time data:</source>
         <translation>Choose how to handle the date/time data:</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/CSV/Player.cpp" line="1226"/>
+        <location filename="../../../core/Storage/CSV/Player.cpp" line="1231"/>
         <source>Set Interval</source>
         <translation>Set Interval</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/CSV/Player.cpp" line="1227"/>
+        <location filename="../../../core/Storage/CSV/Player.cpp" line="1232"/>
         <source>Please enter the interval between rows in milliseconds:</source>
         <translation>Please enter the interval between rows in milliseconds:</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/CSV/Player.cpp" line="1244"/>
+        <location filename="../../../core/Storage/CSV/Player.cpp" line="1249"/>
         <source>Select Date/Time Column</source>
         <translation>Select Date/Time Column</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/CSV/Player.cpp" line="1245"/>
+        <location filename="../../../core/Storage/CSV/Player.cpp" line="1250"/>
         <source>Please select the column that contains the date/time data:</source>
         <translation>Please select the column that contains the date/time data:</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/CSV/Player.cpp" line="1255"/>
+        <location filename="../../../core/Storage/CSV/Player.cpp" line="1260"/>
         <source>Invalid Selection</source>
         <translation>Invalid Selection</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/CSV/Player.cpp" line="1255"/>
+        <location filename="../../../core/Storage/CSV/Player.cpp" line="1260"/>
         <source>The selected column is not valid.</source>
         <translation>The selected column is not valid.</translation>
     </message>
@@ -2953,6 +2957,79 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
         <location filename="../../qml/ProjectEditor/Views/CodeEditorMenu.qml" line="91"/>
         <source>Format Selection</source>
         <translation>Format Selection</translation>
+    </message>
+</context>
+<context>
+    <name>CodeEditorToolbar</name>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/CodeEditorToolbar.qml" line="60"/>
+        <source>Reset</source>
+        <translation>Reset</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/CodeEditorToolbar.qml" line="70"/>
+        <source>Open</source>
+        <translation>Open</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/CodeEditorToolbar.qml" line="80"/>
+        <source>Undo</source>
+        <translation>Undo</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/CodeEditorToolbar.qml" line="85"/>
+        <source>Undo the last code edit</source>
+        <translation>Undo the last code edit</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/CodeEditorToolbar.qml" line="91"/>
+        <source>Redo</source>
+        <translation>Redo</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/CodeEditorToolbar.qml" line="96"/>
+        <source>Redo the previously undone edit</source>
+        <translation>Redo the previously undone edit</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/CodeEditorToolbar.qml" line="110"/>
+        <source>Cut</source>
+        <translation>Cut</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/CodeEditorToolbar.qml" line="114"/>
+        <source>Cut selected code to clipboard</source>
+        <translation>Cut selected code to clipboard</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/CodeEditorToolbar.qml" line="120"/>
+        <source>Copy</source>
+        <translation>Copy</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/CodeEditorToolbar.qml" line="124"/>
+        <source>Copy selected code to clipboard</source>
+        <translation>Copy selected code to clipboard</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/CodeEditorToolbar.qml" line="130"/>
+        <source>Paste</source>
+        <translation>Paste</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/CodeEditorToolbar.qml" line="134"/>
+        <source>Paste code from clipboard</source>
+        <translation>Paste code from clipboard</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/CodeEditorToolbar.qml" line="148"/>
+        <source>Help</source>
+        <translation>Help</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/CodeEditorToolbar.qml" line="163"/>
+        <source>Validate</source>
+        <translation>Validate</translation>
     </message>
 </context>
 <context>
@@ -5463,29 +5540,24 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
         <translation>Control Loop</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ControlScriptView.qml" line="125"/>
         <source>Undo</source>
-        <translation>Undo</translation>
+        <translation type="vanished">Undo</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ControlScriptView.qml" line="136"/>
         <source>Redo</source>
-        <translation>Redo</translation>
+        <translation type="vanished">Redo</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ControlScriptView.qml" line="155"/>
         <source>Cut</source>
-        <translation>Cut</translation>
+        <translation type="vanished">Cut</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ControlScriptView.qml" line="165"/>
         <source>Copy</source>
-        <translation>Copy</translation>
+        <translation type="vanished">Copy</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ControlScriptView.qml" line="175"/>
         <source>Paste</source>
-        <translation>Paste</translation>
+        <translation type="vanished">Paste</translation>
     </message>
     <message>
         <source>Select All</source>
@@ -5500,22 +5572,21 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
         <translation type="vanished">Format Selection</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ControlScriptView.qml" line="105"/>
         <source>Reset</source>
-        <translation>Reset</translation>
+        <translation type="vanished">Reset</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ControlScriptView.qml" line="109"/>
+        <location filename="../../qml/ProjectEditor/Views/ControlScriptView.qml" line="89"/>
         <source>Reset to the default control loop</source>
         <translation>Reset to the default control loop</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ControlScriptView.qml" line="119"/>
+        <location filename="../../qml/ProjectEditor/Views/ControlScriptView.qml" line="88"/>
         <source>Import a control loop file</source>
         <translation>Import a control loop file</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ControlScriptView.qml" line="198"/>
+        <location filename="../../qml/ProjectEditor/Views/ControlScriptView.qml" line="90"/>
         <source>Open the control loop documentation</source>
         <translation>Open the control loop documentation</translation>
     </message>
@@ -5524,55 +5595,47 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
         <translation type="vanished">Reset to the default control script</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ControlScriptView.qml" line="115"/>
         <source>Open</source>
-        <translation>Open</translation>
+        <translation type="vanished">Open</translation>
     </message>
     <message>
         <source>Import a control script file</source>
         <translation type="vanished">Import a control script file</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ControlScriptView.qml" line="130"/>
         <source>Undo the last code edit</source>
-        <translation>Undo the last code edit</translation>
+        <translation type="vanished">Undo the last code edit</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ControlScriptView.qml" line="141"/>
         <source>Redo the previously undone edit</source>
-        <translation>Redo the previously undone edit</translation>
+        <translation type="vanished">Redo the previously undone edit</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ControlScriptView.qml" line="159"/>
         <source>Cut selected code to clipboard</source>
-        <translation>Cut selected code to clipboard</translation>
+        <translation type="vanished">Cut selected code to clipboard</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ControlScriptView.qml" line="169"/>
         <source>Copy selected code to clipboard</source>
-        <translation>Copy selected code to clipboard</translation>
+        <translation type="vanished">Copy selected code to clipboard</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ControlScriptView.qml" line="179"/>
         <source>Paste code from clipboard</source>
-        <translation>Paste code from clipboard</translation>
+        <translation type="vanished">Paste code from clipboard</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ControlScriptView.qml" line="193"/>
         <source>Help</source>
-        <translation>Help</translation>
+        <translation type="vanished">Help</translation>
     </message>
     <message>
         <source>Open the control script documentation</source>
         <translation type="vanished">Open the control script documentation</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ControlScriptView.qml" line="208"/>
         <source>Validate</source>
-        <translation>Validate</translation>
+        <translation type="vanished">Validate</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ControlScriptView.qml" line="212"/>
+        <location filename="../../qml/ProjectEditor/Views/ControlScriptView.qml" line="91"/>
         <source>Verify that the script compiles correctly</source>
         <translation>Verify that the script compiles correctly</translation>
     </message>
@@ -5920,27 +5983,27 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
 <context>
     <name>DataExportView</name>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/DataExportView.qml" line="34"/>
+        <location filename="../../qml/ProjectEditor/Views/DataExportView.qml" line="25"/>
         <source>Data Export</source>
         <translation>Data Export</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/DataExportView.qml" line="47"/>
+        <location filename="../../qml/ProjectEditor/Views/DataExportView.qml" line="34"/>
         <source>MQTT Publisher</source>
         <translation>MQTT Publisher</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/DataExportView.qml" line="48"/>
+        <location filename="../../qml/ProjectEditor/Views/DataExportView.qml" line="35"/>
         <source>Publish dataset values to an MQTT broker as they arrive, as plain topics or Sparkplug B.</source>
         <translation>Publish dataset values to an MQTT broker as they arrive, as plain topics or Sparkplug B.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/DataExportView.qml" line="54"/>
+        <location filename="../../qml/ProjectEditor/Views/DataExportView.qml" line="41"/>
         <source>InfluxDB Sink</source>
         <translation>InfluxDB Sink</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/DataExportView.qml" line="55"/>
+        <location filename="../../qml/ProjectEditor/Views/DataExportView.qml" line="42"/>
         <source>Write every published block to an InfluxDB 2.x bucket as line protocol.</source>
         <translation>Write every published block to an InfluxDB 2.x bucket as line protocol.</translation>
     </message>
@@ -10124,7 +10187,7 @@ Reload it?</translation>
 <context>
     <name>DataModel::TransformLibraryEditor</name>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/TransformLibraryEditor.cpp" line="140"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/TransformLibraryEditor.cpp" line="141"/>
         <source>//
 // JavaScript Library
 //
@@ -10165,7 +10228,7 @@ Reload it?</translation>
 </translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/TransformLibraryEditor.cpp" line="159"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/TransformLibraryEditor.cpp" line="160"/>
         <source>--
 -- Lua Library
 --
@@ -10206,54 +10269,54 @@ Reload it?</translation>
 </translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/TransformLibraryEditor.cpp" line="255"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/TransformLibraryEditor.cpp" line="256"/>
         <source>Select Lua file to import</source>
         <translation>Select Lua file to import</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/TransformLibraryEditor.cpp" line="256"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/TransformLibraryEditor.cpp" line="257"/>
         <source>Select JavaScript file to import</source>
         <translation>Select JavaScript file to import</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/TransformLibraryEditor.cpp" line="340"/>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/TransformLibraryEditor.cpp" line="356"/>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/TransformLibraryEditor.cpp" line="373"/>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/TransformLibraryEditor.cpp" line="382"/>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/TransformLibraryEditor.cpp" line="391"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/TransformLibraryEditor.cpp" line="341"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/TransformLibraryEditor.cpp" line="357"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/TransformLibraryEditor.cpp" line="374"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/TransformLibraryEditor.cpp" line="383"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/TransformLibraryEditor.cpp" line="392"/>
         <source>Code Validation Failed</source>
         <translation>Code Validation Failed</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/TransformLibraryEditor.cpp" line="341"/>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/TransformLibraryEditor.cpp" line="374"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/TransformLibraryEditor.cpp" line="342"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/TransformLibraryEditor.cpp" line="375"/>
         <source>Failed to create the validation engine.</source>
         <translation>Failed to create the validation engine.</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/TransformLibraryEditor.cpp" line="352"/>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/TransformLibraryEditor.cpp" line="383"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/TransformLibraryEditor.cpp" line="353"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/TransformLibraryEditor.cpp" line="384"/>
         <source>The library did not finish running within %1 ms. Check for an infinite loop at the top level.</source>
         <translation>The library did not finish running within %1 ms. Check for an infinite loop at the top level.</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/TransformLibraryEditor.cpp" line="360"/>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/TransformLibraryEditor.cpp" line="399"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/TransformLibraryEditor.cpp" line="361"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/TransformLibraryEditor.cpp" line="400"/>
         <source>Code Validation Successful</source>
         <translation>Code Validation Successful</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/TransformLibraryEditor.cpp" line="361"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/TransformLibraryEditor.cpp" line="362"/>
         <source>No errors detected in the Lua library.</source>
         <translation>No errors detected in the Lua library.</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/TransformLibraryEditor.cpp" line="392"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/TransformLibraryEditor.cpp" line="393"/>
         <source>Line %1: %2</source>
         <translation>Line %1: %2</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/TransformLibraryEditor.cpp" line="400"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/TransformLibraryEditor.cpp" line="401"/>
         <source>No errors detected in the JavaScript library.</source>
         <translation>No errors detected in the JavaScript library.</translation>
     </message>
@@ -12219,47 +12282,47 @@ Valid format: 01 A2 FF 3C</translation>
         <translation>Password for broker authentication</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorMqtt.cpp" line="513"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorMqtt.cpp" line="514"/>
         <source>SSL / TLS</source>
         <translation>SSL / TLS</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorMqtt.cpp" line="524"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorMqtt.cpp" line="525"/>
         <source>Use SSL/TLS</source>
         <translation>Use SSL/TLS</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorMqtt.cpp" line="525"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorMqtt.cpp" line="526"/>
         <source>Tunnel the broker connection over TLS</source>
         <translation>Tunnel the broker connection over TLS</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorMqtt.cpp" line="538"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorMqtt.cpp" line="539"/>
         <source>Protocol</source>
         <translation>Protocol</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorMqtt.cpp" line="539"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorMqtt.cpp" line="540"/>
         <source>Negotiated TLS protocol family</source>
         <translation>Negotiated TLS protocol family</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorMqtt.cpp" line="549"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorMqtt.cpp" line="550"/>
         <source>Peer Verify</source>
         <translation>Peer Verify</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorMqtt.cpp" line="550"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorMqtt.cpp" line="551"/>
         <source>How strictly the broker's certificate chain is validated</source>
         <translation>How strictly the broker's certificate chain is validated</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorMqtt.cpp" line="560"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorMqtt.cpp" line="561"/>
         <source>Verify Depth</source>
         <translation>Verify Depth</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorMqtt.cpp" line="561"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorMqtt.cpp" line="562"/>
         <source>Maximum certificate chain length accepted (0 = unlimited)</source>
         <translation>Maximum certificate chain length accepted (0 = unlimited)</translation>
     </message>
@@ -18759,11 +18822,15 @@ Plans include Monthly, Yearly, and Lifetime options.</source>
 Plans include Monthly, Yearly, and Lifetime options.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="138"/>
         <source>Your license includes 5 device activations.
 Yearly is the best value; Monthly and Lifetime plans are also available.</source>
-        <translation>Your license includes 5 device activations.
+        <translation type="vanished">Your license includes 5 device activations.
 Yearly is the best value; Monthly and Lifetime plans are also available.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="138"/>
+        <source>Yearly is the best value; Monthly and Lifetime plans are also available.</source>
+        <translation>Yearly is the best value; Monthly and Lifetime plans are also available.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="150"/>
@@ -24322,7 +24389,8 @@ Click Refresh to update the list.</translation>
     </message>
     <message>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectLoader.cpp" line="794"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectPersistence.cpp" line="357"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectLoader.cpp" line="980"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectPersistence.cpp" line="368"/>
         <source>Untitled Project</source>
         <translation>Untitled Project</translation>
     </message>
@@ -24333,7 +24401,7 @@ Click Refresh to update the list.</translation>
     </message>
     <message>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectLoader.cpp" line="803"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectPersistence.cpp" line="336"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectPersistence.cpp" line="347"/>
         <source>Serial Studio Project Files (*.ssproj)</source>
         <translation>Serial Studio Project Files (*.ssproj)</translation>
     </message>
@@ -24363,73 +24431,73 @@ Click Refresh to update the list.</translation>
         <translation>Add Import to Project</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectLoader.cpp" line="1063"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectLoader.cpp" line="1068"/>
         <source>Device A</source>
         <translation>Device A</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectLoader.cpp" line="1106"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectLoader.cpp" line="1111"/>
         <source>Multi-source projects require a Pro license</source>
         <translation>Multi-source projects require a Pro license</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectLoader.cpp" line="1107"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectLoader.cpp" line="1112"/>
         <source>This project contains multiple data sources. Only the first source has been loaded. A Serial Studio Pro license is required to use multi-source projects.</source>
         <translation>This project contains multiple data sources. Only the first source has been loaded. A Serial Studio Pro license is required to use multi-source projects.</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectLoader.cpp" line="1218"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectLoader.cpp" line="1223"/>
         <source>Workspace IDs remapped on load</source>
         <translation>Workspace IDs remapped on load</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectLoader.cpp" line="1219"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectLoader.cpp" line="1224"/>
         <source>%1 custom workspace ID(s) overlapped the new reserved auto range and were moved into the user range. Save the project to make the remap permanent.</source>
         <translation>%1 custom workspace ID(s) overlapped the new reserved auto range and were moved into the user range. Save the project to make the remap permanent.</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectPersistence.cpp" line="294"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectPersistence.cpp" line="305"/>
         <source>Do you want to save your changes?</source>
         <translation>Do you want to save your changes?</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectPersistence.cpp" line="295"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectPersistence.cpp" line="306"/>
         <source>You have unsaved modifications in this project!</source>
         <translation>You have unsaved modifications in this project!</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectPersistence.cpp" line="334"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectPersistence.cpp" line="345"/>
         <source>Save Serial Studio Project</source>
         <translation>Save Serial Studio Project</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectPersistence.cpp" line="427"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectPersistence.cpp" line="438"/>
         <source>File save error</source>
         <translation>File save error</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectPersistence.cpp" line="657"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectPersistence.cpp" line="670"/>
         <source>Project file removed from disk</source>
         <translation>Project file removed from disk</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectPersistence.cpp" line="658"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectPersistence.cpp" line="671"/>
         <source>%1 was deleted or renamed by another program. Save the project to recreate it.</source>
         <translation>%1 was deleted or renamed by another program. Save the project to recreate it.</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectPersistence.cpp" line="681"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectPersistence.cpp" line="703"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectPersistence.cpp" line="704"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectPersistence.cpp" line="726"/>
         <source>Project file changed on disk</source>
         <translation>Project file changed on disk</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectPersistence.cpp" line="682"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectPersistence.cpp" line="705"/>
         <source>%1 was modified by another program. The in-memory project was kept; reopen the file to load the external changes.</source>
         <translation>%1 was modified by another program. The in-memory project was kept; reopen the file to load the external changes.</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectPersistence.cpp" line="700"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectPersistence.cpp" line="723"/>
         <source>The project file was modified by another program.
 
 Reload it and discard your unsaved changes?</source>
@@ -24438,7 +24506,7 @@ Reload it and discard your unsaved changes?</source>
 Reload it and discard your unsaved changes?</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectPersistence.cpp" line="702"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectPersistence.cpp" line="725"/>
         <source>The project file was modified by another program.
 
 Reload it?</source>
@@ -24447,12 +24515,12 @@ Reload it?</source>
 Reload it?</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectPersistence.cpp" line="742"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectPersistence.cpp" line="765"/>
         <source>Project file could not be reloaded</source>
         <translation>Project file could not be reloaded</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectPersistence.cpp" line="743"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectPersistence.cpp" line="766"/>
         <source>%1 could not be read back: it is unreadable or no longer valid JSON. Your in-memory project was kept; save it to overwrite the file on disk.</source>
         <translation>%1 could not be read back: it is unreadable or no longer valid JSON. Your in-memory project was kept; save it to overwrite the file on disk.</translation>
     </message>
@@ -25220,37 +25288,37 @@ Reload it?</translation>
 <context>
     <name>ProjectScriptsView</name>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ProjectScriptsView.qml" line="34"/>
+        <location filename="../../qml/ProjectEditor/Views/ProjectScriptsView.qml" line="25"/>
         <source>Project Scripts</source>
         <translation>Project Scripts</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ProjectScriptsView.qml" line="47"/>
+        <location filename="../../qml/ProjectEditor/Views/ProjectScriptsView.qml" line="34"/>
         <source>Control Loop</source>
         <translation>Control Loop</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ProjectScriptsView.qml" line="48"/>
+        <location filename="../../qml/ProjectEditor/Views/ProjectScriptsView.qml" line="35"/>
         <source>JavaScript setup() and loop() that run while the project is connected: timers, watchdogs, automated commands.</source>
         <translation>JavaScript setup() and loop() that run while the project is connected: timers, watchdogs, automated commands.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ProjectScriptsView.qml" line="54"/>
+        <location filename="../../qml/ProjectEditor/Views/ProjectScriptsView.qml" line="41"/>
         <source>Lua Library</source>
         <translation>Lua Library</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ProjectScriptsView.qml" line="55"/>
+        <location filename="../../qml/ProjectEditor/Views/ProjectScriptsView.qml" line="42"/>
         <source>Functions every Lua value transform of this project can call, so a formula lives in one place.</source>
         <translation>Functions every Lua value transform of this project can call, so a formula lives in one place.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ProjectScriptsView.qml" line="61"/>
+        <location filename="../../qml/ProjectEditor/Views/ProjectScriptsView.qml" line="48"/>
         <source>JavaScript Library</source>
         <translation>JavaScript Library</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ProjectScriptsView.qml" line="62"/>
+        <location filename="../../qml/ProjectEditor/Views/ProjectScriptsView.qml" line="49"/>
         <source>Functions every JavaScript value transform of this project can call.</source>
         <translation>Functions every JavaScript value transform of this project can call.</translation>
     </message>
@@ -31464,97 +31532,83 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
         <translation>JavaScript Library</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/TransformLibraryView.qml" line="107"/>
         <source>Reset</source>
-        <translation>Reset</translation>
+        <translation type="vanished">Reset</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/TransformLibraryView.qml" line="111"/>
+        <location filename="../../qml/ProjectEditor/Views/TransformLibraryView.qml" line="90"/>
         <source>Reset to the commented starter</source>
         <translation>Reset to the commented starter</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/TransformLibraryView.qml" line="117"/>
         <source>Open</source>
-        <translation>Open</translation>
+        <translation type="vanished">Open</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/TransformLibraryView.qml" line="122"/>
+        <location filename="../../qml/ProjectEditor/Views/TransformLibraryView.qml" line="93"/>
         <source>Import a Lua file</source>
         <translation>Import a Lua file</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/TransformLibraryView.qml" line="122"/>
+        <location filename="../../qml/ProjectEditor/Views/TransformLibraryView.qml" line="93"/>
         <source>Import a JavaScript file</source>
         <translation>Import a JavaScript file</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/TransformLibraryView.qml" line="127"/>
         <source>Undo</source>
-        <translation>Undo</translation>
+        <translation type="vanished">Undo</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/TransformLibraryView.qml" line="132"/>
         <source>Undo the last code edit</source>
-        <translation>Undo the last code edit</translation>
+        <translation type="vanished">Undo the last code edit</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/TransformLibraryView.qml" line="138"/>
         <source>Redo</source>
-        <translation>Redo</translation>
+        <translation type="vanished">Redo</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/TransformLibraryView.qml" line="143"/>
         <source>Redo the previously undone edit</source>
-        <translation>Redo the previously undone edit</translation>
+        <translation type="vanished">Redo the previously undone edit</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/TransformLibraryView.qml" line="157"/>
         <source>Cut</source>
-        <translation>Cut</translation>
+        <translation type="vanished">Cut</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/TransformLibraryView.qml" line="161"/>
         <source>Cut selected code to clipboard</source>
-        <translation>Cut selected code to clipboard</translation>
+        <translation type="vanished">Cut selected code to clipboard</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/TransformLibraryView.qml" line="167"/>
         <source>Copy</source>
-        <translation>Copy</translation>
+        <translation type="vanished">Copy</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/TransformLibraryView.qml" line="171"/>
         <source>Copy selected code to clipboard</source>
-        <translation>Copy selected code to clipboard</translation>
+        <translation type="vanished">Copy selected code to clipboard</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/TransformLibraryView.qml" line="177"/>
         <source>Paste</source>
-        <translation>Paste</translation>
+        <translation type="vanished">Paste</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/TransformLibraryView.qml" line="181"/>
         <source>Paste code from clipboard</source>
-        <translation>Paste code from clipboard</translation>
+        <translation type="vanished">Paste code from clipboard</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/TransformLibraryView.qml" line="195"/>
         <source>Help</source>
-        <translation>Help</translation>
+        <translation type="vanished">Help</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/TransformLibraryView.qml" line="200"/>
+        <location filename="../../qml/ProjectEditor/Views/TransformLibraryView.qml" line="91"/>
         <source>Open the dataset transforms documentation</source>
         <translation>Open the dataset transforms documentation</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/TransformLibraryView.qml" line="210"/>
         <source>Validate</source>
-        <translation>Validate</translation>
+        <translation type="vanished">Validate</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/TransformLibraryView.qml" line="214"/>
+        <location filename="../../qml/ProjectEditor/Views/TransformLibraryView.qml" line="92"/>
         <source>Load the library in a sandbox and report the first error</source>
         <translation>Load the library in a sandbox and report the first error</translation>
     </message>

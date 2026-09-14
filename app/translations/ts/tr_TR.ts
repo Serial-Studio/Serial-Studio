@@ -45,26 +45,30 @@
     </message>
     <message>
         <location filename="../../../core/Ui/ProjectEditor/EditorMqtt.cpp" line="470"/>
-        <source>Passphrase for an encrypted private key (stored in the encrypted vault, never in the project file)</source>
-        <translation>Şifrelenmiş özel anahtar için parola (şifrelenmiş kasada saklanır, proje dosyasında asla)</translation>
+        <source>Passphrase for an encrypted private key (stored obfuscated in this machine's credential vault, never in the project file)</source>
+        <translation>Şifrelenmiş özel anahtar için parola (bu makinenin kimlik bilgisi kasasında gizlenmiş olarak saklanır, proje dosyasında asla saklanmaz)</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorMqtt.cpp" line="481"/>
+        <source>Passphrase for an encrypted private key (stored in the encrypted vault, never in the project file)</source>
+        <translation type="vanished">Şifrelenmiş özel anahtar için parola (şifrelenmiş kasada saklanır, proje dosyasında asla)</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorMqtt.cpp" line="482"/>
         <source>ALPN (MQTT over port 443)</source>
         <translation>ALPN (443 portu üzerinden MQTT)</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorMqtt.cpp" line="482"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorMqtt.cpp" line="483"/>
         <source>Announce an ALPN protocol so brokers can serve MQTT on port 443 behind firewalls</source>
         <translation>Broker'ların güvenlik duvarları arkasında 443 portunda MQTT sunabilmesi için bir ALPN protokolü bildir</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorMqtt.cpp" line="496"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorMqtt.cpp" line="497"/>
         <source>ALPN Protocol</source>
         <translation>ALPN Protokolü</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorMqtt.cpp" line="498"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorMqtt.cpp" line="499"/>
         <source>Protocol name announced during the TLS handshake (AWS IoT uses x-amzn-mqtt-ca)</source>
         <translation>TLS el sıkışması sırasında duyurulan protokol adı (AWS IoT x-amzn-mqtt-ca kullanır)</translation>
     </message>
@@ -2721,144 +2725,144 @@ Bunu yalnızca güvenilir ağlarda etkinleştirin. Güvenilmeyen istemciler canl
 <context>
     <name>CSV::Player</name>
     <message>
-        <location filename="../../../core/Storage/CSV/Player.cpp" line="331"/>
+        <location filename="../../../core/Storage/CSV/Player.cpp" line="335"/>
         <source>Select CSV file</source>
         <translation>CSV dosyası seç</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/CSV/Player.cpp" line="333"/>
+        <location filename="../../../core/Storage/CSV/Player.cpp" line="337"/>
         <source>CSV files (*.csv)</source>
         <translation>CSV dosyaları (*.CSV)</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/CSV/Player.cpp" line="462"/>
+        <location filename="../../../core/Storage/CSV/Player.cpp" line="466"/>
         <source>Device Connection Active</source>
         <translation>Cihaz Bağlantısı Etkin</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/CSV/Player.cpp" line="463"/>
+        <location filename="../../../core/Storage/CSV/Player.cpp" line="467"/>
         <source>To use this feature, you must disconnect from the device. Do you want to proceed?</source>
         <translation>Bu özelliği kullanmak için cihaz bağlantısını kesmelisiniz. Devam etmek istiyor musunuz?</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/CSV/Player.cpp" line="472"/>
-        <location filename="../../../core/Storage/CSV/Player.cpp" line="491"/>
+        <location filename="../../../core/Storage/CSV/Player.cpp" line="476"/>
+        <location filename="../../../core/Storage/CSV/Player.cpp" line="495"/>
         <source>Check file permissions and location</source>
         <translation>Dosya izinlerini ve konumunu kontrol edin</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/CSV/Player.cpp" line="480"/>
-        <location filename="../../../core/Storage/CSV/Player.cpp" line="567"/>
-        <location filename="../../../core/Storage/CSV/Player.cpp" line="706"/>
+        <location filename="../../../core/Storage/CSV/Player.cpp" line="484"/>
+        <location filename="../../../core/Storage/CSV/Player.cpp" line="571"/>
+        <location filename="../../../core/Storage/CSV/Player.cpp" line="710"/>
         <source>Insufficient Data in CSV File</source>
         <translation>CSV Dosyasında Yetersiz Veri</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/CSV/Player.cpp" line="471"/>
-        <location filename="../../../core/Storage/CSV/Player.cpp" line="490"/>
+        <location filename="../../../core/Storage/CSV/Player.cpp" line="475"/>
+        <location filename="../../../core/Storage/CSV/Player.cpp" line="494"/>
         <source>Cannot read CSV file</source>
         <translation>CSV dosyası okunamıyor</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/CSV/Player.cpp" line="481"/>
-        <location filename="../../../core/Storage/CSV/Player.cpp" line="568"/>
-        <location filename="../../../core/Storage/CSV/Player.cpp" line="707"/>
+        <location filename="../../../core/Storage/CSV/Player.cpp" line="485"/>
+        <location filename="../../../core/Storage/CSV/Player.cpp" line="572"/>
+        <location filename="../../../core/Storage/CSV/Player.cpp" line="711"/>
         <source>The CSV file must contain at least one data row to proceed. Check the file and try again.</source>
         <translation>CSV dosyası devam etmek için en az bir veri satırı içermelidir. Dosyayı kontrol edin ve tekrar deneyin.</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/CSV/Player.cpp" line="700"/>
+        <location filename="../../../core/Storage/CSV/Player.cpp" line="704"/>
         <source>CSV Row Limit Reached</source>
         <translation>CSV Satır Sınırına Ulaşıldı</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/CSV/Player.cpp" line="701"/>
+        <location filename="../../../core/Storage/CSV/Player.cpp" line="705"/>
         <source>Playback is limited to %L1 rows; the rest of the file was not indexed.</source>
         <translation>Oynatma %L1 satırla sınırlıdır; dosyanın geri kalanı dizinlenmedi.</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/CSV/Player.cpp" line="1167"/>
+        <location filename="../../../core/Storage/CSV/Player.cpp" line="1172"/>
         <source>Seconds (s)</source>
         <translation>Saniye (s)</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/CSV/Player.cpp" line="1167"/>
+        <location filename="../../../core/Storage/CSV/Player.cpp" line="1172"/>
         <source>Milliseconds (ms)</source>
         <translation>Milisaniye (ms)</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/CSV/Player.cpp" line="1167"/>
+        <location filename="../../../core/Storage/CSV/Player.cpp" line="1172"/>
         <source>Microseconds (us)</source>
         <translation>Mikrosaniye (us)</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/CSV/Player.cpp" line="1171"/>
+        <location filename="../../../core/Storage/CSV/Player.cpp" line="1176"/>
         <source>Timestamp Units</source>
         <translation>Zaman Damgası Birimleri</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/CSV/Player.cpp" line="1172"/>
+        <location filename="../../../core/Storage/CSV/Player.cpp" line="1177"/>
         <source>The timestamp column does not declare a unit. How should it be interpreted?</source>
         <translation>Zaman damgası sütunu bir birim bildirmiyor. Nasıl yorumlanmalı?</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/CSV/Player.cpp" line="1197"/>
+        <location filename="../../../core/Storage/CSV/Player.cpp" line="1202"/>
         <source>Invalid CSV</source>
         <translation>Geçersiz CSV</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/CSV/Player.cpp" line="1198"/>
+        <location filename="../../../core/Storage/CSV/Player.cpp" line="1203"/>
         <source>The CSV file does not contain any data or headers.</source>
         <translation>CSV dosyası herhangi bir veri veya başlık içermiyor.</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/CSV/Player.cpp" line="1211"/>
+        <location filename="../../../core/Storage/CSV/Player.cpp" line="1216"/>
         <source>Select a date/time column</source>
         <translation>Tarih/saat sütunu seçin</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/CSV/Player.cpp" line="1211"/>
-        <location filename="../../../core/Storage/CSV/Player.cpp" line="1223"/>
+        <location filename="../../../core/Storage/CSV/Player.cpp" line="1216"/>
+        <location filename="../../../core/Storage/CSV/Player.cpp" line="1228"/>
         <source>Set interval manually</source>
         <translation>Aralığı manuel olarak ayarla</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/CSV/Player.cpp" line="1213"/>
+        <location filename="../../../core/Storage/CSV/Player.cpp" line="1218"/>
         <source>CSV Date/Time Selection</source>
         <translation>CSV Tarih/saat Seçimi</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/CSV/Player.cpp" line="1214"/>
+        <location filename="../../../core/Storage/CSV/Player.cpp" line="1219"/>
         <source>Choose how to handle the date/time data:</source>
         <translation>Tarih/saat verisinin nasıl işleneceğini seçin:</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/CSV/Player.cpp" line="1226"/>
+        <location filename="../../../core/Storage/CSV/Player.cpp" line="1231"/>
         <source>Set Interval</source>
         <translation>Aralığı Ayarla</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/CSV/Player.cpp" line="1227"/>
+        <location filename="../../../core/Storage/CSV/Player.cpp" line="1232"/>
         <source>Please enter the interval between rows in milliseconds:</source>
         <translation>Lütfen satırlar arasındaki aralığı milisaniye cinsinden girin:</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/CSV/Player.cpp" line="1244"/>
+        <location filename="../../../core/Storage/CSV/Player.cpp" line="1249"/>
         <source>Select Date/Time Column</source>
         <translation>Tarih/saat Sütunu Seç</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/CSV/Player.cpp" line="1245"/>
+        <location filename="../../../core/Storage/CSV/Player.cpp" line="1250"/>
         <source>Please select the column that contains the date/time data:</source>
         <translation>Lütfen tarih/saat verilerini içeren sütunu seçin:</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/CSV/Player.cpp" line="1255"/>
+        <location filename="../../../core/Storage/CSV/Player.cpp" line="1260"/>
         <source>Invalid Selection</source>
         <translation>Geçersiz Seçim</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/CSV/Player.cpp" line="1255"/>
+        <location filename="../../../core/Storage/CSV/Player.cpp" line="1260"/>
         <source>The selected column is not valid.</source>
         <translation>Seçilen sütun geçerli değil.</translation>
     </message>
@@ -2953,6 +2957,79 @@ Bunu yalnızca güvenilir ağlarda etkinleştirin. Güvenilmeyen istemciler canl
         <location filename="../../qml/ProjectEditor/Views/CodeEditorMenu.qml" line="91"/>
         <source>Format Selection</source>
         <translation>Seçimi Biçimlendir</translation>
+    </message>
+</context>
+<context>
+    <name>CodeEditorToolbar</name>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/CodeEditorToolbar.qml" line="60"/>
+        <source>Reset</source>
+        <translation>Sıfırla</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/CodeEditorToolbar.qml" line="70"/>
+        <source>Open</source>
+        <translation>Aç</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/CodeEditorToolbar.qml" line="80"/>
+        <source>Undo</source>
+        <translation>Geri Al</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/CodeEditorToolbar.qml" line="85"/>
+        <source>Undo the last code edit</source>
+        <translation>Son kod düzenlemesini geri al</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/CodeEditorToolbar.qml" line="91"/>
+        <source>Redo</source>
+        <translation>Yinele</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/CodeEditorToolbar.qml" line="96"/>
+        <source>Redo the previously undone edit</source>
+        <translation>Geri alınan düzenlemeyi yinele</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/CodeEditorToolbar.qml" line="110"/>
+        <source>Cut</source>
+        <translation>Kes</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/CodeEditorToolbar.qml" line="114"/>
+        <source>Cut selected code to clipboard</source>
+        <translation>Seçili kodu panoya kes</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/CodeEditorToolbar.qml" line="120"/>
+        <source>Copy</source>
+        <translation>Kopyala</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/CodeEditorToolbar.qml" line="124"/>
+        <source>Copy selected code to clipboard</source>
+        <translation>Seçili kodu panoya kopyala</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/CodeEditorToolbar.qml" line="130"/>
+        <source>Paste</source>
+        <translation>Yapıştır</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/CodeEditorToolbar.qml" line="134"/>
+        <source>Paste code from clipboard</source>
+        <translation>Panodan kod yapıştır</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/CodeEditorToolbar.qml" line="148"/>
+        <source>Help</source>
+        <translation>Yardım</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/CodeEditorToolbar.qml" line="163"/>
+        <source>Validate</source>
+        <translation>Doğrula</translation>
     </message>
 </context>
 <context>
@@ -5463,29 +5540,24 @@ Bunu yalnızca güvenilir ağlarda etkinleştirin. Güvenilmeyen istemciler canl
         <translation>Kontrol Döngüsü</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ControlScriptView.qml" line="125"/>
         <source>Undo</source>
-        <translation>Geri Al</translation>
+        <translation type="vanished">Geri Al</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ControlScriptView.qml" line="136"/>
         <source>Redo</source>
-        <translation>Yinele</translation>
+        <translation type="vanished">Yinele</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ControlScriptView.qml" line="155"/>
         <source>Cut</source>
-        <translation>Kes</translation>
+        <translation type="vanished">Kes</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ControlScriptView.qml" line="165"/>
         <source>Copy</source>
-        <translation>Kopyala</translation>
+        <translation type="vanished">Kopyala</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ControlScriptView.qml" line="175"/>
         <source>Paste</source>
-        <translation>Yapıştır</translation>
+        <translation type="vanished">Yapıştır</translation>
     </message>
     <message>
         <source>Select All</source>
@@ -5500,22 +5572,21 @@ Bunu yalnızca güvenilir ağlarda etkinleştirin. Güvenilmeyen istemciler canl
         <translation type="vanished">Seçimi Biçimlendir</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ControlScriptView.qml" line="105"/>
         <source>Reset</source>
-        <translation>Sıfırla</translation>
+        <translation type="vanished">Sıfırla</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ControlScriptView.qml" line="109"/>
+        <location filename="../../qml/ProjectEditor/Views/ControlScriptView.qml" line="89"/>
         <source>Reset to the default control loop</source>
         <translation>Varsayılan kontrol döngüsüne sıfırla</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ControlScriptView.qml" line="119"/>
+        <location filename="../../qml/ProjectEditor/Views/ControlScriptView.qml" line="88"/>
         <source>Import a control loop file</source>
         <translation>Bir kontrol döngüsü dosyası içe aktar</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ControlScriptView.qml" line="198"/>
+        <location filename="../../qml/ProjectEditor/Views/ControlScriptView.qml" line="90"/>
         <source>Open the control loop documentation</source>
         <translation>Kontrol döngüsü belgelerini aç</translation>
     </message>
@@ -5524,55 +5595,47 @@ Bunu yalnızca güvenilir ağlarda etkinleştirin. Güvenilmeyen istemciler canl
         <translation type="vanished">Varsayılan kontrol betiğine sıfırla</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ControlScriptView.qml" line="115"/>
         <source>Open</source>
-        <translation>Aç</translation>
+        <translation type="vanished">Aç</translation>
     </message>
     <message>
         <source>Import a control script file</source>
         <translation type="vanished">Bir kontrol betiği dosyası içe aktar</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ControlScriptView.qml" line="130"/>
         <source>Undo the last code edit</source>
-        <translation>Son kod düzenlemesini geri al</translation>
+        <translation type="vanished">Son kod düzenlemesini geri al</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ControlScriptView.qml" line="141"/>
         <source>Redo the previously undone edit</source>
-        <translation>Geri alınan düzenlemeyi yinele</translation>
+        <translation type="vanished">Geri alınan düzenlemeyi yinele</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ControlScriptView.qml" line="159"/>
         <source>Cut selected code to clipboard</source>
-        <translation>Seçili kodu panoya kes</translation>
+        <translation type="vanished">Seçili kodu panoya kes</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ControlScriptView.qml" line="169"/>
         <source>Copy selected code to clipboard</source>
-        <translation>Seçili kodu panoya kopyala</translation>
+        <translation type="vanished">Seçili kodu panoya kopyala</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ControlScriptView.qml" line="179"/>
         <source>Paste code from clipboard</source>
-        <translation>Panodan kod yapıştır</translation>
+        <translation type="vanished">Panodan kod yapıştır</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ControlScriptView.qml" line="193"/>
         <source>Help</source>
-        <translation>Yardım</translation>
+        <translation type="vanished">Yardım</translation>
     </message>
     <message>
         <source>Open the control script documentation</source>
         <translation type="vanished">Kontrol betiği belgelerini aç</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ControlScriptView.qml" line="208"/>
         <source>Validate</source>
-        <translation>Doğrula</translation>
+        <translation type="vanished">Doğrula</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ControlScriptView.qml" line="212"/>
+        <location filename="../../qml/ProjectEditor/Views/ControlScriptView.qml" line="91"/>
         <source>Verify that the script compiles correctly</source>
         <translation>Betiğin doğru şekilde derlendiğini doğrula</translation>
     </message>
@@ -5920,27 +5983,27 @@ Bunu yalnızca güvenilir ağlarda etkinleştirin. Güvenilmeyen istemciler canl
 <context>
     <name>DataExportView</name>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/DataExportView.qml" line="34"/>
+        <location filename="../../qml/ProjectEditor/Views/DataExportView.qml" line="25"/>
         <source>Data Export</source>
         <translation>Veri Dışa Aktarımı</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/DataExportView.qml" line="47"/>
+        <location filename="../../qml/ProjectEditor/Views/DataExportView.qml" line="34"/>
         <source>MQTT Publisher</source>
         <translation>MQTT Yayıncı</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/DataExportView.qml" line="48"/>
+        <location filename="../../qml/ProjectEditor/Views/DataExportView.qml" line="35"/>
         <source>Publish dataset values to an MQTT broker as they arrive, as plain topics or Sparkplug B.</source>
         <translation>Veri kümesi değerlerini geldikçe düz konu veya Sparkplug B olarak MQTT broker'a yayınla.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/DataExportView.qml" line="54"/>
+        <location filename="../../qml/ProjectEditor/Views/DataExportView.qml" line="41"/>
         <source>InfluxDB Sink</source>
         <translation>Influxdb Havuzu</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/DataExportView.qml" line="55"/>
+        <location filename="../../qml/ProjectEditor/Views/DataExportView.qml" line="42"/>
         <source>Write every published block to an InfluxDB 2.x bucket as line protocol.</source>
         <translation>Yayınlanan her bloğu satır protokolü olarak InfluxDB 2.x bucket'ına yaz.</translation>
     </message>
@@ -10124,7 +10187,7 @@ Yeniden yüklensin mi?</translation>
 <context>
     <name>DataModel::TransformLibraryEditor</name>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/TransformLibraryEditor.cpp" line="140"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/TransformLibraryEditor.cpp" line="141"/>
         <source>//
 // JavaScript Library
 //
@@ -10165,7 +10228,7 @@ Yeniden yüklensin mi?</translation>
 </translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/TransformLibraryEditor.cpp" line="159"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/TransformLibraryEditor.cpp" line="160"/>
         <source>--
 -- Lua Library
 --
@@ -10206,54 +10269,54 @@ Yeniden yüklensin mi?</translation>
 </translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/TransformLibraryEditor.cpp" line="255"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/TransformLibraryEditor.cpp" line="256"/>
         <source>Select Lua file to import</source>
         <translation>İçe aktarılacak Lua dosyasını seçin</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/TransformLibraryEditor.cpp" line="256"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/TransformLibraryEditor.cpp" line="257"/>
         <source>Select JavaScript file to import</source>
         <translation>İçe aktarılacak JavaScript dosyasını seç</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/TransformLibraryEditor.cpp" line="340"/>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/TransformLibraryEditor.cpp" line="356"/>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/TransformLibraryEditor.cpp" line="373"/>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/TransformLibraryEditor.cpp" line="382"/>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/TransformLibraryEditor.cpp" line="391"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/TransformLibraryEditor.cpp" line="341"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/TransformLibraryEditor.cpp" line="357"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/TransformLibraryEditor.cpp" line="374"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/TransformLibraryEditor.cpp" line="383"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/TransformLibraryEditor.cpp" line="392"/>
         <source>Code Validation Failed</source>
         <translation>Kod Doğrulama Başarısız</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/TransformLibraryEditor.cpp" line="341"/>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/TransformLibraryEditor.cpp" line="374"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/TransformLibraryEditor.cpp" line="342"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/TransformLibraryEditor.cpp" line="375"/>
         <source>Failed to create the validation engine.</source>
         <translation>Doğrulama motoru oluşturulamadı.</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/TransformLibraryEditor.cpp" line="352"/>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/TransformLibraryEditor.cpp" line="383"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/TransformLibraryEditor.cpp" line="353"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/TransformLibraryEditor.cpp" line="384"/>
         <source>The library did not finish running within %1 ms. Check for an infinite loop at the top level.</source>
         <translation>Kütüphane %1 ms içinde çalışmayı tamamlamadı. En üst düzeyde sonsuz döngü olup olmadığını kontrol edin.</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/TransformLibraryEditor.cpp" line="360"/>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/TransformLibraryEditor.cpp" line="399"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/TransformLibraryEditor.cpp" line="361"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/TransformLibraryEditor.cpp" line="400"/>
         <source>Code Validation Successful</source>
         <translation>Kod Doğrulama Başarılı</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/TransformLibraryEditor.cpp" line="361"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/TransformLibraryEditor.cpp" line="362"/>
         <source>No errors detected in the Lua library.</source>
         <translation>Lua kütüphanesinde hata tespit edilmedi.</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/TransformLibraryEditor.cpp" line="392"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/TransformLibraryEditor.cpp" line="393"/>
         <source>Line %1: %2</source>
         <translation>Satır %1: %2</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/TransformLibraryEditor.cpp" line="400"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/TransformLibraryEditor.cpp" line="401"/>
         <source>No errors detected in the JavaScript library.</source>
         <translation>JavaScript kütüphanesinde hata tespit edilmedi.</translation>
     </message>
@@ -12219,47 +12282,47 @@ Geçerli biçim: 01 A2 FF 3C</translation>
         <translation>Broker kimlik doğrulaması için parola</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorMqtt.cpp" line="513"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorMqtt.cpp" line="514"/>
         <source>SSL / TLS</source>
         <translation>SSL / TLS</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorMqtt.cpp" line="524"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorMqtt.cpp" line="525"/>
         <source>Use SSL/TLS</source>
         <translation>SSL/TLS Kullan</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorMqtt.cpp" line="525"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorMqtt.cpp" line="526"/>
         <source>Tunnel the broker connection over TLS</source>
         <translation>Broker bağlantısını TLS üzerinden tünelle</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorMqtt.cpp" line="538"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorMqtt.cpp" line="539"/>
         <source>Protocol</source>
         <translation>Protokol</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorMqtt.cpp" line="539"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorMqtt.cpp" line="540"/>
         <source>Negotiated TLS protocol family</source>
         <translation>Müzakere edilen TLS protokol ailesi</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorMqtt.cpp" line="549"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorMqtt.cpp" line="550"/>
         <source>Peer Verify</source>
         <translation>Eş Doğrulama</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorMqtt.cpp" line="550"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorMqtt.cpp" line="551"/>
         <source>How strictly the broker's certificate chain is validated</source>
         <translation>Broker'ın sertifika zincirinin ne kadar katı doğrulandığı</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorMqtt.cpp" line="560"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorMqtt.cpp" line="561"/>
         <source>Verify Depth</source>
         <translation>Doğrulama Derinliği</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorMqtt.cpp" line="561"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorMqtt.cpp" line="562"/>
         <source>Maximum certificate chain length accepted (0 = unlimited)</source>
         <translation>Kabul edilen maksimum sertifika zinciri uzunluğu (0 = sınırsız)</translation>
     </message>
@@ -18759,11 +18822,15 @@ Plans include Monthly, Yearly, and Lifetime options.</source>
 Planlar Aylık, Yıllık ve Ömür Boyu seçeneklerini içerir.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="138"/>
         <source>Your license includes 5 device activations.
 Yearly is the best value; Monthly and Lifetime plans are also available.</source>
-        <translation>Lisansınız 5 cihaz etkinleştirmesi içerir.
+        <translation type="vanished">Lisansınız 5 cihaz etkinleştirmesi içerir.
 Yıllık en iyi değer; Aylık ve Ömür Boyu planlar da mevcuttur.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="138"/>
+        <source>Yearly is the best value; Monthly and Lifetime plans are also available.</source>
+        <translation>Yıllık en iyi değer; Aylık ve Ömür Boyu planlar da mevcuttur.</translation>
     </message>
     <message>
         <location filename="../../qml/Dialogs/LicenseManagement.qml" line="150"/>
@@ -24322,7 +24389,8 @@ Listeyi güncellemek için Yenile'ye tıklayın.</translation>
     </message>
     <message>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectLoader.cpp" line="794"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectPersistence.cpp" line="357"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectLoader.cpp" line="980"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectPersistence.cpp" line="368"/>
         <source>Untitled Project</source>
         <translation>Adsız Proje</translation>
     </message>
@@ -24333,7 +24401,7 @@ Listeyi güncellemek için Yenile'ye tıklayın.</translation>
     </message>
     <message>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectLoader.cpp" line="803"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectPersistence.cpp" line="336"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectPersistence.cpp" line="347"/>
         <source>Serial Studio Project Files (*.ssproj)</source>
         <translation>Serial Studio Proje Dosyaları (*.ssproj)</translation>
     </message>
@@ -24363,73 +24431,73 @@ Listeyi güncellemek için Yenile'ye tıklayın.</translation>
         <translation>İçe Aktarmayı Projeye Ekle</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectLoader.cpp" line="1063"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectLoader.cpp" line="1068"/>
         <source>Device A</source>
         <translation>Cihaz A</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectLoader.cpp" line="1106"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectLoader.cpp" line="1111"/>
         <source>Multi-source projects require a Pro license</source>
         <translation>Çoklu kaynak projeleri Pro lisansı gerektirir</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectLoader.cpp" line="1107"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectLoader.cpp" line="1112"/>
         <source>This project contains multiple data sources. Only the first source has been loaded. A Serial Studio Pro license is required to use multi-source projects.</source>
         <translation>Bu proje birden fazla veri kaynağı içeriyor. Yalnızca ilk kaynak yüklendi. Çoklu kaynak projelerini kullanmak için Serial Studio Pro lisansı gereklidir.</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectLoader.cpp" line="1218"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectLoader.cpp" line="1223"/>
         <source>Workspace IDs remapped on load</source>
         <translation>Çalışma Alanı Kimlikleri yüklemede yeniden eşlendi</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectLoader.cpp" line="1219"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectLoader.cpp" line="1224"/>
         <source>%1 custom workspace ID(s) overlapped the new reserved auto range and were moved into the user range. Save the project to make the remap permanent.</source>
         <translation>%1 özel çalışma alanı kimliği yeni ayrılmış otomatik aralıkla çakıştı ve kullanıcı aralığına taşındı. Yeniden eşlemeyi kalıcı hale getirmek için projeyi kaydedin.</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectPersistence.cpp" line="294"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectPersistence.cpp" line="305"/>
         <source>Do you want to save your changes?</source>
         <translation>Değişiklikler kaydedilsin mi?</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectPersistence.cpp" line="295"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectPersistence.cpp" line="306"/>
         <source>You have unsaved modifications in this project!</source>
         <translation>Bu projede kaydedilmemiş değişiklikler var!</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectPersistence.cpp" line="334"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectPersistence.cpp" line="345"/>
         <source>Save Serial Studio Project</source>
         <translation>Serial Studio Projesini Kaydet</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectPersistence.cpp" line="427"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectPersistence.cpp" line="438"/>
         <source>File save error</source>
         <translation>Dosya kaydetme hatası</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectPersistence.cpp" line="657"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectPersistence.cpp" line="670"/>
         <source>Project file removed from disk</source>
         <translation>Proje dosyası diskten kaldırıldı</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectPersistence.cpp" line="658"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectPersistence.cpp" line="671"/>
         <source>%1 was deleted or renamed by another program. Save the project to recreate it.</source>
         <translation>%1 başka bir program tarafından silindi veya yeniden adlandırıldı. Yeniden oluşturmak için projeyi kaydedin.</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectPersistence.cpp" line="681"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectPersistence.cpp" line="703"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectPersistence.cpp" line="704"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectPersistence.cpp" line="726"/>
         <source>Project file changed on disk</source>
         <translation>Proje dosyası diskte değiştirildi</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectPersistence.cpp" line="682"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectPersistence.cpp" line="705"/>
         <source>%1 was modified by another program. The in-memory project was kept; reopen the file to load the external changes.</source>
         <translation>%1 başka bir program tarafından değiştirildi. Bellekteki proje korundu; harici değişiklikleri yüklemek için dosyayı yeniden açın.</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectPersistence.cpp" line="700"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectPersistence.cpp" line="723"/>
         <source>The project file was modified by another program.
 
 Reload it and discard your unsaved changes?</source>
@@ -24438,7 +24506,7 @@ Reload it and discard your unsaved changes?</source>
 Yeniden yüklensin ve kaydedilmemiş değişiklikler iptal edilsin mi?</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectPersistence.cpp" line="702"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectPersistence.cpp" line="725"/>
         <source>The project file was modified by another program.
 
 Reload it?</source>
@@ -24447,12 +24515,12 @@ Reload it?</source>
 Yeniden yüklensin mi?</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectPersistence.cpp" line="742"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectPersistence.cpp" line="765"/>
         <source>Project file could not be reloaded</source>
         <translation>Proje dosyası yeniden yüklenemedi</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectPersistence.cpp" line="743"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectPersistence.cpp" line="766"/>
         <source>%1 could not be read back: it is unreadable or no longer valid JSON. Your in-memory project was kept; save it to overwrite the file on disk.</source>
         <translation>%1 geri okunamadı: dosya okunamıyor veya artık geçerli bir JSON değil. Bellekteki projeniz korundu; diskteki dosyanın üzerine yazmak için kaydedin.</translation>
     </message>
@@ -25220,37 +25288,37 @@ Yeniden yüklensin mi?</translation>
 <context>
     <name>ProjectScriptsView</name>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ProjectScriptsView.qml" line="34"/>
+        <location filename="../../qml/ProjectEditor/Views/ProjectScriptsView.qml" line="25"/>
         <source>Project Scripts</source>
         <translation>Proje Betikleri</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ProjectScriptsView.qml" line="47"/>
+        <location filename="../../qml/ProjectEditor/Views/ProjectScriptsView.qml" line="34"/>
         <source>Control Loop</source>
         <translation>Kontrol Döngüsü</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ProjectScriptsView.qml" line="48"/>
+        <location filename="../../qml/ProjectEditor/Views/ProjectScriptsView.qml" line="35"/>
         <source>JavaScript setup() and loop() that run while the project is connected: timers, watchdogs, automated commands.</source>
         <translation>Proje bağlıyken çalışan JavaScript setup() ve loop() fonksiyonları: zamanlayıcılar, watchdog'lar, otomatik komutlar.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ProjectScriptsView.qml" line="54"/>
+        <location filename="../../qml/ProjectEditor/Views/ProjectScriptsView.qml" line="41"/>
         <source>Lua Library</source>
         <translation>Lua Kütüphanesi</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ProjectScriptsView.qml" line="55"/>
+        <location filename="../../qml/ProjectEditor/Views/ProjectScriptsView.qml" line="42"/>
         <source>Functions every Lua value transform of this project can call, so a formula lives in one place.</source>
         <translation>Bu projenin her Lua değer dönüşümünün çağırabileceği fonksiyonlar, böylece formül tek bir yerde bulunur.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ProjectScriptsView.qml" line="61"/>
+        <location filename="../../qml/ProjectEditor/Views/ProjectScriptsView.qml" line="48"/>
         <source>JavaScript Library</source>
         <translation>Javascript Kütüphanesi</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ProjectScriptsView.qml" line="62"/>
+        <location filename="../../qml/ProjectEditor/Views/ProjectScriptsView.qml" line="49"/>
         <source>Functions every JavaScript value transform of this project can call.</source>
         <translation>Bu projenin her JavaScript değer dönüşümünün çağırabileceği fonksiyonlar.</translation>
     </message>
@@ -31424,97 +31492,83 @@ Orijinal dosya taşınsa veya silinse bile kısayolun çalışmaya devam etmesi 
         <translation>Javascript Kütüphanesi</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/TransformLibraryView.qml" line="107"/>
         <source>Reset</source>
-        <translation>Sıfırla</translation>
+        <translation type="vanished">Sıfırla</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/TransformLibraryView.qml" line="111"/>
+        <location filename="../../qml/ProjectEditor/Views/TransformLibraryView.qml" line="90"/>
         <source>Reset to the commented starter</source>
         <translation>Yorumlu başlangıca sıfırla</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/TransformLibraryView.qml" line="117"/>
         <source>Open</source>
-        <translation>Aç</translation>
+        <translation type="vanished">Aç</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/TransformLibraryView.qml" line="122"/>
+        <location filename="../../qml/ProjectEditor/Views/TransformLibraryView.qml" line="93"/>
         <source>Import a Lua file</source>
         <translation>Lua dosyası içe aktar</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/TransformLibraryView.qml" line="122"/>
+        <location filename="../../qml/ProjectEditor/Views/TransformLibraryView.qml" line="93"/>
         <source>Import a JavaScript file</source>
         <translation>JavaScript dosyası içe aktar</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/TransformLibraryView.qml" line="127"/>
         <source>Undo</source>
-        <translation>Geri Al</translation>
+        <translation type="vanished">Geri Al</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/TransformLibraryView.qml" line="132"/>
         <source>Undo the last code edit</source>
-        <translation>Son kod düzenlemesini geri al</translation>
+        <translation type="vanished">Son kod düzenlemesini geri al</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/TransformLibraryView.qml" line="138"/>
         <source>Redo</source>
-        <translation>Yinele</translation>
+        <translation type="vanished">Yinele</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/TransformLibraryView.qml" line="143"/>
         <source>Redo the previously undone edit</source>
-        <translation>Geri alınan düzenlemeyi yinele</translation>
+        <translation type="vanished">Geri alınan düzenlemeyi yinele</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/TransformLibraryView.qml" line="157"/>
         <source>Cut</source>
-        <translation>Kes</translation>
+        <translation type="vanished">Kes</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/TransformLibraryView.qml" line="161"/>
         <source>Cut selected code to clipboard</source>
-        <translation>Seçili kodu panoya kes</translation>
+        <translation type="vanished">Seçili kodu panoya kes</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/TransformLibraryView.qml" line="167"/>
         <source>Copy</source>
-        <translation>Kopyala</translation>
+        <translation type="vanished">Kopyala</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/TransformLibraryView.qml" line="171"/>
         <source>Copy selected code to clipboard</source>
-        <translation>Seçili kodu panoya kopyala</translation>
+        <translation type="vanished">Seçili kodu panoya kopyala</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/TransformLibraryView.qml" line="177"/>
         <source>Paste</source>
-        <translation>Yapıştır</translation>
+        <translation type="vanished">Yapıştır</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/TransformLibraryView.qml" line="181"/>
         <source>Paste code from clipboard</source>
-        <translation>Panodan kod yapıştır</translation>
+        <translation type="vanished">Panodan kod yapıştır</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/TransformLibraryView.qml" line="195"/>
         <source>Help</source>
-        <translation>Yardım</translation>
+        <translation type="vanished">Yardım</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/TransformLibraryView.qml" line="200"/>
+        <location filename="../../qml/ProjectEditor/Views/TransformLibraryView.qml" line="91"/>
         <source>Open the dataset transforms documentation</source>
         <translation>Veri kümesi dönüşümleri belgelerini aç</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/TransformLibraryView.qml" line="210"/>
         <source>Validate</source>
-        <translation>Doğrula</translation>
+        <translation type="vanished">Doğrula</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/TransformLibraryView.qml" line="214"/>
+        <location filename="../../qml/ProjectEditor/Views/TransformLibraryView.qml" line="92"/>
         <source>Load the library in a sandbox and report the first error</source>
         <translation>Kütüphaneyi bir sandbox'ta yükle ve ilk hatayı raporla</translation>
     </message>

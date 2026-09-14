@@ -801,7 +801,7 @@ For Pro license holders:
 When reporting an issue, please include:
 
 **System Information:**
-- [ ] Serial Studio version (Help → About)
+- [ ] Serial Studio version and build. The toolbar's **About** button shows `Version 4.0.3 (abcdef1)`; click that line to copy the full build identity, commit included. A build compiled locally reads `local build` instead of a commit.
 - [ ] Operating system and version
 - [ ] How you installed (official binary, compiled from source, AppImage, etc.)
 
@@ -824,7 +824,7 @@ When reporting an issue, please include:
 Dashboard widgets show "NaN" instead of values
 
 ## System
-- Serial Studio v4.0.3
+- Serial Studio v4.0.3 (a1b2c3d)
 - Windows 11 Pro
 - Official binary installer
 

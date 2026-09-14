@@ -83,7 +83,7 @@ SerialStudio --iec104 192.168.0.20 --iec104-ca 1 --iec104-port 2404
 
 ## API
 
-The Socket API exposes the driver under `io.iec104.*`: `getConfig`, `getStatus`, `getPoints`, `setProperty`, `clearPoints` and `generateProject`. `setProperty` takes a `key` and a `value` and accepts `host`, `port`, `commonAddress`, `windowK`, `windowW`, `timeoutT1`, `timeoutT2` and `timeoutT3`. `getPoints` returns the discovered table in wire order, which is the order the datasets read it in. `getStatus` returns the link state and the pulled counters: points with bad quality, skipped ASDUs, test-frame timeouts, sequence errors, malformed frames, frames published and link drops.
+The Socket API exposes the driver under `io.iec104.*`: `getConfig`, `getStatus`, `getPoints`, `setProperty`, `clearPoints` and `generateProject`. `setProperty` takes a `key` and a `value` and accepts `host`, `port`, `commonAddress`, `windowK`, `windowW`, `timeoutT1`, `timeoutT2` and `timeoutT3`. `getPoints` returns the discovered table in wire order, which is the order the datasets read it in. `getStatus` returns the link state and the pulled counters: points with bad quality, skipped ASDUs, test-frame timeouts, sequence errors, malformed frames, frames published and link drops. Each command, with its parameters, is listed under [IEC 60870-5-104 Driver Commands](API-Reference.md#iec-60870-5-104-driver-commands---pro-6).
 
 ## Availability
 

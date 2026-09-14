@@ -25,6 +25,7 @@ Options marked **(Pro)** are available only in commercial builds.
 | `-t`, `--fps` | `Hz` | Set the visualization refresh rate. |
 | `-n`, `--points` | `count` | Set the number of data points per plot. |
 | `--exit-after` | `seconds` | Quit gracefully after the given number of seconds (CI runs, PGO training). |
+| `--simd` | `level` | Pin the vector kernels to `auto`, `scalar`, `sse4`, `avx2` or `neon` for this run only. The value is not saved, and an unknown or unsupported level falls back to `auto` and says so in the application log. See [the acquisition pipeline](Data-Hotpath.md#simd-instruction-set). |
 
 ## Data Sources
 
@@ -83,6 +84,24 @@ pipeline.
 | `--activate` | `key` | Activate a license key and exit. |
 | `--deactivate` | | Deactivate the current license instance and exit. |
 | `--selftest-offline-license` | | Run the offline-certificate verifier self-test vectors and exit. |
+| `--validate-guards` | | Verify that every embedded license guard passes in this binary and exit. |
+
+## Session Verification (Pro)
+
+Both verifiers re-record an archived Historian session in a child process and print a JSON
+verdict, so a deployment can gate on reproducibility without a GUI. Pair either with
+`--headless` for offscreen operation. The same work is available from the API through
+`sessions.verify` and `sessions.regress`.
+
+| Option | Argument | Description |
+|--------|----------|-------------|
+| `--verify-session` | `file` | Verify an archived historian database's reproducibility and exit; prints a JSON verdict. |
+| `--verify-session-id` | `id` | Session id inside the `--verify-session` archive (default: the latest completed session). |
+| `--verify-keep-regen` | | Keep the temporary regenerated database for inspection. |
+| `--regress-session` | `file` | Compare an archived session against a candidate project and exit; prints a JSON drift report. |
+| `--regress-session-id` | `id` | Session id inside the `--regress-session` archive (default: the latest completed session). |
+| `--regress-project` | `file` | Candidate project file for `--regress-session`. |
+| `--regress-keep-regen` | | Keep both temporary regenerated databases for inspection. |
 
 ## Modbus (Pro)
 

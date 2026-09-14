@@ -88,7 +88,7 @@ SerialStudio --ethernetip 192.168.0.10 --ethernetip-path 1,0 \
 
 ## API
 
-The Socket API exposes the driver under `io.eip.*`: `getConfig`, `getStatus`, `setProperty`, `addTag`, `removeTag`, `clearTags` and `generateProject`. `setProperty` takes a `key` and a `value` and accepts `host`, `cipPath`, `plcType` and `pollInterval`. `plcType` takes either a slug from [Controller families](#controller-families) or that family's row number; `getConfig` and `getStatus` always report the slug, because the API is machine-facing. `getStatus` returns the session state and the pulled counters: successful reads, failed reads, frames published and link drops.
+The Socket API exposes the driver under `io.eip.*`: `getConfig`, `getStatus`, `setProperty`, `addTag`, `removeTag`, `clearTags` and `generateProject`. `setProperty` takes a `key` and a `value` and accepts `host`, `cipPath`, `plcType` and `pollInterval`. `plcType` takes either a slug from [Controller families](#controller-families) or that family's row number; `getConfig` and `getStatus` always report the slug, because the API is machine-facing. `getStatus` returns the session state and the pulled counters: successful reads, failed reads, frames published and link drops. Each command, with its parameters, is listed under [EtherNet/IP Driver Commands](API-Reference.md#ethernetip-driver-commands---pro-7).
 
 ## Availability
 

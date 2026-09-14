@@ -1287,7 +1287,7 @@ QString IO::Drivers::MQTT::privateKeyPath() const
 }
 
 /**
- * @brief Returns the private-key passphrase (kept in the encrypted vault, never in QSettings).
+ * @brief Returns the private-key passphrase (kept obfuscated in the credential vault).
  */
 QString IO::Drivers::MQTT::keyPassphrase() const
 {

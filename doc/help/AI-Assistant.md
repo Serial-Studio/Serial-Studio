@@ -2,7 +2,7 @@
 
 A chat-based assistant that lives inside Serial Studio and edits the project for you. Open it from the main toolbar (the **Assistant** button next to *Extensions*) or from the **Project Editor** toolbar, describe what you want to build, and the assistant configures sources, groups, datasets, frame parsers, transforms, output widgets, canvas widgets, and workspaces by calling the same in-process API your scripts and the MCP server already use.
 
-It is **bring-your-own-key**. You pick a provider (Anthropic, OpenAI, Google Gemini, DeepSeek, Groq, Mistral, OpenRouter, or a local model server) and paste an API key once. The key is encrypted on this machine and never leaves your computer except to talk to the provider you selected. The local-server option lets you run everything offline against Ollama, llama.cpp, LM Studio, or vLLM.
+It is **bring-your-own-key**. You pick a provider (Anthropic, OpenAI, Google Gemini, DeepSeek, Groq, Mistral, OpenRouter, or a local model server) and paste an API key once. The key is stored obfuscated in this machine's settings and never leaves your computer except to talk to the provider you selected. The local-server option lets you run everything offline against Ollama, llama.cpp, LM Studio, or vLLM.
 
 > **Pro feature.** The Assistant button is only present in Pro builds; GPL builds hide it entirely. Operator deployments (`--runtime`) also hide it. The Assistant is a build-time author tool, not something you ship to operators.
 
@@ -56,7 +56,7 @@ Whatever models are installed on the server show up in the model picker. Click t
 
 ### Getting a key
 
-The empty-conversation card has a **Get a key from <provider>** link that opens the right signup page. Once you have the key, click **Open API Key Setup** (or the wrench icon in the top bar), paste the key, and save. The key is checked, shown in the dialog only as a **Key set** / **No key** status pill, and persisted under your local app settings encrypted with a per-machine key.
+The empty-conversation card has a **Get a key from <provider>** link that opens the right signup page. Once you have the key, click **Open API Key Setup** (or the wrench icon in the top bar), paste the key, and save. The key is checked, shown in the dialog only as a **Key set** / **No key** status pill, and persisted in your local app settings, obfuscated with a machine-derived key.
 
 You can change provider, change model, or revoke a key at any time from the same dialog. Revoking a key clears it from disk; revoking the active provider's key drops you back to the welcome screen until you paste a new one.
 
@@ -112,17 +112,43 @@ Read this before pasting anything sensitive. Every message you send goes to the 
 
 - **Sent on every turn**: your message, the conversation history so far, the tool catalog, and a snapshot of the live project state (sources, groups, datasets, frame parser code, transforms, and so on; the same JSON your `.ssproj` would contain). Frame parser scripts and transform scripts are part of that snapshot.
 - **Not sent**: live telemetry data, your raw serial bytes, your dashboard frames, your CSV/MDF4 logs, your Historian database, the API key for any *other* provider.
-- **Stored where**: the API key is encrypted on this machine via Serial Studio's per-machine key derivation. Conversation history is written to local JSON files (one per chat, plus an index) in the app's data directory, and survives closing the dialog and restarting the app. Clicking the trash deletes that chat's JSON file.
+- **Sent when a tool reads it**: the contents of any file the assistant opens, including files you drag into the chat and the application source it reads under `source/`.
+- **Stored where**: the API key is stored obfuscated in this machine's settings, scrambled with a key derived from the machine fingerprint. That keeps it out of the settings file as plain text and makes it useless on another machine; it is not encryption, so it does not protect the key from someone who already has your user account. Conversation history is written to local JSON files (one per chat, plus an index) in the app's data directory, and survives closing the dialog and restarting the app. Clicking the trash deletes that chat's JSON file.
 
 If your project file contains commercial firmware code or proprietary protocol notes inside frame parsers or transforms, that text will travel to the provider with each turn. Treat the provider's data-handling policy as the relevant constraint, not Serial Studio's.
 
 ## Documentation lookup
 
-The assistant can pull `doc/help/*.md` pages directly off the Serial Studio GitHub repo when it needs them. You'll see this as a tool call named `meta.fetchHelp` with a path like `Painter-Widget` or `JavaScript-API`. It is read-only and Safe. It pulls the requested page directly; if a guessed page name 404s, it then fetches `help.json` (the page index) to self-correct and retry.
+The assistant can pull `doc/help/*.md` pages directly off the Serial Studio GitHub repo when it needs them. You'll see this as a tool call named `meta.fetchHelp` with a path like `Painter-Widget` or `JavaScript-API`. It is read-only and Safe. It pulls the requested page directly; if a guessed page name 404s, it then fetches `help.json` (the page index) to self-correct and retry. Pages are fetched at the commit this build was made from, so an older release gets the manual that shipped with it rather than the development branch; a build compiled locally, which carries no commit, falls back to `master`.
 
 For scripting, there's a parallel surface called `meta.fetchScriptingDocs` that returns the API reference for one of nine kinds: `frame_parser_js`, `frame_parser_lua`, `transform_js`, `transform_lua`, `output_widget_js`, `painter_js`, `control_script_js`, plus `sdk_js` and `sdk_lua`, which return the generated SerialStudio SDK source itself. The assistant is wired to call this **before** writing or modifying any script. That's why frame parsers it generates use real APIs and not made-up function names.
 
 There's also `meta.searchDocs` (a small built-in BM25 index over the bundled help and scripting docs, used to find the right page when a path isn't obvious) and `meta.loadSkill` (loads one of a handful of focused skill briefs: `painter`, `frame_parsers`, `transforms`, `output_widgets`, `workspace_design`, `dashboard_layout`, `mqtt`, `can_modbus`, `filesystem`, `debugging`, `project_basics`, `tool_discovery`, `api_semantics`, `behavioral`, `control_script`) when the assistant needs deeper guidance for a specific task.
+
+## Reading the application source
+
+Serial Studio Pro ships its own source code inside the executable, and the assistant can read it.
+Ask why a driver reconnects, what a console message means, or which field a project key maps to, and
+the answer comes from the code of the build you are running instead of from the model's memory of an
+older release.
+
+The bundle is addressed through a virtual `source/` prefix: `fs.read` with a path like
+`source/core/Devices/IO/Drivers/CANBus.cpp`, and `fs.search` scoped with `path: "source/core"`. It
+carries the hand-written C++, QML, Lua, JavaScript, CMake and Markdown of the tree, plus this
+manual and the bundled example projects; third-party libraries, unit tests and CI files stay out.
+Two rules keep it out of the way:
+
+- **Read-only.** Any write, append or delete under `source/` is refused. The assistant's write root
+  is still only the `AI/` folder of your workspace.
+- **Off the default search.** A `fs.search` without a `path` never walks the source, so searching
+  your own logs or CSV files does not come back full of C++ hits. The source is reached only by a
+  search scoped to `source/`.
+
+Nothing is unpacked to disk and nothing is downloaded. A build compiled without the bundle answers
+`source_unavailable` and the assistant falls back to the documentation tools.
+
+What it reads, it sends: a file the assistant opens becomes part of the conversation that travels to
+your provider, exactly like the rest of a tool result.
 
 ## Project templates
 

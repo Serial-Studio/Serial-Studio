@@ -41,7 +41,7 @@ The header bar above the form shows the live connection state (green LED + "Conn
 
 The Publisher connects automatically whenever **Enable Publishing** is on and hostname and port are set; an empty **Topic Base** leaves the connection up but suppresses all traffic. Changing any broker setting while connected triggers an automatic disconnect-and-reconnect with the new values.
 
-The same configuration is scriptable through the [API](API-Reference.md) commands `project.mqtt.publisher.getConfig`, `project.mqtt.publisher.setConfig`, and `project.mqtt.publisher.getStatus`. `setConfig` patches only the keys you pass; passwords go to the encrypted credential vault, never to the project file.
+The same configuration is scriptable through the [API](API-Reference.md) commands `project.mqtt.publisher.getConfig`, `project.mqtt.publisher.setConfig`, and `project.mqtt.publisher.getStatus`. `setConfig` patches only the keys you pass; passwords go to the machine's credential vault, stored obfuscated in the machine's settings, never to the project file.
 
 ## Form fields
 

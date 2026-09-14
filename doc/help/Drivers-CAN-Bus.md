@@ -114,6 +114,7 @@ The CAN driver wraps `QCanBusDevice`. Setup involves these fields:
 | **Flexible Data-Rate** | Whether to use the CAN FD frame format. | off |
 | **Loopback** | Echo transmitted frames back to the application (self-reception). | off |
 | **Listen-Only** | Silent monitoring: receive frames without acknowledging or transmitting. | off |
+| **Multi-Frame Reassembly** | Joins J1939 transport-protocol and ISO-TP multi-frame messages into one long frame before parsing. See [Multi-frame reassembly](#multi-frame-reassembly). | off |
 | **DBC Database** | **Import DBC File…** generates a project from a signal database (see [Auto-Generating Projects](Auto-Generating-Projects.md)). | none |
 
 For Linux SocketCAN, the interface must be brought up from a terminal *before* Serial Studio connects:
@@ -138,13 +139,59 @@ In a DBC-imported project the auto-generated parser is a Lua frame parser built 
 
 When the project is built by hand, the dispatch logic can instead be written in Lua or JavaScript. See [Frame Parser Scripting](JavaScript-API.md).
 
+### Multi-frame reassembly
+
+A classic CAN frame carries at most 8 data bytes, 64 with CAN FD, so the protocols that move longer
+messages split them across frames. J1939-21 announces a transfer with a TP.CM packet (PGN `0xEC00`)
+and streams the body as TP.DT packets (PGN `0xEB00`). ISO-TP (ISO 15765-2, the transport under UDS
+and OBD-II) sends a FirstFrame followed by ConsecutiveFrames. Decoding either one in a frame parser
+means carrying session state between frames.
+
+Tick **Multi-Frame Reassembly** and the driver does it instead. It is off by default, because
+reading the J1939 transport parameter groups on a bus that does not speak J1939 would turn
+ordinary traffic into synthesized long frames. It claims only two kinds of traffic:
+
+- **J1939**: extended (29-bit) frames whose parameter group is TP.CM or TP.DT.
+- **ISO-TP**: the ISO 15765-4 diagnostic identifiers (11-bit `0x7E0` to `0x7EF`, 29-bit
+  `0x18DAxxyy` and `0x18DBxxyy`), and only when the payload's first nibble is a multi-frame PCI. A
+  SingleFrame reaches the parser unchanged.
+
+Everything else on the bus is published exactly as it was with the option off.
+
+A completed message arrives as one extended-format frame whose DLC byte is `0xFF`, the marker for a
+reassembled payload: `[0x80|ID28..24, ID23..16, ID15..8, ID7..0, 0xFF, payload...]`. The payload is
+appended whole, so a reassembled frame is longer than the 13 bytes of a raw extended frame and is
+not capped at 64 data bytes. For J1939 the identifier is rebuilt from the transfer's priority, PGN
+and source address; for ISO-TP it is the identifier the session arrived on. The timestamp is the
+capture time of the message's **first** packet, not of the fragment that completed it, so a long
+transfer is dated when it began.
+
+Reassembly is listen-only. FlowControl frames are consumed and never sent, and a J1939 session opens
+on the announcement without waiting for a CTS that Serial Studio will not transmit, so the feature
+works while tapping a bus between two other nodes.
+
+The limits are fixed, and a session that exceeds one is dropped whole and counted rather than
+truncated into a half-decoded message:
+
+| Limit | Value |
+|---|---|
+| Concurrent sessions, per protocol | 16 |
+| J1939 transfer size | 1785 bytes, 255 packets |
+| ISO-TP message size | 4095 bytes |
+| Session timeout since the last fragment | 750 ms |
+
+`io.canbus.getConfig` reports the current state and the per-protocol counters (`completed`,
+`timeouts`, `aborted`, `malformed`, `sizeOverruns`, `sequenceErrors`, `sessionOverruns`), so a bus
+that drops transfers is visible without guessing. Unticking and re-ticking the checkbox clears
+both the counters and any half-collected session. See [API Reference](API-Reference.md).
+
 ### Threading
 
 The CAN driver runs on the main thread. Qt's async I/O delivers received frames via signals; there is no dedicated worker thread for CAN. See [Threading and Timing Guarantees](Threading-and-Timing.md).
 
 ### API control
 
-The [Socket API](API-Reference.md) and the in-app [AI Assistant](AI-Assistant.md) configure this driver through the `io.canbus.*` command scope. Mutations: `setPluginIndex` (param `pluginIndex`), `setInterfaceIndex` (`interfaceIndex`), `setBitrate` (`bitrate`, bit/s), `setCanFd` (`enabled`). Read-only: `getConfig`, `listPlugins`, `listInterfaces`, `listBitrates`, `getInterfaceError`. For the AI Assistant the setters are device-gated: blocked until the user ticks **Allow device control**, and each call still requires confirmation.
+The [Socket API](API-Reference.md) and the in-app [AI Assistant](AI-Assistant.md) configure this driver through the `io.canbus.*` command scope. Mutations: `setPluginIndex` (param `pluginIndex`), `setInterfaceIndex` (`interfaceIndex`), `setBitrate` (`bitrate`, bit/s), `setCanFd` (`enabled`). Read-only: `getConfig`, `listPlugins`, `listInterfaces`, `listBitrates`, `getInterfaceError`. Multi-frame reassembly has no setter in the API: tick it in the Setup panel, then read `tpReassembly` and its counters back from `getConfig`. For the AI Assistant the setters are device-gated: blocked until the user ticks **Allow device control**, and each call still requires confirmation.
 
 For step-by-step setup, see the [Protocol Setup Guides, CAN Bus section](Protocol-Setup-Guides.md).
 
@@ -156,6 +203,7 @@ For step-by-step setup, see the [Protocol Setup Guides, CAN Bus section](Protoco
 - **Permission denied on SocketCAN.** Opening a SocketCAN interface needs no special privileges, but configuring it (`ip link set`) requires root or `CAP_NET_ADMIN`. Bring the interface up once with `sudo`, then connect as a normal user. For `slcan` and other serial adapters, the user must be able to open the serial device (the `dialout` group on Debian-family distributions).
 - **DBC import produces wrong values.** Check the byte order on the signals. DBC supports both little-endian (Intel) and big-endian (Motorola) encoding inside the same message. Auto-generated parsers handle both, but a manually edited DBC with the wrong byte order produces values that look scaled or shifted by a constant amount.
 - **Multiplexed (MUX) signals do not decode.** Simple multiplexing is supported automatically: the importer recognises the message's `MultiplexorSwitch` selector and gates each muxed signal on the matching mux value. Imported datasets are titled `Foo (mux 3)` so you can tell them apart on the dashboard. Extended multiplexing (`SG_MUL_VAL_`, `SwitchAndSignal` intermediates, value ranges) is not supported; those signals are skipped during import and the post-import dialog reports how many were dropped. Switch the source to a Lua or JavaScript frame parser to handle them by hand.
+- **A long message arrives as fragments.** Diagnostic responses and J1939 transfers longer than one frame reach the parser as separate TP.DT or ConsecutiveFrame payloads until **Multi-Frame Reassembly** is ticked. With it on, the joined message arrives as a single frame carrying the `0xFF` DLC marker, and a parser written for raw frames must branch on that byte.
 - **CAN FD frames are dropped.** The bus, the adapter, and Serial Studio all need to be in CAN FD mode. Mixing classic-only nodes on a CAN FD bus works only if the FD nodes downshift, which not every adapter supports.
 - **PCAN/Vector/SysTec driver not found (Windows).** The vendor driver and runtime are separate installs. Qt's CAN plugin is only a wrapper; the actual hardware support comes from the vendor. The CANable, slcan, and Seeed/Waveshare backends are the exception: Serial Studio talks to those adapters directly.
 

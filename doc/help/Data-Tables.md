@@ -128,6 +128,8 @@ If dataset B depends on dataset A's final value, make sure A is listed before B 
 
 Tables are saved with the project file. When the project is shared, anyone opening it gets the same table definitions and defaults.
 
+The same edits are scriptable: the `project.dataTable.*` commands add, rename and delete tables and their variables, and read or write a variable's live runtime value from outside a transform. See [Data Table Commands](API-Reference.md#data-table-commands-13).
+
 ### Naming rules
 
 Table and variable names are free-form strings, but keep them short and descriptive. They appear as string literals in every transform that uses them. Avoid whitespace and non-ASCII characters to keep scripts readable. The name `__datasets__` is reserved for the built-in system table.
@@ -350,3 +352,4 @@ Shared tables span all sources in a project. A transform on source A can read a 
 - [Project Editor](Project-Editor.md): where tables are defined.
 - [Data Flow](Data-Flow.md): where transforms and tables sit in the overall pipeline.
 - [Frame Parser Scripting](JavaScript-API.md): `parse(frame)` produces the raw values that transforms consume.
+- [API Reference](API-Reference.md#data-table-commands-13): the `project.dataTable.*` commands.

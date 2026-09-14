@@ -1263,7 +1263,7 @@ class TestOpcUaSecureChannel:
         assert cfg["authMode"] == 1
 
         # hasPassword is True here on purpose: the password came back from the per-machine
-        # encrypted vault, keyed by host:port, which is where it belongs. The requirement is
+        # credential vault, keyed by host:port, which is where it belongs. The requirement is
         # that it never entered the project FILE, which the connection-block assertions above
         # are what actually pin.
         assert cfg["hasPassword"] is True

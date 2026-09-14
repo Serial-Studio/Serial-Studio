@@ -301,7 +301,7 @@ The script is saved inside the project file, so it travels with the project. Edi
 
 Every connection starts a fresh script engine: all top-level variables reset and `setup()` runs again on each reconnect, exactly like an Arduino reset. Do not design around state surviving a connect/disconnect cycle. The latest-frame store also clears on each connection edge, so `io.getLatestFrame()` reports no data until the first frame of the current connection arrives; a watchdog built on `ageMs` can never trip from a previous connection's frame.
 
-Tools and scripts can manage the control loop through the API: `controlScript.get`/`controlScript.getCode` read the source, `controlScript.dryRun` compile-checks source without installing or running it (syntax errors come back with line numbers), `controlScript.set`/`controlScript.setCode` install it, and `controlScript.getStatus` reports whether it is running.
+Tools and scripts can manage the control loop through the API: `controlScript.get`/`controlScript.getCode` read the source, `controlScript.dryRun` compile-checks source without installing or running it (syntax errors come back with line numbers), `controlScript.set`/`controlScript.setCode` install it, and `controlScript.getStatus` reports whether it is running. Each one is listed under [Control Script Commands](API-Reference.md#control-script-commands-6).
 
 ## Related
 
@@ -309,3 +309,4 @@ Tools and scripts can manage the control loop through the API: `controlScript.ge
 - [Bluetooth Low Energy](Drivers-Bluetooth-LE.md) for selecting the device, service, and notify characteristic the script writes alongside.
 - [Frame Parser Reference](JavaScript-API.md) for turning the bytes a device streams into dataset values.
 - [Actions](Actions.md) for user-triggered one-shot commands, the manual counterpart to an automated Control Loop.
+- [API Reference](API-Reference.md#system-commands-4) for `system.exec` and the helper-process commands a control loop may launch.

@@ -111,7 +111,9 @@ project.outputWidget = project.outputWidget or {}
 project.painter = project.painter or {}
 project.source = project.source or {}
 project.template = project.template or {}
+project.transformLibrary = project.transformLibrary or {}
 project.workspace = project.workspace or {}
+project.workspace.profile = project.workspace.profile or {}
 scripts = scripts or {}
 sessions = sessions or {}
 stream = stream or {}
@@ -2302,6 +2304,26 @@ function project.template.list()
   return apiCall('project.template.list', p)
 end
 
+function project.transformLibrary.dryRun(code, options)
+  local p = {}
+  p['code'] = code
+  if options then for k, v in pairs(options) do p[k] = v end end
+  return apiCall('project.transformLibrary.dryRun', p)
+end
+
+function project.transformLibrary.get(options)
+  local p = {}
+  if options then for k, v in pairs(options) do p[k] = v end end
+  return apiCall('project.transformLibrary.get', p)
+end
+
+function project.transformLibrary.set(code, options)
+  local p = {}
+  p['code'] = code
+  if options then for k, v in pairs(options) do p[k] = v end end
+  return apiCall('project.transformLibrary.set', p)
+end
+
 function project.undo()
   local p = {}
   return apiCall('project.undo', p)
@@ -2365,6 +2387,36 @@ end
 function project.workspace.list()
   local p = {}
   return apiCall('project.workspace.list', p)
+end
+
+function project.workspace.profile.add(title)
+  local p = {}
+  p['title'] = title
+  return apiCall('project.workspace.profile.add', p)
+end
+
+function project.workspace.profile.list()
+  local p = {}
+  return apiCall('project.workspace.profile.list', p)
+end
+
+function project.workspace.profile.remove(profileId)
+  local p = {}
+  p['profileId'] = profileId
+  return apiCall('project.workspace.profile.remove', p)
+end
+
+function project.workspace.profile.select(options)
+  local p = {}
+  if options then for k, v in pairs(options) do p[k] = v end end
+  return apiCall('project.workspace.profile.select', p)
+end
+
+function project.workspace.profile.update(profileId, options)
+  local p = {}
+  p['profileId'] = profileId
+  if options then for k, v in pairs(options) do p[k] = v end end
+  return apiCall('project.workspace.profile.update', p)
 end
 
 function project.workspace.removeWidget(options)

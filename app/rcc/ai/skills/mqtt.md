@@ -49,8 +49,10 @@ want to change:
   the chat (alwaysConfirm), since credentials and TLS settings ride on
   it. Batch the fields into as few calls as possible.
 - `password` requires `username` in the same call; the pair lands in
-  the encrypted vault (publisher) or driver settings (subscriber),
-  never in the project file. `getConfig` never returns the password --
+  the credential vault (publisher) or driver settings (subscriber),
+  obfuscated in this machine's settings and never in the project file.
+  It is obfuscation, not encryption: say so if the user asks where the
+  password lives. `getConfig` never returns the password --
   check `hasCredentials` on the publisher instead. To clear publisher
   credentials, pass empty strings for both.
 - TLS: `sslEnabled: true`, then pick `sslProtocol` and

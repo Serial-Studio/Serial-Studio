@@ -48,6 +48,10 @@ When you select **MQTT Subscriber** as the **Bus Type** for a source, the projec
 | **Client Certificate** | Path to a PEM client certificate, for mutual TLS. Optional; leave empty for ordinary CA-only (server-authentication) TLS. |
 | **Private Key** | Path to the client certificate's private key. Defaults to the certificate file itself when left empty. |
 | **Key Passphrase** | Passphrase for an encrypted private key, if the key requires one. |
+| **ALPN (MQTT over port 443)** | Offer an ALPN protocol during the TLS handshake, which is how a broker multiplexes MQTT onto port 443. Off by default. |
+| **ALPN Protocol** | The protocol name to offer, shown only while ALPN is on. Default `x-amzn-mqtt-ca`, the name AWS IoT Core expects on port 443; other brokers document their own. |
+
+ALPN applies to the handshake only: it changes nothing about the MQTT session, and a broker that ignores the extension connects as usual. Offering the wrong protocol name is refused during the handshake, so a failure here reads as a TLS error, not an MQTT one.
 
 The main window's **Setup** pane shows the same configuration with a few extras: a **Regenerate** button beside **Client ID**, a **CA Certificates** row whose **Load From Folder…** button imports PEM certificates for self-signed brokers, and **Browse…** buttons beside **Client Certificate** and **Private Key** (both hidden unless **SSL/TLS Enabled** is on). The Setup pane omits **Auto Keep Alive** and shortens a few labels (**Version**, **Use SSL/TLS**, **Peer Verify**, **Verify Depth**); the fields are otherwise the same.
 

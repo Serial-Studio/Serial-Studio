@@ -113,7 +113,8 @@ void API::Handlers::OpcUaHandler::registerConfigCommands(CommandRegistry& regist
                            &setUsername);
   registry.registerCommand(
     QStringLiteral("io.opcua.setPassword"),
-    QStringLiteral("Set the password (params: password; stored in the encrypted vault)"),
+    QStringLiteral("Set the password (params: password; stored obfuscated in this machine's "
+                   "credential vault)"),
     API::makeSchema({
       {QStringLiteral("password"),
        QStringLiteral("string"),

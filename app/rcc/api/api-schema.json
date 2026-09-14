@@ -2372,7 +2372,7 @@
         ]
     },
     {
-        "description": "Set the password (params: password; stored in the encrypted vault)",
+        "description": "Set the password (params: password; stored obfuscated in this machine's credential vault)",
         "name": "io.opcua.setPassword",
         "properties": {
             "password": {
@@ -4905,7 +4905,7 @@
         ]
     },
     {
-        "description": "Patch one or more MQTT publisher fields. Pass only the keys you want to change. Setting 'password' requires 'username' in the same call -- the credential pair is persisted to the encrypted vault, NOT to the project file. To clear credentials, pass empty strings for both. Setting 'enabled:true' starts publishing.",
+        "description": "Patch one or more MQTT publisher fields. Pass only the keys you want to change. Setting 'password' requires 'username' in the same call -- the credential pair is persisted obfuscated in this machine's credential vault, NOT to the project file. To clear credentials, pass empty strings for both. Setting 'enabled:true' starts publishing.",
         "name": "project.mqtt.publisher.setConfig",
         "properties": {
             "cleanSession": {
@@ -5179,7 +5179,7 @@
         ]
     },
     {
-        "description": "Read the current configuration of an output widget (params: groupId, widgetId). Returns title, icon, type, checkable, color, size, on/offLabel, min/max/step/initialValue, transmitFunction. Use BEFORE rewriting the transmitFunction so you preserve the user's current ranges and labels.",
+        "description": "Read the current configuration of an output widget (params: groupId, widgetId). Returns title, icon, type, checkable, color, size, on/offLabel, min/max/step/initialValue, transmitFunction, and the state binding (stateSource with its stateDatasetId or stateTable/stateVariable, stateOnValue, stateConfirmMs) when one is set. Use BEFORE rewriting the transmitFunction so you preserve the user's current ranges and labels.",
         "name": "project.outputWidget.get",
         "properties": {
             "groupId": {
@@ -5197,7 +5197,7 @@
         ]
     },
     {
-        "description": "Patch output-widget fields by id (params: groupId, widgetId, plus any of title, icon, transmitFunction, sourceId, txEncoding, monoIcon, checkable, color, size, onLabel, offLabel, minValue, maxValue, stepSize, initialValue). A checkable button latches and transmits 1 (on) / 0 (off) like a toggle, instead of pulsing a single value on click; color is a hex fill override (empty = group accent) and size is 0=small, 1=normal, 2=large, 3=extra large. The transmitFunction is **JavaScript only** -- runs in QJSEngine to convert UI state into device bytes. **Call meta.fetchScriptingDocs{kind:'output_widget_js'} before authoring** for the function signature (transmit(value) returning a Uint8Array / string), the per-widget value semantics, and the injected Modbus/CAN helper globals (modbusWriteRegister / modbusWriteRegisters / modbusWriteCoil / modbusWriteFloat / canSendFrame / canSendValue). Validate first with project.outputWidget.dryRun.",
+        "description": "Patch output-widget fields by id (params: groupId, widgetId, plus any of title, icon, transmitFunction, sourceId, txEncoding, monoIcon, checkable, color, size, onLabel, offLabel, minValue, maxValue, stepSize, initialValue, stateSource, stateDatasetId, stateTable, stateVariable, stateOnValue, stateConfirmMs). A checkable button latches and transmits 1 (on) / 0 (off) like a toggle, instead of pulsing a single value on click; color is a hex fill override (empty = group accent) and size is 0=small, 1=normal, 2=large, 3=extra large. stateSource binds the displayed state to feedback (0=none, 1=dataset via stateDatasetId, 2=variable via stateTable/stateVariable); stateOnValue is the value that reads as on (empty = any non-zero) and stateConfirmMs how long a request stays outstanding. The transmitFunction is **JavaScript only** -- runs in QJSEngine to convert UI state into device bytes. **Call meta.fetchScriptingDocs{kind:'output_widget_js'} before authoring** for the function signature (transmit(value) returning a Uint8Array / string), the per-widget value semantics, and the injected Modbus/CAN helper globals (modbusWriteRegister / modbusWriteRegisters / modbusWriteCoil / modbusWriteFloat, each with an optional trailing unit 1..247 to write to another unit on the bus / canSendFrame / canSendValue). Validate first with project.outputWidget.dryRun.",
         "name": "project.outputWidget.update",
         "properties": {
             "groupId": {
@@ -5549,6 +5549,52 @@
         ]
     },
     {
+        "description": "Load and run library source in a sandboxed engine WITHOUT installing it (params: code, [language]). Reports the error when the chunk fails to compile or run. Use before project.transformLibrary.set.",
+        "name": "project.transformLibrary.dryRun",
+        "properties": {
+            "code": {
+                "description": "Library source",
+                "type": "string"
+            },
+            "language": {
+                "description": "Which library: \"lua\" (default) or \"js\"",
+                "type": "string"
+            }
+        },
+        "required": [
+            "code"
+        ]
+    },
+    {
+        "description": "Get a project's shared transform library (params: [language], lua by default or js): one chunk whose top-level functions every dataset transform of that language can call.",
+        "name": "project.transformLibrary.get",
+        "properties": {
+            "language": {
+                "description": "Which library: \"lua\" (default) or \"js\"",
+                "type": "string"
+            }
+        },
+        "required": [
+        ]
+    },
+    {
+        "description": "Replace a shared transform library (params: code, [language]; empty code clears it). Persisted in the project; every transform engine recompiles immediately. Validate first with project.transformLibrary.dryRun.",
+        "name": "project.transformLibrary.set",
+        "properties": {
+            "code": {
+                "description": "Library source",
+                "type": "string"
+            },
+            "language": {
+                "description": "Which library: \"lua\" (default) or \"js\"",
+                "type": "string"
+            }
+        },
+        "required": [
+            "code"
+        ]
+    },
+    {
         "description": "Undo the most recent project-document mutation (from any surface: editor UI, API, or batch -- one shared history). A batch or cascade reverts atomically as one step. Returns {performed:false, reason} when history is empty; never an error. History clears on project load/new. Not for workspace or widget-layout edits (those are outside undo history).",
         "name": "project.undo",
         "properties": {
@@ -5690,6 +5736,87 @@
         "properties": {
         },
         "required": [
+        ]
+    },
+    {
+        "description": "Add an empty workspace profile (params: title). Fill it with project.workspace.profile.update.",
+        "name": "project.workspace.profile.add",
+        "properties": {
+            "title": {
+                "description": "Profile title",
+                "type": "string"
+            }
+        },
+        "required": [
+            "title"
+        ]
+    },
+    {
+        "description": "List the project's workspace profiles (named subsets of workspace folders and workspaces) and which one is active (-1 = all workspaces).",
+        "name": "project.workspace.profile.list",
+        "properties": {
+        },
+        "required": [
+        ]
+    },
+    {
+        "description": "Delete a workspace profile (params: profileId).",
+        "name": "project.workspace.profile.remove",
+        "properties": {
+            "profileId": {
+                "description": "Profile id",
+                "type": "integer"
+            }
+        },
+        "required": [
+            "profileId"
+        ]
+    },
+    {
+        "description": "Show only the workspaces of a profile (params: profileId, or title; -1 or an empty title shows all). Runtime state, not saved with the project.",
+        "name": "project.workspace.profile.select",
+        "properties": {
+            "profileId": {
+                "description": "Profile id, -1 for all workspaces",
+                "type": "integer"
+            },
+            "title": {
+                "description": "Profile title",
+                "type": "string"
+            }
+        },
+        "required": [
+        ]
+    },
+    {
+        "description": "Edit a profile (params: profileId, [title], [folderIds], [workspaceIds]). A listed folder shows its whole subtree; the id arrays replace the lists.",
+        "name": "project.workspace.profile.update",
+        "properties": {
+            "folderIds": {
+                "description": "Workspace folder ids the profile shows",
+                "items": {
+                    "type": "string"
+                },
+                "type": "array"
+            },
+            "profileId": {
+                "description": "Profile id",
+                "type": "integer"
+            },
+            "title": {
+                "description": "New title",
+                "type": "string"
+            },
+            "workspaceIds": {
+                "description": "Individual workspace ids the profile shows",
+                "items": {
+                    "type": "string"
+                },
+                "type": "array"
+            }
+        },
+        "required": [
+            "profileId"
         ]
     },
     {

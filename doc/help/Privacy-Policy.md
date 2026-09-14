@@ -33,7 +33,7 @@ it:
   and PDF reports.
 - Application settings, themes, window layout, and workspace configuration.
 - AI Assistant chat history, stored as local JSON files.
-- AI provider API keys and your license token, stored encrypted (see
+- AI provider API keys and your license token, stored obfuscated (see
   [Local data security](#local-data-security)).
 - Crash-recovery state. Serial Studio detects an abnormal exit with a local
   flag in application settings and never transmits any crash information.
@@ -64,7 +64,7 @@ sends your license key and a machine fingerprint. Lemon Squeezy is the payment
 processor and reseller for Serial Studio Pro; it holds the purchase
 information you provided at checkout (such as name, email, and payment
 details) under its own privacy policy at <https://www.lemonsqueezy.com/privacy>.
-Once activated, your license metadata is cached locally in encrypted form so
+Once activated, your license metadata is cached locally in obfuscated form so
 the application can work offline for up to 30 days between checks.
 
 ### AI Assistant (Pro, optional, bring-your-own-key)
@@ -127,17 +127,20 @@ a stable operating-system identifier (for example the OS machine ID on Linux,
 the platform UUID on macOS, or the registry machine GUID on Windows). It
 contains no personal files, no file contents, and no account information, and
 the original identifier cannot be recovered from it. The same value is used to
-derive the local encryption key described below, so encrypted data from one
-machine cannot be decrypted on another.
+derive the local obfuscation key described below, so data obfuscated on one
+machine cannot be read back on another.
 
 ## Local data security
 
-API keys and license data are stored encrypted at rest in the application
-settings, using a key derived from the machine fingerprint and protected with
-an integrity hash. Plaintext API keys are scrubbed from memory when a key is
-removed. Project files, Historian databases, and exports are ordinary files under
-your control and are not encrypted by the application; protect them with your
-operating system's own mechanisms if they contain sensitive data.
+API keys and license data are stored obfuscated in the application settings,
+scrambled with a key derived from the machine fingerprint and protected with an
+integrity hash. This keeps them out of the settings file as plain text and makes
+them useless on another machine; it is not encryption and does not protect them
+from software running under your own user account. Plaintext API keys are
+scrubbed from memory when a key is removed. Project files, Historian databases,
+and exports are ordinary files under your control and are not encrypted by the
+application; protect them with your operating system's own mechanisms if they
+contain sensitive data.
 
 ## Data retention and your choices
 

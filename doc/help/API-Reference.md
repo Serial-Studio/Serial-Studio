@@ -683,34 +683,57 @@ A client that issues commands on a long-lived socket while a device is streaming
 
 ## Complete Command Reference
 
-The API provides **300+ commands** across multiple modules; enumerate the live surface with `api.getCommands`:
+The API provides **437 commands** across the modules listed below; enumerate the live surface
+with `api.getCommands`, which is always the source of truth for the build you are running.
 
-The per-module counts below are approximate and drift behind the C++
-registry; treat `api.getCommands` as the source of truth.
+Every command in this reference carries the badge of the build that registers it: 🟢 in every
+build, 🔵 in commercial builds only. A handful of 🟢 sections hold individually gated entries
+(`project.source.add`, `delete` and `update` answer `COMMERCIAL_REQUIRED` in a GPL build);
+those carry the 🔵 badge inside the section.
 
 When a command is invoked through the AI Assistant rather than a raw TCP/JSON client, it is additionally gated by a five-tier safety system (Safe, Confirm, Always confirm, Device-gated, Blocked); see [The safety tiers](AI-Assistant.md#the-safety-tiers).
 
-**GPL Build:**
+**GPL Build (267 commands):**
 - API introspection: 1 command
 - I/O Manager: 8 commands
 - UART Driver: 12 commands
-- Network Driver: 9 commands
+- Network Driver: 17 commands
 - Bluetooth LE Driver: 12 commands
-- CSV Export: 3 commands
+- CSV Export: 4 commands
 - CSV Player: 6 commands
-- Console Control: 17 commands
-- Dashboard Configuration: 13 commands
-- Project Management: 67 commands
+- Console: 16 commands
+- Console Export: 3 commands
+- Dashboard Configuration: 14 commands
+- Dashboard Window: 14 commands
+- Project Management: 75 commands
 - Workspace Management: 20 commands
+- Source: 9 commands
+- Data Table: 13 commands
+- Control Script: 6 commands
+- Reference Script: 2 commands
+- System: 4 commands
+- Sample Stream: 2 commands
+- Remote Dashboard: 2 commands
+- Extensions: 10 commands
+- Assistant Rails: 12 commands
 - Problem Center: 3 commands
+- Diagnostics: 2 commands
 
-**Pro Build Additional:**
+**Pro Build Additional (170 commands):**
 - Modbus Driver: 22 commands
-- CAN Bus Driver: 9 commands
+- CAN Bus Driver: 12 commands
+- OPC UA Driver: 29 commands
+- S7comm Driver: 7 commands
+- EtherNet/IP Driver: 7 commands
+- IEC 60870-5-104 Driver: 6 commands
 - MQTT Client: 6 commands
+- Historian: 21 commands
+- InfluxDB: 3 commands
+- Notifications: 8 commands
+- Licensing: 9 commands
 - MDF4 Export: 3 commands
 - MDF4 Player: 6 commands
-- Audio Driver: 13 commands
+- Audio Driver: 14 commands
 - USB Driver: 7 commands
 - HID Driver: 3 commands
 - Process I/O Driver: 7 commands
@@ -1468,7 +1491,7 @@ Write raw bytes to a BLE characteristic resolved by UUID, independent of the sel
 > under `io.writeData` above; the same one-time prompt and
 > `SERIAL_STUDIO_API_AUTO_CONSENT=1` override apply here.
 
-### CSV Export Commands (3)
+### CSV Export Commands (4)
 
 CSV file export control:
 
@@ -1495,6 +1518,15 @@ Enable or disable CSV export.
 ```bash
 python test_api.py send csvExport.setEnabled -p enabled=true
 ```
+
+#### 🟢 `csvExport.setInterval`
+Set the logging cadence. `0`, the default, writes one row per received frame; a positive value
+switches the recorder to a fixed-interval snapshot log where every row carries the latest value
+of every column, which is what a multi-source or high-rate project wants before per-frame rows
+explode the file. Applies to an open recording and persists across restarts.
+
+**Parameters:**
+- `intervalMs` (int): Snapshot interval in milliseconds, or `0` for one row per frame
 
 #### 🟢 `csvExport.close`
 Close current CSV file.
@@ -1577,10 +1609,7 @@ Get player status.
 }
 ```
 
-### Console Commands (11)
-
-> This section documents a representative subset; the live Console module
-> registers 17 commands. Run `api.getCommands` for the full list.
+### Console Commands (16)
 
 Console/terminal control:
 
@@ -1662,11 +1691,37 @@ Get console configuration.
 }
 ```
 
-### Dashboard Configuration Commands (10)
+#### 🟢 `console.setEncoding`
+Set the text encoding used to decode incoming bytes.
 
-> This section documents a representative subset; the live Dashboard
-> Configuration module registers 13 commands. Run `api.getCommands` for the
-> full list.
+**Parameters:**
+- `encoding` (int): Index into the `textEncodings` list returned by `console.getConfig`
+
+#### 🟢 `console.setVt100Emulation`
+Interpret VT100 / xterm escape sequences.
+
+**Parameters:**
+- `enabled` (bool): true to act as a terminal emulator for cursor, clear and scroll codes
+
+#### 🟢 `console.setAnsiColorsEnabled`
+Honor ANSI / xterm color sequences instead of printing them.
+
+**Parameters:**
+- `enabled` (bool): true to render SGR color escapes
+
+#### 🟢 `console.setCollapseDuplicates`
+Collapse consecutive duplicate lines.
+
+**Parameters:**
+- `enabled` (bool): true to collapse
+
+#### 🟢 `console.setSearchCaseSensitive`
+Make the console search case-sensitive.
+
+**Parameters:**
+- `enabled` (bool): true for case-sensitive search
+
+### Dashboard Configuration Commands (14)
 
 Dashboard settings and visualization control:
 
@@ -1932,12 +1987,36 @@ python test_api.py send project.dashboard.setWidgetFreezeTitle -p widgetType=9 -
 - Requires ProjectFile mode with a loaded project
 - Only affects freeze mode; normal-mode chrome and titles are unchanged
 
-### Project Management Commands (66)
+#### 🟢 `dashboard.getData`
+Get the dashboard widget counts and the latest frame data.
 
-> This section documents 61 of the 64 commands the live Project
-> Management module registers. `project.new`, `project.open`, and
-> `project.save` are covered above in prose rather than as separate
-> entries. Run `api.getCommands` for the full list.
+**Parameters:** None
+
+#### 🟢 `dashboard.tailFrames`
+Return the last samples, as timestamp and value pairs, for each plot-enabled dataset. Use it to
+check "the values look wrong" without polling `dashboard.getData`. Only datasets whose plot flag
+is on are returned; turn the flag on with `project.dataset.setOption` for the rest.
+
+**Parameters:**
+- `count` (int, optional): Samples per dataset, 1 to 256, default 32
+- `uniqueIds` (array, optional): Only datasets whose uniqueId or alias is listed; unresolved
+  aliases are skipped
+
+#### 🟢 `dashboard.reprocess`
+Re-run every dataset transform from the last received values and republish the frames to the
+dashboard, with no export side effects. Transforms normally run only when a device frame
+arrives, so call this after editing one.
+
+**Parameters:** None
+
+#### 🟢 `dashboard.tick`
+Force a render from the current table and dataset state, synthesizing the project frame
+structure when no device frame has arrived yet. Unlike `dashboard.reprocess`, it works before
+the first real frame.
+
+**Parameters:** None
+
+### Project Management Commands (75)
 
 Project file and configuration management:
 
@@ -3637,6 +3716,82 @@ Nothing in the project changes.
 `Line N: message`); a chunk that exceeds the dry-run budget reports
 `"library timed out"`.
 
+#### 🟢 `project.new`
+Reset to a blank project: one default UART source, no groups, datasets, actions or workspaces.
+Discards the loaded project, so use it only when the user asks to start over. For a typed
+starting point, `project.template.apply` gives a working skeleton instead of an empty canvas.
+
+**Parameters:**
+- `dryRun` (bool, optional): Return what the current project holds (`wouldDiscard`) without
+  wiping it
+
+#### 🟢 `project.open`
+Open a `.ssproj` or `.json` file, replacing the current project. The operation mode switches to
+ProjectFile when it was QuickPlot or ConsoleOnly. Re-opening the project already loaded is a
+no-op that keeps unsaved edits, reported as `reloaded: false`.
+
+**Parameters:**
+- `filePath` (string): Absolute path to the project file
+- `dryRun` (bool, optional): Parse the file and return `wouldDiscard` and `wouldApply` without
+  loading it
+
+#### 🟢 `project.save`
+Write the current project to disk. Note that the AI Assistant does not write the project file
+on its own: a successful mutating tool call takes a checkpoint, not a save.
+
+**Parameters:**
+- `filePath` (string, optional): Absolute path for a headless save-as. Omit to save to the
+  project's existing path
+- `askPath` (bool, optional): Open the save dialog instead of writing directly
+
+#### 🟢 `project.undo`
+Undo the most recent project-document mutation, whichever surface made it: the editor UI, the
+API, or a batch. One shared history, and a batch or cascade reverts atomically as one step.
+Returns `{"performed": false, "reason": ...}` when the history is empty rather than an error.
+History clears when a project is loaded or created.
+
+**Parameters:** None
+
+#### 🟢 `project.redo`
+Replay the most recently undone step. Returns `{"performed": false, "reason": ...}` when there
+is nothing to redo. Any new mutation after an undo discards the redo tail.
+
+**Parameters:** None
+
+#### 🟢 `project.dataset.getFFTMarkers`
+Return the dataset's FFT frequency markers as an array. Each entry carries `freq` (Hz),
+`endFreq` (band markers only), `label`, `color` (`#rrggbb`, or empty for the theme accent),
+and the optional `warningDb` / `alarmDb` display thresholds. The reply also carries `nyquist`
+(half the FFT sampling rate), so a caller can validate frequencies before writing back.
+
+**Parameters:**
+- `groupId` (int): Owning group id
+- `datasetId` (int): Dataset id within the group
+
+#### 🟢 `project.dataset.setFFTMarkers`
+Replace the dataset's marker array atomically. Markers drive both the FFT plot and the
+waterfall. Each entry needs a finite `freq` above 0; invalid entries are dropped and counted in
+`droppedInvalid`. An `endFreq` above `freq` makes the entry a band instead of a point marker,
+and `warningDb` / `alarmDb` are evaluated against the rendered spectrum, swapped when reversed.
+Pass an empty array to clear every marker.
+
+**Parameters:**
+- `groupId` (int): Owning group id
+- `datasetId` (int): Dataset id within the group
+- `fftMarkers` (array): Full replacement marker list
+
+#### 🟢 `project.dashboard.getTimeRange`
+Get the visible plot time window. Alias of `dashboard.getTimeRange`.
+
+**Parameters:** None
+
+#### 🟢 `project.dashboard.setTimeRange`
+Set the visible plot time window. Alias of `dashboard.setTimeRange`; the value is per-project
+and survives a project reload.
+
+**Parameters:**
+- `seconds` (number): Window length in seconds
+
 ### Workspace Commands (20)
 
 > `project.workspace.*` is a separate registered command family
@@ -4241,6 +4396,592 @@ findings with `problems.list`.
 python test_api.py send diagnostics.status
 ```
 
+### Source Commands (9)
+
+A project holds one source per data link. These commands enumerate them, patch their frame
+settings and driver properties, and carry the per-source frame parser. Adding, deleting and
+updating a source is Pro, because a project with more than one source is a Pro feature; every
+read-only command works in every build. See [Project Editor](Project-Editor.md).
+
+#### 🟢 `project.source.list`
+List every source in the project, with its id, title and bus type.
+
+**Parameters:** None
+
+#### 🟢 `project.source.getConfig`
+Get one source's full configuration: title, bus type, frame detection, delimiters, checksum and
+decoder.
+
+**Parameters:**
+- `sourceId` (int): Source ID
+
+#### 🟢 `project.source.getFrameParserCode`
+Get the source's JavaScript frame parser.
+
+**Parameters:**
+- `sourceId` (int): Source ID
+
+#### 🟢 `project.source.setFrameParserCode`
+Replace the source's JavaScript frame parser.
+
+**Parameters:**
+- `sourceId` (int): Source ID
+- `code` (string): JavaScript frame parser source
+
+#### 🟢 `project.source.setProperty`
+Set one driver connection property on a source, by the key the driver publishes.
+
+**Parameters:**
+- `sourceId` (int): Source ID
+- `key` (string): Driver property key
+- `value` (string|int|bool): New value
+
+#### 🟢 `project.source.setProperties`
+Set several driver properties in one call.
+
+**Parameters:**
+- `sourceId` (int): Source ID
+- `settings` (object): Driver properties as key/value pairs
+
+#### 🔵 `project.source.add`
+Append a new source. Returns its `sourceId`. A GPL build answers `COMMERCIAL_REQUIRED`.
+
+**Parameters:** None
+
+#### 🔵 `project.source.delete`
+Delete a source and everything filed under it. Source `0` cannot be deleted.
+
+**Parameters:**
+- `sourceId` (int): Source ID (>= 1)
+
+#### 🔵 `project.source.update`
+Patch source fields. Pass only what changes.
+
+**Parameters:**
+- `sourceId` (int): Source ID
+- `title`, `busType`, `frameStart`, `frameEnd`, `checksumAlgorithm`, `frameDetection`,
+  `decoderMethod`, `hexadecimalDelimiters` (optional): the fields to change
+
+### Data Table Commands (13)
+
+Data tables hold the project's Variables: named values that parsers, transforms, control scripts
+and output widgets share. The `*Register` commands edit the table's **definition** (what
+variables exist, saved in the project); the value commands read and write the **live runtime
+store** and change nothing on disk. Every value command mirrors a scripting global, so the API
+and a script see one store. See [Data Tables](Data-Tables.md).
+
+A table that lives inside folders is addressed by its bare name or by its full `/`-joined path.
+
+#### 🟢 `project.dataTable.list`
+List every table with its bare `name`, full `path`, and `registerCount`.
+
+**Parameters:** None
+
+#### 🟢 `project.dataTable.get`
+Return one table's variable list.
+
+**Parameters:**
+- `name` (string): Table name or full folder path
+
+#### 🟢 `project.dataTable.add`
+Create an empty table. A colliding name is uniquified.
+
+**Parameters:**
+- `name` (string, optional): Desired table name (default `Shared Table`)
+
+#### 🟢 `project.dataTable.rename`
+Rename a table.
+
+**Parameters:**
+- `oldName` (string): Current table name
+- `newName` (string): New table name
+
+#### 🟢 `project.dataTable.delete`
+Delete a table and all its variables.
+
+**Parameters:**
+- `name` (string): Table name
+- `dryRun` (bool, optional): Return what would be deleted without committing
+
+#### 🟢 `project.dataTable.addRegister`
+Append a variable to a table.
+
+**Parameters:**
+- `table` (string): Owning table name
+- `name` (string): Variable name
+- `computed` (bool, optional): Computed (default) or constant
+- `defaultValue` (number|string, optional): Initial value (default `0`)
+
+#### 🟢 `project.dataTable.updateRegister`
+Update a variable's name, kind or default.
+
+**Parameters:**
+- `table` (string): Owning table name
+- `name` (string): Current variable name
+- `newName` (string, optional): New variable name
+- `computed` (bool, optional): Switch to computed (true) or constant
+- `defaultValue` (number|string, optional): New default value
+
+#### 🟢 `project.dataTable.deleteRegister`
+Delete a variable.
+
+**Parameters:**
+- `table` (string): Owning table name
+- `name` (string): Variable name
+- `dryRun` (bool, optional): Return what would be deleted without committing
+
+#### 🟢 `project.dataTable.getValue`
+Read a variable's live runtime value. Same store as the parser/transform `tableGet()`.
+
+**Parameters:**
+- `table` (string): Table name
+- `name` (string): Variable name
+
+#### 🟢 `project.dataTable.setValue`
+Write a variable's live runtime value. Same effect as `tableSet()`. A constant variable rejects
+the write.
+
+**Parameters:**
+- `table` (string): Table name
+- `name` (string): Variable name
+- `value` (number|string): New runtime value
+
+#### 🟢 `project.dataTable.handle`
+Resolve a variable to a reusable numeric handle for the fast value path. Returns `handle: -1`
+for an unknown variable. Mirrors `tableHandle()`.
+
+**Parameters:**
+- `table` (string): Table name
+- `name` (string): Variable name
+
+#### 🟢 `project.dataTable.getValueH`
+Read a live value by handle. A stale or invalid handle yields `found: false`. Mirrors
+`tableGetH()`.
+
+**Parameters:**
+- `handle` (number): Handle from `project.dataTable.handle`
+
+#### 🟢 `project.dataTable.setValueH`
+Write a live value by handle. A stale, invalid or constant-variable handle yields
+`written: false`. Mirrors `tableSetH()`.
+
+**Parameters:**
+- `handle` (number): Handle from `project.dataTable.handle`
+- `value` (number|string): New runtime value
+
+### Control Script Commands (6)
+
+The control script is the project's `setup()` / `loop()` automation. Validate source with
+`dryRun` before installing it: `set` recompiles and restarts the live runtime immediately when a
+device is connected. See [Control Script](Control-Script.md).
+
+#### 🟢 `controlScript.get`
+Get the project's control script source.
+
+**Parameters:** None
+
+#### 🟢 `controlScript.getCode`
+Alias of `controlScript.get`, matching the `project.frameParser.getCode` naming.
+
+**Parameters:** None
+
+#### 🟢 `controlScript.set`
+Replace the control script source. The script is persisted in the project and applied to the
+live runtime.
+
+**Parameters:**
+- `code` (string): Control script source
+
+#### 🟢 `controlScript.setCode`
+Alias of `controlScript.set`.
+
+**Parameters:**
+- `code` (string): Control script source
+
+#### 🟢 `controlScript.dryRun`
+Compile the source in a sandboxed engine without installing or running it. Reports syntax errors
+with line numbers and checks that `setup()` and/or `loop()` are defined.
+
+**Parameters:**
+- `code` (string): Control script source to validate
+
+#### 🟢 `controlScript.getStatus`
+Report whether the control script is running.
+
+**Parameters:** None
+
+### Reference Script Commands (2)
+
+The bundled reference scripts are the templates the editors offer. Read one before writing
+canvas-widget, frame-parser, transform or output-widget code, and adapt it instead of starting
+from a blank editor.
+
+#### 🟢 `scripts.list`
+List the bundled reference scripts.
+
+**Parameters:**
+- `kind` (string, optional): Filter to one kind: `painter`, `frame_parser_js`, `frame_parser_lua`,
+  `transform_js`, `transform_lua` or `output_widget_js`
+
+#### 🟢 `scripts.get`
+Read one script's body.
+
+**Parameters:**
+- `kind` (string): Script kind, as reported by `scripts.list`
+- `id` (string): The `file` field from `scripts.list`, without its extension
+
+### System Commands (4)
+
+Helper-process control for the control script. `system.exec` and `system.kill` are **control
+script only**: they are rejected over the network and through the SDK, because launching a
+process from a remote client is not something an API token should buy. A launched process is
+terminated automatically when the device disconnects or the project closes.
+
+#### 🟢 `system.projectDir`
+Return the loaded project's directory, file path and file name. Use it to resolve paths relative
+to the `.ssproj` before calling `system.exec`.
+
+**Parameters:** None
+
+#### 🟢 `system.exec`
+Launch a helper process and return its `processId`. Control script only.
+
+**Parameters:**
+- `program` (string): Executable to run
+- `args` (array, optional): Arguments
+- `workingDir` (string, optional): Working directory (defaults to the project directory)
+
+#### 🟢 `system.kill`
+Terminate a managed helper process. Control script only.
+
+**Parameters:**
+- `processId` (int): Process id from `system.exec`
+
+#### 🟢 `system.runningProcesses`
+List the helper processes currently managed by `system.exec`.
+
+**Parameters:** None
+
+### Sample Stream Commands (2)
+
+The sample stream carries typed blocks instead of rendered frames, for clients that want the
+numbers. Subscription itself is connection-scoped; these two commands describe the surface.
+
+#### 🟢 `stream.getInfo`
+Report the stream surface: how many stream sources are live, the wire encoding of a
+`streamBlock` line (base64 float32le), the per-subscriber queue depth before the oldest block is
+dropped and counted, and the names of the connection-scoped subscribe commands.
+
+**Parameters:** None
+
+#### 🟢 `stream.getSources`
+List every live stream source: `sourceId`, channel count, sample rate, and the dataset
+`uniqueId`s its blocks carry.
+
+**Parameters:** None
+
+### Remote Dashboard Commands (2)
+
+What a remote viewer needs before it can follow this instance. See
+[Remote Dashboard](Remote-Dashboard.md).
+
+#### 🟢 `mirror.getInfo`
+Report whether this instance can be watched: mirror wire version, application version, current
+structure epoch and layout hash, dataset and source counts, the viewer limit and current viewer
+count, the structure part count, and the names of the connection-scoped mirror commands
+(`mirror.subscribe`, `mirror.setRate`, `mirror.unsubscribe`).
+
+**Parameters:** None
+
+#### 🟢 `mirror.getStructure`
+Return the mirror structure for the current epoch: the ordered `(sourceId, uniqueId)` dataset
+list every snapshot is positional against, the layout hash over it, the remote's operation mode,
+plot window and frozen flag, and the serialized project. A large project is split into the
+`structureParts` that `mirror.getInfo` reports; fetch each part by index.
+
+**Parameters:**
+- `part` (int, optional): Structure part to fetch, when the project spans more than one
+
+### Console Export Commands (3)
+
+Console logging to a text file, separate from CSV export. See [Console](Toolbar-Reference.md).
+
+#### 🟢 `consoleExport.getStatus`
+Get console export status.
+
+**Parameters:** None
+
+#### 🟢 `consoleExport.setEnabled`
+Enable or disable console export.
+
+**Parameters:**
+- `enabled` (bool): true to enable, false to disable
+
+#### 🟢 `consoleExport.close`
+Close the current console export file.
+
+**Parameters:** None
+
+### Extension Commands (10)
+
+Installable widget packages and the repositories they come from. See
+[Extensions](Extensions.md).
+
+#### 🟢 `extensions.list`
+List every extension available from the configured repositories.
+
+**Parameters:** None
+
+#### 🟢 `extensions.getInfo`
+Get one extension's detail.
+
+**Parameters:**
+- `extensionId` (string): Extension identifier
+
+#### 🟢 `extensions.install`
+Install an extension from the catalog.
+
+**Parameters:**
+- `addonIndex` (int): Index in the addon list
+
+#### 🟢 `extensions.uninstall`
+Uninstall an extension. Removes its files irreversibly.
+
+**Parameters:**
+- `addonIndex` (int): Index in the addon list
+- `dryRun` (bool, optional): Return what would be removed without committing
+
+#### 🟢 `extensions.refresh`
+Refresh the catalogs of every configured repository.
+
+**Parameters:** None
+
+#### 🟢 `extensions.listRepositories`
+List the configured repository URLs.
+
+**Parameters:** None
+
+#### 🟢 `extensions.addRepository`
+Add a repository URL.
+
+**Parameters:**
+- `url` (string): Repository URL
+
+#### 🟢 `extensions.removeRepository`
+Remove a repository by position.
+
+**Parameters:**
+- `index` (int): Index of the repository to remove
+
+#### 🟢 `extensions.saveState`
+Save a plugin's state into the project file.
+
+**Parameters:**
+- `pluginId` (string): Plugin identifier
+- `state` (object): State to persist
+
+#### 🟢 `extensions.loadState`
+Load a plugin's state from the project file.
+
+**Parameters:**
+- `pluginId` (string): Plugin identifier
+
+### Dashboard Window Commands (14)
+
+The window layer under the dashboard: which group is on screen, how its windows are arranged,
+and the per-widget settings that travel with the layout. Layout work belongs here; the
+workspace's own contents are edited with the `project.workspace.*` commands.
+
+#### 🟢 `ui.window.getStatus`
+Get the dashboard window status: `activeGroupId`, `groupCount`, `autoLayoutEnabled`.
+
+**Parameters:** None
+
+#### 🟢 `ui.window.listGroups`
+List the groups as `[{id, text, icon}]`.
+
+**Parameters:** None
+
+#### 🟢 `ui.window.setActiveGroup`
+Show a group by id.
+
+**Parameters:**
+- `groupId` (int): Group id to activate
+
+#### 🟢 `ui.window.setActiveGroupIndex`
+Show a group by position.
+
+**Parameters:**
+- `index` (int): Group index to activate
+
+#### 🟢 `ui.window.listWindowStates`
+Get the window states of the current group as `[{id, state}]`.
+
+**Parameters:** None
+
+#### 🟢 `ui.window.setWindowState`
+Set one window's state.
+
+**Parameters:**
+- `id` (int): Window id
+- `state` (int): `0` = normal, `1` = minimized, `2` = closed
+
+#### 🟢 `ui.window.setAutoLayout`
+Enable or disable automatic layout.
+
+**Parameters:**
+- `enabled` (bool): Whether to enable auto layout
+
+#### 🟢 `ui.window.setLayoutPattern`
+Set the auto-layout pattern of the workspace or group on screen. Stored beside that workspace's
+window geometry, so the workspace list is untouched.
+
+**Parameters:**
+- `pattern` (string): `` (empty, Grid), `master-stack`, `master-grid`, `row`, `column` or
+  `spiral`
+- `ratio` (int, optional): Primary split in sixteenths, 1 to 15, default 8. Applies only to the
+  patterns that have a primary region
+
+#### 🟢 `ui.window.getLayout`
+Get the serialized layout.
+
+**Parameters:** None
+
+#### 🟢 `ui.window.setLayout`
+Apply a layout.
+
+**Parameters:**
+- `layout` (object): Layout object to apply
+
+#### 🟢 `ui.window.saveLayout`
+Save the current window layout into the project.
+
+**Parameters:** None
+
+#### 🟢 `ui.window.loadLayout`
+Load the window layout stored in the project.
+
+**Parameters:** None
+
+#### 🟢 `ui.window.getWidgetSettings`
+Get a widget's saved settings.
+
+**Parameters:**
+- `widgetId` (string): Widget identifier
+
+#### 🟢 `ui.window.setWidgetSetting`
+Set one widget setting.
+
+**Parameters:**
+- `widgetId` (string): Widget identifier
+- `key` (string): Setting name
+- `value` (any): New value
+
+### Assistant Rail Commands (12)
+
+Convenience commands the in-app [AI Assistant](AI-Assistant.md) uses, each one a documented
+chain over the plain `project.*` commands. A script or socket client can call them too: they
+resolve entities by name instead of by index, validate before writing, and report which step
+failed. The names stay grouped under `assistant.` so the assistant's own skill documents can
+refer to one rail instead of a sequence.
+
+#### 🟢 `assistant.snapshot`
+Token-efficient project snapshot. Same payload as `project.snapshot`.
+
+**Parameters:**
+- `verbose` (bool, optional): Include parser code and per-source frame settings
+
+#### 🟢 `assistant.dataset.resolve`
+Resolve a dataset by path, title or uniqueId, dispatching to the matching `project.dataset.get*`
+command. Exactly one key must be given.
+
+**Parameters:**
+- `path` (string): `Group/Dataset` or `Source/Group/Dataset`, stable across reorders
+- `title` (string): Dataset title
+- `uniqueId` (int|string): Unique id, or a string alias
+
+#### 🟢 `assistant.workspace.resolve`
+Resolve a workspace by id or case-insensitive title. An ambiguous or missing lookup returns
+`candidates[]`.
+
+**Parameters:**
+- `workspaceId` (int): Workspace id (1000-4999 automatic, >= 5000 user-created)
+- `workspace` (string): Workspace title
+
+#### 🟢 `assistant.workspace.plan`
+Return the `(groupId, widgetType)` tuples a workspace can host, optionally filtered to one
+widget type. Run it before `assistant.workspace.addTile`.
+
+**Parameters:**
+- `workspaceId` (int) or `workspace` (string): Which workspace
+- `widgetType` (string, optional): Filter to one visualization
+
+#### 🟢 `assistant.workspace.addTile`
+Add a tile in one call: resolve the dataset, resolve or create the workspace, enter customize
+mode, enable the matching dataset option, patch the ranges, and add the widget. Returns
+`steps[]`. Omit the dataset for a group-level widget.
+
+**Parameters:**
+- `widgetType` (string|int): Widget slug (`plot`, `fft`, `gauge`, ...) or its integer id
+- `workspaceId` (int) or `workspace` (string): Target workspace
+- `createWorkspace` (bool, optional): Create the workspace when the title does not exist
+- `dataset` (string) or `uniqueId` (int): Dataset for a per-dataset widget
+- `groupId` (int): Group id, required for a group-level widget when no dataset is given
+- `ranges` (object, optional): `pltMin`, `pltMax`, `wgtMin`, `wgtMax`, `fftMin`, `fftMax`,
+  `ledHigh`; only the keys present are written
+
+#### 🟢 `assistant.script.dryRun`
+Validate a script without writing it, routed by `kind` to the matching `dryRun` command. Other
+parameters are forwarded verbatim.
+
+**Parameters:**
+- `kind` (string): `frame_parser`, `transform`, `painter`, `output_widget` or `end_to_end`
+- `code` (string): Script source, plus the inputs that kind's dry run takes
+
+#### 🟢 `assistant.script.apply`
+Dry-run a script, then write it through the matching `setCode` command. A failed dry run means
+nothing is written. Returns `steps[]`.
+
+**Parameters:**
+- `kind` (string): `frame_parser`, `transform` or `painter`
+- `code` (string): Script source, plus that kind's target ids
+
+#### 🟢 `assistant.project.bulkApply`
+Run several project mutations under one autosave. Same contract as `project.batch` (up to 1024
+operations, `stopOnError` false by default, not a database transaction), and it rejects a
+nested batch up front.
+
+**Parameters:**
+- `ops` (array): Operations to apply
+- `dryRun` (bool, optional): Preview every operation without committing
+
+#### 🟢 `assistant.checkpoint`
+Take an immediate project snapshot and return its absolute path. Snapshots roll at the last 50
+per project, under the app-data backup directory.
+
+**Parameters:**
+- `label` (string, optional): Tag for retrieval by name
+
+#### 🟢 `assistant.listCheckpoints`
+List the rolling snapshots for the loaded project, newest first.
+
+**Parameters:** None
+
+#### 🟢 `assistant.restore`
+Restore a checkpoint, replacing the current project state. Unsaved state is overwritten, so a
+defensive pre-restore snapshot is taken first and returned as `reverseSnapshotPath`.
+
+**Parameters:**
+- `path` (string), `timestamp` (string) or `label` (string): Which checkpoint to restore
+
+#### 🟢 `assistant.memory.propose`
+Propose remembering one durable fact for future chats. The user sees a confirmation chip and
+decides; the call never stores anything by itself.
+
+**Parameters:**
+- `category` (string): `user`, `feedback`, `project` or `reference`
+- `text` (string): The fact to remember
+
 ### Modbus Driver Commands - Pro (22)
 
 **Note:** These commands require a Serial Studio Pro license.
@@ -4347,16 +5088,42 @@ Clear all register groups.
 
 **Parameters:** None
 
-#### 🔵 Additional Modbus Query Commands
-- `io.modbus.listSerialPorts`
-- `io.modbus.listParities`
-- `io.modbus.listDataBits`
-- `io.modbus.listStopBits`
-- `io.modbus.listBaudRates`
-- `io.modbus.listRegisterTypes`
-- `io.modbus.listRegisterGroups`
+#### 🔵 `io.modbus.listSerialPorts`
+Get the available serial ports.
 
-### CAN Bus Driver Commands - Pro (9)
+**Parameters:** None
+
+#### 🔵 `io.modbus.listParities`
+Get the parity options.
+
+**Parameters:** None
+
+#### 🔵 `io.modbus.listDataBits`
+Get the data-bit options.
+
+**Parameters:** None
+
+#### 🔵 `io.modbus.listStopBits`
+Get the stop-bit options.
+
+**Parameters:** None
+
+#### 🔵 `io.modbus.listBaudRates`
+Get the baud-rate options.
+
+**Parameters:** None
+
+#### 🔵 `io.modbus.listRegisterTypes`
+Get the register type names.
+
+**Parameters:** None
+
+#### 🔵 `io.modbus.listRegisterGroups`
+Get every configured register group.
+
+**Parameters:** None
+
+### CAN Bus Driver Commands - Pro (12)
 
 **Note:** These commands require a Serial Studio Pro license.
 
@@ -4364,6 +5131,28 @@ Clear all register groups.
 Get current CAN bus configuration.
 
 **Parameters:** None
+
+**Returns:** the selected plugin and interface, the bitrate pair, the `loopback`, `listenOnly` and
+`tpReassembly` flags, `isOpen`, `configurationOk`, and `interfaceError` when the last open failed.
+`reassembly` carries the pulled multi-frame counters, one sub-object per protocol:
+
+```json
+{
+  "tpReassembly": true,
+  "reassembly": {
+    "enabled": true,
+    "j1939": {"completed": 128, "timeouts": 0, "aborted": 1, "malformed": 0,
+              "sizeOverruns": 0, "sequenceErrors": 2, "sessionOverruns": 0},
+    "isotp": {"completed": 44, "timeouts": 3, "aborted": 0, "malformed": 0,
+              "sizeOverruns": 0, "sequenceErrors": 0, "sessionOverruns": 0}
+  }
+}
+```
+
+The counters are cumulative since the option was last toggled: unticking and re-ticking the
+checkbox clears them and discards any half-collected session.
+Multi-frame reassembly itself is enabled in the Setup panel; see
+[CAN Bus Driver](Drivers-CAN-Bus.md#multi-frame-reassembly).
 
 #### 🔵 `io.canbus.listPlugins`
 Get list of available CAN plugins.
@@ -4430,6 +5219,340 @@ Enable or disable CAN FD.
 **Parameters:**
 - `enabled` (bool): true to enable CAN FD, false for standard CAN
 
+#### 🔵 `io.canbus.setDataBitrate`
+Set the CAN FD data-phase bitrate.
+
+**Parameters:**
+- `dataBitrate` (int): Data-phase bitrate in bits per second
+
+#### 🔵 `io.canbus.setLoopback`
+Enable or disable loopback mode, which echoes transmitted frames back to the application.
+
+**Parameters:**
+- `enabled` (bool): true to enable loopback
+
+#### 🔵 `io.canbus.setListenOnly`
+Enable or disable listen-only mode, which receives without acknowledging or transmitting.
+
+**Parameters:**
+- `enabled` (bool): true to enable listen-only
+
+### OPC UA Driver Commands - Pro (29)
+
+**Note:** These commands require a Serial Studio Pro license.
+
+Discovery and browsing are asynchronous: the command starts the request, and the matching list
+command is polled for the result. See [OPC UA Driver](Drivers-OPC-UA.md).
+
+#### 🔵 `io.opcua.getConfig`
+Get the current OPC UA configuration.
+
+**Parameters:** None
+
+#### 🔵 `io.opcua.getStatus`
+Get session status and the pulled diagnostics counters.
+
+**Parameters:** None
+
+#### 🔵 `io.opcua.setEndpointUrl`
+Set the endpoint URL.
+
+**Parameters:**
+- `url` (string): `opc.tcp://` endpoint URL, e.g. `opc.tcp://192.168.1.10:4840/server`
+
+#### 🔵 `io.opcua.discoverEndpoints`
+Request the server's endpoints. Poll `io.opcua.listEndpoints` for the result.
+
+**Parameters:** None
+
+#### 🔵 `io.opcua.listEndpoints`
+Get the discovered endpoints with their policy, mode and selectability.
+
+**Parameters:** None
+
+#### 🔵 `io.opcua.setEndpointIndex`
+Select a discovered endpoint by row.
+
+**Parameters:**
+- `index` (int): Row in `io.opcua.listEndpoints`, or `-1` for the typed URL
+
+#### 🔵 `io.opcua.setSecurityPolicy`
+Set the security policy.
+
+**Parameters:**
+- `policy` (string): `None`, `Basic128Rsa15`, `Basic256`, `Basic256Sha256`,
+  `Aes128_Sha256_RsaOaep` or `Aes256_Sha256_RsaPss` (full URI also accepted)
+
+#### 🔵 `io.opcua.setSecurityMode`
+Set the message security mode.
+
+**Parameters:**
+- `mode` (int): `1` = None, `2` = Sign, `3` = Sign and Encrypt
+
+#### 🔵 `io.opcua.setAuthMode`
+Set the authentication mode.
+
+**Parameters:**
+- `mode` (int): `0` = anonymous, `1` = username/password, `2` = X.509 certificate
+
+#### 🔵 `io.opcua.setIdentityType`
+Alias of `io.opcua.setAuthMode`.
+
+**Parameters:**
+- `type` (int): `0` = anonymous, `1` = username/password, `2` = X.509 certificate
+
+#### 🔵 `io.opcua.setUsername`
+Set the username used by authentication mode `1`.
+
+**Parameters:**
+- `username` (string): Username
+
+#### 🔵 `io.opcua.setPassword`
+Set the password used by authentication mode `1`. The password goes to the machine's credential
+vault, stored obfuscated in the machine's settings, and is never returned.
+
+**Parameters:**
+- `password` (string): Password
+
+#### 🔵 `io.opcua.setUserCertificate`
+Set the X.509 identity files used by authentication mode `2`. Only the paths are stored.
+
+**Parameters:**
+- `certificate` (string): Path to the user certificate (DER or PEM)
+- `key` (string): Path to the private key
+
+#### 🔵 `io.opcua.setPublishingInterval`
+Set the publishing interval.
+
+**Parameters:**
+- `intervalMs` (int): Interval in milliseconds (10-60000)
+
+#### 🔵 `io.opcua.startBrowse`
+Open a browse session. Poll `io.opcua.browse` once browsing is true.
+
+**Parameters:** None
+
+#### 🔵 `io.opcua.browse`
+Fetch one level of the address space.
+
+**Parameters:**
+- `nodeId` (string): Folder node id; empty for the Objects folder
+
+#### 🔵 `io.opcua.stopBrowse`
+Close the browse session and commit the picker selection to the tag list.
+
+**Parameters:** None
+
+#### 🔵 `io.opcua.listTags`
+Get the configured tag list and the wire schema.
+
+**Parameters:** None
+
+#### 🔵 `io.opcua.setTags`
+Replace the whole tag list.
+
+**Parameters:**
+- `tags` (array): Tag objects: `id` (node id), `name`, `path`, `unit`, `t` (type code), `n`
+  (array length)
+
+#### 🔵 `io.opcua.addTag`
+Append one tag.
+
+**Parameters:**
+- `id` (string): Variable node id
+- `name` (string): Display name
+- `t` (string): Type code: `bool`, `i8`, `u8`, `i16`, `u16`, `i32`, `u32`, `i64`, `u64`, `f32`,
+  `f64`, `str`
+- `path`, `unit`, `n` (optional): Browse path, engineering unit, array length
+
+#### 🔵 `io.opcua.removeTag`
+Remove a tag by position.
+
+**Parameters:**
+- `index` (int): Zero-based tag position
+
+#### 🔵 `io.opcua.clearTags`
+Remove every tag.
+
+**Parameters:** None
+
+#### 🔵 `io.opcua.generateProject`
+Generate a project from the tag list and load it into the editor.
+
+**Parameters:** None
+
+#### 🔵 `io.opcua.getCertificate`
+Get this installation's OPC UA client certificate.
+
+**Parameters:** None
+
+#### 🔵 `io.opcua.exportCertificate`
+Write the client certificate to a file. The private key is never exported.
+
+**Parameters:**
+- `path` (string): Destination path for the DER certificate
+
+#### 🔵 `io.opcua.regenerateCertificate`
+Replace the client certificate and key. Every server must trust the new one again.
+
+**Parameters:** None
+
+#### 🔵 `io.opcua.listTrusted`
+List the accepted server certificates.
+
+**Parameters:** None
+
+#### 🔵 `io.opcua.trustServer`
+Accept the server certificate the last attempt was refused over.
+
+**Parameters:**
+- `fingerprint` (string): SHA-256 fingerprint reported by the failed attempt
+
+#### 🔵 `io.opcua.revokeTrust`
+Withdraw a previously accepted server certificate.
+
+**Parameters:**
+- `fingerprint` (string): SHA-256 fingerprint from `io.opcua.listTrusted`
+
+### S7comm Driver Commands - Pro (7)
+
+**Note:** These commands require a Serial Studio Pro license.
+
+The driver is a read-only client: it polls the PLC and never writes to it. See
+[Siemens S7 Driver](Drivers-S7.md).
+
+#### 🔵 `io.s7.getConfig`
+Get the S7comm driver configuration.
+
+**Parameters:** None
+
+#### 🔵 `io.s7.getStatus`
+Get session status and the pulled counters: successful reads, failed reads, refused items with
+the name of the last one, frames published and link drops.
+
+**Parameters:** None
+
+#### 🔵 `io.s7.setProperty`
+Set one driver property.
+
+**Parameters:**
+- `key` (string): `host`, `rack`, `slot` or `pollInterval`
+- `value` (string|int): New value
+
+#### 🔵 `io.s7.addVariable`
+Add a variable to the poll list.
+
+**Parameters:**
+- `address` (string): Absolute S7 address, e.g. `DB5.DBD20:REAL`
+- `name` (string, optional): Channel name shown on the dashboard
+
+#### 🔵 `io.s7.removeVariable`
+Remove a variable by position.
+
+**Parameters:**
+- `index` (int): Zero-based position
+
+#### 🔵 `io.s7.clearVariables`
+Remove every configured variable.
+
+**Parameters:** None
+
+#### 🔵 `io.s7.generateProject`
+Build a project from the configured variables.
+
+**Parameters:** None
+
+### EtherNet/IP Driver Commands - Pro (7)
+
+**Note:** These commands require a Serial Studio Pro license.
+
+The driver is a read-only client. See [EtherNet/IP Driver](Drivers-EtherNet-IP.md).
+
+#### 🔵 `io.eip.getConfig`
+Get the EtherNet/IP driver configuration. `plcType` is always reported as its slug.
+
+**Parameters:** None
+
+#### 🔵 `io.eip.getStatus`
+Get session status and the pulled counters: successful reads, failed reads, frames published and
+link drops.
+
+**Parameters:** None
+
+#### 🔵 `io.eip.setProperty`
+Set one driver property.
+
+**Parameters:**
+- `key` (string): `host`, `cipPath`, `plcType` or `pollInterval`
+- `value` (string|int): New value. `plcType` takes a controller-family slug or its row number
+
+#### 🔵 `io.eip.addTag`
+Add a CIP tag to the poll list.
+
+**Parameters:**
+- `tag` (string): CIP symbolic tag name
+- `type` (string): Wire type code (`bool`, `i16`, `i32`, `f32`, `str`, ...)
+- `name` (string, optional): Channel name shown on the dashboard
+- `element` (int, optional): Array element index, or `-1` for a scalar (-1 to 65535)
+
+#### 🔵 `io.eip.removeTag`
+Remove a CIP tag by position.
+
+**Parameters:**
+- `index` (int): Zero-based position in the tag list
+
+#### 🔵 `io.eip.clearTags`
+Remove every configured CIP tag.
+
+**Parameters:** None
+
+#### 🔵 `io.eip.generateProject`
+Build a project from the configured CIP tags.
+
+**Parameters:** None
+
+### IEC 60870-5-104 Driver Commands - Pro (6)
+
+**Note:** These commands require a Serial Studio Pro license.
+
+The driver is a read-only controlling station: it never sends a control command to the
+substation. See [IEC 60870-5-104 Driver](Drivers-IEC-104.md).
+
+#### 🔵 `io.iec104.getConfig`
+Get the IEC 60870-5-104 driver configuration.
+
+**Parameters:** None
+
+#### 🔵 `io.iec104.getStatus`
+Get the link status and the pulled counters: points with bad quality, skipped ASDUs, test-frame
+timeouts, sequence errors, malformed frames, frames published and link drops.
+
+**Parameters:** None
+
+#### 🔵 `io.iec104.getPoints`
+List the information objects the station has reported, in wire order, which is the order the
+datasets read them in.
+
+**Parameters:** None
+
+#### 🔵 `io.iec104.setProperty`
+Set one driver property.
+
+**Parameters:**
+- `key` (string): `host`, `port`, `commonAddress`, `windowK`, `windowW`, `timeoutT1`,
+  `timeoutT2` or `timeoutT3`
+- `value` (string|int): New value
+
+#### 🔵 `io.iec104.clearPoints`
+Forget every discovered information object.
+
+**Parameters:** None
+
+#### 🔵 `io.iec104.generateProject`
+Build a project from the discovered points.
+
+**Parameters:** None
+
 ### MQTT Commands - Pro (6)
 
 **Note:** These commands require a Serial Studio Pro license.
@@ -4444,8 +5567,8 @@ Shared rules for both `setConfig` commands:
 
 - Pass only the keys you want to change; omitted keys keep their values.
 - Setting `password` requires `username` in the same call. The pair is stored
-  in the encrypted credential vault, never in the project file, and is never
-  returned by `getConfig` (check `hasCredentials` instead). Pass empty strings
+  in the machine's credential vault, obfuscated in the machine's settings, never
+  in the project file, and is never returned by `getConfig` (check `hasCredentials` instead). Pass empty strings
   for both to clear the stored pair.
 - Enum-valued fields (`mqttVersion`, `sslProtocol`, `peerVerifyMode`) take
   integer indices; `getConfig` returns the canonical lookup tables
@@ -4503,6 +5626,286 @@ schedules a reconnect.
 
 #### 🔵 `project.mqtt.subscriber.getStatus`
 Snapshot of subscriber driver live state (`isOpen`, `hostname`, `port`).
+
+**Parameters:** None
+
+### Historian Commands - Pro (21)
+
+**Note:** These commands require a Serial Studio Pro license.
+
+Recording control, database browsing, and the tag vocabulary shared across stored sessions.
+`verify` and `regress` run in a child process and answer immediately; poll the matching getter
+for the verdict. See [Historian](Session-Database.md).
+
+#### 🔵 `sessions.getStatus`
+Return the recording flags: `exportEnabled` and `isOpen`.
+
+**Parameters:** None
+
+#### 🔵 `sessions.setExportEnabled`
+Turn session recording on or off.
+
+**Parameters:**
+- `enabled` (bool): Whether to record
+
+#### 🔵 `sessions.close`
+Finalize and close the session that is open. A no-op when none is.
+
+**Parameters:** None
+
+#### 🔵 `sessions.getDbPath`
+Return the canonical `.db` path the recorder uses for a project title.
+
+**Parameters:**
+- `projectTitle` (string): Project title
+
+#### 🔵 `sessions.openDatabase`
+Open a historian database file for browsing.
+
+**Parameters:**
+- `filePath` (string): Path to the `.db` file
+
+#### 🔵 `sessions.list`
+List every session stored in the open database.
+
+**Parameters:** None
+
+#### 🔵 `sessions.get`
+Return one stored session's metadata and tags.
+
+**Parameters:**
+- `sessionId` (int): Session id
+
+#### 🔵 `sessions.delete`
+Delete a stored session.
+
+**Parameters:**
+- `sessionId` (int): Session id
+
+#### 🔵 `sessions.setNotes`
+Set free-form notes on a stored session.
+
+**Parameters:**
+- `sessionId` (int): Session id
+- `notes` (string): Notes text
+
+#### 🔵 `sessions.replay`
+Start the player on a stored session.
+
+**Parameters:**
+- `sessionId` (int): Session id
+
+#### 🔵 `sessions.exportToCsv`
+Export a stored session to CSV. Runs asynchronously.
+
+**Parameters:**
+- `sessionId` (int): Session id
+
+#### 🔵 `sessions.verify`
+Verify a stored session's reproducibility in a child process. Poll `sessions.getVerification`
+for the verdict.
+
+**Parameters:**
+- `sessionId` (int): Session id
+
+#### 🔵 `sessions.getVerification`
+Return the latest stored verification verdict for a session.
+
+**Parameters:**
+- `sessionId` (int): Session id
+
+#### 🔵 `sessions.regress`
+Compare a stored session, or every session carrying a tag, against a candidate project in a
+child process. Poll `sessions.getRegression` for the drift report.
+
+**Parameters:**
+- `sessionId` (int) or `tag` (string): What to compare
+- `projectPath` (string, optional): Candidate project file
+- `projectJson` (object, optional): Candidate project inline
+
+#### 🔵 `sessions.getRegression`
+Return the running flag, the last drift report, and the sweep status.
+
+**Parameters:** None
+
+#### 🔵 `sessions.listTags`
+List every tag defined in the open database.
+
+**Parameters:** None
+
+#### 🔵 `sessions.addTag`
+Create a tag.
+
+**Parameters:**
+- `label` (string): Tag label
+
+#### 🔵 `sessions.renameTag`
+Rename a tag.
+
+**Parameters:**
+- `tagId` (int): Tag id
+- `newLabel` (string): New label
+
+#### 🔵 `sessions.deleteTag`
+Delete a tag from the database.
+
+**Parameters:**
+- `tagId` (int): Tag id
+
+#### 🔵 `sessions.assignTag`
+Assign a tag to a stored session.
+
+**Parameters:**
+- `sessionId` (int): Session id
+- `tagId` (int): Tag id
+
+#### 🔵 `sessions.removeTag`
+Remove a tag from a stored session.
+
+**Parameters:**
+- `sessionId` (int): Session id
+- `tagId` (int): Tag id
+
+### InfluxDB Commands - Pro (3)
+
+**Note:** These commands require a Serial Studio Pro license.
+
+The sink writes each published block to InfluxDB 2.x as line protocol. See
+[InfluxDB](InfluxDB.md).
+
+#### 🔵 `influx.setConfig`
+Configure the sink. Every field is optional, so a call changes only what it names. The token is
+write-only: it goes to the machine's credential vault, never to the project file, and no command
+reads it back.
+
+**Parameters:**
+- `url` (string, optional): Server URL
+- `org` (string, optional): Organization
+- `bucket` (string, optional): Bucket
+- `measurement` (string, optional): Measurement every point is written under
+- `token` (string, optional): API token
+
+#### 🔵 `influx.setEnabled`
+Enable or disable the sink for the current project. An unlicensed build reports
+`enabled: false`.
+
+**Parameters:**
+- `enabled` (bool): Whether to write points to InfluxDB
+
+#### 🔵 `influx.getStatus`
+Snapshot the sink: `enabled` / `isOpen`, the endpoint fields, whether a token is stored, the
+pulled counters (`pointsWritten`, `pointsDropped`, `fieldsSkipped`, `httpErrors`) and the last
+write error.
+
+**Parameters:** None
+
+### Notifications Commands - Pro (8)
+
+**Note:** These commands require a Serial Studio Pro license.
+
+The event log behind the Notifications panel. A control script or an external client posts
+events here, and the panel, the tray notification and the unread badge all read from it. See
+[Notifications](Notifications.md).
+
+#### 🔵 `notifications.post`
+Post an event.
+
+**Parameters:**
+- `level` (int): `0` = Info, `1` = Warning, `2` = Critical
+- `channel` (string, optional): Channel id, free-form
+- `title` (string, optional): Event title
+- `subtitle` (string, optional): Event detail
+
+#### 🔵 `notifications.resolve`
+Emit a companion "Resolved" Info event for an earlier one.
+
+**Parameters:**
+- `channel` (string, optional): Channel id
+- `title` (string, optional): Event title
+- `subtitle` (string, optional): Event detail
+
+#### 🔵 `notifications.list`
+List historical events, newest first.
+
+**Parameters:**
+- `channel` (string, optional): Filter by channel
+- `limit` (int, optional): Maximum entries (`0`, the default, means all)
+
+#### 🔵 `notifications.listChannels`
+List the channel ids present in the history.
+
+**Parameters:** None
+
+#### 🔵 `notifications.getUnreadCount`
+Return the number of unread Warning and Critical events.
+
+**Parameters:** None
+
+#### 🔵 `notifications.markRead`
+Clear the unread badge counter.
+
+**Parameters:** None
+
+#### 🔵 `notifications.clearChannel`
+Erase every event posted to one channel.
+
+**Parameters:**
+- `channel` (string): Channel to clear
+
+#### 🔵 `notifications.clearAll`
+Erase the whole notification history.
+
+**Parameters:** None
+
+### Licensing Commands - Pro (9)
+
+**Note:** These commands are present in commercial builds. They report and change this
+machine's activation state; the free trial is started through the same surface.
+
+#### 🔵 `licensing.getStatus`
+Get the current activation status.
+
+**Parameters:** None
+
+#### 🔵 `licensing.setLicense`
+Store a license key without activating it.
+
+**Parameters:**
+- `licenseKey` (string): License key
+
+#### 🔵 `licensing.activate`
+Activate the stored license key against the server.
+
+**Parameters:** None
+
+#### 🔵 `licensing.validate`
+Re-validate the current license with the server.
+
+**Parameters:** None
+
+#### 🔵 `licensing.deactivate`
+Deactivate this machine, freeing a seat.
+
+**Parameters:** None
+
+#### 🔵 `licensing.activateOffline`
+Activate from an offline license certificate. See [Offline Activation](Offline-Activation.md).
+
+**Parameters:**
+- `path` (string): Path to the certificate file
+
+#### 🔵 `licensing.getTrialStatus`
+Get the trial status for this machine.
+
+**Parameters:** None
+
+#### 🔵 `licensing.enableTrial`
+Start the trial period for this machine.
+
+**Parameters:** None
+
+#### 🔵 `licensing.getGuardStatus`
+Run every build-time license guard and report the results.
 
 **Parameters:** None
 

@@ -94,7 +94,7 @@ SerialStudio --s7 192.168.0.1 --s7-rack 0 --s7-slot 1 \
 
 ## API
 
-The Socket API exposes the driver under `io.s7.*`: `getConfig`, `getStatus`, `setProperty`, `addVariable`, `removeVariable`, `clearVariables` and `generateProject`. `setProperty` takes a `key` and a `value` and accepts `host`, `rack`, `slot` and `pollInterval`. `getStatus` returns the session state and the pulled counters: successful reads, failed reads, refused items with the name of the last one, frames published and link drops.
+The Socket API exposes the driver under `io.s7.*`: `getConfig`, `getStatus`, `setProperty`, `addVariable`, `removeVariable`, `clearVariables` and `generateProject`. `setProperty` takes a `key` and a `value` and accepts `host`, `rack`, `slot` and `pollInterval`. `getStatus` returns the session state and the pulled counters: successful reads, failed reads, refused items with the name of the last one, frames published and link drops. Each command, with its parameters, is listed under [S7comm Driver Commands](API-Reference.md#s7comm-driver-commands---pro-7).
 
 ## Availability
 

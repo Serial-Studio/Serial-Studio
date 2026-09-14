@@ -2569,6 +2569,29 @@
       "reserved": [],
       "next": 2
     },
+    "project.transformLibrary.dryRun": {
+      "fields": {
+        "code": 2,
+        "language": 3
+      },
+      "reserved": [],
+      "next": 4
+    },
+    "project.transformLibrary.get": {
+      "fields": {
+        "language": 2
+      },
+      "reserved": [],
+      "next": 3
+    },
+    "project.transformLibrary.set": {
+      "fields": {
+        "code": 2,
+        "language": 3
+      },
+      "reserved": [],
+      "next": 4
+    },
     "project.undo": {
       "fields": {},
       "reserved": [],
@@ -2641,6 +2664,43 @@
       "fields": {},
       "reserved": [],
       "next": 2
+    },
+    "project.workspace.profile.add": {
+      "fields": {
+        "title": 2
+      },
+      "reserved": [],
+      "next": 3
+    },
+    "project.workspace.profile.list": {
+      "fields": {},
+      "reserved": [],
+      "next": 2
+    },
+    "project.workspace.profile.remove": {
+      "fields": {
+        "profileId": 2
+      },
+      "reserved": [],
+      "next": 3
+    },
+    "project.workspace.profile.select": {
+      "fields": {
+        "profileId": 2,
+        "title": 3
+      },
+      "reserved": [],
+      "next": 4
+    },
+    "project.workspace.profile.update": {
+      "fields": {
+        "folderIds": 2,
+        "profileId": 3,
+        "title": 4,
+        "workspaceIds": 5
+      },
+      "reserved": [],
+      "next": 6
     },
     "project.workspace.removeWidget": {
       "fields": {

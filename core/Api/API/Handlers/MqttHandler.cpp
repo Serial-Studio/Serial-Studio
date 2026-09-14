@@ -77,9 +77,10 @@ void API::Handlers::MqttHandler::registerPublisherCommands()
     QStringLiteral("project.mqtt.publisher.setConfig"),
     QStringLiteral("Patch one or more MQTT publisher fields. Pass only the keys you "
                    "want to change. Setting 'password' requires 'username' in the "
-                   "same call -- the credential pair is persisted to the encrypted "
-                   "vault, NOT to the project file. To clear credentials, pass empty "
-                   "strings for both. Setting 'enabled:true' starts publishing."),
+                   "same call -- the credential pair is persisted obfuscated in this "
+                   "machine's credential vault, NOT to the project file. To clear "
+                   "credentials, pass empty strings for both. Setting 'enabled:true' "
+                   "starts publishing."),
     API::makeSchema(
       {
   },

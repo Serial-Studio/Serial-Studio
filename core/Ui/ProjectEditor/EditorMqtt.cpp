@@ -467,8 +467,9 @@ static void appendMqttClientIdentityRows(DataModel::CustomModel* model,
   passphraseItem->setData(pub.keyPassphrase(), Editor::EditableValue);
   passphraseItem->setData(kMqttPublisher_KeyPassphrase, Editor::ParameterType);
   passphraseItem->setData(Editor::tr("Key Passphrase"), Editor::ParameterName);
-  passphraseItem->setData(Editor::tr("Passphrase for an encrypted private key (stored in the "
-                                     "encrypted vault, never in the project file)"),
+  passphraseItem->setData(Editor::tr("Passphrase for an encrypted private key (stored "
+                                     "obfuscated in this machine's credential vault, never "
+                                     "in the project file)"),
                           Editor::ParameterDescription);
   model->appendRow(passphraseItem);
 

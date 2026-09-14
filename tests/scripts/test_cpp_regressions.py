@@ -1958,6 +1958,10 @@ def test_no_user_facing_string_calls_the_credential_store_encrypted():
     retire when: never, while the decision stands -- this is a claims scan over
     user-facing strings, which is exactly the kind of thing no runtime test can see.
     Fold it into documentation-verify.py if that linter ever grows a claims rule.
+
+    The roots are asserted to exist: the scan pointed at core/Devices/MQTT after spec 0076
+    moved the drivers, so it covered nothing and the wording drifted back into the API
+    command descriptions unnoticed.
     """
     claims = (
         "stored encrypted",
@@ -1967,8 +1971,21 @@ def test_no_user_facing_string_calls_the_credential_store_encrypted():
         "encrypted storage",
         "encrypted on this",
     )
-    for rel in ("app/qml", "core/Devices/MQTT", "core/Ui/AI"):
-        for path in sorted((ROOT / rel).rglob("*")):
+    roots = (
+        "app/qml",
+        "core/Api/API/Handlers",
+        "core/Core/Crypto",
+        "core/Devices/IO/Drivers",
+        "core/Storage",
+        "core/Ui/AI",
+        "core/Ui/ProjectEditor",
+    )
+    for rel in roots:
+        root = ROOT / rel
+        assert (
+            root.is_dir()
+        ), f"{rel} moved; this scan silently covers nothing until it is fixed"
+        for path in sorted(root.rglob("*")):
             if path.suffix not in (".qml", ".cpp", ".h") or not path.is_file():
                 continue
 
