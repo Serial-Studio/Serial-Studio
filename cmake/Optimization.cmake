@@ -43,8 +43,8 @@ include_guard(GLOBAL)
 #                                 -fno-unsafe-math-optimizations), -ffunction-sections/-fdata-sections
 #                                 paired with --gc-sections (-dead_strip on macOS), and -flto=auto
 #                                 unless disabled. -fno-semantic-interposition on GCC/IntelLLVM only.
-#                                 macOS is the exception: it keeps the frame pointer (the Apple arm64
-#                                 ABI walks x29 chains). Every branch also emits line-table debug
+#                                 macOS is the exception twice over: it keeps the frame pointer (the
+#                                 Apple arm64 ABI walks x29 chains) and it builds without LTO. Every branch also emits line-table debug
 #                                 info (-gline-tables-only on Clang flavours, -g1 on GCC): names,
 #                                 lines and inlined-frame records for profilers and symbolicated
 #                                 crash stacks, never a codegen change. The commercial hardening
@@ -60,11 +60,11 @@ include_guard(GLOBAL)
 # there, so every linked object must still carry unwind metadata for the error path to walk out
 # of the VM into the host's pcall/catch guards. On macOS, Xcode 26's ld (ld-1267) drops DWARF
 # (__eh_frame) exception unwind under -flto for functions that fall back from compact unwind
-# (llvm/llvm-project#135888, open upstream). With pac-ret gated off Apple (Hardening.cmake) the app
-# rides compact unwind, so that fallback population is tiny; the luajit target additionally opts
-# out of LTO entirely (lib/luajit/CMakeLists.txt: assembly VM + generated tables). Remaining
-# guards: per-TU unwind tables here, protected bootstraps around every VM setup path, and pcall
-# around every script entry.
+# (llvm/llvm-project#135888, open upstream), which is why macOS builds with LTO disabled
+# (DISABLE_LTO forced ON below); the luajit target opts out of LTO on every platform
+# (lib/luajit/CMakeLists.txt: assembly VM + generated tables). Remaining guards: per-TU unwind
+# tables here, protected bootstraps around every VM setup path, and pcall around every script
+# entry.
 #
 # Architecture baselines: x86-64 -> -march=x86-64-v2 (SSE4.2, 2012+ CPUs); aarch64 -> armv8-a (plus
 # -latomic); armv7l -> armv7-a -mfpu=neon -mfloat-abi=hard (hardfloat pinned so a soft-float
@@ -79,6 +79,14 @@ if(PRODUCTION_OPTIMIZATION)
       set(DISABLE_LTO ON)
       set(ENABLE_HARDENING ON CACHE BOOL "Auto-enabled hardening for sandboxed builds" FORCE)
       message(STATUS "Sandboxed build detected, disabling LTO and enabling hardening")
+   elseif(APPLE)
+      # Xcode's ld drops DWARF (__eh_frame) unwind under -flto for compact-unwind fallback
+      # functions (llvm/llvm-project#135888, open upstream), which puts the Lua error path one
+      # codegen decision away from an unwind abort; the LTO link is also the longest single step
+      # of the macOS PGO-use stage. Neither cost is worth the remaining codegen win, so macOS
+      # builds without LTO.
+      set(DISABLE_LTO ON)
+      message(STATUS "macOS build detected, disabling LTO")
    else()
       set(DISABLE_LTO OFF)
    endif()
@@ -245,11 +253,8 @@ if(PRODUCTION_OPTIMIZATION)
    elseif(APPLE)
       message(STATUS "Production branch: AppleClang (macOS)")
 
-      # LTO is on: Xcode's ld drops DWARF exception unwind under -flto for compact-unwind
-      # fallback functions (llvm/llvm-project#135888), but the unwind-across-LTO hazard is
-      # confined to the Lua error path, and the luajit target opts out of LTO entirely
-      # (lib/luajit/CMakeLists.txt). The 2026-07 CI hang that once implicated LTO was
-      # root-caused to an API::Server socket ABA race, so the blanket disable is gone.
+      # LTO is off on macOS (DISABLE_LTO is forced ON above); the blocks below stay guarded so a
+      # local build can flip it back, and they pick ThinLTO rather than -flto=auto.
       # Frame pointers stay on: the Apple arm64 ABI walks x29 chains — but only
       # non-leaf frames must keep them, so -momit-leaf-frame-pointer frees x29 in leaf loops
       # (tokenizer/DSP). Hidden visibility stays on for tighter symbol binding.
@@ -269,7 +274,8 @@ if(PRODUCTION_OPTIMIZATION)
       # ThinLTO, not -flto=auto: clang has no partitioned-parallel LTO mode, so `auto` is monolithic
       # full LTO with a single-threaded backend. On the 3-core macOS CI runner that made the
       # PGO-use stage 4-7x slower than the same stage on Linux (GCC partitions) or Windows
-      # (clang-cl, already ThinLTO), and the final link alone cost ten minutes.
+      # (clang-cl, already ThinLTO), and the final link alone cost ten minutes. That link cost is
+      # half of why the branch is off by default.
       if(NOT DISABLE_LTO)
          add_compile_options(
             -flto=thin

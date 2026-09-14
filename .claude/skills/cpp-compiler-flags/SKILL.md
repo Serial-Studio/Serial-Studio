@@ -49,7 +49,7 @@ the references; propose the edit; hand off. Flag changes that touch the hotpath 
 | `ENABLE_TSAN` | ThreadSanitizer (proves the lock-free hotpath); mutually exclusive with ASan and MSVC. | Manual / CI thread-safety job. |
 
 `DISABLE_LTO` is internal: forced ON for Flatpak/sandboxed builds (which also auto-enable
-hardening). LTO is otherwise ON whenever `PRODUCTION_OPTIMIZATION` is.
+hardening) and for every macOS build. LTO is otherwise ON whenever `PRODUCTION_OPTIMIZATION` is.
 
 ## Non-negotiable invariants (do not regress these)
 

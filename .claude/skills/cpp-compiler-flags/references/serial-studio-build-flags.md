@@ -34,13 +34,18 @@ add_compile_definitions(NDEBUG)
 -O3 -funroll-loops -fomit-frame-pointer                   # macOS keeps FP: -fno-omit-frame-pointer (arm64 ABI)
 -momit-leaf-frame-pointer                                 # macOS only: leaf frames may drop x29 (ABI-legal)
 -fvisibility=hidden -fvisibility-inlines-hidden           # macOS + Linux-Clang only
--fwhole-program-vtables                                   # macOS + Linux-Clang, needs LTO; lua54 negates it
+-fwhole-program-vtables                                   # Linux-Clang, needs LTO; lua54 negates it
 -fno-fast-math -fno-unsafe-math-optimizations            # IEEE-stable, non-negotiable
 -ffunction-sections -fdata-sections                       # paired with --gc-sections / -dead_strip
--flto=auto                                                # unless DISABLE_LTO
+-flto=auto                                                # unless DISABLE_LTO; never on macOS
 -fno-semantic-interposition                               # GCC and IntelLLVM only
 # link: -Wl,--gc-sections   (macOS: -Wl,-dead_strip)   + -flto=auto unless DISABLE_LTO
 ```
+macOS forces `DISABLE_LTO=ON`, so the AppleClang branch ships no `-flto=thin`,
+`-fwhole-program-vtables` or `-object_path_lto`: Xcode's ld drops DWARF unwind under `-flto` for
+compact-unwind fallback functions (llvm/llvm-project#135888), which the Lua error path depends on,
+and the LTO link dominated the macOS PGO-use stage. The guarded blocks stay in the branch so a
+local build can flip it back.
 Hidden visibility + `-fwhole-program-vtables` mirror the clang-cl branch (whole-program
 devirtualization of app-internal interfaces; safe because the app is one monolithic executable
 with no in-tree shared libs). LuaJIT compiles `-fno-lto` on every platform (its asm VM and generated
@@ -131,9 +136,10 @@ forced a per-source opt-out list that every new gRPC includer had to join. Wirin
 advisory, scoped to `app/` where no opt-out list is needed. Don't re-add the flag -- extend the
 lint instead.
 
-### DISABLE_LTO / sandboxed builds
+### DISABLE_LTO / sandboxed and macOS builds
 `PRODUCTION_OPTIMIZATION` + Flatpak (`FLATPAK_ID` env or `FLATPAK_BUILD`) -> `DISABLE_LTO=ON`
-and `ENABLE_HARDENING` forced ON. LTO is otherwise ON.
+and `ENABLE_HARDENING` forced ON. `PRODUCTION_OPTIMIZATION` + `APPLE` -> `DISABLE_LTO=ON` as well
+(hardening untouched). LTO is otherwise ON.
 
 ## Hardening.cmake
 

@@ -354,7 +354,10 @@ both own malloc):
   DirectConnection invariants it proves live in the suites, not in the GUI. `TSAN_OPTIONS` points
   at `app/tests/tsan.supp`, which suppresses one blind spot and nothing else: Qt's queued slot
   handover and glib's event-loop wakeup fd sit in uninstrumented libraries whose happens-before
-  edges TSan cannot see. A race between two first-party objects carries neither frame and reports.
+  edges TSan cannot see. The handover reports at three depths -- on the queued-event symbols, on
+  `operator new`/`delete`, and on the libc allocator underneath `QArrayData` -- and the last two
+  are matched with `race_top`, so only an allocation or a free is ever suppressed. A race between
+  two first-party objects carries none of those frames and reports.
 
 ```bash
 cmake -G Ninja -B build/asan -DCMAKE_CXX_COMPILER=clang++ -DCMAKE_BUILD_TYPE=Debug \

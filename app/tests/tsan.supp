@@ -22,3 +22,16 @@ called_from_lib:libglib-2.0.so
 # the whole suite. A first-party field race still reports, since its top frame is our own code.
 race_top:operator new
 race_top:operator delete
+
+# The same blind spot one level below the container: QArrayData allocates through the libc
+# allocator, not operator new, so a QString, QByteArray or QHostInfo that a pooled worker builds
+# and the receiving thread frees reports with malloc/realloc/free on top and unsymbolized
+# libQt6Core frames under it -- neither the queued-event symbols above nor our own code appear.
+# Both observed sites hand a result over exactly the way Qt documents: QHostInfo::lookupHost's
+# resolver pool (IO::AsyncTcpDial) and a QRunnable that posts back with Qt::QueuedConnection
+# (AI::AsyncToolRunner). race_top, so the suppressed access IS the allocation or the free; a
+# first-party field race keeps its own frame on top and still reports.
+race_top:malloc
+race_top:calloc
+race_top:realloc
+race_top:free
