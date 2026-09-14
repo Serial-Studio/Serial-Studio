@@ -420,12 +420,14 @@ threads only when they exit or read statistics, so the Native rows, which run be
 engine, watchdog or exporter thread exists, count the benchmark thread alone. It exists only in a
 build configured with `-DSS_ALLOC_STATS=ON`
 (`cmake/MiMalloc.cmake` compiles mimalloc with `MI_STAT=2` and defines `SS_ALLOC_STATS`); any
-other build prints `n/a` and `HOTPATH_ALLOC_GATE=n/a`. CI turns the option on for the
-PGO-GENERATE configure only, so the `--min-fps 1` training run is where the gate fires: the
-Native numeric and Native mixed rows must read `0` or `HOTPATH_PASS` is `0` and the training
-step fails. Allocation count is a property of the code, not the optimization level, which is
-what makes gating on the instrumented build exact; the shipped PGO-USE binary is untouched.
-Script lanes print their count and are never gated on it.
+other build prints `n/a` and `HOTPATH_ALLOC_GATE=n/a`. CI turns the option on for both PGO
+configures, so the gate fires twice: on the `--min-fps 1` training run, and again on the
+256 kHz gate run against the optimized binary. Either way the Native numeric and Native mixed
+rows must read `0`, or `HOTPATH_PASS` is `0` and the step fails. The two stages have to match:
+a flag that changes mimalloc and the benchmark TU under GENERATE but not under USE makes the
+compiler discard that part of the profile, so the shipped binary carries mimalloc's statistics
+bookkeeping as the price of an exact profile. Script lanes print their count and are never
+gated on it.
 
 **Width (`--benchmark-channels N`, default 8).** Sets the numeric channel count of the
 synthetic project for every parser tier and the exporter floor; the dashboard rows keep the

@@ -365,6 +365,7 @@ jobs:
           -DENABLE_GRPC=ON \
           -DENABLE_PGO=ON \
           -DPGO_STAGE=USE \
+          -DSS_ALLOC_STATS=ON \
           -DSS_UNITY_BUILD=ON \
           -DSS_UNITY_BATCH_SIZE=${{ env.SS_UNITY_BATCH }} \
           -DUSE_SYSTEM_ZLIB=ON \
@@ -682,6 +683,7 @@ jobs:
           -DENABLE_GRPC=ON \
           -DENABLE_PGO=ON \
           -DPGO_STAGE=USE \
+          -DSS_ALLOC_STATS=ON \
           -DSS_UNITY_BUILD=ON \
           -DSS_UNITY_BATCH_SIZE=${{ env.SS_UNITY_BATCH }} \
           -DUSE_SYSTEM_ZLIB=ON \
@@ -950,6 +952,7 @@ jobs:
           -DENABLE_GRPC=ON \
           -DENABLE_PGO=ON \
           -DPGO_STAGE=USE \
+          -DSS_ALLOC_STATS=ON \
           -DSS_UNITY_BUILD=ON \
           -DSS_UNITY_BATCH_SIZE=${{ env.SS_UNITY_BATCH }} \
           -DLLVM_PROFDATA=$(xcrun -f llvm-profdata) \
@@ -1536,6 +1539,7 @@ jobs:
           -DENABLE_GRPC=ON `
           -DENABLE_PGO=ON `
           -DPGO_STAGE=USE `
+          -DSS_ALLOC_STATS=ON `
           -DSS_UNITY_BUILD=ON `
           -DSS_UNITY_BATCH_SIZE=${{ env.SS_UNITY_BATCH }} `
           -DSS_PACKAGE_TYPE=msi `
@@ -2451,492 +2455,76 @@ jobs:
 #---------------------------------------------------------------------------------------------------
 # Integration tests
 #---------------------------------------------------------------------------------------------------
+#
+# One caller per leg rather than one matrixed job: a matrix carries a single `needs` list, so every
+# leg used to wait for the slowest build. The suite consumes the build jobs' artifacts directly,
+# never the Release: downloading from the Release (the pre-0075 shape) let one run's job pick up
+# another run's binary. It runs alongside 'upload' and reports on the published build without
+# gating it.
+#
+# secrets: inherit forwards SERIAL_STUDIO_LICENSE_KEY, which the activation step needs.
+#
 
-  test:
-    name: '🧪 Test (${{ matrix.label }})'
-    #
-    # The suite consumes the build jobs' artifacts directly, never the Release: downloading
-    # from the Release (the pre-0075 shape) let one run's job pick up another run's binary.
-    # It runs alongside 'upload' and reports on the published build without gating it.
-    #
-    needs:
-      - build-linux
-      - build-linux-arm64
-      - build-macos
-      - build-windows
+  test-linux:
+    needs: build-linux
     permissions:
       contents: read
-    strategy:
-      fail-fast: false
-      matrix:
-        include:
-          - label: Linux
-            os: linux
-            runs-on: ubuntu-24.04
-            asset: Linux-x64.AppImage
-            broker: true
-            opcua_sim: true
-            marker_expr: "not destructive and not dos and not audio"
-            timeout_method: signal
-          - label: Linux-arm64
-            os: linux
-            runs-on: ubuntu-24.04-arm
-            asset: Linux-arm64.AppImage
-            broker: true
-            opcua_sim: true
-            marker_expr: "not destructive and not dos and not audio"
-            timeout_method: signal
-          - label: macOS
-            os: macos
-            runs-on: macos-latest
-            asset: macOS.dmg
-            broker: true
-            opcua_sim: true
-            marker_expr: "not destructive and not dos and not audio"
-            timeout_method: signal
-          - label: Windows
-            os: windows
-            runs-on: windows-latest
-            asset: Windows-Portable
-            broker: false
-            opcua_sim: false
-            marker_expr: "not destructive and not dos and not audio and not requires_broker and not requires_opcua_sim"
-            timeout_method: thread
-    runs-on: ${{ matrix.runs-on }}
-    defaults:
-      run:
-        shell: bash
-    steps:
-    #
-    # No submodules: this job runs the pytest suite against a downloaded binary
-    #
-    - name: '🧰 Checkout'
-      uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.1.0
+    uses: ./.github/workflows/test-suite.yml
+    secrets: inherit
+    with:
+      label: Linux
+      os: linux
+      runner: ubuntu-24.04
+      asset: Linux-x64.AppImage
+      broker: true
+      opcua_sim: true
+      marker_expr: "not destructive and not dos and not audio"
+      timeout_method: signal
 
-    #
-    # Derives the artifact name the download step below resolves against, and that the
-    # per-OS prepare steps unpack
-    #
-    - name: '🧮 Resolve artifact name'
-      run: |
-        echo "ARTIFACT=${{env.EXECUTABLE}}-${{env.VERSION}}-${{matrix.asset}}" >> "$GITHUB_ENV"
+  test-linux-arm64:
+    needs: build-linux-arm64
+    permissions:
+      contents: read
+    uses: ./.github/workflows/test-suite.yml
+    secrets: inherit
+    with:
+      label: Linux-arm64
+      os: linux
+      runner: ubuntu-24.04-arm
+      asset: Linux-arm64.AppImage
+      broker: true
+      opcua_sim: true
+      marker_expr: "not destructive and not dos and not audio"
+      timeout_method: signal
 
-    #
-    # 3.11 with pip caching: every gate in this job is a Python script
-    #
-    - name: '🐍 Set up Python'
-      uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6.3.0
-      with:
-        python-version: '3.11'
-        cache: 'pip'
+  test-macos:
+    needs: build-macos
+    permissions:
+      contents: read
+    uses: ./.github/workflows/test-suite.yml
+    secrets: inherit
+    with:
+      label: macOS
+      os: macos
+      runner: macos-latest
+      asset: macOS.dmg
+      broker: true
+      opcua_sim: true
+      marker_expr: "not destructive and not dos and not audio"
+      timeout_method: signal
 
-    #
-    # requirements.lock is the hash-pinned resolution of tests/requirements.txt; --require-hashes
-    # is what makes a CI run reproducible instead of a function of the day it ran
-    #
-    - name: '🐍 Install Python dependencies'
-      run: pip install --require-hashes -r tests/requirements.lock
-
-    #
-    # The suite runs against the packaged artifact rather than a local build, so packaging bugs
-    # are in scope; it comes from this run's build job, never from a Release
-    #
-    - name: '📥 Download packaged binary'
-      uses: actions/download-artifact@634f93cb2916e3fdff6788551b99b062d0335ce0 # v5.0.0
-      with:
-        name: ${{env.EXECUTABLE}}-${{env.VERSION}}-${{matrix.asset}}
-        path: .
-
-    #
-    # Extracting the AppImage beats running it (no FUSE needed); the apt payload is the runtime
-    # the tests exercise: audio, fonts and the broker client
-    #
-    - name: '📦 Prepare binary (Linux AppImage)'
-      if: matrix.os == 'linux'
-      run: |
-        sudo apt-get update
-        sudo apt-get install -y libegl1 libgl1 libopengl0 libasound2-dev fontconfig \
-          mosquitto mosquitto-clients alsa-utils
-        chmod +x "$ARTIFACT"
-        ./"$ARTIFACT" --appimage-extract >/dev/null
-        echo "SS_RUN=$PWD/squashfs-root/AppRun" >> "$GITHUB_ENV"
-
-    #
-    # Mounts the DMG, copies the bundle out, and exports SS_RUN
-    #
-    - name: '📦 Prepare binary (macOS .app)'
-      if: matrix.os == 'macos'
-      run: |
-        hdiutil attach "$ARTIFACT" -nobrowse -mountpoint /tmp/ssdmg
-        cp -R "/tmp/ssdmg/${{env.APPLICATION}}.app" .
-        hdiutil detach /tmp/ssdmg
-        echo "SS_RUN=$PWD/${{env.APPLICATION}}.app/Contents/MacOS/${{env.EXECUTABLE}}" >> "$GITHUB_ENV"
-
-    #
-    # Unzips the portable build and locates the executable inside it
-    #
-    - name: '📦 Prepare binary (Windows portable)'
-      if: matrix.os == 'windows'
-      run: |
-        7z x "${ARTIFACT}.zip" -oapp_win >/dev/null
-        EXE=$(find app_win -name "${{env.EXECUTABLE}}.exe" | head -1)
-        echo "SS_RUN=$PWD/$EXE" >> "$GITHUB_ENV"
-
-    #
-    # Local broker on 127.0.0.1:1883 for the MQTT tests; the Windows leg has no broker and drops
-    # the requires_broker marker instead
-    #
-    - name: '🦟 Start Mosquitto (Linux)'
-      if: matrix.os == 'linux'
-      run: |
-        sudo systemctl stop mosquitto || true
-        printf 'listener 1883 127.0.0.1\nallow_anonymous true\npersistence false\n' > /tmp/mosq.conf
-        mosquitto -d -c /tmp/mosq.conf
-        for i in $(seq 1 15); do (echo > /dev/tcp/127.0.0.1/1883) >/dev/null 2>&1 && break; sleep 1; done
-
-    #
-    # Same broker, installed through Homebrew
-    #
-    - name: '🦟 Start Mosquitto (macOS)'
-      if: matrix.os == 'macos'
-      run: |
-        brew install mosquitto
-        printf 'listener 1883 127.0.0.1\nallow_anonymous true\npersistence false\n' > /tmp/mosq.conf
-        "$(brew --prefix mosquitto)/sbin/mosquitto" -d -c /tmp/mosq.conf
-        for i in $(seq 1 15); do (echo > /dev/tcp/127.0.0.1/1883) >/dev/null 2>&1 && break; sleep 1; done
-
-    #
-    # The OPC UA bottling-line simulator on 127.0.0.1:4840 for the spec-0066 driver tests; the
-    # Windows leg runs no simulator and drops the requires_opcua_sim marker instead
-    #
-    - name: '🏭 Start OPC UA simulator'
-      if: matrix.opcua_sim
-      run: |
-        nohup python "examples/OPC UA PLC Simulator/opcua_plc_simulator.py" --port 4840 --rate 20 \
-          > /tmp/opcua-sim.log 2>&1 &
-        for i in $(seq 1 30); do (echo > /dev/tcp/127.0.0.1/4840) >/dev/null 2>&1 && break; sleep 1; done
-        (echo > /dev/tcp/127.0.0.1/4840) >/dev/null 2>&1 || { cat /tmp/opcua-sim.log; exit 1; }
-
-    #
-    # snd-aloop gives the audio driver a capture device; every command is tolerant because the
-    # audio leg is non-blocking anyway
-    #
-    - name: '🎙 Set up ALSA loopback (Linux)'
-      if: matrix.os == 'linux'
-      run: |
-        sudo apt-get install -y "linux-modules-extra-$(uname -r)" || true
-        sudo modprobe snd-aloop || true
-        aplay -l || true
-
-    #
-    # Per-OS core-dump and WER configuration, applied before the app starts so a mid-suite crash
-    # leaves something to read
-    #
-    - name: '🧯 Enable crash capture'
-      continue-on-error: true
-      run: |
-        case "${{ matrix.os }}" in
-          linux)
-            mkdir -p "$GITHUB_WORKSPACE/cores"
-            chmod 777 "$GITHUB_WORKSPACE/cores"
-            echo "$GITHUB_WORKSPACE/cores/core.%e.%p.%t" | sudo tee /proc/sys/kernel/core_pattern >/dev/null
-            sudo systemctl stop apport.service 2>/dev/null || true
-            ;;
-          macos)
-            mkdir -p "$HOME/Library/Logs/DiagnosticReports"
-            sudo sysctl -w kern.coredump=1 >/dev/null 2>&1 || true
-            sudo chmod 1777 /cores 2>/dev/null || true
-            ;;
-          windows)
-            mkdir -p "$GITHUB_WORKSPACE/crash-dumps"
-            DUMP_DIR="$(cygpath -w "$GITHUB_WORKSPACE/crash-dumps")"
-            KEY='HKLM\SOFTWARE\Microsoft\Windows\Windows Error Reporting\LocalDumps'
-            reg add "$KEY" //v DumpFolder //t REG_EXPAND_SZ //d "$DUMP_DIR" //f
-            reg add "$KEY" //v DumpType   //t REG_DWORD      //d 2          //f
-            reg add "$KEY" //v DumpCount  //t REG_DWORD      //d 10         //f
-            ;;
-        esac
-
-    #
-    # The --selftest tier runs inside CLI::process(), before the composition root exists
-    #
-    - name: '🔏 Offline license self-test'
-      env:
-        QT_QPA_PLATFORM: offscreen
-      run: '"$SS_RUN" --selftest-offline-license'
-
-    #
-    # Pro surfaces are license-gated; without activation most of the suite would skip
-    #
-    - name: '🔑 Activate Serial Studio license'
-      env:
-        QT_QPA_PLATFORM: offscreen
-        SERIAL_STUDIO_LICENSE_KEY: ${{secrets.SERIAL_STUDIO_LICENSE_KEY}}
-      run: '"$SS_RUN" --activate "$SERIAL_STUDIO_LICENSE_KEY"'
-
-    #
-    # Starts the app with the API server on 7777, waits for the port, and redirects its output to
-    # ss_output.log so the assert-scan step below has something to read. The API path policy
-    # defaults to home + temp, but the repo corpus the round-trip baseline tests open lives in the
-    # workspace (outside home on the Windows runners), so all three roots are allowed explicitly;
-    # pytest's tmp_path follows TMPDIR, which on the macOS runners is a private /var/folders tree
-    # under neither home nor /tmp, and without it every tmp_path project file is rejected as
-    # "filePath is not allowed". SS_ASSERT_NONFATAL is a no-op on the released (Release) binaries,
-    # where soft asserts are always nonfatal; it keeps a locally-substituted Debug binary from
-    # aborting mid-suite
-    #
-    - name: '🚀 Start Serial Studio (headless)'
-      env:
-        QT_QPA_PLATFORM: offscreen
-        SERIAL_STUDIO_API_AUTO_CONSENT: '1'
-        SS_ASSERT_NONFATAL: '1'
-      run: |
-        if [ "${{ matrix.os }}" = "windows" ]; then
-          export SERIAL_STUDIO_API_ALLOWED_PATHS="$(cygpath -w "$GITHUB_WORKSPACE");$USERPROFILE;$(cygpath -w "$RUNNER_TEMP")"
-        else
-          ulimit -c unlimited
-          export SERIAL_STUDIO_API_ALLOWED_PATHS="$GITHUB_WORKSPACE:$HOME:/tmp:$RUNNER_TEMP:${TMPDIR:-/tmp}"
-        fi
-
-        "$SS_RUN" --headless --api-server > ss_output.log 2>&1 &
-        echo $! > ss_pid.txt
-        for i in $(seq 1 30); do
-          (echo > /dev/tcp/127.0.0.1/7777) >/dev/null 2>&1 && { echo "API server ready ($i)"; break; }
-          sleep 1
-        done
-
-    #
-    # continue-on-error: the suite reports, it does not gate. 'upload' needs this job, and a
-    # pytest failure must not hold a release; the step outcome still drives the hang capture
-    # below and the warning annotation that follows. timeout-method=signal (POSIX) fails only
-    # the hung test and keeps the suite and its junit XML alive, where the ini default (thread)
-    # kills the whole pytest process; Windows has no SIGALRM, so it stays on thread, and
-    # timeout-minutes is what bounds a fully wedged app now that a hang no longer fast-fails
-    # the run
-    #
-    - name: '🧪 Run tests'
-      id: run_tests
-      continue-on-error: true
-      timeout-minutes: 90
-      env:
-        PYTHONIOENCODING: utf-8
-        PYTHONUTF8: '1'
-      run: |
-        pytest tests/ \
-          --deselect tests/integration/test_licensing.py::test_rapid_status_queries_no_crash \
-          -m "${{ matrix.marker_expr }}" \
-          --timeout-method=${{ matrix.timeout_method }} \
-          -q --tb=line --timeout=60 --junit-xml=test-results.xml
-
-    #
-    # The job stays green on a pytest failure, so the failure has to be visible somewhere other
-    # than the step log: one annotation per leg, pointing at the junit XML in the artifact
-    #
-    - name: '⚠️ Annotate pytest failures'
-      if: always() && steps.run_tests.outcome == 'failure'
-      run: |
-        echo "::warning title=pytest (${{ matrix.label }})::the suite reported failures; see test-results.xml in the pytest-results-${{ matrix.label }} artifact"
-
-    #
-    # Only on a test failure: distinguishes a hang from a crash, and for a hang takes the dump
-    # Windows never writes on its own (nothing crashed, so WER produces nothing). comsvcs.dll's
-    # MiniDump entry point ships with Windows, so no extra tooling is installed for it
-    #
-    - name: '🔬 Capture hung app (Windows)'
-      if: always() && matrix.os == 'windows' && steps.run_tests.outcome == 'failure'
-      continue-on-error: true
-      run: |
-        mkdir -p crash-reports
-        PID="$(cat ss_pid.txt 2>/dev/null)"
-        if [ -z "$PID" ]; then
-          echo 'no ss_pid.txt; nothing to dump' | tee crash-reports/hang-liveness.txt
-          exit 0
-        fi
-        if kill -0 "$PID" 2>/dev/null; then
-          echo "Serial Studio (pid $PID) still ALIVE after test failure -> HANG; dumping" \
-            | tee crash-reports/hang-liveness.txt
-          WIN_PID="$(powershell -NoProfile -Command "(Get-Process -Id $PID -ErrorAction SilentlyContinue).Id")"
-          DUMP="$(cygpath -w "$PWD/crash-reports/hang-full.dmp")"
-          powershell -NoProfile -Command \
-            "rundll32.exe C:\\Windows\\System32\\comsvcs.dll, MiniDump ${WIN_PID:-$PID} '$DUMP' full" \
-            || echo 'MiniDump failed' | tee -a crash-reports/hang-liveness.txt
-        else
-          echo "Serial Studio (pid $PID) GONE after test failure -> crashed/exited, not a hang" \
-            | tee crash-reports/hang-liveness.txt
-        fi
-        echo '--- captured ---'
-        ls -la crash-reports || true
-
-    #
-    # macOS counterpart: sample and spindump both capture a live process, so a hang leaves a
-    # thread state behind
-    #
-    - name: '🔬 Capture hung app (macOS)'
-      if: always() && matrix.os == 'macos' && steps.run_tests.outcome == 'failure'
-      continue-on-error: true
-      run: |
-        mkdir -p crash-reports
-        PID="$(cat ss_pid.txt 2>/dev/null)"
-        if [ -z "$PID" ]; then
-          echo 'no ss_pid.txt; nothing to sample' | tee crash-reports/hang-liveness.txt
-          exit 0
-        fi
-        if kill -0 "$PID" 2>/dev/null; then
-          echo "Serial Studio (pid $PID) still ALIVE after test failure -> HANG; sampling threads" \
-            | tee crash-reports/hang-liveness.txt
-          sample "$PID" 10 -mayDie -file crash-reports/hang-sample.txt || true
-          sudo spindump "$PID" 10 -file crash-reports/hang-spindump.txt >/dev/null 2>&1 || true
-        else
-          echo "Serial Studio (pid $PID) GONE after test failure -> crashed/exited, not a hang" \
-            | tee crash-reports/hang-liveness.txt
-        fi
-        echo '--- captured ---'
-        ls -la crash-reports || true
-
-    #
-    # A mid-suite death turns every later test into a connection error, which reads like hundreds
-    # of unrelated failures; say so explicitly and show the app's last words, since a clean exit
-    # leaves no crash dump behind
-    #
-    - name: '🩺 Report app liveness after tests'
-      if: always()
-      continue-on-error: true
-      run: |
-        PID="$(cat ss_pid.txt 2>/dev/null)"
-        if [ -n "$PID" ] && kill -0 "$PID" 2>/dev/null; then
-          echo "Serial Studio (pid $PID) still running after the suite."
-        else
-          echo "::warning title=App exited early::Serial Studio (pid ${PID:-unknown}) was gone when the suite ended"
-          echo '--- tail of ss_output.log ---'
-          tail -n 60 ss_output.log 2>/dev/null || echo '(no ss_output.log)'
-        fi
-
-    #
-    # The audio marker is excluded from the main run: loopback hardware is not guaranteed on a
-    # runner, so this leg reports and never blocks
-    #
-    - name: '🎙 Run audio loopback tests (Linux, non-blocking)'
-      if: matrix.os == 'linux'
-      continue-on-error: true
-      env:
-        QT_QPA_PLATFORM: offscreen
-        SS_AUDIO_LOOPBACK_PLAYBACK: plughw:Loopback,1,0
-        SS_AUDIO_CAPTURE_MATCH: loopback
-      run: |
-        pytest tests/integration/test_audio_loopback.py \
-          -m audio -q --tb=line --timeout=120 --junit-xml=audio-test-results.xml
-
-    #
-    # always(): the seat has to come back even when the suite failed
-    #
-    - name: '🔑 Deactivate Serial Studio license'
-      if: always()
-      env:
-        QT_QPA_PLATFORM: offscreen
-      run: '"$SS_RUN" --deactivate || true'
-
-    #
-    # always(): the app is a background process and would otherwise outlive the job
-    #
-    - name: '🛑 Stop Serial Studio'
-      if: always()
-      run: '[ -f ss_pid.txt ] && kill $(cat ss_pid.txt) || true'
-
-    #
-    # SS_ASSERT reports once per source site through the serialstudio.assert category; surface
-    # every site the suite tripped as a workflow annotation (non-blocking) so regressions are
-    # visible without digging into artifacts
-    #
-    - name: '🔎 Scan app output for soft asserts'
-      if: always()
-      continue-on-error: true
-      run: |
-        sleep 2
-        if [ ! -f ss_output.log ]; then
-          echo 'no ss_output.log; nothing to scan'
-          exit 0
-        fi
-        if grep -F 'assertion failed:' ss_output.log > asserts.txt; then
-          COUNT=$(wc -l < asserts.txt | tr -d ' ')
-          echo "::warning title=SS_ASSERT (${{ matrix.label }})::$COUNT soft-assert site(s) tripped; full app output in pytest-results-${{ matrix.label }} artifact"
-          while IFS= read -r line; do
-            echo "::warning title=SS_ASSERT::${line}"
-          done < asserts.txt
-        else
-          echo 'No soft asserts in app output.'
-        fi
-
-    #
-    # Collects whatever the crash-capture step arranged for, per OS
-    #
-    - name: '🩹 Collect crash reports'
-      if: always()
-      run: |
-        set +e
-        mkdir -p crash-reports
-        case "${{ matrix.os }}" in
-          linux)
-            cp -v cores/core.* crash-reports/ 2>/dev/null
-            if ls cores/core.* >/dev/null 2>&1; then
-              BIN=$(find "$PWD/squashfs-root" -type f \( -name "$UNIXNAME" -o -name "$EXECUTABLE" \) 2>/dev/null | head -1)
-              [ -z "$BIN" ] && BIN="$SS_RUN"
-              cp -v "$BIN" crash-reports/ 2>/dev/null
-              command -v gdb >/dev/null 2>&1 || sudo apt-get install -y gdb >/dev/null 2>&1
-              for c in cores/core.*; do
-                gdb -batch -ex "thread apply all bt full" "$BIN" "$c" \
-                  > "crash-reports/$(basename "$c").backtrace.txt" 2>&1 || true
-              done
-            fi
-            ;;
-          macos)
-            for i in $(seq 1 8); do
-              ls "$HOME/Library/Logs/DiagnosticReports/${EXECUTABLE}"*.ips >/dev/null 2>&1 && break
-              sleep 1
-            done
-            cp -v "$HOME/Library/Logs/DiagnosticReports/${EXECUTABLE}"*.ips   crash-reports/ 2>/dev/null
-            cp -v "$HOME/Library/Logs/DiagnosticReports/${EXECUTABLE}"*.crash crash-reports/ 2>/dev/null
-            sudo cp -v "/Library/Logs/DiagnosticReports/${EXECUTABLE}"*.ips    crash-reports/ 2>/dev/null
-            cp -v /cores/core.* crash-reports/ 2>/dev/null
-            ;;
-          windows)
-            cp -v crash-dumps/*.dmp crash-reports/ 2>/dev/null
-            ;;
-        esac
-        echo '--- crash-reports ---'
-        ls -la crash-reports 2>/dev/null || true
-
-    #
-    # Guarded on matrix.broker so the Windows leg does not try to kill a broker it never started
-    #
-    - name: '🦟 Stop Mosquitto'
-      if: always() && matrix.broker
-      run: pkill -f "mosquitto -d -c /tmp/mosq.conf" || true
-
-    - name: '🏭 Stop OPC UA simulator'
-      if: always() && matrix.opcua_sim
-      run: pkill -f "opcua_plc_simulator.py" || true
-
-    #
-    # junit XML plus the app's own output, which the assert scan reads from
-    #
-    - name: '📤 Upload test results'
-      if: always()
-      uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
-      with:
-        name: pytest-results-${{ matrix.label }}
-        path: |
-          test-results.xml
-          audio-test-results.xml
-          ss_output.log
-          tests/**/*.log
-
-    #
-    # Ignored when clean: an empty crash-reports directory is the expected outcome
-    #
-    - name: '📤 Upload crash reports'
-      if: always()
-      uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
-      with:
-        name: crash-reports-${{ matrix.label }}
-        path: crash-reports/**
-        if-no-files-found: ignore
+  test-windows:
+    needs: build-windows
+    permissions:
+      contents: read
+    uses: ./.github/workflows/test-suite.yml
+    secrets: inherit
+    with:
+      label: Windows
+      os: windows
+      runner: windows-latest
+      asset: Windows-Portable
+      broker: false
+      opcua_sim: false
+      marker_expr: "not destructive and not dos and not audio and not requires_broker and not requires_opcua_sim"
+      timeout_method: thread

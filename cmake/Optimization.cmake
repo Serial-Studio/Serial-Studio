@@ -266,9 +266,13 @@ if(PRODUCTION_OPTIMIZATION)
          -fdata-sections
          -gline-tables-only
       )
+      # ThinLTO, not -flto=auto: clang has no partitioned-parallel LTO mode, so `auto` is monolithic
+      # full LTO with a single-threaded backend. On the 3-core macOS CI runner that made the
+      # PGO-use stage 4-7x slower than the same stage on Linux (GCC partitions) or Windows
+      # (clang-cl, already ThinLTO), and the final link alone cost ten minutes.
       if(NOT DISABLE_LTO)
          add_compile_options(
-            -flto=auto
+            -flto=thin
             -fwhole-program-vtables
          )
       endif()
@@ -278,10 +282,12 @@ if(PRODUCTION_OPTIMIZATION)
       if(NOT DISABLE_LTO)
          # ld writes the LTO-merged objects to /tmp and unlinks them at exit, so the dSYM pass that
          # follows the link reports "(arm64) /tmp/lto.o unable to open object file" and the debug
-         # symbols the CI job uploads cover only the non-LTO objects. -object_path_lto keeps them.
+         # symbols the CI job uploads cover only the non-LTO objects. -object_path_lto keeps them,
+         # and it must stay a directory: ThinLTO writes one object per module, not the single
+         # lto.o full LTO produces.
          file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/lto.objects)
          add_link_options(
-            -flto=auto
+            -flto=thin
             -Wl,-object_path_lto,${CMAKE_BINARY_DIR}/lto.objects
          )
       endif()
