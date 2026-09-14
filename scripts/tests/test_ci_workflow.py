@@ -27,11 +27,15 @@ WORKFLOWS = REPO / ".github" / "workflows"
 CI_YML = WORKFLOWS / "ci.yml"
 DOCS_YML = WORKFLOWS / "docs.yml"
 
+# The pytest suite is a reusable workflow called once per platform, so every gate written for the
+# old in-line 'test' job has to follow it here: a workflow one file away is not a smaller surface.
+TEST_SUITE_YML = WORKFLOWS / "test-suite.yml"
+
 # The repeated build / profiling / packaging sequences live in repo-local composite actions, so
 # the supply-chain and secret-handling gates below have to walk them too: a third-party action
 # pinned in ci.yml and floating one directory away is the same hole.
 ACTIONS = sorted((REPO / ".github" / "actions").glob("*/action.yml"))
-PINNED_FILES = [CI_YML, DOCS_YML] + ACTIONS
+PINNED_FILES = [CI_YML, DOCS_YML, TEST_SUITE_YML] + ACTIONS
 
 # The jobs that compile and run the throughput gate.
 BUILD_JOBS = ("build-linux", "build-linux-arm64", "build-macos-arm64", "build-windows")
@@ -49,6 +53,10 @@ CTEST_JOBS = ("build-linux", "build-linux-arm64")
 # ASan and TSan cannot coexist in one build, so each sanitizer leg is its own job and they run in
 # parallel; build-gpl3 is the only job left that compiles the GPL application.
 SANITIZER_JOBS = ("sanitize", "sanitize-tsan")
+
+# The jobs that call test-suite.yml. One per packaged platform, each waiting on its own build
+# only: a shared 'needs' block made every leg wait for the slowest build in the run.
+TEST_CALLER_JOBS = ("test-linux", "test-linux-arm64", "test-macos", "test-windows")
 
 # A tracking reference: a spec finding id ("0075 I1"), a GitHub issue, an upstream bug id, or
 # a URL. "By design, not a finding" is not a reason to xfail -- delete the test instead.
@@ -90,6 +98,12 @@ def ci():
     return _jobs(CI_YML)
 
 
+@pytest.fixture(scope="module")
+def suite():
+    """The single job inside the reusable pytest workflow."""
+    return _jobs(TEST_SUITE_YML)["test"]
+
+
 # --------------------------------------------------------------------------------------------
 # Supply chain (L3)
 # --------------------------------------------------------------------------------------------
@@ -129,7 +143,9 @@ def test_every_pin_names_its_version(path):
 # --------------------------------------------------------------------------------------------
 
 
-@pytest.mark.parametrize("path", [CI_YML, DOCS_YML], ids=lambda p: p.name)
+@pytest.mark.parametrize(
+    "path", [CI_YML, DOCS_YML, TEST_SUITE_YML], ids=lambda p: p.name
+)
 def test_every_job_declares_permissions(path):
     """Without an explicit block a job inherits the repository default token scope."""
     missing = [name for name, job in _jobs(path).items() if "permissions" not in job]
@@ -186,27 +202,41 @@ def test_publication_waits_on_the_builds_and_the_linters(ci):
     needs = set(ci["upload"]["needs"])
     assert "lint" in needs
     assert set(PACKAGE_JOBS) <= needs
-    assert "test" not in needs
-    assert "upload" not in ci["test"]["needs"]
-    assert set(PACKAGE_JOBS) <= set(ci["test"]["needs"])
+    assert not needs & set(TEST_CALLER_JOBS)
+    for job in TEST_CALLER_JOBS:
+        assert "upload" not in str(ci[job]["needs"])
     assert "always()" not in str(ci["upload"].get("if", ""))
 
 
-def test_the_test_job_consumes_build_artifacts_not_a_release(ci):
+def test_every_packaged_platform_is_tested_against_its_own_build(ci):
+    """
+    Each leg waits on the one build whose artifact it downloads. A shared needs block (the
+    pre-split shape) made the Linux suite idle until the slowest macOS package existed.
+    """
+    callers = {job: ci[job] for job in TEST_CALLER_JOBS}
+    assert set(PACKAGE_JOBS) == {
+        str(job["needs"]) for job in callers.values()
+    }, "every packaged platform needs a test leg, waiting on that build alone"
+    for name, job in callers.items():
+        assert job["uses"].endswith("/test-suite.yml"), name
+        assert job["name"], f"{name} has no name; the check renders as the job id"
+
+
+def test_the_test_job_consumes_build_artifacts_not_a_release(suite):
     """Downloading from the Release is what forced test to run after upload."""
-    steps = _steps(ci["test"])
+    steps = _steps(suite)
     assert any("download-artifact" in step.get("uses", "") for step in steps)
     assert not any("gh release download" in str(step.get("run", "")) for step in steps)
 
 
-def test_the_test_suite_reports_without_gating(ci):
+def test_the_test_suite_reports_without_gating(suite):
     """
     Since 2e3a55533 the suite is continue-on-error by decision: it reports, it does not hold a
     release. What makes that safe is visibility, so the failure has to surface as a workflow
     annotation and the hang-capture steps have to keep reading the step outcome; a soft step
     with neither is how master silently stayed green over failing tests before.
     """
-    steps = _steps(ci["test"])
+    steps = _steps(suite)
     run_tests = next((step for step in steps if step.get("id") == "run_tests"), None)
     assert run_tests is not None, "the run_tests step is gone"
     assert run_tests.get("continue-on-error") is True

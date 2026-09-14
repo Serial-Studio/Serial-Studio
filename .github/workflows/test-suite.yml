@@ -98,7 +98,11 @@ on:
 jobs:
 
   test:
-    name: '🧪 Test (${{ inputs.label }})'
+    #
+    # A reusable workflow's check renders as '<caller job name> / <this job name>', so the
+    # label carries alone here and the caller owns the prefix; naming both repeats it
+    #
+    name: '${{ inputs.label }}'
     runs-on: ${{ inputs.runner }}
     permissions:
       contents: read
@@ -305,8 +309,8 @@ jobs:
         done
 
     #
-    # continue-on-error: the suite reports, it does not gate. 'upload' needs this job, and a
-    # pytest failure must not hold a release; the step outcome still drives the hang capture
+    # continue-on-error: the suite reports, it does not gate. Nothing waits on this leg, so a
+    # pytest failure must not redden the run; the step outcome still drives the hang capture
     # below and the warning annotation that follows. timeout-method=signal (POSIX) fails only
     # the hung test and keeps the suite and its junit XML alive, where the ini default (thread)
     # kills the whole pytest process; Windows has no SIGALRM, so it stays on thread, and

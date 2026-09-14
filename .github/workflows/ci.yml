@@ -2466,6 +2466,7 @@ jobs:
 #
 
   test-linux:
+    name: '🧪 Test'
     needs: build-linux
     permissions:
       contents: read
@@ -2482,6 +2483,7 @@ jobs:
       timeout_method: signal
 
   test-linux-arm64:
+    name: '🧪 Test'
     needs: build-linux-arm64
     permissions:
       contents: read
@@ -2498,6 +2500,7 @@ jobs:
       timeout_method: signal
 
   test-macos:
+    name: '🧪 Test'
     needs: build-macos
     permissions:
       contents: read
@@ -2514,6 +2517,7 @@ jobs:
       timeout_method: signal
 
   test-windows:
+    name: '🧪 Test'
     needs: build-windows
     permissions:
       contents: read
