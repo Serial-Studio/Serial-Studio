@@ -570,7 +570,7 @@ Pro features become locked. You can:
 
 ### Can I transfer my Pro license to another computer?
 
-**Yes.** Deactivate on one machine (the **Deactivate** button in the Licensing dialog), then activate on another. You can transfer activations as needed, up to your plan's activation limit (5, 20, or 100 depending on the tier).
+**Yes.** Deactivate on one machine (the **Deactivate** button in the Licensing dialog), then activate on another. You can transfer activations as needed, up to your plan's activation limit (3, 10, or 20 depending on the tier).
 
 ### Is there a subscription?
 
