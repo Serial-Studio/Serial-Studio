@@ -81,9 +81,16 @@ env:
   # every configure site: both PGO stages must see the identical value or the
   # unity TU layout diverges and profile data is silently dropped.
   #
+  # Sized against the largest unity target and the narrowest runner: core/Ui has
+  # 213 sources, and ninja runs at nproc + 2, so 5 jobs in flight on the 3-vCPU
+  # macOS arm64 box. At 32 that target is 7 TUs, two waves with the second one
+  # mostly idle; at 48 it is 5, a single wave, and no smaller target loses a
+  # wave. Going past 48 only fattens the TUs without dropping a wave, and peak
+  # compiler RSS times 5 has to stay inside the runner's 7 GB.
+  #
   # Note: setting batch size to 0 results in a single TU with all sources
   #
-  SS_UNITY_BATCH: 32
+  SS_UNITY_BATCH: 48
 
   #
   # Excluded AppImage libraries

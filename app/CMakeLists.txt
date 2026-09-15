@@ -1102,8 +1102,9 @@ endif()
 # default 8) sets sources per TU: it amortizes header parsing while keeping enough TUs
 # for the build to parallelize (batch 0 -- one monolithic jumbo TU -- serializes the
 # whole target on one compiler process, so keep the TU count above the runner's core
-# count). CI passes 32 via the SS_UNITY_BATCH workflow env var, sized for the
-# post-spec-0070 source count. Default is OFF: local builds, the ss_unit_tests tier,
+# count). CI passes 48 via the SS_UNITY_BATCH workflow env var, sized so the largest
+# unity target (core/Ui, 213 sources) fits one ninja wave on the narrowest runner.
+# Default is OFF: local builds, the ss_unit_tests tier,
 # and every lib/ third-party target are unaffected. Both PGO stages must configure
 # with the same value -- the unity layout determines the object-file <-> profile-data
 # mapping, and it has to be identical across stages.
