@@ -171,12 +171,17 @@ jobs:
     # Unit tests live inside the build job so the Qt cache has one consumer per arch;
     # a parallel unit job racing this restore could get denied or evict the entry
     #
-    - name: '🚧 Configure unit-test tier'
+    - name: '🚧 Configure unit-test tier (Pro)'
+      env:
+        ARCGIS_API_KEY: ${{secrets.ARCGIS_API_KEY}}
+        SERIAL_STUDIO_LICENSE_KEY: ${{secrets.SERIAL_STUDIO_LICENSE_KEY}}
+        SERIAL_STUDIO_INSTANCE_ID: ${{secrets.SERIAL_STUDIO_INSTANCE_ID}}
       run: |
         cmake -G Ninja -B build/unit-ci \
           -DCMAKE_BUILD_TYPE=Debug \
           -DSS_BUILD_TESTS=ON \
-          -DBUILD_GPL3=ON \
+          -DBUILD_GPL3=OFF \
+          -DBUILD_COMMERCIAL=ON \
           -DENABLE_GRPC=OFF \
           -DWITH_WEBENGINE=OFF \
           -DSS_USE_MIMALLOC=OFF \
@@ -184,8 +189,13 @@ jobs:
           -DUSE_SYSTEM_EXPAT=ON
 
     #
-    # Lean Debug tier: GPL build, no gRPC, no WebEngine, no mimalloc, system zlib and expat;
-    # the application target never builds here
+    # Lean Debug tier: no gRPC, no WebEngine, no mimalloc, system zlib and expat; the application
+    # target never builds here. Pro, because this job is where the shipped Pro binary comes
+    # from: a GPL3 unit tier never registers the suites gated on the commercial sources, and
+    # never compiles the #ifdef BUILD_COMMERCIAL branches of the TUs a suite links, so both
+    # were proved by the sanitizer legs alone, the slowest jobs in the run and the last to
+    # report. BUILD_COMMERCIAL validates the license at configure time, hence the credentials
+    # above.
     #
     - name: '🚧 Build unit-test tier'
       run: cmake --build build/unit-ci --target ss_unit_tests
@@ -597,12 +607,17 @@ jobs:
     # Unit tests live inside the build job so the Qt cache has one consumer per arch;
     # a parallel unit job racing this restore could get denied or evict the entry
     #
-    - name: '🚧 Configure unit-test tier'
+    - name: '🚧 Configure unit-test tier (Pro)'
+      env:
+        ARCGIS_API_KEY: ${{secrets.ARCGIS_API_KEY}}
+        SERIAL_STUDIO_LICENSE_KEY: ${{secrets.SERIAL_STUDIO_LICENSE_KEY}}
+        SERIAL_STUDIO_INSTANCE_ID: ${{secrets.SERIAL_STUDIO_INSTANCE_ID}}
       run: |
         cmake -G Ninja -B build/unit-ci \
           -DCMAKE_BUILD_TYPE=Debug \
           -DSS_BUILD_TESTS=ON \
-          -DBUILD_GPL3=ON \
+          -DBUILD_GPL3=OFF \
+          -DBUILD_COMMERCIAL=ON \
           -DENABLE_GRPC=OFF \
           -DWITH_WEBENGINE=OFF \
           -DSS_USE_MIMALLOC=OFF \
@@ -610,8 +625,13 @@ jobs:
           -DUSE_SYSTEM_EXPAT=ON
 
     #
-    # Lean Debug tier: GPL build, no gRPC, no WebEngine, no mimalloc, system zlib and expat;
-    # the application target never builds here
+    # Lean Debug tier: no gRPC, no WebEngine, no mimalloc, system zlib and expat; the application
+    # target never builds here. Pro, because this job is where the shipped Pro binary comes
+    # from: a GPL3 unit tier never registers the suites gated on the commercial sources, and
+    # never compiles the #ifdef BUILD_COMMERCIAL branches of the TUs a suite links, so both
+    # were proved by the sanitizer legs alone, the slowest jobs in the run and the last to
+    # report. BUILD_COMMERCIAL validates the license at configure time, hence the credentials
+    # above.
     #
     - name: '🚧 Build unit-test tier'
       run: cmake --build build/unit-ci --target ss_unit_tests

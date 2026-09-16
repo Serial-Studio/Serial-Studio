@@ -2677,8 +2677,9 @@ ss_add_unit_test(tst_uart_policy
 #
 # The two serial CAN adapter protocols and the policies of the base they now share: the LAWICEL
 # and analyzer decoders, the bitrate tables, the fatal-error classification behind the unplug
-# path, and the bounded receive buffer. Qt6::SerialBus exists only on a commercial configure, so
-# the suite registers behind the same guard the driver does.
+# path, and the bounded receive buffer. SerialPortIdentity is what both backends enumerate and
+# what the base resolves a picker label through, so it links here too. Qt6::SerialBus exists only
+# on a commercial configure, so the suite registers behind the same guard the driver does.
 #
 if(TARGET Qt6::SerialBus)
   ss_add_unit_test(tst_serial_can_backend
@@ -2686,6 +2687,7 @@ if(TARGET Qt6::SerialBus)
             ${SS_CORE_SRC}/Devices/IO/Drivers/CANBus/SlcanBackend.cpp
             ${SS_CORE_SRC}/Devices/IO/Drivers/CANBus/SeeedCanBackend.cpp
             ${SS_CORE_SRC}/Devices/IO/Drivers/CANBus/SerialCanBackendBase.cpp
+            ${SS_CORE_SRC}/Devices/IO/Drivers/SerialPortIdentity.cpp
     LIBS    Qt6::Core
             Qt6::SerialBus
             Qt6::SerialPort
