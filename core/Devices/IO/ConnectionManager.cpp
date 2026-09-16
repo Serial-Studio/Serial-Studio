@@ -70,6 +70,7 @@ IO::ConnectionManager::ConnectionManager(Core::Bus::MessageBus& bus, IIngestBind
   , m_fileTransmission(nullptr)
   , m_io(m_binder, m_replyCapture, m_devices, m_paused, m_fileTransmission)
   , m_query(m_devices, m_project)
+  , m_resourceGuard(m_devices, m_project)
   , m_driverFactory(m_uiDrivers, m_bus)
   , m_streamConfigs(m_operationMode, m_frameConfig, m_project)
   , m_uiSync(m_uiDrivers, m_operationMode, m_project, m_bus)
@@ -553,6 +554,9 @@ void IO::ConnectionManager::connectDevice()
     return;
   }
 #endif
+
+  if (m_operationMode == SerialStudio::ProjectFile && !m_resourceGuard.verifyProjectSources())
+    return;
 
   if (!isConnected())
     rebuildStreamWorkers();

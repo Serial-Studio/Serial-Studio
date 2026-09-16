@@ -43,11 +43,14 @@ public:
    * @brief One synthetic CAN backend, identified by a plugin key. interfaceSupportsFD may be
    *        null: the backend never offers CAN FD (classic-only backends pass an explicit
    *        nullptr; omitting the field trips -Wmissing-field-initializers on Windows CI).
+   *        usesSerialPort marks the backends whose interfaces are serial ports, which is what
+   *        lets the driver report the port it claims against the other serial sources.
    */
   struct Entry {
     QString key;
     QString displayName;
     bool supported;
+    bool usesSerialPort;
     QStringList (*availableInterfaces)();
     QCanBusDevice* (*create)(const QString& interfaceName);
     bool (*interfaceSupportsFD)(const QString& interfaceName);

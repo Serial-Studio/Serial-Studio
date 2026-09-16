@@ -27,6 +27,7 @@
 #include <QSettings>
 #include <QStringList>
 
+#include "IO/Drivers/SerialPortIdentity.h"
 #include "Misc/Diagnostics/DeviceAccess.h"
 
 //--------------------------------------------------------------------------------------------------
@@ -171,7 +172,7 @@ static void reportSerialMissingSelection(QList<Result>& out)
   if (selected.startsWith(QLatin1Char('/')) && QFile::exists(selected))
     return;
 
-  const auto port_name = selected.section(QStringLiteral("  "), 0, 0).trimmed();
+  const auto port_name = IO::Drivers::SerialPorts::portNameFromLabel(selected);
   const auto ports     = QSerialPortInfo::availablePorts();
   for (const auto& info : ports)
     if (info.portName() == port_name || info.systemLocation() == selected)

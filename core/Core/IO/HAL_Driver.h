@@ -251,6 +251,14 @@ public:
 
   [[nodiscard]] virtual QJsonObject deviceIdentifier() const { return {}; }
 
+  /**
+   * @brief Names the exclusive device this driver claims, empty when it claims none or is not
+   *        configured. A project pointing two sources at one such device is refused before any
+   *        of them opens it: the second open would otherwise fail with a driver-level busy error
+   *        that names neither source. Serial ports answer with their canonical port name.
+   */
+  [[nodiscard]] virtual QString exclusiveResource() const { return {}; }
+
   virtual bool selectByIdentifier(const QJsonObject& id)
   {
     Q_UNUSED(id);

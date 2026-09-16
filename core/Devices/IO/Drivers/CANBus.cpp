@@ -34,6 +34,7 @@
 #include "IO/ConnectionManager.h"
 #include "IO/Drivers/CANBus/CanBackends.h"
 #include "IO/Drivers/CANBus/GsUsbCanBackend.h"
+#include "IO/Drivers/SerialPortIdentity.h"
 
 // Default CAN FD data-phase bitrate (the gs_usb backend applies the same fallback)
 static constexpr quint32 kDefaultDataBitrate = 2000000;
@@ -1342,6 +1343,36 @@ void IO::Drivers::CANBus::setDriverProperty(const QString& key, const QVariant& 
 }
 
 /**
+ * @brief Finds a saved interface among the enumerated ones, falling back to the port-name token
+ *        for the serial backends: an identifier saved before their labels carried the device
+ *        description holds a bare port name. Returns -1 on no match.
+ */
+[[nodiscard]] static int matchInterface(const QStringList& interfaces, const QString& saved)
+{
+  const int exact = interfaces.indexOf(saved);
+  if (exact >= 0)
+    return exact;
+
+  return IO::Drivers::SerialPorts::indexOfPort(interfaces, saved);
+}
+
+/**
+ * @brief Names the serial port this driver claims when the selected plugin is one of the serial
+ *        CAN backends; a socketcan or vendor-library interface claims no serial port.
+ */
+QString IO::Drivers::CANBus::exclusiveResource() const
+{
+  if (m_pluginIndex >= m_pluginList.count() || m_interfaceIndex >= m_interfaceList.count())
+    return {};
+
+  const auto* backend = IO::Drivers::CanBackends::find(m_pluginList.at(m_pluginIndex));
+  if (!backend || !backend->usesSerialPort)
+    return {};
+
+  return SerialPorts::resourceName(m_interfaceList.at(m_interfaceIndex));
+}
+
+/**
  * @brief Returns a JSON identifier for the currently selected plugin and interface.
  */
 QJsonObject IO::Drivers::CANBus::deviceIdentifier() const
@@ -1380,12 +1411,10 @@ bool IO::Drivers::CANBus::selectByIdentifier(const QJsonObject& id)
 
   const auto saved_iface = id.value(QStringLiteral("interface")).toString();
   if (!saved_iface.isEmpty()) {
-    for (int i = 0; i < m_interfaceList.size(); ++i) {
-      if (m_interfaceList.at(i) == saved_iface) {
-        setInterfaceIndex(static_cast<quint8>(i));
-        matched = true;
-        break;
-      }
+    const int index = matchInterface(m_interfaceList, saved_iface);
+    if (index >= 0) {
+      setInterfaceIndex(static_cast<quint8>(index));
+      matched = true;
     }
   }
 

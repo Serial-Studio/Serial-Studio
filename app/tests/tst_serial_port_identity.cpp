@@ -28,7 +28,8 @@
 // declaration-order execution is never load-bearing.
 
 /**
- * @brief Scoring contract of the serial-port identity matcher shared by UART and Modbus.
+ * @brief Scoring contract of the serial-port identity matcher shared by UART and Modbus, and the
+ *        label round-trip every serial picker relies on.
  */
 class TstSerialPortIdentity : public QObject {
   Q_OBJECT
@@ -39,6 +40,9 @@ private slots:
 
   void serialOutranksDescription();
   void differentUnitLosesToSameUnit();
+
+  void labelRoundTripsToPortName();
+  void savedSelectionMatchesLabelledPort();
 };
 
 //--------------------------------------------------------------------------------------------------
@@ -196,6 +200,45 @@ void TstSerialPortIdentity::differentUnitLosesToSameUnit()
                                      QString());
 
   QCOMPARE(IO::Drivers::SerialPorts::scoreIdentityMatch(stranger, saved), 5);
+}
+
+//--------------------------------------------------------------------------------------------------
+// Picker labels
+//--------------------------------------------------------------------------------------------------
+
+/**
+ * @brief The label a picker shows doubles as the identifier the CAN backend registry hands to
+ *        create(), so the port name must come back out of it whole. A string that carries no
+ *        description is its own port name.
+ */
+void TstSerialPortIdentity::labelRoundTripsToPortName()
+{
+  using IO::Drivers::SerialPorts::portNameFromLabel;
+
+  QCOMPARE(portNameFromLabel(QStringLiteral("COM3  USB-SERIAL CH340")), QStringLiteral("COM3"));
+  QCOMPARE(portNameFromLabel(QStringLiteral("COM3")), QStringLiteral("COM3"));
+  QCOMPARE(portNameFromLabel(QStringLiteral("/dev/ttyUSB0")), QStringLiteral("/dev/ttyUSB0"));
+  QCOMPARE(portNameFromLabel(QString()), QString());
+}
+
+/**
+ * @brief A selection saved before the labels carried descriptions holds a bare port name, and a
+ *        device may report a different description than it did last session. Both still resolve
+ *        to the same port; a port that is simply gone resolves to nothing.
+ */
+void TstSerialPortIdentity::savedSelectionMatchesLabelledPort()
+{
+  using IO::Drivers::SerialPorts::indexOfPort;
+
+  const QStringList labels{QStringLiteral("Select Port"),
+                           QStringLiteral("COM3  USB-SERIAL CH340"),
+                           QStringLiteral("COM7  Arduino Uno")};
+
+  QCOMPARE(indexOfPort(labels, QStringLiteral("COM7  Arduino Uno")), 2);
+  QCOMPARE(indexOfPort(labels, QStringLiteral("COM3")), 1);
+  QCOMPARE(indexOfPort(labels, QStringLiteral("COM3  CH340 (COM3)")), 1);
+  QCOMPARE(indexOfPort(labels, QStringLiteral("COM9")), -1);
+  QCOMPARE(indexOfPort(labels, QString()), -1);
 }
 
 QTEST_APPLESS_MAIN(TstSerialPortIdentity)

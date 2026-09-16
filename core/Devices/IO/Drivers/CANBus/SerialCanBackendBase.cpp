@@ -25,6 +25,8 @@
 #include <chrono>
 #include <QVariant>
 
+#include "IO/Drivers/SerialPortIdentity.h"
+
 static constexpr int kOpenAckTimeoutMs      = 250;
 static constexpr quint32 kDefaultBitrate    = 500000;
 static constexpr qsizetype kMaxRxBufferSize = 65536;
@@ -34,7 +36,9 @@ static constexpr qsizetype kMaxRxBufferSize = 65536;
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Binds the backend to a serial port name and the line speed its adapter family runs at.
+ * @brief Binds the backend to a serial port and the line speed its adapter family runs at. The
+ *        enumerated interface doubles as the label the user picked, so the port name is taken
+ *        back out of it here: every serial CAN backend is created from that same string.
  */
 IO::Drivers::SerialCanBackendBase::SerialCanBackendBase(const QString& portName,
                                                         qint32 baudRate,
@@ -42,7 +46,7 @@ IO::Drivers::SerialCanBackendBase::SerialCanBackendBase(const QString& portName,
   : QCanBusDevice(parent)
   , m_baudRate(baudRate)
   , m_bufferOverflows(0)
-  , m_portName(portName)
+  , m_portName(SerialPorts::portNameFromLabel(portName))
   , m_port(nullptr)
 {}
 

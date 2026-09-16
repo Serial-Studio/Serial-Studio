@@ -60,6 +60,7 @@ qt_add_library(
   IO/ConnectionManager/ReplyCapture.cpp
   IO/ConnectionManager/DeviceIoRouter.cpp
   IO/ConnectionManager/DeviceTableQuery.cpp
+  IO/ConnectionManager/ExclusiveResourceGuard.cpp
   IO/ConnectionManager/DriverFactory.cpp
   IO/ConnectionManager/StreamConfigBuilder.cpp
   IO/ConnectionManager/UiDriverSync.cpp
@@ -78,6 +79,7 @@ qt_add_library(
   IO/ConnectionManager/ReplyCapture.h
   IO/ConnectionManager/DeviceIoRouter.h
   IO/ConnectionManager/DeviceTableQuery.h
+  IO/ConnectionManager/ExclusiveResourceGuard.h
   IO/ConnectionManager/DriverFactory.h
   IO/ConnectionManager/StreamConfigBuilder.h
   IO/ConnectionManager/UiDriverSync.h

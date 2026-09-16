@@ -796,23 +796,9 @@ void IO::Drivers::UART::setFlowControl(const quint8 flowControlIndex)
  */
 void IO::Drivers::UART::refreshSerialDevices()
 {
-  QStringList names;
-  QStringList locations;
-  locations.append("/dev/null");
-  names.append(tr("Select Port"));
-
-  auto validPortList = SerialPorts::visiblePorts();
-  for (const auto& info : std::as_const(validPortList)) {
-    if (!info.isNull()) {
-#ifdef Q_OS_WIN
-      names.append(info.portName() + "  " + info.description());
-#else
-      names.append(info.portName());
-#endif
-
-      locations.append(info.systemLocation());
-    }
-  }
+  const auto listing          = SerialPorts::listPorts();
+  const QStringList names     = QStringList(tr("Select Port")) + listing.labels;
+  const QStringList locations = QStringList(QStringLiteral("/dev/null")) + listing.locations;
 
   if (m_deviceNames == names)
     return;
@@ -820,7 +806,7 @@ void IO::Drivers::UART::refreshSerialDevices()
   m_deviceNames     = names;
   m_deviceLocations = locations;
 
-  const bool indexChanged = relocateOpenPortIndex(validPortList);
+  const bool indexChanged = relocateOpenPortIndex(listing.ports);
 
   Q_EMIT availablePortsChanged();
 
@@ -830,10 +816,10 @@ void IO::Drivers::UART::refreshSerialDevices()
   if (m_portIndex != 0)
     return;
 
-  const auto ports    = portList();
   const auto lastPort = m_settings.value("IO_Serial_SelectedDevice", "").toString();
-  if (!lastPort.isEmpty() && ports.contains(lastPort))
-    setPortIndex(static_cast<quint8>(ports.indexOf(lastPort)));
+  const int lastIndex = SerialPorts::indexOfPort(portList(), lastPort);
+  if (lastIndex > 0)
+    setPortIndex(static_cast<quint8>(lastIndex));
 }
 
 /**
@@ -849,12 +835,13 @@ void IO::Drivers::UART::pollAutoReconnect()
   }
 
   refreshSerialDevices();
-  if (m_lastPortName.isEmpty() || !portList().contains(m_lastPortName))
+  const int index = SerialPorts::indexOfPort(portList(), m_lastPortName);
+  if (index < 1)
     return;
 
   m_pendingReconnect = false;
   m_reconnectTimer.stop();
-  setPortIndex(static_cast<quint8>(portList().indexOf(m_lastPortName)));
+  setPortIndex(static_cast<quint8>(index));
 
   static auto& connectionManager = ConnectionManager::instance();
   connectionManager.connectDevice(this);
@@ -959,6 +946,18 @@ QJsonObject IO::Drivers::UART::deviceIdentifier() const
     return {};
 
   return SerialPorts::identity(ports.at(idx));
+}
+
+/**
+ * @brief Names the serial port this driver claims, so a project pointing two sources at one port
+ *        is refused before either of them opens it.
+ */
+QString IO::Drivers::UART::exclusiveResource() const
+{
+  if (m_portIndex < 1)
+    return {};
+
+  return SerialPorts::resourceName(portList().value(m_portIndex));
 }
 
 /**

@@ -1239,21 +1239,9 @@ void IO::Drivers::Modbus::onErrorOccurred(QModbusDevice::Error error)
  */
 void IO::Drivers::Modbus::refreshSerialPorts()
 {
-  QStringList names;
-  QStringList locations;
-
-  locations.append("/dev/null");
-  names.append(tr("Select Port"));
-
-  const auto ports = SerialPorts::visiblePorts();
-  for (const auto& info : ports) {
-#ifdef Q_OS_WIN
-    names.append(info.portName() + "  " + info.description());
-#else
-    names.append(info.portName());
-#endif
-    locations.append(info.systemLocation());
-  }
+  const auto listing          = SerialPorts::listPorts();
+  const QStringList names     = QStringList(tr("Select Port")) + listing.labels;
+  const QStringList locations = QStringList(QStringLiteral("/dev/null")) + listing.locations;
 
   if (m_serialPortNames != names) {
     m_serialPortNames     = names;
@@ -1286,6 +1274,17 @@ QJsonObject IO::Drivers::Modbus::deviceIdentifier() const
     return {};
 
   return SerialPorts::identity(filtered.at(idx));
+}
+
+/**
+ * @brief Names the serial port this driver claims while it speaks RTU; a TCP link claims none.
+ */
+QString IO::Drivers::Modbus::exclusiveResource() const
+{
+  if (m_protocolIndex != 0 || m_serialPortIndex < 1)
+    return {};
+
+  return SerialPorts::resourceName(m_serialPortNames.value(m_serialPortIndex));
 }
 
 /**

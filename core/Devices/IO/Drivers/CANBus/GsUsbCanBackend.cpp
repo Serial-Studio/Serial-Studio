@@ -189,6 +189,7 @@ IO::Drivers::CanBackends::Entry IO::Drivers::GsUsbCanBackend::registration()
   return {pluginKey(),
           QStringLiteral("CANable USB"),
           supported(),
+          false,
           &availableInterfaces,
           &create,
           &interfaceSupportsFD};

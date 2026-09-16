@@ -1655,7 +1655,8 @@ ss_add_unit_test(tst_modbus_register_groups
 
 #
 # Serial-port identity scoring shared by UART and Modbus (spec 0070): the 100/50/10/5 ladder
-# that reattaches a saved device to a re-enumerated port.
+# that reattaches a saved device to a re-enumerated port, plus the picker-label round trip the
+# serial CAN backends resolve their port name through.
 #
 ss_add_unit_test(tst_serial_port_identity
   SOURCES tst_serial_port_identity.cpp

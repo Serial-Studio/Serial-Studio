@@ -23,14 +23,53 @@
 
 #include <QJsonObject>
 #include <QSerialPortInfo>
+#include <QStringList>
 #include <QVector>
 
 namespace IO::Drivers::SerialPorts {
 
 /**
+ * @brief One enumeration pass: the ports themselves plus the parallel label and system-location
+ *        lists every serial picker builds its combo from.
+ */
+struct PortListing {
+  QVector<QSerialPortInfo> ports;
+  QStringList labels;
+  QStringList locations;
+};
+
+/**
  * @brief Returns the serial ports the pickers show, with the platform filter applied.
  */
 [[nodiscard]] QVector<QSerialPortInfo> visiblePorts();
+
+/**
+ * @brief Enumerates the visible ports once and returns them with their labels and locations.
+ */
+[[nodiscard]] PortListing listPorts();
+
+/**
+ * @brief Returns the string a picker shows for one port: its name, plus the device description
+ *        when the port reports one.
+ */
+[[nodiscard]] QString portLabel(const QSerialPortInfo& info);
+
+/**
+ * @brief Returns the port name a label was built from; a string that is not a label is its own.
+ */
+[[nodiscard]] QString portNameFromLabel(const QString& label);
+
+/**
+ * @brief Returns the canonical name of the port a label, port name or device path refers to, so
+ *        two drivers naming one port compare equal.
+ */
+[[nodiscard]] QString resourceName(const QString& labelOrPath);
+
+/**
+ * @brief Finds @p saved among @p labels, falling back to the port-name token: a selection saved
+ *        before the labels carried descriptions holds a bare port name. Returns -1 on no match.
+ */
+[[nodiscard]] int indexOfPort(const QStringList& labels, const QString& saved);
 
 /**
  * @brief Returns the persisted hardware identifier of one port (VID, PID, serial, name, label).

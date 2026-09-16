@@ -44,6 +44,7 @@
 #include "IO/ConnectionManager/DeviceTableQuery.h"
 #include "IO/ConnectionManager/DriverFactory.h"
 #include "IO/ConnectionManager/DriverUiRegistry.h"
+#include "IO/ConnectionManager/ExclusiveResourceGuard.h"
 #include "IO/ConnectionManager/ReplyCapture.h"
 #include "IO/ConnectionManager/StreamConfigBuilder.h"
 #include "IO/ConnectionManager/UiDriverSync.h"
@@ -293,6 +294,7 @@ private:
   ReplyCapture m_replyCapture;
   DeviceIoRouter m_io;
   DeviceTableQuery m_query;
+  ExclusiveResourceGuard m_resourceGuard;
   DriverUiRegistry m_uiDrivers;
   DriverFactory m_driverFactory;
   StreamConfigBuilder m_streamConfigs;

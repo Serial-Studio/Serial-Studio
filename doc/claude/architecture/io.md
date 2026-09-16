@@ -77,6 +77,20 @@ The spec-0034 `IO::ConnectionFlows` layer and the hook family it drove (`support
 today is spec 0050's bare `HAL_Driver::openFinished(bool, reason)` verdict signal — a
 namesake of a removed 0034 hook, but a different, much smaller thing (see below).
 
+- **A project connect is refused before it starts when two sources claim one port.**
+  `ConnectionManager::connectDevice()` runs `IO::ExclusiveResourceGuard::verifyProjectSources()`
+  in ProjectFile mode *before* `m_fanOut.beginRequest()`, because an abort after that strands
+  the request flag and the wait cursor. The guard asks every source's driver for
+  `HAL_Driver::exclusiveResource()`, whose default is empty; UART, Modbus (RTU only) and CANBus
+  (serial backends only) answer with the canonical port name from
+  `IO::Drivers::SerialPorts::resourceName()`. A driver that claims a device no second opener can
+  share answers here too, or the loser fails with a busy error naming neither source.
+- **Serial pickers show one label, and the label is also the id.** Every serial combo is built
+  from `SerialPorts::listPorts()`, whose labels are `portName` plus the device description. The
+  CAN backend registry hands that same string to `Entry::create()`, so `SerialCanBackendBase`'s
+  ctor is the ONE place that takes the port name back out (`portNameFromLabel()`); a saved
+  selection is re-matched with `indexOfPort()`, which falls back to the port-name token so an
+  identifier saved before the labels carried descriptions still resolves.
 - **Drop recovery is each driver's own business.** UART arms `m_pendingReconnect` plus its own
   1 s `m_reconnectTimer` in `handleError()` on a `QSerialPort::ResourceError` (live instances
   recover too — the timer belongs to the instance, not the UI driver's 1 Hz rescan), matches

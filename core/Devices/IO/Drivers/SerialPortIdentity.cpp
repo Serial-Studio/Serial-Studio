@@ -21,6 +21,10 @@
 
 #include "IO/Drivers/SerialPortIdentity.h"
 
+#include <utility>
+
+static const auto kSeparator = QStringLiteral("  ");
+
 static const auto kVid    = QStringLiteral("vid");
 static const auto kPid    = QStringLiteral("pid");
 static const auto kSerial = QStringLiteral("serial");
@@ -62,6 +66,93 @@ QVector<QSerialPortInfo> IO::Drivers::SerialPorts::visiblePorts()
   }
 
   return filtered;
+}
+
+/**
+ * @brief Returns the string a picker shows for one port. The description is what tells two
+ *        identical-looking nodes apart, so it is appended whenever the device reports one.
+ */
+QString IO::Drivers::SerialPorts::portLabel(const QSerialPortInfo& info)
+{
+  const auto description = info.description().simplified();
+  if (description.isEmpty())
+    return info.portName();
+
+  return info.portName() + kSeparator + description;
+}
+
+/**
+ * @brief Returns the port name a label was built from. Every consumer of an enumerated string
+ *        that must open, compare or persist a port goes through here: the label is also the
+ *        identifier the CAN backend registry hands to create().
+ */
+QString IO::Drivers::SerialPorts::portNameFromLabel(const QString& label)
+{
+  const int separator = label.indexOf(kSeparator);
+  if (separator < 0)
+    return label.trimmed();
+
+  return label.left(separator).trimmed();
+}
+
+/**
+ * @brief Enumerates once and returns the ports with their labels and system locations, so a
+ *        picker rebuilds its combo without a second scan of the bus.
+ */
+IO::Drivers::SerialPorts::PortListing IO::Drivers::SerialPorts::listPorts()
+{
+  PortListing listing;
+
+  listing.ports = visiblePorts();
+  listing.labels.reserve(listing.ports.count());
+  listing.locations.reserve(listing.ports.count());
+
+  for (const auto& info : std::as_const(listing.ports)) {
+    listing.labels.append(portLabel(info));
+    listing.locations.append(info.systemLocation());
+  }
+
+  return listing;
+}
+
+/**
+ * @brief Resolves a label, port name or device path to the canonical port name, so a UART source
+ *        and a Modbus or CAN source pointing at one port produce the same string.
+ */
+QString IO::Drivers::SerialPorts::resourceName(const QString& labelOrPath)
+{
+  const auto name = portNameFromLabel(labelOrPath);
+  if (name.isEmpty())
+    return {};
+
+  const auto ports = visiblePorts();
+  for (const auto& info : ports)
+    if (info.portName() == name || info.systemLocation() == name)
+      return info.portName();
+
+  return name;
+}
+
+/**
+ * @brief Finds a previously saved selection among the enumerated labels. The fallback matches on
+ *        the port-name token alone: a selection saved before the labels carried the device
+ *        description, or saved while the device reported a different one, is still the same port.
+ */
+int IO::Drivers::SerialPorts::indexOfPort(const QStringList& labels, const QString& saved)
+{
+  if (saved.isEmpty())
+    return -1;
+
+  const int exact = labels.indexOf(saved);
+  if (exact >= 0)
+    return exact;
+
+  const auto name = portNameFromLabel(saved);
+  for (int i = 0; i < labels.count(); ++i)
+    if (portNameFromLabel(labels.at(i)) == name)
+      return i;
+
+  return -1;
 }
 
 /**

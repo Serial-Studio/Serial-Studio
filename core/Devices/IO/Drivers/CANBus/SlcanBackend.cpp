@@ -24,8 +24,9 @@
 
 #include <cstdint>
 #include <iterator>
-#include <QSerialPortInfo>
 #include <QVariant>
+
+#include "IO/Drivers/SerialPortIdentity.h"
 
 //--------------------------------------------------------------------------------------------------
 // slcan / LAWICEL ASCII protocol helpers
@@ -50,7 +51,8 @@ constexpr std::uint32_t kSlcanBitrates[] = {
  */
 IO::Drivers::CanBackends::Entry IO::Drivers::SlcanBackend::registration()
 {
-  return {pluginKey(), QStringLiteral("Serial CAN"), true, &availableInterfaces, &create, nullptr};
+  return {
+    pluginKey(), QStringLiteral("Serial CAN"), true, true, &availableInterfaces, &create, nullptr};
 }
 
 /**
@@ -63,15 +65,12 @@ const QString& IO::Drivers::SlcanBackend::pluginKey()
 }
 
 /**
- * @brief Returns the names of every available serial port.
+ * @brief Returns the label of every available serial port. The labels carry the device
+ *        description, and SerialCanBackendBase takes the port name back out of the one it opens.
  */
 QStringList IO::Drivers::SlcanBackend::availableInterfaces()
 {
-  QStringList ports;
-  for (const QSerialPortInfo& info : QSerialPortInfo::availablePorts())
-    ports.append(info.portName());
-
-  return ports;
+  return SerialPorts::listPorts().labels;
 }
 
 /**

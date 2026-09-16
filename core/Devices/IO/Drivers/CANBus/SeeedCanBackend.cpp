@@ -23,8 +23,9 @@
 #include "IO/Drivers/CANBus/SeeedCanBackend.h"
 
 #include <cstdint>
-#include <QSerialPortInfo>
 #include <QVariant>
+
+#include "IO/Drivers/SerialPortIdentity.h"
 
 //--------------------------------------------------------------------------------------------------
 // Seeed / Waveshare USB-CAN Analyzer serial protocol helpers
@@ -128,8 +129,13 @@ IO::Drivers::SeeedCanBackend::Parse IO::Drivers::SeeedCanBackend::decodePacket(
  */
 IO::Drivers::CanBackends::Entry IO::Drivers::SeeedCanBackend::registration()
 {
-  return {
-    pluginKey(), QStringLiteral("Seeed / Waveshare"), true, &availableInterfaces, &create, nullptr};
+  return {pluginKey(),
+          QStringLiteral("Seeed / Waveshare"),
+          true,
+          true,
+          &availableInterfaces,
+          &create,
+          nullptr};
 }
 
 /**
@@ -142,15 +148,12 @@ const QString& IO::Drivers::SeeedCanBackend::pluginKey()
 }
 
 /**
- * @brief Returns the names of every available serial port.
+ * @brief Returns the label of every available serial port. The labels carry the device
+ *        description, and SerialCanBackendBase takes the port name back out of the one it opens.
  */
 QStringList IO::Drivers::SeeedCanBackend::availableInterfaces()
 {
-  QStringList ports;
-  for (const QSerialPortInfo& info : QSerialPortInfo::availablePorts())
-    ports.append(info.portName());
-
-  return ports;
+  return SerialPorts::listPorts().labels;
 }
 
 /**
