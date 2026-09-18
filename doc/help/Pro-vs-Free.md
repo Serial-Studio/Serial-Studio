@@ -253,7 +253,7 @@ signal debugging.
 **How it works:**
 - Reuses the dataset's FFT settings (`fftSamples`, `fftSamplingRate`, `fftMin`, `fftMax`).
 - Magnitude is converted to dB; dynamic range is adjustable from the widget toolbar.
-- Eight built-in color maps (Viridis, Inferno, Magma, Plasma, Turbo, Jet, Hot, Grayscale).
+- Fifteen built-in color maps. Sequential: Viridis, Inferno, Magma, Plasma, Turbo, Jet, Hot, Cividis, Cubehelix, SDR Classic, Grayscale, Grayscale (Inverted). Diverging: Spectral, Red/Blue, Coolwarm.
 - Mouse wheel to zoom, drag to pan, hover for a frequency/time readout.
 - Y-axis defaults to elapsed time. Set `waterfallYAxis` to another dataset's frame index to drive the Y axis from that dataset's value (order tracking — for example RPM vs. frequency).
 

@@ -44,6 +44,13 @@ enum Map {
   Jet,
   Hot,
   Grayscale,
+  GrayscaleInverted,
+  Cividis,
+  Cubehelix,
+  SdrClassic,
+  Spectral,
+  RedBlue,
+  Coolwarm,
   MapCount,
 };
 

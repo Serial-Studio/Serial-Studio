@@ -150,6 +150,13 @@ public:
     Jet,
     Hot,
     Grayscale,
+    GrayscaleInverted,
+    Cividis,
+    Cubehelix,
+    SdrClassic,
+    Spectral,
+    RedBlue,
+    Coolwarm,
     ColorMapCount,
   };
   Q_ENUM(ColorMap)

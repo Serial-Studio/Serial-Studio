@@ -183,7 +183,7 @@ flowchart TD
 - Scrolling time-frequency plot (spectrogram). Each row is one FFT magnitude spectrum, with the newest row drawn at the top and older rows scrolling down.
 - Reuses the dataset's FFT settings (`fftSamples`, `fftWindow`, `fftSamplingRate`, `fftMin`, `fftMax`). Enable both `fft: true` and `waterfall: true` if you want the FFT plot alongside the waterfall.
 - Magnitude is converted to dB. The dynamic range (`minDb` / `maxDb`) is adjustable from the widget toolbar.
-- Built-in color maps: Viridis, Inferno, Magma, Plasma, Turbo, Jet, Hot, Grayscale.
+- Built-in color maps, sequential: Viridis, Inferno, Magma, Plasma, Turbo, Jet, Hot, Cividis, Cubehelix, SDR Classic, Grayscale, Grayscale (Inverted). Diverging (mid-scale neutral, so an idle spectrogram reads as the low-end color rather than black): Spectral, Red/Blue, Coolwarm.
 - Mouse wheel to zoom, drag to pan, hover for a frequency/time readout. Reset view from the toolbar.
 - Configurable history depth (number of stored rows).
 - **Y-axis source.** Defaults to elapsed time. Set `waterfallYAxis` to another dataset's `uniqueId` to drive the Y axis from that dataset's value instead. This is typically used for order-tracking plots (for example RPM vs. frequency).

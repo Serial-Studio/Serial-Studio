@@ -303,6 +303,20 @@ QString Widgets::Waterfall::colorMapName(int index) const
       return tr("Hot");
     case Grayscale:
       return tr("Grayscale");
+    case GrayscaleInverted:
+      return tr("Grayscale (Inverted)");
+    case Cividis:
+      return tr("Cividis");
+    case Cubehelix:
+      return tr("Cubehelix");
+    case SdrClassic:
+      return tr("SDR Classic");
+    case Spectral:
+      return tr("Spectral");
+    case RedBlue:
+      return tr("Red/Blue");
+    case Coolwarm:
+      return tr("Coolwarm");
     default:
       return tr("Unknown");
   }

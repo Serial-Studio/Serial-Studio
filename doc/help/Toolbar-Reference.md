@@ -281,7 +281,7 @@ See the [FFT Plot](Widget-Reference.md#fft-plot) entry for window size and sampl
 
 | Control | Icon | What it does |
 |---------|------|--------------|
-| **Color map** | (dropdown) | Picks the color map (Viridis, Inferno, Magma, Plasma, Turbo, Jet, Hot, Grayscale). |
+| **Color map** | (dropdown) | Picks the color map. Sequential: Viridis, Inferno, Magma, Plasma, Turbo, Jet, Hot, Cividis, Cubehelix, SDR Classic, Grayscale, Grayscale (Inverted). Diverging: Spectral, Red/Blue, Coolwarm. |
 | **Dynamic range** | (dual slider) | Sets the dB floor and ceiling mapped onto the color map (-120 to +20 dB). |
 | **Show Colorbar** | <img src="icon:commands/color" alt="color" width="16" height="16"> | Shows or hides the color scale. |
 | **Show Axes & Grid** | <img src="icon:commands/abscissa" alt="abscissa" width="16" height="16"> | Shows or hides the axes and grid. |
