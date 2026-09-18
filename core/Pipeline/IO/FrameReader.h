@@ -122,6 +122,7 @@ private:
   QVector<QByteArray> m_finishSequences;
   QVector<std::vector<int>> m_startSequenceLps;
   QVector<std::vector<int>> m_finishSequenceLps;
+  CircularBuffer<QByteArray, char>::PatternAnchors m_finishAnchors;
 
   SerialStudio::OperationMode m_operationMode;
   SerialStudio::FrameDetection m_frameDetectionMode;

@@ -164,35 +164,55 @@ static constexpr uint32_t crc32(const char* data, const int length) noexcept
 }
 
 /**
- * @brief Computes the Adler-32 checksum of the input data.
+ * @brief Computes the Adler-32 checksum of the input data. Reducing once per block instead of
+ *        once per byte is congruent modulo the base and drops two integer divisions per byte;
+ *        5552 is the largest block for which neither 32-bit accumulator can overflow.
  */
 static constexpr uint32_t adler32(const char* data, const int length) noexcept
 {
   constexpr uint32_t kModAdler = 65521;
-  uint32_t a = 1, b = 0;
+  constexpr int kAdlerBlock    = 5552;
 
-  for (int i = 0; i < length; ++i) {
-    a = (a + static_cast<uint8_t>(data[i])) % kModAdler;
-    b = (b + a) % kModAdler;
+  uint32_t a = 1, b = 0;
+  for (int i = 0; i < length;) {
+    const int span = length - i < kAdlerBlock ? length - i : kAdlerBlock;
+    const int end  = i + span;
+    for (; i < end; ++i) {
+      a += static_cast<uint8_t>(data[i]);
+      b += a;
+    }
+
+    a %= kModAdler;
+    b %= kModAdler;
   }
 
   return (b << 16) | a;
 }
 
 /**
- * @brief Computes a Fletcher-16 checksum.
+ * @brief Computes a Fletcher-16 checksum. Reducing once per block instead of once per byte is
+ *        congruent modulo 255 and drops two integer divisions per byte; 4096 keeps both 32-bit
+ *        accumulators at half their range, so the block bound needs no exactness argument.
  */
 static constexpr uint16_t fletcher16(const char* data, const int length) noexcept
 {
-  uint16_t sum1 = 0;
-  uint16_t sum2 = 0;
+  constexpr uint32_t kModFletcher = 255;
+  constexpr int kFletcherBlock    = 4096;
 
-  for (int i = 0; i < length; ++i) {
-    sum1 = (sum1 + static_cast<uint8_t>(data[i])) % 255;
-    sum2 = (sum2 + sum1) % 255;
+  uint32_t sum1 = 0, sum2 = 0;
+  for (int i = 0; i < length;) {
+    const int span = length - i < kFletcherBlock ? length - i : kFletcherBlock;
+    const int end  = i + span;
+    for (; i < end; ++i) {
+      sum1 += static_cast<uint8_t>(data[i]);
+      sum2 += sum1;
+    }
+
+    sum1 %= kModFletcher;
+    sum2 %= kModFletcher;
   }
 
-  return (sum2 << 8) | sum1;
+  return static_cast<uint16_t>((sum2 << 8) | sum1);
 }
 
 /**

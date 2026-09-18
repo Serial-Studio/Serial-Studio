@@ -97,7 +97,23 @@ public:
     int patternIndex = -1;
   };
 
+  static constexpr int kMaxPatterns = 8;
+
+  /**
+   * @brief The distinct first bytes of a pattern set. Any match starts with one of them, so a
+   *        scan anchored on this set cannot skip one. Owners of a fixed delimiter set build it
+   *        once when the set changes instead of once per scan.
+   */
+  struct PatternAnchors {
+    quint8 bytes[kMaxPatterns];
+    int count;
+  };
+
+  [[nodiscard]] static PatternAnchors buildPatternAnchors(const QVector<T>& patterns);
+
   [[nodiscard]] MultiMatchResult findFirstOfPatterns(const QVector<T>& patterns) const;
+  [[nodiscard]] MultiMatchResult findFirstOfPatterns(const QVector<T>& patterns,
+                                                     const PatternAnchors& anchors) const;
 
   [[nodiscard]] qsizetype overflowCount() const noexcept
   {
@@ -107,11 +123,9 @@ public:
   void resetOverflowCount() noexcept { m_overflowCount.store(0, std::memory_order_relaxed); }
 
 private:
-  static constexpr int kMaxPatterns           = 8;
   static constexpr qsizetype kShortPatternMax = 8;
 
   [[nodiscard]] std::vector<int> computeKMPTable(const T& p) const;
-  [[nodiscard]] static int collectFirstBytes(const QVector<T>& patterns, int count, quint8* out);
   [[nodiscard]] static int byteScanLinear(const StorageType* base,
                                           qsizetype current_size,
                                           int pos,
@@ -589,42 +603,57 @@ std::vector<int> IO::CircularBuffer<T, StorageType>::computeKMPTable(const T& p)
 }
 
 /**
- * @brief Collects the distinct first bytes of the first @p count patterns into @p out (which
- *        holds kMaxPatterns entries). A match at any position must start with one of them, so
- *        anchoring the scan on this set cannot skip a match.
+ * @brief Collects the distinct first bytes of the first kMaxPatterns patterns. A match at any
+ *        position must start with one of them, so anchoring the scan on this set cannot skip a
+ *        match. Walks every pattern, so a caller with a fixed set builds it once.
  */
 template<typename T, Concepts::ByteLike StorageType>
-int IO::CircularBuffer<T, StorageType>::collectFirstBytes(const QVector<T>& patterns,
-                                                          int count,
-                                                          quint8* out)
+typename IO::CircularBuffer<T, StorageType>::PatternAnchors IO::CircularBuffer<T, StorageType>::
+  buildPatternAnchors(const QVector<T>& patterns)
 {
-  SS_ASSERT_HOTPATH(out != nullptr);
-  SS_ASSERT_HOTPATH(count >= 1 && count <= kMaxPatterns);
+  PatternAnchors anchors{};
+  SS_ASSERT_HOTPATH(!patterns.isEmpty());
 
-  int unique = 0;
+  const int count = qMin(static_cast<int>(patterns.size()), kMaxPatterns);
+  SS_ASSERT_HOTPATH(count <= kMaxPatterns);
+
   for (int p = 0; p < count; ++p) {
     const auto c = static_cast<quint8>(patterns[p].constData()[0]);
 
     bool seen = false;
-    for (int k = 0; k < unique; ++k)
-      if (out[k] == c) {
+    for (int k = 0; k < anchors.count; ++k)
+      if (anchors.bytes[k] == c) {
         seen = true;
         break;
       }
 
     if (!seen)
-      out[unique++] = c;
+      anchors.bytes[anchors.count++] = c;
   }
 
-  return unique;
+  return anchors;
 }
 
 /**
- * @brief Single-pass multi-pattern scan over the circular buffer.
+ * @brief Single-pass multi-pattern scan, building the scan anchors for this call.
  */
 template<typename T, Concepts::ByteLike StorageType>
 typename IO::CircularBuffer<T, StorageType>::MultiMatchResult IO::CircularBuffer<T, StorageType>::
   findFirstOfPatterns(const QVector<T>& patterns) const
+{
+  if (patterns.isEmpty()) [[unlikely]]
+    return {};
+
+  return findFirstOfPatterns(patterns, buildPatternAnchors(patterns));
+}
+
+/**
+ * @brief Single-pass multi-pattern scan over the circular buffer, anchored on a pre-built
+ *        first-byte set: @p anchors must describe @p patterns or the scan can skip a match.
+ */
+template<typename T, Concepts::ByteLike StorageType>
+typename IO::CircularBuffer<T, StorageType>::MultiMatchResult IO::CircularBuffer<T, StorageType>::
+  findFirstOfPatterns(const QVector<T>& patterns, const PatternAnchors& anchors) const
 {
   const qsizetype bufSize = size();
   if (patterns.isEmpty() || bufSize <= 0) [[unlikely]]
@@ -686,14 +715,13 @@ typename IO::CircularBuffer<T, StorageType>::MultiMatchResult IO::CircularBuffer
   };
 
   if ((head + bufSize) <= m_capacity) [[likely]] {
-    quint8 firstBytes[kMaxPatterns];
-    const int anchors       = collectFirstBytes(patterns, patCount, firstBytes);
     const StorageType* base = m_buffer.data() + head;
     const char* raw         = reinterpret_cast<const char*>(base);
 
     qsizetype i = 0;
     for (qsizetype it = 0; it < scanEnd && i < scanEnd; ++it) {
-      const qsizetype rel = DSP::simdFindAnyByte(raw + i, scanEnd - i, firstBytes, anchors);
+      const qsizetype rel =
+        DSP::simdFindAnyByte(raw + i, scanEnd - i, anchors.bytes, anchors.count);
       if (rel >= scanEnd - i)
         break;
 

@@ -45,6 +45,7 @@ IO::FrameReader::FrameReader(QObject* parent)
   , m_operationMode(SerialStudio::QuickPlot)
   , m_frameDetectionMode(SerialStudio::EndDelimiterOnly)
   , m_circularBuffer(1024 * 1024)
+  , m_finishAnchors{}
   , m_queue(65536)
   , m_capturedPoolHint(0)
   , m_bufferPinned(false)
@@ -280,6 +281,7 @@ void IO::FrameReader::setFinishSequences(const QList<QByteArray>& finishes)
 {
   m_finishSequences.clear();
   m_finishSequenceLps.clear();
+  m_finishAnchors = {};
 
   for (const auto& f : finishes) {
     if (f.isEmpty())
@@ -293,6 +295,9 @@ void IO::FrameReader::setFinishSequences(const QList<QByteArray>& finishes)
     m_finishSequences.clear();
     m_finishSequenceLps.clear();
   });
+
+  if (!m_finishSequences.isEmpty())
+    m_finishAnchors = m_circularBuffer.buildPatternAnchors(m_finishSequences);
 }
 
 /**
@@ -419,7 +424,7 @@ void IO::FrameReader::readEndDelimitedFrames()
       endIndex  = m_circularBuffer.findPatternKMP(m_finishSequences[0], m_finishSequenceLps[0]);
       delimiter = &m_finishSequences[0];
     } else {
-      const auto match = m_circularBuffer.findFirstOfPatterns(m_finishSequences);
+      const auto match = m_circularBuffer.findFirstOfPatterns(m_finishSequences, m_finishAnchors);
       if (match.position >= 0) {
         endIndex  = match.position;
         delimiter = &m_finishSequences[match.patternIndex];

@@ -501,6 +501,17 @@ struct TimeRing {
         t = time[held - 1];
     }
 
+    appendChecked(t, v);
+  }
+
+  /**
+   * @brief appendDecimated() past its input guards: @p t and @p v must be finite and @p t
+   *        already clamped. EnvelopeRing runs those guards to place its open cell, so it
+   *        enters here rather than paying them twice. The min/max update selects into
+   *        registers: on a rate-sized ring, which extreme a sample replaces is a coin flip.
+   */
+  void appendChecked(double t, double v)
+  {
     if (cellSlots > static_cast<int>(time.size())) [[unlikely]]
       cellSlots = static_cast<int>(time.size());
 
@@ -516,20 +527,14 @@ struct TimeRing {
       return;
     }
 
-    bool changed = false;
-    if (v < accMin) {
-      accMin     = v;
-      accMinTime = t;
-      changed    = true;
-    }
+    const bool lowers = v < accMin;
+    const bool raises = v > accMax;
+    accMin            = lowers ? v : accMin;
+    accMinTime        = lowers ? t : accMinTime;
+    accMax            = raises ? v : accMax;
+    accMaxTime        = raises ? t : accMaxTime;
 
-    if (v > accMax) {
-      accMax     = v;
-      accMaxTime = t;
-      changed    = true;
-    }
-
-    if (!changed)
+    if (!(lowers | raises))
       return;
 
     const bool minFirst = accMinTime <= accMaxTime;
@@ -699,9 +704,9 @@ struct EnvelopeRing {
 
   /**
    * @brief Appends one (time, value): rejects non-finite input, folds the level-0 cell this
-   *        sample closes into the coarse levels, then decimates into level 0. Costs one branch
-   *        over TimeRing::appendDecimated on the common (same-cell) path. A restarted producer
-   *        clock drops the pyramid with level 0: those cells describe the abandoned timeline.
+   *        sample closes into the coarse levels, then decimates through appendChecked(). A
+   *        restarted producer clock drops the pyramid with level 0. The open-cell test takes
+   *        no branch hint: a rate-sized stream ring opens a cell on about every other sample.
    */
   void appendDecimated(double t, double v)
   {
@@ -721,7 +726,7 @@ struct EnvelopeRing {
         t = level0.time[n - 1];
     }
 
-    if (level0.opensCell(t)) [[unlikely]] {
+    if (level0.opensCell(t)) {
       if (openCellValid)
         foldOpenCell();
 
@@ -729,7 +734,7 @@ struct EnvelopeRing {
       openCellValid = true;
     }
 
-    level0.appendDecimated(t, v);
+    level0.appendChecked(t, v);
   }
 
 private:
