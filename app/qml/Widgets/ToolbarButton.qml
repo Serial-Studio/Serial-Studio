@@ -77,7 +77,7 @@ Item {
   // Enabled/disabled opacity effect
   //
   opacity: enabled ? 1 : 0.5
-  Behavior on opacity { NumberAnimation {} }
+  Behavior on opacity { NumberAnimation { duration: 160; easing.type: Easing.OutCubic } }
 
   //
   // Checked toolbar button background
@@ -89,12 +89,16 @@ Item {
     border.width: 1
     anchors.fill: parent
     visible: root.toolbarButton
-    opacity: (root.checked || _mouseArea.pressed)
-             ? Cpp_ThemeManager.colors["toolbar_checked_button_opacity"]
-             : 0.0
+    opacity: {
+      const full = Cpp_ThemeManager.colors["toolbar_checked_button_opacity"]
+      if (root.checked || _mouseArea.pressed)
+        return full
+
+      return _mouseArea.containsMouse && root.enabled ? full * 0.4 : 0
+    }
     color: Cpp_ThemeManager.colors["toolbar_checked_button_background"]
     border.color: Cpp_ThemeManager.colors["toolbar_checked_button_border"]
-    Behavior on opacity { NumberAnimation {} }
+    Behavior on opacity { NumberAnimation { duration: 120; easing.type: Easing.OutCubic } }
   }
 
   //
@@ -105,7 +109,7 @@ Item {
     anchors.fill: parent
     visible: !root.toolbarButton && root.checkBgVisible
     opacity: (root.checked || _mouseArea.pressed) ? 1 : 0
-    Behavior on opacity { NumberAnimation {} }
+    Behavior on opacity { NumberAnimation { duration: 120; easing.type: Easing.OutCubic } }
   }
 
   //
@@ -120,10 +124,10 @@ Item {
 
       origin.x: _scaleContainer.width / 2
       origin.y: _scaleContainer.height / 2
-      xScale: _mouseArea.pressed ? 0.95 : 1.0
-      yScale: _mouseArea.pressed ? 0.95 : 1.0
-      Behavior on xScale { NumberAnimation { duration: 100; easing.type: Easing.OutQuad } }
-      Behavior on yScale { NumberAnimation { duration: 100; easing.type: Easing.OutQuad } }
+      xScale: _mouseArea.pressed && !Cpp_Misc_GraphicsBackend.reduceMotion ? 0.95 : 1.0
+      yScale: _mouseArea.pressed && !Cpp_Misc_GraphicsBackend.reduceMotion ? 0.95 : 1.0
+      Behavior on xScale { NumberAnimation { duration: 160; easing.type: Easing.OutBack } }
+      Behavior on yScale { NumberAnimation { duration: 160; easing.type: Easing.OutBack } }
     }
 
     GridLayout {
@@ -164,6 +168,9 @@ Item {
           saturation: _mouseArea.containsMouse && root.enabled ? 0.07 : 0
           visible: Cpp_Misc_GraphicsBackend.effectsEnabled
           enabled: Cpp_Misc_GraphicsBackend.effectsEnabled
+
+          Behavior on brightness { NumberAnimation { duration: 120; easing.type: Easing.OutCubic } }
+          Behavior on saturation { NumberAnimation { duration: 120; easing.type: Easing.OutCubic } }
         }
       }
 

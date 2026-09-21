@@ -45,6 +45,21 @@ Menu {
   property var builtNodes: []
 
   //
+  // Opens at the cursor, so it grows from its top-left corner; kept short, a context menu is
+  // summoned mid-task. `closed` still fires after the exit, so clearBuilt() keeps its timing
+  //
+  transformOrigin: Popup.TopLeft
+
+  enter: PopupEnter {
+    duration: 110
+    fromScale: 0.97
+  }
+
+  exit: PopupExit {
+    duration: 80
+  }
+
+  //
   // Builds a surface and opens the menu at the cursor.
   //
   function openSurface(surface) {

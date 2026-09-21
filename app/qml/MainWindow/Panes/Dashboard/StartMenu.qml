@@ -43,22 +43,40 @@ Popup {
     contentItem.LayoutMirroring.childrenInherit = true
   }
 
-  enter: Transition {
-    NumberAnimation {
-      duration: 200
-      from: 0; to: 1
-      property: "opacity"
-      easing.type: Easing.OutCubic
-    }
+  //
+  // The menu grows out of the start button's corner, then its rows cascade in top to bottom
+  //
+  transformOrigin: Cpp_Misc_Translator.rtl ? Popup.BottomRight : Popup.BottomLeft
+
+  enter: Widgets.PopupEnter {}
+  exit: Widgets.PopupExit {}
+
+  onAboutToShow: {
+    if (!Cpp_Misc_GraphicsBackend.reduceMotion)
+      _revealAnimation.restart()
   }
 
-  exit: Transition {
-    NumberAnimation {
-      duration: 120
-      from: 1; to: 0
-      property: "opacity"
-      easing.type: Easing.InCubic
-    }
+  //
+  // Row cascade: one progress value, each row derives its own window from its y so nothing has
+  // to be numbered. Rests at 1 so a row is never left hidden if the animation is skipped
+  //
+  property real revealProgress: 1
+
+  function rowReveal(rowY) {
+    const span = 0.5
+    const start = (1 - span) * rowY / Math.max(1, _layout.height)
+    return Math.max(0, Math.min(1, (root.revealProgress - start) / span))
+  }
+
+  NumberAnimation {
+    id: _revealAnimation
+
+    to: 1
+    from: 0
+    target: root
+    duration: 260
+    property: "revealProgress"
+    easing.type: Easing.OutQuad
   }
 
   //
@@ -179,6 +197,7 @@ Popup {
 
     expandable: false
     Layout.fillWidth: true
+    reveal: root.rowReveal(_command.y)
     text: entry !== null ? entry.name : ""
     checked: entry !== null && entry.checked
     enabled: entry === null || entry.enabled
@@ -210,6 +229,7 @@ Popup {
     checkable: true
     expandable: false
     Layout.fillWidth: true
+    reveal: root.rowReveal(_toggle.y)
     text: entry !== null ? entry.name : ""
     checked: entry !== null && entry.checked
     enabled: entry === null || entry.enabled
@@ -316,6 +336,7 @@ Popup {
       expandable: true
       Layout.fillWidth: true
       text: qsTr("Workspaces")
+      reveal: root.rowReveal(_groups.y)
       icon.source: Cpp_Misc_IconRegistry.iconById("commands/workspaces", 32)
 
       property var popup: null
@@ -454,6 +475,7 @@ Popup {
       expandable: true
       text: qsTr("Actions")
       Layout.fillWidth: true
+      reveal: root.rowReveal(_actions.y)
       visible: Cpp_UI_Dashboard.actions.length > 0
       icon.source: Cpp_Misc_IconRegistry.iconById("commands/actions", 32)
 
@@ -507,6 +529,7 @@ Popup {
       expandable: true
       text: qsTr("Plugins")
       Layout.fillWidth: true
+      reveal: root.rowReveal(_plugins.y)
       visible: Cpp_ExtensionManager.installedPlugins.length > 0
       icon.source: Cpp_Misc_IconRegistry.iconById("commands/extensions", 48)
 
@@ -624,6 +647,7 @@ Popup {
 
       expandable: true
       Layout.fillWidth: true
+      reveal: root.rowReveal(_export.y)
       text: node !== null ? node.title : ""
       visible: root.anyChildVisible(childItems)
       icon.source: node !== null ? Cpp_Misc_IconRegistry.iconById(node.icon, 32) : ""
@@ -697,6 +721,7 @@ Popup {
 
       expandable: true
       Layout.fillWidth: true
+      reveal: root.rowReveal(_tools.y)
       text: node !== null ? node.title : ""
       visible: root.anyChildVisible(childItems)
       icon.source: node !== null ? Cpp_Misc_IconRegistry.iconById(node.icon, 32) : ""
@@ -814,6 +839,17 @@ Popup {
   //
   Menu {
     id: _wsContextMenu
+
+    transformOrigin: Popup.TopLeft
+
+    enter: Widgets.PopupEnter {
+      duration: 110
+      fromScale: 0.97
+    }
+
+    exit: Widgets.PopupExit {
+      duration: 80
+    }
 
     MenuItem {
       text: qsTr("Edit…")

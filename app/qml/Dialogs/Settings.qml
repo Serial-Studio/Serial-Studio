@@ -186,6 +186,8 @@ Widgets.SmartDialog {
           if (Cpp_Misc_GraphicsBackend.configurable)
             Cpp_Misc_GraphicsBackend.currentBackend = 0
 
+          Cpp_Misc_GraphicsBackend.reduceMotion = !Cpp_Misc_GraphicsBackend.effectsEnabled
+
           if (Cpp_Misc_HighDpiScaling.configurable) {
             Cpp_Misc_HighDpiScaling.currentMode = 1
             Cpp_Misc_HighDpiScaling.customPercent = 100

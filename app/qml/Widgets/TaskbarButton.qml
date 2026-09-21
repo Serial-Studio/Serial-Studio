@@ -57,6 +57,7 @@ Item {
   //
   property bool open: true
   property bool focused: false
+  property bool menuOpen: false
   property bool minimized: false
 
   //
@@ -93,7 +94,7 @@ Item {
   //
   // General Opacity
   //
-  Behavior on opacity { NumberAnimation{} }
+  Behavior on opacity { NumberAnimation { duration: 160; easing.type: Easing.OutCubic } }
 
   //
   // Visual State Styling
@@ -156,6 +157,48 @@ Item {
   }
 
   //
+  // Icon brightness target; the start button answers hover harder and stays lit while its menu
+  // is open
+  //
+  readonly property real iconBrightness: {
+    if (!root.enabled)
+      return 0
+
+    if (root.hovered && _mouseArea.pressed)
+      return -0.07
+
+    if (root.startMenu && root.menuOpen)
+      return 0.16
+
+    if (root.hovered)
+      return root.startMenu ? 0.14 : 0.07
+
+    return 0
+  }
+
+  //
+  // Open-menu indicator: grows from the center while the start menu is showing
+  //
+  Rectangle {
+    height: 2
+    radius: 1
+    visible: root.startMenu && width > 0
+    width: root.menuOpen ? root.width - 12 : 0
+    color: Cpp_ThemeManager.colors["taskbar_indicator_active"]
+
+    anchors {
+      bottomMargin: 1
+      bottom: parent.bottom
+      horizontalCenter: parent.horizontalCenter
+    }
+
+    Behavior on width {
+      enabled: !Cpp_Misc_GraphicsBackend.reduceMotion
+      NumberAnimation { duration: 200; easing.type: Easing.OutCubic }
+    }
+  }
+
+  //
   // Background
   //
   Rectangle {
@@ -194,6 +237,9 @@ Item {
 
     property real baseVisibility: root.startMenu ? 0 : (root.enabled ? 1 : 0.5)
     property real hoverStateOpacity: root.focused ? root.focusedOpacity : (root.hovered ? root.hoverOpacity : 0)
+
+    Behavior on opacity { NumberAnimation { duration: 120; easing.type: Easing.OutCubic } }
+    Behavior on brightness { NumberAnimation { duration: 120; easing.type: Easing.OutCubic } }
   }
 
   //
@@ -204,7 +250,10 @@ Item {
 
     spacing: 0
     anchors.fill: parent
+    scale: root.startMenu && _mouseArea.pressed && !Cpp_Misc_GraphicsBackend.reduceMotion ? 0.94 : 1
     visible: root.startMenu ? !Cpp_ThemeManager.colors["start_menu_button_gradient_enabled"] : true
+
+    Behavior on scale { NumberAnimation { duration: 160; easing.type: Easing.OutBack } }
 
     Item { implicitWidth: 4 }
 
@@ -227,10 +276,13 @@ Item {
 
         source: _icon
         anchors.fill: _icon
+        brightness: root.iconBrightness
         visible: Cpp_Misc_GraphicsBackend.effectsEnabled
         enabled: Cpp_Misc_GraphicsBackend.effectsEnabled
         saturation: !root.open ? -1 : (root.hovered && root.enabled ? 0.07 : 0)
-        brightness: root.hovered && root.enabled ? (_mouseArea.pressed ? -0.07 : 0.07) : 0
+
+        Behavior on brightness { NumberAnimation { duration: 140; easing.type: Easing.OutCubic } }
+        Behavior on saturation { NumberAnimation { duration: 140; easing.type: Easing.OutCubic } }
       }
     }
 

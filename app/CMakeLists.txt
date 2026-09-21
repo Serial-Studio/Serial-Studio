@@ -453,6 +453,8 @@ set(QML_SOURCES
   qml/Widgets/PlotWidget/PlotMarkerPopup.qml
   qml/Widgets/PlotWidget/PlotCursor.qml
   qml/Widgets/PlotWidget/PlotTriggerLine.qml
+  qml/Widgets/PopupEnter.qml
+  qml/Widgets/PopupExit.qml
   qml/Widgets/ProjectTableHeader.qml
   qml/Widgets/ProjectTableRow.qml
   qml/Widgets/ProNotice.qml

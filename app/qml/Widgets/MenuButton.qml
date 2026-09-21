@@ -41,11 +41,51 @@ Item {
 
   signal clicked()
 
+  //
+  // Entrance progress (0..1) driven by the hosting menu; 1 leaves the row at rest
+  //
+  property real reveal: 1
+
+  //
+  // Hover highlight: quick in, slower out, since submenus open on hover and a slow fade-in would
+  // read as lag. The sheen is the row's light, fading with the highlight it sits on
+  //
   Rectangle {
     anchors.fill: parent
+    visible: opacity > 0
     anchors.leftMargin: -6
-    visible: _mouseArea.containsMouse
+    opacity: _mouseArea.containsMouse ? 1 : 0
     color: Cpp_ThemeManager.colors["start_menu_highlight"]
+
+    Behavior on opacity {
+      NumberAnimation {
+        easing.type: Easing.OutCubic
+        duration: _mouseArea.containsMouse ? 70 : 140
+      }
+    }
+
+    Rectangle {
+      id: _sheen
+
+      readonly property bool rtl: Cpp_Misc_Translator.rtl
+      readonly property color light: Cpp_ThemeManager.colors["start_menu_highlighted_text"]
+
+      anchors.fill: parent
+
+      gradient: Gradient {
+        orientation: Gradient.Horizontal
+
+        GradientStop {
+          position: _sheen.rtl ? 0.4 : 0
+          color: Qt.alpha(_sheen.light, _sheen.rtl ? 0 : 0.14)
+        }
+
+        GradientStop {
+          position: _sheen.rtl ? 1 : 0.6
+          color: Qt.alpha(_sheen.light, _sheen.rtl ? 0.14 : 0)
+        }
+      }
+    }
   }
 
   RowLayout {
@@ -53,6 +93,11 @@ Item {
 
     spacing: 0
     anchors.fill: parent
+    opacity: root.reveal
+
+    transform: Translate {
+      x: (1 - root.reveal) * (Cpp_Misc_Translator.rtl ? 10 : -10)
+    }
 
     Image {
       id: _icon
@@ -73,6 +118,8 @@ Item {
       Layout.alignment: Qt.AlignVCenter
       color: _mouseArea.containsMouse ? Cpp_ThemeManager.colors["start_menu_highlighted_text"] :
                                         Cpp_ThemeManager.colors["start_menu_text"]
+
+      Behavior on color { ColorAnimation { duration: 70 } }
     }
 
     Item {
@@ -86,6 +133,16 @@ Item {
       icon.height: 16
       background: Item{}
       Layout.alignment: Qt.AlignVCenter
+
+      transform: Translate {
+        x: root.expandable && !root.checked && _mouseArea.containsMouse
+           && !Cpp_Misc_GraphicsBackend.reduceMotion
+           ? (Cpp_Misc_Translator.rtl ? -2 : 2)
+           : 0
+
+        Behavior on x { NumberAnimation { duration: 120; easing.type: Easing.OutCubic } }
+      }
+
       opacity: root.expandable || root.checked ? 1 : 0
       icon.source: root.checked
                    ? "qrc:/icons/buttons/apply.svg"

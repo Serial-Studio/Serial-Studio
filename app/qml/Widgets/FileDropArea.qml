@@ -141,6 +141,6 @@ DropArea {
       onTriggered: dropRectangle.opacity = 0
     }
 
-    Behavior on opacity {NumberAnimation{}}
+    Behavior on opacity { NumberAnimation { duration: 180; easing.type: Easing.OutCubic } }
   }
 }

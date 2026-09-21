@@ -60,6 +60,7 @@ Popup {
   readonly property int activeRatio: root.windowManager.layoutRatio
   readonly property bool tiling: root.windowManager.autoLayoutEnabled
   readonly property string activePattern: root.windowManager.layoutPattern
+  readonly property bool glide: root.opened && !Cpp_Misc_GraphicsBackend.reduceMotion
 
   //
   // Reduces a ratio in sixteenths to its simplest fraction, so the stops read 1/4 .. 3/4
@@ -76,6 +77,14 @@ Popup {
     return (sixteenths / a) + "/" + (16 / a)
   }
 
+  //
+  // Preview re-tiling motion, shared by the four geometry behaviors of a preview cell
+  //
+  component Glide: NumberAnimation {
+    duration: 220
+    easing.type: Easing.OutCubic
+  }
+
   function apply(patternId) {
     root.windowManager.selectLayoutPattern(patternId, root.activeRatio)
     root.close()
@@ -84,6 +93,10 @@ Popup {
   margins: 8
   padding: 12
   closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutside
+  transformOrigin: Cpp_Misc_Translator.rtl ? Popup.BottomLeft : Popup.BottomRight
+
+  enter: Widgets.PopupEnter {}
+  exit: Widgets.PopupExit {}
 
   background: Rectangle {
     radius: 10
@@ -135,7 +148,13 @@ Popup {
                         ? Cpp_ThemeManager.colors["highlight"]
                         : Cpp_ThemeManager.colors["start_menu_border"]
 
+          scale: Cpp_Misc_GraphicsBackend.reduceMotion
+                 ? 1
+                 : (_tileArea.pressed ? 0.97 : (_tileArea.containsMouse ? 1.03 : 1))
+
           Behavior on color { ColorAnimation { duration: 90 } }
+          Behavior on border.color { ColorAnimation { duration: 140 } }
+          Behavior on scale { NumberAnimation { duration: 140; easing.type: Easing.OutCubic } }
 
           ColumnLayout {
             spacing: 6
@@ -155,23 +174,53 @@ Popup {
               Layout.fillHeight: true
               color: Cpp_ThemeManager.colors["dashboard_background"]
 
+              //
+              // Counted, not used as the model: a new list rebuilds the delegates, and a rebuilt
+              // delegate cannot glide to the geometry a new split ratio gives it
+              //
+              readonly property var rects: root.windowManager.patternPreview(
+                                             _tile.modelData["index"], 5, _canvas.width,
+                                             _canvas.height, root.activeRatio)
+
               Repeater {
-                model: root.windowManager.patternPreview(_tile.modelData["index"],
-                                                         5,
-                                                         _canvas.width,
-                                                         _canvas.height,
-                                                         root.activeRatio)
+                model: _canvas.rects.length
 
                 delegate: Rectangle {
-                  required property var modelData
+                  id: _cell
 
-                  x: modelData["x"]
-                  y: modelData["y"]
+                  required property int index
+
+                  readonly property var rect: _cell.index < _canvas.rects.length
+                                              ? _canvas.rects[_cell.index]
+                                              : null
+
                   border.width: 1
-                  width: modelData["width"]
-                  height: modelData["height"]
+                  x: _cell.rect !== null ? _cell.rect["x"] : 0
+                  y: _cell.rect !== null ? _cell.rect["y"] : 0
+                  width: _cell.rect !== null ? _cell.rect["width"] : 0
+                  height: _cell.rect !== null ? _cell.rect["height"] : 0
                   color: Cpp_ThemeManager.colors["widget_window"]
                   border.color: Cpp_ThemeManager.colors["widget_border"]
+
+                  Behavior on x {
+                    enabled: root.glide
+                    Glide {}
+                  }
+
+                  Behavior on y {
+                    enabled: root.glide
+                    Glide {}
+                  }
+
+                  Behavior on width {
+                    enabled: root.glide
+                    Glide {}
+                  }
+
+                  Behavior on height {
+                    enabled: root.glide
+                    Glide {}
+                  }
                 }
               }
             }

@@ -18,6 +18,20 @@ ComboBox {
   LayoutMirroring.enabled: false
   LayoutMirroring.childrenInherit: true
 
+  //
+  // The style's dropdown is kept as is; it only gains the shared entrance, unrolling from the field
+  //
+  popup.transformOrigin: Popup.Top
+
+  popup.enter: PopupEnter {
+    duration: 110
+    fromScale: 0.98
+  }
+
+  popup.exit: PopupExit {
+    duration: 80
+  }
+
   contentItem: Text {
     font: control.font
     elide: Text.ElideRight

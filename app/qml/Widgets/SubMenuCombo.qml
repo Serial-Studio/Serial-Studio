@@ -40,22 +40,18 @@ Popup {
     contentItem.LayoutMirroring.childrenInherit = true
   }
 
-  enter: Transition {
-    NumberAnimation {
-      duration: 200
-      from: 0; to: 1
-      property: "opacity"
-      easing.type: Easing.OutCubic
-    }
+  //
+  // Hover-opened, so the entrance is shorter and shallower than a clicked popup's
+  //
+  transformOrigin: Cpp_Misc_Translator.rtl ? Popup.Right : Popup.Left
+
+  enter: PopupEnter {
+    duration: 120
+    fromScale: 0.98
   }
 
-  exit: Transition {
-    NumberAnimation {
-      duration: 120
-      from: 1; to: 0
-      property: "opacity"
-      easing.type: Easing.InCubic
-    }
+  exit: PopupExit {
+    duration: 90
   }
 
   //
@@ -232,8 +228,16 @@ Popup {
       //
       Rectangle {
         anchors.fill: parent
-        visible: !isSeparator && !isHeader && _mouseArea.containsMouse
+        visible: opacity > 0
         color: Cpp_ThemeManager.colors["start_menu_highlight"]
+        opacity: !isSeparator && !isHeader && _mouseArea.containsMouse ? 1 : 0
+
+        Behavior on opacity {
+          NumberAnimation {
+            easing.type: Easing.OutCubic
+            duration: _mouseArea.containsMouse ? 70 : 140
+          }
+        }
       }
 
       RowLayout {
@@ -269,6 +273,8 @@ Popup {
           text: modelData[root.textRole]
           color: _mouseArea.containsMouse ? Cpp_ThemeManager.colors["start_menu_highlighted_text"] :
                                             Cpp_ThemeManager.colors["start_menu_text"]
+
+          Behavior on color { ColorAnimation { duration: 70 } }
         }
 
         ToolButton {

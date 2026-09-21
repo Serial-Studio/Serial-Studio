@@ -45,9 +45,14 @@ class GraphicsBackend : public QObject {
   Q_PROPERTY(bool effectsEnabled
              READ effectsEnabled
              CONSTANT)
+  Q_PROPERTY(bool reduceMotion
+             READ reduceMotion
+             WRITE setReduceMotion
+             NOTIFY reduceMotionChanged)
   // clang-format on
 
 signals:
+  void reduceMotionChanged();
   void currentBackendChanged();
 
 public:
@@ -76,12 +81,14 @@ public:
 
   [[nodiscard]] int currentBackend() const noexcept;
   [[nodiscard]] bool configurable() const noexcept;
+  [[nodiscard]] bool reduceMotion() const noexcept;
   [[nodiscard]] bool effectsEnabled() const noexcept;
   [[nodiscard]] const QVariantList& availableBackends() const noexcept;
 
   static void applyConfiguredBackend();
 
 public slots:
+  void setReduceMotion(bool reduce);
   void setCurrentBackend(int backend);
   void confirmStartupSuccess();
   void promptRestartAndQuit();
@@ -92,11 +99,13 @@ private:
   static bool isBackendAvailable(int backend) noexcept;
   static const char* settingsKey() noexcept;
   static const char* pendingKey() noexcept;
+  static const char* reduceMotionKey() noexcept;
   void rebuildAvailableBackends();
 
 private:
   int m_currentBackend;
   bool m_configurable;
+  bool m_reduceMotion;
   QSettings m_settings;
   QVariantList m_availableBackends;
 

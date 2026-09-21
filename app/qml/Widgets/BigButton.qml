@@ -60,7 +60,7 @@ Item {
   // Animations
   //
   opacity: enabled ? 1 : 0.5
-  Behavior on opacity {NumberAnimation{}}
+  Behavior on opacity { NumberAnimation { duration: 160; easing.type: Easing.OutCubic } }
 
   //
   // Enable tab focus
@@ -79,9 +79,15 @@ Item {
     visible: root.toolbarButton
     color: Cpp_ThemeManager.colors["toolbar_checked_button_background"]
     border.color: Cpp_ThemeManager.colors["toolbar_checked_button_border"]
-    opacity: (root.checked || _mouseArea.pressed) ? Cpp_ThemeManager.colors["toolbar_checked_button_opacity"] : 0.0
+    opacity: {
+      const full = Cpp_ThemeManager.colors["toolbar_checked_button_opacity"]
+      if (root.checked || _mouseArea.pressed)
+        return full
 
-    Behavior on opacity {NumberAnimation{}}
+      return _mouseArea.containsMouse && root.enabled ? full * 0.4 : 0
+    }
+
+    Behavior on opacity { NumberAnimation { duration: 120; easing.type: Easing.OutCubic } }
   }
 
   //
@@ -93,7 +99,7 @@ Item {
     visible: !root.toolbarButton
     opacity: (root.checked || _mouseArea.pressed) ? 1 : 0
 
-    Behavior on opacity {NumberAnimation{}}
+    Behavior on opacity { NumberAnimation { duration: 120; easing.type: Easing.OutCubic } }
   }
 
   //
@@ -177,7 +183,7 @@ Item {
     visible: Cpp_Misc_GraphicsBackend.effectsEnabled
     enabled: Cpp_Misc_GraphicsBackend.effectsEnabled
 
-    Behavior on saturation {NumberAnimation{}}
-    Behavior on brightness {NumberAnimation{}}
+    Behavior on saturation { NumberAnimation { duration: 120; easing.type: Easing.OutCubic } }
+    Behavior on brightness { NumberAnimation { duration: 120; easing.type: Easing.OutCubic } }
   }
 }

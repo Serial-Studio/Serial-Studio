@@ -92,6 +92,43 @@ Window {
   }
 
   //
+  // Content entrance: the OS animates the window frame, this settles what is inside it. Hiding
+  // snaps the content back to rest, so an interrupted entrance can never leave a blank dialog
+  //
+  onVisibleChanged: {
+    if (root.visible) {
+      _entrance.restart()
+      return
+    }
+
+    _entrance.stop()
+    contentArea.opacity = 1
+    _entranceShift.y = 0
+  }
+
+  ParallelAnimation {
+    id: _entrance
+
+    NumberAnimation {
+      to: 1
+      from: 0
+      duration: 180
+      target: contentArea
+      property: "opacity"
+      easing.type: Easing.OutCubic
+    }
+
+    NumberAnimation {
+      to: 0
+      property: "y"
+      duration: 220
+      target: _entranceShift
+      easing.type: Easing.OutCubic
+      from: Cpp_Misc_GraphicsBackend.reduceMotion ? 0 : 8
+    }
+  }
+
+  //
   // Update window colors when theme changes
   //
   Connections {
@@ -169,6 +206,10 @@ Window {
     anchors.fill: parent
     anchors.margins: root.contentPadding
     anchors.topMargin: (root.contentPadding / 2) + root.titlebarHeight
+
+    transform: Translate {
+      id: _entranceShift
+    }
 
     palette.window: root.backgroundColor
     palette.mid: Cpp_ThemeManager.colors["mid"]

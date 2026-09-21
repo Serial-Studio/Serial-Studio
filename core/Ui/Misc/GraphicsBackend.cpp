@@ -55,6 +55,14 @@ const char* Misc::GraphicsBackend::pendingKey() noexcept
   return "App/GraphicsBackendPending";
 }
 
+/**
+ * @brief Returns the QSettings key holding the reduce-motion preference.
+ */
+const char* Misc::GraphicsBackend::reduceMotionKey() noexcept
+{
+  return "App/ReduceMotion";
+}
+
 //--------------------------------------------------------------------------------------------------
 // Platform support
 //--------------------------------------------------------------------------------------------------
@@ -162,11 +170,15 @@ Misc::GraphicsBackend& Misc::GraphicsBackend::instance()
 }
 
 /**
- * @brief Builds the list of selectable backends for the current platform.
+ * @brief Builds the list of selectable backends; reduce-motion defaults on under the Software
+ *        backend, where every animated frame is a CPU repaint.
  */
-Misc::GraphicsBackend::GraphicsBackend() : m_currentBackend(Backend::Default), m_configurable(false)
+Misc::GraphicsBackend::GraphicsBackend()
+  : m_currentBackend(Backend::Default), m_configurable(false), m_reduceMotion(false)
 {
   m_currentBackend = m_settings.value(settingsKey(), Backend::Default).toInt();
+  m_reduceMotion =
+    m_settings.value(reduceMotionKey(), s_activeBackend == Backend::Software).toBool();
 
 #if defined(Q_OS_MACOS)
   m_configurable = false;
@@ -201,6 +213,14 @@ bool Misc::GraphicsBackend::configurable() const noexcept
 }
 
 /**
+ * @brief Returns true when interface motion (scale, slide, bounce) is off; fades stay.
+ */
+bool Misc::GraphicsBackend::reduceMotion() const noexcept
+{
+  return m_reduceMotion;
+}
+
+/**
  * @brief Returns false when the active backend is Software; layer effects can't render then.
  */
 bool Misc::GraphicsBackend::effectsEnabled() const noexcept
@@ -219,6 +239,20 @@ const QVariantList& Misc::GraphicsBackend::availableBackends() const noexcept
 //--------------------------------------------------------------------------------------------------
 // Mutators
 //--------------------------------------------------------------------------------------------------
+
+/**
+ * @brief Persists the reduce-motion preference; QML reads it live, so no restart is needed.
+ */
+void Misc::GraphicsBackend::setReduceMotion(bool reduce)
+{
+  if (m_reduceMotion == reduce)
+    return;
+
+  m_reduceMotion = reduce;
+  m_settings.setValue(reduceMotionKey(), reduce);
+  m_settings.sync();
+  Q_EMIT reduceMotionChanged();
+}
 
 /**
  * @brief Persists the chosen backend; the change takes effect after the next restart.

@@ -222,6 +222,29 @@ Item {
     }
 
     Label {
+      text: qsTr("Reduce Motion")
+      color: Cpp_ThemeManager.colors["text"]
+    } Switch {
+      id: _reduceMotion
+
+      Layout.rightMargin: -8
+      Layout.alignment: Qt.AlignRight
+      checked: Cpp_Misc_GraphicsBackend.reduceMotion
+      palette.highlight: Cpp_ThemeManager.colors["switch_highlight"]
+      onCheckedChanged: {
+        if (checked !== Cpp_Misc_GraphicsBackend.reduceMotion)
+          Cpp_Misc_GraphicsBackend.reduceMotion = checked
+      }
+
+      Connections {
+        target: Cpp_Misc_GraphicsBackend
+        function onReduceMotionChanged() {
+          _reduceMotion.checked = Cpp_Misc_GraphicsBackend.reduceMotion
+        }
+      }
+    }
+
+    Label {
       color: Cpp_ThemeManager.colors["text"]
       text: qsTr("Apply Performance Hints")
     } Switch {

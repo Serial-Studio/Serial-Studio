@@ -220,6 +220,7 @@ Item {
       startMenu: true
       text: qsTr("Menu")
       implicitWidth: start.layout.implicitWidth + 8
+      menuOpen: root.startMenu !== null && root.startMenu.visible
       icon.source: Cpp_ThemeManager.parameters["start-icon"]
       onClicked: {
         root.startClicked()
@@ -269,6 +270,8 @@ Item {
           border.color: searchField.activeFocus
                         ? Cpp_ThemeManager.colors["highlight"]
                         : Cpp_ThemeManager.colors["window_border"]
+
+          Behavior on border.color { ColorAnimation { duration: 140 } }
         }
 
         onTextChanged: taskBar.searchFilter = text
@@ -343,6 +346,10 @@ Item {
         visible: searchField.activeFocus
                  && root.flatSearchNodes.length > 0
         closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutside
+        transformOrigin: Cpp_Misc_Translator.rtl ? Popup.BottomRight : Popup.BottomLeft
+
+        enter: Widgets.PopupEnter {}
+        exit: Widgets.PopupExit {}
 
         background: Rectangle {
           border.width: 1
@@ -735,7 +742,7 @@ Item {
                           || (taskBar && taskBar.hasMaximizedWindow)
 
             width: opacity > 0 ? 144 : 0
-            Behavior on width { NumberAnimation{} }
+            Behavior on width { NumberAnimation { duration: 200; easing.type: Easing.OutCubic } }
 
             Component.onCompleted: updateState()
 
@@ -1018,6 +1025,10 @@ Item {
             y: -implicitHeight - mqttIndicator.y + 1
             x: Cpp_Misc_Translator.rtl ? 0 : mqttIndicator.width - width
             closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutsideParent
+            transformOrigin: Cpp_Misc_Translator.rtl ? Popup.BottomLeft : Popup.BottomRight
+
+            enter: Widgets.PopupEnter {}
+            exit: Widgets.PopupExit {}
 
             background: Rectangle {
               border.width: 1
@@ -1141,6 +1152,17 @@ Item {
 
   Menu {
     id: _tbContextMenu
+
+    transformOrigin: Popup.TopLeft
+
+    enter: Widgets.PopupEnter {
+      duration: 110
+      fromScale: 0.97
+    }
+
+    exit: Widgets.PopupExit {
+      duration: 80
+    }
 
     MenuItem {
       text: qsTr("Remove from Workspace")

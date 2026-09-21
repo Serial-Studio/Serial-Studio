@@ -39,12 +39,54 @@ Rectangle {
   implicitWidth: _row.implicitWidth
   border.color: Cpp_ThemeManager.colors["widget_border"]
 
+  //
+  // Selection pill: one rectangle that slides between segments, so a change of choice reads as
+  // movement rather than as two unrelated fades. Armed a tick late so it never glides in from 0
+  //
+  Rectangle {
+    id: _pill
+
+    property bool armed: false
+    readonly property Item segment: {
+      void _segments.count
+      return _segments.itemAt(root.currentIndex)
+    }
+
+    function arm() {
+      _pill.armed = true
+    }
+
+    y: 2
+    border.width: 1
+    radius: root.radius - 2
+    height: root.height - 4
+    x: _pill.segment !== null ? _pill.segment.x + 2 : 0
+    width: _pill.segment !== null ? _pill.segment.width - 4 : 0
+    color: Cpp_ThemeManager.colors["toolbar_checked_button_background"]
+    border.color: Cpp_ThemeManager.colors["toolbar_checked_button_border"]
+    opacity: _pill.segment !== null ? Cpp_ThemeManager.colors["toolbar_checked_button_opacity"] : 0
+
+    Component.onCompleted: Qt.callLater(_pill.arm)
+
+    Behavior on x {
+      enabled: _pill.armed && !Cpp_Misc_GraphicsBackend.reduceMotion
+      NumberAnimation { duration: 200; easing.type: Easing.OutCubic }
+    }
+
+    Behavior on width {
+      enabled: _pill.armed && !Cpp_Misc_GraphicsBackend.reduceMotion
+      NumberAnimation { duration: 200; easing.type: Easing.OutCubic }
+    }
+  }
+
   Row {
     id: _row
 
     anchors.fill: parent
 
     Repeater {
+      id: _segments
+
       model: root.model
 
       delegate: AbstractButton {
@@ -77,12 +119,12 @@ Rectangle {
           opacity: {
             const full = Cpp_ThemeManager.colors["toolbar_checked_button_opacity"]
             if (_segment.checked)
-              return full
+              return 0
 
             return _segment.hovered ? full * 0.4 : 0
           }
 
-          Behavior on opacity { NumberAnimation {} }
+          Behavior on opacity { NumberAnimation { duration: 120; easing.type: Easing.OutCubic } }
         }
 
         contentItem: RowLayout {
