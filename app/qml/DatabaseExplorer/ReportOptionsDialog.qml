@@ -13,6 +13,8 @@ import QtQuick.Layouts
 import QtQuick.Controls
 import QtQuick.Controls.impl
 
+import SerialStudio
+
 import "../Widgets" as Widgets
 
 Widgets.SmartDialog {
