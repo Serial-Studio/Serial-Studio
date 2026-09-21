@@ -6021,22 +6021,22 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
         <translation>값</translation>
     </message>
     <message>
+        <location filename="../../qml/Widgets/Dashboard/DataGrid.qml" line="108"/>
         <location filename="../../rcc/extensions/widget/datagrid/DataGrid.qml" line="111"/>
         <location filename="../../rcc/extensions/widget/datagrid/DataGrid.qml" line="118"/>
-        <location filename="../../qml/Widgets/Dashboard/DataGrid.qml" line="108"/>
         <source>Pause</source>
         <translation>일시정지</translation>
     </message>
     <message>
+        <location filename="../../qml/Widgets/Dashboard/DataGrid.qml" line="108"/>
         <location filename="../../rcc/extensions/widget/datagrid/DataGrid.qml" line="111"/>
         <location filename="../../rcc/extensions/widget/datagrid/DataGrid.qml" line="118"/>
-        <location filename="../../qml/Widgets/Dashboard/DataGrid.qml" line="108"/>
         <source>Resume</source>
         <translation>재개</translation>
     </message>
     <message>
-        <location filename="../../rcc/extensions/widget/datagrid/DataGrid.qml" line="335"/>
         <location filename="../../qml/Widgets/Dashboard/DataGrid.qml" line="323"/>
+        <location filename="../../rcc/extensions/widget/datagrid/DataGrid.qml" line="335"/>
         <source>Awaiting data…</source>
         <translation>데이터 대기 중…</translation>
     </message>
@@ -14553,7 +14553,7 @@ Add controller tags above to poll them.</source>
 <context>
     <name>IO::ConnectionManager</name>
     <message>
-        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="240"/>
+        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="241"/>
         <source>UART/COM</source>
         <translation>UART/COM</translation>
     </message>
@@ -14562,92 +14562,92 @@ Add controller tags above to poll them.</source>
         <translation type="vanished">네트워크 소켓</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="240"/>
+        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="241"/>
         <source>Network</source>
         <translation>네트워크</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="240"/>
+        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="241"/>
         <source>Bluetooth LE</source>
         <translation>Bluetooth LE</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="242"/>
+        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="243"/>
         <source>Audio</source>
         <translation>오디오</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="242"/>
+        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="243"/>
         <source>Modbus</source>
         <translation>Modbus</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="242"/>
+        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="243"/>
         <source>CAN Bus</source>
         <translation>CAN Bus</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="242"/>
+        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="243"/>
         <source>USB Device</source>
         <translation>USB 장치</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="242"/>
+        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="243"/>
         <source>HID Device</source>
         <translation>HID 장치</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="243"/>
+        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="244"/>
         <source>Process</source>
         <translation>프로세스</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="243"/>
+        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="244"/>
         <source>MQTT Subscriber</source>
         <translation>MQTT 구독자</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="243"/>
+        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="244"/>
         <source>OPC UA</source>
         <translation>OPC UA</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="243"/>
+        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="244"/>
         <source>Siemens S7</source>
         <translation>Siemens S7</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="244"/>
+        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="245"/>
         <source>EtherNet/IP</source>
         <translation>EtherNet/IP</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="244"/>
+        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="245"/>
         <source>IEC 60870-5-104</source>
         <translation>IEC 60870-5-104</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="551"/>
+        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="552"/>
         <source>Your trial period has ended.</source>
         <translation>평가판 기간이 종료되었습니다.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="552"/>
+        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="553"/>
         <source>To continue using Serial Studio, please activate your license.</source>
         <translation>Serial Studio를 계속 사용하려면 라이선스를 활성화하십시오.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="630"/>
+        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="634"/>
         <source>connection attempt failed</source>
         <translation>연결 시도 실패</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="1095"/>
+        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="1099"/>
         <source>This connection type requires an active license or trial.</source>
         <translation>이 연결 유형은 활성 라이선스 또는 평가판이 필요합니다.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="1096"/>
+        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="1100"/>
         <source>Activate Serial Studio Pro or start a trial to use this device type.</source>
         <translation>이 장치 유형을 사용하려면 Serial Studio Pro를 활성화하거나 평가판을 시작하십시오.</translation>
     </message>
@@ -14901,15 +14901,15 @@ Add controller tags above to poll them.</source>
 <context>
     <name>IO::Drivers::CANBus</name>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="416"/>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="421"/>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="426"/>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="430"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="417"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="422"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="427"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="431"/>
         <source>CAN Bus Not Available</source>
         <translation>CAN Bus 사용 불가</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="427"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="428"/>
         <source>No CAN bus plugins found on this system.
 
 CAN bus support on macOS is limited and may require third-party hardware drivers.</source>
@@ -14918,37 +14918,37 @@ CAN bus support on macOS is limited and may require third-party hardware drivers
 macOS의 CAN bus 지원은 제한적이며 타사 하드웨어 드라이버가 필요할 수 있습니다.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="431"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="432"/>
         <source>No CAN bus plugins are available on this platform.</source>
         <translation>이 플랫폼에서는 CAN bus 플러그인을 사용할 수 없습니다.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="442"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="443"/>
         <source>Invalid CAN Configuration</source>
         <translation>잘못된 CAN 구성</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="449"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="450"/>
         <source>Invalid Selection</source>
         <translation>잘못된 선택</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="457"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="458"/>
         <source>No Devices Available</source>
         <translation>사용 가능한 장치 없음</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="369"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="370"/>
         <source>CAN Device Creation Failed</source>
         <translation>CAN 장치 생성 실패</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="401"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="402"/>
         <source>CAN Connection Failed</source>
         <translation>CAN 연결 실패</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="417"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="418"/>
         <source>No CAN bus plugins found on this system.
 
 On Linux, ensure SocketCAN kernel modules are loaded.</source>
@@ -14957,7 +14957,7 @@ On Linux, ensure SocketCAN kernel modules are loaded.</source>
 Linux에서는 SOCKETCAN 커널 모듈이 로드되었는지 확인하세요.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="422"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="423"/>
         <source>No CAN bus plugins found on this system.
 
 On Windows, install CAN hardware drivers (PEAK, Vector, etc.).</source>
@@ -14966,27 +14966,27 @@ On Windows, install CAN hardware drivers (PEAK, Vector, etc.).</source>
 Windows에서는 CAN 하드웨어 드라이버(PEAK, VECTOR 등)를 설치하세요.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="443"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="444"/>
         <source>The CAN bus configuration is incomplete. Select a valid plugin and interface.</source>
         <translation>CAN 버스 구성이 불완전합니다. 유효한 플러그인과 인터페이스를 선택하세요.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="450"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="451"/>
         <source>The selected plugin or interface is no longer available. Refresh the lists and try again.</source>
         <translation>선택한 플러그인 또는 인터페이스를 더 이상 사용할 수 없습니다. 목록을 새로 고침하고 다시 시도하세요.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="458"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="459"/>
         <source>The plugin or interface list is empty. Refresh the lists and ensure your CAN hardware is connected.</source>
         <translation>플러그인 또는 인터페이스 목록이 비어 있습니다. 목록을 새로 고침하고 CAN 하드웨어가 연결되어 있는지 확인하세요.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="371"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="372"/>
         <source>Unable to create CAN bus device. Check your hardware and drivers.</source>
         <translation>CAN 버스 장치를 생성할 수 없습니다. 하드웨어와 드라이버를 확인하세요.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="399"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="400"/>
         <source>Unable to connect to CAN bus device. Check your hardware connection and settings.</source>
         <translation>CAN 버스 장치에 연결할 수 없습니다. 하드웨어 연결 및 설정을 확인하세요.</translation>
     </message>
@@ -14999,68 +14999,68 @@ Windows에서는 CAN 하드웨어 드라이버(PEAK, VECTOR 등)를 설치하세
         <translation type="vanished">오류가 발생했지만 CAN 장치를 더 이상 사용할 수 없습니다.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="999"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1000"/>
         <source>Error code: %1</source>
         <translation>오류 코드: %1</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1007"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1008"/>
         <source>CAN Bus Communication Error</source>
         <translation>CAN Bus 통신 오류</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1113"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1114"/>
         <source>No CAN driver selected</source>
         <translation>CAN 드라이버가 선택되지 않음</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1050"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1051"/>
         <source>Load SocketCAN kernel modules first</source>
         <translation>먼저 SOCKETCAN 커널 모듈을 로드하십시오</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1046"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1047"/>
         <source>Connect a %1 adapter, then refresh</source>
         <translation>%1 어댑터를 연결한 후 새로고침하십시오</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1053"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1054"/>
         <source>Set up a virtual CAN interface first</source>
         <translation>먼저 가상 CAN 인터페이스를 설정하십시오</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1055"/>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1075"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1056"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1076"/>
         <source>No interfaces found for %1</source>
         <translation>%1에 대한 인터페이스를 찾을 수 없음</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1059"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1060"/>
         <source>Install &lt;a href='https://www.peak-system.com/Drivers.523.0.html?&amp;L=1'&gt;PEAK CAN drivers&lt;/a&gt;</source>
         <translation>&lt;a href='https://www.PEAK-system.com/Drivers.523.0.html?&amp;L=1'&gt;PEAK CAN 드라이버&lt;/a&gt;를 설치하십시오</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1063"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1064"/>
         <source>Install &lt;a href='https://www.vector.com/us/en/products/products-a-z/libraries-drivers/'&gt;Vector CAN drivers&lt;/a&gt;</source>
         <translation>&lt;a href='https://www.VECTOR.com/us/en/products/products-a-z/libraries-drivers/'&gt;VECTOR CAN 드라이버&lt;/a&gt;를 설치하십시오</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1067"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1068"/>
         <source>Install &lt;a href='https://www.systec-electronic.com/en/company/support/driver'&gt;SysTec CAN drivers&lt;/a&gt;</source>
         <translation>&lt;a href='https://www.systec-electronic.com/en/company/support/driver'&gt;SysTec CAN 드라이버&lt;/a&gt; 설치</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1070"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1071"/>
         <source>Install %1 drivers</source>
         <translation>%1 드라이버 설치</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1073"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1074"/>
         <source>Install %1 drivers for macOS</source>
         <translation>macOS용 %1 드라이버 설치</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1087"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1088"/>
         <source>
 
 If the interface is down, bring it up first:
@@ -15071,42 +15071,42 @@ sudo ip link set %1 up type can bitrate %2
 </translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1223"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1224"/>
         <source>Plugin</source>
         <translation>플러그인</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1231"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1232"/>
         <source>Interface</source>
         <translation>인터페이스</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1239"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1240"/>
         <source>Bitrate</source>
         <translation>비트레이트</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1248"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1249"/>
         <source>CAN FD</source>
         <translation>CAN FD</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1255"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1256"/>
         <source>Data Bitrate</source>
         <translation>데이터 비트레이트</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1265"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1266"/>
         <source>Loopback</source>
         <translation>루프백</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1272"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1273"/>
         <source>Listen-Only</source>
         <translation>수신 전용</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1279"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1280"/>
         <source>Multi-Frame Reassembly</source>
         <translation>다중 프레임 재조립</translation>
     </message>
@@ -15299,93 +15299,93 @@ sudo ip link set %1 up type can bitrate %2
 <context>
     <name>IO::Drivers::GsUsbCanBackend</name>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="494"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="495"/>
         <source>Failed to initialize libusb for the CANable adapter.</source>
         <translation>CANable 어댑터에 대한 libusb를 초기화하지 못했습니다.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="521"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="522"/>
         <source>Unable to enumerate USB devices.</source>
         <translation>USB 장치를 열거할 수 없습니다.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="541"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="542"/>
         <source>The selected CANable adapter is no longer connected, or another application has it open. On Windows the device must use the WinUSB driver (candleLight installs it automatically).</source>
         <translation>선택한 CANable 어댑터가 더 이상 연결되어 있지 않거나 다른 애플리케이션에서 사용 중입니다. Windows에서는 장치가 WinUSB 드라이버를 사용해야 합니다(candleLight가 자동으로 설치함).</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="554"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="555"/>
         <source>Could not claim the CANable USB interface.</source>
         <translation>CANable USB 인터페이스를 요청할 수 없습니다.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="624"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="625"/>
         <source>CANable adapter is not open for writing.</source>
         <translation>CANable 어댑터가 쓰기용으로 열려 있지 않습니다.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="678"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="679"/>
         <source>Failed to transmit CAN frame to the adapter.</source>
         <translation>CAN 프레임을 어댑터로 전송하지 못했습니다.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="694"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="695"/>
         <source>CAN bus error reported by the CANable adapter.</source>
         <translation>CANable 어댑터에서 CAN Bus 오류가 보고되었습니다.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="749"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="750"/>
         <source>A CAN frame was not acknowledged on the bus.</source>
         <translation>CAN 프레임이 버스에서 승인되지 않았습니다.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="782"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="783"/>
         <source>The CANable adapter was disconnected.</source>
         <translation>CANable 어댑터 연결이 해제되었습니다.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="859"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="860"/>
         <source>CANable adapter rejected the host-format handshake.</source>
         <translation>CANable 어댑터가 호스트 형식 핸드셰이크를 거부했습니다.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="866"/>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="940"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="867"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="941"/>
         <source>Could not read CANable timing constants.</source>
         <translation>CANable 타이밍 상수를 읽을 수 없습니다.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="872"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="873"/>
         <source>The adapter firmware does not support CAN FD. Flash candleLight FD firmware or disable the flexible data-rate option.</source>
         <translation>어댑터 펌웨어가 CAN FD를 지원하지 않습니다. candleLight FD 펌웨어를 플래시하거나 가변 데이터 레이트 옵션을 비활성화하십시오.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="880"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="881"/>
         <source>The bitrate %1 bps is not supported by this CANable adapter.</source>
         <translation>비트레이트 %1 bps는 이 CANable 어댑터에서 지원되지 않습니다.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="886"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="887"/>
         <source>CANable adapter rejected the requested bitrate.</source>
         <translation>CANable 어댑터가 요청한 비트레이트를 거부했습니다.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="910"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="911"/>
         <source>Could not start the CANable channel.</source>
         <translation>CANable 채널을 시작할 수 없습니다.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="932"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="933"/>
         <source>Could not read CANable FD timing constants.</source>
         <translation>CANable FD 타이밍 상수를 읽을 수 없습니다.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="946"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="947"/>
         <source>The data bitrate %1 bps is not supported by this CANable adapter.</source>
         <translation>데이터 비트레이트 %1 bps는 이 CANable 어댑터에서 지원되지 않습니다.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="953"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="954"/>
         <source>CANable adapter rejected the requested data bitrate.</source>
         <translation>CANable 어댑터가 요청한 데이터 비트레이트를 거부했습니다.</translation>
     </message>
@@ -16180,57 +16180,57 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
         <translation>Modbus 통신 오류</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1246"/>
+        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1243"/>
         <source>Select Port</source>
         <translation>포트 선택</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1336"/>
+        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1335"/>
         <source>Protocol</source>
         <translation>프로토콜</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1344"/>
+        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1343"/>
         <source>Slave Address</source>
         <translation>슬레이브 주소</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1353"/>
+        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1352"/>
         <source>Poll Interval (ms)</source>
         <translation>폴링 간격 (ms)</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1381"/>
+        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1380"/>
         <source>Host / IP</source>
         <translation>호스트 / IP</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1388"/>
+        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1387"/>
         <source>Port</source>
         <translation>포트</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1403"/>
+        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1402"/>
         <source>Serial Port</source>
         <translation>시리얼 포트</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1411"/>
+        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1410"/>
         <source>Baud Rate</source>
         <translation>보레이트</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1419"/>
+        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1418"/>
         <source>Parity</source>
         <translation>패리티</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1427"/>
+        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1426"/>
         <source>Data Bits</source>
         <translation>데이터 비트</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1435"/>
+        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1434"/>
         <source>Stop Bits</source>
         <translation>스톱 비트</translation>
     </message>
@@ -17284,7 +17284,7 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
 <context>
     <name>IO::Drivers::SeeedCanBackend</name>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus/SeeedCanBackend.cpp" line="196"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus/SeeedCanBackend.cpp" line="199"/>
         <source>The bitrate %1 bps is not supported by the USB-CAN Analyzer.</source>
         <translation>비트레이트 %1 bps는 USB-CAN Analyzer에서 지원되지 않습니다.</translation>
     </message>
@@ -17297,12 +17297,12 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
         <translation type="vanished">USB-CAN Analyzer 초기화 실패.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus/SeeedCanBackend.cpp" line="206"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus/SeeedCanBackend.cpp" line="209"/>
         <source>USB-CAN Analyzer is not open for writing.</source>
         <translation>USB-CAN Analyzer가 쓰기용으로 열려 있지 않습니다.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus/SeeedCanBackend.cpp" line="251"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus/SeeedCanBackend.cpp" line="254"/>
         <source>CAN bus error reported by the USB-CAN Analyzer.</source>
         <translation>USB-CAN Analyzer에서 CAN Bus 오류가 보고되었습니다.</translation>
     </message>
@@ -17310,27 +17310,27 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
 <context>
     <name>IO::Drivers::SerialCanBackendBase</name>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus/SerialCanBackendBase.cpp" line="190"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus/SerialCanBackendBase.cpp" line="194"/>
         <source>Could not open serial port %1: %2</source>
         <translation>시리얼 포트 %1을(를) 열 수 없음: %2</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus/SerialCanBackendBase.cpp" line="201"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus/SerialCanBackendBase.cpp" line="205"/>
         <source>The adapter on %1 did not accept the initialization sequence.</source>
         <translation>%1의 어댑터가 초기화 시퀀스를 수락하지 않았습니다</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus/SerialCanBackendBase.cpp" line="211"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus/SerialCanBackendBase.cpp" line="215"/>
         <source>The adapter on %1 refused the requested configuration.</source>
         <translation>%1의 어댑터가 요청된 구성을 거부했습니다</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus/SerialCanBackendBase.cpp" line="272"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus/SerialCanBackendBase.cpp" line="276"/>
         <source>The serial adapter is gone</source>
         <translation>시리얼 어댑터가 사라졌습니다</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus/SerialCanBackendBase.cpp" line="273"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus/SerialCanBackendBase.cpp" line="277"/>
         <source>Lost the adapter on %1: %2</source>
         <translation>%1에서 어댑터 연결 끊김: %2</translation>
     </message>
@@ -17338,7 +17338,7 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
 <context>
     <name>IO::Drivers::SlcanBackend</name>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus/SlcanBackend.cpp" line="173"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus/SlcanBackend.cpp" line="172"/>
         <source>The bitrate %1 bps is not a standard slcan rate.</source>
         <translation>비트레이트 %1 bps는 표준 slcan 속도가 아닙니다.</translation>
     </message>
@@ -17351,12 +17351,12 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
         <translation type="vanished">slcan 채널 열기 실패.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus/SlcanBackend.cpp" line="245"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus/SlcanBackend.cpp" line="244"/>
         <source>slcan adapter is not open for writing.</source>
         <translation>slcan 어댑터가 쓰기용으로 열려 있지 않습니다.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus/SlcanBackend.cpp" line="283"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus/SlcanBackend.cpp" line="282"/>
         <source>CAN bus error reported by the slcan adapter.</source>
         <translation>slcan 어댑터에서 CAN Bus 오류가 보고되었습니다.</translation>
     </message>
@@ -17373,7 +17373,7 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
     </message>
     <message>
         <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="395"/>
-        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="802"/>
+        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="800"/>
         <source>Select Port</source>
         <translation>포트 선택</translation>
     </message>
@@ -17418,17 +17418,17 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
         <translation>사용자 정의 시리얼 장치를 등록하려면 다른 경로를 입력하십시오</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="911"/>
+        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="898"/>
         <source>The specified device could not be found. Check the connection and try again.</source>
         <translation>지정한 장치를 찾을 수 없습니다. 연결을 확인하고 다시 시도하십시오.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="918"/>
+        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="905"/>
         <source>An unknown error occurred. Check the device and try again.</source>
         <translation>알 수 없는 오류가 발생했습니다. 장치를 확인하고 다시 시도하십시오.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="920"/>
+        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="907"/>
         <source>The device is not open. Open the device before attempting this operation.</source>
         <translation>장치가 열려 있지 않습니다. 이 작업을 시도하기 전에 장치를 여십시오.</translation>
     </message>
@@ -17464,97 +17464,97 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
         <translation>"%1"은(는) 유효한 경로가 아닙니다. 사용자 정의 시리얼 장치를 등록하려면 다른 경로를 입력하십시오.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="884"/>
+        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="871"/>
         <source>Unknown</source>
         <translation>알 수 없음</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="885"/>
+        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="872"/>
         <source>Critical error on serial port "%1"</source>
         <translation>시리얼 포트 "%1"에서 치명적 오류 발생</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="886"/>
+        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="873"/>
         <source>Unknown error</source>
         <translation>알 수 없는 오류</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="910"/>
+        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="897"/>
         <source>No error occurred.</source>
         <translation>오류가 발생하지 않았습니다.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="912"/>
+        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="899"/>
         <source>Permission denied. Ensure the application has the necessary access rights to the device.</source>
         <translation>권한이 거부되었습니다. 애플리케이션이 장치에 대한 필요한 액세스 권한을 가지고 있는지 확인하십시오.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="913"/>
+        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="900"/>
         <source>Failed to open the device. It may already be in use or unavailable.</source>
         <translation>장치를 열지 못했습니다. 이미 사용 중이거나 사용할 수 없습니다.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="914"/>
+        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="901"/>
         <source>An error occurred while writing data to the device.</source>
         <translation>장치에 데이터를 쓰는 중 오류가 발생했습니다.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="915"/>
+        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="902"/>
         <source>An error occurred while reading data from the device.</source>
         <translation>장치에서 데이터를 읽는 중 오류가 발생했습니다.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="916"/>
+        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="903"/>
         <source>A critical resource error occurred. The device may have been disconnected or is no longer accessible.</source>
         <translation>치명적인 리소스 오류가 발생했습니다. 장치가 연결 해제되었거나 더 이상 액세스할 수 없습니다.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="917"/>
+        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="904"/>
         <source>The requested operation is not supported on this device.</source>
         <translation>요청한 작업은 이 장치에서 지원되지 않습니다.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="919"/>
+        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="906"/>
         <source>The operation timed out. The device may not be responding.</source>
         <translation>작업 시간이 초과되었습니다. 장치가 응답하지 않을 수 있습니다.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="1008"/>
+        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="1007"/>
         <source>Serial Port</source>
         <translation>시리얼 포트</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="1016"/>
+        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="1015"/>
         <source>Baud Rate</source>
         <translation>보레이트</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="1024"/>
+        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="1023"/>
         <source>Parity</source>
         <translation>패리티</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="1032"/>
+        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="1031"/>
         <source>Data Bits</source>
         <translation>데이터 비트</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="1040"/>
+        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="1039"/>
         <source>Stop Bits</source>
         <translation>스톱 비트</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="1048"/>
+        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="1047"/>
         <source>Flow Control</source>
         <translation>흐름 제어</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="1056"/>
+        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="1055"/>
         <source>DTR</source>
         <translation>DTR</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="1063"/>
+        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="1062"/>
         <source>Auto-Reconnect</source>
         <translation>자동 재연결</translation>
     </message>
@@ -17941,12 +17941,12 @@ The device may not expose data endpoints in its active configuration, or it may 
 <context>
     <name>IO::FrameReader</name>
     <message>
-        <location filename="../../../core/Pipeline/IO/FrameReader.cpp" line="392"/>
+        <location filename="../../../core/Pipeline/IO/FrameReader.cpp" line="397"/>
         <source>Frames dropped</source>
         <translation>프레임 손실</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/IO/FrameReader.cpp" line="394"/>
+        <location filename="../../../core/Pipeline/IO/FrameReader.cpp" line="399"/>
         <source>Incoming data is arriving faster than Serial Studio can process it; %1 frame(s) have been dropped. Reduce the data rate or disable a heavy consumer.</source>
         <translation>수신 데이터가 Serial Studio의 처리 속도보다 빠르게 도착하고 있습니다; %1개의 프레임이 손실되었습니다. 데이터 전송률을 줄이거나 부하가 큰 소비자를 비활성화하십시오.</translation>
     </message>
@@ -18778,17 +18778,17 @@ The device may not expose data endpoints in its active configuration, or it may 
         <translation>나선형</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/LayoutPatternPicker.qml" line="100"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/LayoutPatternPicker.qml" line="113"/>
         <source>Layout</source>
         <translation>레이아웃</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/LayoutPatternPicker.qml" line="214"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/LayoutPatternPicker.qml" line="263"/>
         <source>Split</source>
         <translation>분할</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/LayoutPatternPicker.qml" line="280"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/LayoutPatternPicker.qml" line="329"/>
         <source>Manual placement</source>
         <translation>수동 배치</translation>
     </message>
@@ -20980,12 +20980,12 @@ Would you like to open the download page?</source>
 <context>
     <name>Misc::GraphicsBackend</name>
     <message>
-        <location filename="../../../core/Ui/Misc/GraphicsBackend.cpp" line="246"/>
+        <location filename="../../../core/Ui/Misc/GraphicsBackend.cpp" line="280"/>
         <source>Restart Required</source>
         <translation>다시 시작 필요</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/Misc/GraphicsBackend.cpp" line="247"/>
+        <location filename="../../../core/Ui/Misc/GraphicsBackend.cpp" line="281"/>
         <source>The new rendering backend will take effect after restarting Serial Studio. Restart now to apply the change?</source>
         <translation>새로운 렌더링 백엔드는 Serial Studio를 다시 시작한 후 적용됩니다. 지금 다시 시작하여 변경 사항을 적용하시겠습니까?</translation>
     </message>
@@ -21148,8 +21148,8 @@ Would you like to open the download page?</source>
         <translation>Info.plist를 쓸 수 없음: %1</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/Misc/ShortcutGenerator_macOS.cpp" line="271"/>
         <location filename="../../../core/Ui/Misc/ShortcutGenerator_Linux.cpp" line="140"/>
+        <location filename="../../../core/Ui/Misc/ShortcutGenerator_macOS.cpp" line="271"/>
         <source>Windows shortcut writer is not available on this platform.</source>
         <translation>Windows 바로가기 생성기는 이 플랫폼에서 사용할 수 없습니다.</translation>
     </message>
@@ -21180,8 +21180,8 @@ Would you like to open the download page?</source>
         <translation>.lnk 파일 저장 실패(HRESULT 0x%1).</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/Misc/ShortcutGenerator_Windows.cpp" line="185"/>
         <location filename="../../../core/Ui/Misc/ShortcutGenerator_Linux.cpp" line="154"/>
+        <location filename="../../../core/Ui/Misc/ShortcutGenerator_Windows.cpp" line="185"/>
         <source>macOS shortcut writer is not available on this platform.</source>
         <translation>macOS 바로가기 생성기는 이 플랫폼에서 사용할 수 없습니다.</translation>
     </message>
@@ -21917,38 +21917,38 @@ Add groups above to poll multiple register types.</source>
 <context>
     <name>NativeTemplates</name>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryRaw.cpp" line="116"/>
         <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryHex.cpp" line="127"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryRaw.cpp" line="116"/>
         <source>Bytes per value</source>
         <translation>값당 바이트 수</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryRaw.cpp" line="117"/>
         <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryHex.cpp" line="128"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryRaw.cpp" line="117"/>
         <source>Number of bytes combined into each channel value.</source>
         <translation>각 채널 값으로 결합되는 바이트 수입니다.</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryRaw.cpp" line="125"/>
         <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryHex.cpp" line="136"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryRaw.cpp" line="125"/>
         <source>Endianness</source>
         <translation>엔디언</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryRaw.cpp" line="126"/>
         <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryHex.cpp" line="137"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryRaw.cpp" line="126"/>
         <source>Byte order used when combining multi-byte values.</source>
         <translation>다중 바이트 값을 결합할 때 사용되는 바이트 순서.</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryRaw.cpp" line="134"/>
         <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryHex.cpp" line="145"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryRaw.cpp" line="134"/>
         <source>Signed values</source>
         <translation>부호 있는 값</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryRaw.cpp" line="135"/>
         <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryHex.cpp" line="146"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryRaw.cpp" line="135"/>
         <source>Interprets each value as two's-complement signed.</source>
         <translation>각 값을 2의 보수 부호 있는 값으로 해석합니다.</translation>
     </message>
@@ -21963,9 +21963,9 @@ Add groups above to poll multiple register types.</source>
         <translation>쉼표로 구분된 태그:인덱스 항목(예: 1:0,2:1,3:2). 태그는 10진수 또는 0x 접두사가 붙은 16진수일 수 있습니다.</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/TextNmea0183.cpp" line="219"/>
         <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinarySirf.cpp" line="216"/>
         <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryUbx.cpp" line="226"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/TextNmea0183.cpp" line="219"/>
         <source>Validate checksum</source>
         <translation>체크섬 검증</translation>
     </message>
@@ -24586,10 +24586,10 @@ Reload it?</source>
         <translation>출력 위젯 "%1"을(를) 삭제하시겠습니까?</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectOutputWidgets.cpp" line="239"/>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="313"/>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="355"/>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="390"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectOutputWidgets.cpp" line="239"/>
         <source>This action cannot be undone. Do you wish to proceed?</source>
         <translation>이 작업은 취소할 수 없습니다. 계속하시겠습니까?</translation>
     </message>
@@ -24914,18 +24914,9 @@ Reload it?</source>
         <translation>새 작업 공간 프로필</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaceProfiles.cpp" line="373"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaceProfiles.cpp" line="395"/>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="1309"/>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="1338"/>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="1364"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="382"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="410"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="433"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="456"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectSources.cpp" line="280"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaces.cpp" line="763"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaces.cpp" line="789"/>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="498"/>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="520"/>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="547"/>
@@ -24934,6 +24925,15 @@ Reload it?</source>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="954"/>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="976"/>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="1002"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectSources.cpp" line="280"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="382"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="410"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="433"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="456"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaceProfiles.cpp" line="373"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaceProfiles.cpp" line="395"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaces.cpp" line="763"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaces.cpp" line="789"/>
         <source>Name:</source>
         <translation>이름:</translation>
     </message>
@@ -24978,9 +24978,9 @@ Reload it?</source>
         <translation>테이블 추가</translation>
     </message>
     <message>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="978"/>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="123"/>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="384"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="978"/>
         <source>Shared Table</source>
         <translation>공유 테이블</translation>
     </message>
@@ -25018,8 +25018,8 @@ Reload it?</source>
         <translation>변수 편집</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="381"/>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="975"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="381"/>
         <source>New Shared Table</source>
         <translation>새 공유 테이블</translation>
     </message>
@@ -25161,15 +25161,15 @@ Reload it?</source>
         <translation>스트림 레인 변경</translation>
     </message>
     <message>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="522"/>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaces.cpp" line="384"/>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaces.cpp" line="765"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="522"/>
         <source>Workspace</source>
         <translation>작업 공간</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaces.cpp" line="762"/>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="519"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaces.cpp" line="762"/>
         <source>New Workspace</source>
         <translation>새 작업 공간</translation>
     </message>
@@ -26064,8 +26064,8 @@ This script may use Lua 5.3 bitwise syntax, which this runtime does not support.
 </translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="489"/>
         <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="230"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="489"/>
         <source>Frame Parser Disabled</source>
         <translation>프레임 파서 비활성화됨</translation>
     </message>
@@ -26131,8 +26131,8 @@ Serial Studio는 지원되지 않는 연산자를 bit.* 호출로 재작성하�
 %1</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="680"/>
         <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="560"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="680"/>
         <source>Missing Parse Function</source>
         <translation>Parse 함수 누락</translation>
     </message>
@@ -26148,8 +26148,8 @@ function parse(frame) ... end</source>
 function parse(frame) ... end</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="743"/>
         <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="612"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="743"/>
         <source>Parse Function Runtime Error</source>
         <translation>Parse 함수 런타임 오류</translation>
     </message>
@@ -26493,12 +26493,12 @@ function parse(%1) { ... }
         <translation>지원되지 않는 최상위 키워드 '%1'</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/Misc/GraphicsBackend.cpp" line="295"/>
+        <location filename="../../../core/Ui/Misc/GraphicsBackend.cpp" line="329"/>
         <source>Automatic (Platform Default)</source>
         <translation>자동(플랫폼 기본값)</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/Misc/GraphicsBackend.cpp" line="300"/>
+        <location filename="../../../core/Ui/Misc/GraphicsBackend.cpp" line="334"/>
         <source>Software (Fallback)</source>
         <translation>소프트웨어(대체)</translation>
     </message>
@@ -26934,288 +26934,288 @@ function parse(%1) { ... }
 <context>
     <name>ReportOptionsDialog</name>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="25"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="27"/>
         <source>Generate PDF Report</source>
         <translation>PDF 보고서 생성</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="25"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="27"/>
         <source>Generate Report</source>
         <translation>보고서 생성</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="71"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="73"/>
         <source>Solid</source>
         <translation>실선</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="72"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="74"/>
         <source>Dashed</source>
         <translation>파선</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="73"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="75"/>
         <source>Dotted</source>
         <translation>점선</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="95"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="97"/>
         <source>A4 (210 × 297 mm)</source>
         <translation>A4 (210 × 297 mm)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="96"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="98"/>
         <source>A3 (297 × 420 mm)</source>
         <translation>A3 (297 × 420 mm)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="97"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="99"/>
         <source>A2 (420 × 594 mm)</source>
         <translation>A2 (420 × 594 mm)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="98"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="100"/>
         <source>A1 (594 × 841 mm)</source>
         <translation>A1 (594 × 841 mm)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="99"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="101"/>
         <source>A0 (841 × 1189 mm)</source>
         <translation>A0 (841 × 1189 mm)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="100"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="102"/>
         <source>A5 (148 × 210 mm)</source>
         <translation>A5 (148 × 210 mm)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="101"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="103"/>
         <source>A6 (105 × 148 mm)</source>
         <translation>A6 (105 × 148 mm)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="102"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="104"/>
         <source>B4 (250 × 353 mm)</source>
         <translation>B4 (250 × 353 mm)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="103"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="105"/>
         <source>B5 (176 × 250 mm)</source>
         <translation>B5 (176 × 250 mm)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="104"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="106"/>
         <source>Letter (8.5 × 11 in)</source>
         <translation>Letter (8.5 × 11 in)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="105"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="107"/>
         <source>Legal (8.5 × 14 in)</source>
         <translation>Legal (8.5 × 14 in)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="106"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="108"/>
         <source>Executive (7.25 × 10.5 in)</source>
         <translation>Executive (7.25 × 10.5 in)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="107"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="109"/>
         <source>Tabloid (11 × 17 in)</source>
         <translation>Tabloid (11 × 17 in)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="108"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="110"/>
         <source>Ledger (17 × 11 in)</source>
         <translation>Ledger (17 × 11 in)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="122"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="124"/>
         <source>%1 — Session Report</source>
         <translation>%1 — 세션 보고서</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="124"/>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="319"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="126"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="321"/>
         <source>Session Report</source>
         <translation>세션 보고서</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="221"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="223"/>
         <source>Branding</source>
         <translation>브랜딩</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="227"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="229"/>
         <source>Page</source>
         <translation>페이지</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="233"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="235"/>
         <source>Sections</source>
         <translation>섹션</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="239"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="241"/>
         <source>Datasets</source>
         <translation>데이터셋</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="287"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="289"/>
         <source>Identity</source>
         <translation>식별 정보</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="301"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="303"/>
         <source>Company</source>
         <translation>회사</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="308"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="310"/>
         <source>e.g. Acme Test Systems</source>
         <translation>예: Acme Test Systems</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="312"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="314"/>
         <source>Document title</source>
         <translation>문서 제목</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="323"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="325"/>
         <source>Author</source>
         <translation>작성자</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="330"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="332"/>
         <source>Prepared by (optional)</source>
         <translation>작성자 (선택 사항)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="339"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="341"/>
         <source>Logo</source>
         <translation>로고</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="352"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="354"/>
         <source>File</source>
         <translation>파일</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="363"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="365"/>
         <source>PNG, JPG or SVG (optional)</source>
         <translation>PNG, JPG 또는 SVG (선택 사항)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="365"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="367"/>
         <source>Browse…</source>
         <translation>찾아보기…</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="368"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="370"/>
         <source>Clear</source>
         <translation>지우기</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="409"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="411"/>
         <source>Paper</source>
         <translation>용지</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="421"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="423"/>
         <source>Page size</source>
         <translation>페이지 크기</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="555"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="557"/>
         <source>Annotate min, max, and mean values on plots</source>
         <translation>플롯에 최소값, 최대값 및 평균값 주석 표시</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="591"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="593"/>
         <source>Include datasets</source>
         <translation>데이터셋 포함</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="605"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="607"/>
         <source>Expand All</source>
         <translation>모두 펼치기</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="614"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="616"/>
         <source>Collapse All</source>
         <translation>모두 접기</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="626"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="628"/>
         <source>Search datasets</source>
         <translation>데이터셋 검색</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="752"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="754"/>
         <source>Loading datasets...</source>
         <translation>데이터셋 로드 중...</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="753"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="755"/>
         <source>No datasets match your search.</source>
         <translation>검색 조건과 일치하는 데이터셋이 없습니다.</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="773"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="775"/>
         <source>Select at least one dataset to include.</source>
         <translation>포함할 데이터셋을 하나 이상 선택하세요.</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="790"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="792"/>
         <source>Export HTML</source>
         <translation>HTML 내보내기</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="539"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="541"/>
         <source>Cover page (logo, document title, test subtitle)</source>
         <translation>표지 (로고, 문서 제목, 테스트 부제목)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="543"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="545"/>
         <source>Test information (project, timestamps, classification and notes)</source>
         <translation>테스트 정보 (프로젝트, 타임스탬프, 분류 및 메모)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="547"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="549"/>
         <source>Measurement summary (min, max, mean, std. deviation per parameter)</source>
         <translation>측정 요약 (매개변수별 최소값, 최대값, 평균, 표준 편차)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="551"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="553"/>
         <source>Parameter trends (time-series chart per numeric parameter)</source>
         <translation>매개변수 추세 (숫자 매개변수별 시계열 차트)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="437"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="439"/>
         <source>Plot appearance</source>
         <translation>플롯 모양</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="451"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="453"/>
         <source>Line width</source>
         <translation>선 두께</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="483"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="485"/>
         <source>Line style</source>
         <translation>선 스타일</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="524"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="526"/>
         <source>Include</source>
         <translation>포함</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="782"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="784"/>
         <source>Cancel</source>
         <translation>취소</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="790"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="792"/>
         <source>Export PDF</source>
         <translation>PDF 내보내기</translation>
     </message>
@@ -29118,12 +29118,12 @@ Add absolute addresses above to poll the controller.</source>
         <translation>재설정</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="231"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="233"/>
         <source>Close</source>
         <translation>닫기</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="239"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="241"/>
         <source>Apply</source>
         <translation>적용</translation>
     </message>
@@ -29478,42 +29478,47 @@ Add absolute addresses above to poll the controller.</source>
         <translation>SIMD 명령어 세트</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="226"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="225"/>
+        <source>Reduce Motion</source>
+        <translation>모션 줄이기</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="249"/>
         <source>Apply Performance Hints</source>
         <translation>성능 힌트 적용</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="249"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="272"/>
         <source>Keep Display Awake</source>
         <translation>디스플레이 켜짐 유지</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="278"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="301"/>
         <source>Performance hints raise process priority and opt out of OS power throttling. Changes take effect the next time Serial Studio starts.</source>
         <translation>성능 힌트는 프로세스 우선순위를 높이고 OS 전력 조절을 해제합니다. 변경 사항은 다음 Serial Studio 시작 시 적용됩니다.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="289"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="312"/>
         <source>Updates &amp; News</source>
         <translation>업데이트 및 소식</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="305"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="328"/>
         <source>Automatically Check for Updates</source>
         <translation>자동으로 업데이트 확인</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="328"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="351"/>
         <source>Check for Extension Updates</source>
         <translation>확장 업데이트 확인</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="352"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="375"/>
         <source>Install Extension Updates Automatically</source>
         <translation>확장 업데이트 자동 설치</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="382"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="405"/>
         <source>Installed extensions and themes are checked when Serial Studio starts, together with application updates. Serial Studio asks before installing them unless automatic installation is enabled.</source>
         <translation>설치된 확장 및 테마는 Serial Studio 시작 시 애플리케이션 업데이트와 함께 확인됩니다. 자동 설치가 활성화되지 않은 경우 Serial Studio는 설치 전에 확인을 요청합니다.</translation>
     </message>
@@ -30199,27 +30204,27 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
 <context>
     <name>StartMenu</name>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="318"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="338"/>
         <source>Workspaces</source>
         <translation>작업 공간</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="455"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="476"/>
         <source>Actions</source>
         <translation>작업</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="478"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="500"/>
         <source>No Actions Available</source>
         <translation>사용 가능한 작업 없음</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="508"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="530"/>
         <source>Plugins</source>
         <translation>플러그인</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="556"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="579"/>
         <source>No Plugins Installed</source>
         <translation>설치된 플러그인 없음</translation>
     </message>
@@ -30244,7 +30249,7 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
         <translation type="vanished">도구</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="744"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="769"/>
         <source>No Tools Available</source>
         <translation>사용 가능한 도구 없음</translation>
     </message>
@@ -30257,17 +30262,17 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
         <translation type="vanished">종료</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="830"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="866"/>
         <source>Delete</source>
         <translation>삭제</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="831"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="867"/>
         <source>Hide</source>
         <translation>숨기기</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="406"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="427"/>
         <source>New Workspace…</source>
         <translation>새 작업 공간…</translation>
     </message>
@@ -30292,22 +30297,22 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
         <translation type="vanished">AI 어시스턴트</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="392"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="413"/>
         <source>Show "%1"</source>
         <translation>"%1" 표시</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="397"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="418"/>
         <source>Show All Hidden Workspaces</source>
         <translation>숨겨진 모든 작업 공간 표시</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="420"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="441"/>
         <source>No Workspaces Available</source>
         <translation>사용 가능한 작업 공간 없음</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="546"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="569"/>
         <source>Manage Plugins…</source>
         <translation>플러그인 관리…</translation>
     </message>
@@ -30336,7 +30341,7 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
         <translation type="vanished">세션 데이터베이스</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="669"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="693"/>
         <source>No Export Formats Available</source>
         <translation>사용 가능한 내보내기 형식 없음</translation>
     </message>
@@ -30353,7 +30358,7 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
         <translation type="vanished">환경설정</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="819"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="855"/>
         <source>Edit…</source>
         <translation>편집…</translation>
     </message>
@@ -30421,7 +30426,7 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
 <context>
     <name>SubMenuCombo</name>
     <message>
-        <location filename="../../qml/Widgets/SubMenuCombo.qml" line="186"/>
+        <location filename="../../qml/Widgets/SubMenuCombo.qml" line="182"/>
         <source>No Data Available</source>
         <translation>사용 가능한 데이터 없음</translation>
     </message>
@@ -30633,42 +30638,42 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
         <translation type="vanished">검색…</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="577"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="584"/>
         <source>Settings</source>
         <translation>설정</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="578"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="585"/>
         <source>Console</source>
         <translation>콘솔</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="579"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="586"/>
         <source>Notifications</source>
         <translation>알림</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="580"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="587"/>
         <source>Clock</source>
         <translation>시계</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="581"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="588"/>
         <source>Stopwatch</source>
         <translation>스톱워치</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="583"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="590"/>
         <source>AI Assistant</source>
         <translation>AI 어시스턴트</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="584"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="591"/>
         <source>Resume</source>
         <translation>재개</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="584"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="591"/>
         <source>Pause</source>
         <translation>일시정지</translation>
     </message>
@@ -30681,77 +30686,77 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
         <translation type="vanished">사용 가능한 작업 공간 없음</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="258"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="259"/>
         <source>Search… (%1)</source>
         <translation>검색… (%1)</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="935"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="942"/>
         <source>Data is arriving faster than scripts can process it; some frames are being thinned. See the problem center for details.</source>
         <translation>데이터가 스크립트의 처리 속도보다 빠르게 도착하고 있습니다; 일부 프레임이 간소화되고 있습니다. 자세한 내용은 문제 센터를 참조하십시오.</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="959"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="966"/>
         <source>Unfreeze Dashboard</source>
         <translation>대시보드 고정 해제</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="960"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="967"/>
         <source>Freeze Dashboard</source>
         <translation>대시보드 고정</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1009"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1016"/>
         <source>MQTT: Connected to %1</source>
         <translation>MQTT: %1에 연결됨</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1010"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1017"/>
         <source>MQTT: Not connected</source>
         <translation>MQTT: 연결되지 않음</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1034"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1045"/>
         <source>MQTT Publisher</source>
         <translation>MQTT 발행자</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1044"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1055"/>
         <source>Status:</source>
         <translation>상태:</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1052"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1063"/>
         <source>Connected</source>
         <translation>연결됨</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1053"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1064"/>
         <source>Disconnected</source>
         <translation>연결 해제됨</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1060"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1071"/>
         <source>Broker:</source>
         <translation>브로커:</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1073"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1084"/>
         <source>Mode:</source>
         <translation>모드:</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1086"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1097"/>
         <source>Messages sent:</source>
         <translation>전송된 메시지:</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1100"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1111"/>
         <source>Open MQTT Settings</source>
         <translation>MQTT 설정 열기</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="582"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="589"/>
         <source>File Transmission</source>
         <translation>파일 전송</translation>
     </message>
@@ -30760,7 +30765,7 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
         <translation type="vanished">위젯 검색…</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1146"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1168"/>
         <source>Remove from Workspace</source>
         <translation>작업 공간에서 제거</translation>
     </message>
@@ -32961,6 +32966,41 @@ I understand that when it ends, I'll need to buy a license or build the GPLv3 ve
     </message>
     <message>
         <location filename="../../../core/Ui/UI/Widgets/Waterfall.cpp" line="307"/>
+        <source>Grayscale (Inverted)</source>
+        <translation>그레이스케일 (반전)</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/UI/Widgets/Waterfall.cpp" line="309"/>
+        <source>Cividis</source>
+        <translation>Cividis</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/UI/Widgets/Waterfall.cpp" line="311"/>
+        <source>Cubehelix</source>
+        <translation>Cubehelix</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/UI/Widgets/Waterfall.cpp" line="313"/>
+        <source>SDR Classic</source>
+        <translation>SDR 클래식</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/UI/Widgets/Waterfall.cpp" line="315"/>
+        <source>Spectral</source>
+        <translation>스펙트럼</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/UI/Widgets/Waterfall.cpp" line="317"/>
+        <source>Red/Blue</source>
+        <translation>레드/블루</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/UI/Widgets/Waterfall.cpp" line="319"/>
+        <source>Coolwarm</source>
+        <translation>Coolwarm</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/UI/Widgets/Waterfall.cpp" line="321"/>
         <source>Unknown</source>
         <translation>알 수 없음</translation>
     </message>

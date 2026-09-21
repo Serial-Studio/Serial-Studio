@@ -6021,22 +6021,22 @@ Włączaj tę opcję tylko w zaufanych sieciach. Niezaufani klienci mogą odczyt
         <translation>Wartość</translation>
     </message>
     <message>
+        <location filename="../../qml/Widgets/Dashboard/DataGrid.qml" line="108"/>
         <location filename="../../rcc/extensions/widget/datagrid/DataGrid.qml" line="111"/>
         <location filename="../../rcc/extensions/widget/datagrid/DataGrid.qml" line="118"/>
-        <location filename="../../qml/Widgets/Dashboard/DataGrid.qml" line="108"/>
         <source>Pause</source>
         <translation>Wstrzymaj</translation>
     </message>
     <message>
+        <location filename="../../qml/Widgets/Dashboard/DataGrid.qml" line="108"/>
         <location filename="../../rcc/extensions/widget/datagrid/DataGrid.qml" line="111"/>
         <location filename="../../rcc/extensions/widget/datagrid/DataGrid.qml" line="118"/>
-        <location filename="../../qml/Widgets/Dashboard/DataGrid.qml" line="108"/>
         <source>Resume</source>
         <translation>Wznów</translation>
     </message>
     <message>
-        <location filename="../../rcc/extensions/widget/datagrid/DataGrid.qml" line="335"/>
         <location filename="../../qml/Widgets/Dashboard/DataGrid.qml" line="323"/>
+        <location filename="../../rcc/extensions/widget/datagrid/DataGrid.qml" line="335"/>
         <source>Awaiting data…</source>
         <translation>Oczekiwanie na dane…</translation>
     </message>
@@ -14553,7 +14553,7 @@ Dodaj tagi kontrolera powyżej, aby je odpytywać.</translation>
 <context>
     <name>IO::ConnectionManager</name>
     <message>
-        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="240"/>
+        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="241"/>
         <source>UART/COM</source>
         <translation>UART/COM</translation>
     </message>
@@ -14562,92 +14562,92 @@ Dodaj tagi kontrolera powyżej, aby je odpytywać.</translation>
         <translation type="vanished">Gniazdo Sieciowe</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="240"/>
+        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="241"/>
         <source>Network</source>
         <translation>Sieć</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="240"/>
+        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="241"/>
         <source>Bluetooth LE</source>
         <translation>Bluetooth LE</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="242"/>
+        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="243"/>
         <source>Audio</source>
         <translation>Audio</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="242"/>
+        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="243"/>
         <source>Modbus</source>
         <translation>Modbus</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="242"/>
+        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="243"/>
         <source>CAN Bus</source>
         <translation>Magistrala CAN</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="242"/>
+        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="243"/>
         <source>USB Device</source>
         <translation>Urządzenie USB</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="242"/>
+        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="243"/>
         <source>HID Device</source>
         <translation>Urządzenie HID</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="243"/>
+        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="244"/>
         <source>Process</source>
         <translation>Proces</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="243"/>
+        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="244"/>
         <source>MQTT Subscriber</source>
         <translation>Subskrybent MQTT</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="243"/>
+        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="244"/>
         <source>OPC UA</source>
         <translation>OPC UA</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="243"/>
+        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="244"/>
         <source>Siemens S7</source>
         <translation>Siemens S7</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="244"/>
+        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="245"/>
         <source>EtherNet/IP</source>
         <translation>Ethernet/IP</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="244"/>
+        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="245"/>
         <source>IEC 60870-5-104</source>
         <translation>IEC 60870-5-104</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="551"/>
+        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="552"/>
         <source>Your trial period has ended.</source>
         <translation>Okres próbny zakończony.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="552"/>
+        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="553"/>
         <source>To continue using Serial Studio, please activate your license.</source>
         <translation>Aby kontynuować korzystanie z Serial Studio, aktywuj licencję.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="630"/>
+        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="634"/>
         <source>connection attempt failed</source>
         <translation>próba połączenia nie powiodła się</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="1095"/>
+        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="1099"/>
         <source>This connection type requires an active license or trial.</source>
         <translation>Ten typ połączenia wymaga aktywnej licencji lub wersji próbnej.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="1096"/>
+        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="1100"/>
         <source>Activate Serial Studio Pro or start a trial to use this device type.</source>
         <translation>Aktywuj Serial Studio Pro lub rozpocznij okres próbny, aby użyć tego typu urządzenia.</translation>
     </message>
@@ -14901,15 +14901,15 @@ Dodaj tagi kontrolera powyżej, aby je odpytywać.</translation>
 <context>
     <name>IO::Drivers::CANBus</name>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="416"/>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="421"/>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="426"/>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="430"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="417"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="422"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="427"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="431"/>
         <source>CAN Bus Not Available</source>
         <translation>Magistrala CAN Niedostępna</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="427"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="428"/>
         <source>No CAN bus plugins found on this system.
 
 CAN bus support on macOS is limited and may require third-party hardware drivers.</source>
@@ -14918,37 +14918,37 @@ CAN bus support on macOS is limited and may require third-party hardware drivers
 Obsługa magistrali CAN w macOS jest ograniczona i może wymagać sterowników sprzętowych firm trzecich.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="431"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="432"/>
         <source>No CAN bus plugins are available on this platform.</source>
         <translation>Brak dostępnych wtyczek magistrali CAN na tej platformie.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="442"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="443"/>
         <source>Invalid CAN Configuration</source>
         <translation>Nieprawidłowa Konfiguracja CAN</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="449"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="450"/>
         <source>Invalid Selection</source>
         <translation>Nieprawidłowy Wybór</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="457"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="458"/>
         <source>No Devices Available</source>
         <translation>Brak Dostępnych Urządzeń</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="369"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="370"/>
         <source>CAN Device Creation Failed</source>
         <translation>Tworzenie Urządzenia CAN Nie Powiodło Się</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="401"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="402"/>
         <source>CAN Connection Failed</source>
         <translation>Połączenie CAN Nie Powiodło Się</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="417"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="418"/>
         <source>No CAN bus plugins found on this system.
 
 On Linux, ensure SocketCAN kernel modules are loaded.</source>
@@ -14957,7 +14957,7 @@ On Linux, ensure SocketCAN kernel modules are loaded.</source>
 W systemie Linux upewnij się, że moduły jądra SOCKETCAN są załadowane.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="422"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="423"/>
         <source>No CAN bus plugins found on this system.
 
 On Windows, install CAN hardware drivers (PEAK, Vector, etc.).</source>
@@ -14966,27 +14966,27 @@ On Windows, install CAN hardware drivers (PEAK, Vector, etc.).</source>
 W systemie Windows zainstaluj sterowniki sprzętowe CAN (PEAK, VECTOR itp.).</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="443"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="444"/>
         <source>The CAN bus configuration is incomplete. Select a valid plugin and interface.</source>
         <translation>Konfiguracja magistrali CAN jest niekompletna. Wybierz prawidłową wtyczkę i interfejs.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="450"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="451"/>
         <source>The selected plugin or interface is no longer available. Refresh the lists and try again.</source>
         <translation>Wybrana wtyczka lub interfejs nie jest już dostępny. Odśwież listy i spróbuj ponownie.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="458"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="459"/>
         <source>The plugin or interface list is empty. Refresh the lists and ensure your CAN hardware is connected.</source>
         <translation>Lista wtyczek lub interfejsów jest pusta. Odśwież listy i upewnij się, że sprzęt CAN jest podłączony.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="371"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="372"/>
         <source>Unable to create CAN bus device. Check your hardware and drivers.</source>
         <translation>Nie można utworzyć urządzenia magistrali CAN. Sprawdź sprzęt i sterowniki.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="399"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="400"/>
         <source>Unable to connect to CAN bus device. Check your hardware connection and settings.</source>
         <translation>Nie można połączyć się z urządzeniem magistrali CAN. Sprawdź połączenie sprzętowe i ustawienia.</translation>
     </message>
@@ -14999,68 +14999,68 @@ W systemie Windows zainstaluj sterowniki sprzętowe CAN (PEAK, VECTOR itp.).</tr
         <translation type="vanished">Wystąpił błąd, ale urządzenie CAN nie jest już dostępne.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="999"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1000"/>
         <source>Error code: %1</source>
         <translation>Kod błędu: %1</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1007"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1008"/>
         <source>CAN Bus Communication Error</source>
         <translation>Błąd Komunikacji Magistrali CAN</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1113"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1114"/>
         <source>No CAN driver selected</source>
         <translation>Nie wybrano sterownika CAN</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1050"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1051"/>
         <source>Load SocketCAN kernel modules first</source>
         <translation>Najpierw załaduj moduły jądra SOCKETCAN</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1046"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1047"/>
         <source>Connect a %1 adapter, then refresh</source>
         <translation>Podłącz adapter %1, a następnie odśwież</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1053"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1054"/>
         <source>Set up a virtual CAN interface first</source>
         <translation>Najpierw skonfiguruj wirtualny interfejs CAN</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1055"/>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1075"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1056"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1076"/>
         <source>No interfaces found for %1</source>
         <translation>Nie znaleziono interfejsów dla %1</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1059"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1060"/>
         <source>Install &lt;a href='https://www.peak-system.com/Drivers.523.0.html?&amp;L=1'&gt;PEAK CAN drivers&lt;/a&gt;</source>
         <translation>Zainstaluj &lt;a href='https://www.PEAK-system.com/Drivers.523.0.html?&amp;L=1'&gt;sterowniki PEAK CAN&lt;/a&gt;</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1063"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1064"/>
         <source>Install &lt;a href='https://www.vector.com/us/en/products/products-a-z/libraries-drivers/'&gt;Vector CAN drivers&lt;/a&gt;</source>
         <translation>Zainstaluj &lt;a href='https://www.VECTOR.com/us/en/products/products-a-z/libraries-drivers/'&gt;sterowniki VECTOR CAN&lt;/a&gt;</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1067"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1068"/>
         <source>Install &lt;a href='https://www.systec-electronic.com/en/company/support/driver'&gt;SysTec CAN drivers&lt;/a&gt;</source>
         <translation>Zainstaluj &lt;a href='https://www.systec-electronic.com/en/company/support/driver'&gt;sterowniki SysTec CAN&lt;/a&gt;</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1070"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1071"/>
         <source>Install %1 drivers</source>
         <translation>Zainstaluj sterowniki %1</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1073"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1074"/>
         <source>Install %1 drivers for macOS</source>
         <translation>Zainstaluj sterowniki %1 dla macOS</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1087"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1088"/>
         <source>
 
 If the interface is down, bring it up first:
@@ -15071,42 +15071,42 @@ sudo ip link set %1 up type can bitrate %2
 </translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1223"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1224"/>
         <source>Plugin</source>
         <translation>Wtyczka</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1231"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1232"/>
         <source>Interface</source>
         <translation>Interfejs</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1239"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1240"/>
         <source>Bitrate</source>
         <translation>Przepływność</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1248"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1249"/>
         <source>CAN FD</source>
         <translation>CAN FD</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1255"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1256"/>
         <source>Data Bitrate</source>
         <translation>Przepływność Danych</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1265"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1266"/>
         <source>Loopback</source>
         <translation>Loopback</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1272"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1273"/>
         <source>Listen-Only</source>
         <translation>Tylko Nasłuch</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1279"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1280"/>
         <source>Multi-Frame Reassembly</source>
         <translation>Składanie Ramek Wieloczęściowych</translation>
     </message>
@@ -15299,93 +15299,93 @@ sudo ip link set %1 up type can bitrate %2
 <context>
     <name>IO::Drivers::GsUsbCanBackend</name>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="494"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="495"/>
         <source>Failed to initialize libusb for the CANable adapter.</source>
         <translation>Nie udało się zainicjować libusb dla adaptera CANable.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="521"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="522"/>
         <source>Unable to enumerate USB devices.</source>
         <translation>Nie można wyliczyć urządzeń USB.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="541"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="542"/>
         <source>The selected CANable adapter is no longer connected, or another application has it open. On Windows the device must use the WinUSB driver (candleLight installs it automatically).</source>
         <translation>Wybrany adapter CANable nie jest już podłączony lub inna aplikacja go używa. W systemie Windows urządzenie musi używać sterownika WinUSB (candleLight instaluje go automatycznie).</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="554"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="555"/>
         <source>Could not claim the CANable USB interface.</source>
         <translation>Nie można przejąć interfejsu USB CANable.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="624"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="625"/>
         <source>CANable adapter is not open for writing.</source>
         <translation>Adapter CANable nie jest otwarty do zapisu.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="678"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="679"/>
         <source>Failed to transmit CAN frame to the adapter.</source>
         <translation>Nie udało się przesłać ramki CAN do adaptera.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="694"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="695"/>
         <source>CAN bus error reported by the CANable adapter.</source>
         <translation>Błąd magistrali CAN zgłoszony przez adapter CANable.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="749"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="750"/>
         <source>A CAN frame was not acknowledged on the bus.</source>
         <translation>Ramka CAN nie została potwierdzona na magistrali.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="782"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="783"/>
         <source>The CANable adapter was disconnected.</source>
         <translation>Adapter CANable został odłączony.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="859"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="860"/>
         <source>CANable adapter rejected the host-format handshake.</source>
         <translation>Adapter CANable odrzucił uzgadnianie formatu hosta.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="866"/>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="940"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="867"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="941"/>
         <source>Could not read CANable timing constants.</source>
         <translation>Nie można odczytać stałych czasowych CANable.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="872"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="873"/>
         <source>The adapter firmware does not support CAN FD. Flash candleLight FD firmware or disable the flexible data-rate option.</source>
         <translation>Oprogramowanie adaptera nie obsługuje CAN FD. Wgraj oprogramowanie candleLight FD lub wyłącz opcję elastycznej przepływności danych.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="880"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="881"/>
         <source>The bitrate %1 bps is not supported by this CANable adapter.</source>
         <translation>Przepływność %1 bps nie jest obsługiwana przez ten adapter CANable.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="886"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="887"/>
         <source>CANable adapter rejected the requested bitrate.</source>
         <translation>Adapter CANable odrzucił żądaną przepływność.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="910"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="911"/>
         <source>Could not start the CANable channel.</source>
         <translation>Nie można uruchomić kanału CANable.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="932"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="933"/>
         <source>Could not read CANable FD timing constants.</source>
         <translation>Nie można odczytać stałych czasowych CANable FD.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="946"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="947"/>
         <source>The data bitrate %1 bps is not supported by this CANable adapter.</source>
         <translation>Przepływność danych %1 bps nie jest obsługiwana przez ten adapter CANable.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="953"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="954"/>
         <source>CANable adapter rejected the requested data bitrate.</source>
         <translation>Adapter CANable odrzucił żądaną przepływność danych.</translation>
     </message>
@@ -16180,57 +16180,57 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
         <translation>Błąd Komunikacji Modbus</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1246"/>
+        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1243"/>
         <source>Select Port</source>
         <translation>Wybierz Port</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1336"/>
+        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1335"/>
         <source>Protocol</source>
         <translation>Protokół</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1344"/>
+        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1343"/>
         <source>Slave Address</source>
         <translation>Adres Slave</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1353"/>
+        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1352"/>
         <source>Poll Interval (ms)</source>
         <translation>Interwał Odpytywania (ms)</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1381"/>
+        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1380"/>
         <source>Host / IP</source>
         <translation>Host / IP</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1388"/>
+        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1387"/>
         <source>Port</source>
         <translation>Port</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1403"/>
+        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1402"/>
         <source>Serial Port</source>
         <translation>Port Szeregowy</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1411"/>
+        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1410"/>
         <source>Baud Rate</source>
         <translation>Prędkość Transmisji</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1419"/>
+        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1418"/>
         <source>Parity</source>
         <translation>Parzystość</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1427"/>
+        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1426"/>
         <source>Data Bits</source>
         <translation>Bity Danych</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1435"/>
+        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1434"/>
         <source>Stop Bits</source>
         <translation>Bity Stopu</translation>
     </message>
@@ -17284,7 +17284,7 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
 <context>
     <name>IO::Drivers::SeeedCanBackend</name>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus/SeeedCanBackend.cpp" line="196"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus/SeeedCanBackend.cpp" line="199"/>
         <source>The bitrate %1 bps is not supported by the USB-CAN Analyzer.</source>
         <translation>Przepływność %1 bps nie jest obsługiwana przez analizator USB-CAN.</translation>
     </message>
@@ -17297,12 +17297,12 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
         <translation type="vanished">Nie udało się zainicjować analizatora USB-CAN.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus/SeeedCanBackend.cpp" line="206"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus/SeeedCanBackend.cpp" line="209"/>
         <source>USB-CAN Analyzer is not open for writing.</source>
         <translation>Analizator USB-CAN nie jest otwarty do zapisu.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus/SeeedCanBackend.cpp" line="251"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus/SeeedCanBackend.cpp" line="254"/>
         <source>CAN bus error reported by the USB-CAN Analyzer.</source>
         <translation>Błąd magistrali CAN zgłoszony przez analizator USB-CAN.</translation>
     </message>
@@ -17310,27 +17310,27 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
 <context>
     <name>IO::Drivers::SerialCanBackendBase</name>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus/SerialCanBackendBase.cpp" line="190"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus/SerialCanBackendBase.cpp" line="194"/>
         <source>Could not open serial port %1: %2</source>
         <translation>Nie można otworzyć portu szeregowego %1: %2</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus/SerialCanBackendBase.cpp" line="201"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus/SerialCanBackendBase.cpp" line="205"/>
         <source>The adapter on %1 did not accept the initialization sequence.</source>
         <translation>Adapter na %1 nie zaakceptował sekwencji inicjalizacji.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus/SerialCanBackendBase.cpp" line="211"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus/SerialCanBackendBase.cpp" line="215"/>
         <source>The adapter on %1 refused the requested configuration.</source>
         <translation>Adapter na %1 odrzucił żądaną konfigurację.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus/SerialCanBackendBase.cpp" line="272"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus/SerialCanBackendBase.cpp" line="276"/>
         <source>The serial adapter is gone</source>
         <translation>Adapter szeregowy jest niedostępny</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus/SerialCanBackendBase.cpp" line="273"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus/SerialCanBackendBase.cpp" line="277"/>
         <source>Lost the adapter on %1: %2</source>
         <translation>Utracono adapter na %1: %2</translation>
     </message>
@@ -17338,7 +17338,7 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
 <context>
     <name>IO::Drivers::SlcanBackend</name>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus/SlcanBackend.cpp" line="173"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus/SlcanBackend.cpp" line="172"/>
         <source>The bitrate %1 bps is not a standard slcan rate.</source>
         <translation>Przepływność %1 bps nie jest standardową wartością slcan.</translation>
     </message>
@@ -17351,12 +17351,12 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
         <translation type="vanished">Nie udało się otworzyć kanału slcan.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus/SlcanBackend.cpp" line="245"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus/SlcanBackend.cpp" line="244"/>
         <source>slcan adapter is not open for writing.</source>
         <translation>Adapter slcan nie jest otwarty do zapisu.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus/SlcanBackend.cpp" line="283"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus/SlcanBackend.cpp" line="282"/>
         <source>CAN bus error reported by the slcan adapter.</source>
         <translation>Błąd magistrali CAN zgłoszony przez adapter slcan.</translation>
     </message>
@@ -17373,7 +17373,7 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
     </message>
     <message>
         <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="395"/>
-        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="802"/>
+        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="800"/>
         <source>Select Port</source>
         <translation>Wybierz Port</translation>
     </message>
@@ -17418,17 +17418,17 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
         <translation>Wpisz inną ścieżkę, aby zarejestrować niestandardowe urządzenie szeregowe</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="911"/>
+        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="898"/>
         <source>The specified device could not be found. Check the connection and try again.</source>
         <translation>Nie można znaleźć określonego urządzenia. Sprawdź połączenie i spróbuj ponownie.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="918"/>
+        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="905"/>
         <source>An unknown error occurred. Check the device and try again.</source>
         <translation>Wystąpił nieznany błąd. Sprawdź urządzenie i spróbuj ponownie.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="920"/>
+        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="907"/>
         <source>The device is not open. Open the device before attempting this operation.</source>
         <translation>Urządzenie nie jest otwarte. Otwórz urządzenie przed wykonaniem tej operacji.</translation>
     </message>
@@ -17464,97 +17464,97 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
         <translation>"%1" nie jest prawidłową ścieżką; wpisz inną ścieżkę, aby zarejestrować niestandardowe urządzenie szeregowe.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="884"/>
+        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="871"/>
         <source>Unknown</source>
         <translation>Nieznany</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="885"/>
+        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="872"/>
         <source>Critical error on serial port "%1"</source>
         <translation>Błąd krytyczny na porcie szeregowym "%1"</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="886"/>
+        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="873"/>
         <source>Unknown error</source>
         <translation>Nieznany błąd</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="910"/>
+        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="897"/>
         <source>No error occurred.</source>
         <translation>Nie wystąpił błąd.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="912"/>
+        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="899"/>
         <source>Permission denied. Ensure the application has the necessary access rights to the device.</source>
         <translation>Odmowa dostępu. Upewnij się, że aplikacja ma niezbędne uprawnienia do urządzenia.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="913"/>
+        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="900"/>
         <source>Failed to open the device. It may already be in use or unavailable.</source>
         <translation>Nie udało się otworzyć urządzenia. Może być już w użyciu lub niedostępne.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="914"/>
+        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="901"/>
         <source>An error occurred while writing data to the device.</source>
         <translation>Wystąpił błąd podczas zapisu danych do urządzenia.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="915"/>
+        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="902"/>
         <source>An error occurred while reading data from the device.</source>
         <translation>Wystąpił błąd podczas odczytu danych z urządzenia.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="916"/>
+        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="903"/>
         <source>A critical resource error occurred. The device may have been disconnected or is no longer accessible.</source>
         <translation>Wystąpił krytyczny błąd zasobu. Urządzenie mogło zostać odłączone lub nie jest już dostępne.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="917"/>
+        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="904"/>
         <source>The requested operation is not supported on this device.</source>
         <translation>Żądana operacja nie jest obsługiwana na tym urządzeniu.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="919"/>
+        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="906"/>
         <source>The operation timed out. The device may not be responding.</source>
         <translation>Operacja przekroczyła limit czasu. Urządzenie może nie odpowiadać.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="1008"/>
+        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="1007"/>
         <source>Serial Port</source>
         <translation>Port Szeregowy</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="1016"/>
+        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="1015"/>
         <source>Baud Rate</source>
         <translation>Prędkość Transmisji</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="1024"/>
+        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="1023"/>
         <source>Parity</source>
         <translation>Parzystość</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="1032"/>
+        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="1031"/>
         <source>Data Bits</source>
         <translation>Bity Danych</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="1040"/>
+        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="1039"/>
         <source>Stop Bits</source>
         <translation>Bity Stopu</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="1048"/>
+        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="1047"/>
         <source>Flow Control</source>
         <translation>Kontrola Przepływu</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="1056"/>
+        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="1055"/>
         <source>DTR</source>
         <translation>DTR</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="1063"/>
+        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="1062"/>
         <source>Auto-Reconnect</source>
         <translation>Automatyczne Ponowne Łączenie</translation>
     </message>
@@ -17941,12 +17941,12 @@ Urządzenie może nie udostępniać punktów końcowych danych w aktywnej konfig
 <context>
     <name>IO::FrameReader</name>
     <message>
-        <location filename="../../../core/Pipeline/IO/FrameReader.cpp" line="392"/>
+        <location filename="../../../core/Pipeline/IO/FrameReader.cpp" line="397"/>
         <source>Frames dropped</source>
         <translation>Utracone ramki</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/IO/FrameReader.cpp" line="394"/>
+        <location filename="../../../core/Pipeline/IO/FrameReader.cpp" line="399"/>
         <source>Incoming data is arriving faster than Serial Studio can process it; %1 frame(s) have been dropped. Reduce the data rate or disable a heavy consumer.</source>
         <translation>Dane przychodzące szybciej niż Serial Studio może je przetworzyć; utracono %1 ramek. Zmniejsz szybkość transmisji lub wyłącz wymagający komponent.</translation>
     </message>
@@ -18778,17 +18778,17 @@ Urządzenie może nie udostępniać punktów końcowych danych w aktywnej konfig
         <translation>Spirala</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/LayoutPatternPicker.qml" line="100"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/LayoutPatternPicker.qml" line="113"/>
         <source>Layout</source>
         <translation>Układ</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/LayoutPatternPicker.qml" line="214"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/LayoutPatternPicker.qml" line="263"/>
         <source>Split</source>
         <translation>Podział</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/LayoutPatternPicker.qml" line="280"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/LayoutPatternPicker.qml" line="329"/>
         <source>Manual placement</source>
         <translation>Ręczne rozmieszczenie</translation>
     </message>
@@ -20980,12 +20980,12 @@ Czy chcesz otworzyć stronę pobierania?</translation>
 <context>
     <name>Misc::GraphicsBackend</name>
     <message>
-        <location filename="../../../core/Ui/Misc/GraphicsBackend.cpp" line="246"/>
+        <location filename="../../../core/Ui/Misc/GraphicsBackend.cpp" line="280"/>
         <source>Restart Required</source>
         <translation>Wymagane Ponowne Uruchomienie</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/Misc/GraphicsBackend.cpp" line="247"/>
+        <location filename="../../../core/Ui/Misc/GraphicsBackend.cpp" line="281"/>
         <source>The new rendering backend will take effect after restarting Serial Studio. Restart now to apply the change?</source>
         <translation>Nowy backend renderowania zacznie działać po ponownym uruchomieniu Serial Studio. Uruchomić ponownie, aby zastosować zmiany?</translation>
     </message>
@@ -21148,8 +21148,8 @@ Czy chcesz otworzyć stronę pobierania?</translation>
         <translation>Nie można zapisać Info.plist: %1</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/Misc/ShortcutGenerator_macOS.cpp" line="271"/>
         <location filename="../../../core/Ui/Misc/ShortcutGenerator_Linux.cpp" line="140"/>
+        <location filename="../../../core/Ui/Misc/ShortcutGenerator_macOS.cpp" line="271"/>
         <source>Windows shortcut writer is not available on this platform.</source>
         <translation>Moduł zapisu skrótów Windows nie jest dostępny na tej platformie.</translation>
     </message>
@@ -21180,8 +21180,8 @@ Czy chcesz otworzyć stronę pobierania?</translation>
         <translation>Zapisywanie pliku .lnk nie powiodło się (HRESULT 0x%1).</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/Misc/ShortcutGenerator_Windows.cpp" line="185"/>
         <location filename="../../../core/Ui/Misc/ShortcutGenerator_Linux.cpp" line="154"/>
+        <location filename="../../../core/Ui/Misc/ShortcutGenerator_Windows.cpp" line="185"/>
         <source>macOS shortcut writer is not available on this platform.</source>
         <translation>Moduł zapisu skrótów macOS nie jest dostępny na tej platformie.</translation>
     </message>
@@ -21917,38 +21917,38 @@ Dodaj grupy powyżej, aby odpytywać wiele typów rejestrów.</translation>
 <context>
     <name>NativeTemplates</name>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryRaw.cpp" line="116"/>
         <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryHex.cpp" line="127"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryRaw.cpp" line="116"/>
         <source>Bytes per value</source>
         <translation>Bajtów na wartość</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryRaw.cpp" line="117"/>
         <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryHex.cpp" line="128"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryRaw.cpp" line="117"/>
         <source>Number of bytes combined into each channel value.</source>
         <translation>Liczba bajtów łączonych w każdą wartość kanału.</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryRaw.cpp" line="125"/>
         <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryHex.cpp" line="136"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryRaw.cpp" line="125"/>
         <source>Endianness</source>
         <translation>Kolejność Bajtów</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryRaw.cpp" line="126"/>
         <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryHex.cpp" line="137"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryRaw.cpp" line="126"/>
         <source>Byte order used when combining multi-byte values.</source>
         <translation>Kolejność bajtów używana przy łączeniu wartości wielobajtowych.</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryRaw.cpp" line="134"/>
         <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryHex.cpp" line="145"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryRaw.cpp" line="134"/>
         <source>Signed values</source>
         <translation>Wartości ze znakiem</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryRaw.cpp" line="135"/>
         <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryHex.cpp" line="146"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryRaw.cpp" line="135"/>
         <source>Interprets each value as two's-complement signed.</source>
         <translation>Interpretuje każdą wartość jako liczbę ze znakiem w kodzie uzupełnień do dwóch.</translation>
     </message>
@@ -21963,9 +21963,9 @@ Dodaj grupy powyżej, aby odpytywać wiele typów rejestrów.</translation>
         <translation>Wpisy tag:indeks oddzielone przecinkami, np. 1:0,2:1,3:2. Tagi mogą być dziesiętne lub szesnastkowe z prefiksem 0x.</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/TextNmea0183.cpp" line="219"/>
         <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinarySirf.cpp" line="216"/>
         <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryUbx.cpp" line="226"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/TextNmea0183.cpp" line="219"/>
         <source>Validate checksum</source>
         <translation>Waliduj sumę kontrolną</translation>
     </message>
@@ -24586,10 +24586,10 @@ Przeładować go?</translation>
         <translation>Czy chcesz usunąć widget wyjściowy "%1"?</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectOutputWidgets.cpp" line="239"/>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="313"/>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="355"/>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="390"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectOutputWidgets.cpp" line="239"/>
         <source>This action cannot be undone. Do you wish to proceed?</source>
         <translation>Tej operacji nie można cofnąć. Czy chcesz kontynuować?</translation>
     </message>
@@ -24914,18 +24914,9 @@ Przeładować go?</translation>
         <translation>Nowy Profil Obszaru Roboczego</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaceProfiles.cpp" line="373"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaceProfiles.cpp" line="395"/>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="1309"/>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="1338"/>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="1364"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="382"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="410"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="433"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="456"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectSources.cpp" line="280"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaces.cpp" line="763"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaces.cpp" line="789"/>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="498"/>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="520"/>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="547"/>
@@ -24934,6 +24925,15 @@ Przeładować go?</translation>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="954"/>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="976"/>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="1002"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectSources.cpp" line="280"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="382"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="410"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="433"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="456"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaceProfiles.cpp" line="373"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaceProfiles.cpp" line="395"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaces.cpp" line="763"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaces.cpp" line="789"/>
         <source>Name:</source>
         <translation>Nazwa:</translation>
     </message>
@@ -24978,9 +24978,9 @@ Przeładować go?</translation>
         <translation>Dodaj Tabelę</translation>
     </message>
     <message>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="978"/>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="123"/>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="384"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="978"/>
         <source>Shared Table</source>
         <translation>Tabela Współdzielona</translation>
     </message>
@@ -25018,8 +25018,8 @@ Przeładować go?</translation>
         <translation>Edytuj Zmienną</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="381"/>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="975"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="381"/>
         <source>New Shared Table</source>
         <translation>Nowa Tabela Współdzielona</translation>
     </message>
@@ -25161,15 +25161,15 @@ Przeładować go?</translation>
         <translation>Zmień Tor Strumienia</translation>
     </message>
     <message>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="522"/>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaces.cpp" line="384"/>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaces.cpp" line="765"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="522"/>
         <source>Workspace</source>
         <translation>Obszar Roboczy</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaces.cpp" line="762"/>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="519"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaces.cpp" line="762"/>
         <source>New Workspace</source>
         <translation>Nowy Obszar Roboczy</translation>
     </message>
@@ -26064,8 +26064,8 @@ This script may use Lua 5.3 bitwise syntax, which this runtime does not support.
 </translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="489"/>
         <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="230"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="489"/>
         <source>Frame Parser Disabled</source>
         <translation>Parser Ramek Wyłączony</translation>
     </message>
@@ -26131,8 +26131,8 @@ Serial Studio może przepisać nieobsługiwane operatory jako wywołania bit.* i
 %1</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="680"/>
         <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="560"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="680"/>
         <source>Missing Parse Function</source>
         <translation>Brak Funkcji Parse</translation>
     </message>
@@ -26148,8 +26148,8 @@ Upewnij się, że kod zawiera:
 function parse(frame) ... end</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="743"/>
         <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="612"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="743"/>
         <source>Parse Function Runtime Error</source>
         <translation>Błąd Wykonania Funkcji Parse</translation>
     </message>
@@ -26493,12 +26493,12 @@ Parametr separatora nie jest już potrzebny.</translation>
         <translation>Nieobsługiwane słowo kluczowe najwyższego poziomu '%1'</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/Misc/GraphicsBackend.cpp" line="295"/>
+        <location filename="../../../core/Ui/Misc/GraphicsBackend.cpp" line="329"/>
         <source>Automatic (Platform Default)</source>
         <translation>Automatycznie (Domyślne dla Platformy)</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/Misc/GraphicsBackend.cpp" line="300"/>
+        <location filename="../../../core/Ui/Misc/GraphicsBackend.cpp" line="334"/>
         <source>Software (Fallback)</source>
         <translation>Programowo (Tryb Awaryjny)</translation>
     </message>
@@ -26934,288 +26934,288 @@ Parametr separatora nie jest już potrzebny.</translation>
 <context>
     <name>ReportOptionsDialog</name>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="25"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="27"/>
         <source>Generate PDF Report</source>
         <translation>Wygeneruj Raport PDF</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="25"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="27"/>
         <source>Generate Report</source>
         <translation>Generuj Raport</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="71"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="73"/>
         <source>Solid</source>
         <translation>Ciągła</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="72"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="74"/>
         <source>Dashed</source>
         <translation>Kreskowana</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="73"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="75"/>
         <source>Dotted</source>
         <translation>Kropkowana</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="95"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="97"/>
         <source>A4 (210 × 297 mm)</source>
         <translation>A4 (210 × 297 mm)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="96"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="98"/>
         <source>A3 (297 × 420 mm)</source>
         <translation>A3 (297 × 420 mm)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="97"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="99"/>
         <source>A2 (420 × 594 mm)</source>
         <translation>A2 (420 × 594 mm)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="98"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="100"/>
         <source>A1 (594 × 841 mm)</source>
         <translation>A1 (594 × 841 mm)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="99"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="101"/>
         <source>A0 (841 × 1189 mm)</source>
         <translation>A0 (841 × 1189 mm)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="100"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="102"/>
         <source>A5 (148 × 210 mm)</source>
         <translation>A5 (148 × 210 mm)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="101"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="103"/>
         <source>A6 (105 × 148 mm)</source>
         <translation>A6 (105 × 148 mm)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="102"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="104"/>
         <source>B4 (250 × 353 mm)</source>
         <translation>B4 (250 × 353 mm)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="103"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="105"/>
         <source>B5 (176 × 250 mm)</source>
         <translation>B5 (176 × 250 mm)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="104"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="106"/>
         <source>Letter (8.5 × 11 in)</source>
         <translation>Letter (8,5 × 11 cali)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="105"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="107"/>
         <source>Legal (8.5 × 14 in)</source>
         <translation>Legal (8,5 × 14 cali)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="106"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="108"/>
         <source>Executive (7.25 × 10.5 in)</source>
         <translation>Executive (7,25 × 10,5 cala)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="107"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="109"/>
         <source>Tabloid (11 × 17 in)</source>
         <translation>Tabloid (11 × 17 cali)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="108"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="110"/>
         <source>Ledger (17 × 11 in)</source>
         <translation>Ledger (17 × 11 cali)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="122"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="124"/>
         <source>%1 — Session Report</source>
         <translation>%1 — Raport Sesji</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="124"/>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="319"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="126"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="321"/>
         <source>Session Report</source>
         <translation>Raport Sesji</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="221"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="223"/>
         <source>Branding</source>
         <translation>Branding</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="227"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="229"/>
         <source>Page</source>
         <translation>Strona</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="233"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="235"/>
         <source>Sections</source>
         <translation>Sekcje</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="239"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="241"/>
         <source>Datasets</source>
         <translation>Zestawy Danych</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="287"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="289"/>
         <source>Identity</source>
         <translation>Tożsamość</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="301"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="303"/>
         <source>Company</source>
         <translation>Firma</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="308"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="310"/>
         <source>e.g. Acme Test Systems</source>
         <translation>np. Acme Test Systems</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="312"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="314"/>
         <source>Document title</source>
         <translation>Tytuł dokumentu</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="323"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="325"/>
         <source>Author</source>
         <translation>Autor</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="330"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="332"/>
         <source>Prepared by (optional)</source>
         <translation>Przygotowane przez (opcjonalnie)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="339"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="341"/>
         <source>Logo</source>
         <translation>Logo</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="352"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="354"/>
         <source>File</source>
         <translation>Plik</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="363"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="365"/>
         <source>PNG, JPG or SVG (optional)</source>
         <translation>PNG, JPG lub SVG (opcjonalnie)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="365"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="367"/>
         <source>Browse…</source>
         <translation>Przeglądaj…</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="368"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="370"/>
         <source>Clear</source>
         <translation>Wyczyść</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="409"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="411"/>
         <source>Paper</source>
         <translation>Papier</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="421"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="423"/>
         <source>Page size</source>
         <translation>Rozmiar strony</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="555"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="557"/>
         <source>Annotate min, max, and mean values on plots</source>
         <translation>Oznacz wartości min, maks. i średnią na wykresach</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="591"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="593"/>
         <source>Include datasets</source>
         <translation>Dołącz zestawy danych</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="605"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="607"/>
         <source>Expand All</source>
         <translation>Rozwiń Wszystko</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="614"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="616"/>
         <source>Collapse All</source>
         <translation>Zwiń Wszystko</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="626"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="628"/>
         <source>Search datasets</source>
         <translation>Szukaj zestawów danych</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="752"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="754"/>
         <source>Loading datasets...</source>
         <translation>Ładowanie zestawów danych...</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="753"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="755"/>
         <source>No datasets match your search.</source>
         <translation>Żaden zestaw danych nie pasuje do wyszukiwania.</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="773"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="775"/>
         <source>Select at least one dataset to include.</source>
         <translation>Wybierz co najmniej jeden zestaw danych do dołączenia.</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="790"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="792"/>
         <source>Export HTML</source>
         <translation>Eksportuj HTML</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="539"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="541"/>
         <source>Cover page (logo, document title, test subtitle)</source>
         <translation>Strona tytułowa (logo, tytuł dokumentu, podtytuł testu)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="543"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="545"/>
         <source>Test information (project, timestamps, classification and notes)</source>
         <translation>Informacje o teście (projekt, znaczniki czasu, klasyfikacja i notatki)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="547"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="549"/>
         <source>Measurement summary (min, max, mean, std. deviation per parameter)</source>
         <translation>Podsumowanie pomiarów (min, maks, średnia, odch. std. dla każdego parametru)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="551"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="553"/>
         <source>Parameter trends (time-series chart per numeric parameter)</source>
         <translation>Trendy parametrów (wykres szeregów czasowych dla każdego parametru numerycznego)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="437"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="439"/>
         <source>Plot appearance</source>
         <translation>Wygląd wykresu</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="451"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="453"/>
         <source>Line width</source>
         <translation>Szerokość linii</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="483"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="485"/>
         <source>Line style</source>
         <translation>Styl linii</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="524"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="526"/>
         <source>Include</source>
         <translation>Uwzględnij</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="782"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="784"/>
         <source>Cancel</source>
         <translation>Anuluj</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="790"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="792"/>
         <source>Export PDF</source>
         <translation>Eksportuj PDF</translation>
     </message>
@@ -29118,12 +29118,12 @@ Dodaj adresy bezwzględne powyżej, aby odpytać sterownik.</translation>
         <translation>Resetuj</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="231"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="233"/>
         <source>Close</source>
         <translation>Zamknij</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="239"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="241"/>
         <source>Apply</source>
         <translation>Zastosuj</translation>
     </message>
@@ -29478,42 +29478,47 @@ Dodaj adresy bezwzględne powyżej, aby odpytać sterownik.</translation>
         <translation>Zestaw Instrukcji SIMD</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="226"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="225"/>
+        <source>Reduce Motion</source>
+        <translation>Ogranicz Ruch</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="249"/>
         <source>Apply Performance Hints</source>
         <translation>Zastosuj Wskazówki Wydajności</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="249"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="272"/>
         <source>Keep Display Awake</source>
         <translation>Utrzymuj Wyświetlacz Aktywny</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="278"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="301"/>
         <source>Performance hints raise process priority and opt out of OS power throttling. Changes take effect the next time Serial Studio starts.</source>
         <translation>Wskazówki wydajności podnoszą priorytet procesu i wyłączają ograniczanie mocy przez system operacyjny. Zmiany wchodzą w życie przy następnym uruchomieniu Serial Studio.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="289"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="312"/>
         <source>Updates &amp; News</source>
         <translation>Aktualizacje i Nowości</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="305"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="328"/>
         <source>Automatically Check for Updates</source>
         <translation>Automatycznie Sprawdzaj Aktualizacje</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="328"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="351"/>
         <source>Check for Extension Updates</source>
         <translation>Sprawdź Aktualizacje Rozszerzeń</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="352"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="375"/>
         <source>Install Extension Updates Automatically</source>
         <translation>Instaluj Aktualizacje Rozszerzeń Automatycznie</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="382"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="405"/>
         <source>Installed extensions and themes are checked when Serial Studio starts, together with application updates. Serial Studio asks before installing them unless automatic installation is enabled.</source>
         <translation>Zainstalowane rozszerzenia i motywy są sprawdzane podczas uruchamiania Serial Studio, razem z aktualizacjami aplikacji. Serial Studio pyta przed ich instalacją, chyba że włączono automatyczną instalację.</translation>
     </message>
@@ -30199,27 +30204,27 @@ Włącz Osadź Projekt, aby wbudować projekt w skrót, dzięki czemu będzie dz
 <context>
     <name>StartMenu</name>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="318"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="338"/>
         <source>Workspaces</source>
         <translation>Obszary Robocze</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="455"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="476"/>
         <source>Actions</source>
         <translation>Akcje</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="478"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="500"/>
         <source>No Actions Available</source>
         <translation>Brak Dostępnych Akcji</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="508"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="530"/>
         <source>Plugins</source>
         <translation>Wtyczki</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="556"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="579"/>
         <source>No Plugins Installed</source>
         <translation>Brak Zainstalowanych Wtyczek</translation>
     </message>
@@ -30244,7 +30249,7 @@ Włącz Osadź Projekt, aby wbudować projekt w skrót, dzięki czemu będzie dz
         <translation type="vanished">Narzędzia</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="744"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="769"/>
         <source>No Tools Available</source>
         <translation>Brak Dostępnych Narzędzi</translation>
     </message>
@@ -30257,17 +30262,17 @@ Włącz Osadź Projekt, aby wbudować projekt w skrót, dzięki czemu będzie dz
         <translation type="vanished">Zakończ</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="830"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="866"/>
         <source>Delete</source>
         <translation>Usuń</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="831"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="867"/>
         <source>Hide</source>
         <translation>Ukryj</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="406"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="427"/>
         <source>New Workspace…</source>
         <translation>Nowy Obszar Roboczy…</translation>
     </message>
@@ -30292,22 +30297,22 @@ Włącz Osadź Projekt, aby wbudować projekt w skrót, dzięki czemu będzie dz
         <translation type="vanished">Asystent AI</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="392"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="413"/>
         <source>Show "%1"</source>
         <translation>Pokaż "%1"</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="397"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="418"/>
         <source>Show All Hidden Workspaces</source>
         <translation>Pokaż Wszystkie Ukryte Obszary Robocze</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="420"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="441"/>
         <source>No Workspaces Available</source>
         <translation>Brak Dostępnych Obszarów Roboczych</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="546"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="569"/>
         <source>Manage Plugins…</source>
         <translation>Zarządzaj Wtyczkami…</translation>
     </message>
@@ -30336,7 +30341,7 @@ Włącz Osadź Projekt, aby wbudować projekt w skrót, dzięki czemu będzie dz
         <translation type="vanished">Baza Danych Sesji</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="669"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="693"/>
         <source>No Export Formats Available</source>
         <translation>Brak Dostępnych Formatów Eksportu</translation>
     </message>
@@ -30353,7 +30358,7 @@ Włącz Osadź Projekt, aby wbudować projekt w skrót, dzięki czemu będzie dz
         <translation type="vanished">Preferencje</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="819"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="855"/>
         <source>Edit…</source>
         <translation>Edytuj…</translation>
     </message>
@@ -30421,7 +30426,7 @@ Włącz Osadź Projekt, aby wbudować projekt w skrót, dzięki czemu będzie dz
 <context>
     <name>SubMenuCombo</name>
     <message>
-        <location filename="../../qml/Widgets/SubMenuCombo.qml" line="186"/>
+        <location filename="../../qml/Widgets/SubMenuCombo.qml" line="182"/>
         <source>No Data Available</source>
         <translation>Brak Dostępnych Danych</translation>
     </message>
@@ -30633,42 +30638,42 @@ Włącz Osadź Projekt, aby wbudować projekt w skrót, dzięki czemu będzie dz
         <translation type="vanished">Szukaj…</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="577"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="584"/>
         <source>Settings</source>
         <translation>Ustawienia</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="578"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="585"/>
         <source>Console</source>
         <translation>Konsola</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="579"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="586"/>
         <source>Notifications</source>
         <translation>Powiadomienia</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="580"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="587"/>
         <source>Clock</source>
         <translation>Zegar</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="581"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="588"/>
         <source>Stopwatch</source>
         <translation>Stoper</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="583"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="590"/>
         <source>AI Assistant</source>
         <translation>Asystent AI</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="584"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="591"/>
         <source>Resume</source>
         <translation>Wznów</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="584"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="591"/>
         <source>Pause</source>
         <translation>Wstrzymaj</translation>
     </message>
@@ -30681,77 +30686,77 @@ Włącz Osadź Projekt, aby wbudować projekt w skrót, dzięki czemu będzie dz
         <translation type="vanished">Brak Dostępnych Obszarów Roboczych</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="258"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="259"/>
         <source>Search… (%1)</source>
         <translation>Szukaj… (%1)</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="935"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="942"/>
         <source>Data is arriving faster than scripts can process it; some frames are being thinned. See the problem center for details.</source>
         <translation>Dane przychodzą szybciej niż skrypty mogą je przetworzyć; niektóre ramki są pomijane. Sprawdź centrum problemów, aby uzyskać szczegóły.</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="959"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="966"/>
         <source>Unfreeze Dashboard</source>
         <translation>Odblokuj Pulpit</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="960"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="967"/>
         <source>Freeze Dashboard</source>
         <translation>Zablokuj Pulpit</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1009"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1016"/>
         <source>MQTT: Connected to %1</source>
         <translation>MQTT: Połączono z %1</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1010"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1017"/>
         <source>MQTT: Not connected</source>
         <translation>MQTT: Brak połączenia</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1034"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1045"/>
         <source>MQTT Publisher</source>
         <translation>Wydawca MQTT</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1044"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1055"/>
         <source>Status:</source>
         <translation>Status:</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1052"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1063"/>
         <source>Connected</source>
         <translation>Połączono</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1053"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1064"/>
         <source>Disconnected</source>
         <translation>Rozłączono</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1060"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1071"/>
         <source>Broker:</source>
         <translation>Broker:</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1073"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1084"/>
         <source>Mode:</source>
         <translation>Tryb:</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1086"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1097"/>
         <source>Messages sent:</source>
         <translation>Wysłane komunikaty:</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1100"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1111"/>
         <source>Open MQTT Settings</source>
         <translation>Otwórz Ustawienia MQTT</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="582"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="589"/>
         <source>File Transmission</source>
         <translation>Transmisja Pliku</translation>
     </message>
@@ -30760,7 +30765,7 @@ Włącz Osadź Projekt, aby wbudować projekt w skrót, dzięki czemu będzie dz
         <translation type="vanished">Wyszukaj widżety…</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1146"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1168"/>
         <source>Remove from Workspace</source>
         <translation>Usuń z Obszaru Roboczego</translation>
     </message>
@@ -32961,6 +32966,41 @@ Rozumiem, że po jej zakończeniu będę musiał kupić licencję lub zbudować 
     </message>
     <message>
         <location filename="../../../core/Ui/UI/Widgets/Waterfall.cpp" line="307"/>
+        <source>Grayscale (Inverted)</source>
+        <translation>Skala Szarości (Odwrócona)</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/UI/Widgets/Waterfall.cpp" line="309"/>
+        <source>Cividis</source>
+        <translation>Cividis</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/UI/Widgets/Waterfall.cpp" line="311"/>
+        <source>Cubehelix</source>
+        <translation>Cubehelix</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/UI/Widgets/Waterfall.cpp" line="313"/>
+        <source>SDR Classic</source>
+        <translation>SDR Classic</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/UI/Widgets/Waterfall.cpp" line="315"/>
+        <source>Spectral</source>
+        <translation>Spektralny</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/UI/Widgets/Waterfall.cpp" line="317"/>
+        <source>Red/Blue</source>
+        <translation>Czerwony/niebieski</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/UI/Widgets/Waterfall.cpp" line="319"/>
+        <source>Coolwarm</source>
+        <translation>Coolwarm</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/UI/Widgets/Waterfall.cpp" line="321"/>
         <source>Unknown</source>
         <translation>Nieznany</translation>
     </message>

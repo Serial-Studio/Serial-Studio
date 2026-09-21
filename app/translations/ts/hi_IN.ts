@@ -6021,22 +6021,22 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
         <translation>मान</translation>
     </message>
     <message>
+        <location filename="../../qml/Widgets/Dashboard/DataGrid.qml" line="108"/>
         <location filename="../../rcc/extensions/widget/datagrid/DataGrid.qml" line="111"/>
         <location filename="../../rcc/extensions/widget/datagrid/DataGrid.qml" line="118"/>
-        <location filename="../../qml/Widgets/Dashboard/DataGrid.qml" line="108"/>
         <source>Pause</source>
         <translation>रोकें</translation>
     </message>
     <message>
+        <location filename="../../qml/Widgets/Dashboard/DataGrid.qml" line="108"/>
         <location filename="../../rcc/extensions/widget/datagrid/DataGrid.qml" line="111"/>
         <location filename="../../rcc/extensions/widget/datagrid/DataGrid.qml" line="118"/>
-        <location filename="../../qml/Widgets/Dashboard/DataGrid.qml" line="108"/>
         <source>Resume</source>
         <translation>फिर से शुरू करें</translation>
     </message>
     <message>
-        <location filename="../../rcc/extensions/widget/datagrid/DataGrid.qml" line="335"/>
         <location filename="../../qml/Widgets/Dashboard/DataGrid.qml" line="323"/>
+        <location filename="../../rcc/extensions/widget/datagrid/DataGrid.qml" line="335"/>
         <source>Awaiting data…</source>
         <translation>डेटा की प्रतीक्षा में…</translation>
     </message>
@@ -14553,7 +14553,7 @@ Add controller tags above to poll them.</source>
 <context>
     <name>IO::ConnectionManager</name>
     <message>
-        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="240"/>
+        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="241"/>
         <source>UART/COM</source>
         <translation>UART/COM</translation>
     </message>
@@ -14562,92 +14562,92 @@ Add controller tags above to poll them.</source>
         <translation type="vanished">नेटवर्क सॉकेट</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="240"/>
+        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="241"/>
         <source>Network</source>
         <translation>नेटवर्क</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="240"/>
+        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="241"/>
         <source>Bluetooth LE</source>
         <translation>Bluetooth LE</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="242"/>
+        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="243"/>
         <source>Audio</source>
         <translation>ऑडियो</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="242"/>
+        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="243"/>
         <source>Modbus</source>
         <translation>Modbus</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="242"/>
+        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="243"/>
         <source>CAN Bus</source>
         <translation>CAN Bus</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="242"/>
+        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="243"/>
         <source>USB Device</source>
         <translation>USB डिवाइस</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="242"/>
+        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="243"/>
         <source>HID Device</source>
         <translation>HID डिवाइस</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="243"/>
+        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="244"/>
         <source>Process</source>
         <translation>प्रोसेस</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="243"/>
+        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="244"/>
         <source>MQTT Subscriber</source>
         <translation>MQTT सब्सक्राइबर</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="243"/>
+        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="244"/>
         <source>OPC UA</source>
         <translation>OPC UA</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="243"/>
+        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="244"/>
         <source>Siemens S7</source>
         <translation>Siemens S7</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="244"/>
+        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="245"/>
         <source>EtherNet/IP</source>
         <translation>EtherNet/IP</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="244"/>
+        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="245"/>
         <source>IEC 60870-5-104</source>
         <translation>IEC 60870-5-104</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="551"/>
+        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="552"/>
         <source>Your trial period has ended.</source>
         <translation>आपकी ट्रायल अवधि समाप्त हो गई है।</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="552"/>
+        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="553"/>
         <source>To continue using Serial Studio, please activate your license.</source>
         <translation>Serial Studio का उपयोग जारी रखने के लिए, कृपया अपना लाइसेंस सक्रिय करें।</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="630"/>
+        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="634"/>
         <source>connection attempt failed</source>
         <translation>कनेक्शन प्रयास विफल</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="1095"/>
+        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="1099"/>
         <source>This connection type requires an active license or trial.</source>
         <translation>इस कनेक्शन प्रकार के लिए सक्रिय लाइसेंस या ट्रायल आवश्यक है।</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="1096"/>
+        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="1100"/>
         <source>Activate Serial Studio Pro or start a trial to use this device type.</source>
         <translation>इस डिवाइस प्रकार का उपयोग करने के लिए Serial Studio Pro सक्रिय करें या ट्रायल प्रारंभ करें।</translation>
     </message>
@@ -14901,15 +14901,15 @@ Add controller tags above to poll them.</source>
 <context>
     <name>IO::Drivers::CANBus</name>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="416"/>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="421"/>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="426"/>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="430"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="417"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="422"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="427"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="431"/>
         <source>CAN Bus Not Available</source>
         <translation>CAN Bus उपलब्ध नहीं</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="427"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="428"/>
         <source>No CAN bus plugins found on this system.
 
 CAN bus support on macOS is limited and may require third-party hardware drivers.</source>
@@ -14918,37 +14918,37 @@ CAN bus support on macOS is limited and may require third-party hardware drivers
 macOS पर CAN bus समर्थन सीमित है और तृतीय-पक्ष हार्डवेयर ड्राइवर की आवश्यकता हो सकती है।</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="431"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="432"/>
         <source>No CAN bus plugins are available on this platform.</source>
         <translation>इस प्लेटफ़ॉर्म पर कोई CAN bus प्लगइन उपलब्ध नहीं है।</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="442"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="443"/>
         <source>Invalid CAN Configuration</source>
         <translation>अमान्य CAN कॉन्फ़िगरेशन</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="449"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="450"/>
         <source>Invalid Selection</source>
         <translation>अमान्य चयन</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="457"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="458"/>
         <source>No Devices Available</source>
         <translation>कोई डिवाइस उपलब्ध नहीं</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="369"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="370"/>
         <source>CAN Device Creation Failed</source>
         <translation>CAN डिवाइस निर्माण विफल</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="401"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="402"/>
         <source>CAN Connection Failed</source>
         <translation>CAN कनेक्शन विफल</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="417"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="418"/>
         <source>No CAN bus plugins found on this system.
 
 On Linux, ensure SocketCAN kernel modules are loaded.</source>
@@ -14957,7 +14957,7 @@ On Linux, ensure SocketCAN kernel modules are loaded.</source>
 Linux पर, सुनिश्चित करें कि SOCKETCAN कर्नेल मॉड्यूल लोड हैं।</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="422"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="423"/>
         <source>No CAN bus plugins found on this system.
 
 On Windows, install CAN hardware drivers (PEAK, Vector, etc.).</source>
@@ -14966,27 +14966,27 @@ On Windows, install CAN hardware drivers (PEAK, Vector, etc.).</source>
 Windows पर, CAN हार्डवेयर ड्राइवर इंस्टॉल करें (PEAK, VECTOR, आदि)।</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="443"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="444"/>
         <source>The CAN bus configuration is incomplete. Select a valid plugin and interface.</source>
         <translation>CAN बस कॉन्फ़िगरेशन अधूरा है। मान्य प्लगइन और इंटरफ़ेस चुनें।</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="450"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="451"/>
         <source>The selected plugin or interface is no longer available. Refresh the lists and try again.</source>
         <translation>चयनित प्लगइन या इंटरफ़ेस अब उपलब्ध नहीं है। सूची रिफ़्रेश करें और पुनः प्रयास करें।</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="458"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="459"/>
         <source>The plugin or interface list is empty. Refresh the lists and ensure your CAN hardware is connected.</source>
         <translation>प्लगइन या इंटरफ़ेस सूची खाली है। सूची रिफ़्रेश करें और सुनिश्चित करें कि आपका CAN हार्डवेयर कनेक्ट है।</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="371"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="372"/>
         <source>Unable to create CAN bus device. Check your hardware and drivers.</source>
         <translation>CAN बस डिवाइस बनाने में असमर्थ। अपना हार्डवेयर और ड्राइवर जाँचें।</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="399"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="400"/>
         <source>Unable to connect to CAN bus device. Check your hardware connection and settings.</source>
         <translation>CAN Bus डिवाइस से कनेक्ट करने में असमर्थ। अपने हार्डवेयर कनेक्शन और सेटिंग्स जाँचें।</translation>
     </message>
@@ -14999,68 +14999,68 @@ Windows पर, CAN हार्डवेयर ड्राइवर इंस�
         <translation type="vanished">एक त्रुटि हुई लेकिन CAN डिवाइस अब उपलब्ध नहीं है।</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="999"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1000"/>
         <source>Error code: %1</source>
         <translation>त्रुटि कोड: %1</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1007"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1008"/>
         <source>CAN Bus Communication Error</source>
         <translation>CAN Bus संचार त्रुटि</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1113"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1114"/>
         <source>No CAN driver selected</source>
         <translation>कोई CAN ड्राइवर चयनित नहीं</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1050"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1051"/>
         <source>Load SocketCAN kernel modules first</source>
         <translation>पहले SOCKETCAN कर्नेल मॉड्यूल लोड करें</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1046"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1047"/>
         <source>Connect a %1 adapter, then refresh</source>
         <translation>%1 एडाप्टर कनेक्ट करें, फिर रिफ़्रेश करें</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1053"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1054"/>
         <source>Set up a virtual CAN interface first</source>
         <translation>पहले एक वर्चुअल CAN इंटरफ़ेस सेट करें</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1055"/>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1075"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1056"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1076"/>
         <source>No interfaces found for %1</source>
         <translation>%1 के लिए कोई इंटरफ़ेस नहीं मिला</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1059"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1060"/>
         <source>Install &lt;a href='https://www.peak-system.com/Drivers.523.0.html?&amp;L=1'&gt;PEAK CAN drivers&lt;/a&gt;</source>
         <translation>&lt;a href='https://www.PEAK-system.com/Drivers.523.0.html?&amp;L=1'&gt;PEAK CAN ड्राइवर&lt;/a&gt; इंस्टॉल करें</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1063"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1064"/>
         <source>Install &lt;a href='https://www.vector.com/us/en/products/products-a-z/libraries-drivers/'&gt;Vector CAN drivers&lt;/a&gt;</source>
         <translation>&lt;a href='https://www.VECTOR.com/us/en/products/products-a-z/libraries-drivers/'&gt;VECTOR CAN ड्राइवर&lt;/a&gt; इंस्टॉल करें</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1067"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1068"/>
         <source>Install &lt;a href='https://www.systec-electronic.com/en/company/support/driver'&gt;SysTec CAN drivers&lt;/a&gt;</source>
         <translation>&lt;a href='https://www.systec-electronic.com/en/company/support/driver'&gt;SysTec CAN ड्राइवर&lt;/a&gt; इंस्टॉल करें</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1070"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1071"/>
         <source>Install %1 drivers</source>
         <translation>%1 ड्राइवर इंस्टॉल करें</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1073"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1074"/>
         <source>Install %1 drivers for macOS</source>
         <translation>macOS के लिए %1 ड्राइवर इंस्टॉल करें</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1087"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1088"/>
         <source>
 
 If the interface is down, bring it up first:
@@ -15071,42 +15071,42 @@ sudo ip link set %1 up type can bitrate %2
 </translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1223"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1224"/>
         <source>Plugin</source>
         <translation>प्लगइन</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1231"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1232"/>
         <source>Interface</source>
         <translation>इंटरफ़ेस</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1239"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1240"/>
         <source>Bitrate</source>
         <translation>बिटरेट</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1248"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1249"/>
         <source>CAN FD</source>
         <translation>CAN FD</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1255"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1256"/>
         <source>Data Bitrate</source>
         <translation>डेटा बिटरेट</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1265"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1266"/>
         <source>Loopback</source>
         <translation>लूपबैक</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1272"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1273"/>
         <source>Listen-Only</source>
         <translation>केवल-सुनने योग्य</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1279"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1280"/>
         <source>Multi-Frame Reassembly</source>
         <translation>मल्टी-फ्रेम रीअसेंबली</translation>
     </message>
@@ -15299,93 +15299,93 @@ sudo ip link set %1 up type can bitrate %2
 <context>
     <name>IO::Drivers::GsUsbCanBackend</name>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="494"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="495"/>
         <source>Failed to initialize libusb for the CANable adapter.</source>
         <translation>CANable एडाप्टर के लिए libusb को आरंभ करने में विफल।</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="521"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="522"/>
         <source>Unable to enumerate USB devices.</source>
         <translation>USB डिवाइस की गणना करने में असमर्थ।</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="541"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="542"/>
         <source>The selected CANable adapter is no longer connected, or another application has it open. On Windows the device must use the WinUSB driver (candleLight installs it automatically).</source>
         <translation>चयनित CANable एडाप्टर अब कनेक्ट नहीं है, या कोई अन्य एप्लिकेशन इसे खोले हुए है। Windows पर डिवाइस को WinUSB ड्राइवर का उपयोग करना चाहिए (candleLight इसे स्वचालित रूप से इंस्टॉल करता है)।</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="554"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="555"/>
         <source>Could not claim the CANable USB interface.</source>
         <translation>CANable USB इंटरफ़ेस को क्लेम नहीं किया जा सका।</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="624"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="625"/>
         <source>CANable adapter is not open for writing.</source>
         <translation>CANable एडाप्टर लिखने के लिए खुला नहीं है।</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="678"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="679"/>
         <source>Failed to transmit CAN frame to the adapter.</source>
         <translation>CAN फ़्रेम को एडाप्टर पर ट्रांसमिट करने में विफल।</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="694"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="695"/>
         <source>CAN bus error reported by the CANable adapter.</source>
         <translation>CANable एडाप्टर द्वारा CAN Bus त्रुटि रिपोर्ट की गई।</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="749"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="750"/>
         <source>A CAN frame was not acknowledged on the bus.</source>
         <translation>CAN फ़्रेम को बस पर स्वीकार नहीं किया गया।</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="782"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="783"/>
         <source>The CANable adapter was disconnected.</source>
         <translation>CANable एडाप्टर डिस्कनेक्ट हो गया।</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="859"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="860"/>
         <source>CANable adapter rejected the host-format handshake.</source>
         <translation>CANable एडाप्टर ने होस्ट-फ़ॉर्मेट हैंडशेक को अस्वीकार कर दिया।</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="866"/>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="940"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="867"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="941"/>
         <source>Could not read CANable timing constants.</source>
         <translation>CANable टाइमिंग कॉन्स्टेंट्स नहीं पढ़े जा सके।</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="872"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="873"/>
         <source>The adapter firmware does not support CAN FD. Flash candleLight FD firmware or disable the flexible data-rate option.</source>
         <translation>एडाप्टर फर्मवेयर CAN FD का समर्थन नहीं करता। candleLight FD फर्मवेयर फ्लैश करें या flexible data-rate विकल्प अक्षम करें।</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="880"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="881"/>
         <source>The bitrate %1 bps is not supported by this CANable adapter.</source>
         <translation>बिटरेट %1 bps इस CANable एडाप्टर द्वारा समर्थित नहीं है।</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="886"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="887"/>
         <source>CANable adapter rejected the requested bitrate.</source>
         <translation>CANable एडाप्टर ने अनुरोधित बिटरेट को अस्वीकार कर दिया।</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="910"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="911"/>
         <source>Could not start the CANable channel.</source>
         <translation>CANable चैनल प्रारंभ नहीं हो सका।</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="932"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="933"/>
         <source>Could not read CANable FD timing constants.</source>
         <translation>CANable FD टाइमिंग कॉन्स्टेंट्स नहीं पढ़े जा सके।</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="946"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="947"/>
         <source>The data bitrate %1 bps is not supported by this CANable adapter.</source>
         <translation>डेटा बिटरेट %1 bps इस CANable एडाप्टर द्वारा समर्थित नहीं है।</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="953"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="954"/>
         <source>CANable adapter rejected the requested data bitrate.</source>
         <translation>CANable एडाप्टर ने अनुरोधित डेटा बिटरेट को अस्वीकार कर दिया।</translation>
     </message>
@@ -16180,57 +16180,57 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
         <translation>Modbus संचार त्रुटि</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1246"/>
+        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1243"/>
         <source>Select Port</source>
         <translation>पोर्ट चुनें</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1336"/>
+        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1335"/>
         <source>Protocol</source>
         <translation>प्रोटोकॉल</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1344"/>
+        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1343"/>
         <source>Slave Address</source>
         <translation>स्लेव एड्रेस</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1353"/>
+        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1352"/>
         <source>Poll Interval (ms)</source>
         <translation>पोल अंतराल (ms)</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1381"/>
+        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1380"/>
         <source>Host / IP</source>
         <translation>होस्ट / IP</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1388"/>
+        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1387"/>
         <source>Port</source>
         <translation>पोर्ट</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1403"/>
+        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1402"/>
         <source>Serial Port</source>
         <translation>सीरियल पोर्ट</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1411"/>
+        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1410"/>
         <source>Baud Rate</source>
         <translation>बॉड रेट</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1419"/>
+        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1418"/>
         <source>Parity</source>
         <translation>पैरिटी</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1427"/>
+        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1426"/>
         <source>Data Bits</source>
         <translation>डेटा बिट्स</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1435"/>
+        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1434"/>
         <source>Stop Bits</source>
         <translation>स्टॉप बिट्स</translation>
     </message>
@@ -17284,7 +17284,7 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
 <context>
     <name>IO::Drivers::SeeedCanBackend</name>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus/SeeedCanBackend.cpp" line="196"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus/SeeedCanBackend.cpp" line="199"/>
         <source>The bitrate %1 bps is not supported by the USB-CAN Analyzer.</source>
         <translation>बिटरेट %1 bps USB-CAN Analyzer द्वारा समर्थित नहीं है।</translation>
     </message>
@@ -17297,12 +17297,12 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
         <translation type="vanished">USB-CAN Analyzer प्रारंभ करने में विफल।</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus/SeeedCanBackend.cpp" line="206"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus/SeeedCanBackend.cpp" line="209"/>
         <source>USB-CAN Analyzer is not open for writing.</source>
         <translation>USB-CAN Analyzer लिखने के लिए खुला नहीं है।</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus/SeeedCanBackend.cpp" line="251"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus/SeeedCanBackend.cpp" line="254"/>
         <source>CAN bus error reported by the USB-CAN Analyzer.</source>
         <translation>USB-CAN Analyzer द्वारा CAN Bus त्रुटि रिपोर्ट की गई।</translation>
     </message>
@@ -17310,27 +17310,27 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
 <context>
     <name>IO::Drivers::SerialCanBackendBase</name>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus/SerialCanBackendBase.cpp" line="190"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus/SerialCanBackendBase.cpp" line="194"/>
         <source>Could not open serial port %1: %2</source>
         <translation>सीरियल पोर्ट %1 खोल नहीं सका: %2</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus/SerialCanBackendBase.cpp" line="201"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus/SerialCanBackendBase.cpp" line="205"/>
         <source>The adapter on %1 did not accept the initialization sequence.</source>
         <translation>%1 पर एडाप्टर ने इनिशियलाइज़ेशन सीक्वेंस स्वीकार नहीं किया।</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus/SerialCanBackendBase.cpp" line="211"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus/SerialCanBackendBase.cpp" line="215"/>
         <source>The adapter on %1 refused the requested configuration.</source>
         <translation>%1 पर एडाप्टर ने अनुरोधित कॉन्फ़िगरेशन अस्वीकार किया।</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus/SerialCanBackendBase.cpp" line="272"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus/SerialCanBackendBase.cpp" line="276"/>
         <source>The serial adapter is gone</source>
         <translation>सीरियल एडाप्टर गायब है</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus/SerialCanBackendBase.cpp" line="273"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus/SerialCanBackendBase.cpp" line="277"/>
         <source>Lost the adapter on %1: %2</source>
         <translation>%1 पर एडाप्टर खो गया: %2</translation>
     </message>
@@ -17338,7 +17338,7 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
 <context>
     <name>IO::Drivers::SlcanBackend</name>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus/SlcanBackend.cpp" line="173"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus/SlcanBackend.cpp" line="172"/>
         <source>The bitrate %1 bps is not a standard slcan rate.</source>
         <translation>बिटरेट %1 bps मानक slcan दर नहीं है।</translation>
     </message>
@@ -17351,12 +17351,12 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
         <translation type="vanished">slcan चैनल खोलने में विफल।</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus/SlcanBackend.cpp" line="245"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus/SlcanBackend.cpp" line="244"/>
         <source>slcan adapter is not open for writing.</source>
         <translation>slcan एडाप्टर लिखने के लिए खुला नहीं है।</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus/SlcanBackend.cpp" line="283"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus/SlcanBackend.cpp" line="282"/>
         <source>CAN bus error reported by the slcan adapter.</source>
         <translation>slcan एडाप्टर द्वारा CAN Bus त्रुटि रिपोर्ट की गई।</translation>
     </message>
@@ -17373,7 +17373,7 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
     </message>
     <message>
         <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="395"/>
-        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="802"/>
+        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="800"/>
         <source>Select Port</source>
         <translation>पोर्ट चुनें</translation>
     </message>
@@ -17418,17 +17418,17 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
         <translation>कस्टम सीरियल डिवाइस रजिस्टर करने के लिए कोई अन्य पथ टाइप करें</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="911"/>
+        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="898"/>
         <source>The specified device could not be found. Check the connection and try again.</source>
         <translation>निर्दिष्ट डिवाइस नहीं मिला। कनेक्शन जाँचें और पुनः प्रयास करें।</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="918"/>
+        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="905"/>
         <source>An unknown error occurred. Check the device and try again.</source>
         <translation>अज्ञात त्रुटि हुई। डिवाइस जाँचें और पुनः प्रयास करें।</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="920"/>
+        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="907"/>
         <source>The device is not open. Open the device before attempting this operation.</source>
         <translation>डिवाइस खुला नहीं है। यह ऑपरेशन करने से पहले डिवाइस खोलें।</translation>
     </message>
@@ -17464,97 +17464,97 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
         <translation>"%1" मान्य पथ नहीं है; कस्टम सीरियल डिवाइस रजिस्टर करने के लिए कोई अन्य पथ टाइप करें।</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="884"/>
+        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="871"/>
         <source>Unknown</source>
         <translation>अज्ञात</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="885"/>
+        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="872"/>
         <source>Critical error on serial port "%1"</source>
         <translation>सीरियल पोर्ट "%1" पर गंभीर त्रुटि</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="886"/>
+        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="873"/>
         <source>Unknown error</source>
         <translation>अज्ञात त्रुटि</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="910"/>
+        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="897"/>
         <source>No error occurred.</source>
         <translation>कोई त्रुटि नहीं हुई।</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="912"/>
+        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="899"/>
         <source>Permission denied. Ensure the application has the necessary access rights to the device.</source>
         <translation>अनुमति अस्वीकृत। सुनिश्चित करें कि एप्लिकेशन के पास डिवाइस तक पहुँचने के लिए आवश्यक अधिकार हैं।</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="913"/>
+        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="900"/>
         <source>Failed to open the device. It may already be in use or unavailable.</source>
         <translation>डिवाइस खोलने में विफल। यह पहले से उपयोग में हो सकता है या अनुपलब्ध हो सकता है।</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="914"/>
+        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="901"/>
         <source>An error occurred while writing data to the device.</source>
         <translation>डिवाइस पर डेटा लिखते समय त्रुटि हुई।</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="915"/>
+        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="902"/>
         <source>An error occurred while reading data from the device.</source>
         <translation>डिवाइस से डेटा पढ़ते समय त्रुटि हुई।</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="916"/>
+        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="903"/>
         <source>A critical resource error occurred. The device may have been disconnected or is no longer accessible.</source>
         <translation>एक गंभीर संसाधन त्रुटि हुई। डिवाइस डिस्कनेक्ट हो गया होगा या अब पहुँच योग्य नहीं है।</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="917"/>
+        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="904"/>
         <source>The requested operation is not supported on this device.</source>
         <translation>अनुरोधित ऑपरेशन इस डिवाइस पर समर्थित नहीं है।</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="919"/>
+        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="906"/>
         <source>The operation timed out. The device may not be responding.</source>
         <translation>ऑपरेशन टाइम आउट हो गया। डिवाइस प्रतिक्रिया नहीं दे रहा है।</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="1008"/>
+        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="1007"/>
         <source>Serial Port</source>
         <translation>सीरियल पोर्ट</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="1016"/>
+        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="1015"/>
         <source>Baud Rate</source>
         <translation>बॉड रेट</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="1024"/>
+        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="1023"/>
         <source>Parity</source>
         <translation>पैरिटी</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="1032"/>
+        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="1031"/>
         <source>Data Bits</source>
         <translation>डेटा बिट्स</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="1040"/>
+        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="1039"/>
         <source>Stop Bits</source>
         <translation>स्टॉप बिट्स</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="1048"/>
+        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="1047"/>
         <source>Flow Control</source>
         <translation>फ्लो कंट्रोल</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="1056"/>
+        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="1055"/>
         <source>DTR</source>
         <translation>DTR</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="1063"/>
+        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="1062"/>
         <source>Auto-Reconnect</source>
         <translation>स्वतः पुनः कनेक्ट</translation>
     </message>
@@ -17941,12 +17941,12 @@ The device may not expose data endpoints in its active configuration, or it may 
 <context>
     <name>IO::FrameReader</name>
     <message>
-        <location filename="../../../core/Pipeline/IO/FrameReader.cpp" line="392"/>
+        <location filename="../../../core/Pipeline/IO/FrameReader.cpp" line="397"/>
         <source>Frames dropped</source>
         <translation>फ्रेम छोड़े गए</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/IO/FrameReader.cpp" line="394"/>
+        <location filename="../../../core/Pipeline/IO/FrameReader.cpp" line="399"/>
         <source>Incoming data is arriving faster than Serial Studio can process it; %1 frame(s) have been dropped. Reduce the data rate or disable a heavy consumer.</source>
         <translation>आने वाला डेटा Serial Studio द्वारा प्रोसेस किए जाने की तुलना में तेज़ी से आ रहा है; %1 फ्रेम छोड़े गए हैं। डेटा दर कम करें या किसी भारी उपभोक्ता को अक्षम करें।</translation>
     </message>
@@ -18778,17 +18778,17 @@ The device may not expose data endpoints in its active configuration, or it may 
         <translation>सर्पिल</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/LayoutPatternPicker.qml" line="100"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/LayoutPatternPicker.qml" line="113"/>
         <source>Layout</source>
         <translation>लेआउट</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/LayoutPatternPicker.qml" line="214"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/LayoutPatternPicker.qml" line="263"/>
         <source>Split</source>
         <translation>विभाजित</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/LayoutPatternPicker.qml" line="280"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/LayoutPatternPicker.qml" line="329"/>
         <source>Manual placement</source>
         <translation>मैन्युअल प्लेसमेंट</translation>
     </message>
@@ -20980,12 +20980,12 @@ Would you like to open the download page?</source>
 <context>
     <name>Misc::GraphicsBackend</name>
     <message>
-        <location filename="../../../core/Ui/Misc/GraphicsBackend.cpp" line="246"/>
+        <location filename="../../../core/Ui/Misc/GraphicsBackend.cpp" line="280"/>
         <source>Restart Required</source>
         <translation>रीस्टार्ट आवश्यक</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/Misc/GraphicsBackend.cpp" line="247"/>
+        <location filename="../../../core/Ui/Misc/GraphicsBackend.cpp" line="281"/>
         <source>The new rendering backend will take effect after restarting Serial Studio. Restart now to apply the change?</source>
         <translation>नया रेंडरिंग बैकएंड Serial Studio को रीस्टार्ट करने के बाद प्रभावी होगा। बदलाव लागू करने के लिए अभी रीस्टार्ट करें?</translation>
     </message>
@@ -21148,8 +21148,8 @@ Would you like to open the download page?</source>
         <translation>Info.plist नहीं लिखा जा सका: %1</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/Misc/ShortcutGenerator_macOS.cpp" line="271"/>
         <location filename="../../../core/Ui/Misc/ShortcutGenerator_Linux.cpp" line="140"/>
+        <location filename="../../../core/Ui/Misc/ShortcutGenerator_macOS.cpp" line="271"/>
         <source>Windows shortcut writer is not available on this platform.</source>
         <translation>Windows शॉर्टकट राइटर इस प्लेटफ़ॉर्म पर उपलब्ध नहीं है।</translation>
     </message>
@@ -21180,8 +21180,8 @@ Would you like to open the download page?</source>
         <translation>.lnk फ़ाइल सहेजना विफल (HRESULT 0x%1)।</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/Misc/ShortcutGenerator_Windows.cpp" line="185"/>
         <location filename="../../../core/Ui/Misc/ShortcutGenerator_Linux.cpp" line="154"/>
+        <location filename="../../../core/Ui/Misc/ShortcutGenerator_Windows.cpp" line="185"/>
         <source>macOS shortcut writer is not available on this platform.</source>
         <translation>macOS शॉर्टकट राइटर इस प्लेटफ़ॉर्म पर उपलब्ध नहीं है।</translation>
     </message>
@@ -21917,38 +21917,38 @@ Add groups above to poll multiple register types.</source>
 <context>
     <name>NativeTemplates</name>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryRaw.cpp" line="116"/>
         <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryHex.cpp" line="127"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryRaw.cpp" line="116"/>
         <source>Bytes per value</source>
         <translation>प्रति मान बाइट्स</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryRaw.cpp" line="117"/>
         <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryHex.cpp" line="128"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryRaw.cpp" line="117"/>
         <source>Number of bytes combined into each channel value.</source>
         <translation>प्रत्येक चैनल मान में संयोजित बाइट्स की संख्या।</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryRaw.cpp" line="125"/>
         <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryHex.cpp" line="136"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryRaw.cpp" line="125"/>
         <source>Endianness</source>
         <translation>एंडियननेस</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryRaw.cpp" line="126"/>
         <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryHex.cpp" line="137"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryRaw.cpp" line="126"/>
         <source>Byte order used when combining multi-byte values.</source>
         <translation>मल्टी-बाइट मानों को संयोजित करते समय उपयोग किया जाने वाला बाइट क्रम।</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryRaw.cpp" line="134"/>
         <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryHex.cpp" line="145"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryRaw.cpp" line="134"/>
         <source>Signed values</source>
         <translation>साइन किए गए मान</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryRaw.cpp" line="135"/>
         <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryHex.cpp" line="146"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryRaw.cpp" line="135"/>
         <source>Interprets each value as two's-complement signed.</source>
         <translation>प्रत्येक मान को two's-complement साइन किए गए के रूप में व्याख्यायित करता है।</translation>
     </message>
@@ -21963,9 +21963,9 @@ Add groups above to poll multiple register types.</source>
         <translation>अल्पविराम से अलग किए गए tag:index प्रविष्टियाँ, जैसे 1:0,2:1,3:2। टैग दशमलव या 0x-उपसर्गित हेक्स हो सकते हैं।</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/TextNmea0183.cpp" line="219"/>
         <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinarySirf.cpp" line="216"/>
         <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryUbx.cpp" line="226"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/TextNmea0183.cpp" line="219"/>
         <source>Validate checksum</source>
         <translation>चेकसम सत्यापित करें</translation>
     </message>
@@ -24586,10 +24586,10 @@ Reload it?</source>
         <translation>क्या आप आउटपुट विजेट "%1" को हटाना चाहते हैं?</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectOutputWidgets.cpp" line="239"/>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="313"/>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="355"/>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="390"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectOutputWidgets.cpp" line="239"/>
         <source>This action cannot be undone. Do you wish to proceed?</source>
         <translation>यह क्रिया पूर्ववत नहीं की जा सकती। क्या आप आगे बढ़ना चाहते हैं?</translation>
     </message>
@@ -24914,18 +24914,9 @@ Reload it?</source>
         <translation>नया वर्कस्पेस प्रोफ़ाइल</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaceProfiles.cpp" line="373"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaceProfiles.cpp" line="395"/>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="1309"/>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="1338"/>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="1364"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="382"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="410"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="433"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="456"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectSources.cpp" line="280"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaces.cpp" line="763"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaces.cpp" line="789"/>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="498"/>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="520"/>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="547"/>
@@ -24934,6 +24925,15 @@ Reload it?</source>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="954"/>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="976"/>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="1002"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectSources.cpp" line="280"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="382"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="410"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="433"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="456"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaceProfiles.cpp" line="373"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaceProfiles.cpp" line="395"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaces.cpp" line="763"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaces.cpp" line="789"/>
         <source>Name:</source>
         <translation>नाम:</translation>
     </message>
@@ -24978,9 +24978,9 @@ Reload it?</source>
         <translation>टेबल जोड़ें</translation>
     </message>
     <message>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="978"/>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="123"/>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="384"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="978"/>
         <source>Shared Table</source>
         <translation>साझा टेबल</translation>
     </message>
@@ -25018,8 +25018,8 @@ Reload it?</source>
         <translation>वेरिएबल संपादित करें</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="381"/>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="975"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="381"/>
         <source>New Shared Table</source>
         <translation>नई साझा टेबल</translation>
     </message>
@@ -25161,15 +25161,15 @@ Reload it?</source>
         <translation>स्ट्रीम लेन बदलें</translation>
     </message>
     <message>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="522"/>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaces.cpp" line="384"/>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaces.cpp" line="765"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="522"/>
         <source>Workspace</source>
         <translation>कार्यस्थान</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaces.cpp" line="762"/>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="519"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaces.cpp" line="762"/>
         <source>New Workspace</source>
         <translation>नया कार्यस्थान</translation>
     </message>
@@ -26064,8 +26064,8 @@ This script may use Lua 5.3 bitwise syntax, which this runtime does not support.
 </translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="489"/>
         <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="230"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="489"/>
         <source>Frame Parser Disabled</source>
         <translation>Frame Parser अक्षम</translation>
     </message>
@@ -26131,8 +26131,8 @@ Serial Studio असमर्थित ऑपरेटरों को bit.* क
 %1</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="680"/>
         <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="560"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="680"/>
         <source>Missing Parse Function</source>
         <translation>Parse फ़ंक्शन अनुपलब्ध</translation>
     </message>
@@ -26148,8 +26148,8 @@ function parse(frame) ... end</source>
 function parse(frame) ... end</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="743"/>
         <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="612"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="743"/>
         <source>Parse Function Runtime Error</source>
         <translation>Parse फ़ंक्शन रनटाइम त्रुटि</translation>
     </message>
@@ -26493,12 +26493,12 @@ function parse(%1) { ... }
         <translation>असमर्थित टॉप-लेवल कीवर्ड '%1'</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/Misc/GraphicsBackend.cpp" line="295"/>
+        <location filename="../../../core/Ui/Misc/GraphicsBackend.cpp" line="329"/>
         <source>Automatic (Platform Default)</source>
         <translation>ऑटोमैटिक (प्लेटफ़ॉर्म डिफ़ॉल्ट)</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/Misc/GraphicsBackend.cpp" line="300"/>
+        <location filename="../../../core/Ui/Misc/GraphicsBackend.cpp" line="334"/>
         <source>Software (Fallback)</source>
         <translation>सॉफ़्टवेयर (फॉलबैक)</translation>
     </message>
@@ -26934,288 +26934,288 @@ function parse(%1) { ... }
 <context>
     <name>ReportOptionsDialog</name>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="25"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="27"/>
         <source>Generate PDF Report</source>
         <translation>PDF रिपोर्ट जेनरेट करें</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="25"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="27"/>
         <source>Generate Report</source>
         <translation>रिपोर्ट जनरेट करें</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="71"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="73"/>
         <source>Solid</source>
         <translation>सॉलिड</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="72"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="74"/>
         <source>Dashed</source>
         <translation>डैश्ड</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="73"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="75"/>
         <source>Dotted</source>
         <translation>डॉटेड</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="95"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="97"/>
         <source>A4 (210 × 297 mm)</source>
         <translation>A4 (210 × 297 mm)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="96"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="98"/>
         <source>A3 (297 × 420 mm)</source>
         <translation>A3 (297 × 420 mm)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="97"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="99"/>
         <source>A2 (420 × 594 mm)</source>
         <translation>A2 (420 × 594 mm)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="98"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="100"/>
         <source>A1 (594 × 841 mm)</source>
         <translation>A1 (594 × 841 mm)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="99"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="101"/>
         <source>A0 (841 × 1189 mm)</source>
         <translation>A0 (841 × 1189 mm)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="100"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="102"/>
         <source>A5 (148 × 210 mm)</source>
         <translation>A5 (148 × 210 mm)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="101"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="103"/>
         <source>A6 (105 × 148 mm)</source>
         <translation>A6 (105 × 148 mm)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="102"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="104"/>
         <source>B4 (250 × 353 mm)</source>
         <translation>B4 (250 × 353 mm)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="103"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="105"/>
         <source>B5 (176 × 250 mm)</source>
         <translation>B5 (176 × 250 mm)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="104"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="106"/>
         <source>Letter (8.5 × 11 in)</source>
         <translation>Letter (8.5 × 11 in)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="105"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="107"/>
         <source>Legal (8.5 × 14 in)</source>
         <translation>Legal (8.5 × 14 in)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="106"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="108"/>
         <source>Executive (7.25 × 10.5 in)</source>
         <translation>Executive (7.25 × 10.5 in)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="107"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="109"/>
         <source>Tabloid (11 × 17 in)</source>
         <translation>Tabloid (11 × 17 in)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="108"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="110"/>
         <source>Ledger (17 × 11 in)</source>
         <translation>Ledger (17 × 11 in)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="122"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="124"/>
         <source>%1 — Session Report</source>
         <translation>%1 — सेशन रिपोर्ट</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="124"/>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="319"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="126"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="321"/>
         <source>Session Report</source>
         <translation>सेशन रिपोर्ट</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="221"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="223"/>
         <source>Branding</source>
         <translation>ब्रांडिंग</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="227"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="229"/>
         <source>Page</source>
         <translation>पेज</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="233"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="235"/>
         <source>Sections</source>
         <translation>अनुभाग</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="239"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="241"/>
         <source>Datasets</source>
         <translation>डेटासेट्स</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="287"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="289"/>
         <source>Identity</source>
         <translation>पहचान</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="301"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="303"/>
         <source>Company</source>
         <translation>कंपनी</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="308"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="310"/>
         <source>e.g. Acme Test Systems</source>
         <translation>उदा. Acme Test Systems</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="312"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="314"/>
         <source>Document title</source>
         <translation>दस्तावेज़ शीर्षक</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="323"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="325"/>
         <source>Author</source>
         <translation>लेखक</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="330"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="332"/>
         <source>Prepared by (optional)</source>
         <translation>तैयारकर्ता (वैकल्पिक)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="339"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="341"/>
         <source>Logo</source>
         <translation>लोगो</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="352"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="354"/>
         <source>File</source>
         <translation>फ़ाइल</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="363"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="365"/>
         <source>PNG, JPG or SVG (optional)</source>
         <translation>PNG, JPG या SVG (वैकल्पिक)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="365"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="367"/>
         <source>Browse…</source>
         <translation>ब्राउज़ करें…</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="368"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="370"/>
         <source>Clear</source>
         <translation>साफ़ करें</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="409"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="411"/>
         <source>Paper</source>
         <translation>पेपर</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="421"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="423"/>
         <source>Page size</source>
         <translation>पेज साइज़</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="555"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="557"/>
         <source>Annotate min, max, and mean values on plots</source>
         <translation>प्लॉट पर न्यूनतम, अधिकतम और औसत मान एनोटेट करें</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="591"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="593"/>
         <source>Include datasets</source>
         <translation>डेटासेट्स शामिल करें</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="605"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="607"/>
         <source>Expand All</source>
         <translation>सभी विस्तृत करें</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="614"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="616"/>
         <source>Collapse All</source>
         <translation>सभी संक्षिप्त करें</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="626"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="628"/>
         <source>Search datasets</source>
         <translation>डेटासेट्स खोजें</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="752"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="754"/>
         <source>Loading datasets...</source>
         <translation>डेटासेट्स लोड हो रहे हैं...</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="753"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="755"/>
         <source>No datasets match your search.</source>
         <translation>आपकी खोज से कोई डेटासेट मेल नहीं खाता।</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="773"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="775"/>
         <source>Select at least one dataset to include.</source>
         <translation>शामिल करने के लिए कम से कम एक डेटासेट चुनें।</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="790"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="792"/>
         <source>Export HTML</source>
         <translation>HTML एक्सपोर्ट करें</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="539"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="541"/>
         <source>Cover page (logo, document title, test subtitle)</source>
         <translation>कवर पेज (लोगो, डॉक्यूमेंट शीर्षक, टेस्ट उपशीर्षक)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="543"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="545"/>
         <source>Test information (project, timestamps, classification and notes)</source>
         <translation>टेस्ट जानकारी (प्रोजेक्ट, टाइमस्टैम्प, वर्गीकरण और नोट्स)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="547"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="549"/>
         <source>Measurement summary (min, max, mean, std. deviation per parameter)</source>
         <translation>मापन सारांश (प्रति पैरामीटर न्यूनतम, अधिकतम, माध्य, मानक विचलन)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="551"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="553"/>
         <source>Parameter trends (time-series chart per numeric parameter)</source>
         <translation>पैरामीटर ट्रेंड (प्रति संख्यात्मक पैरामीटर टाइम-सीरीज़ चार्ट)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="437"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="439"/>
         <source>Plot appearance</source>
         <translation>प्लॉट अपीयरेंस</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="451"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="453"/>
         <source>Line width</source>
         <translation>लाइन चौड़ाई</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="483"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="485"/>
         <source>Line style</source>
         <translation>लाइन स्टाइल</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="524"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="526"/>
         <source>Include</source>
         <translation>शामिल करें</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="782"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="784"/>
         <source>Cancel</source>
         <translation>रद्द करें</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="790"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="792"/>
         <source>Export PDF</source>
         <translation>PDF एक्सपोर्ट करें</translation>
     </message>
@@ -29118,12 +29118,12 @@ Add absolute addresses above to poll the controller.</source>
         <translation>रीसेट करें</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="231"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="233"/>
         <source>Close</source>
         <translation>बंद करें</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="239"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="241"/>
         <source>Apply</source>
         <translation>लागू करें</translation>
     </message>
@@ -29478,42 +29478,47 @@ Add absolute addresses above to poll the controller.</source>
         <translation>SIMD निर्देश सेट</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="226"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="225"/>
+        <source>Reduce Motion</source>
+        <translation>मोशन कम करें</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="249"/>
         <source>Apply Performance Hints</source>
         <translation>परफ़ॉर्मेंस हिंट्स लागू करें</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="249"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="272"/>
         <source>Keep Display Awake</source>
         <translation>डिस्प्ले को सक्रिय रखें</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="278"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="301"/>
         <source>Performance hints raise process priority and opt out of OS power throttling. Changes take effect the next time Serial Studio starts.</source>
         <translation>परफ़ॉर्मेंस हिंट्स प्रोसेस प्राथमिकता बढ़ाते हैं और OS पावर थ्रॉटलिंग से बाहर निकलते हैं। बदलाव अगली बार Serial Studio शुरू होने पर लागू होंगे।</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="289"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="312"/>
         <source>Updates &amp; News</source>
         <translation>अपडेट और समाचार</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="305"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="328"/>
         <source>Automatically Check for Updates</source>
         <translation>अपडेट स्वचालित रूप से जाँचें</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="328"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="351"/>
         <source>Check for Extension Updates</source>
         <translation>एक्सटेंशन अपडेट जाँचें</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="352"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="375"/>
         <source>Install Extension Updates Automatically</source>
         <translation>एक्सटेंशन अपडेट स्वचालित रूप से इंस्टॉल करें</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="382"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="405"/>
         <source>Installed extensions and themes are checked when Serial Studio starts, together with application updates. Serial Studio asks before installing them unless automatic installation is enabled.</source>
         <translation>इंस्टॉल किए गए एक्सटेंशन और थीम की जाँच Serial Studio शुरू होने पर एप्लिकेशन अपडेट के साथ की जाती है। Serial Studio इन्हें इंस्टॉल करने से पहले पूछता है जब तक कि स्वचालित इंस्टॉलेशन सक्षम न हो।</translation>
     </message>
@@ -30199,42 +30204,42 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
 <context>
     <name>StartMenu</name>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="318"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="338"/>
         <source>Workspaces</source>
         <translation>वर्कस्पेसेज़</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="420"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="441"/>
         <source>No Workspaces Available</source>
         <translation>कोई वर्कस्पेस उपलब्ध नहीं</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="455"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="476"/>
         <source>Actions</source>
         <translation>एक्शन्स</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="478"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="500"/>
         <source>No Actions Available</source>
         <translation>कोई एक्शन उपलब्ध नहीं</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="508"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="530"/>
         <source>Plugins</source>
         <translation>प्लगइन्स</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="406"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="427"/>
         <source>New Workspace…</source>
         <translation>नया वर्कस्पेस…</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="546"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="569"/>
         <source>Manage Plugins…</source>
         <translation>प्लगइन प्रबंधित करें…</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="556"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="579"/>
         <source>No Plugins Installed</source>
         <translation>कोई प्लगइन इंस्टॉल नहीं है</translation>
     </message>
@@ -30271,12 +30276,12 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
         <translation type="vanished">AI असिस्टेंट</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="392"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="413"/>
         <source>Show "%1"</source>
         <translation>"%1" दिखाएं</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="397"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="418"/>
         <source>Show All Hidden Workspaces</source>
         <translation>सभी छिपे हुए वर्कस्पेसेज़ दिखाएं</translation>
     </message>
@@ -30305,7 +30310,7 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
         <translation type="vanished">सेशन डेटाबेस</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="669"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="693"/>
         <source>No Export Formats Available</source>
         <translation>कोई एक्सपोर्ट फॉर्मेट उपलब्ध नहीं</translation>
     </message>
@@ -30314,7 +30319,7 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
         <translation type="vanished">टूल्स</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="744"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="769"/>
         <source>No Tools Available</source>
         <translation>कोई टूल उपलब्ध नहीं</translation>
     </message>
@@ -30327,7 +30332,7 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
         <translation type="vanished">बंद करें</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="819"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="855"/>
         <source>Edit…</source>
         <translation>एडिट करें…</translation>
     </message>
@@ -30348,12 +30353,12 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
         <translation type="vanished">हेल्प सेंटर</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="830"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="866"/>
         <source>Delete</source>
         <translation>डिलीट करें</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="831"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="867"/>
         <source>Hide</source>
         <translation>छुपाएं</translation>
     </message>
@@ -30421,7 +30426,7 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
 <context>
     <name>SubMenuCombo</name>
     <message>
-        <location filename="../../qml/Widgets/SubMenuCombo.qml" line="186"/>
+        <location filename="../../qml/Widgets/SubMenuCombo.qml" line="182"/>
         <source>No Data Available</source>
         <translation>कोई डेटा उपलब्ध नहीं</translation>
     </message>
@@ -30633,42 +30638,42 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
         <translation type="vanished">खोजें…</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="577"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="584"/>
         <source>Settings</source>
         <translation>सेटिंग्स</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="578"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="585"/>
         <source>Console</source>
         <translation>कंसोल</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="579"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="586"/>
         <source>Notifications</source>
         <translation>सूचनाएं</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="580"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="587"/>
         <source>Clock</source>
         <translation>घड़ी</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="581"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="588"/>
         <source>Stopwatch</source>
         <translation>स्टॉपवॉच</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="583"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="590"/>
         <source>AI Assistant</source>
         <translation>AI असिस्टेंट</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="584"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="591"/>
         <source>Resume</source>
         <translation>फिर से शुरू करें</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="584"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="591"/>
         <source>Pause</source>
         <translation>रोकें</translation>
     </message>
@@ -30681,72 +30686,72 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
         <translation type="vanished">कोई वर्कस्पेस उपलब्ध नहीं</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="258"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="259"/>
         <source>Search… (%1)</source>
         <translation>खोजें… (%1)</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="935"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="942"/>
         <source>Data is arriving faster than scripts can process it; some frames are being thinned. See the problem center for details.</source>
         <translation>डेटा स्क्रिप्ट द्वारा प्रोसेस किए जाने की तुलना में तेज़ी से आ रहा है; कुछ फ्रेम पतले किए जा रहे हैं। विवरण के लिए समस्या केंद्र देखें।</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="959"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="966"/>
         <source>Unfreeze Dashboard</source>
         <translation>डैशबोर्ड अनफ्रीज़ करें</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="960"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="967"/>
         <source>Freeze Dashboard</source>
         <translation>डैशबोर्ड फ्रीज़ करें</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1009"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1016"/>
         <source>MQTT: Connected to %1</source>
         <translation>MQTT: %1 से कनेक्ट हो गया</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1010"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1017"/>
         <source>MQTT: Not connected</source>
         <translation>MQTT: कनेक्ट नहीं है</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1034"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1045"/>
         <source>MQTT Publisher</source>
         <translation>MQTT Publisher</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1044"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1055"/>
         <source>Status:</source>
         <translation>स्थिति:</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1052"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1063"/>
         <source>Connected</source>
         <translation>कनेक्टेड</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1053"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1064"/>
         <source>Disconnected</source>
         <translation>डिस्कनेक्टेड</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1060"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1071"/>
         <source>Broker:</source>
         <translation>Broker:</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1073"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1084"/>
         <source>Mode:</source>
         <translation>मोड:</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1086"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1097"/>
         <source>Messages sent:</source>
         <translation>भेजे गए संदेश:</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1100"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1111"/>
         <source>Open MQTT Settings</source>
         <translation>MQTT सेटिंग्स खोलें</translation>
     </message>
@@ -30779,7 +30784,7 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
         <translation type="vanished">समस्या केंद्र खोलें</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="582"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="589"/>
         <source>File Transmission</source>
         <translation>फ़ाइल ट्रांसमिशन</translation>
     </message>
@@ -30788,7 +30793,7 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
         <translation type="vanished">विजेट खोजें…</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1146"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1168"/>
         <source>Remove from Workspace</source>
         <translation>वर्कस्पेस से हटाएं</translation>
     </message>
@@ -32989,6 +32994,41 @@ I understand that when it ends, I'll need to buy a license or build the GPLv3 ve
     </message>
     <message>
         <location filename="../../../core/Ui/UI/Widgets/Waterfall.cpp" line="307"/>
+        <source>Grayscale (Inverted)</source>
+        <translation>ग्रेस्केल (इनवर्टेड)</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/UI/Widgets/Waterfall.cpp" line="309"/>
+        <source>Cividis</source>
+        <translation>Cividis</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/UI/Widgets/Waterfall.cpp" line="311"/>
+        <source>Cubehelix</source>
+        <translation>Cubehelix</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/UI/Widgets/Waterfall.cpp" line="313"/>
+        <source>SDR Classic</source>
+        <translation>SDR क्लासिक</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/UI/Widgets/Waterfall.cpp" line="315"/>
+        <source>Spectral</source>
+        <translation>स्पेक्ट्रल</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/UI/Widgets/Waterfall.cpp" line="317"/>
+        <source>Red/Blue</source>
+        <translation>लाल/नीला</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/UI/Widgets/Waterfall.cpp" line="319"/>
+        <source>Coolwarm</source>
+        <translation>Coolwarm</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/UI/Widgets/Waterfall.cpp" line="321"/>
         <source>Unknown</source>
         <translation>अज्ञात</translation>
     </message>

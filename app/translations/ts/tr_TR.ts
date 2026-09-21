@@ -6021,22 +6021,22 @@ Bunu yalnızca güvenilir ağlarda etkinleştirin. Güvenilmeyen istemciler canl
         <translation>Değer</translation>
     </message>
     <message>
+        <location filename="../../qml/Widgets/Dashboard/DataGrid.qml" line="108"/>
         <location filename="../../rcc/extensions/widget/datagrid/DataGrid.qml" line="111"/>
         <location filename="../../rcc/extensions/widget/datagrid/DataGrid.qml" line="118"/>
-        <location filename="../../qml/Widgets/Dashboard/DataGrid.qml" line="108"/>
         <source>Pause</source>
         <translation>Duraklat</translation>
     </message>
     <message>
+        <location filename="../../qml/Widgets/Dashboard/DataGrid.qml" line="108"/>
         <location filename="../../rcc/extensions/widget/datagrid/DataGrid.qml" line="111"/>
         <location filename="../../rcc/extensions/widget/datagrid/DataGrid.qml" line="118"/>
-        <location filename="../../qml/Widgets/Dashboard/DataGrid.qml" line="108"/>
         <source>Resume</source>
         <translation>Devam Et</translation>
     </message>
     <message>
-        <location filename="../../rcc/extensions/widget/datagrid/DataGrid.qml" line="335"/>
         <location filename="../../qml/Widgets/Dashboard/DataGrid.qml" line="323"/>
+        <location filename="../../rcc/extensions/widget/datagrid/DataGrid.qml" line="335"/>
         <source>Awaiting data…</source>
         <translation>Veri bekleniyor…</translation>
     </message>
@@ -14553,7 +14553,7 @@ Yoklamak için yukarıdan kontrolcü etiketleri ekleyin.</translation>
 <context>
     <name>IO::ConnectionManager</name>
     <message>
-        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="240"/>
+        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="241"/>
         <source>UART/COM</source>
         <translation>UART/COM</translation>
     </message>
@@ -14562,92 +14562,92 @@ Yoklamak için yukarıdan kontrolcü etiketleri ekleyin.</translation>
         <translation type="vanished">Ağ Soketi</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="240"/>
+        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="241"/>
         <source>Network</source>
         <translation>Ağ</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="240"/>
+        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="241"/>
         <source>Bluetooth LE</source>
         <translation>Bluetooth LE</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="242"/>
+        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="243"/>
         <source>Audio</source>
         <translation>Ses</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="242"/>
+        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="243"/>
         <source>Modbus</source>
         <translation>Modbus</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="242"/>
+        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="243"/>
         <source>CAN Bus</source>
         <translation>CAN Bus</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="242"/>
+        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="243"/>
         <source>USB Device</source>
         <translation>USB Cihazı</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="242"/>
+        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="243"/>
         <source>HID Device</source>
         <translation>HID Cihazı</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="243"/>
+        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="244"/>
         <source>Process</source>
         <translation>Süreç</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="243"/>
+        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="244"/>
         <source>MQTT Subscriber</source>
         <translation>MQTT Abone</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="243"/>
+        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="244"/>
         <source>OPC UA</source>
         <translation>OPC UA</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="243"/>
+        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="244"/>
         <source>Siemens S7</source>
         <translation>Siemens S7</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="244"/>
+        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="245"/>
         <source>EtherNet/IP</source>
         <translation>Ethernet/IP</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="244"/>
+        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="245"/>
         <source>IEC 60870-5-104</source>
         <translation>IEC 60870-5-104</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="551"/>
+        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="552"/>
         <source>Your trial period has ended.</source>
         <translation>Deneme süreniz sona erdi.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="552"/>
+        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="553"/>
         <source>To continue using Serial Studio, please activate your license.</source>
         <translation>Serial Studio'yu kullanmaya devam etmek için lütfen lisansınızı etkinleştirin.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="630"/>
+        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="634"/>
         <source>connection attempt failed</source>
         <translation>bağlantı denemesi başarısız</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="1095"/>
+        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="1099"/>
         <source>This connection type requires an active license or trial.</source>
         <translation>Bu bağlantı türü aktif bir lisans veya deneme sürümü gerektirir.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="1096"/>
+        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="1100"/>
         <source>Activate Serial Studio Pro or start a trial to use this device type.</source>
         <translation>Bu cihaz türünü kullanmak için Serial Studio Pro'yu etkinleştirin veya deneme sürümü başlatın.</translation>
     </message>
@@ -14901,15 +14901,15 @@ Yoklamak için yukarıdan kontrolcü etiketleri ekleyin.</translation>
 <context>
     <name>IO::Drivers::CANBus</name>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="416"/>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="421"/>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="426"/>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="430"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="417"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="422"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="427"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="431"/>
         <source>CAN Bus Not Available</source>
         <translation>CAN Bus Kullanılamıyor</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="427"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="428"/>
         <source>No CAN bus plugins found on this system.
 
 CAN bus support on macOS is limited and may require third-party hardware drivers.</source>
@@ -14918,37 +14918,37 @@ CAN bus support on macOS is limited and may require third-party hardware drivers
 macOS üzerinde CAN bus desteği sınırlıdır ve üçüncü taraf donanım sürücüleri gerektirebilir.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="431"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="432"/>
         <source>No CAN bus plugins are available on this platform.</source>
         <translation>Bu platformda CAN bus eklentisi mevcut değil.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="442"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="443"/>
         <source>Invalid CAN Configuration</source>
         <translation>Geçersiz CAN Yapılandırması</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="449"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="450"/>
         <source>Invalid Selection</source>
         <translation>Geçersiz Seçim</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="457"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="458"/>
         <source>No Devices Available</source>
         <translation>Kullanılabilir Cihaz Yok</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="369"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="370"/>
         <source>CAN Device Creation Failed</source>
         <translation>CAN Cihazı Oluşturma Başarısız</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="401"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="402"/>
         <source>CAN Connection Failed</source>
         <translation>CAN Bağlantısı Başarısız</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="417"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="418"/>
         <source>No CAN bus plugins found on this system.
 
 On Linux, ensure SocketCAN kernel modules are loaded.</source>
@@ -14957,7 +14957,7 @@ On Linux, ensure SocketCAN kernel modules are loaded.</source>
 Linux'ta SOCKETCAN çekirdek modüllerinin yüklendiğinden emin olun.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="422"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="423"/>
         <source>No CAN bus plugins found on this system.
 
 On Windows, install CAN hardware drivers (PEAK, Vector, etc.).</source>
@@ -14966,27 +14966,27 @@ On Windows, install CAN hardware drivers (PEAK, Vector, etc.).</source>
 Windows'ta CAN donanım sürücülerini yükleyin (PEAK, VECTOR, vb.).</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="443"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="444"/>
         <source>The CAN bus configuration is incomplete. Select a valid plugin and interface.</source>
         <translation>CAN bus yapılandırması eksik. Geçerli bir eklenti ve arayüz seçin.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="450"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="451"/>
         <source>The selected plugin or interface is no longer available. Refresh the lists and try again.</source>
         <translation>Seçilen eklenti veya arayüz artık kullanılabilir değil. Listeleri yenileyin ve tekrar deneyin.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="458"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="459"/>
         <source>The plugin or interface list is empty. Refresh the lists and ensure your CAN hardware is connected.</source>
         <translation>Eklenti veya arayüz listesi boş. Listeleri yenileyin ve CAN donanımınızın bağlı olduğundan emin olun.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="371"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="372"/>
         <source>Unable to create CAN bus device. Check your hardware and drivers.</source>
         <translation>CAN bus cihazı oluşturulamıyor. Donanımınızı ve sürücülerinizi kontrol edin.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="399"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="400"/>
         <source>Unable to connect to CAN bus device. Check your hardware connection and settings.</source>
         <translation>CAN bus cihazına bağlanılamıyor. Donanım bağlantınızı ve ayarlarınızı kontrol edin.</translation>
     </message>
@@ -14999,68 +14999,68 @@ Windows'ta CAN donanım sürücülerini yükleyin (PEAK, VECTOR, vb.).</translat
         <translation type="vanished">Bir hata oluştu ancak CAN cihazı artık kullanılamıyor.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="999"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1000"/>
         <source>Error code: %1</source>
         <translation>Hata kodu: %1</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1007"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1008"/>
         <source>CAN Bus Communication Error</source>
         <translation>CAN Bus İletişim Hatası</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1113"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1114"/>
         <source>No CAN driver selected</source>
         <translation>CAN sürücüsü seçilmedi</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1050"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1051"/>
         <source>Load SocketCAN kernel modules first</source>
         <translation>Önce SOCKETCAN çekirdek modüllerini yükleyin</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1046"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1047"/>
         <source>Connect a %1 adapter, then refresh</source>
         <translation>Bir %1 adaptörü bağlayın, ardından yenileyin</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1053"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1054"/>
         <source>Set up a virtual CAN interface first</source>
         <translation>Önce sanal bir CAN arayüzü kurun</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1055"/>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1075"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1056"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1076"/>
         <source>No interfaces found for %1</source>
         <translation>%1 için arayüz bulunamadı</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1059"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1060"/>
         <source>Install &lt;a href='https://www.peak-system.com/Drivers.523.0.html?&amp;L=1'&gt;PEAK CAN drivers&lt;/a&gt;</source>
         <translation>&lt;a href='https://www.PEAK-system.com/Drivers.523.0.html?&amp;L=1'&gt;PEAK CAN sürücülerini&lt;/a&gt; yükleyin</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1063"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1064"/>
         <source>Install &lt;a href='https://www.vector.com/us/en/products/products-a-z/libraries-drivers/'&gt;Vector CAN drivers&lt;/a&gt;</source>
         <translation>&lt;a href='https://www.VECTOR.com/us/en/products/products-a-z/libraries-drivers/'&gt;VECTOR CAN sürücülerini&lt;/a&gt; yükleyin</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1067"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1068"/>
         <source>Install &lt;a href='https://www.systec-electronic.com/en/company/support/driver'&gt;SysTec CAN drivers&lt;/a&gt;</source>
         <translation>&lt;a href='https://www.systec-electronic.com/en/company/support/driver'&gt;SysTec CAN sürücülerini&lt;/a&gt; yükleyin</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1070"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1071"/>
         <source>Install %1 drivers</source>
         <translation>%1 sürücülerini yükleyin</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1073"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1074"/>
         <source>Install %1 drivers for macOS</source>
         <translation>MacOS için %1 sürücülerini yükleyin</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1087"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1088"/>
         <source>
 
 If the interface is down, bring it up first:
@@ -15071,42 +15071,42 @@ sudo ip link set %1 up type can bitrate %2
 </translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1223"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1224"/>
         <source>Plugin</source>
         <translation>Eklenti</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1231"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1232"/>
         <source>Interface</source>
         <translation>Arayüz</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1239"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1240"/>
         <source>Bitrate</source>
         <translation>Bit Hızı</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1248"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1249"/>
         <source>CAN FD</source>
         <translation>CAN FD</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1255"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1256"/>
         <source>Data Bitrate</source>
         <translation>Veri Bit Hızı</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1265"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1266"/>
         <source>Loopback</source>
         <translation>Geri Döngü</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1272"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1273"/>
         <source>Listen-Only</source>
         <translation>Yalnızca Dinleme</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1279"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1280"/>
         <source>Multi-Frame Reassembly</source>
         <translation>Çok Çerçeveli Yeniden Birleştirme</translation>
     </message>
@@ -15299,93 +15299,93 @@ sudo ip link set %1 up type can bitrate %2
 <context>
     <name>IO::Drivers::GsUsbCanBackend</name>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="494"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="495"/>
         <source>Failed to initialize libusb for the CANable adapter.</source>
         <translation>CANable adaptörü için libusb başlatılamadı.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="521"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="522"/>
         <source>Unable to enumerate USB devices.</source>
         <translation>USB cihazları numaralandırılamıyor.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="541"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="542"/>
         <source>The selected CANable adapter is no longer connected, or another application has it open. On Windows the device must use the WinUSB driver (candleLight installs it automatically).</source>
         <translation>Seçilen CANable adaptörü artık bağlı değil veya başka bir uygulama tarafından kullanılıyor. Windows'ta cihaz WinUSB sürücüsünü kullanmalıdır (candleLight otomatik olarak yükler).</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="554"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="555"/>
         <source>Could not claim the CANable USB interface.</source>
         <translation>CANable USB arayüzü talep edilemedi.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="624"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="625"/>
         <source>CANable adapter is not open for writing.</source>
         <translation>CANable adaptörü yazma için açık değil.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="678"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="679"/>
         <source>Failed to transmit CAN frame to the adapter.</source>
         <translation>CAN frame adaptöre iletilemedi.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="694"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="695"/>
         <source>CAN bus error reported by the CANable adapter.</source>
         <translation>CANable adaptörü tarafından CAN bus hatası bildirildi.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="749"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="750"/>
         <source>A CAN frame was not acknowledged on the bus.</source>
         <translation>Bir CAN frame bus üzerinde onaylanmadı.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="782"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="783"/>
         <source>The CANable adapter was disconnected.</source>
         <translation>CANable adaptörünün bağlantısı kesildi.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="859"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="860"/>
         <source>CANable adapter rejected the host-format handshake.</source>
         <translation>CANable adaptörü host-format el sıkışmasını reddetti.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="866"/>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="940"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="867"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="941"/>
         <source>Could not read CANable timing constants.</source>
         <translation>CANable zamanlama sabitleri okunamadı.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="872"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="873"/>
         <source>The adapter firmware does not support CAN FD. Flash candleLight FD firmware or disable the flexible data-rate option.</source>
         <translation>Adaptör yazılımı CAN FD desteklemiyor. candleLight FD yazılımını yükleyin veya esnek veri hızı seçeneğini devre dışı bırakın.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="880"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="881"/>
         <source>The bitrate %1 bps is not supported by this CANable adapter.</source>
         <translation>%1 bps bit hızı bu CANable adaptörü tarafından desteklenmiyor.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="886"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="887"/>
         <source>CANable adapter rejected the requested bitrate.</source>
         <translation>CANable adaptörü istenen bit hızını reddetti.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="910"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="911"/>
         <source>Could not start the CANable channel.</source>
         <translation>CANable kanalı başlatılamadı.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="932"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="933"/>
         <source>Could not read CANable FD timing constants.</source>
         <translation>CANable FD zamanlama sabitleri okunamadı.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="946"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="947"/>
         <source>The data bitrate %1 bps is not supported by this CANable adapter.</source>
         <translation>%1 bps veri bit hızı bu CANable adaptörü tarafından desteklenmiyor.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="953"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus/GsUsbCanBackend.cpp" line="954"/>
         <source>CANable adapter rejected the requested data bitrate.</source>
         <translation>CANable adaptörü istenen veri bit hızını reddetti.</translation>
     </message>
@@ -16180,57 +16180,57 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
         <translation>Modbus İletişim Hatası</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1246"/>
+        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1243"/>
         <source>Select Port</source>
         <translation>Port Seç</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1336"/>
+        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1335"/>
         <source>Protocol</source>
         <translation>Protokol</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1344"/>
+        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1343"/>
         <source>Slave Address</source>
         <translation>Slave Adresi</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1353"/>
+        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1352"/>
         <source>Poll Interval (ms)</source>
         <translation>Yoklama Aralığı (ms)</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1381"/>
+        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1380"/>
         <source>Host / IP</source>
         <translation>Host / IP</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1388"/>
+        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1387"/>
         <source>Port</source>
         <translation>Port</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1403"/>
+        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1402"/>
         <source>Serial Port</source>
         <translation>Seri Port</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1411"/>
+        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1410"/>
         <source>Baud Rate</source>
         <translation>Baud Hızı</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1419"/>
+        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1418"/>
         <source>Parity</source>
         <translation>Parite</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1427"/>
+        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1426"/>
         <source>Data Bits</source>
         <translation>Veri Bitleri</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1435"/>
+        <location filename="../../../core/Devices/IO/Drivers/Modbus.cpp" line="1434"/>
         <source>Stop Bits</source>
         <translation>Durdurma Bitleri</translation>
     </message>
@@ -17284,7 +17284,7 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
 <context>
     <name>IO::Drivers::SeeedCanBackend</name>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus/SeeedCanBackend.cpp" line="196"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus/SeeedCanBackend.cpp" line="199"/>
         <source>The bitrate %1 bps is not supported by the USB-CAN Analyzer.</source>
         <translation>%1 bps bit hızı USB-CAN Analyzer tarafından desteklenmiyor.</translation>
     </message>
@@ -17297,12 +17297,12 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
         <translation type="vanished">USB-CAN Analyzer başlatılamadı.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus/SeeedCanBackend.cpp" line="206"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus/SeeedCanBackend.cpp" line="209"/>
         <source>USB-CAN Analyzer is not open for writing.</source>
         <translation>USB-CAN Analyzer yazma için açık değil.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus/SeeedCanBackend.cpp" line="251"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus/SeeedCanBackend.cpp" line="254"/>
         <source>CAN bus error reported by the USB-CAN Analyzer.</source>
         <translation>USB-CAN Analyzer tarafından CAN bus hatası bildirildi.</translation>
     </message>
@@ -17310,27 +17310,27 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
 <context>
     <name>IO::Drivers::SerialCanBackendBase</name>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus/SerialCanBackendBase.cpp" line="190"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus/SerialCanBackendBase.cpp" line="194"/>
         <source>Could not open serial port %1: %2</source>
         <translation>%1 seri portu açılamadı: %2</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus/SerialCanBackendBase.cpp" line="201"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus/SerialCanBackendBase.cpp" line="205"/>
         <source>The adapter on %1 did not accept the initialization sequence.</source>
         <translation>%1 üzerindeki adaptör başlatma dizisini kabul etmedi.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus/SerialCanBackendBase.cpp" line="211"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus/SerialCanBackendBase.cpp" line="215"/>
         <source>The adapter on %1 refused the requested configuration.</source>
         <translation>%1 üzerindeki adaptör istenen yapılandırmayı reddetti.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus/SerialCanBackendBase.cpp" line="272"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus/SerialCanBackendBase.cpp" line="276"/>
         <source>The serial adapter is gone</source>
         <translation>Seri adaptör kayboldu</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus/SerialCanBackendBase.cpp" line="273"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus/SerialCanBackendBase.cpp" line="277"/>
         <source>Lost the adapter on %1: %2</source>
         <translation>%1 üzerindeki adaptör kaybedildi: %2</translation>
     </message>
@@ -17338,7 +17338,7 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
 <context>
     <name>IO::Drivers::SlcanBackend</name>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus/SlcanBackend.cpp" line="173"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus/SlcanBackend.cpp" line="172"/>
         <source>The bitrate %1 bps is not a standard slcan rate.</source>
         <translation>%1 bps bit hızı standart bir slcan hızı değil.</translation>
     </message>
@@ -17351,12 +17351,12 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
         <translation type="vanished">Slcan kanalı açılamadı.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus/SlcanBackend.cpp" line="245"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus/SlcanBackend.cpp" line="244"/>
         <source>slcan adapter is not open for writing.</source>
         <translation>slcan adaptörü yazma için açık değil.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus/SlcanBackend.cpp" line="283"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus/SlcanBackend.cpp" line="282"/>
         <source>CAN bus error reported by the slcan adapter.</source>
         <translation>Slcan adaptörü tarafından bildirilen CAN Bus hatası.</translation>
     </message>
@@ -17373,7 +17373,7 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
     </message>
     <message>
         <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="395"/>
-        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="802"/>
+        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="800"/>
         <source>Select Port</source>
         <translation>Port Seç</translation>
     </message>
@@ -17418,17 +17418,17 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
         <translation>Özel bir seri cihaz kaydetmek için başka bir yol yazın</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="911"/>
+        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="898"/>
         <source>The specified device could not be found. Check the connection and try again.</source>
         <translation>Belirtilen cihaz bulunamadı. Bağlantıyı kontrol edin ve tekrar deneyin.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="918"/>
+        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="905"/>
         <source>An unknown error occurred. Check the device and try again.</source>
         <translation>Bilinmeyen bir hata oluştu. Cihazı kontrol edin ve tekrar deneyin.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="920"/>
+        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="907"/>
         <source>The device is not open. Open the device before attempting this operation.</source>
         <translation>Cihaz açık değil. Bu işlemi denemeden önce cihazı açın.</translation>
     </message>
@@ -17464,97 +17464,97 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
         <translation>"%1" geçerli bir yol değil; özel bir seri cihaz kaydetmek için başka bir yol yazın.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="884"/>
+        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="871"/>
         <source>Unknown</source>
         <translation>Bilinmiyor</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="885"/>
+        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="872"/>
         <source>Critical error on serial port "%1"</source>
         <translation>"%1" seri portunda kritik hata</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="886"/>
+        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="873"/>
         <source>Unknown error</source>
         <translation>Bilinmeyen hata</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="910"/>
+        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="897"/>
         <source>No error occurred.</source>
         <translation>Hata oluşmadı.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="912"/>
+        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="899"/>
         <source>Permission denied. Ensure the application has the necessary access rights to the device.</source>
         <translation>İzin reddedildi. Uygulamanın cihaza erişim yetkisine sahip olduğundan emin olun.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="913"/>
+        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="900"/>
         <source>Failed to open the device. It may already be in use or unavailable.</source>
         <translation>Cihaz açılamadı. Zaten kullanımda veya erişilemez durumda olabilir.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="914"/>
+        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="901"/>
         <source>An error occurred while writing data to the device.</source>
         <translation>Cihaza veri yazılırken hata oluştu.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="915"/>
+        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="902"/>
         <source>An error occurred while reading data from the device.</source>
         <translation>Cihazdan veri okunurken hata oluştu.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="916"/>
+        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="903"/>
         <source>A critical resource error occurred. The device may have been disconnected or is no longer accessible.</source>
         <translation>Kritik kaynak hatası oluştu. Cihaz bağlantısı kesilmiş veya artık erişilebilir olmayabilir.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="917"/>
+        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="904"/>
         <source>The requested operation is not supported on this device.</source>
         <translation>İstenen işlem bu cihazda desteklenmiyor.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="919"/>
+        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="906"/>
         <source>The operation timed out. The device may not be responding.</source>
         <translation>İşlem zaman aşımına uğradı. Cihaz yanıt vermiyor olabilir.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="1008"/>
+        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="1007"/>
         <source>Serial Port</source>
         <translation>Seri Port</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="1016"/>
+        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="1015"/>
         <source>Baud Rate</source>
         <translation>İletim Hızı</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="1024"/>
+        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="1023"/>
         <source>Parity</source>
         <translation>Eşlik</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="1032"/>
+        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="1031"/>
         <source>Data Bits</source>
         <translation>Veri Bitleri</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="1040"/>
+        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="1039"/>
         <source>Stop Bits</source>
         <translation>Durma Bitleri</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="1048"/>
+        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="1047"/>
         <source>Flow Control</source>
         <translation>Akış Kontrolü</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="1056"/>
+        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="1055"/>
         <source>DTR</source>
         <translation>DTR</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="1063"/>
+        <location filename="../../../core/Devices/IO/Drivers/UART.cpp" line="1062"/>
         <source>Auto-Reconnect</source>
         <translation>Otomatik Yeniden Bağlan</translation>
     </message>
@@ -17941,12 +17941,12 @@ Cihaz, etkin yapılandırmasında veri uç noktalarını sunmuyor olabilir veya 
 <context>
     <name>IO::FrameReader</name>
     <message>
-        <location filename="../../../core/Pipeline/IO/FrameReader.cpp" line="392"/>
+        <location filename="../../../core/Pipeline/IO/FrameReader.cpp" line="397"/>
         <source>Frames dropped</source>
         <translation>Düşürülen çerçeveler</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/IO/FrameReader.cpp" line="394"/>
+        <location filename="../../../core/Pipeline/IO/FrameReader.cpp" line="399"/>
         <source>Incoming data is arriving faster than Serial Studio can process it; %1 frame(s) have been dropped. Reduce the data rate or disable a heavy consumer.</source>
         <translation>Gelen veriler Serial Studio'nun işleyebileceğinden daha hızlı geliyor; %1 çerçeve düşürüldü. Veri hızını azaltın veya ağır bir tüketiciyi devre dışı bırakın.</translation>
     </message>
@@ -18778,17 +18778,17 @@ Cihaz, etkin yapılandırmasında veri uç noktalarını sunmuyor olabilir veya 
         <translation>Spiral</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/LayoutPatternPicker.qml" line="100"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/LayoutPatternPicker.qml" line="113"/>
         <source>Layout</source>
         <translation>Düzen</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/LayoutPatternPicker.qml" line="214"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/LayoutPatternPicker.qml" line="263"/>
         <source>Split</source>
         <translation>Böl</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/LayoutPatternPicker.qml" line="280"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/LayoutPatternPicker.qml" line="329"/>
         <source>Manual placement</source>
         <translation>Manuel yerleştirme</translation>
     </message>
@@ -20980,12 +20980,12 @@ Would you like to open the download page?</source>
 <context>
     <name>Misc::GraphicsBackend</name>
     <message>
-        <location filename="../../../core/Ui/Misc/GraphicsBackend.cpp" line="246"/>
+        <location filename="../../../core/Ui/Misc/GraphicsBackend.cpp" line="280"/>
         <source>Restart Required</source>
         <translation>Yeniden Başlatma Gerekli</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/Misc/GraphicsBackend.cpp" line="247"/>
+        <location filename="../../../core/Ui/Misc/GraphicsBackend.cpp" line="281"/>
         <source>The new rendering backend will take effect after restarting Serial Studio. Restart now to apply the change?</source>
         <translation>Yeni işleme altyapısı, Serial Studio yeniden başlatıldıktan sonra etkinleşecek. Değişikliği uygulamak için şimdi yeniden başlatılsın mı?</translation>
     </message>
@@ -21148,8 +21148,8 @@ Would you like to open the download page?</source>
         <translation>Info.plist yazılamadı: %1</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/Misc/ShortcutGenerator_macOS.cpp" line="271"/>
         <location filename="../../../core/Ui/Misc/ShortcutGenerator_Linux.cpp" line="140"/>
+        <location filename="../../../core/Ui/Misc/ShortcutGenerator_macOS.cpp" line="271"/>
         <source>Windows shortcut writer is not available on this platform.</source>
         <translation>Windows kısayol yazıcısı bu platformda kullanılamıyor.</translation>
     </message>
@@ -21180,8 +21180,8 @@ Would you like to open the download page?</source>
         <translation>.lnk dosyası kaydedilemedi (HRESULT 0x%1).</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/Misc/ShortcutGenerator_Windows.cpp" line="185"/>
         <location filename="../../../core/Ui/Misc/ShortcutGenerator_Linux.cpp" line="154"/>
+        <location filename="../../../core/Ui/Misc/ShortcutGenerator_Windows.cpp" line="185"/>
         <source>macOS shortcut writer is not available on this platform.</source>
         <translation>MacOS kısayol yazıcısı bu platformda kullanılamıyor.</translation>
     </message>
@@ -21917,38 +21917,38 @@ Birden fazla kayıt türünü sorgulamak için yukarıdan grup ekleyin.</transla
 <context>
     <name>NativeTemplates</name>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryRaw.cpp" line="116"/>
         <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryHex.cpp" line="127"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryRaw.cpp" line="116"/>
         <source>Bytes per value</source>
         <translation>Değer başına bayt</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryRaw.cpp" line="117"/>
         <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryHex.cpp" line="128"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryRaw.cpp" line="117"/>
         <source>Number of bytes combined into each channel value.</source>
         <translation>Her kanal değerine birleştirilen bayt sayısı.</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryRaw.cpp" line="125"/>
         <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryHex.cpp" line="136"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryRaw.cpp" line="125"/>
         <source>Endianness</source>
         <translation>Bayt Sırası</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryRaw.cpp" line="126"/>
         <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryHex.cpp" line="137"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryRaw.cpp" line="126"/>
         <source>Byte order used when combining multi-byte values.</source>
         <translation>Çok baytlı değerler birleştirilirken kullanılan bayt sırası.</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryRaw.cpp" line="134"/>
         <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryHex.cpp" line="145"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryRaw.cpp" line="134"/>
         <source>Signed values</source>
         <translation>İşaretli değerler</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryRaw.cpp" line="135"/>
         <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryHex.cpp" line="146"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryRaw.cpp" line="135"/>
         <source>Interprets each value as two's-complement signed.</source>
         <translation>Her değeri ikinin tümleyeni işaretli olarak yorumlar.</translation>
     </message>
@@ -21963,9 +21963,9 @@ Birden fazla kayıt türünü sorgulamak için yukarıdan grup ekleyin.</transla
         <translation>Virgülle ayrılmış etiket:indeks girdileri, örn. 1:0,2:1,3:2. Etiketler ondalık veya 0x önekli onaltılık olabilir.</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/TextNmea0183.cpp" line="219"/>
         <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinarySirf.cpp" line="216"/>
         <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryUbx.cpp" line="226"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/TextNmea0183.cpp" line="219"/>
         <source>Validate checksum</source>
         <translation>Sağlama toplamını doğrula</translation>
     </message>
@@ -24586,10 +24586,10 @@ Yeniden yüklensin mi?</translation>
         <translation>"%1" çıkış widget'ını silmek istiyor musunuz?</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectOutputWidgets.cpp" line="239"/>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="313"/>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="355"/>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="390"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectOutputWidgets.cpp" line="239"/>
         <source>This action cannot be undone. Do you wish to proceed?</source>
         <translation>Bu eylem geri alınamaz. Devam etmek istiyor musunuz?</translation>
     </message>
@@ -24914,18 +24914,9 @@ Yeniden yüklensin mi?</translation>
         <translation>Yeni Çalışma Alanı Profili</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaceProfiles.cpp" line="373"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaceProfiles.cpp" line="395"/>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="1309"/>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="1338"/>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="1364"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="382"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="410"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="433"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="456"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectSources.cpp" line="280"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaces.cpp" line="763"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaces.cpp" line="789"/>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="498"/>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="520"/>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="547"/>
@@ -24934,6 +24925,15 @@ Yeniden yüklensin mi?</translation>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="954"/>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="976"/>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="1002"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectSources.cpp" line="280"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="382"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="410"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="433"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="456"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaceProfiles.cpp" line="373"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaceProfiles.cpp" line="395"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaces.cpp" line="763"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaces.cpp" line="789"/>
         <source>Name:</source>
         <translation>Ad:</translation>
     </message>
@@ -24978,9 +24978,9 @@ Yeniden yüklensin mi?</translation>
         <translation>Tablo Ekle</translation>
     </message>
     <message>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="978"/>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="123"/>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="384"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="978"/>
         <source>Shared Table</source>
         <translation>Paylaşılan Tablo</translation>
     </message>
@@ -25018,8 +25018,8 @@ Yeniden yüklensin mi?</translation>
         <translation>Değişkeni Düzenle</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="381"/>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="975"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="381"/>
         <source>New Shared Table</source>
         <translation>Yeni Paylaşılan Tablo</translation>
     </message>
@@ -25161,15 +25161,15 @@ Yeniden yüklensin mi?</translation>
         <translation>Akış Şeridini Değiştir</translation>
     </message>
     <message>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="522"/>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaces.cpp" line="384"/>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaces.cpp" line="765"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="522"/>
         <source>Workspace</source>
         <translation>Çalışma Alanı</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaces.cpp" line="762"/>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="519"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaces.cpp" line="762"/>
         <source>New Workspace</source>
         <translation>Yeni Çalışma Alanı</translation>
     </message>
@@ -26064,8 +26064,8 @@ This script may use Lua 5.3 bitwise syntax, which this runtime does not support.
 </translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="489"/>
         <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="230"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="489"/>
         <source>Frame Parser Disabled</source>
         <translation>Frame Ayrıştırıcı Devre Dışı</translation>
     </message>
@@ -26131,8 +26131,8 @@ Serial Studio desteklenmeyen operatörleri bit.* çağrıları olarak yeniden ya
 %1</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="680"/>
         <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="560"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="680"/>
         <source>Missing Parse Function</source>
         <translation>Eksik Parse Fonksiyonu</translation>
     </message>
@@ -26148,8 +26148,8 @@ Lütfen kodunuzun şunu içerdiğinden emin olun:
 function parse(frame) ... end</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="743"/>
         <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="612"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="743"/>
         <source>Parse Function Runtime Error</source>
         <translation>Parse Fonksiyonu Çalışma Zamanı Hatası</translation>
     </message>
@@ -26493,12 +26493,12 @@ Ayırıcı parametresine artık gerek yok.</translation>
         <translation>Desteklenmeyen üst düzey anahtar kelime '%1'</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/Misc/GraphicsBackend.cpp" line="295"/>
+        <location filename="../../../core/Ui/Misc/GraphicsBackend.cpp" line="329"/>
         <source>Automatic (Platform Default)</source>
         <translation>Otomatik (Platform Varsayılanı)</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/Misc/GraphicsBackend.cpp" line="300"/>
+        <location filename="../../../core/Ui/Misc/GraphicsBackend.cpp" line="334"/>
         <source>Software (Fallback)</source>
         <translation>Yazılım (Yedek)</translation>
     </message>
@@ -26934,288 +26934,288 @@ Ayırıcı parametresine artık gerek yok.</translation>
 <context>
     <name>ReportOptionsDialog</name>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="25"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="27"/>
         <source>Generate PDF Report</source>
         <translation>PDF Raporu Oluştur</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="25"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="27"/>
         <source>Generate Report</source>
         <translation>Rapor Oluştur</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="71"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="73"/>
         <source>Solid</source>
         <translation>Düz</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="72"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="74"/>
         <source>Dashed</source>
         <translation>Kesikli</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="73"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="75"/>
         <source>Dotted</source>
         <translation>Noktalı</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="95"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="97"/>
         <source>A4 (210 × 297 mm)</source>
         <translation>A4 (210 × 297 mm)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="96"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="98"/>
         <source>A3 (297 × 420 mm)</source>
         <translation>A3 (297 × 420 mm)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="97"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="99"/>
         <source>A2 (420 × 594 mm)</source>
         <translation>A2 (420 × 594 mm)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="98"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="100"/>
         <source>A1 (594 × 841 mm)</source>
         <translation>A1 (594 × 841 mm)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="99"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="101"/>
         <source>A0 (841 × 1189 mm)</source>
         <translation>A0 (841 × 1189 mm)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="100"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="102"/>
         <source>A5 (148 × 210 mm)</source>
         <translation>A5 (148 × 210 mm)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="101"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="103"/>
         <source>A6 (105 × 148 mm)</source>
         <translation>A6 (105 × 148 mm)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="102"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="104"/>
         <source>B4 (250 × 353 mm)</source>
         <translation>B4 (250 × 353 mm)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="103"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="105"/>
         <source>B5 (176 × 250 mm)</source>
         <translation>B5 (176 × 250 mm)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="104"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="106"/>
         <source>Letter (8.5 × 11 in)</source>
         <translation>Letter (8,5 × 11 inç)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="105"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="107"/>
         <source>Legal (8.5 × 14 in)</source>
         <translation>Legal (8,5 × 14 inç)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="106"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="108"/>
         <source>Executive (7.25 × 10.5 in)</source>
         <translation>Executive (7,25 × 10,5 inç)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="107"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="109"/>
         <source>Tabloid (11 × 17 in)</source>
         <translation>Tabloid (11 × 17 inç)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="108"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="110"/>
         <source>Ledger (17 × 11 in)</source>
         <translation>Ledger (17 × 11 inç)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="122"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="124"/>
         <source>%1 — Session Report</source>
         <translation>%1 — Oturum Raporu</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="124"/>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="319"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="126"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="321"/>
         <source>Session Report</source>
         <translation>Oturum Raporu</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="221"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="223"/>
         <source>Branding</source>
         <translation>Markalaşma</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="227"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="229"/>
         <source>Page</source>
         <translation>Sayfa</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="233"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="235"/>
         <source>Sections</source>
         <translation>Bölümler</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="239"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="241"/>
         <source>Datasets</source>
         <translation>Veri Kümeleri</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="287"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="289"/>
         <source>Identity</source>
         <translation>Kimlik</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="301"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="303"/>
         <source>Company</source>
         <translation>Şirket</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="308"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="310"/>
         <source>e.g. Acme Test Systems</source>
         <translation>örn. Acme Test Sistemleri</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="312"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="314"/>
         <source>Document title</source>
         <translation>Belge başlığı</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="323"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="325"/>
         <source>Author</source>
         <translation>Yazar</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="330"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="332"/>
         <source>Prepared by (optional)</source>
         <translation>Hazırlayan (isteğe bağlı)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="339"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="341"/>
         <source>Logo</source>
         <translation>Logo</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="352"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="354"/>
         <source>File</source>
         <translation>Dosya</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="363"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="365"/>
         <source>PNG, JPG or SVG (optional)</source>
         <translation>PNG, JPG veya SVG (isteğe bağlı)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="365"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="367"/>
         <source>Browse…</source>
         <translation>Gözat…</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="368"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="370"/>
         <source>Clear</source>
         <translation>Temizle</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="409"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="411"/>
         <source>Paper</source>
         <translation>Kağıt</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="421"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="423"/>
         <source>Page size</source>
         <translation>Sayfa boyutu</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="555"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="557"/>
         <source>Annotate min, max, and mean values on plots</source>
         <translation>Grafiklerde minimum, maksimum ve ortalama değerleri açıkla</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="591"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="593"/>
         <source>Include datasets</source>
         <translation>Veri kümelerini dahil et</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="605"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="607"/>
         <source>Expand All</source>
         <translation>Tümünü Genişlet</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="614"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="616"/>
         <source>Collapse All</source>
         <translation>Tümünü Daralt</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="626"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="628"/>
         <source>Search datasets</source>
         <translation>Veri kümelerinde ara</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="752"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="754"/>
         <source>Loading datasets...</source>
         <translation>Veri kümeleri yükleniyor...</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="753"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="755"/>
         <source>No datasets match your search.</source>
         <translation>Aramanızla eşleşen veri kümesi yok.</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="773"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="775"/>
         <source>Select at least one dataset to include.</source>
         <translation>Dahil edilecek en az bir veri kümesi seçin.</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="790"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="792"/>
         <source>Export HTML</source>
         <translation>HTML Dışa Aktar</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="539"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="541"/>
         <source>Cover page (logo, document title, test subtitle)</source>
         <translation>Kapak sayfası (logo, belge başlığı, test alt başlığı)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="543"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="545"/>
         <source>Test information (project, timestamps, classification and notes)</source>
         <translation>Test bilgileri (proje, zaman damgaları, sınıflandırma ve notlar)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="547"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="549"/>
         <source>Measurement summary (min, max, mean, std. deviation per parameter)</source>
         <translation>Ölçüm özeti (parametre başına min, maks, ortalama, std. sapma)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="551"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="553"/>
         <source>Parameter trends (time-series chart per numeric parameter)</source>
         <translation>Parametre eğilimleri (sayısal parametre başına zaman serisi grafiği)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="437"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="439"/>
         <source>Plot appearance</source>
         <translation>Grafik görünümü</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="451"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="453"/>
         <source>Line width</source>
         <translation>Çizgi kalınlığı</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="483"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="485"/>
         <source>Line style</source>
         <translation>Çizgi stili</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="524"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="526"/>
         <source>Include</source>
         <translation>Dahil Et</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="782"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="784"/>
         <source>Cancel</source>
         <translation>İptal</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="790"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="792"/>
         <source>Export PDF</source>
         <translation>PDF Aktar</translation>
     </message>
@@ -29118,12 +29118,12 @@ Denetleyiciyi sorgulamak için yukarıya mutlak adresler ekleyin.</translation>
         <translation>Sıfırla</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="231"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="233"/>
         <source>Close</source>
         <translation>Kapat</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="239"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="241"/>
         <source>Apply</source>
         <translation>Uygula</translation>
     </message>
@@ -29478,42 +29478,47 @@ Denetleyiciyi sorgulamak için yukarıya mutlak adresler ekleyin.</translation>
         <translation>SIMD Komut Seti</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="226"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="225"/>
+        <source>Reduce Motion</source>
+        <translation>Hareketi Azalt</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="249"/>
         <source>Apply Performance Hints</source>
         <translation>Performans İpuçlarını Uygula</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="249"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="272"/>
         <source>Keep Display Awake</source>
         <translation>Ekranı Uyanık Tut</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="278"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="301"/>
         <source>Performance hints raise process priority and opt out of OS power throttling. Changes take effect the next time Serial Studio starts.</source>
         <translation>Performans ipuçları işlem önceliğini yükseltir ve işletim sistemi güç kısıtlamasından çıkar. Değişiklikler Serial Studio bir sonraki başlatıldığında geçerli olur.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="289"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="312"/>
         <source>Updates &amp; News</source>
         <translation>Güncellemeler ve Haberler</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="305"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="328"/>
         <source>Automatically Check for Updates</source>
         <translation>Güncellemeleri Otomatik Denetle</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="328"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="351"/>
         <source>Check for Extension Updates</source>
         <translation>Eklenti Güncellemelerini Kontrol Et</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="352"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="375"/>
         <source>Install Extension Updates Automatically</source>
         <translation>Eklenti Güncellemelerini Otomatik Yükle</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="382"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="405"/>
         <source>Installed extensions and themes are checked when Serial Studio starts, together with application updates. Serial Studio asks before installing them unless automatic installation is enabled.</source>
         <translation>Yüklü eklentiler ve temalar, Serial Studio başlatıldığında uygulama güncellemeleriyle birlikte denetlenir. Otomatik yükleme etkinleştirilmediği sürece Serial Studio yüklemeden önce sorar.</translation>
     </message>
@@ -30199,27 +30204,27 @@ Orijinal dosya taşınsa veya silinse bile kısayolun çalışmaya devam etmesi 
 <context>
     <name>StartMenu</name>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="318"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="338"/>
         <source>Workspaces</source>
         <translation>Çalışma Alanları</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="455"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="476"/>
         <source>Actions</source>
         <translation>Eylemler</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="478"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="500"/>
         <source>No Actions Available</source>
         <translation>Kullanılabilir Eylem Yok</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="508"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="530"/>
         <source>Plugins</source>
         <translation>Eklentiler</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="556"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="579"/>
         <source>No Plugins Installed</source>
         <translation>Yüklü Eklenti Yok</translation>
     </message>
@@ -30244,7 +30249,7 @@ Orijinal dosya taşınsa veya silinse bile kısayolun çalışmaya devam etmesi 
         <translation type="vanished">Araçlar</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="744"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="769"/>
         <source>No Tools Available</source>
         <translation>Kullanılabilir Araç Yok</translation>
     </message>
@@ -30257,17 +30262,17 @@ Orijinal dosya taşınsa veya silinse bile kısayolun çalışmaya devam etmesi 
         <translation type="vanished">Çık</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="830"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="866"/>
         <source>Delete</source>
         <translation>Sil</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="831"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="867"/>
         <source>Hide</source>
         <translation>Gizle</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="406"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="427"/>
         <source>New Workspace…</source>
         <translation>Yeni Çalışma Alanı…</translation>
     </message>
@@ -30292,22 +30297,22 @@ Orijinal dosya taşınsa veya silinse bile kısayolun çalışmaya devam etmesi 
         <translation type="vanished">Yapay Zeka Asistanı</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="392"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="413"/>
         <source>Show "%1"</source>
         <translation>"%1" Göster</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="397"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="418"/>
         <source>Show All Hidden Workspaces</source>
         <translation>Tüm Gizli Çalışma Alanlarını Göster</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="420"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="441"/>
         <source>No Workspaces Available</source>
         <translation>Kullanılabilir Çalışma Alanı Yok</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="546"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="569"/>
         <source>Manage Plugins…</source>
         <translation>Eklentileri Yönet…</translation>
     </message>
@@ -30336,7 +30341,7 @@ Orijinal dosya taşınsa veya silinse bile kısayolun çalışmaya devam etmesi 
         <translation type="vanished">Oturum Veritabanı</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="669"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="693"/>
         <source>No Export Formats Available</source>
         <translation>Kullanılabilir Dışa Aktarma Formatı Yok</translation>
     </message>
@@ -30353,7 +30358,7 @@ Orijinal dosya taşınsa veya silinse bile kısayolun çalışmaya devam etmesi 
         <translation type="vanished">Tercihler</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="819"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="855"/>
         <source>Edit…</source>
         <translation>Düzenle…</translation>
     </message>
@@ -30421,7 +30426,7 @@ Orijinal dosya taşınsa veya silinse bile kısayolun çalışmaya devam etmesi 
 <context>
     <name>SubMenuCombo</name>
     <message>
-        <location filename="../../qml/Widgets/SubMenuCombo.qml" line="186"/>
+        <location filename="../../qml/Widgets/SubMenuCombo.qml" line="182"/>
         <source>No Data Available</source>
         <translation>Kullanılabilir Veri Yok</translation>
     </message>
@@ -30633,42 +30638,42 @@ Orijinal dosya taşınsa veya silinse bile kısayolun çalışmaya devam etmesi 
         <translation type="vanished">Ara…</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="577"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="584"/>
         <source>Settings</source>
         <translation>Ayarlar</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="578"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="585"/>
         <source>Console</source>
         <translation>Konsol</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="579"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="586"/>
         <source>Notifications</source>
         <translation>Bildirimler</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="580"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="587"/>
         <source>Clock</source>
         <translation>Saat</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="581"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="588"/>
         <source>Stopwatch</source>
         <translation>Kronometre</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="583"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="590"/>
         <source>AI Assistant</source>
         <translation>Yapay Zeka Asistanı</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="584"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="591"/>
         <source>Resume</source>
         <translation>Devam Et</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="584"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="591"/>
         <source>Pause</source>
         <translation>Duraklat</translation>
     </message>
@@ -30681,77 +30686,77 @@ Orijinal dosya taşınsa veya silinse bile kısayolun çalışmaya devam etmesi 
         <translation type="vanished">Kullanılabilir Çalışma Alanı Yok</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="258"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="259"/>
         <source>Search… (%1)</source>
         <translation>Ara… (%1)</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="935"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="942"/>
         <source>Data is arriving faster than scripts can process it; some frames are being thinned. See the problem center for details.</source>
         <translation>Veriler, betiklerin işleyebileceğinden daha hızlı geliyor; bazı çerçeveler atlanıyor. Ayrıntılar için sorun merkezine bakın.</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="959"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="966"/>
         <source>Unfreeze Dashboard</source>
         <translation>Gösterge Panelini Dondur</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="960"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="967"/>
         <source>Freeze Dashboard</source>
         <translation>Gösterge Panelini Dondur</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1009"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1016"/>
         <source>MQTT: Connected to %1</source>
         <translation>MQTT: %1 adresine bağlandı</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1010"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1017"/>
         <source>MQTT: Not connected</source>
         <translation>MQTT: Bağlı değil</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1034"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1045"/>
         <source>MQTT Publisher</source>
         <translation>MQTT Yayıncı</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1044"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1055"/>
         <source>Status:</source>
         <translation>Durum:</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1052"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1063"/>
         <source>Connected</source>
         <translation>Bağlı</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1053"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1064"/>
         <source>Disconnected</source>
         <translation>Bağlantı Kesildi</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1060"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1071"/>
         <source>Broker:</source>
         <translation>Broker:</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1073"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1084"/>
         <source>Mode:</source>
         <translation>Mod:</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1086"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1097"/>
         <source>Messages sent:</source>
         <translation>Gönderilen mesajlar:</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1100"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1111"/>
         <source>Open MQTT Settings</source>
         <translation>MQTT Ayarlarını Aç</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="582"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="589"/>
         <source>File Transmission</source>
         <translation>Dosya İletimi</translation>
     </message>
@@ -30760,7 +30765,7 @@ Orijinal dosya taşınsa veya silinse bile kısayolun çalışmaya devam etmesi 
         <translation type="vanished">Widget'ları ara…</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1146"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1168"/>
         <source>Remove from Workspace</source>
         <translation>Çalışma Alanından Kaldır</translation>
     </message>
@@ -32961,6 +32966,41 @@ Deneme sona erdiğinde lisans satın almam veya GPLv3 sürümünü derlemem gere
     </message>
     <message>
         <location filename="../../../core/Ui/UI/Widgets/Waterfall.cpp" line="307"/>
+        <source>Grayscale (Inverted)</source>
+        <translation>Gri Tonlama (Ters Çevrilmiş)</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/UI/Widgets/Waterfall.cpp" line="309"/>
+        <source>Cividis</source>
+        <translation>Cividis</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/UI/Widgets/Waterfall.cpp" line="311"/>
+        <source>Cubehelix</source>
+        <translation>Cubehelix</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/UI/Widgets/Waterfall.cpp" line="313"/>
+        <source>SDR Classic</source>
+        <translation>SDR Klasik</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/UI/Widgets/Waterfall.cpp" line="315"/>
+        <source>Spectral</source>
+        <translation>Spektral</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/UI/Widgets/Waterfall.cpp" line="317"/>
+        <source>Red/Blue</source>
+        <translation>Kırmızı/mavi</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/UI/Widgets/Waterfall.cpp" line="319"/>
+        <source>Coolwarm</source>
+        <translation>Coolwarm</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/UI/Widgets/Waterfall.cpp" line="321"/>
         <source>Unknown</source>
         <translation>Bilinmiyor</translation>
     </message>
