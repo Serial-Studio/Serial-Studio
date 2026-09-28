@@ -299,6 +299,7 @@ Widgets.SmartDialog {
           text: qsTr("Hex Delimiters")
           checked: tester.hexDelimiters
           onClicked: tester.setHexDelimiters(checked)
+          onToggled: Cpp_UI_Alarms.playEvent("toggle")
           enabled: root.needsStartDelimiter || root.needsEndDelimiter
         }
       }
@@ -360,6 +361,7 @@ Widgets.SmartDialog {
             id: hexToggle
 
             text: qsTr("Hex")
+            onToggled: Cpp_UI_Alarms.playEvent("toggle")
           }
         }
 

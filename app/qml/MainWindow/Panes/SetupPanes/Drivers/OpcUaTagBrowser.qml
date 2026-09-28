@@ -362,6 +362,7 @@ Window {
                           : Qt.Unchecked
                 onClicked: Cpp_IO_OpcUa.tagModel.setChecked(
                              _tree.index(_row.row, 0), checkState !== Qt.Unchecked)
+                onToggled: Cpp_UI_Alarms.playEvent("toggle")
               }
 
               Item {

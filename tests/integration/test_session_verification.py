@@ -181,11 +181,28 @@ def _record_js_session(
 
 
 def _open_archive(api_client, path: Path) -> int:
-    """Open an archive for browsing and return its latest session id."""
-    api_client.command("sessions.openDatabase", {"filePath": str(path)})
-    time.sleep(0.5)
+    """Open an archive for browsing and return its latest session id.
 
-    sessions = api_client.command("sessions.list").get("sessions", [])
+    sessions.openDatabase is asynchronous (the worker migrates the schema
+    before signalling open, and a legacy archive has the most to migrate), so
+    poll sessions.list until this archive is the one that is open.
+    """
+    api_client.command("sessions.openDatabase", {"filePath": str(path)})
+
+    deadline = time.time() + 20.0
+    sessions = []
+    while time.time() < deadline:
+        try:
+            result = api_client.command("sessions.list")
+        except APIError:
+            time.sleep(0.3)
+            continue
+
+        sessions = result.get("sessions", [])
+        if sessions and Path(result.get("filePath", "")) == path:
+            break
+        time.sleep(0.3)
+
     assert sessions, f"no sessions listed in {path}"
     return max(s["session_id"] for s in sessions)
 

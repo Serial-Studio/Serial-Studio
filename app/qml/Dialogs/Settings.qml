@@ -57,6 +57,7 @@ Widgets.SmartDialog {
 
       implicitHeight: 24
       Layout.fillWidth: true
+      onCurrentIndexChanged: Cpp_UI_Alarms.playEvent("button")
 
       TabButton {
         text: qsTr("General")

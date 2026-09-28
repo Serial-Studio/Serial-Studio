@@ -159,6 +159,7 @@ Window {
             displayText: currentIndex < 0 ? qsTr("Select Template") : currentText
 
             onActivated: (index) => {
+              Cpp_UI_Alarms.playEvent("toggle")
               root.applyingTemplate = true
               editor.applyTemplate(index)
               root.applyingTemplate = false

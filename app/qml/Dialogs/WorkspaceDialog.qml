@@ -247,6 +247,7 @@ Widgets.SmartDialog {
                     var map = root.checkedWidgets
                     map[wid] = checked
                     root.checkedWidgets = map
+                    Cpp_UI_Alarms.playEvent("toggle")
                   }
                 }
 

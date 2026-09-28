@@ -2,13 +2,13 @@
   "rule": "cxx-tu-too-long",
   "regenerate": "python scripts/code-verify.py --tu-census --accept",
   "threshold": 1500,
-  "excess": 2610,
-  "files": 11,
+  "excess": 2608,
+  "files": 10,
   "worst": 2892,
   "buckets": {
     "critical": 0,
     "god": 1,
-    "oversized": 10
+    "oversized": 9
   },
   "per_file": {
     "core/Pipeline/DataModel/FrameBuilder.cpp": 2892,
@@ -20,7 +20,6 @@
     "core/Storage/MQTT/Publisher.cpp": 1568,
     "core/Devices/IO/Drivers/Audio.cpp": 1556,
     "core/Devices/IO/Drivers/Modbus.cpp": 1526,
-    "core/Ui/Misc/ExtensionManager.cpp": 1505,
-    "core/Core/DataModel/Frame.h": 1502
+    "core/Ui/Misc/ExtensionManager.cpp": 1505
   }
 }

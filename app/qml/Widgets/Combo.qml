@@ -15,6 +15,11 @@ ComboBox {
 
   readonly property bool rtl: Cpp_Misc_Translator.rtl
 
+  //
+  // Voice the Toggle Changed event on a user selection (spec 0087 R16)
+  //
+  onActivated: Cpp_UI_Alarms.playEvent("toggle")
+
   LayoutMirroring.enabled: false
   LayoutMirroring.childrenInherit: true
 

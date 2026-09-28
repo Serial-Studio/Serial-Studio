@@ -296,8 +296,10 @@ Item {
           CheckBox {
             Layout.alignment: Qt.AlignVCenter
             checked: pinRow_.modelData.pinned
-            onToggled: Cpp_UI_TaskbarSettings.setButtonPinned(
-                         pinRow_.modelData.id, checked)
+            onToggled: {
+              Cpp_UI_TaskbarSettings.setButtonPinned(pinRow_.modelData.id, checked)
+              Cpp_UI_Alarms.playEvent("toggle")
+            }
           }
 
           Image {

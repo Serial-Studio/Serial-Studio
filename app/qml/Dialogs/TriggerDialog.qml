@@ -208,6 +208,7 @@ Widgets.SmartDialog {
           model: root.model ? root.model.labels : []
           currentIndex: (root.isMultiPlot && root.model) ? root.model.triggerSource : 0
           onActivated: {
+            Cpp_UI_Alarms.playEvent("toggle")
             if (root.model)
               root.model.triggerSource = currentIndex
           }

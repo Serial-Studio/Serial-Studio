@@ -63,6 +63,7 @@ Widgets.SmartDialog {
 
         Layout.preferredWidth: 130
         model: [qsTr("user"), qsTr("feedback"), qsTr("project"), qsTr("reference")]
+        onActivated: Cpp_UI_Alarms.playEvent("toggle")
       }
 
       Widgets.LineField {

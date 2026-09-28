@@ -168,7 +168,10 @@ Widgets.SmartDialog {
       model: declaration["options"]
       currentIndex: Math.max(0, declaration["options"].indexOf(
                                String(root.values[declaration["id"]])))
-      onActivated: root.apply(declaration["id"], combo.currentText)
+      onActivated: {
+        root.apply(declaration["id"], combo.currentText)
+        Cpp_UI_Alarms.playEvent("toggle")
+      }
     }
   }
 

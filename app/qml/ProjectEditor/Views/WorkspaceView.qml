@@ -369,6 +369,7 @@ Widgets.Pane {
                        : [qsTr("Title Bar"), qsTr("Hidden")]
                 currentIndex: Math.max(0, modeKeys.indexOf(modelData.freezeTitleMode))
                 onActivated: (index) => {
+                  Cpp_UI_Alarms.playEvent("toggle")
                   Cpp_JSON_ProjectModel.setFreezeTitleMode(modelData.widgetType,
                                                            modelData.uniqueId, modeKeys[index])
                 }

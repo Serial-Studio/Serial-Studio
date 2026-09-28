@@ -450,6 +450,7 @@ Item {
                   }
                   text: qsTr("Show Timestamp")
                   checked: Cpp_Console_Handler.showTimestamp
+                  onToggled: Cpp_UI_Alarms.playEvent("toggle")
                 }
 
                 CheckBox {
@@ -461,6 +462,7 @@ Item {
                       Cpp_Console_Handler.echo = checked
                   }
                   checked: Cpp_Console_Handler.echo
+                  onToggled: Cpp_UI_Alarms.playEvent("toggle")
                 }
 
                 CheckBox {
@@ -474,6 +476,7 @@ Item {
                   text: qsTr("Emulate VT-100")
                   checked: Cpp_Console_Handler.vt100Emulation
                   enabled: !Cpp_Console_Handler.imageWidgetActive
+                  onToggled: Cpp_UI_Alarms.playEvent("toggle")
                 }
 
                 CheckBox {
@@ -487,6 +490,7 @@ Item {
                   opacity: enabled ? 1 : 0.8
                   checked: Cpp_Console_Handler.vt100Emulation && Cpp_Console_Handler.ansiColors
                   enabled: Cpp_Console_Handler.vt100Emulation && !Cpp_Console_Handler.imageWidgetActive
+                  onToggled: Cpp_UI_Alarms.playEvent("toggle")
                 }
 
                 RowLayout {
@@ -882,6 +886,7 @@ Item {
         enabled: Cpp_IO_Manager.readWrite
         Layout.alignment: Qt.AlignVCenter
         checked: Cpp_Console_Handler.dataMode === 1
+        onToggled: Cpp_UI_Alarms.playEvent("toggle")
       }
 
       Widgets.Combo {

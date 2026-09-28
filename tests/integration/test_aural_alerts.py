@@ -61,9 +61,7 @@ def _point(state: dict, title: str) -> dict:
 
 
 def _fresh(api_client) -> None:
-    api_client.command("alarms.reset")
-    api_client.command("alarms.acknowledge")
-    api_client.command("alarms.reset")
+    api_client.command("alarms.clear")
     _set_sequence(api_client, "A-4")
     api_client.command("notifications.clearAll")
     time.sleep(0.15)
@@ -148,7 +146,7 @@ def test_manual_sequences_park_in_return_to_normal_until_reset(
 
     state = _state(api_client)
     assert _point(state, "EGT high").get("state") == "returnToNormal"
-    assert state["ringbackPending"] is (letter == "R")
+    assert state["ringbackPending"] is (letter in ("R", "R-4"))
 
     api_client.command("alarms.reset")
     time.sleep(0.1)
@@ -319,7 +317,7 @@ def _load_band_project(api_client) -> None:
     )
     time.sleep(0.2)
     api_client.command(
-        "project.parser.setCode",
+        "project.frameParser.setCode",
         {"code": "function parse(frame) { return frame.split(','); }"},
     )
     api_client.configure_frame_parser(
@@ -331,7 +329,7 @@ def _load_band_project(api_client) -> None:
     )
     time.sleep(0.2)
     api_client.set_operation_mode("project")
-    assert api_client.command("project.loadIntoFrameBuilder")["loaded"]
+    assert api_client.command("project.activate")["loaded"]
 
 
 def _send(device_simulator, values, interval=0.1) -> None:

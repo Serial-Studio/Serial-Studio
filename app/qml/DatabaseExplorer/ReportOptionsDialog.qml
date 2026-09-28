@@ -539,22 +539,27 @@ Widgets.SmartDialog {
             id: _coverCheck
 
             text: qsTr("Cover page (logo, document title, test subtitle)")
+            onToggled: Cpp_UI_Alarms.playEvent("toggle")
           } CheckBox {
             id: _metadataCheck
 
             text: qsTr("Test information (project, timestamps, classification and notes)")
+            onToggled: Cpp_UI_Alarms.playEvent("toggle")
           } CheckBox {
             id: _statsCheck
 
             text: qsTr("Measurement summary (min, max, mean, std. deviation per parameter)")
+            onToggled: Cpp_UI_Alarms.playEvent("toggle")
           } CheckBox {
             id: _chartsCheck
 
             text: qsTr("Parameter trends (time-series chart per numeric parameter)")
+            onToggled: Cpp_UI_Alarms.playEvent("toggle")
           } CheckBox {
             id: _annotateStatsCheck
 
             text: qsTr("Annotate min, max, and mean values on plots")
+            onToggled: Cpp_UI_Alarms.playEvent("toggle")
           }
 
           Item {
@@ -700,6 +705,8 @@ Widgets.SmartDialog {
                       _datasetModel.setSubtreeChecked(index, !model.checked)
                     else
                       _datasetModel.setSubtreeChecked(index, model.checkState !== Qt.Checked)
+
+                    Cpp_UI_Alarms.playEvent("toggle")
                   }
                 }
 

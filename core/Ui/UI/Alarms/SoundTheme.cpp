@@ -181,7 +181,7 @@ UI::Alarms::Sequence UI::Alarms::SoundTheme::sequenceFromLetter(const QString& l
  */
 UI::Alarms::SoundTheme::SoundTheme()
   : m_muted(false)
-  , m_enabled(true)
+  , m_enabled(false)
   , m_volume(kDefaultVolume)
   , m_nextOverrideSlot(kSlotCount)
   , m_projectSequenceSet(false)
@@ -567,13 +567,14 @@ int UI::Alarms::SoundTheme::clampInterval(Priority priority, int ms) noexcept
 }
 
 /**
- * @brief Reads every preference; UI feedback slots default off, everything else on.
+ * @brief Reads every preference; the master enable and UI feedback slots default off,
+ *        everything else on.
  */
 void UI::Alarms::SoundTheme::restore()
 {
   bool ok   = false;
   m_muted   = m_settings.value(settingsKey(QStringLiteral("muted")), false).toBool();
-  m_enabled = m_settings.value(settingsKey(QStringLiteral("enabled")), true).toBool();
+  m_enabled = m_settings.value(settingsKey(QStringLiteral("enabled")), false).toBool();
   m_volume  = std::clamp(
     m_settings.value(settingsKey(QStringLiteral("volume")), kDefaultVolume).toInt(), 0, 100);
   m_sequence = sequenceFromLetter(

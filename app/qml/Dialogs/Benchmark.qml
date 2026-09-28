@@ -245,7 +245,10 @@ Widgets.SmartDialog {
         enabled: !root.running
         currentIndex: root.framesIndex
         model: root.runner.frameOptions
-        onActivated: root.framesIndex = currentIndex
+        onActivated: {
+          root.framesIndex = currentIndex
+          Cpp_UI_Alarms.playEvent("toggle")
+        }
       }
 
       Label {
@@ -259,7 +262,10 @@ Widgets.SmartDialog {
         enabled: !root.running
         currentIndex: root.secondsIndex
         model: root.runner.secondsOptions
-        onActivated: root.secondsIndex = currentIndex
+        onActivated: {
+          root.secondsIndex = currentIndex
+          Cpp_UI_Alarms.playEvent("toggle")
+        }
       }
     }
 
@@ -289,7 +295,10 @@ Widgets.SmartDialog {
           text: qsTr("Parsers")
           enabled: !root.running
           checked: root.runParsers
-          onToggled: root.runParsers = checked
+          onToggled: {
+            root.runParsers = checked
+            Cpp_UI_Alarms.playEvent("toggle")
+          }
         }
 
         CheckBox {
@@ -297,7 +306,10 @@ Widgets.SmartDialog {
           enabled: !root.running
           text: qsTr("Data export")
           checked: root.runDataExport
-          onToggled: root.runDataExport = checked
+          onToggled: {
+            root.runDataExport = checked
+            Cpp_UI_Alarms.playEvent("toggle")
+          }
         }
 
         CheckBox {
@@ -305,7 +317,10 @@ Widgets.SmartDialog {
           enabled: !root.running
           text: qsTr("Dashboard")
           checked: root.runDashboard
-          onToggled: root.runDashboard = checked
+          onToggled: {
+            root.runDashboard = checked
+            Cpp_UI_Alarms.playEvent("toggle")
+          }
         }
       }
 
@@ -326,15 +341,21 @@ Widgets.SmartDialog {
           enabled: !root.running
           checked: root.runNumeric
           text: qsTr("Numeric only")
-          onToggled: root.runNumeric = checked
+          onToggled: {
+            root.runNumeric = checked
+            Cpp_UI_Alarms.playEvent("toggle")
+          }
         }
 
         CheckBox {
           padding: 0
           enabled: !root.running
           checked: root.runMixed
-          onToggled: root.runMixed = checked
           text: qsTr("Mixed (numeric + text)")
+          onToggled: {
+            root.runMixed = checked
+            Cpp_UI_Alarms.playEvent("toggle")
+          }
         }
       }
     }

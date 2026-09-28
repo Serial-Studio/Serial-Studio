@@ -608,7 +608,7 @@ def test_my_custom_project(api_client, device_simulator, clean_state):
     time.sleep(0.1)
 
     # 3. Set JavaScript frame parser
-    api_client.command("project.parser.setCode", {
+    api_client.command("project.frameParser.setCode", {
         "code": "function parse(frame) { return frame.split(','); }"
     })
     time.sleep(0.2)

@@ -303,6 +303,7 @@ Widgets.SmartDialog {
                          ? qsTr("Choose preset…")
                          : root.presets[currentIndex].label
             onActivated: {
+              Cpp_UI_Alarms.playEvent("toggle")
               root.applyPreset(presetCombo.currentIndex)
               presetCombo.currentIndex = -1
             }

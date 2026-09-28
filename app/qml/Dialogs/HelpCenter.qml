@@ -165,6 +165,7 @@ Widgets.SmartDialog {
             if (count <= 0)
               return
 
+            Cpp_UI_Alarms.playEvent("toggle")
             Cpp_HelpCenter.versionIndex = index
           }
 

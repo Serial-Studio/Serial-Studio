@@ -329,6 +329,7 @@ Popup {
                                    global.x, global.y)
           } else {
             root.currentValue = modelData[root.valueRole]
+            Cpp_UI_Alarms.playEvent("toggle")
             root.valueSelected(root.currentValue)
             root.closeChain()
           }

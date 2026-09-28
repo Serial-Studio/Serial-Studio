@@ -98,7 +98,7 @@ def test_problems_handler_is_registered_in_the_gpl_block():
     assert "Handlers::ProblemsHandler::registerCommands();" in source
 
     call = source.index("Handlers::ProblemsHandler::registerCommands();")
-    commercial = source.index("#ifdef BUILD_COMMERCIAL", source.index("registerAll()"))
+    commercial = source.index("#ifdef BUILD_COMMERCIAL", source.index("registerAll("))
     assert call < commercial, "the handler must register outside the commercial block"
 
 

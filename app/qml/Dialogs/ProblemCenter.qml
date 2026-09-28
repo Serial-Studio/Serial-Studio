@@ -229,6 +229,7 @@ Widgets.SmartWindow {
                   root.labelForSeverity(2),
                   root.labelForSeverity(1),
                   root.labelForSeverity(0)]
+          onActivated: Cpp_UI_Alarms.playEvent("toggle")
           onCurrentIndexChanged: {
             if (count <= 0)
               return

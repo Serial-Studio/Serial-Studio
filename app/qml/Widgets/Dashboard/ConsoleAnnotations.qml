@@ -897,7 +897,10 @@ Item {
               checked: true
               Layout.leftMargin: 6
               text: qsTr("Hexadecimal")
-              onToggled: _payload.refresh()
+              onToggled: {
+                _payload.refresh()
+                Cpp_UI_Alarms.playEvent("toggle")
+              }
             }
 
             Widgets.IconButton {
