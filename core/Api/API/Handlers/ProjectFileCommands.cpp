@@ -189,12 +189,13 @@ void API::Handlers::ProjectFileCommands::registerLifecycleCommands()
 
   registry.registerCommand(
     QStringLiteral("project.open"),
-    QStringLiteral("Open a .ssproj or .json project file. Replaces the current project. "
-                   "Auto-switches operationMode to ProjectFile if it was QuickPlot or "
-                   "ConsoleOnly. Path must be absolute. Pass dryRun:true to read the "
-                   "file and return wouldDiscard + wouldApply summaries without loading. "
-                   "Re-opening the project that is already loaded is a no-op that keeps unsaved "
-                   "edits: the reply reports reloaded:false for it."),
+    QStringLiteral(
+      "Open a .ssproj or .json project file. Replaces the current project. "
+      "Auto-switches operationMode to ProjectFile if it was QuickPlot or "
+      "ConsoleOnly. Path must be absolute. Pass dryRun:true to read the "
+      "file and return wouldDiscard + wouldApply summaries without loading. "
+      "Re-opening the project that is already loaded is a no-op that keeps unsaved "
+      "edits: the reply reports reloaded:false for it. Remote clients must clear the one-time script-install consent prompt (the user's answer is persisted); in-process callers are not prompted."),
     makeSchema(
       {
         {QStringLiteral("filePath"),
@@ -228,14 +229,15 @@ void API::Handlers::ProjectFileCommands::registerLifecycleCommands()
 
   registry.registerCommand(
     QStringLiteral("project.loadJson"),
-    QStringLiteral("Replace the current project with a JSON object IN MEMORY (no file "
-                   "association). Use when you have a project shape ready to install -- "
-                   "e.g. building a project from scratch in one shot, or implementing a "
-                   "custom template. The JSON shape must match the .ssproj schema "
-                   "(top-level: title, frameStart, frameEnd, frameDetection, decoder, "
-                   "frameParser, groups, actions, ...). Prefer project.template.apply "
-                   "for canned starters. Pass dryRun:true to return wouldDiscard + "
-                   "wouldApply summaries without loading."),
+    QStringLiteral(
+      "Replace the current project with a JSON object IN MEMORY (no file "
+      "association). Use when you have a project shape ready to install -- "
+      "e.g. building a project from scratch in one shot, or implementing a "
+      "custom template. The JSON shape must match the .ssproj schema "
+      "(top-level: title, frameStart, frameEnd, frameDetection, decoder, "
+      "frameParser, groups, actions, ...). Prefer project.template.apply "
+      "for canned starters. Pass dryRun:true to return wouldDiscard + "
+      "wouldApply summaries without loading. Remote clients must clear the one-time script-install consent prompt (the user's answer is persisted); in-process callers are not prompted."),
     makeSchema(
       {
         {QStringLiteral("config"),
@@ -352,33 +354,34 @@ void API::Handlers::ProjectFileCommands::registerTemplateCommands()
 
   registry.registerCommand(
     QStringLiteral("project.template.apply"),
-    QStringLiteral("Replace the current project with a starter template -- the right "
-                   "first move when the user says \"set me up an X project\" rather "
-                   "than \"add an X to my existing project\". DESTRUCTIVE: discards "
-                   "any unsaved current state; auto-save will write the new template "
-                   "to disk shortly after. After applying, narrate what landed (groups, "
-                   "datasets) so the user knows what they got, then proceed with any "
-                   "follow-up edits the user requested. Available templates and their "
-                   "best fit:\n"
-                   "  blank: empty project, one default UART source. Use when the user "
-                   "wants to build everything themselves.\n"
-                   "  imu_uart: 9-DOF IMU (accelerometer X/Y/Z + gyro X/Y/Z + mag "
-                   "X/Y/Z) over UART, comma-separated, $ start / ; end. Replace the "
-                   "frame parser if your device frames differ.\n"
-                   "  gps_uart_nmea: GPS over UART using NMEA 0183 ($GPGGA). "
-                   "Lat/lon/altitude/satellites/HDOP/fixQuality. Map widget configured.\n"
-                   "  scope_multichannel_uart: 8 generic channels over UART, "
-                   "comma-separated, all plot-enabled. Adapt for ADC streams or sensor "
-                   "arrays.\n"
-                   "  telemetry_udp: CSV body parser with 5 generic value channels, "
-                   "intended for UDP telemetry. The template does NOT configure the "
-                   "connection -- set up the UDP listener via io.network.* after "
-                   "applying.\n"
-                   "  mqtt_subscriber (Pro): MQTT subscriber-mode skeleton. After "
-                   "applying, configure the broker via project.mqtt.subscriber.setConfig.\n"
-                   "Pass dryRun:true to return wouldDiscard + wouldApply summaries "
-                   "without applying. Useful when the user is choosing between two "
-                   "templates."),
+    QStringLiteral(
+      "Replace the current project with a starter template -- the right "
+      "first move when the user says \"set me up an X project\" rather "
+      "than \"add an X to my existing project\". DESTRUCTIVE: discards "
+      "any unsaved current state; auto-save will write the new template "
+      "to disk shortly after. After applying, narrate what landed (groups, "
+      "datasets) so the user knows what they got, then proceed with any "
+      "follow-up edits the user requested. Available templates and their "
+      "best fit:\n"
+      "  blank: empty project, one default UART source. Use when the user "
+      "wants to build everything themselves.\n"
+      "  imu_uart: 9-DOF IMU (accelerometer X/Y/Z + gyro X/Y/Z + mag "
+      "X/Y/Z) over UART, comma-separated, $ start / ; end. Replace the "
+      "frame parser if your device frames differ.\n"
+      "  gps_uart_nmea: GPS over UART using NMEA 0183 ($GPGGA). "
+      "Lat/lon/altitude/satellites/HDOP/fixQuality. Map widget configured.\n"
+      "  scope_multichannel_uart: 8 generic channels over UART, "
+      "comma-separated, all plot-enabled. Adapt for ADC streams or sensor "
+      "arrays.\n"
+      "  telemetry_udp: CSV body parser with 5 generic value channels, "
+      "intended for UDP telemetry. The template does NOT configure the "
+      "connection -- set up the UDP listener via io.network.* after "
+      "applying.\n"
+      "  mqtt_subscriber (Pro): MQTT subscriber-mode skeleton. After "
+      "applying, configure the broker via project.mqtt.subscriber.setConfig.\n"
+      "Pass dryRun:true to return wouldDiscard + wouldApply summaries "
+      "without applying. Useful when the user is choosing between two "
+      "templates. Remote clients must clear the one-time script-install consent prompt (the user's answer is persisted); in-process callers are not prompted."),
     makeSchema(
       {
         {QStringLiteral("templateId"),

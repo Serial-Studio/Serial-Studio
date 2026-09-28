@@ -121,6 +121,7 @@
 #include "ProjectEditor/ProjectEditor.h"
 #include "SessionContext.h"
 #include "UI/AlarmMonitor.h"
+#include "UI/Alarms/AlarmAnnunciator.h"
 #include "UI/CommandRegistry.h"
 #include "UI/Dashboard.h"
 #include "UI/DashboardWidget.h"
@@ -179,6 +180,20 @@
 #ifdef ENABLE_GRPC
 #  include "API/GRPC/GRPCServer.h"
 #endif
+
+//--------------------------------------------------------------------------------------------------
+// Root-owned objects
+//--------------------------------------------------------------------------------------------------
+
+/**
+ * @brief The one root-owned object outside the SessionContext slots (spec 0087): built by the
+ *        root that wires it (GUI, headless), never by the benchmark, because it takes every
+ *        module it reads by reference; its audio stops in stopFrameConsumerWorkers() and the
+ *        object is released by releaseAnnunciator() right before shutdown(), once the QML engine
+ *        is gone. The API handler reads it through this slot, so a released annunciator reads as
+ *        null there. Never a singleton.
+ */
+static std::unique_ptr<UI::Alarms::AlarmAnnunciator> s_annunciator;
 
 //--------------------------------------------------------------------------------------------------
 // Message handler
@@ -460,6 +475,9 @@ void Misc::ModuleManager::onQuit()
  */
 void Misc::ModuleManager::stopFrameConsumerWorkers()
 {
+  if (s_annunciator)
+    s_annunciator->stopAudio();
+
   IO::ConnectionManager::instance().stopStreamWorkers();
   IO::PipelineHost::instance().shutdown();
   CSV::Export::instance().stopWorker();
@@ -701,6 +719,8 @@ void Misc::ModuleManager::initializeQmlInterface()
   applyLayoutDirection();
 
   setupCrossModuleConnections();
+  if (s_annunciator)
+    s_annunciator->arm();
 
   qInstallMessageHandler(MessageHandler);
   qAddPostRoutine([]() { qInstallMessageHandler(nullptr); });
@@ -880,6 +900,55 @@ void Misc::ModuleManager::instantiateCoreModules()
 }
 
 /**
+ * @brief Constructs the aural alert facade from the adopted modules; the problem center is the
+ *        one Ui singleton the caller already reached (null on a root without one). Idempotent
+ *        per session, no new instance() reach.
+ */
+void Misc::ModuleManager::constructAnnunciator(SessionContext& ctx,
+                                               Misc::ProblemCenter* problemCenter)
+{
+  if (s_annunciator)
+    return;
+
+  const UI::Alarms::AlarmAnnunciator::Modules modules{
+    ctx.bus(),
+    ctx.dashboard(),
+    Core::services().timerEvents,
+    problemCenter,
+    ctx.projectModel(),
+    ctx.notifications(),
+    ctx.connectionManager(),
+  };
+  s_annunciator = std::make_unique<UI::Alarms::AlarmAnnunciator>(modules);
+}
+
+/**
+ * @brief Destroys the annunciator. Called by every root right before SessionContext::shutdown(),
+ *        with the QML engine already gone: the object holds references to the adopted modules,
+ *        and destroying it earlier (onQuit runs with QML alive) turns every Cpp_UI_Alarms binding
+ *        into a null read.
+ */
+void Misc::ModuleManager::releaseAnnunciator()
+{
+  s_annunciator.reset();
+}
+
+/**
+ * @brief Builds and wires the annunciator in the GUI root: the band monitor and the console
+ *        recorder are the two Ui singletons it observes, captured here so the census stays flat
+ *        (spec 0087).
+ */
+void Misc::ModuleManager::wireAnnunciator(bool headless, Misc::ProblemCenter& problemCenter)
+{
+  auto& alarmMonitor  = UI::AlarmMonitor::instance();
+  auto& consoleExport = Console::Export::instance();
+  alarmMonitor.setupExternalConnections();
+  consoleExport.setupExternalConnections();
+  constructAnnunciator(SessionContext::current(), &problemCenter);
+  s_annunciator->setupExternalConnections(headless, &alarmMonitor, &consoleExport);
+}
+
+/**
  * @brief Binds the seams every root needs before any wiring or the first device open (spec 0077):
  *        block sinks (two read-only observers named by slot), raw-byte taps and the per-frame tap.
  *        ONE list for the GUI, headless and benchmark roots: a sink missing here never reaches
@@ -949,7 +1018,7 @@ void Misc::ModuleManager::registerApiHandlers()
 
   registered = true;
   API::CommandHandler::instance().registerCoreHandlers();
-  UI::ApiHandlers::registerAll();
+  UI::ApiHandlers::registerAll(&s_annunciator);
 #ifdef BUILD_COMMERCIAL
   API::Handlers::LicensingHandler::registerCommands();
 #endif
@@ -970,6 +1039,8 @@ void Misc::ModuleManager::setupHeadlessSessionConnections()
 #ifdef BUILD_COMMERCIAL
   Sessions::Export::instance().setupExternalConnections();
 #endif
+  constructAnnunciator(SessionContext::current(), nullptr);
+  s_annunciator->setupExternalConnections(true, nullptr, nullptr);
 }
 
 /**
@@ -1062,11 +1133,10 @@ void Misc::ModuleManager::setupCrossModuleConnections()
   API::ProcessLauncher::instance().setupExternalConnections();
   DataModel::FrameBuilder::instance().setupExternalConnections();
   DataModel::ControlScript::instance().setupExternalConnections();
-  Console::Export::instance().setupExternalConnections();
   Console::Handler::instance().setupExternalConnections();
   IO::FileTransmission::instance().setupExternalConnections();
-  UI::AlarmMonitor::instance().setupExternalConnections();
   auto& problemCenter = Misc::ProblemCenter::instance();
+  wireAnnunciator(m_headless, problemCenter);
   problemCenter.setupExternalConnections();
   wireProblemCenterSessionReset(ioManager, problemCenter);
   Misc::ConnectionDiagnostics::instance().setupExternalConnections();
@@ -1171,6 +1241,7 @@ void Misc::ModuleManager::registerCoreContextProperties(QQmlContext* ctx)
   registry.add("Cpp_JSON_ProtoImporter", &DataModel::ProtoImporter::instance());
   registry.add("Cpp_JSON_FrameBuilder", &DataModel::FrameBuilder::instance());
   registry.add("Cpp_Notifications", &DataModel::NotificationCenter::instance());
+  registry.add("Cpp_UI_Alarms", s_annunciator.get());
   registry.add("Cpp_Misc_TimerEvents", &Misc::TimerEvents::instance());
   registry.add("Cpp_Misc_CommonFonts", &Misc::CommonFonts::instance());
   registry.add("Cpp_IO_FileTransmission", &IO::FileTransmission::instance());

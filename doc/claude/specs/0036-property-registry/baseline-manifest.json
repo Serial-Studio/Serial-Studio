@@ -29,6 +29,10 @@
       "sha256": "6eb0379cdea447f3601f3469c3ba7e4ef7f0d771d094f02d8603d769677571bb"
     },
     {
+      "path": "examples/Graphical Ping/graphical-ping.ssproj",
+      "sha256": "2ecf8198e53887ac16b107f7c580a52bc0d1cc7270678269396721993fde08dc"
+    },
+    {
       "path": "examples/HexadecimalADC/HexadecimalADC.ssproj",
       "sha256": "87859a7a367c92a15266d458a5e0b51d6aaf54377d75a5969c1e22b6fa0d0c72"
     },

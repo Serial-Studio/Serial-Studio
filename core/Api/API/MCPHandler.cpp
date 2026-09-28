@@ -303,13 +303,10 @@ API::MCP::MCPResponse API::MCPHandler::handleToolsCall(const MCP::MCPRequest& re
   }
 
   static auto& server = Server::instance();
-  if (!server.authorizeRemoteCommand(name)) {
-    return MCP::MCPResponse::makeError(
-      request.id,
-      MCP::ErrorCode::InternalError,
-      QStringLiteral("Device writes need the user's consent; retry after the prompt is answered"));
-  }
-
+  const RemoteDispatchScope scope(
+    [](const QString& id, const QString& command, const QJsonObject& params) {
+      return server.authorizeRemoteCommand(id, command, params);
+    });
   const auto response = registry.execute(name, QString(), arguments);
 
   QJsonObject contentObj;

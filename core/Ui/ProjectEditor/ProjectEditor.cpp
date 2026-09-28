@@ -1066,6 +1066,30 @@ void DataModel::ProjectEditor::commitAlarmBands(const QVariantList& bands)
 }
 
 /**
+ * @brief Opens the channel sound map dialog with the rows EditorCommit builds.
+ */
+void DataModel::ProjectEditor::openChannelSoundsEditorForProject()
+{
+  Q_EMIT openChannelSoundsEditor(m_commit.channelSoundRows());
+}
+
+/**
+ * @brief Forwards to EditorCommit.
+ */
+void DataModel::ProjectEditor::commitChannelSounds(const QVariantList& rows)
+{
+  m_commit.commitChannelSounds(rows);
+}
+
+/**
+ * @brief Forwards to EditorCommit.
+ */
+void DataModel::ProjectEditor::setProjectSoundSequence(const QString& letter)
+{
+  m_commit.setProjectSoundSequence(letter);
+}
+
+/**
  * @brief Forwards to EditorCommit.
  */
 void DataModel::ProjectEditor::commitFrequencyMarkers(const QVariantList& markers)

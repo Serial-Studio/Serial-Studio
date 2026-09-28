@@ -25,6 +25,7 @@
 #include <QCoreApplication>
 #include <QJsonArray>
 #include <QSet>
+#include <QThread>
 
 #include "API/PathPolicy.h"
 #include "Core/SSAssert.h"
@@ -272,6 +273,62 @@ struct ExecuteDepthGuard {
   }
 };
 
+//--------------------------------------------------------------------------------------------------
+// Remote dispatch scope
+//--------------------------------------------------------------------------------------------------
+
+/**
+ * @brief The innermost scope, or null when no entry point opened one (GUI-thread only).
+ */
+static const API::RemoteDispatchScope*& activeRemoteScope() noexcept
+{
+  static const API::RemoteDispatchScope* scope = nullptr;
+  return scope;
+}
+
+/**
+ * @brief Pushes this scope over the current one.
+ */
+API::RemoteDispatchScope::RemoteDispatchScope(RemoteGate gate)
+  : m_gate(std::move(gate)), m_previous(activeRemoteScope())
+{
+  SS_ASSERT_LOG(QThread::currentThread() == qApp->thread());
+  activeRemoteScope() = this;
+}
+
+/**
+ * @brief Restores the scope this one shadowed.
+ */
+API::RemoteDispatchScope::~RemoteDispatchScope()
+{
+  SS_ASSERT_LOG(activeRemoteScope() == this);
+  activeRemoteScope() = m_previous;
+}
+
+/**
+ * @brief The scope the next execute() answers to.
+ */
+const API::RemoteDispatchScope* API::RemoteDispatchScope::active() noexcept
+{
+  return activeRemoteScope();
+}
+
+/**
+ * @brief Runs the gate; an empty gate is a trusted scope and allows everything.
+ */
+std::optional<API::CommandResponse> API::RemoteDispatchScope::authorize(
+  const QString& id, const QString& name, const QJsonObject& params) const
+{
+  if (!m_gate)
+    return std::nullopt;
+
+  return m_gate(id, name, params);
+}
+
+//--------------------------------------------------------------------------------------------------
+// Execution
+//--------------------------------------------------------------------------------------------------
+
 /**
  * @brief Execute a registered command. Only the outermost destructive command snapshots the
  *        project: a project.batch of N deletes takes one snapshot, not N+1 synchronous
@@ -283,6 +340,11 @@ API::CommandResponse API::CommandRegistry::execute(const QString& name,
 {
   if (!hasCommand(name))
     return buildUnknownCommandResponse(name, id);
+
+  if (const auto* scope = RemoteDispatchScope::active()) {
+    if (auto refused = scope->authorize(id, name, params))
+      return *refused;
+  }
 
   if (const auto rejected = rejectDisallowedPaths(m_commands[name].pathParams, id, params))
     return *rejected;

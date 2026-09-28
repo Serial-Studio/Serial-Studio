@@ -21,8 +21,14 @@
 
 #pragma once
 
+#include <memory>
+
+namespace UI::Alarms {
+class AlarmAnnunciator;
+}  // namespace UI::Alarms
+
 namespace UI::ApiHandlers {
 
-void registerAll();
+void registerAll(const std::unique_ptr<UI::Alarms::AlarmAnnunciator>* annunciator);
 
 }  // namespace UI::ApiHandlers

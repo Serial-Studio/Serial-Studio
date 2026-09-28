@@ -145,6 +145,9 @@ widgets, Modbus, CAN Bus, OPC UA, S7comm, EtherNet/IP, IEC 60870-5-104, Sparkplu
 3D, ImageView, Waterfall, file-transfer protocols (X/Y/ZMODEM), Modbus map importer,
 Historian (per-session SQLite recording; "Session Database" pre-2026-08), InfluxDB 2.x sink
 (`core/Storage/InfluxDB/`, line protocol per published block).
+Aural alerts (spec 0087, every build): an ISA-18.1 annunciator (`UI::Alarms::AlarmAnnunciator`,
+root-owned, `Cpp_UI_Alarms`, `alarms.*` API) with IEC 60601-1-8 WAV signatures played by
+`IO::Audio::SoundPlayer` on a raw miniaudio device.
 User-facing renames of 2026-08-19 — internal identifiers unchanged: Historian (was Session
 Database; `Sessions::` namespace, `sessions.*` API, "Session Databases" folder stay), Variables
 (was Shared Memory; registers → variables in UI/docs, `RegisterDef`/`registers` JSON stay),
@@ -357,6 +360,7 @@ area. The hazard column names what breaks silently — the doc holds the rule.
 | An embedded code editor's render cadence | [scripting.md](doc/claude/architecture/scripting.md) "Embedded Code Editors" | Never give a main-window-embedded editor an unconditional per-tick `grab()` — cost 13% of the GUI thread (2026-08-17). |
 | The AI assistant: a tool tier, the checkpoint timer, a provider, the tool surface, the sandbox roots | [ai.md](doc/claude/architecture/ai.md) | A mutating tool call takes a **checkpoint**, never a save — the API descriptions and `app/rcc/ai/skills/` say so to the model, so a disk-contract change is incomplete until those strings change too. Every command sits in exactly one tier of `command_safety.json`; an unlisted name silently falls through to `Confirm`. The bundled source behind the `source/` prefix (spec 0078) is read-only and joins a search ONLY through the `path` scope — never add it to the default walk. |
 | Locating a god object's concerns (`ProjectModel`, `ProjectHandler`, `FrameBuilder`, `Dashboard`) | [directory-map.md](doc/claude/directory-map.md) | Spec 0070 re-formed the god objects into facades owning real sub-object classes (one class = one .h/.cpp, in a sibling dir named after the facade). Never split one class across TUs: decompose into member sub-objects instead. |
+| An API command that installs script code, launches a process, or re-dispatches other commands | [AuthPrimitives.cpp](core/Api/API/Server/AuthPrimitives.cpp), [CommandRegistry.h](core/Api/API/CommandRegistry.h) | Remote origin is a dispatch scope (`RemoteDispatchScope`), never a per-site check: a nested `CommandRegistry::execute` (`project.batch`, assistant forwards) answers to the same gate as the outer call. A new command that installs script code goes into `commandInstallsScript` (any script reaches `system.exec` as Trusted), one that spawns goes through `ProcessLauncher::launch` (per-project consent). `SERIAL_STUDIO_API_AUTO_CONSENT=1` grants every gate for headless runs. |
 | Anything under `core/` or a source that could move there (spec 0076) | [directory-map.md](doc/claude/directory-map.md) "core/" | A library never includes `app/src`; a moved `Q_OBJECT` header listed in both a library and the executable mocs twice; every `.h`/`.cpp` pair lives in one target; a relative include must resolve in exactly one root; an upward include beyond `scripts/layer-baseline.json` fails CI; the bus is never on the per-frame path. |
 
 ## Code Style — Essentials

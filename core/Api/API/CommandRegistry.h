@@ -22,6 +22,7 @@
 #pragma once
 
 #include <functional>
+#include <optional>
 #include <QJsonObject>
 #include <QMap>
 #include <QString>
@@ -47,6 +48,39 @@ struct CommandDefinition {
   QJsonObject inputSchema;
   QVector<PathParamPolicy> pathParams;
   CommandFunction handler;
+};
+
+/**
+ * @brief Policy a remote entry point installs for the commands dispatched under it: the refusal
+ *        to send, or nothing when the command may run.
+ */
+using RemoteGate = std::function<std::optional<CommandResponse>(
+  const QString& id, const QString& name, const QJsonObject& params)>;
+
+/**
+ * @brief RAII marker that every CommandRegistry::execute under it, outer or nested, answers to
+ *        @p gate, so a project.batch op or an assistant forward cannot outrun the origin check.
+ *        Remote entry points (TCP, MCP, gRPC) open one with the server's policy; a trusted
+ *        dispatch opens one with an empty gate, shadowing any remote scope it runs inside.
+ */
+class RemoteDispatchScope {
+public:
+  explicit RemoteDispatchScope(RemoteGate gate);
+  ~RemoteDispatchScope();
+  RemoteDispatchScope(RemoteDispatchScope&&)                 = delete;
+  RemoteDispatchScope(const RemoteDispatchScope&)            = delete;
+  RemoteDispatchScope& operator=(RemoteDispatchScope&&)      = delete;
+  RemoteDispatchScope& operator=(const RemoteDispatchScope&) = delete;
+
+public:
+  [[nodiscard]] static const RemoteDispatchScope* active() noexcept;
+  [[nodiscard]] std::optional<CommandResponse> authorize(const QString& id,
+                                                         const QString& name,
+                                                         const QJsonObject& params) const;
+
+private:
+  RemoteGate m_gate;
+  const RemoteDispatchScope* m_previous;
 };
 
 /**

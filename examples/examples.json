@@ -99,6 +99,17 @@
     "requiresPro": true
   },
   {
+    "id": "Graphical Ping",
+    "title": "Graphical Ping",
+    "description": "Plots network latency to any host in real time, like the gping terminal tool. A Control Loop launches a Python helper that runs the system ping command and streams round-trip time and statistics over UDP.",
+    "category": "Networking",
+    "difficulty": "Beginner",
+    "hasProjectFile": true,
+    "projectFileName": "graphical-ping.ssproj",
+    "hasScreenshot": false,
+    "requiresPro": false
+  },
+  {
     "id": "HexadecimalADC",
     "title": "Command-Based ADC Sampling",
     "description": "Showcases binary data parsing, custom serial actions, timed execution, and CRC-16 checksum validation for Arduino-based sensor data acquisition with FFT analysis.",

@@ -185,7 +185,7 @@ Widgets.SmartDialog {
           color: Cpp_ThemeManager.colors["text"]
         }
 
-        Switch {
+        Widgets.Toggle {
           id: inputInGSwitch
 
           onToggled: {

@@ -278,6 +278,30 @@ bool DataModel::read(OutputWidget& w, const QJsonObject& obj)
 }
 
 /**
+ * @brief Serializes an AlarmBand to a QJsonObject; optional fields are omitted when empty.
+ */
+QJsonObject DataModel::serialize(const AlarmBand& b)
+{
+  QJsonObject obj;
+  obj.insert(Keys::Min, qMin(b.min, b.max));
+  obj.insert(Keys::Max, qMax(b.min, b.max));
+  obj.insert(Keys::Severity, static_cast<int>(b.severity));
+  if (b.blink)
+    obj.insert(Keys::Blink, b.blink);
+
+  if (!b.color.isEmpty())
+    obj.insert(Keys::Color, b.color);
+
+  if (!b.label.isEmpty())
+    obj.insert(Keys::Label, b.label);
+
+  if (!b.sound.isEmpty())
+    obj.insert(Keys::Sound, b.sound);
+
+  return obj;
+}
+
+/**
  * @brief Deserializes an AlarmBand from a QJsonObject.
  */
 bool DataModel::read(AlarmBand& b, const QJsonObject& obj)
@@ -295,6 +319,7 @@ bool DataModel::read(AlarmBand& b, const QJsonObject& obj)
   b.blink       = ss_jsr(obj, Keys::Blink, false).toBool();
   b.color       = ss_jsr(obj, Keys::Color, "").toString().simplified();
   b.label       = ss_jsr(obj, Keys::Label, "").toString().simplified();
+  b.sound       = ss_jsr(obj, Keys::Sound, "").toString().trimmed();
   return b.max > b.min;
 }
 

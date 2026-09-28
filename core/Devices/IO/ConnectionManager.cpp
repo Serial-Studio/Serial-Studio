@@ -63,6 +63,7 @@ IO::ConnectionManager::ConnectionManager(Core::Bus::MessageBus& bus, IIngestBind
   , m_binder(binder)
   , m_paused(false)
   , m_writeEnabled(true)
+  , m_closeRequested(false)
   , m_rebuildingDevices(false)
   , m_busType(SerialStudio::BusType::UART)
   , m_operationMode(SerialStudio::QuickPlot)
@@ -521,6 +522,15 @@ void IO::ConnectionManager::toggleConnection()
 }
 
 /**
+ * @brief True when the last close came from an operator or API disconnect rather than from a
+ *        driver dropping the link (spec 0087); cleared by the next connect.
+ */
+bool IO::ConnectionManager::lastCloseRequested() const noexcept
+{
+  return m_closeRequested;
+}
+
+/**
  * @brief Returns true while any device is dialing; drives the connect button's feedback so an
  *        asynchronous attempt is visible instead of looking like a dead click.
  */
@@ -557,6 +567,8 @@ void IO::ConnectionManager::connectDevice()
 
   if (m_operationMode == SerialStudio::ProjectFile && !m_resourceGuard.verifyProjectSources())
     return;
+
+  m_closeRequested = false;
 
   if (!isConnected())
     rebuildStreamWorkers();
@@ -644,6 +656,7 @@ void IO::ConnectionManager::disconnectDevice()
 {
   SS_ASSERT_LOG(thread() == QThread::currentThread());
 
+  m_closeRequested      = true;
   const bool hadSession = isConnected();
 
   m_fanOut.beginWaitCursor();

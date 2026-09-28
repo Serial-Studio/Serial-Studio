@@ -134,7 +134,7 @@ Widgets.SmartDialog {
           Repeater {
             model: [qsTr("Auto"), qsTr("Normal"), qsTr("Single")]
 
-            delegate: RadioButton {
+            delegate: Widgets.Radio {
               required property int index
               required property string modelData
 

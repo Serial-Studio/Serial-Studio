@@ -158,7 +158,8 @@ void API::Handlers::SourceHandler::registerFrameParserCommands()
 
   registry.registerCommand(
     QStringLiteral("project.source.setFrameParserCode"),
-    QStringLiteral("Set per-source JS frame parser (params: sourceId, code)"),
+    QStringLiteral(
+      "Set per-source JS frame parser (params: sourceId, code). Remote clients must clear the one-time script-install consent prompt (the user's answer is persisted); in-process callers are not prompted."),
     makeSchema({
       {QString(Keys::SourceId),QStringLiteral("integer"),QStringLiteral("Source ID")                           },
       { QStringLiteral("code"),

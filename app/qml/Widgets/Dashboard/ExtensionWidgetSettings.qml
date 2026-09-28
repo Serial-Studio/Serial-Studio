@@ -107,7 +107,7 @@ Widgets.SmartDialog {
   Component {
     id: boolEditor
 
-    Switch {
+    Widgets.Toggle {
       required property var declaration
 
       checked: root.values[declaration["id"]] === true

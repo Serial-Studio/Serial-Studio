@@ -21,18 +21,14 @@
 
 #pragma once
 
+#include "API/Server/ConsentVerdict.h"
+
 namespace API {
 
 /**
- * @brief Answer of the device-write consent gate. ConsentRequired is what keeps the modal off the
- *        receive path (spec 0075 I1): the write is refused now, the prompt is posted queued, and
- *        the client retries once the user answered. Lives in its own header so the reception
- *        machine can be driven by a stub host that links neither ServerAuth nor QtWidgets.
+ * @brief The device-write gate's answer is the shared consent verdict; the alias keeps the
+ *        reception machine and its stub host naming the write they gate.
  */
-enum class DeviceWriteVerdict {
-  Allowed,
-  Denied,
-  ConsentRequired,
-};
+using DeviceWriteVerdict = ConsentVerdict;
 
 }  // namespace API

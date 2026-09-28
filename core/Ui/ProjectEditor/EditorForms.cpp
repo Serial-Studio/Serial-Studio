@@ -95,6 +95,7 @@ EditorForms::~EditorForms()
     entry.insert(QStringLiteral("color"), b.color);
     entry.insert(QStringLiteral("label"), b.label);
     entry.insert(QStringLiteral("blink"), b.blink);
+    entry.insert(QStringLiteral("sound"), b.sound);
     out.append(entry);
   }
 
@@ -112,7 +113,8 @@ EditorForms::~EditorForms()
 
   for (size_t i = 0; i < a.size(); ++i)
     if (a[i].min != b[i].min || a[i].max != b[i].max || a[i].severity != b[i].severity
-        || a[i].blink != b[i].blink || a[i].color != b[i].color || a[i].label != b[i].label)
+        || a[i].blink != b[i].blink || a[i].color != b[i].color || a[i].label != b[i].label
+        || a[i].sound != b[i].sound)
       return false;
 
   return true;

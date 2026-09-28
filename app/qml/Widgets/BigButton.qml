@@ -167,6 +167,7 @@ Item {
       if (root.checkable)
         root.checked = !root.checked
 
+      Cpp_UI_Alarms.playEvent("button")
       root.clicked()
     }
   }

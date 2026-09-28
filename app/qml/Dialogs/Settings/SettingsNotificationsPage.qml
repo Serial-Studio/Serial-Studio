@@ -22,6 +22,7 @@
 import QtQuick
 import QtQuick.Layouts
 import QtQuick.Controls
+import "../../Widgets" as Widgets
 
 // Notifications page (Pro only): zero implicit height in GPL builds keeps the tab indices aligned.
 Item {
@@ -73,7 +74,7 @@ Item {
     Label {
       text: qsTr("System Notifications")
       color: Cpp_ThemeManager.colors["text"]
-    } Switch {
+    } Widgets.Toggle {
       Layout.rightMargin: -8
       Layout.alignment: Qt.AlignRight
       checked: Cpp_Notifications.systemNotificationsEnabled
@@ -119,7 +120,7 @@ Item {
     Label {
       text: qsTr("Route Warnings to Notifications")
       color: Cpp_ThemeManager.colors["text"]
-    } Switch {
+    } Widgets.Toggle {
       Layout.rightMargin: -8
       Layout.alignment: Qt.AlignRight
       checked: Cpp_Notifications.routeWarningsToNotifications

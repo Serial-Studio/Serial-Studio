@@ -22,6 +22,7 @@
 #pragma once
 
 #include <QByteArray>
+#include <QJsonObject>
 #include <QString>
 
 namespace API {
@@ -55,6 +56,13 @@ namespace Auth {
  *        device-write consent gate before a remote client may run it.
  */
 [[nodiscard]] bool commandWritesToDevice(const QString& command);
+
+/**
+ * @brief Whether a command (with these parameters) installs script code into the project. Every
+ *        project script runs with Trusted origin and reaches the full command surface, system.exec
+ *        included, so a remote client has to clear the script-install consent gate first.
+ */
+[[nodiscard]] bool commandInstallsScript(const QString& command, const QJsonObject& params);
 
 }  // namespace Auth
 }  // namespace API

@@ -48,16 +48,17 @@ void API::Handlers::ProjectPainterCommands::registerCommands()
 
   registry.registerCommand(
     QStringLiteral("project.painter.setCode"),
-    QStringLiteral("Set the canvas widget code for a group (params: groupId, code). "
-                   "**JavaScript only** -- canvas scripts run in QJSEngine, not Lua. "
-                   "Available globals: ctx (2D canvas context, QPainter-like), w, h "
-                   "(canvas dimensions), datasetGetFinal(uid)/datasetGetRaw(uid). The "
-                   "entry point is paint(ctx, w, h) and an optional zero-arg onFrame() "
-                   "callback. "
-                   "Validate with project.painter.dryRun before setCode. **Always call "
-                   "meta.fetchScriptingDocs{kind:'painter_js'} first** for the full API "
-                   "surface and worked examples -- don't invent canvas methods from JS "
-                   "DOM Canvas, the surface is QPainter-shaped."),
+    QStringLiteral(
+      "Set the canvas widget code for a group (params: groupId, code). "
+      "**JavaScript only** -- canvas scripts run in QJSEngine, not Lua. "
+      "Available globals: ctx (2D canvas context, QPainter-like), w, h "
+      "(canvas dimensions), datasetGetFinal(uid)/datasetGetRaw(uid). The "
+      "entry point is paint(ctx, w, h) and an optional zero-arg onFrame() "
+      "callback. "
+      "Validate with project.painter.dryRun before setCode. **Always call "
+      "meta.fetchScriptingDocs{kind:'painter_js'} first** for the full API "
+      "surface and worked examples -- don't invent canvas methods from JS "
+      "DOM Canvas, the surface is QPainter-shaped. Remote clients must clear the one-time script-install consent prompt (the user's answer is persisted); in-process callers are not prompted."),
     makeSchema({
       {QStringLiteral("groupId"),
        QStringLiteral("integer"),

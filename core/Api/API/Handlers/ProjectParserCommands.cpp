@@ -166,26 +166,28 @@ void API::Handlers::ProjectParserCommands::registerCodeCommands()
                      "template). When supplied, the source language is flipped before the "
                      "code is validated and script errors are returned as API errors.")}});
 
-  registry.registerCommand(QStringLiteral("project.frameParser.setCode"),
-                           QStringLiteral("Set frame parser code (params: code, "
-                                          "optional sourceId, optional language). "
-                                          "Always pass `language` when authoring code "
-                                          "to lock in the runtime engine -- mismatch = "
-                                          "silent compile failure. Lua (1) is the "
-                                          "recommended default; it's faster than "
-                                          "JavaScript on the hotpath at typical "
-                                          "telemetry rates. Use JavaScript only when "
-                                          "you need a JS-specific library or feature. "
-                                          "Validate with project.frameParser.dryRun (or "
-                                          "dryCompile for a syntax-only check) before "
-                                          "setCode. **Call meta.fetchScriptingDocs{kind: "
-                                          "'frame_parser_lua' | 'frame_parser_js'} first** "
-                                          "for the parse() signature, return-shape rules, "
-                                          "and the tableGet/tableSet API. For Built-In (2), "
-                                          "prefer project.frameParser.setTemplate; passing "
-                                          "the JSON descriptor as `code` also works."),
-                           setCodeSchema,
-                           &parserSetCode);
+  registry.registerCommand(
+    QStringLiteral("project.frameParser.setCode"),
+    QStringLiteral(
+      "Set frame parser code (params: code, "
+      "optional sourceId, optional language). "
+      "Always pass `language` when authoring code "
+      "to lock in the runtime engine -- mismatch = "
+      "silent compile failure. Lua (1) is the "
+      "recommended default; it's faster than "
+      "JavaScript on the hotpath at typical "
+      "telemetry rates. Use JavaScript only when "
+      "you need a JS-specific library or feature. "
+      "Validate with project.frameParser.dryRun (or "
+      "dryCompile for a syntax-only check) before "
+      "setCode. **Call meta.fetchScriptingDocs{kind: "
+      "'frame_parser_lua' | 'frame_parser_js'} first** "
+      "for the parse() signature, return-shape rules, "
+      "and the tableGet/tableSet API. For Built-In (2), "
+      "prefer project.frameParser.setTemplate; passing "
+      "the JSON descriptor as `code` also works. Remote clients must clear the one-time script-install consent prompt (the user's answer is persisted); in-process callers are not prompted."),
+    setCodeSchema,
+    &parserSetCode);
 
   registry.registerCommand(QStringLiteral("project.frameParser.getCode"),
                            QStringLiteral("Read the current frame parser source for a "

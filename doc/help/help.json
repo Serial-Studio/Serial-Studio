@@ -72,6 +72,12 @@
   "file": "Notifications.md"
  },
  {
+  "id": "aural-alerts",
+  "title": "Aural Alerts",
+  "section": "Configuration",
+  "file": "Aural-Alerts.md"
+ },
+ {
   "id": "widget-reference",
   "title": "Widget Reference",
   "section": "Configuration",

@@ -19,13 +19,17 @@
  * SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial
  */
 
+#include <QCoreApplication>
 #include <QJsonDocument>
 #include <QJsonObject>
+#include <QSettings>
+#include <QStandardPaths>
 #include <QTcpSocket>
 #include <QTest>
 
 #include "API/Server/AuthPrimitives.h"
 #include "API/Server/ClientReception.h"
+#include "API/Server/ServerAuth.h"
 
 // Mirrors the caps ClientReception.cpp keeps file-private; restating them here is the point of a
 // KAT: a silent widening of a limit has to break this suite.
@@ -134,6 +138,8 @@ class TstServerAuth : public QObject {
   Q_OBJECT
 
 private slots:
+  void initTestCase();
+
   void constantTimeEquals_data();
   void constantTimeEquals();
 
@@ -144,6 +150,12 @@ private slots:
 
   void commandClassification_data();
   void commandClassification();
+
+  void scriptInstallClassification_data();
+  void scriptInstallClassification();
+
+  void remoteCommandPolicy();
+  void remoteCommandPolicyHeadlessGrant();
 
   void authHandshakeRejectsBadToken();
   void authHandshakeAcceptsAndReplaysPipeline();
@@ -165,6 +177,18 @@ private:
 //--------------------------------------------------------------------------------------------------
 // Helpers
 //--------------------------------------------------------------------------------------------------
+
+/**
+ * @brief Test-mode settings so ServerAuth persists into a throwaway store.
+ */
+void TstServerAuth::initTestCase()
+{
+  QStandardPaths::setTestModeEnabled(true);
+  QCoreApplication::setOrganizationName(QStringLiteral("SerialStudioTests"));
+  QCoreApplication::setApplicationName(QStringLiteral("tst_server_auth"));
+  QSettings settings;
+  settings.clear();
+}
 
 /**
  * @brief A connection that already cleared the handshake, as every post-auth path expects.
@@ -311,6 +335,143 @@ void TstServerAuth::commandClassification()
 
   QCOMPARE(API::Auth::commandIsControlScriptOnly(command), scriptOnly);
   QCOMPARE(API::Auth::commandWritesToDevice(command), writesToDevice);
+}
+
+//--------------------------------------------------------------------------------------------------
+// Script-install classification
+//--------------------------------------------------------------------------------------------------
+
+void TstServerAuth::scriptInstallClassification_data()
+{
+  QTest::addColumn<QString>("command");
+  QTest::addColumn<QJsonObject>("params");
+  QTest::addColumn<bool>("installs");
+
+  const QJsonObject none;
+  const QJsonObject transform{
+    {QStringLiteral("transformCode"), QStringLiteral("return v")}
+  };
+  const QJsonObject painter{
+    {QStringLiteral("painterCode"), QStringLiteral("function paint(){}")}
+  };
+  const QJsonObject transmit{
+    {QStringLiteral("transmitFunction"), QStringLiteral("x")}
+  };
+  const QJsonObject title{
+    {QStringLiteral("title"), QStringLiteral("Voltage")}
+  };
+
+  QTest::newRow("controlScript.set") << QStringLiteral("controlScript.set") << none << true;
+  QTest::newRow("controlScript.setCode") << QStringLiteral("controlScript.setCode") << none << true;
+  QTest::newRow("frameParser.setCode")
+    << QStringLiteral("project.frameParser.setCode") << none << true;
+  QTest::newRow("source.setFrameParserCode")
+    << QStringLiteral("project.source.setFrameParserCode") << none << true;
+  QTest::newRow("dataset.setTransformCode")
+    << QStringLiteral("project.dataset.setTransformCode") << none << true;
+  QTest::newRow("transformLibrary.set")
+    << QStringLiteral("project.transformLibrary.set") << none << true;
+  QTest::newRow("painter.setCode") << QStringLiteral("project.painter.setCode") << none << true;
+  QTest::newRow("project.loadJson") << QStringLiteral("project.loadJson") << none << true;
+  QTest::newRow("project.open") << QStringLiteral("project.open") << none << true;
+  QTest::newRow("template.apply") << QStringLiteral("project.template.apply") << none << true;
+  QTest::newRow("dataset.update with code")
+    << QStringLiteral("project.dataset.update") << transform << true;
+  QTest::newRow("dataset.update without code")
+    << QStringLiteral("project.dataset.update") << title << false;
+  QTest::newRow("group.update with painter")
+    << QStringLiteral("project.group.update") << painter << true;
+  QTest::newRow("group.update without painter")
+    << QStringLiteral("project.group.update") << title << false;
+  QTest::newRow("outputWidget.update with transmit")
+    << QStringLiteral("project.outputWidget.update") << transmit << true;
+  QTest::newRow("outputWidget.update without transmit")
+    << QStringLiteral("project.outputWidget.update") << title << false;
+  QTest::newRow("controlScript.dryRun") << QStringLiteral("controlScript.dryRun") << none << false;
+  QTest::newRow("controlScript.get") << QStringLiteral("controlScript.get") << none << false;
+  QTest::newRow("project.new") << QStringLiteral("project.new") << none << false;
+  QTest::newRow("io.connect") << QStringLiteral("io.connect") << none << false;
+  QTest::newRow("case sensitive") << QStringLiteral("ControlScript.set") << none << false;
+}
+
+/**
+ * @brief The script-install classification: every setter and loader unconditionally, the
+ *        generic updaters only when the call carries their code field.
+ */
+void TstServerAuth::scriptInstallClassification()
+{
+  QFETCH(QString, command);
+  QFETCH(QJsonObject, params);
+  QFETCH(bool, installs);
+
+  QCOMPARE(API::Auth::commandInstallsScript(command, params), installs);
+}
+
+//--------------------------------------------------------------------------------------------------
+// Remote command policy
+//--------------------------------------------------------------------------------------------------
+
+/**
+ * @brief The ONE remote policy: control-script-only refused outright, a script install and a
+ *        device write each refused with CONSENT_REQUIRED while their prompt is pending and denied
+ *        once it resolved to "no" (no prompter bound answers the default), the rest allowed.
+ */
+void TstServerAuth::remoteCommandPolicy()
+{
+  qunsetenv("SERIAL_STUDIO_API_AUTO_CONSENT");
+  QSettings settings;
+  settings.clear();
+  API::ServerAuth auth(settings);
+  const QString id = QStringLiteral("7");
+
+  const auto scriptOnly = auth.authorizeRemoteCommand(id, QStringLiteral("system.exec"), {});
+  QVERIFY(scriptOnly.has_value());
+  QCOMPARE(scriptOnly->id, id);
+  QCOMPARE(scriptOnly->errorCode, QString::fromLatin1(API::ErrorCode::ExecutionError));
+  QVERIFY(scriptOnly->errorMessage.contains(QStringLiteral("control-script only")));
+
+  QVERIFY(!auth.authorizeRemoteCommand(id, QStringLiteral("project.new"), {}).has_value());
+  QVERIFY(!auth.authorizeRemoteCommand(id, QStringLiteral("controlScript.dryRun"), {}).has_value());
+
+  const auto install = auth.authorizeRemoteCommand(id, QStringLiteral("controlScript.set"), {});
+  QVERIFY(install.has_value());
+  QCOMPARE(install->errorCode, QString::fromLatin1(API::ErrorCode::ConsentRequired));
+
+  const auto write = auth.authorizeRemoteCommand(id, QStringLiteral("io.writeData"), {});
+  QVERIFY(write.has_value());
+  QCOMPARE(write->errorCode, QString::fromLatin1(API::ErrorCode::ConsentRequired));
+  QCOMPARE(auth.authorizeDeviceWrite(), API::DeviceWriteVerdict::ConsentRequired);
+
+  QCoreApplication::processEvents();
+
+  const auto denied = auth.authorizeRemoteCommand(id, QStringLiteral("controlScript.set"), {});
+  QVERIFY(denied.has_value());
+  QCOMPARE(denied->errorCode, QString::fromLatin1(API::ErrorCode::ExecutionError));
+  QVERIFY(denied->errorMessage.contains(QStringLiteral("denied by the user")));
+  QCOMPARE(auth.authorizeDeviceWrite(), API::DeviceWriteVerdict::Denied);
+  QVERIFY(!settings.contains(QStringLiteral("API/ScriptInstallConsent")));
+  QVERIFY(!settings.contains(QStringLiteral("API/DeviceWriteConsent")));
+}
+
+/**
+ * @brief The headless override grants both consents in memory: nothing persists, and the
+ *        control-script-only refusal still stands.
+ */
+void TstServerAuth::remoteCommandPolicyHeadlessGrant()
+{
+  qputenv("SERIAL_STUDIO_API_AUTO_CONSENT", QByteArrayLiteral("1"));
+  QSettings settings;
+  settings.clear();
+  API::ServerAuth auth(settings);
+  qunsetenv("SERIAL_STUDIO_API_AUTO_CONSENT");
+  const QString id = QStringLiteral("8");
+
+  QVERIFY(!auth.authorizeRemoteCommand(id, QStringLiteral("controlScript.set"), {}).has_value());
+  QVERIFY(!auth.authorizeRemoteCommand(id, QStringLiteral("io.writeData"), {}).has_value());
+  QCOMPARE(auth.authorizeDeviceWrite(), API::DeviceWriteVerdict::Allowed);
+  QVERIFY(auth.authorizeRemoteCommand(id, QStringLiteral("system.kill"), {}).has_value());
+  QVERIFY(!settings.contains(QStringLiteral("API/ScriptInstallConsent")));
+  QVERIFY(!settings.contains(QStringLiteral("API/DeviceWriteConsent")));
 }
 
 //--------------------------------------------------------------------------------------------------

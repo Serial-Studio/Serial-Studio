@@ -1039,6 +1039,13 @@ void Sessions::DatabaseManager::wireExporter()
           &DatabaseManager::pdfExportProgressChanged);
   connect(&m_exporter, &SessionExporter::pdfFinished, this, &DatabaseManager::pdfExportFinished);
   connect(&m_exporter, &SessionExporter::logoPicked, this, &DatabaseManager::reportLogoPicked);
+
+  const auto announce = [this](const QString&, bool success) {
+    if (success && m_bus)
+      m_bus->publish<Core::Bus::AppEventRaised>(Core::Bus::kAppEventExportFinished);
+  };
+  connect(&m_exporter, &SessionExporter::csvFinished, this, announce);
+  connect(&m_exporter, &SessionExporter::pdfFinished, this, announce);
 }
 
 /**

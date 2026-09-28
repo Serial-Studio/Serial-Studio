@@ -78,6 +78,7 @@ qt_add_library(
   ApiHandlers/DashboardHandler.cpp
   ApiHandlers/DiagnosticsHandler.cpp
   ApiHandlers/ExtensionHandler.cpp
+  ApiHandlers/AlarmsHandler.cpp
   ApiHandlers/ProblemsHandler.cpp
   ApiHandlers/WindowHandler.cpp
   ApiHandlers/WorkspaceProfileHandler.cpp
@@ -94,6 +95,10 @@ qt_add_library(
   UI/Dashboard/DashboardWiring.cpp
   UI/Dashboard/WidgetMapBuilder.cpp
   UI/AlarmMonitor.cpp
+  UI/Alarms/AlarmAnnunciator.cpp
+  UI/Alarms/AnnunciatorSequence.cpp
+  UI/Alarms/AppEventSounds.cpp
+  UI/Alarms/SoundTheme.cpp
   UI/Taskbar.cpp
   UI/Taskbar/TaskbarModel.cpp
   UI/Taskbar/TaskbarWindowMap.cpp
@@ -179,6 +184,7 @@ qt_add_library(
   ApiHandlers/DashboardHandler.h
   ApiHandlers/DiagnosticsHandler.h
   ApiHandlers/ExtensionHandler.h
+  ApiHandlers/AlarmsHandler.h
   ApiHandlers/ProblemsHandler.h
   ApiHandlers/WindowHandler.h
   ApiHandlers/WorkspaceProfileHandler.h
@@ -194,6 +200,10 @@ qt_add_library(
   UI/Dashboard/WidgetMapBuilder.h
   UI/DashboardWidget.h
   UI/AlarmMonitor.h
+  UI/Alarms/AlarmAnnunciator.h
+  UI/Alarms/AnnunciatorSequence.h
+  UI/Alarms/AppEventSounds.h
+  UI/Alarms/SoundTheme.h
   UI/Taskbar.h
   UI/Taskbar/TaskbarModel.h
   UI/Taskbar/TaskbarWindowMap.h
@@ -607,6 +617,10 @@ if(SS_UNITY_BUILD)
     target_compile_options(SerialStudioUi PRIVATE /bigobj)
   endif()
 endif()
+
+# UI/Alarms/AlarmAnnunciator.h embeds IO::Audio::SoundPlayer by value, which carries miniaudio structs
+# whose layout depends on the MA_* switches; the define set must match SerialStudioDevices exactly.
+ss_apply_miniaudio_definitions(SerialStudioUi)
 
 if(COMMAND serial_studio_harden)
   serial_studio_harden(SerialStudioUi)

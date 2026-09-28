@@ -23,15 +23,18 @@
 
 #include <cmath>
 #include <memory>
+#include <QDir>
 #include <QDirIterator>
 #include <QFileInfo>
 #include <QHash>
 #include <QJsonObject>
 #include <QSet>
 #include <QTimer>
+#include <QUrl>
 #include <QVector>
 
 #include "Core/Checksum.h"
+#include "Core/DataModel/FrameKeys.h"
 #include "Core/IO/HAL_Driver.h"
 #include "Core/Prompt/UserPrompt.h"
 #include "Core/SerialStudio.h"
@@ -41,6 +44,7 @@
 #include "ProjectEditor/EditorForms/OutputStateRows.h"
 #include "ProjectEditor/ProjectEditor.h"
 #include "ProjectEditorItemIds.h"
+#include "UI/Alarms/SoundTheme.h"
 #include "UI/WidgetExtensions.h"
 
 namespace DataModel {
@@ -60,10 +64,30 @@ EditorCommit::EditorCommit(ProjectEditor& editor, ProjectModel& model)
 {}
 
 /**
+ * @brief Normalizes a sound path picked in a dialog (spec 0087): a file URL becomes a local
+ *        path, and a file inside the project folder is stored relative to it so the project
+ *        folder can travel with its sounds.
+ */
+[[nodiscard]] static QString normalizeSoundPath(const QString& raw, const QString& projectFile)
+{
+  QString path = raw.trimmed();
+  if (path.startsWith(QLatin1String("file:")))
+    path = QUrl(path).toLocalFile();
+
+  if (path.isEmpty() || projectFile.isEmpty() || !QDir::isAbsolutePath(path))
+    return path;
+
+  const QDir dir         = QFileInfo(projectFile).absoluteDir();
+  const QString relative = dir.relativeFilePath(path);
+  return relative.startsWith(QLatin1String("..")) ? path : relative;
+}
+
+/**
  * @brief Parses the AlarmBandsEditor dialog's QVariantList payload into validated alarm bands,
  *        dropping degenerate (max <= min) entries.
  */
-[[nodiscard]] static std::vector<DataModel::AlarmBand> parseAlarmBandList(const QVariantList& bands)
+[[nodiscard]] static std::vector<DataModel::AlarmBand> parseAlarmBandList(
+  const QVariantList& bands, const QString& projectFile)
 {
   std::vector<DataModel::AlarmBand> out;
   out.reserve(bands.size());
@@ -75,6 +99,7 @@ EditorCommit::EditorCommit(ProjectEditor& editor, ProjectModel& model)
     band.blink = m.value(QStringLiteral("blink"), false).toBool();
     band.color = m.value(QStringLiteral("color")).toString().simplified();
     band.label = m.value(QStringLiteral("label")).toString().simplified();
+    band.sound = normalizeSoundPath(m.value(QStringLiteral("sound")).toString(), projectFile);
     const int sev =
       m.value(QStringLiteral("severity"), static_cast<int>(DataModel::AlarmSeverity::Warning))
         .toInt();
@@ -725,7 +750,7 @@ bool EditorCommit::validateSelectedDatasetAlias(const QString& newAlias)
  */
 void EditorCommit::commitAlarmBands(const QVariantList& bands)
 {
-  const auto parsed = parseAlarmBandList(bands);
+  const auto parsed = parseAlarmBandList(bands, m_model.jsonFilePath());
   if (m_editor.m_currentView == MultiSelectionView
       && m_editor.m_batchKind == ProjectEditor::KindDataset) {
     commitAlarmBandsForSelection(parsed);
@@ -739,6 +764,87 @@ void EditorCommit::commitAlarmBands(const QVariantList& bands)
                    m_editor.m_selectedDataset,
                    false);
   m_editor.m_forms.buildDatasetModel(m_editor.m_selectedDataset);
+}
+
+/**
+ * @brief The project's notification channel map as ChannelSoundsEditor rows (spec 0087 R14):
+ *        one row per channel with its warning, caution and advisory files.
+ */
+QVariantList EditorCommit::channelSoundRows() const
+{
+  QVariantList rows;
+  const QJsonObject channels = m_model.sounds().value(Keys::Channels).toObject();
+  for (auto it = channels.constBegin(); it != channels.constEnd(); ++it) {
+    const QJsonObject entry = it.value().toObject();
+    QVariantMap row;
+    row.insert(QStringLiteral("channel"), it.key());
+    row.insert(QStringLiteral("warning"), entry.value(Keys::SoundWarning).toString());
+    row.insert(QStringLiteral("caution"), entry.value(Keys::SoundCaution).toString());
+    row.insert(QStringLiteral("advisory"), entry.value(Keys::SoundAdvisory).toString());
+    rows.append(row);
+  }
+
+  return rows;
+}
+
+/**
+ * @brief Replaces the project's notification channel sound map (spec 0087 R14) from the
+ *        ChannelSoundsEditor rows; the sequence override, when set, is carried over untouched.
+ */
+void EditorCommit::commitChannelSounds(const QVariantList& rows)
+{
+  const QString projectFile = m_model.jsonFilePath();
+  QJsonObject channels;
+  for (const auto& v : rows) {
+    const auto m          = v.toMap();
+    const QString channel = m.value(QStringLiteral("channel")).toString().trimmed();
+    if (channel.isEmpty())
+      continue;
+
+    QJsonObject entry;
+    const QString warning =
+      normalizeSoundPath(m.value(QStringLiteral("warning")).toString(), projectFile);
+    const QString caution =
+      normalizeSoundPath(m.value(QStringLiteral("caution")).toString(), projectFile);
+    const QString advisory =
+      normalizeSoundPath(m.value(QStringLiteral("advisory")).toString(), projectFile);
+    if (!warning.isEmpty())
+      entry.insert(Keys::SoundWarning, warning);
+
+    if (!caution.isEmpty())
+      entry.insert(Keys::SoundCaution, caution);
+
+    if (!advisory.isEmpty())
+      entry.insert(Keys::SoundAdvisory, advisory);
+
+    if (!entry.isEmpty())
+      channels.insert(channel, entry);
+  }
+
+  QJsonObject sounds = m_model.sounds();
+  if (channels.isEmpty())
+    sounds.remove(Keys::Channels);
+  else
+    sounds.insert(Keys::Channels, channels);
+
+  m_model.setSounds(sounds);
+}
+
+/**
+ * @brief Sets or clears the project's ISA-18.1 sequence override; anything but a valid code
+ *        (A, M, R, A-4, M-4, R-4) means the app preference applies.
+ */
+void EditorCommit::setProjectSoundSequence(const QString& letter)
+{
+  bool ok             = false;
+  const auto sequence = UI::Alarms::SoundTheme::sequenceFromLetter(letter, ok);
+  QJsonObject sounds  = m_model.sounds();
+  if (ok)
+    sounds.insert(Keys::Sequence, UI::Alarms::SoundTheme::letterFor(sequence));
+  else
+    sounds.remove(Keys::Sequence);
+
+  m_model.setSounds(sounds);
 }
 
 /**

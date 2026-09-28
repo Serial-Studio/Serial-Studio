@@ -22,6 +22,7 @@
 #pragma once
 
 #include <atomic>
+#include <optional>
 #include <QByteArray>
 #include <QHash>
 #include <QHostAddress>
@@ -109,7 +110,9 @@ public:
   [[nodiscard]] bool externalConnections() const noexcept;
   [[nodiscard]] bool setAuthToken(const QString& token);
   [[nodiscard]] bool verifyToken(const QByteArray& provided) const override;
-  [[nodiscard]] bool authorizeRemoteCommand(const QString& command);
+  [[nodiscard]] std::optional<CommandResponse> authorizeRemoteCommand(const QString& id,
+                                                                      const QString& command,
+                                                                      const QJsonObject& params);
 
 public slots:
   void removeConnection();

@@ -43,6 +43,9 @@
 #include <QUrl>
 
 #include "Core/AppInfo.h"
+#include "Core/Bus/MessageBus.h"
+#include "Core/Bus/Messages.h"
+#include "Core/Services.h"
 #include "Core/SSAssert.h"
 
 //--------------------------------------------------------------------------------------------------
@@ -247,6 +250,9 @@ int Misc::Utilities::showMessageBox(const QString& text,
       Qt::QueuedConnection);
     return QMessageBox::NoButton;
   }
+
+  if (icon == QMessageBox::Warning || icon == QMessageBox::Critical)
+    Core::services().bus.publish<Core::Bus::AppEventRaised>(Core::Bus::kAppEventErrorDialogShown);
 
   QMessageBox box;
   box.setStandardButtons(bt);

@@ -42,6 +42,7 @@ Item {
   //
   property alias icon: _icon
   property real iconSize: 32
+  property bool clickSound: true
   property alias font: _label.font
   property alias text: _label.text
   property bool toolbarButton: true
@@ -237,6 +238,9 @@ Item {
     onClicked: {
       if (root.checkable)
         root.checked = !root.checked
+
+      if (root.clickSound)
+        Cpp_UI_Alarms.playEvent("button")
 
       root.clicked()
     }

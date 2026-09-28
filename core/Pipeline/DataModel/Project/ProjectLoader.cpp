@@ -1297,8 +1297,8 @@ void DataModel::ProjectLoader::loadHiddenGroupsAndTables(const QJsonObject& json
 }
 
 /**
- * @brief Loads the per-project sink configurations. Both objects are opaque to the model: their
- *        owning modules parse them, and an absent key leaves that sink unconfigured, which is what
+ * @brief Loads the per-project sink and sound configurations. The objects are opaque to the model:
+ * their owning modules parse them, and an absent key leaves that sink unconfigured, which is what
  *        keeps a project written before either sink existed loading unchanged.
  */
 void DataModel::ProjectLoader::loadSinkConfigs(const QJsonObject& json)
@@ -1308,6 +1308,9 @@ void DataModel::ProjectLoader::loadSinkConfigs(const QJsonObject& json)
 
   m_model.m_influxSink = json.value(Keys::InfluxSink).toObject();
   Q_EMIT m_model.influxSinkChanged();
+
+  m_model.m_sounds = json.value(Keys::Sounds).toObject();
+  Q_EMIT m_model.soundsChanged();
 }
 
 /**

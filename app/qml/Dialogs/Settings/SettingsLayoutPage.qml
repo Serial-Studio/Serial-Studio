@@ -230,7 +230,7 @@ Item {
     Label {
       text: qsTr("Show Actions Panel")
       color: Cpp_ThemeManager.colors["text"]
-    } Switch {
+    } Widgets.Toggle {
       id: _actionsPanel
 
       Layout.rightMargin: -8
@@ -246,7 +246,7 @@ Item {
     Label {
       text: qsTr("Auto-Hide Toolbar")
       color: Cpp_ThemeManager.colors["text"]
-    } Switch {
+    } Widgets.Toggle {
       id: _autoHideToolbar
 
       Layout.rightMargin: -8
@@ -269,7 +269,7 @@ Item {
     Label {
       text: qsTr("Show Alignment Guides")
       color: Cpp_ThemeManager.colors["text"]
-    } Switch {
+    } Widgets.Toggle {
       id: _showAlignmentGuides
 
       Layout.rightMargin: -8

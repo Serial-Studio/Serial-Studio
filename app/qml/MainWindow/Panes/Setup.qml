@@ -209,7 +209,7 @@ Widgets.Pane {
         font: Cpp_Misc_CommonFonts.customUiFont(0.8, true)
         color: Cpp_ThemeManager.colors["pane_section_label"]
         Component.onCompleted: font.capitalization = Font.AllUppercase
-      } RadioButton {
+      } Widgets.Radio {
         Layout.leftMargin: -6
         enabled: app.ioEnabled
         Layout.maximumHeight: 18
@@ -222,7 +222,7 @@ Widgets.Pane {
           if (checked && shouldChange)
             Cpp_AppState.operationMode = SerialStudio.ConsoleOnly
         }
-      } RadioButton {
+      } Widgets.Radio {
         Layout.leftMargin: -6
         enabled: app.ioEnabled
         Layout.maximumHeight: 18
@@ -235,7 +235,7 @@ Widgets.Pane {
           if (checked && shouldChange)
             Cpp_AppState.operationMode = SerialStudio.QuickPlot
         }
-      } RadioButton {
+      } Widgets.Radio {
         Layout.leftMargin: -6
         Layout.maximumHeight: 18
         opacity: enabled ? 1 : 0.5
@@ -294,7 +294,7 @@ Widgets.Pane {
         Layout.fillWidth: true
         Layout.maximumWidth: root.maxItemWidth
 
-        Switch {
+        Widgets.Toggle {
           id: csvLogging
 
           Layout.leftMargin: -6
@@ -313,7 +313,7 @@ Widgets.Pane {
           }
         }
 
-        Switch {
+        Widgets.Toggle {
           Layout.leftMargin: -6
           Layout.maximumHeight: 18
           palette.accent: "#1f4f8a"
@@ -336,7 +336,7 @@ Widgets.Pane {
           }
         }
 
-        Switch {
+        Widgets.Toggle {
           Layout.leftMargin: -6
           Layout.maximumHeight: 18
           palette.accent: "#8a1a1a"
@@ -353,7 +353,7 @@ Widgets.Pane {
           }
         }
 
-        Switch {
+        Widgets.Toggle {
           Layout.leftMargin: -6
           Layout.maximumHeight: 18
           palette.accent: "#4a5663"

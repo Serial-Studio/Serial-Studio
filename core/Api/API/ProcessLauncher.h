@@ -23,9 +23,12 @@
 
 #include <QHash>
 #include <QObject>
+#include <QSettings>
 #include <QString>
 #include <QStringList>
 #include <QVariantList>
+
+#include "API/Server/ConsentGate.h"
 
 class QProcess;
 
@@ -39,9 +42,10 @@ class ProjectModel;
 
 namespace API {
 /**
- * @brief Owns helper processes spawned by the project control script. Every launched process
- *        is terminated on device disconnect, project change, and application quit so a project
- *        never leaves orphaned helpers (e.g. a Python data generator) running.
+ * @brief Owns helper processes spawned by the project control script, terminating every one on
+ *        device disconnect, project change, and application quit so no helper is orphaned.
+ *        Launching is gated by a per-project user consent: a script runs programs only once
+ *        the user said yes for THIS project file (session-only for a project without one).
  */
 class ProcessLauncher : public QObject {
   Q_OBJECT
@@ -59,6 +63,9 @@ private:
 
 public:
   [[nodiscard]] static ProcessLauncher& instance();
+
+  static constexpr int kLaunchDenied          = -3;
+  static constexpr int kLaunchConsentRequired = -2;
 
   void setupExternalConnections();
 
@@ -78,6 +85,7 @@ private slots:
 private:
   [[nodiscard]] static QStringList extraSearchPaths();
   [[nodiscard]] static QString resolveExecutable(const QString& name);
+  [[nodiscard]] static QString consentKeyFor(const QString& projectPath);
 
   void logLine(int id, const QString& name, const QString& message);
   void logProcessOutput(int id, const QString& name, const QByteArray& data);
@@ -85,6 +93,8 @@ private:
 
 private:
   int m_nextId;
+  QSettings m_settings;
+  ConsentGate m_consent;
   QString m_lastProjectPath;
   QHash<int, QProcess*> m_processes;
   IO::ConnectionManager* m_connectionManager;

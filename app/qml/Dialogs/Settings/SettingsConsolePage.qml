@@ -165,7 +165,7 @@ Item {
     Label {
       text: qsTr("Show Timestamps")
       color: Cpp_ThemeManager.colors["text"]
-    } Switch {
+    } Widgets.Toggle {
       id: _showTimestamp
 
       Layout.rightMargin: -8
@@ -296,7 +296,7 @@ Item {
     Label {
       text: qsTr("Echo Sent Data")
       color: Cpp_ThemeManager.colors["text"]
-    } Switch {
+    } Widgets.Toggle {
       id: _echo
 
       Layout.rightMargin: -8
@@ -340,7 +340,7 @@ Item {
       text: qsTr("VT100 Emulation")
       color: Cpp_ThemeManager.colors["text"]
       opacity: Cpp_Console_Handler.imageWidgetActive ? 0.8 : 1
-    } Switch {
+    } Widgets.Toggle {
       id: _vt100Emulation
 
       Layout.rightMargin: -8
@@ -367,7 +367,7 @@ Item {
       enabled: _vt100Emulation.checked
       color: Cpp_ThemeManager.colors["text"]
       opacity: Cpp_Console_Handler.imageWidgetActive ? 0.8 : (enabled ? 1 : 0.5)
-    } Switch {
+    } Widgets.Toggle {
       id: _ansiColors
 
       Layout.rightMargin: -8

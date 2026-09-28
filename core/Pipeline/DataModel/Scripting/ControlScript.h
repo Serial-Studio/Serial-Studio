@@ -67,6 +67,7 @@ public:
   [[nodiscard]] bool running() const;
 
 public slots:
+  void restart();
   void shutdown();
   void setCode(const QString& code);
   void runOnConnect();

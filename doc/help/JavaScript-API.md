@@ -760,7 +760,7 @@ end
 
 ## Calling any API command: `apiCall()`
 
-Beyond the focused helpers above, parsers can invoke Serial Studio's API commands through a generic gateway. This is the same surface exposed on TCP port 7777 for external clients, now reachable from inside the parser, dataset transforms, control loop, and Canvas widgets. Because these are all the project's own first-party scripts, the gateway is ungated for them: the full command catalog is callable with no allow-list, no rate limit, and no payload cap. The gate lives on the network side instead — a remote TCP client still clears the user-consent prompt before any device write.
+Beyond the focused helpers above, parsers can invoke Serial Studio's API commands through a generic gateway. This is the same surface exposed on TCP port 7777 for external clients, now reachable from inside the parser, dataset transforms, control loop, and Canvas widgets. Because these are all the project's own first-party scripts, the gateway is ungated for them: the full command catalog is callable with no allow-list, no rate limit, and no payload cap. The gates live on the network side instead — a remote TCP client still clears the user-consent prompts before any device write and before installing or replacing project scripts — with one exception every caller shares: `system.exec` asks once per project before a script may launch programs (see [Control Script](Control-Script.md)).
 
 ```text
 apiCall(method, params?) -> { ok, result?, error?, errorCode?, errorData? }

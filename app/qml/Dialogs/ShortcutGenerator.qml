@@ -411,7 +411,7 @@ Widgets.SmartDialog {
           Label {
             text: qsTr("Fullscreen")
             color: Cpp_ThemeManager.colors["text"]
-          } Switch {
+          } Widgets.Toggle {
             id: fullscreen
 
             Layout.rightMargin: -8
@@ -422,7 +422,7 @@ Widgets.SmartDialog {
           Label {
             text: qsTr("Actions Panel")
             color: Cpp_ThemeManager.colors["text"]
-          } Switch {
+          } Widgets.Toggle {
             id: actionsPanel
 
             checked: true
@@ -434,7 +434,7 @@ Widgets.SmartDialog {
           Label {
             text: qsTr("File Transmission")
             color: Cpp_ThemeManager.colors["text"]
-          } Switch {
+          } Widgets.Toggle {
             id: fileTransmission
 
             Layout.rightMargin: -8
@@ -533,7 +533,7 @@ Widgets.SmartDialog {
             color: Cpp_ThemeManager.colors["text"]
             enabled: root.taskbarMode !== "hidden"
             opacity: enabled ? 1 : 0.5
-          } Switch {
+          } Widgets.Toggle {
             id: searchBar
 
             checked: true
@@ -591,7 +591,7 @@ Widgets.SmartDialog {
             color: Cpp_ThemeManager.colors["text"]
             enabled: root.taskbarMode !== "hidden"
             opacity: enabled ? 1 : 0.5
-          } Switch {
+          } Widgets.Toggle {
             id: pinConsole
 
             checked: false
@@ -606,7 +606,7 @@ Widgets.SmartDialog {
             color: Cpp_ThemeManager.colors["text"]
             enabled: root.taskbarMode !== "hidden"
             opacity: enabled ? 1 : 0.5
-          } Switch {
+          } Widgets.Toggle {
             id: pinNotifications
 
             checked: true
@@ -621,7 +621,7 @@ Widgets.SmartDialog {
             color: Cpp_ThemeManager.colors["text"]
             enabled: root.taskbarMode !== "hidden"
             opacity: enabled ? 1 : 0.5
-          } Switch {
+          } Widgets.Toggle {
             id: pinClock
 
             checked: false
@@ -636,7 +636,7 @@ Widgets.SmartDialog {
             color: Cpp_ThemeManager.colors["text"]
             enabled: root.taskbarMode !== "hidden"
             opacity: enabled ? 1 : 0.5
-          } Switch {
+          } Widgets.Toggle {
             id: pinStopwatch
 
             checked: false
@@ -651,7 +651,7 @@ Widgets.SmartDialog {
             color: Cpp_ThemeManager.colors["text"]
             enabled: root.taskbarMode !== "hidden"
             opacity: enabled ? 1 : 0.5
-          } Switch {
+          } Widgets.Toggle {
             id: pinPause
 
             checked: true
@@ -666,7 +666,7 @@ Widgets.SmartDialog {
             color: Cpp_ThemeManager.colors["text"]
             enabled: root.taskbarMode !== "hidden" && fileTransmission.checked
             opacity: enabled ? 1 : 0.5
-          } Switch {
+          } Widgets.Toggle {
             id: pinFileTransmission
 
             checked: false
@@ -730,7 +730,7 @@ Widgets.SmartDialog {
           Label {
             text: qsTr("CSV File")
             color: Cpp_ThemeManager.colors["text"]
-          } Switch {
+          } Widgets.Toggle {
             id: csvExport
 
             Layout.rightMargin: -8
@@ -741,7 +741,7 @@ Widgets.SmartDialog {
           Label {
             text: qsTr("MDF4 File")
             color: Cpp_ThemeManager.colors["text"]
-          } Switch {
+          } Widgets.Toggle {
             id: mdfExport
 
             Layout.rightMargin: -8
@@ -752,7 +752,7 @@ Widgets.SmartDialog {
           Label {
             text: qsTr("Historian")
             color: Cpp_ThemeManager.colors["text"]
-          } Switch {
+          } Widgets.Toggle {
             id: sessionExport
 
             Layout.rightMargin: -8
@@ -763,7 +763,7 @@ Widgets.SmartDialog {
           Label {
             text: qsTr("Console Log")
             color: Cpp_ThemeManager.colors["text"]
-          } Switch {
+          } Widgets.Toggle {
             id: consoleExport
 
             Layout.rightMargin: -8

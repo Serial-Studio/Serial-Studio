@@ -24,6 +24,8 @@ Button {
   ToolTip.delay: 500
   ToolTip.visible: root.hovered && root.ToolTip.text !== ""
 
+  onClicked: Cpp_UI_Alarms.playEvent("button")
+
   property int iconSize: 18
   property string color: palette.buttonText
   property bool mirrorIconInRtl: icon.source.toString() !== "qrc:/icons/buttons/apply.svg"

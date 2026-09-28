@@ -359,24 +359,32 @@ Jede Geräteaktion erfordert weiterhin Ihre ausdrückliche Genehmigung pro Aufru
     </message>
 </context>
 <context>
+    <name>API::ConsentGate</name>
+    <message>
+        <location filename="../../../core/Api/API/Server/ConsentGate.cpp" line="151"/>
+        <source>Serial Studio</source>
+        <translation>Serial Studio</translation>
+    </message>
+</context>
+<context>
     <name>API::GRPC::GRPCServer</name>
     <message>
-        <location filename="../../src/API/GRPC/GRPCServer.cpp" line="537"/>
+        <location filename="../../src/API/GRPC/GRPCServer.cpp" line="536"/>
         <source>Export Protobuf File</source>
         <translation>Protobuf-datei Exportieren</translation>
     </message>
     <message>
-        <location filename="../../src/API/GRPC/GRPCServer.cpp" line="539"/>
+        <location filename="../../src/API/GRPC/GRPCServer.cpp" line="538"/>
         <source>Protocol Buffers (*.proto)</source>
         <translation>Protocol Buffers (*.proto)</translation>
     </message>
     <message>
-        <location filename="../../src/API/GRPC/GRPCServer.cpp" line="626"/>
+        <location filename="../../src/API/GRPC/GRPCServer.cpp" line="625"/>
         <source>Unable to start gRPC server</source>
         <translation>GRPC-Server kann nicht gestartet werden</translation>
     </message>
     <message>
-        <location filename="../../src/API/GRPC/GRPCServer.cpp" line="627"/>
+        <location filename="../../src/API/GRPC/GRPCServer.cpp" line="626"/>
         <source>Failed to bind to %1</source>
         <translation>Bindung an %1 fehlgeschlagen</translation>
     </message>
@@ -442,12 +450,39 @@ Jede Geräteaktion erfordert weiterhin Ihre ausdrückliche Genehmigung pro Aufru
 <context>
     <name>API::ProcessLauncher</name>
     <message>
-        <location filename="../../../core/Api/API/ProcessLauncher.cpp" line="93"/>
+        <location filename="../../../core/Api/API/ProcessLauncher.cpp" line="63"/>
+        <source>Allow this project's scripts to launch programs?</source>
+        <translation>Diesem Projekt erlauben, Programme zu starten?</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Api/API/ProcessLauncher.cpp" line="64"/>
+        <source>Scripts run programs with your user account's privileges. Only allow this for projects you trust.</source>
+        <translation>Skripte führen Programme mit den Berechtigungen Ihres Benutzerkontos aus. Erlauben Sie dies nur für vertrauenswürdige Projekte.</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Api/API/ProcessLauncher.cpp" line="123"/>
         <source>No program specified</source>
         <translation>Kein Programm angegeben</translation>
     </message>
     <message>
-        <location filename="../../../core/Api/API/ProcessLauncher.cpp" line="99"/>
+        <location filename="../../../core/Api/API/ProcessLauncher.cpp" line="127"/>
+        <source>This project's script wants to run:
+%1</source>
+        <translation>Das Skript dieses Projekts möchte ausführen:
+%1</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Api/API/ProcessLauncher.cpp" line="131"/>
+        <source>Launching programs needs the user's consent; a prompt was shown</source>
+        <translation>Das Starten von Programmen erfordert die Zustimmung des Benutzers; eine Eingabeaufforderung wurde angezeigt</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Api/API/ProcessLauncher.cpp" line="136"/>
+        <source>Launching programs was denied by the user</source>
+        <translation>Das Starten von Programmen wurde vom Benutzer abgelehnt</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Api/API/ProcessLauncher.cpp" line="142"/>
         <source>Program "%1" not found in PATH</source>
         <translation>Programm „%1" nicht im PATH gefunden</translation>
     </message>
@@ -490,12 +525,12 @@ Nur in vertrauenswürdigen Netzwerken aktivieren. Nicht vertrauenswürdige Clien
         <translation type="vanished">Serial Studio</translation>
     </message>
     <message>
-        <location filename="../../../core/Api/API/Server.cpp" line="1019"/>
+        <location filename="../../../core/Api/API/Server.cpp" line="1022"/>
         <source>API server</source>
         <translation>API-Server</translation>
     </message>
     <message>
-        <location filename="../../../core/Api/API/Server.cpp" line="1019"/>
+        <location filename="../../../core/Api/API/Server.cpp" line="1022"/>
         <source>Invalid pending connection</source>
         <translation>Ungültige ausstehende Verbindung</translation>
     </message>
@@ -503,19 +538,28 @@ Nur in vertrauenswürdigen Netzwerken aktivieren. Nicht vertrauenswürdige Clien
 <context>
     <name>API::ServerAuth</name>
     <message>
-        <location filename="../../../core/Api/API/Server/ServerAuth.cpp" line="160"/>
+        <location filename="../../../core/Api/API/Server/ServerAuth.cpp" line="38"/>
         <source>Allow API device control?</source>
         <translation>API-Gerätesteuerung zulassen?</translation>
     </message>
     <message>
-        <location filename="../../../core/Api/API/Server/ServerAuth.cpp" line="161"/>
+        <location filename="../../../core/Api/API/Server/ServerAuth.cpp" line="39"/>
         <source>A program using Serial Studio's local API is requesting to send data to the connected device. Allow API clients to write to the device?</source>
         <translation>Ein Programm, das die lokale API von Serial Studio verwendet, fordert an, Daten an das verbundene Gerät zu senden. API-Clients das Schreiben auf das Gerät erlauben?</translation>
     </message>
     <message>
-        <location filename="../../../core/Api/API/Server/ServerAuth.cpp" line="164"/>
+        <location filename="../../../core/Api/API/Server/ServerAuth.cpp" line="44"/>
+        <source>Allow API clients to modify project scripts?</source>
+        <translation>API-Clients erlauben, Projektskripte zu ändern?</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Api/API/Server/ServerAuth.cpp" line="45"/>
+        <source>A program using Serial Studio's local API wants to change this project's scripts. Scripts run with the application's full privileges, including launching programs. Allow API clients to modify project scripts?</source>
+        <translation>Ein Programm, das die lokale API von Serial Studio verwendet, möchte die Skripte dieses Projekts ändern. Skripte werden mit den vollen Berechtigungen der Anwendung ausgeführt, einschließlich des Startens von Programmen. API-Clients erlauben, Projektskripte zu ändern?</translation>
+    </message>
+    <message>
         <source>Serial Studio</source>
-        <translation>Serial Studio</translation>
+        <translation type="vanished">Serial Studio</translation>
     </message>
 </context>
 <context>
@@ -871,6 +915,44 @@ Nur in vertrauenswürdigen Netzwerken aktivieren. Nicht vertrauenswürdige Clien
     </message>
 </context>
 <context>
+    <name>AlarmAnnunciator</name>
+    <message>
+        <location filename="../../../core/Ui/UI/Alarms/AlarmAnnunciator.cpp" line="1285"/>
+        <source>Alarm sound file unavailable: %1</source>
+        <translation>Alarm-Audiodatei nicht verfügbar: %1</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/UI/Alarms/AlarmAnnunciator.cpp" line="1298"/>
+        <source>No audio output device is available</source>
+        <translation>Kein Audioausgabegerät verfügbar</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/UI/Alarms/AlarmAnnunciator.cpp" line="1300"/>
+        <source>Alarm sounds cannot play until an output device is present.</source>
+        <translation>Alarmtöne können erst abgespielt werden, wenn ein Ausgabegerät vorhanden ist.</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/UI/Alarms/AlarmAnnunciator.cpp" line="1302"/>
+        <source>Connect an audio output, or disable sounds in Preferences &gt; Sounds.</source>
+        <translation>Audioausgang verbinden oder Töne in Einstellungen &gt; Töne deaktivieren.</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/UI/Alarms/AlarmAnnunciator.cpp" line="1308"/>
+        <source>Alarm sound device '%1' not found</source>
+        <translation>Alarmton-Gerät '%1' nicht gefunden</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/UI/Alarms/AlarmAnnunciator.cpp" line="1311"/>
+        <source>Alarm sounds are playing on the system default output instead.</source>
+        <translation>Alarmtöne werden stattdessen über die Systemstandardausgabe wiedergegeben.</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/UI/Alarms/AlarmAnnunciator.cpp" line="1313"/>
+        <source>Reconnect the device, or pick another one in Preferences &gt; Sounds.</source>
+        <translation>Gerät erneut verbinden oder ein anderes in Einstellungen &gt; Töne auswählen.</translation>
+    </message>
+</context>
+<context>
     <name>AlarmBandsEditor</name>
     <message>
         <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="35"/>
@@ -878,269 +960,299 @@ Nur in vertrauenswürdigen Netzwerken aktivieren. Nicht vertrauenswürdige Clien
         <translation>Alarmbereiche</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="71"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="72"/>
         <source>Info</source>
         <translation>Info</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="72"/>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="130"/>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="152"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="73"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="131"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="153"/>
         <source>OK</source>
         <translation>OK</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="73"/>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="153"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="74"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="154"/>
         <source>Warning</source>
         <translation>Warnung</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="74"/>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="154"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="75"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="155"/>
         <source>Critical</source>
         <translation>Kritisch</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="83"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="84"/>
         <source>Tachometer</source>
         <translation>Tachometer</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="85"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="86"/>
         <source>Idle</source>
         <translation>Leerlauf</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="86"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="87"/>
         <source>Operating</source>
         <translation>Betrieb</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="87"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="88"/>
         <source>Caution</source>
         <translation>Vorsicht</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="88"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="89"/>
         <source>Redline</source>
         <translation>Drehzahlbegrenzung</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="92"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="93"/>
         <source>Speedometer</source>
         <translation>Tachometer</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="94"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="95"/>
         <source>Cruise</source>
         <translation>Reisegeschwindigkeit</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="95"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="96"/>
         <source>Fast</source>
         <translation>Schnell</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="96"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="97"/>
         <source>Top Speed</source>
         <translation>Höchstgeschwindigkeit</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="100"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="101"/>
         <source>Engine Temperature</source>
         <translation>Motortemperatur</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="102"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="103"/>
         <source>Cold</source>
         <translation>Kalt</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="103"/>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="112"/>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="144"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="104"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="113"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="145"/>
         <source>Normal</source>
         <translation>Normal</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="104"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="105"/>
         <source>Warm</source>
         <translation>Warm</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="105"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="106"/>
         <source>Overheat</source>
         <translation>Überhitzung</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="109"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="110"/>
         <source>Pressure</source>
         <translation>Druck</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="111"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="112"/>
         <source>Vacuum</source>
         <translation>Vakuum</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="113"/>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="122"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="114"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="123"/>
         <source>High</source>
         <translation>Hoch</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="114"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="115"/>
         <source>Burst</source>
         <translation>Burst</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="118"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="119"/>
         <source>Battery Voltage</source>
         <translation>Batteriespannung</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="120"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="121"/>
         <source>Low</source>
         <translation>Niedrig</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="121"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="122"/>
         <source>Nominal</source>
         <translation>Nominal</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="126"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="127"/>
         <source>Fuel Level</source>
         <translation>Kraftstoffstand</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="128"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="129"/>
         <source>Empty</source>
         <translation>Leer</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="129"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="130"/>
         <source>Reserve</source>
         <translation>Reserve</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="134"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="135"/>
         <source>Signal Strength</source>
         <translation>Signalstärke</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="136"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="137"/>
         <source>No Signal</source>
         <translation>Kein Signal</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="137"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="138"/>
         <source>Weak</source>
         <translation>Schwach</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="138"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="139"/>
         <source>Good</source>
         <translation>Gut</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="142"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="143"/>
         <source>CPU / System Load</source>
         <translation>CPU / Systemlast</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="145"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="146"/>
         <source>Busy</source>
         <translation>Ausgelastet</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="146"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="147"/>
         <source>Overload</source>
         <translation>Überlast</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="150"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="151"/>
         <source>OK / Warning / Critical</source>
         <translation>OK / Warnung / Kritisch</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="158"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="159"/>
         <source>Indicator (On / Off)</source>
         <translation>Indikator (Ein / Aus)</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="160"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="161"/>
         <source>On</source>
         <translation>Ein</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="164"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="165"/>
         <source>Fault Indicator</source>
         <translation>Fehlerindikator</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="166"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="167"/>
         <source>Fault</source>
         <translation>Fehler</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="289"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="275"/>
+        <source>Select Alarm Sound</source>
+        <translation>Alarmton Auswählen</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="277"/>
+        <source>WAV audio (*.wav)</source>
+        <translation>WAV-Audio (*.WAV)</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="277"/>
+        <source>All files (*)</source>
+        <translation>Alle Dateien (*)</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="312"/>
         <source>Choose Band Color</source>
         <translation>Bandfarbe Wählen</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="316"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="339"/>
         <source>Presets</source>
         <translation>Voreinstellungen</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="339"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="362"/>
         <source>Preset</source>
         <translation>Voreinstellung</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="354"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="377"/>
         <source>Choose preset…</source>
         <translation>Voreinstellung wählen…</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="464"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="487"/>
         <source>Blink</source>
         <translation>Blinken</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="584"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="494"/>
+        <source>Sound</source>
+        <translation>Ton</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="615"/>
         <source>Reset to severity default</source>
         <translation>Auf Schweregrad-Standard zurücksetzen</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="598"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="629"/>
         <source>Click to choose a color. Right-click to reset to severity default.</source>
         <translation>Klicken, um Farbe zu wählen. Rechtsklick, um auf Schweregrad-Standard zurückzusetzen.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="599"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="630"/>
         <source>Click to choose a custom color.</source>
         <translation>Klicken, um benutzerdefinierte Farbe zu wählen.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="630"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="661"/>
         <source>Flash the LED while the value sits in this band.</source>
         <translation>LED blinkt, während der Wert in diesem Band liegt.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="704"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="686"/>
+        <source>Pick a WAV file to play for this band.</source>
+        <translation>WAV-Datei für diesen Bereich auswählen.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="702"/>
+        <source>Use the priority's default sound.</source>
+        <translation>Standardton der Priorität verwenden.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="775"/>
         <source>No bands defined. Pick a preset above or add a band to get started.</source>
         <translation>Keine Bänder definiert. Voreinstellung oben wählen oder Band hinzufügen, um zu beginnen.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="828"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="899"/>
         <source>Apply</source>
         <translation>Anwenden</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="831"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="902"/>
         <source>Apply changes to the dataset.</source>
         <translation>Änderungen am Datensatz anwenden.</translation>
     </message>
@@ -1153,47 +1265,47 @@ Nur in vertrauenswürdigen Netzwerken aktivieren. Nicht vertrauenswürdige Clien
         <translation type="vanished">Die aktuellen Bereiche durch die ausgewählte Voreinstellung ersetzen, skaliert auf den Wertebereich dieses Datensatzes.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="365"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="388"/>
         <source>Range</source>
         <translation>Bereich</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="393"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="416"/>
         <source>Bands</source>
         <translation>Bereiche</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="404"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="427"/>
         <source>Add Band</source>
         <translation>Bereich Hinzufügen</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="408"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="431"/>
         <source>Add a new band continuing from the last one.</source>
         <translation>Einen neuen Bereich hinzufügen, der an den letzten anschließt.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="439"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="462"/>
         <source>Min</source>
         <translation>Min.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="445"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="468"/>
         <source>Max</source>
         <translation>Max.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="451"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="474"/>
         <source>Severity</source>
         <translation>Schweregrad</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="457"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="480"/>
         <source>Color</source>
         <translation>Farbe</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="471"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="501"/>
         <source>Label</source>
         <translation>Beschriftung</translation>
     </message>
@@ -1206,22 +1318,22 @@ Nur in vertrauenswürdigen Netzwerken aktivieren. Nicht vertrauenswürdige Clien
         <translation type="vanished">auto</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="641"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="712"/>
         <source>(optional)</source>
         <translation>(optional)</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="658"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="729"/>
         <source>Move up.</source>
         <translation>Nach oben verschieben.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="677"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="748"/>
         <source>Move down.</source>
         <translation>Nach unten verschieben.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="690"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="761"/>
         <source>Remove this band.</source>
         <translation>Dieses Band entfernen.</translation>
     </message>
@@ -1230,17 +1342,17 @@ Nur in vertrauenswürdigen Netzwerken aktivieren. Nicht vertrauenswürdige Clien
         <translation type="vanished">Keine Bänder definiert. Voreinstellung anwenden oder Band hinzufügen, um zu beginnen.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="721"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="792"/>
         <source>Preview</source>
         <translation>Vorschau</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="817"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="888"/>
         <source>Cancel</source>
         <translation>Abbrechen</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="819"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="890"/>
         <source>Discard changes.</source>
         <translation>Änderungen verwerfen.</translation>
     </message>
@@ -2868,6 +2980,84 @@ Nur in vertrauenswürdigen Netzwerken aktivieren. Nicht vertrauenswürdige Clien
     </message>
 </context>
 <context>
+    <name>ChannelSoundsEditor</name>
+    <message>
+        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="38"/>
+        <source>Notification Channel Sounds</source>
+        <translation>Benachrichtigungskanal-töne</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="97"/>
+        <source>Select Sound File</source>
+        <translation>Audiodatei Auswählen</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="99"/>
+        <source>WAV audio (*.wav)</source>
+        <translation>WAV-Audio (*.WAV)</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="99"/>
+        <source>All files (*)</source>
+        <translation>Alle Dateien (*)</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="125"/>
+        <source>(app default)</source>
+        <translation>(App-Standard)</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="154"/>
+        <source>A Critical notification on a channel plays its Warning file, a Warning notification its Caution file, an Info notification its Advisory file. Empty cells use the sounds from Preferences.</source>
+        <translation>Eine Critical-Benachrichtigung auf einem Kanal spielt dessen Warning-Datei ab, eine Warning-Benachrichtigung dessen Caution-Datei, eine Info-Benachrichtigung dessen Advisory-Datei. Leere Zellen verwenden die Sounds aus den Einstellungen.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="165"/>
+        <source>Channel</source>
+        <translation>Kanal</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="171"/>
+        <source>Warning</source>
+        <translation>Warnung</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="177"/>
+        <source>Caution</source>
+        <translation>Vorsicht</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="183"/>
+        <source>Advisory</source>
+        <translation>Advisory</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="228"/>
+        <source>Channel name</source>
+        <translation>Kanalname</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="244"/>
+        <source>Remove this channel.</source>
+        <translation>Diesen Kanal entfernen.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="258"/>
+        <source>Add Channel</source>
+        <translation>Kanal Hinzufügen</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="267"/>
+        <source>Cancel</source>
+        <translation>Abbrechen</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="275"/>
+        <source>Apply</source>
+        <translation>Anwenden</translation>
+    </message>
+</context>
+<context>
     <name>ChatSidebar</name>
     <message>
         <location filename="../../qml/AI/ChatSidebar.qml" line="44"/>
@@ -3103,141 +3293,151 @@ Nur in vertrauenswürdigen Netzwerken aktivieren. Nicht vertrauenswürdige Clien
     </message>
     <message>
         <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="34"/>
+        <source>Acknowledge Alarms</source>
+        <translation>Alarme Quittieren</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="35"/>
+        <source>Acknowledge every alerting alarm point (ISA-18.1)</source>
+        <translation>Jeden alarmierenden Alarmpunkt quittieren (ISA-18.1)</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="36"/>
         <source>Action</source>
         <translation>Aktion</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="35"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="37"/>
         <source>Add 3D Plot</source>
         <translation>3D-diagramm Hinzufügen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="36"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="38"/>
         <source>Add Accelerometer</source>
         <translation>Beschleunigungsmesser Hinzufügen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="37"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="39"/>
         <source>Add Action</source>
         <translation>Aktion Hinzufügen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="38"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="40"/>
         <source>Add Bar Panel</source>
         <translation>Balkenpanel Hinzufügen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="39"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="41"/>
         <source>Add Canvas</source>
         <translation>Canvas Hinzufügen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="40"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="42"/>
         <source>Add Compass</source>
         <translation>Kompass Hinzufügen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="41"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="43"/>
         <source>Add Data Source</source>
         <translation>Datenquelle Hinzufügen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="42"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="44"/>
         <source>Add Data Table</source>
         <translation>Datentabelle Hinzufügen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="43"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="45"/>
         <source>Add Dataset</source>
         <translation>Datensatz Hinzufügen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="44"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="46"/>
         <source>Add Device</source>
         <translation>Gerät Hinzufügen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="45"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="47"/>
         <source>Add External Window</source>
         <translation>Externes Fenster Hinzufügen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="46"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="48"/>
         <source>Add FFT Plot</source>
         <translation>FFT-diagramm Hinzufügen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="47"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="49"/>
         <source>Add GPS Map</source>
         <translation>GPS-karte Hinzufügen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="48"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="50"/>
         <source>Add Gauge</source>
         <translation>Messgerät Hinzufügen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="49"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="51"/>
         <source>Add Group</source>
         <translation>Gruppe Hinzufügen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="50"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="52"/>
         <source>Add Gyroscope</source>
         <translation>Gyroskop Hinzufügen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="51"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="53"/>
         <source>Add Image View</source>
         <translation>Bildansicht Hinzufügen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="52"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="54"/>
         <source>Add LED Indicator</source>
         <translation>LED-indikator Hinzufügen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="53"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="55"/>
         <source>Add Level Indicator</source>
         <translation>Pegelanzeige Hinzufügen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="54"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="56"/>
         <source>Add Multi-Plot</source>
         <translation>Mehrfachdiagramm Hinzufügen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="55"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="57"/>
         <source>Add Output</source>
         <translation>Ausgabe Hinzufügen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="56"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="58"/>
         <source>Add Output Button</source>
         <translation>Ausgabe-schaltfläche Hinzufügen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="57"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="59"/>
         <source>Add Output Knob</source>
         <translation>Ausgabe-drehknopf Hinzufügen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="58"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="60"/>
         <source>Add Output Panel</source>
         <translation>Ausgabepanel Hinzufügen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="59"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="61"/>
         <source>Add Output Slider</source>
         <translation>Ausgabe-schieberegler Hinzufügen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="60"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="62"/>
         <source>Add Output Text Field</source>
         <translation>Ausgabe-textfeld Hinzufügen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="61"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="63"/>
         <source>Add Output Toggle</source>
         <translation>Ausgabe-umschalter Hinzufügen</translation>
     </message>
@@ -3246,7 +3446,7 @@ Nur in vertrauenswürdigen Netzwerken aktivieren. Nicht vertrauenswürdige Clien
         <translation type="vanished">Painter Hinzufügen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="62"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="64"/>
         <source>Add Plot</source>
         <translation>Diagramm Hinzufügen</translation>
     </message>
@@ -3255,197 +3455,197 @@ Nur in vertrauenswürdigen Netzwerken aktivieren. Nicht vertrauenswürdige Clien
         <translation type="vanished">Register Hinzufügen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="63"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="65"/>
         <source>Add Shared Table</source>
         <translation>Gemeinsame Tabelle Hinzufügen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="64"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="66"/>
         <source>Add Variable</source>
         <translation>Variable Hinzufügen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="65"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="67"/>
         <source>Add Web View</source>
         <translation>Webansicht Hinzufügen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="66"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="68"/>
         <source>Add Workspace</source>
         <translation>Arbeitsbereich Hinzufügen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="67"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="69"/>
         <source>Add a 2D plot dataset</source>
         <translation>2D-Diagramm-Datensatz hinzufügen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="68"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="70"/>
         <source>Add a 2D plot with multiple signals</source>
         <translation>2D-Diagramm mit mehreren Signalen hinzufügen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="69"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="71"/>
         <source>Add a 3-axis accelerometer group</source>
         <translation>3-Achsen-Beschleunigungssensor-Gruppe hinzufügen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="70"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="72"/>
         <source>Add a 3-axis gyroscope group</source>
         <translation>3-Achsen-Gyroskop-Gruppe hinzufügen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="71"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="73"/>
         <source>Add a 3D plot group</source>
         <translation>3D-Plot-Gruppe hinzufügen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="72"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="74"/>
         <source>Add a 3D plot visualization</source>
         <translation>3D-Diagramm-Visualisierung hinzufügen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="73"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="75"/>
         <source>Add a Fast Fourier Transform plot</source>
         <translation>Fast-Fourier-Transformation-Diagramm hinzufügen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="74"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="76"/>
         <source>Add a button control</source>
         <translation>Schaltflächen-Steuerelement hinzufügen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="75"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="77"/>
         <source>Add a compass widget for directional data</source>
         <translation>Kompass-Widget für Richtungsdaten hinzufügen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="76"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="78"/>
         <source>Add a data table view</source>
         <translation>Datentabellenansicht hinzufügen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="77"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="79"/>
         <source>Add a data table view group</source>
         <translation>Datentabellen-Ansicht-Gruppe hinzufügen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="78"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="80"/>
         <source>Add a dataset container group</source>
         <translation>Datensatz-Container-Gruppe hinzufügen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="79"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="81"/>
         <source>Add a dataset shown as a 2D plot</source>
         <translation>Datensatz als 2D-Diagramm hinzufügen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="80"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="82"/>
         <source>Add a dataset shown as a bar or level</source>
         <translation>Datensatz als Balken oder Pegel hinzufügen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="81"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="83"/>
         <source>Add a dataset shown as a compass</source>
         <translation>Datensatz als Kompass hinzufügen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="82"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="84"/>
         <source>Add a dataset shown as a gauge</source>
         <translation>Datensatz als Messgerät hinzufügen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="83"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="85"/>
         <source>Add a dataset shown as an FFT plot</source>
         <translation>Datensatz als FFT-Diagramm hinzufügen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="84"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="86"/>
         <source>Add a dataset shown as an LED indicator</source>
         <translation>Datensatz als LED-Anzeige hinzufügen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="85"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="87"/>
         <source>Add a dataset shown as an analog meter</source>
         <translation>Datensatz als Analogmessgerät hinzufügen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="86"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="88"/>
         <source>Add a folder inside this folder</source>
         <translation>Ordner in diesem Ordner hinzufügen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="87"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="89"/>
         <source>Add a gauge widget for numeric data</source>
         <translation>Anzeige-Widget für numerische Daten hinzufügen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="88"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="90"/>
         <source>Add a generic dataset</source>
         <translation>Generischen Datensatz hinzufügen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="89"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="91"/>
         <source>Add a group for 3-axis accelerometer data</source>
         <translation>Gruppe für 3-Achsen-Beschleunigungsdaten hinzufügen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="90"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="92"/>
         <source>Add a group for 3-axis gyroscope data</source>
         <translation>Gruppe für 3-Achsen-Gyroskop-Daten hinzufügen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="91"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="93"/>
         <source>Add a knob control</source>
         <translation>Drehregler hinzufügen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="92"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="94"/>
         <source>Add a map group for GPS data</source>
         <translation>Kartengruppe für GPS-Daten hinzufügen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="93"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="95"/>
         <source>Add a map widget for GPS data</source>
         <translation>Karten-Widget für GPS-Daten hinzufügen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="94"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="96"/>
         <source>Add a multi-channel bar panel</source>
         <translation>Mehrkanal-Balkenpanel hinzufügen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="95"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="97"/>
         <source>Add a multi-channel bar panel group</source>
         <translation>Mehrkanal-Balkenpanel-Gruppe hinzufügen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="96"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="98"/>
         <source>Add a new action to the project</source>
         <translation>Neue Aktion zum Projekt hinzufügen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="97"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="99"/>
         <source>Add a new data source (device) to the project</source>
         <translation>Neue Datenquelle (Gerät) zum Projekt hinzufügen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="98"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="100"/>
         <source>Add a new output control panel with a button</source>
         <translation>Neues Ausgabe-Bedienfeld mit einer Schaltfläche hinzufügen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="99"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="101"/>
         <source>Add a plain dataset</source>
         <translation>Einfachen Datensatz hinzufügen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="100"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="102"/>
         <source>Add a plain dataset container group</source>
         <translation>Einfache Datensatz-Container-Gruppe hinzufügen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="101"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="103"/>
         <source>Add a plot with multiple signals</source>
         <translation>Plot mit mehreren Signalen hinzufügen</translation>
     </message>
@@ -3462,467 +3662,477 @@ Nur in vertrauenswürdigen Netzwerken aktivieren. Nicht vertrauenswürdige Clien
         <translation type="vanished">Gemeinsame Speichertabelle hinzufügen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="102"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="104"/>
         <source>Add a script-drawn canvas group</source>
         <translation>Skript-gezeichnete Canvas-Gruppe hinzufügen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="103"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="105"/>
         <source>Add a shared variable table</source>
         <translation>Gemeinsame Variablentabelle hinzufügen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="104"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="106"/>
         <source>Add a slider control</source>
         <translation>Schieberegler-Steuerelement hinzufügen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="105"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="107"/>
         <source>Add a text field control</source>
         <translation>Textfeld-Steuerelement hinzufügen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="106"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="108"/>
         <source>Add a toggle control</source>
         <translation>Umschalt-Steuerelement hinzufügen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="107"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="109"/>
         <source>Add a top-level folder in this section</source>
         <translation>Ordner der obersten Ebene in diesem Abschnitt hinzufügen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="108"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="110"/>
         <source>Add a variable to this shared table</source>
         <translation>Variable zu dieser gemeinsamen Tabelle hinzufügen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="109"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="111"/>
         <source>Add a vertical bar level indicator</source>
         <translation>Vertikale Balken-Pegelanzeige hinzufügen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="110"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="112"/>
         <source>Add a web viewer</source>
         <translation>Web-Viewer hinzufügen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="111"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="113"/>
         <source>Add a web viewer group</source>
         <translation>Web-Viewer-Gruppe hinzufügen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="112"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="114"/>
         <source>Add a workspace to the project</source>
         <translation>Arbeitsbereich zum Projekt hinzufügen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="113"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="115"/>
         <source>Add an LED-style status indicator</source>
         <translation>LED-Statusanzeige hinzufügen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="114"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="116"/>
         <source>Add an action to the project</source>
         <translation>Aktion zum Projekt hinzufügen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="115"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="117"/>
         <source>Add an image or video stream group</source>
         <translation>Bild- oder Videostream-Gruppe hinzufügen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="116"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="118"/>
         <source>Add an image/video stream viewer</source>
         <translation>Bild-/Videostream-Viewer hinzufügen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="117"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="119"/>
         <source>Add an output button control</source>
         <translation>Ausgabe-Schaltfläche hinzufügen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="118"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="120"/>
         <source>Add an output control panel</source>
         <translation>Ausgabe-Steuerpanel hinzufügen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="119"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="121"/>
         <source>Add an output knob control</source>
         <translation>Ausgabe-Drehregler hinzufügen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="120"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="122"/>
         <source>Add an output slider control</source>
         <translation>Ausgabe-Schieberegler hinzufügen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="121"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="123"/>
         <source>Add an output text field control</source>
         <translation>Ausgabe-Textfeld hinzufügen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="122"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="124"/>
         <source>Add an output toggle control</source>
         <translation>Ausgabe-Umschalter hinzufügen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="123"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="125"/>
         <source>Add another data source to the project</source>
         <translation>Weitere Datenquelle zum Projekt hinzufügen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="124"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="126"/>
         <source>Assistant</source>
         <translation>Assistent</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="125"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="127"/>
         <source>Audio</source>
         <translation>Audio</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="126"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="128"/>
         <source>Auto Layout</source>
         <translation>Automatisches Layout</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="127"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="129"/>
         <source>Bar Panel</source>
         <translation>Balkenpanel</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="128"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="130"/>
         <source>Bluetooth</source>
         <translation>Bluetooth</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="129"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="131"/>
         <source>Browse and install extensions</source>
         <translation>Erweiterungen durchsuchen und installieren</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="130"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="132"/>
         <source>Browse documentation, FAQ, and wiki</source>
         <translation>Dokumentation, FAQ und Wiki durchsuchen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="131"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="133"/>
         <source>Browse example projects</source>
         <translation>Beispielprojekte durchsuchen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="132"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="134"/>
         <source>Browse, replay, and export recorded sessions</source>
         <translation>Aufgezeichnete Sitzungen durchsuchen, wiedergeben und exportieren</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="133"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="135"/>
         <source>Build an operator app for the current project</source>
         <translation>Bedienoberfläche für das aktuelle Projekt erstellen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="134"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="136"/>
         <source>Button</source>
         <translation>Schaltfläche</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="135"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="137"/>
         <source>CAN Bus</source>
         <translation>CAN Bus</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="136"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="138"/>
         <source>CSV File</source>
         <translation>CSV-datei</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="137"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="139"/>
         <source>Canvas</source>
         <translation>Canvas</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="138"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="140"/>
         <source>Canvas Widget</source>
         <translation>Canvas-widget</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="139"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="141"/>
         <source>Chat with an AI to build and edit your project</source>
         <translation>Mit einer KI chatten, um Ihr Projekt zu erstellen und zu bearbeiten</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="140"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="142"/>
         <source>Check device permissions, adapters, and host reachability</source>
         <translation>Geräteberechtigungen, Adapter und Host-Erreichbarkeit prüfen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="141"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="143"/>
         <source>Clean Up Unresolved Widgets</source>
         <translation>Nicht Zugeordnete Widgets Bereinigen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="142"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="144"/>
         <source>Clear All Workspaces</source>
         <translation>Alle Arbeitsbereiche Löschen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="143"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="145"/>
         <source>Clear Console</source>
         <translation>Konsole Leeren</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="144"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="146"/>
         <source>Clear Window</source>
         <translation>Fenster Löschen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="145"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="147"/>
+        <source>Clear return-to-normal alarm points (sequences M and R)</source>
+        <translation>Rückkehr-zu-Normal-Alarmpunkte löschen (Sequenzen M und R)</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="148"/>
         <source>Clear the console output</source>
         <translation>Konsolenausgabe löschen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="146"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="149"/>
         <source>Clock</source>
         <translation>Uhr</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="147"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="150"/>
         <source>Close</source>
         <translation>Schließen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="148"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="151"/>
         <source>Close Window</source>
         <translation>Fenster Schließen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="149"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="152"/>
         <source>Close session file</source>
         <translation>Sitzungsdatei schließen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="150"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="153"/>
         <source>Collapse All</source>
         <translation>Alle Reduzieren</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="151"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="154"/>
         <source>Collapse Duplicates</source>
         <translation>Duplikate Zusammenfassen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="152"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="155"/>
         <source>Collapse repeated console lines</source>
         <translation>Wiederholte Konsolenzeilen zusammenfassen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="153"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="156"/>
         <source>Collapse the project tree to its overview</source>
         <translation>Projektbaum auf Übersicht reduzieren</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="154"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="157"/>
         <source>Command Palette</source>
         <translation>Befehlspalette</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="155"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="158"/>
         <source>Compare Project</source>
         <translation>Projekt Vergleichen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="156"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="159"/>
         <source>Compare the selected session against the project open in the editor</source>
         <translation>Die ausgewählte Sitzung mit dem im Editor geöffneten Projekt vergleichen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="157"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="160"/>
         <source>Compass</source>
         <translation>Kompass</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="158"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="161"/>
         <source>Configure the InfluxDB sink</source>
         <translation>InfluxDB-Senke konfigurieren</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="159"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="162"/>
         <source>Configure the MQTT publisher</source>
         <translation>MQTT-Publisher konfigurieren</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="160"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="163"/>
         <source>Connect</source>
         <translation>Verbinden</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="161"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="164"/>
         <source>Connect or disconnect from the configured device</source>
         <translation>Mit dem konfigurierten Gerät verbinden oder trennen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="162"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="165"/>
         <source>Connection Diagnostics</source>
         <translation>Verbindungsdiagnose</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="163"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="166"/>
         <source>Console</source>
         <translation>Konsole</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="164"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="167"/>
         <source>Console Echo</source>
         <translation>Konsolen-echo</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="165"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="168"/>
         <source>Console Only Mode</source>
         <translation>Nur-konsole-modus</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="166"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="169"/>
         <source>Console Timestamps</source>
         <translation>Konsolen-zeitstempel</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="167"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="170"/>
         <source>Console Transcript</source>
         <translation>Konsolen-transkript</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="168"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="171"/>
         <source>Create a new JSON project</source>
         <translation>Neues JSON-Projekt erstellen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="169"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="172"/>
         <source>Customize Workspaces</source>
         <translation>Arbeitsbereiche Anpassen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="170"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="173"/>
         <source>Data Grid</source>
         <translation>Datenraster</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="171"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="174"/>
         <source>Dataset</source>
         <translation>Datensatz</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="172"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="175"/>
         <source>Dataset Container</source>
         <translation>Datensatz-container</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="173"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="176"/>
         <source>Delete</source>
         <translation>Löschen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="174"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="177"/>
         <source>Delete the selected session</source>
         <translation>Ausgewählte Sitzung löschen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="175"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="178"/>
         <source>Delete this item</source>
         <translation>Dieses Element Löschen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="176"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="179"/>
         <source>Deploy</source>
         <translation>Bereitstellen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="177"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="180"/>
         <source>Deploy Operator App</source>
         <translation>Operator-app Bereitstellen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="178"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="181"/>
         <source>Disconnect</source>
         <translation>Trennen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="179"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="182"/>
         <source>Drop workspace widgets whose source is gone</source>
         <translation>Arbeitsbereich-Widgets Entfernen, Deren Quelle Nicht Mehr Vorhanden Ist</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="180"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="183"/>
         <source>Duplicate</source>
         <translation>Duplizieren</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="181"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="184"/>
         <source>Duplicate this item</source>
         <translation>Dieses Element Duplizieren</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="182"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="185"/>
         <source>Echo transmitted data in the console</source>
         <translation>Übertragene Daten in der Konsole ausgeben</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="183"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="186"/>
         <source>Edit Canvas Code</source>
         <translation>Canvas-code Bearbeiten</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="184"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="187"/>
         <source>Edit Control Loop</source>
         <translation>Regelschleife Bearbeiten</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="185"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="188"/>
         <source>Edit Frame Parser</source>
         <translation>Frame-parser Bearbeiten</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="189"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="192"/>
         <source>EtherNet/IP</source>
         <translation>Ethernet/IP</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="196"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="199"/>
         <source>Export Variables</source>
         <translation>Variablen Exportieren</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="198"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="201"/>
         <source>Export this table's variables to CSV</source>
         <translation>Variablen dieser Tabelle nach CSV exportieren</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="219"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="222"/>
         <source>IEC 60870-5-104</source>
         <translation>IEC 60870-5-104</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="223"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="226"/>
         <source>Import Variables</source>
         <translation>Variablen Importieren</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="224"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="227"/>
         <source>Import this table's variables from CSV</source>
         <translation>Variablen dieser Tabelle aus CSV importieren</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="225"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="228"/>
         <source>InfluxDB Sink</source>
         <translation>Influxdb-senke</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="256"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="250"/>
+        <source>Mute Sounds</source>
+        <translation>Töne Stummschalten</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="260"/>
         <source>OPC UA</source>
         <translation>OPC UA</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="269"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="273"/>
         <source>Open the historian documentation</source>
         <translation>Dokumentation des Historikers öffnen</translation>
     </message>
@@ -3931,47 +4141,47 @@ Nur in vertrauenswürdigen Netzwerken aktivieren. Nicht vertrauenswürdige Clien
         <translation type="vanished">Painter-code Bearbeiten</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="186"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="189"/>
         <source>Edit Transform Code</source>
         <translation>Transform-code Bearbeiten</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="187"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="190"/>
         <source>Edit Workspace Widgets</source>
         <translation>Arbeitsbereich-widgets Bearbeiten</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="188"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="191"/>
         <source>Edit workspaces manually instead of using the automatic layout</source>
         <translation>Arbeitsbereiche manuell bearbeiten statt automatisches Layout verwenden</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="190"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="193"/>
         <source>Examples</source>
         <translation>Beispiele</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="191"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="194"/>
         <source>Expand All</source>
         <translation>Alle Erweitern</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="192"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="195"/>
         <source>Expand every item in the project tree</source>
         <translation>Alle Elemente im Projektbaum erweitern</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="193"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="196"/>
         <source>Export</source>
         <translation>Exportieren</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="194"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="197"/>
         <source>Export CSV</source>
         <translation>CSV Exportieren</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="195"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="198"/>
         <source>Export PDF</source>
         <translation>PDF Exportieren</translation>
     </message>
@@ -3980,7 +4190,7 @@ Nur in vertrauenswürdigen Netzwerken aktivieren. Nicht vertrauenswürdige Clien
         <translation type="vanished">Register Exportieren</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="197"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="200"/>
         <source>Export selected session to CSV</source>
         <translation>Ausgewählte Sitzung als CSV exportieren</translation>
     </message>
@@ -3989,117 +4199,117 @@ Nur in vertrauenswürdigen Netzwerken aktivieren. Nicht vertrauenswürdige Clien
         <translation type="vanished">Register dieser Tabelle nach CSV exportieren</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="199"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="202"/>
         <source>Extensions</source>
         <translation>Erweiterungen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="200"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="203"/>
         <source>FFT Plot</source>
         <translation>FFT-diagramm</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="201"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="204"/>
         <source>File Transmission</source>
         <translation>Dateiübertragung</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="202"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="205"/>
         <source>Fill every empty dataset alias from its title</source>
         <translation>Jeden leeren Datensatz-Alias aus seinem Titel befüllen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="203"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="206"/>
         <source>Freeze Dashboard</source>
         <translation>Dashboard Einfrieren</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="204"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="207"/>
         <source>Full Screen</source>
         <translation>Vollbild</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="205"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="208"/>
         <source>GPS Map</source>
         <translation>GPS-karte</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="206"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="209"/>
         <source>Gauge</source>
         <translation>Messgerät</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="207"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="210"/>
         <source>Generate a PDF report for the selected session</source>
         <translation>PDF-Bericht für die ausgewählte Sitzung erstellen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="208"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="211"/>
         <source>Generate a project from a Protocol Buffers (.proto) schema</source>
         <translation>Projekt aus einem Protocol-Buffers-Schema (.proto) generieren</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="209"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="212"/>
         <source>Generic</source>
         <translation>Generisch</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="210"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="213"/>
         <source>Group</source>
         <translation>Gruppe</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="211"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="214"/>
         <source>Gyroscope</source>
         <translation>Gyroskop</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="212"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="215"/>
         <source>HID</source>
         <translation>HID</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="213"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="216"/>
         <source>Help</source>
         <translation>Hilfe</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="214"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="217"/>
         <source>Help Center</source>
         <translation>Hilfecenter</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="215"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="218"/>
         <source>Hex Display</source>
         <translation>Hex-anzeige</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="216"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="219"/>
         <source>Hide</source>
         <translation>Ausblenden</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="217"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="220"/>
         <source>Hide this item from the dashboard and frame building</source>
         <translation>Dieses Element aus Dashboard und Frame-Erstellung ausblenden</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="218"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="221"/>
         <source>Historian</source>
         <translation>Historiker</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="220"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="223"/>
         <source>Image</source>
         <translation>Bild</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="221"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="224"/>
         <source>Image View</source>
         <translation>Bildansicht</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="222"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="225"/>
         <source>Import Protobuf Schema</source>
         <translation>Protobuf-schema Importieren</translation>
     </message>
@@ -4112,212 +4322,212 @@ Nur in vertrauenswürdigen Netzwerken aktivieren. Nicht vertrauenswürdige Clien
         <translation type="vanished">Register dieser Tabelle aus CSV importieren</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="226"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="229"/>
         <source>Knob</source>
         <translation>Drehregler</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="227"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="230"/>
         <source>LED Indicator</source>
         <translation>LED-anzeige</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="228"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="231"/>
         <source>Level Indicator</source>
         <translation>Pegelanzeige</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="229"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="232"/>
         <source>License Management</source>
         <translation>Lizenzverwaltung</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="230"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="233"/>
         <source>Lock</source>
         <translation>Sperren</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="231"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="234"/>
         <source>Lock Project Editor</source>
         <translation>Projekteditor Sperren</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="232"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="235"/>
         <source>MDF4 File</source>
         <translation>MDF4-datei</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="233"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="236"/>
         <source>MQTT Publisher</source>
         <translation>MQTT-publisher</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="234"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="237"/>
         <source>Macros</source>
         <translation>Makros</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="235"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="238"/>
         <source>Make every hidden group visible again</source>
         <translation>Alle ausgeblendeten Gruppen wieder sichtbar machen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="236"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="239"/>
         <source>Manage your Serial Studio Pro license</source>
         <translation>Serial Studio Pro-Lizenz verwalten</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="237"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="240"/>
         <source>Meter</source>
         <translation>Messgerät</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="238"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="241"/>
         <source>Minimize Window</source>
         <translation>Fenster Minimieren</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="239"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="242"/>
         <source>Modbus</source>
         <translation>Modbus</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="240"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="243"/>
         <source>Move Down</source>
         <translation>Nach Unten</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="241"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="244"/>
         <source>Move Up</source>
         <translation>Nach Oben</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="242"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="245"/>
         <source>Move this item down among its siblings</source>
         <translation>Dieses Element unter seinen Geschwistern nach unten verschieben</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="243"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="246"/>
         <source>Move this item out of every folder</source>
         <translation>Dieses Element aus allen Ordnern herausnehmen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="244"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="247"/>
         <source>Move this item up among its siblings</source>
         <translation>Dieses Element unter seinen Geschwistern nach oben verschieben</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="245"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="248"/>
         <source>Move to Folder</source>
         <translation>In Ordner Verschieben</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="246"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="249"/>
         <source>Multi-Plot</source>
         <translation>Mehrfachdiagramm</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="247"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="251"/>
         <source>Navigate Back</source>
         <translation>Zurück Navigieren</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="248"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="252"/>
         <source>Navigate Forward</source>
         <translation>Vorwärts Navigieren</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="249"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="253"/>
         <source>Network</source>
         <translation>Netzwerk</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="250"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="254"/>
         <source>New</source>
         <translation>Neu</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="251"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="255"/>
         <source>New Folder</source>
         <translation>Neuer Ordner</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="252"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="256"/>
         <source>New Project</source>
         <translation>Neues Projekt</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="253"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="257"/>
         <source>New Sub-Folder</source>
         <translation>Neuer Unterordner</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="254"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="258"/>
         <source>Next Workspace</source>
         <translation>Nächster Arbeitsbereich</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="255"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="259"/>
         <source>Notifications</source>
         <translation>Benachrichtigungen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="257"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="261"/>
         <source>Open</source>
         <translation>Öffnen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="258"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="262"/>
         <source>Open CSV</source>
         <translation>CSV Öffnen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="259"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="263"/>
         <source>Open MDF4</source>
         <translation>MDF4 Öffnen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="260"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="264"/>
         <source>Open Project</source>
         <translation>Projekt Öffnen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="261"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="265"/>
         <source>Open a session file</source>
         <translation>Sitzungsdatei öffnen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="262"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="266"/>
         <source>Open an existing JSON project</source>
         <translation>Bestehendes JSON-Projekt öffnen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="263"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="267"/>
         <source>Open application settings and preferences</source>
         <translation>Anwendungseinstellungen und -präferenzen öffnen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="264"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="268"/>
         <source>Open the Assistant</source>
         <translation>Assistenten öffnen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="265"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="269"/>
         <source>Open the Project Editor documentation</source>
         <translation>Dokumentation des Projekt-Editors öffnen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="266"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="270"/>
         <source>Open the Project Editor to create or modify your JSON layout</source>
         <translation>Projekt-Editor öffnen, um JSON-Layout zu erstellen oder zu ändern</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="267"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="271"/>
         <source>Open the canvas script for this group</source>
         <translation>Canvas-Skript für diese Gruppe öffnen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="268"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="272"/>
         <source>Open the frame parser for this data source</source>
         <translation>Frame-Parser für diese Datenquelle öffnen</translation>
     </message>
@@ -4326,7 +4536,7 @@ Nur in vertrauenswürdigen Netzwerken aktivieren. Nicht vertrauenswürdige Clien
         <translation type="vanished">Painter-Skript für diese Gruppe öffnen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="270"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="274"/>
         <source>Open the project control loop</source>
         <translation>Projekt-Kontrollschleife öffnen</translation>
     </message>
@@ -4339,27 +4549,27 @@ Nur in vertrauenswürdigen Netzwerken aktivieren. Nicht vertrauenswürdige Clien
         <translation type="vanished">Shared-Memory-Dokumentation öffnen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="271"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="275"/>
         <source>Open the value transform for this dataset</source>
         <translation>Werttransformation für diesen Datensatz öffnen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="272"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="276"/>
         <source>Open the variables documentation</source>
         <translation>Dokumentation der Variablen öffnen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="273"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="277"/>
         <source>Open this workspace to edit its widgets</source>
         <translation>Diesen Arbeitsbereich zur Bearbeitung der Widgets öffnen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="274"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="278"/>
         <source>Output</source>
         <translation>Ausgabe</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="275"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="279"/>
         <source>Output Panel</source>
         <translation>Ausgabepanel</translation>
     </message>
@@ -4372,102 +4582,107 @@ Nur in vertrauenswürdigen Netzwerken aktivieren. Nicht vertrauenswürdige Clien
         <translation type="vanished">Painter-widget</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="276"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="280"/>
         <source>Pause</source>
         <translation>Pausieren</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="277"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="281"/>
         <source>Play a CSV file as if it were live sensor data</source>
         <translation>CSV-Datei abspielen, als wären es Live-Sensordaten</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="278"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="282"/>
         <source>Play an MDF4 file as if it were live sensor data (Pro)</source>
         <translation>MDF4-Datei abspielen, als wären es Live-Sensordaten (Pro)</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="279"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="283"/>
+        <source>Play every alarm priority sound and walk the annunciator</source>
+        <translation>Jeden Alarmpriorität-Ton abspielen und Annunciator durchlaufen</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="284"/>
         <source>Plot</source>
         <translation>Diagramm</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="280"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="285"/>
         <source>Preferences</source>
         <translation>Einstellungen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="281"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="286"/>
         <source>Previous Workspace</source>
         <translation>Vorheriger Arbeitsbereich</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="282"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="287"/>
         <source>Problem Center</source>
         <translation>Problemzentrale</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="283"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="288"/>
         <source>Process</source>
         <translation>Prozess</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="284"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="289"/>
         <source>Project Editor</source>
         <translation>Projekteditor</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="285"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="290"/>
         <source>Project File Mode</source>
         <translation>Projektdateimodus</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="286"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="291"/>
         <source>Protobuf</source>
         <translation>Protobuf</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="287"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="292"/>
         <source>Quick Plot Mode</source>
         <translation>Schnelldiagrammmodus</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="288"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="293"/>
         <source>Quit</source>
         <translation>Beenden</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="289"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="294"/>
         <source>Rebuild the automatic workspace layout</source>
         <translation>Automatisches Arbeitsbereich-Layout neu aufbauen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="290"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="295"/>
         <source>Redo</source>
         <translation>Wiederholen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="291"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="296"/>
         <source>Redo the last undone project edit</source>
         <translation>Die zuletzt rückgängig gemachte Projektbearbeitung wiederholen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="292"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="297"/>
         <source>Remote Dashboard</source>
         <translation>Remote-dashboard</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="293"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="298"/>
         <source>Remove every user workspace</source>
         <translation>Alle Benutzer-Arbeitsbereiche entfernen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="294"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="299"/>
         <source>Rename</source>
         <translation>Umbenennen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="295"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="300"/>
         <source>Rename this item</source>
         <translation>Dieses Element umbenennen</translation>
     </message>
@@ -4476,162 +4691,167 @@ Nur in vertrauenswürdigen Netzwerken aktivieren. Nicht vertrauenswürdige Clien
         <translation type="vanished">Wiederherstellen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="296"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="301"/>
         <source>Replay</source>
         <translation>Wiedergabe</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="297"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="302"/>
         <source>Replay selected session on the dashboard</source>
         <translation>Ausgewählte Sitzung im Dashboard wiedergeben</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="298"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="303"/>
         <source>Reset</source>
         <translation>Zurücksetzen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="299"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="304"/>
+        <source>Reset Alarms</source>
+        <translation>Alarme Zurücksetzen</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="305"/>
         <source>Reset to Auto Layout</source>
         <translation>Auf Automatisches Layout zurücksetzen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="300"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="306"/>
         <source>Restore</source>
         <translation>Wiederherstellen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="301"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="307"/>
         <source>Restore Backup</source>
         <translation>Backup Wiederherstellen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="302"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="308"/>
         <source>Restore Project</source>
         <translation>Projekt Wiederherstellen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="303"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="309"/>
         <source>Restore a recent automatic snapshot of the current project</source>
         <translation>Einen kürzlich erstellten automatischen Snapshot des aktuellen Projekts wiederherstellen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="304"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="310"/>
         <source>Restore the project file from this session file</source>
         <translation>Projektdatei aus dieser Sitzungsdatei wiederherstellen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="305"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="311"/>
         <source>Resume</source>
         <translation>Fortsetzen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="306"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="312"/>
         <source>Review project, link, and script diagnostics</source>
         <translation>Projekt-, Link- und Skriptdiagnosen überprüfen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="307"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="313"/>
         <source>Run API commands and script macros interactively</source>
         <translation>API-Befehle und Skript-Makros interaktiv ausführen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="308"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="314"/>
         <source>Save</source>
         <translation>Speichern</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="309"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="315"/>
         <source>Save As</source>
         <translation>Speichern Unter</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="310"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="316"/>
         <source>Save Project</source>
         <translation>Projekt Speichern</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="311"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="317"/>
         <source>Save Project As</source>
         <translation>Projekt Speichern Unter</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="312"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="318"/>
         <source>Search</source>
         <translation>Suchen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="313"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="319"/>
         <source>Search and run any Serial Studio command</source>
         <translation>Beliebigen Serial Studio-Befehl suchen und ausführen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="314"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="320"/>
         <source>Seed Aliases from Titles</source>
         <translation>Aliase aus Titeln generieren</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="315"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="321"/>
         <source>Select Bluetooth Low Energy communication</source>
         <translation>Bluetooth Low Energy-Kommunikation auswählen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="316"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="322"/>
         <source>Select CAN Bus communication (Pro)</source>
         <translation>CAN-Bus-Kommunikation auswählen (Pro)</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="317"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="323"/>
         <source>Select EtherNet/IP communication (Pro)</source>
         <translation>EtherNet/IP-Kommunikation auswählen (Pro)</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="318"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="324"/>
         <source>Select HID device communication (Pro)</source>
         <translation>HID-Gerätekommunikation auswählen (Pro)</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="319"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="325"/>
         <source>Select IEC 60870-5-104 communication (Pro)</source>
         <translation>IEC 60870-5-104-Kommunikation auswählen (Pro)</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="320"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="326"/>
         <source>Select MODBUS communication (Pro)</source>
         <translation>MODBUS-Kommunikation auswählen (Pro)</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="321"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="327"/>
         <source>Select OPC UA communication (Pro)</source>
         <translation>OPC UA-Kommunikation auswählen (Pro)</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="322"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="328"/>
         <source>Select Serial port (UART) communication</source>
         <translation>Serielle Schnittstelle (UART) auswählen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="323"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="329"/>
         <source>Select Siemens S7comm communication (Pro)</source>
         <translation>Siemens S7comm-Kommunikation auswählen (Pro)</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="324"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="330"/>
         <source>Select TCP/UDP network communication</source>
         <translation>TCP/UDP-Netzwerkkommunikation auswählen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="325"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="331"/>
         <source>Select audio input device (Pro)</source>
         <translation>Audioeingabegerät auswählen (Pro)</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="326"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="332"/>
         <source>Select process pipe communication (Pro)</source>
         <translation>Prozesspipe-Kommunikation auswählen (Pro)</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="327"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="333"/>
         <source>Select raw USB communication (Pro)</source>
         <translation>Raw-USB-Kommunikation auswählen (Pro)</translation>
     </message>
@@ -4644,12 +4864,12 @@ Nur in vertrauenswürdigen Netzwerken aktivieren. Nicht vertrauenswürdige Clien
         <translation type="vanished">Sitzungen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="328"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="334"/>
         <source>Set a password and lock the Project Editor</source>
         <translation>Passwort Festlegen und Projekt-Editor Sperren</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="329"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="335"/>
         <source>Set a password to prevent session deletions</source>
         <translation>Passwort festlegen, um Sitzungslöschungen zu verhindern</translation>
     </message>
@@ -4658,182 +4878,207 @@ Nur in vertrauenswürdigen Netzwerken aktivieren. Nicht vertrauenswürdige Clien
         <translation type="vanished">Shared Memory-hilfe</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="330"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="336"/>
         <source>Show</source>
         <translation>Anzeigen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="331"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="337"/>
         <source>Show All Hidden Groups</source>
         <translation>Alle Ausgeblendeten Gruppen Anzeigen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="332"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="338"/>
         <source>Show application info and license details</source>
         <translation>Anwendungsinformationen und Lizenzdetails Anzeigen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="333"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="339"/>
         <source>Show this dataset as a 2D plot</source>
         <translation>Diesen Datensatz als 2D-Diagramm anzeigen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="334"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="340"/>
         <source>Show this dataset as a bar or level</source>
         <translation>Diesen Datensatz als Balken oder Pegel anzeigen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="335"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="341"/>
         <source>Show this dataset as a compass</source>
         <translation>Diesen Datensatz als Kompass anzeigen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="336"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="342"/>
         <source>Show this dataset as a gauge</source>
         <translation>Diesen Datensatz als Messgerät anzeigen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="337"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="343"/>
         <source>Show this dataset as a waterfall plot</source>
         <translation>Diesen Datensatz als Wasserfalldiagramm anzeigen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="338"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="344"/>
         <source>Show this dataset as an FFT plot</source>
         <translation>Diesen Datensatz als FFT-Diagramm anzeigen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="339"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="345"/>
         <source>Show this dataset as an LED indicator</source>
         <translation>Diesen Datensatz als LED-Anzeige anzeigen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="340"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="346"/>
         <source>Show this dataset as an analog meter</source>
         <translation>Diesen Datensatz als Analogmessgerät anzeigen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="341"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="347"/>
         <source>Show timestamps in the console</source>
         <translation>Zeitstempel in der Konsole Anzeigen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="342"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="348"/>
         <source>Siemens S7</source>
         <translation>Siemens S7</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="343"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="349"/>
+        <source>Silence Alarms</source>
+        <translation>Alarme Stummschalten</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="350"/>
+        <source>Silence every alarm and event sound</source>
+        <translation>Jeden Alarm- und Ereigniston stummschalten</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="351"/>
         <source>Slider</source>
         <translation>Schieberegler</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="344"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="352"/>
         <source>Start Menu</source>
         <translation>Startmenü</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="345"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="353"/>
+        <source>Stop the alarm sound; points stay unacknowledged and a new alarm re-sounds</source>
+        <translation>Alarmton stoppen; Punkte bleiben unbestätigt und ein neuer Alarm ertönt erneut</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="354"/>
         <source>Stopwatch</source>
         <translation>Stoppuhr</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="346"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="355"/>
         <source>Switch to Console Only mode (no parsing)</source>
         <translation>Zu Nur-Konsole-Modus Wechseln (kein Parsing)</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="347"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="356"/>
         <source>Switch to Project File mode (parse via a project)</source>
         <translation>Zu Projektdatei-Modus Wechseln (Parsing über ein Projekt)</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="348"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="357"/>
         <source>Switch to Quick Plot mode (comma-separated values)</source>
         <translation>Zu Schnelldiagramm-Modus Wechseln (kommagetrennte Werte)</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="349"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="358"/>
         <source>Table</source>
         <translation>Tabelle</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="350"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="359"/>
+        <source>Test Alarm Sounds</source>
+        <translation>Alarmtöne Testen</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="360"/>
         <source>Text Field</source>
         <translation>Textfeld</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="351"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="361"/>
         <source>Toggle</source>
         <translation>Umschalter</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="352"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="362"/>
         <source>Toggle hexadecimal console display</source>
         <translation>Hexadezimale Konsolenanzeige umschalten</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="353"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="363"/>
         <source>Tools</source>
         <translation>Werkzeuge</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="354"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="364"/>
         <source>Top Level</source>
         <translation>Oberste Ebene</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="355"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="365"/>
         <source>UART</source>
         <translation>UART</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="356"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="366"/>
         <source>USB</source>
         <translation>USB</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="357"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="367"/>
         <source>Undo</source>
         <translation>Rückgängig</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="358"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="368"/>
         <source>Undo the last project edit</source>
         <translation>Die letzte Projektbearbeitung rückgängig machen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="359"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="369"/>
         <source>Unlock</source>
         <translation>Entsperren</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="360"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="370"/>
+        <source>Unmute Sounds</source>
+        <translation>Stummschaltung Aufheben</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="371"/>
         <source>Variables Help</source>
         <translation>Variablen-hilfe</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="361"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="372"/>
         <source>View detailed documentation and ask questions on DeepWiki</source>
         <translation>Detaillierte Dokumentation ansehen und Fragen auf DeepWiki stellen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="362"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="373"/>
         <source>Visualizations</source>
         <translation>Visualisierungen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="363"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="374"/>
         <source>Watch another Serial Studio instance's dashboard over the network</source>
         <translation>Dashboard einer anderen Serial Studio-Instanz über das Netzwerk beobachten</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="364"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="375"/>
         <source>Waterfall</source>
         <translation>Wasserfall</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="365"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="376"/>
         <source>Web View</source>
         <translation>Webansicht</translation>
     </message>
@@ -5906,7 +6151,7 @@ Nur in vertrauenswürdigen Netzwerken aktivieren. Nicht vertrauenswürdige Clien
         <translation>API-server Aus</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardLayout.qml" line="651"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardLayout.qml" line="665"/>
         <source>Command Palette</source>
         <translation>Befehlspalette</translation>
     </message>
@@ -6021,22 +6266,22 @@ Nur in vertrauenswürdigen Netzwerken aktivieren. Nicht vertrauenswürdige Clien
         <translation>Wert</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/DataGrid.qml" line="108"/>
         <location filename="../../rcc/extensions/widget/datagrid/DataGrid.qml" line="111"/>
         <location filename="../../rcc/extensions/widget/datagrid/DataGrid.qml" line="118"/>
+        <location filename="../../qml/Widgets/Dashboard/DataGrid.qml" line="108"/>
         <source>Pause</source>
         <translation>Pausieren</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/DataGrid.qml" line="108"/>
         <location filename="../../rcc/extensions/widget/datagrid/DataGrid.qml" line="111"/>
         <location filename="../../rcc/extensions/widget/datagrid/DataGrid.qml" line="118"/>
+        <location filename="../../qml/Widgets/Dashboard/DataGrid.qml" line="108"/>
         <source>Resume</source>
         <translation>Fortsetzen</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/DataGrid.qml" line="323"/>
         <location filename="../../rcc/extensions/widget/datagrid/DataGrid.qml" line="335"/>
+        <location filename="../../qml/Widgets/Dashboard/DataGrid.qml" line="323"/>
         <source>Awaiting data…</source>
         <translation>Warte auf Daten…</translation>
     </message>
@@ -9214,57 +9459,62 @@ Add %4 dataset(s) using the template's defaults?</source>
         <translation type="vanished">Anzeigetitel (leer stellt das Original wieder her):</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="925"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="597"/>
+        <source>Change Alarm Sounds</source>
+        <translation>Alarmtöne Ändern</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="953"/>
         <source>Change Project Title</source>
         <translation>Projekttitel Ändern</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="941"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="969"/>
         <source>Edit Control Script</source>
         <translation>Steuerskript Bearbeiten</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="960"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="988"/>
         <source>Edit Shared Library</source>
         <translation>Gemeinsame Bibliothek Bearbeiten</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="977"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1005"/>
         <source>Edit JavaScript Library</source>
         <translation>Javascript-bibliothek Bearbeiten</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="993"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1021"/>
         <source>Change Point Count</source>
         <translation>Punktanzahl Ändern</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1011"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1039"/>
         <source>Change Plot Time Range</source>
         <translation>Diagramm-zeitbereich Ändern</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1031"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1059"/>
         <source>Toggle Freeze</source>
         <translation>Einfrieren Umschalten</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1046"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1074"/>
         <source>Toggle Change-Driven Transforms</source>
         <translation>Änderungsgesteuerte Transformationen Umschalten</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1063"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1091"/>
         <source>Toggle Fast Lua Execution</source>
         <translation>Schnelle Lua-ausführung Umschalten</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1084"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1112"/>
         <source>Enable Fast Lua Execution?</source>
         <translation>Schnelle Lua-Ausführung aktivieren?</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1085"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1113"/>
         <source>Fast mode runs Lua parsers and transforms through the JIT compiler (up to ~40x faster), but the runaway-script watchdog cannot operate: a script stuck in an infinite loop will stall its data source until you disconnect.
 
 Enable it only for scripts you trust and have tested in Safe mode first.</source>
@@ -9273,37 +9523,37 @@ Enable it only for scripts you trust and have tested in Safe mode first.</source
 Nur für Skripte aktivieren, denen Sie vertrauen und die Sie zuerst im sicheren Modus getestet haben.</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1090"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1118"/>
         <source>Fast Lua Execution</source>
         <translation>Schnelle Lua-ausführung</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1119"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1147"/>
         <source>Change Frame Start Sequence</source>
         <translation>Frame-startsequenz Ändern</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1138"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1166"/>
         <source>Change Frame End Sequence</source>
         <translation>Frame-endsequenz Ändern</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1157"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1185"/>
         <source>Change Checksum</source>
         <translation>Prüfsumme Ändern</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1176"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1204"/>
         <source>Change Frame Detection</source>
         <translation>Frame-erkennung Ändern</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1195"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1223"/>
         <source>Change Decoder</source>
         <translation>Decoder Ändern</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1214"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1242"/>
         <source>Toggle Hex Delimiters</source>
         <translation>Hex-trennzeichen Umschalten</translation>
     </message>
@@ -9448,12 +9698,12 @@ Nur für Skripte aktivieren, denen Sie vertrauen und die Sie zuerst im sicheren 
         <translation type="vanished">Serial Studio-Projektdateien (*.ssproj)</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="757"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="780"/>
         <source>Untitled Project</source>
         <translation>Unbenanntes Projekt</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="775"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="798"/>
         <source>Device A</source>
         <translation>Gerät A</translation>
     </message>
@@ -11213,85 +11463,85 @@ Gültiges Format: 01 A2 FF 3C</translation>
 <context>
     <name>EditorCommit</name>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorCommit.cpp" line="100"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorCommit.cpp" line="125"/>
         <source>Rename Device</source>
         <translation>Gerät Umbenennen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorCommit.cpp" line="260"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorCommit.cpp" line="285"/>
         <source>Edit Device</source>
         <translation>Gerät Bearbeiten</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorCommit.cpp" line="357"/>
-        <location filename="../../../core/Ui/ProjectEditor/EditorCommit.cpp" line="380"/>
-        <location filename="../../../core/Ui/ProjectEditor/EditorCommit.cpp" line="386"/>
-        <location filename="../../../core/Ui/ProjectEditor/EditorCommit.cpp" line="461"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorCommit.cpp" line="382"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorCommit.cpp" line="405"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorCommit.cpp" line="411"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorCommit.cpp" line="486"/>
         <source>Edit Group</source>
         <translation>Gruppe Bearbeiten</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorCommit.cpp" line="403"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorCommit.cpp" line="428"/>
         <source>Rename Group</source>
         <translation>Gruppe Umbenennen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorCommit.cpp" line="609"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorCommit.cpp" line="634"/>
         <source>Edit Action</source>
         <translation>Aktion Bearbeiten</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorCommit.cpp" line="651"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorCommit.cpp" line="676"/>
         <source>Rename Project</source>
         <translation>Projekt Umbenennen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorCommit.cpp" line="698"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorCommit.cpp" line="723"/>
         <source>Alias "%1" is already in use</source>
         <translation>Alias "%1" wird bereits verwendet</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorCommit.cpp" line="699"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorCommit.cpp" line="724"/>
         <source>Dataset aliases must be unique across the project. The change was not applied.</source>
         <translation>Datensatz-Aliase müssen projektübergreifend eindeutig sein. Die Änderung wurde nicht angewendet.</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorCommit.cpp" line="701"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorCommit.cpp" line="726"/>
         <source>Duplicate Alias</source>
         <translation>Doppelter Alias</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorCommit.cpp" line="712"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorCommit.cpp" line="737"/>
         <source>Alias "%1" contains only digits</source>
         <translation>Alias "%1" enthält nur Ziffern</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorCommit.cpp" line="713"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorCommit.cpp" line="738"/>
         <source>Scripts must quote it as a string, e.g. getDataset("%1"); a numeric argument is read as a uniqueId, not &amp;m_editor alias.</source>
         <translation>Skripte müssen es als String in Anführungszeichen setzen, z. B. getDataset("%1"); ein numerisches Argument wird als uniqueId gelesen, nicht als Alias.</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorCommit.cpp" line="717"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorCommit.cpp" line="742"/>
         <source>Numeric Alias</source>
         <translation>Numerischer Alias</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorCommit.cpp" line="770"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorCommit.cpp" line="876"/>
         <source>Edit Alarms</source>
         <translation>Alarme Bearbeiten</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorCommit.cpp" line="910"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorCommit.cpp" line="1016"/>
         <source>Rename Dataset</source>
         <translation>Datensatz Umbenennen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorCommit.cpp" line="931"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorCommit.cpp" line="1037"/>
         <source>Edit Dataset</source>
         <translation>Datensatz Bearbeiten</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorCommit.cpp" line="1110"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorCommit.cpp" line="1216"/>
         <source>Edit Output Widget</source>
         <translation>Ausgabe-widget Bearbeiten</translation>
     </message>
@@ -11299,653 +11549,653 @@ Gültiges Format: 01 A2 FF 3C</translation>
 <context>
     <name>EditorForms</name>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="137"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="139"/>
         <source>Project Information</source>
         <translation>Projektinformationen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="148"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="150"/>
         <source>Project Title</source>
         <translation>Projekttitel</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="149"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="151"/>
         <source>Untitled Project</source>
         <translation>Unbenanntes Projekt</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="150"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="152"/>
         <source>Name or description of the project</source>
         <translation>Name oder Beschreibung des Projekts</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="169"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="171"/>
         <source>Group Information</source>
         <translation>Gruppeninformationen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="180"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="182"/>
         <source>Group Title</source>
         <translation>Gruppentitel</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="181"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="183"/>
         <source>Untitled Group</source>
         <translation>Unbenannte Gruppe</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="182"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="184"/>
         <source>Title or description of &amp;m_editor dataset group</source>
         <translation>Titel oder Beschreibung der Datensatzgruppe</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="197"/>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="782"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="199"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="784"/>
         <source>Device %1</source>
         <translation>Gerät %1</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="215"/>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="481"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="217"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="483"/>
         <source>Input Device</source>
         <translation>Eingabegerät</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="216"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="218"/>
         <source>Select which connected device provides data for &amp;m_editor group</source>
         <translation>Wählen Sie, welches verbundene Gerät Daten für diese Gruppe bereitstellt</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="233"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="235"/>
         <source>Image Configuration</source>
         <translation>Bildkonfiguration</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="247"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="249"/>
         <source>Detection Mode</source>
         <translation>Erkennungsmodus</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="249"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="251"/>
         <source>Auto-detect reads JPEG/PNG magic bytes; Manual uses explicit start/end sequences</source>
         <translation>Automatische Erkennung liest JPEG/PNG-Magic-Bytes; Manuell verwendet explizite Start-/Endsequenzen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="259"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="261"/>
         <source>Start Sequence (Hex)</source>
         <translation>Startsequenz (Hex)</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="260"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="262"/>
         <source>e.g. FF D8 FF</source>
         <translation>z. B. FF D8 FF</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="261"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="263"/>
         <source>Hex bytes marking the start of an image frame</source>
         <translation>Hex-Bytes, die den Beginn eines Bild-Frames markieren</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="270"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="272"/>
         <source>End Sequence (Hex)</source>
         <translation>Endsequenz (Hex)</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="271"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="273"/>
         <source>e.g. FF D9</source>
         <translation>z. B. FF D9</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="272"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="274"/>
         <source>Hex bytes marking the end of an image frame</source>
         <translation>Hex-Bytes, die das Ende eines Bild-Frames markieren</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="291"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="293"/>
         <source>Datasets</source>
         <translation>Datensätze</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="321"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="323"/>
         <source>Time</source>
         <translation>Zeit</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="321"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="323"/>
         <source>Samples</source>
         <translation>Abtastwerte</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="332"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="334"/>
         <source>X-Axis Source</source>
         <translation>X-achsen-quelle</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="333"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="335"/>
         <source>Plot every curve against time or against the sample number</source>
         <translation>Jede Kurve gegen Zeit oder gegen die Sample-Nummer plotten</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="348"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="350"/>
         <source>Logarithmic X Axis</source>
         <translation>Logarithmische X-achse</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="349"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="351"/>
         <source>Scale the X axis in decades; available when the X-Axis source is Samples (not Time)</source>
         <translation>X-Achse in Dekaden skalieren; verfügbar, wenn die X-Achsen-Quelle Samples ist (nicht Zeit)</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="361"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="363"/>
         <source>Logarithmic Y Axis</source>
         <translation>Logarithmische Y-achse</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="362"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="364"/>
         <source>Scale the shared Y axis in decades; values at or below zero are clamped</source>
         <translation>Gemeinsame Y-Achse in Dekaden skalieren; Werte bei oder unter null werden begrenzt</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="379"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="381"/>
         <source>URL</source>
         <translation>URL</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="381"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="383"/>
         <source>Web address to load in &amp;m_editor widget</source>
         <translation>Webadresse, die in diesem Widget geladen werden soll</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="400"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="402"/>
         <source>Auto</source>
         <translation>Auto</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="400"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="402"/>
         <source>Horizontal</source>
         <translation>Horizontal</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="400"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="402"/>
         <source>Vertical</source>
         <translation>Vertikal</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="403"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="405"/>
         <source>Bar Style</source>
         <translation>Balkenstil</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="404"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="406"/>
         <source>Bar orientation: automatic, horizontal rows, or vertical columns</source>
         <translation>Balkenausrichtung: automatisch, horizontale Zeilen oder vertikale Spalten</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="446"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="448"/>
         <source>Composite Widget</source>
         <translation>Zusammengesetztes Widget</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="448"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="450"/>
         <source>Select how &amp;m_editor group of datasets should be visualized (optional)</source>
         <translation>Wählen Sie, wie diese Gruppe von Datensätzen visualisiert werden soll (optional)</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="492"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="494"/>
         <source>Device Name</source>
         <translation>Gerätename</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="493"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="495"/>
         <source>Device 1</source>
         <translation>Gerät 1</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="494"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="496"/>
         <source>Human-readable name for &amp;m_editor input device</source>
         <translation>Lesbarer Name für dieses Eingabegerät</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="503"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="505"/>
         <source>Bus Type</source>
         <translation>Bustyp</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="504"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="506"/>
         <source>Select the hardware interface for &amp;m_editor input device</source>
         <translation>Wählen Sie die Hardware-Schnittstelle für dieses Eingabegerät</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="507"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="509"/>
         <source>Serial Port</source>
         <translation>Serielle Schnittstelle</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="507"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="509"/>
         <source>Network</source>
         <translation>Netzwerk</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="507"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="509"/>
         <source>Bluetooth LE</source>
         <translation>Bluetooth LE</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="509"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="511"/>
         <source>Audio Input</source>
         <translation>Audioeingang</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="509"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="511"/>
         <source>Modbus</source>
         <translation>Modbus</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="509"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="511"/>
         <source>CAN Bus</source>
         <translation>CAN Bus</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="509"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="511"/>
         <source>Raw USB</source>
         <translation>Raw USB</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="510"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="512"/>
         <source>HID Device</source>
         <translation>HID-gerät</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="510"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="512"/>
         <source>Process</source>
         <translation>Prozess</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="510"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="512"/>
         <source>MQTT Subscriber</source>
         <translation>MQTT-abonnent</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="510"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="512"/>
         <source>OPC UA</source>
         <translation>OPC UA</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="511"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="513"/>
         <source>Siemens S7</source>
         <translation>Siemens S7</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="511"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="513"/>
         <source>EtherNet/IP</source>
         <translation>Ethernet/IP</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="511"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="513"/>
         <source>IEC 60870-5-104</source>
         <translation>IEC 60870-5-104</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="534"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="536"/>
         <source>Frame Detection</source>
         <translation>Frame-erkennung</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="549"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="551"/>
         <source>Frame Detection Method</source>
         <translation>Frame-erkennungsmethode</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="550"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="552"/>
         <source>Select how incoming data frames are identified</source>
         <translation>Auswahl, wie eingehende Datenframes identifiziert werden</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="560"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="562"/>
         <source>Hexadecimal Delimiters</source>
         <translation>Hexadezimale Trennzeichen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="561"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="563"/>
         <source>Enter frame start/end sequences as hexadecimal values</source>
         <translation>Frame-Start-/Endsequenzen als Hexadezimalwerte eingeben</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="577"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="579"/>
         <source>Frame Start Delimiter</source>
         <translation>Frame-start-trennzeichen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="578"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="580"/>
         <source>e.g. /*</source>
         <translation>z. B. /*</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="579"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="581"/>
         <source>Sequence that marks the beginning of a data frame</source>
         <translation>Sequenz, die den Beginn eines Datenframes markiert</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="591"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="593"/>
         <source>Frame End Delimiter</source>
         <translation>Frame-endebegrenzer</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="592"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="594"/>
         <source>e.g. */</source>
         <translation>z. B. */</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="593"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="595"/>
         <source>Sequence that marks the end of a data frame</source>
         <translation>Sequenz, die das Ende eines Daten-Frames markiert</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="606"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="608"/>
         <source>Payload Processing &amp; Validation</source>
         <translation>Nutzdatenverarbeitung &amp; Validierung</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="617"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="619"/>
         <source>Data Conversion Method</source>
         <translation>Datenkonvertierungsmethode</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="618"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="620"/>
         <source>Select how incoming binary data is decoded before parsing</source>
         <translation>Auswahl, wie eingehende Binärdaten vor dem Parsen dekodiert werden</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="634"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="636"/>
         <source>Checksum Algorithm</source>
         <translation>Prüfsummenalgorithmus</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="635"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="637"/>
         <source>Select the checksum algorithm used to validate frames</source>
         <translation>Auswahl des Prüfsummenalgorithmus zur Validierung von Frames</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="688"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="690"/>
         <source>Connection Settings</source>
         <translation>Verbindungseinstellungen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="748"/>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1164"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="750"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1166"/>
         <source>General Information</source>
         <translation>Allgemeine Informationen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="758"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="760"/>
         <source>Action Title</source>
         <translation>Aktionstitel</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="760"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="762"/>
         <source>Untitled Action</source>
         <translation>Unbenannte Aktion</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="761"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="763"/>
         <source>Name or description of &amp;m_editor action</source>
         <translation>Name oder Beschreibung dieser Aktion</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="770"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="772"/>
         <source>Action Icon</source>
         <translation>Aktionssymbol</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="771"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="773"/>
         <source>Default Icon</source>
         <translation>Standardsymbol</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="772"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="774"/>
         <source>Icon displayed for &amp;m_editor action in the dashboard</source>
         <translation>Symbol, das für diese Aktion im Dashboard angezeigt wird</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="800"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="802"/>
         <source>Target Device</source>
         <translation>Zielgerät</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="801"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="803"/>
         <source>Select which connected device &amp;m_editor action sends data to</source>
         <translation>Wählen Sie aus, an welches verbundene Gerät diese Aktion Daten sendet</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="814"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="816"/>
         <source>Data Payload</source>
         <translation>Datennutzlast</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="826"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="828"/>
         <source>Send as Binary</source>
         <translation>Als Binär senden</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="827"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="829"/>
         <source>Send raw binary data when &amp;m_editor action is triggered</source>
         <translation>Rohe Binärdaten senden, wenn diese Aktion ausgelöst wird</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="838"/>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="850"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="840"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="852"/>
         <source>Command</source>
         <translation>Befehl</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="839"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="841"/>
         <source>Transmit Data (Hex)</source>
         <translation>Daten Übertragen (Hex)</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="840"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="842"/>
         <source>Hexadecimal payload to send when the action is triggered</source>
         <translation>Hexadezimale Nutzlast, die beim Auslösen der Aktion gesendet wird</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="851"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="853"/>
         <source>Transmit Data</source>
         <translation>Daten Übertragen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="852"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="854"/>
         <source>Text payload to send when the action is triggered</source>
         <translation>Textnutzlast, die beim Auslösen der Aktion gesendet wird</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="863"/>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1289"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="865"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1291"/>
         <source>Text Encoding</source>
         <translation>Textkodierung</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="864"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="866"/>
         <source>Character encoding used to serialize the text payload</source>
         <translation>Zeichenkodierung zur Serialisierung der Textnutzlast</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="889"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="891"/>
         <source>End-of-Line Sequence</source>
         <translation>End-of-line-sequenz</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="890"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="892"/>
         <source>EOL characters to append to the message (e.g. \n, \r\n)</source>
         <translation>EOL-Zeichen, die an die Nachricht angehängt werden (z. B. </translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="903"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="905"/>
         <source>Execution Behavior</source>
         <translation>Ausführungsverhalten</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="915"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="917"/>
         <source>Auto-Execute on Connect</source>
         <translation>Automatisch bei Verbindung ausführen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="916"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="918"/>
         <source>Automatically trigger &amp;m_editor action when the device connects</source>
         <translation>Diese Aktion automatisch auslösen, wenn das Gerät verbunden wird</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="922"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="924"/>
         <source>Timer Behavior</source>
         <translation>Timer-verhalten</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="931"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="933"/>
         <source>Timer Mode</source>
         <translation>Timer-modus</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="934"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="936"/>
         <source>Choose when and how &amp;m_editor action should repeat automatically</source>
         <translation>Wählen, wann und wie diese Aktion automatisch wiederholt werden soll</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="941"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="943"/>
         <source>Interval (ms)</source>
         <translation>Intervall (ms)</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="945"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="947"/>
         <source>Timer Interval (ms)</source>
         <translation>Timer-Intervall (ms)</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="946"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="948"/>
         <source>Milliseconds between each repeated trigger of &amp;m_editor action</source>
         <translation>Millisekunden zwischen jeder wiederholten Auslösung dieser Aktion</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="953"/>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="957"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="955"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="959"/>
         <source>Repeat Count</source>
         <translation>Wiederholungsanzahl</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="958"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="960"/>
         <source>Number of times to send the command on each trigger</source>
         <translation>Anzahl der Sendungen des Befehls bei jeder Auslösung</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1052"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1054"/>
         <source>On</source>
         <translation>Ein</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1175"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1177"/>
         <source>Label</source>
         <translation>Beschriftung</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1176"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1178"/>
         <source>Display label</source>
         <translation>Beschriftung anzeigen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1186"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1188"/>
         <source>Button Icon</source>
         <translation>Schaltflächensymbol</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1195"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1197"/>
         <source>Colorize Icon</source>
         <translation>Symbol Einfärben</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1196"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1198"/>
         <source>Tint the icon with the button color</source>
         <translation>Symbol mit der Schaltflächenfarbe einfärben</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1205"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1207"/>
         <source>Automatic</source>
         <translation>Automatisch</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1206"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1208"/>
         <source>Button Color</source>
         <translation>Schaltflächenfarbe</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1207"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1209"/>
         <source>Custom fill color for this button; automatic uses the group accent</source>
         <translation>Benutzerdefinierte Füllfarbe für diese Schaltfläche; automatisch verwendet die Gruppenakzentfarbe</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1218"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1220"/>
         <source>Button Size</source>
         <translation>Schaltflächengröße</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1219"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1221"/>
         <source>Scales the button, its icon and its caption</source>
         <translation>Skaliert die Schaltfläche, ihr Symbol und ihre Beschriftung</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1228"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1230"/>
         <source>Toggle Button</source>
         <translation>Umschalterschaltfläche</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1229"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1231"/>
         <source>Stay pressed and transmit 1 (on) / 0 (off) instead of a single click</source>
         <translation>Gedrückt bleiben und 1 (ein) / 0 (aus) übertragen statt eines einzelnen Klicks</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1251"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1253"/>
         <source>On Label</source>
         <translation>Ein-beschriftung</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1252"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1254"/>
         <source>Caption shown while latched (defaults to the label)</source>
         <translation>Beschriftung im verriegelten Zustand (Standard ist die Beschriftung)</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1261"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1263"/>
         <source>Off Label</source>
         <translation>Aus-beschriftung</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1262"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1264"/>
         <source>Caption shown while released (defaults to the label)</source>
         <translation>Beschriftung im gelösten Zustand (Standard ist die Beschriftung)</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1278"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1280"/>
         <source>Initial Value</source>
         <translation>Anfangswert</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1290"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1292"/>
         <source>Character encoding used when transmit() returns a string value</source>
         <translation>Zeichenkodierung, die verwendet wird, wenn transmit() einen String-Wert zurückgibt</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1309"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1311"/>
         <source>Value Range</source>
         <translation>Wertebereich</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1320"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1322"/>
         <source>Minimum Value</source>
         <translation>Minimalwert</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1329"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1331"/>
         <source>Maximum Value</source>
         <translation>Maximalwert</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1338"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1340"/>
         <source>Step Size</source>
         <translation>Schrittgröße</translation>
     </message>
@@ -14553,7 +14803,7 @@ Fügen Sie oben Controller-Tags hinzu, um sie abzufragen.</translation>
 <context>
     <name>IO::ConnectionManager</name>
     <message>
-        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="241"/>
+        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="242"/>
         <source>UART/COM</source>
         <translation>UART/COM</translation>
     </message>
@@ -14562,92 +14812,92 @@ Fügen Sie oben Controller-Tags hinzu, um sie abzufragen.</translation>
         <translation type="vanished">Netzwerk-socket</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="241"/>
+        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="242"/>
         <source>Network</source>
         <translation>Netzwerk</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="241"/>
+        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="242"/>
         <source>Bluetooth LE</source>
         <translation>Bluetooth LE</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="243"/>
+        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="244"/>
         <source>Audio</source>
         <translation>Audio</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="243"/>
+        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="244"/>
         <source>Modbus</source>
         <translation>Modbus</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="243"/>
+        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="244"/>
         <source>CAN Bus</source>
         <translation>CAN-bus</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="243"/>
+        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="244"/>
         <source>USB Device</source>
         <translation>USB-gerät</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="243"/>
+        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="244"/>
         <source>HID Device</source>
         <translation>HID-gerät</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="244"/>
+        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="245"/>
         <source>Process</source>
         <translation>Prozess</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="244"/>
+        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="245"/>
         <source>MQTT Subscriber</source>
         <translation>MQTT-abonnent</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="244"/>
+        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="245"/>
         <source>OPC UA</source>
         <translation>OPC UA</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="244"/>
+        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="245"/>
         <source>Siemens S7</source>
         <translation>Siemens S7</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="245"/>
+        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="246"/>
         <source>EtherNet/IP</source>
         <translation>Ethernet/IP</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="245"/>
+        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="246"/>
         <source>IEC 60870-5-104</source>
         <translation>IEC 60870-5-104</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="552"/>
+        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="562"/>
         <source>Your trial period has ended.</source>
         <translation>Der Testzeitraum ist abgelaufen.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="553"/>
+        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="563"/>
         <source>To continue using Serial Studio, please activate your license.</source>
         <translation>Zur weiteren Nutzung von Serial Studio die Lizenz aktivieren.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="634"/>
+        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="646"/>
         <source>connection attempt failed</source>
         <translation>Verbindungsversuch fehlgeschlagen</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="1099"/>
+        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="1112"/>
         <source>This connection type requires an active license or trial.</source>
         <translation>Dieser Verbindungstyp erfordert eine aktive Lizenz oder Testversion.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="1100"/>
+        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="1113"/>
         <source>Activate Serial Studio Pro or start a trial to use this device type.</source>
         <translation>Serial Studio Pro aktivieren oder Testversion starten, um diesen Gerätetyp zu verwenden.</translation>
     </message>
@@ -20487,6 +20737,89 @@ Bitte geben Sie die erforderlichen Anmeldedaten ein.</translation>
     </message>
 </context>
 <context>
+    <name>MasterAnnunciator</name>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/MasterAnnunciator.qml" line="123"/>
+        <source>Alarm sounds are muted. Click to open the alarm panel.</source>
+        <translation>Alarmtöne sind stummgeschaltet. Klicken, um das Alarmpanel zu öffnen.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/MasterAnnunciator.qml" line="125"/>
+        <source>%1 unacknowledged alarm(s). Click for the alarm panel, right-click to acknowledge.</source>
+        <translation>%1 unbestätigte Alarme. Klicken für das Alarmpanel, Rechtsklick zum Bestätigen.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/MasterAnnunciator.qml" line="127"/>
+        <source>No active alarms. Click for the alarm panel.</source>
+        <translation>Keine aktiven Alarme. Klicken für das Alarmpanel.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/MasterAnnunciator.qml" line="194"/>
+        <source>Alarms</source>
+        <translation>Alarme</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/MasterAnnunciator.qml" line="203"/>
+        <source>Acknowledge all</source>
+        <translation>Alle bestätigen</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/MasterAnnunciator.qml" line="212"/>
+        <source>Silence</source>
+        <translation>Stummschalten</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/MasterAnnunciator.qml" line="221"/>
+        <source>Reset</source>
+        <translation>Zurücksetzen</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/MasterAnnunciator.qml" line="232"/>
+        <source>Clear every alarm from the list</source>
+        <translation>Jeden Alarm aus der Liste löschen</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/MasterAnnunciator.qml" line="240"/>
+        <source>Test sounds</source>
+        <translation>Töne testen</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/MasterAnnunciator.qml" line="249"/>
+        <source>Unmute sounds</source>
+        <translation>Töne aktivieren</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/MasterAnnunciator.qml" line="249"/>
+        <source>Mute sounds</source>
+        <translation>Töne stummschalten</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/MasterAnnunciator.qml" line="384"/>
+        <source>Unacknowledged</source>
+        <translation>Unbestätigt</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/MasterAnnunciator.qml" line="385"/>
+        <source>Acknowledged</source>
+        <translation>Bestätigt</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/MasterAnnunciator.qml" line="386"/>
+        <source>Returned to normal, awaiting reset</source>
+        <translation>Auf Normal zurückgekehrt, wartet auf Zurücksetzen</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/MasterAnnunciator.qml" line="387"/>
+        <source>click to show the widget</source>
+        <translation>klicken, um das Widget anzuzeigen</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/MasterAnnunciator.qml" line="398"/>
+        <source>No active alarms</source>
+        <translation>Keine aktiven Alarme</translation>
+    </message>
+</context>
+<context>
     <name>Mdf4Player</name>
     <message>
         <location filename="../../qml/Dialogs/Mdf4Player.qml" line="14"/>
@@ -21148,8 +21481,8 @@ Download-Seite öffnen?</translation>
         <translation>Info.plist konnte nicht geschrieben werden: %1</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/Misc/ShortcutGenerator_Linux.cpp" line="140"/>
         <location filename="../../../core/Ui/Misc/ShortcutGenerator_macOS.cpp" line="271"/>
+        <location filename="../../../core/Ui/Misc/ShortcutGenerator_Linux.cpp" line="140"/>
         <source>Windows shortcut writer is not available on this platform.</source>
         <translation>Windows-Verknüpfungsschreiber ist auf dieser Plattform nicht verfügbar.</translation>
     </message>
@@ -21180,8 +21513,8 @@ Download-Seite öffnen?</translation>
         <translation>Speichern der .lnk-Datei fehlgeschlagen (HRESULT 0x%1).</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/Misc/ShortcutGenerator_Linux.cpp" line="154"/>
         <location filename="../../../core/Ui/Misc/ShortcutGenerator_Windows.cpp" line="185"/>
+        <location filename="../../../core/Ui/Misc/ShortcutGenerator_Linux.cpp" line="154"/>
         <source>macOS shortcut writer is not available on this platform.</source>
         <translation>MacOS-Verknüpfungsschreiber ist auf dieser Plattform nicht verfügbar.</translation>
     </message>
@@ -21233,92 +21566,92 @@ Download-Seite öffnen?</translation>
         <translation type="vanished">Soll %1 automatisch nach Updates suchen? Updates können jederzeit manuell über den „Info"-Dialog gesucht werden</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/Misc/Utilities.cpp" line="268"/>
+        <location filename="../../../core/Ui/Misc/Utilities.cpp" line="274"/>
         <source>Ok</source>
         <translation>OK</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/Misc/Utilities.cpp" line="270"/>
+        <location filename="../../../core/Ui/Misc/Utilities.cpp" line="276"/>
         <source>Save</source>
         <translation>Speichern</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/Misc/Utilities.cpp" line="272"/>
+        <location filename="../../../core/Ui/Misc/Utilities.cpp" line="278"/>
         <source>Save all</source>
         <translation>Alle speichern</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/Misc/Utilities.cpp" line="274"/>
+        <location filename="../../../core/Ui/Misc/Utilities.cpp" line="280"/>
         <source>Open</source>
         <translation>Öffnen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/Misc/Utilities.cpp" line="276"/>
+        <location filename="../../../core/Ui/Misc/Utilities.cpp" line="282"/>
         <source>Yes</source>
         <translation>Ja</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/Misc/Utilities.cpp" line="278"/>
+        <location filename="../../../core/Ui/Misc/Utilities.cpp" line="284"/>
         <source>Yes to all</source>
         <translation>Ja, alle</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/Misc/Utilities.cpp" line="280"/>
+        <location filename="../../../core/Ui/Misc/Utilities.cpp" line="286"/>
         <source>No</source>
         <translation>Nein</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/Misc/Utilities.cpp" line="282"/>
+        <location filename="../../../core/Ui/Misc/Utilities.cpp" line="288"/>
         <source>No to all</source>
         <translation>Nein zu allen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/Misc/Utilities.cpp" line="284"/>
+        <location filename="../../../core/Ui/Misc/Utilities.cpp" line="290"/>
         <source>Abort</source>
         <translation>Abbrechen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/Misc/Utilities.cpp" line="286"/>
+        <location filename="../../../core/Ui/Misc/Utilities.cpp" line="292"/>
         <source>Retry</source>
         <translation>Wiederholen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/Misc/Utilities.cpp" line="288"/>
+        <location filename="../../../core/Ui/Misc/Utilities.cpp" line="294"/>
         <source>Ignore</source>
         <translation>Ignorieren</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/Misc/Utilities.cpp" line="290"/>
+        <location filename="../../../core/Ui/Misc/Utilities.cpp" line="296"/>
         <source>Close</source>
         <translation>Schließen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/Misc/Utilities.cpp" line="292"/>
+        <location filename="../../../core/Ui/Misc/Utilities.cpp" line="298"/>
         <source>Cancel</source>
         <translation>Abbrechen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/Misc/Utilities.cpp" line="294"/>
+        <location filename="../../../core/Ui/Misc/Utilities.cpp" line="300"/>
         <source>Discard</source>
         <translation>Verwerfen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/Misc/Utilities.cpp" line="296"/>
+        <location filename="../../../core/Ui/Misc/Utilities.cpp" line="302"/>
         <source>Help</source>
         <translation>Hilfe</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/Misc/Utilities.cpp" line="298"/>
+        <location filename="../../../core/Ui/Misc/Utilities.cpp" line="304"/>
         <source>Apply</source>
         <translation>Anwenden</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/Misc/Utilities.cpp" line="300"/>
+        <location filename="../../../core/Ui/Misc/Utilities.cpp" line="306"/>
         <source>Reset</source>
         <translation>Zurücksetzen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/Misc/Utilities.cpp" line="302"/>
+        <location filename="../../../core/Ui/Misc/Utilities.cpp" line="308"/>
         <source>Restore defaults</source>
         <translation>Standardwerte Wiederherstellen</translation>
     </message>
@@ -21718,7 +22051,7 @@ Fügen Sie oben Gruppen hinzu, um mehrere Registertypen abzufragen.</translation
         <translation type="vanished">Interpolieren</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/MultiPlot.qml" line="372"/>
+        <location filename="../../qml/Widgets/Dashboard/MultiPlot.qml" line="373"/>
         <source>Interpolation: %1</source>
         <translation>Interpolation: %1</translation>
     </message>
@@ -21727,47 +22060,47 @@ Fügen Sie oben Gruppen hinzu, um mehrere Registertypen abzufragen.</translation
         <translation type="vanished">Legenden Anzeigen</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/MultiPlot.qml" line="400"/>
+        <location filename="../../qml/Widgets/Dashboard/MultiPlot.qml" line="401"/>
         <source>Show X Axis Label</source>
         <translation>X-achsenbeschriftung Anzeigen</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/MultiPlot.qml" line="411"/>
+        <location filename="../../qml/Widgets/Dashboard/MultiPlot.qml" line="412"/>
         <source>Show Y Axis Label</source>
         <translation>Y-achsenbeschriftung Anzeigen</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/MultiPlot.qml" line="423"/>
+        <location filename="../../qml/Widgets/Dashboard/MultiPlot.qml" line="424"/>
         <source>Show Crosshair</source>
         <translation>Fadenkreuz Anzeigen</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/MultiPlot.qml" line="493"/>
+        <location filename="../../qml/Widgets/Dashboard/MultiPlot.qml" line="494"/>
         <source>Pause</source>
         <translation>Pausieren</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/MultiPlot.qml" line="493"/>
+        <location filename="../../qml/Widgets/Dashboard/MultiPlot.qml" line="494"/>
         <source>Resume</source>
         <translation>Fortsetzen</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/MultiPlot.qml" line="438"/>
+        <location filename="../../qml/Widgets/Dashboard/MultiPlot.qml" line="439"/>
         <source>Sweep / Trigger Mode</source>
         <translation>Sweep- / Trigger-modus</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/MultiPlot.qml" line="450"/>
+        <location filename="../../qml/Widgets/Dashboard/MultiPlot.qml" line="451"/>
         <source>Trigger Settings</source>
         <translation>Trigger-einstellungen</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/MultiPlot.qml" line="474"/>
+        <location filename="../../qml/Widgets/Dashboard/MultiPlot.qml" line="475"/>
         <source>Reset View</source>
         <translation>Ansicht Zurücksetzen</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/MultiPlot.qml" line="480"/>
+        <location filename="../../qml/Widgets/Dashboard/MultiPlot.qml" line="481"/>
         <source>Axis Range Settings</source>
         <translation>Achsenbereich-einstellungen</translation>
     </message>
@@ -21917,38 +22250,38 @@ Fügen Sie oben Gruppen hinzu, um mehrere Registertypen abzufragen.</translation
 <context>
     <name>NativeTemplates</name>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryHex.cpp" line="127"/>
         <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryRaw.cpp" line="116"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryHex.cpp" line="127"/>
         <source>Bytes per value</source>
         <translation>Bytes pro Wert</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryHex.cpp" line="128"/>
         <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryRaw.cpp" line="117"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryHex.cpp" line="128"/>
         <source>Number of bytes combined into each channel value.</source>
         <translation>Anzahl der Bytes, die zu jedem Kanalwert kombiniert werden.</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryHex.cpp" line="136"/>
         <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryRaw.cpp" line="125"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryHex.cpp" line="136"/>
         <source>Endianness</source>
         <translation>Byte-reihenfolge</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryHex.cpp" line="137"/>
         <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryRaw.cpp" line="126"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryHex.cpp" line="137"/>
         <source>Byte order used when combining multi-byte values.</source>
         <translation>Byte-Reihenfolge beim Kombinieren von Mehrbytwerten.</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryHex.cpp" line="145"/>
         <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryRaw.cpp" line="134"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryHex.cpp" line="145"/>
         <source>Signed values</source>
         <translation>Vorzeichenbehaftete Werte</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryHex.cpp" line="146"/>
         <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryRaw.cpp" line="135"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryHex.cpp" line="146"/>
         <source>Interprets each value as two's-complement signed.</source>
         <translation>Interpretiert jeden Wert als vorzeichenbehaftetes Zweierkomplement.</translation>
     </message>
@@ -21963,9 +22296,9 @@ Fügen Sie oben Gruppen hinzu, um mehrere Registertypen abzufragen.</translation
         <translation>Kommagetrennte Tag:Index-Einträge, z. B. 1:0,2:1,3:2. Tags können dezimal oder mit 0x-Präfix hexadezimal sein.</translation>
     </message>
     <message>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/TextNmea0183.cpp" line="219"/>
         <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinarySirf.cpp" line="216"/>
         <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryUbx.cpp" line="226"/>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/TextNmea0183.cpp" line="219"/>
         <source>Validate checksum</source>
         <translation>Prüfsumme validieren</translation>
     </message>
@@ -24390,7 +24723,7 @@ Aktualisieren klicken, um die Liste zu aktualisieren.</translation>
     <message>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectLoader.cpp" line="794"/>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectLoader.cpp" line="980"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectPersistence.cpp" line="368"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectPersistence.cpp" line="371"/>
         <source>Untitled Project</source>
         <translation>Unbenanntes Projekt</translation>
     </message>
@@ -24401,7 +24734,7 @@ Aktualisieren klicken, um die Liste zu aktualisieren.</translation>
     </message>
     <message>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectLoader.cpp" line="803"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectPersistence.cpp" line="347"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectPersistence.cpp" line="350"/>
         <source>Serial Studio Project Files (*.ssproj)</source>
         <translation>Serial Studio-Projektdateien (*.ssproj)</translation>
     </message>
@@ -24456,48 +24789,48 @@ Aktualisieren klicken, um die Liste zu aktualisieren.</translation>
         <translation>%1 benutzerdefinierte Arbeitsbereich-ID(s) überlappten den neuen reservierten automatischen Bereich und wurden in den Benutzerbereich verschoben. Projekt speichern, um die Neuzuordnung dauerhaft zu machen.</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectPersistence.cpp" line="305"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectPersistence.cpp" line="308"/>
         <source>Do you want to save your changes?</source>
         <translation>Änderungen speichern?</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectPersistence.cpp" line="306"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectPersistence.cpp" line="309"/>
         <source>You have unsaved modifications in this project!</source>
         <translation>Nicht gespeicherte Änderungen in diesem Projekt vorhanden!</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectPersistence.cpp" line="345"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectPersistence.cpp" line="348"/>
         <source>Save Serial Studio Project</source>
         <translation>Serial Studio-projekt Speichern</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectPersistence.cpp" line="438"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectPersistence.cpp" line="441"/>
         <source>File save error</source>
         <translation>Fehler beim Speichern der Datei</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectPersistence.cpp" line="670"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectPersistence.cpp" line="673"/>
         <source>Project file removed from disk</source>
         <translation>Projektdatei von Datenträger entfernt</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectPersistence.cpp" line="671"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectPersistence.cpp" line="674"/>
         <source>%1 was deleted or renamed by another program. Save the project to recreate it.</source>
         <translation>%1 wurde von einem anderen Programm gelöscht oder umbenannt. Projekt speichern, um es neu zu erstellen.</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectPersistence.cpp" line="704"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectPersistence.cpp" line="726"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectPersistence.cpp" line="707"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectPersistence.cpp" line="729"/>
         <source>Project file changed on disk</source>
         <translation>Projektdatei auf Datenträger geändert</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectPersistence.cpp" line="705"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectPersistence.cpp" line="708"/>
         <source>%1 was modified by another program. The in-memory project was kept; reopen the file to load the external changes.</source>
         <translation>%1 wurde von einem anderen Programm geändert. Das Projekt im Speicher wurde beibehalten; Datei erneut öffnen, um die externen Änderungen zu laden.</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectPersistence.cpp" line="723"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectPersistence.cpp" line="726"/>
         <source>The project file was modified by another program.
 
 Reload it and discard your unsaved changes?</source>
@@ -24506,7 +24839,7 @@ Reload it and discard your unsaved changes?</source>
 Neu laden und nicht gespeicherte Änderungen verwerfen?</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectPersistence.cpp" line="725"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectPersistence.cpp" line="728"/>
         <source>The project file was modified by another program.
 
 Reload it?</source>
@@ -24515,12 +24848,12 @@ Reload it?</source>
 Neu laden?</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectPersistence.cpp" line="765"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectPersistence.cpp" line="768"/>
         <source>Project file could not be reloaded</source>
         <translation>Projektdatei konnte nicht neu geladen werden</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectPersistence.cpp" line="766"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectPersistence.cpp" line="769"/>
         <source>%1 could not be read back: it is unreadable or no longer valid JSON. Your in-memory project was kept; save it to overwrite the file on disk.</source>
         <translation>%1 konnte nicht zurückgelesen werden: Die Datei ist nicht lesbar oder kein gültiges JSON mehr. Ihr Projekt im Speicher wurde beibehalten; speichern Sie es, um die Datei auf der Festplatte zu überschreiben.</translation>
     </message>
@@ -24586,10 +24919,10 @@ Neu laden?</translation>
         <translation>Ausgabe-Widget „%1" löschen?</translation>
     </message>
     <message>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectOutputWidgets.cpp" line="239"/>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="313"/>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="355"/>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="390"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectOutputWidgets.cpp" line="239"/>
         <source>This action cannot be undone. Do you wish to proceed?</source>
         <translation>Diese Aktion kann nicht rückgängig gemacht werden. Möchten Sie fortfahren?</translation>
     </message>
@@ -24914,9 +25247,18 @@ Neu laden?</translation>
         <translation>Neues Arbeitsbereichsprofil</translation>
     </message>
     <message>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaceProfiles.cpp" line="373"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaceProfiles.cpp" line="395"/>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="1309"/>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="1338"/>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="1364"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="382"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="410"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="433"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="456"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectSources.cpp" line="280"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaces.cpp" line="763"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaces.cpp" line="789"/>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="498"/>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="520"/>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="547"/>
@@ -24925,15 +25267,6 @@ Neu laden?</translation>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="954"/>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="976"/>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="1002"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectSources.cpp" line="280"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="382"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="410"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="433"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="456"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaceProfiles.cpp" line="373"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaceProfiles.cpp" line="395"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaces.cpp" line="763"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaces.cpp" line="789"/>
         <source>Name:</source>
         <translation>Name:</translation>
     </message>
@@ -24978,9 +25311,9 @@ Neu laden?</translation>
         <translation>Tabelle Hinzufügen</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="978"/>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="123"/>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="384"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="978"/>
         <source>Shared Table</source>
         <translation>Gemeinsame Tabelle</translation>
     </message>
@@ -25018,8 +25351,8 @@ Neu laden?</translation>
         <translation>Variable Bearbeiten</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="975"/>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="381"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="975"/>
         <source>New Shared Table</source>
         <translation>Neue Gemeinsame Tabelle</translation>
     </message>
@@ -25161,15 +25494,15 @@ Neu laden?</translation>
         <translation>Stream-lane Ändern</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="522"/>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaces.cpp" line="384"/>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaces.cpp" line="765"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="522"/>
         <source>Workspace</source>
         <translation>Arbeitsbereich</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="519"/>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaces.cpp" line="762"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="519"/>
         <source>New Workspace</source>
         <translation>Neuer Arbeitsbereich</translation>
     </message>
@@ -25804,47 +26137,118 @@ Neu laden?</translation>
         <translation>Lua-Skripte mit dem JIT-Compiler für maximalen Durchsatz ausführen. Deaktiviert den Watchdog für außer Kontrolle geratene Skripte; standardmäßig deaktiviert.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ProjectView.qml" line="329"/>
+        <location filename="../../qml/ProjectEditor/Views/ProjectView.qml" line="292"/>
+        <source>Alarm Sequence:</source>
+        <translation>Alarmsequenz:</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/ProjectView.qml" line="303"/>
+        <source>App preference</source>
+        <translation>App-Einstellung</translation>
+    </message>
+    <message>
+        <source>A - Automatic reset</source>
+        <translation type="vanished">A - Automatisches Zurücksetzen</translation>
+    </message>
+    <message>
+        <source>M - Manual reset</source>
+        <translation type="vanished">M - Manuelles Zurücksetzen</translation>
+    </message>
+    <message>
+        <source>R - Ringback</source>
+        <translation type="vanished">R - Rückmeldung</translation>
+    </message>
+    <message>
+        <source>ISA-18.1 annunciator sequence for this project: automatic reset, manual reset, or ringback on return to normal.</source>
+        <translation type="vanished">ISA-18.1-Annunciator-Sequenz für dieses Projekt: automatisches Zurücksetzen, manuelles Zurücksetzen oder Rückmeldung bei Rückkehr zum Normalzustand.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/ProjectView.qml" line="304"/>
+        <source>A-4 - Automatic reset, no lock-in</source>
+        <translation>A-4 - Automatisches Zurücksetzen, keine Verriegelung</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/ProjectView.qml" line="305"/>
+        <source>A - Automatic reset, lock-in until acknowledged</source>
+        <translation>A - Automatisches Zurücksetzen, Verriegelung bis zur Quittierung</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/ProjectView.qml" line="306"/>
+        <source>M-4 - Manual reset, no lock-in</source>
+        <translation>M-4 - Manuelles Zurücksetzen, keine Verriegelung</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/ProjectView.qml" line="307"/>
+        <source>M - Manual reset, lock-in until acknowledged</source>
+        <translation>M - Manuelles Zurücksetzen, Verriegelung bis zur Quittierung</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/ProjectView.qml" line="308"/>
+        <source>R-4 - Ringback, no lock-in</source>
+        <translation>R-4 - Rückruf, keine Verriegelung</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/ProjectView.qml" line="309"/>
+        <source>R - Ringback, lock-in until acknowledged</source>
+        <translation>R - Rückruf, Verriegelung bis zur Quittierung</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/ProjectView.qml" line="315"/>
+        <source>ISA-18.1 annunciator sequence for this project: automatic reset, manual reset, or ringback on return to normal; "-4" (option 4) stops a momentary alarm as soon as its condition clears instead of locking it in until acknowledged.</source>
+        <translation>ISA-18.1 Meldersequenz für dieses Projekt: automatisches Zurücksetzen, manuelles Zurücksetzen oder Rückruf bei Rückkehr zum Normalzustand; „-4" (Option 4) stoppt einen momentanen Alarm sobald dessen Bedingung aufgehoben wird, anstatt ihn bis zur Quittierung zu verriegeln.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/ProjectView.qml" line="322"/>
+        <source>Channel Sounds:</source>
+        <translation>Kanaltöne:</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/ProjectView.qml" line="328"/>
+        <source>Edit...</source>
+        <translation>Bearbeiten…</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/ProjectView.qml" line="401"/>
         <source>Source</source>
         <translation>Quelle</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ProjectView.qml" line="330"/>
+        <location filename="../../qml/ProjectEditor/Views/ProjectView.qml" line="402"/>
         <source>Sources</source>
         <translation>Quellen</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ProjectView.qml" line="335"/>
+        <location filename="../../qml/ProjectEditor/Views/ProjectView.qml" line="407"/>
         <source>Group</source>
         <translation>Gruppe</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ProjectView.qml" line="336"/>
+        <location filename="../../qml/ProjectEditor/Views/ProjectView.qml" line="408"/>
         <source>Groups</source>
         <translation>Gruppen</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ProjectView.qml" line="341"/>
+        <location filename="../../qml/ProjectEditor/Views/ProjectView.qml" line="413"/>
         <source>Dataset</source>
         <translation>Datensatz</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ProjectView.qml" line="342"/>
+        <location filename="../../qml/ProjectEditor/Views/ProjectView.qml" line="414"/>
         <source>Datasets</source>
         <translation>Datensätze</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ProjectView.qml" line="347"/>
+        <location filename="../../qml/ProjectEditor/Views/ProjectView.qml" line="419"/>
         <source>Action</source>
         <translation>Aktion</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ProjectView.qml" line="348"/>
+        <location filename="../../qml/ProjectEditor/Views/ProjectView.qml" line="420"/>
         <source>Actions</source>
         <translation>Aktionen</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ProjectView.qml" line="436"/>
+        <location filename="../../qml/ProjectEditor/Views/ProjectView.qml" line="508"/>
         <source>Double-click a block to edit it. Right-click anywhere to add a group, dataset, action, data table, or device.</source>
         <translation>Doppelklicken Sie auf einen Block, um ihn zu bearbeiten. Rechtsklicken Sie an eine beliebige Stelle, um eine Gruppe, einen Datensatz, eine Aktion, eine Datentabelle oder ein Gerät hinzuzufügen.</translation>
     </message>
@@ -26064,8 +26468,8 @@ This script may use Lua 5.3 bitwise syntax, which this runtime does not support.
 </translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="230"/>
         <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="489"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="230"/>
         <source>Frame Parser Disabled</source>
         <translation>Frame-parser Deaktiviert</translation>
     </message>
@@ -26131,8 +26535,8 @@ Serial Studio kann die nicht unterstützten Operatoren als bit.*-Aufrufe umschre
 %1</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="560"/>
         <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="680"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="560"/>
         <source>Missing Parse Function</source>
         <translation>Fehlende Parse-funktion</translation>
     </message>
@@ -26148,8 +26552,8 @@ Bitte stellen Sie sicher, dass Ihr Code Folgendes enthält:
 function parse(frame) ... end</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="612"/>
         <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="743"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="612"/>
         <source>Parse Function Runtime Error</source>
         <translation>Laufzeitfehler der Parse-funktion</translation>
     </message>
@@ -26315,22 +26719,22 @@ function parse(%1) { ... }
 Der Trennzeichen-Parameter wird nicht mehr benötigt.</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ModuleManager.cpp" line="259"/>
+        <location filename="../../src/Misc/ModuleManager.cpp" line="274"/>
         <source>Critical</source>
         <translation>Kritisch</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ModuleManager.cpp" line="259"/>
+        <location filename="../../src/Misc/ModuleManager.cpp" line="274"/>
         <source>Warning</source>
         <translation>Warnung</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/CLI.cpp" line="868"/>
+        <location filename="../../src/Misc/CLI.cpp" line="869"/>
         <source>Project file not found</source>
         <translation>Projektdatei nicht gefunden</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/CLI.cpp" line="869"/>
+        <location filename="../../src/Misc/CLI.cpp" line="870"/>
         <source>The project file referenced by this shortcut could not be found:
 
 %1</source>
@@ -26339,17 +26743,17 @@ Der Trennzeichen-Parameter wird nicht mehr benötigt.</translation>
 %1</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/CLI.cpp" line="872"/>
+        <location filename="../../src/Misc/CLI.cpp" line="873"/>
         <source>Would you like to delete this shortcut?</source>
         <translation>Soll diese Verknüpfung gelöscht werden?</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/CLI.cpp" line="876"/>
+        <location filename="../../src/Misc/CLI.cpp" line="877"/>
         <source>Delete Shortcut</source>
         <translation>Verknüpfung Löschen</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/CLI.cpp" line="878"/>
+        <location filename="../../src/Misc/CLI.cpp" line="879"/>
         <source>Quit</source>
         <translation>Beenden</translation>
     </message>
@@ -26796,6 +27200,103 @@ Der Trennzeichen-Parameter wird nicht mehr benötigt.</translation>
         <location filename="../../../core/Ui/AI/Providers/OpenAICompatibleProvider.cpp" line="247"/>
         <source>No %1 API key set. Open Manage Keys to add one.</source>
         <translation>Kein %1-API-Schlüssel festgelegt. Öffnen Sie „Schlüssel verwalten", um einen hinzuzufügen.</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/UI/Alarms/SoundTheme.cpp" line="509"/>
+        <source>Too many distinct override sounds in this project</source>
+        <translation>Zu viele unterschiedliche Override-Töne in diesem Projekt</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Devices/IO/Audio/WavDecoder.cpp" line="84"/>
+        <source>Not a RIFF/WAVE file</source>
+        <translation>Keine RIFF/WAVE-Datei</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Devices/IO/Audio/WavDecoder.cpp" line="98"/>
+        <source>Truncated WAV chunk '%1'</source>
+        <translation>Abgeschnittener WAV-Chunk '%1'</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Devices/IO/Audio/WavDecoder.cpp" line="113"/>
+        <source>WAV file has no data chunk</source>
+        <translation>WAV-Datei hat keinen Data-Chunk</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Devices/IO/Audio/WavDecoder.cpp" line="127"/>
+        <source>No file selected</source>
+        <translation>Keine Datei ausgewählt</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Devices/IO/Audio/WavDecoder.cpp" line="133"/>
+        <source>File not found: %1</source>
+        <translation>Datei nicht gefunden: %1</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Devices/IO/Audio/WavDecoder.cpp" line="138"/>
+        <source>Not a regular file: %1</source>
+        <translation>Keine reguläre Datei: %1</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Devices/IO/Audio/WavDecoder.cpp" line="144"/>
+        <location filename="../../../core/Devices/IO/Audio/WavDecoder.cpp" line="155"/>
+        <source>File is larger than a %1 s sound can be</source>
+        <translation>Datei ist größer als ein %1 s langer Ton sein kann</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Devices/IO/Audio/WavDecoder.cpp" line="149"/>
+        <source>Cannot open %1</source>
+        <translation>%1 kann nicht geöffnet werden</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Devices/IO/Audio/WavDecoder.cpp" line="168"/>
+        <source>WAV format chunk is too short</source>
+        <translation>WAV-Format-Chunk ist zu kurz</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Devices/IO/Audio/WavDecoder.cpp" line="180"/>
+        <source>WAV extensible format chunk is too short</source>
+        <translation>WAV-Extensible-Format-Chunk ist zu kurz</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Devices/IO/Audio/WavDecoder.cpp" line="192"/>
+        <source>Unsupported WAV encoding (only PCM integer and 32-bit float)</source>
+        <translation>Nicht unterstützte WAV-Kodierung (nur PCM-Integer und 32-Bit-Float)</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Devices/IO/Audio/WavDecoder.cpp" line="197"/>
+        <source>WAV has %1 channels; mono or stereo only</source>
+        <translation>WAV hat %1 Kanäle; nur Mono oder Stereo</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Devices/IO/Audio/WavDecoder.cpp" line="202"/>
+        <source>WAV sample rate %1 Hz is outside 8 to 96 kHz</source>
+        <translation>WAV-Abtastrate %1 Hz liegt außerhalb von 8 bis 96 kHz</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Devices/IO/Audio/WavDecoder.cpp" line="214"/>
+        <source>WAV data chunk precedes the format chunk</source>
+        <translation>WAV-Daten-Chunk steht vor dem Format-Chunk</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Devices/IO/Audio/WavDecoder.cpp" line="263"/>
+        <source>WAV data chunk is empty</source>
+        <translation>WAV-Daten-Chunk ist leer</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Devices/IO/Audio/WavDecoder.cpp" line="268"/>
+        <source>Sound is longer than %1 s</source>
+        <translation>Ton ist länger als %1 s</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Devices/IO/Audio/SoundBank.cpp" line="195"/>
+        <source>Sample-rate conversion is unavailable for this file</source>
+        <translation>Abtastraten-Konvertierung ist für diese Datei nicht verfügbar</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Devices/IO/Audio/SoundBank.cpp" line="205"/>
+        <location filename="../../../core/Devices/IO/Audio/SoundBank.cpp" line="215"/>
+        <source>Sample-rate conversion failed for this file</source>
+        <translation>Abtastraten-Konvertierung für diese Datei fehlgeschlagen</translation>
     </message>
 </context>
 <context>
@@ -28035,7 +28536,7 @@ Absolute Adressen oben hinzufügen, um den Controller abzufragen.</translation>
         <translation>Sitzungsdateien (*.db)</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="1291"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="1298"/>
         <source>Cannot open session file</source>
         <translation>Sitzungsdatei kann nicht geöffnet werden</translation>
     </message>
@@ -28050,7 +28551,7 @@ Absolute Adressen oben hinzufügen, um den Controller abzufragen.</translation>
         <translation>Sitzung Löschen</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="1151"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="1158"/>
         <source>No project data</source>
         <translation>Keine Projektdaten</translation>
     </message>
@@ -28182,37 +28683,37 @@ Absolute Adressen oben hinzufügen, um den Controller abzufragen.</translation>
         <translation type="vanished">Der Bericht konnte nicht erstellt werden.</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="1152"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="1159"/>
         <source>This session file does not contain an embedded project.</source>
         <translation>Diese Sitzungsdatei enthält kein eingebettetes Projekt.</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="1161"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="1168"/>
         <source>Invalid project data</source>
         <translation>Ungültige Projektdaten</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="1162"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="1169"/>
         <source>The embedded project JSON is malformed and cannot be restored.</source>
         <translation>Die eingebetteten Projekt-JSON-Daten sind fehlerhaft und können nicht wiederhergestellt werden.</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="1172"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="1179"/>
         <source>Restore Project</source>
         <translation>Projekt Wiederherstellen</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="1172"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="1179"/>
         <source>Serial Studio projects (*.ssproj *.json)</source>
         <translation>Serial Studio-Projekte (*.ssproj *.json)</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="1180"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="1187"/>
         <source>Cannot write file</source>
         <translation>Datei kann nicht geschrieben werden</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="1180"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="1187"/>
         <source>Check file permissions and try again.</source>
         <translation>Dateiberechtigungen prüfen und erneut versuchen.</translation>
     </message>
@@ -28719,6 +29220,11 @@ Absolute Adressen oben hinzufügen, um den Controller abzufragen.</translation>
         <translation>Exportieren</translation>
     </message>
     <message>
+        <location filename="../../qml/Dialogs/Settings.qml" line="104"/>
+        <source>Sounds</source>
+        <translation>Töne</translation>
+    </message>
+    <message>
         <source>Language</source>
         <translation type="vanished">Sprache</translation>
     </message>
@@ -29012,7 +29518,7 @@ Absolute Adressen oben hinzufügen, um den Controller abzufragen.</translation>
         <translation type="vanished">Schriftfamilie</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="105"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="111"/>
         <source>Notifications</source>
         <translation>Benachrichtigungen</translation>
     </message>
@@ -29113,17 +29619,17 @@ Absolute Adressen oben hinzufügen, um den Controller abzufragen.</translation>
         <translation type="vanished">Standardmäßig deaktiviert – QT und QML geben häufig Warnungen aus, und die Aktivierung kann echte Alarme übertönen. Kritische Meldungen werden unabhängig von dieser Einstellung immer weitergeleitet.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="174"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="185"/>
         <source>Reset</source>
         <translation>Zurücksetzen</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="233"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="245"/>
         <source>Close</source>
         <translation>Schließen</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="241"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="253"/>
         <source>Apply</source>
         <translation>Anwenden</translation>
     </message>
@@ -29209,27 +29715,27 @@ Absolute Adressen oben hinzufügen, um den Controller abzufragen.</translation>
 <context>
     <name>SettingsExportPage</name>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsExportPage.qml" line="56"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsExportPage.qml" line="57"/>
         <source>CSV Export</source>
         <translation>CSV-export</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsExportPage.qml" line="71"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsExportPage.qml" line="72"/>
         <source>Row Interval (ms)</source>
         <translation>Zeilenintervall (ms)</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsExportPage.qml" line="133"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsExportPage.qml" line="134"/>
         <source>0 writes one row per received frame. A positive value logs one snapshot row of every channel at that interval, which keeps file size bounded for multi-source or high-rate projects.</source>
         <translation>0 schreibt eine Zeile pro empfangenem Frame. Ein positiver Wert protokolliert eine Snapshot-Zeile aller Kanäle in diesem Intervall, wodurch die Dateigröße bei Projekten mit mehreren Quellen oder hoher Datenrate begrenzt bleibt.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsExportPage.qml" line="146"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsExportPage.qml" line="147"/>
         <source>Video Export</source>
         <translation>Videoexport</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsExportPage.qml" line="164"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsExportPage.qml" line="165"/>
         <source>Save Videos by Default</source>
         <translation>Videos Standardmäßig Speichern</translation>
     </message>
@@ -29392,32 +29898,32 @@ Absolute Adressen oben hinzufügen, um den Controller abzufragen.</translation>
 <context>
     <name>SettingsNotificationsPage</name>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsNotificationsPage.qml" line="59"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsNotificationsPage.qml" line="60"/>
         <source>Delivery</source>
         <translation>Zustellung</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsNotificationsPage.qml" line="74"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsNotificationsPage.qml" line="75"/>
         <source>System Notifications</source>
         <translation>Systembenachrichtigungen</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsNotificationsPage.qml" line="95"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsNotificationsPage.qml" line="96"/>
         <source>Show Warning/Critical events as OS desktop notifications when Serial Studio is not the foreground window.</source>
         <translation>Warnungs-/Kritische Ereignisse als Desktop-Benachrichtigungen anzeigen, wenn Serial Studio nicht im Vordergrund ist.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsNotificationsPage.qml" line="105"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsNotificationsPage.qml" line="106"/>
         <source>Application Logs</source>
         <translation>Anwendungsprotokolle</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsNotificationsPage.qml" line="120"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsNotificationsPage.qml" line="121"/>
         <source>Route Warnings to Notifications</source>
         <translation>Warnungen an Benachrichtigungen Weiterleiten</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsNotificationsPage.qml" line="141"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsNotificationsPage.qml" line="142"/>
         <source>Off by default — Qt and QML emit warnings frequently and enabling this can drown out real alarms. Critical messages are always routed regardless of this setting.</source>
         <translation>Standardmäßig deaktiviert – QT und QML geben häufig Warnungen aus, und die Aktivierung kann echte Alarme übertönen. Kritische Meldungen werden unabhängig von dieser Einstellung immer weitergeleitet.</translation>
     </message>
@@ -29443,6 +29949,216 @@ Absolute Adressen oben hinzufügen, um den Controller abzufragen.</translation>
         <location filename="../../qml/Dialogs/Settings/SettingsPlottingPage.qml" line="148"/>
         <source>UI Refresh Rate (Hz)</source>
         <translation>Ui-aktualisierungsrate (Hz)</translation>
+    </message>
+</context>
+<context>
+    <name>SettingsSoundsPage</name>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsSoundsPage.qml" line="51"/>
+        <source>Warning</source>
+        <translation>Warnung</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsSoundsPage.qml" line="52"/>
+        <source>Caution</source>
+        <translation>Vorsicht</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsSoundsPage.qml" line="53"/>
+        <source>Advisory</source>
+        <translation>Hinweis</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsSoundsPage.qml" line="54"/>
+        <source>Ringback</source>
+        <translation>Rückruf</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsSoundsPage.qml" line="55"/>
+        <source>Connected</source>
+        <translation>Verbunden</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsSoundsPage.qml" line="56"/>
+        <source>Disconnected</source>
+        <translation>Getrennt</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsSoundsPage.qml" line="57"/>
+        <source>Link Lost</source>
+        <translation>Verbindung Verloren</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsSoundsPage.qml" line="58"/>
+        <source>Reconnected</source>
+        <translation>Wiederverbunden</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsSoundsPage.qml" line="59"/>
+        <source>Export Finished</source>
+        <translation>Export Abgeschlossen</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsSoundsPage.qml" line="60"/>
+        <source>Recording Started</source>
+        <translation>Aufzeichnung Gestartet</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsSoundsPage.qml" line="61"/>
+        <source>Recording Stopped</source>
+        <translation>Aufzeichnung Gestoppt</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsSoundsPage.qml" line="62"/>
+        <source>Error Dialog Shown</source>
+        <translation>Fehlerdialog Angezeigt</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsSoundsPage.qml" line="63"/>
+        <source>Button Pressed</source>
+        <translation>Schaltfläche Gedrückt</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsSoundsPage.qml" line="64"/>
+        <source>Toggle Changed</source>
+        <translation>Umschalter Geändert</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsSoundsPage.qml" line="74"/>
+        <source>Select Sound File</source>
+        <translation>Audiodatei Auswählen</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsSoundsPage.qml" line="76"/>
+        <source>WAV audio (*.wav)</source>
+        <translation>WAV-Audio (*.WAV)</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsSoundsPage.qml" line="76"/>
+        <source>All files (*)</source>
+        <translation>Alle Dateien (*)</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsSoundsPage.qml" line="124"/>
+        <source>Bundled sound</source>
+        <translation>Mitgelieferter Sound</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsSoundsPage.qml" line="145"/>
+        <source>Browse for a WAV file</source>
+        <translation>Nach WAV-Datei Suchen</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsSoundsPage.qml" line="156"/>
+        <source>Play this sound</source>
+        <translation>Diesen Sound Abspielen</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsSoundsPage.qml" line="165"/>
+        <source>Use the bundled sound</source>
+        <translation>Mitgelieferten Sound Verwenden</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsSoundsPage.qml" line="225"/>
+        <source>Output</source>
+        <translation>Ausgabe</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsSoundsPage.qml" line="229"/>
+        <source>Enable Sounds</source>
+        <translation>Sounds Aktivieren</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsSoundsPage.qml" line="261"/>
+        <source>Volume</source>
+        <translation>Lautstärke</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsSoundsPage.qml" line="274"/>
+        <source>Output Device</source>
+        <translation>Ausgabegerät</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsSoundsPage.qml" line="290"/>
+        <source>The selected device is not available; sounds play on the system default.</source>
+        <translation>Das ausgewählte Gerät ist nicht verfügbar; Sounds werden über die Systemstandardausgabe wiedergegeben.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsSoundsPage.qml" line="293"/>
+        <source>Alarms</source>
+        <translation>Alarme</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsSoundsPage.qml" line="297"/>
+        <source>Sequence (ISA-18.1)</source>
+        <translation>Sequenz (ISA-18.1)</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsSoundsPage.qml" line="301"/>
+        <source>A-4 - Automatic reset, no lock-in</source>
+        <translation>A-4 - Automatisches Zurücksetzen, keine Verriegelung</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsSoundsPage.qml" line="302"/>
+        <source>A - Automatic reset, lock-in until acknowledged</source>
+        <translation>A - Automatisches Zurücksetzen, Verriegelung bis zur Quittierung</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsSoundsPage.qml" line="303"/>
+        <source>M-4 - Manual reset, no lock-in</source>
+        <translation>M-4 - Manuelles Zurücksetzen, keine Verriegelung</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsSoundsPage.qml" line="304"/>
+        <source>M - Manual reset, lock-in until acknowledged</source>
+        <translation>M - Manuelles Zurücksetzen, Sperrung bis zur Bestätigung</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsSoundsPage.qml" line="305"/>
+        <source>R-4 - Ringback, no lock-in</source>
+        <translation>R-4 - Rückruf, keine Sperrung</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsSoundsPage.qml" line="306"/>
+        <source>R - Ringback, lock-in until acknowledged</source>
+        <translation>R - Rückruf, Sperrung bis zur Bestätigung</translation>
+    </message>
+    <message>
+        <source>A - Automatic reset</source>
+        <translation type="vanished">A - Automatisches Zurücksetzen</translation>
+    </message>
+    <message>
+        <source>M - Manual reset</source>
+        <translation type="vanished">M - Manuelles Zurücksetzen</translation>
+    </message>
+    <message>
+        <source>R - Ringback</source>
+        <translation type="vanished">R - Rückruf</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsSoundsPage.qml" line="320"/>
+        <source>Warning Repeat (ms)</source>
+        <translation>Warnungswiederholung (ms)</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsSoundsPage.qml" line="333"/>
+        <source>Caution Repeat (ms)</source>
+        <translation>Vorsichtswiederholung (ms)</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsSoundsPage.qml" line="345"/>
+        <source>Events</source>
+        <translation>Ereignisse</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsSoundsPage.qml" line="375"/>
+        <source>Test</source>
+        <translation>Testen</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsSoundsPage.qml" line="383"/>
+        <source>Reset to Bundled Sounds</source>
+        <translation>Auf mitgelieferte Töne zurücksetzen</translation>
     </message>
 </context>
 <context>
@@ -29526,77 +30242,77 @@ Absolute Adressen oben hinzufügen, um den Controller abzufragen.</translation>
 <context>
     <name>SettingsTaskbarPage</name>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsTaskbarPage.qml" line="53"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsTaskbarPage.qml" line="54"/>
         <source>Behavior</source>
         <translation>Verhalten</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsTaskbarPage.qml" line="74"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsTaskbarPage.qml" line="75"/>
         <source>Always Show Taskbar Buttons</source>
         <translation>Taskleisten-schaltflächen Immer Anzeigen</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsTaskbarPage.qml" line="98"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsTaskbarPage.qml" line="99"/>
         <source>Show Search Field</source>
         <translation>Suchfeld Anzeigen</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsTaskbarPage.qml" line="122"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsTaskbarPage.qml" line="123"/>
         <source>Auto-hide Taskbar</source>
         <translation>Taskleiste Automatisch Ausblenden</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsTaskbarPage.qml" line="149"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsTaskbarPage.qml" line="150"/>
         <source>Hide Delay (ms)</source>
         <translation>Ausblendverzögerung (ms)</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsTaskbarPage.qml" line="182"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsTaskbarPage.qml" line="183"/>
         <source>Pinned Buttons</source>
         <translation>Angeheftete Schaltflächen</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsTaskbarPage.qml" line="200"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsTaskbarPage.qml" line="201"/>
         <source>Drag a pinned button on the taskbar to reorder it.</source>
         <translation>Ziehen Sie eine angeheftete Schaltfläche in der Taskleiste, um sie neu anzuordnen.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsTaskbarPage.qml" line="221"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsTaskbarPage.qml" line="222"/>
         <source>Settings</source>
         <translation>Einstellungen</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsTaskbarPage.qml" line="222"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsTaskbarPage.qml" line="223"/>
         <source>Console</source>
         <translation>Konsole</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsTaskbarPage.qml" line="223"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsTaskbarPage.qml" line="224"/>
         <source>Notifications</source>
         <translation>Benachrichtigungen</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsTaskbarPage.qml" line="224"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsTaskbarPage.qml" line="225"/>
         <source>Clock</source>
         <translation>Uhr</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsTaskbarPage.qml" line="225"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsTaskbarPage.qml" line="226"/>
         <source>Stopwatch</source>
         <translation>Stoppuhr</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsTaskbarPage.qml" line="226"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsTaskbarPage.qml" line="227"/>
         <source>Pause / Resume</source>
         <translation>Pausieren / Fortsetzen</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsTaskbarPage.qml" line="227"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsTaskbarPage.qml" line="228"/>
         <source>File Transmission</source>
         <translation>Dateiübertragung</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsTaskbarPage.qml" line="228"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsTaskbarPage.qml" line="229"/>
         <source>AI Assistant</source>
         <translation>Ki-assistent</translation>
     </message>
@@ -30629,7 +31345,7 @@ Projekt Einbetten aktivieren, um das Projekt in die Verknüpfung einzubetten, so
         <translation type="vanished">Startmenü</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="221"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="222"/>
         <source>Menu</source>
         <translation>Menü</translation>
     </message>
@@ -30638,42 +31354,42 @@ Projekt Einbetten aktivieren, um das Projekt in die Verknüpfung einzubetten, so
         <translation type="vanished">Suchen…</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="584"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="585"/>
         <source>Settings</source>
         <translation>Einstellungen</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="585"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="586"/>
         <source>Console</source>
         <translation>Konsole</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="586"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="587"/>
         <source>Notifications</source>
         <translation>Benachrichtigungen</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="587"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="588"/>
         <source>Clock</source>
         <translation>Uhr</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="588"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="589"/>
         <source>Stopwatch</source>
         <translation>Stoppuhr</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="590"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="591"/>
         <source>AI Assistant</source>
         <translation>Ki-assistent</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="591"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="592"/>
         <source>Resume</source>
         <translation>Fortsetzen</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="591"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="592"/>
         <source>Pause</source>
         <translation>Pausieren</translation>
     </message>
@@ -30686,72 +31402,72 @@ Projekt Einbetten aktivieren, um das Projekt in die Verknüpfung einzubetten, so
         <translation type="vanished">Keine Arbeitsbereiche Verfügbar</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="259"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="260"/>
         <source>Search… (%1)</source>
         <translation>Suchen… (%1)</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="942"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="943"/>
         <source>Data is arriving faster than scripts can process it; some frames are being thinned. See the problem center for details.</source>
         <translation>Daten kommen schneller an, als Skripte sie verarbeiten können; einige Frames werden ausgedünnt. Details finden Sie in der Problemzentrale.</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="966"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="967"/>
         <source>Unfreeze Dashboard</source>
         <translation>Dashboard Entsperren</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="967"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="968"/>
         <source>Freeze Dashboard</source>
         <translation>Dashboard Sperren</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1016"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1017"/>
         <source>MQTT: Connected to %1</source>
         <translation>MQTT: Verbunden mit %1</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1017"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1018"/>
         <source>MQTT: Not connected</source>
         <translation>MQTT: Nicht verbunden</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1045"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1046"/>
         <source>MQTT Publisher</source>
         <translation>MQTT-publisher</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1055"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1056"/>
         <source>Status:</source>
         <translation>Status:</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1063"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1064"/>
         <source>Connected</source>
         <translation>Verbunden</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1064"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1065"/>
         <source>Disconnected</source>
         <translation>Getrennt</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1071"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1072"/>
         <source>Broker:</source>
         <translation>Broker:</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1084"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1085"/>
         <source>Mode:</source>
         <translation>Modus:</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1097"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1098"/>
         <source>Messages sent:</source>
         <translation>Gesendete Nachrichten:</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1111"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1112"/>
         <source>Open MQTT Settings</source>
         <translation>MQTT-einstellungen Öffnen</translation>
     </message>
@@ -30784,7 +31500,7 @@ Projekt Einbetten aktivieren, um das Projekt in die Verknüpfung einzubetten, so
         <translation type="vanished">Problemcenter Öffnen</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="589"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="590"/>
         <source>File Transmission</source>
         <translation>Dateiübertragung</translation>
     </message>
@@ -30793,7 +31509,7 @@ Projekt Einbetten aktivieren, um das Projekt in die Verknüpfung einzubetten, so
         <translation type="vanished">Widgets suchen…</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1168"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1176"/>
         <source>Remove from Workspace</source>
         <translation>Aus Arbeitsbereich entfernen</translation>
     </message>
@@ -31912,29 +32628,58 @@ Projekt Einbetten aktivieren, um das Projekt in die Verknüpfung einzubetten, so
 <context>
     <name>UI::AlarmMonitor</name>
     <message>
-        <location filename="../../../core/Ui/UI/AlarmMonitor.cpp" line="205"/>
+        <location filename="../../../core/Ui/UI/AlarmMonitor.cpp" line="218"/>
         <source>Alarm</source>
         <translation>Alarm</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/AlarmMonitor.cpp" line="206"/>
+        <location filename="../../../core/Ui/UI/AlarmMonitor.cpp" line="219"/>
         <source>critical</source>
         <translation>kritisch</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/AlarmMonitor.cpp" line="206"/>
+        <location filename="../../../core/Ui/UI/AlarmMonitor.cpp" line="219"/>
         <source>warning</source>
         <translation>Warnung</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/AlarmMonitor.cpp" line="210"/>
+        <location filename="../../../core/Ui/UI/AlarmMonitor.cpp" line="223"/>
         <source>Value %1%2 entered the %3 band (%4–%5).</source>
         <translation>Wert %1%2 hat den %3-Bereich betreten (%4–%5).</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/AlarmMonitor.cpp" line="215"/>
+        <location filename="../../../core/Ui/UI/AlarmMonitor.cpp" line="228"/>
+        <location filename="../../../core/Ui/UI/Alarms/AlarmAnnunciator.cpp" line="799"/>
         <source>Alarms</source>
         <translation>Alarme</translation>
+    </message>
+</context>
+<context>
+    <name>UI::Alarms::AlarmAnnunciator</name>
+    <message>
+        <location filename="../../../core/Ui/UI/Alarms/AlarmAnnunciator.cpp" line="386"/>
+        <source>System default</source>
+        <translation>Systemstandard</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/UI/Alarms/AlarmAnnunciator.cpp" line="461"/>
+        <source>Path climbs out of the project folder</source>
+        <translation>Pfad verlässt den Projektordner</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/UI/Alarms/AlarmAnnunciator.cpp" line="529"/>
+        <source>Unknown sound slot '%1'</source>
+        <translation>Unbekannter Sound-Slot '%1'</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/UI/Alarms/AlarmAnnunciator.cpp" line="787"/>
+        <source>Alarms</source>
+        <translation>Alarme</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/UI/Alarms/AlarmAnnunciator.cpp" line="1287"/>
+        <source>Pick a valid PCM WAV file, or clear the override to use the bundled sound.</source>
+        <translation>Wählen Sie eine gültige PCM-WAV-Datei oder löschen Sie die Überschreibung, um den mitgelieferten Sound zu verwenden.</translation>
     </message>
 </context>
 <context>

@@ -339,6 +339,7 @@ Warnings are off by default because Qt and QML emit them frequently during norma
 
 ## See also
 
+- [Aural Alerts](Aural-Alerts.md): Warning and Critical notifications become alarm points that sound and flash the master annunciator; `notifyClear()` returns them to normal.
 - [Dataset Value Transforms](Dataset-Transforms.md): where `notify*` is most commonly used.
 - [Frame Parser Scripting](JavaScript-API.md): the `parse(frame)` function has the same notification API.
 - [Output Controls](Output-Controls.md): `transmit(value)` can also post notifications.

@@ -572,6 +572,82 @@
         "app",
         "dashboard"
       ]
+    },
+    {
+      "id": "alarms.acknowledge",
+      "title": "Acknowledge Alarms",
+      "tooltip": "Acknowledge every alerting alarm point (ISA-18.1)",
+      "kind": "action",
+      "category": "tools",
+      "contexts": [
+        "app",
+        "dashboard"
+      ],
+      "shortcut": "Ctrl+Shift+A",
+      "shortcutWindows": [
+        "main"
+      ]
+    },
+    {
+      "id": "alarms.silence",
+      "title": "Silence Alarms",
+      "tooltip": "Stop the alarm sound; points stay unacknowledged and a new alarm re-sounds",
+      "kind": "action",
+      "category": "tools",
+      "contexts": [
+        "app",
+        "dashboard"
+      ],
+      "shortcut": "Ctrl+Shift+H",
+      "shortcutWindows": [
+        "main"
+      ]
+    },
+    {
+      "id": "alarms.reset",
+      "title": "Reset Alarms",
+      "tooltip": "Clear return-to-normal alarm points (sequences M and R)",
+      "kind": "action",
+      "category": "tools",
+      "contexts": [
+        "app",
+        "dashboard"
+      ],
+      "shortcut": "Ctrl+Shift+R",
+      "shortcutWindows": [
+        "main"
+      ]
+    },
+    {
+      "id": "alarms.test",
+      "title": "Test Alarm Sounds",
+      "tooltip": "Play every alarm priority sound and walk the annunciator",
+      "kind": "action",
+      "category": "tools",
+      "contexts": [
+        "app",
+        "dashboard"
+      ],
+      "shortcut": "Ctrl+Shift+T",
+      "shortcutWindows": [
+        "main"
+      ]
+    },
+    {
+      "id": "alarms.mute",
+      "title": "Mute Sounds",
+      "titleChecked": "Unmute Sounds",
+      "tooltip": "Silence every alarm and event sound",
+      "kind": "toggle",
+      "category": "tools",
+      "contexts": [
+        "app",
+        "dashboard"
+      ],
+      "shortcut": "Ctrl+Shift+U",
+      "shortcutWindows": [
+        "main"
+      ]
     }
   ]
 }

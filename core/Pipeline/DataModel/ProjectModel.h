@@ -165,6 +165,10 @@ class ProjectModel : public QObject {
              READ influxSink
              WRITE setInfluxSink
              NOTIFY influxSinkChanged)
+  Q_PROPERTY(QJsonObject sounds
+             READ sounds
+             WRITE setSounds
+             NOTIFY soundsChanged)
   Q_PROPERTY(QJsonObject diagramCollapse
              READ diagramCollapse
              NOTIFY diagramCollapseChanged)
@@ -225,6 +229,7 @@ signals:
   void lockedChanged();
   void mqttPublisherChanged();
   void influxSinkChanged();
+  void soundsChanged();
   void diagramCollapseChanged();
   void saveDialogCompleted(bool accepted);
   void importCompleted(bool accepted, const QString& savedPath);
@@ -486,6 +491,8 @@ public:
   [[nodiscard]] const QJsonObject& mqttPublisher() const noexcept { return m_mqttPublisher; }
 
   [[nodiscard]] const QJsonObject& influxSink() const noexcept { return m_influxSink; }
+
+  [[nodiscard]] const QJsonObject& sounds() const noexcept { return m_sounds; }
 
   [[nodiscard]] qint64 mutationEpoch() const noexcept { return m_mutationEpoch; }
 
@@ -990,6 +997,7 @@ public slots:
 
   void setMqttPublisher(const QJsonObject& config);
   void setInfluxSink(const QJsonObject& config);
+  void setSounds(const QJsonObject& config);
 
   Q_INVOKABLE int addWorkspace(const QString& title) { return m_workspaces.addWorkspace(title); }
 
@@ -1307,7 +1315,7 @@ private:
   void clearTransientState();
   void scheduleWorkspaceRegen();
   void flushWorkspaceRegen();
-  void emitSinkConfigResets(bool hadMqttPublisher, bool hadInfluxSink);
+  void emitSinkConfigResets(bool hadMqttPublisher, bool hadInfluxSink, bool hadSounds);
   void wireStructureSnapshot();
   void publishStructureSnapshot(int change, int sourceId = -1);
 
@@ -1367,6 +1375,7 @@ private:
 
   QJsonObject m_mqttPublisher;
   QJsonObject m_influxSink;
+  QJsonObject m_sounds;
 
   ProjectPresentation m_presentation;
   ProjectPersistence m_persistence;

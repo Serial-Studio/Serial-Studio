@@ -106,6 +106,7 @@ inline constexpr KeyView Color("color");
 inline constexpr KeyView Alias("alias");
 inline constexpr KeyView Label("label");
 inline constexpr KeyView Blink("blink");
+inline constexpr KeyView Sound("sound");
 inline constexpr KeyView Severity("severity");
 inline constexpr KeyView FFTSamplingRate("fftSamplingRate");
 inline constexpr KeyView FFTWindow("fftWindow");
@@ -246,6 +247,14 @@ inline constexpr KeyView MqttPublisher("mqttPublisher");
 
 // Per-project InfluxDB sink configuration (Pro); absent means disabled, token lives in the vault.
 inline constexpr KeyView InfluxSink("influxSink");
+
+// Per-project aural alert overrides (spec 0087): sequence letter + per-channel sound map.
+inline constexpr KeyView Sounds("sounds");
+inline constexpr KeyView Sequence("sequence");
+inline constexpr KeyView Channels("channels");
+inline constexpr KeyView SoundWarning("warning");
+inline constexpr KeyView SoundCaution("caution");
+inline constexpr KeyView SoundAdvisory("advisory");
 
 // Sparkplug B slot table in the MQTT connection block; absent means derive on the first birth.
 inline constexpr KeyView SparkplugSlots("sparkplugSlots");

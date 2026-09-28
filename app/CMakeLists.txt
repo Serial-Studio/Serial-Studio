@@ -322,6 +322,7 @@ set(QML_SOURCES
   qml/Dialogs/Settings/SettingsConsolePage.qml
   qml/Dialogs/Settings/SettingsExportPage.qml
   qml/Dialogs/Settings/SettingsNotificationsPage.qml
+  qml/Dialogs/Settings/SettingsSoundsPage.qml
   qml/Dialogs/Welcome.qml
   qml/Dialogs/WorkspaceDialog.qml
   qml/Dialogs/ExtensionManager.qml
@@ -337,6 +338,7 @@ set(QML_SOURCES
   qml/MainWindow/Panes/Dashboard/DashboardLayout.qml
   qml/MainWindow/Panes/Dashboard/ExternalWidgetWindow.qml
   qml/MainWindow/Panes/Dashboard/LayoutPatternPicker.qml
+  qml/MainWindow/Panes/Dashboard/MasterAnnunciator.qml
   qml/MainWindow/Panes/Dashboard/PaletteModel.qml
   qml/MainWindow/Panes/Dashboard/StartMenu.qml
   qml/MainWindow/Panes/Dashboard/Taskbar.qml
@@ -393,6 +395,7 @@ set(QML_SOURCES
   qml/ProjectEditor/Views/TableFolderView.qml
   qml/ProjectEditor/Views/GroupTemplateMenu.qml
   qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml
+  qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml
   qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml
   qml/ProjectEditor/Dialogs/ProtoPreviewDialog.qml
   qml/ProjectEditor/ProjectEditor.qml
@@ -458,12 +461,14 @@ set(QML_SOURCES
   qml/Widgets/ProjectTableHeader.qml
   qml/Widgets/ProjectTableRow.qml
   qml/Widgets/ProNotice.qml
+  qml/Widgets/Radio.qml
   qml/Widgets/SearchField.qml
   qml/Widgets/SegmentedControl.qml
   qml/Widgets/SmartWindow.qml
   qml/Widgets/SmartDialog.qml
   qml/Widgets/SubMenuCombo.qml
   qml/Widgets/TaskbarButton.qml
+  qml/Widgets/Toggle.qml
   qml/Widgets/ToolbarButton.qml
   qml/Widgets/VisualRange.qml
   qml/Widgets/WindowMirror.qml
@@ -994,6 +999,10 @@ endif()
 #---------------------------------------------------------------------------------------------------
 
 serial_studio_harden(${PROJECT_EXECUTABLE})
+
+# The composition root constructs the annunciator, which embeds miniaudio structs by value: the
+# MA_* switches must match the SerialStudioDevices archive exactly (see core/CMakeLists.txt).
+ss_apply_miniaudio_definitions(${PROJECT_EXECUTABLE})
 serial_studio_sign(${PROJECT_EXECUTABLE})
 
 #---------------------------------------------------------------------------------------------------

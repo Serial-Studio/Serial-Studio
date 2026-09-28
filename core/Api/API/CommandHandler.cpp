@@ -145,25 +145,25 @@ QByteArray API::CommandHandler::processMessage(const QByteArray& data, const Com
 }
 
 /**
- * @brief Process a single command request; remote-origin device-write commands must clear the
- *        user consent gate first, matching the raw byte paths.
+ * @brief Process a single command request under the origin's dispatch scope: a remote request
+ *        answers to the server's policy for this command AND every command it nests
+ *        (project.batch ops, assistant forwards); a trusted request shadows any remote scope it
+ *        runs inside.
  */
 API::CommandResponse API::CommandHandler::processCommand(const CommandRequest& request,
                                                          const CommandOrigin origin)
 {
-  const bool remote = (origin == CommandOrigin::Remote);
-  if (remote) {
-    static auto& server = Server::instance();
-    if (!server.authorizeRemoteCommand(request.command)) {
-      return CommandResponse::makeError(
-        request.id,
-        ErrorCode::ConsentRequired,
-        QStringLiteral(
-          "Device writes need the user's consent; retry after the prompt is answered"));
-    }
+  static auto& registry = CommandRegistry::instance();
+  if (origin != CommandOrigin::Remote) {
+    const RemoteDispatchScope trusted(RemoteGate());
+    return registry.execute(request.command, request.id, request.params);
   }
 
-  static auto& registry = CommandRegistry::instance();
+  static auto& server = Server::instance();
+  const RemoteDispatchScope scope(
+    [](const QString& id, const QString& name, const QJsonObject& params) {
+      return server.authorizeRemoteCommand(id, name, params);
+    });
   return registry.execute(request.command, request.id, request.params);
 }
 

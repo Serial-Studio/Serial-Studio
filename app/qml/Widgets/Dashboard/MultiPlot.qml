@@ -28,6 +28,7 @@ import SerialStudio
 
 import "../"
 import "../../Dialogs" as Dialogs
+import ".." as Widgets
 
 Item {
   id: root
@@ -660,7 +661,7 @@ Item {
                 spacing: 2
                 Layout.fillWidth: true
 
-                Switch {
+                Widgets.Toggle {
                   id: legendSwitch
 
                   onCheckedChanged: {

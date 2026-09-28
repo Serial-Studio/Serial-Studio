@@ -81,7 +81,7 @@ The API Server is available in both **Serial Studio GPL** and **Serial Studio Pr
 
 ## Calling the API from Frame Parsers, Transforms, and Canvas Widgets
 
-The commands in this document are also reachable from inside Serial Studio's scripting surfaces (Lua and JavaScript) via a generic `apiCall()` gateway. No TCP socket required: the call is dispatched in-process on the dashboard thread. A project's own scripts are first-party code, so the gateway is ungated for them — the full catalog below is callable with no allow-list, rate limit, or payload cap. The user-consent gate applies only to remote clients over TCP. See [Frame Parser Scripting](JavaScript-API.md) for examples.
+The commands in this document are also reachable from inside Serial Studio's scripting surfaces (Lua and JavaScript) via a generic `apiCall()` gateway. No TCP socket required: the call is dispatched in-process on the dashboard thread. A project's own scripts are first-party code, so the gateway is ungated for them — the full catalog below is callable with no allow-list, rate limit, or payload cap. The consent prompts for device writes and script changes apply only to remote clients; launching a program through `system.exec` asks once per project whoever calls it. See [Consent Prompts](#consent-prompts) and [Frame Parser Scripting](JavaScript-API.md) for examples.
 
 ```lua
 local r = apiCall("project.dataset.list")
@@ -281,6 +281,27 @@ netstat -an | findstr 7777
 ```bash
 netstat -an | grep 7777
 ```
+
+### Consent Prompts
+
+Three actions need a one-time "yes" from the person at the screen. Each is refused with
+`CONSENT_REQUIRED` while its prompt is open; the client retries once the prompt is answered. A
+"no" holds until Serial Studio restarts and is never saved.
+
+| Prompt | Who triggers it | Covers | Remembered |
+|--------|-----------------|--------|------------|
+| **Allow API device control?** | Remote API/MCP/gRPC clients | `io.writeData`, `io.ble.writeCharacteristic`, `console.send`, raw-mode bytes | Per installation |
+| **Allow API clients to modify project scripts?** | Remote API/MCP/gRPC clients | `controlScript.set`/`setCode`, `project.frameParser.setCode`, `project.source.setFrameParserCode`, `project.dataset.setTransformCode`, `project.transformLibrary.set`, `project.painter.setCode`, `project.loadJson`, `project.open`, `project.template.apply`, and `project.dataset.update` / `project.group.update` / `project.outputWidget.update` when the call carries `transformCode` / `painterCode` / `transmitFunction` | Per installation |
+| **Allow this project's scripts to launch programs?** | Any script calling `system.exec`, including the project's own control script | `system.exec` | Per project file; session-only for a project without a file |
+
+Project scripts run with the application's full privileges: a script installed over the API
+can call `system.exec` as first-party code, which is why installing one needs the second
+prompt. The gate applies to the whole dispatch, so a `project.batch` op or an assistant
+command that forwards to one of these commands is checked the same way as a direct call.
+
+Headless runs cannot show a prompt, so a remote-triggered action is denied and a warning names
+the override: set `SERIAL_STUDIO_API_AUTO_CONSENT=1` to grant all three consents for that
+process (used by CI). The grant is in memory only and is not saved.
 
 ### Security Best Practices
 
@@ -888,14 +909,14 @@ python test_api.py send io.writeData -p data=SGVsbG8gV29ybGQ=
 ```
 
 **Errors:**
+- `CONSENT_REQUIRED`: The device-write consent prompt is open; retry after the user answers
 - `EXECUTION_ERROR`: Not connected, or device write denied by the user
 - `MISSING_PARAM`: Missing `data` parameter
 - `INVALID_PARAM`: Invalid base64 encoding
 
 > Device-write commands (`io.writeData`, `io.ble.writeCharacteristic`, `console.send`) sent
 > by a remote API/MCP client trigger a one-time consent prompt; the user's answer is
-> remembered. Headless runs cannot show the prompt, so set the environment variable
-> `SERIAL_STUDIO_API_AUTO_CONSENT=1` to allow API device writes in that mode (used by CI).
+> remembered. See [Consent Prompts](#consent-prompts) for the headless override.
 
 > Frame-detection mode and start/finish delimiter sequences are no longer
 > live runtime commands. They are per-source project settings configured
@@ -1485,6 +1506,7 @@ Write raw bytes to a BLE characteristic resolved by UUID, independent of the sel
 - `data` (string): Base64-encoded bytes to write
 
 **Errors:**
+- `CONSENT_REQUIRED`: The device-write consent prompt is open; retry after the user answers
 - `EXECUTION_ERROR`: Not connected, no service selected, or device write denied by the user
 
 > This is one of the device-write commands covered by the consent prompt described
@@ -4632,9 +4654,14 @@ Read one script's body.
 
 ### System Commands (4)
 
-Helper-process control for the control script. `system.exec` and `system.kill` are **control
-script only**: they are rejected over the network and through the SDK, because launching a
-process from a remote client is not something an API token should buy. A launched process is
+Helper-process control for the control script. `system.exec`, `system.kill` and
+`system.runningProcesses` are **control script only**: they are rejected over the network and
+through the SDK, because launching a process from a remote client is not something an API
+token should buy. `system.exec` is also gated by a one-time **per-project consent prompt**
+naming the program: the first call answers `CONSENT_REQUIRED` while the user is asked, the
+control script restarts on "yes" so `setup()` runs again, and a "no" holds for the session. A
+script installed over the API is still first-party code, so installing one needs the
+script-install consent first (see [Consent Prompts](#consent-prompts)). A launched process is
 terminated automatically when the device disconnects or the project closes.
 
 #### 🟢 `system.projectDir`
@@ -4644,7 +4671,8 @@ to the `.ssproj` before calling `system.exec`.
 **Parameters:** None
 
 #### 🟢 `system.exec`
-Launch a helper process and return its `processId`. Control script only.
+Launch a helper process and return its `processId`. Control script only; needs the per-project
+launch consent.
 
 **Parameters:**
 - `program` (string): Executable to run
@@ -4658,7 +4686,7 @@ Terminate a managed helper process. Control script only.
 - `processId` (int): Process id from `system.exec`
 
 #### 🟢 `system.runningProcesses`
-List the helper processes currently managed by `system.exec`.
+List the helper processes currently managed by `system.exec`. Control script only.
 
 **Parameters:** None
 

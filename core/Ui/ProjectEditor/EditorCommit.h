@@ -57,6 +57,9 @@ public:
   void onProjectItemChanged(QStandardItem* item);
   void onDatasetItemChanged(QStandardItem* item);
   void commitAlarmBands(const QVariantList& bands);
+  void commitChannelSounds(const QVariantList& rows);
+  [[nodiscard]] QVariantList channelSoundRows() const;
+  void setProjectSoundSequence(const QString& letter);
   void onOutputWidgetItemChanged(QStandardItem* item);
   void commitFrequencyMarkers(const QVariantList& markers);
   void syncDatasetTreeIcon(const DataModel::Dataset& dataset);

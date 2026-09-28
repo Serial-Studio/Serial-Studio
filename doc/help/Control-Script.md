@@ -117,6 +117,8 @@ A control loop can launch a helper program and let Serial Studio manage its life
 
 Serial Studio stops every process it launched when the device disconnects, when the project changes, and when the app quits, so a helper never lingers after you are done with it.
 
+The first time a project's script asks to run a program, Serial Studio shows a prompt naming the program and its arguments and asks whether this project's scripts may launch programs. Until you answer, `system.exec` returns `ok: false` with `errorCode: "CONSENT_REQUIRED"`; on **Yes** the control script restarts so `setup()` runs again with the permission in place, and the answer is remembered for that project file. A launch from `onConnect()` needs one more **Connect** after you allowed it. **No** holds until you restart Serial Studio. A project that has not been saved to a file is asked once per session. Open projects you do not trust with this in mind: a control script runs with your user account's privileges. Headless runs cannot show the prompt; `SERIAL_STUDIO_API_AUTO_CONSENT=1` grants it for that process.
+
 The program name is resolved cross-platform: a bare `"python3"` or `"python"` is looked up on the system `PATH` plus the usual install locations a GUI app does not otherwise see (Homebrew, pyenv, and user-local directories), so the interpreter that has your installed packages is the one that runs. The launched program's standard output and standard error are captured and written to Serial Studio's console, tagged with the process id, so you can see what the helper prints.
 
 A typical launcher pairs `system.projectDir()` with `system.exec()` and tries `python3` first, falling back to `python`:

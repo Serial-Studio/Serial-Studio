@@ -444,6 +444,7 @@ static void teardownHeadlessSession()
 {
   Misc::ModuleManager::teardownHeadlessSessionModules();
   Misc::ModuleManager::stopFrameConsumerWorkers();
+  Misc::ModuleManager::releaseAnnunciator();
   SessionContext::current().shutdown();
 }
 

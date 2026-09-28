@@ -264,6 +264,9 @@ void DataModel::ProjectPersistence::serializePresentationAndSinks(QJsonObject& j
 
   if (!m_model.m_influxSink.isEmpty())
     json.insert(Keys::InfluxSink, m_model.m_influxSink);
+
+  if (!m_model.m_sounds.isEmpty())
+    json.insert(Keys::Sounds, m_model.m_sounds);
 }
 
 //--------------------------------------------------------------------------------------------------

@@ -450,12 +450,15 @@ API::DeviceWriteVerdict API::Server::authorizeDeviceWrite()
 }
 
 /**
- * @brief Gates remote-origin device-write commands behind the consent prompt; commands that
- *        never touch the hardware always pass.
+ * @brief The remote-origin command policy: the refusal to send, or nothing when the command may
+ *        run. Applied by CommandRegistry through a RemoteDispatchScope so nested dispatch
+ *        (project.batch, assistant forwards) sees the same gate as the outer call.
  */
-bool API::Server::authorizeRemoteCommand(const QString& command)
+std::optional<API::CommandResponse> API::Server::authorizeRemoteCommand(const QString& id,
+                                                                        const QString& command,
+                                                                        const QJsonObject& params)
 {
-  return m_auth.authorizeRemoteCommand(command);
+  return m_auth.authorizeRemoteCommand(id, command, params);
 }
 
 //--------------------------------------------------------------------------------------------------

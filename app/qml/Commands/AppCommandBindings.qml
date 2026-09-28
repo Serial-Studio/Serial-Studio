@@ -87,7 +87,12 @@ QtObject {
     "driver.opcua": root.cmdDriverOpcUa,
     "driver.s7": root.cmdDriverS7,
     "driver.ethernetip": root.cmdDriverEthernetIp,
-    "driver.iec104": root.cmdDriverIec104
+    "driver.iec104": root.cmdDriverIec104,
+    "alarms.acknowledge": root.cmdAlarmsAcknowledge,
+    "alarms.silence": root.cmdAlarmsSilence,
+    "alarms.reset": root.cmdAlarmsReset,
+    "alarms.test": root.cmdAlarmsTest,
+    "alarms.mute": root.cmdAlarmsMute
   })
 
   //
@@ -353,5 +358,33 @@ QtObject {
     readonly property bool enabled: root.driverSelectionEnabled
     readonly property bool checked: Cpp_IO_Manager.busType === SerialStudio.Iec104
     function run() { Cpp_IO_Manager.busType = SerialStudio.Iec104 }
+  }
+
+  //
+  // Aural alerts (spec 0087): the ISA-18.1 operator actions on the root-owned annunciator.
+  //
+  readonly property QtObject cmdAlarmsAcknowledge: QtObject {
+    readonly property bool enabled: Cpp_UI_Alarms.unacknowledgedCount > 0
+    function run() { Cpp_UI_Alarms.acknowledge() }
+  }
+
+  readonly property QtObject cmdAlarmsSilence: QtObject {
+    readonly property bool enabled: Cpp_UI_Alarms.sounding
+    function run() { Cpp_UI_Alarms.silence() }
+  }
+
+  readonly property QtObject cmdAlarmsReset: QtObject {
+    readonly property bool enabled: Cpp_UI_Alarms.highestPriority >= 0
+    function run() { Cpp_UI_Alarms.reset() }
+  }
+
+  readonly property QtObject cmdAlarmsTest: QtObject {
+    readonly property bool enabled: !Cpp_UI_Alarms.testing
+    function run() { Cpp_UI_Alarms.test() }
+  }
+
+  readonly property QtObject cmdAlarmsMute: QtObject {
+    readonly property bool checked: Cpp_UI_Alarms.muted
+    function run() { Cpp_UI_Alarms.muted = !Cpp_UI_Alarms.muted }
   }
 }

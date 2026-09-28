@@ -340,6 +340,17 @@ struct SourceSettingsRestoreRequested final {
 };
 
 /**
+ * @brief An application event the aural alert theme may voice (spec 0087 R16): kind is one of
+ *        the kAppEvent* ordinals below.
+ */
+struct AppEventRaised final {
+  int kind;
+};
+
+inline constexpr int kAppEventErrorDialogShown = 0;
+inline constexpr int kAppEventExportFinished   = 1;
+
+/**
  * @brief Hands out the request ids that pair a request topic with its reply, process-wide.
  */
 [[nodiscard]] inline quint64 allocateRequestId() noexcept

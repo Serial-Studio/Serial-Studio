@@ -1553,17 +1553,35 @@ ss_add_unit_test(tst_conversation_metatools
 )
 
 #
-# The API socket's credential and reception guards (spec 0070). AuthPrimitives.cpp is the pure
-# half of ServerAuth (QtCore only) so these KATs need neither the consent prompt's QtWidgets
-# dependency nor a live server; ClientReception drives its ReceptionHost stub, so QTcpSocket is
-# only ever an opaque handle and Qt6::Network is here for that type alone.
+# The API socket's credential and reception guards (spec 0070) plus the ONE remote command policy
+# (control-script-only, script-install consent, device-write consent). ServerAuth links its two
+# ConsentGates; with no prompter bound the queued prompt answers its default "no", so the suite
+# needs no QtWidgets and no live server. ClientReception drives its ReceptionHost stub, so
+# QTcpSocket is only ever an opaque handle and Qt6::Network is here for that type alone.
 #
 ss_add_unit_test(tst_server_auth
   SOURCES tst_server_auth.cpp
           ${SS_CORE_SRC}/Api/API/Server/AuthPrimitives.cpp
           ${SS_CORE_SRC}/Api/API/Server/ClientReception.cpp
+          ${SS_CORE_SRC}/Api/API/Server/ConsentGate.cpp
+          ${SS_CORE_SRC}/Api/API/Server/ServerAuth.cpp
   LIBS    Qt6::Core
+          Qt6::Gui
           Qt6::Network
+          SerialStudio::Core
+)
+
+#
+# The consent gate every API prompt sits behind: the non-blocking CONSENT_REQUIRED refusal, one
+# prompt per decision, "no" held for the session only, "yes" persisted under the bound key (and
+# not under an empty one), the in-memory headless grant, and rebind forgetting the answer. A
+# scripted IUserPrompter answers the queued prompt.
+#
+ss_add_unit_test(tst_consent_gate
+  SOURCES tst_consent_gate.cpp
+          ${SS_CORE_SRC}/Api/API/Server/ConsentGate.cpp
+  LIBS    Qt6::Core
+          Qt6::Gui
           SerialStudio::Core
 )
 
@@ -2601,6 +2619,28 @@ ss_add_unit_test(tst_async_tcp_dial
           ${SS_CORE_SRC}/Devices/IO/AsyncTcpDial.cpp
   LIBS    Qt6::Core
           Qt6::Network
+          SerialStudio::Core
+)
+
+#
+# Aural alerts (spec 0087). The first-party RIFF/WAVE reader is QtCore plus SerialStudio::Core:
+# every accepted PCM layout, the extensible header, chunk skipping and every refusal reason.
+#
+ss_add_unit_test(tst_wav_decoder
+  SOURCES tst_wav_decoder.cpp
+          ${SS_CORE_SRC}/Devices/IO/Audio/WavDecoder.cpp
+  LIBS    Qt6::Core
+          SerialStudio::Core
+)
+
+#
+# The ISA-18.1 point table behind the master annunciator (spec 0087): sequences A, M and R,
+# acknowledge / silence / reset, reflash, arbitration and the point cap. Pure C++, no signals.
+#
+ss_add_unit_test(tst_annunciator_sequence
+  SOURCES tst_annunciator_sequence.cpp
+          ${SS_CORE_SRC}/Ui/UI/Alarms/AnnunciatorSequence.cpp
+  LIBS    Qt6::Core
           SerialStudio::Core
 )
 

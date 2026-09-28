@@ -42,10 +42,10 @@
 IO::FrameReader::FrameReader(QObject* parent)
   : QObject(parent)
   , m_checksumLength(0)
+  , m_finishAnchors{}
   , m_operationMode(SerialStudio::QuickPlot)
   , m_frameDetectionMode(SerialStudio::EndDelimiterOnly)
   , m_circularBuffer(1024 * 1024)
-  , m_finishAnchors{}
   , m_queue(65536)
   , m_capturedPoolHint(0)
   , m_bufferPinned(false)

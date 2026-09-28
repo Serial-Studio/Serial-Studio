@@ -81,6 +81,12 @@ API::CommandResponse API::Handlers::SystemHandler::exec(const QString& id,
   QString error;
   static auto& processLauncher = ProcessLauncher::instance();
   const int processId          = processLauncher.launch(program, arguments, workingDir, error);
+  if (processId == ProcessLauncher::kLaunchConsentRequired)
+    return CommandResponse::makeError(id, ErrorCode::ConsentRequired, error);
+
+  if (processId == ProcessLauncher::kLaunchDenied)
+    return CommandResponse::makeError(id, ErrorCode::ExecutionError, error);
+
   if (processId < 0)
     return CommandResponse::makeError(id, ErrorCode::OperationFailed, error);
 
@@ -143,10 +149,12 @@ void API::Handlers::SystemHandler::registerCommands()
   registry.registerCommand(
     QStringLiteral("system.exec"),
     QStringLiteral("Launch a helper process (e.g. \"python\" with a script path). Control "
-                   "script only -- rejected over the network/SDK. workingDir defaults to the "
-                   "project directory. Returns a processId. The process is terminated "
-                   "automatically when the device disconnects, the project changes, or the "
-                   "app quits."),
+                   "script only -- rejected over the network/SDK -- and gated by a one-time "
+                   "per-project consent prompt: the first launch answers CONSENT_REQUIRED "
+                   "while the user is asked, and the control script restarts once they "
+                   "allow it. workingDir defaults to the project directory. Returns a "
+                   "processId. The process is terminated automatically when the device "
+                   "disconnects, the project changes, or the app quits."),
     makeSchema(
       {
         {QStringLiteral("program"),
@@ -169,7 +177,8 @@ void API::Handlers::SystemHandler::registerCommands()
 
   registry.registerCommand(
     QStringLiteral("system.runningProcesses"),
-    QStringLiteral("List the helper processes currently managed by system.exec."),
+    QStringLiteral("List the helper processes currently managed by system.exec. Control "
+                   "script only."),
     emptySchema(),
     &runningProcesses);
 }

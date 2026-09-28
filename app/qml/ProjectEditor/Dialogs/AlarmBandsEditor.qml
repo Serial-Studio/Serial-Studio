@@ -53,6 +53,7 @@ Widgets.SmartDialog {
   readonly property int colWMove: 24
   readonly property int colWColor: 28
   readonly property int colWBlink: 40
+  readonly property int colWSound: 56
   readonly property int colSpacing: 8
   readonly property int colWDelete: 28
   readonly property int colWSeverity: 130
@@ -60,7 +61,7 @@ Widgets.SmartDialog {
 
   //
   // Editable working copy of the bands list. ListModel rows: bandMin, bandMax, severity,
-  // colorHex, bandLabel, bandBlink.
+  // colorHex, bandLabel, bandBlink, bandSound.
   //
   ListModel { id: bandsModel }
 
@@ -196,7 +197,8 @@ Widgets.SmartDialog {
         severity: Number(b.severity ?? 2),
         colorHex: String(b.color ?? ""),
         bandLabel: String(b.label ?? ""),
-        bandBlink: b.blink === true
+        bandBlink: b.blink === true,
+        bandSound: String(b.sound ?? "")
       })
     }
   }
@@ -214,7 +216,8 @@ Widgets.SmartDialog {
         severity: Number(r.severity),
         color: String(r.colorHex),
         label: String(r.bandLabel),
-        blink: r.bandBlink === true
+        blink: r.bandBlink === true,
+        sound: String(r.bandSound ?? "")
       })
     }
     return out
@@ -235,7 +238,8 @@ Widgets.SmartDialog {
         severity: b.severity,
         colorHex: b.color,
         bandLabel: b.label,
-        bandBlink: b.blink === true
+        bandBlink: b.blink === true,
+        bandSound: ""
       })
     }
   }
@@ -254,8 +258,27 @@ Widgets.SmartDialog {
       severity: 2,
       colorHex: "",
       bandLabel: "",
-      bandBlink: false
+      bandBlink: false,
+      bandSound: ""
     })
+  }
+
+  //
+  // Per-band sound override (spec 0087): the picked file goes into the row, the commit path
+  // normalizes it against the project folder.
+  //
+  property int browsingRow: -1
+
+  FileDialog {
+    id: _soundBrowse
+
+    title: qsTr("Select Alarm Sound")
+    fileMode: FileDialog.OpenFile
+    nameFilters: [qsTr("WAV audio (*.wav)"), qsTr("All files (*)")]
+    onAccepted: {
+      if (root.browsingRow >= 0 && root.browsingRow < bandsModel.count)
+        bandsModel.setProperty(root.browsingRow, "bandSound", String(selectedFile))
+    }
   }
 
   //
@@ -468,6 +491,13 @@ Widgets.SmartDialog {
               Layout.preferredWidth: root.colWBlink
             }
             Label {
+              text: qsTr("Sound")
+              font: Cpp_Misc_CommonFonts.boldUiFont
+              color: Cpp_ThemeManager.colors["placeholder_text"]
+              horizontalAlignment: Text.AlignHCenter
+              Layout.preferredWidth: root.colWSound
+            }
+            Label {
               text: qsTr("Label")
               font: Cpp_Misc_CommonFonts.boldUiFont
               color: Cpp_ThemeManager.colors["placeholder_text"]
@@ -514,6 +544,7 @@ Widgets.SmartDialog {
               required property string colorHex
               required property string bandLabel
               required property bool bandBlink
+              required property string bandSound
 
               implicitHeight: 36
               width: ListView.view.width
@@ -630,6 +661,46 @@ Widgets.SmartDialog {
                     ToolTip.text: qsTr("Flash the LED while the value sits in this band.")
 
                     onToggled: bandsModel.setProperty(bandRow.index, "bandBlink", checked)
+                  }
+                }
+
+                //
+                // Sound column: a WAV played instead of the priority default (spec 0087)
+                //
+                RowLayout {
+                  spacing: 0
+                  Layout.alignment: Qt.AlignVCenter
+                  Layout.preferredWidth: root.colWSound
+
+                  Widgets.IconButton {
+                    iconSize: 14
+                    padding: 2
+                    Layout.preferredWidth: 24
+                    Layout.preferredHeight: 24
+                    icon.source: "qrc:/icons/buttons/open.svg"
+                    highlighted: bandRow.bandSound.length > 0
+                    ToolTip.delay: 700
+                    ToolTip.visible: hovered
+                    ToolTip.text: bandRow.bandSound.length > 0
+                                  ? bandRow.bandSound
+                                  : qsTr("Pick a WAV file to play for this band.")
+                    onClicked: {
+                      root.browsingRow = bandRow.index
+                      _soundBrowse.open()
+                    }
+                  }
+
+                  Widgets.IconButton {
+                    padding: 2
+                    iconSize: 14
+                    ToolTip.delay: 700
+                    ToolTip.visible: hovered
+                    Layout.preferredWidth: 24
+                    Layout.preferredHeight: 24
+                    enabled: bandRow.bandSound.length > 0
+                    icon.source: "qrc:/icons/buttons/clear.svg"
+                    ToolTip.text: qsTr("Use the priority's default sound.")
+                    onClicked: bandsModel.setProperty(bandRow.index, "bandSound", "")
                   }
                 }
 

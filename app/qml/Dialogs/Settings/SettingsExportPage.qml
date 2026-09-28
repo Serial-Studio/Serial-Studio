@@ -22,6 +22,7 @@
 import QtQuick
 import QtQuick.Layouts
 import QtQuick.Controls
+import "../../Widgets" as Widgets
 
 Item {
   id: root
@@ -163,7 +164,7 @@ Item {
       visible: Cpp_CommercialBuild
       text: qsTr("Save Videos by Default")
       color: Cpp_ThemeManager.colors["text"]
-    } Switch {
+    } Widgets.Toggle {
       id: _saveImages
 
       Layout.rightMargin: -8

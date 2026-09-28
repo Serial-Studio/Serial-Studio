@@ -111,6 +111,9 @@ core/
 │   │   │            byte path + framing, fanning chunks to the root-bound raw taps),
 │   │   │            DeviceTableQuery (every read), DriverFactory, DriverUiRegistry,
 │   │   │            ReplyCapture, StreamConfigBuilder, UiDriverSync, BusBridge
+│   │   ├── Audio/    WavDecoder, SoundBank, SoundPlayer: the aural alert playback device
+│   │   │            (spec 0087; every build, own ma_context, two-lane SPSC mixer, no Qt in
+│   │   │            the callback); the vendored miniaudio TU compiles here in every build
 │   │   └── Drivers/  UART, Network, BluetoothLE, Audio, CANBus, HID, Modbus, MQTT, Process,
 │   │                USB, OpcUa (+ OpcUaTagModel browse tree, OpcUaWire.h delta-frame
 │   │                vocabulary), S7, EthernetIp, Iec104 + PolledPlcWorkerBase (the shared
@@ -148,6 +151,9 @@ core/
     │   │            (generated, never hand-edit), SnapGuides
     │   ├── Dashboard/  DashboardIngest (the block-ingest sub-object + every push table),
     │   │            DashboardTools
+    │   ├── Alarms/    AlarmAnnunciator (root-owned facade, Cpp_UI_Alarms, alarms.* API) +
+    │   │            AnnunciatorSequence (ISA-18.1 point table), SoundTheme, AppEventSounds
+    │   │            (spec 0087)
     │   ├── Widgets/Waterfall/  ColorMap (+LUT), Overlay, Tiles, RingTexture (QRhi scanline
     │   │            uploads), SpectrogramNodes (both draw paths)
     │   ├── Widgets/  PlotBase (state Plot/MultiPlot/FFTPlot share, composed not inherited),

@@ -21,6 +21,7 @@
 
 #include "ApiHandlers/UiHandlers.h"
 
+#include "ApiHandlers/AlarmsHandler.h"
 #include "ApiHandlers/AssistantHandler.h"
 #include "ApiHandlers/ConsoleHandler.h"
 #include "ApiHandlers/DashboardHandler.h"
@@ -39,8 +40,9 @@
  *        composition root calls this right after the core set, so the command names, schemas and
  *        replies are exactly what the one registry held before the handlers moved up a layer.
  */
-void UI::ApiHandlers::registerAll()
+void UI::ApiHandlers::registerAll(const std::unique_ptr<UI::Alarms::AlarmAnnunciator>* annunciator)
 {
+  API::Handlers::AlarmsHandler::registerCommands(annunciator);
   API::Handlers::ConsoleHandler::registerCommands();
   API::Handlers::DashboardHandler::registerCommands();
   API::Handlers::WindowHandler::registerCommands();

@@ -106,11 +106,10 @@ public:
     API::CommandResponse result;
     const bool ran = m_server->marshalToGui([&]() {
       static auto& server = API::Server::instance();
-      if (!server.authorizeRemoteCommand(command)) {
-        result = API::CommandResponse::makeError(
-          id, API::ErrorCode::WriteDenied, QStringLiteral("Device write denied by user"));
-        return;
-      }
+      const API::RemoteDispatchScope scope(
+        [](const QString& requestId, const QString& name, const QJsonObject& requestParams) {
+          return server.authorizeRemoteCommand(requestId, name, requestParams);
+        });
 
       static auto& commandRegistry = API::CommandRegistry::instance();
       result                       = commandRegistry.execute(command, id, params);

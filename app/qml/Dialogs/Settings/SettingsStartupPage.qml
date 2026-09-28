@@ -224,7 +224,7 @@ Item {
     Label {
       text: qsTr("Reduce Motion")
       color: Cpp_ThemeManager.colors["text"]
-    } Switch {
+    } Widgets.Toggle {
       id: _reduceMotion
 
       Layout.rightMargin: -8
@@ -247,7 +247,7 @@ Item {
     Label {
       color: Cpp_ThemeManager.colors["text"]
       text: qsTr("Apply Performance Hints")
-    } Switch {
+    } Widgets.Toggle {
       id: _performanceMode
 
       Layout.rightMargin: -8
@@ -270,7 +270,7 @@ Item {
     Label {
       color: Cpp_ThemeManager.colors["text"]
       text: qsTr("Keep Display Awake")
-    } Switch {
+    } Widgets.Toggle {
       id: _inhibitIdleSleep
 
       Layout.rightMargin: -8
@@ -326,7 +326,7 @@ Item {
     Label {
       color: Cpp_ThemeManager.colors["text"]
       text: qsTr("Automatically Check for Updates")
-    } Switch {
+    } Widgets.Toggle {
       id: _automaticUpdates
 
       Layout.rightMargin: -8
@@ -349,7 +349,7 @@ Item {
     Label {
       color: Cpp_ThemeManager.colors["text"]
       text: qsTr("Check for Extension Updates")
-    } Switch {
+    } Widgets.Toggle {
       id: _extensionUpdateCheck
 
       Layout.rightMargin: -8
@@ -373,7 +373,7 @@ Item {
       color: Cpp_ThemeManager.colors["text"]
       opacity: Cpp_ExtensionManager.updateCheckEnabled ? 1 : 0.5
       text: qsTr("Install Extension Updates Automatically")
-    } Switch {
+    } Widgets.Toggle {
       id: _extensionAutoUpdate
 
       Layout.rightMargin: -8

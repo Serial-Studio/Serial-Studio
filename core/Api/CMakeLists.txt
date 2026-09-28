@@ -44,6 +44,7 @@ qt_add_library(
   API/Server.cpp
   API/Server/ServerWorker.cpp
   API/Server/AuthPrimitives.cpp
+  API/Server/ConsentGate.cpp
   API/Server/ServerAuth.cpp
   API/Server/ClientReception.cpp
   API/Server/MirrorCommands.cpp
@@ -89,6 +90,8 @@ qt_add_library(
   API/Server.h
   API/Server/ServerWorker.h
   API/Server/AuthPrimitives.h
+  API/Server/ConsentGate.h
+  API/Server/ConsentVerdict.h
   API/Server/ServerAuth.h
   API/Server/ClientReception.h
   API/Server/ConnectionState.h

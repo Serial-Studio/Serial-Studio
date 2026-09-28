@@ -101,6 +101,12 @@ Widgets.SmartDialog {
       }
 
       TabButton {
+        text: qsTr("Sounds")
+        height: _tab.height + 3
+        width: implicitWidth + 2 * 8
+      }
+
+      TabButton {
         height: _tab.height + 3
         text: qsTr("Notifications")
         visible: Cpp_CommercialBuild
@@ -127,6 +133,7 @@ Widgets.SmartDialog {
                         taskbarTab.implicitHeight,
                         consoleTab.implicitHeight,
                         exportTab.implicitHeight,
+                        soundsTab.implicitHeight,
                         Cpp_CommercialBuild ? notificationsTab.implicitHeight : 0
                         )
 
@@ -156,6 +163,10 @@ Widgets.SmartDialog {
 
       Pages.SettingsExportPage {
         id: exportTab
+      }
+
+      Pages.SettingsSoundsPage {
+        id: soundsTab
       }
 
       Pages.SettingsNotificationsPage {
@@ -220,6 +231,7 @@ Widgets.SmartDialog {
           Cpp_Misc_CommonFonts.widgetFontFamily = Cpp_Misc_CommonFonts.monoFont.family
           Cpp_Notifications.systemNotificationsEnabled = false
           Cpp_Notifications.routeWarningsToNotifications = false
+          Cpp_UI_Alarms.resetToDefaults()
           if (Cpp_CommercialBuild)
             Cpp_Image_Export.exportEnabled = false
         }

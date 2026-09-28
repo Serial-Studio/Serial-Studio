@@ -208,7 +208,16 @@ void DataModel::ControlScript::setCode(const QString& code)
 
   m_code = code;
   Q_EMIT codeChanged();
+  restart();
+}
 
+/**
+ * @brief Stops the running script and starts it again on a fresh engine when the lifecycle says
+ *        it should run, so setup() re-runs. The consent gates use it once the user grants a
+ *        permission setup() was refused, and code edits go through it too.
+ */
+void DataModel::ControlScript::restart()
+{
   m_shouldRun = shouldRun();
   stopWorker();
   if (m_shouldRun)

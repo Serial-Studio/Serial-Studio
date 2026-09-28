@@ -62,6 +62,8 @@ Item {
         if (!root.model)
           return
 
+        Cpp_UI_Alarms.playEvent("toggle")
+
         root.model.checked = !root.desiredChecked
         control.checked = Qt.binding(function() { return root.desiredChecked })
       }

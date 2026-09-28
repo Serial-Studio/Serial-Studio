@@ -104,7 +104,6 @@ if(BUILD_COMMERCIAL)
     IO/Drivers/Audio/AudioDeviceCatalog.h
     IO/Drivers/Audio/AudioPcm.h
     IO/Drivers/Audio/PlaybackRing.h
-    ThirdParty/miniaudio.h
     IO/Drivers/CANBus.h
     IO/Drivers/CANBus/CanBackends.h
     IO/Drivers/CANBus/GsUsbCanBackend.h
@@ -142,7 +141,6 @@ if(BUILD_COMMERCIAL)
     IO/Drivers/Audio.cpp
     IO/Drivers/Audio/AudioDeviceCatalog.cpp
     IO/Drivers/Audio/AudioPcm.cpp
-    ThirdParty/miniaudio.cpp
     IO/Drivers/CANBus.cpp
     IO/Drivers/CANBus/CanBackends.cpp
     IO/Drivers/CANBus/GsUsbCanBackend.cpp
@@ -235,34 +233,47 @@ if(WIN32)
   target_link_libraries(SerialStudioDevices PRIVATE ws2_32)
 endif()
 
-# IO/Drivers/Audio.h and its helpers include ThirdParty/miniaudio.h, whose struct layouts depend on
-# the MA_* feature switches: every archive that sees the header must configure it identically or
-# two of them disagree about the size of a ma_device (the function lives in core/CMakeLists.txt so
-# Pipeline, added earlier, can call it too). This is the only target that compiles miniaudio's
-# implementation, so the vendored .cpp's warning suppressions and the ALSA link live here as well.
-if(BUILD_COMMERCIAL)
-  ss_apply_miniaudio_definitions(SerialStudioDevices)
+# IO/Drivers/Audio.h (Pro) and IO/Audio/ (the aural alert player, every build, spec 0087) include
+# ThirdParty/miniaudio.h, whose struct layouts depend on the MA_* feature switches: every archive
+# that sees the header must configure it identically or two of them disagree about the size of a
+# ma_device (the function lives in core/CMakeLists.txt so Pipeline, added earlier, can call it
+# too; SerialStudioUi and the executable call it as well because SoundPlayer.h travels up to
+# them). This is the only target that compiles miniaudio's implementation, so the vendored .cpp's
+# warning suppressions and the ALSA link live here as well.
+target_sources(
+  SerialStudioDevices PRIVATE
 
-  # The timing helpers of the WIN32 backend are unused when MA_NO_GENERATION is set. cl.exe reports
-  # that as C4505, clang-cl as -Wunused-function: it is clang's frontend behind an MSVC driver, and
-  # a /wd<number> naming an MSVC-only warning silences nothing there.
-  if(MSVC AND CMAKE_CXX_COMPILER_ID MATCHES "Clang")
-    set_source_files_properties(ThirdParty/miniaudio.cpp
-      PROPERTIES COMPILE_OPTIONS "/clang:-Wno-unused-function"
-    )
-  elseif(MSVC)
-    set_source_files_properties(ThirdParty/miniaudio.cpp
-      PROPERTIES COMPILE_OPTIONS "/wd4505"
-    )
-  else()
-    set_source_files_properties(ThirdParty/miniaudio.cpp
-      PROPERTIES COMPILE_OPTIONS "-Wno-unused-function"
-    )
-  endif()
+  IO/Audio/WavDecoder.h
+  IO/Audio/SoundBank.h
+  IO/Audio/SoundPlayer.h
+  ThirdParty/miniaudio.h
+  IO/Audio/WavDecoder.cpp
+  IO/Audio/SoundBank.cpp
+  IO/Audio/SoundPlayer.cpp
+  ThirdParty/miniaudio.cpp
+)
 
-  if(LINUX)
-    target_link_libraries(SerialStudioDevices PRIVATE asound)
-  endif()
+ss_apply_miniaudio_definitions(SerialStudioDevices)
+
+# The timing helpers of the WIN32 backend are unused when MA_NO_GENERATION is set. cl.exe reports
+# that as C4505, clang-cl as -Wunused-function: it is clang's frontend behind an MSVC driver, and
+# a /wd<number> naming an MSVC-only warning silences nothing there.
+if(MSVC AND CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+  set_source_files_properties(ThirdParty/miniaudio.cpp
+    PROPERTIES COMPILE_OPTIONS "/clang:-Wno-unused-function"
+  )
+elseif(MSVC)
+  set_source_files_properties(ThirdParty/miniaudio.cpp
+    PROPERTIES COMPILE_OPTIONS "/wd4505"
+  )
+else()
+  set_source_files_properties(ThirdParty/miniaudio.cpp
+    PROPERTIES COMPILE_OPTIONS "-Wno-unused-function"
+  )
+endif()
+
+if(LINUX)
+  target_link_libraries(SerialStudioDevices PRIVATE asound)
 endif()
 
 if(MSVC)
@@ -288,11 +299,9 @@ if(SS_UNITY_BUILD)
 
   # ~90k-line vendored TU full of file-local symbols. Its per-source COMPILE_OPTIONS already opt it
   # out of unity; the pin keeps a warning-flag cleanup from silently pulling it into a batch.
-  if(BUILD_COMMERCIAL)
-    set_source_files_properties(ThirdParty/miniaudio.cpp
-      PROPERTIES SKIP_UNITY_BUILD_INCLUSION ON
-    )
-  endif()
+  set_source_files_properties(ThirdParty/miniaudio.cpp
+    PROPERTIES SKIP_UNITY_BUILD_INCLUSION ON
+  )
 endif()
 
 if(COMMAND serial_studio_harden)

@@ -125,6 +125,8 @@ Item {
   signal minimizeClicked()
   signal maximizeClicked()
 
+  onMenuClicked: Cpp_UI_Alarms.playEvent("button")
+
   //
   // Internal properties for saving/restoring window geometry
   //
@@ -137,6 +139,7 @@ Item {
   // Minimize button behavior
   //
   onMinimizeClicked: {
+    Cpp_UI_Alarms.playEvent("button")
     prevX = x
     prevY = y
     root.state = "minimized"
@@ -146,6 +149,7 @@ Item {
   // Maximize button behavior
   //
   onMaximizeClicked: {
+    Cpp_UI_Alarms.playEvent("button")
     prevX = x
     prevY = y
     root.radius = 0
@@ -158,6 +162,7 @@ Item {
   // Restore button behavior
   //
   onRestoreClicked: {
+    Cpp_UI_Alarms.playEvent("button")
     root.x = prevX
     root.y = prevY
     root.state = "normal"
@@ -170,6 +175,7 @@ Item {
   // Close button behavior
   //
   onCloseClicked: {
+    Cpp_UI_Alarms.playEvent("button")
     prevX = x
     prevY = y
     root.state = "closed"

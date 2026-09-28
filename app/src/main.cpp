@@ -130,6 +130,7 @@ static void shutdownSession()
   teardownTrace("drivers-shut-down");
 
   qInstallMessageHandler(nullptr);
+  Misc::ModuleManager::releaseAnnunciator();
   SessionContext::current().shutdown();
   teardownTrace("session-shutdown-done");
 }

@@ -134,7 +134,7 @@ Item {
       visible: Cpp_NativeWindow.csdAvailable
       text: qsTr("Custom Window Decorations")
       color: Cpp_ThemeManager.colors["text"]
-    } Switch {
+    } Widgets.Toggle {
       Layout.rightMargin: -8
       Layout.alignment: Qt.AlignRight
       visible: Cpp_NativeWindow.csdAvailable
@@ -228,7 +228,7 @@ Item {
     Label {
       color: Cpp_ThemeManager.colors["text"]
       text: qsTr("Enable API Server")
-    } Switch {
+    } Widgets.Toggle {
       id: _apiServer
 
       Layout.rightMargin: -8
@@ -278,7 +278,7 @@ Item {
       opacity: enabled ? 1 : 0.5
       color: Cpp_ThemeManager.colors["text"]
       text: qsTr("Allow External API Connections")
-    } Switch {
+    } Widgets.Toggle {
       id: _apiExternal
 
       Layout.rightMargin: -8

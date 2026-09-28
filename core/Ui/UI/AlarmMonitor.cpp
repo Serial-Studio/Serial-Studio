@@ -105,11 +105,14 @@ void UI::AlarmMonitor::rebuildTrackers()
       b.max      = qMax(band.min, band.max);
       b.severity = static_cast<int>(band.severity);
       b.label    = band.label;
+      b.sound    = band.sound;
       tracker.bands.push_back(std::move(b));
     }
 
     m_trackers.push_back(std::move(tracker));
   }
+
+  Q_EMIT trackersRebuilt();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -163,8 +166,10 @@ int UI::AlarmMonitor::bandIndexFor(const Tracker& tracker, double value) noexcep
 }
 
 /**
- * @brief Posts a notification on transition into a Warning or Critical band; the value is
- *        clamped to the dataset's widget range first to mirror analog-widget semantics.
+ * @brief Posts a notification on transition into a Warning or Critical band (value clamped to
+ *        the widget range first). Every band change, the baseline capture included, is also
+ *        emitted as bandTransition for the annunciator (spec 0087) ahead of the unchanged
+ *        notification cooldown, so a rebuilt tracker re-seeds its point without a notification.
  */
 void UI::AlarmMonitor::processValue(Tracker& tracker, double value)
 {
@@ -178,8 +183,12 @@ void UI::AlarmMonitor::processValue(Tracker& tracker, double value)
     tracker.hint = idx;
 
   if (!tracker.initialized) {
-    tracker.initialized   = true;
-    tracker.lastFiredBand = idx;
+    tracker.initialized    = true;
+    tracker.lastFiredBand  = idx;
+    const int seedSeverity = idx < 0 ? -1 : tracker.bands[idx].severity;
+    const QString seedLbl  = idx < 0 ? QString() : tracker.bands[idx].label;
+    const QString seedSnd  = idx < 0 ? QString() : tracker.bands[idx].sound;
+    Q_EMIT bandTransition(tracker.uniqueId, seedSeverity, tracker.title, seedLbl, seedSnd, value);
     return;
   }
 
@@ -187,6 +196,10 @@ void UI::AlarmMonitor::processValue(Tracker& tracker, double value)
     return;
 
   tracker.lastFiredBand = idx;
+  const int severity    = idx < 0 ? -1 : tracker.bands[idx].severity;
+  const QString label   = idx < 0 ? QString() : tracker.bands[idx].label;
+  const QString sound   = idx < 0 ? QString() : tracker.bands[idx].sound;
+  Q_EMIT bandTransition(tracker.uniqueId, severity, tracker.title, label, sound, value);
   if (idx < 0)
     return;
 

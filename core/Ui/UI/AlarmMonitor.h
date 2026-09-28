@@ -40,6 +40,15 @@ class Dashboard;
 class AlarmMonitor : public QObject {
   Q_OBJECT
 
+signals:
+  void trackersRebuilt();
+  void bandTransition(int uniqueId,
+                      int severity,
+                      const QString& title,
+                      const QString& label,
+                      const QString& sound,
+                      double value);
+
 private:
   explicit AlarmMonitor();
   AlarmMonitor(AlarmMonitor&&)                 = delete;
@@ -62,6 +71,7 @@ private:
     double max;
     int severity;
     QString label;
+    QString sound;
   };
 
   struct Tracker {

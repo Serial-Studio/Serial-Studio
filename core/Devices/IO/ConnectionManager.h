@@ -209,6 +209,7 @@ public:
   [[nodiscard]] Q_INVOKABLE qint64 writeData(const QByteArray& data);
   [[nodiscard]] Q_INVOKABLE qint64 writeDataToDevice(int deviceId, const QByteArray& data) override;
   [[nodiscard]] Q_INVOKABLE bool isDeviceConnected(int deviceId) const;
+  [[nodiscard]] bool lastCloseRequested() const noexcept;
 
   [[nodiscard]] qint64 writeAndArmReply(int deviceId, const QByteArray& data) override;
   [[nodiscard]] QByteArray pollReplyBuffer(int deviceId) const override;
@@ -276,6 +277,7 @@ private:
   IIngestBinder& m_binder;
   std::atomic<bool> m_paused;
   bool m_writeEnabled;
+  bool m_closeRequested;
   bool m_rebuildingDevices;
   SerialStudio::BusType m_busType;
 

@@ -170,7 +170,27 @@
         <file>fonts/GeistMono-Bold.ttf</file>
         <file>fonts/GeistMono-Medium.ttf</file>
         <file>fonts/GeistMono-Regular.ttf</file>
+        <file>sounds/warning.wav</file>
+        <file>sounds/caution.wav</file>
+        <file>sounds/advisory.wav</file>
+        <file>sounds/ringback.wav</file>
+        <file>sounds/connected.wav</file>
+        <file>sounds/disconnected.wav</file>
+        <file>sounds/link-lost.wav</file>
+        <file>sounds/reconnected.wav</file>
+        <file>sounds/export-finished.wav</file>
+        <file>sounds/recording-started.wav</file>
+        <file>sounds/recording-stopped.wav</file>
+        <file>sounds/error.wav</file>
+        <file>sounds/button.wav</file>
+        <file>sounds/toggle.wav</file>
         <file>icons/buttons/activate.svg</file>
+        <file>icons/buttons/alarm-acknowledge.svg</file>
+        <file>icons/buttons/alarm-annunciator.svg</file>
+        <file>icons/buttons/alarm-mute.svg</file>
+        <file>icons/buttons/alarm-silence.svg</file>
+        <file>icons/buttons/alarm-sound.svg</file>
+        <file>icons/buttons/alarm-test.svg</file>
         <file>icons/buttons/add-workspace.svg</file>
         <file>icons/buttons/apply.svg</file>
         <file>icons/buttons/attach.svg</file>

@@ -246,7 +246,7 @@ Widgets.Pane {
                   text: qsTr("Change-Driven Transforms:")
                 }
 
-                Switch {
+                Widgets.Toggle {
                   Layout.leftMargin: -9
                   Layout.alignment: Qt.AlignVCenter | Qt.AlignLeft
                   checked: Cpp_JSON_ProjectModel.changeDrivenTransforms
@@ -264,7 +264,7 @@ Widgets.Pane {
                   text: qsTr("Fast Lua Execution:")
                 }
 
-                Switch {
+                Widgets.Toggle {
                   id: fastLuaSwitch
 
                   Layout.leftMargin: -9
@@ -284,9 +284,81 @@ Widgets.Pane {
                     })
                   }
                 }
+
+                //
+                // Aural alerts (spec 0087): the ISA-18.1 sequence override and the channel map
+                //
+                Label {
+                  text: qsTr("Alarm Sequence:")
+                  Layout.alignment: Qt.AlignVCenter
+                }
+
+                Widgets.Combo {
+                  id: sequenceCombo
+
+                  readonly property var codes: ["", "A-4", "A", "M-4", "M", "R-4", "R"]
+                  readonly property string letter: String(Cpp_JSON_ProjectModel.sounds.sequence ?? "")
+
+                  Layout.fillWidth: true
+                  model: [qsTr("App preference"),
+                          qsTr("A-4 - Automatic reset, no lock-in"),
+                          qsTr("A - Automatic reset, lock-in until acknowledged"),
+                          qsTr("M-4 - Manual reset, no lock-in"),
+                          qsTr("M - Manual reset, lock-in until acknowledged"),
+                          qsTr("R-4 - Ringback, no lock-in"),
+                          qsTr("R - Ringback, lock-in until acknowledged")]
+                  currentIndex: Math.max(0, codes.indexOf(letter))
+                  onActivated: Cpp_JSON_ProjectEditor.setProjectSoundSequence(codes[currentIndex])
+
+                  ToolTip.delay: 700
+                  ToolTip.visible: hovered
+                  ToolTip.text: qsTr("ISA-18.1 annunciator sequence for this project: automatic "
+                                     + "reset, manual reset, or ringback on return to normal; "
+                                     + "\"-4\" (option 4) stops a momentary alarm as soon as its "
+                                     + "condition clears instead of locking it in until acknowledged.")
+                }
+
+                Label {
+                  text: qsTr("Channel Sounds:")
+                  Layout.alignment: Qt.AlignVCenter
+                }
+
+                Widgets.IconButton {
+                  iconSize: 16
+                  text: qsTr("Edit...")
+                  Layout.alignment: Qt.AlignLeft
+                  icon.source: "qrc:/icons/buttons/utilities.svg"
+                  onClicked: Cpp_JSON_ProjectEditor.openChannelSoundsEditorForProject()
+                }
               }
             }
           }
+        }
+      }
+
+      //
+      // Lazy-loaded channel sound map dialog. Activated via Cpp_JSON_ProjectEditor signal.
+      //
+      Loader {
+        id: channelSoundsDialog
+
+        active: false
+        asynchronous: false
+        source: "qrc:/serial-studio.com/gui/qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml"
+
+        onLoaded: channelSoundsDialog.item.closing.connect(() => channelSoundsDialog.active = false)
+
+        function show(rows) {
+          channelSoundsDialog.active = true
+          if (channelSoundsDialog.item)
+            channelSoundsDialog.item.showDialog(rows)
+        }
+      }
+
+      Connections {
+        target: Cpp_JSON_ProjectEditor
+        function onOpenChannelSoundsEditor(rows) {
+          channelSoundsDialog.show(rows)
         }
       }
 

@@ -104,6 +104,8 @@ Item {
         if (!root.model)
           return
 
+        Cpp_UI_Alarms.playEvent("button")
+
         if (!root.checkable) {
           root.model.click()
           return

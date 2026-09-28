@@ -320,7 +320,7 @@ Window {
             RowLayout {
               Layout.fillWidth: true
 
-              Switch {
+              Widgets.Toggle {
                 id: dontNagMe
 
                 Layout.leftMargin: -6

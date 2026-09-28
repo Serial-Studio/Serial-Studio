@@ -507,6 +507,20 @@ Widgets.Pane {
           paletteModel: _paletteModel
 
           //
+          // An alarm row asked for its widget: same route the palette takes (workspace member
+          // first, pop-out window otherwise)
+          //
+          onWidgetNavigationRequested: (windowId, groupId) => {
+            const containing = root.taskBar.workspaceContainingWidget(windowId)
+            if (containing >= 1000) {
+              root.taskBar.selectWorkspaceById(containing)
+              root.taskBar.navigateToWidget(windowId, groupId, false)
+            } else {
+              root.openWidgetWindow(windowId)
+            }
+          }
+
+          //
           // Anchor to the bottom of the host
           //
           y: parent.height - height

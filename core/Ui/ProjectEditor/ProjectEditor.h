@@ -209,6 +209,7 @@ signals:
   void treeRebuildFinished(const QModelIndex& revealIndex);
   void openAlarmBandsEditor(
     int groupId, int datasetId, double rangeMin, double rangeMax, QVariantList currentBands);
+  void openChannelSoundsEditor(QVariantList rows);
   void openFrequencyMarkersEditor(int groupId,
                                   int datasetId,
                                   double nyquist,
@@ -473,6 +474,9 @@ public slots:
   void setSuppressViewChange(bool suppress) noexcept;
   void openAlarmBandsEditorForSelection();
   void commitAlarmBands(const QVariantList& bands);
+  void openChannelSoundsEditorForProject();
+  void commitChannelSounds(const QVariantList& rows);
+  void setProjectSoundSequence(const QString& letter);
   void openFrequencyMarkersEditorForSelection();
   void commitFrequencyMarkers(const QVariantList& markers);
   void changeDatasetOptionForSelection(int option, bool checked);

@@ -349,6 +349,7 @@ Item {
       if (root.checkable)
         root.focused = !root.focused
 
+      Cpp_UI_Alarms.playEvent("button")
       root.clicked()
     }
   }

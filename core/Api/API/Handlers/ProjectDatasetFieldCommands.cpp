@@ -79,20 +79,21 @@ void API::Handlers::ProjectDatasetFieldCommands::registerFieldCommands()
 
   registry.registerCommand(
     QStringLiteral("project.dataset.setTransformCode"),
-    QStringLiteral("Set dataset transformCode. Empty clears. Pass `language` whenever "
-                   "you author code so the dataset's transformLanguage matches the "
-                   "syntax you wrote -- mismatches compile-fail silently. Lua (1) is "
-                   "the recommended default; it's measurably faster than JavaScript "
-                   "on hot transforms. If this dataset is compute-only (no slot in "
-                   "the parser output array), also set virtual=true via "
-                   "project.dataset.setVirtual or project.dataset.update. Validate with "
-                   "project.dataset.transform.dryRun before setting. **Call "
-                   "meta.fetchScriptingDocs{kind: 'transform_lua' | 'transform_js'} "
-                   "first** for the transform(value) signature, table API "
-                   "(tableGet/tableSet/datasetGetRaw/datasetGetFinal), and "
-                   "execution-order rules -- a transform may read RAW values from any "
-                   "dataset but only FINAL values of datasets earlier in "
-                   "project.dataset.getExecutionOrder."),
+    QStringLiteral(
+      "Set dataset transformCode. Empty clears. Pass `language` whenever "
+      "you author code so the dataset's transformLanguage matches the "
+      "syntax you wrote -- mismatches compile-fail silently. Lua (1) is "
+      "the recommended default; it's measurably faster than JavaScript "
+      "on hot transforms. If this dataset is compute-only (no slot in "
+      "the parser output array), also set virtual=true via "
+      "project.dataset.setVirtual or project.dataset.update. Validate with "
+      "project.dataset.transform.dryRun before setting. **Call "
+      "meta.fetchScriptingDocs{kind: 'transform_lua' | 'transform_js'} "
+      "first** for the transform(value) signature, table API "
+      "(tableGet/tableSet/datasetGetRaw/datasetGetFinal), and "
+      "execution-order rules -- a transform may read RAW values from any "
+      "dataset but only FINAL values of datasets earlier in "
+      "project.dataset.getExecutionOrder. Remote clients must clear the one-time script-install consent prompt (the user's answer is persisted); in-process callers are not prompted."),
     makeSchema(
       {
         {  QString(Keys::GroupId),QStringLiteral("integer"),QStringLiteral("Owning group id")                           },

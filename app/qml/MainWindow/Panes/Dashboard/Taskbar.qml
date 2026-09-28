@@ -103,6 +103,7 @@ Item {
   signal extendWindowClicked()
   signal workspaceSwitcherRequested()
   signal editWorkspaceRequested(int workspaceId, string currentName)
+  signal widgetNavigationRequested(int windowId, int groupId)
 
   //
   // Focus the search field (called externally)
@@ -1121,6 +1122,13 @@ Item {
           }
         }
       }
+    }
+
+    //
+    // Master annunciator: the ISA-18.1 alarm window, rightmost tray item (spec 0087)
+    //
+    MasterAnnunciator {
+      onNavigateRequested: (windowId, groupId) => root.widgetNavigationRequested(windowId, groupId)
     }
 
     //

@@ -21,32 +21,38 @@
 
 #include "API/Server/ServerAuth.h"
 
-#include <QDebug>
-#include <QGuiApplication>
-
 #include "API/Server/AuthPrimitives.h"
-#include "Core/Prompt/UserPrompt.h"
 
 //--------------------------------------------------------------------------------------------------
 // Constructor
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Restores the persisted credential and consent decision. The environment override exists
- *        for headless runs (CI included), which cannot answer the consent prompt at all.
+ * @brief Restores the persisted credential and consent decisions. The environment override exists
+ *        for headless runs (CI included), which cannot answer a consent prompt at all.
  */
 API::ServerAuth::ServerAuth(QSettings& settings)
   : m_settings(settings)
-  , m_consentPromptPosted(false)
-  , m_deviceWriteConsent(DeviceWriteConsent::Unset)
+  , m_deviceWrite(settings,
+                  QStringLiteral("API/DeviceWriteConsent"),
+                  tr("Allow API device control?"),
+                  tr("A program using Serial Studio's local API is requesting to send data to the "
+                     "connected device. Allow API clients to write to the device?"),
+                  this)
+  , m_scriptInstall(settings,
+                    QStringLiteral("API/ScriptInstallConsent"),
+                    tr("Allow API clients to modify project scripts?"),
+                    tr("A program using Serial Studio's local API wants to change this project's "
+                       "scripts. Scripts run with the application's full privileges, including "
+                       "launching programs. Allow API clients to modify project scripts?"),
+                    this)
 {
   m_authToken = m_settings.value("API/AuthToken").toString();
 
-  if (m_settings.value("API/DeviceWriteConsent", false).toBool())
-    m_deviceWriteConsent = DeviceWriteConsent::Granted;
-
-  if (qEnvironmentVariableIntValue("SERIAL_STUDIO_API_AUTO_CONSENT") != 0)
-    m_deviceWriteConsent = DeviceWriteConsent::Granted;
+  if (qEnvironmentVariableIntValue("SERIAL_STUDIO_API_AUTO_CONSENT") != 0) {
+    m_deviceWrite.grant();
+    m_scriptInstall.grant();
+  }
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -113,82 +119,59 @@ bool API::ServerAuth::verifyToken(const QByteArray& provided) const
 }
 
 //--------------------------------------------------------------------------------------------------
-// Device-write consent
+// Consent gates
 //--------------------------------------------------------------------------------------------------
 
 /**
  * @brief Answers whether an API device write may proceed, never blocking: an unanswered consent
- *        posts the prompt and refuses with ConsentRequired, because the modal used to run inside
- *        the receive loop whose connection state it could outlive (spec 0075 I1). Headless runs
- *        cannot prompt, so consent is pre-granted through SERIAL_STUDIO_API_AUTO_CONSENT.
+ *        posts the prompt and refuses with ConsentRequired (spec 0075 I1).
  */
 API::DeviceWriteVerdict API::ServerAuth::authorizeDeviceWrite()
 {
-  if (m_deviceWriteConsent == DeviceWriteConsent::Granted)
-    return DeviceWriteVerdict::Allowed;
-
-  if (m_deviceWriteConsent == DeviceWriteConsent::Denied)
-    return DeviceWriteVerdict::Denied;
-
-  if (qApp->platformName() == QLatin1String("offscreen")) {
-    m_deviceWriteConsent = DeviceWriteConsent::Denied;
-    qWarning() << "[API] Device write denied: no GUI to prompt for consent. Set "
-                  "SERIAL_STUDIO_API_AUTO_CONSENT=1 to allow API device writes in headless mode.";
-    return DeviceWriteVerdict::Denied;
-  }
-
-  if (!m_consentPromptPosted) {
-    m_consentPromptPosted = true;
-    QMetaObject::invokeMethod(this, "showDeviceWriteConsentPrompt", Qt::QueuedConnection);
-  }
-
-  return DeviceWriteVerdict::ConsentRequired;
+  return m_deviceWrite.authorize();
 }
 
 /**
- * @brief Asks the user, from the event loop rather than from the receive path, and records the
- *        answer for every later write. A second prompt is refused: the first one already decided.
+ * @brief Turns a gate's verdict into the refusal a remote client gets, or nothing when allowed.
+ *        CONSENT_REQUIRED is retryable: the prompt was posted, the client re-sends once answered.
  */
-void API::ServerAuth::showDeviceWriteConsentPrompt()
+static std::optional<API::CommandResponse> refusalFor(const API::ConsentVerdict verdict,
+                                                      const QString& id,
+                                                      const QString& subject)
 {
-  if (m_deviceWriteConsent != DeviceWriteConsent::Unset) {
-    m_consentPromptPosted = false;
-    return;
-  }
+  if (verdict == API::ConsentVerdict::Allowed)
+    return std::nullopt;
 
-  const auto answer = Core::Prompt::showMessageBox(
-    tr("Allow API device control?"),
-    tr("A program using Serial Studio's local API is requesting to send data to the connected "
-       "device. Allow API clients to write to the device?"),
-    Core::Prompt::Question,
-    tr("Serial Studio"),
-    Core::Prompt::Yes | Core::Prompt::No,
-    Core::Prompt::No);
+  if (verdict == API::ConsentVerdict::ConsentRequired)
+    return API::CommandResponse::makeError(
+      id,
+      API::ErrorCode::ConsentRequired,
+      QStringLiteral("%1 need the user's consent; a prompt was shown, retry after it is answered")
+        .arg(subject));
 
-  if (answer == Core::Prompt::Yes) {
-    m_deviceWriteConsent = DeviceWriteConsent::Granted;
-    m_settings.setValue("API/DeviceWriteConsent", true);
-    m_consentPromptPosted = false;
-    return;
-  }
-
-  m_deviceWriteConsent  = DeviceWriteConsent::Denied;
-  m_consentPromptPosted = false;
+  return API::CommandResponse::makeError(
+    id, API::ErrorCode::ExecutionError, QStringLiteral("%1 denied by the user").arg(subject));
 }
 
 /**
- * @brief Gates remote-origin device-write commands behind the consent prompt; commands that
- *        never touch the hardware always pass. Keeps the command path consistent with the
- *        raw byte paths, which run the same gate: an unanswered consent refuses this command
- *        and the client retries once the posted prompt is answered.
+ * @brief The ONE policy for a remote-origin command, outer or nested: control-script-only commands
+ *        are refused outright, script installs and device writes each clear their consent gate,
+ *        everything else passes. Returns the refusal to send, or nothing when the command may run.
  */
-bool API::ServerAuth::authorizeRemoteCommand(const QString& command)
+std::optional<API::CommandResponse> API::ServerAuth::authorizeRemoteCommand(
+  const QString& id, const QString& command, const QJsonObject& params)
 {
   if (API::Auth::commandIsControlScriptOnly(command))
-    return false;
+    return CommandResponse::makeError(
+      id,
+      ErrorCode::ExecutionError,
+      QStringLiteral("%1 is control-script only and not available to API clients").arg(command));
 
-  if (!API::Auth::commandWritesToDevice(command))
-    return true;
+  if (API::Auth::commandInstallsScript(command, params))
+    return refusalFor(m_scriptInstall.authorize(), id, QStringLiteral("Script changes"));
 
-  return authorizeDeviceWrite() == DeviceWriteVerdict::Allowed;
+  if (API::Auth::commandWritesToDevice(command))
+    return refusalFor(m_deviceWrite.authorize(), id, QStringLiteral("Device writes"));
+
+  return std::nullopt;
 }

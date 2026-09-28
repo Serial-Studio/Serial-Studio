@@ -126,6 +126,41 @@ so cached pointers would dangle. Consequences:
   flash while the band is active. LED datasets with no bands synthesize a runtime
   `[ledHigh, +inf)` band inside `LEDPanel` (severity -1 = dataset color); nothing is migrated
   in the project file — the editor only pre-fills a band from `ledHigh` when the dialog opens.
+- `AlarmBand.sound` (`Keys::Sound`, JSON `sound`, omitted when empty) is the per-band WAV
+  override the annunciator plays instead of the priority default (spec 0087).
+
+### Aural alerts — `UI::Alarms::AlarmAnnunciator` (spec 0087)
+
+The ISA-18.1 annunciator sits beside `AlarmMonitor`, never inside it. `AlarmMonitor` emits
+`bandTransition(uniqueId, severity, title, label, sound, value)` on every band index change
+(exit included, severity -1) *before* its 3 s notification cooldown, plus `trackersRebuilt()`;
+the facade turns severity 2/3 into Caution/Warning points and anything else into a clear.
+Notification points come from the bus topic `Core::Bus::NotificationPosted` (Critical → Warning,
+Warning → Caution, a `Resolved: X` Info clears X, any other Info is an Advisory one-shot); the
+`Problems` and `System` channels never become points. The facade is **root-owned, not a
+singleton**: `ModuleManager` holds it in a file-static `unique_ptr` built at the end of
+`instantiateCoreModules()` from `SessionContext` accessors and `Core::services()` (zero census
+growth), wires it in `wireAnnunciator()` (GUI) and `setupHeadlessSessionConnections()`
+(headless, no device), arms it after `restoreLastProject()`, publishes it to QML as
+`Cpp_UI_Alarms`, binds it into `API::Handlers::AlarmsHandler` (`alarms.*`, every build), stops its audio in
+`stopFrameConsumerWorkers()` and releases it in `releaseAnnunciator()`, which every root calls
+right before `shutdown()` once the QML engine is gone (destroying it earlier nulls every
+`Cpp_UI_Alarms` binding). Sub-objects (one class per
+file pair under `core/Ui/UI/Alarms/`): `AnnunciatorSequence` (pure point table, sequences A/M/R each plain or option-4 no-lock-in,
+arbitration, reflash; ctest `tst_annunciator_sequence`), `SoundTheme` (QSettings slots under
+`AlarmSounds/`, project overrides, bank loading, resolution order band → channel map → user
+file → bundled), `AppEventSounds` (connection edges via `ConnectionManager::lastCloseRequested()`,
+recording sinks' `openChanged`, the bus topic `AppEventRaised`). Playback is
+`IO::Audio::SoundPlayer` in `core/Devices/IO/Audio/`: its own `ma_context`, a raw playback
+`ma_device` (48 kHz f32 stereo, 10 ms periods), a 32-entry SPSC command ring and a two-lane
+mixer (event lane ducked 12 dB under the alarm lane) reading `SoundBank` slots through atomic
+pointers; retired buffers wait in a graveyard until the callback generation passes. **The
+callback never allocates, locks, logs or touches Qt.** WAVs decode through the first-party
+`WavDecoder` (ctest `tst_wav_decoder`) because the vendored miniaudio is built with
+`MA_NO_DECODING`; that define set is unchanged but now also applied to `SerialStudioUi` and the
+executable (both see `SoundPlayer.h`), and the miniaudio implementation compiles in every build
+(it used to sit under `BUILD_COMMERCIAL` with the Audio driver). Nothing here runs
+per frame: evaluation stays on `Dashboard::updated`, the 1 Hz tick only polls device health.
 
 ## Dashboard Tools — External Windows Only
 

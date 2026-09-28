@@ -29,9 +29,15 @@
 #include "Platform/NativeWindow.h"
 
 class QQmlContext;
+class SessionContext;
+
+namespace UI::Alarms {
+class AlarmAnnunciator;
+}  // namespace UI::Alarms
 
 namespace Misc {
 class SimdSettings;
+class ProblemCenter;
 
 /**
  * @brief Manages application module lifecycle, QML engine setup, and headless operation.
@@ -68,6 +74,9 @@ public:
   static void instantiateCoreModules();
   static void bindInterfaces();
   static void registerApiHandlers();
+  static void releaseAnnunciator();
+  static void wireAnnunciator(bool headless, Misc::ProblemCenter& problemCenter);
+  static void constructAnnunciator(SessionContext& ctx, Misc::ProblemCenter* problemCenter);
   static void setupHeadlessSessionConnections();
   static void teardownHeadlessSessionModules();
   static void stopFrameConsumerWorkers();

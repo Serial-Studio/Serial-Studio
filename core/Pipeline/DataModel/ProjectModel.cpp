@@ -586,16 +586,37 @@ void DataModel::ProjectModel::setInfluxSink(const QJsonObject& config)
 }
 
 /**
+ * @brief Replaces the per-project aural alert overrides (spec 0087) and marks the project as
+ *        modified; the object is opaque to the model and parsed by the annunciator.
+ */
+void DataModel::ProjectModel::setSounds(const QJsonObject& config)
+{
+  if (m_sounds == config)
+    return;
+
+  const ProjectUndoScope undo_scope{*this, tr("Change Alarm Sounds")};
+
+  m_sounds = config;
+  setModified(true);
+  Q_EMIT soundsChanged();
+}
+
+/**
  * @brief Notifies the sink modules that a document reset cleared their configuration, each one
  *        only when it actually had one, so a fresh document does not churn every sink.
  */
-void DataModel::ProjectModel::emitSinkConfigResets(bool hadMqttPublisher, bool hadInfluxSink)
+void DataModel::ProjectModel::emitSinkConfigResets(bool hadMqttPublisher,
+                                                   bool hadInfluxSink,
+                                                   bool hadSounds)
 {
   if (hadMqttPublisher)
     Q_EMIT mqttPublisherChanged();
 
   if (hadInfluxSink)
     Q_EMIT influxSinkChanged();
+
+  if (hadSounds)
+    Q_EMIT soundsChanged();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -742,8 +763,10 @@ void DataModel::ProjectModel::newJsonFile()
 
   const bool hadMqttPublisher = !m_mqttPublisher.isEmpty();
   const bool hadInfluxSink    = !m_influxSink.isEmpty();
+  const bool hadSounds        = !m_sounds.isEmpty();
   m_mqttPublisher             = QJsonObject();
   m_influxSink                = QJsonObject();
+  m_sounds                    = QJsonObject();
 
   const bool wasLocked = m_locked;
   m_passwordHash.clear();
@@ -807,7 +830,7 @@ void DataModel::ProjectModel::newJsonFile()
   if (wasLocked)
     Q_EMIT lockedChanged();
 
-  emitSinkConfigResets(hadMqttPublisher, hadInfluxSink);
+  emitSinkConfigResets(hadMqttPublisher, hadInfluxSink, hadSounds);
 
   if (!m_silentReload)
     Q_EMIT sourceStructureChanged();
@@ -892,6 +915,11 @@ void DataModel::ProjectModel::clearTransientState()
   if (!m_influxSink.isEmpty()) {
     m_influxSink = QJsonObject();
     Q_EMIT influxSinkChanged();
+  }
+
+  if (!m_sounds.isEmpty()) {
+    m_sounds = QJsonObject();
+    Q_EMIT soundsChanged();
   }
 
   setModified(false);

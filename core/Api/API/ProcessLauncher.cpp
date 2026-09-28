@@ -22,6 +22,7 @@
 #include "API/ProcessLauncher.h"
 
 #include <QCoreApplication>
+#include <QCryptographicHash>
 #include <QDebug>
 #include <QDir>
 #include <QFileInfo>
@@ -36,16 +37,39 @@
 #include "Core/SSAssert.h"
 #include "DataModel/PipelineModules.h"
 #include "DataModel/ProjectModel.h"
+#include "DataModel/Scripting/ControlScript.h"
 #include "IO/ConnectionManager.h"
 
 static constexpr int kTerminateGraceMs = 2000;
 
 /**
- * @brief Constructs the launcher with an empty process table.
+ * @brief Whether the headless override pre-granted every consent (CI, --headless operators).
+ */
+static bool headlessConsent()
+{
+  return qEnvironmentVariableIntValue("SERIAL_STUDIO_API_AUTO_CONSENT") != 0;
+}
+
+/**
+ * @brief Constructs the launcher with an empty process table and an unbound consent (no project
+ *        yet). The headless override grants it: an operator who set it opted into scripts running
+ *        programs.
  */
 API::ProcessLauncher::ProcessLauncher(QObject* parent)
-  : QObject(parent), m_nextId(1), m_connectionManager(nullptr), m_projectModel(nullptr)
-{}
+  : QObject(parent)
+  , m_nextId(1)
+  , m_consent(m_settings,
+              QString(),
+              tr("Allow this project's scripts to launch programs?"),
+              tr("Scripts run programs with your user account's privileges. Only allow this for "
+                 "projects you trust."),
+              this)
+  , m_connectionManager(nullptr)
+  , m_projectModel(nullptr)
+{
+  if (headlessConsent())
+    m_consent.grant();
+}
 
 /**
  * @brief Returns the singleton instance.
@@ -66,7 +90,13 @@ void API::ProcessLauncher::setupExternalConnections()
   m_projectModel      = &DataModel::pipelineModules().projectModel;
 
   m_lastProjectPath = m_projectModel->jsonFilePath();
+  if (!headlessConsent())
+    m_consent.rebind(consentKeyFor(m_lastProjectPath));
 
+  connect(&m_consent,
+          &ConsentGate::granted,
+          &DataModel::pipelineModules().controlScript,
+          &DataModel::ControlScript::restart);
   connect(m_connectionManager,
           &IO::ConnectionManager::sessionClosed,
           this,
@@ -79,10 +109,10 @@ void API::ProcessLauncher::setupExternalConnections()
 }
 
 /**
- * @brief Spawns a helper process; returns its id, or -1 with @p error set on failure. A helper
- *        identical to one still running (same executable, arguments, and working directory) is
- *        not spawned again: reconnects re-run the script's onConnect() hook, and a duplicate
- *        server helper only steals the first one's port and dies on bind.
+ * @brief Spawns a helper; returns its id, or with @p error set: -1 on failure,
+ *        kLaunchConsentRequired while the per-project prompt is pending, kLaunchDenied after a
+ *        "no". An identical helper still running is not spawned again: reconnects re-run
+ *        onConnect(), and a duplicate server only steals the first one's port and dies on bind.
  */
 int API::ProcessLauncher::launch(const QString& program,
                                  const QStringList& arguments,
@@ -92,6 +122,19 @@ int API::ProcessLauncher::launch(const QString& program,
   if (program.isEmpty()) {
     error = tr("No program specified");
     return -1;
+  }
+
+  const auto request = tr("This project's script wants to run:\n%1")
+                         .arg((QStringList(program) + arguments).join(QLatin1Char(' ')));
+  const auto verdict = m_consent.authorize(request);
+  if (verdict == ConsentVerdict::ConsentRequired) {
+    error = tr("Launching programs needs the user's consent; a prompt was shown");
+    return kLaunchConsentRequired;
+  }
+
+  if (verdict == ConsentVerdict::Denied) {
+    error = tr("Launching programs was denied by the user");
+    return kLaunchDenied;
   }
 
   const QString resolved = resolveExecutable(program);
@@ -320,7 +363,23 @@ void API::ProcessLauncher::onAboutToQuit()
 }
 
 /**
- * @brief Reaps every helper when the loaded project's file path actually changes.
+ * @brief The settings key a project file's launch consent persists under; empty (session-only)
+ *        for a project that has no file.
+ */
+QString API::ProcessLauncher::consentKeyFor(const QString& projectPath)
+{
+  if (projectPath.isEmpty())
+    return QString();
+
+  const auto digest =
+    QCryptographicHash::hash(QDir::cleanPath(projectPath).toUtf8(), QCryptographicHash::Sha1);
+  return QStringLiteral("API/ScriptExecConsent/") + QString::fromLatin1(digest.toHex());
+}
+
+/**
+ * @brief Reaps every helper when the loaded project's file path actually changes, and rebinds
+ *        the launch consent to the new file: a yes given to one project never carries to another.
+ *        The headless grant is process-wide and survives the rebind.
  */
 void API::ProcessLauncher::onProjectFileChanged()
 {
@@ -335,4 +394,7 @@ void API::ProcessLauncher::onProjectFileChanged()
 
   m_lastProjectPath = path;
   killAll();
+
+  if (!headlessConsent())
+    m_consent.rebind(consentKeyFor(path));
 }

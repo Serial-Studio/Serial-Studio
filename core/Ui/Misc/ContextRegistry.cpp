@@ -64,6 +64,7 @@
     QStringLiteral("Cpp_JSON_ProtoImporter"),
     QStringLiteral("Cpp_JSON_FrameBuilder"),
     QStringLiteral("Cpp_Notifications"),
+    QStringLiteral("Cpp_UI_Alarms"),
     QStringLiteral("Cpp_Misc_TimerEvents"),
     QStringLiteral("Cpp_Misc_CommonFonts"),
     QStringLiteral("Cpp_IO_FileTransmission"),

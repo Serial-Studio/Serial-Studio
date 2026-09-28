@@ -24,6 +24,7 @@ path = [
   "app/rcc/messages/**",
   "app/rcc/properties/**",
   "app/rcc/scripts/**",
+  "app/rcc/sounds/**",
   "app/rcc/templates/**",
   "app/rcc/themes/**",
   "app/rcc/chat-viewer.html",

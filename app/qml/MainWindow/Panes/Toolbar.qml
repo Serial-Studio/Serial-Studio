@@ -280,6 +280,7 @@ Rectangle {
     Widgets.ToolbarButton {
       id: _connectButton
 
+      clickSound: false
       readonly property bool connecting: Cpp_IO_Manager.isConnecting
       readonly property var entry: _tbModel.binding("io.toggleConnection")
 

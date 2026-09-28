@@ -294,6 +294,7 @@ struct alignas(8) AlarmBand {
   bool blink             = false;  ///< Flash the indicator while the band is active
   QString color;                   ///< Optional hex override; empty -> severity default
   QString label;                   ///< Optional human label (used in notifications)
+  QString sound;                   ///< Optional WAV path; empty -> priority default sound
 };
 
 static_assert(sizeof(AlarmBand) % alignof(AlarmBand) == 0, "Unaligned AlarmBand struct");
@@ -998,25 +999,9 @@ void read_io_settings(QByteArray& frameStart,
 }
 
 /**
- * @brief Serializes an AlarmBand to a QJsonObject.
+ * @brief Serializes an AlarmBand to a QJsonObject (Frame.cpp; optional fields are omitted).
  */
-[[nodiscard]] inline QJsonObject serialize(const AlarmBand& b)
-{
-  QJsonObject obj;
-  obj.insert(Keys::Min, qMin(b.min, b.max));
-  obj.insert(Keys::Max, qMax(b.min, b.max));
-  obj.insert(Keys::Severity, static_cast<int>(b.severity));
-  if (b.blink)
-    obj.insert(Keys::Blink, b.blink);
-
-  if (!b.color.isEmpty())
-    obj.insert(Keys::Color, b.color);
-
-  if (!b.label.isEmpty())
-    obj.insert(Keys::Label, b.label);
-
-  return obj;
-}
+[[nodiscard]] QJsonObject serialize(const AlarmBand& b);
 
 /**
  * @brief Serializes a FrequencyMarker to a QJsonObject; unset optional fields are omitted.

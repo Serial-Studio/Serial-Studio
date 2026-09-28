@@ -30,6 +30,7 @@ ToolButton {
   icon.width: 18
   icon.height: 18
   icon.color: "transparent"
+  onClicked: Cpp_UI_Alarms.playEvent("button")
 
   ToolTip {
     delay: 700

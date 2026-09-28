@@ -160,6 +160,7 @@ Item {
     hoverEnabled: true
     anchors.fill: parent
     onClicked: {
+      Cpp_UI_Alarms.playEvent("button")
       root.clicked()
       if (root.checkable)
         root.checked = !root.checked

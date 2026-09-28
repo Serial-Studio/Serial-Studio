@@ -21,20 +21,24 @@
 
 #pragma once
 
+#include <optional>
 #include <QByteArray>
+#include <QJsonObject>
 #include <QObject>
 #include <QSettings>
 #include <QString>
 
+#include "API/Server/ConsentGate.h"
 #include "API/Server/DeviceWriteVerdict.h"
+#include "Core/Api/CommandProtocol.h"
 
 namespace API {
 
 /**
- * @brief Credential and consent half of the API server: the token external (non-loopback) clients
- *        must present, and the one-time user consent that gates API-originated device writes. Takes
- *        the server's QSettings by injection so both halves persist into the same store, and holds
- *        no socket state -- the reception machine asks it questions, it never answers a client.
+ * @brief Credential and consent half of the API server: the token external (non-loopback)
+ *        clients must present, and the one-time consents gating API-originated device writes and
+ *        script installs. Takes the server's QSettings by injection so both persist into one
+ *        store; holds no socket state -- the reception machine asks it, it never answers a client.
  */
 class ServerAuth : public QObject {
   // clang-format off
@@ -56,27 +60,19 @@ public:
   [[nodiscard]] bool setAuthToken(const QString& token);
   [[nodiscard]] bool verifyToken(const QByteArray& provided) const;
   [[nodiscard]] DeviceWriteVerdict authorizeDeviceWrite();
-  [[nodiscard]] bool authorizeRemoteCommand(const QString& command);
+  [[nodiscard]] std::optional<CommandResponse> authorizeRemoteCommand(const QString& id,
+                                                                      const QString& command,
+                                                                      const QJsonObject& params);
 
 public slots:
   void ensureAuthToken();
   void regenerateAuthToken();
-  void showDeviceWriteConsentPrompt();
 
 private:
-  /**
-   * @brief Tri-state user consent for API-originated device writes.
-   */
-  enum class DeviceWriteConsent {
-    Unset,
-    Granted,
-    Denied
-  };
-
   QSettings& m_settings;
   QString m_authToken;
-  bool m_consentPromptPosted;
-  DeviceWriteConsent m_deviceWriteConsent;
+  ConsentGate m_deviceWrite;
+  ConsentGate m_scriptInstall;
 };
 
 }  // namespace API

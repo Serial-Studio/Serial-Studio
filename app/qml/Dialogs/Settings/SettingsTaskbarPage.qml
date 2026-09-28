@@ -22,6 +22,7 @@
 import QtQuick
 import QtQuick.Layouts
 import QtQuick.Controls
+import "../../Widgets" as Widgets
 
 Item {
   id: root
@@ -73,7 +74,7 @@ Item {
         Layout.fillWidth: true
         text: qsTr("Always Show Taskbar Buttons")
         color: Cpp_ThemeManager.colors["text"]
-      } Switch {
+      } Widgets.Toggle {
         id: _showTaskbarButtons
 
         Layout.rightMargin: -8
@@ -97,7 +98,7 @@ Item {
         Layout.fillWidth: true
         text: qsTr("Show Search Field")
         color: Cpp_ThemeManager.colors["text"]
-      } Switch {
+      } Widgets.Toggle {
         id: _searchEnabled
 
         Layout.rightMargin: -8
@@ -121,7 +122,7 @@ Item {
         Layout.fillWidth: true
         text: qsTr("Auto-hide Taskbar")
         color: Cpp_ThemeManager.colors["text"]
-      } Switch {
+      } Widgets.Toggle {
         id: _taskbarAutohide
 
         Layout.rightMargin: -8

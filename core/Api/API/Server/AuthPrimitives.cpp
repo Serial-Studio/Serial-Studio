@@ -21,6 +21,7 @@
 
 #include "API/Server/AuthPrimitives.h"
 
+#include <QHash>
 #include <QRandomGenerator>
 #include <QSet>
 
@@ -115,4 +116,36 @@ bool API::Auth::commandWritesToDevice(const QString& command)
   };
 
   return kDeviceWriteCommands.contains(command);
+}
+
+/**
+ * @brief Whether a command installs script code into the project: unconditionally for the
+ *        setters and loaders, and for the generic updaters only when the call carries a code field.
+ */
+bool API::Auth::commandInstallsScript(const QString& command, const QJsonObject& params)
+{
+  static const QSet<QString> kScriptInstallCommands = {
+    QStringLiteral("controlScript.set"),
+    QStringLiteral("controlScript.setCode"),
+    QStringLiteral("project.frameParser.setCode"),
+    QStringLiteral("project.source.setFrameParserCode"),
+    QStringLiteral("project.dataset.setTransformCode"),
+    QStringLiteral("project.transformLibrary.set"),
+    QStringLiteral("project.painter.setCode"),
+    QStringLiteral("project.loadJson"),
+    QStringLiteral("project.open"),
+    QStringLiteral("project.template.apply"),
+  };
+
+  static const QHash<QString, QString> kScriptParamByCommand = {
+    {     QStringLiteral("project.dataset.update"),    QStringLiteral("transformCode")},
+    {       QStringLiteral("project.group.update"),      QStringLiteral("painterCode")},
+    {QStringLiteral("project.outputWidget.update"), QStringLiteral("transmitFunction")},
+  };
+
+  if (kScriptInstallCommands.contains(command))
+    return true;
+
+  const auto param = kScriptParamByCommand.constFind(command);
+  return param != kScriptParamByCommand.constEnd() && params.contains(param.value());
 }

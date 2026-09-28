@@ -17,6 +17,7 @@ You can also browse and download examples directly from Serial Studio via the **
 | [Dual Drone Telemetry](Dual%20Drone%20Telemetry) | Multi-source two-drone simulator with synthetic camera feeds | Advanced | Yes |
 | [EM Wave Simulator](EM%20Wave%20Simulator) | Propagating electromagnetic plane wave visualizer | Advanced | Yes |
 | [EtherNet-IP Example](EtherNet-IP%20Example) | Allen-Bradley Logix tag polling over EtherNet/IP (no simulator; real hardware or emulator) | Advanced | Yes |
+| [Graphical Ping](Graphical%20Ping) | Live network latency plot driven by the system `ping` command | Beginner | |
 | [HexadecimalADC](HexadecimalADC) | Binary ADC data with CRC-16 and FFT analysis | Intermediate | |
 | [Hydrogen](Hydrogen) | Hydrogen 1s orbital Monte Carlo 3D visualization | Advanced | Yes |
 | [IEC 104 Example](IEC%20104%20Example) | IEC 60870-5-104 substation simulator with interrogation-driven point discovery | Intermediate | Yes |
