@@ -501,7 +501,7 @@ Item {
                     Layout.alignment: Qt.AlignVCenter
                   }
 
-                  SpinBox {
+                  Widgets.SpinBox {
                     id: scrollbackSpin
 
                     from: 100
@@ -635,7 +635,7 @@ Item {
                   : qsTr("No results")
           }
 
-          Button {
+          Widgets.PushButton {
             id: caseButton
 
             text: "Aa"

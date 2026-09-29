@@ -367,7 +367,7 @@ Item {
       Label {
         text: qsTr("DBC Database") + ":"
         visible: Cpp_IO_CANBus.interfaceList.length > 0
-      } Button {
+      } Widgets.PushButton {
         Layout.fillWidth: true
         text: qsTr("Import DBC File…")
         visible: Cpp_IO_CANBus.interfaceList.length > 0

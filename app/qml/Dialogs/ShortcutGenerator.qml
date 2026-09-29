@@ -304,7 +304,7 @@ Widgets.SmartDialog {
                 implicitHeight: 4
               }
 
-              Button {
+              Widgets.PushButton {
                 text: qsTr("Change Icon…")
                 font: Cpp_Misc_CommonFonts.uiFont
                 onClicked: iconPicker.open()

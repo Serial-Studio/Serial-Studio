@@ -257,13 +257,13 @@ Item {
               }
             }
 
-            Button {
+            Widgets.PushButton {
               text: qsTr("Approve all")
               font: Cpp_Misc_CommonFonts.uiFont
               onClicked: Cpp_AI_Assistant.approveToolCallGroup(family)
             }
 
-            Button {
+            Widgets.PushButton {
               text: qsTr("Deny all")
               font: Cpp_Misc_CommonFonts.uiFont
               onClicked: Cpp_AI_Assistant.denyToolCallGroup(family)

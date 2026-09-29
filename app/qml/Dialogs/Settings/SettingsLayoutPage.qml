@@ -132,7 +132,7 @@ Item {
         }
       }
 
-      SpinBox {
+      Widgets.SpinBox {
         id: _widgetFontCustom
 
         to: 300
@@ -180,7 +180,7 @@ Item {
     Label {
       text: qsTr("Layout Margin")
       color: Cpp_ThemeManager.colors["text"]
-    } SpinBox {
+    } Widgets.SpinBox {
       id: _layoutMargin
 
       from: 0
@@ -205,7 +205,7 @@ Item {
     Label {
       text: qsTr("Layout Spacing")
       color: Cpp_ThemeManager.colors["text"]
-    } SpinBox {
+    } Widgets.SpinBox {
       id: _layoutSpacing
 
       from: -1

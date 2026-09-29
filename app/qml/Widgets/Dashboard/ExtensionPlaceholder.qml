@@ -23,6 +23,8 @@ import QtQuick
 import QtQuick.Layouts
 import QtQuick.Controls
 
+import ".." as Widgets
+
 Item {
   id: root
 
@@ -90,14 +92,14 @@ Item {
       }
     }
 
-    Button {
+    Widgets.PushButton {
       visible: root.awaitingConsent
       text: qsTr("Review and Allow…")
       Layout.alignment: Qt.AlignHCenter
       onClicked: app.showExtensionConsent(root.extensionId)
     }
 
-    Button {
+    Widgets.PushButton {
       visible: !root.awaitingConsent
       text: qsTr("Open Problem Center")
       Layout.alignment: Qt.AlignHCenter

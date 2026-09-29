@@ -180,7 +180,7 @@ Widgets.Pane {
                   Layout.alignment: Qt.AlignVCenter
                 }
 
-                SpinBox {
+                Widgets.SpinBox {
                   id: timeRangeField
 
                   readonly property var presets: [0.001, 0.002, 0.005, 0.01, 0.02, 0.05,
@@ -228,7 +228,7 @@ Widgets.Pane {
                   Layout.alignment: Qt.AlignVCenter
                 }
 
-                SpinBox {
+                Widgets.SpinBox {
                   id: pointCountField
 
                   from: 10

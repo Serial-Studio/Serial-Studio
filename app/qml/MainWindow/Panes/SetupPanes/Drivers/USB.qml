@@ -199,7 +199,7 @@ Item {
       text: qsTr("Max Packet Size") + ":"
       enabled: app.ioEnabled && !Cpp_IO_Manager.isConnected
       visible: Cpp_IO_USB.isoModeEnabled && deviceCombo.currentIndex > 0
-    } SpinBox {
+    } Widgets.SpinBox {
       id: isoPacketSpin
 
       from: 1

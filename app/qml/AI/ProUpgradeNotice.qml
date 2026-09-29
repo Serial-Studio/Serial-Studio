@@ -48,7 +48,7 @@ Widgets.SmartDialog {
     DialogButtonBox {
       Layout.fillWidth: true
 
-      Button {
+      Widgets.PushButton {
         text: qsTr("Activate")
         font: Cpp_Misc_CommonFonts.uiFont
         DialogButtonBox.buttonRole: DialogButtonBox.AcceptRole
@@ -62,7 +62,7 @@ Widgets.SmartDialog {
         }
       }
 
-      Button {
+      Widgets.PushButton {
         text: qsTr("Close")
         font: Cpp_Misc_CommonFonts.uiFont
         DialogButtonBox.buttonRole: DialogButtonBox.RejectRole

@@ -260,7 +260,7 @@ Item {
         Label {
           text: qsTr("Volume")
           color: Cpp_ThemeManager.colors["text"]
-        } SpinBox {
+        } Widgets.SpinBox {
           from: 0
           to: 100
           stepSize: 5
@@ -319,7 +319,7 @@ Item {
         Label {
           text: qsTr("Warning Repeat (ms)")
           color: Cpp_ThemeManager.colors["text"]
-        } SpinBox {
+        } Widgets.SpinBox {
           to: 15000
           from: 2500
           stepSize: 500
@@ -332,7 +332,7 @@ Item {
         Label {
           text: qsTr("Caution Repeat (ms)")
           color: Cpp_ThemeManager.colors["text"]
-        } SpinBox {
+        } Widgets.SpinBox {
           to: 30000
           from: 2500
           stepSize: 500

@@ -146,7 +146,7 @@ DriverTagPickerDialog {
               placeholderText: qsTr("DB5.DBD20:REAL")
             }
 
-            Button {
+            Widgets.PushButton {
               text: qsTr("Add Variable")
               enabled: !Cpp_IO_S7.variablesLocked && _addressField.text.length > 0
                        && _addressError.text.length === 0
@@ -276,7 +276,7 @@ DriverTagPickerDialog {
                   text: Cpp_IO_S7.variableInfo(index)
                 }
 
-                Button {
+                Widgets.PushButton {
                   implicitHeight: 28
                   text: qsTr("Remove")
                   Layout.preferredWidth: 90
@@ -313,20 +313,20 @@ DriverTagPickerDialog {
           text: qsTr("Total variables: %1").arg(Cpp_IO_S7.variableCount)
         }
 
-        Button {
+        Widgets.PushButton {
           text: qsTr("Generate Project")
           visible: Cpp_IO_S7.variableCount > 0
           onClicked: Cpp_IO_S7.generateProject()
         }
 
-        Button {
+        Widgets.PushButton {
           text: qsTr("Clear All")
           enabled: !Cpp_IO_S7.variablesLocked
           visible: Cpp_IO_S7.variableCount > 0
           onClicked: Cpp_IO_S7.clearVariables()
         }
 
-        Button {
+        Widgets.PushButton {
           text: qsTr("Close")
           onClicked: root.close()
         }

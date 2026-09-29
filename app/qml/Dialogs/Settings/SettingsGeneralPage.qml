@@ -253,7 +253,7 @@ Item {
       opacity: enabled ? 1 : 0.5
       color: Cpp_ThemeManager.colors["text"]
       text: qsTr("API Server Port")
-    } SpinBox {
+    } Widgets.SpinBox {
       id: _apiPort
 
       to: 65535
@@ -333,7 +333,7 @@ Item {
       enabled: _apiServer.checked
       color: Cpp_ThemeManager.colors["text"]
       text: qsTr("Export Protobuf File")
-    } Button {
+    } Widgets.PushButton {
       text: qsTr("Export…")
       visible: Cpp_GrpcAvailable
       opacity: enabled ? 1 : 0.5

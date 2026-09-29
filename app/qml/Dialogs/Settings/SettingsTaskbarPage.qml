@@ -149,7 +149,7 @@ Item {
         enabled: Cpp_UI_TaskbarSettings.autohide
         text: qsTr("Hide Delay (ms)")
         color: Cpp_ThemeManager.colors["text"]
-      } SpinBox {
+      } Widgets.SpinBox {
         id: _autohideDelay
 
         from: 200

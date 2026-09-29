@@ -486,7 +486,7 @@ Widgets.Pane {
             onAccepted: addTagBtn.clicked()
           }
 
-          Button {
+          Widgets.PushButton {
             id: addTagBtn
 
             text: qsTr("Add")

@@ -249,7 +249,7 @@ Widgets.SmartDialog {
           Layout.fillWidth: true
           Layout.minimumWidth: root.controlColumn
 
-          Button {
+          Widgets.PushButton {
             checkable: true
             autoExclusive: true
             text: qsTr("Rising")
@@ -264,7 +264,7 @@ Widgets.SmartDialog {
             }
           }
 
-          Button {
+          Widgets.PushButton {
             checkable: true
             autoExclusive: true
             text: qsTr("Falling")

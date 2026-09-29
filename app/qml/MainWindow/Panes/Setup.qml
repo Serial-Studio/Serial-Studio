@@ -256,7 +256,7 @@ Widgets.Pane {
       //
       // Map file selector button
       //
-      Button {
+      Widgets.PushButton {
         Layout.fillWidth: true
         opacity: enabled ? 1 : 0.5
         Layout.maximumWidth: root.maxItemWidth

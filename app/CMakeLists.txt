@@ -461,11 +461,13 @@ set(QML_SOURCES
   qml/Widgets/ProjectTableHeader.qml
   qml/Widgets/ProjectTableRow.qml
   qml/Widgets/ProNotice.qml
+  qml/Widgets/PushButton.qml
   qml/Widgets/Radio.qml
   qml/Widgets/SearchField.qml
   qml/Widgets/SegmentedControl.qml
   qml/Widgets/SmartWindow.qml
   qml/Widgets/SmartDialog.qml
+  qml/Widgets/SpinBox.qml
   qml/Widgets/SubMenuCombo.qml
   qml/Widgets/TaskbarButton.qml
   qml/Widgets/Toggle.qml

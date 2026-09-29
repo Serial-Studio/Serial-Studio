@@ -171,7 +171,7 @@ DriverTagPickerDialog {
               validator: IntValidator { bottom: 1; top: 247 }
             }
 
-            Button {
+            Widgets.PushButton {
               text: qsTr("Add Group")
               enabled: _startField.text.length > 0 && _countField.text.length > 0
               onClicked: {
@@ -333,7 +333,7 @@ DriverTagPickerDialog {
                   Layout.fillWidth: true
                 }
 
-                Button {
+                Widgets.PushButton {
                   implicitHeight: 28
                   text: qsTr("Remove")
                   onClicked: Cpp_IO_Modbus.removeRegisterGroup(index)
@@ -368,19 +368,19 @@ DriverTagPickerDialog {
           text: qsTr("Total groups: %1").arg(Cpp_IO_Modbus.registerGroupCount)
         }
 
-        Button {
+        Widgets.PushButton {
           text: qsTr("Generate Project")
           visible: Cpp_IO_Modbus.registerGroupCount > 0
           onClicked: Cpp_IO_Modbus.generateProject()
         }
 
-        Button {
+        Widgets.PushButton {
           text: qsTr("Clear All")
           visible: Cpp_IO_Modbus.registerGroupCount > 0
           onClicked: Cpp_IO_Modbus.clearRegisterGroups()
         }
 
-        Button {
+        Widgets.PushButton {
           text: qsTr("Close")
           onClicked: root.close()
         }

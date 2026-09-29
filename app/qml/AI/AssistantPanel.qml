@@ -155,7 +155,7 @@ Widgets.SmartDialog {
               }
             }
 
-            Button {
+            Widgets.PushButton {
               text: qsTr("Start fresh chat")
               onClicked: Cpp_AI_Assistant.newChatFromHandoff(Cpp_AI_Assistant.activeChatId)
             }
@@ -211,7 +211,7 @@ Widgets.SmartDialog {
                     + " \"" + memoryProposalChip.factText + "\""
             }
 
-            Button {
+            Widgets.PushButton {
               text: qsTr("Remember")
               onClicked: {
                 if (Cpp_AI_Assistant.addMemory(memoryProposalChip.category,
@@ -220,7 +220,7 @@ Widgets.SmartDialog {
               }
             }
 
-            Button {
+            Widgets.PushButton {
               text: qsTr("Dismiss")
               onClicked: memoryProposalChip.visible = false
             }

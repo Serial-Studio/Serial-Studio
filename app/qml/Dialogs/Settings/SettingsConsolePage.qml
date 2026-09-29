@@ -116,7 +116,7 @@ Item {
     Label {
       text: qsTr("Font Size")
       color: Cpp_ThemeManager.colors["text"]
-    } SpinBox {
+    } Widgets.SpinBox {
       id: _consoleFontSize
 
       to: 72
@@ -140,7 +140,7 @@ Item {
     Label {
       text: qsTr("Scrollback Lines")
       color: Cpp_ThemeManager.colors["text"]
-    } SpinBox {
+    } Widgets.SpinBox {
       id: _scrollbackLines
 
       from: 100

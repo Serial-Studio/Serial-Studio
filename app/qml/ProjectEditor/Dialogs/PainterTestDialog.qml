@@ -232,7 +232,7 @@ Window {
         spacing: 8
         Layout.fillWidth: true
 
-        Button {
+        Widgets.PushButton {
           text: qsTr("Clear console")
           onClicked: consoleModel.clear()
         }
@@ -241,7 +241,7 @@ Window {
           Layout.fillWidth: true
         }
 
-        Button {
+        Widgets.PushButton {
           text: qsTr("Close")
           onClicked: root.close()
         }

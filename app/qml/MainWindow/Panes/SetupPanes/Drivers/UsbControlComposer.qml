@@ -139,7 +139,7 @@ ColumnLayout {
     Label {
       visible: root.isIn
       text: qsTr("Read Length") + ":"
-    } SpinBox {
+    } Widgets.SpinBox {
       id: lengthSpin
 
       from: 0
@@ -154,7 +154,7 @@ ColumnLayout {
   //
   // Send button
   //
-  Button {
+  Widgets.PushButton {
     text: qsTr("Send Control Transfer")
     Layout.alignment: Qt.AlignRight
     enabled: !root.pending && typeField.text.length > 0 && requestField.text.length > 0

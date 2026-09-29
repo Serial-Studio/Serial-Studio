@@ -214,6 +214,7 @@ Item {
 
       implicitHeight: 24
       Layout.fillWidth: true
+      onCurrentIndexChanged: Cpp_UI_Alarms.playEvent("button")
 
       TabButton {
         text: qsTr("Track")
@@ -325,7 +326,7 @@ Item {
                 color: Cpp_ThemeManager.colors["text"]
               }
 
-              SpinBox {
+              Widgets.SpinBox {
                 id: _windowSpin
 
                 from: 256

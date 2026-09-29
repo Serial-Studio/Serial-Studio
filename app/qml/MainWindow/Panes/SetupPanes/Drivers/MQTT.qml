@@ -165,7 +165,7 @@ Item {
           onEdited: text => Cpp_IO_Mqtt.clientId = text
         }
 
-        Button {
+        Widgets.PushButton {
           enabled: app.ioEnabled
           text: qsTr("Regenerate")
           opacity: enabled ? 1 : 0.5
@@ -327,7 +327,7 @@ Item {
         text: qsTr("Sparkplug Project") + ":"
         visible: Cpp_IO_Mqtt.sparkplugEnabled
         enabled: app.ioEnabled && Cpp_IO_Mqtt.sparkplugEnabled
-      } Button {
+      } Widgets.PushButton {
         id: _generate
 
         Layout.fillWidth: true
@@ -455,7 +455,7 @@ Item {
         visible: Cpp_IO_Mqtt.sslEnabled
         text: qsTr("CA Certificates") + ":"
         enabled: app.ioEnabled && Cpp_IO_Mqtt.sslEnabled
-      } Button {
+      } Widgets.PushButton {
         Layout.fillWidth: true
         opacity: enabled ? 1 : 0.5
         visible: Cpp_IO_Mqtt.sslEnabled
@@ -486,7 +486,7 @@ Item {
           onEdited: text => Cpp_IO_Mqtt.clientCertificatePath = text
         }
 
-        Button {
+        Widgets.PushButton {
           text: qsTr("Browse…")
           opacity: enabled ? 1 : 0.5
           enabled: app.ioEnabled && Cpp_IO_Mqtt.sslEnabled
@@ -516,7 +516,7 @@ Item {
           placeholderText: qsTr("Defaults to the certificate file")
         }
 
-        Button {
+        Widgets.PushButton {
           text: qsTr("Browse…")
           opacity: enabled ? 1 : 0.5
           enabled: app.ioEnabled && Cpp_IO_Mqtt.sslEnabled

@@ -133,7 +133,7 @@ Item {
         }
       }
 
-      Button {
+      Widgets.PushButton {
         text: qsTr("Browse")
         enabled: app.ioEnabled
         opacity: enabled ? 1 : 0.5
@@ -217,7 +217,7 @@ Item {
         }
       }
 
-      Button {
+      Widgets.PushButton {
         text: qsTr("Browse")
         enabled: app.ioEnabled
         opacity: enabled ? 1 : 0.5
@@ -269,7 +269,7 @@ Item {
         }
       }
 
-      Button {
+      Widgets.PushButton {
         text: qsTr("Browse")
         enabled: app.ioEnabled
         opacity: enabled ? 1 : 0.5
@@ -282,7 +282,7 @@ Item {
     //
     Item {
       visible: modeCombo.currentIndex === 1
-    } Button {
+    } Widgets.PushButton {
       Layout.fillWidth: true
       enabled: app.ioEnabled
       opacity: enabled ? 1 : 0.5

@@ -74,7 +74,7 @@ Widgets.SmartDialog {
         placeholderText: qsTr("Something the assistant should remember…")
       }
 
-      Button {
+      Widgets.PushButton {
         text: qsTr("Remember")
         enabled: factField.text.trim().length > 0
         onClicked: {

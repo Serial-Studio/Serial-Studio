@@ -18,6 +18,8 @@ import QtQuick.Window
 import QtQuick.Layouts
 import QtQuick.Controls
 
+import "../Widgets" as Widgets
+
 Rectangle {
   id: root
 
@@ -220,12 +222,12 @@ Rectangle {
 
         Item { Layout.fillWidth: true }
 
-        Button {
+        Widgets.PushButton {
           text: qsTr("Cancel")
           onClicked: renamePopup.close()
         }
 
-        Button {
+        Widgets.PushButton {
           text: qsTr("Rename")
           onClicked: renamePopup.commit()
         }

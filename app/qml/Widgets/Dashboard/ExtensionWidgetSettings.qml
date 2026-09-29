@@ -118,7 +118,7 @@ Widgets.SmartDialog {
   Component {
     id: numberEditor
 
-    SpinBox {
+    Widgets.SpinBox {
       id: spin
 
       required property var declaration

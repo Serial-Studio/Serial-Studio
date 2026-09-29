@@ -161,7 +161,7 @@ Item {
       implicitHeight: _variablesButton.height + _projectButton.height
                       + _variableStatus.height + 12
 
-      Button {
+      Widgets.PushButton {
         id: _variablesButton
 
         anchors.top: parent.top
@@ -171,7 +171,7 @@ Item {
         text: qsTr("Configure Variables…")
       }
 
-      Button {
+      Widgets.PushButton {
         id: _projectButton
 
         anchors.topMargin: 4

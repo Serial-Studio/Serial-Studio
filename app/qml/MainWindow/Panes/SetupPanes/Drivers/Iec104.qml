@@ -245,7 +245,7 @@ Item {
       Layout.fillWidth: true
       implicitHeight: _projectButton.height + _pointStatus.height + 8
 
-      Button {
+      Widgets.PushButton {
         id: _projectButton
 
         anchors.top: parent.top

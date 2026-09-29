@@ -12,7 +12,7 @@ import QtQuick.Layouts
 import QtQuick.Controls
 import QtQuick.Controls.impl
 
-Button {
+PushButton {
   id: root
 
   padding: 4
@@ -23,8 +23,6 @@ Button {
 
   ToolTip.delay: 500
   ToolTip.visible: root.hovered && root.ToolTip.text !== ""
-
-  onClicked: Cpp_UI_Alarms.playEvent("button")
 
   property int iconSize: 18
   property string color: palette.buttonText

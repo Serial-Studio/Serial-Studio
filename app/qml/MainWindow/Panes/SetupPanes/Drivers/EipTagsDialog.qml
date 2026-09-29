@@ -165,7 +165,7 @@ DriverTagPickerDialog {
               validator: IntValidator { bottom: 0; top: 65535 }
             }
 
-            Button {
+            Widgets.PushButton {
               text: qsTr("Add Tag")
               enabled: _tagField.text.length > 0
               onClicked: {
@@ -284,7 +284,7 @@ DriverTagPickerDialog {
                   font: Cpp_Misc_CommonFonts.monoFont
                 }
 
-                Button {
+                Widgets.PushButton {
                   implicitHeight: 28
                   text: qsTr("Remove")
                   Layout.preferredWidth: 90
@@ -320,19 +320,19 @@ DriverTagPickerDialog {
           text: qsTr("Total tags: %1").arg(Cpp_IO_Eip.tagCount)
         }
 
-        Button {
+        Widgets.PushButton {
           text: qsTr("Generate Project")
           visible: Cpp_IO_Eip.tagCount > 0
           onClicked: Cpp_IO_Eip.generateProject()
         }
 
-        Button {
+        Widgets.PushButton {
           text: qsTr("Clear All")
           visible: Cpp_IO_Eip.tagCount > 0
           onClicked: Cpp_IO_Eip.clearTags()
         }
 
-        Button {
+        Widgets.PushButton {
           text: qsTr("Close")
           onClicked: root.close()
         }

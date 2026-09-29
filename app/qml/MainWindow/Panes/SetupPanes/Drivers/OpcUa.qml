@@ -69,7 +69,7 @@ Item {
         }
       }
 
-      Button {
+      Widgets.PushButton {
         text: qsTr("Discover")
         enabled: app.ioEnabled && !Cpp_IO_OpcUa.discovering
         onClicked: {
@@ -275,7 +275,7 @@ Item {
         placeholderText: qsTr("No certificate selected")
       }
 
-      Button {
+      Widgets.PushButton {
         text: qsTr("Browse…")
         enabled: app.ioEnabled
         onClicked: _userCertDialog.open()
@@ -300,7 +300,7 @@ Item {
         placeholderText: qsTr("No private key selected")
       }
 
-      Button {
+      Widgets.PushButton {
         text: qsTr("Browse…")
         enabled: app.ioEnabled
         onClicked: _userKeyDialog.open()
@@ -362,13 +362,13 @@ Item {
         spacing: 4
         Layout.fillWidth: true
 
-        Button {
+        Widgets.PushButton {
           text: qsTr("Export…")
           enabled: app.ioEnabled && Cpp_IO_OpcUa.clientCertificate.valid === true
           onClicked: _exportDialog.open()
         }
 
-        Button {
+        Widgets.PushButton {
           text: qsTr("Replace")
           enabled: app.ioEnabled
           onClicked: Cpp_IO_OpcUa.regenerateCertificate()
@@ -389,7 +389,7 @@ Item {
       Layout.fillWidth: true
       implicitHeight: _browseButton.height + _generateButton.height + _status.height + 12
 
-      Button {
+      Widgets.PushButton {
         id: _browseButton
 
         enabled: app.ioEnabled
@@ -400,7 +400,7 @@ Item {
         onClicked: _browser.show()
       }
 
-      Button {
+      Widgets.PushButton {
         id: _generateButton
 
         anchors.topMargin: 4

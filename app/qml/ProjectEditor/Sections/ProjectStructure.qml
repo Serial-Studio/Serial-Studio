@@ -695,6 +695,7 @@ Widgets.Pane {
                          }
 
                          treeView.forceActiveFocus()
+                         Cpp_UI_Alarms.playEvent("button")
 
                          if (mouse.modifiers & Qt.ControlModifier) {
                            treeView.selectionModel.select(idx, ItemSelectionModel.Toggle)

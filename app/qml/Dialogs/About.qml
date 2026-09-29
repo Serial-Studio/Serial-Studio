@@ -210,7 +210,7 @@ Widgets.SmartDialog {
       //
       // License management
       //
-      Button {
+      Widgets.PushButton {
         Layout.fillWidth: true
         visible: Cpp_CommercialBuild
         text: qsTr("Manage License")
@@ -220,7 +220,7 @@ Widgets.SmartDialog {
       //
       // Donate button (free & GPL3)
       //
-      Button {
+      Widgets.PushButton {
         text: qsTr("Donate")
         Layout.fillWidth: true
         visible: !app.proVersion
@@ -230,7 +230,7 @@ Widgets.SmartDialog {
       //
       // Check for updates
       //
-      Button {
+      Widgets.PushButton {
         Layout.fillWidth: true
         text: qsTr("Check for Updates")
         onClicked: app.checkForUpdates()
@@ -239,7 +239,7 @@ Widgets.SmartDialog {
       //
       // License Agreement
       //
-      Button {
+      Widgets.PushButton {
         Layout.fillWidth: true
         text: qsTr("License Agreement")
         onClicked: Qt.openUrlExternally("https://github.com/Serial-Studio/Serial-Studio/blob/master/LICENSE.md")
@@ -248,7 +248,7 @@ Widgets.SmartDialog {
       //
       // Report bug
       //
-      Button {
+      Widgets.PushButton {
         Layout.fillWidth: true
         text: qsTr("Report Bug")
         onClicked: Qt.openUrlExternally("https://github.com/Serial-Studio/Serial-Studio/issues")
@@ -257,7 +257,7 @@ Widgets.SmartDialog {
       //
       // Acknowledgements
       //
-      Button {
+      Widgets.PushButton {
         Layout.fillWidth: true
         text: qsTr("Acknowledgements")
         onClicked: app.showAcknowledgements()
@@ -266,7 +266,7 @@ Widgets.SmartDialog {
       //
       // Hotpath benchmark
       //
-      Button {
+      Widgets.PushButton {
         Layout.fillWidth: true
         text: qsTr("Benchmark")
         onClicked: app.showBenchmarkDialog()
@@ -275,7 +275,7 @@ Widgets.SmartDialog {
       //
       // Website
       //
-      Button {
+      Widgets.PushButton {
         text: qsTr("Website")
         Layout.fillWidth: true
         onClicked: Qt.openUrlExternally("https://serial-studio.com/")
@@ -291,7 +291,7 @@ Widgets.SmartDialog {
       //
       // Close button
       //
-      Button {
+      Widgets.PushButton {
         text: qsTr("Close")
         Layout.fillWidth: true
         onClicked: root.close()

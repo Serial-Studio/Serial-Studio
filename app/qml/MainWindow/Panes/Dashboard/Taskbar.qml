@@ -1107,7 +1107,7 @@ Item {
                 }
               }
 
-              Button {
+              Widgets.PushButton {
                 Layout.fillWidth: true
                 text: qsTr("Open MQTT Settings")
                 font: Cpp_Misc_CommonFonts.uiFont

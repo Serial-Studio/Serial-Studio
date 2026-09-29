@@ -283,7 +283,7 @@ Widgets.SmartDialog {
         Layout.fillWidth: true
       }
 
-      Button {
+      Widgets.PushButton {
         text: qsTr("Close")
         onClicked: root.close()
       }

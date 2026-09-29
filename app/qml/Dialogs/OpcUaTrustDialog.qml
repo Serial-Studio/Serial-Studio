@@ -184,12 +184,12 @@ Widgets.SmartDialog {
         Layout.fillWidth: true
       }
 
-      Button {
+      Widgets.PushButton {
         text: qsTr("Reject")
         onClicked: root.close()
       }
 
-      Button {
+      Widgets.PushButton {
         text: qsTr("Trust This Server")
         onClicked: {
           Cpp_IO_OpcUa.trustServerCertificate(root.certificate.fingerprint || "")

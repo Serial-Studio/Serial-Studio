@@ -23,6 +23,8 @@ import QtQuick
 import QtQuick.Layouts
 import QtQuick.Controls
 
+import "../../Widgets" as Widgets
+
 Item {
   id: root
 
@@ -70,7 +72,7 @@ Item {
     Label {
       text: qsTr("Time Range")
       color: Cpp_ThemeManager.colors["text"]
-    } SpinBox {
+    } Widgets.SpinBox {
       id: _timeRange
 
       readonly property var presets: [0.001, 0.002, 0.005, 0.01, 0.02, 0.05,
@@ -122,7 +124,7 @@ Item {
     Label {
       text: qsTr("Point Count")
       color: Cpp_ThemeManager.colors["text"]
-    } SpinBox {
+    } Widgets.SpinBox {
       id: _pointCount
 
       from: 10
@@ -147,7 +149,7 @@ Item {
     Label {
       text: qsTr("UI Refresh Rate (Hz)")
       color: Cpp_ThemeManager.colors["text"]
-    } SpinBox {
+    } Widgets.SpinBox {
       id: _refreshRate
 
       from: 1

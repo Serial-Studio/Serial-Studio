@@ -370,7 +370,7 @@ Item {
       implicitHeight: _groupButton.height + _importButton.height
                       + _groupStatus.height + 12
 
-      Button {
+      Widgets.PushButton {
         id: _groupButton
 
         anchors.top: parent.top
@@ -380,7 +380,7 @@ Item {
         text: qsTr("Configure Register Groups…")
       }
 
-      Button {
+      Widgets.PushButton {
         id: _importButton
 
         anchors.topMargin: 4

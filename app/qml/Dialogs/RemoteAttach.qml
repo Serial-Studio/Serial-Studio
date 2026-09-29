@@ -185,7 +185,7 @@ Widgets.SmartDialog {
         color: Cpp_ThemeManager.colors["text"]
       }
 
-      SpinBox {
+      Widgets.SpinBox {
         from: 1
         to: 65535
         editable: true

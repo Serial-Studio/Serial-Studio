@@ -147,7 +147,7 @@ Widgets.SmartDialog {
             text: Cpp_IO_FileTransmission.fileName
           }
 
-          Button {
+          Widgets.PushButton {
             text: qsTr("Select File…")
             Layout.alignment: Qt.AlignVCenter
             onClicked: Cpp_IO_FileTransmission.openFile()
@@ -176,7 +176,7 @@ Widgets.SmartDialog {
           visible: _modeCombo.currentIndex <= 1
           enabled: !Cpp_IO_FileTransmission.active
 
-          SpinBox {
+          Widgets.SpinBox {
             id: _interval
 
             from: 0
@@ -213,7 +213,7 @@ Widgets.SmartDialog {
           enabled: !Cpp_IO_FileTransmission.active
           visible: _modeCombo.currentIndex === 1 || _modeCombo.currentIndex === 5
 
-          SpinBox {
+          Widgets.SpinBox {
             id: _blockSize
 
             from: 64
@@ -251,7 +251,7 @@ Widgets.SmartDialog {
           visible: _modeCombo.currentIndex >= 2
           enabled: !Cpp_IO_FileTransmission.active
 
-          SpinBox {
+          Widgets.SpinBox {
             id: _timeout
 
             to: 60000
@@ -289,7 +289,7 @@ Widgets.SmartDialog {
           visible: _modeCombo.currentIndex >= 2
           enabled: !Cpp_IO_FileTransmission.active
 
-          SpinBox {
+          Widgets.SpinBox {
             id: _retries
 
             from: 1
@@ -405,7 +405,7 @@ Widgets.SmartDialog {
           spacing: 4
           Layout.fillWidth: true
 
-          Button {
+          Widgets.PushButton {
             Layout.fillWidth: true
             opacity: enabled ? 1 : 0.5
             enabled: Cpp_IO_FileTransmission.fileOpen
@@ -460,7 +460,7 @@ Widgets.SmartDialog {
             text: qsTr("Activity Log")
           }
 
-          Button {
+          Widgets.PushButton {
             text: qsTr("Clear")
             onClicked: Cpp_IO_FileTransmission.clearLog()
           }

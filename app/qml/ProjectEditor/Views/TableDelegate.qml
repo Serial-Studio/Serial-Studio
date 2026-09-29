@@ -823,7 +823,7 @@ ColumnLayout {
           property var editableValue: model.editableValue
           property var modelPlaceholder: model.placeholderValue
 
-          sourceComponent: SpinBox {
+          sourceComponent: Widgets.SpinBox {
             id: _autoIntSpin
 
             editable: true
@@ -1069,7 +1069,7 @@ ColumnLayout {
           property var modelActive: model.active
           property var modelPlaceholder: model.placeholderValue
 
-          sourceComponent: Button {
+          sourceComponent: Widgets.PushButton {
             id: _btn
 
             enabled: buttonLoader.modelActive

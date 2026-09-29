@@ -23,6 +23,8 @@ import QtQuick
 import QtQuick.Layouts
 import QtQuick.Controls
 
+import ".." as Widgets
+
 //
 // Marker name prompt: centered over the plot-area overlay it is parented to
 //
@@ -75,12 +77,12 @@ Popup {
       onAccepted: root.accept()
     }
 
-    Button {
+    Widgets.PushButton {
       text: qsTr("Add")
       onClicked: root.accept()
     }
 
-    Button {
+    Widgets.PushButton {
       text: qsTr("Cancel")
       onClicked: root.close()
     }

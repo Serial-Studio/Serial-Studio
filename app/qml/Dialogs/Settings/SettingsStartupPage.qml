@@ -144,7 +144,7 @@ Item {
       visible: Cpp_Misc_HighDpiScaling.configurable
                && Cpp_Misc_HighDpiScaling.customSelected
       color: Cpp_ThemeManager.colors["text"]
-    } SpinBox {
+    } Widgets.SpinBox {
       id: _hidpiPercent
 
       from: Cpp_Misc_HighDpiScaling.minimumPercent

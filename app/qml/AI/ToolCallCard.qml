@@ -10,6 +10,8 @@ import QtQuick
 import QtQuick.Layouts
 import QtQuick.Controls
 
+import "../Widgets" as Widgets
+
 Rectangle {
   id: root
 
@@ -205,7 +207,7 @@ Rectangle {
       // The instruction is deliberately untranslated: the tool names are literal and the
       // recovery flow must not vary by UI locale.
       //
-      Button {
+      Widgets.PushButton {
         enabled: !Cpp_AI_Assistant.busy
         text: qsTr("Restore checkpoint…")
         font: Cpp_Misc_CommonFonts.uiFont
@@ -225,13 +227,13 @@ Rectangle {
       visible: root.statusValue === root.kAwaitingConfirm
                && !root.groupedConfirm
 
-      Button {
+      Widgets.PushButton {
         text: qsTr("Approve")
         font: Cpp_Misc_CommonFonts.uiFont
         onClicked: Cpp_AI_Assistant.approveToolCall(root.callId)
       }
 
-      Button {
+      Widgets.PushButton {
         text: qsTr("Deny")
         font: Cpp_Misc_CommonFonts.uiFont
         onClicked: Cpp_AI_Assistant.denyToolCall(root.callId)

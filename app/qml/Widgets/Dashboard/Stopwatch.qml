@@ -236,7 +236,7 @@ Item {
       spacing: 6
       Layout.fillWidth: true
 
-      Button {
+      Widgets.PushButton {
         id: startStopBtn
 
         Layout.fillWidth: true
@@ -254,7 +254,7 @@ Item {
         onClicked: root.toggleRun()
       }
 
-      Button {
+      Widgets.PushButton {
         id: lapBtn
 
         Layout.fillWidth: true
@@ -270,7 +270,7 @@ Item {
         onClicked: root.recordLap()
       }
 
-      Button {
+      Widgets.PushButton {
         id: resetBtn
 
         Layout.fillWidth: true

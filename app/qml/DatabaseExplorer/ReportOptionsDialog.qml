@@ -363,10 +363,10 @@ Widgets.SmartDialog {
               Layout.fillWidth: true
               font: Cpp_Misc_CommonFonts.uiFont
               placeholderText: qsTr("PNG, JPG or SVG (optional)")
-            } Button {
+            } Widgets.PushButton {
               text: qsTr("Browse…")
               onClicked: Cpp_Sessions_Manager.pickReportLogo()
-            } Button {
+            } Widgets.PushButton {
               text: qsTr("Clear")
               enabled: _logoField.text.length > 0
               onClicked: _logoField.text = ""
@@ -456,7 +456,7 @@ Widgets.SmartDialog {
             spacing: 8
             Layout.fillWidth: true
 
-            SpinBox {
+            Widgets.SpinBox {
               id: _lineWidthSpin
 
               to: 30
@@ -606,7 +606,7 @@ Widgets.SmartDialog {
               Layout.fillWidth: true
             }
 
-            Button {
+            Widgets.PushButton {
               flat: true
               padding: 4
               text: qsTr("Expand All")
@@ -615,7 +615,7 @@ Widgets.SmartDialog {
               onClicked: _datasetModel.setAllExpanded(true)
             }
 
-            Button {
+            Widgets.PushButton {
               flat: true
               padding: 4
               text: qsTr("Collapse All")

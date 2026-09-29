@@ -224,7 +224,7 @@ DriverTagPickerDialog {
           placeholderText: qsTr("Type to filter by name…")
         }
 
-        Button {
+        Widgets.PushButton {
           text: qsTr("Refresh")
           onClicked: Cpp_IO_Process.refreshProcessList()
         }
@@ -393,13 +393,13 @@ DriverTagPickerDialog {
           text: qsTr("%1 process(es)").arg(filteredModel.count)
         }
 
-        Button {
+        Widgets.PushButton {
           text: qsTr("Select")
           onClicked: root.confirmSelection()
           enabled: processList.currentIndex >= 0
         }
 
-        Button {
+        Widgets.PushButton {
           text: qsTr("Close")
           onClicked: root.close()
         }

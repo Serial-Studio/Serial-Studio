@@ -149,7 +149,7 @@ Item {
       Layout.fillWidth: true
       implicitHeight: _tagsButton.height + _projectButton.height + _tagStatus.height + 12
 
-      Button {
+      Widgets.PushButton {
         id: _tagsButton
 
         anchors.top: parent.top
@@ -159,7 +159,7 @@ Item {
         text: qsTr("Configure Tags…")
       }
 
-      Button {
+      Widgets.PushButton {
         id: _projectButton
 
         anchors.topMargin: 4

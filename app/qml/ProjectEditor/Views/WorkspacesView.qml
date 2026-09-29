@@ -431,7 +431,7 @@ Widgets.Pane {
                          + "with widgets to populate workspaces.")
           }
 
-          Button {
+          Widgets.PushButton {
             Layout.alignment: Qt.AlignHCenter
             text: qsTr("Reset to Auto Layout")
             visible: Cpp_JSON_ProjectModel.customizeWorkspaces
