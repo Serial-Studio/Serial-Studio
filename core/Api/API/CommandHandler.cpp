@@ -155,7 +155,7 @@ API::CommandResponse API::CommandHandler::processCommand(const CommandRequest& r
 {
   static auto& registry = CommandRegistry::instance();
   if (origin != CommandOrigin::Remote) {
-    const RemoteDispatchScope trusted(RemoteGate());
+    const RemoteDispatchScope trusted((RemoteGate()));
     return registry.execute(request.command, request.id, request.params);
   }
 
