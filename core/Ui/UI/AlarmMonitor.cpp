@@ -109,6 +109,11 @@ void UI::AlarmMonitor::rebuildTrackers()
       tracker.bands.push_back(std::move(b));
     }
 
+    for (const auto& band : tracker.bands) {
+      tracker.rangeMin = qMin(tracker.rangeMin, band.min);
+      tracker.rangeMax = qMax(tracker.rangeMax, band.max);
+    }
+
     m_trackers.push_back(std::move(tracker));
   }
 
@@ -166,10 +171,10 @@ int UI::AlarmMonitor::bandIndexFor(const Tracker& tracker, double value) noexcep
 }
 
 /**
- * @brief Posts a notification on transition into a Warning or Critical band (value clamped to
- *        the widget range first). Every band change, the baseline capture included, is also
- *        emitted as bandTransition for the annunciator (spec 0087) ahead of the unchanged
- *        notification cooldown, so a rebuilt tracker re-seeds its point without a notification.
+ * @brief Posts a notification on transition into a Warning or Critical band; the value is first
+ *        clamped to the widget range widened to the band extents. Every band change, baseline
+ *        capture included, is emitted as bandTransition (spec 0087) ahead of the notification
+ *        cooldown, so a rebuilt tracker re-seeds its point without a notification.
  */
 void UI::AlarmMonitor::processValue(Tracker& tracker, double value)
 {
