@@ -190,8 +190,10 @@ QVariant DataModel::TransformDispatch::applyLua(DataModel::TransformEngine& engi
     if (lua_isnumber(L, -1)) {
       const double result = lua_tonumber(L, -1);
       lua_pop(L, 1);
-      if (!std::isfinite(result)) [[unlikely]]
+      if (!std::isfinite(result)) [[unlikely]] {
+        m_transforms.noteTransformError(uniqueId, "transform returned NaN");
         return rawValue;
+      }
 
       return QVariant(result);
     }
@@ -203,6 +205,7 @@ QVariant DataModel::TransformDispatch::applyLua(DataModel::TransformEngine& engi
     }
 
     lua_pop(L, 1);
+    m_transforms.noteTransformError(uniqueId, "transform returned no value");
     return rawValue;
   } catch (const std::exception& e) {
     qWarning() << "[TransformDispatch] applyTransformLua uncaught exception for" << uniqueId << ":"
@@ -280,8 +283,10 @@ QVariant DataModel::TransformDispatch::applyJs(DataModel::TransformEngine& engin
 
   if (result.isNumber()) {
     const double val = result.toNumber();
-    if (!std::isfinite(val)) [[unlikely]]
+    if (!std::isfinite(val)) [[unlikely]] {
+      m_transforms.noteTransformError(uniqueId, "transform returned NaN");
       return rawValue;
+    }
 
     return QVariant(val);
   }
@@ -294,7 +299,9 @@ QVariant DataModel::TransformDispatch::applyJs(DataModel::TransformEngine& engin
     qWarning() << "[TransformDispatch] JS transform call failed for dataset" << uniqueId << ":"
                << message;
     m_transforms.noteTransformError(uniqueId, message);
+    return rawValue;
   }
 
+  m_transforms.noteTransformError(uniqueId, "transform returned no value");
   return rawValue;
 }

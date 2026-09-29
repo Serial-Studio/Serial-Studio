@@ -93,7 +93,9 @@ inline constexpr int kSeverityCritical = 2;
 
 /**
  * @brief The notification center accepted an event (after dedup and clamping): what the history
- *        holds, for sinks that forward notifications (the MQTT publisher).
+ *        holds, for sinks that forward notifications (the MQTT publisher). origin carries the
+ *        kNotificationOrigin* provenance ordinal, so a reader that must treat the app's own
+ *        alarm-band monitor specially (spec 0088) never matches on a translated channel name.
  */
 struct NotificationPosted final {
   qint64 timestampMs;
@@ -101,7 +103,11 @@ struct NotificationPosted final {
   QString channel;
   QString title;
   QString text;
+  int origin;
 };
+
+inline constexpr int kNotificationOriginUser         = 0;
+inline constexpr int kNotificationOriginAlarmMonitor = 1;
 
 /**
  * @brief The dashboard rebuilt its widget structure; the generation counter identifies the build.

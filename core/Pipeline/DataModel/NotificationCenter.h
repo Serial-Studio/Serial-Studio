@@ -113,7 +113,11 @@ public:
   Q_INVOKABLE [[nodiscard]] int maxHistory() const noexcept;
 
 public slots:
-  void post(int level, const QString& channel, const QString& title, const QString& subtitle);
+  void post(int level,
+            const QString& channel,
+            const QString& title,
+            const QString& subtitle,
+            int origin = 0);
   void postInfo(const QString& channel, const QString& title, const QString& subtitle);
   void postWarning(const QString& channel, const QString& title, const QString& subtitle);
   void postCritical(const QString& channel, const QString& title, const QString& subtitle);
@@ -132,6 +136,7 @@ public:
     QString channel;
     QString title;
     QString subtitle;
+    int origin;
   };
 
   struct DedupKey {

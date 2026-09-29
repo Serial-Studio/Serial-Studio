@@ -140,6 +140,7 @@ qt_add_library(
   DataModel/FrameBuilder/BlockStager.cpp
   DataModel/FrameBuilder/ExternalWiring.cpp
   DataModel/FrameBuilder/ReplayIngest.cpp
+  DataModel/FrameBuilder/ShortFrameWatch.cpp
   DataModel/FrameBuilder/LatestFrameTap.cpp
   DataModel/FrameBuilder/QuickPlotBuilder.cpp
   DataModel/FrameBuilder/TableSnapshotChannel.cpp
@@ -263,6 +264,7 @@ qt_add_library(
   DataModel/FrameBuilder/BlockStager.h
   DataModel/FrameBuilder/ExternalWiring.h
   DataModel/FrameBuilder/ReplayIngest.h
+  DataModel/FrameBuilder/ShortFrameWatch.h
   DataModel/FrameBuilder/LatestFrameTap.h
   DataModel/FrameBuilder/QuickPlotBuilder.h
   DataModel/FrameBuilder/TableSnapshotChannel.h

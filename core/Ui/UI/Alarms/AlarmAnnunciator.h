@@ -92,6 +92,9 @@ class AlarmAnnunciator : public QObject {
   Q_PROPERTY(bool ringbackPending
              READ ringbackPending
              NOTIFY stateChanged)
+  Q_PROPERTY(bool hasConfiguredAlarms
+             READ hasConfiguredAlarms
+             NOTIFY stateChanged)
   Q_PROPERTY(QString effectiveSequence
              READ effectiveSequence
              NOTIFY stateChanged)
@@ -182,6 +185,7 @@ public:
   [[nodiscard]] bool sounding() const noexcept;
   [[nodiscard]] bool deviceLost() const noexcept;
   [[nodiscard]] bool ringbackPending() const noexcept;
+  [[nodiscard]] bool hasConfiguredAlarms() const noexcept;
   [[nodiscard]] int volume() const noexcept;
   [[nodiscard]] int testPriority() const noexcept;
   [[nodiscard]] int highestPriority() const noexcept;
@@ -227,10 +231,12 @@ private slots:
   void onTestStep();
   void onDataReset();
   void onHealthTick();
-  void onLinkClosed();
   void onRepeatDue();
+  void onConnectionEdge();
   void onTrackersRebuilt();
+  void onProjectFileChanged();
   void onProjectSoundsChanged();
+  void onLinkClosed(bool wasDrop);
   void onEventRequested(int slot);
   void onBandTransition(int uniqueId,
                         int severity,
@@ -251,6 +257,8 @@ private:
   [[nodiscard]] Slot slotFromName(const QString& name, bool& ok) const;
 
   void onNotificationPosted(const Core::Bus::NotificationPosted& event);
+  [[nodiscard]] bool projectDefinesAlarms() const;
+  void refreshConfiguredAlarms();
   void raisePoint(const PointKey& key,
                   Priority priority,
                   const QString& title,
@@ -274,8 +282,10 @@ private:
 
   bool m_armed;
   bool m_headless;
+  bool m_dropHold;
   bool m_deviceLost;
   bool m_ringbackSounding;
+  bool m_hasConfiguredAlarms;
   int m_testStep;
   int m_burstCount;
   int m_soundingSlot;

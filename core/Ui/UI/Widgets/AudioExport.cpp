@@ -38,6 +38,8 @@
 #include "Core/SSAssert.h"
 #include "Core/WorkspaceManager.h"
 #include "CSV/Player.h"
+#include "DataModel/FrameBuilder.h"
+#include "DataModel/PipelineModules.h"
 #include "IO/ConnectionManager.h"
 #include "MDF4/Player.h"
 #include "Sessions/Player.h"
@@ -653,23 +655,19 @@ void Widgets::AudioExport::onSessionOpenFailed(quint32 key)
 }
 
 /**
- * @brief Wires the auto-stop sources: disconnect, pause, replay open, and license loss.
+ * @brief Wires the auto-stop sources: the session boundary (disconnect AND pause, emitted after
+ *        the builder flushed every open block, so the tail lands in the file that was open --
+ *        spec 0088 R4, queued from the pipeline thread), replay open, and license loss.
  */
 void Widgets::AudioExport::setupExternalConnections()
 {
-  connect(&API::handlerContext().connectionManager,
-          &IO::ConnectionManager::connectedChanged,
+  connect(&DataModel::pipelineModules().frameBuilder,
+          &DataModel::FrameBuilder::sessionBoundary,
           this,
-          [this] {
-            if (!API::handlerContext().connectionManager.isConnected())
+          [this](bool connected, bool paused) {
+            if (!connected || paused)
               closeAllSessions();
           });
-
-  connect(
-    &API::handlerContext().connectionManager, &IO::ConnectionManager::pausedChanged, this, [this] {
-      if (API::handlerContext().connectionManager.paused())
-        closeAllSessions();
-    });
 
   connect(&API::handlerContext().csvPlayer, &CSV::Player::openChanged, this, [this] {
     if (API::handlerContext().csvPlayer.isOpen())

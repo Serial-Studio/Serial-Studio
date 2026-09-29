@@ -30,6 +30,7 @@
 #include "Core/SerialStudio.h"
 #include "DataModel/FrameBuilder.h"
 #include "DataModel/PipelineModules.h"
+#include "DataModel/ProjectModel.h"
 #include "IO/ConnectionManager.h"
 #include "Misc/ProblemCenter.h"
 #include "Replay/PlayerState.h"
@@ -51,8 +52,9 @@ static qint64 s_lastSampleMs = 0;
 static IO::LinkStats s_previousStats{};
 static quint64 s_previousParsedFrames = 0;
 
-static int s_noFrameTicks = 0;
-static int s_noParseTicks = 0;
+static int s_noFrameTicks    = 0;
+static int s_noParseTicks    = 0;
+static int s_shortFrameTicks = 0;
 
 static quint64 s_windowBytes         = 0;
 static quint64 s_windowExtracted     = 0;
@@ -164,6 +166,7 @@ static void resetWindows()
 {
   s_noFrameTicks        = 0;
   s_noParseTicks        = 0;
+  s_shortFrameTicks     = 0;
   s_windowBytes         = 0;
   s_windowExtracted     = 0;
   s_totalExtracted      = 0;
@@ -442,6 +445,93 @@ static void reportParseThinning(QList<Finding>& out)
 }
 
 /**
+ * @brief Collects one group's starved dataset names (frame index above @p watermark), counting
+ *        overflow past the cap into @p extra so the finding text stays short and stable.
+ */
+static void appendStarvedNames(const DataModel::Group& group,
+                               int watermark,
+                               QStringList& names,
+                               int& extra)
+{
+  constexpr int kMaxNamed = 5;
+
+  for (const auto& dataset : group.datasets) {
+    if (!dataset.enabled || dataset.virtual_ || dataset.index <= watermark)
+      continue;
+
+    if (names.size() >= kMaxNamed) {
+      ++extra;
+      continue;
+    }
+
+    if (dataset.title.isEmpty())
+      names.append(trLinkProblem("Dataset %1").arg(dataset.uniqueId));
+    else
+      names.append(dataset.title);
+  }
+}
+
+/**
+ * @brief Names the datasets of @p sourceId whose frame index exceeds @p watermark.
+ */
+[[nodiscard]] static QString starvedDatasetNames(int sourceId, int watermark)
+{
+  QStringList names;
+  int extra          = 0;
+  const auto& groups = DataModel::pipelineModules().projectModel.groups();
+  for (const auto& group : groups)
+    if (group.sourceId == sourceId && group.enabled)
+      appendStarvedNames(group, watermark, names, extra);
+
+  QString joined = names.join(QStringLiteral(", "));
+  if (extra > 0)
+    joined = trLinkProblem("%1 and %2 more").arg(joined, QString::number(extra));
+
+  return joined;
+}
+
+/**
+ * @brief Reports datasets starved by short frames (spec 0088 R5): the source's frames deliver
+ *        fewer values than the highest configured frame index, sustained across the window, so
+ *        the affected datasets keep a stale value that looks live.
+ */
+static void reportShortFrames(QList<Finding>& out)
+{
+  DataModel::FrameBuilder::ShortFrameStat offender{-1, 0, 0};
+  const auto stats = frameBuilder().shortFrameStats();
+  for (const auto& stat : stats)
+    if (stat.watermark > 0 && stat.watermark < stat.maxIndex) {
+      offender = stat;
+      break;
+    }
+
+  if (offender.sourceId < 0) {
+    s_shortFrameTicks = 0;
+    return;
+  }
+
+  s_shortFrameTicks = qMin(s_shortFrameTicks + 1, kSustainTicks);
+  if (s_shortFrameTicks < kSustainTicks)
+    return;
+
+  const QString starved = starvedDatasetNames(offender.sourceId, offender.watermark);
+  if (starved.isEmpty())
+    return;
+
+  out.append(makeLinkFinding(
+    Misc::ProblemCenter::Warning,
+    "short-frames",
+    trLinkProblem("Frames deliver fewer values than the project expects"),
+    trLinkProblem("The received frames carry at most %1 values, but the project "
+                  "maps datasets up to frame index %2. These datasets never "
+                  "receive data and keep a stale value: %3.")
+      .arg(QString::number(offender.watermark), QString::number(offender.maxIndex), starved),
+    trLinkProblem("Confirm the device sends every expected value per frame, or "
+                  "fix the affected datasets' frame index in the Project "
+                  "Editor.")));
+}
+
+/**
  * @brief Reports bytes lost because the receive buffer filled up before it could be drained.
  */
 static void reportBufferOverflow(QList<Finding>& out)
@@ -478,6 +568,7 @@ static void checkLinkStatistics(QList<Finding>& out)
   advanceSampler();
   reportNoFrames(out);
   reportNoParsedFrames(out);
+  reportShortFrames(out);
   reportChecksumFailures(out);
   reportDroppedFrames(out);
   reportBufferOverflow(out);

@@ -892,6 +892,7 @@ void DataModel::FrameBuilder::applyProjectSnapshot(ProjectSnapshot snapshot)
   initializeTableStore();
   compileTransforms();
   parseBudgetReset();
+  m_shortFrameWatch.rebuild(m_frame);
 
   SS_ASSERT_LOG(!m_frame.title.isEmpty());
 
@@ -1057,6 +1058,7 @@ void DataModel::FrameBuilder::onOperationModeChanged()
   clearLatestFrames();
   invalidateFramePool();
   parseBudgetReset();
+  m_shortFrameWatch.resetWatermarks();
 }
 
 /**
@@ -1428,6 +1430,7 @@ void DataModel::FrameBuilder::onConnectedChanged()
   invalidateFramePool();
 
   parseBudgetReset();
+  m_shortFrameWatch.resetWatermarks();
 
   if (!nowConnected) {
     m_sourceFrames.clear();
@@ -1537,6 +1540,7 @@ void DataModel::FrameBuilder::parseProjectFrameFor(int sourceId,
     if (channels.isEmpty()) [[unlikely]]
       continue;
 
+    m_shortFrameWatch.note(sourceId, channels.size());
     DataModel::Frame& srcFrame = perSource ? ensureSourceFrame(sourceId) : m_frame;
     const auto frameTs         = data->timestamp + step * i;
     TransformFrameInfo info;
@@ -1751,6 +1755,7 @@ int DataModel::FrameBuilder::trySpanLane(int sourceId,
   if (tokens == 0)
     return 0;
 
+  m_shortFrameWatch.note(sourceId, tokens);
   if (m_captureLatestFrame) [[unlikely]]
     captureLatestChannelSpans(sourceId, m_spanScratch.data(), tokens);
 
@@ -1827,6 +1832,7 @@ int DataModel::FrameBuilder::tryCellLane(int sourceId,
     if (count <= 0) [[unlikely]]
       continue;
 
+    m_shortFrameWatch.note(sourceId, count);
     const auto frameTs = data->timestamp + step * row;
     TransformFrameInfo info;
     info.sourceId = sourceId;

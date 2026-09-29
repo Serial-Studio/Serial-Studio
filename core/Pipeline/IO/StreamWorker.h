@@ -94,11 +94,17 @@ public:
 
   [[nodiscard]] int observedChannels() const noexcept { return m_observedChannels; }
 
-  [[nodiscard]] quint64 transformErrorCount() const noexcept { return m_transformErrors; }
+  [[nodiscard]] quint64 transformErrorCount() const noexcept
+  {
+    return m_transformErrors.load(std::memory_order_relaxed);
+  }
 
   [[nodiscard]] quint64 displayDropCount() const noexcept { return m_displayDrops; }
 
-  [[nodiscard]] quint64 transformTimeoutCount() const noexcept { return m_transformTimeouts; }
+  [[nodiscard]] quint64 transformTimeoutCount() const noexcept
+  {
+    return m_transformTimeouts.load(std::memory_order_relaxed);
+  }
 
   [[nodiscard]] bool transformsReferenceTableApi(int language) const;
 
@@ -169,8 +175,15 @@ private:
   int m_observedChannels;
   quint64 m_samplesProcessed;
   quint64 m_blocksProcessed;
-  quint64 m_transformErrors;
-  quint64 m_transformTimeouts;
+
+  // code-verify off
+  // Worker-written on failing blocks only, GUI-sampled by the 1 Hz problem poll (spec 0033).
+  // Single writer: cross-core write contention between the adjacent atomics cannot occur, so
+  // no interference padding is needed.
+  std::atomic<quint64> m_transformErrors;
+  std::atomic<quint64> m_transformTimeouts;
+  // code-verify on
+
   quint64 m_displayDrops;
 
   std::vector<double> m_scratch;

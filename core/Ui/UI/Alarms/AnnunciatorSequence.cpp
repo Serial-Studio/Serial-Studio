@@ -228,6 +228,26 @@ void UI::Alarms::AnnunciatorSequence::clearKind(PointKind kind)
 }
 
 /**
+ * @brief Drops every point of @p kind still in Alert (spec 0088 R3): a link drop discards
+ *        unacknowledged notification points, whose raiser cannot re-assert or clear them across
+ *        the outage, while acknowledged ones survive the hold. Returns how many were dropped.
+ */
+int UI::Alarms::AnnunciatorSequence::dropUnacknowledged(PointKind kind)
+{
+  int dropped = 0;
+  m_points.erase(std::remove_if(m_points.begin(),
+                                m_points.end(),
+                                [kind, &dropped](const Point& p) {
+                                  const bool drop =
+                                    p.key.kind == kind && p.state == PointState::Alert;
+                                  dropped += drop ? 1 : 0;
+                                  return drop;
+                                }),
+                 m_points.end());
+  return dropped;
+}
+
+/**
  * @brief Switches sequence; leaving R or M drops the Return-to-normal points A cannot hold.
  */
 void UI::Alarms::AnnunciatorSequence::setSequence(Sequence sequence)

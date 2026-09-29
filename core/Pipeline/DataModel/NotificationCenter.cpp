@@ -167,15 +167,18 @@ int DataModel::NotificationCenter::maxHistory() const noexcept
  *        parser and transform diagnostics since spec 0051 M3) is queued here instead of mutating
  *        the bus off-thread; notifications carry no result, so nothing waits.
  */
-void DataModel::NotificationCenter::post(int level,
-                                         const QString& channel,
-                                         const QString& title,
-                                         const QString& subtitle)
+void DataModel::NotificationCenter::post(
+  int level, const QString& channel, const QString& title, const QString& subtitle, int origin)
 {
+  static_assert(Core::Bus::kNotificationOriginUser == 0,
+                "post()'s default origin argument encodes the user-origin ordinal");
+
   if (thread() != QThread::currentThread()) {
     QMetaObject::invokeMethod(
       this,
-      [this, level, channel, title, subtitle] { post(level, channel, title, subtitle); },
+      [this, level, channel, title, subtitle, origin] {
+        post(level, channel, title, subtitle, origin);
+      },
       Qt::QueuedConnection);
     return;
   }
@@ -199,6 +202,7 @@ void DataModel::NotificationCenter::post(int level,
   e.channel     = chan;
   e.title       = ttl;
   e.subtitle    = subtitle;
+  e.origin      = origin;
   appendEvent(std::move(e));
 }
 
@@ -443,6 +447,7 @@ void DataModel::NotificationCenter::appendEvent(Event&& e)
   const QString chan     = e.channel;
   const bool newChannel  = !chan.isEmpty() && !m_channelCounts.contains(chan);
   const int level        = e.level;
+  const int origin       = e.origin;
   const qint64 timestamp = e.timestampMs;
   const QString title    = e.title;
   const QString subtitle = e.subtitle;
@@ -469,7 +474,7 @@ void DataModel::NotificationCenter::appendEvent(Event&& e)
   }
 
   Q_EMIT notificationPosted(variant);
-  m_bus.publish<Core::Bus::NotificationPosted>(timestamp, level, chan, title, subtitle);
+  m_bus.publish<Core::Bus::NotificationPosted>(timestamp, level, chan, title, subtitle, origin);
   if (newChannel)
     Q_EMIT channelsChanged();
 

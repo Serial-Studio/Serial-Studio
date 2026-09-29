@@ -24,6 +24,7 @@
 #include <cmath>
 #include <QDateTime>
 
+#include "Core/Bus/Messages.h"
 #include "Core/DataModel/Frame.h"
 #include "Core/SSAssert.h"
 #include "DataModel/NotificationCenter.h"
@@ -230,5 +231,6 @@ void UI::AlarmMonitor::processValue(Tracker& tracker, double value)
 
   const auto level = band.severity >= 3 ? DataModel::NotificationCenter::Critical
                                         : DataModel::NotificationCenter::Warning;
-  m_notificationCenter->post(level, tr("Alarms"), name, subtitle);
+  m_notificationCenter->post(
+    level, tr("Alarms"), name, subtitle, Core::Bus::kNotificationOriginAlarmMonitor);
 }

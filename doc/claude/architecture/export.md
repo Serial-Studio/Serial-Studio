@@ -7,12 +7,17 @@
 
 ### What every sink shares
 
-- **The session boundary.** All three recording sinks close on
+- **The session boundary.** Every recording sink closes on
   `FrameBuilder::sessionBoundary(bool connected, bool paused)` — connect, disconnect **and
   pause/resume** — never on `connectedChanged` / `pausedChanged` directly. The builder flushes
   every open block *before* emitting, so a sink's `close()` drains the samples staged while its
   file was open rather than finding the file gone and opening a second file for the tail. That
-  ordering is the contract; see [dataflow.md](dataflow.md) "The Session Boundary".
+  ordering is the contract; see [dataflow.md](dataflow.md) "The Session Boundary". Since spec
+  0088 R4 the subscribers are five: CSV, MDF4, Sessions, `Widgets::AudioExport` (WAV recordings,
+  which previously raced the tail on `connectedChanged`) and `Console::Export` (whose
+  `registerData` also skips while paused, so a mid-pause line never lazily reopens the file the
+  boundary just closed). InfluxDB stays boundary-free on purpose: stateless HTTP, flushed per
+  batch.
 - **Per-source time.** The monotonic tie-break is per source
   (`FrameConsumerWorkerBase::monotonicSourceNs`), and a uniform-grid block never takes it at all:
   its offsets are exactly derived, so bumping them would falsify the grid. Two sources recorded

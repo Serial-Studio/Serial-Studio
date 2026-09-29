@@ -137,7 +137,21 @@ The ISA-18.1 annunciator sits beside `AlarmMonitor`, never inside it. `AlarmMoni
 the facade turns severity 2/3 into Caution/Warning points and anything else into a clear.
 Notification points come from the bus topic `Core::Bus::NotificationPosted` (Critical → Warning,
 Warning → Caution, a `Resolved: X` Info clears X, any other Info is an Advisory one-shot); the
-`Problems` and `System` channels never become points. The facade is **root-owned, not a
+`Problems` and `System` channels never become points, and the band monitor's own posts are
+excluded by the topic's `origin` field (`kNotificationOriginAlarmMonitor`), never by a
+translated channel name (spec 0088 R2). **An unrequested link drop holds the point table
+instead of wiping it (spec 0088 R3):** `AppEventSounds::linkClosed(bool wasDrop)` carries the
+classification; on a drop the facade stops the audible, drops only unacknowledged
+notification-kind points (`AnnunciatorSequence::dropUnacknowledged`), latches `m_dropHold`
+(which gates `updateAudible`, `onTrackersRebuilt`'s reap, and every disconnect-driven
+`dataReset` while the link stays down and no player is open — a replay opening outranks the
+hold), and releases on reconnect (re-running the audible arbitration, so a point with no band
+baseline resumes sounding), a requested close, a project change or operator Clear — the
+monitor's baseline re-seed then reconciles surviving band points, since `raise()` returns
+false for an unchanged Alert/Acknowledged point. The `alarms.sounds` problem
+findings live in `AnnunciatorChecker` (ref-binding sub-object), which also reports a project
+that defines alarms while the master enable is off (spec 0088 R7); QML reads the paired
+`hasConfiguredAlarms` property. The facade is **root-owned, not a
 singleton**: `ModuleManager` holds it in a file-static `unique_ptr` built at the end of
 `instantiateCoreModules()` from `SessionContext` accessors and `Core::services()` (zero census
 growth), wires it in `wireAnnunciator()` (GUI) and `setupHeadlessSessionConnections()`

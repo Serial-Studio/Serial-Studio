@@ -42,6 +42,7 @@
 #  include "Core/Licensing/CommercialToken.h"
 #  include "Core/SerialStudio.h"
 #  include "Core/WorkspaceManager.h"
+#  include "DataModel/FrameBuilder.h"
 #  include "DataModel/ProjectModel.h"
 #  include "IO/ConnectionManager.h"
 #  include "Replay/PlayerState.h"
@@ -294,7 +295,9 @@ void Console::Export::attachMessageBus(Core::Bus::MessageBus& bus)
 }
 
 /**
- * @brief Configures signal/slot connections with dependent modules.
+ * @brief Configures signal/slot connections with dependent modules. The log closes on the
+ *        session boundary like every other recording sink (spec 0088 R4): disconnect AND
+ *        pause, emitted after the builder's flush so the boundary never races the tail.
  */
 void Console::Export::setupExternalConnections()
 {
@@ -303,10 +306,13 @@ void Console::Export::setupExternalConnections()
           &Console::Handler::deviceDataReady,
           this,
           &Console::Export::registerData);
-  connect(&API::handlerContext().connectionManager,
-          &IO::ConnectionManager::connectedChanged,
+  connect(&DataModel::pipelineModules().frameBuilder,
+          &DataModel::FrameBuilder::sessionBoundary,
           this,
-          &Console::Export::closeFile);
+          [this](bool connected, bool paused) {
+            if (!connected || paused)
+              closeFile();
+          });
 #endif
 }
 
@@ -354,12 +360,15 @@ void Console::Export::setExportEnabled(const bool enabled)
 }
 
 /**
- * @brief Appends console data from a specific device to the output buffer.
+ * @brief Appends console data from a specific device to the output buffer; a paused session
+ *        logs nothing, matching what the other recorders capture during a pause (spec 0088 R4),
+ *        so a mid-pause line never lazily reopens the file the boundary just closed.
  */
 void Console::Export::registerData(int deviceId, QStringView data)
 {
 #ifdef BUILD_COMMERCIAL
-  if (!exportEnabled() || data.isEmpty() || SerialStudio::isAnyPlayerOpen())
+  if (!exportEnabled() || data.isEmpty() || SerialStudio::isAnyPlayerOpen()
+      || API::handlerContext().connectionManager.paused())
     return;
 
   static const QRegularExpression ansiRegex(

@@ -162,6 +162,7 @@ public:
   int acknowledge();
   void clearAll();
   void clearKind(PointKind kind);
+  [[nodiscard]] int dropUnacknowledged(PointKind kind);
   void setSequence(Sequence sequence);
 
 private:

@@ -42,6 +42,8 @@ Item {
 
   readonly property int priority: Cpp_UI_Alarms.testing ? Cpp_UI_Alarms.testPriority
                                                         : Cpp_UI_Alarms.highestPriority
+  readonly property bool alarmsDisabled: Cpp_UI_Alarms.hasConfiguredAlarms
+                                         && !Cpp_UI_Alarms.enabled
   readonly property bool fastFlash: Cpp_UI_Alarms.alerting && !Cpp_Misc_GraphicsBackend.reduceMotion
   readonly property bool slowFlash: !Cpp_UI_Alarms.alerting && Cpp_UI_Alarms.ringbackPending
                                     && !Cpp_Misc_GraphicsBackend.reduceMotion
@@ -86,6 +88,9 @@ Item {
     iconSize: 16
     anchors.centerIn: parent
     highlighted: _panel.opened
+    opacity: root.alarmsDisabled ? 0.45 : 1
+
+    Behavior on opacity { NumberAnimation { duration: 120 } }
     text: Cpp_UI_Alarms.unacknowledgedCount > 0 ? String(Cpp_UI_Alarms.unacknowledgedCount) : ""
     font: Cpp_Misc_CommonFonts.customUiFont(0.85, true)
     color: root.lit ? root.priorityColor : Cpp_ThemeManager.colors["taskbar_text"]
@@ -119,12 +124,15 @@ Item {
 
     ToolTip.delay: 700
     ToolTip.visible: hovered && !_panel.opened
-    ToolTip.text: Cpp_UI_Alarms.muted
-                  ? qsTr("Alarm sounds are muted. Click to open the alarm panel.")
-                  : Cpp_UI_Alarms.unacknowledgedCount > 0
-                    ? qsTr("%1 unacknowledged alarm(s). Click for the alarm panel, right-click "
-                           + "to acknowledge.").arg(Cpp_UI_Alarms.unacknowledgedCount)
-                    : qsTr("No active alarms. Click for the alarm panel.")
+    ToolTip.text: root.alarmsDisabled
+                  ? qsTr("Aural alerts are disabled, but this project defines alarms. Enable "
+                         + "them in Preferences > Sounds.")
+                  : Cpp_UI_Alarms.muted
+                    ? qsTr("Alarm sounds are muted. Click to open the alarm panel.")
+                    : Cpp_UI_Alarms.unacknowledgedCount > 0
+                      ? qsTr("%1 unacknowledged alarm(s). Click for the alarm panel, right-click "
+                             + "to acknowledge.").arg(Cpp_UI_Alarms.unacknowledgedCount)
+                      : qsTr("No active alarms. Click for the alarm panel.")
 
     onClicked: _panel.opened ? _panel.close() : _panel.open()
 

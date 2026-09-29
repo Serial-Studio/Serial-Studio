@@ -1964,6 +1964,7 @@ _HOTPATH_ASSERT_ALLOWED = (
     "core/Pipeline/DataModel/FrameBuilder/BlockPublisher.cpp",
     "core/Pipeline/DataModel/FrameBuilder/BlockStager.cpp",
     "core/Pipeline/DataModel/FrameBuilder/ReplayIngest.cpp",
+    "core/Pipeline/DataModel/FrameBuilder/ShortFrameWatch.cpp",
     "core/Core/CircularBuffer.h",
     "core/Core/CircularBuffer.cpp",
     "core/Pipeline/IO/FrameReader.h",

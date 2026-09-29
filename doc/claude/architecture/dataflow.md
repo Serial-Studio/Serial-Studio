@@ -329,9 +329,17 @@ increments; nothing on it emits, allocates, locks, or calls into `Misc::ProblemC
   previously destroyed the number. `resetDiagnosticCounters()` clears all four. The per-failure
   checksum hex dump is throttled to the same 5 s pattern `noteDroppedFrame` uses.
 - **`FrameBuilder`**: `m_transformErrors` increments in the existing transform-error branches;
-  `m_lastTransformError` / `m_lastTransformDatasetUniqueId` are assigned **only when the failing
-  dataset differs from the last recorded one**, so a dataset that throws every frame allocates
-  the message once rather than per frame (`noteTransformError`, `SS_COLD`).
+  `m_lastTransformError` / `m_lastTransformDatasetUniqueId` are assigned **only on a dataset's
+  FIRST failure since the last engine rebuild** (`m_errorNotedDatasets`), so several datasets
+  failing on every frame allocate one message each in total — a last-writer rule re-materialized
+  the string per failing dataset per frame as they ping-ponged (`noteTransformError`, `SS_COLD`;
+  spec 0088 review follow-up).
+- **`DataModel::ShortFrameWatch`** (`FrameBuilder/ShortFrameWatch.h`, spec 0088 R5): per-source
+  max configured frame index vs the delivered-token watermark, written with one compare+store at
+  the three parse call sites (span, cell, list lanes). Single pipeline-thread writer over fixed
+  storage with the count published last; `FrameBuilder::shortFrameStats()` reads it torn-benign
+  for the 1 Hz `link.short-frames` check. Watermarks are session-monotonic, reset on connect,
+  mode change and project sync.
 - **Reading them.** `IO::PipelineHost` owns the readers (spec 0077); `ConnectionManager::
   linkStats()` forwards to `IO::IIngestBinder::linkStats()`, which the host answers by summing the
   per-device counters into an `IO::LinkStats` POD — the struct lives in

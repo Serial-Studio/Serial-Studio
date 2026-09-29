@@ -51,6 +51,7 @@ private slots:
   void arbitrationPicksHighestUnsilencedAlert();
   void latestAlertIsMostRecentRaise();
   void clearKindDropsOnlyThatKind();
+  void dropUnacknowledgedKeepsAcknowledgedAndBands();
   void switchingToADropsReturnToNormal();
   void pointCapIsEnforced();
 
@@ -226,6 +227,21 @@ void TstAnnunciatorSequence::clearKindDropsOnlyThatKind()
   QVERIFY(s.find(note(1)) != nullptr);
   s.clearAll();
   QCOMPARE(s.points().size(), std::size_t{0});
+}
+
+void TstAnnunciatorSequence::dropUnacknowledgedKeepsAcknowledgedAndBands()
+{
+  AnnunciatorSequence s(Sequence::A4);
+  QVERIFY(raise(s, note(1), Priority::Warning, 10));
+  QCOMPARE(s.acknowledge(), 1);
+  QVERIFY(raise(s, note(2), Priority::Caution, 20));
+  QVERIFY(raise(s, band(3), Priority::Warning, 30));
+  QCOMPARE(s.dropUnacknowledged(PointKind::Notification), 1);
+  QCOMPARE(s.find(note(1))->state, PointState::Acknowledged);
+  QVERIFY(s.find(note(2)) == nullptr);
+  QCOMPARE(s.find(band(3))->state, PointState::Alert);
+  QVERIFY(!raise(s, band(3), Priority::Warning, 40));
+  QCOMPARE(s.find(band(3))->state, PointState::Alert);
 }
 
 void TstAnnunciatorSequence::switchingToADropsReturnToNormal()

@@ -42,6 +42,7 @@
 #include "MDF4/Export.h"
 #include "Misc/ProblemCenter.h"
 #include "UI/AlarmMonitor.h"
+#include "UI/Alarms/AnnunciatorChecker.h"
 #include "UI/Dashboard.h"
 
 #ifdef BUILD_COMMERCIAL
@@ -79,8 +80,10 @@ UI::Alarms::AlarmAnnunciator::AlarmAnnunciator(const Modules& modules, QObject* 
   : QObject(parent)
   , m_armed(false)
   , m_headless(true)
+  , m_dropHold(false)
   , m_deviceLost(false)
   , m_ringbackSounding(false)
+  , m_hasConfiguredAlarms(false)
   , m_testStep(-1)
   , m_burstCount(0)
   , m_soundingSlot(-1)
@@ -162,6 +165,10 @@ void UI::Alarms::AlarmAnnunciator::setupExternalConnections(bool headless,
   }
 
   connect(&m_modules.dashboard, &UI::Dashboard::dataReset, this, &AlarmAnnunciator::onDataReset);
+  connect(&m_modules.connectionManager,
+          &IO::ConnectionManager::connectedChanged,
+          this,
+          &AlarmAnnunciator::onConnectionEdge);
   connect(&m_modules.timers, &Misc::TimerEvents::timeout1Hz, this, &AlarmAnnunciator::onHealthTick);
   connect(&m_testTimer, &QTimer::timeout, this, &AlarmAnnunciator::onTestStep);
   connect(&m_repeatTimer, &QTimer::timeout, this, &AlarmAnnunciator::onRepeatDue);
@@ -176,7 +183,7 @@ void UI::Alarms::AlarmAnnunciator::setupExternalConnections(bool headless,
   connect(&project,
           &DataModel::ProjectModel::jsonFileChanged,
           this,
-          &AlarmAnnunciator::onProjectSoundsChanged);
+          &AlarmAnnunciator::onProjectFileChanged);
 
   m_notifications = m_modules.bus.subscribe<Core::Bus::NotificationPosted>(
     this, [this](const std::shared_ptr<const Core::Bus::NotificationPosted>& event) {
@@ -203,6 +210,7 @@ void UI::Alarms::AlarmAnnunciator::setupExternalConnections(bool headless,
 
   registerChecker();
   applyProjectOverrides();
+  refreshConfiguredAlarms();
   applyPlayerState();
 }
 
@@ -264,6 +272,36 @@ bool UI::Alarms::AlarmAnnunciator::deviceLost() const noexcept
 bool UI::Alarms::AlarmAnnunciator::ringbackPending() const noexcept
 {
   return m_sequence.ringbackPending();
+}
+
+/**
+ * @brief True while the loaded project defines alarm configuration; the taskbar pill shows the
+ *        disabled state on it (spec 0088 R7).
+ */
+bool UI::Alarms::AlarmAnnunciator::hasConfiguredAlarms() const noexcept
+{
+  return m_hasConfiguredAlarms;
+}
+
+/**
+ * @brief Whether the loaded project expresses alarm intent; the walk lives with the checker.
+ */
+bool UI::Alarms::AlarmAnnunciator::projectDefinesAlarms() const
+{
+  return AnnunciatorChecker::definesAlarms(m_modules.project);
+}
+
+/**
+ * @brief Re-caches the alarm-configuration flag for QML, with a guard return before the notify.
+ */
+void UI::Alarms::AlarmAnnunciator::refreshConfiguredAlarms()
+{
+  const bool configured = projectDefinesAlarms();
+  if (configured == m_hasConfiguredAlarms)
+    return;
+
+  m_hasConfiguredAlarms = configured;
+  scheduleStateChanged();
 }
 
 /**
@@ -789,14 +827,14 @@ void UI::Alarms::AlarmAnnunciator::onBandTransition(int uniqueId,
 
 /**
  * @brief Notification points: Critical raises Warning, Warning raises Caution, a "Resolved: X"
- *        Info clears X, any other Info is an Advisory one-shot. The Problems and System channels
- *        are the app's own diagnostics and the Alarms channel is the band monitor's own
- *        notification of a point that already exists, so none of them become points.
+ *        Info clears X, any other Info is an Advisory one-shot. Problems/System diagnostics and
+ *        band-monitor-origin events (a point that already exists) never become points; the
+ *        monitor is excluded by provenance, never by a translated channel name (spec 0088 R2).
  */
 void UI::Alarms::AlarmAnnunciator::onNotificationPosted(const Core::Bus::NotificationPosted& event)
 {
-  if (event.channel == kProblemsChannel || event.channel == kSystemChannel
-      || event.channel == UI::AlarmMonitor::tr("Alarms"))
+  if (event.origin == Core::Bus::kNotificationOriginAlarmMonitor
+      || event.channel == kProblemsChannel || event.channel == kSystemChannel)
     return;
 
   if (event.severity >= Core::Bus::kSeverityWarning) {
@@ -829,12 +867,17 @@ void UI::Alarms::AlarmAnnunciator::onNotificationPosted(const Core::Bus::Notific
 }
 
 /**
- * @brief Band trackers were rebuilt (project or layout change): drop the points whose dataset
- *        no longer exists or lost its bands; the survivors are re-seeded by the monitor's next
- *        baseline emission, so an acknowledged point stays acknowledged across the rebuild.
+ * @brief Band trackers were rebuilt: drop the points whose dataset no longer exists or lost its
+ *        bands; the monitor's next baseline emission re-seeds the survivors, so an acknowledged
+ *        point survives the rebuild. A held table skips the reap: the disconnect reset empties
+ *        the dashboard's dataset map, which would otherwise reap every held point (0088 R3).
  */
 void UI::Alarms::AlarmAnnunciator::onTrackersRebuilt()
 {
+  refreshConfiguredAlarms();
+  if (m_dropHold)
+    return;
+
   const auto& datasets = m_modules.dashboard.datasets();
   std::vector<PointKey> stale;
   for (const auto& point : m_sequence.points()) {
@@ -854,19 +897,64 @@ void UI::Alarms::AlarmAnnunciator::onTrackersRebuilt()
 }
 
 /**
- * @brief Dashboard data reset: every point is stale.
+ * @brief Dashboard data reset: every point is stale -- except the resets the unrequested drop
+ *        itself causes while the link is still down, which the hold consumes (the hold flag is
+ *        set on the direct linkClosed hop, the reset arrives queued, so the flag is provably
+ *        set first). A replay opening outranks the hold; a project change released it already.
  */
 void UI::Alarms::AlarmAnnunciator::onDataReset()
 {
+  const bool dropReset =
+    m_dropHold && !m_modules.connectionManager.isConnected() && !SerialStudio::isAnyPlayerOpen();
+  if (dropReset)
+    return;
+
   dropAllPoints();
 }
 
 /**
- * @brief The link closed: every point returns to normal without ringback (spec R19).
+ * @brief The link closed. An operator-requested close clears the table (spec 0087 R19); an
+ *        unrequested drop HOLDS it instead (spec 0088 R3): audible off, unacknowledged
+ *        notification points dropped (their raiser cannot re-assert or clear them across the
+ *        outage), everything else kept for the reconnect re-seed to reconcile.
  */
-void UI::Alarms::AlarmAnnunciator::onLinkClosed()
+void UI::Alarms::AlarmAnnunciator::onLinkClosed(bool wasDrop)
 {
-  dropAllPoints();
+  if (!wasDrop) {
+    dropAllPoints();
+    return;
+  }
+
+  (void)m_sequence.dropUnacknowledged(PointKind::Notification);
+  stopAudible();
+  m_dropHold = true;
+  scheduleStateChanged();
+}
+
+/**
+ * @brief The link recovered: release the hold and re-run the audible arbitration -- a surviving
+ *        or mid-outage unacknowledged point resumes sounding at once (a point with no band
+ *        baseline would otherwise sit listed but silent forever), an acknowledged one stays
+ *        quiet, and a dataset back in a normal band settles on its seed (spec 0088 R3).
+ */
+void UI::Alarms::AlarmAnnunciator::onConnectionEdge()
+{
+  if (!m_dropHold || !m_modules.connectionManager.isConnected())
+    return;
+
+  m_dropHold = false;
+  updateAudible(false);
+  scheduleStateChanged();
+}
+
+/**
+ * @brief The project file changed: alarm points belong to the old document, so a held table has
+ *        nothing left to protect; the reset that follows the load clears it.
+ */
+void UI::Alarms::AlarmAnnunciator::onProjectFileChanged()
+{
+  m_dropHold = false;
+  onProjectSoundsChanged();
 }
 
 /**
@@ -887,6 +975,7 @@ void UI::Alarms::AlarmAnnunciator::onEventRequested(int slot)
 void UI::Alarms::AlarmAnnunciator::onProjectSoundsChanged()
 {
   applyProjectOverrides();
+  refreshConfiguredAlarms();
   updateAudible(false);
   scheduleStateChanged();
 }
@@ -1048,10 +1137,11 @@ void UI::Alarms::AlarmAnnunciator::clearPoint(const PointKey& key)
 }
 
 /**
- * @brief Every point to Normal, audible off, no ringback.
+ * @brief Every point to Normal, audible off, no ringback; a pending drop hold is void with them.
  */
 void UI::Alarms::AlarmAnnunciator::dropAllPoints()
 {
+  m_dropHold = false;
   m_sequence.clearAll();
   stopAudible();
   scheduleStateChanged();
@@ -1060,10 +1150,14 @@ void UI::Alarms::AlarmAnnunciator::dropAllPoints()
 /**
  * @brief Arbitration (spec R6): the highest unsilenced Alert priority sounds; on a change of
  *        priority, or when @p restart is set, the burst starts now; ringback only when no point
- *        is in Alert; nothing when the lane should be quiet.
+ *        is in Alert; nothing when the lane should be quiet. A held table (link drop, spec 0088
+ *        R3) never sounds: the audible stays off for the whole outage.
  */
 void UI::Alarms::AlarmAnnunciator::updateAudible(bool restart)
 {
+  if (m_dropHold) [[unlikely]]
+    return;
+
   const Priority wanted = m_sequence.soundingPriority();
   if (wanted == Priority::None) {
     if (m_sequence.ringbackPending()) {
@@ -1263,56 +1357,24 @@ void UI::Alarms::AlarmAnnunciator::reloadBank()
 }
 
 /**
- * @brief Registers the pull-only checker that reports unusable sound files and a lost device.
+ * @brief Registers the pull-only checker; AnnunciatorChecker builds the findings (spec 0088).
  */
 void UI::Alarms::AlarmAnnunciator::registerChecker()
 {
-  using Finding = Misc::ProblemCenter::Finding;
   const auto triggers =
     static_cast<quint8>(Misc::ProblemCenter::LinkSample | Misc::ProblemCenter::ProjectChanged);
   if (!m_modules.problems)
     return;
 
   const QPointer<AlarmAnnunciator> self(this);
-  m_modules.problems->registerChecker(kCheckerId, triggers, [self](QList<Finding>& out) {
-    if (!self)
-      return;
+  m_modules.problems->registerChecker(
+    kCheckerId, triggers, [self](QList<Misc::ProblemCenter::Finding>& out) {
+      if (!self)
+        return;
 
-    for (const auto& issue : self->m_theme.issues()) {
-      Finding f;
-      f.severity    = Misc::ProblemCenter::Warning;
-      f.code        = QStringLiteral("alarms.sound-file");
-      f.title       = AlarmAnnunciator::tr("Alarm sound file unavailable: %1").arg(issue.path);
-      f.explanation = issue.reason;
-      f.remedy = tr("Pick a valid PCM WAV file, or clear the override to use the bundled sound.");
-      out.append(f);
-    }
-
-    if (!self->m_deviceLost)
-      return;
-
-    Finding f;
-    f.severity = Misc::ProblemCenter::Warning;
-    if (self->m_theme.outputDeviceId().isEmpty() || !self->m_player.running()) {
-      f.code  = QStringLiteral("alarms.no-output-device");
-      f.title = AlarmAnnunciator::tr("No audio output device is available");
-      f.explanation =
-        AlarmAnnunciator::tr("Alarm sounds cannot play until an output device is present.");
-      f.remedy =
-        AlarmAnnunciator::tr("Connect an audio output, or disable sounds in Preferences > Sounds.");
-      out.append(f);
-      return;
-    }
-
-    f.code  = QStringLiteral("alarms.output-device");
-    f.title = AlarmAnnunciator::tr("Alarm sound device '%1' not found")
-                .arg(self->m_theme.outputDeviceName());
-    f.explanation =
-      AlarmAnnunciator::tr("Alarm sounds are playing on the system default output instead.");
-    f.remedy =
-      AlarmAnnunciator::tr("Reconnect the device, or pick another one in Preferences > Sounds.");
-    out.append(f);
-  });
+      const AnnunciatorChecker checker(self->m_theme, self->m_player, self->m_deviceLost);
+      checker.collect(out, self->projectDefinesAlarms());
+    });
 }
 
 //--------------------------------------------------------------------------------------------------

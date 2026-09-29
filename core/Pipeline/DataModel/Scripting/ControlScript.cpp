@@ -61,6 +61,7 @@ DataModel::ControlScript::ControlScript()
   , m_running(false)
   , m_shouldRun(false)
   , m_shutdown(false)
+  , m_stoppedOnError(false)
   , m_playerOpen(false)
   , m_tableArmed(false)
   , m_playerOpenMask{}
@@ -310,16 +311,36 @@ void DataModel::ControlScript::onConnectedChanged()
 }
 
 /**
- * @brief Forwards a worker-thread script error to the GUI and marks the script stopped.
+ * @brief Forwards a worker-thread script error to the GUI, marks the script stopped and latches
+ *        the message for the pull-based problem check (spec 0088 R6).
  */
 void DataModel::ControlScript::onWorkerError(const QString& message)
 {
+  m_lastError      = message;
+  m_stoppedOnError = true;
+
   if (m_running) {
     m_running = false;
     Q_EMIT runningChanged();
   }
 
   Q_EMIT error(message);
+}
+
+/**
+ * @brief True while the script is stopped because its last run raised a runtime error.
+ */
+bool DataModel::ControlScript::stoppedOnError() const noexcept
+{
+  return m_stoppedOnError && !m_running;
+}
+
+/**
+ * @brief The message of the error that stopped the script; empty when none is latched.
+ */
+const QString& DataModel::ControlScript::lastError() const noexcept
+{
+  return m_lastError;
 }
 
 /**
@@ -332,6 +353,8 @@ void DataModel::ControlScript::startWorker()
   if (m_running || m_code.trimmed().isEmpty() || !shouldRun())
     return;
 
+  m_lastError.clear();
+  m_stoppedOnError = false;
   QMetaObject::invokeMethod(m_worker, "start", Qt::QueuedConnection, Q_ARG(QString, m_code));
   m_running = true;
 

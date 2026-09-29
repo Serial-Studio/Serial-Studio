@@ -194,16 +194,18 @@ DataModel::TransformEngine* DataModel::TransformCompiler::engineFor(int sourceId
 }
 
 /**
- * @brief Counts a transform failure and retains its message only when the failing dataset differs
- *        from the one already recorded, so a dataset that throws on every frame stores the string
- *        once instead of allocating per frame.
+ * @brief Counts a transform failure and retains its message only on a dataset's FIRST failure
+ *        since the last engine rebuild: several datasets failing on every frame allocate one
+ *        string each in total, where a last-writer rule would re-materialize the message per
+ *        failing dataset per frame as they ping-pong (spec 0088 review follow-up).
  */
 SS_COLD void DataModel::TransformCompiler::noteTransformError(int uniqueId, const char* message)
 {
   ++m_transformErrors;
-  if (m_lastTransformDatasetUniqueId == uniqueId)
+  if (m_errorNotedDatasets.contains(uniqueId))
     return;
 
+  m_errorNotedDatasets.insert(uniqueId);
   m_lastTransformDatasetUniqueId = uniqueId;
   m_lastTransformError           = QString::fromUtf8(message ? message : "");
 }
@@ -214,9 +216,10 @@ SS_COLD void DataModel::TransformCompiler::noteTransformError(int uniqueId, cons
 SS_COLD void DataModel::TransformCompiler::noteTransformError(int uniqueId, const QString& message)
 {
   ++m_transformErrors;
-  if (m_lastTransformDatasetUniqueId == uniqueId)
+  if (m_errorNotedDatasets.contains(uniqueId))
     return;
 
+  m_errorNotedDatasets.insert(uniqueId);
   m_lastTransformDatasetUniqueId = uniqueId;
   m_lastTransformError           = message;
 }
@@ -620,6 +623,7 @@ void DataModel::TransformCompiler::destroy()
   m_transformErrors              = 0;
   m_lastTransformDatasetUniqueId = -1;
   m_lastTransformError.clear();
+  m_errorNotedDatasets.clear();
 
   for (auto& [id, engine] : m_engines) {
     engine.jsRefs.clear();

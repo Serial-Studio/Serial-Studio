@@ -96,6 +96,7 @@ qt_add_library(
   UI/Dashboard/WidgetMapBuilder.cpp
   UI/AlarmMonitor.cpp
   UI/Alarms/AlarmAnnunciator.cpp
+  UI/Alarms/AnnunciatorChecker.cpp
   UI/Alarms/AnnunciatorSequence.cpp
   UI/Alarms/AppEventSounds.cpp
   UI/Alarms/SoundTheme.cpp
@@ -201,6 +202,7 @@ qt_add_library(
   UI/DashboardWidget.h
   UI/AlarmMonitor.h
   UI/Alarms/AlarmAnnunciator.h
+  UI/Alarms/AnnunciatorChecker.h
   UI/Alarms/AnnunciatorSequence.h
   UI/Alarms/AppEventSounds.h
   UI/Alarms/SoundTheme.h

@@ -1,0 +1,176 @@
+---
+spec: 0088-silent-failure-hardening
+title: Silent-failure hardening — alarm loop and script contracts
+status: done         # approved and implemented 2026-09-29
+created: 2026-09-29
+author: Alex Spataru
+---
+
+# Spec 0088 — Silent-failure hardening: alarm loop and script contracts
+
+> **Phase 1 of 4 — the WHAT and the WHY.** No implementation detail; no file paths, no
+> class names, no signal wiring (that is `plan.md`). Gate: do not start `/ss-plan` until
+> a human marks this `approved`.
+
+## Problem / Motivation
+
+A 2026-09-29 field session with the BADAQ test rig surfaced a class of defect that shares one
+shape: the application knows something went wrong, or could know, and tells no one. The
+triggering incident — a project script raised a critical alarm and "recovered" with a
+notification the alarm system does not recognize, producing an alarm that repeated until
+manually acknowledged — was reproduced live over the API and traced to an implicit contract
+nothing enforces. A systematic sweep found six more shipped behaviors of the same shape, each
+verified in code:
+
+1. A value transform that produces a non-numeric or non-finite result (a `NaN` from a
+   parameter typo, a forgotten `return`) silently displays the *untransformed* value; the
+   script-error diagnostics never fire.
+2. Whether a notification channel participates in the aural-alert system depends on the UI
+   language, because the app's own alarm-channel exclusion matches a *translated* channel
+   name.
+3. An unrequested link drop wipes the whole alarm point table; on reconnect every in-band
+   dataset re-alarms and re-sounds as brand-new. On a flaky link the operator's
+   acknowledgements are destroyed exactly when they matter.
+4. Audio (WAV) recordings and console logs close on connection-state signals instead of the
+   session boundary every other recording sink uses: the audio tail parsed just before a
+   disconnect or pause can be lost, and console logs ignore pause entirely.
+5. A frame that delivers fewer values than a dataset's configured frame index leaves that
+   dataset frozen at its last value, indistinguishable from live data — and alarm bands keep
+   evaluating the frozen value, so alarms can neither fire nor clear.
+6. A control script that dies at runtime reports its error only inside the project editor;
+   on a deployed dashboard nobody sees it, and any alarm the script raised can never clear
+   itself again.
+7. Aural alerts default to disabled, and a disabled annunciator is visually identical to a
+   healthy one — a project full of alarm bands can run an entire test silently with no hint.
+
+Each item is small on its own; together they decide whether an operator can trust the
+dashboard's silence. The deciding constraint for the whole bundle: every fix converts a
+silent wrong behavior into either correct behavior or a visible finding, without changing
+what correctly-authored projects experience today.
+
+## Goals
+
+- A wrong transform result, a starved dataset, a dead control script, and a silenced
+  annunciator each produce a Problem Center finding an operator can act on.
+- Alarm participation of a notification channel is identical in every UI language.
+- Operator acknowledgements survive an unrequested link drop and reconnect.
+- Every recording sink delivers the data parsed before a disconnect or pause into the file
+  that was open, and console logs follow the same pause-split convention as the other
+  recorders.
+- No behavior change for projects that follow the contracts today, and no new noise:
+  findings appear only when the underlying condition is real.
+
+## Non-Goals
+
+- Alarm/event journaling and alarm history (future spec; the standout feature gap from the
+  same sweep, deliberately separate).
+- Per-dataset / per-band / per-channel alarm opt-out, shelving, hysteresis, or per-point
+  acknowledge (separate spec, already queued).
+- Driver auto-reconnect policy (whether non-UART drivers should redial after a drop is a
+  deliberate policy decision, out of scope here).
+- New API verbs, importer/exporter parity, or macro-language parity items from the sweep.
+- Static project-lint extensions beyond the items above (band overlap detection, sound-map
+  key validation, transform-parameter cross-checks) — follow-ups, not this bundle.
+- Any change to how a transform *displays* on failure: the untransformed-value fallback
+  stays; this spec only makes the failure visible.
+
+## Requirements
+
+1. **R1 — Transform result hygiene.** A per-dataset value transform (either language, frame
+   or stream lane) whose result is not a finite number or a string is counted as a transform
+   error, and the existing script-problem finding reports it with the dataset and a reason
+   ("returned NaN", "returned no value"). The dataset continues to display the untransformed
+   value, unchanged from today.
+2. **R2 — Locale-independent alarm participation.** Notifications generated by the app's own
+   alarm-band monitor are excluded from the aural-alert system by provenance, never by
+   channel name. A user script or API client posting a Warning/Critical notification on a
+   channel named "Alarms" — in any UI language — raises an alarm point like any other
+   channel. The app-diagnostic channel exclusions that remain are documented by their
+   untranslated identifiers.
+3. **R3 — Acknowledgements survive an unrequested drop.** After an unrequested link loss and
+   recovery, a dataset that re-enters the same alarm band with the same severity presents as
+   its prior point: an acknowledged point stays acknowledged and does not re-sound; an
+   unacknowledged point resumes alerting. A dataset whose band or severity changed alarms as
+   new. The audible stops for the duration of the outage. An operator-requested disconnect
+   still clears the entire point table (spec 0087 R19 behavior unchanged).
+4. **R4 — One session boundary for every recorder.** Audio (WAV) recording and console
+   export close on the same session boundary as CSV/MDF4/Historian — disconnect and pause
+   alike — after all data parsed before the boundary has reached the open file. Console
+   logs start a new file on resume, matching the other recorders. No recording sink loses
+   its tail on a boundary.
+5. **R5 — Starved datasets are reported.** When the connected source's frames deliver fewer
+   values than a dataset's configured frame index expects, a link-class finding names the
+   starved datasets. The finding appears while the condition holds and clears when frames
+   grow to cover the datasets or the project changes. Quiet sources (no frames at all) keep
+   their existing, separate diagnostic.
+6. **R6 — A dead control script is a visible problem.** A control script stopped by a
+   runtime error or budget overrun produces a script-class finding carrying the error
+   message, visible wherever Problem Center findings appear — not only in the project
+   editor. The finding warns that notifications raised by the script can no longer clear
+   themselves, and it clears when the script runs again.
+7. **R7 — A silent annunciator is a visible problem.** When the loaded project defines alarm
+   bands or a project sounds map and the aural-alert master enable is off, a finding states
+   that alarms will be silent and names the remedy. Projects without alarm configuration
+   produce no finding. The master annunciator's taskbar presence distinguishes the disabled
+   state the same way it already distinguishes muted.
+
+## Acceptance Criteria
+
+- [ ] **AC1** — Integration (`pytest`, app running): install a JS transform returning `NaN`
+      and a Lua transform with a parameter typo via the API, stream values, and observe a
+      script-problem finding naming the dataset in `problems.list`; the dataset's displayed
+      value equals the untransformed input. Repeat for a transform with no return value.
+- [ ] **AC2** — Integration: post a Critical notification on channel `Alarms` via the API and
+      observe an alarm point in `alarms.state`; drive a dataset into an alarm band and
+      observe exactly one point for it (the monitor's own notification still excluded), in a
+      non-English UI language as well.
+- [ ] **AC3** — Integration: raise a band alarm, acknowledge it, kill the simulated link,
+      reconnect; `alarms.state` shows the point acknowledged with no new burst
+      (`burstStartedMs` unchanged after recovery). Variant: unacknowledged point resumes
+      alerting; operator-requested disconnect clears the table.
+- [ ] **AC4** — Integration: with console export enabled, pause and resume; two files exist
+      and the pre-pause tail is in the first. Maintainer observation: a WAV recording
+      stopped by disconnect contains audio up to the drop.
+- [ ] **AC5** — Integration: connect a simulated source sending 4-value frames against a
+      project with 8 indexed datasets; a finding names the four starved datasets; extend the
+      frames to 8 values; the finding clears.
+- [ ] **AC6** — Integration: install a control script whose `loop()` throws; a script-class
+      finding with the error text appears in `problems.list`; fix the script; the finding
+      clears.
+- [ ] **AC7** — Integration: load a project with alarm bands while the master enable is off;
+      a finding appears; enable sounds; it clears. Maintainer observation: the taskbar
+      annunciator shows the disabled state distinctly from muted.
+- [ ] **AC8** — `--benchmark-hotpath` shows no regression (the detection counters live on
+      the frame path).
+- [ ] **AC9** — Existing alarm sequence unit suite still passes; new unit coverage for the
+      reconnect point-preservation rule.
+
+## Constraints & Invariants
+
+- **No per-frame allocation, locking, or signaling** for any new detection on the data path:
+  plain counters polled by the existing 1 Hz / pull-based diagnostics, per the
+  diagnostics-are-pulled rule. The 256 kHz hotpath gate must not regress.
+- **Findings are pull-checkers in the existing Problem Center**, not new notification
+  traffic; no finding may itself raise an alarm point (no feedback loop).
+- **Display semantics unchanged:** transform failure still shows the untransformed value;
+  starved datasets still show their last value (the finding is the remedy, not a UI
+  staleness overlay).
+- **No dependence on UI language** for any alarm, finding, or exclusion decision.
+- **Sequence semantics of spec 0087 unchanged** except the reconnect rule in R3; the ISA
+  sequence unit-test suite is the guard.
+- **Existing tier gating unchanged:** each sink and feature keeps its current GPL/Pro
+  status; the new findings themselves are not license-gated.
+- **Recording file naming and rotation conventions unchanged**, apart from console logs
+  gaining the same pause-split the other recorders already have.
+- No new dependencies.
+
+## Open Questions
+
+Resolved with the maintainer at approval (2026-09-29):
+
+- Acknowledged notification-kind points (script-raised) also survive an unrequested drop —
+  a drop is exactly when a script cannot re-raise or clear them. Unacknowledged
+  notification points are discarded as today (no process condition to re-verify on
+  recovery).
+- The disabled-state annunciator indicator is visible whenever the loaded project defines
+  alarm bands, not only while a point is active.

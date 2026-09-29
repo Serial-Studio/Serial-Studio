@@ -33,6 +33,7 @@ extern "C" {
 #include <QDeadlineTimer>
 #include <QJSEngine>
 #include <QJSValue>
+#include <QSet>
 #include <QString>
 #include <QVariantMap>
 #include <vector>
@@ -172,6 +173,7 @@ private:
   quint64 m_transformErrors;
   int m_lastTransformDatasetUniqueId;
   QString m_lastTransformError;
+  QSet<int> m_errorNotedDatasets;
 
   std::map<EngineKey, TransformEngine> m_engines;
 };

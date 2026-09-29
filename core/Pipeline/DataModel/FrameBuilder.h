@@ -62,6 +62,7 @@ extern "C" {
 #include "DataModel/FrameBuilder/LatestFrameTap.h"
 #include "DataModel/FrameBuilder/QuickPlotBuilder.h"
 #include "DataModel/FrameBuilder/ReplayIngest.h"
+#include "DataModel/FrameBuilder/ShortFrameWatch.h"
 #include "DataModel/FrameBuilder/TableScriptBridge.h"
 #include "DataModel/FrameBuilder/TableSnapshotChannel.h"
 #include "DataModel/FrameBuilder/TransformCompiler.h"
@@ -135,12 +136,19 @@ public:
   [[nodiscard]] DataModel::DataTableStore& tableStore() noexcept;
   [[nodiscard]] const LatestFrameInfo* latestFrame(int sourceId) const noexcept;
 
-  using ParseLoad = DataModel::ParseBudget::Load;
+  using ParseLoad      = DataModel::ParseBudget::Load;
+  using ShortFrameStat = DataModel::ShortFrameWatch::Stat;
 
   void resetFrameCounters();
   void setParseBudgetEnabled(bool enabled);
   [[nodiscard]] bool parseBudgetThinning() const noexcept;
   [[nodiscard]] std::vector<ParseLoad> parseLoadSnapshot();
+
+  [[nodiscard]] std::vector<ShortFrameStat> shortFrameStats() const
+  {
+    return m_shortFrameWatch.stats();
+  }
+
   [[nodiscard]] LatestFrameInfo latestFrameSnapshot(int sourceId);
   [[nodiscard]] quint64 parsedFrameCount() const noexcept;
   [[nodiscard]] quint64 skippedFrameCount() const noexcept;
@@ -308,6 +316,7 @@ private:
   QMap<int, DataModel::Frame> m_sourceFrames;
   std::map<int, quint64> m_sourceFrameCounters;
   std::unordered_map<int, DatasetDeps> m_datasetDeps;
+  DataModel::ShortFrameWatch m_shortFrameWatch;
 
   int m_latestFrameSourceId;
   quint64 m_latestFrameSeq;

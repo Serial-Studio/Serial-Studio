@@ -15,7 +15,7 @@ Priorities use the flight-deck vocabulary: **Warning**, **Caution** and **Adviso
 | Caution  | Warning alarm band (severity 2), Warning notification | Three-pulse burst | Every 10 s (2.5 s to 30 s) until acknowledged, silenced or the condition clears |
 | Advisory | Info notification | Single pulse | Once, only while nothing else sounds |
 
-Info and OK alarm bands never alert. The `Problems` and `System` notification channels are the application's own diagnostics and never become alarm points.
+Info and OK alarm bands never alert. The `Problems` and `System` notification channels are the application's own diagnostics and never become alarm points. The alarm-band monitor's own notifications are recognised by their origin, never by their channel name, so a script or API client may post on any channel it likes — including one named "Alarms" — and still raise a point, in every interface language.
 
 ## Alarm points and sequences
 
@@ -55,11 +55,11 @@ A bell sits at the right end of the dashboard taskbar tray at all times. While a
 
 At most one alarm sound plays at a time: the highest priority among unsilenced alerting points. When that priority is fully acknowledged or silenced, the next lower alerting priority takes over. Ringback plays only when nothing is in Alert.
 
-Disconnecting returns every point to Normal without ringback; the Link Lost or Disconnected event sound plays instead. Opening a project or starting the application never sounds, and changing a preference only plays the (off-by-default) UI feedback events.
+Disconnecting on purpose returns every point to Normal without ringback; the Disconnected event sound plays instead. An **unrequested** link drop is different: the audible stops for the outage, but the point table is held — acknowledged points stay acknowledged, and when the link recovers, a dataset still in the same alarm band picks its point back up (an unacknowledged one resumes sounding, an acknowledged one stays quiet). Unacknowledged notification points are dropped at the loss, since the script that raised them cannot clear them across the outage. Opening a project or starting the application never sounds, and changing a preference only plays the (off-by-default) UI feedback events.
 
 ## Preferences > Sounds
 
-- **Enable Sounds** (off by default; nothing plays until it is turned on), **Mute**, **Volume**, **Output Device** (system default or any output the OS lists). If the selected device disappears, sounds continue on the system default, the Problem Center reports the lost device, and output returns to it when it comes back.
+- **Enable Sounds** (off by default; nothing plays until it is turned on), **Mute**, **Volume**, **Output Device** (system default or any output the OS lists). If the selected device disappears, sounds continue on the system default, the Problem Center reports the lost device, and output returns to it when it comes back. While sounds are disabled and the loaded project defines alarm bands or alarm sounds, the taskbar bell dims and the Problem Center says the alarms will be silent — a project full of alarms can never run mute without a visible hint.
 - **Sequence (ISA-18.1)**: A-4 (default), A, M-4, M, R-4 or R.
 - One row per alarm signal (Warning, Caution, Advisory, Ringback): the WAV file (empty means the bundled sound), a browse button, a play button and a clear button. Warning and Caution also carry their repeat interval.
 - One row per application event, each with an enable switch: Connected, Disconnected, Link Lost, Reconnected, Export Finished, Recording Started, Recording Stopped, Error Dialog Shown, Button Pressed, Toggle Changed. Toggle Changed covers switches, radio buttons, checkboxes, combo box selections and spin box edits; Button Pressed covers buttons, the Preferences and console annotation tabs, and Project Editor tree clicks. Button Pressed and Toggle Changed are off by default. Event sounds play on their own lane, are lowered by 12 dB while an alarm sounds, and never delay an alarm burst.

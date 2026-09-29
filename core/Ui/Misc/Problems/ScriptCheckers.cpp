@@ -28,7 +28,10 @@
 #include "DataModel/FrameBuilder/TransformCompiler.h"
 #include "DataModel/PipelineModules.h"
 #include "DataModel/ProjectModel.h"
+#include "DataModel/Scripting/ControlScript.h"
 #include "DataModel/Scripting/FrameParser.h"
+#include "IO/PipelineHost.h"
+#include "IO/StreamWorker.h"
 #include "Misc/ProblemCenter.h"
 
 //--------------------------------------------------------------------------------------------------
@@ -214,12 +217,45 @@ static void checkParserErrors(QList<Finding>& out)
 //--------------------------------------------------------------------------------------------------
 
 /**
+ * @brief Reports dense-lane transforms that keep failing; a failing or timed-out block falls back
+ *        to the source's raw samples. Counters are worker-written atomics sampled here at 1 Hz
+ *        (spec 0033); the block path never signals.
+ */
+static void checkStreamTransformErrors(QList<Finding>& out)
+{
+  const auto& workers = DataModel::pipelineModules().pipelineHost.streamWorkers();
+  for (const auto& worker : workers) {
+    const auto* processor = worker ? worker->processor() : nullptr;
+    if (!processor)
+      continue;
+
+    const quint64 fails = processor->transformErrorCount();
+    if (fails == 0)
+      continue;
+
+    out.append(makeScriptFinding(
+      Misc::ProblemCenter::Warning,
+      "stream-transform-errors",
+      trScriptProblem("A stream transform is failing"),
+      trScriptProblem("The dense-lane transforms of \"%1\" have failed %2, so the affected "
+                      "blocks show raw samples.")
+        .arg(scriptSourceLabel(worker->sourceId()), scriptBucketLabel(fails)),
+      trScriptProblem("Check this source's dataset transforms; the stream lane keeps no "
+                      "per-dataset error detail, so validate each one in its editor."),
+      -1,
+      QString()));
+  }
+}
+
+/**
  * @brief Reports per-dataset value transforms that keep throwing; the dataset silently falls back
  *        to its raw value, which looks like a wrong reading rather than a broken script.
  */
 static void checkTransformErrors(QList<Finding>& out)
 {
   auto& builder = DataModel::pipelineModules().frameBuilder;
+
+  checkStreamTransformErrors(out);
 
   const quint64 fails = builder.transformErrorCount();
   if (fails == 0)
@@ -245,6 +281,35 @@ static void checkTransformErrors(QList<Finding>& out)
 }
 
 //--------------------------------------------------------------------------------------------------
+// Control-script check
+//--------------------------------------------------------------------------------------------------
+
+/**
+ * @brief Reports a control script stopped by a runtime error (spec 0088 R6): it drives nothing
+ *        until fixed, and a notification it raised can no longer resolve itself, so any alarm it
+ *        holds open needs an operator. Clears once the script runs again.
+ */
+static void checkControlScriptStopped(QList<Finding>& out)
+{
+  auto& script = DataModel::pipelineModules().controlScript;
+  if (!script.stoppedOnError())
+    return;
+
+  out.append(makeScriptFinding(
+    Misc::ProblemCenter::Warning,
+    "control-script-stopped",
+    trScriptProblem("The control script stopped with an error"),
+    trScriptProblem("The project's control script raised a runtime error and is no longer "
+                    "running. Notifications it raised can no longer resolve themselves, so any "
+                    "alarm they hold open needs an acknowledge. Error: %1")
+      .arg(script.lastError()),
+    trScriptProblem("Open the control script in the Project Editor, fix the reported error and "
+                    "reconnect to restart it."),
+    -1,
+    QString()));
+}
+
+//--------------------------------------------------------------------------------------------------
 // Registration
 //--------------------------------------------------------------------------------------------------
 
@@ -259,4 +324,5 @@ void Misc::ScriptCheckers::registerAll()
 
   center.registerChecker(QStringLiteral("script.parser"), triggers, checkParserErrors);
   center.registerChecker(QStringLiteral("script.transform"), triggers, checkTransformErrors);
+  center.registerChecker(QStringLiteral("script.control"), triggers, checkControlScriptStopped);
 }

@@ -124,7 +124,7 @@ void UI::Alarms::AppEventSounds::onConnectedChanged()
   }
 
   m_lastCloseWasDrop = !m_connectionManager.lastCloseRequested();
-  Q_EMIT linkClosed();
+  Q_EMIT linkClosed(m_lastCloseWasDrop);
   if (m_armed)
     Q_EMIT eventRequested(
       static_cast<int>(m_lastCloseWasDrop ? Slot::LinkLost : Slot::Disconnected));

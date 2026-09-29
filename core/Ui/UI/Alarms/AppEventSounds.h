@@ -48,7 +48,7 @@ class AppEventSounds : public QObject {
 
 signals:
   void eventRequested(int slot);
-  void linkClosed();
+  void linkClosed(bool wasDrop);
 
 public:
   explicit AppEventSounds(Core::Bus::MessageBus& bus,

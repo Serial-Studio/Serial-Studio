@@ -271,7 +271,10 @@ unconditionally — check with a sample first if you think you need to, and neve
   `TransformDispatch::applyJs` latches `m_jsTimedOut` (read through `jsTimedOut()`, cleared
   per pass); the user-facing notification is posted once
   from the main thread after the loop, never from the watchdog thread.
-- Non-finite numeric results are rejected (`[[unlikely]]` guarded) and `rawValue` is returned.
+- Non-finite numeric results are rejected (`[[unlikely]]` guarded) and `rawValue` is returned —
+  and, like a nil/undefined result, counted through `noteTransformError` so the `script.transform`
+  problem check names the dataset instead of the wrong-looking value shipping silently (spec
+  0088 R1). Expression transforms keep their documented NaN degrade and are not counted.
 - **Stream-lane datasets run their transform in the `IO::StreamWorker`, not here (spec 0051).**
   That engine is worker-owned (same safe-lib sandbox, same Safe/Fast mode) and prefers
   `transform_block(samples, info) -> samples`, called ONCE per captured block with the

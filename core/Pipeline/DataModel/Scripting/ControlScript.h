@@ -65,6 +65,8 @@ public:
 
   [[nodiscard]] QString code() const;
   [[nodiscard]] bool running() const;
+  [[nodiscard]] bool stoppedOnError() const noexcept;
+  [[nodiscard]] const QString& lastError() const noexcept;
 
 public slots:
   void restart();
@@ -86,10 +88,12 @@ private:
 
 private:
   QString m_code;
+  QString m_lastError;
   bool m_ready;
   bool m_running;
   bool m_shouldRun;
   bool m_shutdown;
+  bool m_stoppedOnError;
   bool m_playerOpen;
   bool m_tableArmed;
   std::array<bool, 3> m_playerOpenMask;
