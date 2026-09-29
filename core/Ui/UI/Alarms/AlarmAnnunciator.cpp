@@ -41,6 +41,7 @@
 #include "IO/ConnectionManager.h"
 #include "MDF4/Export.h"
 #include "Misc/ProblemCenter.h"
+#include "Replay/PlayerState.h"
 #include "UI/AlarmMonitor.h"
 #include "UI/Alarms/AnnunciatorChecker.h"
 #include "UI/Dashboard.h"
