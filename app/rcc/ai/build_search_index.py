@@ -162,7 +162,7 @@ def chunk_script(path: Path):
     """For .js/.lua templates, the leading comment block is the most useful
     chunk. Take the first 1000 chars of the file (which should include the
     header comment) plus the first function definition."""
-    text = path.read_text(errors="replace")
+    text = path.read_text(encoding="utf-8", errors="replace")
     return [text[:CHUNK_MAX]]
 
 
@@ -203,11 +203,17 @@ def add(source: str, title: str, body: str, doc_id: str):
     )
 
 
+# Path sorting is case-insensitive on Windows and case-sensitive elsewhere; sorting on the
+# posix string keeps corpus order (and thus the index bytes) identical across machines.
+def path_key(p: Path) -> str:
+    return p.as_posix()
+
+
 def harvest_markdown(dir_path: Path, source: str):
     if not dir_path.exists():
         return
-    for md in sorted(dir_path.glob("*.md")):
-        text = md.read_text(errors="replace")
+    for md in sorted(dir_path.glob("*.md"), key=path_key):
+        text = md.read_text(encoding="utf-8", errors="replace")
         title = md.stem
         for i, chunk in enumerate(chunk_markdown(text)):
             add(
@@ -221,7 +227,9 @@ def harvest_markdown(dir_path: Path, source: str):
 def harvest_scripts(dir_path: Path, source: str):
     if not dir_path.exists():
         return
-    for js in sorted(list(dir_path.glob("*.js")) + list(dir_path.glob("*.lua"))):
+    for js in sorted(
+        list(dir_path.glob("*.js")) + list(dir_path.glob("*.lua")), key=path_key
+    ):
         for i, chunk in enumerate(chunk_script(js)):
             add(
                 source=source,
@@ -235,7 +243,7 @@ def harvest_templates_manifest():
     manifest_path = TEMPLATES / "manifest.json"
     if not manifest_path.exists():
         return
-    data = json.loads(manifest_path.read_text())
+    data = json.loads(manifest_path.read_text(encoding="utf-8"))
     for entry in data.get("templates", []):
         body = f"Template: {entry.get('title','')}\n\n{entry.get('description','')}"
         add(
@@ -249,8 +257,8 @@ def harvest_templates_manifest():
 def harvest_example_readmes():
     if not EXAMPLES.exists():
         return
-    for md in sorted(EXAMPLES.rglob("README.md")):
-        text = md.read_text(errors="replace")
+    for md in sorted(EXAMPLES.rglob("README.md"), key=path_key):
+        text = md.read_text(encoding="utf-8", errors="replace")
         title = md.parent.name
         for i, chunk in enumerate(chunk_markdown(text)):
             add(
@@ -264,9 +272,9 @@ def harvest_example_readmes():
 def harvest_examples():
     if not EXAMPLES.exists():
         return
-    for proj in sorted(EXAMPLES.rglob("*.ssproj")):
+    for proj in sorted(EXAMPLES.rglob("*.ssproj"), key=path_key):
         try:
-            data = json.loads(proj.read_text())
+            data = json.loads(proj.read_text(encoding="utf-8"))
         except Exception:
             continue
         title = data.get("title", proj.stem)
@@ -366,6 +374,10 @@ index = {
     "docs": docs_out,
 }
 
+# sort_keys makes the file byte-stable: dict insertion order upstream depends on set()
+# iteration (per-process hash randomization), which reshuffled idf keys on every rebuild.
 OUT.parent.mkdir(parents=True, exist_ok=True)
-OUT.write_bytes(json.dumps(index, separators=(",", ":")).encode("utf-8"))
+OUT.write_bytes(
+    json.dumps(index, separators=(",", ":"), sort_keys=True).encode("utf-8")
+)
 print(f"[index] wrote {OUT} ({OUT.stat().st_size // 1024} KiB)", file=sys.stderr)
