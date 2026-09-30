@@ -62,6 +62,22 @@ Each rule has a short ID for cross-referencing in review reports. Repo-specific 
 - **ENM-2**: Scoped, or explicit underlying type.
 - **ENM-5**: `{}` (value 0) should mean "default".
 - **ENM-7**: `switch` over an enum: no `default:` label; list all enumerators explicitly.
+- **ENM-8**: A fixed, project-owned vocabulary must be an enum, never a string. A parameter,
+  member, or DTO/JSON field holding a closed set of values (state, mode, kind, phase,
+  status, ...) typed as `QString` gladly accepts new — and wrong — values; adding a value
+  must break every switch that forgot it, which a string silently doesn't. Tells:
+  `QString state`, comparisons against value literals (`mode == "dark"`), a comment
+  enumerating the legal values. Strings are only for identifiers the project does NOT own
+  (external system names, protocol/vendor ids — and here, persisted `.ssproj` JSON keys,
+  which are a wire format).
+- **ENM-9**: The boolean parameter trap: non-intuitive `bool` parameters — or a call site
+  like `f(text, false, false, true)` — should be named enums. Even a single bool qualifies
+  when the call site doesn't read (`sort(true)`); clear ones like `setVisible(true)` are
+  fine.
+- **ENM-10**: Placement: class scope when the vocabulary belongs to one class's API; a
+  `Q_NAMESPACE`-registered namespace (like `SerialStudio::`) when shared across classes.
+  Never duplicate an enum because the first copy was scoped too narrowly — widen the
+  original.
 
 ## Exceptions / noexcept
 

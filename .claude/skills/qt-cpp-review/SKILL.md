@@ -190,6 +190,11 @@ deprecated classes.
 - `noexcept` on a function whose `Q_ASSERT` checks a *precondition* (incompatible).
 - Unscoped enum without an explicit underlying type; missing trailing comma on the last
   enumerator; `switch` over an enum with a `default:` label (suppresses `-Wswitch`).
+- A closed, project-owned vocabulary held in a `QString` (`mode == "dark"`-style
+  comparisons) instead of an enum — persisted JSON keys and external/vendor ids are exempt.
+- Boolean parameter traps: consecutive bool literals at a call site (`f(x, false, true)`),
+  or a lone `bool` argument the call site can't explain; suggest a named enum. An enum
+  duplicated across classes instead of centralized (e.g. in `SerialStudio::`).
 - `QList<QString>` where `QStringList` is meant.
 - A deprecated class from `qt-deprecated-classes.md`. Note repo reality: this codebase uses
   `std::shared_ptr` (e.g. `TimestampedFramePtr`), not `QSharedPointer` — do not flag the
