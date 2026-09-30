@@ -72,11 +72,13 @@ void HdrTransferTest::exactAtAnchorPoints()
 }
 
 /**
- * @brief No jump at the piecewise cuts or at the 1.0 extension seam, in either direction.
+ * @brief No jump at the piecewise cuts or at the 1.0 extension seam, in either direction. The
+ *        probe eps must stay well under tolerance / slope: oetfExt climbs at ~12.92 near its
+ *        linear cut, so a 1e-4 probe reads ~2.6e-3 of pure slope and fails without any seam.
  */
 void HdrTransferTest::continuousAtEveryCut()
 {
-  constexpr float eps    = 1e-4f;
+  constexpr float eps    = 1e-5f;
   const float cuts_enc[] = {Misc::HdrTransfer::kSrgbEncodedCut, 1.0f};
   const float cuts_lin[] = {Misc::HdrTransfer::kSrgbLinearCut, 1.0f};
 
