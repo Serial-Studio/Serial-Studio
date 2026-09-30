@@ -59,6 +59,7 @@ path = [
   ".clang-tidy",
   ".gitattributes",
   ".gitignore",
+  ".mcp.json",
 ]
 SPDX-FileCopyrightText = "2020-2026 Alex Spataru <alex@serial-studio.com>"
 SPDX-License-Identifier = "GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial"
