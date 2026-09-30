@@ -124,6 +124,7 @@ private:
   double m_xMax;
   double m_yMin;
   double m_yMax;
+  bool m_hdrMaterial;
 
   QList<QPointF> m_px;
   QPointer<QXYSeries> m_source;

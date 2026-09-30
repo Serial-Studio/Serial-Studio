@@ -230,6 +230,18 @@ Item {
             visible: Cpp_Misc_GraphicsBackend.effectsEnabled
             enabled: Cpp_Misc_GraphicsBackend.effectsEnabled
           }
+
+          HdrBoost {
+            target: led
+            width: led.width
+            height: led.height
+            x: layout.x + led.x
+            y: layout.y + led.y
+            active: led.showLit
+            boost: led.flashing
+                   ? Cpp_Misc_GraphicsBackend.hdrAutoIntensity
+                   : Cpp_Misc_GraphicsBackend.hdrSteadyIntensity
+          }
         }
       }
     }

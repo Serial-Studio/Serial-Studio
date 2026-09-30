@@ -88,9 +88,6 @@ Item {
     iconSize: 16
     anchors.centerIn: parent
     highlighted: _panel.opened
-    opacity: root.alarmsDisabled ? 0.45 : 1
-
-    Behavior on opacity { NumberAnimation { duration: 120 } }
     text: Cpp_UI_Alarms.unacknowledgedCount > 0 ? String(Cpp_UI_Alarms.unacknowledgedCount) : ""
     font: Cpp_Misc_CommonFonts.customUiFont(0.85, true)
     color: root.lit ? root.priorityColor : Cpp_ThemeManager.colors["taskbar_text"]
@@ -141,6 +138,18 @@ Item {
       acceptedButtons: Qt.RightButton
       onClicked: Cpp_UI_Alarms.acknowledge()
     }
+  }
+
+  //
+  // Emissive bell (spec 0089): full intensity during the fast alarm flash, steady intensity
+  // whenever a priority color is lit (ringback and acknowledged states included)
+  //
+  Widgets.HdrBoost {
+    target: _bell
+    anchors.fill: _bell
+    active: root.lit && root.priority >= 0
+    boost: root.fastFlash ? Cpp_Misc_GraphicsBackend.hdrAutoIntensity
+                          : Cpp_Misc_GraphicsBackend.hdrSteadyIntensity
   }
 
   //

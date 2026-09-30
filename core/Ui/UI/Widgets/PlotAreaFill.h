@@ -122,6 +122,7 @@ private:
   QColor m_color;
   QColor m_fillColor;
   double m_baseline;
+  bool m_hdrMaterial;
   double m_xMin;
   double m_xMax;
   double m_yMin;

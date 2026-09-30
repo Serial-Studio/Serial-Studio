@@ -150,8 +150,17 @@ Item {
               ? "99+"
               : Cpp_Notifications.unreadCount.toString()
         background: Rectangle {
+          id: unreadBadgeBg
+
           radius: 11
           color: Cpp_ThemeManager.colors["alarm"]
+        }
+
+        Widgets.HdrBoost {
+          z: -1
+          anchors.fill: parent
+          target: unreadBadgeBg
+          boost: Cpp_Misc_GraphicsBackend.hdrSteadyIntensity
         }
       }
 

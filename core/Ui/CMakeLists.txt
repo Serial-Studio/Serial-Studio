@@ -67,7 +67,9 @@ qt_add_library(
   Misc/IconRegistryLegacy.cpp
   UI/CommandRegistry.cpp
   UI/CommandStrings.cpp
+  UI/Widgets/StrokeHdrMaterial.cpp
   Misc/GraphicsBackend.cpp
+  Misc/HdrOutput.cpp
   Misc/HighDpiScaling.cpp
   Misc/SimdSettings.cpp
   Misc/CrashTracker.cpp
@@ -174,7 +176,10 @@ qt_add_library(
   Misc/IconEngine.h
   Misc/IconRegistryLegacy.h
   UI/CommandRegistry.h
+  UI/Widgets/StrokeHdrMaterial.h
   Misc/GraphicsBackend.h
+  Misc/HdrOutput.h
+  Misc/HdrTransfer.h
   Misc/HighDpiScaling.h
   Misc/SimdSettings.h
   Misc/CrashTracker.h
@@ -364,6 +369,7 @@ if(BUILD_COMMERCIAL)
     UI/Widgets/Waterfall/WaterfallTiles.h
     UI/Widgets/Waterfall/WaterfallViewState.h
     UI/Widgets/Waterfall/WaterfallOverlay.h
+    UI/Widgets/Waterfall/WaterfallHdrMaterial.h
     UI/Widgets/Waterfall/WaterfallRingTexture.h
     UI/Widgets/Waterfall/WaterfallSpectrogramNodes.h
     UI/Widgets/Painter.h
@@ -450,6 +456,7 @@ if(BUILD_COMMERCIAL)
     UI/Widgets/Waterfall/WaterfallTiles.cpp
     UI/Widgets/Waterfall/WaterfallViewState.cpp
     UI/Widgets/Waterfall/WaterfallOverlay.cpp
+    UI/Widgets/Waterfall/WaterfallHdrMaterial.cpp
     UI/Widgets/Waterfall/WaterfallRingTexture.cpp
     UI/Widgets/Waterfall/WaterfallSpectrogramNodes.cpp
     UI/Widgets/Painter.cpp

@@ -38,6 +38,7 @@
 #include "Core/SSAssert.h"
 #include "Core/TimerEvents.h"
 #include "Misc/CommonFonts.h"
+#include "Misc/HdrOutput.h"
 #include "Misc/ThemeManager.h"
 #include "UI/Dashboard.h"
 #include "UI/Widgets/AudioExport.h"
@@ -80,6 +81,8 @@ Widgets::Waterfall::Waterfall(const int index, QQuickItem* parent)
   , m_dragging(false)
   , m_releaseRenderResources(false)
   , m_imageReleased(false)
+  , m_hdrHistory(false)
+  , m_gray16RingSupported(false)
   , m_outerBgNode(nullptr)
   , m_innerBgNode(nullptr)
   , m_overlayNode(nullptr)
@@ -353,7 +356,7 @@ void Widgets::Waterfall::setColorMap(const int map)
 
   rebuildColorLut();
   if (!m_image.isNull() && !m_filledOnce && m_writeRow == 0)
-    m_image.fill(m_colorLut[0]);
+    fillHistoryFloor();
 
   m_spectrogram.markAll();
   Q_EMIT colorMapChanged();
@@ -361,7 +364,8 @@ void Widgets::Waterfall::setColorMap(const int map)
 }
 
 /**
- * @brief Bakes the active color map into the 256-entry table the row colorizer indexes.
+ * @brief Bakes the active color map into the 256-entry table the row colorizer indexes, and
+ *        into the 256x1 image the HDR material samples as its LUT texture (spec 0089).
  */
 void Widgets::Waterfall::rebuildColorLut()
 {
@@ -369,6 +373,12 @@ void Widgets::Waterfall::rebuildColorLut()
   SS_ASSERT(
     m_colorLut.size() == static_cast<std::size_t>(WaterfallColorMap::kLutSize),
     m_colorLut.assign(static_cast<std::size_t>(WaterfallColorMap::kLutSize), qRgb(0, 0, 0)));
+
+  m_lutImage = QImage(reinterpret_cast<const uchar*>(m_colorLut.data()),
+                      WaterfallColorMap::kLutSize,
+                      1,
+                      QImage::Format_RGB32)
+                 .copy();
 }
 
 /**
@@ -477,7 +487,7 @@ void Widgets::Waterfall::clearHistory()
   m_writeRow   = 0;
   m_filledOnce = false;
   if (!m_image.isNull()) {
-    m_image.fill(m_colorLut[0]);
+    fillHistoryFloor();
     m_spectrogram.markAll();
   }
 
@@ -589,14 +599,51 @@ void Widgets::Waterfall::releaseFftPlan()
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Allocates the spectrogram image based on FFT size and history depth.
+ * @brief Whether the history should hold 16-bit magnitudes for the HDR ring material: the
+ *        window's swapchain is HDR, the device backs an R16 ring (verdict cached at sync --
+ *        the GUI thread never touches the render thread's QRhi), and the ring path never
+ *        failed (the tile fallback needs colorized RGB32 rows).
+ */
+bool Widgets::Waterfall::hdrHistoryWanted() const
+{
+  if (m_spectrogram.ringUnavailable() || !m_gray16RingSupported)
+    return false;
+
+  QQuickWindow* win = window();
+  return win != nullptr && win->property("hdrActive").toBool() == true;
+}
+
+/**
+ * @brief The window's effective emissive boost (SmartWindow's `hdrBoost`, 1 when absent).
+ */
+float Widgets::Waterfall::hdrBoost() const
+{
+  return Misc::HdrOutput::effectiveBoost(window());
+}
+
+/**
+ * @brief Fills the history with the floor value of the active mode: LUT entry zero for the
+ *        colorized SDR image, zero magnitude for the HDR one.
+ */
+void Widgets::Waterfall::fillHistoryFloor()
+{
+  if (m_image.isNull())
+    return;
+
+  m_image.fill(m_hdrHistory ? 0u : static_cast<uint>(m_colorLut[0]));
+}
+
+/**
+ * @brief Allocates the spectrogram image based on FFT size and history depth; the pixel format
+ *        follows the HDR mode (16-bit magnitude vs colorized RGB32, spec 0089).
  */
 void Widgets::Waterfall::rebuildHistoryImage()
 {
   const int width  = qMax(1, m_size / 2);
   const int height = qMax(1, m_historySize);
-  m_image          = QImage(width, height, QImage::Format_RGB32);
-  m_image.fill(m_colorLut[0]);
+  m_hdrHistory     = hdrHistoryWanted();
+  m_image = QImage(width, height, m_hdrHistory ? QImage::Format_Grayscale16 : QImage::Format_RGB32);
+  fillHistoryFloor();
   m_topRow        = 0;
   m_writeRow      = 0;
   m_filledOnce    = false;
@@ -661,8 +708,10 @@ void Widgets::Waterfall::writeRowAt(int row, const float* dbValues, int bins)
 }
 
 /**
- * @brief Colorizes one spectrum row into a physical scan line: dB values normalize onto the
- *        current display range and the bins past the spectrum take the colormap floor.
+ * @brief Bakes one spectrum row into a physical scan line: dB values normalize onto the
+ *        current display range, then land as LUT colors (SDR history) or as 16-bit
+ *        magnitudes for the GPU LUT (HDR history, spec 0089); bins past the spectrum take
+ *        the floor. Both paths write into the preallocated image -- no allocation per row.
  */
 void Widgets::Waterfall::paintRowInto(int physicalRow, const float* dbValues, int bins)
 {
@@ -673,10 +722,24 @@ void Widgets::Waterfall::paintRowInto(int physicalRow, const float* dbValues, in
   const float minDb      = static_cast<float>(m_view.minDb());
   const float invDbRange = m_view.invDbRange();
   const int writableBins = qMin(bins, imageWidth);
-  const int lastEntry    = WaterfallColorMap::kLutSize - 1;
-  const QRgb* lut        = m_colorLut.data();
-  QRgb* scan             = reinterpret_cast<QRgb*>(m_image.scanLine(physicalRow));
   m_spectrogram.markRow(physicalRow);
+
+  if (m_hdrHistory) {
+    auto* scan = reinterpret_cast<quint16*>(m_image.scanLine(physicalRow));
+    for (int x = 0; x < writableBins; ++x) {
+      const float v = (dbValues[x] - minDb) * invDbRange;
+      scan[x]       = static_cast<quint16>(qBound(0, static_cast<int>(v * 65535.0f + 0.5f), 65535));
+    }
+
+    for (int x = writableBins; x < imageWidth; ++x)
+      scan[x] = 0;
+
+    return;
+  }
+
+  const int lastEntry = WaterfallColorMap::kLutSize - 1;
+  const QRgb* lut     = m_colorLut.data();
+  QRgb* scan          = reinterpret_cast<QRgb*>(m_image.scanLine(physicalRow));
 
   for (int x = 0; x < writableBins; ++x) {
     const float v = (dbValues[x] - minDb) * invDbRange;
@@ -764,7 +827,7 @@ void Widgets::Waterfall::updateData()
   if (newSize != m_size) {
     allocateFftPlan(newSize);
     rebuildHistoryImage();
-  } else if (m_imageReleased) {
+  } else if (m_imageReleased || hdrHistoryWanted() != m_hdrHistory) {
     rebuildHistoryImage();
   }
 
@@ -866,8 +929,30 @@ QSGNode* Widgets::Waterfall::updatePaintNode(QSGNode* oldNode, UpdatePaintNodeDa
 
   root->removeAllChildNodes();
   syncBackgroundNodes(root, m_overlay.plotRect());
-  m_spectrogram.sync(root, window(), m_image, computeSourceRect(), m_overlay.plotRect(), m_topRow);
+  if (!m_image.isNull())
+    m_gray16RingSupported = WaterfallRingTexture::supported(
+      window(), m_image.size(), WaterfallRingTexture::PixelFormat::Gray16);
+
+  m_spectrogram.sync(root,
+                     window(),
+                     m_image,
+                     computeSourceRect(),
+                     m_overlay.plotRect(),
+                     m_topRow,
+                     hdrBoost(),
+                     m_lutImage);
   syncOverlayNode(root);
+
+  if (m_hdrHistory && m_spectrogram.ringUnavailable())
+    QMetaObject::invokeMethod(
+      this,
+      [this] {
+        if (m_hdrHistory && !hdrHistoryWanted()) {
+          rebuildHistoryImage();
+          update();
+        }
+      },
+      Qt::QueuedConnection);
 
   return root;
 }

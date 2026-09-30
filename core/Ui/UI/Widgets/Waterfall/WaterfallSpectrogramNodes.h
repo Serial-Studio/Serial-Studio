@@ -29,11 +29,13 @@
 #include "UI/Widgets/Waterfall/WaterfallTiles.h"
 
 QT_FORWARD_DECLARE_CLASS(QQuickWindow)
+QT_FORWARD_DECLARE_CLASS(QSGGeometryNode)
 QT_FORWARD_DECLARE_CLASS(QSGNode)
 QT_FORWARD_DECLARE_CLASS(QSGSimpleTextureNode)
 
 namespace Widgets {
 
+class WaterfallHdrMaterial;
 class WaterfallRingTexture;
 
 /**
@@ -58,12 +60,16 @@ public:
   void markRow(int physicalRow);
   void markAll();
 
+  [[nodiscard]] bool ringUnavailable() const noexcept;
+
   void sync(QSGNode* root,
             QQuickWindow* window,
             const QImage& image,
             const QRectF& sourceRect,
             const QRectF& plotRect,
-            int topRow);
+            int topRow,
+            float hdrBoost,
+            const QImage& lutImage);
 
 private:
   void releaseTileNodes();
@@ -83,6 +89,14 @@ private:
                 const QRectF& sourceRect,
                 const QRectF& plotRect,
                 int topRow);
+  void syncRingHdr(QSGNode* root,
+                   QQuickWindow* window,
+                   const QImage& image,
+                   const QRectF& sourceRect,
+                   const QRectF& plotRect,
+                   int topRow,
+                   float hdrBoost,
+                   const QImage& lutImage);
 
   [[nodiscard]] int tileCount() const noexcept;
 
@@ -90,9 +104,12 @@ private:
   bool m_tilesResized;
   bool m_ringUnavailable;
   bool m_ringFullDirty;
+  qint64 m_lutCacheKey;
 
   QSGSimpleTextureNode* m_ringNode;
   QSGSimpleTextureNode* m_ringAliasNode;
+  QSGGeometryNode* m_hdrNode;
+  QSGGeometryNode* m_hdrAliasNode;
   WaterfallRingTexture* m_ringTexture;
 
   std::vector<quint8> m_rowDirty;

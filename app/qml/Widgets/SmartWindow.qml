@@ -129,6 +129,23 @@ Window {
   WindowMirror {}
 
   //
+  // HDR output stage (spec 0089); dormant unless HDR is enabled and granted. The two window
+  // properties are the discovery surface HdrBoost reads through Window.window.
+  //
+  readonly property bool hdrActive: _hdr.active
+  readonly property real hdrHeadroom: _hdr.headroom
+  readonly property real hdrBoost: hdrActive
+                                   ? Math.min(Cpp_Misc_GraphicsBackend.hdrAutoIntensity,
+                                              hdrHeadroom)
+                                   : 1
+
+  HdrSurface {
+    id: _hdr
+
+    hostWindow: root
+  }
+
+  //
   // Ensure that window size stays within minimum size
   //
   Component.onCompleted: {

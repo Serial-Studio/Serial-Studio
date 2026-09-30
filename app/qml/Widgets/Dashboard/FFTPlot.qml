@@ -506,6 +506,8 @@ Item {
           // Band edge strokes
           //
           Rectangle {
+            id: bandEdgeLo
+
             y: 0
             x: markerShape.xLo
             height: parent.height
@@ -515,6 +517,8 @@ Item {
           }
 
           Rectangle {
+            id: bandEdgeHi
+
             y: 0
             height: parent.height
             visible: markerShape.isBand
@@ -554,6 +558,8 @@ Item {
           }
 
           Rectangle {
+            id: pointLine
+
             y: 0
             height: parent.height
             visible: !markerShape.isBand
@@ -563,6 +569,27 @@ Item {
                             markerShape.spotlit
                             ? 1.0
                             : (markerShape.markerState > 0 ? 0.95 : 0.65))
+          }
+
+          //
+          // Emissive marker strokes (spec 0089); the translucent bloom stays SDR
+          //
+          HdrBoost {
+            target: bandEdgeLo
+            anchors.fill: bandEdgeLo
+            active: bandEdgeLo.visible
+          }
+
+          HdrBoost {
+            target: bandEdgeHi
+            anchors.fill: bandEdgeHi
+            active: bandEdgeHi.visible
+          }
+
+          HdrBoost {
+            target: pointLine
+            anchors.fill: pointLine
+            active: pointLine.visible
           }
         }
       }

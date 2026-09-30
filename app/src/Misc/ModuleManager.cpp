@@ -104,6 +104,7 @@
 #include "Misc/Examples.h"
 #include "Misc/ExtensionManager.h"
 #include "Misc/GraphicsBackend.h"
+#include "Misc/HdrOutput.h"
 #include "Misc/HelpCenter.h"
 #include "Misc/HighDpiScaling.h"
 #include "Misc/IconEngine.h"
@@ -630,6 +631,8 @@ void Misc::ModuleManager::configureUpdater()
 void Misc::ModuleManager::registerQmlTypes()
 {
   qmlRegisterType<API::TerminalBridge>("SerialStudio", 1, 0, "ApiTerminalBridge");
+  Misc::HdrOutput::bindBackend(&Misc::GraphicsBackend::instance());
+  qmlRegisterType<Misc::HdrOutput>("SerialStudio", 1, 0, "HdrOutput");
   qmlRegisterType<DataModel::MacroEditor>("SerialStudio", 1, 0, "MacroEditor");
   qmlRegisterType<DataModel::MacroRunner>("SerialStudio", 1, 0, "MacroRunner");
   qmlRegisterType<DataModel::RowFilterProxy>("SerialStudio", 1, 0, "RowFilterProxy");

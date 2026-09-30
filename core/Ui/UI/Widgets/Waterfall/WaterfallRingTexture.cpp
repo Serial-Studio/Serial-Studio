@@ -32,8 +32,26 @@
 // Constants
 //--------------------------------------------------------------------------------------------------
 
-// QImage::Format_RGB32 stores 0xffRRGGBB, whose little-endian byte order is exactly BGRA8
-static constexpr QRhiTexture::Format kRingFormat = QRhiTexture::BGRA8;
+// Bgra8 = QImage::Format_RGB32 (0xffRRGGBB is BGRA8 in LE bytes); Gray16 = Grayscale16 over R16
+static constexpr QRhiTexture::Format kBgra8Format  = QRhiTexture::BGRA8;
+static constexpr QRhiTexture::Format kGray16Format = QRhiTexture::R16;
+
+/**
+ * @brief Maps a ring pixel layout to its QRhiTexture format.
+ */
+static QRhiTexture::Format rhi_format(const Widgets::WaterfallRingTexture::PixelFormat format)
+{
+  return format == Widgets::WaterfallRingTexture::PixelFormat::Gray16 ? kGray16Format
+                                                                      : kBgra8Format;
+}
+
+/**
+ * @brief Bytes per pixel of a ring pixel layout.
+ */
+static int bytes_per_pixel(const Widgets::WaterfallRingTexture::PixelFormat format)
+{
+  return format == Widgets::WaterfallRingTexture::PixelFormat::Gray16 ? 2 : 4;
+}
 
 //--------------------------------------------------------------------------------------------------
 // Constructor & destructor
@@ -43,9 +61,10 @@ static constexpr QRhiTexture::Format kRingFormat = QRhiTexture::BGRA8;
  * @brief Builds the staging side of a ring texture for a @p size spectrogram; the GPU texture
  *        itself is created lazily on the render thread, where a QRhiTexture may legally exist.
  */
-Widgets::WaterfallRingTexture::WaterfallRingTexture(const QSize& size)
+Widgets::WaterfallRingTexture::WaterfallRingTexture(const QSize& size, const PixelFormat format)
   : m_size(size)
-  , m_bytesPerRow(size.width() * 4)
+  , m_format(format)
+  , m_bytesPerRow(size.width() * bytes_per_pixel(format))
   , m_texture(nullptr)
   , m_fullUpload(false)
   , m_stagedRows(0)
@@ -130,7 +149,7 @@ void Widgets::WaterfallRingTexture::commitTextureOperations(
     return;
 
   if (!m_texture) {
-    m_texture = rhi->newTexture(kRingFormat, m_size);
+    m_texture = rhi->newTexture(rhi_format(m_format), m_size);
     if (!m_texture || !m_texture->create()) {
       delete m_texture;
       m_texture = nullptr;
@@ -142,8 +161,6 @@ void Widgets::WaterfallRingTexture::commitTextureOperations(
   if (m_fullUpload) {
     if (!m_stagingImage.isNull()) {
       QRhiTextureSubresourceUploadDescription sub(m_stagingImage);
-      sub.setSourceSize(m_size);
-      sub.setDestinationTopLeft(QPoint(0, 0));
       resourceUpdates->uploadTexture(
         m_texture, QRhiTextureUploadDescription(QRhiTextureUploadEntry(0, 0, sub)));
     }
@@ -178,6 +195,15 @@ void Widgets::WaterfallRingTexture::commitTextureOperations(
 bool Widgets::WaterfallRingTexture::failed() const noexcept
 {
   return m_failed.load(std::memory_order_relaxed);
+}
+
+/**
+ * @brief Pixel layout this ring was built with; a mode switch rebuilds the texture.
+ */
+Widgets::WaterfallRingTexture::PixelFormat Widgets::WaterfallRingTexture::pixelFormat()
+  const noexcept
+{
+  return m_format;
 }
 
 /**
@@ -257,21 +283,25 @@ void Widgets::WaterfallRingTexture::stageRow(const QImage& image, const int row)
 
 /**
  * @brief Whether a ring texture can back @p size on @p window's graphics device: the QImage-to-RHI
- *        byte-order match is little-endian only, the device must expose BGRA8, and the ring must
- *        fit the driver's maximum texture dimension. A false answer keeps the tile fallback.
+ *        byte-order match is little-endian only (both layouts store native-endian pixels), the
+ *        device must expose the layout's format, and the ring must fit the driver's maximum
+ *        texture dimension. A false answer keeps the tile fallback.
  */
-bool Widgets::WaterfallRingTexture::supported(const QQuickWindow* window, const QSize& size)
+bool Widgets::WaterfallRingTexture::supported(const QQuickWindow* window,
+                                              const QSize& size,
+                                              const PixelFormat format)
 {
 #if Q_BYTE_ORDER != Q_LITTLE_ENDIAN
   Q_UNUSED(window)
   Q_UNUSED(size)
+  Q_UNUSED(format)
   return false;
 #else
   if (!window || size.isEmpty())
     return false;
 
   QRhi* rhi = window->rhi();
-  if (!rhi || !rhi->isTextureFormatSupported(kRingFormat))
+  if (!rhi || !rhi->isTextureFormatSupported(rhi_format(format)))
     return false;
 
   const int maxDimension = rhi->resourceLimit(QRhi::TextureSizeMax);

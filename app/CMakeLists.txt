@@ -438,6 +438,8 @@ set(QML_SOURCES
   qml/Widgets/LedIndicator.qml
   qml/Widgets/LineField.qml
   qml/Widgets/FileDropArea.qml
+  qml/Widgets/HdrBoost.qml
+  qml/Widgets/HdrSurface.qml
   qml/Widgets/IconButton.qml
   qml/Widgets/MarkdownIcons.js
   qml/Widgets/MarkdownTextView.qml
@@ -875,6 +877,17 @@ endif()
 #
 #---------------------------------------------------------------------------------------------------
 
+qt_add_shaders(${PROJECT_EXECUTABLE} "hdr_shaders"
+  BATCHABLE
+  PREFIX "/serial-studio.com/shaders"
+  BASE "${CMAKE_CURRENT_SOURCE_DIR}/shaders"
+  FILES
+    shaders/hdr_output.frag
+    shaders/hdr_boost.frag
+    shaders/stroke_hdr.vert
+    shaders/stroke_hdr.frag
+)
+
 if(BUILD_COMMERCIAL)
   qt_add_shaders(${PROJECT_EXECUTABLE} "plot3d_eye_shaders"
     BATCHABLE
@@ -883,6 +896,15 @@ if(BUILD_COMMERCIAL)
     FILES
       shaders/plot3d_eye.vert
       shaders/plot3d_eye.frag
+  )
+
+  qt_add_shaders(${PROJECT_EXECUTABLE} "waterfall_hdr_shaders"
+    BATCHABLE
+    PREFIX "/serial-studio.com/shaders"
+    BASE "${CMAKE_CURRENT_SOURCE_DIR}/shaders"
+    FILES
+      shaders/waterfall_hdr.vert
+      shaders/waterfall_hdr.frag
   )
 endif()
 

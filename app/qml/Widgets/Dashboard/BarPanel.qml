@@ -214,15 +214,29 @@ Item {
               Repeater {
                 model: root.model.bands[barRow.index]
 
-                delegate: Rectangle {
+                delegate: Item {
+                  id: hBandHost
+
                   required property var modelData
-                  opacity: 0.32
-                  y: hWell.y + 1
-                  antialiasing: true
-                  height: hWell.height - 2
-                  color: root.bandColor(modelData)
-                  x: hWell.x + 1 + modelData.fracMin * (hWell.width - 2)
-                  width: Math.max(0, (modelData.fracMax - modelData.fracMin) * (hWell.width - 2))
+
+                  Rectangle {
+                    id: hBandZone
+
+                    opacity: 0.32
+                    y: hWell.y + 1
+                    antialiasing: true
+                    height: hWell.height - 2
+                    color: root.bandColor(hBandHost.modelData)
+                    x: hWell.x + 1 + hBandHost.modelData.fracMin * (hWell.width - 2)
+                    width: Math.max(0, (hBandHost.modelData.fracMax - hBandHost.modelData.fracMin)
+                                       * (hWell.width - 2))
+                  }
+
+                  HdrBoost {
+                    target: hBandZone
+                    anchors.fill: hBandZone
+                    boost: Cpp_Misc_GraphicsBackend.hdrSteadyIntensity
+                  }
                 }
               }
 
@@ -277,6 +291,12 @@ Item {
                   anchors.bottom: parent.bottom
                   color: Cpp_ThemeManager.colors["bright_text"]
                 }
+              }
+
+              HdrBoost {
+                target: hFill
+                anchors.fill: hFill
+                boost: Cpp_Misc_GraphicsBackend.hdrSteadyIntensity
               }
 
               Repeater {
@@ -473,15 +493,29 @@ Item {
               Repeater {
                 model: root.model.bands[barColumn.index]
 
-                delegate: Rectangle {
+                delegate: Item {
+                  id: vBandHost
+
                   required property var modelData
-                  opacity: 0.32
-                  x: vWell.x + 1
-                  antialiasing: true
-                  width: vWell.width - 2
-                  color: root.bandColor(modelData)
-                  y: vWell.y + 1 + (1 - modelData.fracMax) * (vWell.height - 2)
-                  height: Math.max(0, (modelData.fracMax - modelData.fracMin) * (vWell.height - 2))
+
+                  Rectangle {
+                    id: vBandZone
+
+                    opacity: 0.32
+                    x: vWell.x + 1
+                    antialiasing: true
+                    width: vWell.width - 2
+                    color: root.bandColor(vBandHost.modelData)
+                    y: vWell.y + 1 + (1 - vBandHost.modelData.fracMax) * (vWell.height - 2)
+                    height: Math.max(0, (vBandHost.modelData.fracMax - vBandHost.modelData.fracMin)
+                                        * (vWell.height - 2))
+                  }
+
+                  HdrBoost {
+                    target: vBandZone
+                    anchors.fill: vBandZone
+                    boost: Cpp_Misc_GraphicsBackend.hdrSteadyIntensity
+                  }
                 }
               }
 
@@ -538,6 +572,12 @@ Item {
                   anchors.right: parent.right
                   color: Cpp_ThemeManager.colors["bright_text"]
                 }
+              }
+
+              HdrBoost {
+                target: vFill
+                anchors.fill: vFill
+                boost: Cpp_Misc_GraphicsBackend.hdrSteadyIntensity
               }
 
               Repeater {

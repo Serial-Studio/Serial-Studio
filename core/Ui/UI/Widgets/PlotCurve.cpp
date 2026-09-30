@@ -24,18 +24,39 @@
 #include <algorithm>
 #include <QDebug>
 #include <QElapsedTimer>
+#include <QQuickWindow>
 #include <QSGGeometryNode>
 #include <QSGVertexColorMaterial>
 
 #include "Core/DSPSimd.h"
 #include "Core/SSAssert.h"
+#include "Misc/HdrOutput.h"
 #include "UI/Widgets/GpuStroke.h"
+#include "UI/Widgets/StrokeHdrMaterial.h"
+
+/**
+ * @brief Builds the stroke material for the current mode; both node creation and the swap
+ *        branch share it, and neither material back-face culls (the ribbon winding is mixed).
+ */
+static QSGMaterial* make_stroke_material(const bool hdr)
+{
+  if (hdr)
+    return new Widgets::StrokeHdrMaterial;
+
+  return new QSGVertexColorMaterial;
+}
 
 /**
  * @brief Constructs the curve item and enables scene-graph content.
  */
 Widgets::PlotCurve::PlotCurve(QQuickItem* parent)
-  : QQuickItem(parent), m_lineWidth(2.0), m_xMin(0), m_xMax(1), m_yMin(0), m_yMax(1)
+  : QQuickItem(parent)
+  , m_lineWidth(2.0)
+  , m_xMin(0)
+  , m_xMax(1)
+  , m_yMin(0)
+  , m_yMax(1)
+  , m_hdrMaterial(false)
 {
   setFlag(ItemHasContents, true);
 }
@@ -264,10 +285,10 @@ void Widgets::PlotCurve::countRibbon(const QPointF* pts,
 }
 
 /**
- * @brief Streams each visible run as constant-width body quads with round joins, via emitRun. Sharp
- *        tips stay full-width and the fans fill the outer notch at each interior vertex. Triangle
- *        winding is mixed (fan side flips with turn direction), so correctness relies on
- *        QSGVertexColorMaterial not back-face culling: do not enable culling or swap the material.
+ * @brief Streams each visible run as constant-width body quads with round joins, via emitRun.
+ *        Sharp tips stay full-width, fans fill the outer notch at interior vertices, and the
+ *        mixed triangle winding means the attached material must never back-face cull
+ *        (QSGVertexColorMaterial and StrokeHdrMaterial both qualify).
  */
 void Widgets::PlotCurve::emitRibbon(QSGGeometry::ColoredPoint2D* vertices,
                                     quint32* indices,
@@ -353,6 +374,9 @@ QSGNode* Widgets::PlotCurve::updatePaintNode(QSGNode* oldNode, UpdatePaintNodeDa
   const int idxs     = static_cast<int>(indexCount);
   const double hw    = std::max(0.5, m_lineWidth * 0.5);
 
+  const float boost  = Misc::HdrOutput::effectiveBoost(window());
+  const bool wantHdr = boost > 1.0f;
+
   auto* node = static_cast<QSGGeometryNode*>(oldNode);
   if (!node) {
     node           = new QSGGeometryNode;
@@ -361,8 +385,25 @@ QSGNode* Widgets::PlotCurve::updatePaintNode(QSGNode* oldNode, UpdatePaintNodeDa
     geometry->setDrawingMode(QSGGeometry::DrawTriangles);
     node->setGeometry(geometry);
     node->setFlag(QSGNode::OwnsGeometry);
-    node->setMaterial(new QSGVertexColorMaterial);
+    node->setMaterial(make_stroke_material(wantHdr));
     node->setFlag(QSGNode::OwnsMaterial);
+    m_hdrMaterial = wantHdr;
+  }
+
+  if (m_hdrMaterial != wantHdr) {
+    QSGMaterial* previous = node->material();
+    node->setMaterial(make_stroke_material(wantHdr));
+    delete previous;
+    m_hdrMaterial = wantHdr;
+    node->markDirty(QSGNode::DirtyMaterial);
+  }
+
+  if (m_hdrMaterial) {
+    auto* material = static_cast<StrokeHdrMaterial*>(node->material());
+    if (material->intensity() != boost) {
+      material->setIntensity(boost);
+      node->markDirty(QSGNode::DirtyMaterial);
+    }
   }
 
   auto* geometry = node->geometry();

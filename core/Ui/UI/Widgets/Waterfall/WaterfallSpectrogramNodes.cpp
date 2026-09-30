@@ -23,10 +23,13 @@
 #include "UI/Widgets/Waterfall/WaterfallSpectrogramNodes.h"
 
 #include <QQuickWindow>
+#include <QSGGeometry>
+#include <QSGGeometryNode>
 #include <QSGNode>
 #include <QSGSimpleTextureNode>
 
 #include "Core/SSAssert.h"
+#include "UI/Widgets/Waterfall/WaterfallHdrMaterial.h"
 #include "UI/Widgets/Waterfall/WaterfallRingTexture.h"
 
 //--------------------------------------------------------------------------------------------------
@@ -41,8 +44,11 @@ Widgets::WaterfallSpectrogramNodes::WaterfallSpectrogramNodes()
   , m_tilesResized(true)
   , m_ringUnavailable(false)
   , m_ringFullDirty(true)
+  , m_lutCacheKey(0)
   , m_ringNode(nullptr)
   , m_ringAliasNode(nullptr)
+  , m_hdrNode(nullptr)
+  , m_hdrAliasNode(nullptr)
   , m_ringTexture(nullptr)
 {}
 
@@ -97,7 +103,10 @@ void Widgets::WaterfallSpectrogramNodes::forgetNodes()
 {
   m_ringNode      = nullptr;
   m_ringAliasNode = nullptr;
+  m_hdrNode       = nullptr;
+  m_hdrAliasNode  = nullptr;
   m_ringTexture   = nullptr;
+  m_lutCacheKey   = 0;
   m_tileNodes.clear();
   m_tileAliasNodes.clear();
 
@@ -151,6 +160,15 @@ int Widgets::WaterfallSpectrogramNodes::tileCount() const noexcept
   return WaterfallTiles::tileCount(m_imageHeight);
 }
 
+/**
+ * @brief True once ring-texture creation failed on this device; the widget reads it to fall
+ *        back from the HDR magnitude history to the SDR colorized one (tiles need RGB32).
+ */
+bool Widgets::WaterfallSpectrogramNodes::ringUnavailable() const noexcept
+{
+  return m_ringUnavailable;
+}
+
 //--------------------------------------------------------------------------------------------------
 // Synchronization phase
 //--------------------------------------------------------------------------------------------------
@@ -165,7 +183,9 @@ void Widgets::WaterfallSpectrogramNodes::sync(QSGNode* root,
                                               const QImage& image,
                                               const QRectF& sourceRect,
                                               const QRectF& plotRect,
-                                              const int topRow)
+                                              const int topRow,
+                                              const float hdrBoost,
+                                              const QImage& lutImage)
 {
   SS_ASSERT(root != nullptr, return);
 
@@ -178,13 +198,24 @@ void Widgets::WaterfallSpectrogramNodes::sync(QSGNode* root,
   if (m_ringTexture && m_ringTexture->failed())
     m_ringUnavailable = true;
 
-  if (!m_ringUnavailable && WaterfallRingTexture::supported(window, image.size())) {
+  const bool hdr = image.format() == QImage::Format_Grayscale16;
+  const auto fmt =
+    hdr ? WaterfallRingTexture::PixelFormat::Gray16 : WaterfallRingTexture::PixelFormat::Bgra8;
+
+  if (!m_ringUnavailable && WaterfallRingTexture::supported(window, image.size(), fmt)) {
     releaseTileNodes();
-    syncRing(root, image, sourceRect, plotRect, topRow);
+    if (hdr)
+      syncRingHdr(root, window, image, sourceRect, plotRect, topRow, hdrBoost, lutImage);
+    else
+      syncRing(root, image, sourceRect, plotRect, topRow);
+
     return;
   }
 
   releaseRingNodes();
+  if (hdr)
+    return;
+
   syncTiles(root, window, image, sourceRect, plotRect, topRow);
 }
 
@@ -201,10 +232,15 @@ void Widgets::WaterfallSpectrogramNodes::releaseRingNodes()
 {
   delete m_ringAliasNode;
   delete m_ringNode;
+  delete m_hdrAliasNode;
+  delete m_hdrNode;
 
   m_ringAliasNode = nullptr;
   m_ringNode      = nullptr;
+  m_hdrAliasNode  = nullptr;
+  m_hdrNode       = nullptr;
   m_ringTexture   = nullptr;
+  m_lutCacheKey   = 0;
   m_ringFullDirty = true;
 }
 
@@ -243,7 +279,9 @@ void Widgets::WaterfallSpectrogramNodes::syncRing(QSGNode* root,
                                                   const QRectF& plotRect,
                                                   const int topRow)
 {
-  if (m_ringTexture && m_ringTexture->textureSize() != image.size())
+  if (m_ringTexture
+      && (m_ringTexture->textureSize() != image.size()
+          || m_ringTexture->pixelFormat() != WaterfallRingTexture::PixelFormat::Bgra8))
     releaseRingNodes();
 
   if (!m_ringNode) {
@@ -279,6 +317,131 @@ void Widgets::WaterfallSpectrogramNodes::syncRing(QSGNode* root,
 
   root->appendChildNode(m_ringNode);
   root->appendChildNode(m_ringAliasNode);
+}
+
+/**
+ * @brief Builds one HDR spectrogram quad node: a textured-point strip whose material samples
+ *        the shared magnitude ring; only the primary node's material owns the textures.
+ */
+static QSGGeometryNode* make_hdr_ring_node(
+  Widgets::WaterfallRingTexture* ring,
+  const Widgets::WaterfallHdrMaterial::TextureOwnership ownership)
+{
+  // code-verify off
+  // Scene-graph nodes default to QSGNode::OwnedByParent, so appending transfers ownership to the
+  // root; the primary node's material owns the ring and LUT textures, and the alias material
+  // must never own them, or the shared textures would be freed twice.
+  auto* node     = new QSGGeometryNode;
+  auto* geometry = new QSGGeometry(QSGGeometry::defaultAttributes_TexturedPoint2D(), 4);
+  auto* material = new Widgets::WaterfallHdrMaterial(ownership);
+  // code-verify on
+  geometry->setDrawingMode(QSGGeometry::DrawTriangleStrip);
+  node->setGeometry(geometry);
+  node->setFlag(QSGNode::OwnsGeometry);
+  material->setRing(ring);
+  node->setMaterial(material);
+  node->setFlag(QSGNode::OwnsMaterial);
+  return node;
+}
+
+/**
+ * @brief Writes one quad's positions and normalized ring coordinates; an empty destination
+ *        collapses to a zero-area strip that draws nothing (the seam alias most frames).
+ */
+static void assign_hdr_quad(QSGGeometryNode* node,
+                            const QRectF& dstRect,
+                            const QRectF& srcRect,
+                            const QSize& ringSize)
+{
+  SS_ASSERT(node != nullptr, return);
+  SS_ASSERT(!ringSize.isEmpty(), return);
+
+  const QRectF normalized(srcRect.x() / ringSize.width(),
+                          srcRect.y() / ringSize.height(),
+                          srcRect.width() / ringSize.width(),
+                          srcRect.height() / ringSize.height());
+  QSGGeometry::updateTexturedRectGeometry(node->geometry(), dstRect, normalized);
+  node->markDirty(QSGNode::DirtyGeometry);
+}
+
+/**
+ * @brief HDR twin of syncRing (spec 0089): same staging, same seam decomposition, but the quads
+ *        are geometry nodes whose material samples the 16-bit magnitude ring through the LUT
+ *        texture and applies the emissive boost. The LUT re-uploads only on a colormap change.
+ */
+void Widgets::WaterfallSpectrogramNodes::syncRingHdr(QSGNode* root,
+                                                     QQuickWindow* window,
+                                                     const QImage& image,
+                                                     const QRectF& sourceRect,
+                                                     const QRectF& plotRect,
+                                                     const int topRow,
+                                                     const float hdrBoost,
+                                                     const QImage& lutImage)
+{
+  SS_ASSERT(window != nullptr, return);
+
+  if (m_ringTexture
+      && (m_ringTexture->textureSize() != image.size()
+          || m_ringTexture->pixelFormat() != WaterfallRingTexture::PixelFormat::Gray16))
+    releaseRingNodes();
+
+  if (!m_hdrNode) {
+    // code-verify off
+    // The ring texture is owned by the primary node's material (OwnsMaterial takes it down with
+    // the node on the render thread); this class only observes it.
+    m_ringTexture =
+      new WaterfallRingTexture(image.size(), WaterfallRingTexture::PixelFormat::Gray16);
+    // code-verify on
+    m_ringTexture->setFiltering(QSGTexture::Linear);
+    m_hdrNode = make_hdr_ring_node(m_ringTexture, WaterfallHdrMaterial::TextureOwnership::Owns);
+    m_hdrAliasNode =
+      make_hdr_ring_node(m_ringTexture, WaterfallHdrMaterial::TextureOwnership::Borrows);
+    m_ringFullDirty = true;
+    m_lutCacheKey   = 0;
+  }
+
+  auto* material      = static_cast<WaterfallHdrMaterial*>(m_hdrNode->material());
+  auto* aliasMaterial = static_cast<WaterfallHdrMaterial*>(m_hdrAliasNode->material());
+  SS_ASSERT(material != nullptr && aliasMaterial != nullptr, return);
+
+  if (!lutImage.isNull() && lutImage.cacheKey() != m_lutCacheKey) {
+    QSGTexture* lut = window->createTextureFromImage(lutImage);
+    if (lut != nullptr) {
+      lut->setFiltering(QSGTexture::Linear);
+      material->setLut(lut);
+      aliasMaterial->setLut(lut);
+      m_lutCacheKey = lutImage.cacheKey();
+    }
+  }
+
+  if (material->lut() == nullptr)
+    return;
+
+  material->setBoost(hdrBoost);
+  aliasMaterial->setBoost(hdrBoost);
+
+  stageRingUploads(image);
+  m_hdrNode->markDirty(QSGNode::DirtyMaterial);
+  m_hdrAliasNode->markDirty(QSGNode::DirtyMaterial);
+
+  WaterfallTiles::decompose(sourceRect, plotRect, image.height(), topRow, m_pieces, image.height());
+  bool primaryAssigned = false;
+  bool aliasAssigned   = false;
+  for (const auto& piece : m_pieces) {
+    auto* node = primaryAssigned ? m_hdrAliasNode : m_hdrNode;
+    assign_hdr_quad(node, piece.dst, piece.src, image.size());
+    aliasAssigned   |= primaryAssigned;
+    primaryAssigned  = true;
+  }
+
+  if (!primaryAssigned)
+    assign_hdr_quad(m_hdrNode, QRectF(), QRectF(), image.size());
+
+  if (!aliasAssigned)
+    assign_hdr_quad(m_hdrAliasNode, QRectF(), QRectF(), image.size());
+
+  root->appendChildNode(m_hdrNode);
+  root->appendChildNode(m_hdrAliasNode);
 }
 
 //--------------------------------------------------------------------------------------------------

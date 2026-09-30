@@ -34,6 +34,10 @@
 //--------------------------------------------------------------------------------------------------
 
 int Misc::GraphicsBackend::s_activeBackend = Misc::GraphicsBackend::Backend::Default;
+bool Misc::GraphicsBackend::s_hdrRequested = false;
+
+static constexpr double kAutoHdrIntensity   = 2.0;
+static constexpr double kSteadyHdrIntensity = 1.4;
 
 //--------------------------------------------------------------------------------------------------
 // Settings keys
@@ -61,6 +65,22 @@ const char* Misc::GraphicsBackend::pendingKey() noexcept
 const char* Misc::GraphicsBackend::reduceMotionKey() noexcept
 {
   return "App/ReduceMotion";
+}
+
+/**
+ * @brief Returns the QSettings key holding the HDR output preference (spec 0089).
+ */
+const char* Misc::GraphicsBackend::hdrKey() noexcept
+{
+  return "App/HdrEnabled";
+}
+
+/**
+ * @brief Returns the QSettings key set just before applying HDR output at startup.
+ */
+const char* Misc::GraphicsBackend::hdrPendingKey() noexcept
+{
+  return "App/HdrPending";
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -94,6 +114,23 @@ bool Misc::GraphicsBackend::isBackendAvailable(int backend) noexcept
 #endif
 }
 
+/**
+ * @brief Returns whether @p backend can drive an HDR swapchain on this platform: Metal on
+ *        macOS, Direct3D 11 on Windows (each also as the platform Default), nothing else
+ *        (spec 0089 -- OpenGL has no HDR path in Qt, Software none at all).
+ */
+bool Misc::GraphicsBackend::isHdrCapableBackend(int backend) noexcept
+{
+#if defined(Q_OS_MACOS)
+  return backend == Backend::Default || backend == Backend::Metal;
+#elif defined(Q_OS_WIN)
+  return backend == Backend::Default || backend == Backend::Direct3D11;
+#else
+  Q_UNUSED(backend);
+  return false;
+#endif
+}
+
 //--------------------------------------------------------------------------------------------------
 // Apply backend before any QQuickWindow exists
 //--------------------------------------------------------------------------------------------------
@@ -121,12 +158,53 @@ int Misc::GraphicsBackend::readPersistedBackend()
 }
 
 /**
+ * @brief Reads the persisted HDR request for @p backend; a pending flag left from the previous
+ *        launch means that attempt crashed, so the preference reverts to off (same contract as
+ *        readPersistedBackend).
+ */
+bool Misc::GraphicsBackend::readPersistedHdrRequest(int backend)
+{
+  if (!isHdrCapableBackend(backend))
+    return false;
+
+  QSettings settings;
+  const bool enabled = settings.value(hdrKey(), false).toBool();
+  const bool pending = settings.value(hdrPendingKey(), false).toBool();
+
+  if (pending && enabled) {
+    settings.setValue(hdrKey(), false);
+    settings.remove(hdrPendingKey());
+    settings.sync();
+    return false;
+  }
+
+  return enabled;
+}
+
+/**
+ * @brief Returns whether this launch resolved to HDR output (latched before QApplication,
+ *        constant for the session); read by HdrSurface's Loader gate and by Misc::HdrOutput
+ *        when a window applies its swapchain-format request.
+ */
+bool Misc::GraphicsBackend::hdrRequested() const noexcept
+{
+  return s_hdrRequested;
+}
+
+/**
  * @brief Called from main() before QApplication; sets QQuickWindow's graphics API.
  */
 void Misc::GraphicsBackend::applyConfiguredBackend()
 {
   const int backend = readPersistedBackend();
   s_activeBackend   = backend;
+  s_hdrRequested    = readPersistedHdrRequest(backend);
+
+  if (s_hdrRequested) {
+    QSettings settings;
+    settings.setValue(hdrPendingKey(), true);
+    settings.sync();
+  }
 
   if (backend == Backend::Default)
     return;
@@ -174,11 +252,15 @@ Misc::GraphicsBackend& Misc::GraphicsBackend::instance()
  *        backend, where every animated frame is a CPU repaint.
  */
 Misc::GraphicsBackend::GraphicsBackend()
-  : m_currentBackend(Backend::Default), m_configurable(false), m_reduceMotion(false)
+  : m_currentBackend(Backend::Default)
+  , m_configurable(false)
+  , m_reduceMotion(false)
+  , m_hdrEnabled(false)
 {
   m_currentBackend = m_settings.value(settingsKey(), Backend::Default).toInt();
   m_reduceMotion =
     m_settings.value(reduceMotionKey(), s_activeBackend == Backend::Software).toBool();
+  m_hdrEnabled = m_settings.value(hdrKey(), false).toBool();
 
 #if defined(Q_OS_MACOS)
   m_configurable = false;
@@ -229,6 +311,49 @@ bool Misc::GraphicsBackend::effectsEnabled() const noexcept
 }
 
 /**
+ * @brief Returns whether the user's selected backend could drive HDR output after a restart;
+ *        controls the visibility of the HDR rows in Settings.
+ */
+bool Misc::GraphicsBackend::hdrSupported() const noexcept
+{
+  return isHdrCapableBackend(m_currentBackend);
+}
+
+/**
+ * @brief Returns the persisted HDR output preference (restart-applied).
+ */
+bool Misc::GraphicsBackend::hdrEnabled() const noexcept
+{
+  return m_hdrEnabled;
+}
+
+/**
+ * @brief Returns the automatic emissive intensity (2 x SDR white); every window clamps it to
+ *        its display's reported headroom, so the effective boost is min(2, headroom).
+ */
+double Misc::GraphicsBackend::hdrAutoIntensity() const noexcept
+{
+  return kAutoHdrIntensity;
+}
+
+/**
+ * @brief Returns the softer emissive intensity for always-on surfaces (band arcs, bar fills,
+ *        steady-lit LEDs); flashing elements take hdrAutoIntensity instead.
+ */
+double Misc::GraphicsBackend::hdrSteadyIntensity() const noexcept
+{
+  return kSteadyHdrIntensity;
+}
+
+/**
+ * @brief Returns whether any window currently renders through an HDR swapchain.
+ */
+bool Misc::GraphicsBackend::hdrAnyActive() const noexcept
+{
+  return !m_hdrActiveWindows.isEmpty();
+}
+
+/**
  * @brief Returns the platform-filtered list of selectable backend entries for QML.
  */
 const QVariantList& Misc::GraphicsBackend::availableBackends() const noexcept
@@ -272,6 +397,45 @@ void Misc::GraphicsBackend::setCurrentBackend(int backend)
 }
 
 /**
+ * @brief Persists the HDR output preference; takes effect after the next restart.
+ */
+void Misc::GraphicsBackend::setHdrEnabled(bool enabled)
+{
+  if (m_hdrEnabled == enabled)
+    return;
+
+  m_hdrEnabled = enabled;
+  m_settings.setValue(hdrKey(), enabled);
+  m_settings.sync();
+  Q_EMIT hdrEnabledChanged();
+}
+
+/**
+ * @brief Tracks which windows currently render through an HDR swapchain; called by
+ *        Misc::HdrOutput on activation changes and from its destructor. A tracked window
+ *        also self-removes on destroyed(), so a teardown order that nulls the helper's
+ *        QPointer first cannot leave a dangling roster entry latching hdrAnyActive.
+ */
+void Misc::GraphicsBackend::setWindowHdrActive(QObject* window, bool active)
+{
+  if (window == nullptr)
+    return;
+
+  const bool was = !m_hdrActiveWindows.isEmpty();
+  if (active && !m_hdrActiveWindows.contains(window)) {
+    m_hdrActiveWindows.insert(window);
+    connect(window, &QObject::destroyed, this, [this](QObject* gone) {
+      setWindowHdrActive(gone, false);
+    });
+  } else if (!active) {
+    m_hdrActiveWindows.remove(window);
+  }
+
+  if (was != !m_hdrActiveWindows.isEmpty())
+    Q_EMIT hdrAnyActiveChanged();
+}
+
+/**
  * @brief Asks the user via a native message box whether to relaunch to apply the change.
  */
 void Misc::GraphicsBackend::promptRestartAndQuit()
@@ -294,14 +458,16 @@ void Misc::GraphicsBackend::promptRestartAndQuit()
 }
 
 /**
- * @brief Clears the "startup pending" flag once QML has loaded without crashing.
+ * @brief Clears the "startup pending" flags (backend and HDR) once QML has loaded without
+ *        crashing; both move in lockstep with the writes in applyConfiguredBackend().
  */
 void Misc::GraphicsBackend::confirmStartupSuccess()
 {
-  if (!m_settings.contains(pendingKey()))
+  if (!m_settings.contains(pendingKey()) && !m_settings.contains(hdrPendingKey()))
     return;
 
   m_settings.remove(pendingKey());
+  m_settings.remove(hdrPendingKey());
   m_settings.sync();
 }
 

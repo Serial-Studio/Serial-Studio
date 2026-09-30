@@ -2385,6 +2385,16 @@ ss_add_unit_test(tst_dashboard_ingest
 )
 
 #
+# The extended sRGB transfer pair behind every HDR shader (spec 0089): exact continuity at 1.0,
+# roundtrip identity, monotonicity, and the boost contract. Header-only pure math; the shader
+# copies in app/shaders mirror these bodies.
+#
+ss_add_unit_test(tst_hdr_transfer
+  SOURCES tst_hdr_transfer.cpp
+  LIBS    Qt6::Core
+)
+
+#
 # The waterfall's baked color maps (spec 0075, F5): the LUT must be a bake of the continuous map,
 # not an approximation, because the spectrogram now indexes it per pixel. Pure QtGui value types.
 #

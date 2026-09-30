@@ -28,7 +28,12 @@
 #include <QSGVertexColorMaterial>
 
 #include "Core/SSAssert.h"
+#include "Misc/HdrOutput.h"
 #include "UI/Widgets/GpuStroke.h"
+#include "UI/Widgets/StrokeHdrMaterial.h"
+
+// Fraction of the emissive boost the fill takes: a large translucent surface glows gently
+static constexpr float kFillBoostFraction = 0.5f;
 
 // Alpha ramp for the fill gradient (strong at the data extreme, visible at the baseline)
 constexpr double kMinAlpha = 0.12;
@@ -61,7 +66,13 @@ static void setFillVertexColor(QSGGeometry::ColoredPoint2D& vertex,
  * @brief Constructs the fill item and enables scene-graph content.
  */
 Widgets::PlotAreaFill::PlotAreaFill(QQuickItem* parent)
-  : QQuickItem(parent), m_baseline(0), m_xMin(0), m_xMax(1), m_yMin(0), m_yMax(1)
+  : QQuickItem(parent)
+  , m_baseline(0)
+  , m_xMin(0)
+  , m_xMax(1)
+  , m_yMin(0)
+  , m_yMax(1)
+  , m_hdrMaterial(false)
 {
   setFlag(ItemHasContents, true);
 }
@@ -486,6 +497,10 @@ QSGNode* Widgets::PlotAreaFill::updatePaintNode(QSGNode* oldNode, UpdatePaintNod
     return nullptr;
   }
 
+  const float windowBoost = Misc::HdrOutput::effectiveBoost(window());
+  const float boost       = 1.0f + (windowBoost - 1.0f) * kFillBoostFraction;
+  const bool wantHdr      = boost > 1.0f;
+
   auto* node = static_cast<QSGGeometryNode*>(oldNode);
   if (!node) {
     node           = new QSGGeometryNode;
@@ -493,8 +508,27 @@ QSGNode* Widgets::PlotAreaFill::updatePaintNode(QSGNode* oldNode, UpdatePaintNod
     geometry->setDrawingMode(QSGGeometry::DrawTriangleStrip);
     node->setGeometry(geometry);
     node->setFlag(QSGNode::OwnsGeometry);
-    node->setMaterial(new QSGVertexColorMaterial);
+    node->setMaterial(wantHdr ? static_cast<QSGMaterial*>(new StrokeHdrMaterial)
+                              : new QSGVertexColorMaterial);
     node->setFlag(QSGNode::OwnsMaterial);
+    m_hdrMaterial = wantHdr;
+  }
+
+  if (m_hdrMaterial != wantHdr) {
+    QSGMaterial* previous = node->material();
+    node->setMaterial(wantHdr ? static_cast<QSGMaterial*>(new StrokeHdrMaterial)
+                              : new QSGVertexColorMaterial);
+    delete previous;
+    m_hdrMaterial = wantHdr;
+    node->markDirty(QSGNode::DirtyMaterial);
+  }
+
+  if (m_hdrMaterial) {
+    auto* material = static_cast<StrokeHdrMaterial*>(node->material());
+    if (material->intensity() != boost) {
+      material->setIntensity(boost);
+      node->markDirty(QSGNode::DirtyMaterial);
+    }
   }
 
   const int vertexCount = 8 * filled - 2;

@@ -243,6 +243,9 @@ private:
   void releaseHistoryImage();
   void markAxisDirty();
   [[nodiscard]] QRectF computeSourceRect() const;
+  [[nodiscard]] bool hdrHistoryWanted() const;
+  [[nodiscard]] float hdrBoost() const;
+  void fillHistoryFloor();
 
   int m_index;
   int m_size;
@@ -264,6 +267,9 @@ private:
 
   bool m_releaseRenderResources;
   bool m_imageReleased;
+  bool m_hdrHistory;
+  bool m_gray16RingSupported;
+  QImage m_lutImage;
 
   QSGSimpleRectNode* m_outerBgNode;
   QSGSimpleRectNode* m_innerBgNode;

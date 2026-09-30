@@ -317,60 +317,74 @@ InstrumentBase {
         //
         Repeater {
           model: root.model.alarmBands
-          delegate: Shape {
-            id: alarmZoneShape
+          delegate: Item {
+            id: alarmZoneHost
 
-            smooth: true
-            opacity: 0.60
-            antialiasing: true
             anchors.fill: parent
-            preferredRendererType: Shape.CurveRenderer
 
             required property var modelData
-            readonly property color bandColor: modelData.customColor && modelData.customColor.length > 0
-                                               ? modelData.customColor
-                                               : Cpp_ThemeManager.alarmColorForSeverity(modelData.severity)
-            readonly property real rOut: meterArea.faceR - 0.5
-            readonly property real rIn: alarmZoneShape.rOut - Math.max(6, meterArea.faceR * 0.075)
-            readonly property real angADeg: modelData.fracMin <= 0
-                                            ? -90 : startAngleDeg + modelData.fracMin * angleRangeDeg
-            readonly property real angBDeg: modelData.fracMax >= 1
-                                            ? 90 : startAngleDeg + modelData.fracMax * angleRangeDeg
-            readonly property real angA: alarmZoneShape.angADeg * Math.PI / 180
-            readonly property real angB: alarmZoneShape.angBDeg * Math.PI / 180
-            readonly property bool largeArc: alarmZoneShape.angBDeg - alarmZoneShape.angADeg > 180
 
-            ShapePath {
-              strokeWidth: -1
-              fillColor: alarmZoneShape.bandColor
+            Shape {
+              id: alarmZoneShape
 
-              startX: meterArea.faceCx + alarmZoneShape.rOut * Math.sin(alarmZoneShape.angA)
-              startY: meterArea.faceCy - alarmZoneShape.rOut * Math.cos(alarmZoneShape.angA)
+              smooth: true
+              opacity: 0.60
+              antialiasing: true
+              anchors.fill: parent
+              preferredRendererType: Shape.CurveRenderer
 
-              PathArc {
-                radiusX: alarmZoneShape.rOut
-                radiusY: alarmZoneShape.rOut
-                direction: PathArc.Clockwise
-                useLargeArc: alarmZoneShape.largeArc
-                x: meterArea.faceCx + alarmZoneShape.rOut * Math.sin(alarmZoneShape.angB)
-                y: meterArea.faceCy - alarmZoneShape.rOut * Math.cos(alarmZoneShape.angB)
+              readonly property var modelData: alarmZoneHost.modelData
+              readonly property color bandColor: modelData.customColor && modelData.customColor.length > 0
+                                                 ? modelData.customColor
+                                                 : Cpp_ThemeManager.alarmColorForSeverity(modelData.severity)
+              readonly property real rOut: meterArea.faceR - 0.5
+              readonly property real rIn: alarmZoneShape.rOut - Math.max(6, meterArea.faceR * 0.075)
+              readonly property real angADeg: modelData.fracMin <= 0
+                                              ? -90 : startAngleDeg + modelData.fracMin * angleRangeDeg
+              readonly property real angBDeg: modelData.fracMax >= 1
+                                              ? 90 : startAngleDeg + modelData.fracMax * angleRangeDeg
+              readonly property real angA: alarmZoneShape.angADeg * Math.PI / 180
+              readonly property real angB: alarmZoneShape.angBDeg * Math.PI / 180
+              readonly property bool largeArc: alarmZoneShape.angBDeg - alarmZoneShape.angADeg > 180
+
+              ShapePath {
+                strokeWidth: -1
+                fillColor: alarmZoneShape.bandColor
+
+                startX: meterArea.faceCx + alarmZoneShape.rOut * Math.sin(alarmZoneShape.angA)
+                startY: meterArea.faceCy - alarmZoneShape.rOut * Math.cos(alarmZoneShape.angA)
+
+                PathArc {
+                  radiusX: alarmZoneShape.rOut
+                  radiusY: alarmZoneShape.rOut
+                  direction: PathArc.Clockwise
+                  useLargeArc: alarmZoneShape.largeArc
+                  x: meterArea.faceCx + alarmZoneShape.rOut * Math.sin(alarmZoneShape.angB)
+                  y: meterArea.faceCy - alarmZoneShape.rOut * Math.cos(alarmZoneShape.angB)
+                }
+                PathLine {
+                  x: meterArea.faceCx + alarmZoneShape.rIn * Math.sin(alarmZoneShape.angB)
+                  y: meterArea.faceCy - alarmZoneShape.rIn * Math.cos(alarmZoneShape.angB)
+                }
+                PathArc {
+                  radiusX: alarmZoneShape.rIn
+                  radiusY: alarmZoneShape.rIn
+                  direction: PathArc.Counterclockwise
+                  useLargeArc: alarmZoneShape.largeArc
+                  x: meterArea.faceCx + alarmZoneShape.rIn * Math.sin(alarmZoneShape.angA)
+                  y: meterArea.faceCy - alarmZoneShape.rIn * Math.cos(alarmZoneShape.angA)
+                }
+                PathLine {
+                  x: meterArea.faceCx + alarmZoneShape.rOut * Math.sin(alarmZoneShape.angA)
+                  y: meterArea.faceCy - alarmZoneShape.rOut * Math.cos(alarmZoneShape.angA)
+                }
               }
-              PathLine {
-                x: meterArea.faceCx + alarmZoneShape.rIn * Math.sin(alarmZoneShape.angB)
-                y: meterArea.faceCy - alarmZoneShape.rIn * Math.cos(alarmZoneShape.angB)
-              }
-              PathArc {
-                radiusX: alarmZoneShape.rIn
-                radiusY: alarmZoneShape.rIn
-                direction: PathArc.Counterclockwise
-                useLargeArc: alarmZoneShape.largeArc
-                x: meterArea.faceCx + alarmZoneShape.rIn * Math.sin(alarmZoneShape.angA)
-                y: meterArea.faceCy - alarmZoneShape.rIn * Math.cos(alarmZoneShape.angA)
-              }
-              PathLine {
-                x: meterArea.faceCx + alarmZoneShape.rOut * Math.sin(alarmZoneShape.angA)
-                y: meterArea.faceCy - alarmZoneShape.rOut * Math.cos(alarmZoneShape.angA)
-              }
+            }
+
+            HdrBoost {
+              target: alarmZoneShape
+              anchors.fill: alarmZoneShape
+              boost: Cpp_Misc_GraphicsBackend.hdrSteadyIntensity
             }
           }
         }
@@ -692,6 +706,14 @@ InstrumentBase {
                   Behavior on color { ColorAnimation { duration: 280; easing.type: Easing.InOutQuad } }
                 }
               }
+
+              HdrBoost {
+                target: valueBox
+                anchors.fill: valueBox
+                active: valueFlash.filled && valueFlash.hasData
+                boost: valueFlash.blinking ? Cpp_Misc_GraphicsBackend.hdrAutoIntensity
+                                           : Cpp_Misc_GraphicsBackend.hdrSteadyIntensity
+              }
             }
           }
         }
@@ -1008,6 +1030,14 @@ InstrumentBase {
             Behavior on color { ColorAnimation { duration: 280; easing.type: Easing.InOutQuad } }
           }
         }
+      }
+
+      HdrBoost {
+        target: digitalBox
+        anchors.fill: digitalBox
+        active: digitalFlash.filled && digitalFlash.hasData
+        boost: digitalFlash.blinking ? Cpp_Misc_GraphicsBackend.hdrAutoIntensity
+                                     : Cpp_Misc_GraphicsBackend.hdrSteadyIntensity
       }
     }
   }

@@ -611,6 +611,14 @@ Item {
                   Behavior on color { ColorAnimation { duration: 280; easing.type: Easing.InOutQuad } }
                 }
               }
+
+              HdrBoost {
+                target: valueBox
+                anchors.fill: valueBox
+                active: valueFlash.filled && valueFlash.hasData
+                boost: valueFlash.blinking ? Cpp_Misc_GraphicsBackend.hdrAutoIntensity
+                                           : Cpp_Misc_GraphicsBackend.hdrSteadyIntensity
+              }
             }
           }
         }
@@ -726,6 +734,14 @@ Item {
             Behavior on color { ColorAnimation { duration: 280; easing.type: Easing.InOutQuad } }
           }
         }
+      }
+
+      HdrBoost {
+        target: digitalBox
+        anchors.fill: digitalBox
+        active: digitalFlash.filled && digitalFlash.hasData
+        boost: digitalFlash.blinking ? Cpp_Misc_GraphicsBackend.hdrAutoIntensity
+                                     : Cpp_Misc_GraphicsBackend.hdrSteadyIntensity
       }
     }
   }

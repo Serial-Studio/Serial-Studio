@@ -732,6 +732,55 @@ its history** — becoming visible again rebuilds the image at the floor color a
 live data. Switching workspace tabs is where a user sees it. That is what "a hidden widget
 releases its image and textures" costs.
 
+## HDR Output (spec 0089)
+
+Free feature, macOS/Metal + Windows/D3D11 only. The whole design rests on one fact verified
+against the Qt 6.11.2 sources: the 2D scene graph neither linearizes sRGB nor applies the
+Windows SDR white level, so a bare HDR swapchain renders wrong gamma. Therefore:
+
+- **Per window**: `HdrSurface.qml` (instantiated by `SmartWindow.qml`/`SmartDialog.qml`, which
+  expose `hdrActive`/`hdrHeadroom`/`hdrBoost` as window properties) creates a `Misc::HdrOutput`
+  that requests the FP16 swapchain via the **private** window property `_qt_sg_hdr_format`
+  <!-- claim-verify off -->
+  (read by Qt's `QSGRhiSupport::applySwapChainFormat`, a Qt-internal symbol; re-verify on
+  every Qt bump — removal degrades to SDR, never breaks)
+  <!-- claim-verify on -->
+  and samples `QRhiSwapChain::hdrInfo()` inside a Direct
+  `beforeSynchronizing` hook at ~1 Hz. When granted, HdrSurface re-homes the contentItem's
+  children into a full-size wrapper carrying an RGBA16F layer whose effect
+  (`app/shaders/hdr_output.frag`) linearizes and applies the scene-referred SDR-white
+  multiply. The wrapper is load-bearing: Qt's item layers insert their effect into the
+  layered item's PARENT (`QQuickItemLayer::activate`), so layering the parentless
+  contentItem itself silently draws nothing (blank window, found 2026-09-29); the wrapper
+  also force-creates the popup overlay first so popups render inside the transform. The
+  transform effect must declare `property variant source` or the layer texture never binds
+  (unbound Metal sampler = white window, same day). **Inside the layer everything composites exactly as in
+  SDR** — that is what makes SDR parity structural. Raw `Window{}` dialogs are unwrapped and
+  stay SDR by design.
+- **Emissive producers** write encoded values >1.0 into the layer through the shared extended
+  transfer (`core/Ui/Misc/HdrTransfer.h`, pinned by `tst_hdr_transfer`; every shader copy in
+  `app/shaders/` mirrors it line for line): `HdrBoost.qml` (alarm flash boxes, annunciator
+  bell, LED cores, FFT marker strokes, and — always on at `hdrSteadyIntensity`, 1.4 vs the
+  2.0 flash intensity — gauge/meter band arcs, bar-panel fills and band stripes; always
+  `hideSource`, or translucent sources double-blend), `StrokeHdrMaterial` (PlotCurve swaps it in when the window property
+  `hdrBoost` exceeds 1; stock vertex-color material otherwise — either way the material must
+  never back-face cull, the ribbon winding is mixed), and `WaterfallHdrMaterial` (below).
+- **The RGBA8 clamp rule**: anything routed through a `MultiEffect` or default-format
+  `layer.enabled` renders via an RGBA8 intermediate and silently clamps back to SDR. An
+  emissive element must not sit behind one; the LED halo (MultiEffect glow) staying SDR under
+  the boosted core is the one accepted clamp.
+- **Waterfall dual-format ring**: under an HDR window the history image switches to
+  `QImage::Format_Grayscale16` (normalized magnitude, no CPU LUT) over an `R16` ring texture
+  — half the upload bytes — and `WaterfallSpectrogramNodes` draws geometry nodes with
+  `WaterfallHdrMaterial` (GPU LUT from the widget's baked colormap, top-of-scale boost). The
+  SDR path, the tile fallback, the staging contract and the seam math are byte-identical to
+  before; ring failure or an SDR window rebuilds the RGB32 history (a mode flip resets
+  history, same cost as the hidden-release behavior).
+- **Settings**: `Misc::GraphicsBackend` owns `App/HdrEnabled` (restart-applied, crash-revert
+  via `App/HdrPending` in lockstep with the backend pending flag). Intensity is automatic:
+  `hdrAutoIntensity` (2 x SDR white) clamped per window to the display's reported headroom —
+  there is deliberately no user slider (2026-09-29).
+
 ## Time-Ring Sizing & the Plot Clocks — Non-Negotiable
 
 **Time rings are sized from a rate, never from a sample count alone**

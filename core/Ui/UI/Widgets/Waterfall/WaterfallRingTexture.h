@@ -54,7 +54,17 @@ public:
    */
   static constexpr int kStagedRowSlots = 8;
 
-  explicit WaterfallRingTexture(const QSize& size);
+  /**
+   * @brief Pixel layout of the ring: Bgra8 carries the CPU-colorized SDR spectrogram
+   *        (QImage::Format_RGB32), Gray16 carries normalized magnitude for the HDR material
+   *        (QImage::Format_Grayscale16, half the bytes per row -- spec 0089).
+   */
+  enum class PixelFormat {
+    Bgra8,
+    Gray16
+  };
+
+  explicit WaterfallRingTexture(const QSize& size, PixelFormat format = PixelFormat::Bgra8);
   WaterfallRingTexture(WaterfallRingTexture&&)                 = delete;
   WaterfallRingTexture(const WaterfallRingTexture&)            = delete;
   WaterfallRingTexture& operator=(WaterfallRingTexture&&)      = delete;
@@ -69,6 +79,7 @@ public:
   void commitTextureOperations(QRhi* rhi, QRhiResourceUpdateBatch* resourceUpdates) override;
 
   [[nodiscard]] bool failed() const noexcept;
+  [[nodiscard]] PixelFormat pixelFormat() const noexcept;
   [[nodiscard]] bool fullUploadPending() const noexcept;
   [[nodiscard]] int stagedRowCount() const noexcept;
   [[nodiscard]] int stagedRowAt(int slot) const noexcept;
@@ -76,10 +87,13 @@ public:
   void stageImage(const QImage& image);
   void stageRow(const QImage& image, int row);
 
-  [[nodiscard]] static bool supported(const QQuickWindow* window, const QSize& size);
+  [[nodiscard]] static bool supported(const QQuickWindow* window,
+                                      const QSize& size,
+                                      PixelFormat format = PixelFormat::Bgra8);
 
 private:
   QSize m_size;
+  PixelFormat m_format;
   int m_bytesPerRow;
   QRhiTexture* m_texture;
 

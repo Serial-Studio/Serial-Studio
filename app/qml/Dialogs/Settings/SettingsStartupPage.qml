@@ -49,15 +49,18 @@ Item {
     anchors.margins: 8
     anchors.fill: parent
 
+    readonly property bool graphicsSection: Cpp_Misc_GraphicsBackend.configurable
+                                            || Cpp_Misc_GraphicsBackend.hdrSupported
+
     Item {
       implicitHeight: 2
       Layout.columnSpan: 2
-      visible: Cpp_Misc_GraphicsBackend.configurable
+      visible: startupLayout.graphicsSection
     } Label {
       Layout.columnSpan: 2
       Layout.topMargin: 2
       text: qsTr("Graphics")
-      visible: Cpp_Misc_GraphicsBackend.configurable
+      visible: startupLayout.graphicsSection
       font: Cpp_Misc_CommonFonts.customUiFont(0.75, true)
       color: Cpp_ThemeManager.colors["pane_section_label"]
       Component.onCompleted: font.capitalization = Font.AllUppercase
@@ -65,12 +68,12 @@ Item {
       implicitHeight: 1
       Layout.columnSpan: 2
       Layout.fillWidth: true
-      visible: Cpp_Misc_GraphicsBackend.configurable
+      visible: startupLayout.graphicsSection
       color: Cpp_ThemeManager.colors["groupbox_border"]
     } Item {
       implicitHeight: 2
       Layout.columnSpan: 2
-      visible: Cpp_Misc_GraphicsBackend.configurable
+      visible: startupLayout.graphicsSection
     }
 
     Label {
@@ -105,6 +108,34 @@ Item {
         Cpp_Misc_GraphicsBackend.promptRestartAndQuit()
       }
     }
+
+    Label {
+      text: qsTr("HDR Output")
+      visible: Cpp_Misc_GraphicsBackend.hdrSupported
+      color: Cpp_ThemeManager.colors["text"]
+    } Widgets.Toggle {
+      id: _hdrOutput
+
+      Layout.rightMargin: -8
+      Layout.alignment: Qt.AlignRight
+      visible: Cpp_Misc_GraphicsBackend.hdrSupported
+      checked: Cpp_Misc_GraphicsBackend.hdrEnabled
+      palette.highlight: Cpp_ThemeManager.colors["switch_highlight"]
+      onCheckedChanged: {
+        if (checked !== Cpp_Misc_GraphicsBackend.hdrEnabled) {
+          Cpp_Misc_GraphicsBackend.hdrEnabled = checked
+          Cpp_Misc_GraphicsBackend.promptRestartAndQuit()
+        }
+      }
+
+      Connections {
+        target: Cpp_Misc_GraphicsBackend
+        function onHdrEnabledChanged() {
+          _hdrOutput.checked = Cpp_Misc_GraphicsBackend.hdrEnabled
+        }
+      }
+    }
+
 
     Label {
       text: qsTr("Display Scaling")
