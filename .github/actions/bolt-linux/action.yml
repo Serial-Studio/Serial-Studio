@@ -24,16 +24,19 @@ inputs:
     description: 'Qt library directory placed on LD_LIBRARY_PATH for the training runs.'
     required: true
   bolt-version:
-    description: 'Pinned LLVM BOLT major (Ubuntu bolt-<N> package; built for amd64 and arm64).'
+    description: 'Pinned LLVM BOLT major (apt.llvm.org bolt-<N> package; built for amd64 and arm64).'
     required: false
-    default: '18'
+    default: '21'
 
 runs:
   using: 'composite'
   steps:
   #
-  # The distro package pins the major and exists for both release arches; a missing package is
-  # a loud failure, never a skipped stage
+  # apt.llvm.org, not the Ubuntu archive: noble's bolt-18 is amd64-only AND predates the
+  # llvm/llvm-project#98992 fragment-matching fix our prebuilt gRPC needs (its GCC .cold
+  # fragments carry duplicated local symbols, which older BOLT cannot map to a parent).
+  # The upstream repo ships bolt-<N> for both release arches; a missing package is a loud
+  # failure, never a skipped stage
   #
   - name: '⚙️ Install LLVM BOLT'
     shell: bash
@@ -41,6 +44,11 @@ runs:
       BOLT_V: ${{inputs.bolt-version}}
     run: |
       set -euo pipefail
+      CODENAME="$(. /etc/os-release && echo "$VERSION_CODENAME")"
+      wget -qO- https://apt.llvm.org/llvm-snapshot.gpg.key \
+        | sudo gpg --dearmor -o /usr/share/keyrings/apt-llvm-org.gpg
+      echo "deb [signed-by=/usr/share/keyrings/apt-llvm-org.gpg] http://apt.llvm.org/${CODENAME}/ llvm-toolchain-${CODENAME}-${BOLT_V} main" \
+        | sudo tee /etc/apt/sources.list.d/apt-llvm-org.list
       sudo apt-get update -qq
       sudo apt-get install -y --no-install-recommends "bolt-${BOLT_V}"
       "llvm-bolt-${BOLT_V}" --version
