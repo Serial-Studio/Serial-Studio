@@ -403,7 +403,7 @@ jobs:
 
     #
     # Spec 0090: BOLT instruments the PGO binary, re-runs the training loads, rewrites the
-    # layout, and runs the deferred ss_finalize_binary split/strip -- so every gate, package
+    # layout (strip + sidecar included; the action is the only post-link writer) -- so every gate, package
     # and signature below consumes the rewritten binary. Fail-hard: no fallback to the
     # un-rewritten binary
     #
@@ -411,7 +411,6 @@ jobs:
       uses: ./.github/actions/bolt-linux
       with:
         app: ./build/app/${{env.UNIXNAME}}
-        build-dir: build
         qt-lib-dir: ${{github.workspace}}/Qt-${{env.QT_VERSION_LINUX}}-${{runner.os}}-x64/${{env.QT_VERSION_LINUX}}/gcc_64/lib
 
     #
@@ -764,7 +763,6 @@ jobs:
       uses: ./.github/actions/bolt-linux
       with:
         app: ./build/app/${{env.UNIXNAME}}
-        build-dir: build
         qt-lib-dir: ${{github.workspace}}/Qt-${{env.QT_VERSION_LINUX}}-${{runner.os}}-arm64/${{env.QT_VERSION_LINUX}}/gcc_arm64/lib
 
     #

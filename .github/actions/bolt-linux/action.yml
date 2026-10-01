@@ -5,9 +5,10 @@
 # The post-link layout stage of the Linux release flow (spec 0090). Takes the PGO-optimized,
 # still-unstripped binary, instruments it with LLVM BOLT, re-runs the same two training loads
 # the PGO flow used (the license seat is already active from pgo-train-linux; the job's
-# always() step releases it), rewrites the binary from the merged profile, and only then runs
-# the deferred ss_finalize_binary script so the spec-0084 sidecar is cut from the binary that
-# ships. Every step is fail-hard: there is no fallback to the un-rewritten binary (spec R3).
+# always() step releases it), rewrites the binary from the merged profile -- BOLT itself
+# performs the spec-0084 hardening strip (-remove-symtab) because objcopy/strip corrupt a
+# rewritten ELF -- and cuts the spec-0084 sidecar from a debug-rich twin rewrite. Every step
+# is fail-hard: there is no fallback to the un-rewritten binary (spec R3).
 #
 
 name: 'Post-link layout (Linux BOLT)'
@@ -16,9 +17,6 @@ description: 'Instruments, trains, and rewrites the PGO-optimized binary with LL
 inputs:
   app:
     description: 'Path to the PGO-optimized executable (unstripped, linked with --emit-relocs).'
-    required: true
-  build-dir:
-    description: 'CMake build directory holding the generated ss_finalize_binary script.'
     required: true
   qt-lib-dir:
     description: 'Qt library directory placed on LD_LIBRARY_PATH for the training runs.'
@@ -164,9 +162,13 @@ runs:
 
   #
   # ext-tsp block layout + cdsort function order + BOLT's own hot/cold splitting (which replaces
-  # the GCC splitting the build disabled for it); -update-debug-sections keeps the line tables
-  # true so the spec-0084 sidecar split below symbolicates the rewritten binary. dyno-stats is
-  # the per-release audit artifact (spec R8)
+  # the GCC splitting the build disabled for it). BOLT is the ONLY writer of the shipping
+  # binary: objcopy and strip corrupt a BOLT-rewritten ELF (llvm/llvm-project#89336), so the
+  # shipping rewrite lets BOLT itself drop the debug info, the --emit-relocs payload (it strips
+  # non-allocatable RELA sections unconditionally) and the symbol table (-remove-symtab, the
+  # spec-0084 hardening strip). The second rewrite is a layout-identical debug-rich twin
+  # (-update-debug-sections) that exists only for the sidecar cut below and never ships.
+  # dyno-stats is the per-release audit artifact (spec R8)
   #
   - name: '🔩 Rewrite binary layout (BOLT)'
     shell: bash
@@ -181,27 +183,35 @@ runs:
         -reorder-functions=cdsort \
         -split-functions \
         -split-all-cold \
-        -update-debug-sections \
         -skip-funcs='lj_BC_ISLT.*' \
+        -remove-symtab \
         -dyno-stats 2>&1 | tee bolt-report.txt
-      mv -f "${SS_APP}.bolt" "$SS_APP"
-      chmod +x "$SS_APP"
+      "llvm-bolt-${BOLT_V}" "$SS_APP" -o "${SS_APP}.sym" \
+        -data=bolt-merged.fdata \
+        -reorder-blocks=ext-tsp \
+        -reorder-functions=cdsort \
+        -split-functions \
+        -split-all-cold \
+        -skip-funcs='lj_BC_ISLT.*' \
+        -update-debug-sections
       rm -f "${SS_APP}.inst"
 
   #
-  # The deferred spec-0084 finalize: sidecar split from the REWRITTEN binary, --emit-relocs
-  # payload removed, then the strip. The generated script runs via cmake -P, never through
-  # cmake --build: the build graph can relink the executable first and silently replace the
-  # rewritten binary with the original link. The readelf probe proves the binary on disk is
-  # the BOLT output (BOLT always stamps .note.bolt_info) before anything is cut from it.
-  # After this step the binary is the one every gate measures and every package ships
+  # The deferred spec-0084 finalize, reduced to the sidecar cut: objcopy only READS the
+  # debug-rich twin to write the .debug file, so the shipping binary is never post-processed.
+  # The readelf probes prove the shipping binary is the BOLT output (BOLT always stamps
+  # .note.bolt_info) and the sidecar actually carries line tables before the swap. After
+  # this step the binary is the one every gate measures and every package ships
   #
-  - name: '🔩 Finalize binary (sidecar split + strip)'
+  - name: '🔩 Finalize binary (sidecar split)'
     shell: bash
     env:
-      BUILD_DIR: ${{inputs.build-dir}}
       SS_APP: ${{inputs.app}}
     run: |
       set -euo pipefail
-      readelf -x .note.bolt_info "$SS_APP" 1>/dev/null
-      cmake -P "$BUILD_DIR/app/ss_finalize_binary.cmake"
+      readelf -x .note.bolt_info "${SS_APP}.bolt" 1>/dev/null
+      objcopy --only-keep-debug "${SS_APP}.sym" "${SS_APP}.debug"
+      readelf -S "${SS_APP}.debug" | grep -q "\.debug_line"
+      mv -f "${SS_APP}.bolt" "$SS_APP"
+      chmod +x "$SS_APP"
+      rm -f "${SS_APP}.sym"

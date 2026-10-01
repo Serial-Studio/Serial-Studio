@@ -1291,41 +1291,13 @@ if(BUILD_COMMERCIAL AND PRODUCTION_OPTIMIZATION)
   elseif(UNIX)
     find_program(SS_OBJCOPY objcopy)
 
-    # Spec 0090: when the CI post-link layout stage is on, the split/strip must run AFTER the
-    # BOLT rewrite -- BOLT needs the symbol table, and the sidecar must be cut from the binary
-    # that actually ships or spec-0084 symbolication silently lies. The commands move verbatim
-    # into an on-demand target the bolt-linux action invokes, plus --remove-relocations to drop
-    # the --emit-relocs payload (non-dynamic relocation sections only; .rela.dyn/.rela.plt are
-    # untouched). With the stage off, the POST_BUILD behavior is identical to spec 0084.
-    if(ENABLE_POST_LINK_LAYOUT)
-      if(NOT SS_OBJCOPY)
-        message(FATAL_ERROR "ENABLE_POST_LINK_LAYOUT needs objcopy for the deferred sidecar split")
-      endif()
-
-      # The finalize commands live in a generated cmake -P script, NOT in the build graph: a
-      # cmake --build of a graph target can relink the executable first, silently replacing the
-      # BOLT-rewritten binary with the original link. The bolt-linux action runs the script
-      # directly; the ss_finalize_binary target below wraps it for manual use only.
-      set(SS_FINALIZE_SCRIPT "${CMAKE_CURRENT_BINARY_DIR}/ss_finalize_binary.cmake")
-      file(GENERATE OUTPUT "${SS_FINALIZE_SCRIPT}" CONTENT "\
-set(app \"$<TARGET_FILE:${PROJECT_EXECUTABLE}>\")
-function(ss_run)
-  execute_process(COMMAND \${ARGV} RESULT_VARIABLE rc)
-  if(NOT rc EQUAL 0)
-    message(FATAL_ERROR \"ss_finalize_binary: \${ARGV0} step failed (\${rc})\")
-  endif()
-endfunction()
-ss_run(\"${SS_OBJCOPY}\" --only-keep-debug \"\${app}\" \"\${app}.debug\")
-ss_run(\"${SS_OBJCOPY}\" --remove-relocations=* \"\${app}\")
-ss_run(\"${SS_OBJCOPY}\" \"--add-gnu-debuglink=\${app}.debug\" \"\${app}\")
-ss_run(\"${CMAKE_STRIP}\" --strip-unneeded \"\${app}\")
-")
-      add_custom_target(ss_finalize_binary
-        COMMAND ${CMAKE_COMMAND} -P "${SS_FINALIZE_SCRIPT}"
-        COMMENT "Finalizing rewritten binary: sidecar split, reloc removal, strip (Linux)"
-        VERBATIM
-      )
-    else()
+    # Spec 0090: when the CI post-link layout stage is on, nothing here touches the binary.
+    # objcopy and strip corrupt a BOLT-rewritten ELF (llvm/llvm-project#89336), so the
+    # bolt-linux action ships BOLT's own output -- the rewrite drops debug info, the
+    # --emit-relocs payload and the symbol table (-remove-symtab) itself -- and cuts the
+    # spec-0084 sidecar from a debug-rich twin rewrite that never ships. With the stage off,
+    # the POST_BUILD behavior is identical to spec 0084.
+    if(NOT ENABLE_POST_LINK_LAYOUT)
       if(SS_OBJCOPY)
         add_custom_command(TARGET ${PROJECT_EXECUTABLE} POST_BUILD
           COMMAND ${SS_OBJCOPY} --only-keep-debug "$<TARGET_FILE:${PROJECT_EXECUTABLE}>"
