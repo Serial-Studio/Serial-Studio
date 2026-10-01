@@ -1063,6 +1063,24 @@ void Misc::ModuleManager::teardownHeadlessSessionModules()
 }
 
 /**
+ * @brief Forwards the active theme's darkness into Misc::GraphicsBackend (spec 0089): steady
+ *        emissive intensity follows the theme, and the root owns the cross-singleton wiring so
+ *        GraphicsBackend never reaches into ThemeManager. The initial sync covers the theme the
+ *        ThemeManager ctor already applied before this connect existed.
+ */
+static void wireThemeHdrIntensity(Misc::ThemeManager* themeManager)
+{
+  auto* graphicsBackend = &Misc::GraphicsBackend::instance();
+  QObject::connect(themeManager,
+                   &Misc::ThemeManager::themeChanged,
+                   graphicsBackend,
+                   [themeManager, graphicsBackend] {
+                     graphicsBackend->setDarkTheme(themeManager->isDarkTheme());
+                   });
+  graphicsBackend->setDarkTheme(themeManager->isDarkTheme());
+}
+
+/**
  * @brief Wires the per-session problem reset on the false-to-true connection edge only
  *        (connectedChanged is also forwarded from config edits). A full run replaces every
  *        checker's findings wholesale, so no separate clear is needed and the dedup keys
@@ -1155,6 +1173,7 @@ void Misc::ModuleManager::setupCrossModuleConnections()
           &Misc::ExtensionManager::extensionUninstalled,
           miscThemeManager,
           &Misc::ThemeManager::onExtensionUninstalled);
+  wireThemeHdrIntensity(miscThemeManager);
 
   auto* workspaceManager = &Misc::WorkspaceManager::instance();
   connect(workspaceManager,

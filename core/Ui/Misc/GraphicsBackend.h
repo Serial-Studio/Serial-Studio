@@ -63,10 +63,13 @@ class GraphicsBackend : public QObject {
              CONSTANT)
   Q_PROPERTY(double hdrAutoIntensity
              READ hdrAutoIntensity
+             NOTIFY hdrAutoIntensityChanged)
+  Q_PROPERTY(double hdrFlashIntensity
+             READ hdrFlashIntensity
              CONSTANT)
   Q_PROPERTY(double hdrSteadyIntensity
              READ hdrSteadyIntensity
-             CONSTANT)
+             NOTIFY hdrSteadyIntensityChanged)
   Q_PROPERTY(bool hdrAnyActive
              READ hdrAnyActive
              NOTIFY hdrAnyActiveChanged)
@@ -77,6 +80,8 @@ signals:
   void currentBackendChanged();
   void hdrEnabledChanged();
   void hdrAnyActiveChanged();
+  void hdrAutoIntensityChanged();
+  void hdrSteadyIntensityChanged();
 
 public:
   /**
@@ -110,6 +115,7 @@ public:
   [[nodiscard]] bool hdrEnabled() const noexcept;
   [[nodiscard]] bool hdrRequested() const noexcept;
   [[nodiscard]] double hdrAutoIntensity() const noexcept;
+  [[nodiscard]] double hdrFlashIntensity() const noexcept;
   [[nodiscard]] double hdrSteadyIntensity() const noexcept;
   [[nodiscard]] bool hdrAnyActive() const noexcept;
   [[nodiscard]] const QVariantList& availableBackends() const noexcept;
@@ -122,6 +128,7 @@ public slots:
   void setReduceMotion(bool reduce);
   void setCurrentBackend(int backend);
   void setHdrEnabled(bool enabled);
+  void setDarkTheme(bool dark);
   void confirmStartupSuccess();
   void promptRestartAndQuit();
 
@@ -143,6 +150,7 @@ private:
   bool m_configurable;
   bool m_reduceMotion;
   bool m_hdrEnabled;
+  bool m_darkTheme;
   QSettings m_settings;
   QVariantList m_availableBackends;
   QSet<QObject*> m_hdrActiveWindows;

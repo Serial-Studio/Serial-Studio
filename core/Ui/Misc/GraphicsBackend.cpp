@@ -36,8 +36,11 @@
 int Misc::GraphicsBackend::s_activeBackend = Misc::GraphicsBackend::Backend::Default;
 bool Misc::GraphicsBackend::s_hdrRequested = false;
 
-static constexpr double kAutoHdrIntensity   = 2.0;
-static constexpr double kSteadyHdrIntensity = 1.4;
+static constexpr double kAutoHdrIntensityDark    = 2.0;
+static constexpr double kAutoHdrIntensityLight   = 1.0;
+static constexpr double kFlashHdrIntensity       = 1.7;
+static constexpr double kSteadyHdrIntensityDark  = 1.4;
+static constexpr double kSteadyHdrIntensityLight = 1.2;
 
 //--------------------------------------------------------------------------------------------------
 // Settings keys
@@ -256,6 +259,7 @@ Misc::GraphicsBackend::GraphicsBackend()
   , m_configurable(false)
   , m_reduceMotion(false)
   , m_hdrEnabled(false)
+  , m_darkTheme(false)
 {
   m_currentBackend = m_settings.value(settingsKey(), Backend::Default).toInt();
   m_reduceMotion =
@@ -328,21 +332,35 @@ bool Misc::GraphicsBackend::hdrEnabled() const noexcept
 }
 
 /**
- * @brief Returns the automatic emissive intensity (2 x SDR white); every window clamps it to
- *        its display's reported headroom, so the effective boost is min(2, headroom).
+ * @brief Returns the emissive ceiling for thin data strokes (plot curves, FFT markers,
+ *        waterfall top-of-scale), clamped per window to the display's headroom. Dark themes
+ *        only: emission helps only when ink ends up brighter than its surround, so light
+ *        themes return 1.0 and strokes keep the SDR material.
  */
 double Misc::GraphicsBackend::hdrAutoIntensity() const noexcept
 {
-  return kAutoHdrIntensity;
+  return m_darkTheme ? kAutoHdrIntensityDark : kAutoHdrIntensityLight;
+}
+
+/**
+ * @brief Returns the alarm-flash peak intensity: above the steady tier so a blinking element
+ *        reads hotter, below the stroke ceiling because temporal modulation already carries
+ *        the salience (ISA-101: reserve maximum emphasis for abnormal, thin-element cases).
+ */
+double Misc::GraphicsBackend::hdrFlashIntensity() const noexcept
+{
+  return kFlashHdrIntensity;
 }
 
 /**
  * @brief Returns the softer emissive intensity for always-on surfaces (band arcs, bar fills,
- *        steady-lit LEDs); flashing elements take hdrAutoIntensity instead.
+ *        steady-lit LEDs); flashing elements take hdrAutoIntensity instead. Theme-weighted: a
+ *        dark theme leaves more perceptual headroom over the chrome, so steady emissives sit
+ *        higher there and lower on a light theme (the composition root syncs the flag).
  */
 double Misc::GraphicsBackend::hdrSteadyIntensity() const noexcept
 {
-  return kSteadyHdrIntensity;
+  return m_darkTheme ? kSteadyHdrIntensityDark : kSteadyHdrIntensityLight;
 }
 
 /**
@@ -408,6 +426,21 @@ void Misc::GraphicsBackend::setHdrEnabled(bool enabled)
   m_settings.setValue(hdrKey(), enabled);
   m_settings.sync();
   Q_EMIT hdrEnabledChanged();
+}
+
+/**
+ * @brief Records whether the active theme is dark; the composition root forwards it from
+ *        Misc::ThemeManager so hdrSteadyIntensity can follow the theme without this class
+ *        reaching into the theme singleton.
+ */
+void Misc::GraphicsBackend::setDarkTheme(bool dark)
+{
+  if (m_darkTheme == dark)
+    return;
+
+  m_darkTheme = dark;
+  Q_EMIT hdrAutoIntensityChanged();
+  Q_EMIT hdrSteadyIntensityChanged();
 }
 
 /**

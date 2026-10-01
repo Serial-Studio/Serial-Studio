@@ -35,6 +35,12 @@ Item {
   property bool active: true
   property real boost: Cpp_Misc_GraphicsBackend.hdrAutoIntensity
 
+  //
+  // Widens the capture rect past the target's bounds, for targets that paint outside
+  // themselves (a MultiEffect's padded blur); the consumer sizes this item to match.
+  //
+  property real captureMargin: 0
+
   readonly property var hostWindow: root.Window.window
   readonly property real windowHeadroom: (root.hostWindow
                                           && root.hostWindow.hdrHeadroom !== undefined)
@@ -66,6 +72,10 @@ Item {
         live: true
         hideSource: true
         sourceItem: root.target
+        sourceRect: Qt.rect(-root.captureMargin,
+                            -root.captureMargin,
+                            root.target.width + 2 * root.captureMargin,
+                            root.target.height + 2 * root.captureMargin)
       }
       property real boost: Math.min(root.boost, root.windowHeadroom)
       fragmentShader: "qrc:/serial-studio.com/shaders/hdr_boost.frag.qsb"

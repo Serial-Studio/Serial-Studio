@@ -148,7 +148,7 @@ Item {
     target: _bell
     anchors.fill: _bell
     active: root.lit && root.priority >= 0
-    boost: root.fastFlash ? Cpp_Misc_GraphicsBackend.hdrAutoIntensity
+    boost: root.fastFlash ? Cpp_Misc_GraphicsBackend.hdrFlashIntensity
                           : Cpp_Misc_GraphicsBackend.hdrSteadyIntensity
   }
 

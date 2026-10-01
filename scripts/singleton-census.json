@@ -1,10 +1,10 @@
 {
   "spec": "0039-session-context",
   "regenerate": "python scripts/code-verify.py --singleton-census --accept",
-  "total": 796,
+  "total": 797,
   "files": 198,
   "buckets": {
-    "root": 206,
+    "root": 207,
     "accessor": 71,
     "ctor-capture": 62,
     "deferred": 6,
@@ -63,6 +63,7 @@
     "ProjectModel": 5,
     "LemonSqueezy": 4,
     "UI::TaskbarSettings": 4,
+    "Misc::GraphicsBackend": 4,
     "Misc::IconRegistry": 4,
     "Misc::ConnectionDiagnostics": 4,
     "API::CommandHandler": 4,
@@ -70,7 +71,6 @@
     "UI::WidgetRegistry": 4,
     "Misc::ShortcutGenerator": 3,
     "Widgets::ImageExport": 3,
-    "Misc::GraphicsBackend": 3,
     "Misc::Utilities": 3,
     "API::MirrorSession": 3,
     "MirrorPublisher": 3,
@@ -228,9 +228,9 @@
       }
     },
     "app/src/Misc/ModuleManager.cpp": {
-      "total": 200,
+      "total": 201,
       "buckets": {
-        "root": 200,
+        "root": 201,
         "accessor": 0,
         "ctor-capture": 0,
         "deferred": 0,

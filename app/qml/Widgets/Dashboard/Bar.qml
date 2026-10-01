@@ -616,7 +616,7 @@ Item {
                 target: valueBox
                 anchors.fill: valueBox
                 active: valueFlash.filled && valueFlash.hasData
-                boost: valueFlash.blinking ? Cpp_Misc_GraphicsBackend.hdrAutoIntensity
+                boost: valueFlash.blinking ? Cpp_Misc_GraphicsBackend.hdrFlashIntensity
                                            : Cpp_Misc_GraphicsBackend.hdrSteadyIntensity
               }
             }
@@ -740,7 +740,7 @@ Item {
         target: digitalBox
         anchors.fill: digitalBox
         active: digitalFlash.filled && digitalFlash.hasData
-        boost: digitalFlash.blinking ? Cpp_Misc_GraphicsBackend.hdrAutoIntensity
+        boost: digitalFlash.blinking ? Cpp_Misc_GraphicsBackend.hdrFlashIntensity
                                      : Cpp_Misc_GraphicsBackend.hdrSteadyIntensity
       }
     }

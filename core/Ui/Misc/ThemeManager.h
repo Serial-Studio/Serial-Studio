@@ -99,6 +99,7 @@ public:
   [[nodiscard]] static ThemeManager& instance();
 
   [[nodiscard]] int theme() const;
+  [[nodiscard]] bool isDarkTheme() const;
   [[nodiscard]] const QString& themeName() const;
   [[nodiscard]] const QVariantMap& colors() const;
   [[nodiscard]] QQmlPropertyMap* colorMap();

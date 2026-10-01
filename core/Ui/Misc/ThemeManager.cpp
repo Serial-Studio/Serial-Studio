@@ -155,6 +155,16 @@ int Misc::ThemeManager::theme() const
 }
 
 /**
+ * @brief Returns whether the loaded theme is dark, by the same convention the color-scheme
+ *        hint uses: text lighter than base. Holds for user themes, not just the bundled ones.
+ */
+bool Misc::ThemeManager::isDarkTheme() const
+{
+  return getColor(QStringLiteral("text")).lightness()
+       > getColor(QStringLiteral("base")).lightness();
+}
+
+/**
  * @brief Retrieves the current name of the loaded theme.
  */
 const QString& Misc::ThemeManager::themeName() const

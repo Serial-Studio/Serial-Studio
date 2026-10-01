@@ -380,12 +380,6 @@ InstrumentBase {
                 }
               }
             }
-
-            HdrBoost {
-              target: alarmZoneShape
-              anchors.fill: alarmZoneShape
-              boost: Cpp_Misc_GraphicsBackend.hdrSteadyIntensity
-            }
           }
         }
 
@@ -711,7 +705,7 @@ InstrumentBase {
                 target: valueBox
                 anchors.fill: valueBox
                 active: valueFlash.filled && valueFlash.hasData
-                boost: valueFlash.blinking ? Cpp_Misc_GraphicsBackend.hdrAutoIntensity
+                boost: valueFlash.blinking ? Cpp_Misc_GraphicsBackend.hdrFlashIntensity
                                            : Cpp_Misc_GraphicsBackend.hdrSteadyIntensity
               }
             }
@@ -800,6 +794,16 @@ InstrumentBase {
               PathLine { x: needleShape.cx - needleShape.tailW / 2; y: needleShape.cy + needleShape.tailLen }
               PathLine { x: needleShape.cx - needleShape.baseW / 2; y: needleShape.cy }
             }
+          }
+
+          //
+          // Emissive needle (spec 0089): the capture is unrotated needle content, and this
+          // overlay lives inside the rotating holder, so it turns with the needle.
+          //
+          HdrBoost {
+            target: needleShape
+            anchors.fill: parent
+            boost: Cpp_Misc_GraphicsBackend.hdrSteadyIntensity
           }
         }
 
@@ -1036,7 +1040,7 @@ InstrumentBase {
         target: digitalBox
         anchors.fill: digitalBox
         active: digitalFlash.filled && digitalFlash.hasData
-        boost: digitalFlash.blinking ? Cpp_Misc_GraphicsBackend.hdrAutoIntensity
+        boost: digitalFlash.blinking ? Cpp_Misc_GraphicsBackend.hdrFlashIntensity
                                      : Cpp_Misc_GraphicsBackend.hdrSteadyIntensity
       }
     }

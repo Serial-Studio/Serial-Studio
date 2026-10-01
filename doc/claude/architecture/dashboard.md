@@ -759,16 +759,30 @@ Windows SDR white level, so a bare HDR swapchain renders wrong gamma. Therefore:
   stay SDR by design.
 - **Emissive producers** write encoded values >1.0 into the layer through the shared extended
   transfer (`core/Ui/Misc/HdrTransfer.h`, pinned by `tst_hdr_transfer`; every shader copy in
-  `app/shaders/` mirrors it line for line): `HdrBoost.qml` (alarm flash boxes, annunciator
-  bell, LED cores, FFT marker strokes, and — always on at `hdrSteadyIntensity`, 1.4 vs the
-  2.0 flash intensity — gauge/meter band arcs, bar-panel fills and band stripes; always
+  `app/shaders/` mirrors it line for line): `HdrBoost.qml` on a three-tier intensity ladder —
+  `hdrSteadyIntensity` (theme-weighted 1.4 dark / 1.2 light, `ThemeManager::isDarkTheme()`
+  forwarded by the composition root) for always-on surfaces (gauge/meter needles, bar-panel
+  fills and band stripes, LED cores and their blooms), `hdrFlashIntensity` (1.7) for blinking
+  alarm boxes and the annunciator bell's fast flash, and `hdrAutoIntensity` (theme-weighted
+  2.0 dark / 1.0 light, the per-window ceiling) for thin strokes (FFT markers via the
+  `HdrBoost` default) — small areas need more light for equal salience, and a blink outranks
+  a static stroke at any luminance, so the ordering steady < flash < stroke is deliberate.
+  Two deliberate exclusions (both 2026-09-30): gauge/meter band arcs stay SDR — zones are
+  reference information and the ring's area overwhelmed the needle when boosted — and light
+  themes get no stroke boost at all (1.0 falls back to the SDR material), because emission
+  only helps when the ink ends up brighter than its surround, and on paper-white backgrounds
+  it washes the ink out instead. A gauge/meter needle's
+  capture excludes the shape's own rotation: its overlay either lives inside the rotating
+  holder (Meter) or mirrors the rotation binding (Gauge); always
   `hideSource`, or translucent sources double-blend), `StrokeHdrMaterial` (PlotCurve swaps it in when the window property
   `hdrBoost` exceeds 1; stock vertex-color material otherwise — either way the material must
   never back-face cull, the ribbon winding is mixed), and `WaterfallHdrMaterial` (below).
 - **The RGBA8 clamp rule**: anything routed through a `MultiEffect` or default-format
   `layer.enabled` renders via an RGBA8 intermediate and silently clamps back to SDR. An
-  emissive element must not sit behind one; the LED halo (MultiEffect glow) staying SDR under
-  the boosted core is the one accepted clamp.
+  emissive element must not sit behind one. Direction matters: capturing a MultiEffect's SDR
+  *output* and boosting it afterwards is fine — the boost happens in the `HdrBoost` shader,
+  past the RGBA8 step — which is how the LED blooms glow (`captureMargin` widens the capture
+  rect so the blur padded outside the item's bounds is not cropped).
 - **Waterfall dual-format ring**: under an HDR window the history image switches to
   `QImage::Format_Grayscale16` (normalized magnitude, no CPU LUT) over an `R16` ring texture
   — half the upload bytes — and `WaterfallSpectrogramNodes` draws geometry nodes with
@@ -778,8 +792,8 @@ Windows SDR white level, so a bare HDR swapchain renders wrong gamma. Therefore:
   history, same cost as the hidden-release behavior).
 - **Settings**: `Misc::GraphicsBackend` owns `App/HdrEnabled` (restart-applied, crash-revert
   via `App/HdrPending` in lockstep with the backend pending flag). Intensity is automatic:
-  `hdrAutoIntensity` (2 x SDR white) clamped per window to the display's reported headroom —
-  there is deliberately no user slider (2026-09-29).
+  the tier ladder above follows the theme, and every value is clamped per window to the
+  display's reported headroom — there is deliberately no user slider (2026-09-29).
 
 ## Time-Ring Sizing & the Plot Clocks — Non-Negotiable
 

@@ -200,6 +200,8 @@ Item {
           }
 
           MultiEffect {
+            id: ledBloomWide
+
             source: led
             width: led.width
             height: led.height
@@ -216,6 +218,8 @@ Item {
           }
 
           MultiEffect {
+            id: ledBloomTight
+
             source: led
             width: led.width
             height: led.height
@@ -231,6 +235,36 @@ Item {
             enabled: Cpp_Misc_GraphicsBackend.effectsEnabled
           }
 
+          //
+          // Emissive bloom (spec 0089): halos captured with a margin so the blur spill
+          // survives, riding the core's flash/steady tier so the lamp pulses coherently.
+          //
+          HdrBoost {
+            target: ledBloomWide
+            captureMargin: 64
+            width: led.width + 128
+            height: led.height + 128
+            x: layout.x + led.x - 64
+            y: layout.y + led.y - 64
+            active: led.showLit && Cpp_Misc_GraphicsBackend.effectsEnabled
+            boost: led.flashing
+                   ? Cpp_Misc_GraphicsBackend.hdrFlashIntensity
+                   : Cpp_Misc_GraphicsBackend.hdrSteadyIntensity
+          }
+
+          HdrBoost {
+            target: ledBloomTight
+            captureMargin: 64
+            width: led.width + 128
+            height: led.height + 128
+            x: layout.x + led.x - 64
+            y: layout.y + led.y - 64
+            active: led.showLit && Cpp_Misc_GraphicsBackend.effectsEnabled
+            boost: led.flashing
+                   ? Cpp_Misc_GraphicsBackend.hdrFlashIntensity
+                   : Cpp_Misc_GraphicsBackend.hdrSteadyIntensity
+          }
+
           HdrBoost {
             target: led
             width: led.width
@@ -239,7 +273,7 @@ Item {
             y: layout.y + led.y
             active: led.showLit
             boost: led.flashing
-                   ? Cpp_Misc_GraphicsBackend.hdrAutoIntensity
+                   ? Cpp_Misc_GraphicsBackend.hdrFlashIntensity
                    : Cpp_Misc_GraphicsBackend.hdrSteadyIntensity
           }
         }
