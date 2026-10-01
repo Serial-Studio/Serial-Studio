@@ -54,6 +54,33 @@ runs:
       "llvm-bolt-${BOLT_V}" --version
 
   #
+  # The prebuilt gRPC archive carries GCC-split .cold fragments whose parent symbols the
+  # archive's own link folded away (ICF); BOLT's fragment registration hard-fails on any
+  # orphan fragment regardless of -skip-funcs. Dropping exactly those symbols leaves the
+  # code in place, anonymous and unoptimized -- fine for never-executed crash paths -- and
+  # the DWARF sidecar is untouched. Generic by construction so a gRPC bump cannot re-break it
+  #
+  - name: '🔩 Drop orphan .cold fragment symbols'
+    shell: bash
+    env:
+      SS_APP: ${{inputs.app}}
+    run: |
+      set -euo pipefail
+      nm --no-demangle "$SS_APP" | awk 'NF >= 3 {print $3}' | sort -u > bolt-symtab.txt
+      args=()
+      while IFS= read -r frag; do
+        parent="${frag%.cold*}"
+        if ! grep -qxF "$parent" bolt-symtab.txt; then
+          echo "orphan fragment, dropping symbol: $frag"
+          args+=("--strip-symbol=$frag")
+        fi
+      done < <(grep -E '\.cold(\.[0-9]+)?$' bolt-symtab.txt || true)
+      if [ "${#args[@]}" -gt 0 ]; then
+        objcopy "${args[@]}" "$SS_APP"
+      fi
+      rm -f bolt-symtab.txt
+
+  #
   # Instrumentation mode, not sampling: hosted runners expose no PMU/LBR. Periodic dumping is
   # incompatible with per-pid profile names (append-pid dumps only at exit), so every process
   # writes the one bolt-prof.fdata and each training step renames it aside when done.
