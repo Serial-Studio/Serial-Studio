@@ -77,6 +77,34 @@ text and the incidents behind each rule:
   gating, and don't assume a spec dir is complete — some carry a plan or findings only.
 - **Self-review before handoff.** Re-read the diff: is this *what was asked, and only that*?
 
+## Delegation & Cost — Advisor Economics
+
+Quality concentrates in planning and review; bulk token generation doesn't need the strong
+model. Anthropic's advisor-tool measurements and the spec-0069 post-mortem agree on the
+shape: the main session advises, cheaper executors type.
+
+- **The main session plans, reviews, and integrates; mechanical execution is delegated.**
+  Applying an approved brief, repetitive multi-file sweeps, test-writing against a fixed
+  pattern: run them in subagents with a cheaper model override (Sonnet by default, Haiku
+  for purely mechanical work). Design decisions, hotpath edits, and anything on a
+  protected surface stay in the main session.
+- **Two high-tier touchpoints per task, not continuous involvement.** One after
+  orientation but before committing to an approach (the `/ss-plan` gate), one before
+  declaring done (the self-review gate). Between them the strong model directs; it
+  doesn't type.
+- **Briefs and reports are budgeted.** A per-component brief fits half a page: files,
+  the invariants that bind, one acceptance check. Subagents return conclusions, never
+  file dumps. Measured result: hard output caps cut advice volume ~7x with no detectable
+  quality loss — unbounded high-tier prose is the dominant avoidable cost, so cap first
+  and raise only on evidence.
+- **Searches fan out, conclusions come back.** Multi-file exploration runs in read-only
+  search subagents; the main context receives the answer, not the excerpts. This also
+  keeps the cached prompt prefix stable.
+- **No process tax on trivial work.** Mandating a consult/plan step on tasks whose first
+  action needs no planning measured net-zero quality gain at pure cost. Keep the
+  "skip for trivial" escape hatches, and never write a rule that both mandates and
+  restrains the same mechanism — conflicting steering is worse than either alone.
+
 ## Scripts
 
 All scripts in `scripts/` are CWD-independent and write LF endings; run from anywhere. The
