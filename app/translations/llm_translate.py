@@ -20,14 +20,14 @@
 # THE SOFTWARE.
 #
 # USAGE:
-#   Translate missing strings (default Anthropic claude-sonnet-4-5):
+#   Translate missing strings (default Anthropic claude-haiku-4-5):
 #     python3 llm_translate.py
 #
 #   Use OpenAI instead:
 #     python3 llm_translate.py --provider openai
 #
-#   Override the model:
-#     python3 llm_translate.py --provider anthropic --model claude-sonnet-4-5
+#   Override the model (e.g. escalate to a stronger one):
+#     python3 llm_translate.py --provider anthropic --model claude-sonnet-5-5
 #
 #   Translate only one language:
 #     python3 llm_translate.py --lang fr_FR
@@ -129,10 +129,11 @@ DEFAULT_PROVIDER = "anthropic"
 # paraphrase. gpt-5 hallucinates terminology in our experience.
 OPENAI_MODEL_DEFAULT = "gpt-4.1"
 
-# Anthropic: claude-sonnet-4-5 is the current strong model. Claude 3.5 Sonnet
-# is two generations old and noticeably worse at instruction-following on
-# the long structured prompt this script sends.
-ANTHROPIC_MODEL_DEFAULT = "claude-sonnet-4-5"
+# Anthropic: claude-haiku-4-5 is the cheap default ($1/$5 per MTok vs $3/$15
+# for claude-sonnet-4-5) and follows the structured prompt fine; weak output
+# is caught anyway by the confidence score keeping entries 'unfinished'.
+# Escalate with --model claude-sonnet-5-5 if a language reviews poorly.
+ANTHROPIC_MODEL_DEFAULT = "claude-haiku-4-5"
 
 # Resolved at runtime in main(). Modules outside this script should treat
 # LLM_MODEL as the active model name.

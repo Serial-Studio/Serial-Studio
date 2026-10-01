@@ -917,39 +917,32 @@ Povolte pouze v důvěryhodných sítích. Nedůvěryhodní klienti mohou číst
 <context>
     <name>AlarmAnnunciator</name>
     <message>
-        <location filename="../../../core/Ui/UI/Alarms/AlarmAnnunciator.cpp" line="1285"/>
         <source>Alarm sound file unavailable: %1</source>
-        <translation>Zvukový soubor alarmu není k dispozici: %1</translation>
+        <translation type="vanished">Zvukový soubor alarmu není k dispozici: %1</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/Alarms/AlarmAnnunciator.cpp" line="1298"/>
         <source>No audio output device is available</source>
-        <translation>Není k dispozici žádné výstupní zvukové zařízení</translation>
+        <translation type="vanished">Není k dispozici žádné výstupní zvukové zařízení</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/Alarms/AlarmAnnunciator.cpp" line="1300"/>
         <source>Alarm sounds cannot play until an output device is present.</source>
-        <translation>Zvuky alarmů nelze přehrát, dokud není k dispozici výstupní zařízení.</translation>
+        <translation type="vanished">Zvuky alarmů nelze přehrát, dokud není k dispozici výstupní zařízení.</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/Alarms/AlarmAnnunciator.cpp" line="1302"/>
         <source>Connect an audio output, or disable sounds in Preferences &gt; Sounds.</source>
-        <translation>Připojte zvukový výstup, nebo zakažte zvuky v Předvolby &gt; Zvuky.</translation>
+        <translation type="vanished">Připojte zvukový výstup, nebo zakažte zvuky v Předvolby &gt; Zvuky.</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/Alarms/AlarmAnnunciator.cpp" line="1308"/>
         <source>Alarm sound device '%1' not found</source>
-        <translation>Zvukové zařízení alarmu '%1' nenalezeno</translation>
+        <translation type="vanished">Zvukové zařízení alarmu '%1' nenalezeno</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/Alarms/AlarmAnnunciator.cpp" line="1311"/>
         <source>Alarm sounds are playing on the system default output instead.</source>
-        <translation>Zvuky alarmů se přehrávají na výchozím systémovém výstupu.</translation>
+        <translation type="vanished">Zvuky alarmů se přehrávají na výchozím systémovém výstupu.</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/Alarms/AlarmAnnunciator.cpp" line="1313"/>
         <source>Reconnect the device, or pick another one in Preferences &gt; Sounds.</source>
-        <translation>Znovu připojte zařízení, nebo vyberte jiné v Předvolby &gt; Zvuky.</translation>
+        <translation type="vanished">Znovu připojte zařízení, nebo vyberte jiné v Předvolby &gt; Zvuky.</translation>
     </message>
 </context>
 <context>
@@ -1202,57 +1195,57 @@ Povolte pouze v důvěryhodných sítích. Nedůvěryhodní klienti mohou číst
         <translation>Vybrat předvolbu…</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="487"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="488"/>
         <source>Blink</source>
         <translation>Blikat</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="494"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="495"/>
         <source>Sound</source>
         <translation>Zvuk</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="615"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="616"/>
         <source>Reset to severity default</source>
         <translation>Obnovit na výchozí závažnost</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="629"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="630"/>
         <source>Click to choose a color. Right-click to reset to severity default.</source>
         <translation>Klikněte pro výběr barvy. Pravým tlačítkem obnovíte výchozí barvu závažnosti.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="630"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="631"/>
         <source>Click to choose a custom color.</source>
         <translation>Klikněte pro výběr vlastní barvy.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="661"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="662"/>
         <source>Flash the LED while the value sits in this band.</source>
         <translation>Blikat LED, když hodnota leží v tomto pásmu.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="686"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="690"/>
         <source>Pick a WAV file to play for this band.</source>
         <translation>Vyberte WAV soubor pro přehrání tohoto pásma.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="702"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="706"/>
         <source>Use the priority's default sound.</source>
         <translation>Použít výchozí zvuk priority.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="775"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="779"/>
         <source>No bands defined. Pick a preset above or add a band to get started.</source>
         <translation>Nejsou definována žádná pásma. Vyberte předvolbu výše nebo přidejte pásmo pro začátek.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="899"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="903"/>
         <source>Apply</source>
         <translation>Použít</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="902"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="906"/>
         <source>Apply changes to the dataset.</source>
         <translation>Použít změny na dataset.</translation>
     </message>
@@ -1265,47 +1258,47 @@ Povolte pouze v důvěryhodných sítích. Nedůvěryhodní klienti mohou číst
         <translation type="vanished">Nahradit aktuální pásma vybranou předvolbou, škálovanou na rozsah tohoto datasetu.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="388"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="389"/>
         <source>Range</source>
         <translation>Rozsah</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="416"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="417"/>
         <source>Bands</source>
         <translation>Pásma</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="427"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="428"/>
         <source>Add Band</source>
         <translation>Přidat Pásmo</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="431"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="432"/>
         <source>Add a new band continuing from the last one.</source>
         <translation>Přidat nové pásmo navazující na poslední.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="462"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="463"/>
         <source>Min</source>
         <translation>Min.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="468"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="469"/>
         <source>Max</source>
         <translation>Max.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="474"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="475"/>
         <source>Severity</source>
         <translation>Závažnost</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="480"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="481"/>
         <source>Color</source>
         <translation>Barva</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="501"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="502"/>
         <source>Label</source>
         <translation>Popisek</translation>
     </message>
@@ -1318,22 +1311,22 @@ Povolte pouze v důvěryhodných sítích. Nedůvěryhodní klienti mohou číst
         <translation type="vanished">auto</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="712"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="716"/>
         <source>(optional)</source>
         <translation>(volitelné)</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="729"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="733"/>
         <source>Move up.</source>
         <translation>Posunout nahoru.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="748"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="752"/>
         <source>Move down.</source>
         <translation>Posunout dolů.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="761"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="765"/>
         <source>Remove this band.</source>
         <translation>Odstranit toto pásmo.</translation>
     </message>
@@ -1342,17 +1335,17 @@ Povolte pouze v důvěryhodných sítích. Nedůvěryhodní klienti mohou číst
         <translation type="vanished">Nejsou definována žádná pásma. Použijte předvolbu nebo přidejte pásmo pro začátek.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="792"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="796"/>
         <source>Preview</source>
         <translation>Náhled</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="888"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="892"/>
         <source>Cancel</source>
         <translation>Zrušit</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="890"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="894"/>
         <source>Discard changes.</source>
         <translation>Zahodit změny.</translation>
     </message>
@@ -2305,47 +2298,47 @@ Povolte pouze v důvěryhodných sítích. Nedůvěryhodní klienti mohou číst
         <translation>Snímků na fázi:</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="252"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="255"/>
         <source>Minimum duration:</source>
         <translation>Minimální trvání:</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="281"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="287"/>
         <source>Stages</source>
         <translation>Fáze</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="289"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="295"/>
         <source>Parsers</source>
         <translation>Parsery</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="298"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="307"/>
         <source>Data export</source>
         <translation>Export dat</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="306"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="318"/>
         <source>Dashboard</source>
         <translation>Dashboard</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="318"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="333"/>
         <source>Data</source>
         <translation>Data</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="328"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="343"/>
         <source>Numeric only</source>
         <translation>Pouze číselné</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="337"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="354"/>
         <source>Mixed (numeric + text)</source>
         <translation>Smíšený (numerický + text)</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="353"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="374"/>
         <source>Select at least one stage and one data type to run a benchmark.</source>
         <translation>Vyberte alespoň jednu fázi a jeden datový typ pro spuštění benchmarku.</translation>
     </message>
@@ -2360,47 +2353,47 @@ Povolte pouze v důvěryhodných sítích. Nedůvěryhodní klienti mohou číst
         <translation>Příprava...</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="368"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="389"/>
         <source>Disconnect the active device before running a benchmark.</source>
         <translation>Před spuštěním benchmarku odpojte aktivní zařízení.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="369"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="390"/>
         <source>Close the open recording before running a benchmark.</source>
         <translation>Před spuštěním benchmarku zavřete otevřený záznam.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="401"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="422"/>
         <source>Pipeline</source>
         <translation>Pipeline</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="413"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="434"/>
         <source>Throughput</source>
         <translation>Propustnost</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="425"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="446"/>
         <source>Time</source>
         <translation>Čas</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="437"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="458"/>
         <source>Result</source>
         <translation>Výsledek</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="538"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="559"/>
         <source>Run a test to see results</source>
         <translation>Spusťte test pro zobrazení výsledků</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="555"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="576"/>
         <source>Peak memory: %1</source>
         <translation>Špičková paměť: %1</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="569"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="590"/>
         <source>Pass/Fail applies to the data-pipeline and parser stages (data pipeline and Built-in numeric 1024 K frames/s; Built-in mixed 512 K; Lua numeric 256 K; JavaScript numeric and Lua mixed 128 K; JavaScript mixed 64 K). The export and dashboard stages are informational.</source>
         <translation>Úspěch/Neúspěch se vztahuje na fáze datového pipeline a parseru (datový pipeline a vestavěný numerický 1024 K snímků/s; vestavěný smíšený 512 K; Lua numerický 256 K; JavaScript numerický a Lua smíšený 128 K; JavaScript smíšený 64 K). Fáze exportu a dashboardu jsou informativní.</translation>
     </message>
@@ -2413,7 +2406,7 @@ Povolte pouze v důvěryhodných sítích. Nedůvěryhodní klienti mohou číst
         <translation type="vanished">Úspěch/Selhání se vztahuje na fáze datového pipeline a parseru (datový pipeline a Nativní numerický 1024 K snímků/s; Nativní smíšený 512 K; Lua numerický 256 K; JavaScript numerický a Lua smíšený 128 K; JavaScript smíšený 64 K). Fáze exportu a dashboardu jsou informativní.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="584"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="605"/>
         <source>Copy</source>
         <translation>Kopírovat</translation>
     </message>
@@ -2426,22 +2419,22 @@ Povolte pouze v důvěryhodných sítích. Nedůvěryhodní klienti mohou číst
         <translation type="vanished">Úspěch/Neúspěch se vztahuje pouze na fáze parseru (cíl Lua 256 K snímků/s, JavaScript 128 K). Fáze exportu a dashboardu jsou informativní.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="591"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="612"/>
         <source>Clear</source>
         <translation>Vymazat</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="600"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="621"/>
         <source>Close</source>
         <translation>Zavřít</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="609"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="630"/>
         <source>Running...</source>
         <translation>Probíhá...</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="609"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="630"/>
         <source>Run Benchmark</source>
         <translation>Spustit Benchmark</translation>
     </message>
@@ -3060,48 +3053,48 @@ Povolte pouze v důvěryhodných sítích. Nedůvěryhodní klienti mohou číst
 <context>
     <name>ChatSidebar</name>
     <message>
-        <location filename="../../qml/AI/ChatSidebar.qml" line="44"/>
+        <location filename="../../qml/AI/ChatSidebar.qml" line="46"/>
         <source>Chats</source>
         <translation>Chaty</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/ChatSidebar.qml" line="57"/>
-        <location filename="../../qml/AI/ChatSidebar.qml" line="115"/>
+        <location filename="../../qml/AI/ChatSidebar.qml" line="59"/>
+        <location filename="../../qml/AI/ChatSidebar.qml" line="117"/>
         <source>New chat</source>
         <translation>Nový chat</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/ChatSidebar.qml" line="125"/>
+        <location filename="../../qml/AI/ChatSidebar.qml" line="127"/>
         <source>%1 messages</source>
         <translation>Zpráv: %1</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/ChatSidebar.qml" line="147"/>
+        <location filename="../../qml/AI/ChatSidebar.qml" line="149"/>
         <source>Rename...</source>
         <translation>Přejmenovat…</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/ChatSidebar.qml" line="158"/>
+        <location filename="../../qml/AI/ChatSidebar.qml" line="160"/>
         <source>Continue in new chat</source>
         <translation>Pokračovat v novém chatu</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/ChatSidebar.qml" line="165"/>
+        <location filename="../../qml/AI/ChatSidebar.qml" line="167"/>
         <source>Delete</source>
         <translation>Smazat</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/ChatSidebar.qml" line="204"/>
+        <location filename="../../qml/AI/ChatSidebar.qml" line="206"/>
         <source>Rename chat</source>
         <translation>Přejmenovat chat</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/ChatSidebar.qml" line="224"/>
+        <location filename="../../qml/AI/ChatSidebar.qml" line="226"/>
         <source>Cancel</source>
         <translation>Zrušit</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/ChatSidebar.qml" line="229"/>
+        <location filename="../../qml/AI/ChatSidebar.qml" line="231"/>
         <source>Rename</source>
         <translation>Přejmenovat</translation>
     </message>
@@ -5223,12 +5216,12 @@ Povolte pouze v důvěryhodných sítích. Nedůvěryhodní klienti mohou číst
 <context>
     <name>Console::Export</name>
     <message>
-        <location filename="../../../core/Ui/Console/Export.cpp" line="352"/>
+        <location filename="../../../core/Ui/Console/Export.cpp" line="358"/>
         <source>Console Export is a Pro feature.</source>
         <translation>Export konzole je funkce Pro.</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/Console/Export.cpp" line="353"/>
+        <location filename="../../../core/Ui/Console/Export.cpp" line="359"/>
         <source>This feature requires a license. Please purchase one to enable console export.</source>
         <translation>Tato funkce vyžaduje licenci. Zakupte si ji pro povolení exportu konzole.</translation>
     </message>
@@ -5327,203 +5320,203 @@ Povolte pouze v důvěryhodných sítích. Nedůvěryhodní klienti mohou číst
         <translation>Soubory CSV (*.CSV)</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="219"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="220"/>
         <source>Track</source>
         <translation>Stopa</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="225"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="226"/>
         <source>Table</source>
         <translation>Tabulka</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="231"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="232"/>
         <source>Payload</source>
         <translation>Payload</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="237"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="238"/>
         <source>Decoder</source>
         <translation>Dekodér</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="324"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="325"/>
         <source>Window</source>
         <translation>Okno</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="341"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="342"/>
         <source>Bytes of history drawn across the lanes</source>
         <translation>Bajty historie vykreslené napříč stopami</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="345"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="346"/>
         <source>bytes</source>
         <translation>bajtů</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="370"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="371"/>
         <source>paused</source>
         <translation>pozastaveno</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="381"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="382"/>
         <source>%1 annotations kept</source>
         <translation>%1 anotací zachováno</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="397"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="398"/>
         <source>Each bar is a byte range the decoder labelled, one lane per decoder row: oldest on the left, newest on the right.</source>
         <translation>Každý pruh představuje rozsah bajtů označený dekodérem, jedna linie na řádek dekodéru: nejstarší vlevo, nejnovější vpravo.</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="400"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="401"/>
         <source>Labelled bytes %1 to %2, oldest on the left.</source>
         <translation>Označené bajty %1 až %2, nejstarší vlevo.</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="407"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="408"/>
         <source>The store is full at %1 labels, so anything older was dropped: shrink the window to see individual labels.</source>
         <translation>Úložiště je plné při %1 označeních, takže vše starší bylo zahozeno: zmenšete okno pro zobrazení jednotlivých označení.</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="510"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="511"/>
         <source>nothing labelled in this window</source>
         <translation>v tomto okně nic neoznačeno</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="563"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="564"/>
         <source>%1 labels</source>
         <translation>%1 označení</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="625"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="626"/>
         <source>%1 labels merged (bytes %2 to %3). Shrink the window to separate them.</source>
         <translation>%1 označení sloučeno (bajty %2 až %3). Zmenšete okno pro jejich oddělení.</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="630"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="631"/>
         <source>%1 (bytes %2 to %3)</source>
         <translation>%1 (bajty %2 až %3)</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="693"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="694"/>
         <source>Row</source>
         <translation>Řádek</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="702"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="703"/>
         <source>All rows</source>
         <translation>Všechny řádky</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="706"/>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="881"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="707"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="882"/>
         <source>Class</source>
         <translation>Třída</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="717"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="718"/>
         <source>All classes</source>
         <translation>Všechny třídy</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="727"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="728"/>
         <source>Export CSV</source>
         <translation>Exportovat CSV</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="732"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="733"/>
         <source>Save every annotation to a spreadsheet</source>
         <translation>Uložit každou anotaci do tabulky</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="864"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="865"/>
         <source>No annotations decoded yet</source>
         <translation>Zatím nebyly dekódovány žádné anotace</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="899"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="900"/>
         <source>Hexadecimal</source>
         <translation>Hexadecimální</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="906"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="910"/>
         <source>Refresh</source>
         <translation>Obnovit</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="909"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="913"/>
         <source>Re-read the bytes of the selected class</source>
         <translation>Znovu načíst bajty vybrané třídy</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="921"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="925"/>
         <source>%1 characters</source>
         <translation>%1 znaků</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="945"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="949"/>
         <source>Pick a class and press Refresh to extract its bytes</source>
         <translation>Vyberte třídu a stiskněte Obnovit pro extrakci bajtů</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="979"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="983"/>
         <source>Apply</source>
         <translation>Použít</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="982"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="986"/>
         <source>Compile the script and start decoding</source>
         <translation>Zkompilovat skript a začít dekódovat</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="995"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="999"/>
         <source>Load a decoder for a known protocol</source>
         <translation>Načíst dekodér pro známý protokol</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="1007"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="1011"/>
         <source>Clear</source>
         <translation>Vymazat</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="1012"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="1016"/>
         <source>Discard the annotations decoded so far</source>
         <translation>Zahodit dosud dekódované anotace</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="1020"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="1024"/>
         <source>Pause</source>
         <translation>Pozastavit</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="1020"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="1024"/>
         <source>Resume</source>
         <translation>Pokračovat</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="1025"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="1029"/>
         <source>Stop decoding, keep the labels already captured</source>
         <translation>Zastavit dekódování, zachovat již zachycené štítky</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="1026"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="1030"/>
         <source>Resume decoding the incoming bytes</source>
         <translation>Obnovit dekódování příchozích bajtů</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="1091"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="1095"/>
         <source>No annotations yet</source>
         <translation>Zatím žádné anotace</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="1104"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="1108"/>
         <source>Annotations label ranges of the incoming byte stream: a small script names each range, and this panel draws them as lanes, lists them, and extracts their bytes.</source>
         <translation>Anotace označují rozsahy příchozího proudu bajtů: malý skript pojmenuje každý rozsah a tento panel je vykreslí jako pruhy, vypíše je a extrahuje jejich bajty.</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="1112"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="1116"/>
         <source>Open Decoder</source>
         <translation>Otevřít Dekodér</translation>
     </message>
@@ -7015,12 +7008,12 @@ v
         <translation type="vanished">Následný spotřebitel (dashboard, CSV/MDF4 export, databáze relací nebo API odběratel) nestíhá zpracovávat dostatečně rychle, takže data jsou zahazována ze zobrazení i z jakéhokoli aktivního záznamu. Vypněte náročného spotřebitele nebo snižte datový tok.</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/FrameBuilder.cpp" line="2329"/>
+        <location filename="../../../core/Pipeline/DataModel/FrameBuilder.cpp" line="2335"/>
         <source>JavaScript transform exceeded budget</source>
         <translation>Transformace v JavaScriptu překročila limit</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/FrameBuilder.cpp" line="2330"/>
+        <location filename="../../../core/Pipeline/DataModel/FrameBuilder.cpp" line="2336"/>
         <source>A dataset transform took longer than %1 ms; remaining datasets in the frame fell back to raw values until the next frame. Profile or simplify the transform code.</source>
         <translation>Transformace datové sady trvala déle než %1 ms; zbývající datové sady ve frame byly převedeny na surové hodnoty až do dalšího frame. Profilujte nebo zjednodušte kód transformace.</translation>
     </message>
@@ -13253,27 +13246,27 @@ Přidejte tagy řadiče výše pro jejich dotazování.</translation>
 <context>
     <name>ExtensionPlaceholder</name>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ExtensionPlaceholder.qml" line="71"/>
+        <location filename="../../qml/Widgets/Dashboard/ExtensionPlaceholder.qml" line="73"/>
         <source>Widget Extension</source>
         <translation>Rozšíření Widgetu</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ExtensionPlaceholder.qml" line="86"/>
+        <location filename="../../qml/Widgets/Dashboard/ExtensionPlaceholder.qml" line="88"/>
         <source>This widget is installed but has not been allowed to run.</source>
         <translation>Tento widget je nainstalován, ale nebylo mu povoleno spuštění.</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ExtensionPlaceholder.qml" line="89"/>
+        <location filename="../../qml/Widgets/Dashboard/ExtensionPlaceholder.qml" line="91"/>
         <source>This widget could not be loaded.</source>
         <translation>Tento widget se nepodařilo načíst.</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ExtensionPlaceholder.qml" line="95"/>
+        <location filename="../../qml/Widgets/Dashboard/ExtensionPlaceholder.qml" line="97"/>
         <source>Review and Allow…</source>
         <translation>Zkontrolovat a Povolit…</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ExtensionPlaceholder.qml" line="102"/>
+        <location filename="../../qml/Widgets/Dashboard/ExtensionPlaceholder.qml" line="104"/>
         <source>Open Problem Center</source>
         <translation>Otevřít Centrum Problémů</translation>
     </message>
@@ -13291,22 +13284,22 @@ Přidejte tagy řadiče výše pro jejich dotazování.</translation>
         <translation>Nastavení %1</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ExtensionWidgetSettings.qml" line="191"/>
+        <location filename="../../qml/Widgets/Dashboard/ExtensionWidgetSettings.qml" line="194"/>
         <source>These settings are declared by the widget package and stored in the project.</source>
         <translation>Tato nastavení jsou deklarována balíčkem widgetu a uložena v projektu.</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ExtensionWidgetSettings.qml" line="192"/>
+        <location filename="../../qml/Widgets/Dashboard/ExtensionWidgetSettings.qml" line="195"/>
         <source>This widget declares no settings.</source>
         <translation>Tento widget nedeklaruje žádná nastavení.</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ExtensionWidgetSettings.qml" line="262"/>
+        <location filename="../../qml/Widgets/Dashboard/ExtensionWidgetSettings.qml" line="265"/>
         <source>Restore Defaults</source>
         <translation>Obnovit Výchozí</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ExtensionWidgetSettings.qml" line="274"/>
+        <location filename="../../qml/Widgets/Dashboard/ExtensionWidgetSettings.qml" line="277"/>
         <source>Close</source>
         <translation>Zavřít</translation>
     </message>
@@ -13372,17 +13365,17 @@ Přidejte tagy řadiče výše pro jejich dotazování.</translation>
         <translation>Obnovit</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/FFTPlot.qml" line="692"/>
+        <location filename="../../qml/Widgets/Dashboard/FFTPlot.qml" line="719"/>
         <source>Click to clear the spotlight.</source>
         <translation>Kliknutím vymazat zvýraznění.</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/FFTPlot.qml" line="693"/>
+        <location filename="../../qml/Widgets/Dashboard/FFTPlot.qml" line="720"/>
         <source>Click to spotlight this marker.</source>
         <translation>Kliknutím zvýraznit tuto značku.</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/FFTPlot.qml" line="745"/>
+        <location filename="../../qml/Widgets/Dashboard/FFTPlot.qml" line="772"/>
         <source>Not available over a remote attach. This widget needs the remote's raw sample stream, which the dashboard mirror does not carry.</source>
         <translation>Není dostupné přes vzdálené připojení. Tento widget potřebuje surový proud vzorků ze vzdáleného zařízení, který zrcadlení dashboardu nepřenáší.</translation>
     </message>
@@ -13407,12 +13400,12 @@ Přidejte tagy řadiče výše pro jejich dotazování.</translation>
         <translation>Frekvence (Hz)</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/FFTPlot.qml" line="651"/>
+        <location filename="../../qml/Widgets/Dashboard/FFTPlot.qml" line="678"/>
         <source>%1 Hz</source>
         <translation>%1 Hz</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/FFTPlot.qml" line="655"/>
+        <location filename="../../qml/Widgets/Dashboard/FFTPlot.qml" line="682"/>
         <source>%1  %2 dB</source>
         <translation>%1  %2 dB</translation>
     </message>
@@ -13835,22 +13828,22 @@ Přidejte tagy řadiče výše pro jejich dotazování.</translation>
         <translation>Hexadecimální Oddělovače</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="315"/>
+        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="316"/>
         <source>Frame Data Input</source>
         <translation>Vstup Dat Rámce</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="342"/>
+        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="343"/>
         <source>Enter hex bytes (e.g. 01 A2 FF)</source>
         <translation>Zadejte hexadecimální bajty (např. 01 A2 FF)</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="343"/>
+        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="344"/>
         <source>Enter raw stream bytes here...</source>
         <translation>Zadejte surové bajty streamu zde...</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="362"/>
+        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="363"/>
         <source>Hex</source>
         <translation>Hex</translation>
     </message>
@@ -13859,49 +13852,49 @@ Přidejte tagy řadiče výše pro jejich dotazování.</translation>
         <translation type="vanished">HEX</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="387"/>
+        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="389"/>
         <source>The sample does not contain the configured frame delimiters, so no frame will be extracted. Type them into the sample (e.g. 
  for a newline) or adjust the detection mode.</source>
         <translation>Vzorek neobsahuje nakonfigurované oddělovače rámce, takže nebude extrahován žádný rámec. Zadejte je do vzorku (např. 
  pro nový řádek) nebo upravte režim detekce.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="407"/>
+        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="409"/>
         <source>Pipeline Results</source>
         <translation>Výsledky Zpracování</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="480"/>
+        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="482"/>
         <source>Stage</source>
         <translation>Fáze</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="487"/>
+        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="489"/>
         <source>Value</source>
         <translation>Hodnota</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="530"/>
+        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="532"/>
         <source>Extraction did not produce a complete frame. Check the start / end delimiters and the detection mode.</source>
         <translation>Extrakce nevytvořila kompletní rámec. Zkontrolujte počáteční/koncové oddělovače a režim detekce.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="532"/>
+        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="534"/>
         <source>Enter sample data above and press Evaluate to preview the parsed output</source>
         <translation>Zadejte vzorová data výše a stiskněte Vyhodnotit pro náhled zpracovaného výstupu</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="614"/>
+        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="616"/>
         <source>Clear</source>
         <translation>Vymazat</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="625"/>
+        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="627"/>
         <source>Close</source>
         <translation>Zavřít</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="632"/>
+        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="634"/>
         <source>Evaluate</source>
         <translation>Vyhodnotit</translation>
     </message>
@@ -14112,143 +14105,143 @@ Přidejte tagy řadiče výše pro jejich dotazování.</translation>
         <translation>Vybrat předvolbu…</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="314"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="315"/>
         <source>Frequency range</source>
         <translation>Frekvenční rozsah</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="320"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="321"/>
         <source>0 - %1 Hz</source>
         <translation>0 - %1 Hz</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="342"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="343"/>
         <source>Markers</source>
         <translation>Značky</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="353"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="354"/>
         <source>Add Marker</source>
         <translation>Přidat Značku</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="357"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="358"/>
         <source>Add a new point marker; set an end frequency to turn it into a band.</source>
         <translation>Přidejte nový bodový značkovač; nastavte koncovou frekvenci pro vytvoření pásma.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="388"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="389"/>
         <source>Start (Hz)</source>
         <translation>Začátek (Hz)</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="394"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="395"/>
         <source>End (Hz)</source>
         <translation>Konec (Hz)</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="400"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="401"/>
         <source>Warn (dB)</source>
         <translation>Varování (dB)</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="406"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="407"/>
         <source>Alarm (dB)</source>
         <translation>Alarm (dB)</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="412"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="413"/>
         <source>Color</source>
         <translation>Barva</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="419"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="420"/>
         <source>Label</source>
         <translation>Popisek</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="491"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="492"/>
         <source>(point)</source>
         <translation>(bod)</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="508"/>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="522"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="509"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="523"/>
         <source>(off)</source>
         <translation>(vyp)</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="556"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="557"/>
         <source>Reset to automatic color</source>
         <translation>Obnovit automatickou barvu</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="570"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="571"/>
         <source>Click to choose a color. Right-click to reset to automatic.</source>
         <translation>Klikněte pro výběr barvy. Pravým tlačítkem obnovíte automatickou volbu.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="571"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="572"/>
         <source>Click to choose a custom color.</source>
         <translation>Klikněte pro výběr vlastní barvy.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="592"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="593"/>
         <source>(optional)</source>
         <translation>(volitelné)</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="609"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="610"/>
         <source>Move up.</source>
         <translation>Posunout nahoru.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="628"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="629"/>
         <source>Move down.</source>
         <translation>Posunout dolů.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="641"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="642"/>
         <source>Remove this marker.</source>
         <translation>Odstranit tuto značku.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="655"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="656"/>
         <source>No markers defined. Pick a preset above or add a marker to get started.</source>
         <translation>Nejsou definovány žádné značky. Vyberte předvolbu výše nebo přidejte značku pro začátek.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="672"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="673"/>
         <source>Preview</source>
         <translation>Náhled</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="748"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="749"/>
         <source>0 Hz</source>
         <translation>0 Hz</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="754"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="755"/>
         <source>%1 Hz</source>
         <translation>%1 Hz</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="776"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="777"/>
         <source>Cancel</source>
         <translation>Zrušit</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="778"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="779"/>
         <source>Discard changes.</source>
         <translation>Zahodit změny.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="787"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="788"/>
         <source>Apply</source>
         <translation>Použít</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="790"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="791"/>
         <source>Apply changes to the dataset.</source>
         <translation>Použít změny na dataset.</translation>
     </message>
@@ -14743,37 +14736,37 @@ Přidejte tagy řadiče výše pro jejich dotazování.</translation>
         <translation>Načítání stránek nápovědy…</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/HelpCenter.qml" line="186"/>
+        <location filename="../../qml/Dialogs/HelpCenter.qml" line="187"/>
         <source>Search…</source>
         <translation>Hledat…</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/HelpCenter.qml" line="304"/>
+        <location filename="../../qml/Dialogs/HelpCenter.qml" line="305"/>
         <source>Loading…</source>
         <translation>Načítání…</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/HelpCenter.qml" line="348"/>
+        <location filename="../../qml/Dialogs/HelpCenter.qml" line="349"/>
         <source>Select a page from the sidebar</source>
         <translation>Vyberte stránku z postranního panelu</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/HelpCenter.qml" line="378"/>
+        <location filename="../../qml/Dialogs/HelpCenter.qml" line="379"/>
         <source>Copied to Clipboard</source>
         <translation>Zkopírováno do Schránky</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/HelpCenter.qml" line="410"/>
+        <location filename="../../qml/Dialogs/HelpCenter.qml" line="411"/>
         <source>View Online</source>
         <translation>Zobrazit Online</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/HelpCenter.qml" line="422"/>
+        <location filename="../../qml/Dialogs/HelpCenter.qml" line="423"/>
         <source>%1 pages</source>
         <translation>%1 stránek</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/HelpCenter.qml" line="431"/>
+        <location filename="../../qml/Dialogs/HelpCenter.qml" line="432"/>
         <source>Close</source>
         <translation>Zavřít</translation>
     </message>
@@ -20739,82 +20732,87 @@ Zadejte potřebná pověření.</translation>
 <context>
     <name>MasterAnnunciator</name>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/MasterAnnunciator.qml" line="123"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/MasterAnnunciator.qml" line="125"/>
+        <source>Aural alerts are disabled, but this project defines alarms. Enable them in Preferences &gt; Sounds.</source>
+        <translation>Zvukové výstrahy jsou zakázány, ale tento projekt definuje alarmy. Povolte je v Předvolby &gt; Zvuky.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/MasterAnnunciator.qml" line="128"/>
         <source>Alarm sounds are muted. Click to open the alarm panel.</source>
         <translation>Zvuky alarmů jsou ztlumeny. Kliknutím otevřete panel alarmů.</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/MasterAnnunciator.qml" line="125"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/MasterAnnunciator.qml" line="130"/>
         <source>%1 unacknowledged alarm(s). Click for the alarm panel, right-click to acknowledge.</source>
         <translation>%1 nepotvrzený(ch) alarm(ů). Kliknutím otevřete panel alarmů, pravým tlačítkem potvrďte.</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/MasterAnnunciator.qml" line="127"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/MasterAnnunciator.qml" line="132"/>
         <source>No active alarms. Click for the alarm panel.</source>
         <translation>Žádné aktivní alarmy. Kliknutím otevřete panel alarmů.</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/MasterAnnunciator.qml" line="194"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/MasterAnnunciator.qml" line="211"/>
         <source>Alarms</source>
         <translation>Alarmy</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/MasterAnnunciator.qml" line="203"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/MasterAnnunciator.qml" line="220"/>
         <source>Acknowledge all</source>
         <translation>Potvrdit vše</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/MasterAnnunciator.qml" line="212"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/MasterAnnunciator.qml" line="229"/>
         <source>Silence</source>
         <translation>Ztlumit</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/MasterAnnunciator.qml" line="221"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/MasterAnnunciator.qml" line="238"/>
         <source>Reset</source>
         <translation>Resetovat</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/MasterAnnunciator.qml" line="232"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/MasterAnnunciator.qml" line="249"/>
         <source>Clear every alarm from the list</source>
         <translation>Vymazat všechny alarmy ze seznamu</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/MasterAnnunciator.qml" line="240"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/MasterAnnunciator.qml" line="257"/>
         <source>Test sounds</source>
         <translation>Testovat zvuky</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/MasterAnnunciator.qml" line="249"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/MasterAnnunciator.qml" line="266"/>
         <source>Unmute sounds</source>
         <translation>Zapnout zvuky</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/MasterAnnunciator.qml" line="249"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/MasterAnnunciator.qml" line="266"/>
         <source>Mute sounds</source>
         <translation>Ztlumit zvuky</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/MasterAnnunciator.qml" line="384"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/MasterAnnunciator.qml" line="401"/>
         <source>Unacknowledged</source>
         <translation>Nepotvrzeno</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/MasterAnnunciator.qml" line="385"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/MasterAnnunciator.qml" line="402"/>
         <source>Acknowledged</source>
         <translation>Potvrzeno</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/MasterAnnunciator.qml" line="386"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/MasterAnnunciator.qml" line="403"/>
         <source>Returned to normal, awaiting reset</source>
         <translation>Návrat do normálu, čeká se na reset</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/MasterAnnunciator.qml" line="387"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/MasterAnnunciator.qml" line="404"/>
         <source>click to show the widget</source>
         <translation>klikněte pro zobrazení widgetu</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/MasterAnnunciator.qml" line="398"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/MasterAnnunciator.qml" line="415"/>
         <source>No active alarms</source>
         <translation>Žádné aktivní alarmy</translation>
     </message>
@@ -20860,22 +20858,22 @@ Zadejte potřebná pověření.</translation>
         <translation>reference</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/MemoryManagerDialog.qml" line="73"/>
+        <location filename="../../qml/AI/MemoryManagerDialog.qml" line="74"/>
         <source>Something the assistant should remember…</source>
         <translation>Něco, co by si asistent měl zapamatovat…</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/MemoryManagerDialog.qml" line="77"/>
+        <location filename="../../qml/AI/MemoryManagerDialog.qml" line="78"/>
         <source>Remember</source>
         <translation>Zapamatovat</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/MemoryManagerDialog.qml" line="146"/>
+        <location filename="../../qml/AI/MemoryManagerDialog.qml" line="147"/>
         <source>Forget this fact</source>
         <translation>Zapomenout tuto skutečnost</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/MemoryManagerDialog.qml" line="162"/>
+        <location filename="../../qml/AI/MemoryManagerDialog.qml" line="163"/>
         <source>Nothing remembered yet. Add a fact above, or approve one when the assistant proposes it in chat.</source>
         <translation>Zatím nic nezapamatováno. Přidejte skutečnost výše nebo schvalte návrh asistenta v chatu.</translation>
     </message>
@@ -21313,12 +21311,12 @@ Chcete otevřít stránku pro stažení?</translation>
 <context>
     <name>Misc::GraphicsBackend</name>
     <message>
-        <location filename="../../../core/Ui/Misc/GraphicsBackend.cpp" line="280"/>
+        <location filename="../../../core/Ui/Misc/GraphicsBackend.cpp" line="444"/>
         <source>Restart Required</source>
         <translation>Vyžadován Restart</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/Misc/GraphicsBackend.cpp" line="281"/>
+        <location filename="../../../core/Ui/Misc/GraphicsBackend.cpp" line="445"/>
         <source>The new rendering backend will take effect after restarting Serial Studio. Restart now to apply the change?</source>
         <translation>Nové vykreslovací rozhraní se projeví po restartování Serial Studio. Restartovat nyní pro použití změny?</translation>
     </message>
@@ -22721,17 +22719,17 @@ Přidejte skupiny výše pro dotazování více typů registrů.</translation>
         <translation>Filtrovat podle kanálu…</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/NotificationLog.qml" line="162"/>
+        <location filename="../../qml/Widgets/Dashboard/NotificationLog.qml" line="171"/>
         <source>Clear all notifications</source>
         <translation>Vymazat všechna oznámení</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/NotificationLog.qml" line="247"/>
+        <location filename="../../qml/Widgets/Dashboard/NotificationLog.qml" line="256"/>
         <source>(no title)</source>
         <translation>(bez názvu)</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/NotificationLog.qml" line="305"/>
+        <location filename="../../qml/Widgets/Dashboard/NotificationLog.qml" line="314"/>
         <source>No notifications yet</source>
         <translation>Zatím žádná oznámení</translation>
     </message>
@@ -23128,22 +23126,22 @@ Přidejte skupiny výše pro dotazování více typů registrů.</translation>
         <translation>Filtrovat podle názvu…</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUaTagBrowser.qml" line="428"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUaTagBrowser.qml" line="429"/>
         <source>%1 tag(s), %2 channel(s) selected</source>
         <translation>Vybráno %1 tag(ů), %2 kanál(ů)</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUaTagBrowser.qml" line="435"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUaTagBrowser.qml" line="436"/>
         <source>Select All Readable</source>
         <translation>Vybrat Vše Čitelné</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUaTagBrowser.qml" line="442"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUaTagBrowser.qml" line="443"/>
         <source>Cancel</source>
         <translation>Zrušit</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUaTagBrowser.qml" line="449"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUaTagBrowser.qml" line="450"/>
         <source>OK</source>
         <translation>OK</translation>
     </message>
@@ -23789,23 +23787,23 @@ Přidejte skupiny výše pro dotazování více typů registrů.</translation>
 <context>
     <name>PlotMarkerPopup</name>
     <message>
-        <location filename="../../qml/Widgets/PlotWidget/PlotMarkerPopup.qml" line="50"/>
-        <location filename="../../qml/Widgets/PlotWidget/PlotMarkerPopup.qml" line="59"/>
+        <location filename="../../qml/Widgets/PlotWidget/PlotMarkerPopup.qml" line="52"/>
+        <location filename="../../qml/Widgets/PlotWidget/PlotMarkerPopup.qml" line="61"/>
         <source>M%1</source>
         <translation>M%1</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/PlotWidget/PlotMarkerPopup.qml" line="67"/>
+        <location filename="../../qml/Widgets/PlotWidget/PlotMarkerPopup.qml" line="69"/>
         <source>Marker name:</source>
         <translation>Název značky:</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/PlotWidget/PlotMarkerPopup.qml" line="79"/>
+        <location filename="../../qml/Widgets/PlotWidget/PlotMarkerPopup.qml" line="81"/>
         <source>Add</source>
         <translation>Přidat</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/PlotWidget/PlotMarkerPopup.qml" line="84"/>
+        <location filename="../../qml/Widgets/PlotWidget/PlotMarkerPopup.qml" line="86"/>
         <source>Cancel</source>
         <translation>Zrušit</translation>
     </message>
@@ -24018,52 +24016,52 @@ Přidejte skupiny výše pro dotazování více typů registrů.</translation>
         <translation>Všechny Závažnosti</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ProblemCenter.qml" line="248"/>
+        <location filename="../../qml/Dialogs/ProblemCenter.qml" line="249"/>
         <source>Running Diagnostics</source>
         <translation>Probíhá Diagnostika</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ProblemCenter.qml" line="249"/>
+        <location filename="../../qml/Dialogs/ProblemCenter.qml" line="250"/>
         <source>Run Diagnostics</source>
         <translation>Spustit Diagnostiku</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ProblemCenter.qml" line="255"/>
+        <location filename="../../qml/Dialogs/ProblemCenter.qml" line="256"/>
         <source>Refresh</source>
         <translation>Obnovit</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ProblemCenter.qml" line="262"/>
+        <location filename="../../qml/Dialogs/ProblemCenter.qml" line="263"/>
         <source>Clear</source>
         <translation>Vymazat</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ProblemCenter.qml" line="385"/>
+        <location filename="../../qml/Dialogs/ProblemCenter.qml" line="386"/>
         <source>Go To</source>
         <translation>Přejít Na</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ProblemCenter.qml" line="423"/>
+        <location filename="../../qml/Dialogs/ProblemCenter.qml" line="424"/>
         <source>No problems match the current filter</source>
         <translation>Žádné problémy neodpovídají aktuálnímu filtru.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ProblemCenter.qml" line="424"/>
+        <location filename="../../qml/Dialogs/ProblemCenter.qml" line="425"/>
         <source>No problems detected</source>
         <translation>Nebyly zjištěny žádné problémy</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ProblemCenter.qml" line="433"/>
+        <location filename="../../qml/Dialogs/ProblemCenter.qml" line="434"/>
         <source>Project, link and script checks run automatically.</source>
         <translation>Kontroly projektu, odkazu a skriptu probíhají automaticky.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ProblemCenter.qml" line="449"/>
+        <location filename="../../qml/Dialogs/ProblemCenter.qml" line="450"/>
         <source>Last checked at %1</source>
         <translation>Naposledy zkontrolováno v %1</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ProblemCenter.qml" line="458"/>
+        <location filename="../../qml/Dialogs/ProblemCenter.qml" line="459"/>
         <source>Close</source>
         <translation>Zavřít</translation>
     </message>
@@ -26429,12 +26427,12 @@ Načíst jej znovu?</translation>
         <translation>V odpovědi serveru chybí požadovaná pole.</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/Console/Export.cpp" line="176"/>
+        <location filename="../../../core/Ui/Console/Export.cpp" line="177"/>
         <source>Console Output File Error</source>
         <translation>Chyba Souboru Výstupu Konzole</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/Console/Export.cpp" line="177"/>
+        <location filename="../../../core/Ui/Console/Export.cpp" line="178"/>
         <source>Cannot open file for writing!</source>
         <translation>Nelze otevřít soubor pro zápis!</translation>
     </message>
@@ -26719,12 +26717,12 @@ function parse(%1) { ... }
 Parametr oddělovače již není potřeba.</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ModuleManager.cpp" line="274"/>
+        <location filename="../../src/Misc/ModuleManager.cpp" line="275"/>
         <source>Critical</source>
         <translation>Kritické</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ModuleManager.cpp" line="274"/>
+        <location filename="../../src/Misc/ModuleManager.cpp" line="275"/>
         <source>Warning</source>
         <translation>Varování</translation>
     </message>
@@ -26897,12 +26895,12 @@ Parametr oddělovače již není potřeba.</translation>
         <translation>Nepodporované klíčové slovo nejvyšší úrovně '%1'</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/Misc/GraphicsBackend.cpp" line="329"/>
+        <location filename="../../../core/Ui/Misc/GraphicsBackend.cpp" line="495"/>
         <source>Automatic (Platform Default)</source>
         <translation>Automaticky (Výchozí pro Platformu)</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/Misc/GraphicsBackend.cpp" line="334"/>
+        <location filename="../../../core/Ui/Misc/GraphicsBackend.cpp" line="500"/>
         <source>Software (Fallback)</source>
         <translation>Softwarově (Záložní Režim)</translation>
     </message>
@@ -27626,47 +27624,47 @@ Parametr oddělovače již není potřeba.</translation>
         <translation>Velikost stránky</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="557"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="561"/>
         <source>Annotate min, max, and mean values on plots</source>
         <translation>Anotovat min., max. a průměrné hodnoty na grafech</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="593"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="598"/>
         <source>Include datasets</source>
         <translation>Zahrnout datové sady</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="607"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="612"/>
         <source>Expand All</source>
         <translation>Rozbalit Vše</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="616"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="621"/>
         <source>Collapse All</source>
         <translation>Sbalit Vše</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="628"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="633"/>
         <source>Search datasets</source>
         <translation>Hledat datové sady</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="754"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="761"/>
         <source>Loading datasets...</source>
         <translation>Načítání datových sad...</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="755"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="762"/>
         <source>No datasets match your search.</source>
         <translation>Žádné datové sady neodpovídají vašemu hledání.</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="775"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="782"/>
         <source>Select at least one dataset to include.</source>
         <translation>Vyberte alespoň jednu datovou sadu k zahrnutí.</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="792"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="799"/>
         <source>Export HTML</source>
         <translation>Exportovat HTML</translation>
     </message>
@@ -27676,17 +27674,17 @@ Parametr oddělovače již není potřeba.</translation>
         <translation>Titulní strana (logo, název dokumentu, podtitul testu)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="545"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="546"/>
         <source>Test information (project, timestamps, classification and notes)</source>
         <translation>Informace o testu (projekt, časové značky, klasifikace a poznámky)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="549"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="551"/>
         <source>Measurement summary (min, max, mean, std. deviation per parameter)</source>
         <translation>Souhrn měření (min, max, průměr, směr. odchylka pro každý parametr)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="553"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="556"/>
         <source>Parameter trends (time-series chart per numeric parameter)</source>
         <translation>Trendy parametrů (časový graf pro každý číselný parametr)</translation>
     </message>
@@ -27711,12 +27709,12 @@ Parametr oddělovače již není potřeba.</translation>
         <translation>Zahrnout</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="784"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="791"/>
         <source>Cancel</source>
         <translation>Zrušit</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="792"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="799"/>
         <source>Export PDF</source>
         <translation>Exportovat PDF</translation>
     </message>
@@ -29210,17 +29208,17 @@ Přidejte absolutní adresy výše pro dotazování řadiče.</translation>
         <translation>Předvolby</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="62"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="63"/>
         <source>General</source>
         <translation>Obecné</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="98"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="99"/>
         <source>Export</source>
         <translation>Export</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="104"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="105"/>
         <source>Sounds</source>
         <translation>Zvuky</translation>
     </message>
@@ -29281,7 +29279,7 @@ Přidejte absolutní adresy výše pro dotazování řadiče.</translation>
         <translation type="vanished">Povolit API Server (Port 7777)</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="92"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="93"/>
         <source>Console</source>
         <translation>Konzole</translation>
     </message>
@@ -29306,7 +29304,7 @@ Přidejte absolutní adresy výše pro dotazování řadiče.</translation>
         <translation type="vanished">Automaticky Skrýt Panel Nástrojů</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="86"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="87"/>
         <source>Taskbar</source>
         <translation>Hlavní Panel</translation>
     </message>
@@ -29319,7 +29317,7 @@ Přidejte absolutní adresy výše pro dotazování řadiče.</translation>
         <translation type="vanished">Přístupový Token API</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="68"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="69"/>
         <source>Startup</source>
         <translation>Spuštění</translation>
     </message>
@@ -29408,7 +29406,7 @@ Přidejte absolutní adresy výše pro dotazování řadiče.</translation>
         <translation type="vanished">Vlastní</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="80"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="81"/>
         <source>Layout</source>
         <translation>Rozvržení</translation>
     </message>
@@ -29441,7 +29439,7 @@ Přidejte absolutní adresy výše pro dotazování řadiče.</translation>
         <translation type="vanished">Chování</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="74"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="75"/>
         <source>Plotting</source>
         <translation>Vykreslování</translation>
     </message>
@@ -29518,7 +29516,7 @@ Přidejte absolutní adresy výše pro dotazování řadiče.</translation>
         <translation type="vanished">Rodina Písma</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="111"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="112"/>
         <source>Notifications</source>
         <translation>Oznámení</translation>
     </message>
@@ -29619,17 +29617,17 @@ Přidejte absolutní adresy výše pro dotazování řadiče.</translation>
         <translation type="vanished">Vypnuto ve výchozím nastavení — QT a QML často generují varování a jejich povolení může přehlušit skutečné alarmy. Kritické zprávy jsou vždy směrovány bez ohledu na toto nastavení.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="185"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="186"/>
         <source>Reset</source>
         <translation>Obnovit</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="245"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="246"/>
         <source>Close</source>
         <translation>Zavřít</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="253"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="254"/>
         <source>Apply</source>
         <translation>Použít</translation>
     </message>
@@ -29931,22 +29929,22 @@ Přidejte absolutní adresy výše pro dotazování řadiče.</translation>
 <context>
     <name>SettingsPlottingPage</name>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsPlottingPage.qml" line="56"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsPlottingPage.qml" line="58"/>
         <source>Data Plotting</source>
         <translation>Vykreslování Dat</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsPlottingPage.qml" line="71"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsPlottingPage.qml" line="73"/>
         <source>Time Range</source>
         <translation>Časový Rozsah</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsPlottingPage.qml" line="123"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsPlottingPage.qml" line="125"/>
         <source>Point Count</source>
         <translation>Počet Bodů</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsPlottingPage.qml" line="148"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsPlottingPage.qml" line="150"/>
         <source>UI Refresh Rate (Hz)</source>
         <translation>Obnovovací Frekvence UI (Hz)</translation>
     </message>
@@ -30164,77 +30162,82 @@ Přidejte absolutní adresy výše pro dotazování řadiče.</translation>
 <context>
     <name>SettingsStartupPage</name>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="59"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="62"/>
         <source>Graphics</source>
         <translation>Grafika</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="77"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="80"/>
         <source>Rendering Backend</source>
         <translation>Vykreslovací Rozhraní</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="110"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="113"/>
         <source>Display Scaling</source>
         <translation>Škálování Zobrazení</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="143"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="146"/>
         <source>Custom Scale (%)</source>
         <translation>Vlastní Měřítko (%)</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="180"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="178"/>
+        <source>HDR Output</source>
+        <translation>Výstup HDR</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="210"/>
         <source>System</source>
         <translation>Systém</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="195"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="225"/>
         <source>SIMD Instruction Set</source>
         <translation>Sada Instrukcí SIMD</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="225"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="255"/>
         <source>Reduce Motion</source>
         <translation>Omezit Pohyb</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="249"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="279"/>
         <source>Apply Performance Hints</source>
         <translation>Použít Tipy pro Výkon</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="272"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="302"/>
         <source>Keep Display Awake</source>
         <translation>Udržovat Displej Aktivní</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="301"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="331"/>
         <source>Performance hints raise process priority and opt out of OS power throttling. Changes take effect the next time Serial Studio starts.</source>
         <translation>Tipy pro výkon zvyšují prioritu procesu a vypínají omezování výkonu operačním systémem. Změny se projeví při příštím spuštění Serial Studio.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="312"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="342"/>
         <source>Updates &amp; News</source>
         <translation>Aktualizace a Novinky</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="328"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="358"/>
         <source>Automatically Check for Updates</source>
         <translation>Automaticky Kontrolovat Aktualizace</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="351"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="381"/>
         <source>Check for Extension Updates</source>
         <translation>Zkontrolovat Aktualizace Rozšíření</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="375"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="405"/>
         <source>Install Extension Updates Automatically</source>
         <translation>Instalovat Aktualizace Rozšíření Automaticky</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="405"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="435"/>
         <source>Installed extensions and themes are checked when Serial Studio starts, together with application updates. Serial Studio asks before installing them unless automatic installation is enabled.</source>
         <translation>Nainstalovaná rozšíření a motivy jsou kontrolovány při spuštění Serial Studio společně s aktualizacemi aplikace. Serial Studio se před jejich instalací zeptá, pokud není povolena automatická instalace.</translation>
     </message>
@@ -31561,42 +31564,42 @@ Zapněte Vložit Projekt pro zabudování projektu do zástupce, aby fungoval i 
         <translation>Nastavení konzole</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="593"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="597"/>
         <source>Find in console</source>
         <translation>Hledat v konzoli</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="630"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="634"/>
         <source>%1 of %2</source>
         <translation>%1 z %2</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="631"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="635"/>
         <source>No results</source>
         <translation>Žádné výsledky</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="643"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="647"/>
         <source>Match case</source>
         <translation>Rozlišovat velikost písmen</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="658"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="662"/>
         <source>Previous match</source>
         <translation>Předchozí shoda</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="669"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="673"/>
         <source>Next match</source>
         <translation>Následující shoda</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="679"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="683"/>
         <source>Close search</source>
         <translation>Zavřít vyhledávání</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="726"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="730"/>
         <source>Send a file to the connected device</source>
         <translation>Odeslat soubor do připojeného zařízení</translation>
     </message>
@@ -31662,7 +31665,7 @@ Zapněte Vložit Projekt pro zabudování projektu do zástupce, aby fungoval i 
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="392"/>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="875"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="879"/>
         <source>Hex</source>
         <translation>Hex</translation>
     </message>
@@ -31672,17 +31675,17 @@ Zapněte Vložit Projekt pro zabudování projektu do zástupce, aby fungoval i 
         <translation>Režim hexadecimálního zobrazení</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="496"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="500"/>
         <source>Scrollback Lines</source>
         <translation>Řádky Zpětného Posuvu</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="768"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="772"/>
         <source>Send Data to Device</source>
         <translation>Odeslat data do zařízení</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="928"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="933"/>
         <source>Send data to the device</source>
         <translation>Odeslat data do zařízení</translation>
     </message>
@@ -31692,17 +31695,17 @@ Zapněte Vložit Projekt pro zabudování projektu do zástupce, aby fungoval i 
         <translation>Zobrazit Časovou Značku</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="458"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="459"/>
         <source>Echo</source>
         <translation>Echo</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="474"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="476"/>
         <source>Emulate VT-100</source>
         <translation>Emulovat VT-100</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="486"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="489"/>
         <source>ANSI Colors</source>
         <translation>Barvy ANSI</translation>
     </message>
@@ -31891,95 +31894,95 @@ Zapněte Vložit Projekt pro zabudování projektu do zástupce, aby fungoval i 
 <context>
     <name>ToolCallCard</name>
     <message>
-        <location filename="../../qml/AI/ToolCallCard.qml" line="67"/>
+        <location filename="../../qml/AI/ToolCallCard.qml" line="69"/>
         <source>Awaiting approval</source>
         <translation>Čeká na schválení</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/ToolCallCard.qml" line="68"/>
+        <location filename="../../qml/AI/ToolCallCard.qml" line="70"/>
         <source>Done</source>
         <translation>Hotovo</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/ToolCallCard.qml" line="69"/>
+        <location filename="../../qml/AI/ToolCallCard.qml" line="71"/>
         <source>Error</source>
         <translation>Chyba</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/ToolCallCard.qml" line="70"/>
+        <location filename="../../qml/AI/ToolCallCard.qml" line="72"/>
         <source>Denied</source>
         <translation>Zamítnuto</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/ToolCallCard.qml" line="71"/>
+        <location filename="../../qml/AI/ToolCallCard.qml" line="73"/>
         <source>Blocked</source>
         <translation>Blokováno</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/ToolCallCard.qml" line="72"/>
+        <location filename="../../qml/AI/ToolCallCard.qml" line="74"/>
         <source>Running</source>
         <translation>Spuštěno</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/ToolCallCard.qml" line="160"/>
+        <location filename="../../qml/AI/ToolCallCard.qml" line="162"/>
         <source>Verified</source>
         <translation>Ověřeno</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/ToolCallCard.qml" line="160"/>
+        <location filename="../../qml/AI/ToolCallCard.qml" line="162"/>
         <source>Verify failed</source>
         <translation>Ověření selhalo</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/ToolCallCard.qml" line="200"/>
+        <location filename="../../qml/AI/ToolCallCard.qml" line="202"/>
         <source>Verification failed: %1</source>
         <translation>Ověření selhalo: %1</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/ToolCallCard.qml" line="201"/>
+        <location filename="../../qml/AI/ToolCallCard.qml" line="203"/>
         <source>The applied change failed its verification check.</source>
         <translation>Aplikovaná změna neprošla ověřovací kontrolou.</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/ToolCallCard.qml" line="210"/>
+        <location filename="../../qml/AI/ToolCallCard.qml" line="212"/>
         <source>Restore checkpoint…</source>
         <translation>Obnovit kontrolní bod…</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/ToolCallCard.qml" line="229"/>
+        <location filename="../../qml/AI/ToolCallCard.qml" line="231"/>
         <source>Approve</source>
         <translation>Schválit</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/ToolCallCard.qml" line="235"/>
+        <location filename="../../qml/AI/ToolCallCard.qml" line="237"/>
         <source>Deny</source>
         <translation>Zamítnout</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/ToolCallCard.qml" line="252"/>
+        <location filename="../../qml/AI/ToolCallCard.qml" line="254"/>
         <source>Arguments</source>
         <translation>Argumenty</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/ToolCallCard.qml" line="289"/>
-        <location filename="../../qml/AI/ToolCallCard.qml" line="349"/>
+        <location filename="../../qml/AI/ToolCallCard.qml" line="291"/>
+        <location filename="../../qml/AI/ToolCallCard.qml" line="351"/>
         <source>Copy</source>
         <translation>Kopírovat</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/ToolCallCard.qml" line="294"/>
-        <location filename="../../qml/AI/ToolCallCard.qml" line="354"/>
+        <location filename="../../qml/AI/ToolCallCard.qml" line="296"/>
+        <location filename="../../qml/AI/ToolCallCard.qml" line="356"/>
         <source>Copy All</source>
         <translation>Kopírovat Vše</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/ToolCallCard.qml" line="302"/>
-        <location filename="../../qml/AI/ToolCallCard.qml" line="362"/>
+        <location filename="../../qml/AI/ToolCallCard.qml" line="304"/>
+        <location filename="../../qml/AI/ToolCallCard.qml" line="364"/>
         <source>Select All</source>
         <translation>Vybrat Vše</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/ToolCallCard.qml" line="310"/>
+        <location filename="../../qml/AI/ToolCallCard.qml" line="312"/>
         <source>Result</source>
         <translation>Výsledek</translation>
     </message>
@@ -32143,7 +32146,7 @@ Zapněte Vložit Projekt pro zabudování projektu do zástupce, aby fungoval i 
         <translation type="vanished">Zobrazit podrobnou dokumentaci a klást otázky na DeepWiki</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="292"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="293"/>
         <source>Connect or disconnect from the configured device</source>
         <translation>Připojit nebo odpojit nakonfigurované zařízení</translation>
     </message>
@@ -32203,18 +32206,18 @@ Zapněte Vložit Projekt pro zabudování projektu do zástupce, aby fungoval i 
         <translation>Spravovat připojení ke vzdálenému dashboardu</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="293"/>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="304"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="294"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="305"/>
         <source>Disconnect</source>
         <translation>Odpojit</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="293"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="294"/>
         <source>Connect</source>
         <translation>Připojit</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="293"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="294"/>
         <source>Connecting…</source>
         <translation>Připojování…</translation>
     </message>
@@ -32335,62 +32338,62 @@ Zapněte Vložit Projekt pro zabudování projektu do zástupce, aby fungoval i 
         <translation>Vybrat Šablonu</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/TransmitCodeDialog.qml" line="170"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/TransmitCodeDialog.qml" line="171"/>
         <source>Import</source>
         <translation>Importovat</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/TransmitCodeDialog.qml" line="176"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/TransmitCodeDialog.qml" line="177"/>
         <source>Import a transmit function from a .js file</source>
         <translation>Importovat funkci přenosu ze souboru .js</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/TransmitCodeDialog.qml" line="182"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/TransmitCodeDialog.qml" line="183"/>
         <source>Validate</source>
         <translation>Validovat</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/TransmitCodeDialog.qml" line="187"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/TransmitCodeDialog.qml" line="188"/>
         <source>Verify that the script compiles and defines transmit(value)</source>
         <translation>Ověřit, že skript se zkompiluje a definuje transmit(value)</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/TransmitCodeDialog.qml" line="225"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/TransmitCodeDialog.qml" line="226"/>
         <source>Produced Bytes</source>
         <translation>Vytvořené Bajty</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/TransmitCodeDialog.qml" line="247"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/TransmitCodeDialog.qml" line="248"/>
         <source>Interact with the control to see its output</source>
         <translation>Interagujte s ovládacím prvkem pro zobrazení jeho výstupu</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/TransmitCodeDialog.qml" line="275"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/TransmitCodeDialog.qml" line="276"/>
         <source>%1 bytes, from the last version that compiled</source>
         <translation>%1 bajtů, z poslední verze, která se zkompilovala</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/TransmitCodeDialog.qml" line="276"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/TransmitCodeDialog.qml" line="277"/>
         <source>%1 bytes</source>
         <translation>%1 bajtů</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/TransmitCodeDialog.qml" line="298"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/TransmitCodeDialog.qml" line="299"/>
         <source>Save</source>
         <translation>Uložit</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/TransmitCodeDialog.qml" line="301"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/TransmitCodeDialog.qml" line="302"/>
         <source>Validate and store the transmit function</source>
         <translation>Validovat a uložit funkci přenosu</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/TransmitCodeDialog.qml" line="310"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/TransmitCodeDialog.qml" line="311"/>
         <source>Close</source>
         <translation>Zavřít</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/TransmitCodeDialog.qml" line="313"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/TransmitCodeDialog.qml" line="314"/>
         <source>Close without storing this edit</source>
         <translation>Zavřít bez uložení této úpravy</translation>
     </message>
@@ -32455,22 +32458,22 @@ Zapněte Vložit Projekt pro zabudování projektu do zástupce, aby fungoval i 
         <translation>Single zachytí jeden průběh a poté se zastaví.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="241"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="242"/>
         <source>Slope:</source>
         <translation>Sklon:</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="273"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="274"/>
         <source>Trigger on a downward crossing</source>
         <translation>Trigger při sestupném překročení</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="319"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="320"/>
         <source>Timebase:</source>
         <translation>Časová Základna:</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="388"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="389"/>
         <source>Leave timebase empty to use the plot's time range; lower it to zoom in on a fast signal. Holdoff ignores new triggers for a moment after each.</source>
         <translation>Ponechte časovou základnu prázdnou pro použití časového rozsahu grafu; snižte pro přiblížení rychlého signálu. Holdoff ignoruje nové triggery na chvíli po každém.</translation>
     </message>
@@ -32479,7 +32482,7 @@ Zapněte Vložit Projekt pro zabudování projektu do zástupce, aby fungoval i 
         <translation type="vanished">Signál:</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="230"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="231"/>
         <source>Value to cross</source>
         <translation>Hodnota pro překročení</translation>
     </message>
@@ -32488,17 +32491,17 @@ Zapněte Vložit Projekt pro zabudování projektu do zástupce, aby fungoval i 
         <translation type="vanished">Hrana:</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="254"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="255"/>
         <source>Rising</source>
         <translation>Náběžná</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="258"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="259"/>
         <source>Trigger on an upward crossing</source>
         <translation>Trigger při vzestupném překročení</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="269"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="270"/>
         <source>Falling</source>
         <translation>Sestupná</translation>
     </message>
@@ -32507,7 +32510,7 @@ Zapněte Vložit Projekt pro zabudování projektu do zástupce, aby fungoval i 
         <translation type="vanished">Nový průběh začíná pokaždé, když signál překročí úroveň ve zvoleném směru. Auto také běží volně, když není nalezeno žádné překročení.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="292"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="293"/>
         <source>Timing</source>
         <translation>Časování</translation>
     </message>
@@ -32516,23 +32519,23 @@ Zapněte Vložit Projekt pro zabudování projektu do zástupce, aby fungoval i 
         <translation type="vanished">Časová Základna (ms):</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="332"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="333"/>
         <source>Match time range</source>
         <translation>Shodovat Časový Rozsah</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="345"/>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="375"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="346"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="376"/>
         <source>ms</source>
         <translation>ms</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="351"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="352"/>
         <source>Holdoff:</source>
         <translation>Prodleva:</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="364"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="365"/>
         <source>0</source>
         <translation>0</translation>
     </message>
@@ -32541,17 +32544,17 @@ Zapněte Vložit Projekt pro zabudování projektu do zástupce, aby fungoval i 
         <translation type="vanished">Časová základna nastavuje, kolik času zobrazuje jeden průběh; ponechte prázdné pro použití časového rozsahu grafu. Snižte pro přiblížení rychlého signálu. Holdoff ignoruje nové triggery na chvíli po každém.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="403"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="404"/>
         <source>Capture Next</source>
         <translation>Zachytit Další</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="405"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="406"/>
         <source>Arm for one more single-shot capture</source>
         <translation>Aktivovat pro Další Jednorázové Zachycení</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="217"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="218"/>
         <source>Level:</source>
         <translation>Úroveň:</translation>
     </message>
@@ -32577,7 +32580,7 @@ Zapněte Vložit Projekt pro zabudování projektu do zástupce, aby fungoval i 
         <translation type="vanished">Znovu Aktivovat</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="418"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="419"/>
         <source>Close</source>
         <translation>Zavřít</translation>
     </message>
@@ -32628,28 +32631,27 @@ Zapněte Vložit Projekt pro zabudování projektu do zástupce, aby fungoval i 
 <context>
     <name>UI::AlarmMonitor</name>
     <message>
-        <location filename="../../../core/Ui/UI/AlarmMonitor.cpp" line="218"/>
+        <location filename="../../../core/Ui/UI/AlarmMonitor.cpp" line="224"/>
         <source>Alarm</source>
         <translation>Alarm</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/AlarmMonitor.cpp" line="219"/>
+        <location filename="../../../core/Ui/UI/AlarmMonitor.cpp" line="225"/>
         <source>critical</source>
         <translation>kritické</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/AlarmMonitor.cpp" line="219"/>
+        <location filename="../../../core/Ui/UI/AlarmMonitor.cpp" line="225"/>
         <source>warning</source>
         <translation>varování</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/AlarmMonitor.cpp" line="223"/>
+        <location filename="../../../core/Ui/UI/AlarmMonitor.cpp" line="229"/>
         <source>Value %1%2 entered the %3 band (%4–%5).</source>
         <translation>Hodnota %1%2 vstoupila do pásma %3 (%4–%5).</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/AlarmMonitor.cpp" line="228"/>
-        <location filename="../../../core/Ui/UI/Alarms/AlarmAnnunciator.cpp" line="799"/>
+        <location filename="../../../core/Ui/UI/AlarmMonitor.cpp" line="235"/>
         <source>Alarms</source>
         <translation>Alarmy</translation>
     </message>
@@ -32657,29 +32659,86 @@ Zapněte Vložit Projekt pro zabudování projektu do zástupce, aby fungoval i 
 <context>
     <name>UI::Alarms::AlarmAnnunciator</name>
     <message>
-        <location filename="../../../core/Ui/UI/Alarms/AlarmAnnunciator.cpp" line="386"/>
+        <location filename="../../../core/Ui/UI/Alarms/AlarmAnnunciator.cpp" line="425"/>
         <source>System default</source>
         <translation>Výchozí pro systém</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/Alarms/AlarmAnnunciator.cpp" line="461"/>
+        <location filename="../../../core/Ui/UI/Alarms/AlarmAnnunciator.cpp" line="500"/>
         <source>Path climbs out of the project folder</source>
         <translation>Cesta vede mimo složku projektu</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/Alarms/AlarmAnnunciator.cpp" line="529"/>
+        <location filename="../../../core/Ui/UI/Alarms/AlarmAnnunciator.cpp" line="568"/>
         <source>Unknown sound slot '%1'</source>
         <translation>Neznámý zvukový slot '%1'</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/Alarms/AlarmAnnunciator.cpp" line="787"/>
+        <location filename="../../../core/Ui/UI/Alarms/AlarmAnnunciator.cpp" line="826"/>
         <source>Alarms</source>
         <translation>Alarmy</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/Alarms/AlarmAnnunciator.cpp" line="1287"/>
+        <source>Pick a valid PCM WAV file, or clear the override to use the bundled sound.</source>
+        <translation type="vanished">Vyberte platný soubor PCM WAV nebo zrušte přepsání pro použití vestavěného zvuku.</translation>
+    </message>
+</context>
+<context>
+    <name>UI::Alarms::AnnunciatorChecker</name>
+    <message>
+        <location filename="../../../core/Ui/UI/Alarms/AnnunciatorChecker.cpp" line="71"/>
+        <source>Alarm sound file unavailable: %1</source>
+        <translation>Zvukový soubor alarmu není k dispozici: %1</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/UI/Alarms/AnnunciatorChecker.cpp" line="73"/>
         <source>Pick a valid PCM WAV file, or clear the override to use the bundled sound.</source>
         <translation>Vyberte platný soubor PCM WAV nebo zrušte přepsání pro použití vestavěného zvuku.</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/UI/Alarms/AnnunciatorChecker.cpp" line="81"/>
+        <source>Aural alerts are off, but this project defines alarms</source>
+        <translation>Zvukové výstrahy jsou vypnuty, ale tento projekt definuje alarmy</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/UI/Alarms/AnnunciatorChecker.cpp" line="82"/>
+        <source>The project configures alarm bands or alarm sounds, and none of them will be heard while the master enable is off.</source>
+        <translation>Projekt konfiguruje pásma alarmů nebo zvuky alarmů, a žádný z nich nebude slyšen, pokud je hlavní povolení vypnuté.</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/UI/Alarms/AnnunciatorChecker.cpp" line="84"/>
+        <source>Enable alarm sounds in Preferences &gt; Sounds, or remove the project's alarm configuration.</source>
+        <translation>Povolte zvuky alarmů v Předvolby &gt; Zvuky, nebo odeberte konfiguraci alarmů projektu.</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/UI/Alarms/AnnunciatorChecker.cpp" line="102"/>
+        <source>No audio output device is available</source>
+        <translation>Není k dispozici žádné výstupní zvukové zařízení</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/UI/Alarms/AnnunciatorChecker.cpp" line="103"/>
+        <source>Alarm sounds cannot play until an output device is present.</source>
+        <translation>Zvuky alarmů nelze přehrát, dokud není k dispozici výstupní zařízení.</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/UI/Alarms/AnnunciatorChecker.cpp" line="104"/>
+        <source>Connect an audio output, or disable sounds in Preferences &gt; Sounds.</source>
+        <translation>Připojte zvukový výstup, nebo zakažte zvuky v Předvolby &gt; Zvuky.</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/UI/Alarms/AnnunciatorChecker.cpp" line="110"/>
+        <source>Alarm sound device '%1' not found</source>
+        <translation>Zvukové zařízení alarmu '%1' nenalezeno</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/UI/Alarms/AnnunciatorChecker.cpp" line="111"/>
+        <source>Alarm sounds are playing on the system default output instead.</source>
+        <translation>Zvuky alarmů se přehrávají na výchozím systémovém výstupu.</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/UI/Alarms/AnnunciatorChecker.cpp" line="112"/>
+        <source>Reconnect the device, or pick another one in Preferences &gt; Sounds.</source>
+        <translation>Znovu připojte zařízení, nebo vyberte jiné v Předvolby &gt; Zvuky.</translation>
     </message>
 </context>
 <context>
@@ -33698,82 +33757,82 @@ Chápu, že po jejím skončení budu muset zakoupit licenci nebo sestavit verzi
 <context>
     <name>Widgets::Waterfall</name>
     <message>
-        <location filename="../../../core/Ui/UI/Widgets/Waterfall.cpp" line="291"/>
+        <location filename="../../../core/Ui/UI/Widgets/Waterfall.cpp" line="294"/>
         <source>Viridis</source>
         <translation>Viridis</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/Widgets/Waterfall.cpp" line="293"/>
+        <location filename="../../../core/Ui/UI/Widgets/Waterfall.cpp" line="296"/>
         <source>Inferno</source>
         <translation>Inferno</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/Widgets/Waterfall.cpp" line="295"/>
+        <location filename="../../../core/Ui/UI/Widgets/Waterfall.cpp" line="298"/>
         <source>Magma</source>
         <translation>Magma</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/Widgets/Waterfall.cpp" line="297"/>
+        <location filename="../../../core/Ui/UI/Widgets/Waterfall.cpp" line="300"/>
         <source>Plasma</source>
         <translation>Plasma</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/Widgets/Waterfall.cpp" line="299"/>
+        <location filename="../../../core/Ui/UI/Widgets/Waterfall.cpp" line="302"/>
         <source>Turbo</source>
         <translation>Turbo</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/Widgets/Waterfall.cpp" line="301"/>
+        <location filename="../../../core/Ui/UI/Widgets/Waterfall.cpp" line="304"/>
         <source>Jet</source>
         <translation>Jet</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/Widgets/Waterfall.cpp" line="303"/>
+        <location filename="../../../core/Ui/UI/Widgets/Waterfall.cpp" line="306"/>
         <source>Hot</source>
         <translation>Hot</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/Widgets/Waterfall.cpp" line="305"/>
+        <location filename="../../../core/Ui/UI/Widgets/Waterfall.cpp" line="308"/>
         <source>Grayscale</source>
         <translation>Stupně Šedi</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/Widgets/Waterfall.cpp" line="307"/>
+        <location filename="../../../core/Ui/UI/Widgets/Waterfall.cpp" line="310"/>
         <source>Grayscale (Inverted)</source>
         <translation>Stupně Šedi (Invertované)</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/Widgets/Waterfall.cpp" line="309"/>
+        <location filename="../../../core/Ui/UI/Widgets/Waterfall.cpp" line="312"/>
         <source>Cividis</source>
         <translation>Cividis</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/Widgets/Waterfall.cpp" line="311"/>
+        <location filename="../../../core/Ui/UI/Widgets/Waterfall.cpp" line="314"/>
         <source>Cubehelix</source>
         <translation>Cubehelix</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/Widgets/Waterfall.cpp" line="313"/>
+        <location filename="../../../core/Ui/UI/Widgets/Waterfall.cpp" line="316"/>
         <source>SDR Classic</source>
         <translation>SDR Classic</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/Widgets/Waterfall.cpp" line="315"/>
+        <location filename="../../../core/Ui/UI/Widgets/Waterfall.cpp" line="318"/>
         <source>Spectral</source>
         <translation>Spektrální</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/Widgets/Waterfall.cpp" line="317"/>
+        <location filename="../../../core/Ui/UI/Widgets/Waterfall.cpp" line="320"/>
         <source>Red/Blue</source>
         <translation>Červená/modrá</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/Widgets/Waterfall.cpp" line="319"/>
+        <location filename="../../../core/Ui/UI/Widgets/Waterfall.cpp" line="322"/>
         <source>Coolwarm</source>
         <translation>Coolwarm</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/Widgets/Waterfall.cpp" line="321"/>
+        <location filename="../../../core/Ui/UI/Widgets/Waterfall.cpp" line="324"/>
         <source>Unknown</source>
         <translation>Neznámá</translation>
     </message>
@@ -33811,12 +33870,12 @@ Chápu, že po jejím skončení budu muset zakoupit licenci nebo sestavit verzi
         <translation>Filtrovat widgety…</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/WorkspaceDialog.qml" line="312"/>
+        <location filename="../../qml/Dialogs/WorkspaceDialog.qml" line="313"/>
         <source>Cancel</source>
         <translation>Zrušit</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/WorkspaceDialog.qml" line="319"/>
+        <location filename="../../qml/Dialogs/WorkspaceDialog.qml" line="320"/>
         <source>OK</source>
         <translation>OK</translation>
     </message>
@@ -34068,7 +34127,7 @@ Chápu, že po jejím skončení budu muset zakoupit licenci nebo sestavit verzi
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/WorkspaceView.qml" line="290"/>
-        <location filename="../../qml/ProjectEditor/Views/WorkspaceView.qml" line="404"/>
+        <location filename="../../qml/ProjectEditor/Views/WorkspaceView.qml" line="405"/>
         <source>(unknown)</source>
         <translation>(neznámý)</translation>
     </message>
@@ -34095,7 +34154,7 @@ Chápu, že po jejím skončení budu muset zakoupit licenci nebo sestavit verzi
         <translation>Skryto</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/WorkspaceView.qml" line="434"/>
+        <location filename="../../qml/ProjectEditor/Views/WorkspaceView.qml" line="435"/>
         <source>Remove widget from workspace</source>
         <translation>Odebrat widget z pracovního prostoru</translation>
     </message>
@@ -34104,7 +34163,7 @@ Chápu, že po jejím skončení budu muset zakoupit licenci nebo sestavit verzi
         <translation type="vanished">Odebrat z pracovního prostoru</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/WorkspaceView.qml" line="454"/>
+        <location filename="../../qml/ProjectEditor/Views/WorkspaceView.qml" line="455"/>
         <source>No widgets in this workspace.</source>
         <translation>V tomto pracovním prostoru nejsou žádné widgety.</translation>
     </message>

@@ -110,34 +110,6 @@ Item {
     }
 
     Label {
-      text: qsTr("HDR Output")
-      visible: Cpp_Misc_GraphicsBackend.hdrSupported
-      color: Cpp_ThemeManager.colors["text"]
-    } Widgets.Toggle {
-      id: _hdrOutput
-
-      Layout.rightMargin: -8
-      Layout.alignment: Qt.AlignRight
-      visible: Cpp_Misc_GraphicsBackend.hdrSupported
-      checked: Cpp_Misc_GraphicsBackend.hdrEnabled
-      palette.highlight: Cpp_ThemeManager.colors["switch_highlight"]
-      onCheckedChanged: {
-        if (checked !== Cpp_Misc_GraphicsBackend.hdrEnabled) {
-          Cpp_Misc_GraphicsBackend.hdrEnabled = checked
-          Cpp_Misc_GraphicsBackend.promptRestartAndQuit()
-        }
-      }
-
-      Connections {
-        target: Cpp_Misc_GraphicsBackend
-        function onHdrEnabledChanged() {
-          _hdrOutput.checked = Cpp_Misc_GraphicsBackend.hdrEnabled
-        }
-      }
-    }
-
-
-    Label {
       text: qsTr("Display Scaling")
       visible: Cpp_Misc_HighDpiScaling.configurable
       color: Cpp_ThemeManager.colors["text"]
@@ -198,6 +170,33 @@ Item {
         target: Cpp_Misc_HighDpiScaling
         function onCustomPercentChanged() {
           _hidpiPercent.value = Cpp_Misc_HighDpiScaling.customPercent
+        }
+      }
+    }
+
+    Label {
+      text: qsTr("HDR Output")
+      visible: Cpp_Misc_GraphicsBackend.hdrSupported
+      color: Cpp_ThemeManager.colors["text"]
+    } Widgets.Toggle {
+      id: _hdrOutput
+
+      Layout.rightMargin: -8
+      Layout.alignment: Qt.AlignRight
+      visible: Cpp_Misc_GraphicsBackend.hdrSupported
+      checked: Cpp_Misc_GraphicsBackend.hdrEnabled
+      palette.highlight: Cpp_ThemeManager.colors["switch_highlight"]
+      onCheckedChanged: {
+        if (checked !== Cpp_Misc_GraphicsBackend.hdrEnabled) {
+          Cpp_Misc_GraphicsBackend.hdrEnabled = checked
+          Cpp_Misc_GraphicsBackend.promptRestartAndQuit()
+        }
+      }
+
+      Connections {
+        target: Cpp_Misc_GraphicsBackend
+        function onHdrEnabledChanged() {
+          _hdrOutput.checked = Cpp_Misc_GraphicsBackend.hdrEnabled
         }
       }
     }

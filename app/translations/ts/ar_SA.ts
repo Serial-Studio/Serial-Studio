@@ -913,39 +913,32 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
 <context>
     <name>AlarmAnnunciator</name>
     <message>
-        <location filename="../../../core/Ui/UI/Alarms/AlarmAnnunciator.cpp" line="1285"/>
         <source>Alarm sound file unavailable: %1</source>
-        <translation>ملف صوت الإنذار غير متاح: %1</translation>
+        <translation type="vanished">ملف صوت الإنذار غير متاح: %1</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/Alarms/AlarmAnnunciator.cpp" line="1298"/>
         <source>No audio output device is available</source>
-        <translation>لا يوجد جهاز إخراج صوت متاح</translation>
+        <translation type="vanished">لا يوجد جهاز إخراج صوت متاح</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/Alarms/AlarmAnnunciator.cpp" line="1300"/>
         <source>Alarm sounds cannot play until an output device is present.</source>
-        <translation>لا يمكن تشغيل أصوات الإنذار حتى يتوفر جهاز إخراج.</translation>
+        <translation type="vanished">لا يمكن تشغيل أصوات الإنذار حتى يتوفر جهاز إخراج.</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/Alarms/AlarmAnnunciator.cpp" line="1302"/>
         <source>Connect an audio output, or disable sounds in Preferences &gt; Sounds.</source>
-        <translation>قم بتوصيل مخرج صوتي، أو عطّل الأصوات في التفضيلات &gt; الأصوات.</translation>
+        <translation type="vanished">قم بتوصيل مخرج صوتي، أو عطّل الأصوات في التفضيلات &gt; الأصوات.</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/Alarms/AlarmAnnunciator.cpp" line="1308"/>
         <source>Alarm sound device '%1' not found</source>
-        <translation>جهاز صوت التنبيه '%1' غير موجود</translation>
+        <translation type="vanished">جهاز صوت التنبيه '%1' غير موجود</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/Alarms/AlarmAnnunciator.cpp" line="1311"/>
         <source>Alarm sounds are playing on the system default output instead.</source>
-        <translation>يتم تشغيل أصوات التنبيه على المخرج الافتراضي للنظام بدلاً من ذلك.</translation>
+        <translation type="vanished">يتم تشغيل أصوات التنبيه على المخرج الافتراضي للنظام بدلاً من ذلك.</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/Alarms/AlarmAnnunciator.cpp" line="1313"/>
         <source>Reconnect the device, or pick another one in Preferences &gt; Sounds.</source>
-        <translation>أعد توصيل الجهاز، أو اختر جهازاً آخر في التفضيلات &gt; الأصوات.</translation>
+        <translation type="vanished">أعد توصيل الجهاز، أو اختر جهازاً آخر في التفضيلات &gt; الأصوات.</translation>
     </message>
 </context>
 <context>
@@ -1198,57 +1191,57 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
         <translation>اختر إعداداً مسبقاً…</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="487"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="488"/>
         <source>Blink</source>
         <translation>وميض</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="494"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="495"/>
         <source>Sound</source>
         <translation>الصوت</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="615"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="616"/>
         <source>Reset to severity default</source>
         <translation>إعادة تعيين إلى افتراضي الخطورة</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="629"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="630"/>
         <source>Click to choose a color. Right-click to reset to severity default.</source>
         <translation>انقر لاختيار لون. انقر بزر الماوس الأيمن لإعادة التعيين إلى افتراضي الخطورة.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="630"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="631"/>
         <source>Click to choose a custom color.</source>
         <translation>انقر لاختيار لون مخصص.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="661"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="662"/>
         <source>Flash the LED while the value sits in this band.</source>
         <translation>وميض LED أثناء وجود القيمة في هذا النطاق.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="686"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="690"/>
         <source>Pick a WAV file to play for this band.</source>
         <translation>اختر ملف WAV لتشغيله لهذا النطاق.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="702"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="706"/>
         <source>Use the priority's default sound.</source>
         <translation>استخدام الصوت الافتراضي للأولوية.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="775"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="779"/>
         <source>No bands defined. Pick a preset above or add a band to get started.</source>
         <translation>لا توجد نطاقات محددة. اختر إعداداً مسبقاً أعلاه أو أضف نطاقاً للبدء.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="899"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="903"/>
         <source>Apply</source>
         <translation>تطبيق</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="902"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="906"/>
         <source>Apply changes to the dataset.</source>
         <translation>تطبيق التغييرات على مجموعة البيانات.</translation>
     </message>
@@ -1261,47 +1254,47 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
         <translation type="vanished">استبدال النطاقات الحالية بالإعداد المسبق المحدد، مع تحجيمها لنطاق مجموعة البيانات هذه.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="388"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="389"/>
         <source>Range</source>
         <translation>النطاق</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="416"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="417"/>
         <source>Bands</source>
         <translation>النطاقات</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="427"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="428"/>
         <source>Add Band</source>
         <translation>إضافة نطاق</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="431"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="432"/>
         <source>Add a new band continuing from the last one.</source>
         <translation>إضافة نطاق جديد يستمر من النطاق الأخير.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="462"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="463"/>
         <source>Min</source>
         <translation>الأدنى</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="468"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="469"/>
         <source>Max</source>
         <translation>الأقصى</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="474"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="475"/>
         <source>Severity</source>
         <translation>الخطورة</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="480"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="481"/>
         <source>Color</source>
         <translation>لون</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="501"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="502"/>
         <source>Label</source>
         <translation>تسمية</translation>
     </message>
@@ -1314,22 +1307,22 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
         <translation type="vanished">تلقائي</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="712"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="716"/>
         <source>(optional)</source>
         <translation>(اختياري)</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="729"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="733"/>
         <source>Move up.</source>
         <translation>نقل لأعلى.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="748"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="752"/>
         <source>Move down.</source>
         <translation>نقل لأسفل.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="761"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="765"/>
         <source>Remove this band.</source>
         <translation>إزالة هذا النطاق.</translation>
     </message>
@@ -1338,17 +1331,17 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
         <translation type="vanished">لا توجد نطاقات محددة. طبّق إعداداً مسبقاً أو أضف نطاقاً للبدء.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="792"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="796"/>
         <source>Preview</source>
         <translation>معاينة</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="888"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="892"/>
         <source>Cancel</source>
         <translation>إلغاء</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="890"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="894"/>
         <source>Discard changes.</source>
         <translation>تجاهل التغييرات.</translation>
     </message>
@@ -2293,47 +2286,47 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
         <translation>الإطارات لكل مرحلة:</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="252"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="255"/>
         <source>Minimum duration:</source>
         <translation>الحد الأدنى للمدة:</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="281"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="287"/>
         <source>Stages</source>
         <translation>المراحل</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="289"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="295"/>
         <source>Parsers</source>
         <translation>المحللات</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="298"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="307"/>
         <source>Data export</source>
         <translation>تصدير البيانات</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="306"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="318"/>
         <source>Dashboard</source>
         <translation>لوحة المعلومات</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="318"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="333"/>
         <source>Data</source>
         <translation>البيانات</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="328"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="343"/>
         <source>Numeric only</source>
         <translation>القيم الرقمية فقط</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="337"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="354"/>
         <source>Mixed (numeric + text)</source>
         <translation>مختلط (رقمي + نص)</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="353"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="374"/>
         <source>Select at least one stage and one data type to run a benchmark.</source>
         <translation>حدد مرحلة واحدة على الأقل ونوع بيانات واحد لتشغيل معيار الأداء.</translation>
     </message>
@@ -2348,47 +2341,47 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
         <translation>جارٍ التحضير...</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="368"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="389"/>
         <source>Disconnect the active device before running a benchmark.</source>
         <translation>افصل الجهاز النشط قبل تشغيل المعيار.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="369"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="390"/>
         <source>Close the open recording before running a benchmark.</source>
         <translation>أغلق التسجيل المفتوح قبل تشغيل المعيار.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="401"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="422"/>
         <source>Pipeline</source>
         <translation>خط الأنابيب</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="413"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="434"/>
         <source>Throughput</source>
         <translation>الإنتاجية</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="425"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="446"/>
         <source>Time</source>
         <translation>الوقت</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="437"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="458"/>
         <source>Result</source>
         <translation>النتيجة</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="538"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="559"/>
         <source>Run a test to see results</source>
         <translation>شغّل اختباراً لعرض النتائج</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="555"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="576"/>
         <source>Peak memory: %1</source>
         <translation>الذاكرة القصوى: %1</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="569"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="590"/>
         <source>Pass/Fail applies to the data-pipeline and parser stages (data pipeline and Built-in numeric 1024 K frames/s; Built-in mixed 512 K; Lua numeric 256 K; JavaScript numeric and Lua mixed 128 K; JavaScript mixed 64 K). The export and dashboard stages are informational.</source>
         <translation>النجاح/الفشل ينطبق على مراحل خط البيانات والمحلل (خط البيانات ومحلل مدمج رقمي 1024 ألف إطار/ث؛ مدمج مختلط 512 ألف؛ Lua رقمي 256 ألف؛ JavaScript رقمي وLua مختلط 128 ألف؛ JavaScript مختلط 64 ألف). مراحل التصدير ولوحة المعلومات إعلامية فقط.</translation>
     </message>
@@ -2401,7 +2394,7 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
         <translation type="vanished">ينطبق النجاح/الفشل على مراحل خط الأنابيب والمحلل (خط الأنابيب: Native رقمي 1024 ألف إطار/ث؛ Native مختلط 512 ألف؛ Lua رقمي 256 ألف؛ JavaScript رقمي و Lua مختلط 128 ألف؛ JavaScript مختلط 64 ألف). مراحل التصدير ولوحة المعلومات للإعلام فقط.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="584"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="605"/>
         <source>Copy</source>
         <translation>نسخ</translation>
     </message>
@@ -2414,22 +2407,22 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
         <translation type="vanished">النجاح/الفشل ينطبق على مراحل المحلل فقط (هدف Lua 256 ألف إطار/ث، JavaScript 128 ألف). مراحل التصدير ولوحة المعلومات إعلامية فقط.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="591"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="612"/>
         <source>Clear</source>
         <translation>مسح</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="600"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="621"/>
         <source>Close</source>
         <translation>إغلاق</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="609"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="630"/>
         <source>Running...</source>
         <translation>جارٍ التشغيل...</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="609"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="630"/>
         <source>Run Benchmark</source>
         <translation>تشغيل المعيار</translation>
     </message>
@@ -3048,48 +3041,48 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
 <context>
     <name>ChatSidebar</name>
     <message>
-        <location filename="../../qml/AI/ChatSidebar.qml" line="44"/>
+        <location filename="../../qml/AI/ChatSidebar.qml" line="46"/>
         <source>Chats</source>
         <translation>المحادثات</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/ChatSidebar.qml" line="57"/>
-        <location filename="../../qml/AI/ChatSidebar.qml" line="115"/>
+        <location filename="../../qml/AI/ChatSidebar.qml" line="59"/>
+        <location filename="../../qml/AI/ChatSidebar.qml" line="117"/>
         <source>New chat</source>
         <translation>محادثة جديدة</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/ChatSidebar.qml" line="125"/>
+        <location filename="../../qml/AI/ChatSidebar.qml" line="127"/>
         <source>%1 messages</source>
         <translation>%1 الرسائل</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/ChatSidebar.qml" line="147"/>
+        <location filename="../../qml/AI/ChatSidebar.qml" line="149"/>
         <source>Rename...</source>
         <translation>إعادة تسمية…</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/ChatSidebar.qml" line="158"/>
+        <location filename="../../qml/AI/ChatSidebar.qml" line="160"/>
         <source>Continue in new chat</source>
         <translation>متابعة في محادثة جديدة</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/ChatSidebar.qml" line="165"/>
+        <location filename="../../qml/AI/ChatSidebar.qml" line="167"/>
         <source>Delete</source>
         <translation>حذف</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/ChatSidebar.qml" line="204"/>
+        <location filename="../../qml/AI/ChatSidebar.qml" line="206"/>
         <source>Rename chat</source>
         <translation>إعادة تسمية المحادثة</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/ChatSidebar.qml" line="224"/>
+        <location filename="../../qml/AI/ChatSidebar.qml" line="226"/>
         <source>Cancel</source>
         <translation>إلغاء</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/ChatSidebar.qml" line="229"/>
+        <location filename="../../qml/AI/ChatSidebar.qml" line="231"/>
         <source>Rename</source>
         <translation>إعادة تسمية</translation>
     </message>
@@ -5211,12 +5204,12 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
 <context>
     <name>Console::Export</name>
     <message>
-        <location filename="../../../core/Ui/Console/Export.cpp" line="352"/>
+        <location filename="../../../core/Ui/Console/Export.cpp" line="358"/>
         <source>Console Export is a Pro feature.</source>
         <translation>تصدير وحدة التحكم ميزة Pro.</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/Console/Export.cpp" line="353"/>
+        <location filename="../../../core/Ui/Console/Export.cpp" line="359"/>
         <source>This feature requires a license. Please purchase one to enable console export.</source>
         <translation>تتطلب هذه الميزة ترخيصًا. يرجى شراء ترخيص لتفعيل تصدير وحدة التحكم.</translation>
     </message>
@@ -5315,203 +5308,203 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
         <translation>ملفات CSV (*.CSV)</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="219"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="220"/>
         <source>Track</source>
         <translation>المسار</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="225"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="226"/>
         <source>Table</source>
         <translation>جدول</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="231"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="232"/>
         <source>Payload</source>
         <translation>الحمولة</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="237"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="238"/>
         <source>Decoder</source>
         <translation>فك الترميز</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="324"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="325"/>
         <source>Window</source>
         <translation>النافذة</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="341"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="342"/>
         <source>Bytes of history drawn across the lanes</source>
         <translation>بايتات السجل المرسومة عبر المسارات</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="345"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="346"/>
         <source>bytes</source>
         <translation>بايت</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="370"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="371"/>
         <source>paused</source>
         <translation>متوقف مؤقتاً</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="381"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="382"/>
         <source>%1 annotations kept</source>
         <translation>تم الاحتفاظ بـ %1 تعليق توضيحي</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="397"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="398"/>
         <source>Each bar is a byte range the decoder labelled, one lane per decoder row: oldest on the left, newest on the right.</source>
         <translation>كل شريط يمثل نطاق بايتات قام فك الترميز بتصنيفه، مسار واحد لكل صف من فك الترميز: الأقدم على اليسار، والأحدث على اليمين.</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="400"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="401"/>
         <source>Labelled bytes %1 to %2, oldest on the left.</source>
         <translation>البايتات المصنفة من %1 إلى %2، الأقدم على اليسار.</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="407"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="408"/>
         <source>The store is full at %1 labels, so anything older was dropped: shrink the window to see individual labels.</source>
         <translation>المخزن ممتلئ عند %1 تصنيف، لذا تم إسقاط أي شيء أقدم: قلّص النافذة لرؤية التصنيفات الفردية.</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="510"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="511"/>
         <source>nothing labelled in this window</source>
         <translation>لا يوجد تصنيف في هذه النافذة</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="563"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="564"/>
         <source>%1 labels</source>
         <translation>%1 تصنيف</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="625"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="626"/>
         <source>%1 labels merged (bytes %2 to %3). Shrink the window to separate them.</source>
         <translation>تم دمج %1 تصنيف (البايتات من %2 إلى %3). قلّص النافذة لفصلها.</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="630"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="631"/>
         <source>%1 (bytes %2 to %3)</source>
         <translation>%1 (البايتات من %2 إلى %3)</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="693"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="694"/>
         <source>Row</source>
         <translation>صف</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="702"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="703"/>
         <source>All rows</source>
         <translation>جميع الصفوف</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="706"/>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="881"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="707"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="882"/>
         <source>Class</source>
         <translation>الفئة</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="717"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="718"/>
         <source>All classes</source>
         <translation>جميع الفئات</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="727"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="728"/>
         <source>Export CSV</source>
         <translation>تصدير CSV</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="732"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="733"/>
         <source>Save every annotation to a spreadsheet</source>
         <translation>حفظ كل تعليق توضيحي في جدول بيانات</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="864"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="865"/>
         <source>No annotations decoded yet</source>
         <translation>لم يتم فك تشفير أي تعليقات توضيحية بعد</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="899"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="900"/>
         <source>Hexadecimal</source>
         <translation>سداسي عشري</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="906"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="910"/>
         <source>Refresh</source>
         <translation>تحديث</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="909"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="913"/>
         <source>Re-read the bytes of the selected class</source>
         <translation>إعادة قراءة البايتات للفئة المحددة</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="921"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="925"/>
         <source>%1 characters</source>
         <translation>%1 حرف</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="945"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="949"/>
         <source>Pick a class and press Refresh to extract its bytes</source>
         <translation>اختر فئة واضغط تحديث لاستخراج البايتات الخاصة بها</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="979"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="983"/>
         <source>Apply</source>
         <translation>تطبيق</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="982"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="986"/>
         <source>Compile the script and start decoding</source>
         <translation>ترجمة السكريبت وبدء فك التشفير</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="995"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="999"/>
         <source>Load a decoder for a known protocol</source>
         <translation>تحميل فك تشفير لبروتوكول معروف</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="1007"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="1011"/>
         <source>Clear</source>
         <translation>مسح</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="1012"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="1016"/>
         <source>Discard the annotations decoded so far</source>
         <translation>تجاهل التعليقات التوضيحية المفككة حتى الآن</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="1020"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="1024"/>
         <source>Pause</source>
         <translation>إيقاف مؤقت</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="1020"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="1024"/>
         <source>Resume</source>
         <translation>استئناف</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="1025"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="1029"/>
         <source>Stop decoding, keep the labels already captured</source>
         <translation>إيقاف فك التشفير، الاحتفاظ بالتسميات الملتقطة بالفعل</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="1026"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="1030"/>
         <source>Resume decoding the incoming bytes</source>
         <translation>استئناف فك تشفير البايتات الواردة</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="1091"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="1095"/>
         <source>No annotations yet</source>
         <translation>لا توجد تعليقات توضيحية بعد</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="1104"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="1108"/>
         <source>Annotations label ranges of the incoming byte stream: a small script names each range, and this panel draws them as lanes, lists them, and extracts their bytes.</source>
         <translation>التعليقات التوضيحية تُسمّي نطاقات تدفق البايتات الوارد: سكريبت صغير يُسمّي كل نطاق، وتقوم هذه اللوحة برسمها كمسارات، وإدراجها، واستخراج بايتاتها.</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="1112"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="1116"/>
         <source>Open Decoder</source>
         <translation>فتح مفكك التشفير</translation>
     </message>
@@ -6909,12 +6902,12 @@ v
 <context>
     <name>DataModel::FrameBuilder</name>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/FrameBuilder.cpp" line="2329"/>
+        <location filename="../../../core/Pipeline/DataModel/FrameBuilder.cpp" line="2335"/>
         <source>JavaScript transform exceeded budget</source>
         <translation>تم تجاوز حد تحويل JavaScript</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/FrameBuilder.cpp" line="2330"/>
+        <location filename="../../../core/Pipeline/DataModel/FrameBuilder.cpp" line="2336"/>
         <source>A dataset transform took longer than %1 ms; remaining datasets in the frame fell back to raw values until the next frame. Profile or simplify the transform code.</source>
         <translation>استغرق تحويل مجموعة بيانات وقتًا أطول من %1 مللي ثانية؛ تم استخدام القيم الخام للمجموعات المتبقية في الإطار حتى الإطار التالي. قم بتحليل أو تبسيط كود التحويل.</translation>
     </message>
@@ -13157,27 +13150,27 @@ Add controller tags above to poll them.</source>
 <context>
     <name>ExtensionPlaceholder</name>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ExtensionPlaceholder.qml" line="71"/>
+        <location filename="../../qml/Widgets/Dashboard/ExtensionPlaceholder.qml" line="73"/>
         <source>Widget Extension</source>
         <translation>امتداد الودجت</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ExtensionPlaceholder.qml" line="86"/>
+        <location filename="../../qml/Widgets/Dashboard/ExtensionPlaceholder.qml" line="88"/>
         <source>This widget is installed but has not been allowed to run.</source>
         <translation>هذا العنصر مثبت لكن لم يُسمح بتشغيله.</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ExtensionPlaceholder.qml" line="89"/>
+        <location filename="../../qml/Widgets/Dashboard/ExtensionPlaceholder.qml" line="91"/>
         <source>This widget could not be loaded.</source>
         <translation>تعذر تحميل هذا العنصر.</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ExtensionPlaceholder.qml" line="95"/>
+        <location filename="../../qml/Widgets/Dashboard/ExtensionPlaceholder.qml" line="97"/>
         <source>Review and Allow…</source>
         <translation>مراجعة والسماح…</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ExtensionPlaceholder.qml" line="102"/>
+        <location filename="../../qml/Widgets/Dashboard/ExtensionPlaceholder.qml" line="104"/>
         <source>Open Problem Center</source>
         <translation>فتح مركز المشاكل</translation>
     </message>
@@ -13195,22 +13188,22 @@ Add controller tags above to poll them.</source>
         <translation>إعدادات %1</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ExtensionWidgetSettings.qml" line="191"/>
+        <location filename="../../qml/Widgets/Dashboard/ExtensionWidgetSettings.qml" line="194"/>
         <source>These settings are declared by the widget package and stored in the project.</source>
         <translation>هذه الإعدادات معرّفة من حزمة العنصر ومخزنة في المشروع.</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ExtensionWidgetSettings.qml" line="192"/>
+        <location filename="../../qml/Widgets/Dashboard/ExtensionWidgetSettings.qml" line="195"/>
         <source>This widget declares no settings.</source>
         <translation>هذا العنصر لا يعرّف أي إعدادات.</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ExtensionWidgetSettings.qml" line="262"/>
+        <location filename="../../qml/Widgets/Dashboard/ExtensionWidgetSettings.qml" line="265"/>
         <source>Restore Defaults</source>
         <translation>استعادة الافتراضيات</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ExtensionWidgetSettings.qml" line="274"/>
+        <location filename="../../qml/Widgets/Dashboard/ExtensionWidgetSettings.qml" line="277"/>
         <source>Close</source>
         <translation>إغلاق</translation>
     </message>
@@ -13276,17 +13269,17 @@ Add controller tags above to poll them.</source>
         <translation>استئناف</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/FFTPlot.qml" line="692"/>
+        <location filename="../../qml/Widgets/Dashboard/FFTPlot.qml" line="719"/>
         <source>Click to clear the spotlight.</source>
         <translation>انقر للمسح.</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/FFTPlot.qml" line="693"/>
+        <location filename="../../qml/Widgets/Dashboard/FFTPlot.qml" line="720"/>
         <source>Click to spotlight this marker.</source>
         <translation>انقر لتسليط الضوء على هذه العلامة.</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/FFTPlot.qml" line="745"/>
+        <location filename="../../qml/Widgets/Dashboard/FFTPlot.qml" line="772"/>
         <source>Not available over a remote attach. This widget needs the remote's raw sample stream, which the dashboard mirror does not carry.</source>
         <translation>غير متاح عبر الاتصال عن بُعد. يحتاج عنصر الواجهة هذا إلى تدفق العينات الخام من الجهاز البعيد، والذي لا تحمله مرآة لوحة المعلومات.</translation>
     </message>
@@ -13311,12 +13304,12 @@ Add controller tags above to poll them.</source>
         <translation>التردد (Hz)</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/FFTPlot.qml" line="651"/>
+        <location filename="../../qml/Widgets/Dashboard/FFTPlot.qml" line="678"/>
         <source>%1 Hz</source>
         <translation>%1 Hz</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/FFTPlot.qml" line="655"/>
+        <location filename="../../qml/Widgets/Dashboard/FFTPlot.qml" line="682"/>
         <source>%1  %2 dB</source>
         <translation>%1  %2 dB</translation>
     </message>
@@ -13735,22 +13728,22 @@ Add controller tags above to poll them.</source>
         <translation>المحددات السداسية عشرية</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="315"/>
+        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="316"/>
         <source>Frame Data Input</source>
         <translation>إدخال بيانات الإطار</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="342"/>
+        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="343"/>
         <source>Enter hex bytes (e.g. 01 A2 FF)</source>
         <translation>أدخل بايتات سداسية عشرية (مثال: 01 A2 FF)</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="343"/>
+        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="344"/>
         <source>Enter raw stream bytes here...</source>
         <translation>أدخل بايتات التدفق الخام هنا...</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="362"/>
+        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="363"/>
         <source>Hex</source>
         <translation>هيكس</translation>
     </message>
@@ -13759,49 +13752,49 @@ Add controller tags above to poll them.</source>
         <translation type="vanished">HEX</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="387"/>
+        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="389"/>
         <source>The sample does not contain the configured frame delimiters, so no frame will be extracted. Type them into the sample (e.g. 
  for a newline) or adjust the detection mode.</source>
         <translation>العينة لا تحتوي على محددات الإطار المُكوَّنة، لذا لن يتم استخراج أي إطار. اكتبها في العينة (مثال: 
  لسطر جديد) أو اضبط وضع الكشف.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="407"/>
+        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="409"/>
         <source>Pipeline Results</source>
         <translation>نتائج المسار</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="480"/>
+        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="482"/>
         <source>Stage</source>
         <translation>مرحلة</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="487"/>
+        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="489"/>
         <source>Value</source>
         <translation>القيمة</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="530"/>
+        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="532"/>
         <source>Extraction did not produce a complete frame. Check the start / end delimiters and the detection mode.</source>
         <translation>الاستخراج لم ينتج إطارًا كاملاً. تحقق من محددات البداية / النهاية ووضع الكشف.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="532"/>
+        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="534"/>
         <source>Enter sample data above and press Evaluate to preview the parsed output</source>
         <translation>أدخل بيانات عينة أعلاه واضغط تقييم لمعاينة المخرجات المحللة</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="614"/>
+        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="616"/>
         <source>Clear</source>
         <translation>مسح</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="625"/>
+        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="627"/>
         <source>Close</source>
         <translation>إغلاق</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="632"/>
+        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="634"/>
         <source>Evaluate</source>
         <translation>تقييم</translation>
     </message>
@@ -14012,143 +14005,143 @@ Add controller tags above to poll them.</source>
         <translation>اختر إعداداً مسبقاً…</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="314"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="315"/>
         <source>Frequency range</source>
         <translation>نطاق التردد</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="320"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="321"/>
         <source>0 - %1 Hz</source>
         <translation>0 - %1 Hz</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="342"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="343"/>
         <source>Markers</source>
         <translation>العلامات</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="353"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="354"/>
         <source>Add Marker</source>
         <translation>إضافة علامة</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="357"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="358"/>
         <source>Add a new point marker; set an end frequency to turn it into a band.</source>
         <translation>إضافة علامة نقطة جديدة؛ تعيين تردد نهاية لتحويلها إلى نطاق.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="388"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="389"/>
         <source>Start (Hz)</source>
         <translation>البداية (Hz)</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="394"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="395"/>
         <source>End (Hz)</source>
         <translation>النهاية (Hz)</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="400"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="401"/>
         <source>Warn (dB)</source>
         <translation>تحذير (dB)</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="406"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="407"/>
         <source>Alarm (dB)</source>
         <translation>إنذار (dB)</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="412"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="413"/>
         <source>Color</source>
         <translation>لون</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="419"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="420"/>
         <source>Label</source>
         <translation>تسمية</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="491"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="492"/>
         <source>(point)</source>
         <translation>(نقطة)</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="508"/>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="522"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="509"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="523"/>
         <source>(off)</source>
         <translation>(إيقاف)</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="556"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="557"/>
         <source>Reset to automatic color</source>
         <translation>إعادة تعيين إلى اللون التلقائي</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="570"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="571"/>
         <source>Click to choose a color. Right-click to reset to automatic.</source>
         <translation>انقر لاختيار لون. انقر بزر الماوس الأيمن لإعادة التعيين إلى التلقائي.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="571"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="572"/>
         <source>Click to choose a custom color.</source>
         <translation>انقر لاختيار لون مخصص.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="592"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="593"/>
         <source>(optional)</source>
         <translation>(اختياري)</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="609"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="610"/>
         <source>Move up.</source>
         <translation>نقل لأعلى.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="628"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="629"/>
         <source>Move down.</source>
         <translation>نقل لأسفل.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="641"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="642"/>
         <source>Remove this marker.</source>
         <translation>إزالة هذه العلامة.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="655"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="656"/>
         <source>No markers defined. Pick a preset above or add a marker to get started.</source>
         <translation>لا توجد علامات محددة. اختر إعداداً مسبقاً أعلاه أو أضف علامة للبدء.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="672"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="673"/>
         <source>Preview</source>
         <translation>معاينة</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="748"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="749"/>
         <source>0 Hz</source>
         <translation>0 Hz</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="754"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="755"/>
         <source>%1 Hz</source>
         <translation>%1 هرتز</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="776"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="777"/>
         <source>Cancel</source>
         <translation>إلغاء</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="778"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="779"/>
         <source>Discard changes.</source>
         <translation>تجاهل التغييرات.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="787"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="788"/>
         <source>Apply</source>
         <translation>تطبيق</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="790"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="791"/>
         <source>Apply changes to the dataset.</source>
         <translation>تطبيق التغييرات على مجموعة البيانات.</translation>
     </message>
@@ -14643,37 +14636,37 @@ Add controller tags above to poll them.</source>
         <translation>جارٍ جلب صفحات المساعدة…</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/HelpCenter.qml" line="186"/>
+        <location filename="../../qml/Dialogs/HelpCenter.qml" line="187"/>
         <source>Search…</source>
         <translation>بحث…</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/HelpCenter.qml" line="304"/>
+        <location filename="../../qml/Dialogs/HelpCenter.qml" line="305"/>
         <source>Loading…</source>
         <translation>جارٍ التحميل…</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/HelpCenter.qml" line="348"/>
+        <location filename="../../qml/Dialogs/HelpCenter.qml" line="349"/>
         <source>Select a page from the sidebar</source>
         <translation>اختر صفحة من الشريط الجانبي</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/HelpCenter.qml" line="378"/>
+        <location filename="../../qml/Dialogs/HelpCenter.qml" line="379"/>
         <source>Copied to Clipboard</source>
         <translation>تم النسخ إلى الحافظة</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/HelpCenter.qml" line="410"/>
+        <location filename="../../qml/Dialogs/HelpCenter.qml" line="411"/>
         <source>View Online</source>
         <translation>عرض عبر الإنترنت</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/HelpCenter.qml" line="422"/>
+        <location filename="../../qml/Dialogs/HelpCenter.qml" line="423"/>
         <source>%1 pages</source>
         <translation>%1 صفحة</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/HelpCenter.qml" line="431"/>
+        <location filename="../../qml/Dialogs/HelpCenter.qml" line="432"/>
         <source>Close</source>
         <translation>إغلاق</translation>
     </message>
@@ -20241,82 +20234,87 @@ To reuse this seat on another device, email alex@serial-studio.com with your dev
 <context>
     <name>MasterAnnunciator</name>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/MasterAnnunciator.qml" line="123"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/MasterAnnunciator.qml" line="125"/>
+        <source>Aural alerts are disabled, but this project defines alarms. Enable them in Preferences &gt; Sounds.</source>
+        <translation>التنبيهات الصوتية معطّلة، لكن هذا المشروع يحدّد أجراس إنذار. فعّلها في التفضيلات &gt; الأصوات.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/MasterAnnunciator.qml" line="128"/>
         <source>Alarm sounds are muted. Click to open the alarm panel.</source>
         <translation>أصوات التنبيه مكتومة. انقر لفتح لوحة التنبيهات.</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/MasterAnnunciator.qml" line="125"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/MasterAnnunciator.qml" line="130"/>
         <source>%1 unacknowledged alarm(s). Click for the alarm panel, right-click to acknowledge.</source>
         <translation>%1 تنبيه غير مُقرّ به. انقر للوحة التنبيهات، انقر بالزر الأيمن للإقرار.</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/MasterAnnunciator.qml" line="127"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/MasterAnnunciator.qml" line="132"/>
         <source>No active alarms. Click for the alarm panel.</source>
         <translation>لا توجد تنبيهات نشطة. انقر للوحة التنبيهات.</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/MasterAnnunciator.qml" line="194"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/MasterAnnunciator.qml" line="211"/>
         <source>Alarms</source>
         <translation>الإنذارات</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/MasterAnnunciator.qml" line="203"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/MasterAnnunciator.qml" line="220"/>
         <source>Acknowledge all</source>
         <translation>الإقرار بالكل</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/MasterAnnunciator.qml" line="212"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/MasterAnnunciator.qml" line="229"/>
         <source>Silence</source>
         <translation>إسكات</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/MasterAnnunciator.qml" line="221"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/MasterAnnunciator.qml" line="238"/>
         <source>Reset</source>
         <translation>إعادة تعيين</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/MasterAnnunciator.qml" line="232"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/MasterAnnunciator.qml" line="249"/>
         <source>Clear every alarm from the list</source>
         <translation>مسح جميع التنبيهات من القائمة</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/MasterAnnunciator.qml" line="240"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/MasterAnnunciator.qml" line="257"/>
         <source>Test sounds</source>
         <translation>اختبار الأصوات</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/MasterAnnunciator.qml" line="249"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/MasterAnnunciator.qml" line="266"/>
         <source>Unmute sounds</source>
         <translation>إلغاء كتم الأصوات</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/MasterAnnunciator.qml" line="249"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/MasterAnnunciator.qml" line="266"/>
         <source>Mute sounds</source>
         <translation>كتم الأصوات</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/MasterAnnunciator.qml" line="384"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/MasterAnnunciator.qml" line="401"/>
         <source>Unacknowledged</source>
         <translation>غير مُقرّ به</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/MasterAnnunciator.qml" line="385"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/MasterAnnunciator.qml" line="402"/>
         <source>Acknowledged</source>
         <translation>تم الإقرار</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/MasterAnnunciator.qml" line="386"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/MasterAnnunciator.qml" line="403"/>
         <source>Returned to normal, awaiting reset</source>
         <translation>عاد إلى الوضع الطبيعي، في انتظار إعادة التعيين</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/MasterAnnunciator.qml" line="387"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/MasterAnnunciator.qml" line="404"/>
         <source>click to show the widget</source>
         <translation>انقر لإظهار الأداة</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/MasterAnnunciator.qml" line="398"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/MasterAnnunciator.qml" line="415"/>
         <source>No active alarms</source>
         <translation>لا توجد إنذارات نشطة</translation>
     </message>
@@ -20362,22 +20360,22 @@ To reuse this seat on another device, email alex@serial-studio.com with your dev
         <translation>مرجع</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/MemoryManagerDialog.qml" line="73"/>
+        <location filename="../../qml/AI/MemoryManagerDialog.qml" line="74"/>
         <source>Something the assistant should remember…</source>
         <translation>شيء يجب على المساعد تذكره…</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/MemoryManagerDialog.qml" line="77"/>
+        <location filename="../../qml/AI/MemoryManagerDialog.qml" line="78"/>
         <source>Remember</source>
         <translation>تذكر</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/MemoryManagerDialog.qml" line="146"/>
+        <location filename="../../qml/AI/MemoryManagerDialog.qml" line="147"/>
         <source>Forget this fact</source>
         <translation>نسيان هذه المعلومة</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/MemoryManagerDialog.qml" line="162"/>
+        <location filename="../../qml/AI/MemoryManagerDialog.qml" line="163"/>
         <source>Nothing remembered yet. Add a fact above, or approve one when the assistant proposes it in chat.</source>
         <translation>لا توجد معلومات محفوظة بعد. أضف معلومة أعلاه، أو وافق على واحدة عندما يقترحها المساعد في المحادثة.</translation>
     </message>
@@ -20815,12 +20813,12 @@ Would you like to open the download page?</source>
 <context>
     <name>Misc::GraphicsBackend</name>
     <message>
-        <location filename="../../../core/Ui/Misc/GraphicsBackend.cpp" line="280"/>
+        <location filename="../../../core/Ui/Misc/GraphicsBackend.cpp" line="444"/>
         <source>Restart Required</source>
         <translation>إعادة التشغيل مطلوبة</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/Misc/GraphicsBackend.cpp" line="281"/>
+        <location filename="../../../core/Ui/Misc/GraphicsBackend.cpp" line="445"/>
         <source>The new rendering backend will take effect after restarting Serial Studio. Restart now to apply the change?</source>
         <translation>سيصبح محرك العرض الجديد فعالًا بعد إعادة تشغيل Serial Studio. هل تريد إعادة التشغيل الآن لتطبيق التغيير؟</translation>
     </message>
@@ -22211,17 +22209,17 @@ Add groups above to poll multiple register types.</source>
         <translation>تصفية حسب القناة…</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/NotificationLog.qml" line="162"/>
+        <location filename="../../qml/Widgets/Dashboard/NotificationLog.qml" line="171"/>
         <source>Clear all notifications</source>
         <translation>مسح جميع الإشعارات</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/NotificationLog.qml" line="247"/>
+        <location filename="../../qml/Widgets/Dashboard/NotificationLog.qml" line="256"/>
         <source>(no title)</source>
         <translation>(بلا عنوان)</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/NotificationLog.qml" line="305"/>
+        <location filename="../../qml/Widgets/Dashboard/NotificationLog.qml" line="314"/>
         <source>No notifications yet</source>
         <translation>لا توجد إشعارات بعد</translation>
     </message>
@@ -22614,22 +22612,22 @@ Add groups above to poll multiple register types.</source>
         <translation>تصفية حسب الاسم…</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUaTagBrowser.qml" line="428"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUaTagBrowser.qml" line="429"/>
         <source>%1 tag(s), %2 channel(s) selected</source>
         <translation>%1 وسم، %2 قناة محددة</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUaTagBrowser.qml" line="435"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUaTagBrowser.qml" line="436"/>
         <source>Select All Readable</source>
         <translation>تحديد الكل القابل للقراءة</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUaTagBrowser.qml" line="442"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUaTagBrowser.qml" line="443"/>
         <source>Cancel</source>
         <translation>إلغاء</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUaTagBrowser.qml" line="449"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUaTagBrowser.qml" line="450"/>
         <source>OK</source>
         <translation>موافق</translation>
     </message>
@@ -23271,23 +23269,23 @@ Add groups above to poll multiple register types.</source>
 <context>
     <name>PlotMarkerPopup</name>
     <message>
-        <location filename="../../qml/Widgets/PlotWidget/PlotMarkerPopup.qml" line="50"/>
-        <location filename="../../qml/Widgets/PlotWidget/PlotMarkerPopup.qml" line="59"/>
+        <location filename="../../qml/Widgets/PlotWidget/PlotMarkerPopup.qml" line="52"/>
+        <location filename="../../qml/Widgets/PlotWidget/PlotMarkerPopup.qml" line="61"/>
         <source>M%1</source>
         <translation>M%1</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/PlotWidget/PlotMarkerPopup.qml" line="67"/>
+        <location filename="../../qml/Widgets/PlotWidget/PlotMarkerPopup.qml" line="69"/>
         <source>Marker name:</source>
         <translation>اسم العلامة:</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/PlotWidget/PlotMarkerPopup.qml" line="79"/>
+        <location filename="../../qml/Widgets/PlotWidget/PlotMarkerPopup.qml" line="81"/>
         <source>Add</source>
         <translation>إضافة</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/PlotWidget/PlotMarkerPopup.qml" line="84"/>
+        <location filename="../../qml/Widgets/PlotWidget/PlotMarkerPopup.qml" line="86"/>
         <source>Cancel</source>
         <translation>إلغاء</translation>
     </message>
@@ -23500,52 +23498,52 @@ Add groups above to poll multiple register types.</source>
         <translation>جميع مستويات الخطورة</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ProblemCenter.qml" line="248"/>
+        <location filename="../../qml/Dialogs/ProblemCenter.qml" line="249"/>
         <source>Running Diagnostics</source>
         <translation>تشغيل التشخيصات</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ProblemCenter.qml" line="249"/>
+        <location filename="../../qml/Dialogs/ProblemCenter.qml" line="250"/>
         <source>Run Diagnostics</source>
         <translation>تشغيل التشخيصات</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ProblemCenter.qml" line="255"/>
+        <location filename="../../qml/Dialogs/ProblemCenter.qml" line="256"/>
         <source>Refresh</source>
         <translation>تحديث</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ProblemCenter.qml" line="262"/>
+        <location filename="../../qml/Dialogs/ProblemCenter.qml" line="263"/>
         <source>Clear</source>
         <translation>مسح</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ProblemCenter.qml" line="385"/>
+        <location filename="../../qml/Dialogs/ProblemCenter.qml" line="386"/>
         <source>Go To</source>
         <translation>الانتقال إلى</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ProblemCenter.qml" line="423"/>
+        <location filename="../../qml/Dialogs/ProblemCenter.qml" line="424"/>
         <source>No problems match the current filter</source>
         <translation>لا توجد مشاكل تطابق المرشح الحالي</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ProblemCenter.qml" line="424"/>
+        <location filename="../../qml/Dialogs/ProblemCenter.qml" line="425"/>
         <source>No problems detected</source>
         <translation>لم يتم اكتشاف مشاكل</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ProblemCenter.qml" line="433"/>
+        <location filename="../../qml/Dialogs/ProblemCenter.qml" line="434"/>
         <source>Project, link and script checks run automatically.</source>
         <translation>تُجرى فحوصات المشروع والرابط والسكريبت تلقائياً.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ProblemCenter.qml" line="449"/>
+        <location filename="../../qml/Dialogs/ProblemCenter.qml" line="450"/>
         <source>Last checked at %1</source>
         <translation>آخر فحص في %1</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ProblemCenter.qml" line="458"/>
+        <location filename="../../qml/Dialogs/ProblemCenter.qml" line="459"/>
         <source>Close</source>
         <translation>إغلاق</translation>
     </message>
@@ -25871,12 +25869,12 @@ Reload it?</source>
         <translation>فشل تحميل نص الترحيب :(</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ModuleManager.cpp" line="274"/>
+        <location filename="../../src/Misc/ModuleManager.cpp" line="275"/>
         <source>Critical</source>
         <translation>حرج</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ModuleManager.cpp" line="274"/>
+        <location filename="../../src/Misc/ModuleManager.cpp" line="275"/>
         <source>Warning</source>
         <translation>تحذير</translation>
     </message>
@@ -26361,22 +26359,22 @@ function parse(%1) { ... }
         <translation>كلمة مفتاحية '%1' غير مدعومة في المستوى الأعلى</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/Console/Export.cpp" line="176"/>
+        <location filename="../../../core/Ui/Console/Export.cpp" line="177"/>
         <source>Console Output File Error</source>
         <translation>خطأ في ملف إخراج وحدة التحكم</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/Console/Export.cpp" line="177"/>
+        <location filename="../../../core/Ui/Console/Export.cpp" line="178"/>
         <source>Cannot open file for writing!</source>
         <translation>تعذر فتح الملف للكتابة!</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/Misc/GraphicsBackend.cpp" line="329"/>
+        <location filename="../../../core/Ui/Misc/GraphicsBackend.cpp" line="495"/>
         <source>Automatic (Platform Default)</source>
         <translation>تلقائي (افتراضي النظام)</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/Misc/GraphicsBackend.cpp" line="334"/>
+        <location filename="../../../core/Ui/Misc/GraphicsBackend.cpp" line="500"/>
         <source>Software (Fallback)</source>
         <translation>برمجي (بديل)</translation>
     </message>
@@ -27125,72 +27123,72 @@ function parse(%1) { ... }
         <translation>صفحة الغلاف (الشعار، عنوان المستند، العنوان الفرعي للاختبار)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="545"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="546"/>
         <source>Test information (project, timestamps, classification and notes)</source>
         <translation>معلومات الاختبار (المشروع، الطوابع الزمنية، التصنيف والملاحظات)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="549"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="551"/>
         <source>Measurement summary (min, max, mean, std. deviation per parameter)</source>
         <translation>ملخص القياسات (الحد الأدنى، الحد الأقصى، المتوسط، الانحراف المعياري لكل معامل)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="553"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="556"/>
         <source>Parameter trends (time-series chart per numeric parameter)</source>
         <translation>اتجاهات المعاملات (مخطط السلاسل الزمنية لكل معامل رقمي)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="557"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="561"/>
         <source>Annotate min, max, and mean values on plots</source>
         <translation>إضافة تعليقات توضيحية لقيم الحد الأدنى والأقصى والمتوسط على المخططات</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="593"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="598"/>
         <source>Include datasets</source>
         <translation>تضمين مجموعات البيانات</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="607"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="612"/>
         <source>Expand All</source>
         <translation>توسيع الكل</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="616"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="621"/>
         <source>Collapse All</source>
         <translation>طي الكل</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="628"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="633"/>
         <source>Search datasets</source>
         <translation>بحث في مجموعات البيانات</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="754"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="761"/>
         <source>Loading datasets...</source>
         <translation>جارٍ تحميل مجموعات البيانات...</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="755"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="762"/>
         <source>No datasets match your search.</source>
         <translation>لا توجد مجموعات بيانات تطابق البحث.</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="775"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="782"/>
         <source>Select at least one dataset to include.</source>
         <translation>حدد مجموعة بيانات واحدة على الأقل لتضمينها.</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="784"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="791"/>
         <source>Cancel</source>
         <translation>إلغاء</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="792"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="799"/>
         <source>Export PDF</source>
         <translation>تصدير PDF</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="792"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="799"/>
         <source>Export HTML</source>
         <translation>تصدير HTML</translation>
     </message>
@@ -28638,12 +28636,12 @@ Add absolute addresses above to poll the controller.</source>
         <translation>التفضيلات</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="62"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="63"/>
         <source>General</source>
         <translation>عام</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="68"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="69"/>
         <source>Startup</source>
         <translation>بدء التشغيل</translation>
     </message>
@@ -28652,22 +28650,22 @@ Add absolute addresses above to poll the controller.</source>
         <translation type="vanished">لوحة المعلومات</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="86"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="87"/>
         <source>Taskbar</source>
         <translation>شريط المهام</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="92"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="93"/>
         <source>Console</source>
         <translation>وحدة التحكم</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="104"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="105"/>
         <source>Sounds</source>
         <translation>الأصوات</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="111"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="112"/>
         <source>Notifications</source>
         <translation>الإشعارات</translation>
     </message>
@@ -28836,7 +28834,7 @@ Add absolute addresses above to poll the controller.</source>
         <translation type="vanished">مخصص</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="80"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="81"/>
         <source>Layout</source>
         <translation>التخطيط</translation>
     </message>
@@ -28857,7 +28855,7 @@ Add absolute addresses above to poll the controller.</source>
         <translation type="vanished">هامش التخطيط التلقائي</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="98"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="99"/>
         <source>Export</source>
         <translation>تصدير</translation>
     </message>
@@ -28886,7 +28884,7 @@ Add absolute addresses above to poll the controller.</source>
         <translation type="vanished">السلوك</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="74"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="75"/>
         <source>Plotting</source>
         <translation>الرسم البياني</translation>
     </message>
@@ -29039,17 +29037,17 @@ Add absolute addresses above to poll the controller.</source>
         <translation type="vanished">معطل افتراضياً — تصدر QT و QML تحذيرات بشكل متكرر وتفعيل هذا قد يطغى على التنبيهات الحقيقية. الرسائل الحرجة يتم توجيهها دائماً بغض النظر عن هذا الإعداد.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="185"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="186"/>
         <source>Reset</source>
         <translation>إعادة تعيين</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="245"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="246"/>
         <source>Close</source>
         <translation>إغلاق</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="253"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="254"/>
         <source>Apply</source>
         <translation>تطبيق</translation>
     </message>
@@ -29351,22 +29349,22 @@ Add absolute addresses above to poll the controller.</source>
 <context>
     <name>SettingsPlottingPage</name>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsPlottingPage.qml" line="56"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsPlottingPage.qml" line="58"/>
         <source>Data Plotting</source>
         <translation>رسم البيانات</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsPlottingPage.qml" line="71"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsPlottingPage.qml" line="73"/>
         <source>Time Range</source>
         <translation>النطاق الزمني</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsPlottingPage.qml" line="123"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsPlottingPage.qml" line="125"/>
         <source>Point Count</source>
         <translation>عدد النقاط</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsPlottingPage.qml" line="148"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsPlottingPage.qml" line="150"/>
         <source>UI Refresh Rate (Hz)</source>
         <translation>معدل تحديث الواجهة (Hz)</translation>
     </message>
@@ -29584,77 +29582,82 @@ Add absolute addresses above to poll the controller.</source>
 <context>
     <name>SettingsStartupPage</name>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="59"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="62"/>
         <source>Graphics</source>
         <translation>الرسومات</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="77"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="80"/>
         <source>Rendering Backend</source>
         <translation>محرك العرض</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="110"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="113"/>
         <source>Display Scaling</source>
         <translation>تحجيم العرض</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="143"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="146"/>
         <source>Custom Scale (%)</source>
         <translation>مقياس مخصص (%)</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="180"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="178"/>
+        <source>HDR Output</source>
+        <translation>إخراج HDR</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="210"/>
         <source>System</source>
         <translation>النظام</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="195"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="225"/>
         <source>SIMD Instruction Set</source>
         <translation>مجموعة تعليمات SIMD</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="225"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="255"/>
         <source>Reduce Motion</source>
         <translation>تقليل الحركة</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="249"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="279"/>
         <source>Apply Performance Hints</source>
         <translation>تطبيق تلميحات الأداء</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="272"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="302"/>
         <source>Keep Display Awake</source>
         <translation>إبقاء الشاشة نشطة</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="301"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="331"/>
         <source>Performance hints raise process priority and opt out of OS power throttling. Changes take effect the next time Serial Studio starts.</source>
         <translation>تلميحات الأداء ترفع أولوية العملية وتلغي الاشتراك في تقييد الطاقة من النظام. تصبح التغييرات سارية عند بدء Serial Studio في المرة القادمة.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="312"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="342"/>
         <source>Updates &amp; News</source>
         <translation>التحديثات والأخبار</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="328"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="358"/>
         <source>Automatically Check for Updates</source>
         <translation>التحقق من التحديثات تلقائيًا</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="351"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="381"/>
         <source>Check for Extension Updates</source>
         <translation>التحقق من تحديثات الإضافات</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="375"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="405"/>
         <source>Install Extension Updates Automatically</source>
         <translation>تثبيت تحديثات الإضافات تلقائيًا</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="405"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="435"/>
         <source>Installed extensions and themes are checked when Serial Studio starts, together with application updates. Serial Studio asks before installing them unless automatic installation is enabled.</source>
         <translation>يتم التحقق من الإضافات والسمات المثبتة عند بدء Serial Studio، مع تحديثات التطبيق. يطلب Serial Studio الإذن قبل تثبيتها ما لم يتم تفعيل التثبيت التلقائي.</translation>
     </message>
@@ -30909,42 +30912,42 @@ Add absolute addresses above to poll the controller.</source>
         <translation>إعدادات وحدة التحكم</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="593"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="597"/>
         <source>Find in console</source>
         <translation>البحث في وحدة التحكم</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="630"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="634"/>
         <source>%1 of %2</source>
         <translation>%1 من %2</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="631"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="635"/>
         <source>No results</source>
         <translation>لا توجد نتائج</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="643"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="647"/>
         <source>Match case</source>
         <translation>مطابقة حالة الأحرف</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="658"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="662"/>
         <source>Previous match</source>
         <translation>التطابق السابق</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="669"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="673"/>
         <source>Next match</source>
         <translation>التطابق التالي</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="679"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="683"/>
         <source>Close search</source>
         <translation>إغلاق البحث</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="726"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="730"/>
         <source>Send a file to the connected device</source>
         <translation>إرسال ملف إلى الجهاز المتصل</translation>
     </message>
@@ -31010,7 +31013,7 @@ Add absolute addresses above to poll the controller.</source>
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="392"/>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="875"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="879"/>
         <source>Hex</source>
         <translation>هيكس</translation>
     </message>
@@ -31020,17 +31023,17 @@ Add absolute addresses above to poll the controller.</source>
         <translation>وضع العرض السداسي عشري</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="496"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="500"/>
         <source>Scrollback Lines</source>
         <translation>سطور التمرير للخلف</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="768"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="772"/>
         <source>Send Data to Device</source>
         <translation>إرسال البيانات إلى الجهاز</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="928"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="933"/>
         <source>Send data to the device</source>
         <translation>إرسال البيانات إلى الجهاز</translation>
     </message>
@@ -31040,17 +31043,17 @@ Add absolute addresses above to poll the controller.</source>
         <translation>إظهار الطابع الزمني</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="458"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="459"/>
         <source>Echo</source>
         <translation>صدى</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="474"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="476"/>
         <source>Emulate VT-100</source>
         <translation>محاكاة VT-100</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="486"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="489"/>
         <source>ANSI Colors</source>
         <translation>ألوان ANSI</translation>
     </message>
@@ -31239,95 +31242,95 @@ Add absolute addresses above to poll the controller.</source>
 <context>
     <name>ToolCallCard</name>
     <message>
-        <location filename="../../qml/AI/ToolCallCard.qml" line="67"/>
+        <location filename="../../qml/AI/ToolCallCard.qml" line="69"/>
         <source>Awaiting approval</source>
         <translation>في انتظار الموافقة</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/ToolCallCard.qml" line="68"/>
+        <location filename="../../qml/AI/ToolCallCard.qml" line="70"/>
         <source>Done</source>
         <translation>تم</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/ToolCallCard.qml" line="69"/>
+        <location filename="../../qml/AI/ToolCallCard.qml" line="71"/>
         <source>Error</source>
         <translation>خطأ</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/ToolCallCard.qml" line="70"/>
+        <location filename="../../qml/AI/ToolCallCard.qml" line="72"/>
         <source>Denied</source>
         <translation>مرفوض</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/ToolCallCard.qml" line="71"/>
+        <location filename="../../qml/AI/ToolCallCard.qml" line="73"/>
         <source>Blocked</source>
         <translation>محظور</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/ToolCallCard.qml" line="72"/>
+        <location filename="../../qml/AI/ToolCallCard.qml" line="74"/>
         <source>Running</source>
         <translation>قيد التشغيل</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/ToolCallCard.qml" line="160"/>
+        <location filename="../../qml/AI/ToolCallCard.qml" line="162"/>
         <source>Verified</source>
         <translation>تم التحقق</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/ToolCallCard.qml" line="160"/>
+        <location filename="../../qml/AI/ToolCallCard.qml" line="162"/>
         <source>Verify failed</source>
         <translation>فشل التحقق</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/ToolCallCard.qml" line="200"/>
+        <location filename="../../qml/AI/ToolCallCard.qml" line="202"/>
         <source>Verification failed: %1</source>
         <translation>فشل التحقق: %1</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/ToolCallCard.qml" line="201"/>
+        <location filename="../../qml/AI/ToolCallCard.qml" line="203"/>
         <source>The applied change failed its verification check.</source>
         <translation>فشل التغيير المطبق في فحص التحقق.</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/ToolCallCard.qml" line="210"/>
+        <location filename="../../qml/AI/ToolCallCard.qml" line="212"/>
         <source>Restore checkpoint…</source>
         <translation>استعادة نقطة الحفظ…</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/ToolCallCard.qml" line="229"/>
+        <location filename="../../qml/AI/ToolCallCard.qml" line="231"/>
         <source>Approve</source>
         <translation>موافقة</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/ToolCallCard.qml" line="235"/>
+        <location filename="../../qml/AI/ToolCallCard.qml" line="237"/>
         <source>Deny</source>
         <translation>رفض</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/ToolCallCard.qml" line="252"/>
+        <location filename="../../qml/AI/ToolCallCard.qml" line="254"/>
         <source>Arguments</source>
         <translation>المعاملات</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/ToolCallCard.qml" line="289"/>
-        <location filename="../../qml/AI/ToolCallCard.qml" line="349"/>
+        <location filename="../../qml/AI/ToolCallCard.qml" line="291"/>
+        <location filename="../../qml/AI/ToolCallCard.qml" line="351"/>
         <source>Copy</source>
         <translation>نسخ</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/ToolCallCard.qml" line="294"/>
-        <location filename="../../qml/AI/ToolCallCard.qml" line="354"/>
+        <location filename="../../qml/AI/ToolCallCard.qml" line="296"/>
+        <location filename="../../qml/AI/ToolCallCard.qml" line="356"/>
         <source>Copy All</source>
         <translation>نسخ الكل</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/ToolCallCard.qml" line="302"/>
-        <location filename="../../qml/AI/ToolCallCard.qml" line="362"/>
+        <location filename="../../qml/AI/ToolCallCard.qml" line="304"/>
+        <location filename="../../qml/AI/ToolCallCard.qml" line="364"/>
         <source>Select All</source>
         <translation>تحديد الكل</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/ToolCallCard.qml" line="310"/>
+        <location filename="../../qml/AI/ToolCallCard.qml" line="312"/>
         <source>Result</source>
         <translation>النتيجة</translation>
     </message>
@@ -31531,23 +31534,23 @@ Add absolute addresses above to poll the controller.</source>
         <translation>إدارة اتصال لوحة المعلومات عن بُعد</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="293"/>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="304"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="294"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="305"/>
         <source>Disconnect</source>
         <translation>قطع الاتصال</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="293"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="294"/>
         <source>Connect</source>
         <translation>اتصال</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="293"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="294"/>
         <source>Connecting…</source>
         <translation>جارٍ الاتصال…</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="292"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="293"/>
         <source>Connect or disconnect from the configured device</source>
         <translation>الاتصال أو قطع الاتصال بالجهاز المُهيأ</translation>
     </message>
@@ -31659,62 +31662,62 @@ Add absolute addresses above to poll the controller.</source>
         <translation>اختيار قالب</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/TransmitCodeDialog.qml" line="170"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/TransmitCodeDialog.qml" line="171"/>
         <source>Import</source>
         <translation>استيراد</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/TransmitCodeDialog.qml" line="176"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/TransmitCodeDialog.qml" line="177"/>
         <source>Import a transmit function from a .js file</source>
         <translation>استيراد دالة إرسال من ملف .js</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/TransmitCodeDialog.qml" line="182"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/TransmitCodeDialog.qml" line="183"/>
         <source>Validate</source>
         <translation>التحقق</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/TransmitCodeDialog.qml" line="187"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/TransmitCodeDialog.qml" line="188"/>
         <source>Verify that the script compiles and defines transmit(value)</source>
         <translation>التحقق من أن السكريبت يُترجم ويُعرّف transmit(value)</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/TransmitCodeDialog.qml" line="225"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/TransmitCodeDialog.qml" line="226"/>
         <source>Produced Bytes</source>
         <translation>البايتات الناتجة</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/TransmitCodeDialog.qml" line="247"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/TransmitCodeDialog.qml" line="248"/>
         <source>Interact with the control to see its output</source>
         <translation>التفاعل مع عنصر التحكم لرؤية مخرجاته</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/TransmitCodeDialog.qml" line="275"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/TransmitCodeDialog.qml" line="276"/>
         <source>%1 bytes, from the last version that compiled</source>
         <translation>%1 بايت، من آخر إصدار تم ترجمته</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/TransmitCodeDialog.qml" line="276"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/TransmitCodeDialog.qml" line="277"/>
         <source>%1 bytes</source>
         <translation>%1 بايت</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/TransmitCodeDialog.qml" line="298"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/TransmitCodeDialog.qml" line="299"/>
         <source>Save</source>
         <translation>حفظ</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/TransmitCodeDialog.qml" line="301"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/TransmitCodeDialog.qml" line="302"/>
         <source>Validate and store the transmit function</source>
         <translation>التحقق من صحة دالة الإرسال وتخزينها</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/TransmitCodeDialog.qml" line="310"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/TransmitCodeDialog.qml" line="311"/>
         <source>Close</source>
         <translation>إغلاق</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/TransmitCodeDialog.qml" line="313"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/TransmitCodeDialog.qml" line="314"/>
         <source>Close without storing this edit</source>
         <translation>إغلاق بدون تخزين هذا التعديل</translation>
     </message>
@@ -31779,22 +31782,22 @@ Add absolute addresses above to poll the controller.</source>
         <translation>يلتقط الفردي مسحة واحدة، ثم يتوقف.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="241"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="242"/>
         <source>Slope:</source>
         <translation>الميل:</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="273"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="274"/>
         <source>Trigger on a downward crossing</source>
         <translation>التشغيل عند عبور هابط</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="319"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="320"/>
         <source>Timebase:</source>
         <translation>القاعدة الزمنية:</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="388"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="389"/>
         <source>Leave timebase empty to use the plot's time range; lower it to zoom in on a fast signal. Holdoff ignores new triggers for a moment after each.</source>
         <translation>اترك القاعدة الزمنية فارغة لاستخدام النطاق الزمني للرسم؛ اخفضها للتكبير على إشارة سريعة. يتجاهل Holdoff المشغلات الجديدة للحظة بعد كل واحدة.</translation>
     </message>
@@ -31803,7 +31806,7 @@ Add absolute addresses above to poll the controller.</source>
         <translation type="vanished">الإشارة:</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="230"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="231"/>
         <source>Value to cross</source>
         <translation>القيمة المراد عبورها</translation>
     </message>
@@ -31812,17 +31815,17 @@ Add absolute addresses above to poll the controller.</source>
         <translation type="vanished">الحافة:</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="254"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="255"/>
         <source>Rising</source>
         <translation>صاعد</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="258"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="259"/>
         <source>Trigger on an upward crossing</source>
         <translation>التشغيل عند عبور صاعد</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="269"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="270"/>
         <source>Falling</source>
         <translation>هابط</translation>
     </message>
@@ -31831,7 +31834,7 @@ Add absolute addresses above to poll the controller.</source>
         <translation type="vanished">تبدأ مسحة جديدة في كل مرة تعبر فيها الإشارة المستوى في الاتجاه المختار. يعمل Auto أيضاً بحرية عندما لا يتم العثور على عبور.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="292"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="293"/>
         <source>Timing</source>
         <translation>التوقيت</translation>
     </message>
@@ -31840,23 +31843,23 @@ Add absolute addresses above to poll the controller.</source>
         <translation type="vanished">القاعدة الزمنية (ميلي ثانية):</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="332"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="333"/>
         <source>Match time range</source>
         <translation>مطابقة النطاق الزمني</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="345"/>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="375"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="346"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="376"/>
         <source>ms</source>
         <translation>ميلي ثانية</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="351"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="352"/>
         <source>Holdoff:</source>
         <translation>Holdoff:</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="364"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="365"/>
         <source>0</source>
         <translation>0</translation>
     </message>
@@ -31865,17 +31868,17 @@ Add absolute addresses above to poll the controller.</source>
         <translation type="vanished">تحدد القاعدة الزمنية مقدار الوقت الذي تعرضه مسحة واحدة؛ اتركها فارغة لاستخدام النطاق الزمني للرسم. اخفضها للتكبير على إشارة سريعة. يتجاهل Holdoff المشغلات الجديدة للحظة بعد كل واحدة.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="403"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="404"/>
         <source>Capture Next</source>
         <translation>التقاط التالي</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="405"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="406"/>
         <source>Arm for one more single-shot capture</source>
         <translation>التسليح لالتقاط لقطة واحدة إضافية</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="217"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="218"/>
         <source>Level:</source>
         <translation>المستوى:</translation>
     </message>
@@ -31901,7 +31904,7 @@ Add absolute addresses above to poll the controller.</source>
         <translation type="vanished">إعادة التسليح</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="418"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="419"/>
         <source>Close</source>
         <translation>إغلاق</translation>
     </message>
@@ -31952,28 +31955,27 @@ Add absolute addresses above to poll the controller.</source>
 <context>
     <name>UI::AlarmMonitor</name>
     <message>
-        <location filename="../../../core/Ui/UI/AlarmMonitor.cpp" line="218"/>
+        <location filename="../../../core/Ui/UI/AlarmMonitor.cpp" line="224"/>
         <source>Alarm</source>
         <translation>إنذار</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/AlarmMonitor.cpp" line="219"/>
+        <location filename="../../../core/Ui/UI/AlarmMonitor.cpp" line="225"/>
         <source>critical</source>
         <translation>حرج</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/AlarmMonitor.cpp" line="219"/>
+        <location filename="../../../core/Ui/UI/AlarmMonitor.cpp" line="225"/>
         <source>warning</source>
         <translation>تحذير</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/AlarmMonitor.cpp" line="223"/>
+        <location filename="../../../core/Ui/UI/AlarmMonitor.cpp" line="229"/>
         <source>Value %1%2 entered the %3 band (%4–%5).</source>
         <translation>دخلت القيمة %1%2 نطاق %3 (%4–%5).</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/AlarmMonitor.cpp" line="228"/>
-        <location filename="../../../core/Ui/UI/Alarms/AlarmAnnunciator.cpp" line="799"/>
+        <location filename="../../../core/Ui/UI/AlarmMonitor.cpp" line="235"/>
         <source>Alarms</source>
         <translation>الإنذارات</translation>
     </message>
@@ -31981,29 +31983,86 @@ Add absolute addresses above to poll the controller.</source>
 <context>
     <name>UI::Alarms::AlarmAnnunciator</name>
     <message>
-        <location filename="../../../core/Ui/UI/Alarms/AlarmAnnunciator.cpp" line="386"/>
+        <location filename="../../../core/Ui/UI/Alarms/AlarmAnnunciator.cpp" line="425"/>
         <source>System default</source>
         <translation>افتراضي النظام</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/Alarms/AlarmAnnunciator.cpp" line="461"/>
+        <location filename="../../../core/Ui/UI/Alarms/AlarmAnnunciator.cpp" line="500"/>
         <source>Path climbs out of the project folder</source>
         <translation>المسار يخرج من مجلد المشروع</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/Alarms/AlarmAnnunciator.cpp" line="529"/>
+        <location filename="../../../core/Ui/UI/Alarms/AlarmAnnunciator.cpp" line="568"/>
         <source>Unknown sound slot '%1'</source>
         <translation>فتحة صوت غير معروفة '%1'</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/Alarms/AlarmAnnunciator.cpp" line="787"/>
+        <location filename="../../../core/Ui/UI/Alarms/AlarmAnnunciator.cpp" line="826"/>
         <source>Alarms</source>
         <translation>الإنذارات</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/Alarms/AlarmAnnunciator.cpp" line="1287"/>
+        <source>Pick a valid PCM WAV file, or clear the override to use the bundled sound.</source>
+        <translation type="vanished">اختر ملف PCM WAV صالح، أو امسح التجاوز لاستخدام الصوت المدمج.</translation>
+    </message>
+</context>
+<context>
+    <name>UI::Alarms::AnnunciatorChecker</name>
+    <message>
+        <location filename="../../../core/Ui/UI/Alarms/AnnunciatorChecker.cpp" line="71"/>
+        <source>Alarm sound file unavailable: %1</source>
+        <translation>ملف صوت الإنذار غير متاح: %1</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/UI/Alarms/AnnunciatorChecker.cpp" line="73"/>
         <source>Pick a valid PCM WAV file, or clear the override to use the bundled sound.</source>
         <translation>اختر ملف PCM WAV صالح، أو امسح التجاوز لاستخدام الصوت المدمج.</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/UI/Alarms/AnnunciatorChecker.cpp" line="81"/>
+        <source>Aural alerts are off, but this project defines alarms</source>
+        <translation>التنبيهات الصوتية معطّلة، لكن هذا المشروع يحدّد أجراس إنذار</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/UI/Alarms/AnnunciatorChecker.cpp" line="82"/>
+        <source>The project configures alarm bands or alarm sounds, and none of them will be heard while the master enable is off.</source>
+        <translation>يحتوي المشروع على نطاقات إنذار أو أصوات إنذار، ولن يتم سماع أي منها بينما المفتاح الرئيسي معطّل.</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/UI/Alarms/AnnunciatorChecker.cpp" line="84"/>
+        <source>Enable alarm sounds in Preferences &gt; Sounds, or remove the project's alarm configuration.</source>
+        <translation>فعّل أصوات الإنذار في التفضيلات &gt; الأصوات، أو أزل تكوين الإنذار من المشروع.</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/UI/Alarms/AnnunciatorChecker.cpp" line="102"/>
+        <source>No audio output device is available</source>
+        <translation>لا يوجد جهاز إخراج صوت متاح</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/UI/Alarms/AnnunciatorChecker.cpp" line="103"/>
+        <source>Alarm sounds cannot play until an output device is present.</source>
+        <translation>لا يمكن تشغيل أصوات الإنذار حتى يتوفر جهاز إخراج.</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/UI/Alarms/AnnunciatorChecker.cpp" line="104"/>
+        <source>Connect an audio output, or disable sounds in Preferences &gt; Sounds.</source>
+        <translation>قم بتوصيل مخرج صوتي، أو عطّل الأصوات في التفضيلات &gt; الأصوات.</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/UI/Alarms/AnnunciatorChecker.cpp" line="110"/>
+        <source>Alarm sound device '%1' not found</source>
+        <translation>جهاز صوت التنبيه '%1' غير موجود</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/UI/Alarms/AnnunciatorChecker.cpp" line="111"/>
+        <source>Alarm sounds are playing on the system default output instead.</source>
+        <translation>يتم تشغيل أصوات التنبيه على المخرج الافتراضي للنظام بدلاً من ذلك.</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/UI/Alarms/AnnunciatorChecker.cpp" line="112"/>
+        <source>Reconnect the device, or pick another one in Preferences &gt; Sounds.</source>
+        <translation>أعد توصيل الجهاز، أو اختر جهازاً آخر في التفضيلات &gt; الأصوات.</translation>
     </message>
 </context>
 <context>
@@ -33010,82 +33069,82 @@ I understand that when it ends, I'll need to buy a license or build the GPLv3 ve
 <context>
     <name>Widgets::Waterfall</name>
     <message>
-        <location filename="../../../core/Ui/UI/Widgets/Waterfall.cpp" line="291"/>
+        <location filename="../../../core/Ui/UI/Widgets/Waterfall.cpp" line="294"/>
         <source>Viridis</source>
         <translation>Viridis</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/Widgets/Waterfall.cpp" line="293"/>
+        <location filename="../../../core/Ui/UI/Widgets/Waterfall.cpp" line="296"/>
         <source>Inferno</source>
         <translation>Inferno</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/Widgets/Waterfall.cpp" line="295"/>
+        <location filename="../../../core/Ui/UI/Widgets/Waterfall.cpp" line="298"/>
         <source>Magma</source>
         <translation>Magma</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/Widgets/Waterfall.cpp" line="297"/>
+        <location filename="../../../core/Ui/UI/Widgets/Waterfall.cpp" line="300"/>
         <source>Plasma</source>
         <translation>Plasma</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/Widgets/Waterfall.cpp" line="299"/>
+        <location filename="../../../core/Ui/UI/Widgets/Waterfall.cpp" line="302"/>
         <source>Turbo</source>
         <translation>Turbo</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/Widgets/Waterfall.cpp" line="301"/>
+        <location filename="../../../core/Ui/UI/Widgets/Waterfall.cpp" line="304"/>
         <source>Jet</source>
         <translation>نفاث</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/Widgets/Waterfall.cpp" line="303"/>
+        <location filename="../../../core/Ui/UI/Widgets/Waterfall.cpp" line="306"/>
         <source>Hot</source>
         <translation>ساخن</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/Widgets/Waterfall.cpp" line="305"/>
+        <location filename="../../../core/Ui/UI/Widgets/Waterfall.cpp" line="308"/>
         <source>Grayscale</source>
         <translation>تدرج رمادي</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/Widgets/Waterfall.cpp" line="307"/>
+        <location filename="../../../core/Ui/UI/Widgets/Waterfall.cpp" line="310"/>
         <source>Grayscale (Inverted)</source>
         <translation>تدرج رمادي (معكوس)</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/Widgets/Waterfall.cpp" line="309"/>
+        <location filename="../../../core/Ui/UI/Widgets/Waterfall.cpp" line="312"/>
         <source>Cividis</source>
         <translation>Cividis</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/Widgets/Waterfall.cpp" line="311"/>
+        <location filename="../../../core/Ui/UI/Widgets/Waterfall.cpp" line="314"/>
         <source>Cubehelix</source>
         <translation>Cubehelix</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/Widgets/Waterfall.cpp" line="313"/>
+        <location filename="../../../core/Ui/UI/Widgets/Waterfall.cpp" line="316"/>
         <source>SDR Classic</source>
         <translation>SDR كلاسيكي</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/Widgets/Waterfall.cpp" line="315"/>
+        <location filename="../../../core/Ui/UI/Widgets/Waterfall.cpp" line="318"/>
         <source>Spectral</source>
         <translation>طيفي</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/Widgets/Waterfall.cpp" line="317"/>
+        <location filename="../../../core/Ui/UI/Widgets/Waterfall.cpp" line="320"/>
         <source>Red/Blue</source>
         <translation>أحمر/أزرق</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/Widgets/Waterfall.cpp" line="319"/>
+        <location filename="../../../core/Ui/UI/Widgets/Waterfall.cpp" line="322"/>
         <source>Coolwarm</source>
         <translation>بارد/دافئ</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/Widgets/Waterfall.cpp" line="321"/>
+        <location filename="../../../core/Ui/UI/Widgets/Waterfall.cpp" line="324"/>
         <source>Unknown</source>
         <translation>غير معروف</translation>
     </message>
@@ -33123,12 +33182,12 @@ I understand that when it ends, I'll need to buy a license or build the GPLv3 ve
         <translation>تصفية الودجات…</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/WorkspaceDialog.qml" line="312"/>
+        <location filename="../../qml/Dialogs/WorkspaceDialog.qml" line="313"/>
         <source>Cancel</source>
         <translation>إلغاء</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/WorkspaceDialog.qml" line="319"/>
+        <location filename="../../qml/Dialogs/WorkspaceDialog.qml" line="320"/>
         <source>OK</source>
         <translation>موافق</translation>
     </message>
@@ -33380,7 +33439,7 @@ I understand that when it ends, I'll need to buy a license or build the GPLv3 ve
     </message>
     <message>
         <location filename="../../qml/ProjectEditor/Views/WorkspaceView.qml" line="290"/>
-        <location filename="../../qml/ProjectEditor/Views/WorkspaceView.qml" line="404"/>
+        <location filename="../../qml/ProjectEditor/Views/WorkspaceView.qml" line="405"/>
         <source>(unknown)</source>
         <translation>(غير معروف)</translation>
     </message>
@@ -33407,12 +33466,12 @@ I understand that when it ends, I'll need to buy a license or build the GPLv3 ve
         <translation>مخفي</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/WorkspaceView.qml" line="434"/>
+        <location filename="../../qml/ProjectEditor/Views/WorkspaceView.qml" line="435"/>
         <source>Remove widget from workspace</source>
         <translation>إزالة عنصر الواجهة من مساحة العمل</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/WorkspaceView.qml" line="454"/>
+        <location filename="../../qml/ProjectEditor/Views/WorkspaceView.qml" line="455"/>
         <source>No widgets in this workspace.</source>
         <translation>لا توجد عناصر واجهة في مساحة العمل هذه.</translation>
     </message>

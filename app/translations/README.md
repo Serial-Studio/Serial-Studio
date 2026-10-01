@@ -71,7 +71,7 @@ python3 translation_manager.py --lupdate --lrelease
 
 Fills in missing translations across every `.ts` file in `ts/` (skipping `en_US.ts`, which is treated as the source). It runs `lupdate` first, then translates, then runs `lrelease`.
 
-The script defaults to **Anthropic Claude** (`claude-sonnet-4-5`). Pass `--provider openai` to switch to `gpt-4.1`.
+The script defaults to **Anthropic Claude** (`claude-haiku-4-5`, the cheap tier). Pass `--model claude-sonnet-5-5` for a stronger model, or `--provider openai` to switch to `gpt-4.1`.
 
 ### Translate everything
 
@@ -89,7 +89,7 @@ python3 llm_translate.py --lang fr_FR
 
 ```bash
 python3 llm_translate.py --provider openai
-python3 llm_translate.py --provider anthropic --model claude-sonnet-4-5
+python3 llm_translate.py --provider anthropic --model claude-sonnet-5-5
 ```
 
 ### Reset and re-translate
