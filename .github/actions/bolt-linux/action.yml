@@ -85,7 +85,10 @@ runs:
   # skip-funcs excludes LuaJIT's hand-written VM (one asm function, lj_BC_ISLT + every lj_*
   # entry, built on asm-level jump tables): BOLT's unreachable-block elimination strips blocks
   # those tables still target and emission dies with undefined .Ltmp labels on aarch64 -- and
-  # re-laying hand-tuned interpreter asm has no upside on any arch
+  # re-laying hand-tuned interpreter asm has no upside on any arch. mimalloc is excluded too:
+  # aarch64 BOLT corrupts allocator fast paths (same shape as llvm/llvm-project#155451, bolted
+  # TCMalloc) and the rewritten binary then segfaults in the TLS-heap teardown at exit. The
+  # gdb wrapper on the trainer below prints the backtrace if the trainer still dies
   #
   - name: '🔩 Instrument binary with BOLT'
     shell: bash
@@ -99,7 +102,7 @@ runs:
         --instrumentation-file="$PWD/bolt-prof.fdata" \
         --instrumentation-sleep-time=5 \
         --instrumentation-no-counters-clear \
-        --skip-funcs='lj_BC_ISLT.*'
+        --skip-funcs='lj_BC_ISLT.*,mi_.*,_mi_.*'
 
   #
   # Same two loads as pgo-train-linux, against the instrumented copy. The BOLT runtime dumps
@@ -118,8 +121,11 @@ runs:
       SS_APP: ${{inputs.app}}
     run: |
       set -euo pipefail
+      sudo apt-get install -y --no-install-recommends gdb 1>/dev/null
       set +e
-      "${SS_APP}.inst" --headless --benchmark-hotpath --min-fps 1 --benchmark-output bolt-train.txt
+      gdb -batch -return-child-result -ex run -ex bt \
+        --args "${SS_APP}.inst" --headless --benchmark-hotpath --min-fps 1 \
+        --benchmark-output bolt-train.txt
       rc=$?
       set -e
       test -s bolt-prof.fdata
@@ -183,7 +189,7 @@ runs:
         -reorder-functions=cdsort \
         -split-functions \
         -split-all-cold \
-        -skip-funcs='lj_BC_ISLT.*' \
+        -skip-funcs='lj_BC_ISLT.*,mi_.*,_mi_.*' \
         -remove-symtab \
         -dyno-stats 2>&1 | tee bolt-report.txt
       "llvm-bolt-${BOLT_V}" "$SS_APP" -o "${SS_APP}.sym" \
@@ -192,7 +198,7 @@ runs:
         -reorder-functions=cdsort \
         -split-functions \
         -split-all-cold \
-        -skip-funcs='lj_BC_ISLT.*' \
+        -skip-funcs='lj_BC_ISLT.*,mi_.*,_mi_.*' \
         -update-debug-sections
       rm -f "${SS_APP}.inst"
 
