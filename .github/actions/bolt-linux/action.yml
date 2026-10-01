@@ -72,12 +72,18 @@ runs:
         --instrument \
         --instrumentation-file="$PWD/bolt-prof.fdata" \
         --instrumentation-file-append-pid \
+        --instrumentation-sleep-time=5 \
+        --instrumentation-no-counters-clear \
         --skip-funcs='lj_BC_ISLT.*'
 
   #
-  # Same two loads as pgo-train-linux, against the instrumented copy; the BOLT runtime dumps
-  # its profile on clean process exit, which both loads guarantee (they quit through the event
-  # loop, exactly like the PGO training)
+  # Same two loads as pgo-train-linux, against the instrumented copy. The BOLT runtime dumps
+  # the cumulative profile every 5 s (sleep-time + no-counters-clear above), so a trainer
+  # crash in the runtime's exit-path dump -- a known aarch64 fragility in binaries hosting a
+  # JIT (llvm/llvm-project#126000) -- loses only the final seconds of counters. The trainer's
+  # exit code is therefore advisory; what gates is that each run grew the profile set, plus
+  # the merge/rewrite/self-test/throughput steps downstream (spec R3 stays fail-hard: there
+  # is still no path that ships the un-rewritten binary)
   #
   - name: '🏋️ BOLT training run (hotpath)'
     shell: bash
@@ -86,7 +92,15 @@ runs:
       LD_LIBRARY_PATH: ${{inputs.qt-lib-dir}}
       SS_APP: ${{inputs.app}}
     run: |
+      set -euo pipefail
+      set +e
       "${SS_APP}.inst" --headless --benchmark-hotpath --min-fps 1 --benchmark-output bolt-train.txt
+      rc=$?
+      set -e
+      ls bolt-prof.fdata.* 1>/dev/null
+      if [ "$rc" -ne 0 ]; then
+        echo "::warning::instrumented trainer exited ${rc} after dumping a profile (BOLT runtime teardown; tolerated)"
+      fi
 
   - name: '🏋️ BOLT training run (big project)'
     shell: bash
@@ -95,7 +109,17 @@ runs:
       LD_LIBRARY_PATH: ${{inputs.qt-lib-dir}}
       SS_APP: ${{inputs.app}}
     run: |
+      set -euo pipefail
+      before=$(ls bolt-prof.fdata.* 2>/dev/null | wc -l)
+      set +e
       bash tests/benchmarks/big_db_test/run_load.sh "${SS_APP}.inst" 25
+      rc=$?
+      set -e
+      after=$(ls bolt-prof.fdata.* 2>/dev/null | wc -l)
+      test "$after" -gt "$before"
+      if [ "$rc" -ne 0 ]; then
+        echo "::warning::instrumented trainer exited ${rc} after dumping a profile (BOLT runtime teardown; tolerated)"
+      fi
 
   #
   # An empty merge means the training produced no profile, which rewrites the binary blind --
