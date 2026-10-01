@@ -6,7 +6,7 @@
 # still-unstripped binary, instruments it with LLVM BOLT, re-runs the same two training loads
 # the PGO flow used (the license seat is already active from pgo-train-linux; the job's
 # always() step releases it), rewrites the binary from the merged profile, and only then runs
-# the deferred ss_finalize_binary target so the spec-0084 sidecar is cut from the binary that
+# the deferred ss_finalize_binary script so the spec-0084 sidecar is cut from the binary that
 # ships. Every step is fail-hard: there is no fallback to the un-rewritten binary (spec R3).
 #
 
@@ -18,7 +18,7 @@ inputs:
     description: 'Path to the PGO-optimized executable (unstripped, linked with --emit-relocs).'
     required: true
   build-dir:
-    description: 'CMake build directory holding the ss_finalize_binary target.'
+    description: 'CMake build directory holding the generated ss_finalize_binary script.'
     required: true
   qt-lib-dir:
     description: 'Qt library directory placed on LD_LIBRARY_PATH for the training runs.'
@@ -163,13 +163,18 @@ runs:
 
   #
   # The deferred spec-0084 finalize: sidecar split from the REWRITTEN binary, --emit-relocs
-  # payload removed, then the strip. After this step the binary is the one every gate measures
-  # and every package ships
+  # payload removed, then the strip. The generated script runs via cmake -P, never through
+  # cmake --build: the build graph can relink the executable first and silently replace the
+  # rewritten binary with the original link. The readelf probe proves the binary on disk is
+  # the BOLT output (BOLT always stamps .note.bolt_info) before anything is cut from it.
+  # After this step the binary is the one every gate measures and every package ships
   #
   - name: '🔩 Finalize binary (sidecar split + strip)'
     shell: bash
     env:
       BUILD_DIR: ${{inputs.build-dir}}
+      SS_APP: ${{inputs.app}}
     run: |
       set -euo pipefail
-      cmake --build "$BUILD_DIR" --target ss_finalize_binary
+      readelf -x .note.bolt_info "$SS_APP" 1>/dev/null
+      cmake -P "$BUILD_DIR/app/ss_finalize_binary.cmake"

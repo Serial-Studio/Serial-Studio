@@ -1301,13 +1301,27 @@ if(BUILD_COMMERCIAL AND PRODUCTION_OPTIMIZATION)
       if(NOT SS_OBJCOPY)
         message(FATAL_ERROR "ENABLE_POST_LINK_LAYOUT needs objcopy for the deferred sidecar split")
       endif()
+
+      # The finalize commands live in a generated cmake -P script, NOT in the build graph: a
+      # cmake --build of a graph target can relink the executable first, silently replacing the
+      # BOLT-rewritten binary with the original link. The bolt-linux action runs the script
+      # directly; the ss_finalize_binary target below wraps it for manual use only.
+      set(SS_FINALIZE_SCRIPT "${CMAKE_CURRENT_BINARY_DIR}/ss_finalize_binary.cmake")
+      file(GENERATE OUTPUT "${SS_FINALIZE_SCRIPT}" CONTENT "\
+set(app \"$<TARGET_FILE:${PROJECT_EXECUTABLE}>\")
+function(ss_run)
+  execute_process(COMMAND \${ARGV} RESULT_VARIABLE rc)
+  if(NOT rc EQUAL 0)
+    message(FATAL_ERROR \"ss_finalize_binary: \${ARGV0} step failed (\${rc})\")
+  endif()
+endfunction()
+ss_run(\"${SS_OBJCOPY}\" --only-keep-debug \"\${app}\" \"\${app}.debug\")
+ss_run(\"${SS_OBJCOPY}\" --remove-relocations=* \"\${app}\")
+ss_run(\"${SS_OBJCOPY}\" \"--add-gnu-debuglink=\${app}.debug\" \"\${app}\")
+ss_run(\"${CMAKE_STRIP}\" --strip-unneeded \"\${app}\")
+")
       add_custom_target(ss_finalize_binary
-        COMMAND ${SS_OBJCOPY} --only-keep-debug "$<TARGET_FILE:${PROJECT_EXECUTABLE}>"
-                "$<TARGET_FILE:${PROJECT_EXECUTABLE}>.debug"
-        COMMAND ${SS_OBJCOPY} --remove-relocations=* "$<TARGET_FILE:${PROJECT_EXECUTABLE}>"
-        COMMAND ${SS_OBJCOPY} --add-gnu-debuglink="$<TARGET_FILE:${PROJECT_EXECUTABLE}>.debug"
-                "$<TARGET_FILE:${PROJECT_EXECUTABLE}>"
-        COMMAND ${CMAKE_STRIP} --strip-unneeded "$<TARGET_FILE:${PROJECT_EXECUTABLE}>"
+        COMMAND ${CMAKE_COMMAND} -P "${SS_FINALIZE_SCRIPT}"
         COMMENT "Finalizing rewritten binary: sidecar split, reloc removal, strip (Linux)"
         VERBATIM
       )
