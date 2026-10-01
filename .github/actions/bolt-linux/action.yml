@@ -55,7 +55,11 @@ runs:
 
   #
   # Instrumentation mode, not sampling: hosted runners expose no PMU/LBR. Each training process
-  # appends its own .fdata next to the workspace so two runs cannot clobber each other
+  # appends its own .fdata next to the workspace so two runs cannot clobber each other.
+  # skip-funcs excludes LuaJIT's hand-written VM (one asm function, lj_BC_ISLT + every lj_*
+  # entry, built on asm-level jump tables): BOLT's unreachable-block elimination strips blocks
+  # those tables still target and emission dies with undefined .Ltmp labels on aarch64 -- and
+  # re-laying hand-tuned interpreter asm has no upside on any arch
   #
   - name: '🔩 Instrument binary with BOLT'
     shell: bash
@@ -67,7 +71,8 @@ runs:
       "llvm-bolt-${BOLT_V}" "$SS_APP" -o "${SS_APP}.inst" \
         --instrument \
         --instrumentation-file="$PWD/bolt-prof.fdata" \
-        --instrumentation-file-append-pid
+        --instrumentation-file-append-pid \
+        --skip-funcs='lj_BC_ISLT.*'
 
   #
   # Same two loads as pgo-train-linux, against the instrumented copy; the BOLT runtime dumps
@@ -126,6 +131,7 @@ runs:
         -split-functions \
         -split-all-cold \
         -update-debug-sections \
+        -skip-funcs='lj_BC_ISLT.*' \
         -dyno-stats 2>&1 | tee bolt-report.txt
       mv -f "${SS_APP}.bolt" "$SS_APP"
       chmod +x "$SS_APP"
