@@ -1,0 +1,137 @@
+#
+# SPDX-FileCopyrightText: 2020-2025 Alex Spataru
+# SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial
+#
+# The post-link layout stage of the Linux release flow (spec 0090). Takes the PGO-optimized,
+# still-unstripped binary, instruments it with LLVM BOLT, re-runs the same two training loads
+# the PGO flow used (the license seat is already active from pgo-train-linux; the job's
+# always() step releases it), rewrites the binary from the merged profile, and only then runs
+# the deferred ss_finalize_binary target so the spec-0084 sidecar is cut from the binary that
+# ships. Every step is fail-hard: there is no fallback to the un-rewritten binary (spec R3).
+#
+
+name: 'Post-link layout (Linux BOLT)'
+description: 'Instruments, trains, and rewrites the PGO-optimized binary with LLVM BOLT, then finalizes it.'
+
+inputs:
+  app:
+    description: 'Path to the PGO-optimized executable (unstripped, linked with --emit-relocs).'
+    required: true
+  build-dir:
+    description: 'CMake build directory holding the ss_finalize_binary target.'
+    required: true
+  qt-lib-dir:
+    description: 'Qt library directory placed on LD_LIBRARY_PATH for the training runs.'
+    required: true
+  bolt-version:
+    description: 'Pinned LLVM BOLT major (Ubuntu bolt-<N> package; built for amd64 and arm64).'
+    required: false
+    default: '18'
+
+runs:
+  using: 'composite'
+  steps:
+  #
+  # The distro package pins the major and exists for both release arches; a missing package is
+  # a loud failure, never a skipped stage
+  #
+  - name: '⚙️ Install LLVM BOLT'
+    shell: bash
+    env:
+      BOLT_V: ${{inputs.bolt-version}}
+    run: |
+      set -euo pipefail
+      sudo apt-get update -qq
+      sudo apt-get install -y --no-install-recommends "bolt-${BOLT_V}"
+      "llvm-bolt-${BOLT_V}" --version
+
+  #
+  # Instrumentation mode, not sampling: hosted runners expose no PMU/LBR. Each training process
+  # appends its own .fdata next to the workspace so two runs cannot clobber each other
+  #
+  - name: '🔩 Instrument binary with BOLT'
+    shell: bash
+    env:
+      BOLT_V: ${{inputs.bolt-version}}
+      SS_APP: ${{inputs.app}}
+    run: |
+      set -euo pipefail
+      "llvm-bolt-${BOLT_V}" "$SS_APP" -o "${SS_APP}.inst" \
+        --instrument \
+        --instrumentation-file="$PWD/bolt-prof.fdata" \
+        --instrumentation-file-append-pid
+
+  #
+  # Same two loads as pgo-train-linux, against the instrumented copy; the BOLT runtime dumps
+  # its profile on clean process exit, which both loads guarantee (they quit through the event
+  # loop, exactly like the PGO training)
+  #
+  - name: '🏋️ BOLT training run (hotpath)'
+    shell: bash
+    env:
+      QT_QPA_PLATFORM: offscreen
+      LD_LIBRARY_PATH: ${{inputs.qt-lib-dir}}
+      SS_APP: ${{inputs.app}}
+    run: |
+      "${SS_APP}.inst" --headless --benchmark-hotpath --min-fps 1 --benchmark-output bolt-train.txt
+
+  - name: '🏋️ BOLT training run (big project)'
+    shell: bash
+    env:
+      QT_QPA_PLATFORM: offscreen
+      LD_LIBRARY_PATH: ${{inputs.qt-lib-dir}}
+      SS_APP: ${{inputs.app}}
+    run: |
+      bash tests/benchmarks/big_db_test/run_load.sh "${SS_APP}.inst" 25
+
+  #
+  # An empty merge means the training produced no profile, which rewrites the binary blind --
+  # fail here, loudly, instead (spec R3)
+  #
+  - name: '🔗 Merge BOLT profiles'
+    shell: bash
+    env:
+      BOLT_V: ${{inputs.bolt-version}}
+    run: |
+      set -euo pipefail
+      ls bolt-prof.fdata.* 1>/dev/null
+      "merge-fdata-${BOLT_V}" bolt-prof.fdata.* > bolt-merged.fdata
+      test -s bolt-merged.fdata
+
+  #
+  # ext-tsp block layout + cdsort function order + BOLT's own hot/cold splitting (which replaces
+  # the GCC splitting the build disabled for it); -update-debug-sections keeps the line tables
+  # true so the spec-0084 sidecar split below symbolicates the rewritten binary. dyno-stats is
+  # the per-release audit artifact (spec R8)
+  #
+  - name: '🔩 Rewrite binary layout (BOLT)'
+    shell: bash
+    env:
+      BOLT_V: ${{inputs.bolt-version}}
+      SS_APP: ${{inputs.app}}
+    run: |
+      set -euo pipefail
+      "llvm-bolt-${BOLT_V}" "$SS_APP" -o "${SS_APP}.bolt" \
+        -data=bolt-merged.fdata \
+        -reorder-blocks=ext-tsp \
+        -reorder-functions=cdsort \
+        -split-functions \
+        -split-all-cold \
+        -update-debug-sections \
+        -dyno-stats 2>&1 | tee bolt-report.txt
+      mv -f "${SS_APP}.bolt" "$SS_APP"
+      chmod +x "$SS_APP"
+      rm -f "${SS_APP}.inst"
+
+  #
+  # The deferred spec-0084 finalize: sidecar split from the REWRITTEN binary, --emit-relocs
+  # payload removed, then the strip. After this step the binary is the one every gate measures
+  # and every package ships
+  #
+  - name: '🔩 Finalize binary (sidecar split + strip)'
+    shell: bash
+    env:
+      BUILD_DIR: ${{inputs.build-dir}}
+    run: |
+      set -euo pipefail
+      cmake --build "$BUILD_DIR" --target ss_finalize_binary

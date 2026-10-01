@@ -1290,21 +1290,44 @@ if(BUILD_COMMERCIAL AND PRODUCTION_OPTIMIZATION)
     )
   elseif(UNIX)
     find_program(SS_OBJCOPY objcopy)
-    if(SS_OBJCOPY)
-      add_custom_command(TARGET ${PROJECT_EXECUTABLE} POST_BUILD
+
+    # Spec 0090: when the CI post-link layout stage is on, the split/strip must run AFTER the
+    # BOLT rewrite -- BOLT needs the symbol table, and the sidecar must be cut from the binary
+    # that actually ships or spec-0084 symbolication silently lies. The commands move verbatim
+    # into an on-demand target the bolt-linux action invokes, plus --remove-relocations to drop
+    # the --emit-relocs payload (non-dynamic relocation sections only; .rela.dyn/.rela.plt are
+    # untouched). With the stage off, the POST_BUILD behavior is identical to spec 0084.
+    if(ENABLE_POST_LINK_LAYOUT)
+      if(NOT SS_OBJCOPY)
+        message(FATAL_ERROR "ENABLE_POST_LINK_LAYOUT needs objcopy for the deferred sidecar split")
+      endif()
+      add_custom_target(ss_finalize_binary
         COMMAND ${SS_OBJCOPY} --only-keep-debug "$<TARGET_FILE:${PROJECT_EXECUTABLE}>"
                 "$<TARGET_FILE:${PROJECT_EXECUTABLE}>.debug"
+        COMMAND ${SS_OBJCOPY} --remove-relocations=* "$<TARGET_FILE:${PROJECT_EXECUTABLE}>"
         COMMAND ${SS_OBJCOPY} --add-gnu-debuglink="$<TARGET_FILE:${PROJECT_EXECUTABLE}>.debug"
                 "$<TARGET_FILE:${PROJECT_EXECUTABLE}>"
-        COMMENT "Splitting debug symbols into a .debug sidecar (Linux)"
+        COMMAND ${CMAKE_STRIP} --strip-unneeded "$<TARGET_FILE:${PROJECT_EXECUTABLE}>"
+        COMMENT "Finalizing rewritten binary: sidecar split, reloc removal, strip (Linux)"
+        VERBATIM
       )
     else()
-      message(WARNING "objcopy not found; the commercial binary ships without a symbol sidecar")
+      if(SS_OBJCOPY)
+        add_custom_command(TARGET ${PROJECT_EXECUTABLE} POST_BUILD
+          COMMAND ${SS_OBJCOPY} --only-keep-debug "$<TARGET_FILE:${PROJECT_EXECUTABLE}>"
+                  "$<TARGET_FILE:${PROJECT_EXECUTABLE}>.debug"
+          COMMAND ${SS_OBJCOPY} --add-gnu-debuglink="$<TARGET_FILE:${PROJECT_EXECUTABLE}>.debug"
+                  "$<TARGET_FILE:${PROJECT_EXECUTABLE}>"
+          COMMENT "Splitting debug symbols into a .debug sidecar (Linux)"
+        )
+      else()
+        message(WARNING "objcopy not found; the commercial binary ships without a symbol sidecar")
+      endif()
+      add_custom_command(TARGET ${PROJECT_EXECUTABLE} POST_BUILD
+        COMMAND ${CMAKE_STRIP} --strip-unneeded "$<TARGET_FILE:${PROJECT_EXECUTABLE}>"
+        COMMENT "Stripping unneeded symbols from commercial binary (Linux)"
+      )
     endif()
-    add_custom_command(TARGET ${PROJECT_EXECUTABLE} POST_BUILD
-      COMMAND ${CMAKE_STRIP} --strip-unneeded "$<TARGET_FILE:${PROJECT_EXECUTABLE}>"
-      COMMENT "Stripping unneeded symbols from commercial binary (Linux)"
-    )
   endif()
 endif()
 
