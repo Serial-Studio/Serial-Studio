@@ -54,8 +54,9 @@ runs:
       "llvm-bolt-${BOLT_V}" --version
 
   #
-  # Instrumentation mode, not sampling: hosted runners expose no PMU/LBR. Each training process
-  # appends its own .fdata next to the workspace so two runs cannot clobber each other.
+  # Instrumentation mode, not sampling: hosted runners expose no PMU/LBR. Periodic dumping is
+  # incompatible with per-pid profile names (append-pid dumps only at exit), so every process
+  # writes the one bolt-prof.fdata and each training step renames it aside when done.
   # skip-funcs excludes LuaJIT's hand-written VM (one asm function, lj_BC_ISLT + every lj_*
   # entry, built on asm-level jump tables): BOLT's unreachable-block elimination strips blocks
   # those tables still target and emission dies with undefined .Ltmp labels on aarch64 -- and
@@ -71,7 +72,6 @@ runs:
       "llvm-bolt-${BOLT_V}" "$SS_APP" -o "${SS_APP}.inst" \
         --instrument \
         --instrumentation-file="$PWD/bolt-prof.fdata" \
-        --instrumentation-file-append-pid \
         --instrumentation-sleep-time=5 \
         --instrumentation-no-counters-clear \
         --skip-funcs='lj_BC_ISLT.*'
@@ -97,7 +97,8 @@ runs:
       "${SS_APP}.inst" --headless --benchmark-hotpath --min-fps 1 --benchmark-output bolt-train.txt
       rc=$?
       set -e
-      ls bolt-prof.fdata.* 1>/dev/null
+      test -s bolt-prof.fdata
+      mv bolt-prof.fdata bolt-prof.fdata.hotpath
       if [ "$rc" -ne 0 ]; then
         echo "::warning::instrumented trainer exited ${rc} after dumping a profile (BOLT runtime teardown; tolerated)"
       fi
@@ -110,13 +111,12 @@ runs:
       SS_APP: ${{inputs.app}}
     run: |
       set -euo pipefail
-      before=$(ls bolt-prof.fdata.* 2>/dev/null | wc -l)
       set +e
       bash tests/benchmarks/big_db_test/run_load.sh "${SS_APP}.inst" 25
       rc=$?
       set -e
-      after=$(ls bolt-prof.fdata.* 2>/dev/null | wc -l)
-      test "$after" -gt "$before"
+      test -s bolt-prof.fdata
+      mv bolt-prof.fdata bolt-prof.fdata.big
       if [ "$rc" -ne 0 ]; then
         echo "::warning::instrumented trainer exited ${rc} after dumping a profile (BOLT runtime teardown; tolerated)"
       fi
