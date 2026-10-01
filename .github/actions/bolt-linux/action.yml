@@ -24,7 +24,7 @@ inputs:
   bolt-version:
     description: 'Pinned LLVM BOLT major (apt.llvm.org bolt-<N> package; built for amd64 and arm64).'
     required: false
-    default: '21'
+    default: '22'
 
 runs:
   using: 'composite'
@@ -85,13 +85,15 @@ runs:
   # skip-funcs excludes LuaJIT's hand-written VM (one asm function, lj_BC_ISLT + every lj_*
   # entry, built on asm-level jump tables): BOLT's unreachable-block elimination strips blocks
   # those tables still target and emission dies with undefined .Ltmp labels on aarch64 -- and
-  # re-laying hand-tuned interpreter asm has no upside on any arch. mimalloc is excluded too:
-  # aarch64 BOLT corrupts allocator fast paths (same shape as llvm/llvm-project#155451, bolted
-  # TCMalloc) and the rewritten binary then segfaults in the TLS-heap teardown at exit. The
-  # gRPC/upb/protobuf-C families are excluded because llvm-bolt-21 itself segfaults analyzing
-  # a PIC jump table in the prebuilt x86_64 gRPC objects (skipped functions are never
-  # disassembled), and none of them are near the hotpath. The gdb wrapper on the trainer
-  # below prints the backtrace if the trainer still dies
+  # re-laying hand-tuned interpreter asm has no upside on any arch. The gRPC/upb/protobuf-C
+  # families are excluded because llvm-bolt-21 segfaulted analyzing a PIC jump table in the
+  # prebuilt x86_64 gRPC objects (skipped functions are never disassembled), and none of them
+  # are near the hotpath. The pin is >= 22 because Hardening.cmake builds Linux aarch64 with
+  # -mbranch-protection=standard (pac-ret) and only BOLT 22 carries the OpNegateRAState CFI
+  # support (llvm/llvm-project#120064): BOLT 21 silently drops the RA-state markers, so the
+  # first LuaJIT trace-abort unwind reads a still-signed return address and the rewritten
+  # binary segfaults inside libgcc's unwinder. The gdb wrapper on the trainer below prints
+  # the backtrace if the trainer still dies
   #
   - name: '🔩 Instrument binary with BOLT'
     shell: bash
@@ -105,7 +107,7 @@ runs:
         --instrumentation-file="$PWD/bolt-prof.fdata" \
         --instrumentation-sleep-time=5 \
         --instrumentation-no-counters-clear \
-        --skip-funcs='lj_BC_ISLT.*,mi_.*,_mi_.*,.*grpc.*,upb_.*,_upb.*,google_protobuf_.*'
+        --skip-funcs='lj_BC_ISLT.*,.*grpc.*,upb_.*,_upb.*,google_protobuf_.*'
 
   #
   # Same two loads as pgo-train-linux, against the instrumented copy. The BOLT runtime dumps
@@ -192,7 +194,7 @@ runs:
         -reorder-functions=cdsort \
         -split-functions \
         -split-all-cold \
-        -skip-funcs='lj_BC_ISLT.*,mi_.*,_mi_.*,.*grpc.*,upb_.*,_upb.*,google_protobuf_.*' \
+        -skip-funcs='lj_BC_ISLT.*,.*grpc.*,upb_.*,_upb.*,google_protobuf_.*' \
         -remove-symtab \
         -dyno-stats 2>&1 | tee bolt-report.txt
       "llvm-bolt-${BOLT_V}" "$SS_APP" -o "${SS_APP}.sym" \
@@ -201,7 +203,7 @@ runs:
         -reorder-functions=cdsort \
         -split-functions \
         -split-all-cold \
-        -skip-funcs='lj_BC_ISLT.*,mi_.*,_mi_.*,.*grpc.*,upb_.*,_upb.*,google_protobuf_.*' \
+        -skip-funcs='lj_BC_ISLT.*,.*grpc.*,upb_.*,_upb.*,google_protobuf_.*' \
         -update-debug-sections
       rm -f "${SS_APP}.inst"
 

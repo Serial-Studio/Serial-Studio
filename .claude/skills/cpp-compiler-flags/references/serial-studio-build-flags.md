@@ -136,19 +136,23 @@ USE). One mechanism per platform, all downstream of PGO:
   `-split-functions` replaces that optimization). The rewrite itself is CI's
   `.github/actions/bolt-linux`: drop orphan `.cold` symbols (the prebuilt gRPC carries
   ICF-orphaned fragments BOLT hard-fails on) -> instrument -> re-run both training loads
-  (seat already active; the trainer's exit code is advisory because the aarch64 BOLT runtime
-  can segfault in its exit-path dump -- the profile is dumped every 5 s during the run) ->
-  `merge-fdata` -> two `llvm-bolt -reorder-blocks=ext-tsp -reorder-functions=cdsort
-  -split-functions -split-all-cold -skip-funcs='lj_BC_ISLT.*' -dyno-stats` rewrites. BOLT is
+  (seat already active; the trainer's exit code is advisory and a crash prints a gdb
+  backtrace -- the profile is dumped every 5 s during the run, so a teardown crash loses
+  nothing) -> `merge-fdata` -> two `llvm-bolt -reorder-blocks=ext-tsp
+  -reorder-functions=cdsort -split-functions -split-all-cold -dyno-stats` rewrites, with
+  `-skip-funcs` covering the LuaJIT VM asm and the gRPC/upb/protobuf-C families. The BOLT
+  pin must stay >= 22: Hardening.cmake's `-mbranch-protection=standard` (pac-ret, Linux
+  aarch64) needs BOLT's OpNegateRAState CFI support (llvm/llvm-project#120064) -- BOLT 21
+  drops the RA-state markers and the first unwind through a rewritten frame (a routine
+  LuaJIT trace abort suffices) segfaults in libgcc on a still-signed return address. BOLT is
   the only post-link writer: objcopy/strip corrupt a rewritten ELF (llvm/llvm-project#89336),
   so the shipping rewrite uses `-remove-symtab` (the spec-0084 hardening strip) and BOLT's
   built-in debug/`--emit-relocs`-payload stripping, while a layout-identical
   `-update-debug-sections` twin exists only so the `.debug` sidecar can be cut from it
   (`objcopy --only-keep-debug` reads the twin, never the shipped binary). The POST_BUILD
-  split/strip in `app/CMakeLists.txt` is disabled entirely when the option is ON. The LuaJIT
-  VM is skipped everywhere because BOLT breaks its asm-level jump tables. Fail-hard: there is
-  no fallback to the un-rewritten binary, and every gate/package/signature below the stage
-  consumes the rewritten one.
+  split/strip in `app/CMakeLists.txt` is disabled entirely when the option is ON. Fail-hard:
+  there is no fallback to the un-rewritten binary, and every gate/package/signature below
+  the stage consumes the rewritten one.
 - **macOS (AppleClang, PGO-USE only, arm64 slice only):** no Mach-O rewriter and no linker
   swap; the module derives a hot-function order file from `merged.profdata`
   (`llvm-profdata show --topn`, `_`-prefixed for Mach-O) into `hot-order.txt` and links with
