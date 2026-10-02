@@ -66,6 +66,7 @@ public:
                 int parentFolderId);
   void addDataset(const SerialStudio::DatasetOption option, int sourceId);
   void addAction(int sourceId);
+  void addActionFromTemplate(const Action& action);
   void ensureValidGroup(int sourceId);
   void ensurePainterDatasets(int groupId, const QVariantList& specs);
   void changeDatasetOption(const SerialStudio::DatasetOption option, const bool checked);

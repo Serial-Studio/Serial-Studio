@@ -128,6 +128,16 @@
   "edit that should back up but not dirty the project" through `contentTouched`, not a forced
   `modifiedChanged`.
 
+## Actions — TX Checksum (spec 0091)
+
+`DataModel::Action` carries `checksum` (a name from `IO::availableChecksums()`, `""` = none),
+serialized under `Keys::Checksum` inside the action object; absent key reads as none, so
+pre-0091 files load unchanged. Encoding goes through the unified `DataModel::encode_tx()`
+(`ActionBytes.h`), shared with the console send path: payload, then EOL, then the checksum
+over both. The console-tier history/pins (`Console::SendLibrary`) are QSettings state and
+never enter the project file; promotion uses the one-undo-step
+`ProjectModel::addActionFromTemplate()`.
+
 ## Multi-Source Architecture
 
 - `DataModel::Source` entries in `Frame.h`. `FrameBuilder::hotpathRxSourceFrame(sourceId, data)`

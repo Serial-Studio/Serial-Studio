@@ -3100,6 +3100,9 @@ Patch action fields by id.
 - `txEncoding` (int, optional)
 - `binaryData` (bool, optional)
 - `autoExecuteOnConnect` (bool, optional)
+- `checksum` (string, optional): Checksum name from the app's registry (e.g. `CRC-16`,
+  `CRC-16-MODBUS`, `CRC-32`; empty = none), appended to the transmitted payload after the
+  EOL. An unknown name is rejected with an error listing the valid names.
 
 Unknown fields are accepted but ignored, and surfaced in `result.warnings[].fields`
 with code `unknown_field`.

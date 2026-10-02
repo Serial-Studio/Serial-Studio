@@ -29,6 +29,7 @@
 #include <QFontMetrics>
 
 #include "AppState.h"
+#include "Console/SendLibrary.h"
 #include "Console/TextFormat.h"
 #include "Console/WelcomeText.h"
 #include "Core/Bus/MessageBus.h"
@@ -39,6 +40,7 @@
 #include "Core/SSAssert.h"
 #include "Core/TimerEvents.h"
 #include "Core/Translator.h"
+#include "DataModel/ActionBytes.h"
 #include "DataModel/PipelineModules.h"
 #include "DataModel/ProjectModel.h"
 #include "DataModel/TextCodec.h"
@@ -119,6 +121,7 @@ Console::Handler::Handler(Core::Bus::MessageBus& bus, IO::ConnectionManager& con
   , m_annotations(new AnnotationModel(this))
   , m_annotationDecoder(new AnnotationDecoder(m_annotations, this))
   , m_annotationFilter(new AnnotationFilter(this))
+  , m_sendLibrary(nullptr)
 {
   m_annotationFilter->setSourceModel(m_annotations);
   clear();
@@ -154,6 +157,7 @@ Console::Handler::Handler(Core::Bus::MessageBus& bus, IO::ConnectionManager& con
 
   m_ansiColorsEnabled = m_vt100Emulation && m_ansiColors;
   m_fontFamilyIndex   = availableFonts().indexOf(m_fontFamily);
+  m_sendLibrary       = new SendLibrary(*this);
 
   auto& timerEvents = Core::services().timerEvents;
   connect(&timerEvents, &Misc::TimerEvents::uiTimeout, this, [this]() {
@@ -593,42 +597,44 @@ void Console::Handler::setupExternalConnections()
  */
 void Console::Handler::send(const QString& data)
 {
+  sendPayload(data, true);
+}
+
+/**
+ * @brief Encodes @a data through the unified TX encoder (spec 0091) and writes it to the
+ *        current device; cyclic re-sends pass @a recordHistory false so a fast timer never
+ *        churns the history or its persisted copy.
+ */
+void Console::Handler::sendPayload(const QString& data, bool recordHistory)
+{
   SS_ASSERT(m_connectionManager != nullptr, return);
   if (!m_connectionManager->isConnected())
     return;
 
-  if (!data.isEmpty())
+  if (recordHistory && !data.isEmpty())
     addToHistory(data);
 
-  QByteArray bin;
-  if (dataMode() == DataMode::DataHexadecimal)
-    bin = SerialStudio::hexToBytes(data);
-  else
-    bin = SerialStudio::encodeText(SerialStudio::resolveEscapeSequences(data), m_encoding);
+  DataModel::TxPayload spec;
+  spec.hex      = (dataMode() == DataMode::DataHexadecimal);
+  spec.encoding = static_cast<int>(m_encoding);
+  spec.payload  = data;
+  spec.checksum = IO::availableChecksums().value(m_checksumMethod);
 
   switch (lineEnding()) {
     case LineEnding::NoLineEnding:
       break;
     case LineEnding::NewLine:
-      bin.append('\n');
+      spec.eolBytes = QByteArrayLiteral("\n");
       break;
     case LineEnding::CarriageReturn:
-      bin.append('\r');
+      spec.eolBytes = QByteArrayLiteral("\r");
       break;
     case LineEnding::BothNewLineAndCarriageReturn:
-      bin.append('\r');
-      bin.append('\n');
+      spec.eolBytes = QByteArrayLiteral("\r\n");
       break;
   }
 
-  const auto checksums = IO::availableChecksums();
-  if (m_checksumMethod >= 0 && m_checksumMethod < checksums.count()) {
-    const auto checksumName = checksums.at(m_checksumMethod);
-    auto checksum           = IO::checksum(checksumName, bin);
-    if (!checksum.isEmpty())
-      bin.append(checksum);
-  }
-
+  const QByteArray bin = DataModel::encode_tx(spec);
   if (!bin.isEmpty()) {
     if (m_currentDeviceId >= 0)
       (void)m_connectionManager->writeDataToDevice(m_currentDeviceId, bin);
@@ -877,6 +883,14 @@ void Console::Handler::hotpathRxData(const QByteArray& data)
 
   m_annotationDecoder->feed(data);
   append(dataToString(data), showTimestamp());
+}
+
+/**
+ * @brief The TX command library (spec 0091): persisted history, pins, cyclic send.
+ */
+QObject* Console::Handler::sendLibrary() const noexcept
+{
+  return m_sendLibrary;
 }
 
 /**
@@ -1188,16 +1202,20 @@ void Console::Handler::updateFont()
 }
 
 /**
- * @brief Registers @a command in the list of sent commands.
+ * @brief Registers @a command in the list of sent commands and persists the list (spec 0091);
+ *        only manual sends reach this, so cyclic re-sends never churn the stored copy.
  */
 void Console::Handler::addToHistory(const QString& command)
 {
-  while (m_historyItems.count() > 100)
+  while (m_historyItems.count() >= 100)
     m_historyItems.removeFirst();
 
   m_historyItems.append(command);
   m_historyItem = m_historyItems.count();
   Q_EMIT historyItemChanged();
+
+  SS_ASSERT(m_sendLibrary != nullptr, return);
+  m_sendLibrary->persistHistory();
 }
 
 /**

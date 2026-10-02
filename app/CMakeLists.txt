@@ -424,6 +424,7 @@ set(QML_SOURCES
   qml/Widgets/Dashboard/PlotCommon.qml
   qml/Widgets/Dashboard/Stopwatch.qml
   qml/Widgets/Dashboard/ConsoleAnnotations.qml
+  qml/Widgets/Dashboard/ConsoleSendLibrary.qml
   qml/Widgets/Dashboard/Terminal.qml
   qml/Widgets/Dashboard/WidgetTitleBar.qml
   qml/Widgets/Dashboard/WidgetToolbar.qml

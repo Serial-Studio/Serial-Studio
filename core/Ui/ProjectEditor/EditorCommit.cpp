@@ -623,6 +623,9 @@ void EditorCommit::onActionItemChanged(QStandardItem* item)
     case kActionView_RepeatCount:
       m_editor.m_selectedAction.repeatCount = qMax(1, value.toInt());
       break;
+    case kActionView_Checksum:
+      m_editor.m_selectedAction.checksum = IO::availableChecksums().value(value.toInt());
+      break;
     default:
       break;
   }

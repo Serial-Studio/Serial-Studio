@@ -55,7 +55,8 @@ typedef enum {
   kActionView_AutoExecute,
   kActionView_TimerMode,
   kActionView_TimerInterval,
-  kActionView_RepeatCount
+  kActionView_RepeatCount,
+  kActionView_Checksum
 } ActionItem;
 
 /**

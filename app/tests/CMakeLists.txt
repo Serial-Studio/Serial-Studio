@@ -263,6 +263,22 @@ ss_add_unit_test(tst_checksums
 )
 
 #
+# The unified TX encoder (spec 0091): console sends and project Actions share encode_tx(), and
+# this suite pins the byte contract (EOL placement, checksum-over-payload+EOL, Action wrapper
+# parity). ActionBytes.cpp is a Pipeline TU so it recompiles here; Core5Compat comes with
+# TextCodec.cpp; Qt6::Gui is Frame.h's QColor fallout.
+#
+ss_add_unit_test(tst_tx_encode
+  SOURCES tst_tx_encode.cpp
+          ${SS_CORE_SRC}/Pipeline/DataModel/ActionBytes.cpp
+          ${SS_CORE_SRC}/Pipeline/DataModel/TextCodec.cpp
+  LIBS    Qt6::Core
+          Qt6::Core5Compat
+          Qt6::Gui
+          SerialStudio::Core
+)
+
+#
 # Header-only band lookup shared by Bar/Gauge/Meter/BarPanel (spec 0052); no production TU to
 # link.
 #

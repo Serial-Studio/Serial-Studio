@@ -57,6 +57,9 @@ class ProjectModel;
 }  // namespace DataModel
 
 namespace Console {
+
+class SendLibrary;
+
 /**
  * @brief Receives device data and formats it for the console text view.
  */
@@ -177,6 +180,9 @@ class Handler
   Q_PROPERTY(bool multiDeviceMode
              READ multiDeviceMode
              NOTIFY deviceNamesChanged)
+  Q_PROPERTY(QObject* sendLibrary
+             READ sendLibrary
+             CONSTANT)
   Q_PROPERTY(QObject* annotations
              READ annotations
              CONSTANT)
@@ -218,6 +224,7 @@ signals:
 
 private:
   friend class ::SessionContext;
+  friend class SendLibrary;
 
   static void bindInstance(Handler* instance) noexcept { s_instance = instance; }
 
@@ -292,6 +299,8 @@ public:
 
   [[nodiscard]] Q_INVOKABLE bool validateUserHex(const QString& text);
   [[nodiscard]] Q_INVOKABLE QString formatUserHex(const QString& text);
+  void sendPayload(const QString& data, bool recordHistory);
+  [[nodiscard]] QObject* sendLibrary() const noexcept;
   [[nodiscard]] QObject* annotations() const noexcept;
   [[nodiscard]] QObject* annotationDecoder() const noexcept;
   [[nodiscard]] QObject* annotationFilter() const noexcept;
@@ -395,5 +404,8 @@ private:
   AnnotationModel* m_annotations;
   AnnotationDecoder* m_annotationDecoder;
   AnnotationFilter* m_annotationFilter;
+
+  // TX command library (spec 0091): persisted history + pins, console tier only
+  SendLibrary* m_sendLibrary;
 };
 }  // namespace Console

@@ -31,6 +31,7 @@
 #include "API/Handlers/ProjectApiSupport.h"
 #include "API/Handlers/ProjectHandler.h"
 #include "API/SchemaBuilder.h"
+#include "Core/Checksum.h"
 #include "Core/DataModel/Frame.h"
 #include "Core/SerialStudio.h"
 #include "DataModel/PipelineModules.h"
@@ -334,7 +335,9 @@ void API::Handlers::ProjectUpdateCommands::registerCommands()
     QStringLiteral("project.action.update"),
     QStringLiteral("Patch action fields by id (params: actionId, plus any of title, icon, "
                    "txData, eolSequence, timerMode, timerIntervalMs, repeatCount, "
-                   "sourceId, txEncoding, binaryData, autoExecuteOnConnect). Unknown "
+                   "sourceId, txEncoding, binaryData, autoExecuteOnConnect, and checksum: "
+                   "a registry name like 'CRC-16-MODBUS', empty = none, appended to the "
+                   "payload after the EOL). Unknown "
                    "fields are accepted but ignored, and surfaced in "
                    "result.warnings[].fields with code 'unknown_field'."),
     makeSchema({
@@ -573,6 +576,18 @@ API::CommandResponse API::Handlers::ProjectUpdateCommands::actionUpdate(const QS
 
   if (take(QStringLiteral("autoExecuteOnConnect")))
     a.autoExecuteOnConnect = params.value(QStringLiteral("autoExecuteOnConnect")).toBool();
+
+  if (take(QStringLiteral("checksum"))) {
+    const auto name = params.value(QStringLiteral("checksum")).toString();
+    if (!name.isEmpty() && !IO::availableChecksums().contains(name))
+      return CommandResponse::makeError(
+        id,
+        ErrorCode::InvalidParam,
+        QStringLiteral("Unknown checksum '%1'; valid names: %2")
+          .arg(name, IO::availableChecksums().join(QStringLiteral(", "))));
+
+    a.checksum = name;
+  }
 
   if (consumed.size() > identityKeyCount)
     rebuildTree = true;

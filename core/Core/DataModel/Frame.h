@@ -106,6 +106,7 @@ struct alignas(8) Action {
   QString title;                                ///< Display title
   QString txData;                               ///< Data to transmit
   QString eolSequence;                          ///< End-of-line sequence (e.g. "\r\n")
+  QString checksum;                             ///< TX checksum name ("" = none)
 };
 
 static_assert(sizeof(Action) % alignof(Action) == 0, "Unaligned Action struct");
@@ -988,6 +989,7 @@ void read_io_settings(QByteArray& frameStart,
   obj.insert(Keys::Title, a.title);
   obj.insert(Keys::TxData, a.txData);
   obj.insert(Keys::EOL, a.eolSequence);
+  obj.insert(Keys::Checksum, a.checksum);
   obj.insert(Keys::Binary, a.binaryData);
   obj.insert(Keys::SourceId, a.sourceId);
   obj.insert(Keys::TxEncoding, a.txEncoding);
@@ -1181,6 +1183,7 @@ void read_io_settings(QByteArray& frameStart,
 
   a.txData               = ss_jsr(obj, Keys::TxData, "").toString();
   a.eolSequence          = ss_jsr(obj, Keys::EOL, "").toString();
+  a.checksum             = ss_jsr(obj, Keys::Checksum, "").toString();
   a.binaryData           = ss_jsr(obj, Keys::Binary, false).toBool();
   a.sourceId             = ss_jsr(obj, Keys::SourceId, 0).toInt();
   a.icon                 = ss_jsr(obj, Keys::Icon, "").toString().simplified();

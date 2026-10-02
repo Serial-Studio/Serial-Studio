@@ -242,3 +242,84 @@ def test_exported_json_matches_file_on_disk(api_client, clean_state, tmp_path):
         _WS_KEY
     ), "exportJson and file.save must agree on widgetSettings"
     assert len(exported.get("groups", [])) == len(disk.get("groups", []))
+
+
+@pytest.mark.project
+def test_action_checksum_round_trip(api_client, clean_state, tmp_path):
+    """An action's checksum name survives save/reload (spec 0091 AC5)."""
+    proj_path = tmp_path / "action_checksum.ssproj"
+    _write_project(proj_path)
+
+    api_client.command("project.open", {"filePath": str(proj_path)})
+    time.sleep(0.3)
+
+    add_result = api_client.command("project.action.add")
+    assert add_result.get("added") is True
+
+    update_result = api_client.command(
+        "project.action.update",
+        {
+            "actionId": 0,
+            "txData": "01 03 00 00 00 0A",
+            "binaryData": True,
+            "checksum": "CRC-16",
+        },
+    )
+    assert update_result.get("updated") is True
+
+    api_client.command("project.save")
+    time.sleep(0.2)
+
+    disk = json.loads(proj_path.read_text(encoding="utf-8"))
+    actions = disk.get("actions", [])
+    assert len(actions) == 1
+    assert actions[0].get("checksum") == "CRC-16"
+
+    api_client.command("project.open", {"filePath": str(proj_path)})
+    time.sleep(0.3)
+    exported = api_client.command("project.exportJson")["config"]
+    assert exported.get("actions", [])[0].get("checksum") == "CRC-16"
+
+
+@pytest.mark.project
+def test_action_checksum_rejects_unknown_name(api_client, clean_state, tmp_path):
+    """An unknown checksum name errors instead of being stored silently (spec 0091)."""
+    proj_path = tmp_path / "action_checksum_invalid.ssproj"
+    _write_project(proj_path)
+
+    api_client.command("project.open", {"filePath": str(proj_path)})
+    time.sleep(0.3)
+
+    api_client.command("project.action.add")
+    with pytest.raises(Exception):
+        api_client.command(
+            "project.action.update", {"actionId": 0, "checksum": "CRC-99-NOPE"}
+        )
+
+
+@pytest.mark.project
+def test_action_without_checksum_key_reads_as_none(api_client, clean_state, tmp_path):
+    """A pre-0091 project file (action without the checksum key) loads as checksum none."""
+    legacy_action = {
+        "icon": "Play Property",
+        "title": "Legacy Action",
+        "txData": "ping",
+        "eol": "\n",
+        "binary": False,
+        "sourceId": 0,
+        "txEncoding": 0,
+        "repeatCount": 3,
+        "timerIntervalMs": 100,
+        "autoExecuteOnConnect": False,
+        "timerMode": 0,
+    }
+    proj_path = tmp_path / "action_legacy.ssproj"
+    _write_project(proj_path, extra={"actions": [legacy_action]})
+
+    api_client.command("project.open", {"filePath": str(proj_path)})
+    time.sleep(0.3)
+
+    exported = api_client.command("project.exportJson")["config"]
+    actions = exported.get("actions", [])
+    assert len(actions) == 1
+    assert actions[0].get("checksum", "") == ""

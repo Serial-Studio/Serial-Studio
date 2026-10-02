@@ -818,6 +818,37 @@ void DataModel::ProjectEntities::addAction(int sourceId)
 }
 
 /**
+ * @brief Adds a pre-filled @a action to the project in ONE undo step (spec 0091: console
+ *        promotion); the id is positional and the title uniquified like addAction().
+ */
+void DataModel::ProjectEntities::addActionFromTemplate(const Action& action)
+{
+  const ProjectUndoScope undo_scope{m_model, ProjectModel::tr("Add Action")};
+  auto& actions = m_model.m_actions;
+
+  QStringList existingTitles;
+  existingTitles.reserve(static_cast<int>(actions.size()));
+  for (const auto& a : std::as_const(actions))
+    existingTitles.append(a.title);
+
+  Action copy   = action;
+  copy.actionId = actions.size();
+  if (copy.title.isEmpty())
+    copy.title = ProjectModel::tr("New Action");
+
+  copy.title = uniqueEntityTitle(copy.title, existingTitles);
+  if (copy.sourceId < 0)
+    copy.sourceId = 0;
+
+  actions.push_back(copy);
+  m_model.m_selectedAction = copy;
+
+  Q_EMIT m_model.actionsChanged();
+  Q_EMIT m_model.actionAdded(static_cast<int>(actions.size()) - 1);
+  m_model.setModified(true);
+}
+
+/**
  * @brief Adds a new group with a unique title and the given widget type.
  */
 void DataModel::ProjectEntities::addGroup(const QString& title,

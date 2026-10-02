@@ -854,6 +854,8 @@ public slots:
 
   void addAction(int sourceId = -1) { m_entities.addAction(sourceId); }
 
+  void addActionFromTemplate(const Action& action) { m_entities.addActionFromTemplate(action); }
+
   void addSource() { m_sourceOps.addSource(); }
 
   void deleteSource(int sourceId, bool confirm = false)

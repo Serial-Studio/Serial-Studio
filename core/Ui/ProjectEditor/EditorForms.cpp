@@ -892,6 +892,21 @@ void EditorForms::buildActionPayloadRows(const DataModel::Action& action)
   eolItem->setData(tr("EOL characters to append to the message (e.g. \\n, \\r\\n)"),
                    ParameterDescription);
   m_editor.m_actionModel->appendRow(eolItem);
+
+  auto checksumLabels = IO::availableChecksums();
+  checksumLabels.replace(qMax(0, checksumLabels.indexOf(QLatin1String(""))), tr("No Checksum"));
+
+  auto* crcItem = new QStandardItem();
+  crcItem->setEditable(true);
+  crcItem->setData(true, Active);
+  crcItem->setData(ComboBox, WidgetType);
+  crcItem->setData(qMax(0, IO::availableChecksums().indexOf(action.checksum)), EditableValue);
+  crcItem->setData(kActionView_Checksum, ParameterType);
+  crcItem->setData(checksumLabels, ComboBoxData);
+  crcItem->setData(tr("Checksum"), ParameterName);
+  crcItem->setData(tr("Checksum appended to the payload (covers payload and EOL)"),
+                   ParameterDescription);
+  m_editor.m_actionModel->appendRow(crcItem);
 }
 
 /**

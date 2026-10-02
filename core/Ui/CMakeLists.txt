@@ -147,6 +147,7 @@ qt_add_library(
   UI/Widgets/WebView.cpp
   Console/Annotations.cpp
   Console/Handler.cpp
+  Console/SendLibrary.cpp
   Console/WelcomeText.cpp
   Console/TextFormat.cpp
   Console/Export.cpp
@@ -260,6 +261,7 @@ qt_add_library(
   Platform/NativeWindow.h
   Console/Annotations.h
   Console/Handler.h
+  Console/SendLibrary.h
   Console/WelcomeText.h
   Console/TextFormat.h
   Console/Export.h

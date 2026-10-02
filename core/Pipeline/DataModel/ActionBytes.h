@@ -22,15 +22,33 @@
 #pragma once
 
 #include <QByteArray>
+#include <QString>
 
 #include "Core/DataModel/Frame.h"
 
 /**
  * @file ActionBytes.h
- * @brief The on-wire encoding of an Action's TX payload. Apart from the value types because it
- *        goes through the text codecs (Qt Core5Compat), which the Core library does not link.
+ * @brief The on-wire encoding of a TX payload (spec 0091: one encoder for console sends and
+ *        Actions). Apart from the value types because it goes through the text codecs
+ *        (Qt Core5Compat), which the Core library does not link.
  */
 
 namespace DataModel {
+
+/**
+ * @brief One TX payload ready to encode: the caller owns its EOL representation and passes
+ *        resolved EOL bytes; the checksum is named (IO::availableChecksums(), "" = none) and
+ *        covers the payload including the EOL.
+ */
+struct TxPayload {
+  bool hex     = false;  ///< Payload is a hex byte string instead of text
+  int encoding = 0;      ///< SerialStudio::TextEncoding for text payloads
+  QString payload;       ///< User payload (text with escapes, or hex pairs)
+  QString checksum;      ///< Checksum name appended last ("" = none)
+  QByteArray eolBytes;   ///< Resolved end-of-line bytes appended before the checksum
+};
+
+[[nodiscard]] QByteArray encode_tx(const TxPayload& spec);
 [[nodiscard]] QByteArray get_tx_bytes(const Action& action);
+
 }  // namespace DataModel

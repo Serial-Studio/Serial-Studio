@@ -21,25 +21,50 @@
 
 #include "DataModel/ActionBytes.h"
 
+#include "Core/Checksum.h"
 #include "Core/SerialStudio.h"
 #include "DataModel/TextCodec.h"
 
 /**
- * @brief Encodes an Action's TX payload (text/hex with optional EOL) to the on-wire byte array.
+ * @brief Encodes a TX payload to the on-wire byte array: payload (hex or escaped text through
+ *        the codec), then EOL bytes, then the named checksum over everything before it.
  */
-QByteArray DataModel::get_tx_bytes(const Action& action)
+QByteArray DataModel::encode_tx(const TxPayload& spec)
 {
   QByteArray b;
-  const auto enc = static_cast<SerialStudio::TextEncoding>(action.txEncoding);
-  if (action.binaryData)
-    b = SerialStudio::hexToBytes(action.txData);
+  const auto enc = static_cast<SerialStudio::TextEncoding>(spec.encoding);
+  if (spec.hex)
+    b = SerialStudio::hexToBytes(spec.payload);
   else
-    b = SerialStudio::encodeText(SerialStudio::resolveEscapeSequences(action.txData), enc);
+    b = SerialStudio::encodeText(SerialStudio::resolveEscapeSequences(spec.payload), enc);
 
-  if (!action.eolSequence.isEmpty()) {
-    const auto eol = SerialStudio::resolveEscapeSequences(action.eolSequence);
-    b.append(action.binaryData ? eol.toUtf8() : SerialStudio::encodeText(eol, enc));
+  b.append(spec.eolBytes);
+
+  if (!spec.checksum.isEmpty()) {
+    const auto crc = IO::checksum(spec.checksum, b);
+    b.append(crc);
   }
 
   return b;
+}
+
+/**
+ * @brief Encodes an Action's TX payload through encode_tx(); the Action's EOL is an escape
+ *        sequence resolved here (raw UTF-8 for binary payloads, codec-encoded for text).
+ */
+QByteArray DataModel::get_tx_bytes(const Action& action)
+{
+  TxPayload spec;
+  spec.hex      = action.binaryData;
+  spec.encoding = action.txEncoding;
+  spec.payload  = action.txData;
+  spec.checksum = action.checksum;
+
+  if (!action.eolSequence.isEmpty()) {
+    const auto enc = static_cast<SerialStudio::TextEncoding>(action.txEncoding);
+    const auto eol = SerialStudio::resolveEscapeSequences(action.eolSequence);
+    spec.eolBytes  = action.binaryData ? eol.toUtf8() : SerialStudio::encodeText(eol, enc);
+  }
+
+  return encode_tx(spec);
 }

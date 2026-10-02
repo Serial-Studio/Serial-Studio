@@ -520,6 +520,34 @@ Item {
                     }
                   }
                 }
+
+                RowLayout {
+                  spacing: 4
+
+                  Label {
+                    Layout.alignment: Qt.AlignVCenter
+                    text: qsTr("Cyclic Send Interval (ms)")
+                  }
+
+                  Widgets.SpinBox {
+                    id: cyclicIntervalSpin
+
+                    from: 1
+                    to: 3600000
+                    stepSize: 1
+                    editable: true
+                    Layout.fillWidth: true
+                    value: Cpp_Console_Handler.sendLibrary.cyclicIntervalMs
+                    onValueModified: Cpp_Console_Handler.sendLibrary.cyclicIntervalMs = value
+
+                    Connections {
+                      target: Cpp_Console_Handler.sendLibrary
+                      function onCyclicIntervalChanged() {
+                        cyclicIntervalSpin.value = Cpp_Console_Handler.sendLibrary.cyclicIntervalMs
+                      }
+                    }
+                  }
+                }
               }
             }
           }
@@ -758,6 +786,28 @@ Item {
         }
       }
 
+      Widgets.IconButton {
+        id: libraryButton
+
+        iconSize: 16
+        implicitHeight: 24
+        Layout.maximumWidth: 24
+        visible: !app.runtimeMode
+        opacity: enabled ? 1 : 0.5
+        Layout.alignment: Qt.AlignVCenter
+        icon.source: "qrc:/icons/buttons/dropdown.svg"
+        ToolTip.text: qsTr("Command library (history, pins and actions)")
+        onClicked: sendLibraryPopup.visible ? sendLibraryPopup.close() : sendLibraryPopup.open()
+
+        ConsoleSendLibrary {
+          id: sendLibraryPopup
+
+          x: 0
+          y: -(height + 4)
+          onFillRequested: (text) => send.text = text
+        }
+      }
+
       Widgets.LineField {
         id: send
 
@@ -919,6 +969,35 @@ Item {
                        if (Cpp_Console_Handler.checksumMethod !== index)
                        Cpp_Console_Handler.checksumMethod = index
                      }
+      }
+
+      Widgets.IconButton {
+        id: cyclicBt
+
+        readonly property var lib: Cpp_Console_Handler.sendLibrary
+
+        iconSize: 16
+        checkable: true
+        implicitHeight: 24
+        Layout.maximumWidth: 32
+        checked: lib.cyclicArmed
+        opacity: enabled ? 1 : 0.5
+        enabled: Cpp_IO_Manager.readWrite
+        Layout.alignment: Qt.AlignVCenter
+        icon.source: "qrc:/icons/buttons/refresh.svg"
+        onClicked: lib.cyclicArmed ? lib.disarmCyclic() : lib.armCyclic(send.text)
+        ToolTip.text: lib.cyclicArmed
+                      ? qsTr("Stop cyclic send")
+                      : qsTr("Repeat the current command every %1 ms").arg(lib.cyclicIntervalMs)
+
+        //
+        // A click severs the `checked` binding and C++ can refuse or drop the armed
+        // state, so it is always synced back from the library.
+        //
+        Connections {
+          target: cyclicBt.lib
+          function onCyclicArmedChanged() { cyclicBt.checked = cyclicBt.lib.cyclicArmed }
+        }
       }
 
       Widgets.IconButton {
