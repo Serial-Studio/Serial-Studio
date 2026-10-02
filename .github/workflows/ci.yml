@@ -287,7 +287,6 @@ jobs:
           -DENABLE_GRPC=ON \
           -DENABLE_PGO=ON \
           -DPGO_STAGE=GENERATE \
-          -DENABLE_POST_LINK_LAYOUT=ON \
           -DSS_ALLOC_STATS=ON \
           -DSS_UNITY_BUILD=ON \
           -DSS_UNITY_BATCH_SIZE=${{ env.SS_UNITY_BATCH }} \
@@ -383,7 +382,6 @@ jobs:
           -DENABLE_GRPC=ON \
           -DENABLE_PGO=ON \
           -DPGO_STAGE=USE \
-          -DENABLE_POST_LINK_LAYOUT=ON \
           -DSS_ALLOC_STATS=ON \
           -DSS_UNITY_BUILD=ON \
           -DSS_UNITY_BATCH_SIZE=${{ env.SS_UNITY_BATCH }} \
@@ -400,29 +398,6 @@ jobs:
     #
     - name: '🚧 Build application (PGO optimized)'
       run: cmake --build build --config Release
-
-    #
-    # Spec 0090: BOLT instruments the PGO binary, re-runs the training loads, rewrites the
-    # layout (strip + sidecar included; the action is the only post-link writer) -- so every gate, package
-    # and signature below consumes the rewritten binary. Fail-hard: no fallback to the
-    # un-rewritten binary
-    #
-    - name: '🔩 Post-link layout (BOLT)'
-      uses: ./.github/actions/bolt-linux
-      with:
-        app: ./build/app/${{env.UNIXNAME}}
-        qt-lib-dir: ${{github.workspace}}/Qt-${{env.QT_VERSION_LINUX}}-${{runner.os}}-x64/${{env.QT_VERSION_LINUX}}/gcc_64/lib
-
-    #
-    # Spec 0090 AC2: the pre-root suites (smoke + script-unwind) prove the rewritten binary's
-    # exception unwind still carries a Lua error back into the host
-    #
-    - name: '🧪 Binary self-test (rewritten binary)'
-      env:
-        QT_QPA_PLATFORM: offscreen
-        LD_LIBRARY_PATH: >-
-          ${{github.workspace}}/Qt-${{env.QT_VERSION_LINUX}}-${{runner.os}}-x64/${{env.QT_VERSION_LINUX}}/gcc_64/lib
-      run: ./build/app/${{env.UNIXNAME}} --headless --selftest
 
     #
     # Findings G12 / M7: instantiates every compiled .qml against stubbed Cpp_* globals and
@@ -456,7 +431,6 @@ jobs:
         path: |
           benchmark.txt
           pgo-train.txt
-          bolt-report.txt
 
     #
     # Spec 0084: the line-table symbols objcopy split out of the stripped binary, so a profile or
@@ -687,7 +661,6 @@ jobs:
           -DENABLE_GRPC=ON \
           -DENABLE_PGO=ON \
           -DPGO_STAGE=GENERATE \
-          -DENABLE_POST_LINK_LAYOUT=ON \
           -DSS_ALLOC_STATS=ON \
           -DSS_UNITY_BUILD=ON \
           -DSS_UNITY_BATCH_SIZE=${{ env.SS_UNITY_BATCH }} \
@@ -737,7 +710,6 @@ jobs:
           -DENABLE_GRPC=ON \
           -DENABLE_PGO=ON \
           -DPGO_STAGE=USE \
-          -DENABLE_POST_LINK_LAYOUT=ON \
           -DSS_ALLOC_STATS=ON \
           -DSS_UNITY_BUILD=ON \
           -DSS_UNITY_BATCH_SIZE=${{ env.SS_UNITY_BATCH }} \
@@ -754,27 +726,6 @@ jobs:
     #
     - name: '🚧 Build application (PGO optimized)'
       run: cmake --build build --config Release
-
-    #
-    # Spec 0090: same BOLT stage as the x86_64 job; arm64 is BOLT's least-battle-tested arch,
-    # so this job is the rollout canary. Fail-hard: no fallback to the un-rewritten binary
-    #
-    - name: '🔩 Post-link layout (BOLT)'
-      uses: ./.github/actions/bolt-linux
-      with:
-        app: ./build/app/${{env.UNIXNAME}}
-        qt-lib-dir: ${{github.workspace}}/Qt-${{env.QT_VERSION_LINUX}}-${{runner.os}}-arm64/${{env.QT_VERSION_LINUX}}/gcc_arm64/lib
-
-    #
-    # Spec 0090 AC2: the pre-root suites (smoke + script-unwind) prove the rewritten binary's
-    # exception unwind still carries a Lua error back into the host
-    #
-    - name: '🧪 Binary self-test (rewritten binary)'
-      env:
-        QT_QPA_PLATFORM: offscreen
-        LD_LIBRARY_PATH: >-
-          ${{github.workspace}}/Qt-${{env.QT_VERSION_LINUX}}-${{runner.os}}-arm64/${{env.QT_VERSION_LINUX}}/gcc_arm64/lib
-      run: ./build/app/${{env.UNIXNAME}} --headless --selftest
 
     #
     # The CI throughput gate: nine tiers scaled off --min-fps. A miss fails the build
@@ -796,7 +747,6 @@ jobs:
         path: |
           benchmark.txt
           pgo-train.txt
-          bolt-report.txt
 
     - name: '📤 Upload artifact: symbols (Linux arm64)'
       uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
@@ -960,7 +910,6 @@ jobs:
           -DENABLE_GRPC=ON \
           -DENABLE_PGO=ON \
           -DPGO_STAGE=GENERATE \
-          -DENABLE_POST_LINK_LAYOUT=ON \
           -DSS_ALLOC_STATS=ON \
           -DSS_UNITY_BUILD=ON \
           -DSS_UNITY_BATCH_SIZE=${{ env.SS_UNITY_BATCH }} \
@@ -1030,7 +979,6 @@ jobs:
           -DENABLE_GRPC=ON \
           -DENABLE_PGO=ON \
           -DPGO_STAGE=USE \
-          -DENABLE_POST_LINK_LAYOUT=ON \
           -DSS_ALLOC_STATS=ON \
           -DSS_UNITY_BUILD=ON \
           -DSS_UNITY_BATCH_SIZE=${{ env.SS_UNITY_BATCH }} \
@@ -1067,7 +1015,6 @@ jobs:
         path: |
           benchmark.txt
           pgo-train.txt
-          build/hot-order.txt
 
     - name: '📤 Upload artifact: symbols (macOS arm64)'
       uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
@@ -1550,7 +1497,6 @@ jobs:
           -DENABLE_GRPC=ON `
           -DENABLE_PGO=ON `
           -DPGO_STAGE=GENERATE `
-          -DENABLE_POST_LINK_LAYOUT=ON `
           -DSS_ALLOC_STATS=ON `
           -DSS_UNITY_BUILD=ON `
           -DSS_UNITY_BATCH_SIZE=${{ env.SS_UNITY_BATCH }} `
@@ -1620,7 +1566,6 @@ jobs:
           -DENABLE_GRPC=ON `
           -DENABLE_PGO=ON `
           -DPGO_STAGE=USE `
-          -DENABLE_POST_LINK_LAYOUT=ON `
           -DSS_ALLOC_STATS=ON `
           -DSS_UNITY_BUILD=ON `
           -DSS_UNITY_BATCH_SIZE=${{ env.SS_UNITY_BATCH }} `
@@ -1634,21 +1579,6 @@ jobs:
     #
     - name: '🚧 Build application (PGO optimized)'
       run: cmake --build build --config Release
-
-    #
-    # Spec 0090 R5/AC4: lld-link sorts functions by the PGO call-graph profile; the
-    # /print-symbol-order evidence file proves the sort actually ran on this link. An absent or
-    # near-empty file means the profile stopped reaching the linker -- fail, do not weaken this
-    # check (the fallback is a generated /call-graph-ordering-file, a follow-up task, never a
-    # softer assertion)
-    #
-    - name: '🔎 Assert PGO call-graph ordering (lld-link)'
-      run: |
-        $f = 'build/symbol-order.txt'
-        if (-not (Test-Path $f)) { throw 'symbol-order.txt missing: call-graph profile sort did not run' }
-        $lines = (Get-Content $f | Measure-Object -Line).Lines
-        Write-Host "lld-link symbol order: $lines entries"
-        if ($lines -lt 1000) { throw "symbol-order.txt has only $lines entries; call-graph profile sort looks inactive" }
 
     #
     # The throughput gate reads HOTPATH_PASS out of benchmark.txt: Start-Process loses the child's
@@ -1670,7 +1600,6 @@ jobs:
         path: |
           benchmark.txt
           pgo-train.txt
-          build/symbol-order.txt
 
     - name: '📤 Upload artifact: symbols (Windows)'
       uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0

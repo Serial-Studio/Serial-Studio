@@ -1290,30 +1290,21 @@ if(BUILD_COMMERCIAL AND PRODUCTION_OPTIMIZATION)
     )
   elseif(UNIX)
     find_program(SS_OBJCOPY objcopy)
-
-    # Spec 0090: when the CI post-link layout stage is on, nothing here touches the binary.
-    # objcopy and strip corrupt a BOLT-rewritten ELF (llvm/llvm-project#89336), so the
-    # bolt-linux action ships BOLT's own output -- the rewrite drops debug info, the
-    # --emit-relocs payload and the symbol table (-remove-symtab) itself -- and cuts the
-    # spec-0084 sidecar from a debug-rich twin rewrite that never ships. With the stage off,
-    # the POST_BUILD behavior is identical to spec 0084.
-    if(NOT ENABLE_POST_LINK_LAYOUT)
-      if(SS_OBJCOPY)
-        add_custom_command(TARGET ${PROJECT_EXECUTABLE} POST_BUILD
-          COMMAND ${SS_OBJCOPY} --only-keep-debug "$<TARGET_FILE:${PROJECT_EXECUTABLE}>"
-                  "$<TARGET_FILE:${PROJECT_EXECUTABLE}>.debug"
-          COMMAND ${SS_OBJCOPY} --add-gnu-debuglink="$<TARGET_FILE:${PROJECT_EXECUTABLE}>.debug"
-                  "$<TARGET_FILE:${PROJECT_EXECUTABLE}>"
-          COMMENT "Splitting debug symbols into a .debug sidecar (Linux)"
-        )
-      else()
-        message(WARNING "objcopy not found; the commercial binary ships without a symbol sidecar")
-      endif()
+    if(SS_OBJCOPY)
       add_custom_command(TARGET ${PROJECT_EXECUTABLE} POST_BUILD
-        COMMAND ${CMAKE_STRIP} --strip-unneeded "$<TARGET_FILE:${PROJECT_EXECUTABLE}>"
-        COMMENT "Stripping unneeded symbols from commercial binary (Linux)"
+        COMMAND ${SS_OBJCOPY} --only-keep-debug "$<TARGET_FILE:${PROJECT_EXECUTABLE}>"
+                "$<TARGET_FILE:${PROJECT_EXECUTABLE}>.debug"
+        COMMAND ${SS_OBJCOPY} --add-gnu-debuglink="$<TARGET_FILE:${PROJECT_EXECUTABLE}>.debug"
+                "$<TARGET_FILE:${PROJECT_EXECUTABLE}>"
+        COMMENT "Splitting debug symbols into a .debug sidecar (Linux)"
       )
+    else()
+      message(WARNING "objcopy not found; the commercial binary ships without a symbol sidecar")
     endif()
+    add_custom_command(TARGET ${PROJECT_EXECUTABLE} POST_BUILD
+      COMMAND ${CMAKE_STRIP} --strip-unneeded "$<TARGET_FILE:${PROJECT_EXECUTABLE}>"
+      COMMENT "Stripping unneeded symbols from commercial binary (Linux)"
+    )
   endif()
 endif()
 

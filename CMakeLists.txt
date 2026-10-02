@@ -59,7 +59,6 @@ find_package(
 # Performance:
 #   PRODUCTION_OPTIMIZATION=OFF (default) - Set to ON to enable O3, LTO, vectorization
 #   ENABLE_PGO=OFF (default)              - Profile-Guided Optimization
-#   ENABLE_POST_LINK_LAYOUT=OFF (default) - CI post-link layout stage (BOLT / order files)
 #
 # Security:
 #   ENABLE_HARDENING=OFF (default) - Security hardening flags (FORTIFY, RELRO)
@@ -82,7 +81,6 @@ option(DEBUG_SANITIZER         "Enable sanitizers for debug builds"    OFF)
 option(PRODUCTION_OPTIMIZATION "Enable production optimization flags"  OFF)
 option(ENABLE_HARDENING        "Enable security hardening flags"       OFF)
 option(ENABLE_PGO              "Enable Profile-Guided Optimization"    OFF)
-option(ENABLE_POST_LINK_LAYOUT "Enable the CI post-link layout stage (spec 0090)" OFF)
 option(BUILD_COMMERCIAL        "Enable commercial features"            OFF)
 option(ENABLE_GRPC             "Enable gRPC server support"            OFF)
 option(SS_USE_MIMALLOC         "Use the mimalloc allocator override (FetchContent from GitHub)" ON)

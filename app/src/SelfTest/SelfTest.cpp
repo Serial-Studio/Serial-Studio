@@ -21,15 +21,8 @@
 
 #include "SelfTest/SelfTest.h"
 
-extern "C" {
-#include <lauxlib.h>
-#include <lua.h>
-#include <lualib.h>
-}
-
 #include <cstddef>
 #include <cstdlib>
-#include <cstring>
 #include <iterator>
 #include <QCoreApplication>
 #include <QDebug>
@@ -53,7 +46,6 @@ struct SuiteEntry {
 }  // namespace detail
 
 static void runSmokeSuite(SuiteResult& result);
-static void runScriptUnwindSuite(SuiteResult& result);
 
 //---------------------------------------------------------------------------------------------------
 // Constants
@@ -64,8 +56,7 @@ static void runScriptUnwindSuite(SuiteResult& result);
  *        and must never touch an application singleton.
  */
 static constexpr detail::SuiteEntry kSuites[] = {
-  {        "smoke",        &runSmokeSuite},
-  {"script-unwind", &runScriptUnwindSuite},
+  {"smoke", &runSmokeSuite},
 };
 
 /**
@@ -111,53 +102,6 @@ static void runSmokeSuite(SuiteResult& result)
   check(result, compiled.majorVersion() == running.majorVersion(), "Qt major version matches");
   check(result, compiled.minorVersion() == running.minorVersion(), "Qt minor version matches");
   check(result, !QCoreApplication::applicationName().isEmpty(), "application metadata is set");
-}
-
-/**
- * @brief Raises a Lua error from a C frame, so recovery must unwind across native code.
- */
-static int raiseCanaryError(lua_State* state)
-{
-  SS_ASSERT(state != nullptr, return 0);
-  SS_ASSERT_LOG(lua_gettop(state) >= 0);
-
-  return luaL_error(state, "script-unwind canary");
-}
-
-/**
- * @brief Script-unwind suite (spec 0090): proves Lua error recovery survives in this exact
- *        binary. Post-link rewriting regenerates the unwind metadata the LuaJIT error path
- *        walks, so a standalone VM raises an error through a C frame and through pcall, and
- *        both must land back in the host with the state still usable.
- */
-static void runScriptUnwindSuite(SuiteResult& result)
-{
-  lua_State* state = luaL_newstate();
-  check(result, state != nullptr, "standalone Lua state allocates");
-  SS_ASSERT_LOG(state != nullptr);
-  if (state == nullptr)
-    return;
-
-  luaL_openlibs(state);
-  lua_pushcfunction(state, &raiseCanaryError);
-  const int native_status = lua_pcall(state, 0, 0, 0);
-  check(result, native_status == LUA_ERRRUN, "error raised in a C frame unwinds into pcall");
-
-  const char* message = native_status == 0 ? nullptr : lua_tostring(state, -1);
-  SS_ASSERT_LOG(message != nullptr);
-  check(result,
-        message != nullptr && std::strstr(message, "script-unwind canary") != nullptr,
-        "error message survives the unwind");
-  lua_settop(state, 0);
-
-  const int chunk_status =
-    luaL_dostring(state, "local ok = pcall(error, 'canary'); assert(ok == false); return 42");
-  check(result, chunk_status == 0, "in-language pcall recovers after the error");
-  check(result,
-        chunk_status == 0 && lua_tointeger(state, -1) == 42,
-        "Lua state stays usable after recovery");
-
-  lua_close(state);
 }
 
 //---------------------------------------------------------------------------------------------------

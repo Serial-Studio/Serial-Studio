@@ -124,50 +124,6 @@ failure precisely because a killed run writes no profile. The training runs *are
 representative workload that makes PGO help instead of hurt; the 256 kHz gate is a hard
 release gate on the shipped PGO binary. See [[ss-hotpath]].
 
-### Post-link layout (ENABLE_POST_LINK_LAYOUT, spec 0090)
-
-OFF by default; only the release CI pipelines pass it, at **both** PGO configures (the
-stage-identity rule governs the `-D` values, so the option never varies between GENERATE and
-USE). One mechanism per platform, all downstream of PGO:
-
-- **Linux ELF (x86-64/aarch64; armv7l excluded -- BOLT has no 32-bit ARM port):** the module
-  only makes the link BOLT-ready: `-Wl,--emit-relocs`, plus GCC
-  `-fno-reorder-blocks-and-partition` (pre-split functions are ones BOLT must skip; its own
-  `-split-functions` replaces that optimization). The rewrite itself is CI's
-  `.github/actions/bolt-linux`: drop orphan `.cold` symbols (the prebuilt gRPC carries
-  ICF-orphaned fragments BOLT hard-fails on) -> instrument -> re-run both training loads
-  (seat already active; the trainer's exit code is advisory and a crash prints a gdb
-  backtrace -- the profile is dumped every 5 s during the run, so a teardown crash loses
-  nothing) -> `merge-fdata` -> two `llvm-bolt -reorder-blocks=ext-tsp
-  -reorder-functions=cdsort -split-functions -split-all-cold -dyno-stats` rewrites, with
-  `-skip-funcs` covering the LuaJIT VM asm and the gRPC/upb/protobuf-C families. The BOLT
-  pin must stay >= 22: Hardening.cmake's `-mbranch-protection=standard` (pac-ret, Linux
-  aarch64) needs BOLT's OpNegateRAState CFI support (llvm/llvm-project#120064) -- BOLT 21
-  drops the RA-state markers and the first unwind through a rewritten frame (a routine
-  LuaJIT trace abort suffices) segfaults in libgcc on a still-signed return address. BOLT is
-  the only post-link writer: objcopy/strip corrupt a rewritten ELF (llvm/llvm-project#89336),
-  so the shipping rewrite uses `-remove-symtab` (the spec-0084 hardening strip) and BOLT's
-  built-in debug/`--emit-relocs`-payload stripping, while a layout-identical
-  `-update-debug-sections` twin exists only so the `.debug` sidecar can be cut from it
-  (`objcopy --only-keep-debug` reads the twin, never the shipped binary). The POST_BUILD
-  split/strip in `app/CMakeLists.txt` is disabled entirely when the option is ON. Fail-hard:
-  there is no fallback to the un-rewritten binary, and every gate/package/signature below
-  the stage consumes the rewritten one.
-- **macOS (AppleClang, PGO-USE only, arm64 slice only):** no Mach-O rewriter and no linker
-  swap; the module derives a hot-function order file from `merged.profdata`
-  (`llvm-profdata show --topn`, `_`-prefixed for Mach-O) into `hot-order.txt` and links with
-  `-Wl,-order_file,...`. An empty order file is a configure-time FATAL_ERROR. The x86_64 leg
-  builds without PGO and never sets the option.
-- **Windows (clang-cl):** no new mechanism -- lld-link already sorts functions by the PGO
-  call-graph profile. The module adds the native lld-link flag
-  `/print-symbol-order:${CMAKE_BINARY_DIR}/symbol-order.txt` and ci.yml asserts the file is
-  present and non-trivial after the optimized link; weakening that assertion is not an option
-  (the documented fallback is a generated `/call-graph-ordering-file`).
-
-Layout/metadata only: the IEEE-math and unwind-table invariants are untouched by
-construction, and the rewritten binary's unwind is proven per push by the `script-unwind`
-pre-root selftest suite (a Lua error raised through a C frame must land back in the host).
-
 ### Flags deliberately NOT enabled
 `-fcomplete-member-pointers` (clang family). Rejects a pointer-to-member whose class is still
 incomplete -- under the MSVC ABI the representation follows the inheritance model, so an
