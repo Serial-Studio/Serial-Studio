@@ -16,8 +16,13 @@
   changed (and what's next) when you stop. Skip both on trivial edits.
   (The Context Canary line below is exempt — it is mandatory on every response.)
 - **Do not create markdown/doc files** unless asked. Share info conversationally.
-- **Never compile.** Never invoke `cmake`/`jom`/`clang`/the compiler — the developer builds
-  the app themselves. Verify structure by reading and with `scripts/code-verify.py`.
+- **Never build — but always syntax-check.** Never invoke `cmake`/`jom` or produce build
+  artifacts — the developer builds the app themselves. The ONE sanctioned compiler use
+  (2026-10-04) is `scripts/syntax-check.py` (clang `-fsyntax-only` via the newest compile
+  database under `build/`): run it on every C++ file you edit, every time — lint checks
+  shape, only the compiler checks truth (types, includes, reachability), and every
+  AI batch-edit failure of 2026-10 was compiler-class and lint-invisible. A hook runs it
+  per edit; a SKIP (stale database) means the claim "it compiles" is unverified — say so.
 - **Runtime experiments are sanctioned.** Ground truth beats on-paper reasoning: drive a
   *running* app through the API server (`localhost:7777`, `tests/utils/api_client.py`) to
   probe hypotheses, not only to verify fixes; run `ctest` and already-built binaries
@@ -76,6 +81,12 @@ text and the incidents behind each rule:
   neither confirm nor refute that the plan came first. Never cite the archive as proof of
   gating, and don't assume a spec dir is complete — some carry a plan or findings only.
 - **Self-review before handoff.** Re-read the diff: is this *what was asked, and only that*?
+- **Security-sensitive surfaces are decision-visible.** `app/src/Licensing/`,
+  `core/Core/Licensing/`, `MachineID`, and the API Server auth/consent files: any
+  *behavioral* change there is named in chat with its failure modes BEFORE it lands, and
+  never rides inside a bulk/agent package (the 2026-09-03 stored-fingerprint inversion
+  shipped a seat-cloning hole into master for a month exactly that way). The checklist is
+  [doc/claude/specs/0042-license-token-hardening/consumers.md](doc/claude/specs/0042-license-token-hardening/consumers.md).
 
 ## Delegation & Cost — Advisor Economics
 
