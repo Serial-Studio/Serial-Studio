@@ -299,14 +299,6 @@ set(QML_SOURCES
   qml/Dialogs/PlayerDialog.qml
   qml/Dialogs/CsvPlayer.qml
   qml/Dialogs/Mdf4Player.qml
-  qml/Dialogs/SqlitePlayer.qml
-  qml/DatabaseExplorer/DatabaseCommandBindings.qml
-  qml/DatabaseExplorer/DatabaseExplorer.qml
-  qml/DatabaseExplorer/SessionList.qml
-  qml/DatabaseExplorer/SessionDetail.qml
-  qml/DatabaseExplorer/DriftReportDialog.qml
-  qml/DatabaseExplorer/ReportOptionsDialog.qml
-  qml/DatabaseExplorer/ReportProgressDialog.qml
   qml/Dialogs/Donate.qml
   qml/Dialogs/FileTransmission.qml
   qml/Dialogs/FrameParserTest.qml
@@ -522,6 +514,14 @@ if(BUILD_COMMERCIAL)
     qml/Dialogs/LicenseManagement.qml
     qml/Dialogs/OfflineActivation.qml
     qml/Dialogs/ShortcutGenerator.qml
+    qml/Dialogs/SqlitePlayer.qml
+    qml/DatabaseExplorer/DatabaseCommandBindings.qml
+    qml/DatabaseExplorer/DatabaseExplorer.qml
+    qml/DatabaseExplorer/SessionList.qml
+    qml/DatabaseExplorer/SessionDetail.qml
+    qml/DatabaseExplorer/DriftReportDialog.qml
+    qml/DatabaseExplorer/ReportOptionsDialog.qml
+    qml/DatabaseExplorer/ReportProgressDialog.qml
     qml/Dialogs/RuntimeReconfigure.qml
     qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml
     qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml

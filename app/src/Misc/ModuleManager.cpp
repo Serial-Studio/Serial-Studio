@@ -404,6 +404,14 @@ void Misc::ModuleManager::setInhibitIdleSleep(const bool enabled)
 //--------------------------------------------------------------------------------------------------
 
 /**
+ * @brief Returns the QML application engine; the post-root self-tests create on it.
+ */
+QQmlApplicationEngine& Misc::ModuleManager::engine() noexcept
+{
+  return m_engine;
+}
+
+/**
  * @brief Returns a reference to the QML application engine.
  */
 const QQmlApplicationEngine& Misc::ModuleManager::engine() const noexcept

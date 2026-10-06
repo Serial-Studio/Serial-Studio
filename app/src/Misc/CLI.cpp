@@ -795,15 +795,16 @@ bool CLI::postRootSelfTestRequested() const
 }
 
 /**
- * @brief Runs the post-root suite named by --selftest-suite.
+ * @brief Runs the post-root suite named by --selftest-suite on the application's @p engine.
  */
-CLI::ProcessResult CLI::runPostRootSelfTests()
+CLI::ProcessResult CLI::runPostRootSelfTests(QQmlEngine& engine)
 {
 #ifdef SS_INAPP_TESTS
   const QString suite = m_parser.value(m_opts.selftestSuiteOpt).trimmed();
-  const int rc        = SelfTest::Runner::runPostRootAndReport(suite);
+  const int rc        = SelfTest::Runner::runPostRootAndReport(suite, engine);
   return rc == EXIT_SUCCESS ? ProcessResult::ExitSuccess : ProcessResult::ExitFailure;
 #else
+  (void)engine;
   return ProcessResult::ExitFailure;
 #endif
 }

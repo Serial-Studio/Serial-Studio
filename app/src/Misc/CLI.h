@@ -26,6 +26,7 @@
 #include <QString>
 
 class QApplication;
+class QQmlEngine;
 
 namespace Misc {
 
@@ -291,7 +292,7 @@ public:
 
   ProcessResult process(QApplication& app);
   [[nodiscard]] bool postRootSelfTestRequested() const;
-  [[nodiscard]] ProcessResult runPostRootSelfTests();
+  [[nodiscard]] ProcessResult runPostRootSelfTests(QQmlEngine& engine);
 
   [[nodiscard]] bool fullscreen() const noexcept;
   [[nodiscard]] bool runtimeMode() const noexcept;

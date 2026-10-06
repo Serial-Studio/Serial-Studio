@@ -154,7 +154,8 @@ static int runConfiguredSession(QApplication& app,
   Misc::CrashTracker::instance().setCheckpoint(QStringLiteral("event-loop"));
 
   if (cli.postRootSelfTestRequested()) {
-    const bool ok = cli.runPostRootSelfTests() == Misc::CLI::ProcessResult::ExitSuccess;
+    const bool ok =
+      cli.runPostRootSelfTests(moduleManager.engine()) == Misc::CLI::ProcessResult::ExitSuccess;
     teardownTrace("post-root-selftest-done");
     return ok ? EXIT_SUCCESS : EXIT_FAILURE;
   }

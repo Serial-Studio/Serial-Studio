@@ -90,6 +90,7 @@ public:
   [[nodiscard]] bool inhibitIdleSleep() const noexcept;
   [[nodiscard]] bool autoUpdaterEnabled() const noexcept;
   [[nodiscard]] bool automaticUpdates() const noexcept;
+  [[nodiscard]] QQmlApplicationEngine& engine() noexcept;
   [[nodiscard]] const QQmlApplicationEngine& engine() const noexcept;
 
 public slots:

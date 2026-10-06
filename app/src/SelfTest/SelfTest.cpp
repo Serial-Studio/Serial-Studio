@@ -40,12 +40,12 @@ namespace detail {
  */
 struct SuiteEntry {
   const char* name;
-  void (*run)(SuiteResult&);
+  void (*run)(SuiteResult&, const SuiteEnvironment&);
 };
 
 }  // namespace detail
 
-static void runSmokeSuite(SuiteResult& result);
+static void runSmokeSuite(SuiteResult& result, const SuiteEnvironment& env);
 
 //---------------------------------------------------------------------------------------------------
 // Constants
@@ -92,8 +92,9 @@ static void check(SuiteResult& result, bool ok, const char* what)
  * @brief Smoke suite: invariants that hold before any application module exists, so the seam can
  *        be proven without reaching a singleton the composition root has not built yet.
  */
-static void runSmokeSuite(SuiteResult& result)
+static void runSmokeSuite(SuiteResult& result, const SuiteEnvironment& env)
 {
+  SS_ASSERT_LOG(env.engine == nullptr);
   const auto compiled = QVersionNumber::fromString(QStringLiteral(QT_VERSION_STR));
   const auto running  = QVersionNumber::fromString(QString::fromLatin1(qVersion()));
   SS_ASSERT_LOG(!compiled.isNull());
@@ -135,7 +136,8 @@ static QStringList namesIn(const detail::SuiteEntry* suites, std::size_t count)
 static int runRegistry(const detail::SuiteEntry* suites,
                        std::size_t count,
                        const QString& suiteFilter,
-                       const QStringList& available)
+                       const QStringList& available,
+                       const SuiteEnvironment& env)
 {
   SS_ASSERT(suites != nullptr, return EXIT_FAILURE);
   SS_ASSERT_LOG(count > 0);
@@ -154,7 +156,7 @@ static int runRegistry(const detail::SuiteEntry* suites,
     if (!suiteFilter.isEmpty() && suiteFilter != result.name)
       continue;
 
-    entry.run(result);
+    entry.run(result, env);
     ++suitesRun;
     checks   += result.checks;
     failures += result.failures;
@@ -203,16 +205,16 @@ QStringList Runner::postRootSuiteNames()
  */
 int Runner::runAndReport(const QString& suiteFilter)
 {
-  return runRegistry(kSuites, std::size(kSuites), suiteFilter, suiteNames());
+  return runRegistry(kSuites, std::size(kSuites), suiteFilter, suiteNames(), {nullptr});
 }
 
 /**
- * @brief Runs the post-root suite named by @p suiteFilter, after the composition root exists.
+ * @brief Runs the post-root suite named by @p suiteFilter on the composition root's @p engine.
  */
-int Runner::runPostRootAndReport(const QString& suiteFilter)
+int Runner::runPostRootAndReport(const QString& suiteFilter, QQmlEngine& engine)
 {
   return runRegistry(
-    kPostRootSuites, std::size(kPostRootSuites), suiteFilter, postRootSuiteNames());
+    kPostRootSuites, std::size(kPostRootSuites), suiteFilter, postRootSuiteNames(), {&engine});
 }
 
 }  // namespace SelfTest

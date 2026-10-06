@@ -24,6 +24,8 @@
 #include <QString>
 #include <QStringList>
 
+class QQmlEngine;
+
 namespace SelfTest {
 
 /**
@@ -33,6 +35,14 @@ struct SuiteResult {
   QString name;
   int checks;
   int failures;
+};
+
+/**
+ * @brief What the composition root hands a suite: the application's QML engine, or null for the
+ *        pre-root registry, whose suites must not need one.
+ */
+struct SuiteEnvironment {
+  QQmlEngine* engine;
 };
 
 /**
@@ -46,12 +56,12 @@ public:
   [[nodiscard]] static QStringList suiteNames();
   [[nodiscard]] static QStringList postRootSuiteNames();
   [[nodiscard]] static int runAndReport(const QString& suiteFilter);
-  [[nodiscard]] static int runPostRootAndReport(const QString& suiteFilter);
+  [[nodiscard]] static int runPostRootAndReport(const QString& suiteFilter, QQmlEngine& engine);
 };
 
 /**
- * @brief Instantiates every compiled QML file against stubbed `Cpp_*` globals (post-root).
+ * @brief Instantiates every compiled QML file against the root's real `Cpp_*` globals (post-root).
  */
-void runQmlInstantiationSuite(SuiteResult& result);
+void runQmlInstantiationSuite(SuiteResult& result, const SuiteEnvironment& env);
 
 }  // namespace SelfTest
