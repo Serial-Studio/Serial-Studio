@@ -282,7 +282,6 @@ set(HEADERS
 )
 
 set(QML_SOURCES
-  qml/AI/ProUpgradeNotice.qml
   qml/Commands/AppCommandBindings.qml
   qml/Commands/CommandModel.qml
   qml/Commands/DashboardCommandBindings.qml
@@ -323,7 +322,6 @@ set(QML_SOURCES
   qml/Dialogs/Settings/SettingsExportPage.qml
   qml/Dialogs/Settings/SettingsNotificationsPage.qml
   qml/Dialogs/Settings/SettingsSoundsPage.qml
-  qml/Dialogs/Welcome.qml
   qml/Dialogs/WorkspaceDialog.qml
   qml/Dialogs/ExtensionManager.qml
   qml/Dialogs/ExtensionManager/GridPage.qml
@@ -490,6 +488,7 @@ if(BUILD_COMMERCIAL)
   set(HEADERS
     ${HEADERS}
     src/Licensing/Trial.h
+    src/Licensing/TrialGate.h
     src/Licensing/MachineID.h
     src/Licensing/LemonSqueezy.h
     src/Licensing/MonotonicClock.h
@@ -505,6 +504,7 @@ if(BUILD_COMMERCIAL)
   set(SOURCES
     ${SOURCES}
     src/Licensing/Trial.cpp
+    src/Licensing/TrialGate.cpp
     src/Licensing/MachineID.cpp
     src/Licensing/LemonSqueezy.cpp
     src/Licensing/MonotonicClock.cpp

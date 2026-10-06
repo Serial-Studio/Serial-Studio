@@ -28,12 +28,14 @@
 #  include <QNetworkAccessManager>
 #  include <QNetworkReply>
 #  include <QNetworkRequest>
+#  include <QScopedValueRollback>
 #  include <QSslError>
 #  include <QUrlQuery>
 #  include <utility>
 
 #  include "Core/Bus/MessageBus.h"
 #  include "Core/Bus/Messages.h"
+#  include "Core/License.h"
 #  include "Core/Licensing/CommercialToken.h"
 #  include "Core/SerialStudio.h"
 #  include "Core/Services.h"
@@ -522,6 +524,7 @@ InfluxDB::Export::Export()
       DataModel::FrameConsumerConfig{8192, 1024, 1000})
   , m_inApply(false)
   , m_exportRequested(false)
+  , m_licenseReplay(false)
   , m_savingToProjectModel(false)
   , m_measurement(kInfluxDefaultMeasurement)
   , m_vault(kInfluxVaultScope)
@@ -550,6 +553,7 @@ InfluxDB::Export::Export()
 
   m_licenseWatch = Core::services().bus.subscribe<Core::Bus::LicenseStateChanged>(
     this, [this](const std::shared_ptr<const Core::Bus::LicenseStateChanged>&) {
+      const QScopedValueRollback<bool> replay(m_licenseReplay, true);
       setExportEnabled(m_exportRequested);
     });
 }
@@ -785,8 +789,15 @@ void InfluxDB::Export::setExportEnabled(const bool enabled)
   m_exportRequested = enabled;
 
   const bool allow = enabled && licenseValid();
-  if (m_exportEnabled.load(std::memory_order_relaxed) == allow)
+  if (enabled && !allow && !m_inApply && !m_licenseReplay)
+    Core::License::requestProFeature(QStringLiteral("influxdb.export"));
+
+  if (m_exportEnabled.load(std::memory_order_relaxed) == allow) {
+    if (enabled && !allow)
+      Q_EMIT enabledChanged();
+
     return;
+  }
 
   m_exportEnabled.store(allow, std::memory_order_relaxed);
   setConsumerEnabled(allow);

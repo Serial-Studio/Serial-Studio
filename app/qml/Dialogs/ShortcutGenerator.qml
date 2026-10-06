@@ -818,11 +818,10 @@ Widgets.SmartDialog {
         highlighted: true
         text: qsTr("Save")
         horizontalPadding: 8
-        opacity: enabled ? 1 : 0.5
+        opacity: app.proVersion ? 1 : 0.5
         Layout.alignment: Qt.AlignVCenter
         icon.source: "qrc:/icons/buttons/apply.svg"
-        enabled: app.proVersion
-                 && root.projectPath.length > 0
+        enabled: root.projectPath.length > 0
                  && root.shortcutTitle.trim().length > 0
         onClicked: {
           const sanitized = root.shortcutTitle.replace(/[\\/:*?"<>|]/g, "_").trim()

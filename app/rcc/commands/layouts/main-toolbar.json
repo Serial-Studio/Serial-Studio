@@ -64,7 +64,6 @@
     }
   ],
   "pinnedEnd": [
-    { "type": "command", "id": "license.activate" },
     { "type": "command", "id": "io.toggleConnection", "role": "connect" }
   ]
 }

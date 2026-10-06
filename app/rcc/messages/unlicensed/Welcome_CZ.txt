@@ -1,0 +1,17 @@
+Copyright (c) 2020–2026 Alex Spataru <https://github.com/alex-spataru>
+
+Toto je bezplatná verze Serial Studio Pro: všechny základní funkce
+lze používat zdarma a bez časového omezení. Funkce Pro uvedené níže
+se odemknou ve chvíli, kdy některou vyzkoušíte, s bezplatnou 14denní
+zkušební dobou. K jejímu zahájení není potřeba účet ani platba.
+
+→ Podpora: alex@serial-studio.com
+→ Naplánovat hovor: https://calendly.com/serial-studio
+→ Více informací: https://serial-studio.com/
+
+Dostupné funkce Pro:
+→ Vizualizace MQTT a 3D
+→ Ovladače Audio, CAN Bus, Modbus, USB, HID a Process I/O
+→ Výstupní widgety, export MDF4 a přenosy XMODEM/YMODEM/ZMODEM
+→ Historian, Proměnné a transformace hodnot (JS + Lua)
+→ Projekty s více zdroji a vlastní pracovní plochy

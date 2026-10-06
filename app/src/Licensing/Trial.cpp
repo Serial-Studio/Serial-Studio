@@ -22,6 +22,7 @@
 
 #include "Trial.h"
 
+#include <QCoreApplication>
 #include <QJsonDocument>
 #include <QJsonParseError>
 #include <QNetworkReply>
@@ -36,6 +37,8 @@
 #include "MonotonicClock.h"
 
 static Licensing::Trial* s_trial = nullptr;
+
+static constexpr int kRolloverCheckMs = 60000;
 
 /**
  * @brief Builds and installs a commercial token for an active trial.
@@ -68,6 +71,7 @@ Licensing::Trial::Trial()
   , m_silentFetch(false)
   , m_trialEnabled(false)
   , m_deviceRegistered(false)
+  , m_lastEffectiveEnabled(false)
   , m_daysRemaining(0)
   , m_trialExpiry(QDateTime::currentDateTimeUtc())
 {
@@ -86,6 +90,9 @@ Licensing::Trial::Trial()
           &Licensing::LemonSqueezy::licenseDataChanged,
           this,
           &Licensing::Trial::enabledChanged);
+  connect(&lemonSqueezy, &Licensing::LemonSqueezy::licenseDataChanged, this, [this] {
+    m_lastEffectiveEnabled = trialEnabled();
+  });
 
   connect(&m_manager, &QNetworkAccessManager::finished, this, &Licensing::Trial::onServerReply);
 
@@ -93,6 +100,12 @@ Licensing::Trial::Trial()
   m_crypt.setIntegrityProtectionMode(Licensing::SimpleCrypt::ProtectionHash);
 
   readSettings();
+  m_lastEffectiveEnabled = trialEnabled();
+  maybePostExpiryNotice();
+
+  m_rolloverTimer.setInterval(kRolloverCheckMs);
+  connect(&m_rolloverTimer, &QTimer::timeout, this, &Licensing::Trial::onRolloverTick);
+  m_rolloverTimer.start();
 
   s_trial = this;
 }
@@ -173,7 +186,7 @@ bool Licensing::Trial::trialAvailable() const
  */
 int Licensing::Trial::daysRemaining() const
 {
-  const auto today = QDate::currentDate();
+  const auto today = MonotonicClock::now().toUTC().date();
   if (m_daysCachedOn != today) {
     m_daysCachedOn  = today;
     m_daysRemaining = MonotonicClock::now().toUTC().daysTo(m_trialExpiry);
@@ -190,6 +203,55 @@ void Licensing::Trial::invalidateDaysCache()
   m_daysCachedOn = QDate();
 }
 
+/**
+ * @brief Watches for the calendar rollover that ends the trial mid-session (spec 0092): the
+ *        lazily-computed predicates flip on their own, but nothing re-publishes them without an
+ *        emission. Fires enabledChanged only on a real effective transition (consumers rebuild
+ *        live devices on it) and drops the token only when the trial owns the slot.
+ */
+void Licensing::Trial::onRolloverTick()
+{
+  const bool enabled = trialEnabled();
+  if (enabled == m_lastEffectiveEnabled)
+    return;
+
+  m_lastEffectiveEnabled = enabled;
+  if (!enabled && CommercialToken::current().featureTier() == FeatureTier::Trial)
+    CommercialToken::clearCurrent();
+
+  maybePostExpiryNotice();
+  Q_EMIT enabledChanged();
+}
+
+/**
+ * @brief Posts the trial-expiry notice exactly once per machine (spec 0092 R5): a plain latch
+ *        beside the encrypted trial keys, checked on every path that can settle into the expired
+ *        state. Posted, never shown: this runs from the constructor and a timer tick (K13).
+ */
+void Licensing::Trial::maybePostExpiryNotice()
+{
+  if (!trialExpired())
+    return;
+
+  const QString key = QStringLiteral("notified-") + QCoreApplication::applicationVersion();
+  m_settings.beginGroup("trial");
+  const bool notified = m_settings.value(key, false).toBool();
+  if (!notified)
+    m_settings.setValue(key, true);
+
+  m_settings.endGroup();
+
+  if (notified)
+    return;
+
+  Misc::Utilities::postMessageBox(
+    QObject::tr("Your Serial Studio Pro trial has expired"),
+    QObject::tr("Pro features are locked until a license is activated. All free features "
+                "remain fully functional, with no time limit."),
+    QMessageBox::Information,
+    QObject::tr("Trial Expired"));
+}
+
 //--------------------------------------------------------------------------------------------------
 // Trial management
 //--------------------------------------------------------------------------------------------------
@@ -199,8 +261,11 @@ void Licensing::Trial::invalidateDaysCache()
  */
 void Licensing::Trial::enableTrial()
 {
-  if (trialAvailable())
-    fetchTrialState();
+  if (!trialAvailable())
+    return;
+
+  m_silentFetch = false;
+  fetchTrialState();
 }
 
 /**
@@ -295,8 +360,8 @@ void Licensing::Trial::fetchTrialState()
 /**
  * @brief Handles the trial server response (expiry capped at 14 days). A malformed reply leaves
  *        state untouched; the token slot is cleared only when the trial owns it. Messages are
- *        posted, not shown: a modal here runs its loop under the reply's stack (K13).
- *        enabledChanged fires only on a real change, which device-rebuilding consumers rely on.
+ *        posted, not shown (K13); enabledChanged fires only on a real change (device rebuilds
+ *        rely on it); registrationSettled fires on EVERY exit, after any token install.
  */
 void Licensing::Trial::onServerReply(QNetworkReply* reply)
 {
@@ -314,6 +379,7 @@ void Licensing::Trial::onServerReply(QNetworkReply* reply)
                                       QObject::tr("Trial Activation Error"));
 
     reply->deleteLater();
+    Q_EMIT registrationSettled();
     return;
   }
 
@@ -330,6 +396,7 @@ void Licensing::Trial::onServerReply(QNetworkReply* reply)
         QMessageBox::Warning,
         QObject::tr("Trial Activation Error"));
 
+    Q_EMIT registrationSettled();
     return;
   }
 
@@ -350,10 +417,11 @@ void Licensing::Trial::onServerReply(QNetworkReply* reply)
         QMessageBox::Warning,
         QObject::tr("Trial Activation Error"));
 
+    Q_EMIT registrationSettled();
     return;
   }
 
-  const QDateTime now = QDateTime::currentDateTimeUtc();
+  const QDateTime now = MonotonicClock::now().toUTC();
   if (expiry > now.addDays(14))
     expiry = now.addDays(14);
 
@@ -372,8 +440,12 @@ void Licensing::Trial::onServerReply(QNetworkReply* reply)
     Licensing::CommercialToken::clearCurrent();
 
   writeSettings();
+  m_lastEffectiveEnabled = trialEnabled();
+  maybePostExpiryNotice();
 
   if (m_trialEnabled != wasEnabled || m_deviceRegistered != wasRegistered
       || m_trialExpiry != wasExpiry)
     Q_EMIT enabledChanged();
+
+  Q_EMIT registrationSettled();
 }

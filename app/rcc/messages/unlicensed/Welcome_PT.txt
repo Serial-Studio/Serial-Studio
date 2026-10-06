@@ -1,0 +1,18 @@
+Copyright (c) 2020–2026 Alex Spataru <https://github.com/alex-spataru>
+
+Esta é a versão gratuita do Serial Studio Pro: todos os recursos
+principais são gratuitos, sem limite de tempo. Os recursos Pro abaixo
+são desbloqueados assim que você experimenta um deles, com um teste
+gratuito de 14 dias. Não é necessário conta nem pagamento para
+iniciá-lo.
+
+→ Suporte: alex@serial-studio.com
+→ Agende uma chamada: https://calendly.com/serial-studio
+→ Saiba mais: https://serial-studio.com/
+
+Recursos Pro disponíveis:
+→ Visualização MQTT e 3D
+→ Drivers Audio, CAN Bus, Modbus, USB, HID e Process I/O
+→ Widgets de saída, exportação MDF4 e transferências XMODEM/YMODEM/ZMODEM
+→ Historian, Variáveis e transformações (JS + Lua)
+→ Projetos multifonte e áreas de trabalho personalizadas

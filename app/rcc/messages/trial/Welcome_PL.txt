@@ -10,7 +10,7 @@ kod źródłowy GPLv3 samodzielnie.
 → Dowiedz się więcej: https://serial-studio.com/
 
 Dostępne funkcje Pro:
-→ Wizualizacja MQTT, XY i 3D
+→ Wizualizacja MQTT i 3D
 → Sterowniki Audio, CAN Bus, Modbus, USB, HID i Process I/O
 → Widżety wyjściowe, eksport MDF4 i transfery XMODEM/YMODEM/ZMODEM
 → Historian, Zmienne i transformacje wartości (JS + Lua)

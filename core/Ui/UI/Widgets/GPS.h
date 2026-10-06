@@ -176,6 +176,7 @@ private:
   double m_zoom;
   int m_index;
   int m_mapType;
+  bool m_restoringMapType;
 
   bool m_autoCenter;
   bool m_showWeather;

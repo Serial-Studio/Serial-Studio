@@ -10,7 +10,7 @@ o código fonte GPLv3 você mesmo.
 → Saiba mais: https://serial-studio.com/
 
 Recursos Pro disponíveis:
-→ Visualização MQTT, XY e 3D
+→ Visualização MQTT e 3D
 → Drivers Audio, CAN Bus, Modbus, USB, HID e Process I/O
 → Widgets de saída, exportação MDF4 e transferências XMODEM/YMODEM/ZMODEM
 → Historian, Variáveis e transformações (JS + Lua)

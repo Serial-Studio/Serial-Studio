@@ -10,7 +10,7 @@ sở hữu độc quyền.
 → Tìm hiểu thêm: https://serial-studio.com/
 
 Các tính năng Pro:
-→ Hình ảnh hóa MQTT, XY và 3D
+→ Hình ảnh hóa MQTT và 3D
 → Trình điều khiển Âm thanh, CAN Bus, Modbus, USB, HID và Process I/O
 → Tiện ích xuất dữ liệu, xuất MDF4 và truyền XMODEM/YMODEM/ZMODEM
 → Historian, Biến và biến đổi giá trị (JS + Lua)

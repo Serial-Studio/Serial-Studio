@@ -27,6 +27,8 @@
 #include <unordered_map>
 #include <vector>
 
+#include "Core/SerialStudio.h"
+
 namespace Core::Bus {
 struct ProjectStructureSnapshot;
 }  // namespace Core::Bus
@@ -59,6 +61,8 @@ public:
   [[nodiscard]] bool anyDeviceConnecting() const;
   [[nodiscard]] int connectedDeviceCount() const;
   [[nodiscard]] bool projectConfigurationOk() const;
+  [[nodiscard]] bool connectRequiresEntitlement(SerialStudio::BusType busType,
+                                                SerialStudio::OperationMode mode) const;
   [[nodiscard]] int deviceIdForDriver(const HAL_Driver* driver) const;
   [[nodiscard]] std::vector<int> deviceIdSnapshot(bool projectSourcesOnly) const;
 

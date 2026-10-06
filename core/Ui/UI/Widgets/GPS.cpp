@@ -33,6 +33,7 @@
 #include <QStandardPaths>
 #include <QTimer>
 
+#include "Core/License.h"
 #include "Core/SSAssert.h"
 #include "DSP.h"
 #include "Misc/CommonFonts.h"
@@ -88,6 +89,7 @@ Widgets::GPS::GPS(const int index, QQuickItem* parent)
   , m_zoom(MIN_ZOOM)
   , m_index(index)
   , m_mapType(0)
+  , m_restoringMapType(false)
   , m_autoCenter(true)
   , m_showWeather(false)
   , m_plotTrajectory(true)
@@ -130,14 +132,16 @@ Widgets::GPS::GPS(const int index, QQuickItem* parent)
 
   m_mapMaxZoom << 18 << 18 << 18 << 18 << 9 << 16 << 16 << 16;
 
+  m_restoringMapType = true;
   setMapType(m_settings.value("gpsMapType", 0).toInt());
-  m_showWeather     = m_settings.value("gpsWeather", false).toBool();
-  m_autoCenter      = m_settings.value("gpsAutoCenter", true).toBool();
-  m_showNasaWeather = m_settings.value("gpsNasaWeather", false).toBool();
-  m_plotTrajectory  = m_settings.value("gpsPlotTrajectory", true).toBool();
-  m_zoom            = qBound(static_cast<double>(MIN_ZOOM),
-                             SerialStudio::toDouble(m_settings.value("gpsZoomLevel", MIN_ZOOM)),
-                             18.0);
+  m_restoringMapType = false;
+  m_showWeather      = m_settings.value("gpsWeather", false).toBool();
+  m_autoCenter       = m_settings.value("gpsAutoCenter", true).toBool();
+  m_showNasaWeather  = m_settings.value("gpsNasaWeather", false).toBool();
+  m_plotTrajectory   = m_settings.value("gpsPlotTrajectory", true).toBool();
+  m_zoom             = qBound(static_cast<double>(MIN_ZOOM),
+                              SerialStudio::toDouble(m_settings.value("gpsZoomLevel", MIN_ZOOM)),
+                              18.0);
 
   if (m_showNasaWeather && m_showWeather)
     m_showWeather = false;
@@ -376,10 +380,16 @@ void Widgets::GPS::setMapType(const int type)
 #endif
     if (!proMaps && mapId > 0) {
       mapId = 0;
-      Misc::Utilities::showMessageBox(
-        tr("Additional map layers are available only for Pro users."),
-        tr("We can't offer unrestricted access because the ArcGIS API key incurs real costs."),
-        QMessageBox::Information);
+#ifdef BUILD_COMMERCIAL
+      if (!m_restoringMapType)
+        Core::License::requestProFeature(QStringLiteral("gps.pro-maps"));
+#else
+      if (!m_restoringMapType)
+        Misc::Utilities::showMessageBox(
+          tr("Additional map layers are available only for Pro users."),
+          tr("We can't offer unrestricted access because the ArcGIS API key incurs real costs."),
+          QMessageBox::Information);
+#endif
     }
 
     m_mapType = mapId;

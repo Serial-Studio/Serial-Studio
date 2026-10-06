@@ -39,6 +39,7 @@ extern "C" {
 
 #include "Core/Bus/MessageBus.h"
 #include "Core/Bus/Messages.h"
+#include "Core/License.h"
 #include "Core/SSAssert.h"
 
 #ifdef BUILD_COMMERCIAL
@@ -534,8 +535,27 @@ static void resolveLuaArgs(
 /**
  * @brief Lua C closure that posts a notification event by level integer.
  */
+/**
+ * @brief Logs once per session that unlicensed notify* calls are ignored, so a script author
+ *        relying on alerts is not left guessing (silent no-op otherwise, spec 0092).
+ */
+static void warnNotifyUnlicensedOnce()
+{
+  static std::atomic_flag warned = ATOMIC_FLAG_INIT;
+  if (!warned.test_and_set(std::memory_order_relaxed))
+    qWarning("Script notify*() ignored: requires an active Serial Studio Pro license or trial");
+}
+
+/**
+ * @brief Lua C closure that posts a notification event by level integer.
+ */
 static int luaNotify(lua_State* L)
 {
+  if (!Core::License::activated()) {
+    warnNotifyUnlicensedOnce();
+    return 0;
+  }
+
   const int level = static_cast<int>(luaL_checkinteger(L, 1));
   QString channel;
   QString title;
@@ -552,6 +572,11 @@ static int luaNotify(lua_State* L)
  */
 static int luaNotifyInfo(lua_State* L)
 {
+  if (!Core::License::activated()) {
+    warnNotifyUnlicensedOnce();
+    return 0;
+  }
+
   QString channel;
   QString title;
   QString subtitle;
@@ -567,6 +592,11 @@ static int luaNotifyInfo(lua_State* L)
  */
 static int luaNotifyWarning(lua_State* L)
 {
+  if (!Core::License::activated()) {
+    warnNotifyUnlicensedOnce();
+    return 0;
+  }
+
   QString channel;
   QString title;
   QString subtitle;
@@ -582,6 +612,11 @@ static int luaNotifyWarning(lua_State* L)
  */
 static int luaNotifyCritical(lua_State* L)
 {
+  if (!Core::License::activated()) {
+    warnNotifyUnlicensedOnce();
+    return 0;
+  }
+
   QString channel;
   QString title;
   QString subtitle;
@@ -597,6 +632,11 @@ static int luaNotifyCritical(lua_State* L)
  */
 static int luaNotifyClear(lua_State* L)
 {
+  if (!Core::License::activated()) {
+    warnNotifyUnlicensedOnce();
+    return 0;
+  }
+
   QString channel;
   QString title;
   QString subtitle;
@@ -608,17 +648,9 @@ static int luaNotifyClear(lua_State* L)
 }
 
 /**
- * @brief Lua C closure used as the stub when Pro tier is not active.
- */
-static int luaNotifyStub(lua_State* L)
-{
-  return luaL_error(L,
-                    "notify() requires a Pro license. "
-                    "See https://serial-studio.com/pricing");
-}
-
-/**
- * @brief Installs notify* globals + Info/Warning/Critical constants into a Lua state.
+ * @brief Installs notify* globals + Info/Warning/Critical constants into a Lua state. The
+ *        closures sample Core::License per call (spec 0092), so an engine outliving an
+ *        entitlement transition gates correctly without a recompile.
  */
 void DataModel::NotificationCenter::installScriptApi(lua_State* L)
 {
@@ -631,27 +663,19 @@ void DataModel::NotificationCenter::installScriptApi(lua_State* L)
   lua_pushinteger(L, 2);
   lua_setglobal(L, "Critical");
 
-  const bool proActive = isProTierActive();
-
-  lua_CFunction fnNotify   = proActive ? luaNotify : luaNotifyStub;
-  lua_CFunction fnInfo     = proActive ? luaNotifyInfo : luaNotifyStub;
-  lua_CFunction fnWarning  = proActive ? luaNotifyWarning : luaNotifyStub;
-  lua_CFunction fnCritical = proActive ? luaNotifyCritical : luaNotifyStub;
-  lua_CFunction fnClear    = proActive ? luaNotifyClear : luaNotifyStub;
-
-  lua_pushcfunction(L, fnNotify);
+  lua_pushcfunction(L, luaNotify);
   lua_setglobal(L, "notify");
 
-  lua_pushcfunction(L, fnInfo);
+  lua_pushcfunction(L, luaNotifyInfo);
   lua_setglobal(L, "notifyInfo");
 
-  lua_pushcfunction(L, fnWarning);
+  lua_pushcfunction(L, luaNotifyWarning);
   lua_setglobal(L, "notifyWarning");
 
-  lua_pushcfunction(L, fnCritical);
+  lua_pushcfunction(L, luaNotifyCritical);
   lua_setglobal(L, "notifyCritical");
 
-  lua_pushcfunction(L, fnClear);
+  lua_pushcfunction(L, luaNotifyClear);
   lua_setglobal(L, "notifyClear");
 }
 

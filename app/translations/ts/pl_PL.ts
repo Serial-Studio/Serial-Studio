@@ -840,12 +840,12 @@ Włączaj tę opcję tylko w zaufanych sieciach. Niezaufani klienci mogą odczyt
         <translation>Dodaj Widget</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="213"/>
+        <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="222"/>
         <source>Available Widgets</source>
         <translation>Dostępne Widgety</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="222"/>
+        <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="231"/>
         <source>Click a row to add it to the workspace.</source>
         <translation>Kliknij wiersz, aby dodać go do obszaru roboczego.</translation>
     </message>
@@ -854,62 +854,62 @@ Włączaj tę opcję tylko w zaufanych sieciach. Niezaufani klienci mogą odczyt
         <translation type="vanished">Szukaj</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="230"/>
+        <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="239"/>
         <source>Search…</source>
         <translation>Szukaj…</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="249"/>
+        <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="258"/>
         <source>Widget</source>
         <translation>Widget</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="250"/>
+        <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="259"/>
         <source>Group</source>
         <translation>Grupa</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="251"/>
+        <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="260"/>
         <source>Name</source>
         <translation>Nazwa</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="318"/>
+        <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="327"/>
         <source>(entire group)</source>
         <translation>(cała grupa)</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="353"/>
+        <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="362"/>
         <source>Already in workspace</source>
         <translation>Już w obszarze roboczym</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="354"/>
+        <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="363"/>
         <source>Add to workspace</source>
         <translation>Dodaj do obszaru roboczego</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="384"/>
+        <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="393"/>
         <source>No widgets available.</source>
         <translation>Brak dostępnych widżetów.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="385"/>
+        <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="394"/>
         <source>No widgets match.</source>
         <translation>Brak pasujących widżetów.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="402"/>
+        <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="411"/>
         <source>%1 widgets</source>
         <translation>Widżety: %1</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="403"/>
+        <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="412"/>
         <source>%1 of %2 widgets</source>
         <translation>%1 z %2 widżetów</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="407"/>
+        <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="416"/>
         <source>Close</source>
         <translation>Zamknij</translation>
     </message>
@@ -5216,55 +5216,53 @@ Włączaj tę opcję tylko w zaufanych sieciach. Niezaufani klienci mogą odczyt
 <context>
     <name>Console::Export</name>
     <message>
-        <location filename="../../../core/Ui/Console/Export.cpp" line="358"/>
         <source>Console Export is a Pro feature.</source>
-        <translation>Eksport Konsoli jest funkcją Pro.</translation>
+        <translation type="vanished">Eksport Konsoli jest funkcją Pro.</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/Console/Export.cpp" line="359"/>
         <source>This feature requires a license. Please purchase one to enable console export.</source>
-        <translation>Ta funkcja wymaga licencji. Zakup licencję, aby włączyć eksport konsoli.</translation>
+        <translation type="vanished">Ta funkcja wymaga licencji. Zakup licencję, aby włączyć eksport konsoli.</translation>
     </message>
 </context>
 <context>
     <name>Console::Handler</name>
     <message>
-        <location filename="../../../core/Ui/Console/Handler.cpp" line="308"/>
+        <location filename="../../../core/Ui/Console/Handler.cpp" line="312"/>
         <source>ASCII</source>
         <translation>ASCII</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/Console/Handler.cpp" line="309"/>
+        <location filename="../../../core/Ui/Console/Handler.cpp" line="313"/>
         <source>HEX</source>
         <translation>HEX</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/Console/Handler.cpp" line="319"/>
+        <location filename="../../../core/Ui/Console/Handler.cpp" line="323"/>
         <source>No Line Ending</source>
         <translation>Bez Zakończenia Linii</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/Console/Handler.cpp" line="320"/>
+        <location filename="../../../core/Ui/Console/Handler.cpp" line="324"/>
         <source>New Line</source>
         <translation>Nowa Linia</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/Console/Handler.cpp" line="321"/>
+        <location filename="../../../core/Ui/Console/Handler.cpp" line="325"/>
         <source>Carriage Return</source>
         <translation>Powrót Karetki</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/Console/Handler.cpp" line="322"/>
+        <location filename="../../../core/Ui/Console/Handler.cpp" line="326"/>
         <source>CR + NL</source>
         <translation>CR + NL</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/Console/Handler.cpp" line="332"/>
+        <location filename="../../../core/Ui/Console/Handler.cpp" line="336"/>
         <source>Text</source>
         <translation>Tekst</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/Console/Handler.cpp" line="333"/>
+        <location filename="../../../core/Ui/Console/Handler.cpp" line="337"/>
         <source>Hex</source>
         <translation>Hex</translation>
     </message>
@@ -5277,12 +5275,12 @@ Włączaj tę opcję tylko w zaufanych sieciach. Niezaufani klienci mogą odczyt
         <translation type="vanished">Szesnastkowy</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/Console/Handler.cpp" line="364"/>
+        <location filename="../../../core/Ui/Console/Handler.cpp" line="368"/>
         <source>No Checksum</source>
         <translation>Bez Sumy Kontrolnej</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/Console/Handler.cpp" line="1071"/>
+        <location filename="../../../core/Ui/Console/Handler.cpp" line="1085"/>
         <source>Device %1</source>
         <translation>Urządzenie %1</translation>
     </message>
@@ -5519,6 +5517,80 @@ Włączaj tę opcję tylko w zaufanych sieciach. Niezaufani klienci mogą odczyt
         <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="1116"/>
         <source>Open Decoder</source>
         <translation>Otwórz Dekoder</translation>
+    </message>
+</context>
+<context>
+    <name>ConsoleSendLibrary</name>
+    <message>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleSendLibrary.qml" line="116"/>
+        <source>Sent commands and pinned presets will appear here</source>
+        <translation>Wysłane polecenia i przypięte ustawienia będą wyświetlane tutaj</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleSendLibrary.qml" line="121"/>
+        <source>Recent</source>
+        <translation>Ostatnie</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleSendLibrary.qml" line="137"/>
+        <source>Fill the send field with this command</source>
+        <translation>Wypełnij pole wysyłania tym poleceniem</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleSendLibrary.qml" line="146"/>
+        <source>Pin this command with the current send settings</source>
+        <translation>Przypnij to polecenie z bieżącymi ustawieniami wysyłania</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleSendLibrary.qml" line="153"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleSendLibrary.qml" line="236"/>
+        <source>Save as project action</source>
+        <translation>Zapisz jako akcję projektu</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleSendLibrary.qml" line="160"/>
+        <source>Pinned</source>
+        <translation>Przypięte</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleSendLibrary.qml" line="183"/>
+        <source>Fill the send field and restore this pin's send settings</source>
+        <translation>Wypełnij pole wysyłania i przywróć ustawienia wysyłania tego przypięcia</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleSendLibrary.qml" line="196"/>
+        <source>Pin name</source>
+        <translation>Nazwa przypięcia</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleSendLibrary.qml" line="214"/>
+        <source>Move up</source>
+        <translation>Przenieś w górę</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleSendLibrary.qml" line="220"/>
+        <source>Move down</source>
+        <translation>Przenieś w dół</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleSendLibrary.qml" line="228"/>
+        <source>Rename pin</source>
+        <translation>Zmień nazwę przypięcia</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleSendLibrary.qml" line="241"/>
+        <source>Delete pin</source>
+        <translation>Usuń pin</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleSendLibrary.qml" line="249"/>
+        <source>Project Actions</source>
+        <translation>Akcje Projektu</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleSendLibrary.qml" line="263"/>
+        <source>Trigger this project action</source>
+        <translation>Wyzwól tę akcję projektu</translation>
     </message>
 </context>
 <context>
@@ -6114,37 +6186,37 @@ Włączaj tę opcję tylko w zaufanych sieciach. Niezaufani klienci mogą odczyt
         <translation>Pulpit</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardLayout.qml" line="253"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardLayout.qml" line="250"/>
         <source>Remote %1 - Stale</source>
         <translation>Zdalny %1 - Nieaktualny</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardLayout.qml" line="256"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardLayout.qml" line="253"/>
         <source>Remote %1 - Live</source>
         <translation>Zdalny %1 - na Żywo</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardLayout.qml" line="258"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardLayout.qml" line="255"/>
         <source>Remote %1 - No Data</source>
         <translation>Zdalny %1 - Brak Danych</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardLayout.qml" line="265"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardLayout.qml" line="262"/>
         <source>API Server Active (%1)</source>
         <translation>Serwer API Aktywny (%1)</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardLayout.qml" line="267"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardLayout.qml" line="264"/>
         <source>API Server Ready</source>
         <translation>Serwer API Gotowy</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardLayout.qml" line="262"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardLayout.qml" line="259"/>
         <source>API Server Off</source>
         <translation>Serwer API Wyłączony</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardLayout.qml" line="665"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardLayout.qml" line="662"/>
         <source>Command Palette</source>
         <translation>Paleta Poleceń</translation>
     </message>
@@ -6450,158 +6522,158 @@ Włączaj tę opcję tylko w zaufanych sieciach. Niezaufani klienci mogą odczyt
 <context>
     <name>DataModel::DatasetTransformEditor</name>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="115"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="116"/>
         <source>Dataset Value Transform</source>
         <translation>Transformacja Wartości Zbioru Danych</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="154"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="155"/>
         <source>Lua</source>
         <translation>Lua</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="154"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="155"/>
         <source>JavaScript</source>
         <translation>Javascript</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="186"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="187"/>
         <source>Language:</source>
         <translation>Język:</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="189"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="190"/>
         <source>Template:</source>
         <translation>Szablon:</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="163"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="164"/>
         <source>Enter raw value (e.g., 1024)</source>
         <translation>Wprowadź wartość surową (np. 1024)</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="168"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="169"/>
         <source>Test</source>
         <translation>Testuj</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="169"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="170"/>
         <source>Clear</source>
         <translation>Wyczyść</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="205"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="206"/>
         <source>Input:</source>
         <translation>Wejście:</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="208"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="209"/>
         <source>Output:</source>
         <translation>Wyjście:</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="171"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="172"/>
         <source>Apply</source>
         <translation>Zastosuj</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="154"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="155"/>
         <source>Expression</source>
         <translation>Wyrażenie</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="172"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="173"/>
         <source>Cancel</source>
         <translation>Anuluj</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="174"/>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="691"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="175"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="697"/>
         <source>Open Lua Library</source>
         <translation>Otwórz Bibliotekę Lua</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="175"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="176"/>
         <source>Show the project's shared library for this language in the Project Editor. Functions defined there can be called from this transform by name.</source>
         <translation>Pokaż współdzieloną bibliotekę projektu dla tego języka w Edytorze Projektu. Funkcje tam zdefiniowane mogą być wywoływane z tej transformacji po nazwie.</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="220"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="221"/>
         <source>Parameters</source>
         <translation>Parametry</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="222"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="223"/>
         <source>Constants that belong to this dataset. The transform reads them as params.&lt;name&gt;.</source>
         <translation>Stałe należące do tego zestawu danych. Transformacja odczytuje je jako params.&lt;nazwa&gt;.</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="224"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="225"/>
         <source>Name</source>
         <translation>Nazwa</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="224"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="225"/>
         <source>Value</source>
         <translation>Wartość</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="230"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="231"/>
         <source>Numbers and true/false keep their type; any other value is a string.</source>
         <translation>Liczby oraz true/false zachowują swój typ; każda inna wartość jest ciągiem znaków.</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="233"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="234"/>
         <source>&lt;b&gt;No Parameters&lt;/b&gt;&lt;br&gt;Parameters are constants that belong to this dataset, such as a scale factor or a sensor offset. The transform reads them as &lt;code&gt;params.name&lt;/code&gt;, so one formula in the Lua Library can serve every dataset that differs only in its constants.</source>
         <translation>&lt;b&gt;Brak Parametrów&lt;/b&gt;&lt;br&gt;Parametry to stałe należące do tego zbioru danych, takie jak współczynnik skali lub przesunięcie czujnika. Transformacja odczytuje je jako &lt;code&gt;params.nazwa&lt;/code&gt;, dzięki czemu jedna formuła w Bibliotece Lua może obsługiwać każdy zbiór danych różniący się tylko stałymi.</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="242"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="243"/>
         <source>Add Parameter</source>
         <translation>Dodaj Parametr</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="243"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="244"/>
         <source>Remove</source>
         <translation>Usuń</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="348"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="354"/>
         <source>Transform — %1</source>
         <translation>Transformacja — %1</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="447"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="453"/>
         <source>The value transform has a syntax error and was not applied.</source>
         <translation>Transformacja wartości zawiera błąd składni i nie została zastosowana.</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="456"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="462"/>
         <source>The value transform must define a transform(value) function.</source>
         <translation>Transformacja wartości musi definiować funkcję transform(value).</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="457"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="463"/>
         <source>Define a transform(value) function that returns a number, or use Clear to remove the transform.</source>
         <translation>Zdefiniuj funkcję transform(value) zwracającą liczbę lub użyj Wyczyść, aby usunąć transformację.</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="475"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="481"/>
         <source>Enter a value</source>
         <translation>Wprowadź wartość</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="482"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="488"/>
         <source>Invalid number</source>
         <translation>Nieprawidłowa liczba</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="523"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="529"/>
         <source>Format Document	Ctrl+Shift+I</source>
         <translation>Formatuj Dokument	ctrl+shift+i</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="524"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="530"/>
         <source>Format Selection	Ctrl+I</source>
         <translation>Formatuj Zaznaczenie	ctrl+i</translation>
     </message>
@@ -6666,7 +6738,7 @@ v
 </translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="821"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="827"/>
         <source>--
 -- Define a transform(value) function that receives the live
 -- dataset reading and returns a transformed number. If no
@@ -6725,7 +6797,7 @@ v
 --</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="849"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="855"/>
         <source>/*
  * Define a transform(value) function that receives the live
  * dataset reading and returns a transformed number. If no
@@ -6782,39 +6854,39 @@ v
  * kliknij Test, aby wypróbować swoją funkcję.</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="990"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="996"/>
         <source>Failed to create the Lua engine.</source>
         <translation>Nie udało się utworzyć silnika Lua.</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1016"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1022"/>
         <source>Failed to create the JavaScript engine.</source>
         <translation>Nie udało się utworzyć silnika JavaScript.</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1032"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1038"/>
         <source>The transform did not finish evaluating within %1 ms.</source>
         <translation>Transformacja nie zakończyła ewaluacji w ciągu %1 ms.</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1037"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1043"/>
         <source>Line %1: %2</source>
         <translation>Linia %1: %2</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1103"/>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1137"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1109"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1143"/>
         <source>Error in shared library: %1</source>
         <translation>Błąd w bibliotece współdzielonej: %1</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1142"/>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1155"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1148"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1161"/>
         <source>Error: the transform did not finish within %1 ms</source>
         <translation>Błąd: transformacja nie zakończyła się w ciągu %1 ms</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1203"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1209"/>
         <source>Select Template…</source>
         <translation>Wybierz Szablon…</translation>
     </message>
@@ -6875,27 +6947,27 @@ v
  * kliknij Test, aby wypróbować swoją funkcję.</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1093"/>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1127"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1099"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1133"/>
         <source>Engine error</source>
         <translation>Błąd silnika</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1083"/>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1109"/>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1117"/>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1145"/>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1158"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1089"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1115"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1123"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1151"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1164"/>
         <source>Error: %1</source>
         <translation>Błąd: %1</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="692"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="698"/>
         <source>Open JavaScript Library</source>
         <translation>Otwórz Bibliotekę Javascript</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="787"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="793"/>
         <source>#
 # An arithmetic expression evaluated once per sample. No function,
 # no statements: the value of the expression is the new reading.
@@ -6964,13 +7036,13 @@ v
 </translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1113"/>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1149"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1119"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1155"/>
         <source>Error: transform() not defined</source>
         <translation>Błąd: transform() nie jest zdefiniowana</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1120"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1126"/>
         <source>Error: transform() must return a number</source>
         <translation>Błąd: transform() musi zwracać liczbę</translation>
     </message>
@@ -9487,27 +9559,27 @@ Dodać %4 zbiorów danych używając domyślnych wartości szablonu?</translatio
         <translation>Zmień Zakres Czasu Wykresu</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1059"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1061"/>
         <source>Toggle Freeze</source>
         <translation>Przełącz Zamrożenie</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1074"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1076"/>
         <source>Toggle Change-Driven Transforms</source>
         <translation>Przełącz Transformacje Sterowane Zmianą</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1091"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1093"/>
         <source>Toggle Fast Lua Execution</source>
         <translation>Przełącz Szybkie Wykonywanie Lua</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1112"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1114"/>
         <source>Enable Fast Lua Execution?</source>
         <translation>Włączyć Szybkie Wykonywanie Lua?</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1113"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1115"/>
         <source>Fast mode runs Lua parsers and transforms through the JIT compiler (up to ~40x faster), but the runaway-script watchdog cannot operate: a script stuck in an infinite loop will stall its data source until you disconnect.
 
 Enable it only for scripts you trust and have tested in Safe mode first.</source>
@@ -9516,37 +9588,37 @@ Enable it only for scripts you trust and have tested in Safe mode first.</source
 Włącz go tylko dla skryptów, którym ufasz i które przetestowałeś wcześniej w trybie bezpiecznym.</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1118"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1120"/>
         <source>Fast Lua Execution</source>
         <translation>Szybkie Wykonywanie Lua</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1147"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1149"/>
         <source>Change Frame Start Sequence</source>
         <translation>Zmień Sekwencję Początkową Ramki</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1166"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1168"/>
         <source>Change Frame End Sequence</source>
         <translation>Zmień Sekwencję Końcową Ramki</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1185"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1187"/>
         <source>Change Checksum</source>
         <translation>Zmień Sumę Kontrolną</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1204"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1206"/>
         <source>Change Frame Detection</source>
         <translation>Zmień Wykrywanie Ramek</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1223"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1225"/>
         <source>Change Decoder</source>
         <translation>Zmień Dekoder</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1242"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1244"/>
         <source>Toggle Hex Delimiters</source>
         <translation>Przełącz Ograniczniki Szesnastkowe</translation>
     </message>
@@ -11479,62 +11551,62 @@ Prawidłowy format: 01 A2 FF 3C</translation>
         <translation>Zmień Nazwę Grupy</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorCommit.cpp" line="634"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorCommit.cpp" line="637"/>
         <source>Edit Action</source>
         <translation>Edytuj Akcję</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorCommit.cpp" line="676"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorCommit.cpp" line="679"/>
         <source>Rename Project</source>
         <translation>Zmień Nazwę Projektu</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorCommit.cpp" line="723"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorCommit.cpp" line="726"/>
         <source>Alias "%1" is already in use</source>
         <translation>Alias "%1" jest już w użyciu</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorCommit.cpp" line="724"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorCommit.cpp" line="727"/>
         <source>Dataset aliases must be unique across the project. The change was not applied.</source>
         <translation>Aliasy zestawów danych muszą być unikalne w całym projekcie. Zmiana nie została zastosowana.</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorCommit.cpp" line="726"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorCommit.cpp" line="729"/>
         <source>Duplicate Alias</source>
         <translation>Duplikuj Alias</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorCommit.cpp" line="737"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorCommit.cpp" line="740"/>
         <source>Alias "%1" contains only digits</source>
         <translation>Alias "%1" zawiera tylko cyfry</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorCommit.cpp" line="738"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorCommit.cpp" line="741"/>
         <source>Scripts must quote it as a string, e.g. getDataset("%1"); a numeric argument is read as a uniqueId, not &amp;m_editor alias.</source>
         <translation>Skrypty muszą cytować go jako ciąg znaków, np. getDataset("%1"); argument numeryczny jest odczytywany jako uniqueId, a nie ten alias.</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorCommit.cpp" line="742"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorCommit.cpp" line="745"/>
         <source>Numeric Alias</source>
         <translation>Alias Numeryczny</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorCommit.cpp" line="876"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorCommit.cpp" line="879"/>
         <source>Edit Alarms</source>
         <translation>Edytuj Alarmy</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorCommit.cpp" line="1016"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorCommit.cpp" line="1019"/>
         <source>Rename Dataset</source>
         <translation>Zmień Nazwę Zbioru Danych</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorCommit.cpp" line="1037"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorCommit.cpp" line="1040"/>
         <source>Edit Dataset</source>
         <translation>Edytuj Zestaw Danych</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorCommit.cpp" line="1216"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorCommit.cpp" line="1219"/>
         <source>Edit Output Widget</source>
         <translation>Edytuj Widżet Wyjściowy</translation>
     </message>
@@ -11915,7 +11987,7 @@ Prawidłowy format: 01 A2 FF 3C</translation>
     </message>
     <message>
         <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="750"/>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1166"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1181"/>
         <source>General Information</source>
         <translation>Informacje Ogólne</translation>
     </message>
@@ -12002,7 +12074,7 @@ Prawidłowy format: 01 A2 FF 3C</translation>
     </message>
     <message>
         <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="865"/>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1291"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1306"/>
         <source>Text Encoding</source>
         <translation>Kodowanie Tekstu</translation>
     </message>
@@ -12022,173 +12094,188 @@ Prawidłowy format: 01 A2 FF 3C</translation>
         <translation>Znaki EOL dołączane do komunikatu (np. </translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="905"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="897"/>
+        <source>No Checksum</source>
+        <translation>Bez Sumy Kontrolnej</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="906"/>
+        <source>Checksum</source>
+        <translation>Suma Kontrolna</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="907"/>
+        <source>Checksum appended to the payload (covers payload and EOL)</source>
+        <translation>Suma kontrolna dołączona do ładunku (obejmuje ładunek i EOL)</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="920"/>
         <source>Execution Behavior</source>
         <translation>Zachowanie Wykonania</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="917"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="932"/>
         <source>Auto-Execute on Connect</source>
         <translation>Automatyczne Wykonanie przy Połączeniu</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="918"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="933"/>
         <source>Automatically trigger &amp;m_editor action when the device connects</source>
         <translation>Automatycznie wyzwól akcję &amp;m_editor po podłączeniu urządzenia</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="924"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="939"/>
         <source>Timer Behavior</source>
         <translation>Zachowanie Timera</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="933"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="948"/>
         <source>Timer Mode</source>
         <translation>Tryb Timera</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="936"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="951"/>
         <source>Choose when and how &amp;m_editor action should repeat automatically</source>
         <translation>Wybierz, kiedy i jak akcja &amp;m_editor powinna się automatycznie powtarzać</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="943"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="958"/>
         <source>Interval (ms)</source>
         <translation>Interwał (ms)</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="947"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="962"/>
         <source>Timer Interval (ms)</source>
         <translation>Interwał Timera (ms)</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="948"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="963"/>
         <source>Milliseconds between each repeated trigger of &amp;m_editor action</source>
         <translation>Milisekundy między każdym powtórzonym wyzwoleniem akcji &amp;m_editor</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="955"/>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="959"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="970"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="974"/>
         <source>Repeat Count</source>
         <translation>Liczba Powtórzeń</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="960"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="975"/>
         <source>Number of times to send the command on each trigger</source>
         <translation>Liczba wysłań komendy przy każdym wyzwoleniu</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1054"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1069"/>
         <source>On</source>
         <translation>Włączone</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1177"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1192"/>
         <source>Label</source>
         <translation>Etykieta</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1178"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1193"/>
         <source>Display label</source>
         <translation>Wyświetl etykietę</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1188"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1203"/>
         <source>Button Icon</source>
         <translation>Ikona Przycisku</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1197"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1212"/>
         <source>Colorize Icon</source>
         <translation>Koloryzuj Ikonę</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1198"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1213"/>
         <source>Tint the icon with the button color</source>
         <translation>Zabarwia ikonę kolorem przycisku</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1207"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1222"/>
         <source>Automatic</source>
         <translation>Automatyczny</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1208"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1223"/>
         <source>Button Color</source>
         <translation>Kolor Przycisku</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1209"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1224"/>
         <source>Custom fill color for this button; automatic uses the group accent</source>
         <translation>Niestandardowy kolor wypełnienia dla tego przycisku; automatyczny używa koloru akcentu grupy</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1220"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1235"/>
         <source>Button Size</source>
         <translation>Rozmiar Przycisku</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1221"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1236"/>
         <source>Scales the button, its icon and its caption</source>
         <translation>Skaluje przycisk, jego ikonę i podpis</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1230"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1245"/>
         <source>Toggle Button</source>
         <translation>Przycisk Przełącznika</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1231"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1246"/>
         <source>Stay pressed and transmit 1 (on) / 0 (off) instead of a single click</source>
         <translation>Pozostaje wciśnięty i przesyła 1 (wł.) / 0 (wył.) zamiast pojedynczego kliknięcia</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1253"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1268"/>
         <source>On Label</source>
         <translation>Etykieta Wł.</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1254"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1269"/>
         <source>Caption shown while latched (defaults to the label)</source>
         <translation>Podpis wyświetlany w stanie załączonym (domyślnie etykieta)</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1263"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1278"/>
         <source>Off Label</source>
         <translation>Etykieta Wył.</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1264"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1279"/>
         <source>Caption shown while released (defaults to the label)</source>
         <translation>Podpis wyświetlany w stanie zwolnionym (domyślnie etykieta)</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1280"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1295"/>
         <source>Initial Value</source>
         <translation>Wartość Początkowa</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1292"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1307"/>
         <source>Character encoding used when transmit() returns a string value</source>
         <translation>Kodowanie znaków używane gdy transmit() zwraca wartość tekstową</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1311"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1326"/>
         <source>Value Range</source>
         <translation>Zakres Wartości</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1322"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1337"/>
         <source>Minimum Value</source>
         <translation>Wartość Minimalna</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1331"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1346"/>
         <source>Maximum Value</source>
         <translation>Wartość Maksymalna</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1340"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1355"/>
         <source>Step Size</source>
         <translation>Rozmiar Kroku</translation>
     </message>
@@ -14870,29 +14957,25 @@ Dodaj tagi kontrolera powyżej, aby je odpytywać.</translation>
         <translation>IEC 60870-5-104</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="562"/>
         <source>Your trial period has ended.</source>
-        <translation>Okres próbny zakończony.</translation>
+        <translation type="vanished">Okres próbny zakończony.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="563"/>
         <source>To continue using Serial Studio, please activate your license.</source>
-        <translation>Aby kontynuować korzystanie z Serial Studio, aktywuj licencję.</translation>
+        <translation type="vanished">Aby kontynuować korzystanie z Serial Studio, aktywuj licencję.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="646"/>
+        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="647"/>
         <source>connection attempt failed</source>
         <translation>próba połączenia nie powiodła się</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="1112"/>
         <source>This connection type requires an active license or trial.</source>
-        <translation>Ten typ połączenia wymaga aktywnej licencji lub wersji próbnej.</translation>
+        <translation type="vanished">Ten typ połączenia wymaga aktywnej licencji lub wersji próbnej.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="1113"/>
         <source>Activate Serial Studio Pro or start a trial to use this device type.</source>
-        <translation>Aktywuj Serial Studio Pro lub rozpocznij okres próbny, aby użyć tego typu urządzenia.</translation>
+        <translation type="vanished">Aktywuj Serial Studio Pro lub rozpocznij okres próbny, aby użyć tego typu urządzenia.</translation>
     </message>
     <message>
         <source>Connection Lost</source>
@@ -18717,7 +18800,7 @@ Urządzenie może nie udostępniać punktów końcowych danych w aktywnej konfig
 <context>
     <name>InfluxDB::Export</name>
     <message>
-        <location filename="../../../core/Storage/InfluxDB/Export.cpp" line="811"/>
+        <location filename="../../../core/Storage/InfluxDB/Export.cpp" line="822"/>
         <source>Refused an insecure InfluxDB URL: use https, or http only for a loopback host</source>
         <translation>Odrzucono niezabezpieczony URL InfluxDB: użyj https lub http tylko dla hosta lokalnego</translation>
     </message>
@@ -18725,17 +18808,17 @@ Urządzenie może nie udostępniać punktów końcowych danych w aktywnej konfig
 <context>
     <name>InfluxDB::ExportWorker</name>
     <message>
-        <location filename="../../../core/Storage/InfluxDB/Export.cpp" line="365"/>
+        <location filename="../../../core/Storage/InfluxDB/Export.cpp" line="367"/>
         <source>The write request could not be sent</source>
         <translation>Nie udało się wysłać żądania zapisu</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/InfluxDB/Export.cpp" line="426"/>
+        <location filename="../../../core/Storage/InfluxDB/Export.cpp" line="428"/>
         <source>Server answered HTTP %1</source>
         <translation>Serwer odpowiedział HTTP %1</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/InfluxDB/Export.cpp" line="424"/>
+        <location filename="../../../core/Storage/InfluxDB/Export.cpp" line="426"/>
         <source>TLS verification failed: %1</source>
         <translation>Weryfikacja TLS nieudana: %1</translation>
     </message>
@@ -19456,14 +19539,57 @@ Aby ponownie użyć tego miejsca na innym urządzeniu, wyślij e-mail na adres a
     </message>
 </context>
 <context>
+    <name>Licensing::TrialGate</name>
+    <message>
+        <location filename="../../src/Licensing/TrialGate.cpp" line="128"/>
+        <source>Start your free 14-day Serial Studio Pro trial?</source>
+        <translation>Rozpocząć bezpłatny 14-dniowy okres próbny Serial Studio Pro?</translation>
+    </message>
+    <message>
+        <location filename="../../src/Licensing/TrialGate.cpp" line="129"/>
+        <source>This feature is part of Serial Studio Pro. The trial unlocks every Pro feature for 14 days, with no account and no payment. An internet connection is required to register the trial on this machine.</source>
+        <translation>Ta funkcja jest częścią Serial Studio Pro. Okres próbny odblokowuje wszystkie funkcje Pro przez 14 dni, bez konta i bez płatności. Wymagane jest połączenie internetowe, aby zarejestrować okres próbny na tym komputerze.</translation>
+    </message>
+    <message>
+        <location filename="../../src/Licensing/TrialGate.cpp" line="133"/>
+        <source>Serial Studio Pro Trial</source>
+        <translation>Serial Studio Pro Trial</translation>
+    </message>
+    <message>
+        <location filename="../../src/Licensing/TrialGate.cpp" line="164"/>
+        <source>Activate License</source>
+        <translation>Aktywuj Licencję</translation>
+    </message>
+    <message>
+        <location filename="../../src/Licensing/TrialGate.cpp" line="165"/>
+        <source>Get Serial Studio Pro</source>
+        <translation>Zdobądź Serial Studio Pro</translation>
+    </message>
+    <message>
+        <location filename="../../src/Licensing/TrialGate.cpp" line="169"/>
+        <source>This feature requires Serial Studio Pro</source>
+        <translation>Ta funkcja wymaga Serial Studio Pro</translation>
+    </message>
+    <message>
+        <location filename="../../src/Licensing/TrialGate.cpp" line="170"/>
+        <source>Your trial has ended. All free features remain fully functional; activate a license or purchase one to use Pro features again.</source>
+        <translation>Twój okres próbny wygasł. Wszystkie bezpłatne funkcje pozostają w pełni funkcjonalne; aktywuj licencję lub kup ją, aby ponownie używać funkcji Pro.</translation>
+    </message>
+    <message>
+        <location filename="../../src/Licensing/TrialGate.cpp" line="173"/>
+        <source>Serial Studio Pro</source>
+        <translation>Serial Studio Pro</translation>
+    </message>
+</context>
+<context>
     <name>MDF4::Export</name>
     <message>
-        <location filename="../../../core/Storage/MDF4/Export.cpp" line="765"/>
+        <location filename="../../../core/Storage/MDF4/Export.cpp" line="779"/>
         <source>MDF4 Export is a Pro feature.</source>
         <translation>Eksport MDF4 jest funkcją Pro.</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/MDF4/Export.cpp" line="766"/>
+        <location filename="../../../core/Storage/MDF4/Export.cpp" line="780"/>
         <source>Activate Serial Studio Pro or start the free trial to enable MDF4 export.</source>
         <translation>Aktywuj Serial Studio Pro lub rozpocznij bezpłatny okres próbny, aby włączyć eksport MDF4.</translation>
     </message>
@@ -19475,17 +19601,17 @@ Aby ponownie użyć tego miejsca na innym urządzeniu, wyślij e-mail na adres a
 <context>
     <name>MDF4::Player</name>
     <message>
-        <location filename="../../../core/Storage/MDF4/Player.cpp" line="258"/>
+        <location filename="../../../core/Storage/MDF4/Player.cpp" line="259"/>
         <source>Select MDF4 file</source>
         <translation>Wybierz plik MDF4</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/MDF4/Player.cpp" line="260"/>
+        <location filename="../../../core/Storage/MDF4/Player.cpp" line="261"/>
         <source>MDF4 files (*.mf4 *.dat)</source>
         <translation>Pliki MDF4 (*.mf4 *.dat)</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/MDF4/Player.cpp" line="291"/>
+        <location filename="../../../core/Storage/MDF4/Player.cpp" line="296"/>
         <source>MDF4 Playback is a Pro feature.</source>
         <translation>Odtwarzanie MDF4 jest funkcją Pro.</translation>
     </message>
@@ -19494,27 +19620,27 @@ Aby ponownie użyć tego miejsca na innym urządzeniu, wyślij e-mail na adres a
         <translation type="vanished">Ta funkcja wymaga licencji. Zakup licencję, aby włączyć odtwarzanie MDF4.</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/MDF4/Player.cpp" line="292"/>
+        <location filename="../../../core/Storage/MDF4/Player.cpp" line="297"/>
         <source>Activate Serial Studio Pro or start the free trial to enable MDF4 playback.</source>
         <translation>Aktywuj Serial Studio Pro lub rozpocznij bezpłatny okres próbny, aby włączyć odtwarzanie MDF4.</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/MDF4/Player.cpp" line="298"/>
+        <location filename="../../../core/Storage/MDF4/Player.cpp" line="304"/>
         <source>Disconnect from device?</source>
         <translation>Rozłączyć z urządzeniem?</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/MDF4/Player.cpp" line="299"/>
+        <location filename="../../../core/Storage/MDF4/Player.cpp" line="305"/>
         <source>You must disconnect from the current device before opening a MDF4 file.</source>
         <translation>Musisz rozłączyć się z bieżącym urządzeniem przed otwarciem pliku MDF4.</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/MDF4/Player.cpp" line="521"/>
+        <location filename="../../../core/Storage/MDF4/Player.cpp" line="527"/>
         <source>MDF4 data may be incomplete</source>
         <translation>Dane MDF4 mogą być niekompletne</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/MDF4/Player.cpp" line="522"/>
+        <location filename="../../../core/Storage/MDF4/Player.cpp" line="528"/>
         <source>Part of the file's data section could not be read; the recording may be truncated.</source>
         <translation>Część sekcji danych pliku nie mogła zostać odczytana; nagranie może być obcięte.</translation>
     </message>
@@ -19535,12 +19661,12 @@ Aby ponownie użyć tego miejsca na innym urządzeniu, wyślij e-mail na adres a
         <translation type="vanished">Nie udało się odczytać struktury pliku. Plik może być uszkodzony.</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/MDF4/Player.cpp" line="490"/>
+        <location filename="../../../core/Storage/MDF4/Player.cpp" line="496"/>
         <source>No data in file</source>
         <translation>Brak danych w pliku</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/MDF4/Player.cpp" line="491"/>
+        <location filename="../../../core/Storage/MDF4/Player.cpp" line="497"/>
         <source>The MDF4 file contains no measurement data.</source>
         <translation>Plik MDF4 nie zawiera danych pomiarowych.</translation>
     </message>
@@ -21311,12 +21437,12 @@ Czy chcesz otworzyć stronę pobierania?</translation>
 <context>
     <name>Misc::GraphicsBackend</name>
     <message>
-        <location filename="../../../core/Ui/Misc/GraphicsBackend.cpp" line="444"/>
+        <location filename="../../../core/Ui/Misc/GraphicsBackend.cpp" line="477"/>
         <source>Restart Required</source>
         <translation>Wymagane Ponowne Uruchomienie</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/Misc/GraphicsBackend.cpp" line="445"/>
+        <location filename="../../../core/Ui/Misc/GraphicsBackend.cpp" line="478"/>
         <source>The new rendering backend will take effect after restarting Serial Studio. Restart now to apply the change?</source>
         <translation>Nowy backend renderowania zacznie działać po ponownym uruchomieniu Serial Studio. Uruchomić ponownie, aby zastosować zmiany?</translation>
     </message>
@@ -21439,17 +21565,17 @@ Czy chcesz otworzyć stronę pobierania?</translation>
         <translation>Obraz Wektorowy lub Rastrowy (*.svg *.png)</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/Misc/ShortcutGenerator.cpp" line="216"/>
+        <location filename="../../../core/Ui/Misc/ShortcutGenerator.cpp" line="217"/>
         <source>A Pro license is required to generate shortcuts.</source>
         <translation>Licencja Pro jest wymagana do generowania skrótów.</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/Misc/ShortcutGenerator.cpp" line="221"/>
+        <location filename="../../../core/Ui/Misc/ShortcutGenerator.cpp" line="222"/>
         <source>No output path was provided.</source>
         <translation>Nie podano ścieżki wyjściowej.</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/Misc/ShortcutGenerator.cpp" line="263"/>
+        <location filename="../../../core/Ui/Misc/ShortcutGenerator.cpp" line="264"/>
         <source>Failed to write shortcut file.</source>
         <translation>Nie udało się zapisać pliku skrótu.</translation>
     </message>
@@ -23963,24 +24089,20 @@ Dodaj grupy powyżej, aby odpytywać wiele typów rejestrów.</translation>
 <context>
     <name>ProUpgradeNotice</name>
     <message>
-        <location filename="../../qml/AI/ProUpgradeNotice.qml" line="26"/>
         <source>Assistant — Pro feature</source>
-        <translation>Asystent — funkcja Pro</translation>
+        <translation type="vanished">Asystent — funkcja Pro</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/ProUpgradeNotice.qml" line="44"/>
         <source>The Assistant is a Serial Studio Pro feature. Activate your license to unlock it.</source>
-        <translation>Asystent jest funkcją Serial Studio Pro. Aktywuj licencję, aby go odblokować.</translation>
+        <translation type="vanished">Asystent jest funkcją Serial Studio Pro. Aktywuj licencję, aby go odblokować.</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/ProUpgradeNotice.qml" line="52"/>
         <source>Activate</source>
-        <translation>Aktywuj</translation>
+        <translation type="vanished">Aktywuj</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/ProUpgradeNotice.qml" line="66"/>
         <source>Close</source>
-        <translation>Zamknij</translation>
+        <translation type="vanished">Zamknij</translation>
     </message>
 </context>
 <context>
@@ -24662,9 +24784,9 @@ Kliknij Odśwież, aby zaktualizować listę.</translation>
     </message>
     <message>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectBulkOps.cpp" line="300"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="493"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="520"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaces.cpp" line="810"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="504"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="531"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaces.cpp" line="818"/>
         <source>This action cannot be undone.</source>
         <translation>Ta operacja jest nieodwracalna.</translation>
     </message>
@@ -25023,25 +25145,25 @@ Przeładować go?</translation>
     </message>
     <message>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="466"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="1160"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="1191"/>
         <source>Duplicate Group</source>
         <translation>Duplikuj Grupę</translation>
     </message>
     <message>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="509"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="1278"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="1309"/>
         <source>Duplicate Action</source>
         <translation>Duplikuj Akcję</translation>
     </message>
     <message>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="543"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="1221"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="1252"/>
         <source>Duplicate Dataset</source>
         <translation>Duplikuj Zestaw Danych</translation>
     </message>
     <message>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="580"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="828"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="859"/>
         <source>Add Group</source>
         <translation>Dodaj Grupę</translation>
     </message>
@@ -25117,26 +25239,28 @@ Przeładować go?</translation>
     </message>
     <message>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="798"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="826"/>
         <source>Add Action</source>
         <translation>Dodaj Akcję</translation>
     </message>
     <message>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="807"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="837"/>
         <source>New Action</source>
         <translation>Nowa Akcja</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="866"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="897"/>
         <source>Change Group Widget</source>
         <translation>Zmień Widget Grupy</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="914"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="945"/>
         <source>Are you sure you want to change the group-level widget?</source>
         <translation>Czy na pewno chcesz zmienić widget na poziomie grupy?</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="915"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="946"/>
         <source>Existing datasets for this group are deleted</source>
         <translation>Istniejące zbiory danych dla tej grupy zostaną usunięte</translation>
     </message>
@@ -25188,23 +25312,23 @@ Przeładować go?</translation>
         <translation>Z</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="986"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="670"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="1017"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="671"/>
         <source>Move Group</source>
         <translation>Przenieś Grupę</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="1043"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="1074"/>
         <source>Move Dataset</source>
         <translation>Przenieś Zestaw Danych</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="1085"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="1116"/>
         <source>Move Action</source>
         <translation>Przenieś Akcję</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="1308"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="1339"/>
         <source>Rename Group</source>
         <translation>Zmień Nazwę Grupy</translation>
     </message>
@@ -25247,24 +25371,24 @@ Przeładować go?</translation>
     <message>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaceProfiles.cpp" line="373"/>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaceProfiles.cpp" line="395"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="1309"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="1338"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="1364"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="382"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="410"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="433"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="456"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectSources.cpp" line="280"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaces.cpp" line="763"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaces.cpp" line="789"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="498"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="520"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="547"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="733"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="759"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="954"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="976"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="1002"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="1340"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="1369"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="1395"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="388"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="416"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="444"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="467"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectSources.cpp" line="288"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaces.cpp" line="771"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaces.cpp" line="797"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="499"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="521"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="548"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="734"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="760"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="955"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="982"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="1008"/>
         <source>Name:</source>
         <translation>Nazwa:</translation>
     </message>
@@ -25294,324 +25418,324 @@ Przeładować go?</translation>
         <translation>Pokaż obszary robocze z:</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="1337"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="1368"/>
         <source>Rename Dataset</source>
         <translation>Zmień Nazwę Zbioru Danych</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="1363"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="1394"/>
         <source>Rename Action</source>
         <translation>Zmień Nazwę Akcji</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="117"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="118"/>
         <source>Add Table</source>
         <translation>Dodaj Tabelę</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="123"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="384"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="978"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="124"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="390"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="984"/>
         <source>Shared Table</source>
         <translation>Tabela Współdzielona</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="152"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="501"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="153"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="512"/>
         <source>Delete Table</source>
         <translation>Usuń Tabelę</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="167"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="409"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="168"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="415"/>
         <source>Rename Table</source>
         <translation>Zmień Nazwę Tabeli</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="241"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="242"/>
         <source>Add Variable</source>
         <translation>Dodaj Zmienną</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="250"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="251"/>
         <source>variable</source>
         <translation>zmienna</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="280"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="522"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="281"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="533"/>
         <source>Delete Variable</source>
         <translation>Usuń Zmienną</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="311"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="312"/>
         <source>Edit Variable</source>
         <translation>Edytuj Zmienną</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="381"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="975"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="387"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="981"/>
         <source>New Shared Table</source>
         <translation>Nowa Tabela Współdzielona</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="432"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="443"/>
         <source>New Variable</source>
         <translation>Nowa Zmienna</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="455"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="466"/>
         <source>Rename Variable</source>
         <translation>Zmień Nazwę Zmiennej</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="494"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="505"/>
         <source>This removes %1 variable(s) along with the table. This action cannot be undone.</source>
         <translation>Spowoduje to usunięcie %1 zmienną/zmienne/zmiennych wraz z tabelą. Ta operacja jest nieodwracalna.</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="498"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="519"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaces.cpp" line="809"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="509"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="530"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaces.cpp" line="817"/>
         <source>Delete "%1"?</source>
         <translation>Usunąć "%1"?</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="550"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="561"/>
         <source>Export Table</source>
         <translation>Eksportuj Tabelę</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="552"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="595"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="563"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="606"/>
         <source>CSV files (*.csv)</source>
         <translation>Pliki CSV (*.CSV)</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="593"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="604"/>
         <source>Import Table</source>
         <translation>Importuj Tabelę</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="604"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="615"/>
         <source>Import Table CSV</source>
         <translation>Importuj CSV Tabeli</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectSources.cpp" line="69"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectSources.cpp" line="70"/>
         <source>Add Device</source>
         <translation>Dodaj Urządzenie</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectSources.cpp" line="74"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectSources.cpp" line="75"/>
         <source>Multiple data sources require a Pro license</source>
         <translation>Wiele źródeł danych wymaga licencji Pro</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectSources.cpp" line="75"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectSources.cpp" line="76"/>
         <source>Serial Studio Pro allows connecting to multiple devices simultaneously. Please upgrade to unlock this feature.</source>
         <translation>Serial Studio Pro umożliwia jednoczesne łączenie z wieloma urządzeniami. Zaktualizuj, aby odblokować tę funkcję.</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectSources.cpp" line="87"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectSources.cpp" line="95"/>
         <source>Device %1</source>
         <translation>Urządzenie %1</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectSources.cpp" line="120"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectSources.cpp" line="128"/>
         <source>Do you want to delete data source "%1"?</source>
         <translation>Czy chcesz usunąć źródło danych "%1"?</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectSources.cpp" line="121"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectSources.cpp" line="129"/>
         <source>Groups using this source will move to the default source. This action cannot be undone.</source>
         <translation>Grupy korzystające z tego źródła zostaną przeniesione do źródła domyślnego. Tej operacji nie można cofnąć.</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectSources.cpp" line="130"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectSources.cpp" line="138"/>
         <source>Delete Device</source>
         <translation>Usuń Urządzenie</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectSources.cpp" line="168"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectSources.cpp" line="176"/>
         <source>Duplicate Device</source>
         <translation>Duplikuj Urządzenie</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectSources.cpp" line="203"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectSources.cpp" line="321"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectSources.cpp" line="354"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectSources.cpp" line="211"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectSources.cpp" line="329"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectSources.cpp" line="362"/>
         <source>Edit Device</source>
         <translation>Edytuj Urządzenie</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectSources.cpp" line="235"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectSources.cpp" line="243"/>
         <source>Rename Device</source>
         <translation>Zmień Nazwę Urządzenia</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectSources.cpp" line="251"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectSources.cpp" line="370"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectSources.cpp" line="259"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectSources.cpp" line="378"/>
         <source>Change Bus Type</source>
         <translation>Zmień Typ Magistrali</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectSources.cpp" line="279"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectSources.cpp" line="287"/>
         <source>Rename Data Source</source>
         <translation>Zmień Nazwę Źródła Danych</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectSources.cpp" line="406"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectSources.cpp" line="466"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectSources.cpp" line="604"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectSources.cpp" line="414"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectSources.cpp" line="474"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectSources.cpp" line="612"/>
         <source>Edit Frame Parser</source>
         <translation>Edytuj Parser Ramek</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectSources.cpp" line="418"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectSources.cpp" line="480"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectSources.cpp" line="426"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectSources.cpp" line="488"/>
         <source>Change Parser Language</source>
         <translation>Zmień Język Parsera</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectSources.cpp" line="434"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectSources.cpp" line="507"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectSources.cpp" line="559"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectSources.cpp" line="442"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectSources.cpp" line="515"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectSources.cpp" line="567"/>
         <source>Change Parser Template</source>
         <translation>Zmień Szablon Parsera</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectSources.cpp" line="446"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectSources.cpp" line="531"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectSources.cpp" line="454"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectSources.cpp" line="539"/>
         <source>Change Parser Parameters</source>
         <translation>Zmień Parametry Parsera</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectSources.cpp" line="575"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectSources.cpp" line="583"/>
         <source>Change Stream Lane</source>
         <translation>Zmień Tor Strumienia</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaces.cpp" line="384"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaces.cpp" line="765"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="522"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaces.cpp" line="392"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaces.cpp" line="773"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="523"/>
         <source>Workspace</source>
         <translation>Obszar Roboczy</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaces.cpp" line="762"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="519"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaces.cpp" line="770"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="520"/>
         <source>New Workspace</source>
         <translation>Nowy Obszar Roboczy</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaces.cpp" line="788"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaces.cpp" line="796"/>
         <source>Rename Workspace</source>
         <translation>Zmień Nazwę Obszaru Roboczego</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaces.cpp" line="812"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaces.cpp" line="820"/>
         <source>Delete Workspace</source>
         <translation>Usuń Obszar Roboczy</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaces.cpp" line="874"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaces.cpp" line="882"/>
         <source>Overview</source>
         <translation>Przegląd</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaces.cpp" line="883"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaces.cpp" line="891"/>
         <source>All Data</source>
         <translation>Wszystkie Dane</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaces.cpp" line="1152"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaces.cpp" line="1160"/>
         <source>Discard workspace customisations?</source>
         <translation>Odrzucić dostosowania obszarów roboczych?</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaces.cpp" line="1153"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaces.cpp" line="1161"/>
         <source>Switching off Customize discards your edits and rebuilds the workspace list from the project's groups.</source>
         <translation>Wyłączenie dostosowywania odrzuci zmiany i odbuduje listę obszarów roboczych na podstawie grup projektu.</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaces.cpp" line="1156"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaces.cpp" line="1164"/>
         <source>Customize Workspaces</source>
         <translation>Dostosuj Obszary Robocze</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="325"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="500"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="610"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="735"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="823"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="956"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="326"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="501"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="611"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="736"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="824"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="957"/>
         <source>Folder</source>
         <translation>Folder</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="497"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="732"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="953"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="498"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="733"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="954"/>
         <source>New Folder</source>
         <translation>Nowy Folder</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="546"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="623"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="758"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="836"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="1001"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="547"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="624"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="759"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="837"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="1007"/>
         <source>Rename Folder</source>
         <translation>Zmień Nazwę Folderu</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="568"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="780"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="1023"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="569"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="781"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="1029"/>
         <source>Delete folder "%1"?</source>
         <translation>Usunąć folder "%1"?</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="569"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="570"/>
         <source>The folder is removed; its workspaces and sub-folders move up to the parent.</source>
         <translation>Folder zostanie usunięty; jego obszary robocze i podfoldery przejdą do folderu nadrzędnego.</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="572"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="643"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="783"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="857"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="1027"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="573"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="644"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="784"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="858"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="1033"/>
         <source>Delete Folder</source>
         <translation>Usuń Folder</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="601"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="812"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="602"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="813"/>
         <source>Add Folder</source>
         <translation>Dodaj Folder</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="691"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="717"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="912"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="938"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="692"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="718"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="913"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="939"/>
         <source>Move Folder</source>
         <translation>Przenieś Folder</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="781"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="782"/>
         <source>The folder is removed; its groups and sub-folders move up to the parent.</source>
         <translation>Folder zostanie usunięty; jego grupy i podfoldery przejdą do folderu nadrzędnego.</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="884"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="885"/>
         <source>Move Table</source>
         <translation>Przenieś Tabelę</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="1024"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="1030"/>
         <source>The folder is removed; its tables and sub-folders move up to the parent. The accessor path of those tables changes accordingly.</source>
         <translation>Folder zostanie usunięty; jego tabele i podfoldery przejdą do folderu nadrzędnego. Ścieżka dostępu tych tabel zostanie odpowiednio zmieniona.</translation>
     </message>
@@ -26389,50 +26513,78 @@ Przeładować go?</translation>
 </context>
 <context>
     <name>QObject</name>
+    <message numerus="yes">
+        <location filename="../../../core/Ui/Console/WelcomeText.cpp" line="70"/>
+        <source>Pro trial: %n day(s) remaining.</source>
+        <translation>Wersja próbna Pro: pozostało %n dzień(dni).<numerusform/>
+            <numerusform/>
+            <numerusform/>
+        </translation>
+    </message>
     <message>
-        <location filename="../../../core/Ui/Console/WelcomeText.cpp" line="61"/>
+        <location filename="../../../core/Ui/Console/WelcomeText.cpp" line="73"/>
+        <source>Pro trial expired. Free features remain fully functional.</source>
+        <translation>Wersja próbna Pro wygasła. Funkcje bezpłatne pozostają w pełni funkcjonalne.</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/Console/WelcomeText.cpp" line="86"/>
         <source>Failed to load welcome text :(</source>
         <translation>Nie udało się załadować tekstu powitalnego :(</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/Trial.cpp" line="311"/>
+        <location filename="../../src/Licensing/Trial.cpp" line="256"/>
+        <source>Your Serial Studio Pro trial has expired</source>
+        <translation>Twoja wersja próbna Serial Studio Pro wygasła</translation>
+    </message>
+    <message>
+        <location filename="../../src/Licensing/Trial.cpp" line="257"/>
+        <source>Pro features are locked until a license is activated. All free features remain fully functional, with no time limit.</source>
+        <translation>Funkcje Pro są zablokowane do czasu aktywacji licencji. Wszystkie funkcje bezpłatne pozostają w pełni funkcjonalne bez ograniczeń czasowych.</translation>
+    </message>
+    <message>
+        <location filename="../../src/Licensing/Trial.cpp" line="260"/>
+        <source>Trial Expired</source>
+        <translation>Wersja Próbna Wygasła</translation>
+    </message>
+    <message>
+        <location filename="../../src/Licensing/Trial.cpp" line="387"/>
         <source>Network error</source>
         <translation>Błąd sieci</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/Trial.cpp" line="314"/>
-        <location filename="../../src/Licensing/Trial.cpp" line="331"/>
-        <location filename="../../src/Licensing/Trial.cpp" line="351"/>
+        <location filename="../../src/Licensing/Trial.cpp" line="390"/>
+        <location filename="../../src/Licensing/Trial.cpp" line="408"/>
+        <location filename="../../src/Licensing/Trial.cpp" line="429"/>
         <source>Trial Activation Error</source>
         <translation>Błąd Aktywacji Wersji Próbnej</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/Trial.cpp" line="328"/>
+        <location filename="../../src/Licensing/Trial.cpp" line="405"/>
         <source>Invalid server response</source>
         <translation>Nieprawidłowa odpowiedź serwera</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/Trial.cpp" line="329"/>
+        <location filename="../../src/Licensing/Trial.cpp" line="406"/>
         <source>The server returned malformed data: %1</source>
         <translation>Serwer zwrócił nieprawidłowe dane: %1</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/Trial.cpp" line="348"/>
+        <location filename="../../src/Licensing/Trial.cpp" line="426"/>
         <source>Unexpected server response</source>
         <translation>Nieoczekiwana odpowiedź serwera</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/Trial.cpp" line="349"/>
+        <location filename="../../src/Licensing/Trial.cpp" line="427"/>
         <source>The server response is missing required fields.</source>
         <translation>W odpowiedzi serwera brakuje wymaganych pól.</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/Console/Export.cpp" line="177"/>
+        <location filename="../../../core/Ui/Console/Export.cpp" line="179"/>
         <source>Console Output File Error</source>
         <translation>Błąd Pliku Wyjścia Konsoli</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/Console/Export.cpp" line="178"/>
+        <location filename="../../../core/Ui/Console/Export.cpp" line="180"/>
         <source>Cannot open file for writing!</source>
         <translation>Nie można otworzyć pliku do zapisu!</translation>
     </message>
@@ -26717,12 +26869,12 @@ function parse(%1) { ... }
 Parametr separatora nie jest już potrzebny.</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ModuleManager.cpp" line="275"/>
+        <location filename="../../src/Misc/ModuleManager.cpp" line="276"/>
         <source>Critical</source>
         <translation>Krytyczny</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ModuleManager.cpp" line="275"/>
+        <location filename="../../src/Misc/ModuleManager.cpp" line="276"/>
         <source>Warning</source>
         <translation>Ostrzeżenie</translation>
     </message>
@@ -26895,12 +27047,12 @@ Parametr separatora nie jest już potrzebny.</translation>
         <translation>Nieobsługiwane słowo kluczowe najwyższego poziomu '%1'</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/Misc/GraphicsBackend.cpp" line="495"/>
+        <location filename="../../../core/Ui/Misc/GraphicsBackend.cpp" line="528"/>
         <source>Automatic (Platform Default)</source>
         <translation>Automatycznie (Domyślne dla Platformy)</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/Misc/GraphicsBackend.cpp" line="500"/>
+        <location filename="../../../core/Ui/Misc/GraphicsBackend.cpp" line="533"/>
         <source>Software (Fallback)</source>
         <translation>Programowo (Tryb Awaryjny)</translation>
     </message>
@@ -31425,52 +31577,52 @@ Włącz Osadź Projekt, aby wbudować projekt w skrót, dzięki czemu będzie dz
         <translation>Zablokuj Pulpit</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1017"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1012"/>
         <source>MQTT: Connected to %1</source>
         <translation>MQTT: Połączono z %1</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1018"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1013"/>
         <source>MQTT: Not connected</source>
         <translation>MQTT: Brak połączenia</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1046"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1041"/>
         <source>MQTT Publisher</source>
         <translation>Wydawca MQTT</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1056"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1051"/>
         <source>Status:</source>
         <translation>Status:</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1064"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1059"/>
         <source>Connected</source>
         <translation>Połączono</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1065"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1060"/>
         <source>Disconnected</source>
         <translation>Rozłączono</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1072"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1067"/>
         <source>Broker:</source>
         <translation>Broker:</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1085"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1080"/>
         <source>Mode:</source>
         <translation>Tryb:</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1098"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1093"/>
         <source>Messages sent:</source>
         <translation>Wysłane komunikaty:</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1112"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1107"/>
         <source>Open MQTT Settings</source>
         <translation>Otwórz Ustawienia MQTT</translation>
     </message>
@@ -31484,7 +31636,7 @@ Włącz Osadź Projekt, aby wbudować projekt w skrót, dzięki czemu będzie dz
         <translation type="vanished">Wyszukaj widżety…</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1176"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1171"/>
         <source>Remove from Workspace</source>
         <translation>Usuń z Obszaru Roboczego</translation>
     </message>
@@ -31536,42 +31688,42 @@ Włącz Osadź Projekt, aby wbudować projekt w skrót, dzięki czemu będzie dz
         <translation>Ustawienia konsoli</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="597"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="625"/>
         <source>Find in console</source>
         <translation>Znajdź w konsoli</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="634"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="662"/>
         <source>%1 of %2</source>
         <translation>%1 z %2</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="635"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="663"/>
         <source>No results</source>
         <translation>Brak wyników</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="647"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="675"/>
         <source>Match case</source>
         <translation>Uwzględnij wielkość liter</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="662"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="690"/>
         <source>Previous match</source>
         <translation>Poprzednie dopasowanie</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="673"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="701"/>
         <source>Next match</source>
         <translation>Następne dopasowanie</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="683"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="711"/>
         <source>Close search</source>
         <translation>Zamknij wyszukiwanie</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="730"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="758"/>
         <source>Send a file to the connected device</source>
         <translation>Wyślij plik do podłączonego urządzenia</translation>
     </message>
@@ -31637,7 +31789,7 @@ Włącz Osadź Projekt, aby wbudować projekt w skrót, dzięki czemu będzie dz
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="392"/>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="879"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="929"/>
         <source>Hex</source>
         <translation>Hex</translation>
     </message>
@@ -31652,12 +31804,32 @@ Włącz Osadź Projekt, aby wbudować projekt w skrót, dzięki czemu będzie dz
         <translation>Linie Przewijania</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="772"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="529"/>
+        <source>Cyclic Send Interval (ms)</source>
+        <translation>Interwał cyklicznego wysyłania (ms)</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="799"/>
+        <source>Command library (history, pins and actions)</source>
+        <translation>Biblioteka poleceń (historia, piny i akcje)</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="822"/>
         <source>Send Data to Device</source>
         <translation>Wyślij Dane do Urządzenia</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="933"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="990"/>
+        <source>Stop cyclic send</source>
+        <translation>Zatrzymaj cykliczne wysyłanie</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="991"/>
+        <source>Repeat the current command every %1 ms</source>
+        <translation>Powtarzaj bieżące polecenie co %1 ms</translation>
+    </message>
+    <message>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="1012"/>
         <source>Send data to the device</source>
         <translation>Wyślij dane do urządzenia</translation>
     </message>
@@ -32118,7 +32290,7 @@ Włącz Osadź Projekt, aby wbudować projekt w skrót, dzięki czemu będzie dz
         <translation type="vanished">Wyświetl szczegółową dokumentację i zadawaj pytania na DeepWiki</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="293"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="278"/>
         <source>Connect or disconnect from the configured device</source>
         <translation>Połącz lub rozłącz ze skonfigurowanym urządzeniem</translation>
     </message>
@@ -32163,33 +32335,32 @@ Włącz Osadź Projekt, aby wbudować projekt w skrót, dzięki czemu będzie dz
         <translation type="vanished">AI Wiki i Chat</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="258"/>
         <source>Manage license and activate Serial Studio Pro</source>
-        <translation>Zarządzaj licencją i aktywuj Serial Studio Pro</translation>
+        <translation type="vanished">Zarządzaj licencją i aktywuj Serial Studio Pro</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="270"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="255"/>
         <source>Remote Dashboard</source>
         <translation>Zdalny Pulpit</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="273"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="258"/>
         <source>Manage the remote dashboard connection</source>
         <translation>Zarządzaj połączeniem ze zdalnym pulpitem</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="294"/>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="305"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="279"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="290"/>
         <source>Disconnect</source>
         <translation>Rozłącz</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="294"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="279"/>
         <source>Connect</source>
         <translation>Połącz</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="294"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="279"/>
         <source>Connecting…</source>
         <translation>Łączenie…</translation>
     </message>
@@ -32198,9 +32369,8 @@ Włącz Osadź Projekt, aby wbudować projekt w skrót, dzięki czemu będzie dz
         <translation type="vanished">Połącz lub rozłącz z urządzeniem lub brokerem MQTT</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="254"/>
         <source>Activate</source>
-        <translation>Aktywuj</translation>
+        <translation type="vanished">Aktywuj</translation>
     </message>
 </context>
 <context>
@@ -33194,102 +33364,82 @@ Włącz Osadź Projekt, aby wbudować projekt w skrót, dzięki czemu będzie dz
 <context>
     <name>Welcome</name>
     <message>
-        <location filename="../../qml/Dialogs/Welcome.qml" line="178"/>
         <source>Welcome to %1!</source>
-        <translation>Witaj w %1!</translation>
+        <translation type="vanished">Witaj w %1!</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Welcome.qml" line="189"/>
         <source>Serial Studio is a powerful real-time visualization tool, built for engineers, students, and makers.</source>
-        <translation>Serial Studio to zaawansowane narzędzie do wizualizacji w czasie rzeczywistym, stworzone dla inżynierów, studentów i twórców.</translation>
+        <translation type="vanished">Serial Studio to zaawansowane narzędzie do wizualizacji w czasie rzeczywistym, stworzone dla inżynierów, studentów i twórców.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Welcome.qml" line="200"/>
         <source>You can start a fully-functional 14-day trial, activate it with your license key, or download and compile the GPLv3 source code yourself.</source>
-        <translation>Możesz rozpocząć w pełni funkcjonalny 14-dniowy okres próbny, aktywować program kluczem licencyjnym lub pobrać i skompilować kod źródłowy GPLv3 samodzielnie.</translation>
+        <translation type="vanished">Możesz rozpocząć w pełni funkcjonalny 14-dniowy okres próbny, aktywować program kluczem licencyjnym lub pobrać i skompilować kod źródłowy GPLv3 samodzielnie.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Welcome.qml" line="210"/>
-        <location filename="../../qml/Dialogs/Welcome.qml" line="395"/>
         <source>Buying Pro supports the author directly and helps fund future development.</source>
-        <translation>Zakup wersji Pro wspiera autora bezpośrednio i pomaga finansować przyszły rozwój.</translation>
+        <translation type="vanished">Zakup wersji Pro wspiera autora bezpośrednio i pomaga finansować przyszły rozwój.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Welcome.qml" line="218"/>
-        <location filename="../../qml/Dialogs/Welcome.qml" line="403"/>
         <source>Building the GPLv3 version yourself helps grow the community and encourages technical contributions.</source>
-        <translation>Samodzielna kompilacja wersji GPLv3 pomaga rozwijać społeczność i zachęca do wkładu technicznego.</translation>
+        <translation type="vanished">Samodzielna kompilacja wersji GPLv3 pomaga rozwijać społeczność i zachęca do wkładu technicznego.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Welcome.qml" line="240"/>
         <source>Please wait…</source>
-        <translation>Proszę czekać…</translation>
+        <translation type="vanished">Proszę czekać…</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Welcome.qml" line="276"/>
         <source>%1 days remaining in your trial.</source>
-        <translation>Pozostało %1 dni okresu próbnego.</translation>
+        <translation type="vanished">Pozostało %1 dni okresu próbnego.</translation>
     </message>
     <message>
         <source>You’re currently using the fully-featured trial of %1 Pro. It’s valid for 14 days of personal, non-commercial use.</source>
         <translation type="vanished">Obecnie korzystasz z pełnej wersji próbnej %1 Pro. Jest ważna przez 14 dni do użytku osobistego, niekomercyjnego.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Welcome.qml" line="286"/>
         <source>You're currently using the fully-featured trial of %1 Pro. It's valid for 14 days of personal, non-commercial use.</source>
-        <translation>Obecnie korzystasz z pełnej wersji próbnej %1 Pro. Jest ważna przez 14 dni do użytku osobistego, niekomercyjnego.</translation>
+        <translation type="vanished">Obecnie korzystasz z pełnej wersji próbnej %1 Pro. Jest ważna przez 14 dni do użytku osobistego, niekomercyjnego.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Welcome.qml" line="297"/>
         <source>Upgrade to a paid plan to keep using Serial Studio Pro.</source>
-        <translation>Zaktualizuj do płatnego planu, aby kontynuować korzystanie z Serial Studio Pro.</translation>
+        <translation type="vanished">Zaktualizuj do płatnego planu, aby kontynuować korzystanie z Serial Studio Pro.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Welcome.qml" line="305"/>
         <source>Or, compile the GPLv3 source code to use it for free.</source>
-        <translation>Lub skompiluj kod źródłowy GPLv3, aby używać go za darmo.</translation>
+        <translation type="vanished">Lub skompiluj kod źródłowy GPLv3, aby używać go za darmo.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Welcome.qml" line="313"/>
         <source>To see available subscription plans, click "Upgrade Now" below.</source>
-        <translation>Aby zobaczyć dostępne plany subskrypcji, kliknij poniżej „Zaktualizuj teraz".</translation>
+        <translation type="vanished">Aby zobaczyć dostępne plany subskrypcji, kliknij poniżej „Zaktualizuj teraz".</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Welcome.qml" line="334"/>
         <source>Don't nag me about the trial.
 I understand that when it ends, I'll need to buy a license or build the GPLv3 version.</source>
-        <translation>Nie przypominaj mi o wersji próbnej.
+        <translation type="vanished">Nie przypominaj mi o wersji próbnej.
 Rozumiem, że po jej zakończeniu będę musiał kupić licencję lub zbudować wersję GPLv3.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Welcome.qml" line="365"/>
         <source>Your %1 trial has expired.</source>
-        <translation>Twoja wersja próbna %1 wygasła.</translation>
+        <translation type="vanished">Twoja wersja próbna %1 wygasła.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Welcome.qml" line="375"/>
         <source>Your trial period has ended. To continue using %1 with all Pro features, please upgrade to a paid plan.</source>
-        <translation>Okres próbny zakończony. Aby kontynuować korzystanie z %1 ze wszystkimi funkcjami Pro, zaktualizuj do płatnego planu.</translation>
+        <translation type="vanished">Okres próbny zakończony. Aby kontynuować korzystanie z %1 ze wszystkimi funkcjami Pro, zaktualizuj do płatnego planu.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Welcome.qml" line="386"/>
         <source>If you prefer, you can also compile the open-source version under the GPLv3 license.</source>
-        <translation>Jeśli wolisz, możesz również skompilować wersję open-source na licencji GPLv3.</translation>
+        <translation type="vanished">Jeśli wolisz, możesz również skompilować wersję open-source na licencji GPLv3.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Welcome.qml" line="414"/>
         <source>Thank you for trying %1!</source>
-        <translation>Dziękujemy za wypróbowanie %1!</translation>
+        <translation type="vanished">Dziękujemy za wypróbowanie %1!</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Welcome.qml" line="456"/>
         <source>Upgrade Now</source>
-        <translation>Zaktualizuj Teraz</translation>
+        <translation type="vanished">Zaktualizuj Teraz</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Welcome.qml" line="465"/>
         <source>Activate</source>
-        <translation>Aktywuj</translation>
+        <translation type="vanished">Aktywuj</translation>
     </message>
     <message>
         <source>See it in Action</source>
@@ -33300,19 +33450,16 @@ Rozumiem, że po jej zakończeniu będę musiał kupić licencję lub zbudować 
         <translation type="vanished">Zobacz w akcji</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Welcome.qml" line="480"/>
         <source>Open in Limited Mode</source>
-        <translation>Otwórz w Trybie Ograniczonym</translation>
+        <translation type="vanished">Otwórz w Trybie Ograniczonym</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Welcome.qml" line="480"/>
         <source>Continue</source>
-        <translation>Kontynuuj</translation>
+        <translation type="vanished">Kontynuuj</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Welcome.qml" line="480"/>
         <source>Start Trial</source>
-        <translation>Rozpocznij Okres Próbny</translation>
+        <translation type="vanished">Rozpocznij Okres Próbny</translation>
     </message>
 </context>
 <context>
@@ -33617,52 +33764,52 @@ Rozumiem, że po jej zakończeniu będę musiał kupić licencję lub zbudować 
 <context>
     <name>Widgets::GPS</name>
     <message>
-        <location filename="../../../core/Ui/UI/Widgets/GPS.cpp" line="122"/>
+        <location filename="../../../core/Ui/UI/Widgets/GPS.cpp" line="124"/>
         <source>Satellite Imagery</source>
         <translation>Zdjęcia Satelitarne</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/Widgets/GPS.cpp" line="122"/>
+        <location filename="../../../core/Ui/UI/Widgets/GPS.cpp" line="124"/>
         <source>Satellite Imagery with Labels</source>
         <translation>Zdjęcia Satelitarne z Etykietami</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/Widgets/GPS.cpp" line="122"/>
+        <location filename="../../../core/Ui/UI/Widgets/GPS.cpp" line="124"/>
         <source>Street Map</source>
         <translation>Mapa Ulic</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/Widgets/GPS.cpp" line="123"/>
+        <location filename="../../../core/Ui/UI/Widgets/GPS.cpp" line="125"/>
         <source>Topographic Map</source>
         <translation>Mapa Topograficzna</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/Widgets/GPS.cpp" line="123"/>
+        <location filename="../../../core/Ui/UI/Widgets/GPS.cpp" line="125"/>
         <source>Terrain</source>
         <translation>Teren</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/Widgets/GPS.cpp" line="123"/>
+        <location filename="../../../core/Ui/UI/Widgets/GPS.cpp" line="125"/>
         <source>Light Gray Canvas</source>
         <translation>Jasne Szare Płótno</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/Widgets/GPS.cpp" line="124"/>
+        <location filename="../../../core/Ui/UI/Widgets/GPS.cpp" line="126"/>
         <source>Dark Gray Canvas</source>
         <translation>Ciemne Szare Płótno</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/Widgets/GPS.cpp" line="124"/>
+        <location filename="../../../core/Ui/UI/Widgets/GPS.cpp" line="126"/>
         <source>National Geographic</source>
         <translation>National Geographic</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/Widgets/GPS.cpp" line="380"/>
+        <location filename="../../../core/Ui/UI/Widgets/GPS.cpp" line="389"/>
         <source>Additional map layers are available only for Pro users.</source>
         <translation>Dodatkowe warstwy mapy są dostępne tylko dla użytkowników Pro.</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/Widgets/GPS.cpp" line="381"/>
+        <location filename="../../../core/Ui/UI/Widgets/GPS.cpp" line="390"/>
         <source>We can't offer unrestricted access because the ArcGIS API key incurs real costs.</source>
         <translation>Nie możemy oferować nieograniczonego dostępu, ponieważ klucz API ArcGIS generuje rzeczywiste koszty.</translation>
     </message>
@@ -33683,12 +33830,12 @@ Rozumiem, że po jej zakończeniu będę musiał kupić licencję lub zbudować 
 <context>
     <name>Widgets::Output::Base</name>
     <message>
-        <location filename="../../../core/Ui/UI/Widgets/Output/Base.cpp" line="403"/>
+        <location filename="../../../core/Ui/UI/Widgets/Output/Base.cpp" line="412"/>
         <source>Transmit script timed out after %1 ms</source>
         <translation>Przekroczono limit czasu skryptu transmisji po %1 ms</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/Widgets/Output/Base.cpp" line="419"/>
+        <location filename="../../../core/Ui/UI/Widgets/Output/Base.cpp" line="428"/>
         <source>Payload exceeds maximum size</source>
         <translation>Ładunek przekracza maksymalny rozmiar</translation>
     </message>

@@ -986,6 +986,27 @@
         <file>messages/trial/Welcome_UK.txt</file>
         <file>messages/trial/Welcome_VI.txt</file>
         <file>messages/trial/Welcome_ZH.txt</file>
+        <file>messages/unlicensed/Welcome_AR.txt</file>
+        <file>messages/unlicensed/Welcome_CZ.txt</file>
+        <file>messages/unlicensed/Welcome_DE.txt</file>
+        <file>messages/unlicensed/Welcome_EN.txt</file>
+        <file>messages/unlicensed/Welcome_ES.txt</file>
+        <file>messages/unlicensed/Welcome_FR.txt</file>
+        <file>messages/unlicensed/Welcome_HE.txt</file>
+        <file>messages/unlicensed/Welcome_HI.txt</file>
+        <file>messages/unlicensed/Welcome_IT.txt</file>
+        <file>messages/unlicensed/Welcome_JA.txt</file>
+        <file>messages/unlicensed/Welcome_KO.txt</file>
+        <file>messages/unlicensed/Welcome_NL.txt</file>
+        <file>messages/unlicensed/Welcome_PL.txt</file>
+        <file>messages/unlicensed/Welcome_PT.txt</file>
+        <file>messages/unlicensed/Welcome_RO.txt</file>
+        <file>messages/unlicensed/Welcome_RU.txt</file>
+        <file>messages/unlicensed/Welcome_SV.txt</file>
+        <file>messages/unlicensed/Welcome_TR.txt</file>
+        <file>messages/unlicensed/Welcome_UK.txt</file>
+        <file>messages/unlicensed/Welcome_VI.txt</file>
+        <file>messages/unlicensed/Welcome_ZH.txt</file>
         <file>messages/Acknowledgements.txt</file>
         <file>scripts/annotations/cobs.js</file>
         <file>scripts/annotations/fixed_records.js</file>

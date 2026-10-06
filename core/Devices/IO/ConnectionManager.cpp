@@ -65,6 +65,7 @@ IO::ConnectionManager::ConnectionManager(Core::Bus::MessageBus& bus, IIngestBind
   , m_writeEnabled(true)
   , m_closeRequested(false)
   , m_rebuildingDevices(false)
+  , m_restoringBusType(false)
   , m_busType(SerialStudio::BusType::UART)
   , m_operationMode(SerialStudio::QuickPlot)
   , m_busBridge(m_bus, m_operationMode, m_frameConfig, m_project)
@@ -556,11 +557,12 @@ bool IO::ConnectionManager::anyDeviceConnecting() const
 void IO::ConnectionManager::connectDevice()
 {
 #ifdef BUILD_COMMERCIAL
-  if ((Core::License::trialExpired() && !Core::License::activated()) || !SS_LICENSE_GUARD()) {
-    disconnectDevice();
-    Core::Prompt::showMessageBox(
-      tr("Your trial period has ended."),
-      tr("To continue using Serial Studio, please activate your license."));
+  if (!SS_LICENSE_GUARD())
+    return;
+
+  if (!Core::License::activated()
+      && m_query.connectRequiresEntitlement(m_busType, m_operationMode)) {
+    Core::License::requestProFeature(QStringLiteral("driver.connect"), [this] { connectDevice(); });
     return;
   }
 #endif
@@ -730,7 +732,9 @@ void IO::ConnectionManager::setupExternalConnections()
   if (!m_settings.contains("IOManager/userBusType"))
     m_settings.setValue("IOManager/userBusType", savedBusType);
 
+  m_restoringBusType = true;
   setBusType(static_cast<SerialStudio::BusType>(savedBusType));
+  m_restoringBusType = false;
 
   m_uiDrivers.setupExternalConnections();
 
@@ -1089,7 +1093,9 @@ void IO::ConnectionManager::setBusType(SerialStudio::BusType type)
 
 /**
  * @brief Removes the primary device when no driver could be created for @p type (license gate)
- *        and queues the activation prompt when the bus exists but is not licensed.
+ *        and raises the central Pro intent (spec 0092) when the bus exists but is not licensed.
+ *        The request is queued, so the boot-time setBusType() restore flags itself
+ *        (m_restoringBusType) to stay silent: a persisted Pro bus must never prompt at launch.
  */
 void IO::ConnectionManager::dropUnavailablePrimaryDevice(SerialStudio::BusType type)
 {
@@ -1104,13 +1110,13 @@ void IO::ConnectionManager::dropUnavailablePrimaryDevice(SerialStudio::BusType t
       retired->deleteLater();
   }
 
-  if (uiDriverForBusType(type) != nullptr) {
+  if (uiDriverForBusType(type) != nullptr && !m_restoringBusType
+      && !Core::License::remoteDispatchActive()) {
     QMetaObject::invokeMethod(
       this,
-      [] {
-        Core::Prompt::showMessageBox(
-          tr("This connection type requires an active license or trial."),
-          tr("Activate Serial Studio Pro or start a trial to use this device type."));
+      [this, type] {
+        Core::License::requestProFeature(QStringLiteral("driver.select"),
+                                         [this, type] { setBusType(type); });
       },
       Qt::QueuedConnection);
   }

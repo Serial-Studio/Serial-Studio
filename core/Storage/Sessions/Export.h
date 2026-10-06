@@ -249,6 +249,8 @@ private:
   alignas(kCacheLine) std::atomic<bool> m_exportEnabled;
   alignas(kCacheLine) std::atomic<int> m_currentSessionId;
   bool m_persistSettings;
+  bool m_exportRequested;
+  bool m_licenseReplay;
 
   moodycamel::ReaderWriterQueue<TimestampedRawBytes> m_rawBytesQueue;
   moodycamel::ReaderWriterQueue<TableSnapshotEntry> m_tableSnapshotQueue;

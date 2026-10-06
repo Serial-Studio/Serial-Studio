@@ -11,7 +11,7 @@ Quellcode selbst.
 → Mehr erfahren: https://serial-studio.com/
 
 Verfügbare Pro-Funktionen:
-→ MQTT-, XY- und 3D-Visualisierung
+→ MQTT- und 3D-Visualisierung
 → Audio-, CAN Bus-, Modbus-, USB-, HID- und Process-I/O-Treiber
 → Output-Widgets, MDF4-Export und XMODEM/YMODEM/ZMODEM-Übertragung
 → Historian, Variablen und Werttransformationen (JS + Lua)

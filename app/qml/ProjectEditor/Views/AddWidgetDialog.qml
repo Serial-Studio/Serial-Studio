@@ -95,6 +95,15 @@ Window {
   }
 
   //
+  // Refresh on entitlement transitions so the Pro widget list never goes stale (spec 0092)
+  //
+  Connections {
+    enabled: Cpp_CommercialBuild
+    target: Cpp_CommercialBuild ? Cpp_Licensing_LemonSqueezy : null
+    function onActivatedChanged() { if (root.visible) Qt.callLater(root.refresh) }
+  }
+
+  //
   // Shortcut to close
   //
   Shortcut {

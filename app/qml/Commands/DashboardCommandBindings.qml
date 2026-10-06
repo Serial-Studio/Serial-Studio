@@ -153,8 +153,8 @@ QtObject {
   }
 
   //
-  // Freeze/reset/pause/disconnect (StartMenu.qml); freeze re-derives
-  // freezeAllowed inline since only run() needs it here.
+  // Freeze/reset/pause/disconnect (StartMenu.qml); the freeze license gate
+  // lives in C++ (ProjectModel::setFrozen raises the Pro intent, spec 0092).
   //
   readonly property QtObject cmdDashboardFreeze: QtObject {
     readonly property bool checked: Cpp_UI_Dashboard.frozen
@@ -163,12 +163,7 @@ QtObject {
     readonly property bool enabled: Cpp_AppState.operationMode === SerialStudio.ProjectFile
         && !app.runtimeMode
     function run() {
-      var allowed = Cpp_CommercialBuild
-          && (Cpp_Licensing_LemonSqueezy.isActivated || Cpp_Licensing_Trial.trialEnabled)
-      if (allowed)
-        Cpp_UI_Dashboard.setFrozen(!Cpp_UI_Dashboard.frozen)
-      else
-        app.showLicenseDialog()
+      Cpp_UI_Dashboard.setFrozen(!Cpp_UI_Dashboard.frozen)
     }
   }
 

@@ -37,18 +37,43 @@
 static constexpr quint8 kTrialTier = 2;
 
 /**
- * @brief Resolves the resource path of the welcome text variant this build and licence get.
+ * @brief Resolves the resource path of the welcome text variant this build and licence get:
+ *        paid tiers read pro, an active trial reads trial, and every unentitled state
+ *        (first run, declined, expired) reads unlicensed (spec 0092).
  */
 [[nodiscard]] static QString welcomeTextPath(const QString& lang)
 {
 #ifdef BUILD_COMMERCIAL
-  if (Core::License::activated() && Core::License::tier() > kTrialTier)
-    return ":/messages/pro/Welcome_" + lang + ".txt";
+  if (Core::License::activated()) {
+    if (Core::License::tier() > kTrialTier)
+      return ":/messages/pro/Welcome_" + lang + ".txt";
 
-  return ":/messages/trial/Welcome_" + lang + ".txt";
+    return ":/messages/trial/Welcome_" + lang + ".txt";
+  }
+
+  return ":/messages/unlicensed/Welcome_" + lang + ".txt";
 #else
   return ":/messages/gpl3/Welcome_" + lang + ".txt";
 #endif
+}
+
+/**
+ * @brief The one-line passive licensing status (spec 0092 R4): trial days while a trial runs,
+ *        the expired note afterwards, nothing for paid, first-run or GPL builds. Riding the
+ *        welcome text keeps it regenerating on every LicenseStateChanged reprint.
+ */
+[[nodiscard]] static QString licenseStatusLine()
+{
+#ifdef BUILD_COMMERCIAL
+  const int trial_days = Core::License::trialDaysRemaining();
+  if (Core::License::activated() && Core::License::tier() <= kTrialTier && trial_days >= 0)
+    return QObject::tr("Pro trial: %n day(s) remaining.", "", trial_days) + "\n";
+
+  if (Core::License::trialExpired() && !Core::License::activated())
+    return QObject::tr("Pro trial expired. Free features remain fully functional.") + "\n";
+#endif
+
+  return QString();
 }
 
 /**
@@ -65,5 +90,5 @@ QString Console::welcomeConsoleText(const Misc::Translator::Language language)
     file.close();
   }
 
-  return text + "\n";
+  return text + "\n" + licenseStatusLine();
 }

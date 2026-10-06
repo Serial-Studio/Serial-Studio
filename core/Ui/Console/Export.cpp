@@ -25,6 +25,7 @@
 #include <QDesktopServices>
 #include <QDir>
 #include <QFileInfo>
+#include <QScopedValueRollback>
 #include <QTimer>
 #include <QUrl>
 
@@ -39,6 +40,7 @@
 #ifdef BUILD_COMMERCIAL
 #  include "AppState.h"
 #  include "Console/Handler.h"
+#  include "Core/License.h"
 #  include "Core/Licensing/CommercialToken.h"
 #  include "Core/SerialStudio.h"
 #  include "Core/WorkspaceManager.h"
@@ -203,9 +205,16 @@ Console::Export::Export()
   , m_isOpen(false)
   , m_exportEnabled(false)
   , m_persistSettings(true)
+  , m_exportRequested(false)
+  , m_licenseReplay(false)
   , m_bus(nullptr)
 #else
-  : m_isOpen(false), m_exportEnabled(false), m_persistSettings(true), m_bus(nullptr)
+  : m_isOpen(false)
+  , m_exportEnabled(false)
+  , m_persistSettings(true)
+  , m_exportRequested(false)
+  , m_licenseReplay(false)
+  , m_bus(nullptr)
 #endif
 {
 #ifdef BUILD_COMMERCIAL
@@ -217,13 +226,16 @@ Console::Export::Export()
           Qt::QueuedConnection);
 
   m_licenseWatch = Core::services().bus.subscribe<Core::Bus::LicenseStateChanged>(
-    this, [this](const std::shared_ptr<const Core::Bus::LicenseStateChanged>& license) {
-      if (exportEnabled() && (!license->activated || !SS_LICENSE_GUARD()))
-        setExportEnabled(false);
+    this, [this](const std::shared_ptr<const Core::Bus::LicenseStateChanged>&) {
+      const QScopedValueRollback<bool> replay(m_licenseReplay, true);
+      setExportEnabled(m_exportRequested);
     });
 #endif
 
-  setExportEnabled(m_settings.value("ConsoleExport", false).toBool());
+  {
+    const QScopedValueRollback<bool> replay(m_licenseReplay, true);
+    setExportEnabled(m_settings.value("ConsoleExport", false).toBool());
+  }
 }
 
 /**
@@ -330,6 +342,8 @@ void Console::Export::setSettingsPersistent(const bool persistent)
 void Console::Export::setExportEnabled(const bool enabled)
 {
 #ifdef BUILD_COMMERCIAL
+  m_exportRequested = enabled;
+
   const auto& tk = Licensing::CommercialToken::current();
   if (tk.isValid() && SS_LICENSE_GUARD()) {
     if (!enabled && isOpen())
@@ -348,15 +362,11 @@ void Console::Export::setExportEnabled(const bool enabled)
 
   closeFile();
   m_exportEnabled.store(false, std::memory_order_relaxed);
-  if (m_persistSettings)
-    m_settings.setValue("ConsoleExport", false);
 
   Q_EMIT enabledChanged();
 
-  if (enabled)
-    Misc::Utilities::showMessageBox(
-      tr("Console Export is a Pro feature."),
-      tr("This feature requires a license. Please purchase one to enable console export."));
+  if (enabled && !m_licenseReplay)
+    Core::License::requestProFeature(QStringLiteral("console.export"));
 }
 
 /**

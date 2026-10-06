@@ -263,6 +263,28 @@ void UI::PlotControlBank::resetSweepStates()
 }
 
 /**
+ * @brief Disarms every sweep engine and drops its capture state (spec 0092): the entitlement
+ *        that allowed the sweep is gone, and the saved-config restore path must not resurrect
+ *        it on the next reconfigure.
+ */
+void UI::PlotControlBank::disableSweeps()
+{
+  for (auto it = m_plotSweep.begin(); it != m_plotSweep.end(); ++it) {
+    if (it.value().enabled) {
+      it.value().enabled = false;
+      it.value().resetState();
+    }
+  }
+
+  for (auto it = m_multiplotSweep.begin(); it != m_multiplotSweep.end(); ++it) {
+    if (it.value().enabled) {
+      it.value().enabled = false;
+      it.value().resetState();
+    }
+  }
+}
+
+/**
  * @brief Re-applies saved sweep trigger settings onto freshly configured plot engines.
  */
 void UI::PlotControlBank::restorePlotSweepConfig(const QMap<int, DSP::SweepEngine>& saved)

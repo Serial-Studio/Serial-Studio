@@ -103,6 +103,7 @@
     QStringLiteral("Cpp_JSON_DBCImporter"),
     QStringLiteral("Cpp_JSON_ModbusMapImporter"),
     QStringLiteral("Cpp_Licensing_Trial"),
+    QStringLiteral("Cpp_Licensing_TrialGate"),
     QStringLiteral("Cpp_Licensing_LemonSqueezy"),
     QStringLiteral("Cpp_Licensing_OfflineLicense"),
     QStringLiteral("Cpp_Sessions_Export"),

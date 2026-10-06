@@ -13,6 +13,7 @@
 
 #include <utility>
 
+#include "Core/License.h"
 #include "Core/Licensing/CommercialToken.h"
 #include "DataModel/FrameBuilder.h"
 #include "DataModel/NotificationCenter.h"
@@ -339,6 +340,14 @@ void Widgets::Output::Base::applyStateVerdict(const StateBinding::Verdict& verdi
  */
 void Widgets::Output::Base::sendValue(const QVariant& value)
 {
+  if (!SS_LICENSE_GUARD())
+    return;
+
+  if (!Licensing::CommercialToken::current().isValid()) {
+    Core::License::requestProFeature(QStringLiteral("output.send"));
+    return;
+  }
+
   const auto interval = static_cast<qint64>(m_target.minIntervalMs);
   const auto elapsed  = m_rateLimiter.elapsed();
   if (interval > 0 && elapsed < interval) {

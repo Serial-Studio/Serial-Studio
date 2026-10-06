@@ -1,0 +1,17 @@
+Copyright (c) 2020–2026 Alex Spataru <https://github.com/alex-spataru>
+
+This is the free version of Serial Studio Pro: every core feature is
+free to use, with no time limit. The Pro features below unlock the
+moment you try one, with a free 14-day trial. No account or payment
+is required to start it.
+
+→ Support: alex@serial-studio.com
+→ Schedule a call: https://calendly.com/serial-studio
+→ Learn more: https://serial-studio.com/
+
+Pro features available:
+→ MQTT and 3D visualization
+→ Audio, CAN Bus, Modbus, USB, HID, and Process I/O drivers
+→ Output widgets, MDF4 export, and XMODEM/YMODEM/ZMODEM transfers
+→ Historian, Variables, and value transforms (JS + Lua)
+→ Multi-source projects and custom dashboard workspaces

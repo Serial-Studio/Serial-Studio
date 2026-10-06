@@ -26,6 +26,7 @@
 #include <QNetworkAccessManager>
 #include <QObject>
 #include <QSettings>
+#include <QTimer>
 
 #include "Core/Crypto/SimpleCrypt.h"
 
@@ -60,6 +61,7 @@ signals:
   void busyChanged();
   void enabledChanged();
   void availableChanged();
+  void registrationSettled();
 
 private:
   explicit Trial();
@@ -89,20 +91,24 @@ public slots:
 
 private slots:
   void onServerReply(QNetworkReply* reply);
+  void onRolloverTick();
 
 private:
   void invalidateDaysCache();
+  void maybePostExpiryNotice();
 
 private:
   bool m_busy;
   bool m_silentFetch;
   bool m_trialEnabled;
   bool m_deviceRegistered;
+  bool m_lastEffectiveEnabled;
 
   // Day-keyed cache of daysRemaining(), a QML-bound property that floors the monotonic clock
   mutable int m_daysRemaining;
   mutable QDate m_daysCachedOn;
 
+  QTimer m_rolloverTimer;
   SimpleCrypt m_crypt;
   QSettings m_settings;
   QDateTime m_trialExpiry;

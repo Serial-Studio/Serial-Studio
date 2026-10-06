@@ -74,6 +74,11 @@ Two entries in that list carry their own reason to sit where they do:
   (`LemonSqueezy::notifyEntitlementMaybeChanged()`, 2026-08-04) — redundant emissions used to loop
   live-device rebuilds. Consumer inventory:
   [../specs/0042-license-token-hardening/consumers.md](../specs/0042-license-token-hardening/consumers.md).
+  Since spec 0092 there is no first-run wall: the boot path always reaches the main window, the
+  trial starts from a gate site's refusal via `Core::License::requestProFeature` (handler:
+  `Licensing::TrialGate`, a `ModuleManager`-owned member wired in `wireTrialGate()` AFTER
+  `restoreLastProject()` so a boot restore never prompts), and `Trial` runs a 60 s date-rollover
+  check so mid-session expiry re-publishes license state like any other transition.
   Three shapes of that block are worth naming because a QML binding reads them at paint rate:
   **`Licensing::MonotonicClock::now()` persists its anti-rewind floor at most once a minute**
   (`kPersistIntervalMs`, 60000; in between, the cached floor still catches a rewind, so the

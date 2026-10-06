@@ -222,7 +222,7 @@ Rectangle {
   }
 
   //
-  // Right-pinned section (Connect + Activate, always visible)
+  // Right-pinned section (Connect, always visible)
   //
   RowLayout {
     id: connectSection
@@ -243,21 +243,6 @@ Rectangle {
       right: parent.right
       verticalCenter: parent.verticalCenter
       verticalCenterOffset: root.titlebarHeight / 2
-    }
-
-    //
-    // License activation (Pro only)
-    //
-    Widgets.ToolbarButton {
-      readonly property var entry: _tbModel.binding("license.activate")
-
-      text: qsTr("Activate")
-      Layout.alignment: Qt.AlignVCenter
-      visible: Cpp_CommercialBuild && Cpp_Licensing_Trial.trialExpired
-               && !Cpp_Licensing_LemonSqueezy.isActivated
-      ToolTip.text: qsTr("Manage license and activate Serial Studio Pro")
-      icon.source: Cpp_Misc_IconRegistry.iconById("commands/activate", 32)
-      onClicked: entry.run()
     }
 
     //

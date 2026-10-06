@@ -67,7 +67,7 @@ A comparison of features in the free (GPLv3) version against Serial Studio Pro.
 | | LED Panel | ✅ | ✅ |
 | | Web View (embedded web page) | ✅ | ✅ |
 | | 3D Plot | ❌ | ✅ |
-| | XY Plot (phase diagrams) | ❌ | ✅ |
+| | XY Plot (phase diagrams) | ✅ | ✅ |
 | | Waterfall (spectrogram, order tracking) | ❌ | ✅ |
 | | Image View (live camera/image feed) | ❌ | ✅ |
 | | Canvas (user-scripted Canvas2D widget) | ❌ | ✅ |

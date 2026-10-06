@@ -9,7 +9,7 @@ Copyright (c) 2020–2026 Alex Spataru <https://github.com/alex-spataru>
 ← למידע נוסף: https://serial-studio.com/
 
 תכונות פרו:
-← הדמיית MQTT, XY ו-3D
+← הדמיית MQTT ו-3D
 ← מנהלי התקנים לאודיו, CAN Bus, Modbus, USB, HID ו-Process I/O
 ← ווידג'טים לפלט, ייצוא MDF4 והעברות XMODEM/YMODEM/ZMODEM
 ← Historian, משתנים ושינויי ערכים (JS + Lua)

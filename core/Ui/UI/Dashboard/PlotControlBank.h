@@ -95,6 +95,7 @@ public:
   void setPlotSweepRetention(const int index, const int count);
 
   void resetSweepStates();
+  void disableSweeps();
   void restorePlotSweepConfig(const QMap<int, DSP::SweepEngine>& saved);
   void restoreMultiplotSweepConfig(const QMap<int, DSP::SweepEngine>& saved);
 

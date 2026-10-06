@@ -157,10 +157,7 @@ Widgets.Pane {
   }
 
   function toggleFreeze() {
-    const target = !Cpp_UI_Dashboard.frozen
-    Cpp_UI_Dashboard.setFrozen(target)
-    if (target && !Cpp_UI_Dashboard.frozen)
-      app.showLicenseDialog()
+    Cpp_UI_Dashboard.setFrozen(!Cpp_UI_Dashboard.frozen)
   }
 
   function jumpToWorkspaceIndex(index) {

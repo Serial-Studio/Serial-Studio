@@ -192,12 +192,12 @@ void MessageBusTests::publishStateRetainsTheLatestMessage()
   Core::Bus::MessageBus bus;
   QVERIFY(bus.latest<Core::Bus::LicenseStateChanged>() == nullptr);
 
-  bus.publishState<Core::Bus::LicenseStateChanged>(true, 0, false);
+  bus.publishState<Core::Bus::LicenseStateChanged>(true, 0, false, -1);
   const auto activated = bus.latest<Core::Bus::LicenseStateChanged>();
   QVERIFY(activated != nullptr);
   QCOMPARE(activated->activated, true);
 
-  bus.publishState<Core::Bus::LicenseStateChanged>(false, 0, false);
+  bus.publishState<Core::Bus::LicenseStateChanged>(false, 0, false, -1);
   QCOMPARE(bus.latest<Core::Bus::LicenseStateChanged>()->activated, false);
 
   bus.publish<Flag>(true);
@@ -326,7 +326,7 @@ void MessageBusTests::everyVocabularyTopicComposesByBracedInit()
   bus.publish<Core::Bus::DashboardUpdated>(0);
   bus.publish<Core::Bus::DashboardDataReset>(0);
   bus.publishState<Core::Bus::MirrorAttachedChanged>(false);
-  bus.publishState<Core::Bus::LicenseStateChanged>(false, 0, false);
+  bus.publishState<Core::Bus::LicenseStateChanged>(false, 0, false, -1);
   bus.publishState<Core::Bus::OperationModeChanged>(0);
   bus.publishState<Core::Bus::FrameConfigChanged>(IO::FrameConfig());
   bus.publishState<Core::Bus::ReplayPlayerStateChanged>(0, false);

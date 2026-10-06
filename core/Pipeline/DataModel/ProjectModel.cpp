@@ -1053,8 +1053,10 @@ void DataModel::ProjectModel::setFrozen(const bool frozen)
   if (m_frozen == frozen)
     return;
 
-  if (frozen && !Core::License::activated())
+  if (frozen && !Core::License::activated()) {
+    Core::License::requestProFeature(QStringLiteral("dashboard.freeze"));
     return;
+  }
 
   const ProjectUndoScope undo_scope{*this, tr("Toggle Freeze")};
 

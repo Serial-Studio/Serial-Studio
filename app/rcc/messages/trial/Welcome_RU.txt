@@ -11,7 +11,7 @@ GPLv3 самостоятельно.
 → Узнать больше: https://serial-studio.com/
 
 Доступные функции Pro:
-→ Визуализация MQTT, XY и 3D
+→ Визуализация MQTT и 3D
 → Драйверы Audio, CAN Bus, Modbus, USB, HID и Process I/O
 → Виджеты вывода, экспорт MDF4 и передача XMODEM/YMODEM/ZMODEM
 → Historian, Переменные и преобразования (JS + Lua)

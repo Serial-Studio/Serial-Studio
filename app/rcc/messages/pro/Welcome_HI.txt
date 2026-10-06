@@ -9,7 +9,7 @@ Serial Studio Pro का उपयोग करने और ओपन सोर
 → अधिक जानें: https://serial-studio.com/
 
 प्रो विशेषताएँ:
-→ MQTT, XY और 3D विज़ुअलाइज़ेशन
+→ MQTT और 3D विज़ुअलाइज़ेशन
 → Audio, CAN Bus, Modbus, USB, HID और Process I/O ड्राइवर
 → आउटपुट विजेट, MDF4 निर्यात और XMODEM/YMODEM/ZMODEM स्थानांतरण
 → Historian, वेरिएबल और मान रूपांतरण (JS + Lua)

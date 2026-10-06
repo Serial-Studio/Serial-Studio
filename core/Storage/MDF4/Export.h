@@ -213,6 +213,8 @@ private:
   std::atomic<bool> m_isOpen;
   std::atomic<bool> m_exportEnabled;
   bool m_persistSettings;
+  bool m_exportRequested;
+  bool m_licenseReplay;
   Core::Bus::MessageBus* m_bus;
   Core::Bus::Subscription m_operationModeWatch;
   Core::Bus::Subscription m_licenseWatch;

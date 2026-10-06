@@ -2071,7 +2071,6 @@ _TRIAL_PARITY_ALLOWED = (
     "app/src/API/Handlers/LicensingHandler.cpp",
     "app/qml/main.qml",
     "app/qml/Dialogs/LicenseManagement.qml",
-    "app/qml/Dialogs/Welcome.qml",
     "app/qml/Dialogs/About.qml",
 )
 

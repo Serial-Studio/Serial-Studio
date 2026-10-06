@@ -490,8 +490,10 @@ void Widgets::FFTPlot::setAudioRecordingEnabled(const bool enabled)
     return;
 
   if (enabled) {
-    if (!Core::License::activated())
+    if (!Core::License::activated()) {
+      Core::License::requestProFeature(QStringLiteral("audio.record"));
       return;
+    }
 
     const auto& dataset = GET_DATASET(SerialStudio::DashboardFFT, m_index);
     AudioSessionConfig cfg;

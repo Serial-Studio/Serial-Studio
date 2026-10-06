@@ -10,7 +10,7 @@ dịch mã nguồn GPLv3.
 → Tìm hiểu thêm: https://serial-studio.com/
 
 Các tính năng Pro có sẵn:
-→ Hình ảnh hóa MQTT, XY và 3D
+→ Hình ảnh hóa MQTT và 3D
 → Trình điều khiển Âm thanh, CAN Bus, Modbus, USB, HID và Process I/O
 → Tiện ích đầu ra, xuất MDF4 và chuyển XMODEM/YMODEM/ZMODEM
 → Historian, Biến và biến đổi giá trị (JS + Lua)

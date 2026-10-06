@@ -35,6 +35,12 @@ namespace UI::Alarms {
 class AlarmAnnunciator;
 }  // namespace UI::Alarms
 
+#ifdef BUILD_COMMERCIAL
+namespace Licensing {
+class TrialGate;
+}  // namespace Licensing
+#endif
+
 namespace Misc {
 class SimdSettings;
 class ProblemCenter;
@@ -104,6 +110,7 @@ private:
   void registerImageProvidersAndLoadQml();
 #ifdef BUILD_COMMERCIAL
   void registerCommercialContextProperties(QQmlContext* ctx);
+  void wireTrialGate();
 #endif
 
 private:
@@ -117,5 +124,8 @@ private:
   bool m_inhibitIdleSleep;
   NativeWindow m_nativeWindow;
   QQmlApplicationEngine m_engine;
+#ifdef BUILD_COMMERCIAL
+  Licensing::TrialGate* m_trialGate;
+#endif
 };
 }  // namespace Misc

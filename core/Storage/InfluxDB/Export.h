@@ -282,6 +282,7 @@ private:
 
   bool m_inApply;
   bool m_exportRequested;
+  bool m_licenseReplay;
   bool m_savingToProjectModel;
   QString m_url;
   QString m_organization;

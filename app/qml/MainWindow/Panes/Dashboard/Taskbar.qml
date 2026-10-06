@@ -966,12 +966,7 @@ Item {
       ToolTip.visible: hovered
       ToolTip.text: Cpp_UI_Dashboard.frozen ? qsTr("Unfreeze Dashboard")
                                             : qsTr("Freeze Dashboard")
-      onClicked: {
-        if (freezeAllowed)
-          Cpp_UI_Dashboard.setFrozen(!Cpp_UI_Dashboard.frozen)
-        else
-          app.showLicenseDialog()
-      }
+      onClicked: Cpp_UI_Dashboard.setFrozen(!Cpp_UI_Dashboard.frozen)
     }
 
     //

@@ -1215,6 +1215,17 @@ ss_add_unit_test(tst_block_sink
 )
 
 #
+# The lazy-trial seam (spec 0092): Core::License's trial-days field and the requestProFeature
+# handler lifecycle. Links only the Core archive, so GPL and Pro configures both pin the silent
+# no-op contract the gate sites rely on.
+#
+ss_add_unit_test(tst_license_seam
+  SOURCES tst_license_seam.cpp
+  LIBS    Qt6::Core
+          SerialStudio::Core
+)
+
+#
 # The pure SerialStudio helpers in SerialStudioFrameSupport.cpp, tested directly rather than through
 # Frame.cpp. Core5Compat is not optional: the East-Asian encodings go through QTextCodec.
 #

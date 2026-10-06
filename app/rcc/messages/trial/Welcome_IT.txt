@@ -11,7 +11,7 @@ da solo.
 → Scopri di più: https://serial-studio.com/
 
 Funzionalità Pro disponibili:
-→ Visualizzazione MQTT, XY e 3D
+→ Visualizzazione MQTT e 3D
 → Driver Audio, CAN Bus, Modbus, USB, HID e Process I/O
 → Widget di output, export MDF4 e trasferimenti XMODEM/YMODEM/ZMODEM
 → Historian, Variabili e trasformazioni (JS + Lua)

@@ -27,6 +27,7 @@
 #include "Core/AppInfo.h"
 #include "Core/Bus/MessageBus.h"
 #include "Core/Bus/Messages.h"
+#include "Core/License.h"
 #include "Core/Prompt/UserPrompt.h"
 #include "DataModel/Project/ProjectHistory.h"
 #include "DataModel/Project/ProjectNaming.h"
@@ -75,6 +76,13 @@ void DataModel::ProjectSources::addSource()
         ProjectModel::tr("Serial Studio Pro allows connecting to multiple devices simultaneously. "
                          "Please upgrade to unlock this feature."),
         Core::Prompt::Information);
+
+    return;
+  }
+#else
+  if (!m_model.m_sources.empty() && !Core::License::activated()) {
+    if (!m_model.m_suppressMessageBoxes)
+      Core::License::requestProFeature(QStringLiteral("project.multi-source"));
 
     return;
   }
@@ -173,6 +181,13 @@ void DataModel::ProjectSources::duplicateSource(int sourceId)
   auto& sources = m_model.m_sources;
   if (sourceId < 0 || sourceId >= static_cast<int>(sources.size()))
     return;
+
+  if (!sources.empty() && !Core::License::activated()) {
+    if (!m_model.m_suppressMessageBoxes)
+      Core::License::requestProFeature(QStringLiteral("project.multi-source"));
+
+    return;
+  }
 
   DataModel::Source copy  = sources[sourceId];
   copy.sourceId           = static_cast<int>(sources.size());

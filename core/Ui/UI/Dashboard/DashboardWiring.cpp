@@ -69,7 +69,10 @@ void UI::DashboardWiring::wire()
     },
     Qt::DirectConnection);
   m_license = bus.subscribe<Core::Bus::LicenseStateChanged>(
-    &m_owner, [this](const std::shared_ptr<const Core::Bus::LicenseStateChanged>&) {
+    &m_owner, [this](const std::shared_ptr<const Core::Bus::LicenseStateChanged>& license) {
+      if (!license->activated)
+        m_owner.m_plotControls.disableSweeps();
+
       Q_EMIT m_owner.frozenChanged();
     });
   m_viewStateClear = bus.subscribe<Core::Bus::DashboardViewStateClearRequested>(

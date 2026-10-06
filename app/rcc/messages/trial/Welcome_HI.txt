@@ -10,7 +10,7 @@ Copyright (c) 2020–2026 Alex Spataru <https://github.com/alex-spataru>
 → अधिक जानें: https://serial-studio.com/
 
 उपलब्ध प्रो विशेषताएँ:
-→ MQTT, XY और 3D विज़ुअलाइज़ेशन
+→ MQTT और 3D विज़ुअलाइज़ेशन
 → Audio, CAN Bus, Modbus, USB, HID और Process I/O ड्राइवर
 → आउटपुट विजेट, MDF4 निर्यात और XMODEM/YMODEM/ZMODEM स्थानांतरण
 → Historian, वेरिएबल और मान रूपांतरण (JS + Lua)

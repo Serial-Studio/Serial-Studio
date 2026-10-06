@@ -10,7 +10,7 @@ Copyright (c) 2020–2026 Alex Spataru <https://github.com/alex-spataru>
 → Дізнатися більше: https://serial-studio.com/
 
 Доступні функції Pro:
-→ Візуалізація MQTT, XY та 3D
+→ Візуалізація MQTT та 3D
 → Драйвери Audio, CAN Bus, Modbus, USB, HID та Process I/O
 → Віджети виводу, експорт MDF4 та передача XMODEM/YMODEM/ZMODEM
 → Historian, Змінні та перетворення значень (JS + Lua)

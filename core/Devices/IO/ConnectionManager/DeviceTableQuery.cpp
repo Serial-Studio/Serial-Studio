@@ -128,6 +128,33 @@ bool IO::DeviceTableQuery::projectConfigurationOk() const
 }
 
 /**
+ * @brief Whether the pending connect touches a license-gated bus (spec 0092): free buses stay
+ *        connectable in every licensing state, only the gated set routes through the Pro-intent
+ *        seam. Default-gated on purpose, mirroring DriverFactory: a new bus is Pro until someone
+ *        decides otherwise.
+ */
+bool IO::DeviceTableQuery::connectRequiresEntitlement(const SerialStudio::BusType busType,
+                                                      const SerialStudio::OperationMode mode) const
+{
+  const auto freeBus = [](SerialStudio::BusType type) {
+    return type == SerialStudio::BusType::UART || type == SerialStudio::BusType::Network
+        || type == SerialStudio::BusType::BluetoothLE;
+  };
+
+  if (mode != SerialStudio::ProjectFile || !m_project || m_project->sources.empty())
+    return !freeBus(busType);
+
+  if (m_project->sources.size() > 1)
+    return true;
+
+  bool gated = false;
+  for (const auto& src : m_project->sources)
+    gated = gated || !freeBus(static_cast<SerialStudio::BusType>(src.busType));
+
+  return gated;
+}
+
+/**
  * @brief Returns the device id @p driver backs, or -1 when no device owns it. A null driver is an
  *        ordinary miss: the recovery paths call this with whatever the sender handed them.
  */

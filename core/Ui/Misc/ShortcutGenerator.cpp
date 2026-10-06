@@ -213,6 +213,7 @@ void Misc::ShortcutGenerator::generate(const QString& outputPath,
                                        const QString& themeName)
 {
   if (!hasProLicense()) {
+    Core::License::requestProFeature(QStringLiteral("shortcuts.generate"));
     Q_EMIT shortcutFailed(tr("A Pro license is required to generate shortcuts."));
     return;
   }

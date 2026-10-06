@@ -24,6 +24,7 @@
 #include <QDateTime>
 #include <QDir>
 #include <QFile>
+#include <QScopedValueRollback>
 #include <QTimer>
 
 #include "Core/Bus/MessageBus.h"
@@ -46,6 +47,7 @@
 #  include <mdf/mdfwriter.h>
 #  include <QMap>
 
+#  include "Core/License.h"
 #  include "Core/Licensing/CommercialToken.h"
 #  include "CSV/Player.h"
 #  include "DataModel/FrameBuilder.h"
@@ -547,9 +549,16 @@ MDF4::Export::Export()
   , m_isOpen(false)
   , m_exportEnabled(false)
   , m_persistSettings(true)
+  , m_exportRequested(false)
+  , m_licenseReplay(false)
   , m_bus(nullptr)
 #else
-  : m_isOpen(false), m_exportEnabled(false), m_persistSettings(true), m_bus(nullptr)
+  : m_isOpen(false)
+  , m_exportEnabled(false)
+  , m_persistSettings(true)
+  , m_exportRequested(false)
+  , m_licenseReplay(false)
+  , m_bus(nullptr)
 #endif
 {
   connect(this, &MDF4::Export::enabledChanged, this, &DataModel::IBlockSink::sinkActivityChanged);
@@ -562,13 +571,16 @@ MDF4::Export::Export()
           Qt::QueuedConnection);
 
   m_licenseWatch = Core::services().bus.subscribe<Core::Bus::LicenseStateChanged>(
-    this, [this](const std::shared_ptr<const Core::Bus::LicenseStateChanged>& license) {
-      if (exportEnabled() && (!license->activated || !SS_LICENSE_GUARD()))
-        setExportEnabled(false);
+    this, [this](const std::shared_ptr<const Core::Bus::LicenseStateChanged>&) {
+      const QScopedValueRollback<bool> replay(m_licenseReplay, true);
+      setExportEnabled(m_exportRequested);
     });
 #endif
 
-  setExportEnabled(m_settings.value("MDF4Export", false).toBool());
+  {
+    const QScopedValueRollback<bool> replay(m_licenseReplay, true);
+    setExportEnabled(m_settings.value("MDF4Export", false).toBool());
+  }
 }
 
 /**
@@ -727,6 +739,8 @@ void MDF4::Export::setSettingsPersistent(const bool persistent)
 void MDF4::Export::setExportEnabled(const bool enabled)
 {
 #ifdef BUILD_COMMERCIAL
+  m_exportRequested = enabled;
+
   const auto mode        = m_bus ? m_bus->latest<Core::Bus::OperationModeChanged>() : nullptr;
   const bool consoleOnly = mode && mode->mode == SerialStudio::ConsoleOnly;
   const auto& tk         = Licensing::CommercialToken::current();
@@ -747,10 +761,11 @@ void MDF4::Export::setExportEnabled(const bool enabled)
 
   closeFile();
   setConsumerEnabled(false);
-  if (m_persistSettings)
-    m_settings.setValue("MDF4Export", false);
 
   Q_EMIT enabledChanged();
+
+  if (enabled && !m_licenseReplay)
+    Core::License::requestProFeature(QStringLiteral("mdf4.export"));
 #else
   closeFile();
   m_exportEnabled.store(false, std::memory_order_relaxed);
@@ -758,12 +773,12 @@ void MDF4::Export::setExportEnabled(const bool enabled)
     m_settings.setValue("MDF4Export", false);
 
   Q_EMIT enabledChanged();
-#endif
 
   if (enabled)
     Core::Prompt::showMessageBox(
       tr("MDF4 Export is a Pro feature."),
       tr("Activate Serial Studio Pro or start the free trial to enable MDF4 export."));
+#endif
 }
 
 /**

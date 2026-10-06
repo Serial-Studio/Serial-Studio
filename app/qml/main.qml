@@ -36,7 +36,6 @@ Item {
   //
   // Transient quit / dialog flags
   //
-  property bool dontNag: false
   property bool quitting: false
 
   //
@@ -90,14 +89,6 @@ Item {
                                     && !sessionPlayerOpen
 
   //
-  // Cross-launch app flags: shared store, NOT per-deployment
-  //
-  Settings {
-    category: "App"
-    property alias hideWelcomeDialog: app.dontNag
-  }
-
-  //
   // Trigger an interactive update check from the toolbar
   //
   function checkForUpdates() {
@@ -124,7 +115,6 @@ Item {
     problemCenter.close()
     dbExplorerLoader.close()
     aiAssistantLoader.close()
-    aiProUpgradeLoader.close()
     quitTimer.restart()
   }
 
@@ -168,13 +158,6 @@ Item {
   // Boot continuation: skipped only when the crash-recovery dialog is up
   //
   function continueBoot() {
-    if (Cpp_CommercialBuild
-        && !app.runtimeMode
-        && !Cpp_Licensing_LemonSqueezy.isActivated) {
-      app.showWelcomeDialog()
-      return
-    }
-
     app.showMainWindow()
   }
 
@@ -493,21 +476,23 @@ Item {
   }
 
   //
+  // Lazy-trial prompt broker asks for the license dialog (spec 0092)
+  //
+  Connections {
+    enabled: Cpp_CommercialBuild
+    target: Cpp_CommercialBuild ? Cpp_Licensing_TrialGate : null
+    function onActivationRequested() {
+      app.showLicenseDialog()
+    }
+  }
+
+  //
   // License activation dialog
   //
   DialogLoader {
     id: licenseDialog
 
     source: "qrc:/serial-studio.com/gui/qml/Dialogs/LicenseManagement.qml"
-  }
-
-  //
-  // First-launch welcome dialog (commercial only, non-runtime)
-  //
-  DialogLoader {
-    id: welcomeDialog
-
-    source: "qrc:/serial-studio.com/gui/qml/Dialogs/Welcome.qml"
   }
 
   //
@@ -518,15 +503,6 @@ Item {
 
     asynchronous: false
     source: "qrc:/serial-studio.com/gui/qml/AI/AssistantPanel.qml"
-  }
-
-  //
-  // AI Pro-upgrade notice: shown on non-Pro builds when the AI button is clicked
-  //
-  DialogLoader {
-    id: aiProUpgradeLoader
-
-    source: "qrc:/serial-studio.com/gui/qml/AI/ProUpgradeNotice.qml"
   }
 
   //
@@ -658,22 +634,6 @@ Item {
   }
 
   //
-  // Welcome dialog: short-circuits to the main window if trial banner is dismissed
-  //
-  function showWelcomeDialog() {
-    if (!Cpp_CommercialBuild)
-      return
-
-    if (!Cpp_Licensing_Trial.trialExpired
-        && Cpp_Licensing_Trial.trialEnabled
-        && app.dontNag
-        && Cpp_Licensing_Trial.daysRemaining > 1)
-      showMainWindow()
-    else
-      welcomeDialog.activate()
-  }
-
-  //
   // About dialog: author-only
   //
   function showAboutDialog() {
@@ -706,11 +666,18 @@ Item {
   }
 
   //
-  // File transmission: author-only unless the deployment grants runtime access
+  // File transmission: Pro; author-only unless the deployment grants runtime access
   //
   function showFileTransmission() {
-    if (!app.runtimeMode || (app.proVersion && Cpp_IO_FileTransmission.runtimeAccessAllowed))
-      fileTransmissionDialog.activate()
+    if (app.runtimeMode && !(app.proVersion && Cpp_IO_FileTransmission.runtimeAccessAllowed))
+      return
+
+    if (Cpp_CommercialBuild && !app.proVersion) {
+      Cpp_Licensing_TrialGate.requestProFeature("file.transmission")
+      return
+    }
+
+    fileTransmissionDialog.activate()
   }
 
   //
@@ -745,6 +712,11 @@ Item {
     if (!Cpp_CommercialBuild)
       return
 
+    if (!app.runtimeMode && !app.proVersion) {
+      Cpp_Licensing_TrialGate.requestProFeature("sessions.historian")
+      return
+    }
+
     if (app.runtimeMode) {
       if (!Cpp_Sessions_Export.exportEnabled)
         return
@@ -767,23 +739,29 @@ Item {
   // Operator-deployment generator: Pro, author-only
   //
   function showShortcutGenerator() {
-    if (Cpp_CommercialBuild && !app.runtimeMode)
-      shortcutGeneratorDialog.activate()
+    if (!Cpp_CommercialBuild || app.runtimeMode)
+      return
+
+    if (!app.proVersion) {
+      Cpp_Licensing_TrialGate.requestProFeature("shortcuts.generate")
+      return
+    }
+
+    shortcutGeneratorDialog.activate()
   }
 
   //
   // AI assistant: Pro, author-only
   //
   function showAIAssistant() {
-    if (Cpp_CommercialBuild && !app.runtimeMode)
-      aiAssistantLoader.activate()
-  }
+    if (!Cpp_CommercialBuild || app.runtimeMode)
+      return
 
-  //
-  // AI Pro-upgrade notice: shown on non-Pro builds when the AI button is clicked
-  //
-  function showAIProUpgradeNotice() {
-    if (!app.runtimeMode)
-      aiProUpgradeLoader.activate()
+    if (!app.proVersion) {
+      Cpp_Licensing_TrialGate.requestProFeature("ai.assistant")
+      return
+    }
+
+    aiAssistantLoader.activate()
   }
 }

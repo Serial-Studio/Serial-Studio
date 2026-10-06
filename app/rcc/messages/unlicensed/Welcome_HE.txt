@@ -1,0 +1,17 @@
+Copyright (c) 2020–2026 Alex Spataru <https://github.com/alex-spataru>
+
+זוהי הגרסה החינמית של Serial Studio Pro: כל תכונות הליבה
+חינמיות לשימוש, ללא הגבלת זמן. תכונות ה-Pro שלהלן נפתחות
+ברגע שתנסה אחת מהן, עם תקופת ניסיון חינמית של 14 יום.
+אין צורך בחשבון או בתשלום כדי להתחיל.
+
+← תמיכה: alex@serial-studio.com
+← קבע שיחה: https://calendly.com/serial-studio
+← למד עוד: https://serial-studio.com/
+
+תכונות Pro זמינות:
+← MQTT והדמיה ב-3D
+← מנהלי התקנים לאודיו, CAN Bus, Modbus, USB, HID, ו-Process I/O
+← ווידג'טים לפלט, ייצוא MDF4, והעברות XMODEM/YMODEM/ZMODEM
+← Historian, משתנים ושינויי ערכים (JS + Lua)
+← פרויקטים מרובי מקורות ומרחבי עבודה מותאמים אישית

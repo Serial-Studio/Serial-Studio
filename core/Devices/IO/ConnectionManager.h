@@ -279,6 +279,7 @@ private:
   bool m_writeEnabled;
   bool m_closeRequested;
   bool m_rebuildingDevices;
+  bool m_restoringBusType;
   SerialStudio::BusType m_busType;
 
   QSettings m_settings;

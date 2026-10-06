@@ -161,6 +161,7 @@
 #  include "Licensing/MachineID.h"
 #  include "Licensing/OfflineLicense.h"
 #  include "Licensing/Trial.h"
+#  include "Licensing/TrialGate.h"
 #  include "Misc/ShortcutGenerator.h"
 #  include "MQTT/Publisher.h"
 #  include "ProjectEditor/Editors/PainterCodeEditor.h"
@@ -296,6 +297,9 @@ Misc::ModuleManager::ModuleManager()
   , m_automaticUpdates(m_settings.value("App/CheckForUpdates", true).toBool())
   , m_performanceMode(m_settings.value("App/PerformanceMode", true).toBool())
   , m_inhibitIdleSleep(m_settings.value("App/InhibitIdleSleep", true).toBool())
+#ifdef BUILD_COMMERCIAL
+  , m_trialGate(nullptr)
+#endif
 {
   (void)Misc::Translator::instance();
   m_simdSettings = std::make_unique<Misc::SimdSettings>();
@@ -761,9 +765,10 @@ static void publishLicenseState(Core::Bus::MessageBus& bus, const Licensing::Tri
   const auto& token  = Licensing::CommercialToken::current();
   const auto tier    = static_cast<quint8>(token.featureTier());
   const bool expired = trial.trialExpired();
-  Core::License::set(token.isValid() && SS_LICENSE_GUARD(), tier, expired);
+  const int days     = trial.trialEnabled() ? trial.daysRemaining() : (expired ? 0 : -1);
+  Core::License::set(token.isValid() && SS_LICENSE_GUARD(), tier, expired, days);
   bus.publishState<Core::Bus::LicenseStateChanged>(
-    Core::License::activated(), static_cast<int>(tier), expired);
+    Core::License::activated(), static_cast<int>(tier), expired, days);
 }
 #endif
 
@@ -1118,6 +1123,36 @@ static void setupCommercialModuleConnections()
   influx.attachMessageBus(SessionContext::current().bus());
   influx.setupExternalConnections();
 }
+
+/**
+ * @brief Constructs the lazy-trial prompt broker (spec 0092) and raises the project intent on
+ *        the RISING edge of containsCommercialFeatures: opening a Pro project and adding the
+ *        first Pro widget both ask the one question. Must run after restoreLastProject(), whose
+ *        project seeds the baseline, so a boot restore never prompts; headless stays silent.
+ */
+void Misc::ModuleManager::wireTrialGate()
+{
+  if (m_headless)
+    return;
+
+  auto& trial = Licensing::Trial::instance();
+  m_trialGate = new Licensing::TrialGate(trial, Licensing::LemonSqueezy::instance(), this);
+  Core::License::setRemoteDispatchProbe(
+    [] { return API::RemoteDispatchScope::active() != nullptr; });
+
+  auto* projectModel = &DataModel::ProjectModel::instance();
+  auto wasPro        = std::make_shared<bool>(projectModel->containsCommercialFeatures());
+  connect(projectModel,
+          &DataModel::ProjectModel::groupsChanged,
+          m_trialGate,
+          [this, projectModel, &trial, wasPro] {
+            const bool pro    = projectModel->containsCommercialFeatures();
+            const bool rising = pro && !*wasPro;
+            *wasPro           = pro;
+            if (rising && trial.firstRun())
+              m_trialGate->requestProFeature(QStringLiteral("project.pro-features"));
+          });
+}
 #endif
 
 /**
@@ -1293,6 +1328,8 @@ void Misc::ModuleManager::registerCoreContextProperties(QQmlContext* ctx)
  */
 void Misc::ModuleManager::registerCommercialContextProperties(QQmlContext* ctx)
 {
+  wireTrialGate();
+
   auto* ioManager = &IO::ConnectionManager::instance();
 
   Misc::ContextRegistry registry;
@@ -1311,6 +1348,7 @@ void Misc::ModuleManager::registerCommercialContextProperties(QQmlContext* ctx)
   registry.add("Cpp_JSON_DBCImporter", &DataModel::DBCImporter::instance());
   registry.add("Cpp_JSON_ModbusMapImporter", &DataModel::ModbusMapImporter::instance());
   registry.add("Cpp_Licensing_Trial", &Licensing::Trial::instance());
+  registry.add("Cpp_Licensing_TrialGate", m_trialGate);
   registry.add("Cpp_Licensing_LemonSqueezy", &Licensing::LemonSqueezy::instance());
   registry.add("Cpp_Licensing_OfflineLicense", &Licensing::OfflineLicense::instance());
   registry.add("Cpp_Sessions_Export", &Sessions::Export::instance());

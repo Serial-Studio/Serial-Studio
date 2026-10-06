@@ -51,7 +51,7 @@ void TstLicenseState::defaultsToNotActivated()
  */
 void TstLicenseState::setPublishesEveryField()
 {
-  Core::License::set(true, 3, false);
+  Core::License::set(true, 3, false, -1);
   QVERIFY(Core::License::activated());
   QCOMPARE(Core::License::tier(), quint8(3));
   QVERIFY(!Core::License::trialExpired());
@@ -62,8 +62,8 @@ void TstLicenseState::setPublishesEveryField()
  */
 void TstLicenseState::laterSetReplacesEarlierFacts()
 {
-  Core::License::set(true, 2, false);
-  Core::License::set(false, 0, true);
+  Core::License::set(true, 2, false, -1);
+  Core::License::set(false, 0, true, 0);
   QVERIFY(!Core::License::activated());
   QCOMPARE(Core::License::tier(), quint8(0));
   QVERIFY(Core::License::trialExpired());

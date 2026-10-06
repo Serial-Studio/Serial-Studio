@@ -38,6 +38,7 @@
 #include "Core/Bus/MessageBus.h"
 #include "Core/Bus/Messages.h"
 #include "Core/IO/IPayloadInjector.h"
+#include "Core/License.h"
 #include "Core/Prompt/UserPrompt.h"
 #include "Core/Services.h"
 #include "Core/SSAssert.h"
@@ -287,9 +288,14 @@ void MDF4::Player::openFile(const QString& filePath)
 #endif
 
   if (!licensed) {
+#ifdef BUILD_COMMERCIAL
+    Core::License::requestProFeature(QStringLiteral("mdf4.playback"),
+                                     [this, filePath] { openFile(filePath); });
+#else
     Core::Prompt::showMessageBox(
       tr("MDF4 Playback is a Pro feature."),
       tr("Activate Serial Studio Pro or start the free trial to enable MDF4 playback."));
+#endif
     return;
   }
 

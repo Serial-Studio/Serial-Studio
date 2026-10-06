@@ -139,12 +139,14 @@ struct MirrorAttachedChanged final {
 
 /**
  * @brief The licensing state settled on a real token-validity transition; tier is the
- *        Licensing::FeatureTier ordinal (0 when no token is installed).
+ *        Licensing::FeatureTier ordinal (0 when no token is installed) and
+ *        trialDaysRemaining mirrors Core::License::trialDaysRemaining() (-1 when no trial).
  */
 struct LicenseStateChanged final {
   bool activated;
   int tier;
   bool trialExpired;
+  int trialDaysRemaining;
 };
 
 /**

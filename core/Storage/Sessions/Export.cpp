@@ -23,6 +23,7 @@
 #  include <QJsonArray>
 #  include <QJsonDocument>
 #  include <QJsonObject>
+#  include <QScopedValueRollback>
 #  include <QSqlError>
 #  include <QtEndian>
 
@@ -30,6 +31,7 @@
 #  include "Core/AppInfo.h"
 #  include "Core/Bus/MessageBus.h"
 #  include "Core/Bus/Messages.h"
+#  include "Core/License.h"
 #  include "Core/Licensing/CommercialToken.h"
 #  include "Core/Services.h"
 #  include "Core/SSAssert.h"
@@ -869,6 +871,8 @@ Sessions::Export::Export()
   , m_exportEnabled(false)
   , m_currentSessionId(-1)
   , m_persistSettings(true)
+  , m_exportRequested(false)
+  , m_licenseReplay(false)
   , m_rawBytesQueue(8192)
   , m_tableSnapshotQueue(1024)
   , m_controlScriptSeen(false)
@@ -892,9 +896,9 @@ Sessions::Export::Export()
   initializeWorker();
 
   m_licenseWatch = Core::services().bus.subscribe<Core::Bus::LicenseStateChanged>(
-    this, [this](const std::shared_ptr<const Core::Bus::LicenseStateChanged>& license) {
-      if (exportEnabled() && (!license->activated || !SS_LICENSE_GUARD()))
-        setExportEnabled(false);
+    this, [this](const std::shared_ptr<const Core::Bus::LicenseStateChanged>&) {
+      const QScopedValueRollback<bool> replay(m_licenseReplay, true);
+      setExportEnabled(m_exportRequested);
     });
 }
 
@@ -1109,6 +1113,7 @@ void Sessions::Export::setupExternalConnections()
   refreshProjectSnapshot();
 
   const bool persisted = m_settings.value("SQLiteExport/Enabled", false).toBool();
+  const QScopedValueRollback<bool> replay(m_licenseReplay, true);
   setExportEnabled(persisted);
 }
 
@@ -1200,14 +1205,23 @@ void Sessions::Export::setExportEnabled(const bool enabled)
 {
   SS_ASSERT(m_appState != nullptr, return);
 
+  m_exportRequested = enabled;
+
   const auto& tk      = Licensing::CommercialToken::current();
   const bool licensed = tk.isValid() && SS_LICENSE_GUARD();
 
   const bool allow =
     enabled && licensed && m_appState->operationMode() != SerialStudio::ConsoleOnly;
 
-  if (m_exportEnabled.load(std::memory_order_relaxed) == allow)
+  if (enabled && !licensed && !m_licenseReplay)
+    Core::License::requestProFeature(QStringLiteral("sessions.export"));
+
+  if (m_exportEnabled.load(std::memory_order_relaxed) == allow) {
+    if (enabled && !allow)
+      Q_EMIT enabledChanged();
+
     return;
+  }
 
   if (!allow)
     closeFile();
