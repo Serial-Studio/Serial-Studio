@@ -3068,7 +3068,7 @@ service SerialStudioTypedAPI {
   // Set transfer mode (params: mode - 0=Bulk, 1=Advanced, 2=Isochronous)
   rpc IoUsbSetTransferMode(IoUsbSetTransferModeRequest) returns (CommandResponse);
 
-  // Transmit raw bytes to the device (params: data - base64 encoded). Hardware-write: remote clients must clear the one-time device-write consent prompt (the user's answer is persisted); in-process scripts are not prompted. Failure modes: not connected (connection_lost), bus busy (bus_busy). Prefer console.send for text protocols.
+  // Transmit raw bytes to the device (params: data - base64 encoded). Hardware-write: remote clients must clear the one-time device-write consent prompt (the user's answer is remembered for the rest of the session); in-process scripts are not prompted. Failure modes: not connected (connection_lost), bus busy (bus_busy). Prefer console.send for text protocols.
   rpc IoWriteData(IoWriteDataRequest) returns (CommandResponse);
 
   // Activate the stored license key against the server
