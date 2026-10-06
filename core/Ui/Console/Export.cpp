@@ -32,6 +32,7 @@
 #include "API/HandlerContext.h"
 #include "Core/Bus/MessageBus.h"
 #include "Core/Bus/Messages.h"
+#include "Core/License.h"
 #include "Core/Services.h"
 #include "Core/SSAssert.h"
 #include "DataModel/PipelineModules.h"
@@ -40,7 +41,6 @@
 #ifdef BUILD_COMMERCIAL
 #  include "AppState.h"
 #  include "Console/Handler.h"
-#  include "Core/License.h"
 #  include "Core/Licensing/CommercialToken.h"
 #  include "Core/SerialStudio.h"
 #  include "Core/WorkspaceManager.h"
