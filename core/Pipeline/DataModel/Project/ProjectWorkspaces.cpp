@@ -127,6 +127,11 @@ static std::vector<DataModel::WidgetRef> buildAutoRefsForGroup(
   auto groupKey = SerialStudio::getDashboardWidget(group);
   if (groupKey == SerialStudio::DashboardPlot3D && !pro)
     groupKey = SerialStudio::DashboardMultiPlot;
+#ifdef BUILD_COMMERCIAL
+  if ((groupKey == SerialStudio::DashboardImageView || groupKey == SerialStudio::DashboardPainter)
+      && !pro)
+    groupKey = SerialStudio::DashboardDataGrid;
+#endif
 
   const bool isEmptyOutputPanel =
     group.groupType == DataModel::GroupType::Output && group.outputWidgets.empty();
@@ -342,6 +347,11 @@ void DataModel::ProjectWorkspaces::setCustomizeWorkspaces(const bool enabled)
   if (m_customizeWorkspaces == enabled)
     return;
 
+  if (enabled && !Core::License::activated()) {
+    Core::License::requestProFeature(QStringLiteral("project.workspaces"));
+    return;
+  }
+
   m_customizeWorkspaces = enabled;
 
   if (enabled) {
@@ -374,6 +384,9 @@ int DataModel::ProjectWorkspaces::addWorkspace(const QString& title)
   if (!m_customizeWorkspaces)
     setCustomizeWorkspaces(true);
 
+  if (!m_customizeWorkspaces)
+    return -1;
+
   int maxId = WorkspaceIds::UserStart - 1;
   for (const auto& ws : m_workspaces)
     if (ws.workspaceId >= WorkspaceIds::UserStart && ws.workspaceId > maxId)
@@ -398,8 +411,11 @@ void DataModel::ProjectWorkspaces::deleteWorkspace(int workspaceId)
   if (appState.operationMode() != SerialStudio::ProjectFile)
     return;
 
-  if (!m_customizeWorkspaces)
+  if (!m_customizeWorkspaces) {
     setCustomizeWorkspaces(true);
+    if (!m_customizeWorkspaces)
+      return;
+  }
 
   auto it = std::find_if(m_workspaces.begin(), m_workspaces.end(), [workspaceId](const auto& ws) {
     return ws.workspaceId == workspaceId;
@@ -423,8 +439,11 @@ void DataModel::ProjectWorkspaces::clearAllWorkspaces()
   if (appState.operationMode() != SerialStudio::ProjectFile)
     return;
 
-  if (!m_customizeWorkspaces)
+  if (!m_customizeWorkspaces) {
     setCustomizeWorkspaces(true);
+    if (!m_customizeWorkspaces)
+      return;
+  }
 
   if (m_workspaces.empty())
     return;
@@ -443,8 +462,11 @@ void DataModel::ProjectWorkspaces::renameWorkspace(int workspaceId, const QStrin
   if (appState.operationMode() != SerialStudio::ProjectFile)
     return;
 
-  if (!m_customizeWorkspaces)
+  if (!m_customizeWorkspaces) {
     setCustomizeWorkspaces(true);
+    if (!m_customizeWorkspaces)
+      return;
+  }
 
   for (auto& ws : m_workspaces) {
     if (ws.workspaceId == workspaceId) {
@@ -471,8 +493,11 @@ void DataModel::ProjectWorkspaces::updateWorkspace(int workspaceId,
   if (appState.operationMode() != SerialStudio::ProjectFile)
     return;
 
-  if (!m_customizeWorkspaces)
+  if (!m_customizeWorkspaces) {
     setCustomizeWorkspaces(true);
+    if (!m_customizeWorkspaces)
+      return;
+  }
 
   for (auto& ws : m_workspaces) {
     if (ws.workspaceId == workspaceId) {
@@ -511,6 +536,12 @@ void DataModel::ProjectWorkspaces::reorderWorkspaces(const QList<int>& userWorks
   if (appState.operationMode() != SerialStudio::ProjectFile)
     return;
 
+  if (!m_customizeWorkspaces) {
+    setCustomizeWorkspaces(true);
+    if (!m_customizeWorkspaces)
+      return;
+  }
+
   QHash<int, DataModel::Workspace> userById;
   std::vector<DataModel::Workspace> systemSlots;
   for (auto& ws : m_workspaces)
@@ -536,9 +567,6 @@ void DataModel::ProjectWorkspaces::reorderWorkspaces(const QList<int>& userWorks
 
   m_workspaces = std::move(rebuilt);
 
-  if (!m_customizeWorkspaces)
-    setCustomizeWorkspaces(true);
-
   m_model.setModified(true);
   notifyWorkspaceListChanged();
 }
@@ -556,8 +584,11 @@ void DataModel::ProjectWorkspaces::moveWorkspace(int workspaceId, int targetInde
   if (workspaceId < WorkspaceIds::UserStart)
     return;
 
-  if (!m_customizeWorkspaces)
+  if (!m_customizeWorkspaces) {
     setCustomizeWorkspaces(true);
+    if (!m_customizeWorkspaces)
+      return;
+  }
 
   auto it = std::find_if(m_workspaces.begin(), m_workspaces.end(), [workspaceId](const auto& ws) {
     return ws.workspaceId == workspaceId;
@@ -599,8 +630,11 @@ void DataModel::ProjectWorkspaces::addWidgetToWorkspace(
   if (appState.operationMode() != SerialStudio::ProjectFile)
     return;
 
-  if (!m_customizeWorkspaces)
+  if (!m_customizeWorkspaces) {
     setCustomizeWorkspaces(true);
+    if (!m_customizeWorkspaces)
+      return;
+  }
 
   for (auto& ws : m_workspaces) {
     if (ws.workspaceId != workspaceId)
@@ -633,8 +667,11 @@ void DataModel::ProjectWorkspaces::removeWidgetFromWorkspace(int workspaceId, in
   if (appState.operationMode() != SerialStudio::ProjectFile)
     return;
 
-  if (!m_customizeWorkspaces)
+  if (!m_customizeWorkspaces) {
     setCustomizeWorkspaces(true);
+    if (!m_customizeWorkspaces)
+      return;
+  }
 
   for (auto& ws : m_workspaces) {
     if (ws.workspaceId != workspaceId)
@@ -662,8 +699,11 @@ void DataModel::ProjectWorkspaces::removeWidgetFromWorkspace(int workspaceId,
   if (appState.operationMode() != SerialStudio::ProjectFile)
     return;
 
-  if (!m_customizeWorkspaces)
+  if (!m_customizeWorkspaces) {
     setCustomizeWorkspaces(true);
+    if (!m_customizeWorkspaces)
+      return;
+  }
 
   for (auto& ws : m_workspaces) {
     if (ws.workspaceId != workspaceId)
@@ -691,6 +731,9 @@ int DataModel::ProjectWorkspaces::cleanupWorkspaceWidgetRefs(const QSet<qint64>&
 {
   static auto& appState = AppState::instance();
   if (appState.operationMode() != SerialStudio::ProjectFile)
+    return 0;
+
+  if (!m_customizeWorkspaces && !Core::License::activated())
     return 0;
 
   const auto encode = [](int widgetType, int groupId, int relIdx) {
@@ -757,6 +800,11 @@ QString DataModel::ProjectWorkspaces::workspaceIcon(int workspaceId) const
  */
 void DataModel::ProjectWorkspaces::promptAddWorkspace()
 {
+  if (!m_customizeWorkspaces && !Core::License::activated()) {
+    Core::License::requestProFeature(QStringLiteral("project.workspaces"));
+    return;
+  }
+
   bool ok            = false;
   const QString name = QInputDialog::getText(nullptr,
                                              ProjectModel::tr("New Workspace"),
@@ -1087,6 +1135,11 @@ int DataModel::ProjectWorkspaces::autoGenerateWorkspaces()
 
   if (m_customizeWorkspaces && !m_workspaces.empty())
     return m_workspaces.front().workspaceId;
+
+  if (!m_customizeWorkspaces && !Core::License::activated()) {
+    Core::License::requestProFeature(QStringLiteral("project.workspaces"));
+    return -1;
+  }
 
   auto seed = buildAutoWorkspaces();
   if (seed.empty())

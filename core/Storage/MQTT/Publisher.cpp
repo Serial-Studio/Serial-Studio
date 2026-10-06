@@ -788,6 +788,8 @@ void MQTT::Publisher::setupExternalConnections()
   SS_ASSERT(m_bus != nullptr, return);
   m_notificationSubscription = m_bus->subscribe<Core::Bus::NotificationPosted>(
     this, [this](const auto& posted) { onNotificationPosted(*posted); }, Qt::AutoConnection);
+  m_licenseWatch = m_bus->subscribe<Core::Bus::LicenseStateChanged>(
+    this, [this](const auto&) { syncToWorker(); }, Qt::AutoConnection);
 
   auto* projectModel = &DataModel::pipelineModules().projectModel;
   connect(projectModel, &DataModel::ProjectModel::mqttPublisherChanged, this, [this, projectModel] {
@@ -1466,7 +1468,7 @@ void MQTT::Publisher::scheduleSyncToWorker()
 MQTT::BrokerConfig MQTT::Publisher::snapshotConfig() const
 {
   BrokerConfig cfg;
-  cfg.enabled              = m_enabled;
+  cfg.enabled              = m_enabled && licenseValid();
   cfg.sslEnabled           = m_tls.enabled();
   cfg.cleanSession         = m_cleanSession;
   cfg.publishNotifications = m_publishNotifications;

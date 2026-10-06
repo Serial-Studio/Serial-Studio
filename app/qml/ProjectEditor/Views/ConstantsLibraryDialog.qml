@@ -277,6 +277,11 @@ Window {
               anchors.fill: parent
               cursorShape: Qt.PointingHandCursor
               onClicked: {
+                if (Cpp_CommercialBuild && !app.proVersion) {
+                  Cpp_Licensing_TrialGate.requestProFeature("project.variables")
+                  return
+                }
+
                 Cpp_JSON_ProjectModel.addRegister(
                       root.targetTable,
                       modelData.suggestedName,

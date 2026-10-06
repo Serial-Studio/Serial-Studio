@@ -28,6 +28,7 @@
 #include <QTextStream>
 #include <QTimer>
 
+#include "Core/License.h"
 #include "Core/Prompt/UserPrompt.h"
 #include "Core/SerialStudio.h"
 #include "Core/Services.h"
@@ -207,6 +208,11 @@ void DataModel::ProjectTables::appendTableCopyToFolder(const DataModel::TableDef
  */
 void DataModel::ProjectTables::duplicateTableByPath(const QString& tablePath)
 {
+  if (!Core::License::activated()) {
+    Core::License::requestProFeature(QStringLiteral("project.variables"));
+    return;
+  }
+
   const int idx = findTableIndexByPath(tablePath);
   if (idx < 0)
     return;
@@ -376,6 +382,11 @@ QVariantList DataModel::ProjectTables::registersForTable(const QString& table) c
  */
 void DataModel::ProjectTables::promptAddTable()
 {
+  if (!Core::License::activated()) {
+    Core::License::requestProFeature(QStringLiteral("project.variables"));
+    return;
+  }
+
   bool ok            = false;
   const QString name = QInputDialog::getText(nullptr,
                                              ProjectModel::tr("New Shared Table"),
@@ -426,6 +437,11 @@ void DataModel::ProjectTables::promptAddRegister(const QString& table)
 {
   if (table.isEmpty())
     return;
+
+  if (!Core::License::activated()) {
+    Core::License::requestProFeature(QStringLiteral("project.variables"));
+    return;
+  }
 
   bool okName           = false;
   const QString regName = QInputDialog::getText(nullptr,
@@ -581,6 +597,11 @@ void DataModel::ProjectTables::exportTableToCsv(const QString& tableName)
  */
 void DataModel::ProjectTables::importTableFromCsv(const QString& tableName)
 {
+  if (!Core::License::activated()) {
+    Core::License::requestProFeature(QStringLiteral("project.variables"));
+    return;
+  }
+
   const int idx = findTableIndexByPath(tableName);
   if (idx < 0)
     return;

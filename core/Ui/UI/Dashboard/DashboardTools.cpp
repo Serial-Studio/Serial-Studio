@@ -26,6 +26,7 @@
 #include <QTimer>
 #include <QVariantMap>
 
+#include "Core/License.h"
 #include "DataModel/ActionBytes.h"
 #include "DataModel/ProjectModel.h"
 #include "IO/ConnectionManager.h"
@@ -165,6 +166,11 @@ void UI::DashboardTools::setNotificationLogEnabled(const bool enabled)
 {
   if (m_notificationLogEnabled == enabled)
     return;
+
+  if (enabled && !Core::License::activated()) {
+    Core::License::requestProFeature(QStringLiteral("dashboard.notification-log"));
+    return;
+  }
 
   m_notificationLogEnabled = enabled;
   if (m_persistSettings)

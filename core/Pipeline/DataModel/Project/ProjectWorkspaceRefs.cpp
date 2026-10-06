@@ -211,6 +211,11 @@ QMap<int, int> widgetTypeCountsForGroup(const Group& group)
   auto groupKey = SerialStudio::getDashboardWidget(group);
   if (groupKey == SerialStudio::DashboardPlot3D && !Core::License::activated())
     groupKey = SerialStudio::DashboardMultiPlot;
+#ifdef BUILD_COMMERCIAL
+  if ((groupKey == SerialStudio::DashboardImageView || groupKey == SerialStudio::DashboardPainter)
+      && !Core::License::activated())
+    groupKey = SerialStudio::DashboardDataGrid;
+#endif
 
   const bool isEmptyOutputPanel =
     group.groupType == DataModel::GroupType::Output && group.outputWidgets.empty();

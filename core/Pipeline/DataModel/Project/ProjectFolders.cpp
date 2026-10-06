@@ -27,6 +27,7 @@
 #include <QTimer>
 
 #include "AppState.h"
+#include "Core/License.h"
 #include "Core/Prompt/UserPrompt.h"
 #include "DataModel/Project/EntityKinds.h"
 #include "DataModel/Project/ProjectHistory.h"
@@ -311,8 +312,11 @@ int DataModel::ProjectFolders::addWorkspaceFolder(int parentFolderId, const QStr
   if (appState.operationMode() != SerialStudio::ProjectFile)
     return -1;
 
-  if (!m_model.m_workspaces.customizeWorkspaces())
+  if (!m_model.m_workspaces.customizeWorkspaces()) {
     m_model.m_workspaces.setCustomizeWorkspaces(true);
+    if (!m_model.m_workspaces.customizeWorkspaces())
+      return -1;
+  }
 
   if (parentFolderId != -1 && !folderExists(m_workspaceFolders, parentFolderId))
     parentFolderId = -1;
@@ -356,8 +360,11 @@ void DataModel::ProjectFolders::renameWorkspaceFolder(int folderId, const QStrin
  */
 void DataModel::ProjectFolders::deleteWorkspaceFolder(int folderId)
 {
-  if (!m_model.m_workspaces.customizeWorkspaces())
+  if (!m_model.m_workspaces.customizeWorkspaces()) {
     m_model.m_workspaces.setCustomizeWorkspaces(true);
+    if (!m_model.m_workspaces.customizeWorkspaces())
+      return;
+  }
 
   auto it = std::find_if(m_workspaceFolders.begin(),
                          m_workspaceFolders.end(),
@@ -387,8 +394,11 @@ void DataModel::ProjectFolders::deleteWorkspaceFolder(int folderId)
  */
 void DataModel::ProjectFolders::moveWorkspaceToFolder(int workspaceId, int parentFolderId)
 {
-  if (!m_model.m_workspaces.customizeWorkspaces())
+  if (!m_model.m_workspaces.customizeWorkspaces()) {
     m_model.m_workspaces.setCustomizeWorkspaces(true);
+    if (!m_model.m_workspaces.customizeWorkspaces())
+      return;
+  }
 
   if (parentFolderId != -1 && !folderExists(m_workspaceFolders, parentFolderId))
     return;
@@ -413,8 +423,11 @@ void DataModel::ProjectFolders::moveWorkspaceToFolder(int workspaceId, int paren
  */
 void DataModel::ProjectFolders::moveFolderToFolder(int folderId, int parentFolderId)
 {
-  if (!m_model.m_workspaces.customizeWorkspaces())
+  if (!m_model.m_workspaces.customizeWorkspaces()) {
     m_model.m_workspaces.setCustomizeWorkspaces(true);
+    if (!m_model.m_workspaces.customizeWorkspaces())
+      return;
+  }
 
   if (parentFolderId != -1 && !folderExists(m_workspaceFolders, parentFolderId))
     return;
@@ -442,8 +455,11 @@ void DataModel::ProjectFolders::moveFolderToFolder(int folderId, int parentFolde
  */
 void DataModel::ProjectFolders::moveWorkspaceInFolder(int workspaceId, int direction)
 {
-  if (!m_model.m_workspaces.customizeWorkspaces())
+  if (!m_model.m_workspaces.customizeWorkspaces()) {
     m_model.m_workspaces.setCustomizeWorkspaces(true);
+    if (!m_model.m_workspaces.customizeWorkspaces())
+      return;
+  }
 
   auto& workspaces = m_model.m_workspaces.mutableList();
   const int n      = static_cast<int>(workspaces.size());
@@ -476,8 +492,11 @@ void DataModel::ProjectFolders::moveWorkspaceInFolder(int workspaceId, int direc
  */
 void DataModel::ProjectFolders::moveWorkspaceFolderInParent(int folderId, int direction)
 {
-  if (!m_model.m_workspaces.customizeWorkspaces())
+  if (!m_model.m_workspaces.customizeWorkspaces()) {
     m_model.m_workspaces.setCustomizeWorkspaces(true);
+    if (!m_model.m_workspaces.customizeWorkspaces())
+      return;
+  }
 
   if (!swapFolderWithSibling(m_workspaceFolders, folderId, direction))
     return;
@@ -492,6 +511,11 @@ void DataModel::ProjectFolders::moveWorkspaceFolderInParent(int folderId, int di
  */
 void DataModel::ProjectFolders::promptAddWorkspaceFolder(int parentFolderId)
 {
+  if (!m_model.m_workspaces.customizeWorkspaces() && !Core::License::activated()) {
+    Core::License::requestProFeature(QStringLiteral("project.workspaces"));
+    return;
+  }
+
   bool ok            = false;
   const QString name = QInputDialog::getText(nullptr,
                                              ProjectModel::tr("New Folder"),
@@ -514,6 +538,11 @@ void DataModel::ProjectFolders::promptAddWorkspaceFolder(int parentFolderId)
  */
 void DataModel::ProjectFolders::promptAddWorkspaceInFolder(int parentFolderId)
 {
+  if (!m_model.m_workspaces.customizeWorkspaces() && !Core::License::activated()) {
+    Core::License::requestProFeature(QStringLiteral("project.workspaces"));
+    return;
+  }
+
   bool ok            = false;
   const QString name = QInputDialog::getText(nullptr,
                                              ProjectModel::tr("New Workspace"),
@@ -970,6 +999,11 @@ void DataModel::ProjectFolders::promptAddTableFolder(int parentFolderId)
  */
 void DataModel::ProjectFolders::promptAddTableInFolder(int parentFolderId)
 {
+  if (!Core::License::activated()) {
+    Core::License::requestProFeature(QStringLiteral("project.variables"));
+    return;
+  }
+
   bool ok            = false;
   const QString name = QInputDialog::getText(nullptr,
                                              ProjectModel::tr("New Shared Table"),

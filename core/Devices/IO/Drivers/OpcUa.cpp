@@ -30,6 +30,7 @@
 
 #include "Core/DataModel/Frame.h"
 #include "Core/EnumLabels.h"
+#include "Core/License.h"
 #include "Core/Prompt/UserPrompt.h"
 #include "Core/SerialStudio.h"
 #include "Core/Services.h"
@@ -592,6 +593,13 @@ void IO::Drivers::OpcUa::discoverEndpoints()
 {
   if (m_discovering)
     return;
+
+  if (!Core::License::activated()) {
+    m_lastError = tr("OPC UA access requires an active Serial Studio Pro license or trial");
+    Core::License::requestProFeature(QStringLiteral("driver.opcua"));
+    continuePendingDial();
+    return;
+  }
 
   const QUrl url(m_endpointUrl);
   if (!url.isValid() || url.host().isEmpty()) {

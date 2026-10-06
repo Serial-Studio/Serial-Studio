@@ -181,7 +181,8 @@ void UI::WidgetMapBuilder::buildWidgetGroups(const DataModel::Frame& frame, bool
     }
 
 #ifdef BUILD_COMMERCIAL
-    if (key == SerialStudio::DashboardPainter && !pro) {
+    if ((key == SerialStudio::DashboardPainter || key == SerialStudio::DashboardImageView)
+        && !pro) {
       auto& bucket = m_widgetGroups[key];
       if (!bucket.isEmpty() && bucket.last().groupId == group.groupId)
         bucket.removeLast();
@@ -192,6 +193,15 @@ void UI::WidgetMapBuilder::buildWidgetGroups(const DataModel::Frame& frame, bool
       auto copy  = group;
       copy.title = Dashboard::tr("%1 (Fallback)").arg(group.title);
       m_widgetGroups[SerialStudio::DashboardDataGrid].append(copy);
+    }
+
+    if (key == SerialStudio::DashboardNotificationLog && !pro) {
+      auto& bucket = m_widgetGroups[key];
+      if (!bucket.isEmpty() && bucket.last().groupId == group.groupId)
+        bucket.removeLast();
+
+      if (bucket.isEmpty())
+        m_widgetGroups.remove(key);
     }
 #endif
 

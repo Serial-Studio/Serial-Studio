@@ -34,6 +34,7 @@
 #  include "Core/Bus/MessageBus.h"
 #  include "Core/Bus/Messages.h"
 #  include "Core/IO/IPayloadInjector.h"
+#  include "Core/License.h"
 #  include "Core/Prompt/UserPrompt.h"
 #  include "Core/Services.h"
 #  include "Core/SSAssert.h"
@@ -402,6 +403,13 @@ void Sessions::Player::openFile(const QString& filePath, int sessionId)
 {
   if (filePath.isEmpty())
     return;
+
+  if (!Core::License::activated()) {
+    Core::License::requestProFeature(
+      QStringLiteral("sessions.playback"),
+      [this, filePath, sessionId] { openFile(filePath, sessionId); });
+    return;
+  }
 
   closeFile();
 

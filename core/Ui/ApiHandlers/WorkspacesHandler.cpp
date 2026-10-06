@@ -821,6 +821,11 @@ API::CommandResponse API::Handlers::WorkspacesHandler::add(const QString& id,
 
   auto& pm        = DataModel::pipelineModules().projectModel;
   const int newId = pm.addWorkspace(title);
+  if (newId < 0)
+    return CommandResponse::makeError(
+      id,
+      ErrorCode::OperationFailed,
+      QStringLiteral("Custom workspaces require an active license or trial"));
 
   QJsonObject result;
   result[QStringLiteral("id")]    = newId;
@@ -1048,6 +1053,11 @@ API::CommandResponse API::Handlers::WorkspacesHandler::autoGenerate(const QStrin
 
   auto& pm          = DataModel::pipelineModules().projectModel;
   const int firstId = pm.autoGenerateWorkspaces();
+  if (firstId < 0 && !Core::License::activated())
+    return CommandResponse::makeError(
+      id,
+      ErrorCode::OperationFailed,
+      QStringLiteral("Custom workspaces require an active license or trial"));
 
   QJsonObject result;
   result[QStringLiteral("firstWorkspaceId")] = firstId;
@@ -1090,6 +1100,12 @@ API::CommandResponse API::Handlers::WorkspacesHandler::customizeSet(const QStrin
   const bool enabled = params.value(QStringLiteral("enabled")).toBool();
   auto& pm           = DataModel::pipelineModules().projectModel;
   pm.setCustomizeWorkspaces(enabled);
+
+  if (pm.customizeWorkspaces() != enabled)
+    return CommandResponse::makeError(
+      id,
+      ErrorCode::OperationFailed,
+      QStringLiteral("Custom workspaces require an active license or trial"));
 
   QJsonObject result;
   result[QStringLiteral("enabled")] = enabled;

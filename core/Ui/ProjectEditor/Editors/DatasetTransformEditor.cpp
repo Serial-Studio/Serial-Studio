@@ -41,6 +41,7 @@ extern "C" {
 #include <QSet>
 #include <QShortcut>
 
+#include "Core/License.h"
 #include "Core/Prompt/UserPrompt.h"
 #include "Core/SerialStudio.h"
 #include "Core/Services.h"
@@ -339,6 +340,11 @@ void DataModel::DatasetTransformEditor::displayDialog(const QString& datasetTitl
                                                       const QString& luaLibrary,
                                                       const QString& jsLibrary)
 {
+  if (!Core::License::activated()) {
+    Core::License::requestProFeature(QStringLiteral("dataset.transforms"));
+    return;
+  }
+
   m_targetGroupId   = groupId;
   m_targetDatasetId = datasetId;
   m_libraryCode     = luaLibrary;

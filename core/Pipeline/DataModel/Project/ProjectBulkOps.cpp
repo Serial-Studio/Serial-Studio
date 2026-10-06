@@ -24,6 +24,7 @@
 #include <algorithm>
 #include <QSet>
 
+#include "Core/License.h"
 #include "Core/Prompt/UserPrompt.h"
 #include "DataModel/Project/EntityKinds.h"
 #include "DataModel/Project/ProjectEntities.h"
@@ -160,6 +161,16 @@ void DataModel::ProjectBulkOps::duplicateSelectedItems(const QVariantList& items
       coveredTableFolders.unite(folders.duplicateTableFolderSubtree(id));
   }
 
+  bool tablesGated = false;
+  for (const auto& v : items) {
+    const int kind = v.toMap().value(QStringLiteral("kind"), -1).toInt();
+    if (kind == DataModel::KindUserTable && !Core::License::activated())
+      tablesGated = true;
+  }
+
+  if (tablesGated)
+    Core::License::requestProFeature(QStringLiteral("project.variables"));
+
   for (const auto& v : items) {
     const auto entry   = v.toMap();
     const int kind     = entry.value(QStringLiteral("kind"), -1).toInt();
@@ -187,7 +198,9 @@ void DataModel::ProjectBulkOps::duplicateSelectedItems(const QVariantList& items
         m_model.m_outputWidgets.duplicateOutputWidget(parent, id);
         break;
       case DataModel::KindUserTable:
-        m_model.m_tables.duplicateTableByPath(path);
+        if (!tablesGated)
+          m_model.m_tables.duplicateTableByPath(path);
+
         break;
       default:
         break;

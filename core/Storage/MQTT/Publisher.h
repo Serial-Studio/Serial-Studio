@@ -435,6 +435,7 @@ private:
   quint64 m_messagesSentSeen;
   Core::Bus::MessageBus* m_bus;
   Core::Bus::Subscription m_notificationSubscription;
+  Core::Bus::Subscription m_licenseWatch;
 
   static constexpr int kSyncDebounceMs = 200;
   static constexpr int kStatsTickMs    = 500;

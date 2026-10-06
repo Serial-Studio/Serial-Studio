@@ -158,6 +158,11 @@ QHash<qint64, ResolvedWidget> buildResolvedWidgetLookup(const std::vector<Group>
     auto groupKey = SerialStudio::getDashboardWidget(g);
     if (groupKey == SerialStudio::DashboardPlot3D && !pro)
       groupKey = SerialStudio::DashboardMultiPlot;
+#ifdef BUILD_COMMERCIAL
+    if ((groupKey == SerialStudio::DashboardImageView || groupKey == SerialStudio::DashboardPainter)
+        && !pro)
+      groupKey = SerialStudio::DashboardDataGrid;
+#endif
 
     const bool isEmptyOutputPanel =
       g.groupType == DataModel::GroupType::Output && g.outputWidgets.empty();

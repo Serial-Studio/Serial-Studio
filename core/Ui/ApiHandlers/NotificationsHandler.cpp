@@ -20,6 +20,7 @@
 
 #  include "API/CommandRegistry.h"
 #  include "API/HandlerContext.h"
+#  include "Core/License.h"
 #  include "DataModel/NotificationCenter.h"
 #  include "DataModel/PipelineModules.h"
 
@@ -166,6 +167,12 @@ API::CommandResponse API::Handlers::NotificationsHandler::post(const QString& id
     return CommandResponse::makeError(
       id, ErrorCode::MissingParam, QStringLiteral("Missing required parameter: level"));
 
+  if (!Core::License::activated())
+    return CommandResponse::makeError(
+      id,
+      ErrorCode::OperationFailed,
+      QStringLiteral("Notifications require an active license or trial"));
+
   const int level = params.value(QStringLiteral("level")).toInt(0);
   QString channel, title, subtitle;
   readEventStrings(params, channel, title, subtitle);
@@ -185,6 +192,12 @@ API::CommandResponse API::Handlers::NotificationsHandler::post(const QString& id
 API::CommandResponse API::Handlers::NotificationsHandler::resolve(const QString& id,
                                                                   const QJsonObject& params)
 {
+  if (!Core::License::activated())
+    return CommandResponse::makeError(
+      id,
+      ErrorCode::OperationFailed,
+      QStringLiteral("Notifications require an active license or trial"));
+
   QString channel, title, subtitle;
   readEventStrings(params, channel, title, subtitle);
 

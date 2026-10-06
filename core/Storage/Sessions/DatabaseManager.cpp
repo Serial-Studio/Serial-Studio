@@ -34,6 +34,7 @@
 #  include "AppState.h"
 #  include "Core/Bus/MessageBus.h"
 #  include "Core/Bus/Messages.h"
+#  include "Core/License.h"
 #  include "Core/Prompt/UserPrompt.h"
 #  include "Core/SerialStudio.h"
 #  include "Core/Services.h"
@@ -671,6 +672,12 @@ void Sessions::DatabaseManager::openDatabase(const QString& filePath)
 {
   if (filePath.isEmpty())
     return;
+
+  if (!Core::License::activated()) {
+    Core::License::requestProFeature(QStringLiteral("sessions.historian"),
+                                     [this, filePath] { openDatabase(filePath); });
+    return;
+  }
 
   setBusy(true);
   QMetaObject::invokeMethod(
