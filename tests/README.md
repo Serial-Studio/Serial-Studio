@@ -394,8 +394,9 @@ every file under `qrc:/serial-studio.com/` on the composition root's own engine,
 stubbed), inside a child context. It captures `QQmlEngine::warnings` instead of letting them
 reach stderr: a `ReferenceError` on a name that is neither registered by the build nor an `id`
 declared in some enclosing file is a failure, a read of an enclosing file's `id` is the expected
-cost of creating a fragment standalone and is only counted, and every other distinct warning is
-printed once as a finding. CI runs it in the Linux build job, the ASan job and the GPL gate: a
+cost of creating a fragment standalone and is only counted, a file whose root declares a
+`required property` is skipped as a fragment (its contract is that property), and every other
+distinct warning is printed once as a finding. CI runs it in the Linux build job, the ASan job and the GPL gate: a
 Pro-only `Cpp_*` global reached from a `.qml` the GPL build compiles is a `ReferenceError` there
 and nowhere else, which is why the Historian explorer files live in the `BUILD_COMMERCIAL` list.
 
