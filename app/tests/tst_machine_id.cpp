@@ -19,6 +19,8 @@
  * SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial
  */
 
+#include <QCoreApplication>
+#include <QCryptographicHash>
 #include <QSettings>
 #include <QStandardPaths>
 #include <QTest>
@@ -74,7 +76,7 @@ class TstMachineId : public QObject {
 
 private slots:
   void initTestCase();
-  void storedFingerprintSkipsTheToolSpawn();
+  void freshReadWinsOverStoredFingerprint();
   void identifiersAreDerivedFromIt();
 };
 
@@ -92,11 +94,35 @@ void TstMachineId::initTestCase()
 }
 
 /**
- * @brief With a fingerprint on disk, the platform tools are not run at all.
+ * @brief A healthy platform read wins over the seeded store: the stored fingerprint is a
+ *        degraded-read fallback only (spec-0075 stored-first order reverted 2026-10-04,
+ *        because a copied settings file could clone a licensed seat).
  */
-void TstMachineId::storedFingerprintSkipsTheToolSpawn()
+void TstMachineId::freshReadWinsOverStoredFingerprint()
 {
-  QVERIFY(Licensing::MachineID::instance().usedStoredFingerprint());
+  auto& machine = Licensing::MachineID::instance();
+  if (machine.usedStoredFingerprint())
+    QSKIP("degraded platform read on this host: precedence cannot be proven here");
+
+#if defined(Q_OS_LINUX)
+  const auto os = QStringLiteral("Linux");
+#elif defined(Q_OS_MAC)
+  const auto os = QStringLiteral("macOS");
+#elif defined(Q_OS_WIN)
+  const auto os = QStringLiteral("Windows");
+#elif defined(Q_OS_BSD)
+  const auto os = QStringLiteral("BSD");
+#else
+  const auto os = QStringLiteral("Unknown");
+#endif
+
+  const auto seeded = QStringLiteral("%1@%2:%3")
+                        .arg(QCoreApplication::applicationName(),
+                             QStringLiteral("00000000-1111-2222-3333-444444444444"),
+                             os);
+  const auto fromSeed =
+    QCryptographicHash::hash(seeded.toUtf8(), QCryptographicHash::Blake2s_128).toBase64();
+  QVERIFY(machine.machineId() != QString::fromUtf8(fromSeed));
 }
 
 /**

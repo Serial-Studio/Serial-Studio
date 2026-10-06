@@ -185,24 +185,6 @@ static QString readBsdId(bool& complete)
 #endif
 
 /**
- * @brief The OS label the fingerprint is stored under, without spawning anything.
- */
-static QString platformName()
-{
-#if defined(Q_OS_LINUX)
-  return QStringLiteral("Linux");
-#elif defined(Q_OS_MAC)
-  return QStringLiteral("macOS");
-#elif defined(Q_OS_WIN)
-  return QStringLiteral("Windows");
-#elif defined(Q_OS_BSD)
-  return QStringLiteral("BSD");
-#else
-  return QStringLiteral("Unknown");
-#endif
-}
-
-/**
  * @brief Gathers the raw, platform-specific machine identifier and OS label.
  */
 static QString readPlatformId(QString& os, bool& complete)
@@ -268,8 +250,8 @@ const QString& Licensing::MachineID::appVerMachineId() const noexcept
 }
 
 /**
- * @brief Whether this run answered from the persisted fingerprint instead of spawning the
- *        platform tools, which is the steady state after the first launch.
+ * @brief Whether this run fell back to the persisted fingerprint because the platform read
+ *        degraded; false on every healthy launch (the store is a fallback, never a shortcut).
  */
 bool Licensing::MachineID::usedStoredFingerprint() const noexcept
 {
@@ -339,23 +321,27 @@ void Licensing::MachineID::saveLastGoodRawId(const QString& rawId, const QString
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Derives the machine id and key from the persisted fingerprint, spawning the platform
- *        tools only when there is none: ioreg/reg/powershell ran on the GUI thread inside the
- *        composition root on EVERY launch. Their timeouts are deliberately NOT shortened -- a
- *        truncated first read would be persisted as this machine's identity.
+ * @brief Collects system data to derive the machine id and encryption key; a healthy platform
+ *        read refreshes the last-good store, and only a degraded read reuses the stored
+ *        fingerprint, so a transient tool failure never re-keys the machine. Stored-first
+ *        (spec 0075) was reverted 2026-10-04: a copied settings file could clone a seat.
  */
 void Licensing::MachineID::readInformation()
 {
-  QString os    = platformName();
-  QString id    = loadLastGoodRawId(os);
-  bool complete = !id.isEmpty();
+  QString os;
+  bool complete = false;
+  QString id    = readPlatformId(os, complete);
 
-  m_usedStoredFingerprint = complete;
+  if (complete)
+    saveLastGoodRawId(id, os);
 
-  if (!complete) {
-    id = readPlatformId(os, complete);
-    if (complete)
-      saveLastGoodRawId(id, os);
+  else {
+    const auto stored = loadLastGoodRawId(os);
+    if (!stored.isEmpty()) {
+      qWarning() << "[MachineID] degraded read; reusing last-good fingerprint";
+      id                      = stored;
+      m_usedStoredFingerprint = true;
+    }
 
     else
       qWarning() << "[MachineID] degraded read and no stored fingerprint";
