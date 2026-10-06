@@ -25,6 +25,8 @@
 #include <QRandomGenerator>
 #include <QSet>
 
+#include "Core/DataModel/FrameKeys.h"
+
 //--------------------------------------------------------------------------------------------------
 // Constants
 //--------------------------------------------------------------------------------------------------
@@ -105,9 +107,11 @@ bool API::Auth::commandIsControlScriptOnly(const QString& command)
 
 /**
  * @brief Whether a command reaches the connected hardware, and therefore has to clear the
- *        device-write consent gate before a remote client may run it.
+ *        device-write consent gate before a remote client may run it. An action update counts
+ *        when it changes the bytes, target or arming of an action (auto-execute and timers
+ *        write later with no further prompt); duplicating copies whatever is armed.
  */
-bool API::Auth::commandWritesToDevice(const QString& command)
+bool API::Auth::commandWritesToDevice(const QString& command, const QJsonObject& params)
 {
   static const QSet<QString> kDeviceWriteCommands = {
     QStringLiteral("io.writeData"),
@@ -115,7 +119,37 @@ bool API::Auth::commandWritesToDevice(const QString& command)
     QStringLiteral("console.send"),
   };
 
-  return kDeviceWriteCommands.contains(command);
+  if (kDeviceWriteCommands.contains(command))
+    return true;
+
+  if (command == QStringLiteral("project.action.duplicate"))
+    return true;
+
+  if (command != QStringLiteral("project.action.update"))
+    return false;
+
+  if (params.value(QStringLiteral("autoExecuteOnConnect")).toBool())
+    return true;
+
+  if (params.value(QStringLiteral("timerMode")).toInt() != 0)
+    return true;
+
+  static const QStringList kTxParams = {
+    QStringLiteral("txData"),
+    QStringLiteral("binaryData"),
+    QStringLiteral("checksum"),
+    QStringLiteral("eolSequence"),
+    QStringLiteral("txEncoding"),
+    QString(Keys::SourceId),
+    QStringLiteral("repeatCount"),
+    QStringLiteral("timerIntervalMs"),
+  };
+
+  for (const auto& key : kTxParams)
+    if (params.contains(key))
+      return true;
+
+  return false;
 }
 
 /**

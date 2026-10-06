@@ -185,7 +185,7 @@ void API::Handlers::ProjectParserCommands::registerCodeCommands()
       "for the parse() signature, return-shape rules, "
       "and the tableGet/tableSet API. For Built-In (2), "
       "prefer project.frameParser.setTemplate; passing "
-      "the JSON descriptor as `code` also works. Remote clients must clear the one-time script-install consent prompt (the user's answer is persisted); in-process callers are not prompted."),
+      "the JSON descriptor as `code` also works. Remote clients must clear the one-time script-install consent prompt (the user's answer is remembered for the rest of the session); in-process callers are not prompted."),
     setCodeSchema,
     &parserSetCode);
 

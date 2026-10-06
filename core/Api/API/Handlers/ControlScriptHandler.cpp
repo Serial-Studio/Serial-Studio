@@ -72,7 +72,7 @@ void API::Handlers::ControlScriptHandler::registerCommands()
       "Replace the project's control script source (params: code). The script is "
       "persisted in the project and applied to the live runtime; if a device is "
       "connected it is recompiled and restarted immediately. Validate first with "
-      "controlScript.dryRun. Remote clients must clear the one-time script-install consent prompt (the user's answer is persisted); in-process callers are not prompted."),
+      "controlScript.dryRun. Remote clients must clear the one-time script-install consent prompt (the user's answer is remembered for the rest of the session); in-process callers are not prompted."),
     codeSchema,
     &setScript);
 
@@ -80,7 +80,7 @@ void API::Handlers::ControlScriptHandler::registerCommands()
     QStringLiteral("controlScript.setCode"),
     QStringLiteral(
       "Replace the control script source (alias of controlScript.set; params: "
-      "code; matches the project.frameParser.setCode naming convention). Remote clients must clear the one-time script-install consent prompt (the user's answer is persisted); in-process callers are not prompted."),
+      "code; matches the project.frameParser.setCode naming convention). Remote clients must clear the one-time script-install consent prompt (the user's answer is remembered for the rest of the session); in-process callers are not prompted."),
     codeSchema,
     &setScript);
 

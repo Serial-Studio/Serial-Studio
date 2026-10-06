@@ -34,13 +34,13 @@
 API::ServerAuth::ServerAuth(QSettings& settings)
   : m_settings(settings)
   , m_deviceWrite(settings,
-                  QStringLiteral("API/DeviceWriteConsent"),
+                  QString(),
                   tr("Allow API device control?"),
                   tr("A program using Serial Studio's local API is requesting to send data to the "
                      "connected device. Allow API clients to write to the device?"),
                   this)
   , m_scriptInstall(settings,
-                    QStringLiteral("API/ScriptInstallConsent"),
+                    QString(),
                     tr("Allow API clients to modify project scripts?"),
                     tr("A program using Serial Studio's local API wants to change this project's "
                        "scripts. Scripts run with the application's full privileges, including "
@@ -168,10 +168,10 @@ std::optional<API::CommandResponse> API::ServerAuth::authorizeRemoteCommand(
       QStringLiteral("%1 is control-script only and not available to API clients").arg(command));
 
   if (API::Auth::commandInstallsScript(command, params))
-    return refusalFor(m_scriptInstall.authorize(), id, QStringLiteral("Script changes"));
+    return refusalFor(m_scriptInstall.authorize(command), id, QStringLiteral("Script changes"));
 
-  if (API::Auth::commandWritesToDevice(command))
-    return refusalFor(m_deviceWrite.authorize(), id, QStringLiteral("Device writes"));
+  if (API::Auth::commandWritesToDevice(command, params))
+    return refusalFor(m_deviceWrite.authorize(command), id, QStringLiteral("Device writes"));
 
   return std::nullopt;
 }

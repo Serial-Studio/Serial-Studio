@@ -290,8 +290,8 @@ Three actions need a one-time "yes" from the person at the screen. Each is refus
 
 | Prompt | Who triggers it | Covers | Remembered |
 |--------|-----------------|--------|------------|
-| **Allow API device control?** | Remote API/MCP/gRPC clients | `io.writeData`, `io.ble.writeCharacteristic`, `console.send`, raw-mode bytes | Per installation |
-| **Allow API clients to modify project scripts?** | Remote API/MCP/gRPC clients | `controlScript.set`/`setCode`, `project.frameParser.setCode`, `project.source.setFrameParserCode`, `project.dataset.setTransformCode`, `project.transformLibrary.set`, `project.painter.setCode`, `project.loadJson`, `project.open`, `project.template.apply`, and `project.dataset.update` / `project.group.update` / `project.outputWidget.update` when the call carries `transformCode` / `painterCode` / `transmitFunction` | Per installation |
+| **Allow API device control?** | Remote API/MCP/gRPC clients | `io.writeData`, `io.ble.writeCharacteristic`, `console.send`, raw-mode bytes, and `project.action.update` / `project.action.duplicate` when the call changes an action's payload, target or arming | Per session |
+| **Allow API clients to modify project scripts?** | Remote API/MCP/gRPC clients | `controlScript.set`/`setCode`, `project.frameParser.setCode`, `project.source.setFrameParserCode`, `project.dataset.setTransformCode`, `project.transformLibrary.set`, `project.painter.setCode`, `project.loadJson`, `project.open`, `project.template.apply`, and `project.dataset.update` / `project.group.update` / `project.outputWidget.update` when the call carries `transformCode` / `painterCode` / `transmitFunction` | Per session |
 | **Allow this project's scripts to launch programs?** | Any script calling `system.exec`, including the project's own control script | `system.exec` | Per project file; session-only for a project without a file |
 
 Project scripts run with the application's full privileges: a script installed over the API
@@ -916,7 +916,8 @@ python test_api.py send io.writeData -p data=SGVsbG8gV29ybGQ=
 
 > Device-write commands (`io.writeData`, `io.ble.writeCharacteristic`, `console.send`) sent
 > by a remote API/MCP client trigger a one-time consent prompt; the user's answer is
-> remembered. See [Consent Prompts](#consent-prompts) for the headless override.
+> remembered for the rest of the session. See [Consent Prompts](#consent-prompts) for the
+> headless override.
 
 > Frame-detection mode and start/finish delimiter sequences are no longer
 > live runtime commands. They are per-source project settings configured

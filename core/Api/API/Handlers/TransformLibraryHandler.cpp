@@ -77,7 +77,7 @@ void API::Handlers::TransformLibraryHandler::registerCommands(CommandRegistry& r
     QStringLiteral(
       "Replace a shared transform library (params: code, [language]; empty code "
       "clears it). Persisted in the project; every transform engine recompiles "
-      "immediately. Validate first with project.transformLibrary.dryRun. Remote clients must clear the one-time script-install consent prompt (the user's answer is persisted); in-process callers are not prompted."),
+      "immediately. Validate first with project.transformLibrary.dryRun. Remote clients must clear the one-time script-install consent prompt (the user's answer is remembered for the rest of the session); in-process callers are not prompted."),
     codeSchema,
     &setLibrary);
 

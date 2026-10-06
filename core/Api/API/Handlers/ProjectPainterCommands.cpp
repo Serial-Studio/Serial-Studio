@@ -58,7 +58,7 @@ void API::Handlers::ProjectPainterCommands::registerCommands()
       "Validate with project.painter.dryRun before setCode. **Always call "
       "meta.fetchScriptingDocs{kind:'painter_js'} first** for the full API "
       "surface and worked examples -- don't invent canvas methods from JS "
-      "DOM Canvas, the surface is QPainter-shaped. Remote clients must clear the one-time script-install consent prompt (the user's answer is persisted); in-process callers are not prompted."),
+      "DOM Canvas, the surface is QPainter-shaped. Remote clients must clear the one-time script-install consent prompt (the user's answer is remembered for the rest of the session); in-process callers are not prompted."),
     makeSchema({
       {QStringLiteral("groupId"),
        QStringLiteral("integer"),

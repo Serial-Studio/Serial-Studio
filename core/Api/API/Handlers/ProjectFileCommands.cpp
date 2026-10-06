@@ -195,7 +195,7 @@ void API::Handlers::ProjectFileCommands::registerLifecycleCommands()
       "ConsoleOnly. Path must be absolute. Pass dryRun:true to read the "
       "file and return wouldDiscard + wouldApply summaries without loading. "
       "Re-opening the project that is already loaded is a no-op that keeps unsaved "
-      "edits: the reply reports reloaded:false for it. Remote clients must clear the one-time script-install consent prompt (the user's answer is persisted); in-process callers are not prompted."),
+      "edits: the reply reports reloaded:false for it. Remote clients must clear the one-time script-install consent prompt (the user's answer is remembered for the rest of the session); in-process callers are not prompted."),
     makeSchema(
       {
         {QStringLiteral("filePath"),
@@ -237,7 +237,7 @@ void API::Handlers::ProjectFileCommands::registerLifecycleCommands()
       "(top-level: title, frameStart, frameEnd, frameDetection, decoder, "
       "frameParser, groups, actions, ...). Prefer project.template.apply "
       "for canned starters. Pass dryRun:true to return wouldDiscard + "
-      "wouldApply summaries without loading. Remote clients must clear the one-time script-install consent prompt (the user's answer is persisted); in-process callers are not prompted."),
+      "wouldApply summaries without loading. Remote clients must clear the one-time script-install consent prompt (the user's answer is remembered for the rest of the session); in-process callers are not prompted."),
     makeSchema(
       {
         {QStringLiteral("config"),
@@ -381,7 +381,7 @@ void API::Handlers::ProjectFileCommands::registerTemplateCommands()
       "applying, configure the broker via project.mqtt.subscriber.setConfig.\n"
       "Pass dryRun:true to return wouldDiscard + wouldApply summaries "
       "without applying. Useful when the user is choosing between two "
-      "templates. Remote clients must clear the one-time script-install consent prompt (the user's answer is persisted); in-process callers are not prompted."),
+      "templates. Remote clients must clear the one-time script-install consent prompt (the user's answer is remembered for the rest of the session); in-process callers are not prompted."),
     makeSchema(
       {
         {QStringLiteral("templateId"),

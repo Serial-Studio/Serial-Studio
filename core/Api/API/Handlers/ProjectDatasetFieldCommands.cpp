@@ -93,7 +93,7 @@ void API::Handlers::ProjectDatasetFieldCommands::registerFieldCommands()
       "(tableGet/tableSet/datasetGetRaw/datasetGetFinal), and "
       "execution-order rules -- a transform may read RAW values from any "
       "dataset but only FINAL values of datasets earlier in "
-      "project.dataset.getExecutionOrder. Remote clients must clear the one-time script-install consent prompt (the user's answer is persisted); in-process callers are not prompted."),
+      "project.dataset.getExecutionOrder. Remote clients must clear the one-time script-install consent prompt (the user's answer is remembered for the rest of the session); in-process callers are not prompted."),
     makeSchema(
       {
         {  QString(Keys::GroupId),QStringLiteral("integer"),QStringLiteral("Owning group id")                           },

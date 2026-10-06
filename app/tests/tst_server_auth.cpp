@@ -179,7 +179,8 @@ private:
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Test-mode settings so ServerAuth persists into a throwaway store.
+ * @brief Test-mode settings so ServerAuth's token lives in a throwaway store (consent is
+ *        session-scoped since 2026-10-04 and never persists).
  */
 void TstServerAuth::initTestCase()
 {
@@ -334,7 +335,7 @@ void TstServerAuth::commandClassification()
   QFETCH(bool, writesToDevice);
 
   QCOMPARE(API::Auth::commandIsControlScriptOnly(command), scriptOnly);
-  QCOMPARE(API::Auth::commandWritesToDevice(command), writesToDevice);
+  QCOMPARE(API::Auth::commandWritesToDevice(command, QJsonObject()), writesToDevice);
 }
 
 //--------------------------------------------------------------------------------------------------

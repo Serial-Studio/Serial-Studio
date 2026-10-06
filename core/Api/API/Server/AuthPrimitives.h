@@ -55,7 +55,7 @@ namespace Auth {
  * @brief Whether a command reaches the connected hardware, and therefore has to clear the
  *        device-write consent gate before a remote client may run it.
  */
-[[nodiscard]] bool commandWritesToDevice(const QString& command);
+[[nodiscard]] bool commandWritesToDevice(const QString& command, const QJsonObject& params);
 
 /**
  * @brief Whether a command (with these parameters) installs script code into the project. Every
