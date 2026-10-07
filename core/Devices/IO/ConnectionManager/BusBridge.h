@@ -53,6 +53,8 @@ public:
     std::function<void()> resetFrameReader;
     std::function<void(int)> reconfigureSource;
     std::function<void()> rebuildStreams;
+    std::function<bool()> deferLicenseRebuild;
+    std::function<void()> observeContent;
   };
 
   using ProjectSnapshot = std::shared_ptr<const Core::Bus::ProjectStructureSnapshot>;

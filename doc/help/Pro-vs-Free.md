@@ -1,18 +1,28 @@
 # Pro vs Free
 
-A comparison of features in the free (GPLv3) version against Serial Studio Pro.
+A comparison of the free feature set against Serial Studio Pro.
+
+## Editions
+
+Serial Studio comes in two forms:
+
+- **Official binary.** The download from [serial-studio.com](https://serial-studio.com) and GitHub releases. It runs without a license, and the free features work with no time limit for personal, educational, and open-source use; commercial use needs a Pro license. Pro features are built in and unlock with a license or the 14-day trial (see [Pricing](#pricing)).
+- **GPL build.** Compiled from source under the GPLv3. It contains the free feature set only.
+
+The **Free** column in the tables below applies to both: the official binary without a license, and a GPL build.
 
 ## Quick summary
 
-**Free (GPLv3) version:**
+**Free features:**
 - Core protocols: Serial/UART, TCP/UDP, Bluetooth LE.
 - All standard widgets and visualization.
 - Full project editor and dashboard customization.
 - CSV export and playback.
-- Licensed under the GPLv3: usable for any purpose, commercial use included.
+- A GPL build is licensed under the GPLv3: usable for any purpose, commercial use included. The official binary without a license is for personal, educational, and open-source use.
 
 **Pro version:**
 - Everything in the free version, plus:
+- Dataset value transforms, Variables, custom workspaces, and the notification log.
 - Advanced protocols: MQTT, Modbus, CAN Bus, OPC UA, Audio Input, raw USB, HID, Process I/O.
 - Pro widgets: 3D Plot, Waterfall (spectrogram), Image View (live camera feed), Canvas (user-scripted Canvas2D widget).
 - Output (control) widgets: buttons, toggles, sliders, knobs, text fields, and the Output Panel.
@@ -27,8 +37,8 @@ A comparison of features in the free (GPLv3) version against Serial Studio Pro.
 
 ## Complete Feature Comparison
 
-| Category | Feature | Free (GPLv3) | Pro |
-|----------|---------|--------------|-----|
+| Category | Feature | Free | Pro |
+|----------|---------|------|-----|
 | **Data Sources** | | | |
 | | Serial/UART (USB, RS-232) | ✅ | ✅ |
 | | TCP/UDP Network | ✅ | ✅ |
@@ -53,6 +63,8 @@ A comparison of features in the free (GPLv3) version against Serial Studio Pro.
 | | Binary (Direct) Mode | ✅ | ✅ |
 | | Frame Parsers (JavaScript, Lua, Built-In templates) | ✅ | ✅ |
 | | Checksum Validation | ✅ | ✅ |
+| | Dataset Value Transforms (JavaScript, Lua) | ❌ | ✅ |
+| | Variables (shared tables) | ❌ | ✅ |
 | **Visualization Widgets** | | | |
 | | Plot (time-series) | ✅ | ✅ |
 | | Multiple Plots | ✅ | ✅ |
@@ -84,6 +96,8 @@ A comparison of features in the free (GPLv3) version against Serial Studio Pro.
 | | Multi-window Support | ✅ | ✅ |
 | | Customizable Layouts | ✅ | ✅ |
 | | Taskbar Integration | ✅ | ✅ |
+| | Custom Workspaces | ❌ | ✅ |
+| | Notification Log | ❌ | ✅ |
 | | File Transmission (XMODEM/YMODEM/ZMODEM) | ❌ | ✅ |
 | | In-App AI Assistant | ❌ | ✅ |
 | | Operator Deployment Generation | ❌ | ✅ |
@@ -98,12 +112,12 @@ A comparison of features in the free (GPLv3) version against Serial Studio Pro.
 | | Linux (x64, AppImage/Flatpak) | ✅ | ✅ |
 | **Licensing** | | | |
 | | Personal/Educational Use | ✅ | ✅ |
-| | Commercial Use | ✅ (under GPLv3 terms) | ✅ |
+| | Commercial Use | GPL build only (under GPLv3 terms) | ✅ |
 | | Open Source Projects | ✅ | ✅ |
 | | Source Code Access (GPL modules) | ✅ | ✅ |
 | **Distribution** | | | |
 | | Compile from Source | ✅ | N/A |
-| | Official Binary Download | Trial only | ✅ |
+| | Official Binary Download | ✅ (free features, no time limit) | ✅ |
 | **Support** | | | |
 | | Community Support (GitHub) | ✅ | ✅ |
 | | Email Support | ❌ | ✅ |
@@ -394,6 +408,18 @@ signal debugging.
 
 **Learn more:** [Data Sources - Multi-device mode](Data-Sources.md#multi-device-mode)
 
+### Dataset Transforms, Variables, and Custom Workspaces
+
+**What they are:** Three authoring features of the Project Editor. A [dataset transform](Dataset-Transforms.md) is a per-dataset JavaScript or Lua function that converts the raw parsed value before it reaches the dashboard. [Variables](Data-Tables.md) are shared tables that transforms read and write. Custom workspaces replace the automatic dashboard tabs with ones the project defines.
+
+**What the gate covers:** Opening the transform editor, creating, duplicating, or importing a table, adding a variable, and switching a project to custom workspaces each need a license or an active trial.
+
+**Connecting:** A project that contains a dataset transform or a Variables table also needs a license or an active trial to connect, whatever created it. The prompt shown at Connect lists how many transforms and tables the project has. Removing them is free: right-click a dataset and choose **Remove Transform**, or delete the table, and the project connects again. Bringing them back while connected without a license, by opening such a project, undoing the removal or switching to project mode, ends the session with the same prompt. A session that was already running when a license or trial ended keeps running until you disconnect. CSV playback is not affected, because playback shows the recorded values and never runs a transform.
+
+### Notification Log
+
+**What it is:** The dashboard tool window that lists [notifications](Notifications.md) posted by scripts, alarm bands, and the API. Showing it needs a license or an active trial, as does posting to it.
+
 ### Historian
 
 **What it is:** Recording of complete sessions (parsed frames, raw bytes, table snapshots, and project metadata) into a single SQLite `.db` file.
@@ -476,6 +502,7 @@ systems, university research, and home automation.
 - Raw USB (bulk/isochronous via libusb), HID, and Process I/O.
 - 3D plots, Waterfall (spectrogram), Canvas, and live Image View (camera feeds).
 - Output (control) widgets and multi-device projects.
+- Dataset transforms, Variables, custom workspaces, and the notification log.
 - MDF4 export and playback, plus the Historian.
 - File transfers (XMODEM/YMODEM/ZMODEM) and the in-app AI Assistant.
 - Email support.
@@ -497,8 +524,9 @@ version too (see [Binary (Direct) Mode](#binary-direct-mode) above).
   is a one-time perpetual purchase (currently offered for individual use)
 
 **Free Trial:**
-- 14-day trial included with official binary download
+- The official binary offers the 14-day trial the first time a Pro feature is used, with a single question; nothing starts at installation or at launch
 - Full Pro features unlocked during trial
+- Starting it needs an internet connection, to register the trial on the machine
 - One trial per version, per hardware (cannot reset by reinstalling)
 - A new trial unlocks when a new Serial Studio version is released
 - No credit card required
@@ -511,8 +539,9 @@ version too (see [Binary (Direct) Mode](#binary-direct-mode) above).
 2. Download the official binary (if you were using a GPL build).
 3. Open Serial Studio.
 4. Open the Licensing dialog: click **About** in the toolbar, then **Manage
-   License**. (The toolbar also shows an **Activate** shortcut once the
-   14-day trial has expired and no key is active.)
+   License**. (Once the 14-day trial has expired, the prompt shown when a Pro
+   feature is used has an **Activate License** button that opens the same
+   dialog.)
 5. Paste the license key and click **Activate**.
 
 Pro features unlock once the key is accepted.
@@ -563,7 +592,7 @@ Contributors to the Serial Studio project can receive a free Pro license.
 
 ### What happens if my trial expires?
 
-Pro features become locked. You can:
+Pro features become locked, and the free features keep working with no time limit. A message reports the expiry once per release; after that the console welcome text carries the line `Pro trial expired. Free features remain fully functional.`, and using a Pro feature shows a prompt with **Activate License** and **Get Serial Studio Pro** buttons. Historian databases recorded during the trial cannot be opened in Serial Studio until a license is active; they are standard SQLite files and stay readable with any SQLite tool. You can:
 - Purchase a Pro license to unlock them
 - Continue using Free features (Serial, TCP/UDP, BLE, standard widgets)
 - Wait for the next Serial Studio release, which starts a fresh 14-day trial
@@ -586,7 +615,7 @@ equipment. Updates are included on every plan.
 
 ### Can I try Pro before buying?
 
-**Yes.** Download the official binary and use the 14-day trial. Full Pro features unlocked, no credit card required.
+**Yes.** Download the official binary and use any Pro feature: Serial Studio asks whether to start the 14-day trial. Full Pro features unlocked, no account and no credit card required.
 
 ### What if I need more licenses for my team?
 
@@ -670,20 +699,21 @@ Yes, for Pro customers. Contact alex@serial-studio.com for rates and availabilit
 
 ## Summary
 
-| | Free (GPLv3) | Pro |
-|---|--------------|-----|
+| | Free | Pro |
+|---|------|-----|
 | **Best for** | Hobbyists, students, open-source | Professionals, businesses, industry |
 | **Protocols** | Basic (Serial, Network, BLE) | Advanced (MQTT, Modbus, CAN, OPC UA, Audio, Raw USB, HID, Process I/O) |
-| **Widgets** | Standard | Standard + 3D Plot, XY Plot, Waterfall, Image View, Canvas, Output widgets |
+| **Widgets** | Standard | Standard + 3D Plot, Waterfall, Image View, Canvas, Output widgets |
+| **Authoring** | Project Editor, frame parsers | + Dataset transforms, Variables, custom workspaces |
 | **Export** | CSV | CSV + MDF4 |
-| **Commercial use** | ✅ (GPLv3 terms) | ✅ |
+| **Commercial use** | GPL build only (GPLv3 terms) | ✅ |
 | **Support** | Community | Email + Community |
 | **Cost** | Free | Monthly, yearly, or lifetime license |
 
 ## More information
 
 - **Feature list:** see the [feature comparison table](#complete-feature-comparison) above.
-- **Trial:** the [official binary](https://serial-studio.com) includes a 14-day trial.
+- **Trial:** the [official binary](https://serial-studio.com) offers a 14-day trial the first time a Pro feature is used.
 - **Earn a license:** [contribute to the project](Earn-Pro-License.md).
 - **Contact:** alex@serial-studio.com
 
@@ -695,4 +725,4 @@ Yes, for Pro customers. Contact alex@serial-studio.com for rates and availabilit
 - [Getting Started](Getting-Started.md) - First-time setup
 - [Earn a Pro License](Earn-Pro-License.md) - Contribute for free access
 
-Pricing and the trial download are at [serial-studio.com](https://serial-studio.com).
+Pricing and downloads are at [serial-studio.com](https://serial-studio.com).

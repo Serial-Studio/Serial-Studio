@@ -4666,16 +4666,26 @@ Aktivera endast detta i betrodda nätverk. Ej betrodda klienter kan läsa liveda
     </message>
     <message>
         <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="298"/>
+        <source>Remove Transform</source>
+        <translation>Ta Bort Transformering</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="299"/>
         <source>Remove every user workspace</source>
         <translation>Ta bort alla användararbetsytor</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="299"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="300"/>
+        <source>Remove the value transform from this dataset</source>
+        <translation>Ta bort värdetransformen från detta dataset</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="301"/>
         <source>Rename</source>
         <translation>Byt Namn</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="300"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="302"/>
         <source>Rename this item</source>
         <translation>Byt namn på detta objekt</translation>
     </message>
@@ -4684,167 +4694,167 @@ Aktivera endast detta i betrodda nätverk. Ej betrodda klienter kan läsa liveda
         <translation type="vanished">Återställ</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="301"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="303"/>
         <source>Replay</source>
         <translation>Spela Upp</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="302"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="304"/>
         <source>Replay selected session on the dashboard</source>
         <translation>Spela upp vald session på instrumentpanelen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="303"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="305"/>
         <source>Reset</source>
         <translation>Återställ</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="304"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="306"/>
         <source>Reset Alarms</source>
         <translation>Återställ Larm</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="305"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="307"/>
         <source>Reset to Auto Layout</source>
         <translation>Återställ till Automatisk Layout</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="306"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="308"/>
         <source>Restore</source>
         <translation>Återställ</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="307"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="309"/>
         <source>Restore Backup</source>
         <translation>Återställ Säkerhetskopia</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="308"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="310"/>
         <source>Restore Project</source>
         <translation>Återställ Projekt</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="309"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="311"/>
         <source>Restore a recent automatic snapshot of the current project</source>
         <translation>Återställ en nyligen automatisk ögonblicksbild av det aktuella projektet</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="310"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="312"/>
         <source>Restore the project file from this session file</source>
         <translation>Återställ projektfilen från denna sessionsfil</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="311"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="313"/>
         <source>Resume</source>
         <translation>Återuppta</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="312"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="314"/>
         <source>Review project, link, and script diagnostics</source>
         <translation>Granska projekt-, länk- och skriptdiagnostik</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="313"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="315"/>
         <source>Run API commands and script macros interactively</source>
         <translation>Kör API-kommandon och skriptmakron interaktivt</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="314"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="316"/>
         <source>Save</source>
         <translation>Spara</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="315"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="317"/>
         <source>Save As</source>
         <translation>Spara Som</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="316"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="318"/>
         <source>Save Project</source>
         <translation>Spara Projekt</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="317"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="319"/>
         <source>Save Project As</source>
         <translation>Spara Projekt Som</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="318"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="320"/>
         <source>Search</source>
         <translation>Sök</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="319"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="321"/>
         <source>Search and run any Serial Studio command</source>
         <translation>Sök och kör valfritt Serial Studio-kommando</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="320"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="322"/>
         <source>Seed Aliases from Titles</source>
         <translation>Fyll Alias från Titlar</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="321"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="323"/>
         <source>Select Bluetooth Low Energy communication</source>
         <translation>Välj Bluetooth Low Energy-kommunikation</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="322"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="324"/>
         <source>Select CAN Bus communication (Pro)</source>
         <translation>Välj CAN Bus-kommunikation (Pro)</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="323"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="325"/>
         <source>Select EtherNet/IP communication (Pro)</source>
         <translation>Välj EtherNet/IP-kommunikation (Pro)</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="324"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="326"/>
         <source>Select HID device communication (Pro)</source>
         <translation>Välj HID-enhetskommunikation (Pro)</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="325"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="327"/>
         <source>Select IEC 60870-5-104 communication (Pro)</source>
         <translation>Välj IEC 60870-5-104-kommunikation (Pro)</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="326"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="328"/>
         <source>Select MODBUS communication (Pro)</source>
         <translation>Välj MODBUS-kommunikation (Pro)</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="327"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="329"/>
         <source>Select OPC UA communication (Pro)</source>
         <translation>Välj OPC UA-kommunikation (Pro)</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="328"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="330"/>
         <source>Select Serial port (UART) communication</source>
         <translation>Välj seriell port (UART)-kommunikation</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="329"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="331"/>
         <source>Select Siemens S7comm communication (Pro)</source>
         <translation>Välj Siemens S7comm-kommunikation (Pro)</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="330"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="332"/>
         <source>Select TCP/UDP network communication</source>
         <translation>Välj TCP/UDP-nätverkskommunikation</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="331"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="333"/>
         <source>Select audio input device (Pro)</source>
         <translation>Välj ljudingångsenhet (Pro)</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="332"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="334"/>
         <source>Select process pipe communication (Pro)</source>
         <translation>Välj processrörkommunikation (Pro)</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="333"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="335"/>
         <source>Select raw USB communication (Pro)</source>
         <translation>Välj rå USB-kommunikation (Pro)</translation>
     </message>
@@ -4857,12 +4867,12 @@ Aktivera endast detta i betrodda nätverk. Ej betrodda klienter kan läsa liveda
         <translation type="vanished">Sessioner</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="334"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="336"/>
         <source>Set a password and lock the Project Editor</source>
         <translation>Ange ett lösenord och lås Projektredigeraren</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="335"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="337"/>
         <source>Set a password to prevent session deletions</source>
         <translation>Ange ett lösenord för att förhindra radering av sessioner</translation>
     </message>
@@ -4871,207 +4881,207 @@ Aktivera endast detta i betrodda nätverk. Ej betrodda klienter kan läsa liveda
         <translation type="vanished">Hjälp för Delat Minne</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="336"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="338"/>
         <source>Show</source>
         <translation>Visa</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="337"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="339"/>
         <source>Show All Hidden Groups</source>
         <translation>Visa Alla Dolda Grupper</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="338"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="340"/>
         <source>Show application info and license details</source>
         <translation>Visa applikationsinformation och licensdetaljer</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="339"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="341"/>
         <source>Show this dataset as a 2D plot</source>
         <translation>Visa denna datamängd som ett 2D-diagram</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="340"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="342"/>
         <source>Show this dataset as a bar or level</source>
         <translation>Visa denna datamängd som en stapel eller nivå</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="341"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="343"/>
         <source>Show this dataset as a compass</source>
         <translation>Visa denna datamängd som en kompass</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="342"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="344"/>
         <source>Show this dataset as a gauge</source>
         <translation>Visa denna datamängd som en mätare</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="343"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="345"/>
         <source>Show this dataset as a waterfall plot</source>
         <translation>Visa denna datamängd som ett vattenfallsdiagram</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="344"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="346"/>
         <source>Show this dataset as an FFT plot</source>
         <translation>Visa denna datamängd som en FFT-plot</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="345"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="347"/>
         <source>Show this dataset as an LED indicator</source>
         <translation>Visa denna datamängd som en LED-indikator</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="346"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="348"/>
         <source>Show this dataset as an analog meter</source>
         <translation>Visa denna datamängd som en analog mätare</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="347"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="349"/>
         <source>Show timestamps in the console</source>
         <translation>Visa tidsstämplar i konsolen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="348"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="350"/>
         <source>Siemens S7</source>
         <translation>Siemens S7</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="349"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="351"/>
         <source>Silence Alarms</source>
         <translation>Tysta Larm</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="350"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="352"/>
         <source>Silence every alarm and event sound</source>
         <translation>Tysta alla larm- och händelseljud</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="351"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="353"/>
         <source>Slider</source>
         <translation>Skjutreglage</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="352"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="354"/>
         <source>Start Menu</source>
         <translation>Startmeny</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="353"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="355"/>
         <source>Stop the alarm sound; points stay unacknowledged and a new alarm re-sounds</source>
         <translation>Stoppa larmljudet; punkter förblir obekräftade och ett nytt larm ljuder igen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="354"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="356"/>
         <source>Stopwatch</source>
         <translation>Stoppur</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="355"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="357"/>
         <source>Switch to Console Only mode (no parsing)</source>
         <translation>Växla till läget Endast Konsol (ingen parsning)</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="356"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="358"/>
         <source>Switch to Project File mode (parse via a project)</source>
         <translation>Växla till läget Projektfil (parsning via ett projekt)</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="357"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="359"/>
         <source>Switch to Quick Plot mode (comma-separated values)</source>
         <translation>Växla till läget Snabbdiagram (kommaseparerade värden)</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="358"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="360"/>
         <source>Table</source>
         <translation>Tabell</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="359"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="361"/>
         <source>Test Alarm Sounds</source>
         <translation>Testa Larmljud</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="360"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="362"/>
         <source>Text Field</source>
         <translation>Textfält</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="361"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="363"/>
         <source>Toggle</source>
         <translation>Växlare</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="362"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="364"/>
         <source>Toggle hexadecimal console display</source>
         <translation>Växla hexadecimal konsoldisplay</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="363"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="365"/>
         <source>Tools</source>
         <translation>Verktyg</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="364"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="366"/>
         <source>Top Level</source>
         <translation>Toppnivå</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="365"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="367"/>
         <source>UART</source>
         <translation>UART</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="366"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="368"/>
         <source>USB</source>
         <translation>USB</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="367"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="369"/>
         <source>Undo</source>
         <translation>Ångra</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="368"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="370"/>
         <source>Undo the last project edit</source>
         <translation>Ångra den senaste projektredigeringen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="369"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="371"/>
         <source>Unlock</source>
         <translation>Lås Upp</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="370"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="372"/>
         <source>Unmute Sounds</source>
         <translation>Aktivera Ljud</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="371"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="373"/>
         <source>Variables Help</source>
         <translation>Hjälp för Variabler</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="372"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="374"/>
         <source>View detailed documentation and ask questions on DeepWiki</source>
         <translation>Visa detaljerad dokumentation och ställ frågor på DeepWiki</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="373"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="375"/>
         <source>Visualizations</source>
         <translation>Visualiseringar</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="374"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="376"/>
         <source>Watch another Serial Studio instance's dashboard over the network</source>
         <translation>Bevaka en annan Serial Studio-instans instrumentpanel över nätverket</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="375"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="377"/>
         <source>Waterfall</source>
         <translation>Vattenfall</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="376"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="378"/>
         <source>Web View</source>
         <translation>Webbvisning</translation>
     </message>
@@ -5818,22 +5828,22 @@ Aktivera endast detta i betrodda nätverk. Ej betrodda klienter kan läsa liveda
         <translation>Kategori</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="359"/>
+        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="364"/>
         <source>No constants match.</source>
         <translation>Inga konstanter matchar.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="380"/>
+        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="385"/>
         <source>%1 constants</source>
         <translation>%1 konstanter</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="381"/>
+        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="386"/>
         <source>%1 of %2 constants</source>
         <translation>%1 av %2 konstanter</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="385"/>
+        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="390"/>
         <source>Close</source>
         <translation>Stäng</translation>
     </message>
@@ -6093,13 +6103,13 @@ Aktivera endast detta i betrodda nätverk. Ej betrodda klienter kan läsa liveda
     </message>
     <message>
         <location filename="../../../core/Ui/UI/Dashboard/WidgetMapBuilder.cpp" line="178"/>
-        <location filename="../../../core/Ui/UI/Dashboard/WidgetMapBuilder.cpp" line="193"/>
+        <location filename="../../../core/Ui/UI/Dashboard/WidgetMapBuilder.cpp" line="194"/>
         <source>%1 (Fallback)</source>
         <translation>%1 (Reserv)</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/Dashboard/WidgetMapBuilder.cpp" line="215"/>
-        <location filename="../../../core/Ui/UI/Dashboard/WidgetMapBuilder.cpp" line="293"/>
+        <location filename="../../../core/Ui/UI/Dashboard/WidgetMapBuilder.cpp" line="225"/>
+        <location filename="../../../core/Ui/UI/Dashboard/WidgetMapBuilder.cpp" line="303"/>
         <source>LED Panel (%1)</source>
         <translation>LED-panel (%1)</translation>
     </message>
@@ -6331,22 +6341,22 @@ Aktivera endast detta i betrodda nätverk. Ej betrodda klienter kan läsa liveda
         <translation>Värde</translation>
     </message>
     <message>
+        <location filename="../../qml/Widgets/Dashboard/DataGrid.qml" line="108"/>
         <location filename="../../rcc/extensions/widget/datagrid/DataGrid.qml" line="111"/>
         <location filename="../../rcc/extensions/widget/datagrid/DataGrid.qml" line="118"/>
-        <location filename="../../qml/Widgets/Dashboard/DataGrid.qml" line="108"/>
         <source>Pause</source>
         <translation>Pausa</translation>
     </message>
     <message>
+        <location filename="../../qml/Widgets/Dashboard/DataGrid.qml" line="108"/>
         <location filename="../../rcc/extensions/widget/datagrid/DataGrid.qml" line="111"/>
         <location filename="../../rcc/extensions/widget/datagrid/DataGrid.qml" line="118"/>
-        <location filename="../../qml/Widgets/Dashboard/DataGrid.qml" line="108"/>
         <source>Resume</source>
         <translation>Återuppta</translation>
     </message>
     <message>
-        <location filename="../../rcc/extensions/widget/datagrid/DataGrid.qml" line="335"/>
         <location filename="../../qml/Widgets/Dashboard/DataGrid.qml" line="323"/>
+        <location filename="../../rcc/extensions/widget/datagrid/DataGrid.qml" line="335"/>
         <source>Awaiting data…</source>
         <translation>Väntar på data…</translation>
     </message>
@@ -6588,7 +6598,7 @@ Aktivera endast detta i betrodda nätverk. Ej betrodda klienter kan läsa liveda
     </message>
     <message>
         <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="175"/>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="697"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="703"/>
         <source>Open Lua Library</source>
         <translation>Öppna Lua-bibliotek</translation>
     </message>
@@ -6643,37 +6653,37 @@ Aktivera endast detta i betrodda nätverk. Ej betrodda klienter kan läsa liveda
         <translation>Transformering — %1</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="453"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="459"/>
         <source>The value transform has a syntax error and was not applied.</source>
         <translation>Värdetransformen har ett syntaxfel och tillämpades inte.</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="462"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="468"/>
         <source>The value transform must define a transform(value) function.</source>
         <translation>Värdetransformen måste definiera en transform(value)-funktion.</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="463"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="469"/>
         <source>Define a transform(value) function that returns a number, or use Clear to remove the transform.</source>
         <translation>Definiera en transform(value)-funktion som returnerar ett tal, eller använd Rensa för att ta bort transformen.</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="481"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="487"/>
         <source>Enter a value</source>
         <translation>Ange ett värde</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="488"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="494"/>
         <source>Invalid number</source>
         <translation>Ogiltigt tal</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="529"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="535"/>
         <source>Format Document	Ctrl+Shift+I</source>
         <translation>Formatera Dokument	ctrl+shift+i</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="530"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="536"/>
         <source>Format Selection	Ctrl+I</source>
         <translation>Formatera Markering	ctrl+i</translation>
     </message>
@@ -6738,7 +6748,7 @@ v
 </translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="827"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="833"/>
         <source>--
 -- Define a transform(value) function that receives the live
 -- dataset reading and returns a transformed number. If no
@@ -6797,7 +6807,7 @@ v
 </translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="855"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="861"/>
         <source>/*
  * Define a transform(value) function that receives the live
  * dataset reading and returns a transformed number. If no
@@ -6854,39 +6864,39 @@ v
  * klicka på Testa för att prova din funktion.</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="996"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1002"/>
         <source>Failed to create the Lua engine.</source>
         <translation>Misslyckades med att skapa Lua-motorn.</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1022"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1028"/>
         <source>Failed to create the JavaScript engine.</source>
         <translation>Misslyckades med att skapa JavaScript-motorn.</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1038"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1044"/>
         <source>The transform did not finish evaluating within %1 ms.</source>
         <translation>Transformeringen slutförde inte utvärderingen inom %1 ms.</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1043"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1049"/>
         <source>Line %1: %2</source>
         <translation>Rad %1: %2</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1109"/>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1143"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1115"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1149"/>
         <source>Error in shared library: %1</source>
         <translation>Fel i delat bibliotek: %1</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1148"/>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1161"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1154"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1167"/>
         <source>Error: the transform did not finish within %1 ms</source>
         <translation>Fel: transformeringen slutförde inte inom %1 ms</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1209"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1215"/>
         <source>Select Template…</source>
         <translation>Välj Mall…</translation>
     </message>
@@ -6947,27 +6957,27 @@ v
  * klicka på Testa för att prova din funktion.</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1099"/>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1133"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1105"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1139"/>
         <source>Engine error</source>
         <translation>Motorfel</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1089"/>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1115"/>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1123"/>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1151"/>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1164"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1095"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1121"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1129"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1157"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1170"/>
         <source>Error: %1</source>
         <translation>Fel: %1</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="698"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="704"/>
         <source>Open JavaScript Library</source>
         <translation>Öppna Javascript-bibliotek</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="793"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="799"/>
         <source>#
 # An arithmetic expression evaluated once per sample. No function,
 # no statements: the value of the expression is the new reading.
@@ -7036,13 +7046,13 @@ v
 </translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1119"/>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1155"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1125"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1161"/>
         <source>Error: transform() not defined</source>
         <translation>Fel: transform() ej definierad</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1126"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1132"/>
         <source>Error: transform() must return a number</source>
         <translation>Fel: transform() måste returnera ett tal</translation>
     </message>
@@ -7940,12 +7950,12 @@ Lägg till %4 dataset med mallens standardvärden?</translation>
         <translation>Fasta decimaler för värdevisningen; åsidosätter formatet (-1 = auto)</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="655"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="713"/>
         <source>Auto-detect</source>
         <translation>Autodetektera</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="655"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="713"/>
         <source>Manual Delimiters</source>
         <translation>Manuella Avgränsare</translation>
     </message>
@@ -8600,6 +8610,16 @@ Lägg till %4 dataset med mallens standardvärden?</translation>
         <translation>Visa hållmarkörer vid de lägsta och högsta värdena som observerats sedan senaste dataåterställningen</translation>
     </message>
     <message>
+        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="752"/>
+        <source>Suppress Alarms</source>
+        <translation>Undertrycka Larm</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="753"/>
+        <source>Keep the bands on the widget but never notify, raise an alarm point or sound for them</source>
+        <translation>Behåll banden på widgeten men meddela aldrig, höj aldrig en larmpunkt eller ljud för dem</translation>
+    </message>
+    <message>
         <source>Scale the FFT frequency axis in decades so low octaves stay readable</source>
         <translation type="vanished">Skala FFT-frekvensaxeln i dekader så att låga oktaver förblir läsbara</translation>
     </message>
@@ -8649,7 +8669,7 @@ Lägg till %4 dataset med mallens standardvärden?</translation>
         <translation type="vanished">På</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="784"/>
+        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="797"/>
         <source>LED lights up when value meets or exceeds this threshold; define alarm bands for multi-state colors</source>
         <translation>LED lyser när värdet når eller överskrider detta tröskelvärde; definiera larmband för flertillståndsfärger</translation>
     </message>
@@ -8658,7 +8678,7 @@ Lägg till %4 dataset med mallens standardvärden?</translation>
         <translation type="vanished">Painter-widget</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="672"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="730"/>
         <source>Web View</source>
         <translation>Webbvisning</translation>
     </message>
@@ -8868,7 +8888,7 @@ Lägg till %4 dataset med mallens standardvärden?</translation>
         <translation type="vanished">Övre gräns för mätarens eller stapelns visningsområde</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="685"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="743"/>
         <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="663"/>
         <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="690"/>
         <source>Auto</source>
@@ -8931,22 +8951,22 @@ Lägg till %4 dataset med mallens standardvärden?</translation>
         <translation type="vanished">Utlöser ett visuellt larm när värdet överskrider detta tröskelvärde</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="756"/>
+        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="769"/>
         <source>LED Display Settings</source>
         <translation>Inställningar för LED-display</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="769"/>
+        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="782"/>
         <source>Show in LED Panel</source>
         <translation>Visa i LED-Panel</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="770"/>
+        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="783"/>
         <source>Enable visual status monitoring using an LED display</source>
         <translation>Aktivera visuell statusövervakning med en LED-display</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="783"/>
+        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="796"/>
         <source>LED On Threshold (required)</source>
         <translation>LED-tröskelvärde för På (obligatoriskt)</translation>
     </message>
@@ -8959,207 +8979,207 @@ Lägg till %4 dataset med mallens standardvärden?</translation>
         <translation type="vanished">Redigera Painter-kod</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="497"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="555"/>
         <source>Edit Canvas Code</source>
         <translation>Redigera Canvas-kod</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="521"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="579"/>
         <source>Edit Transmit Function</source>
         <translation>Redigera Överföringsfunktion</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="619"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="677"/>
         <source>Rectangular (None)</source>
         <translation>Rektangulär (Ingen)</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="619"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="677"/>
         <source>Bartlett (Triangular)</source>
         <translation>Bartlett (Triangulär)</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="619"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="677"/>
         <source>Hann</source>
         <translation>Hann</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="620"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="678"/>
         <source>Hamming</source>
         <translation>Hamming</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="620"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="678"/>
         <source>Blackman</source>
         <translation>Blackman</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="620"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="678"/>
         <source>Blackman-Harris</source>
         <translation>Blackman-harris</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="620"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="678"/>
         <source>Nuttall</source>
         <translation>Nuttall</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="621"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="679"/>
         <source>Blackman-Nuttall</source>
         <translation>Blackman-nuttall</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="621"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="679"/>
         <source>Flat Top</source>
         <translation>Flat Top</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="621"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="679"/>
         <source>Welch</source>
         <translation>Welch</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="621"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="679"/>
         <source>Bartlett-Hann</source>
         <translation>Bartlett-hann</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="622"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="680"/>
         <source>Bohman</source>
         <translation>Bohman</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="622"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="680"/>
         <source>Cosine (Sine)</source>
         <translation>Cosinus (Sinus)</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="622"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="680"/>
         <source>Lanczos</source>
         <translation>Lanczos</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="622"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="680"/>
         <source>Parzen</source>
         <translation>Parzen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="633"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="691"/>
         <source>Off</source>
         <translation>Av</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="633"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="691"/>
         <source>Auto Start</source>
         <translation>Starta Automatiskt</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="633"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="691"/>
         <source>Start on Trigger</source>
         <translation>Starta vid Trigger</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="633"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="691"/>
         <source>Toggle on Trigger</source>
         <translation>Växla vid Trigger</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="634"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="692"/>
         <source>Repeat N Times</source>
         <translation>Upprepa N Gånger</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="637"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="695"/>
         <source>Plain Text (UTF8)</source>
         <translation>Oformaterad Text (UTF8)</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="637"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="695"/>
         <source>Hexadecimal</source>
         <translation>Hexadecimal</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="637"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="695"/>
         <source>Base64</source>
         <translation>Base64</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="638"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="696"/>
         <source>Binary (Direct)</source>
         <translation>Binär (Direkt)</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="643"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="701"/>
         <source>No Checksum</source>
         <translation>Ingen Kontrollsumma</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="647"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="705"/>
         <source>End Delimiter Only</source>
         <translation>Endast Slutavgränsare</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="647"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="705"/>
         <source>Start Delimiter Only</source>
         <translation>Endast Startavgränsare</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="648"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="706"/>
         <source>Start + End Delimiter</source>
         <translation>Start- + Slutavgränsare</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="648"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="706"/>
         <source>No Delimiters</source>
         <translation>Inga Avgränsare</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="658"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="716"/>
         <source>Button</source>
         <translation>Knapp</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="658"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="716"/>
         <source>Slider</source>
         <translation>Skjutreglage</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="658"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="716"/>
         <source>Toggle</source>
         <translation>Växlare</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="658"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="716"/>
         <source>Text Field</source>
         <translation>Textfält</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="659"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="717"/>
         <source>Knob</source>
         <translation>Ratt</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="663"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="721"/>
         <source>Bar Panel</source>
         <translation>Stapelpanel</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="664"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="722"/>
         <source>Data Grid</source>
         <translation>Datarutnät</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="665"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="723"/>
         <source>GPS Map</source>
         <translation>GPS-karta</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="666"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="724"/>
         <source>Gyroscope</source>
         <translation>Gyroskop</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="667"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="725"/>
         <source>Multi-Plot</source>
         <translation>Flerplott</translation>
     </message>
@@ -9168,51 +9188,51 @@ Lägg till %4 dataset med mallens standardvärden?</translation>
         <translation type="vanished">Flerplott</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="668"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="726"/>
         <source>Accelerometer</source>
         <translation>Accelerometer</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="669"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="727"/>
         <source>3D Plot</source>
         <translation>3D-plott</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="670"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="728"/>
         <source>Image View</source>
         <translation>Bildvisning</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="671"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="729"/>
         <source>Canvas Widget</source>
         <translation>Canvas-widget</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="673"/>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="676"/>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="693"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="731"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="734"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="751"/>
         <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputStateRows.cpp" line="121"/>
         <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputStateRows.cpp" line="140"/>
         <source>None</source>
         <translation>Ingen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="677"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="735"/>
         <source>Bar</source>
         <translation>Stapel</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="678"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="736"/>
         <source>Gauge</source>
         <translation>Mätare</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="679"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="737"/>
         <source>Compass</source>
         <translation>Kompass</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="680"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="738"/>
         <source>Meter</source>
         <translation>Mätare</translation>
     </message>
@@ -9221,52 +9241,52 @@ Lägg till %4 dataset med mallens standardvärden?</translation>
         <translation type="vanished">Termometer</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="686"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="744"/>
         <source>Integer (0 decimals)</source>
         <translation>Heltal (0 decimaler)</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="687"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="745"/>
         <source>1 decimal</source>
         <translation>1 decimal</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="688"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="746"/>
         <source>2 decimals</source>
         <translation>2 decimaler</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="689"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="747"/>
         <source>3 decimals</source>
         <translation>3 decimaler</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="690"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="748"/>
         <source>Scientific</source>
         <translation>Vetenskaplig</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="694"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="752"/>
         <source>New Line (\n)</source>
         <translation>Ny Rad (</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="695"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="753"/>
         <source>Carriage Return (\r)</source>
         <translation>Vagnretur (\r)</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="696"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="754"/>
         <source>CRLF (\r\n)</source>
         <translation>CRLF (\r</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="699"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="757"/>
         <source>No</source>
         <translation>Nej</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="700"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="758"/>
         <source>Yes</source>
         <translation>Ja</translation>
     </message>
@@ -9529,57 +9549,57 @@ Lägg till %4 dataset med mallens standardvärden?</translation>
         <translation>Ändra Larmljud</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="953"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="955"/>
         <source>Change Project Title</source>
         <translation>Ändra Projekttitel</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="969"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="971"/>
         <source>Edit Control Script</source>
         <translation>Redigera Kontrollskript</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="988"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="990"/>
         <source>Edit Shared Library</source>
         <translation>Redigera Delat Bibliotek</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1005"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1007"/>
         <source>Edit JavaScript Library</source>
         <translation>Redigera Javascript-bibliotek</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1021"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1023"/>
         <source>Change Point Count</source>
         <translation>Ändra Punktantal</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1039"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1041"/>
         <source>Change Plot Time Range</source>
         <translation>Ändra Plottens Tidsintervall</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1061"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1063"/>
         <source>Toggle Freeze</source>
         <translation>Växla Frys</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1076"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1078"/>
         <source>Toggle Change-Driven Transforms</source>
         <translation>Växla Ändrings-drivna Transformationer</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1093"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1095"/>
         <source>Toggle Fast Lua Execution</source>
         <translation>Växla Snabb Lua-körning</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1114"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1116"/>
         <source>Enable Fast Lua Execution?</source>
         <translation>Aktivera Snabb Lua-körning?</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1115"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1117"/>
         <source>Fast mode runs Lua parsers and transforms through the JIT compiler (up to ~40x faster), but the runaway-script watchdog cannot operate: a script stuck in an infinite loop will stall its data source until you disconnect.
 
 Enable it only for scripts you trust and have tested in Safe mode first.</source>
@@ -9588,37 +9608,37 @@ Enable it only for scripts you trust and have tested in Safe mode first.</source
 Aktivera endast för skript du litar på och har testat i säkert läge först.</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1120"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1122"/>
         <source>Fast Lua Execution</source>
         <translation>Snabb Lua-körning</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1149"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1151"/>
         <source>Change Frame Start Sequence</source>
         <translation>Ändra Ramstartsekvens</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1168"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1170"/>
         <source>Change Frame End Sequence</source>
         <translation>Ändra Ramslutsekvens</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1187"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1189"/>
         <source>Change Checksum</source>
         <translation>Ändra Checksumma</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1206"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1208"/>
         <source>Change Frame Detection</source>
         <translation>Ändra Ramdetektering</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1225"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1227"/>
         <source>Change Decoder</source>
         <translation>Ändra Avkodare</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1244"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1246"/>
         <source>Toggle Hex Delimiters</source>
         <translation>Växla Hexadecimala Avgränsare</translation>
     </message>
@@ -9763,12 +9783,12 @@ Aktivera endast för skript du litar på och har testat i säkert läge först.<
         <translation type="vanished">Serial Studio-projektfiler (*.ssproj)</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="780"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="782"/>
         <source>Untitled Project</source>
         <translation>Namnlöst Projekt</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="798"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="800"/>
         <source>Device A</source>
         <translation>Enhet A</translation>
     </message>
@@ -11020,17 +11040,21 @@ Giltigt format: 01 A2 FF 3C</translation>
         <translation>Växla analog mätare (halvbåge) widget</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="344"/>
-        <source>Define colored value ranges with severity tiers for this dataset's gauge or LED.</source>
-        <translation>Definiera färgade värdeintervall med allvarlighetsnivåer för detta datasets mätare eller LED.</translation>
+        <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="340"/>
+        <source>Define colored value ranges with severity tiers. Available for Bar, Gauge, Meter, LED, and Bar Panel datasets.</source>
+        <translation>Definiera färgade värdeintervall med allvarlighetsnivåer. Tillgängligt för Bar, Gauge, Meter, LED och Bar Panel datasets.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="350"/>
+        <source>Define colored value ranges with severity tiers for this dataset's gauge or LED.</source>
+        <translation type="vanished">Definiera färgade värdeintervall med allvarlighetsnivåer för detta datasets mätare eller LED.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="346"/>
         <source>Freq. Markers</source>
         <translation>Frekv.markörer</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="357"/>
+        <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="353"/>
         <source>Pin labeled frequencies or bands on the FFT plot and waterfall, with optional warning and alarm levels.</source>
         <translation>Fäst märkta frekvenser eller band på FFT-diagrammet och vattenfallet, med valfria varnings- och larmnivåer.</translation>
     </message>
@@ -11058,7 +11082,7 @@ Giltigt format: 01 A2 FF 3C</translation>
         <translation>Beteende</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="334"/>
+        <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="335"/>
         <source>Alarm Bands</source>
         <translation>Larmband</translation>
     </message>
@@ -11067,32 +11091,32 @@ Giltigt format: 01 A2 FF 3C</translation>
         <translation type="vanished">Definiera färgade värdeintervall med allvarlighetsnivåer för detta datasets mätare.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="363"/>
+        <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="359"/>
         <source>Transform</source>
         <translation>Transformering</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="367"/>
+        <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="363"/>
         <source>Edit a value transform expression for calibration, filtering, or unit conversion</source>
         <translation>Redigera ett värdetransformationsuttryck för kalibrering, filtrering eller enhetskonvertering</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="380"/>
+        <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="376"/>
         <source>Duplicate</source>
         <translation>Duplicera</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="385"/>
+        <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="381"/>
         <source>Duplicate this dataset with the same configuration</source>
         <translation>Duplicera denna datamängd med samma konfiguration</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="390"/>
+        <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="386"/>
         <source>Delete</source>
         <translation>Ta Bort</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="393"/>
+        <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="389"/>
         <source>Delete this dataset from the group</source>
         <translation>Ta bort denna datamängd från gruppen</translation>
     </message>
@@ -11591,22 +11615,22 @@ Giltigt format: 01 A2 FF 3C</translation>
         <translation>Numeriskt Alias</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorCommit.cpp" line="879"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorCommit.cpp" line="865"/>
         <source>Edit Alarms</source>
         <translation>Redigera Larm</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorCommit.cpp" line="1019"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorCommit.cpp" line="1005"/>
         <source>Rename Dataset</source>
         <translation>Byt Namn på Dataset</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorCommit.cpp" line="1040"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorCommit.cpp" line="1026"/>
         <source>Edit Dataset</source>
         <translation>Redigera Dataset</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorCommit.cpp" line="1219"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorCommit.cpp" line="1205"/>
         <source>Edit Output Widget</source>
         <translation>Redigera Utmatningswidget</translation>
     </message>
@@ -11987,7 +12011,7 @@ Giltigt format: 01 A2 FF 3C</translation>
     </message>
     <message>
         <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="750"/>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1181"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1165"/>
         <source>General Information</source>
         <translation>Allmän Information</translation>
     </message>
@@ -12074,7 +12098,7 @@ Giltigt format: 01 A2 FF 3C</translation>
     </message>
     <message>
         <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="865"/>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1306"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1290"/>
         <source>Text Encoding</source>
         <translation>Textkodning</translation>
     </message>
@@ -12170,112 +12194,112 @@ Giltigt format: 01 A2 FF 3C</translation>
         <translation>På</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1192"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1176"/>
         <source>Label</source>
         <translation>Etikett</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1193"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1177"/>
         <source>Display label</source>
         <translation>Visa Etikett</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1203"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1187"/>
         <source>Button Icon</source>
         <translation>Knappikon</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1212"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1196"/>
         <source>Colorize Icon</source>
         <translation>Färglägg Ikon</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1213"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1197"/>
         <source>Tint the icon with the button color</source>
         <translation>Tona ikonen med knappfärgen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1222"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1206"/>
         <source>Automatic</source>
         <translation>Automatisk</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1223"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1207"/>
         <source>Button Color</source>
         <translation>Knappfärg</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1224"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1208"/>
         <source>Custom fill color for this button; automatic uses the group accent</source>
         <translation>Anpassad fyllnadsfärg för denna knapp; automatisk använder gruppens accentfärg</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1235"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1219"/>
         <source>Button Size</source>
         <translation>Knappstorlek</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1236"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1220"/>
         <source>Scales the button, its icon and its caption</source>
         <translation>Skalar knappen, dess ikon och dess text</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1245"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1229"/>
         <source>Toggle Button</source>
         <translation>Växlarknapp</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1246"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1230"/>
         <source>Stay pressed and transmit 1 (on) / 0 (off) instead of a single click</source>
         <translation>Förbli nedtryckt och överför 1 (på) / 0 (av) istället för ett enda klick</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1268"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1252"/>
         <source>On Label</source>
         <translation>På-etikett</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1269"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1253"/>
         <source>Caption shown while latched (defaults to the label)</source>
         <translation>Text som visas när låst (standard är etiketten)</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1278"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1262"/>
         <source>Off Label</source>
         <translation>Av-etikett</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1279"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1263"/>
         <source>Caption shown while released (defaults to the label)</source>
         <translation>Bildtext som visas när den är släppt (standard är etiketten)</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1295"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1279"/>
         <source>Initial Value</source>
         <translation>Initialt Värde</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1307"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1291"/>
         <source>Character encoding used when transmit() returns a string value</source>
         <translation>Teckenkodning som används när transmit() returnerar ett strängvärde</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1326"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1310"/>
         <source>Value Range</source>
         <translation>Värdeområde</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1337"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1321"/>
         <source>Minimum Value</source>
         <translation>Minimivärde</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1346"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1330"/>
         <source>Maximum Value</source>
         <translation>Maximivärde</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1355"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1339"/>
         <source>Step Size</source>
         <translation>Stegstorlek</translation>
     </message>
@@ -12672,11 +12696,11 @@ Giltigt format: 01 A2 FF 3C</translation>
         <translation>Blandat</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorMultiSelect.cpp" line="432"/>
-        <location filename="../../../core/Ui/ProjectEditor/EditorMultiSelect.cpp" line="433"/>
-        <location filename="../../../core/Ui/ProjectEditor/EditorMultiSelect.cpp" line="494"/>
-        <location filename="../../../core/Ui/ProjectEditor/EditorMultiSelect.cpp" line="495"/>
-        <location filename="../../../core/Ui/ProjectEditor/EditorMultiSelect.cpp" line="551"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorMultiSelect.cpp" line="434"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorMultiSelect.cpp" line="435"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorMultiSelect.cpp" line="497"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorMultiSelect.cpp" line="498"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorMultiSelect.cpp" line="554"/>
         <source>Edit Selection</source>
         <translation>Redigera Markering</translation>
     </message>
@@ -14883,7 +14907,7 @@ Lägg till styrenhetstaggar ovan för att avläsa dem.</translation>
 <context>
     <name>IO::ConnectionManager</name>
     <message>
-        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="242"/>
+        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="247"/>
         <source>UART/COM</source>
         <translation>UART/COM</translation>
     </message>
@@ -14892,67 +14916,67 @@ Lägg till styrenhetstaggar ovan för att avläsa dem.</translation>
         <translation type="vanished">Nätverksuttag</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="242"/>
+        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="247"/>
         <source>Network</source>
         <translation>Nätverk</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="242"/>
+        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="247"/>
         <source>Bluetooth LE</source>
         <translation>Bluetooth LE</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="244"/>
+        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="249"/>
         <source>Audio</source>
         <translation>Ljud</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="244"/>
+        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="249"/>
         <source>Modbus</source>
         <translation>Modbus</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="244"/>
+        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="249"/>
         <source>CAN Bus</source>
         <translation>CAN-buss</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="244"/>
+        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="249"/>
         <source>USB Device</source>
         <translation>USB-enhet</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="244"/>
+        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="249"/>
         <source>HID Device</source>
         <translation>HID-enhet</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="245"/>
+        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="250"/>
         <source>Process</source>
         <translation>Process</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="245"/>
+        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="250"/>
         <source>MQTT Subscriber</source>
         <translation>MQTT-prenumerant</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="245"/>
+        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="250"/>
         <source>OPC UA</source>
         <translation>OPC UA</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="245"/>
+        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="250"/>
         <source>Siemens S7</source>
         <translation>Siemens S7</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="246"/>
+        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="251"/>
         <source>EtherNet/IP</source>
         <translation>Ethernet/IP</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="246"/>
+        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="251"/>
         <source>IEC 60870-5-104</source>
         <translation>IEC 60870-5-104</translation>
     </message>
@@ -14965,7 +14989,7 @@ Lägg till styrenhetstaggar ovan för att avläsa dem.</translation>
         <translation type="vanished">För att fortsätta använda Serial Studio, aktivera din licens.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="647"/>
+        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="658"/>
         <source>connection attempt failed</source>
         <translation>anslutningsförsöket misslyckades</translation>
     </message>
@@ -16777,7 +16801,7 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
 <context>
     <name>IO::Drivers::OpcUa</name>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="332"/>
+        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="333"/>
         <source>OPC UA Initialization Failed</source>
         <translation>OPC Ua-initiering Misslyckades</translation>
     </message>
@@ -16786,29 +16810,29 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
         <translation type="vanished">%1-backend är inte tillgänglig i denna version.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="494"/>
+        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="495"/>
         <source>OPC UA Connection Failed</source>
         <translation>OPC Ua-anslutning Misslyckades</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="495"/>
+        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="496"/>
         <source>Unable to connect to "%1".</source>
         <translation>Kan inte ansluta till "%1".</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="496"/>
-        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="642"/>
-        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="1279"/>
+        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="497"/>
+        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="650"/>
+        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="1287"/>
         <source>"%1": %2</source>
         <translation>"%1": %2</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="512"/>
+        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="513"/>
         <source>OPC UA Connection Lost</source>
         <translation>OPC Ua-anslutning Förlorad</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="526"/>
+        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="527"/>
         <source>Timed out after %1 s</source>
         <translation>Avbröts på grund av timeout efter %1 s</translation>
     </message>
@@ -16817,7 +16841,7 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
         <translation type="vanished">Servern stängde anslutningen</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="572"/>
+        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="573"/>
         <source>The server closed the session</source>
         <translation>Servern stängde sessionen</translation>
     </message>
@@ -16862,13 +16886,13 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
         <translation type="vanished">Oväntat backend-fel</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="598"/>
+        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="606"/>
         <source>"%1" is not a valid endpoint URL</source>
         <translation>"%1" är inte en giltig endpoint-URL</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="599"/>
-        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="1279"/>
+        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="607"/>
+        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="1287"/>
         <source>OPC UA Discovery</source>
         <translation>OPC Ua-upptäckt</translation>
     </message>
@@ -16877,12 +16901,12 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
         <translation type="vanished">%1-backend är inte tillgänglig i denna version</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="641"/>
+        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="649"/>
         <source>Discovery failed: %1</source>
         <translation>Upptäckt misslyckades: %1</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="642"/>
+        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="650"/>
         <source>OPC UA Discovery Failed</source>
         <translation>OPC Ua-upptäckt Misslyckades</translation>
     </message>
@@ -16891,38 +16915,43 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
         <translation type="vanished">Ingen None-policy endpoint; säkra kanaler stöds inte i denna version</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="324"/>
+        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="325"/>
         <source>The connection is not configured: check the endpoint and the tag list</source>
         <translation>Anslutningen är inte konfigurerad: kontrollera slutpunkten och tagglistan</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="331"/>
-        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="607"/>
+        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="332"/>
+        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="615"/>
         <source>The %1 stack is not available in this build</source>
         <translation>%1-stacken är inte tillgänglig i denna version</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="370"/>
+        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="371"/>
         <source>The connection attempt could not be started</source>
         <translation>Anslutningsförsöket kunde inte startas</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="384"/>
+        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="385"/>
         <source>OPC UA Certificate</source>
         <translation>OPC Ua-certifikat</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="385"/>
+        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="386"/>
         <source>The client certificate could not be generated; secure channels will be refused.</source>
         <translation>Klientcertifikatet kunde inte genereras; säkra kanaler kommer att avvisas.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="640"/>
+        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="598"/>
+        <source>OPC UA access requires an active Serial Studio Pro license or trial</source>
+        <translation>OPC UA-åtkomst kräver en aktiv Serial Studio Pro-licens eller testversion</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="648"/>
         <source>The server did not answer within %1 s</source>
         <translation>Servern svarade inte inom %1 s</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="672"/>
+        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="680"/>
         <source>Endpoint discovery failed</source>
         <translation>Endpoint-upptäckt misslyckades</translation>
     </message>
@@ -16987,40 +17016,40 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
         <translation type="vanished">Kunde inte öppna en bläddringssession på %1</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="729"/>
-        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="757"/>
+        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="737"/>
+        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="765"/>
         <source>Failed to load generated project</source>
         <translation>Misslyckades att Ladda Genererat Projekt</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="730"/>
-        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="758"/>
+        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="738"/>
+        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="766"/>
         <source>The generated project JSON could not be loaded.</source>
         <translation>Den genererade projekt-JSON:en kunde inte laddas.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="743"/>
+        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="751"/>
         <source>No tags selected</source>
         <translation>Inga Taggar Valda</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="744"/>
+        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="752"/>
         <source>Browse the server and select at least one tag before generating a project.</source>
         <translation>Bläddra i servern och välj minst en tagg innan du genererar ett projekt.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="747"/>
-        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="771"/>
+        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="755"/>
+        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="779"/>
         <source>OPC UA Project Generator</source>
         <translation>OPC UA Projektgenerator</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="766"/>
+        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="774"/>
         <source>Successfully generated project with %1 groups and %2 datasets.</source>
         <translation>Projektet genererades framgångsrikt med %1 grupper och %2 dataset.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="769"/>
+        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="777"/>
         <source>The project editor is now open for customization.</source>
         <translation>Projektredigeraren är nu öppen för anpassning.</translation>
     </message>
@@ -17061,22 +17090,22 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
         <translation type="vanished">Ogiltig</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="1508"/>
+        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="1516"/>
         <source>Security Policy</source>
         <translation>Säkerhetspolicy</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="1516"/>
+        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="1524"/>
         <source>Security Mode</source>
         <translation>Säkerhetsläge</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="1525"/>
+        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="1533"/>
         <source>User Certificate</source>
         <translation>Användarcertifikat</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="1533"/>
+        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="1541"/>
         <source>User Private Key</source>
         <translation>Användarens Privata Nyckel</translation>
     </message>
@@ -17085,52 +17114,52 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
         <translation type="vanished">Signera &amp; Kryptera</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="846"/>
+        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="854"/>
         <source>Connecting to %1</source>
         <translation>Ansluter till %1</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="849"/>
+        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="857"/>
         <source>Not connected</source>
         <translation>Ej ansluten</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="857"/>
+        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="865"/>
         <source>Subscribing, %1 of %2 tags</source>
         <translation>Prenumererar, %1 av %2 taggar</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="862"/>
+        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="870"/>
         <source>Subscribed %1 tags, polling %2 refused, %3 Hz</source>
         <translation>Prenumererade %1 taggar, polling %2 nekade, %3 Hz</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="868"/>
+        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="876"/>
         <source>Polling (server refused subscriptions), %1 tags, %2 Hz</source>
         <translation>Polling (server nekade prenumerationer), %1 taggar, %2 Hz</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="872"/>
+        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="880"/>
         <source>Subscribed, %1 tags, %2 Hz</source>
         <translation>Prenumererade, %1 taggar, %2 Hz</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="902"/>
+        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="910"/>
         <source>Anonymous</source>
         <translation>Anonym</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="902"/>
+        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="910"/>
         <source>Username / Password</source>
         <translation>Användarnamn / Lösenord</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="902"/>
+        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="910"/>
         <source>X.509 Certificate</source>
         <translation>X.509-certifikat</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="1278"/>
+        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="1286"/>
         <source>No endpoint this build can open with the selected identity</source>
         <translation>Ingen slutpunkt som denna version kan öppna med den valda identiteten</translation>
     </message>
@@ -17155,27 +17184,27 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
         <translation type="vanished">Servercertifikatet kunde inte tolkas</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="1468"/>
+        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="1476"/>
         <source>Endpoint URL</source>
         <translation>Slutpunkts-URL</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="1475"/>
+        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="1483"/>
         <source>Authentication</source>
         <translation>Autentisering</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="1483"/>
+        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="1491"/>
         <source>Username</source>
         <translation>Användarnamn</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="1491"/>
+        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="1499"/>
         <source>Password</source>
         <translation>Lösenord</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="1499"/>
+        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="1507"/>
         <source>Poll Interval (ms)</source>
         <translation>Pollintervall (ms)</translation>
     </message>
@@ -19551,32 +19580,32 @@ För att återanvända denna plats på en annan enhet, mejla alex@serial-studio.
         <translation>Den här funktionen är en del av Serial Studio Pro. Testversionen låser upp alla Pro-funktioner i 14 dagar, utan konto och utan betalning. En internetanslutning krävs för att registrera testversionen på denna dator.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/TrialGate.cpp" line="133"/>
+        <location filename="../../src/Licensing/TrialGate.cpp" line="134"/>
         <source>Serial Studio Pro Trial</source>
         <translation>Serial Studio Pro-testversion</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/TrialGate.cpp" line="164"/>
+        <location filename="../../src/Licensing/TrialGate.cpp" line="166"/>
         <source>Activate License</source>
         <translation>Aktivera Licens</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/TrialGate.cpp" line="165"/>
+        <location filename="../../src/Licensing/TrialGate.cpp" line="167"/>
         <source>Get Serial Studio Pro</source>
         <translation>Skaffa Serial Studio Pro</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/TrialGate.cpp" line="169"/>
+        <location filename="../../src/Licensing/TrialGate.cpp" line="171"/>
         <source>This feature requires Serial Studio Pro</source>
         <translation>Den här funktionen kräver Serial Studio Pro</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/TrialGate.cpp" line="170"/>
+        <location filename="../../src/Licensing/TrialGate.cpp" line="172"/>
         <source>Your trial has ended. All free features remain fully functional; activate a license or purchase one to use Pro features again.</source>
         <translation>Din testversion har upphört. Alla kostnadsfria funktioner förblir fullt funktionella; aktivera eller köp en licens för att använda Pro-funktioner igen.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/TrialGate.cpp" line="173"/>
+        <location filename="../../src/Licensing/TrialGate.cpp" line="176"/>
         <source>Serial Studio Pro</source>
         <translation>Serial Studio Pro</translation>
     </message>
@@ -20172,7 +20201,7 @@ Ange nödvändiga inloggningsuppgifter.</translation>
     </message>
     <message>
         <location filename="../../../core/Storage/MQTT/Publisher.cpp" line="665"/>
-        <location filename="../../../core/Storage/MQTT/Publisher.cpp" line="1395"/>
+        <location filename="../../../core/Storage/MQTT/Publisher.cpp" line="1397"/>
         <source>MQTT Test Connection</source>
         <translation>MQTT Testa Anslutning</translation>
     </message>
@@ -20197,28 +20226,28 @@ Ange nödvändiga inloggningsuppgifter.</translation>
         <translation>Välj Privat Nyckel</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/MQTT/Publisher.cpp" line="1392"/>
+        <location filename="../../../core/Storage/MQTT/Publisher.cpp" line="1394"/>
         <source>MQTT broker reachable</source>
         <translation>MQTT-broker nåbar</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/MQTT/Publisher.cpp" line="1392"/>
+        <location filename="../../../core/Storage/MQTT/Publisher.cpp" line="1394"/>
         <source>MQTT broker unreachable</source>
         <translation>MQTT-broker onåbar</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/MQTT/Publisher.cpp" line="1406"/>
+        <location filename="../../../core/Storage/MQTT/Publisher.cpp" line="1408"/>
         <source>MQTT broker connection failed</source>
         <translation>MQTT-brokeranslutning misslyckades</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/MQTT/Publisher.cpp" line="1406"/>
-        <location filename="../../../core/Storage/MQTT/Publisher.cpp" line="1565"/>
+        <location filename="../../../core/Storage/MQTT/Publisher.cpp" line="1408"/>
+        <location filename="../../../core/Storage/MQTT/Publisher.cpp" line="1567"/>
         <source>MQTT Publisher</source>
         <translation>MQTT-utgivare</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/MQTT/Publisher.cpp" line="1562"/>
+        <location filename="../../../core/Storage/MQTT/Publisher.cpp" line="1564"/>
         <source>MQTT Client Certificate Error</source>
         <translation>MQTT-fel för Klientcertifikat</translation>
     </message>
@@ -21605,8 +21634,8 @@ Vill du öppna nedladdningssidan?</translation>
         <translation>Kunde inte skriva Info.plist: %1</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/Misc/ShortcutGenerator_macOS.cpp" line="271"/>
         <location filename="../../../core/Ui/Misc/ShortcutGenerator_Linux.cpp" line="140"/>
+        <location filename="../../../core/Ui/Misc/ShortcutGenerator_macOS.cpp" line="271"/>
         <source>Windows shortcut writer is not available on this platform.</source>
         <translation>Windows-genvägsverktyget är inte tillgängligt på denna plattform.</translation>
     </message>
@@ -21637,8 +21666,8 @@ Vill du öppna nedladdningssidan?</translation>
         <translation>Sparande av .lnk-filen misslyckades (HRESULT 0x%1).</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/Misc/ShortcutGenerator_Windows.cpp" line="185"/>
         <location filename="../../../core/Ui/Misc/ShortcutGenerator_Linux.cpp" line="154"/>
+        <location filename="../../../core/Ui/Misc/ShortcutGenerator_Windows.cpp" line="185"/>
         <source>macOS shortcut writer is not available on this platform.</source>
         <translation>MacOS-genvägsverktyget är inte tillgängligt på denna plattform.</translation>
     </message>
@@ -22341,32 +22370,36 @@ Lägg till grupper ovan för att avläsa flera registertyper.</translation>
         <translation>Larmband</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/MultiSelectionView.qml" line="303"/>
-        <source>Define colored value ranges and apply them to every selected dataset.</source>
-        <translation>Definiera färgade värdeintervall och tillämpa dem på varje vald datamängd.</translation>
+        <location filename="../../qml/ProjectEditor/Views/MultiSelectionView.qml" line="304"/>
+        <source>Define colored value ranges and apply them to the selected Bar, Gauge, Meter, LED, and Bar Panel datasets.</source>
+        <translation>Definiera färgade värdeintervall och tillämpa dem på de valda Bar, Gauge, Meter, LED och Bar Panel datasets.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/MultiSelectionView.qml" line="322"/>
+        <source>Define colored value ranges and apply them to every selected dataset.</source>
+        <translation type="vanished">Definiera färgade värdeintervall och tillämpa dem på varje vald datamängd.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/MultiSelectionView.qml" line="323"/>
         <source>Duplicate</source>
         <translation>Duplicera</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/MultiSelectionView.qml" line="324"/>
+        <location filename="../../qml/ProjectEditor/Views/MultiSelectionView.qml" line="325"/>
         <source>Duplicate every selected dataset</source>
         <translation>Duplicera varje vald datamängd</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/MultiSelectionView.qml" line="332"/>
+        <location filename="../../qml/ProjectEditor/Views/MultiSelectionView.qml" line="333"/>
         <source>Delete</source>
         <translation>Ta Bort</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/MultiSelectionView.qml" line="335"/>
+        <location filename="../../qml/ProjectEditor/Views/MultiSelectionView.qml" line="336"/>
         <source>Delete every selected dataset</source>
         <translation>Ta bort varje vald datamängd</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/MultiSelectionView.qml" line="375"/>
+        <location filename="../../qml/ProjectEditor/Views/MultiSelectionView.qml" line="376"/>
         <source>Editing %1 items. Shared fields apply to all; per-item fields are locked.</source>
         <translation>Redigerar %1 objekt. Delade fält gäller alla; objektspecifika fält är låsta.</translation>
     </message>
@@ -22374,38 +22407,38 @@ Lägg till grupper ovan för att avläsa flera registertyper.</translation>
 <context>
     <name>NativeTemplates</name>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryRaw.cpp" line="116"/>
         <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryHex.cpp" line="127"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryRaw.cpp" line="116"/>
         <source>Bytes per value</source>
         <translation>Byte per värde</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryRaw.cpp" line="117"/>
         <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryHex.cpp" line="128"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryRaw.cpp" line="117"/>
         <source>Number of bytes combined into each channel value.</source>
         <translation>Antal byte som kombineras till varje kanalvärde.</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryRaw.cpp" line="125"/>
         <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryHex.cpp" line="136"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryRaw.cpp" line="125"/>
         <source>Endianness</source>
         <translation>Endianness</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryRaw.cpp" line="126"/>
         <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryHex.cpp" line="137"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryRaw.cpp" line="126"/>
         <source>Byte order used when combining multi-byte values.</source>
         <translation>Byteordning som används vid kombination av flerbytevärden.</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryRaw.cpp" line="134"/>
         <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryHex.cpp" line="145"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryRaw.cpp" line="134"/>
         <source>Signed values</source>
         <translation>Signerade värden</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryRaw.cpp" line="135"/>
         <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryHex.cpp" line="146"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryRaw.cpp" line="135"/>
         <source>Interprets each value as two's-complement signed.</source>
         <translation>Tolkar varje värde som tvåkomplementssignerat.</translation>
     </message>
@@ -22420,9 +22453,9 @@ Lägg till grupper ovan för att avläsa flera registertyper.</translation>
         <translation>Kommaseparerade tagg:index-poster, t.ex. 1:0,2:1,3:2. Taggar kan vara decimala eller 0x-prefixade hex.</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/TextNmea0183.cpp" line="219"/>
         <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinarySirf.cpp" line="216"/>
         <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryUbx.cpp" line="226"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/TextNmea0183.cpp" line="219"/>
         <source>Validate checksum</source>
         <translation>Validera kontrollsumma</translation>
     </message>
@@ -24682,17 +24715,17 @@ Klicka på Uppdatera för att uppdatera listan.</translation>
 <context>
     <name>ProjectEditorMenuBindings</name>
     <message>
-        <location filename="../../qml/Commands/ProjectEditorMenuBindings.qml" line="401"/>
+        <location filename="../../qml/Commands/ProjectEditorMenuBindings.qml" line="402"/>
         <source>Dataset Container</source>
         <translation>Datauppsättningsbehållare</translation>
     </message>
     <message>
-        <location filename="../../qml/Commands/ProjectEditorMenuBindings.qml" line="406"/>
+        <location filename="../../qml/Commands/ProjectEditorMenuBindings.qml" line="407"/>
         <source>Data Grid</source>
         <translation>Datarutnät</translation>
     </message>
     <message>
-        <location filename="../../qml/Commands/ProjectEditorMenuBindings.qml" line="411"/>
+        <location filename="../../qml/Commands/ProjectEditorMenuBindings.qml" line="412"/>
         <source>Bar Panel</source>
         <translation>Stapelpanel</translation>
     </message>
@@ -24701,42 +24734,42 @@ Klicka på Uppdatera för att uppdatera listan.</translation>
         <translation type="vanished">Flerdiagram</translation>
     </message>
     <message>
-        <location filename="../../qml/Commands/ProjectEditorMenuBindings.qml" line="416"/>
+        <location filename="../../qml/Commands/ProjectEditorMenuBindings.qml" line="417"/>
         <source>Multi-Plot</source>
         <translation>Flerplott</translation>
     </message>
     <message>
-        <location filename="../../qml/Commands/ProjectEditorMenuBindings.qml" line="421"/>
+        <location filename="../../qml/Commands/ProjectEditorMenuBindings.qml" line="422"/>
         <source>3D Plot</source>
         <translation>3D-plott</translation>
     </message>
     <message>
-        <location filename="../../qml/Commands/ProjectEditorMenuBindings.qml" line="426"/>
+        <location filename="../../qml/Commands/ProjectEditorMenuBindings.qml" line="427"/>
         <source>Accelerometer</source>
         <translation>Accelerometer</translation>
     </message>
     <message>
-        <location filename="../../qml/Commands/ProjectEditorMenuBindings.qml" line="431"/>
+        <location filename="../../qml/Commands/ProjectEditorMenuBindings.qml" line="432"/>
         <source>Gyroscope</source>
         <translation>Gyroskop</translation>
     </message>
     <message>
-        <location filename="../../qml/Commands/ProjectEditorMenuBindings.qml" line="436"/>
+        <location filename="../../qml/Commands/ProjectEditorMenuBindings.qml" line="437"/>
         <source>GPS Map</source>
         <translation>GPS-karta</translation>
     </message>
     <message>
-        <location filename="../../qml/Commands/ProjectEditorMenuBindings.qml" line="441"/>
+        <location filename="../../qml/Commands/ProjectEditorMenuBindings.qml" line="442"/>
         <source>Image View</source>
         <translation>Bildvisning</translation>
     </message>
     <message>
-        <location filename="../../qml/Commands/ProjectEditorMenuBindings.qml" line="446"/>
+        <location filename="../../qml/Commands/ProjectEditorMenuBindings.qml" line="447"/>
         <source>Web View</source>
         <translation>Webbvisning</translation>
     </message>
     <message>
-        <location filename="../../qml/Commands/ProjectEditorMenuBindings.qml" line="451"/>
+        <location filename="../../qml/Commands/ProjectEditorMenuBindings.qml" line="452"/>
         <source>Canvas Widget</source>
         <translation>Canvas-widget</translation>
     </message>
@@ -24745,22 +24778,22 @@ Klicka på Uppdatera för att uppdatera listan.</translation>
         <translation type="vanished">Painter-widget</translation>
     </message>
     <message>
-        <location filename="../../qml/Commands/ProjectEditorMenuBindings.qml" line="712"/>
+        <location filename="../../qml/Commands/ProjectEditorMenuBindings.qml" line="713"/>
         <source>Hide Selected (%1)</source>
         <translation>Dölj Markerade (%1)</translation>
     </message>
     <message>
-        <location filename="../../qml/Commands/ProjectEditorMenuBindings.qml" line="713"/>
+        <location filename="../../qml/Commands/ProjectEditorMenuBindings.qml" line="714"/>
         <source>Show Selected (%1)</source>
         <translation>Visa Markerade (%1)</translation>
     </message>
     <message>
-        <location filename="../../qml/Commands/ProjectEditorMenuBindings.qml" line="725"/>
+        <location filename="../../qml/Commands/ProjectEditorMenuBindings.qml" line="726"/>
         <source>Duplicate Selected (%1)</source>
         <translation>Duplicera Markerade (%1)</translation>
     </message>
     <message>
-        <location filename="../../qml/Commands/ProjectEditorMenuBindings.qml" line="744"/>
+        <location filename="../../qml/Commands/ProjectEditorMenuBindings.qml" line="745"/>
         <source>Delete Selected (%1)</source>
         <translation>Ta Bort Markerade (%1)</translation>
     </message>
@@ -24768,40 +24801,40 @@ Klicka på Uppdatera för att uppdatera listan.</translation>
 <context>
     <name>ProjectModel</name>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectBulkOps.cpp" line="132"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectBulkOps.cpp" line="133"/>
         <source>Duplicate Selection</source>
         <translation>Duplicera Markering</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectBulkOps.cpp" line="210"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectBulkOps.cpp" line="223"/>
         <source>Delete Selection</source>
         <translation>Ta Bort Markering</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectBulkOps.cpp" line="299"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectBulkOps.cpp" line="312"/>
         <source>Delete %1 selected items?</source>
         <translation>Ta Bort %1 Markerade Objekt?</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectBulkOps.cpp" line="300"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="504"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="531"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaces.cpp" line="818"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectBulkOps.cpp" line="313"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="509"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="536"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaces.cpp" line="858"/>
         <source>This action cannot be undone.</source>
         <translation>Denna åtgärd kan inte ångras.</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectBulkOps.cpp" line="302"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectBulkOps.cpp" line="315"/>
         <source>Delete Items</source>
         <translation>Ta Bort Objekt</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectBulkOps.cpp" line="323"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectBulkOps.cpp" line="336"/>
         <source>Move Selection</source>
         <translation>Flytta Markering</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectBulkOps.cpp" line="388"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectBulkOps.cpp" line="401"/>
         <source>Toggle Selection</source>
         <translation>Växla Markering</translation>
     </message>
@@ -25039,10 +25072,10 @@ Läs in den igen?</translation>
         <translation>Vill du ta bort utgångswidget "%1"?</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectOutputWidgets.cpp" line="239"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="313"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="355"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="348"/>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="390"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="425"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectOutputWidgets.cpp" line="239"/>
         <source>This action cannot be undone. Do you wish to proceed?</source>
         <translation>Denna åtgärd kan inte ångras. Vill du fortsätta?</translation>
     </message>
@@ -25089,178 +25122,183 @@ Läs in den igen?</translation>
         <translation>Redigera Grupp</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="159"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="178"/>
+        <source>Remove Transform</source>
+        <translation>Ta Bort Transformering</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="194"/>
         <source>Edit Dataset</source>
         <translation>Redigera Dataset</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="202"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="237"/>
         <source>Edit Action</source>
         <translation>Redigera Åtgärd</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="223"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="258"/>
         <source>Seed Dataset Aliases</source>
         <translation>Fyll Dataset-alias</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="260"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="295"/>
         <source>Toggle Group</source>
         <translation>Växla Grupp</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="283"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="318"/>
         <source>Toggle Dataset</source>
         <translation>Växla Dataset</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="312"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="347"/>
         <source>Do you want to delete group "%1"?</source>
         <translation>Vill du ta bort grupp "%1"?</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="326"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="361"/>
         <source>Delete Group</source>
         <translation>Ta Bort Grupp</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="354"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="389"/>
         <source>Do you want to delete action "%1"?</source>
         <translation>Vill du ta bort åtgärd "%1"?</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="368"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="403"/>
         <source>Delete Action</source>
         <translation>Ta Bort Åtgärd</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="388"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="423"/>
         <source>Do you want to delete dataset "%1"?</source>
         <translation>Vill du ta bort dataset "%1"?</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="409"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="444"/>
         <source>Delete Dataset</source>
         <translation>Ta Bort Dataset</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="466"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="1191"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="501"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="1226"/>
         <source>Duplicate Group</source>
         <translation>Duplicera Grupp</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="509"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="1309"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="544"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="1344"/>
         <source>Duplicate Action</source>
         <translation>Duplicera Åtgärd</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="543"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="1252"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="578"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="1287"/>
         <source>Duplicate Dataset</source>
         <translation>Duplicera Dataset</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="580"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="859"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="615"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="894"/>
         <source>Add Group</source>
         <translation>Lägg till Grupp</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="616"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="651"/>
         <source>Group</source>
         <translation>Grupp</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="625"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="660"/>
         <source>Add Dataset</source>
         <translation>Lägg till Dataset</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="637"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="672"/>
         <source>New Dataset</source>
         <translation>Ny Datauppsättning</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="640"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="675"/>
         <source>New Plot</source>
         <translation>Ny Graf</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="644"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="679"/>
         <source>New FFT Plot</source>
         <translation>Ny FFT-graf</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="648"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="683"/>
         <source>New Level Indicator</source>
         <translation>Ny Nivåindikator</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="652"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="687"/>
         <source>New Gauge</source>
         <translation>Ny Mätare</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="656"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="691"/>
         <source>New Compass</source>
         <translation>Ny Kompass</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="662"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="697"/>
         <source>New Meter</source>
         <translation>Ny Mätare</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="666"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="701"/>
         <source>New LED Indicator</source>
         <translation>Ny LED-indikator</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="670"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="705"/>
         <source>New Waterfall</source>
         <translation>Nytt Vattenfall</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="701"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="736"/>
         <source>Edit Canvas Datasets</source>
         <translation>Redigera Canvas-datauppsättningar</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="722"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="757"/>
         <source>Channel %1</source>
         <translation>Kanal %1</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="745"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="780"/>
         <source>Change Dataset Option</source>
         <translation>Ändra Dataset-alternativ</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="798"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="826"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="833"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="861"/>
         <source>Add Action</source>
         <translation>Lägg till Åtgärd</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="807"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="837"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="842"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="872"/>
         <source>New Action</source>
         <translation>Ny Åtgärd</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="897"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="932"/>
         <source>Change Group Widget</source>
         <translation>Ändra Gruppwidget</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="945"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="980"/>
         <source>Are you sure you want to change the group-level widget?</source>
         <translation>Är du säker på att du vill ändra gruppnivåwidgeten?</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="946"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="981"/>
         <source>Existing datasets for this group are deleted</source>
         <translation>Befintliga dataset för denna grupp tas bort</translation>
     </message>
@@ -25312,23 +25350,23 @@ Läs in den igen?</translation>
         <translation>Z</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="1017"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="671"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="1052"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="699"/>
         <source>Move Group</source>
         <translation>Flytta Grupp</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="1074"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="1109"/>
         <source>Move Dataset</source>
         <translation>Flytta Dataset</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="1116"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="1151"/>
         <source>Move Action</source>
         <translation>Flytta Åtgärd</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="1339"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="1374"/>
         <source>Rename Group</source>
         <translation>Byt Namn på Grupp</translation>
     </message>
@@ -25369,26 +25407,26 @@ Läs in den igen?</translation>
         <translation>Ny Arbetsytaprofil</translation>
     </message>
     <message>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="1375"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="1404"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="1430"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="522"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="549"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="576"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="762"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="788"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="983"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="1010"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="1036"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectSources.cpp" line="295"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="393"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="421"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="449"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="472"/>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaceProfiles.cpp" line="373"/>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaceProfiles.cpp" line="395"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="1340"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="1369"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="1395"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="388"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="416"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="444"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="467"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectSources.cpp" line="288"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaces.cpp" line="771"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaces.cpp" line="797"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="499"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="521"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="548"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="734"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="760"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="955"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="982"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="1008"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaces.cpp" line="811"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaces.cpp" line="837"/>
         <source>Name:</source>
         <translation>Namn:</translation>
     </message>
@@ -25418,12 +25456,12 @@ Läs in den igen?</translation>
         <translation>Visa arbetsytorna för:</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="1368"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="1403"/>
         <source>Rename Dataset</source>
         <translation>Byt Namn på Dataset</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="1394"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="1429"/>
         <source>Rename Action</source>
         <translation>Byt Namn på Åtgärd</translation>
     </message>
@@ -25433,91 +25471,91 @@ Läs in den igen?</translation>
         <translation>Lägg till Tabell</translation>
     </message>
     <message>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="1012"/>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="124"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="390"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="984"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="395"/>
         <source>Shared Table</source>
         <translation>Delad Tabell</translation>
     </message>
     <message>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="153"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="512"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="517"/>
         <source>Delete Table</source>
         <translation>Ta Bort Tabell</translation>
     </message>
     <message>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="168"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="415"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="420"/>
         <source>Rename Table</source>
         <translation>Byt Namn på Tabell</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="242"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="247"/>
         <source>Add Variable</source>
         <translation>Lägg till Variabel</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="251"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="256"/>
         <source>variable</source>
         <translation>variabel</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="281"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="533"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="286"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="538"/>
         <source>Delete Variable</source>
         <translation>Ta Bort Variabel</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="312"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="317"/>
         <source>Edit Variable</source>
         <translation>Redigera Variabel</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="387"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="981"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="1009"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="392"/>
         <source>New Shared Table</source>
         <translation>Ny Delad Tabell</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="443"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="448"/>
         <source>New Variable</source>
         <translation>Ny Variabel</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="466"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="471"/>
         <source>Rename Variable</source>
         <translation>Byt Namn på Variabel</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="505"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="510"/>
         <source>This removes %1 variable(s) along with the table. This action cannot be undone.</source>
         <translation>Detta tar bort %1 variabel/variabler tillsammans med tabellen. Denna åtgärd kan inte ångras.</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="509"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="530"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaces.cpp" line="817"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="514"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="535"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaces.cpp" line="857"/>
         <source>Delete "%1"?</source>
         <translation>Ta Bort "%1"?</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="561"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="566"/>
         <source>Export Table</source>
         <translation>Exportera Tabell</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="563"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="606"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="568"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="616"/>
         <source>CSV files (*.csv)</source>
         <translation>CSV-filer (*.CSV)</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="604"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="614"/>
         <source>Import Table</source>
         <translation>Importera Tabell</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="615"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="625"/>
         <source>Import Table CSV</source>
         <translation>Importera Tabell-CSV</translation>
     </message>
@@ -25562,180 +25600,180 @@ Läs in den igen?</translation>
         <translation>Duplicera Enhet</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectSources.cpp" line="211"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectSources.cpp" line="329"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectSources.cpp" line="362"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectSources.cpp" line="218"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectSources.cpp" line="336"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectSources.cpp" line="369"/>
         <source>Edit Device</source>
         <translation>Redigera Enhet</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectSources.cpp" line="243"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectSources.cpp" line="250"/>
         <source>Rename Device</source>
         <translation>Byt Namn på Enhet</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectSources.cpp" line="259"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectSources.cpp" line="378"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectSources.cpp" line="266"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectSources.cpp" line="385"/>
         <source>Change Bus Type</source>
         <translation>Ändra Busstyp</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectSources.cpp" line="287"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectSources.cpp" line="294"/>
         <source>Rename Data Source</source>
         <translation>Byt Namn på Datakälla</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectSources.cpp" line="414"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectSources.cpp" line="474"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectSources.cpp" line="612"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectSources.cpp" line="421"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectSources.cpp" line="481"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectSources.cpp" line="619"/>
         <source>Edit Frame Parser</source>
         <translation>Redigera Frame-parser</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectSources.cpp" line="426"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectSources.cpp" line="488"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectSources.cpp" line="433"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectSources.cpp" line="495"/>
         <source>Change Parser Language</source>
         <translation>Ändra Parserspråk</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectSources.cpp" line="442"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectSources.cpp" line="515"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectSources.cpp" line="567"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectSources.cpp" line="449"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectSources.cpp" line="522"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectSources.cpp" line="574"/>
         <source>Change Parser Template</source>
         <translation>Ändra Parsermall</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectSources.cpp" line="454"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectSources.cpp" line="539"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectSources.cpp" line="461"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectSources.cpp" line="546"/>
         <source>Change Parser Parameters</source>
         <translation>Ändra Parserparametrar</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectSources.cpp" line="583"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectSources.cpp" line="590"/>
         <source>Change Stream Lane</source>
         <translation>Ändra Strömfil</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaces.cpp" line="392"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaces.cpp" line="773"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="523"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="551"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaces.cpp" line="397"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaces.cpp" line="813"/>
         <source>Workspace</source>
         <translation>Arbetsyta</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaces.cpp" line="770"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="520"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="548"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaces.cpp" line="810"/>
         <source>New Workspace</source>
         <translation>Ny Arbetsyta</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaces.cpp" line="796"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaces.cpp" line="836"/>
         <source>Rename Workspace</source>
         <translation>Byt Namn på Arbetsyta</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaces.cpp" line="820"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaces.cpp" line="860"/>
         <source>Delete Workspace</source>
         <translation>Ta Bort Arbetsyta</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaces.cpp" line="882"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaces.cpp" line="922"/>
         <source>Overview</source>
         <translation>Översikt</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaces.cpp" line="891"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaces.cpp" line="931"/>
         <source>All Data</source>
         <translation>All Data</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaces.cpp" line="1160"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaces.cpp" line="1205"/>
         <source>Discard workspace customisations?</source>
         <translation>Kassera anpassningar av arbetsytor?</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaces.cpp" line="1161"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaces.cpp" line="1206"/>
         <source>Switching off Customize discards your edits and rebuilds the workspace list from the project's groups.</source>
         <translation>Att stänga av Anpassa kasserar dina ändringar och återskapar arbetsytelistan från projektets grupper.</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaces.cpp" line="1164"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaces.cpp" line="1209"/>
         <source>Customize Workspaces</source>
         <translation>Anpassa Arbetsytor</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="326"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="501"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="611"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="736"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="824"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="957"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="329"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="524"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="639"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="764"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="852"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="985"/>
         <source>Folder</source>
         <translation>Mapp</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="498"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="733"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="954"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="521"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="761"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="982"/>
         <source>New Folder</source>
         <translation>Ny Mapp</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="547"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="624"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="759"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="837"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="1007"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="575"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="652"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="787"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="865"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="1035"/>
         <source>Rename Folder</source>
         <translation>Byt Namn på Mapp</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="569"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="781"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="1029"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="597"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="809"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="1057"/>
         <source>Delete folder "%1"?</source>
         <translation>Ta Bort Mapp "%1"?</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="570"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="598"/>
         <source>The folder is removed; its workspaces and sub-folders move up to the parent.</source>
         <translation>Mappen tas bort; dess arbetsytor och undermappar flyttas upp till föräldern.</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="573"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="644"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="784"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="858"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="1033"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="601"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="672"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="812"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="886"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="1061"/>
         <source>Delete Folder</source>
         <translation>Ta Bort Mapp</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="602"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="813"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="630"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="841"/>
         <source>Add Folder</source>
         <translation>Lägg till Mapp</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="692"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="718"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="913"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="939"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="720"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="746"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="941"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="967"/>
         <source>Move Folder</source>
         <translation>Flytta Mapp</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="782"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="810"/>
         <source>The folder is removed; its groups and sub-folders move up to the parent.</source>
         <translation>Mappen tas bort; dess grupper och undermappar flyttas upp till föräldern.</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="885"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="913"/>
         <source>Move Table</source>
         <translation>Flytta Tabell</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="1030"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="1058"/>
         <source>The folder is removed; its tables and sub-folders move up to the parent. The accessor path of those tables changes accordingly.</source>
         <translation>Mappen tas bort; dess tabeller och undermappar flyttas upp till föräldern. Åtkomstsökvägen för dessa tabeller ändras därefter.</translation>
     </message>
@@ -26516,8 +26554,9 @@ Läs in den igen?</translation>
     <message numerus="yes">
         <location filename="../../../core/Ui/Console/WelcomeText.cpp" line="70"/>
         <source>Pro trial: %n day(s) remaining.</source>
-        <translation>Pro-testversion: %n dag(ar) återstår.<numerusform/>
-            <numerusform/>
+        <translation>
+            <numerusform>Pro-testversion: %n dag(ar) återstår.</numerusform>
+            <numerusform>Pro-testversion: %n dag(ar) återstår.</numerusform>
         </translation>
     </message>
     <message>
@@ -26531,49 +26570,49 @@ Läs in den igen?</translation>
         <translation>Misslyckades att ladda välkomsttext :(</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/Trial.cpp" line="256"/>
+        <location filename="../../src/Licensing/Trial.cpp" line="248"/>
         <source>Your Serial Studio Pro trial has expired</source>
         <translation>Din Serial Studio Pro-testversion har utgått</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/Trial.cpp" line="257"/>
+        <location filename="../../src/Licensing/Trial.cpp" line="249"/>
         <source>Pro features are locked until a license is activated. All free features remain fully functional, with no time limit.</source>
         <translation>Pro-funktioner är låsta tills en licens aktiveras. Alla kostnadsfria funktioner fungerar fullt ut utan tidsbegränsning.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/Trial.cpp" line="260"/>
+        <location filename="../../src/Licensing/Trial.cpp" line="252"/>
         <source>Trial Expired</source>
         <translation>Testversion Utgången</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/Trial.cpp" line="387"/>
+        <location filename="../../src/Licensing/Trial.cpp" line="376"/>
         <source>Network error</source>
         <translation>Nätverksfel</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/Trial.cpp" line="390"/>
-        <location filename="../../src/Licensing/Trial.cpp" line="408"/>
-        <location filename="../../src/Licensing/Trial.cpp" line="429"/>
+        <location filename="../../src/Licensing/Trial.cpp" line="379"/>
+        <location filename="../../src/Licensing/Trial.cpp" line="397"/>
+        <location filename="../../src/Licensing/Trial.cpp" line="418"/>
         <source>Trial Activation Error</source>
         <translation>Aktiveringsfel för Provperiod</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/Trial.cpp" line="405"/>
+        <location filename="../../src/Licensing/Trial.cpp" line="394"/>
         <source>Invalid server response</source>
         <translation>Ogiltigt serversvar</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/Trial.cpp" line="406"/>
+        <location filename="../../src/Licensing/Trial.cpp" line="395"/>
         <source>The server returned malformed data: %1</source>
         <translation>Servern returnerade felformaterad data: %1</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/Trial.cpp" line="426"/>
+        <location filename="../../src/Licensing/Trial.cpp" line="415"/>
         <source>Unexpected server response</source>
         <translation>Oväntat serversvar</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/Trial.cpp" line="427"/>
+        <location filename="../../src/Licensing/Trial.cpp" line="416"/>
         <source>The server response is missing required fields.</source>
         <translation>Serversvaret saknar obligatoriska fält.</translation>
     </message>
@@ -26617,8 +26656,8 @@ This script may use Lua 5.3 bitwise syntax, which this runtime does not support.
 </translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="489"/>
         <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="230"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="489"/>
         <source>Frame Parser Disabled</source>
         <translation>Frame-parser Inaktiverad</translation>
     </message>
@@ -26684,8 +26723,8 @@ Serial Studio kan skriva om de operatorer som inte stöds som bit.*-anrop och la
 %1</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="680"/>
         <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="560"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="680"/>
         <source>Missing Parse Function</source>
         <translation>Parse-funktion Saknas</translation>
     </message>
@@ -26701,8 +26740,8 @@ Säkerställ att din kod innehåller:
 function parse(frame) ... end</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="743"/>
         <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="612"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="743"/>
         <source>Parse Function Runtime Error</source>
         <translation>Körningsfel i Parse-funktionen</translation>
     </message>
@@ -26868,22 +26907,22 @@ function parse(%1) { ... }
 Separatorparametern behövs inte längre.</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ModuleManager.cpp" line="276"/>
+        <location filename="../../src/Misc/ModuleManager.cpp" line="277"/>
         <source>Critical</source>
         <translation>Kritiskt</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ModuleManager.cpp" line="276"/>
+        <location filename="../../src/Misc/ModuleManager.cpp" line="277"/>
         <source>Warning</source>
         <translation>Varning</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/CLI.cpp" line="869"/>
+        <location filename="../../src/Misc/CLI.cpp" line="870"/>
         <source>Project file not found</source>
         <translation>Projektfilen hittades inte</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/CLI.cpp" line="870"/>
+        <location filename="../../src/Misc/CLI.cpp" line="871"/>
         <source>The project file referenced by this shortcut could not be found:
 
 %1</source>
@@ -26892,17 +26931,17 @@ Separatorparametern behövs inte längre.</translation>
 %1</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/CLI.cpp" line="873"/>
+        <location filename="../../src/Misc/CLI.cpp" line="874"/>
         <source>Would you like to delete this shortcut?</source>
         <translation>Vill du ta bort denna genväg?</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/CLI.cpp" line="877"/>
+        <location filename="../../src/Misc/CLI.cpp" line="878"/>
         <source>Delete Shortcut</source>
         <translation>Ta Bort Genväg</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/CLI.cpp" line="879"/>
+        <location filename="../../src/Misc/CLI.cpp" line="880"/>
         <source>Quit</source>
         <translation>Avsluta</translation>
     </message>
@@ -27320,7 +27359,7 @@ Separatorparametern behövs inte längre.</translation>
         <translation>Servern skickade inget svar</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/CLI.h" line="66"/>
+        <location filename="../../src/Misc/CLI.h" line="67"/>
         <source>Listen for API clients on &lt;port&gt; instead of 7777.</source>
         <translation>Lyssna efter API-klienter på &lt;port&gt; istället för 7777.</translation>
     </message>
@@ -27336,12 +27375,12 @@ Separatorparametern behövs inte längre.</translation>
         <translation>Korrupt blocktiming i session %1</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="79"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="80"/>
         <source>This session is being recorded</source>
         <translation>Denna session spelas in</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="80"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="81"/>
         <source>Stop the recording before deleting or editing this session; its rows are still being written.</source>
         <translation>Stoppa inspelningen innan du tar bort eller redigerar denna session; dess rader skrivs fortfarande.</translation>
     </message>
@@ -27446,6 +27485,57 @@ Separatorparametern behövs inte längre.</translation>
         <location filename="../../../core/Devices/IO/Audio/SoundBank.cpp" line="215"/>
         <source>Sample-rate conversion failed for this file</source>
         <translation>Samplingsfrekvenskonvertering misslyckades för denna fil</translation>
+    </message>
+    <message numerus="yes">
+        <location filename="../../src/Misc/ProFeatureNotice.cpp" line="60"/>
+        <source>%n dataset transform(s)</source>
+        <translation>
+            <numerusform>%n datamängdsvärdetransform(er)</numerusform>
+            <numerusform>%n datamängdsvärdetransform(er)</numerusform>
+        </translation>
+    </message>
+    <message numerus="yes">
+        <location filename="../../src/Misc/ProFeatureNotice.cpp" line="61"/>
+        <source>%n Variables table(s)</source>
+        <translation>
+            <numerusform>%n variabeltabell(er)</numerusform>
+            <numerusform>%n variabeltabell(er)</numerusform>
+        </translation>
+    </message>
+    <message>
+        <location filename="../../src/Misc/ProFeatureNotice.cpp" line="65"/>
+        <source>This project uses %1 and %2.</source>
+        <translation>Det här projektet använder %1 och %2.</translation>
+    </message>
+    <message>
+        <location filename="../../src/Misc/ProFeatureNotice.cpp" line="67"/>
+        <source>This project uses %1.</source>
+        <translation>Det här projektet använder %1.</translation>
+    </message>
+    <message>
+        <location filename="../../src/Misc/ProFeatureNotice.cpp" line="70"/>
+        <source>A project with this content needs Serial Studio Pro to connect. To use it for free, remove the transforms and the tables from the project.</source>
+        <translation>Ett projekt med det här innehållet kräver Serial Studio Pro för att ansluta. Om du vill använda det kostnadsfritt tar du bort transformeringarna och tabellerna från projektet.</translation>
+    </message>
+    <message>
+        <location filename="../../src/Misc/ProFeatureNotice.cpp" line="98"/>
+        <source>Get Serial Studio Pro</source>
+        <translation>Skaffa Serial Studio Pro</translation>
+    </message>
+    <message>
+        <location filename="../../src/Misc/ProFeatureNotice.cpp" line="102"/>
+        <source>This feature requires Serial Studio Pro</source>
+        <translation>Den här funktionen kräver Serial Studio Pro</translation>
+    </message>
+    <message>
+        <location filename="../../src/Misc/ProFeatureNotice.cpp" line="103"/>
+        <source>This build includes the GPLv3 feature set only. The official build adds the Pro features, with a free 14-day trial.</source>
+        <translation>Det här bygget innehåller endast GPLv3-funktionsuppsättningen. Den officiella versionen lägger till Pro-funktionerna, med en kostnadsfri 14-dagars provperiod.</translation>
+    </message>
+    <message>
+        <location filename="../../src/Misc/ProFeatureNotice.cpp" line="107"/>
+        <source>Serial Studio Pro</source>
+        <translation>Serial Studio Pro</translation>
     </message>
 </context>
 <context>
@@ -28675,93 +28765,93 @@ Lägg till absoluta adresser ovan för att polla styrenheten.</translation>
         <translation type="vanished">Bilder (*.png *.jpg *.jpeg *.svg)</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="651"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="652"/>
         <source>Open Session File</source>
         <translation>Öppna Sessionsfil</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="653"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="654"/>
         <source>Session files (*.db)</source>
         <translation>Sessionsfiler (*.db)</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="1298"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="1305"/>
         <source>Cannot open session file</source>
         <translation>Kan inte öppna sessionsfil</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="886"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="893"/>
         <source>Delete session from %1?</source>
         <translation>Ta bort session från %1?</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="889"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="896"/>
         <source>Delete Session</source>
         <translation>Ta Bort Session</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="1158"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="1165"/>
         <source>No project data</source>
         <translation>Ingen projektdata</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="887"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="894"/>
         <source>All readings and raw data for this session are permanently removed.</source>
         <translation>Alla avläsningar och rådata för denna session tas bort permanent.</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="709"/>
-        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="718"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="716"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="725"/>
         <source>Lock Session File</source>
         <translation>Lås Sessionsfil</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="710"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="717"/>
         <source>Choose a password to lock the session file:</source>
         <translation>Välj ett lösenord för att låsa sessionsfilen:</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="719"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="726"/>
         <source>Confirm the password:</source>
         <translation>Bekräfta lösenordet:</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="727"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="734"/>
         <source>Passwords do not match</source>
         <translation>Lösenorden stämmer inte överens</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="728"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="735"/>
         <source>The two passwords you entered do not match. The session file was not locked.</source>
         <translation>De två lösenorden du angav stämmer inte överens. Sessionsfilen låstes inte.</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="764"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="771"/>
         <source>Unlock Session File</source>
         <translation>Lås Upp Sessionsfil</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="765"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="772"/>
         <source>Enter the session file password:</source>
         <translation>Ange sessionsfilens lösenord:</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="775"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="782"/>
         <source>Incorrect password</source>
         <translation>Felaktigt lösenord</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="776"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="783"/>
         <source>The password you entered does not match the one stored in the session file.</source>
         <translation>Lösenordet du angav stämmer inte överens med det som finns lagrat i sessionsfilen.</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="876"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="883"/>
         <source>Session file locked</source>
         <translation>Sessionsfil låst</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="877"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="884"/>
         <source>Unlock the session file before deleting recorded sessions.</source>
         <translation>Lås upp sessionsfilen innan du tar bort inspelade sessioner.</translation>
     </message>
@@ -28832,37 +28922,37 @@ Lägg till absoluta adresser ovan för att polla styrenheten.</translation>
         <translation type="vanished">Kunde inte generera rapporten.</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="1159"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="1166"/>
         <source>This session file does not contain an embedded project.</source>
         <translation>Denna sessionsfil innehåller inget inbäddat projekt.</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="1168"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="1175"/>
         <source>Invalid project data</source>
         <translation>Ogiltig projektdata</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="1169"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="1176"/>
         <source>The embedded project JSON is malformed and cannot be restored.</source>
         <translation>Den inbäddade projekt-JSON:en är felaktig och kan inte återställas.</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="1179"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="1186"/>
         <source>Restore Project</source>
         <translation>Återställ Projekt</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="1179"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="1186"/>
         <source>Serial Studio projects (*.ssproj *.json)</source>
         <translation>Serial Studio-projekt (*.ssproj *.json)</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="1187"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="1194"/>
         <source>Cannot write file</source>
         <translation>Kan inte skriva fil</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="1187"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="1194"/>
         <source>Check file permissions and try again.</source>
         <translation>Kontrollera filbehörigheter och försök igen.</translation>
     </message>
@@ -29160,63 +29250,63 @@ Lägg till absoluta adresser ovan för att polla styrenheten.</translation>
 <context>
     <name>Sessions::Player</name>
     <message>
-        <location filename="../../../core/Storage/Sessions/Player.cpp" line="328"/>
+        <location filename="../../../core/Storage/Sessions/Player.cpp" line="329"/>
         <source>Open Session File</source>
         <translation>Öppna Sessionsfil</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/Player.cpp" line="330"/>
+        <location filename="../../../core/Storage/Sessions/Player.cpp" line="331"/>
         <source>Session files (*.db)</source>
         <translation>Sessionsfiler (*.db)</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/Player.cpp" line="412"/>
+        <location filename="../../../core/Storage/Sessions/Player.cpp" line="420"/>
         <source>Device Connection Active</source>
         <translation>Enhetsanslutning Aktiv</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/Player.cpp" line="413"/>
+        <location filename="../../../core/Storage/Sessions/Player.cpp" line="421"/>
         <source>To use this feature, you must disconnect from the device. Do you want to proceed?</source>
         <translation>För att använda denna funktion måste du koppla från enheten. Vill du fortsätta?</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/Player.cpp" line="455"/>
-        <location filename="../../../core/Storage/Sessions/Player.cpp" line="482"/>
+        <location filename="../../../core/Storage/Sessions/Player.cpp" line="463"/>
+        <location filename="../../../core/Storage/Sessions/Player.cpp" line="490"/>
         <source>Cannot open session file</source>
         <translation>Kan inte öppna sessionsfil</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/Player.cpp" line="456"/>
+        <location filename="../../../core/Storage/Sessions/Player.cpp" line="464"/>
         <source>Unknown error</source>
         <translation>Okänt fel</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/Player.cpp" line="475"/>
+        <location filename="../../../core/Storage/Sessions/Player.cpp" line="483"/>
         <source>No project data</source>
         <translation>Ingen projektdata</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/Player.cpp" line="476"/>
+        <location filename="../../../core/Storage/Sessions/Player.cpp" line="484"/>
         <source>This session does not contain an embedded project file — the dashboard falls back to a quick-plot layout.</source>
         <translation>Denna session innehåller ingen inbäddad projektfil — instrumentpanelen använder en snabbdiagramlayout.</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/Player.cpp" line="483"/>
+        <location filename="../../../core/Storage/Sessions/Player.cpp" line="491"/>
         <source>Check file permissions and try again.</source>
         <translation>Kontrollera filbehörigheter och försök igen.</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/Player.cpp" line="633"/>
+        <location filename="../../../core/Storage/Sessions/Player.cpp" line="641"/>
         <source>Sessions</source>
         <translation>Sessioner</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/Player.cpp" line="635"/>
+        <location filename="../../../core/Storage/Sessions/Player.cpp" line="643"/>
         <source>Recording uses an older copy of the project</source>
         <translation>Inspelningen använder en äldre kopia av projektet</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/Player.cpp" line="636"/>
+        <location filename="../../../core/Storage/Sessions/Player.cpp" line="644"/>
         <source>The dashboard shown is the one embedded in the recording; the project on disk has changed since. Close the session to return to the current project.</source>
         <translation>Instrumentpanelen som visas är den som är inbäddad i inspelningen; projektet på disk har ändrats sedan dess. Stäng sessionen för att återgå till det aktuella projektet.</translation>
     </message>
@@ -32772,27 +32862,27 @@ Aktivera Bädda in Projekt för att baka in projektet i genvägen, så att den f
 <context>
     <name>UI::AlarmMonitor</name>
     <message>
-        <location filename="../../../core/Ui/UI/AlarmMonitor.cpp" line="224"/>
+        <location filename="../../../core/Ui/UI/AlarmMonitor.cpp" line="246"/>
         <source>Alarm</source>
         <translation>Larm</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/AlarmMonitor.cpp" line="225"/>
+        <location filename="../../../core/Ui/UI/AlarmMonitor.cpp" line="247"/>
         <source>critical</source>
         <translation>kritiskt</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/AlarmMonitor.cpp" line="225"/>
+        <location filename="../../../core/Ui/UI/AlarmMonitor.cpp" line="247"/>
         <source>warning</source>
         <translation>varning</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/AlarmMonitor.cpp" line="229"/>
+        <location filename="../../../core/Ui/UI/AlarmMonitor.cpp" line="251"/>
         <source>Value %1%2 entered the %3 band (%4–%5).</source>
         <translation>Värde %1%2 gick in i %3-bandet (%4–%5).</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/AlarmMonitor.cpp" line="235"/>
+        <location filename="../../../core/Ui/UI/AlarmMonitor.cpp" line="257"/>
         <source>Alarms</source>
         <translation>Larm</translation>
     </message>
@@ -32800,22 +32890,22 @@ Aktivera Bädda in Projekt för att baka in projektet i genvägen, så att den f
 <context>
     <name>UI::Alarms::AlarmAnnunciator</name>
     <message>
-        <location filename="../../../core/Ui/UI/Alarms/AlarmAnnunciator.cpp" line="425"/>
+        <location filename="../../../core/Ui/UI/Alarms/AlarmAnnunciator.cpp" line="427"/>
         <source>System default</source>
         <translation>Systemstandard</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/Alarms/AlarmAnnunciator.cpp" line="500"/>
+        <location filename="../../../core/Ui/UI/Alarms/AlarmAnnunciator.cpp" line="502"/>
         <source>Path climbs out of the project folder</source>
         <translation>Sökvägen lämnar projektmappen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/Alarms/AlarmAnnunciator.cpp" line="568"/>
+        <location filename="../../../core/Ui/UI/Alarms/AlarmAnnunciator.cpp" line="570"/>
         <source>Unknown sound slot '%1'</source>
         <translation>Okänd ljudslot '%1'</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/Alarms/AlarmAnnunciator.cpp" line="826"/>
+        <location filename="../../../core/Ui/UI/Alarms/AlarmAnnunciator.cpp" line="828"/>
         <source>Alarms</source>
         <translation>Larm</translation>
     </message>
@@ -32827,57 +32917,57 @@ Aktivera Bädda in Projekt för att baka in projektet i genvägen, så att den f
 <context>
     <name>UI::Alarms::AnnunciatorChecker</name>
     <message>
-        <location filename="../../../core/Ui/UI/Alarms/AnnunciatorChecker.cpp" line="71"/>
+        <location filename="../../../core/Ui/UI/Alarms/AnnunciatorChecker.cpp" line="72"/>
         <source>Alarm sound file unavailable: %1</source>
         <translation>Larmljudfil otillgänglig: %1</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/Alarms/AnnunciatorChecker.cpp" line="73"/>
+        <location filename="../../../core/Ui/UI/Alarms/AnnunciatorChecker.cpp" line="74"/>
         <source>Pick a valid PCM WAV file, or clear the override to use the bundled sound.</source>
         <translation>Välj en giltig PCM WAV-fil eller rensa åsidosättningen för att använda det inbyggda ljudet.</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/Alarms/AnnunciatorChecker.cpp" line="81"/>
+        <location filename="../../../core/Ui/UI/Alarms/AnnunciatorChecker.cpp" line="82"/>
         <source>Aural alerts are off, but this project defines alarms</source>
         <translation>Ljudvarningar är inaktiverade, men det här projektet definierar larm</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/Alarms/AnnunciatorChecker.cpp" line="82"/>
+        <location filename="../../../core/Ui/UI/Alarms/AnnunciatorChecker.cpp" line="83"/>
         <source>The project configures alarm bands or alarm sounds, and none of them will be heard while the master enable is off.</source>
         <translation>Projektet konfigurerar larmband eller larmljud, och inget av dem kommer att höras medan huvudaktiveringen är inaktiverad.</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/Alarms/AnnunciatorChecker.cpp" line="84"/>
+        <location filename="../../../core/Ui/UI/Alarms/AnnunciatorChecker.cpp" line="85"/>
         <source>Enable alarm sounds in Preferences &gt; Sounds, or remove the project's alarm configuration.</source>
         <translation>Aktivera larmljud i Inställningar &gt; Ljud, eller ta bort projektets larmkonfiguration.</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/Alarms/AnnunciatorChecker.cpp" line="102"/>
+        <location filename="../../../core/Ui/UI/Alarms/AnnunciatorChecker.cpp" line="103"/>
         <source>No audio output device is available</source>
         <translation>Ingen ljudutgångsenhet är tillgänglig</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/Alarms/AnnunciatorChecker.cpp" line="103"/>
+        <location filename="../../../core/Ui/UI/Alarms/AnnunciatorChecker.cpp" line="104"/>
         <source>Alarm sounds cannot play until an output device is present.</source>
         <translation>Larmljud kan inte spelas upp förrän en utgångsenhet finns tillgänglig.</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/Alarms/AnnunciatorChecker.cpp" line="104"/>
+        <location filename="../../../core/Ui/UI/Alarms/AnnunciatorChecker.cpp" line="105"/>
         <source>Connect an audio output, or disable sounds in Preferences &gt; Sounds.</source>
         <translation>Anslut en ljudutgång eller inaktivera ljud i Inställningar &gt; Ljud.</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/Alarms/AnnunciatorChecker.cpp" line="110"/>
+        <location filename="../../../core/Ui/UI/Alarms/AnnunciatorChecker.cpp" line="111"/>
         <source>Alarm sound device '%1' not found</source>
         <translation>Larmlj­udenhet '%1' hittades inte</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/Alarms/AnnunciatorChecker.cpp" line="111"/>
+        <location filename="../../../core/Ui/UI/Alarms/AnnunciatorChecker.cpp" line="112"/>
         <source>Alarm sounds are playing on the system default output instead.</source>
         <translation>Larmljud spelas upp på systemets standardutgång istället.</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/Alarms/AnnunciatorChecker.cpp" line="112"/>
+        <location filename="../../../core/Ui/UI/Alarms/AnnunciatorChecker.cpp" line="113"/>
         <source>Reconnect the device, or pick another one in Preferences &gt; Sounds.</source>
         <translation>Återanslut enheten eller välj en annan i Inställningar &gt; Ljud.</translation>
     </message>

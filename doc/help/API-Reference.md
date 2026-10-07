@@ -862,6 +862,7 @@ Open connection to the configured device.
 
 **Errors:**
 - `EXECUTION_ERROR`: Already connected or configuration invalid
+- `OPERATION_FAILED`: No license or trial covers this connect. The message names the reason: a Pro driver, a project with several data sources, or a project that contains dataset transforms or Variables.
 
 **Example:**
 ```bash
@@ -2661,7 +2662,7 @@ Duplicate a dataset by id.
 ```
 
 #### 🟢 `project.dataset.update`
-Patch any subset of dataset fields by group id and dataset id.
+Patch any subset of dataset fields by group id and dataset id. Changing `transformCode` to a non-empty value needs a license or an active trial and fails with `OPERATION_FAILED` otherwise; clearing it is always allowed.
 
 **Parameters:**
 - `groupId` (int, required): Target group id
@@ -2684,6 +2685,8 @@ Patch any subset of dataset fields by group id and dataset id.
   band list.
 - `alarmLow`, `alarmHigh`, `alarmEnabled` (optional): Legacy 2-band simple mode, used
   only when `alarmBands` is not present
+- `suppressAlarms` (bool, optional): Keeps the dataset's bands drawn but stops its band
+  notifications, alarm points and sounds
 - `displayTickCount` (int, optional, clamped to `>= 0`)
 - `displayFormat` (string, optional)
 - `decimalPoints` (int, optional, clamped to `-1..15`)
@@ -2824,7 +2827,7 @@ Toggle the virtual flag on a dataset.
 ```
 
 #### 🟢 `project.dataset.setTransformCode`
-Set a dataset's per-value transform code.
+Set a dataset's per-value transform code. Setting non-empty code needs a license or an active trial and fails with `OPERATION_FAILED` otherwise; clearing it is always allowed.
 
 **Parameters:**
 - `groupId` (int): Owning group id
@@ -2884,7 +2887,7 @@ Get a dataset's coloured alarm bands.
   "rangeMax": 100
 }
 ```
-`rangeMin`/`rangeMax` are the dataset's `wgtMin`/`wgtMax`, returned so callers can validate band ranges before writing them back. An empty project (no bands configured) returns an empty `alarmBands` array. Applies to bar/gauge/meter widgets and LED-panel datasets; calling it on other widget types succeeds with an empty array.
+`rangeMin`/`rangeMax` are the dataset's `wgtMin`/`wgtMax`, returned so callers can validate band ranges before writing them back. An empty project (no bands configured) returns an empty `alarmBands` array. Bands are drawn, notified, and alarmed only when the dataset has a Bar, Gauge, or Meter widget or is an LED Panel member (and is not hidden from the dashboard), or belongs to a Bar Panel group. On any other dataset they are stored and ignored, and this call still returns them. A dataset with `suppressAlarms` set still draws its bands but never notifies or alarms.
 
 #### 🟢 `project.dataset.setAlarmBands`
 Atomically replace a dataset's alarm-band array.
@@ -2900,7 +2903,7 @@ Atomically replace a dataset's alarm-band array.
   - `label` (string, optional): Band name, shown in band-edge notifications
   - `blink` (bool, optional): LED panels flash the LED while the band is active
 
-Bands may have gaps and may overlap; rendering paints them in array order behind the value indicator. Severity of Warning or higher triggers a notification when the value enters the band (3-second per-dataset cooldown suppresses repeat spam). Pass an empty array to clear all alarms.
+Bands may have gaps and may overlap; rendering paints them in array order behind the value indicator. Severity of Warning or higher triggers a notification and an alarm point when the value enters the band (3-second per-dataset cooldown suppresses repeat spam), whether or not the widget is on screen. That happens only when the dataset's bands are applicable (see [Alarm bands](Widget-Reference.md#alarm-bands)) and its `suppressAlarms` is off. Bands written to any other dataset are stored but never notify or alarm, and a suppressed dataset still draws them. Pass an empty array to clear all alarms.
 
 **Returns:**
 ```json
@@ -4510,13 +4513,13 @@ Return one table's variable list.
 - `name` (string): Table name or full folder path
 
 #### 🟢 `project.dataTable.add`
-Create an empty table. A colliding name is uniquified.
+Create an empty table. A colliding name is uniquified. Needs a license or an active trial; fails with `OPERATION_FAILED` otherwise.
 
 **Parameters:**
 - `name` (string, optional): Desired table name (default `Shared Table`)
 
 #### 🟢 `project.dataTable.rename`
-Rename a table.
+Rename a table. Needs a license or an active trial; fails with `OPERATION_FAILED` otherwise.
 
 **Parameters:**
 - `oldName` (string): Current table name
@@ -4530,7 +4533,7 @@ Delete a table and all its variables.
 - `dryRun` (bool, optional): Return what would be deleted without committing
 
 #### 🟢 `project.dataTable.addRegister`
-Append a variable to a table.
+Append a variable to a table. Needs a license or an active trial; fails with `OPERATION_FAILED` otherwise.
 
 **Parameters:**
 - `table` (string): Owning table name
@@ -4539,7 +4542,7 @@ Append a variable to a table.
 - `defaultValue` (number|string, optional): Initial value (default `0`)
 
 #### 🟢 `project.dataTable.updateRegister`
-Update a variable's name, kind or default.
+Update a variable's name, kind or default. Needs a license or an active trial; fails with `OPERATION_FAILED` otherwise.
 
 **Parameters:**
 - `table` (string): Owning table name

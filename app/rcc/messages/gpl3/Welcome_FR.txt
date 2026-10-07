@@ -12,7 +12,7 @@ Serial Studio Pro :
 → https://store.serial-studio.com/
 
 Fonctionnalités Pro :
-→ Visualisation MQTT, XY et 3D
+→ Visualisation MQTT et 3D
 → Pilotes Audio, CAN Bus, Modbus, USB, HID et Process I/O
 → Widgets de sortie, export MDF4 et transferts XMODEM/YMODEM/ZMODEM
 → Historian, Variables et transformations (JS + Lua)

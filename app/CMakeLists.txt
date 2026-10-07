@@ -258,6 +258,7 @@ endif()
 
 set(SOURCES
   src/Misc/ModuleManager.cpp
+  src/Misc/ProFeatureNotice.cpp
   src/Misc/CLI.cpp
   src/Misc/CLI/CliBusConfig.cpp
   src/Misc/CLI/CliIndustrialConfig.cpp
@@ -273,6 +274,7 @@ set(SOURCES
 
 set(HEADERS
   src/Misc/ModuleManager.h
+  src/Misc/ProFeatureNotice.h
   src/Misc/CLI.h
   src/Misc/CLI/CliBusConfig.h
   src/Misc/CLI/CliIndustrialConfig.h

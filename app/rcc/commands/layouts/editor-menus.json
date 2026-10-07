@@ -158,6 +158,7 @@
     ] },
     { "name": "dataset", "items": [
         {"type": "command", "id": "editor.menu.editTransform"},
+        {"type": "command", "id": "editor.menu.removeTransform"},
         {"type": "submenu", "title": "Visualizations", "icon": "editor/widget",
          "include": "dataset-visuals"},
         {"type": "separator"},
@@ -256,7 +257,8 @@
         {"type": "command", "id": "editor.menu.configureInflux"}
     ] },
     { "name": "transform", "items": [
-        {"type": "command", "id": "editor.menu.editTransform"}
+        {"type": "command", "id": "editor.menu.editTransform"},
+        {"type": "command", "id": "editor.menu.removeTransform"}
     ] }
   ]
 }

@@ -78,7 +78,14 @@ Two entries in that list carry their own reason to sit where they do:
   trial starts from a gate site's refusal via `Core::License::requestProFeature` (handler:
   `Licensing::TrialGate`, a `ModuleManager`-owned member wired in `wireTrialGate()` AFTER
   `restoreLastProject()` so a boot restore never prompts), and `Trial` runs a 60 s date-rollover
-  check so mid-session expiry re-publishes license state like any other transition.
+  check so mid-session expiry re-publishes license state like any other transition. A GPL GUI
+  root installs its own handler and the remote-dispatch probe at the same point
+  (`Misc::ProFeatureNotice::install()`, in `app/src/Misc/ProFeatureNotice.cpp`): a notice with a
+  link to the official build, silent when headless or remote-dispatched; without it every
+  `Core::License::activated()` gate in a GPL build refuses with no feedback, because
+  `Core::License::set()` is only ever called under `BUILD_COMMERCIAL`. Both handlers append
+  `Misc::ProFeatureNotice::contentDetail()` for the `Core::License::kProContentFeature` intent
+  (spec 0094), which names the transforms and tables that refused the connect.
   Three shapes of that block are worth naming because a QML binding reads them at paint rate:
   **`Licensing::MonotonicClock::now()` persists its anti-rewind floor at most once a minute**
   (`kPersistIntervalMs`, 60000; in between, the cached floor still catches a rewind, so the

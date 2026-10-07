@@ -11,7 +11,7 @@ Bu projeyi beğendiniz mi? Serial Studio Pro ile geliştirmeyi desteklemeyi
 düşünün: → https://store.serial-studio.com/
 
 Pro özellikler:
-→ MQTT, XY ve 3D görselleştirme
+→ MQTT ve 3D görselleştirme
 → Audio, CAN Bus, Modbus, USB, HID ve Process I/O sürücüleri
 → Çıkış widget'ları, MDF4 dışa aktarma ve XMODEM/YMODEM/ZMODEM aktarımları
 → Historian, Değişkenler ve değer dönüşümleri (JS + Lua)

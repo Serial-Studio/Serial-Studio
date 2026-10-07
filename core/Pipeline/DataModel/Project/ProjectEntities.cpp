@@ -149,6 +149,41 @@ void DataModel::ProjectEntities::updateGroup(const int groupId,
 }
 
 /**
+ * @brief Whether the dataset at @p groupId/@p datasetId carries transform code; drives the Remove
+ *        Transform menu entry.
+ */
+bool DataModel::ProjectEntities::datasetHasTransform(const int groupId, const int datasetId) const
+{
+  const auto& groups = m_model.m_groups;
+  if (groupId < 0 || static_cast<size_t>(groupId) >= groups.size())
+    return false;
+
+  const auto& datasets = groups[groupId].datasets;
+  if (datasetId < 0 || static_cast<size_t>(datasetId) >= datasets.size())
+    return false;
+
+  return !datasets[datasetId].transformCode.isEmpty();
+}
+
+/**
+ * @brief Removes the transform from the dataset at @p groupId/@p datasetId as one undo step and
+ *        rebuilds the live pipeline at once, so the removed code stops running before the next
+ *        connect. Never license-gated (spec 0094 R7): removal is how a project is made free.
+ */
+void DataModel::ProjectEntities::clearDatasetTransform(const int groupId, const int datasetId)
+{
+  if (!datasetHasTransform(groupId, datasetId))
+    return;
+
+  const ProjectUndoScope undo_scope{m_model, ProjectModel::tr("Remove Transform")};
+  DataModel::Dataset cleared = m_model.m_groups[groupId].datasets[datasetId];
+  cleared.transformCode.clear();
+  cleared.transformLanguage = -1;
+  updateDataset(groupId, datasetId, cleared, true);
+  m_model.m_persistence.syncRuntime();
+}
+
+/**
  * @brief Replaces the dataset at @p groupId/@p datasetId.
  */
 void DataModel::ProjectEntities::updateDataset(const int groupId,

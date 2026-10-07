@@ -33,6 +33,8 @@
 #include "API/SchemaBuilder.h"
 #include "Core/Checksum.h"
 #include "Core/DataModel/Frame.h"
+#include "Core/DataModel/FrameSupport.h"
+#include "Core/License.h"
 #include "Core/SerialStudio.h"
 #include "DataModel/PipelineModules.h"
 #include "DataModel/ProjectModel.h"
@@ -479,6 +481,9 @@ API::CommandResponse API::Handlers::ProjectUpdateCommands::datasetUpdate(const Q
   const QString err = ProjectHandler::applyDatasetUpdateParams(d, params, rebuildTree, consumed);
   if (!err.isEmpty())
     return CommandResponse::makeError(id, ErrorCode::InvalidParam, err);
+
+  if (SerialStudio::authorsTransform(datasets[datasetId], d) && !Core::License::activated())
+    return CommandResponse::makeError(id, ErrorCode::OperationFailed, transformsRequirePro());
 
   if (consumed.size() > identityKeyCount)
     rebuildTree = true;

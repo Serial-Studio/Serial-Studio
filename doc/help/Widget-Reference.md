@@ -231,6 +231,10 @@ flowchart TD
 
 Bar, Gauge, Meter, Bar Panel, and LED Panel widgets render one or more **alarm bands**. Each band is a contiguous value range with a color and a severity tier. The bands are always drawn in full — muted zones along the bar track (Bar / Bar Panel) or arc segments on the dial rim (Gauge / Meter) — and the fill or needle takes the active band's color at all times, so a value in the normal range reads as a positive green signal. A value outside every band clamps to the nearest band's severity, so overrange data always renders as critical rather than unclassified; LED Panel entries light in the active band's color. The "APU tachometer" convention (white below normal, green operating range, yellow caution, red redline) is one canonical setup; any combination of ranges and colors is allowed.
 
+Bands take effect only on a dataset that one of these widgets shows: a dataset with a Bar, Gauge, or Meter widget, a dataset shown in the LED Panel, or any dataset in a Bar Panel group. **Hide on Dashboard** removes the first two cases, because a hidden dataset gets no widget of its own; Bar Panel rows are unaffected. On any other dataset (a plot-only dataset, for example) the bands are kept in the project file but are not drawn, post no notification, and raise no [alarm point](Aural-Alerts.md). Assigning one of the widgets again brings them back.
+
+To keep a dataset's bands on screen without alerting, turn on **Suppress Alarms** in the dataset's Widget Settings (`suppressAlarms: true` in the project file). The widgets draw the bands exactly as before, but the dataset posts no band notification and raises no alarm point. A tachometer redline that should be seen but not heard is the usual case.
+
 **Band schema.** Under the dataset's `alarmBands` array, each entry is an object:
 
 | Field      | Type   | Required | Notes |
@@ -319,7 +323,8 @@ Every dataset in a project file supports these visualization-related fields:
 | `decimalPoints`    | int    | -1      | Fixed decimal places for the value display; overrides `displayFormat` (-1 = auto). Editor label "Decimal Points". |
 | `extremeHold`      | bool   | false   | Shows tick marks at the lowest and highest values observed since the last data reset. Editor label "Hold Min/Max Markers". |
 | `ledHigh`          | double | 80      | LED activation threshold (used only when `alarmBands` is empty). |
-| `alarmBands`       | array  | `[]`    | Colored value bands for bar/gauge/meter widgets and LED panels. Each entry: `{min, max, severity, color?, label?, blink?}`; see [Alarm bands](#alarm-bands). Legacy `alarmEnabled` / `alarmLow` / `alarmHigh` keys from older releases are still read and migrated to bands on load, but no longer written. |
+| `alarmBands`       | array  | `[]`    | Colored value bands for bar/gauge/meter widgets, LED panels, and bar panels; ignored on any other dataset. Each entry: `{min, max, severity, color?, label?, blink?}`; see [Alarm bands](#alarm-bands). Legacy `alarmEnabled` / `alarmLow` / `alarmHigh` keys from older releases are still read and migrated to bands on load, but no longer written. |
+| `suppressAlarms`   | bool   | false   | Keeps the dataset's alarm bands drawn but stops its band notifications, alarm points, and sounds. Written only when true. Editor label "Suppress Alarms". |
 | `fftSamples`       | int    | 256     | FFT window size (power of 2, 8 to 262144). |
 | `fftWindow`        | int    | 5       | FFT window function, applied to both the FFT plot and the waterfall: 0 = Rectangular, 1 = Bartlett, 2 = Hann, 3 = Hamming, 4 = Blackman, 5 = Blackman-Harris, 6 = Nuttall, 7 = Blackman-Nuttall, 8 = Flat Top, 9 = Welch, 10 = Bartlett-Hann, 11 = Bohman, 12 = Cosine, 13 = Lanczos, 14 = Parzen. |
 | `fftSamplingRate`  | int    | 100     | FFT sampling rate in Hz. |

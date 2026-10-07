@@ -6,6 +6,9 @@ nedan låses upp i samma stund som du provar en av dem, med en gratis
 14-dagars provperiod. Inget konto eller någon betalning krävs för att
 starta den.
 
+Gratis för personligt bruk, utbildning och öppen källkod;
+kommersiell användning kräver en Pro-licens.
+
 → Support: alex@serial-studio.com
 → Boka ett samtal: https://calendly.com/serial-studio
 → Läs mer: https://serial-studio.com/

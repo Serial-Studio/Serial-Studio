@@ -15,6 +15,8 @@ Priorities use the flight-deck vocabulary: **Warning**, **Caution** and **Adviso
 | Caution  | Warning alarm band (severity 2), Warning notification | Three-pulse burst | Every 10 s (2.5 s to 30 s) until acknowledged, silenced or the condition clears |
 | Advisory | Info notification | Single pulse | Once, only while nothing else sounds |
 
+A dataset's alarm bands alert only when a widget that draws them is configured for it: the dataset has a Bar, Gauge or Meter widget or is shown in the LED Panel, and **Hide on Dashboard** is off, or the dataset belongs to a Bar Panel group. The widget does not have to be on screen. Bands on any other dataset stay in the project file but raise no alarm point and post no notification (see [Alarm bands](Widget-Reference.md#alarm-bands)). A dataset with **Suppress Alarms** on (Project Editor, Widget Settings) keeps its bands on screen but never alerts.
+
 Info and OK alarm bands never alert. The `Problems` and `System` notification channels are the application's own diagnostics and never become alarm points. The alarm-band monitor's own notifications are recognised by their origin, never by their channel name, so a script or API client may post on any channel it likes — including one named "Alarms" — and still raise a point, in every interface language.
 
 ## Alarm points and sequences
@@ -59,7 +61,7 @@ Disconnecting on purpose returns every point to Normal without ringback; the Dis
 
 ## Preferences > Sounds
 
-- **Enable Sounds** (off by default; nothing plays until it is turned on), **Mute**, **Volume**, **Output Device** (system default or any output the OS lists). If the selected device disappears, sounds continue on the system default, the Problem Center reports the lost device, and output returns to it when it comes back. While sounds are disabled and the loaded project defines alarm bands or alarm sounds, the taskbar bell dims and the Problem Center says the alarms will be silent — a project full of alarms can never run mute without a visible hint.
+- **Enable Sounds** (off by default; nothing plays until it is turned on), **Mute**, **Volume**, **Output Device** (system default or any output the OS lists). If the selected device disappears, sounds continue on the system default, the Problem Center reports the lost device, and output returns to it when it comes back. While sounds are disabled and the loaded project defines alarm sounds or alarm bands that can alert, the taskbar bell dims and the Problem Center says the alarms will be silent — a project full of alarms can never run mute without a visible hint.
 - **Sequence (ISA-18.1)**: A-4 (default), A, M-4, M, R-4 or R.
 - One row per alarm signal (Warning, Caution, Advisory, Ringback): the WAV file (empty means the bundled sound), a browse button, a play button and a clear button. Warning and Caution also carry their repeat interval.
 - One row per application event, each with an enable switch: Connected, Disconnected, Link Lost, Reconnected, Export Finished, Recording Started, Recording Stopped, Error Dialog Shown, Button Pressed, Toggle Changed. Toggle Changed covers switches, radio buttons, checkboxes, combo box selections and spin box edits; Button Pressed covers buttons, the Preferences and console annotation tabs, and Project Editor tree clicks. Button Pressed and Toggle Changed are off by default. Event sounds play on their own lane, are lowered by 12 dB while an alarm sounds, and never delay an alarm burst.

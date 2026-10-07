@@ -28,6 +28,7 @@
 #include "Core/Services.h"
 #include "Core/SSAssert.h"
 #include "DataModel/ProjectModel.h"
+#include "DataModel/WidgetResolution.h"
 
 //--------------------------------------------------------------------------------------------------
 // Option sources
@@ -562,6 +563,19 @@ bool DataModel::PropertyHooks::extremeHoldApplicable(const Dataset& d, const Pro
     return false;
 
   return groups[d.groupId].widget == QLatin1String("barpanel");
+}
+
+/**
+ * @brief Returns true while the dataset has alarm bands that a widget draws, which is when the
+ *        Suppress Alarms row has something to suppress (spec 0093).
+ */
+bool DataModel::PropertyHooks::alarmBandsDrawn(const Dataset& d, const ProjectModel& pm)
+{
+  const auto& groups = pm.groups();
+  if (d.alarmBands.empty() || d.groupId < 0 || static_cast<size_t>(d.groupId) >= groups.size())
+    return false;
+
+  return SerialStudio::datasetRendersAlarmBands(d, groups[d.groupId]);
 }
 
 /**

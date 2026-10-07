@@ -4666,16 +4666,26 @@ Povolte pouze v důvěryhodných sítích. Nedůvěryhodní klienti mohou číst
     </message>
     <message>
         <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="298"/>
+        <source>Remove Transform</source>
+        <translation>Odebrat Transformaci</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="299"/>
         <source>Remove every user workspace</source>
         <translation>Odstranit všechny uživatelské pracovní prostory</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="299"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="300"/>
+        <source>Remove the value transform from this dataset</source>
+        <translation>Odebrat transformaci hodnoty z tohoto datasetu</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="301"/>
         <source>Rename</source>
         <translation>Přejmenovat</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="300"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="302"/>
         <source>Rename this item</source>
         <translation>Přejmenovat tuto položku</translation>
     </message>
@@ -4684,167 +4694,167 @@ Povolte pouze v důvěryhodných sítích. Nedůvěryhodní klienti mohou číst
         <translation type="vanished">Obnovit</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="301"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="303"/>
         <source>Replay</source>
         <translation>Přehrát</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="302"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="304"/>
         <source>Replay selected session on the dashboard</source>
         <translation>Přehrát vybranou relaci na panelu</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="303"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="305"/>
         <source>Reset</source>
         <translation>Resetovat</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="304"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="306"/>
         <source>Reset Alarms</source>
         <translation>Resetovat Alarmy</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="305"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="307"/>
         <source>Reset to Auto Layout</source>
         <translation>Obnovit automatické rozložení</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="306"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="308"/>
         <source>Restore</source>
         <translation>Obnovit</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="307"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="309"/>
         <source>Restore Backup</source>
         <translation>Obnovit Zálohu</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="308"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="310"/>
         <source>Restore Project</source>
         <translation>Obnovit Projekt</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="309"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="311"/>
         <source>Restore a recent automatic snapshot of the current project</source>
         <translation>Obnovit nedávný automatický snímek aktuálního projektu</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="310"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="312"/>
         <source>Restore the project file from this session file</source>
         <translation>Obnovit soubor projektu z tohoto souboru relace</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="311"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="313"/>
         <source>Resume</source>
         <translation>Pokračovat</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="312"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="314"/>
         <source>Review project, link, and script diagnostics</source>
         <translation>Zkontrolovat diagnostiku projektu, odkazu a skriptu</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="313"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="315"/>
         <source>Run API commands and script macros interactively</source>
         <translation>Interaktivní spouštění příkazů API a maker skriptů</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="314"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="316"/>
         <source>Save</source>
         <translation>Uložit</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="315"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="317"/>
         <source>Save As</source>
         <translation>Uložit Jako</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="316"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="318"/>
         <source>Save Project</source>
         <translation>Uložit Projekt</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="317"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="319"/>
         <source>Save Project As</source>
         <translation>Uložit Projekt Jako</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="318"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="320"/>
         <source>Search</source>
         <translation>Hledat</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="319"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="321"/>
         <source>Search and run any Serial Studio command</source>
         <translation>Vyhledat a spustit libovolný příkaz Serial Studio</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="320"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="322"/>
         <source>Seed Aliases from Titles</source>
         <translation>Vytvořit aliasy z názvů</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="321"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="323"/>
         <source>Select Bluetooth Low Energy communication</source>
         <translation>Vybrat komunikaci Bluetooth Low Energy</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="322"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="324"/>
         <source>Select CAN Bus communication (Pro)</source>
         <translation>Vybrat komunikaci CAN Bus (Pro)</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="323"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="325"/>
         <source>Select EtherNet/IP communication (Pro)</source>
         <translation>Vybrat komunikaci EtherNet/IP (Pro)</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="324"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="326"/>
         <source>Select HID device communication (Pro)</source>
         <translation>Vybrat komunikaci HID zařízení (Pro)</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="325"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="327"/>
         <source>Select IEC 60870-5-104 communication (Pro)</source>
         <translation>Vybrat komunikaci IEC 60870-5-104 (Pro)</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="326"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="328"/>
         <source>Select MODBUS communication (Pro)</source>
         <translation>Vybrat komunikaci MODBUS (Pro)</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="327"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="329"/>
         <source>Select OPC UA communication (Pro)</source>
         <translation>Vybrat komunikaci OPC UA (Pro)</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="328"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="330"/>
         <source>Select Serial port (UART) communication</source>
         <translation>Vybrat komunikaci sériového portu (UART)</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="329"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="331"/>
         <source>Select Siemens S7comm communication (Pro)</source>
         <translation>Vybrat komunikaci Siemens S7comm (Pro)</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="330"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="332"/>
         <source>Select TCP/UDP network communication</source>
         <translation>Vybrat síťovou komunikaci TCP/UDP</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="331"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="333"/>
         <source>Select audio input device (Pro)</source>
         <translation>Vybrat vstupní audio zařízení (Pro)</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="332"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="334"/>
         <source>Select process pipe communication (Pro)</source>
         <translation>Vybrat komunikaci procesní roury (Pro)</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="333"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="335"/>
         <source>Select raw USB communication (Pro)</source>
         <translation>Vybrat přímou USB komunikaci (Pro)</translation>
     </message>
@@ -4857,12 +4867,12 @@ Povolte pouze v důvěryhodných sítích. Nedůvěryhodní klienti mohou číst
         <translation type="vanished">Relace</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="334"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="336"/>
         <source>Set a password and lock the Project Editor</source>
         <translation>Nastavit heslo a uzamknout Editor Projektu</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="335"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="337"/>
         <source>Set a password to prevent session deletions</source>
         <translation>Nastavte heslo pro zamezení mazání relací</translation>
     </message>
@@ -4871,207 +4881,207 @@ Povolte pouze v důvěryhodných sítích. Nedůvěryhodní klienti mohou číst
         <translation type="vanished">Nápověda Ke Sdílené Paměti</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="336"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="338"/>
         <source>Show</source>
         <translation>Zobrazit</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="337"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="339"/>
         <source>Show All Hidden Groups</source>
         <translation>Zobrazit Všechny Skryté Skupiny</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="338"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="340"/>
         <source>Show application info and license details</source>
         <translation>Zobrazit informace o aplikaci a licenční údaje</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="339"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="341"/>
         <source>Show this dataset as a 2D plot</source>
         <translation>Zobrazit tento dataset jako 2D graf</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="340"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="342"/>
         <source>Show this dataset as a bar or level</source>
         <translation>Zobrazit tento dataset jako pruh nebo úroveň</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="341"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="343"/>
         <source>Show this dataset as a compass</source>
         <translation>Zobrazit tento dataset jako kompas</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="342"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="344"/>
         <source>Show this dataset as a gauge</source>
         <translation>Zobrazit tento dataset jako měřič</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="343"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="345"/>
         <source>Show this dataset as a waterfall plot</source>
         <translation>Zobrazit tento dataset jako vodopádový graf</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="344"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="346"/>
         <source>Show this dataset as an FFT plot</source>
         <translation>Zobrazit tento dataset jako FFT graf</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="345"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="347"/>
         <source>Show this dataset as an LED indicator</source>
         <translation>Zobrazit tento dataset jako LED indikátor</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="346"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="348"/>
         <source>Show this dataset as an analog meter</source>
         <translation>Zobrazit tento dataset jako analogový měřič</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="347"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="349"/>
         <source>Show timestamps in the console</source>
         <translation>Zobrazit časové značky v konzoli</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="348"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="350"/>
         <source>Siemens S7</source>
         <translation>Siemens S7</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="349"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="351"/>
         <source>Silence Alarms</source>
         <translation>Umlčet Alarmy</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="350"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="352"/>
         <source>Silence every alarm and event sound</source>
         <translation>Umlčet každý zvuk alarmu a události</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="351"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="353"/>
         <source>Slider</source>
         <translation>Posuvník</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="352"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="354"/>
         <source>Start Menu</source>
         <translation>Nabídka Start</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="353"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="355"/>
         <source>Stop the alarm sound; points stay unacknowledged and a new alarm re-sounds</source>
         <translation>Zastavit zvuk alarmu; body zůstávají nepotvrzené a nový alarm znovu zazní</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="354"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="356"/>
         <source>Stopwatch</source>
         <translation>Stopky</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="355"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="357"/>
         <source>Switch to Console Only mode (no parsing)</source>
         <translation>Přepnout do režimu Pouze Konzole (bez parsování)</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="356"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="358"/>
         <source>Switch to Project File mode (parse via a project)</source>
         <translation>Přepnout do režimu Soubor Projektu (parsování pomocí projektu)</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="357"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="359"/>
         <source>Switch to Quick Plot mode (comma-separated values)</source>
         <translation>Přepnout do režimu Rychlý Graf (hodnoty oddělené čárkami)</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="358"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="360"/>
         <source>Table</source>
         <translation>Tabulka</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="359"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="361"/>
         <source>Test Alarm Sounds</source>
         <translation>Testovat Zvuky Alarmů</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="360"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="362"/>
         <source>Text Field</source>
         <translation>Textové Pole</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="361"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="363"/>
         <source>Toggle</source>
         <translation>Přepínač</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="362"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="364"/>
         <source>Toggle hexadecimal console display</source>
         <translation>Přepnout hexadecimální zobrazení konzole</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="363"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="365"/>
         <source>Tools</source>
         <translation>Nástroje</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="364"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="366"/>
         <source>Top Level</source>
         <translation>Nejvyšší Úroveň</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="365"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="367"/>
         <source>UART</source>
         <translation>UART</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="366"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="368"/>
         <source>USB</source>
         <translation>USB</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="367"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="369"/>
         <source>Undo</source>
         <translation>Zpět</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="368"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="370"/>
         <source>Undo the last project edit</source>
         <translation>Vrátit poslední úpravu projektu</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="369"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="371"/>
         <source>Unlock</source>
         <translation>Odemknout</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="370"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="372"/>
         <source>Unmute Sounds</source>
         <translation>Zrušit Ztlumení Zvuků</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="371"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="373"/>
         <source>Variables Help</source>
         <translation>Nápověda k Proměnným</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="372"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="374"/>
         <source>View detailed documentation and ask questions on DeepWiki</source>
         <translation>Zobrazit podrobnou dokumentaci a klást otázky na DeepWiki</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="373"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="375"/>
         <source>Visualizations</source>
         <translation>Vizualizace</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="374"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="376"/>
         <source>Watch another Serial Studio instance's dashboard over the network</source>
         <translation>Sledovat dashboard jiné instance Serial Studio přes síť</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="375"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="377"/>
         <source>Waterfall</source>
         <translation>Vodopád</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="376"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="378"/>
         <source>Web View</source>
         <translation>Zobrazení Webu</translation>
     </message>
@@ -5818,22 +5828,22 @@ Povolte pouze v důvěryhodných sítích. Nedůvěryhodní klienti mohou číst
         <translation>Kategorie</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="359"/>
+        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="364"/>
         <source>No constants match.</source>
         <translation>Žádné konstanty neodpovídají.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="380"/>
+        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="385"/>
         <source>%1 constants</source>
         <translation>%1 konstant</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="381"/>
+        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="386"/>
         <source>%1 of %2 constants</source>
         <translation>%1 z %2 konstant</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="385"/>
+        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="390"/>
         <source>Close</source>
         <translation>Zavřít</translation>
     </message>
@@ -6093,13 +6103,13 @@ Povolte pouze v důvěryhodných sítích. Nedůvěryhodní klienti mohou číst
     </message>
     <message>
         <location filename="../../../core/Ui/UI/Dashboard/WidgetMapBuilder.cpp" line="178"/>
-        <location filename="../../../core/Ui/UI/Dashboard/WidgetMapBuilder.cpp" line="193"/>
+        <location filename="../../../core/Ui/UI/Dashboard/WidgetMapBuilder.cpp" line="194"/>
         <source>%1 (Fallback)</source>
         <translation>%1 (Záložní)</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/Dashboard/WidgetMapBuilder.cpp" line="215"/>
-        <location filename="../../../core/Ui/UI/Dashboard/WidgetMapBuilder.cpp" line="293"/>
+        <location filename="../../../core/Ui/UI/Dashboard/WidgetMapBuilder.cpp" line="225"/>
+        <location filename="../../../core/Ui/UI/Dashboard/WidgetMapBuilder.cpp" line="303"/>
         <source>LED Panel (%1)</source>
         <translation>LED Panel (%1)</translation>
     </message>
@@ -6331,22 +6341,22 @@ Povolte pouze v důvěryhodných sítích. Nedůvěryhodní klienti mohou číst
         <translation>Hodnota</translation>
     </message>
     <message>
+        <location filename="../../qml/Widgets/Dashboard/DataGrid.qml" line="108"/>
         <location filename="../../rcc/extensions/widget/datagrid/DataGrid.qml" line="111"/>
         <location filename="../../rcc/extensions/widget/datagrid/DataGrid.qml" line="118"/>
-        <location filename="../../qml/Widgets/Dashboard/DataGrid.qml" line="108"/>
         <source>Pause</source>
         <translation>Pozastavit</translation>
     </message>
     <message>
+        <location filename="../../qml/Widgets/Dashboard/DataGrid.qml" line="108"/>
         <location filename="../../rcc/extensions/widget/datagrid/DataGrid.qml" line="111"/>
         <location filename="../../rcc/extensions/widget/datagrid/DataGrid.qml" line="118"/>
-        <location filename="../../qml/Widgets/Dashboard/DataGrid.qml" line="108"/>
         <source>Resume</source>
         <translation>Obnovit</translation>
     </message>
     <message>
-        <location filename="../../rcc/extensions/widget/datagrid/DataGrid.qml" line="335"/>
         <location filename="../../qml/Widgets/Dashboard/DataGrid.qml" line="323"/>
+        <location filename="../../rcc/extensions/widget/datagrid/DataGrid.qml" line="335"/>
         <source>Awaiting data…</source>
         <translation>Čekání na data…</translation>
     </message>
@@ -6588,7 +6598,7 @@ Povolte pouze v důvěryhodných sítích. Nedůvěryhodní klienti mohou číst
     </message>
     <message>
         <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="175"/>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="697"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="703"/>
         <source>Open Lua Library</source>
         <translation>Otevřít Lua Knihovnu</translation>
     </message>
@@ -6643,37 +6653,37 @@ Povolte pouze v důvěryhodných sítích. Nedůvěryhodní klienti mohou číst
         <translation>Transformace — %1</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="453"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="459"/>
         <source>The value transform has a syntax error and was not applied.</source>
         <translation>Transformace hodnoty obsahuje syntaktickou chybu a nebyla použita.</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="462"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="468"/>
         <source>The value transform must define a transform(value) function.</source>
         <translation>Transformace hodnoty musí definovat funkci transform(value).</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="463"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="469"/>
         <source>Define a transform(value) function that returns a number, or use Clear to remove the transform.</source>
         <translation>Definujte funkci transform(value), která vrací číslo, nebo použijte Vymazat pro odstranění transformace.</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="481"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="487"/>
         <source>Enter a value</source>
         <translation>Zadejte hodnotu</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="488"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="494"/>
         <source>Invalid number</source>
         <translation>Neplatné číslo</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="529"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="535"/>
         <source>Format Document	Ctrl+Shift+I</source>
         <translation>Formátovat Dokument	ctrl+shift+i</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="530"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="536"/>
         <source>Format Selection	Ctrl+I</source>
         <translation>Formátovat Výběr	ctrl+i</translation>
     </message>
@@ -6738,7 +6748,7 @@ v
 </translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="827"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="833"/>
         <source>--
 -- Define a transform(value) function that receives the live
 -- dataset reading and returns a transformed number. If no
@@ -6797,7 +6807,7 @@ v
 </translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="855"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="861"/>
         <source>/*
  * Define a transform(value) function that receives the live
  * dataset reading and returns a transformed number. If no
@@ -6854,39 +6864,39 @@ v
  */</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="996"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1002"/>
         <source>Failed to create the Lua engine.</source>
         <translation>Nepodařilo se vytvořit engine Lua.</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1022"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1028"/>
         <source>Failed to create the JavaScript engine.</source>
         <translation>Nepodařilo se vytvořit engine JavaScript.</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1038"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1044"/>
         <source>The transform did not finish evaluating within %1 ms.</source>
         <translation>Transformace nedokončila vyhodnocení do %1 ms.</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1043"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1049"/>
         <source>Line %1: %2</source>
         <translation>Řádek %1: %2</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1109"/>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1143"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1115"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1149"/>
         <source>Error in shared library: %1</source>
         <translation>Chyba ve sdílené knihovně: %1</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1148"/>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1161"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1154"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1167"/>
         <source>Error: the transform did not finish within %1 ms</source>
         <translation>Chyba: transformace nedokončila do %1 ms</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1209"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1215"/>
         <source>Select Template…</source>
         <translation>Vybrat Šablonu…</translation>
     </message>
@@ -6947,27 +6957,27 @@ v
  */</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1099"/>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1133"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1105"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1139"/>
         <source>Engine error</source>
         <translation>Chyba enginu</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1089"/>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1115"/>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1123"/>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1151"/>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1164"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1095"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1121"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1129"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1157"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1170"/>
         <source>Error: %1</source>
         <translation>Chyba: %1</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="698"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="704"/>
         <source>Open JavaScript Library</source>
         <translation>Otevřít Javascript Knihovnu</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="793"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="799"/>
         <source>#
 # An arithmetic expression evaluated once per sample. No function,
 # no statements: the value of the expression is the new reading.
@@ -7036,13 +7046,13 @@ v
 </translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1119"/>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1155"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1125"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1161"/>
         <source>Error: transform() not defined</source>
         <translation>Chyba: transform() není definována</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1126"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1132"/>
         <source>Error: transform() must return a number</source>
         <translation>Chyba: transform() musí vrátit číslo</translation>
     </message>
@@ -7940,12 +7950,12 @@ Přidat %4 dataset(ů) s výchozími hodnotami šablony?</translation>
         <translation>Pevný počet desetinných míst pro zobrazení hodnoty; přepíše formát (-1 = auto)</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="655"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="713"/>
         <source>Auto-detect</source>
         <translation>Automatická Detekce</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="655"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="713"/>
         <source>Manual Delimiters</source>
         <translation>Ruční Oddělovače</translation>
     </message>
@@ -8600,6 +8610,16 @@ Přidat %4 dataset(ů) s výchozími hodnotami šablony?</translation>
         <translation>Zobrazit značky podržení na nejnižší a nejvyšší hodnotě pozorované od posledního resetu dat</translation>
     </message>
     <message>
+        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="752"/>
+        <source>Suppress Alarms</source>
+        <translation>Potlačit Alarmy</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="753"/>
+        <source>Keep the bands on the widget but never notify, raise an alarm point or sound for them</source>
+        <translation>Ponechat pásma na widgetu, ale nikdy neupozorňovat, nezvyšovat bod alarmu ani nehrát zvuk</translation>
+    </message>
+    <message>
         <source>Scale the FFT frequency axis in decades so low octaves stay readable</source>
         <translation type="vanished">Škálovat osu frekvence FFT v dekádách, aby zůstaly čitelné nízké oktávy</translation>
     </message>
@@ -8649,7 +8669,7 @@ Přidat %4 dataset(ů) s výchozími hodnotami šablony?</translation>
         <translation type="vanished">Zapnuto</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="784"/>
+        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="797"/>
         <source>LED lights up when value meets or exceeds this threshold; define alarm bands for multi-state colors</source>
         <translation>LED se rozsvítí, když hodnota dosáhne nebo překročí tento práh; definujte alarmová pásma pro vícestavové barvy</translation>
     </message>
@@ -8658,7 +8678,7 @@ Přidat %4 dataset(ů) s výchozími hodnotami šablony?</translation>
         <translation type="vanished">Painter Widget</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="672"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="730"/>
         <source>Web View</source>
         <translation>Zobrazení Webu</translation>
     </message>
@@ -8868,7 +8888,7 @@ Přidat %4 dataset(ů) s výchozími hodnotami šablony?</translation>
         <translation type="vanished">Horní mez rozsahu zobrazení měřidla nebo pruhu</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="685"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="743"/>
         <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="663"/>
         <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="690"/>
         <source>Auto</source>
@@ -8931,22 +8951,22 @@ Přidat %4 dataset(ů) s výchozími hodnotami šablony?</translation>
         <translation type="vanished">Spustí vizuální alarm, když hodnota překročí tento práh</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="756"/>
+        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="769"/>
         <source>LED Display Settings</source>
         <translation>Nastavení LED Displeje</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="769"/>
+        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="782"/>
         <source>Show in LED Panel</source>
         <translation>Zobrazit v LED Panelu</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="770"/>
+        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="783"/>
         <source>Enable visual status monitoring using an LED display</source>
         <translation>Umožní vizuální monitorování stavu pomocí LED displeje</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="783"/>
+        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="796"/>
         <source>LED On Threshold (required)</source>
         <translation>Práh Zapnutí LED (povinné)</translation>
     </message>
@@ -8959,207 +8979,207 @@ Přidat %4 dataset(ů) s výchozími hodnotami šablony?</translation>
         <translation type="vanished">Upravit Kód Malíře</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="497"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="555"/>
         <source>Edit Canvas Code</source>
         <translation>Upravit Canvas Kód</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="521"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="579"/>
         <source>Edit Transmit Function</source>
         <translation>Upravit Funkci Přenosu</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="619"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="677"/>
         <source>Rectangular (None)</source>
         <translation>Obdélníkové (Žádné)</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="619"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="677"/>
         <source>Bartlett (Triangular)</source>
         <translation>Bartlett (Trojúhelníkové)</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="619"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="677"/>
         <source>Hann</source>
         <translation>Hann</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="620"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="678"/>
         <source>Hamming</source>
         <translation>Hamming</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="620"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="678"/>
         <source>Blackman</source>
         <translation>Blackman</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="620"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="678"/>
         <source>Blackman-Harris</source>
         <translation>Blackman-harris</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="620"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="678"/>
         <source>Nuttall</source>
         <translation>Nuttall</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="621"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="679"/>
         <source>Blackman-Nuttall</source>
         <translation>Blackman-nuttall</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="621"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="679"/>
         <source>Flat Top</source>
         <translation>Flat Top</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="621"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="679"/>
         <source>Welch</source>
         <translation>Welch</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="621"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="679"/>
         <source>Bartlett-Hann</source>
         <translation>Bartlett-hann</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="622"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="680"/>
         <source>Bohman</source>
         <translation>Bohman</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="622"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="680"/>
         <source>Cosine (Sine)</source>
         <translation>Cosine (Sine)</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="622"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="680"/>
         <source>Lanczos</source>
         <translation>Lanczos</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="622"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="680"/>
         <source>Parzen</source>
         <translation>Parzen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="633"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="691"/>
         <source>Off</source>
         <translation>Vypnuto</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="633"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="691"/>
         <source>Auto Start</source>
         <translation>Automatický Start</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="633"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="691"/>
         <source>Start on Trigger</source>
         <translation>Spustit při Triggeru</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="633"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="691"/>
         <source>Toggle on Trigger</source>
         <translation>Přepnout při Triggeru</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="634"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="692"/>
         <source>Repeat N Times</source>
         <translation>Opakovat N-krát</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="637"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="695"/>
         <source>Plain Text (UTF8)</source>
         <translation>Prostý Text (UTF8)</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="637"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="695"/>
         <source>Hexadecimal</source>
         <translation>Hexadecimální</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="637"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="695"/>
         <source>Base64</source>
         <translation>Base64</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="638"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="696"/>
         <source>Binary (Direct)</source>
         <translation>Binární (Přímý)</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="643"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="701"/>
         <source>No Checksum</source>
         <translation>Bez Kontrolního Součtu</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="647"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="705"/>
         <source>End Delimiter Only</source>
         <translation>Pouze Koncový Oddělovač</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="647"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="705"/>
         <source>Start Delimiter Only</source>
         <translation>Pouze Počáteční Oddělovač</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="648"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="706"/>
         <source>Start + End Delimiter</source>
         <translation>Počáteční + Koncový Oddělovač</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="648"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="706"/>
         <source>No Delimiters</source>
         <translation>Bez Oddělovačů</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="658"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="716"/>
         <source>Button</source>
         <translation>Tlačítko</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="658"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="716"/>
         <source>Slider</source>
         <translation>Posuvník</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="658"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="716"/>
         <source>Toggle</source>
         <translation>Přepínač</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="658"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="716"/>
         <source>Text Field</source>
         <translation>Textové Pole</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="659"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="717"/>
         <source>Knob</source>
         <translation>Otočný Ovladač</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="663"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="721"/>
         <source>Bar Panel</source>
         <translation>Sloupcový Panel</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="664"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="722"/>
         <source>Data Grid</source>
         <translation>Datová Mřížka</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="665"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="723"/>
         <source>GPS Map</source>
         <translation>Mapa GPS</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="666"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="724"/>
         <source>Gyroscope</source>
         <translation>Gyroskop</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="667"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="725"/>
         <source>Multi-Plot</source>
         <translation>Vícenásobný Graf</translation>
     </message>
@@ -9168,51 +9188,51 @@ Přidat %4 dataset(ů) s výchozími hodnotami šablony?</translation>
         <translation type="vanished">Vícenásobný Graf</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="668"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="726"/>
         <source>Accelerometer</source>
         <translation>Akcelerometr</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="669"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="727"/>
         <source>3D Plot</source>
         <translation>3D Graf</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="670"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="728"/>
         <source>Image View</source>
         <translation>Zobrazení Obrázku</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="671"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="729"/>
         <source>Canvas Widget</source>
         <translation>Canvas Widget</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="673"/>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="676"/>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="693"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="731"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="734"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="751"/>
         <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputStateRows.cpp" line="121"/>
         <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputStateRows.cpp" line="140"/>
         <source>None</source>
         <translation>Žádný</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="677"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="735"/>
         <source>Bar</source>
         <translation>Sloupcový</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="678"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="736"/>
         <source>Gauge</source>
         <translation>Ukazatel</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="679"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="737"/>
         <source>Compass</source>
         <translation>Kompas</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="680"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="738"/>
         <source>Meter</source>
         <translation>Měřič</translation>
     </message>
@@ -9221,52 +9241,52 @@ Přidat %4 dataset(ů) s výchozími hodnotami šablony?</translation>
         <translation type="vanished">Teploměr</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="686"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="744"/>
         <source>Integer (0 decimals)</source>
         <translation>Celé Číslo (0 desetinných míst)</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="687"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="745"/>
         <source>1 decimal</source>
         <translation>1 desetinné místo</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="688"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="746"/>
         <source>2 decimals</source>
         <translation>2 desetinná místa</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="689"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="747"/>
         <source>3 decimals</source>
         <translation>3 desetinná místa</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="690"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="748"/>
         <source>Scientific</source>
         <translation>Vědecký</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="694"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="752"/>
         <source>New Line (\n)</source>
         <translation>Nový Řádek (</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="695"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="753"/>
         <source>Carriage Return (\r)</source>
         <translation>Návrat Vozíku (\r)</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="696"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="754"/>
         <source>CRLF (\r\n)</source>
         <translation>CRLF (\r</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="699"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="757"/>
         <source>No</source>
         <translation>Ne</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="700"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="758"/>
         <source>Yes</source>
         <translation>Ano</translation>
     </message>
@@ -9529,57 +9549,57 @@ Přidat %4 dataset(ů) s výchozími hodnotami šablony?</translation>
         <translation>Změnit Zvuky Alarmů</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="953"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="955"/>
         <source>Change Project Title</source>
         <translation>Změnit Název Projektu</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="969"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="971"/>
         <source>Edit Control Script</source>
         <translation>Upravit Řídicí Skript</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="988"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="990"/>
         <source>Edit Shared Library</source>
         <translation>Upravit Sdílenou Knihovnu</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1005"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1007"/>
         <source>Edit JavaScript Library</source>
         <translation>Upravit Knihovnu Javascript</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1021"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1023"/>
         <source>Change Point Count</source>
         <translation>Změnit Počet Bodů</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1039"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1041"/>
         <source>Change Plot Time Range</source>
         <translation>Změnit Časový Rozsah Grafu</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1061"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1063"/>
         <source>Toggle Freeze</source>
         <translation>Přepnout Zmrazení</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1076"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1078"/>
         <source>Toggle Change-Driven Transforms</source>
         <translation>Přepnout Transformace Řízené Změnou</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1093"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1095"/>
         <source>Toggle Fast Lua Execution</source>
         <translation>Přepnout Rychlé Provádění Lua</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1114"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1116"/>
         <source>Enable Fast Lua Execution?</source>
         <translation>Povolit Rychlé Provádění Lua?</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1115"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1117"/>
         <source>Fast mode runs Lua parsers and transforms through the JIT compiler (up to ~40x faster), but the runaway-script watchdog cannot operate: a script stuck in an infinite loop will stall its data source until you disconnect.
 
 Enable it only for scripts you trust and have tested in Safe mode first.</source>
@@ -9588,37 +9608,37 @@ Enable it only for scripts you trust and have tested in Safe mode first.</source
 Povolte pouze pro skripty, kterým důvěřujete a které jste nejprve otestovali v bezpečném režimu.</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1120"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1122"/>
         <source>Fast Lua Execution</source>
         <translation>Rychlé Provádění Lua</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1149"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1151"/>
         <source>Change Frame Start Sequence</source>
         <translation>Změnit Počáteční Sekvenci Rámce</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1168"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1170"/>
         <source>Change Frame End Sequence</source>
         <translation>Změnit Koncovou Sekvenci Rámce</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1187"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1189"/>
         <source>Change Checksum</source>
         <translation>Změnit Kontrolní Součet</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1206"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1208"/>
         <source>Change Frame Detection</source>
         <translation>Změnit Detekci Rámců</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1225"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1227"/>
         <source>Change Decoder</source>
         <translation>Změnit Dekodér</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1244"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1246"/>
         <source>Toggle Hex Delimiters</source>
         <translation>Přepnout Hexadecimální Oddělovače</translation>
     </message>
@@ -9763,12 +9783,12 @@ Povolte pouze pro skripty, kterým důvěřujete a které jste nejprve otestoval
         <translation type="vanished">Soubory Projektu Serial Studio (*.ssproj)</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="780"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="782"/>
         <source>Untitled Project</source>
         <translation>Projekt Bez Názvu</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="798"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="800"/>
         <source>Device A</source>
         <translation>Zařízení A</translation>
     </message>
@@ -11020,17 +11040,21 @@ Platný formát: 01 A2 FF 3C</translation>
         <translation>Přepnout widget analogového měřiče (půlkruhový)</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="344"/>
-        <source>Define colored value ranges with severity tiers for this dataset's gauge or LED.</source>
-        <translation>Definujte barevné rozsahy hodnot s úrovněmi závažnosti pro měřič nebo LED tohoto datasetu.</translation>
+        <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="340"/>
+        <source>Define colored value ranges with severity tiers. Available for Bar, Gauge, Meter, LED, and Bar Panel datasets.</source>
+        <translation>Definujte barevné rozsahy hodnot s úrovněmi závažnosti. Dostupné pro datasety Bar, Gauge, Meter, LED a Bar Panel.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="350"/>
+        <source>Define colored value ranges with severity tiers for this dataset's gauge or LED.</source>
+        <translation type="vanished">Definujte barevné rozsahy hodnot s úrovněmi závažnosti pro měřič nebo LED tohoto datasetu.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="346"/>
         <source>Freq. Markers</source>
         <translation>Frekv. Značky</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="357"/>
+        <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="353"/>
         <source>Pin labeled frequencies or bands on the FFT plot and waterfall, with optional warning and alarm levels.</source>
         <translation>Připnout označené frekvence nebo pásma na FFT graf a vodopád, s volitelnými úrovněmi varování a alarmu.</translation>
     </message>
@@ -11058,7 +11082,7 @@ Platný formát: 01 A2 FF 3C</translation>
         <translation>Chování</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="334"/>
+        <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="335"/>
         <source>Alarm Bands</source>
         <translation>Pásma Alarmu</translation>
     </message>
@@ -11067,32 +11091,32 @@ Platný formát: 01 A2 FF 3C</translation>
         <translation type="vanished">Definujte barevné rozsahy hodnot s úrovněmi závažnosti pro měřič tohoto datasetu.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="363"/>
+        <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="359"/>
         <source>Transform</source>
         <translation>Transformace</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="367"/>
+        <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="363"/>
         <source>Edit a value transform expression for calibration, filtering, or unit conversion</source>
         <translation>Upravit výraz transformace hodnoty pro kalibraci, filtrování nebo převod jednotek</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="380"/>
+        <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="376"/>
         <source>Duplicate</source>
         <translation>Duplikovat</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="385"/>
+        <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="381"/>
         <source>Duplicate this dataset with the same configuration</source>
         <translation>Duplikovat tento dataset se stejnou konfigurací</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="390"/>
+        <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="386"/>
         <source>Delete</source>
         <translation>Odstranit</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="393"/>
+        <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="389"/>
         <source>Delete this dataset from the group</source>
         <translation>Odstranit tento dataset ze skupiny</translation>
     </message>
@@ -11591,22 +11615,22 @@ Platný formát: 01 A2 FF 3C</translation>
         <translation>Numerický Alias</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorCommit.cpp" line="879"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorCommit.cpp" line="865"/>
         <source>Edit Alarms</source>
         <translation>Upravit Alarmy</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorCommit.cpp" line="1019"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorCommit.cpp" line="1005"/>
         <source>Rename Dataset</source>
         <translation>Přejmenovat Datovou Sadu</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorCommit.cpp" line="1040"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorCommit.cpp" line="1026"/>
         <source>Edit Dataset</source>
         <translation>Upravit Dataset</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorCommit.cpp" line="1219"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorCommit.cpp" line="1205"/>
         <source>Edit Output Widget</source>
         <translation>Upravit Výstupní Widget</translation>
     </message>
@@ -11987,7 +12011,7 @@ Platný formát: 01 A2 FF 3C</translation>
     </message>
     <message>
         <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="750"/>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1181"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1165"/>
         <source>General Information</source>
         <translation>Obecné Informace</translation>
     </message>
@@ -12074,7 +12098,7 @@ Platný formát: 01 A2 FF 3C</translation>
     </message>
     <message>
         <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="865"/>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1306"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1290"/>
         <source>Text Encoding</source>
         <translation>Kódování Textu</translation>
     </message>
@@ -12170,112 +12194,112 @@ Platný formát: 01 A2 FF 3C</translation>
         <translation>Zapnuto</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1192"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1176"/>
         <source>Label</source>
         <translation>Popisek</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1193"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1177"/>
         <source>Display label</source>
         <translation>Zobrazit popisek</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1203"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1187"/>
         <source>Button Icon</source>
         <translation>Ikona Tlačítka</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1212"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1196"/>
         <source>Colorize Icon</source>
         <translation>Obarvit Ikonu</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1213"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1197"/>
         <source>Tint the icon with the button color</source>
         <translation>Obarvit ikonu barvou tlačítka</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1222"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1206"/>
         <source>Automatic</source>
         <translation>Automaticky</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1223"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1207"/>
         <source>Button Color</source>
         <translation>Barva Tlačítka</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1224"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1208"/>
         <source>Custom fill color for this button; automatic uses the group accent</source>
         <translation>Vlastní barva výplně pro toto tlačítko; automatická používá akcent skupiny</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1235"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1219"/>
         <source>Button Size</source>
         <translation>Velikost Tlačítka</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1236"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1220"/>
         <source>Scales the button, its icon and its caption</source>
         <translation>Škáluje tlačítko, jeho ikonu a popisek</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1245"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1229"/>
         <source>Toggle Button</source>
         <translation>Přepínací Tlačítko</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1246"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1230"/>
         <source>Stay pressed and transmit 1 (on) / 0 (off) instead of a single click</source>
         <translation>Zůstat stisknuté a přenášet 1 (zap) / 0 (vyp) místo jednoho kliknutí</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1268"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1252"/>
         <source>On Label</source>
         <translation>Popisek Zap</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1269"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1253"/>
         <source>Caption shown while latched (defaults to the label)</source>
         <translation>Popisek zobrazený při zajištění (výchozí je popisek)</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1278"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1262"/>
         <source>Off Label</source>
         <translation>Popisek Vyp</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1279"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1263"/>
         <source>Caption shown while released (defaults to the label)</source>
         <translation>Titulek zobrazený při uvolnění (výchozí je popisek)</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1295"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1279"/>
         <source>Initial Value</source>
         <translation>Počáteční Hodnota</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1307"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1291"/>
         <source>Character encoding used when transmit() returns a string value</source>
         <translation>Kódování znaků použité, když transmit() vrací řetězcovou hodnotu</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1326"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1310"/>
         <source>Value Range</source>
         <translation>Rozsah Hodnot</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1337"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1321"/>
         <source>Minimum Value</source>
         <translation>Minimální Hodnota</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1346"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1330"/>
         <source>Maximum Value</source>
         <translation>Maximální Hodnota</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1355"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1339"/>
         <source>Step Size</source>
         <translation>Velikost Kroku</translation>
     </message>
@@ -12672,11 +12696,11 @@ Platný formát: 01 A2 FF 3C</translation>
         <translation>Smíšené</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorMultiSelect.cpp" line="432"/>
-        <location filename="../../../core/Ui/ProjectEditor/EditorMultiSelect.cpp" line="433"/>
-        <location filename="../../../core/Ui/ProjectEditor/EditorMultiSelect.cpp" line="494"/>
-        <location filename="../../../core/Ui/ProjectEditor/EditorMultiSelect.cpp" line="495"/>
-        <location filename="../../../core/Ui/ProjectEditor/EditorMultiSelect.cpp" line="551"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorMultiSelect.cpp" line="434"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorMultiSelect.cpp" line="435"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorMultiSelect.cpp" line="497"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorMultiSelect.cpp" line="498"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorMultiSelect.cpp" line="554"/>
         <source>Edit Selection</source>
         <translation>Upravit Výběr</translation>
     </message>
@@ -14883,7 +14907,7 @@ Přidejte tagy řadiče výše pro jejich dotazování.</translation>
 <context>
     <name>IO::ConnectionManager</name>
     <message>
-        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="242"/>
+        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="247"/>
         <source>UART/COM</source>
         <translation>UART/COM</translation>
     </message>
@@ -14892,67 +14916,67 @@ Přidejte tagy řadiče výše pro jejich dotazování.</translation>
         <translation type="vanished">Síťový Socket</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="242"/>
+        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="247"/>
         <source>Network</source>
         <translation>Síť</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="242"/>
+        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="247"/>
         <source>Bluetooth LE</source>
         <translation>Bluetooth LE</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="244"/>
+        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="249"/>
         <source>Audio</source>
         <translation>Audio</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="244"/>
+        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="249"/>
         <source>Modbus</source>
         <translation>Modbus</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="244"/>
+        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="249"/>
         <source>CAN Bus</source>
         <translation>Sběrnice CAN</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="244"/>
+        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="249"/>
         <source>USB Device</source>
         <translation>Zařízení USB</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="244"/>
+        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="249"/>
         <source>HID Device</source>
         <translation>Zařízení HID</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="245"/>
+        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="250"/>
         <source>Process</source>
         <translation>Proces</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="245"/>
+        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="250"/>
         <source>MQTT Subscriber</source>
         <translation>MQTT Odběratel</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="245"/>
+        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="250"/>
         <source>OPC UA</source>
         <translation>OPC UA</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="245"/>
+        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="250"/>
         <source>Siemens S7</source>
         <translation>Siemens S7</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="246"/>
+        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="251"/>
         <source>EtherNet/IP</source>
         <translation>Ethernet/IP</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="246"/>
+        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="251"/>
         <source>IEC 60870-5-104</source>
         <translation>IEC 60870-5-104</translation>
     </message>
@@ -14965,7 +14989,7 @@ Přidejte tagy řadiče výše pro jejich dotazování.</translation>
         <translation type="vanished">Pro pokračování v používání Serial Studio aktivujte licenci.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="647"/>
+        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="658"/>
         <source>connection attempt failed</source>
         <translation>pokus o připojení selhal</translation>
     </message>
@@ -16777,7 +16801,7 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
 <context>
     <name>IO::Drivers::OpcUa</name>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="332"/>
+        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="333"/>
         <source>OPC UA Initialization Failed</source>
         <translation>Inicializace OPC UA Selhala</translation>
     </message>
@@ -16786,29 +16810,29 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
         <translation type="vanished">Backend %1 není v tomto sestavení k dispozici.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="494"/>
+        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="495"/>
         <source>OPC UA Connection Failed</source>
         <translation>Připojení OPC UA Selhalo</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="495"/>
+        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="496"/>
         <source>Unable to connect to "%1".</source>
         <translation>Nelze se připojit k "%1".</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="496"/>
-        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="642"/>
-        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="1279"/>
+        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="497"/>
+        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="650"/>
+        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="1287"/>
         <source>"%1": %2</source>
         <translation>"%1": %2</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="512"/>
+        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="513"/>
         <source>OPC UA Connection Lost</source>
         <translation>Připojení OPC UA Ztraceno</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="526"/>
+        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="527"/>
         <source>Timed out after %1 s</source>
         <translation>Časový limit vypršel po %1 s</translation>
     </message>
@@ -16817,7 +16841,7 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
         <translation type="vanished">Server ukončil připojení</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="572"/>
+        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="573"/>
         <source>The server closed the session</source>
         <translation>Server ukončil relaci</translation>
     </message>
@@ -16862,13 +16886,13 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
         <translation type="vanished">Neočekávaná chyba backendu</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="598"/>
+        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="606"/>
         <source>"%1" is not a valid endpoint URL</source>
         <translation>"%1" není platná URL adresa koncového bodu</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="599"/>
-        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="1279"/>
+        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="607"/>
+        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="1287"/>
         <source>OPC UA Discovery</source>
         <translation>Zjišťování OPC UA</translation>
     </message>
@@ -16877,12 +16901,12 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
         <translation type="vanished">Backend %1 není v tomto sestavení k dispozici</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="641"/>
+        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="649"/>
         <source>Discovery failed: %1</source>
         <translation>Zjišťování selhalo: %1</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="642"/>
+        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="650"/>
         <source>OPC UA Discovery Failed</source>
         <translation>Zjišťování OPC UA Selhalo</translation>
     </message>
@@ -16891,38 +16915,43 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
         <translation type="vanished">Žádný koncový bod s politikou None; zabezpečené kanály nejsou v této verzi podporovány</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="324"/>
+        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="325"/>
         <source>The connection is not configured: check the endpoint and the tag list</source>
         <translation>Připojení není nakonfigurováno: zkontrolujte koncový bod a seznam tagů</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="331"/>
-        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="607"/>
+        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="332"/>
+        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="615"/>
         <source>The %1 stack is not available in this build</source>
         <translation>Stack %1 není v tomto sestavení k dispozici</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="370"/>
+        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="371"/>
         <source>The connection attempt could not be started</source>
         <translation>Pokus o připojení nelze spustit</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="384"/>
+        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="385"/>
         <source>OPC UA Certificate</source>
         <translation>Certifikát OPC UA</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="385"/>
+        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="386"/>
         <source>The client certificate could not be generated; secure channels will be refused.</source>
         <translation>Klientský certifikát nemohl být vygenerován; zabezpečené kanály budou odmítnuty.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="640"/>
+        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="598"/>
+        <source>OPC UA access requires an active Serial Studio Pro license or trial</source>
+        <translation>Přístup OPC UA vyžaduje aktivní licenci Serial Studio Pro nebo zkušební verzi</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="648"/>
         <source>The server did not answer within %1 s</source>
         <translation>Server neodpověděl do %1 s</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="672"/>
+        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="680"/>
         <source>Endpoint discovery failed</source>
         <translation>Zjišťování koncového bodu selhalo</translation>
     </message>
@@ -16987,40 +17016,40 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
         <translation type="vanished">Nelze otevřít relaci procházení na %1</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="729"/>
-        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="757"/>
+        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="737"/>
+        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="765"/>
         <source>Failed to load generated project</source>
         <translation>Nepodařilo se načíst vygenerovaný projekt</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="730"/>
-        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="758"/>
+        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="738"/>
+        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="766"/>
         <source>The generated project JSON could not be loaded.</source>
         <translation>Vygenerovaný JSON projektu se nepodařilo načíst.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="743"/>
+        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="751"/>
         <source>No tags selected</source>
         <translation>Nebyly vybrány žádné tagy</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="744"/>
+        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="752"/>
         <source>Browse the server and select at least one tag before generating a project.</source>
         <translation>Procházejte server a vyberte alespoň jeden tag před vygenerováním projektu.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="747"/>
-        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="771"/>
+        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="755"/>
+        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="779"/>
         <source>OPC UA Project Generator</source>
         <translation>Generátor Projektu OPC UA</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="766"/>
+        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="774"/>
         <source>Successfully generated project with %1 groups and %2 datasets.</source>
         <translation>Projekt úspěšně vygenerován s %1 skupinami a %2 datovými sadami.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="769"/>
+        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="777"/>
         <source>The project editor is now open for customization.</source>
         <translation>Editor projektu je nyní otevřen pro přizpůsobení.</translation>
     </message>
@@ -17061,22 +17090,22 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
         <translation type="vanished">Neplatný</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="1508"/>
+        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="1516"/>
         <source>Security Policy</source>
         <translation>Bezpečnostní Politika</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="1516"/>
+        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="1524"/>
         <source>Security Mode</source>
         <translation>Bezpečnostní Režim</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="1525"/>
+        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="1533"/>
         <source>User Certificate</source>
         <translation>Uživatelský Certifikát</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="1533"/>
+        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="1541"/>
         <source>User Private Key</source>
         <translation>Uživatelský Soukromý Klíč</translation>
     </message>
@@ -17085,52 +17114,52 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
         <translation type="vanished">Podpis a Šifrování</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="846"/>
+        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="854"/>
         <source>Connecting to %1</source>
         <translation>Připojování k %1</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="849"/>
+        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="857"/>
         <source>Not connected</source>
         <translation>Nepřipojeno</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="857"/>
+        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="865"/>
         <source>Subscribing, %1 of %2 tags</source>
         <translation>Přihlašování, %1 z %2 tagů</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="862"/>
+        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="870"/>
         <source>Subscribed %1 tags, polling %2 refused, %3 Hz</source>
         <translation>Přihlášeno %1 tagů, dotazování %2 odmítnuto, %3 Hz</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="868"/>
+        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="876"/>
         <source>Polling (server refused subscriptions), %1 tags, %2 Hz</source>
         <translation>Dotazování (server odmítl přihlášení), %1 tagů, %2 Hz</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="872"/>
+        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="880"/>
         <source>Subscribed, %1 tags, %2 Hz</source>
         <translation>Přihlášeno, %1 tagů, %2 Hz</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="902"/>
+        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="910"/>
         <source>Anonymous</source>
         <translation>Anonymní</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="902"/>
+        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="910"/>
         <source>Username / Password</source>
         <translation>Uživatelské Jméno / Heslo</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="902"/>
+        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="910"/>
         <source>X.509 Certificate</source>
         <translation>Certifikát X.509</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="1278"/>
+        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="1286"/>
         <source>No endpoint this build can open with the selected identity</source>
         <translation>Žádný koncový bod, který by toto sestavení mohlo otevřít s vybranou identitou</translation>
     </message>
@@ -17155,27 +17184,27 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
         <translation type="vanished">Certifikát serveru nelze analyzovat</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="1468"/>
+        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="1476"/>
         <source>Endpoint URL</source>
         <translation>URL Koncového Bodu</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="1475"/>
+        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="1483"/>
         <source>Authentication</source>
         <translation>Autentizace</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="1483"/>
+        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="1491"/>
         <source>Username</source>
         <translation>Uživatelské Jméno</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="1491"/>
+        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="1499"/>
         <source>Password</source>
         <translation>Heslo</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="1499"/>
+        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="1507"/>
         <source>Poll Interval (ms)</source>
         <translation>Interval Dotazování (ms)</translation>
     </message>
@@ -19551,32 +19580,32 @@ Chcete-li toto místo použít na jiném zařízení, napište e-mail na alex@se
         <translation>Tato funkce je součástí Serial Studio Pro. Zkušební verze odemyká všechny funkce Pro na 14 dní bez účtu a bez platby. K registraci zkušební verze na tomto počítači je vyžadováno připojení k internetu.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/TrialGate.cpp" line="133"/>
+        <location filename="../../src/Licensing/TrialGate.cpp" line="134"/>
         <source>Serial Studio Pro Trial</source>
         <translation>Zkušební Verze Serial Studio Pro</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/TrialGate.cpp" line="164"/>
+        <location filename="../../src/Licensing/TrialGate.cpp" line="166"/>
         <source>Activate License</source>
         <translation>Aktivovat Licenci</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/TrialGate.cpp" line="165"/>
+        <location filename="../../src/Licensing/TrialGate.cpp" line="167"/>
         <source>Get Serial Studio Pro</source>
         <translation>Získat Serial Studio Pro</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/TrialGate.cpp" line="169"/>
+        <location filename="../../src/Licensing/TrialGate.cpp" line="171"/>
         <source>This feature requires Serial Studio Pro</source>
         <translation>Tato funkce vyžaduje Serial Studio Pro</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/TrialGate.cpp" line="170"/>
+        <location filename="../../src/Licensing/TrialGate.cpp" line="172"/>
         <source>Your trial has ended. All free features remain fully functional; activate a license or purchase one to use Pro features again.</source>
         <translation>Vaše zkušební verze skončila. Všechny bezplatné funkce zůstávají plně funkční; aktivujte licenci nebo si ji zakupte, abyste mohli znovu používat funkce Pro.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/TrialGate.cpp" line="173"/>
+        <location filename="../../src/Licensing/TrialGate.cpp" line="176"/>
         <source>Serial Studio Pro</source>
         <translation>Serial Studio Pro</translation>
     </message>
@@ -20172,7 +20201,7 @@ Zadejte potřebná pověření.</translation>
     </message>
     <message>
         <location filename="../../../core/Storage/MQTT/Publisher.cpp" line="665"/>
-        <location filename="../../../core/Storage/MQTT/Publisher.cpp" line="1395"/>
+        <location filename="../../../core/Storage/MQTT/Publisher.cpp" line="1397"/>
         <source>MQTT Test Connection</source>
         <translation>Test Připojení MQTT</translation>
     </message>
@@ -20197,28 +20226,28 @@ Zadejte potřebná pověření.</translation>
         <translation>Vybrat Soukromý Klíč</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/MQTT/Publisher.cpp" line="1392"/>
+        <location filename="../../../core/Storage/MQTT/Publisher.cpp" line="1394"/>
         <source>MQTT broker reachable</source>
         <translation>MQTT broker je dostupný</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/MQTT/Publisher.cpp" line="1392"/>
+        <location filename="../../../core/Storage/MQTT/Publisher.cpp" line="1394"/>
         <source>MQTT broker unreachable</source>
         <translation>MQTT broker není dostupný</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/MQTT/Publisher.cpp" line="1406"/>
+        <location filename="../../../core/Storage/MQTT/Publisher.cpp" line="1408"/>
         <source>MQTT broker connection failed</source>
         <translation>Připojení k MQTT brokeru selhalo</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/MQTT/Publisher.cpp" line="1406"/>
-        <location filename="../../../core/Storage/MQTT/Publisher.cpp" line="1565"/>
+        <location filename="../../../core/Storage/MQTT/Publisher.cpp" line="1408"/>
+        <location filename="../../../core/Storage/MQTT/Publisher.cpp" line="1567"/>
         <source>MQTT Publisher</source>
         <translation>Vydavatel MQTT</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/MQTT/Publisher.cpp" line="1562"/>
+        <location filename="../../../core/Storage/MQTT/Publisher.cpp" line="1564"/>
         <source>MQTT Client Certificate Error</source>
         <translation>Chyba Certifikátu Klienta MQTT</translation>
     </message>
@@ -21605,8 +21634,8 @@ Chcete otevřít stránku pro stažení?</translation>
         <translation>Nelze zapsat Info.plist: %1</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/Misc/ShortcutGenerator_macOS.cpp" line="271"/>
         <location filename="../../../core/Ui/Misc/ShortcutGenerator_Linux.cpp" line="140"/>
+        <location filename="../../../core/Ui/Misc/ShortcutGenerator_macOS.cpp" line="271"/>
         <source>Windows shortcut writer is not available on this platform.</source>
         <translation>Zapisovač zástupců Windows není na této platformě dostupný.</translation>
     </message>
@@ -21637,8 +21666,8 @@ Chcete otevřít stránku pro stažení?</translation>
         <translation>Uložení souboru .lnk selhalo (HRESULT 0x%1).</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/Misc/ShortcutGenerator_Windows.cpp" line="185"/>
         <location filename="../../../core/Ui/Misc/ShortcutGenerator_Linux.cpp" line="154"/>
+        <location filename="../../../core/Ui/Misc/ShortcutGenerator_Windows.cpp" line="185"/>
         <source>macOS shortcut writer is not available on this platform.</source>
         <translation>Zapisovač zástupců macOS není na této platformě dostupný.</translation>
     </message>
@@ -22341,32 +22370,36 @@ Přidejte skupiny výše pro dotazování více typů registrů.</translation>
         <translation>Pásma Alarmu</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/MultiSelectionView.qml" line="303"/>
-        <source>Define colored value ranges and apply them to every selected dataset.</source>
-        <translation>Definujte barevné rozsahy hodnot a aplikujte je na každý vybraný dataset.</translation>
+        <location filename="../../qml/ProjectEditor/Views/MultiSelectionView.qml" line="304"/>
+        <source>Define colored value ranges and apply them to the selected Bar, Gauge, Meter, LED, and Bar Panel datasets.</source>
+        <translation>Definujte barevné rozsahy hodnot a aplikujte je na vybrané datasety Bar, Gauge, Meter, LED a Bar Panel.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/MultiSelectionView.qml" line="322"/>
+        <source>Define colored value ranges and apply them to every selected dataset.</source>
+        <translation type="vanished">Definujte barevné rozsahy hodnot a aplikujte je na každý vybraný dataset.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/MultiSelectionView.qml" line="323"/>
         <source>Duplicate</source>
         <translation>Duplikovat</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/MultiSelectionView.qml" line="324"/>
+        <location filename="../../qml/ProjectEditor/Views/MultiSelectionView.qml" line="325"/>
         <source>Duplicate every selected dataset</source>
         <translation>Duplikovat každý vybraný dataset</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/MultiSelectionView.qml" line="332"/>
+        <location filename="../../qml/ProjectEditor/Views/MultiSelectionView.qml" line="333"/>
         <source>Delete</source>
         <translation>Odstranit</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/MultiSelectionView.qml" line="335"/>
+        <location filename="../../qml/ProjectEditor/Views/MultiSelectionView.qml" line="336"/>
         <source>Delete every selected dataset</source>
         <translation>Odstranit každý vybraný dataset</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/MultiSelectionView.qml" line="375"/>
+        <location filename="../../qml/ProjectEditor/Views/MultiSelectionView.qml" line="376"/>
         <source>Editing %1 items. Shared fields apply to all; per-item fields are locked.</source>
         <translation>Úprava %1 položek. Sdílená pole platí pro všechny; pole jednotlivých položek jsou uzamčena.</translation>
     </message>
@@ -22374,38 +22407,38 @@ Přidejte skupiny výše pro dotazování více typů registrů.</translation>
 <context>
     <name>NativeTemplates</name>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryRaw.cpp" line="116"/>
         <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryHex.cpp" line="127"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryRaw.cpp" line="116"/>
         <source>Bytes per value</source>
         <translation>Bajtů na hodnotu</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryRaw.cpp" line="117"/>
         <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryHex.cpp" line="128"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryRaw.cpp" line="117"/>
         <source>Number of bytes combined into each channel value.</source>
         <translation>Počet bajtů sloučených do každé hodnoty kanálu.</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryRaw.cpp" line="125"/>
         <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryHex.cpp" line="136"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryRaw.cpp" line="125"/>
         <source>Endianness</source>
         <translation>Endianita</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryRaw.cpp" line="126"/>
         <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryHex.cpp" line="137"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryRaw.cpp" line="126"/>
         <source>Byte order used when combining multi-byte values.</source>
         <translation>Pořadí bajtů použité při kombinování vícebajtových hodnot.</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryRaw.cpp" line="134"/>
         <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryHex.cpp" line="145"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryRaw.cpp" line="134"/>
         <source>Signed values</source>
         <translation>Znaménkové hodnoty</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryRaw.cpp" line="135"/>
         <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryHex.cpp" line="146"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryRaw.cpp" line="135"/>
         <source>Interprets each value as two's-complement signed.</source>
         <translation>Interpretuje každou hodnotu jako znaménkovou ve dvojkovém doplňku.</translation>
     </message>
@@ -22420,9 +22453,9 @@ Přidejte skupiny výše pro dotazování více typů registrů.</translation>
         <translation>Položky značka:index oddělené čárkami, např. 1:0,2:1,3:2. Značky mohou být desítkové nebo hexadecimální s prefixem 0x.</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/TextNmea0183.cpp" line="219"/>
         <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinarySirf.cpp" line="216"/>
         <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryUbx.cpp" line="226"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/TextNmea0183.cpp" line="219"/>
         <source>Validate checksum</source>
         <translation>Ověřit kontrolní součet</translation>
     </message>
@@ -24682,17 +24715,17 @@ Klikněte na Obnovit pro aktualizaci seznamu.</translation>
 <context>
     <name>ProjectEditorMenuBindings</name>
     <message>
-        <location filename="../../qml/Commands/ProjectEditorMenuBindings.qml" line="401"/>
+        <location filename="../../qml/Commands/ProjectEditorMenuBindings.qml" line="402"/>
         <source>Dataset Container</source>
         <translation>Kontejner Datových Sad</translation>
     </message>
     <message>
-        <location filename="../../qml/Commands/ProjectEditorMenuBindings.qml" line="406"/>
+        <location filename="../../qml/Commands/ProjectEditorMenuBindings.qml" line="407"/>
         <source>Data Grid</source>
         <translation>Datová Mřížka</translation>
     </message>
     <message>
-        <location filename="../../qml/Commands/ProjectEditorMenuBindings.qml" line="411"/>
+        <location filename="../../qml/Commands/ProjectEditorMenuBindings.qml" line="412"/>
         <source>Bar Panel</source>
         <translation>Sloupcový Panel</translation>
     </message>
@@ -24701,42 +24734,42 @@ Klikněte na Obnovit pro aktualizaci seznamu.</translation>
         <translation type="vanished">Vícenásobný Graf</translation>
     </message>
     <message>
-        <location filename="../../qml/Commands/ProjectEditorMenuBindings.qml" line="416"/>
+        <location filename="../../qml/Commands/ProjectEditorMenuBindings.qml" line="417"/>
         <source>Multi-Plot</source>
         <translation>Vícenásobný Graf</translation>
     </message>
     <message>
-        <location filename="../../qml/Commands/ProjectEditorMenuBindings.qml" line="421"/>
+        <location filename="../../qml/Commands/ProjectEditorMenuBindings.qml" line="422"/>
         <source>3D Plot</source>
         <translation>3D Graf</translation>
     </message>
     <message>
-        <location filename="../../qml/Commands/ProjectEditorMenuBindings.qml" line="426"/>
+        <location filename="../../qml/Commands/ProjectEditorMenuBindings.qml" line="427"/>
         <source>Accelerometer</source>
         <translation>Akcelerometr</translation>
     </message>
     <message>
-        <location filename="../../qml/Commands/ProjectEditorMenuBindings.qml" line="431"/>
+        <location filename="../../qml/Commands/ProjectEditorMenuBindings.qml" line="432"/>
         <source>Gyroscope</source>
         <translation>Gyroskop</translation>
     </message>
     <message>
-        <location filename="../../qml/Commands/ProjectEditorMenuBindings.qml" line="436"/>
+        <location filename="../../qml/Commands/ProjectEditorMenuBindings.qml" line="437"/>
         <source>GPS Map</source>
         <translation>Mapa GPS</translation>
     </message>
     <message>
-        <location filename="../../qml/Commands/ProjectEditorMenuBindings.qml" line="441"/>
+        <location filename="../../qml/Commands/ProjectEditorMenuBindings.qml" line="442"/>
         <source>Image View</source>
         <translation>Zobrazení Obrázku</translation>
     </message>
     <message>
-        <location filename="../../qml/Commands/ProjectEditorMenuBindings.qml" line="446"/>
+        <location filename="../../qml/Commands/ProjectEditorMenuBindings.qml" line="447"/>
         <source>Web View</source>
         <translation>Zobrazení Webu</translation>
     </message>
     <message>
-        <location filename="../../qml/Commands/ProjectEditorMenuBindings.qml" line="451"/>
+        <location filename="../../qml/Commands/ProjectEditorMenuBindings.qml" line="452"/>
         <source>Canvas Widget</source>
         <translation>Widget Plátna</translation>
     </message>
@@ -24745,22 +24778,22 @@ Klikněte na Obnovit pro aktualizaci seznamu.</translation>
         <translation type="vanished">Painter Widget</translation>
     </message>
     <message>
-        <location filename="../../qml/Commands/ProjectEditorMenuBindings.qml" line="712"/>
+        <location filename="../../qml/Commands/ProjectEditorMenuBindings.qml" line="713"/>
         <source>Hide Selected (%1)</source>
         <translation>Skrýt Vybrané (%1)</translation>
     </message>
     <message>
-        <location filename="../../qml/Commands/ProjectEditorMenuBindings.qml" line="713"/>
+        <location filename="../../qml/Commands/ProjectEditorMenuBindings.qml" line="714"/>
         <source>Show Selected (%1)</source>
         <translation>Zobrazit Vybrané (%1)</translation>
     </message>
     <message>
-        <location filename="../../qml/Commands/ProjectEditorMenuBindings.qml" line="725"/>
+        <location filename="../../qml/Commands/ProjectEditorMenuBindings.qml" line="726"/>
         <source>Duplicate Selected (%1)</source>
         <translation>Duplikovat Vybrané (%1)</translation>
     </message>
     <message>
-        <location filename="../../qml/Commands/ProjectEditorMenuBindings.qml" line="744"/>
+        <location filename="../../qml/Commands/ProjectEditorMenuBindings.qml" line="745"/>
         <source>Delete Selected (%1)</source>
         <translation>Smazat Vybrané (%1)</translation>
     </message>
@@ -24768,40 +24801,40 @@ Klikněte na Obnovit pro aktualizaci seznamu.</translation>
 <context>
     <name>ProjectModel</name>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectBulkOps.cpp" line="132"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectBulkOps.cpp" line="133"/>
         <source>Duplicate Selection</source>
         <translation>Duplikovat Výběr</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectBulkOps.cpp" line="210"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectBulkOps.cpp" line="223"/>
         <source>Delete Selection</source>
         <translation>Smazat Výběr</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectBulkOps.cpp" line="299"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectBulkOps.cpp" line="312"/>
         <source>Delete %1 selected items?</source>
         <translation>Smazat vybrané položky (%1)?</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectBulkOps.cpp" line="300"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="504"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="531"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaces.cpp" line="818"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectBulkOps.cpp" line="313"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="509"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="536"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaces.cpp" line="858"/>
         <source>This action cannot be undone.</source>
         <translation>Tuto akci nelze vrátit zpět.</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectBulkOps.cpp" line="302"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectBulkOps.cpp" line="315"/>
         <source>Delete Items</source>
         <translation>Smazat Položky</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectBulkOps.cpp" line="323"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectBulkOps.cpp" line="336"/>
         <source>Move Selection</source>
         <translation>Přesunout Výběr</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectBulkOps.cpp" line="388"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectBulkOps.cpp" line="401"/>
         <source>Toggle Selection</source>
         <translation>Přepnout Výběr</translation>
     </message>
@@ -25039,10 +25072,10 @@ Načíst jej znovu?</translation>
         <translation>Chcete smazat výstupní widget „%1"?</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectOutputWidgets.cpp" line="239"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="313"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="355"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="348"/>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="390"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="425"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectOutputWidgets.cpp" line="239"/>
         <source>This action cannot be undone. Do you wish to proceed?</source>
         <translation>Tuto akci nelze vrátit zpět. Chcete pokračovat?</translation>
     </message>
@@ -25089,178 +25122,183 @@ Načíst jej znovu?</translation>
         <translation>Upravit Skupinu</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="159"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="178"/>
+        <source>Remove Transform</source>
+        <translation>Odebrat Transformaci</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="194"/>
         <source>Edit Dataset</source>
         <translation>Upravit Dataset</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="202"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="237"/>
         <source>Edit Action</source>
         <translation>Upravit Akci</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="223"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="258"/>
         <source>Seed Dataset Aliases</source>
         <translation>Vyplnit Aliasy Datasetu</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="260"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="295"/>
         <source>Toggle Group</source>
         <translation>Přepnout Skupinu</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="283"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="318"/>
         <source>Toggle Dataset</source>
         <translation>Přepnout Dataset</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="312"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="347"/>
         <source>Do you want to delete group "%1"?</source>
         <translation>Chcete smazat skupinu "%1"?</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="326"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="361"/>
         <source>Delete Group</source>
         <translation>Smazat Skupinu</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="354"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="389"/>
         <source>Do you want to delete action "%1"?</source>
         <translation>Chcete smazat akci "%1"?</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="368"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="403"/>
         <source>Delete Action</source>
         <translation>Smazat Akci</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="388"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="423"/>
         <source>Do you want to delete dataset "%1"?</source>
         <translation>Chcete smazat datovou sadu "%1"?</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="409"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="444"/>
         <source>Delete Dataset</source>
         <translation>Smazat Dataset</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="466"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="1191"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="501"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="1226"/>
         <source>Duplicate Group</source>
         <translation>Duplikovat Skupinu</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="509"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="1309"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="544"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="1344"/>
         <source>Duplicate Action</source>
         <translation>Duplikovat Akci</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="543"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="1252"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="578"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="1287"/>
         <source>Duplicate Dataset</source>
         <translation>Duplikovat Datovou Sadu</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="580"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="859"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="615"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="894"/>
         <source>Add Group</source>
         <translation>Přidat Skupinu</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="616"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="651"/>
         <source>Group</source>
         <translation>Skupina</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="625"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="660"/>
         <source>Add Dataset</source>
         <translation>Přidat Datovou Sadu</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="637"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="672"/>
         <source>New Dataset</source>
         <translation>Nová Datová Sada</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="640"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="675"/>
         <source>New Plot</source>
         <translation>Nový Graf</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="644"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="679"/>
         <source>New FFT Plot</source>
         <translation>Nový FFT Graf</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="648"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="683"/>
         <source>New Level Indicator</source>
         <translation>Nový Indikátor Úrovně</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="652"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="687"/>
         <source>New Gauge</source>
         <translation>Nový Měřič</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="656"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="691"/>
         <source>New Compass</source>
         <translation>Nový Kompas</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="662"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="697"/>
         <source>New Meter</source>
         <translation>Nový Měřič</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="666"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="701"/>
         <source>New LED Indicator</source>
         <translation>Nový LED Indikátor</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="670"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="705"/>
         <source>New Waterfall</source>
         <translation>Nový Vodopád</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="701"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="736"/>
         <source>Edit Canvas Datasets</source>
         <translation>Upravit Canvas Datasety</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="722"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="757"/>
         <source>Channel %1</source>
         <translation>Kanál %1</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="745"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="780"/>
         <source>Change Dataset Option</source>
         <translation>Změnit Možnost Datové Sady</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="798"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="826"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="833"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="861"/>
         <source>Add Action</source>
         <translation>Přidat Akci</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="807"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="837"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="842"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="872"/>
         <source>New Action</source>
         <translation>Nová Akce</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="897"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="932"/>
         <source>Change Group Widget</source>
         <translation>Změnit Widget Skupiny</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="945"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="980"/>
         <source>Are you sure you want to change the group-level widget?</source>
         <translation>Opravdu chcete změnit widget na úrovni skupiny?</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="946"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="981"/>
         <source>Existing datasets for this group are deleted</source>
         <translation>Existující datasety pro tuto skupinu budou smazány</translation>
     </message>
@@ -25312,23 +25350,23 @@ Načíst jej znovu?</translation>
         <translation>Z</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="1017"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="671"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="1052"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="699"/>
         <source>Move Group</source>
         <translation>Přesunout Skupinu</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="1074"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="1109"/>
         <source>Move Dataset</source>
         <translation>Přesunout Dataset</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="1116"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="1151"/>
         <source>Move Action</source>
         <translation>Přesunout Akci</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="1339"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="1374"/>
         <source>Rename Group</source>
         <translation>Přejmenovat Skupinu</translation>
     </message>
@@ -25369,26 +25407,26 @@ Načíst jej znovu?</translation>
         <translation>Nový Profil Pracovního Prostoru</translation>
     </message>
     <message>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="1375"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="1404"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="1430"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="522"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="549"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="576"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="762"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="788"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="983"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="1010"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="1036"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectSources.cpp" line="295"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="393"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="421"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="449"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="472"/>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaceProfiles.cpp" line="373"/>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaceProfiles.cpp" line="395"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="1340"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="1369"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="1395"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="388"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="416"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="444"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="467"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectSources.cpp" line="288"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaces.cpp" line="771"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaces.cpp" line="797"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="499"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="521"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="548"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="734"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="760"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="955"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="982"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="1008"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaces.cpp" line="811"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaces.cpp" line="837"/>
         <source>Name:</source>
         <translation>Název:</translation>
     </message>
@@ -25418,12 +25456,12 @@ Načíst jej znovu?</translation>
         <translation>Zobrazit pracovní prostory z:</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="1368"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="1403"/>
         <source>Rename Dataset</source>
         <translation>Přejmenovat Datovou Sadu</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="1394"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="1429"/>
         <source>Rename Action</source>
         <translation>Přejmenovat Akci</translation>
     </message>
@@ -25433,91 +25471,91 @@ Načíst jej znovu?</translation>
         <translation>Přidat Tabulku</translation>
     </message>
     <message>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="1012"/>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="124"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="390"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="984"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="395"/>
         <source>Shared Table</source>
         <translation>Sdílená Tabulka</translation>
     </message>
     <message>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="153"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="512"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="517"/>
         <source>Delete Table</source>
         <translation>Smazat Tabulku</translation>
     </message>
     <message>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="168"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="415"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="420"/>
         <source>Rename Table</source>
         <translation>Přejmenovat Tabulku</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="242"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="247"/>
         <source>Add Variable</source>
         <translation>Přidat Proměnnou</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="251"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="256"/>
         <source>variable</source>
         <translation>proměnná</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="281"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="533"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="286"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="538"/>
         <source>Delete Variable</source>
         <translation>Odstranit Proměnnou</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="312"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="317"/>
         <source>Edit Variable</source>
         <translation>Upravit Proměnnou</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="387"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="981"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="1009"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="392"/>
         <source>New Shared Table</source>
         <translation>Nová Sdílená Tabulka</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="443"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="448"/>
         <source>New Variable</source>
         <translation>Nová Proměnná</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="466"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="471"/>
         <source>Rename Variable</source>
         <translation>Přejmenovat Proměnnou</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="505"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="510"/>
         <source>This removes %1 variable(s) along with the table. This action cannot be undone.</source>
         <translation>Tímto se odstraní %1 proměnná/proměnné/proměnných spolu s tabulkou. Tuto akci nelze vrátit zpět.</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="509"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="530"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaces.cpp" line="817"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="514"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="535"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaces.cpp" line="857"/>
         <source>Delete "%1"?</source>
         <translation>Smazat „%1"?</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="561"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="566"/>
         <source>Export Table</source>
         <translation>Exportovat Tabulku</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="563"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="606"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="568"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="616"/>
         <source>CSV files (*.csv)</source>
         <translation>Soubory CSV (*.CSV)</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="604"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="614"/>
         <source>Import Table</source>
         <translation>Importovat Tabulku</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="615"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="625"/>
         <source>Import Table CSV</source>
         <translation>Importovat CSV Tabulky</translation>
     </message>
@@ -25562,180 +25600,180 @@ Načíst jej znovu?</translation>
         <translation>Duplikovat Zařízení</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectSources.cpp" line="211"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectSources.cpp" line="329"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectSources.cpp" line="362"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectSources.cpp" line="218"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectSources.cpp" line="336"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectSources.cpp" line="369"/>
         <source>Edit Device</source>
         <translation>Upravit Zařízení</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectSources.cpp" line="243"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectSources.cpp" line="250"/>
         <source>Rename Device</source>
         <translation>Přejmenovat Zařízení</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectSources.cpp" line="259"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectSources.cpp" line="378"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectSources.cpp" line="266"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectSources.cpp" line="385"/>
         <source>Change Bus Type</source>
         <translation>Změnit Typ Sběrnice</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectSources.cpp" line="287"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectSources.cpp" line="294"/>
         <source>Rename Data Source</source>
         <translation>Přejmenovat Zdroj Dat</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectSources.cpp" line="414"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectSources.cpp" line="474"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectSources.cpp" line="612"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectSources.cpp" line="421"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectSources.cpp" line="481"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectSources.cpp" line="619"/>
         <source>Edit Frame Parser</source>
         <translation>Upravit Analyzátor Rámců</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectSources.cpp" line="426"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectSources.cpp" line="488"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectSources.cpp" line="433"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectSources.cpp" line="495"/>
         <source>Change Parser Language</source>
         <translation>Změnit Jazyk Analyzátoru</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectSources.cpp" line="442"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectSources.cpp" line="515"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectSources.cpp" line="567"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectSources.cpp" line="449"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectSources.cpp" line="522"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectSources.cpp" line="574"/>
         <source>Change Parser Template</source>
         <translation>Změnit Šablonu Analyzátoru</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectSources.cpp" line="454"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectSources.cpp" line="539"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectSources.cpp" line="461"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectSources.cpp" line="546"/>
         <source>Change Parser Parameters</source>
         <translation>Změnit Parametry Analyzátoru</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectSources.cpp" line="583"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectSources.cpp" line="590"/>
         <source>Change Stream Lane</source>
         <translation>Změnit Proud Linky</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaces.cpp" line="392"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaces.cpp" line="773"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="523"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="551"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaces.cpp" line="397"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaces.cpp" line="813"/>
         <source>Workspace</source>
         <translation>Pracovní Prostor</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaces.cpp" line="770"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="520"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="548"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaces.cpp" line="810"/>
         <source>New Workspace</source>
         <translation>Nový Pracovní Prostor</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaces.cpp" line="796"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaces.cpp" line="836"/>
         <source>Rename Workspace</source>
         <translation>Přejmenovat Pracovní Prostor</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaces.cpp" line="820"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaces.cpp" line="860"/>
         <source>Delete Workspace</source>
         <translation>Smazat Pracovní Prostor</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaces.cpp" line="882"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaces.cpp" line="922"/>
         <source>Overview</source>
         <translation>Přehled</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaces.cpp" line="891"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaces.cpp" line="931"/>
         <source>All Data</source>
         <translation>Všechna Data</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaces.cpp" line="1160"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaces.cpp" line="1205"/>
         <source>Discard workspace customisations?</source>
         <translation>Zahodit přizpůsobení pracovních prostorů?</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaces.cpp" line="1161"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaces.cpp" line="1206"/>
         <source>Switching off Customize discards your edits and rebuilds the workspace list from the project's groups.</source>
         <translation>Vypnutí přizpůsobení zahodí vaše úpravy a znovu vytvoří seznam pracovních prostorů ze skupin projektu.</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaces.cpp" line="1164"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaces.cpp" line="1209"/>
         <source>Customize Workspaces</source>
         <translation>Přizpůsobit Pracovní Prostory</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="326"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="501"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="611"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="736"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="824"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="957"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="329"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="524"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="639"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="764"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="852"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="985"/>
         <source>Folder</source>
         <translation>Složka</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="498"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="733"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="954"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="521"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="761"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="982"/>
         <source>New Folder</source>
         <translation>Nová Složka</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="547"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="624"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="759"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="837"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="1007"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="575"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="652"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="787"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="865"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="1035"/>
         <source>Rename Folder</source>
         <translation>Přejmenovat Složku</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="569"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="781"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="1029"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="597"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="809"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="1057"/>
         <source>Delete folder "%1"?</source>
         <translation>Smazat složku „%1"?</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="570"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="598"/>
         <source>The folder is removed; its workspaces and sub-folders move up to the parent.</source>
         <translation>Složka je odstraněna; její pracovní plochy a podsložky se přesunou do nadřazené složky.</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="573"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="644"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="784"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="858"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="1033"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="601"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="672"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="812"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="886"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="1061"/>
         <source>Delete Folder</source>
         <translation>Smazat Složku</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="602"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="813"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="630"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="841"/>
         <source>Add Folder</source>
         <translation>Přidat Složku</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="692"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="718"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="913"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="939"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="720"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="746"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="941"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="967"/>
         <source>Move Folder</source>
         <translation>Přesunout Složku</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="782"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="810"/>
         <source>The folder is removed; its groups and sub-folders move up to the parent.</source>
         <translation>Složka je odstraněna; její skupiny a podsložky se přesunou do nadřazené složky.</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="885"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="913"/>
         <source>Move Table</source>
         <translation>Přesunout Tabulku</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="1030"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="1058"/>
         <source>The folder is removed; its tables and sub-folders move up to the parent. The accessor path of those tables changes accordingly.</source>
         <translation>Složka je odstraněna; její tabulky a podsložky se přesunou do nadřazené složky. Přístupová cesta těchto tabulek se odpovídajícím způsobem změní.</translation>
     </message>
@@ -26516,9 +26554,10 @@ Načíst jej znovu?</translation>
     <message numerus="yes">
         <location filename="../../../core/Ui/Console/WelcomeText.cpp" line="70"/>
         <source>Pro trial: %n day(s) remaining.</source>
-        <translation>Zkušební verze Pro: zbývá %n den(í).<numerusform/>
-            <numerusform/>
-            <numerusform/>
+        <translation>
+            <numerusform>Zkušební verze Pro: zbývá %n den(í).</numerusform>
+            <numerusform>Zkušební verze Pro: zbývá %n den(í).</numerusform>
+            <numerusform>Zkušební verze Pro: zbývá %n den(í).</numerusform>
         </translation>
     </message>
     <message>
@@ -26532,49 +26571,49 @@ Načíst jej znovu?</translation>
         <translation>Nepodařilo se načíst uvítací text :(</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/Trial.cpp" line="256"/>
+        <location filename="../../src/Licensing/Trial.cpp" line="248"/>
         <source>Your Serial Studio Pro trial has expired</source>
         <translation>Vaše zkušební verze Serial Studio Pro vypršela</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/Trial.cpp" line="257"/>
+        <location filename="../../src/Licensing/Trial.cpp" line="249"/>
         <source>Pro features are locked until a license is activated. All free features remain fully functional, with no time limit.</source>
         <translation>Funkce Pro jsou uzamčeny, dokud není aktivována licence. Všechny bezplatné funkce zůstávají plně funkční bez časového omezení.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/Trial.cpp" line="260"/>
+        <location filename="../../src/Licensing/Trial.cpp" line="252"/>
         <source>Trial Expired</source>
         <translation>Zkušební Verze Vypršela</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/Trial.cpp" line="387"/>
+        <location filename="../../src/Licensing/Trial.cpp" line="376"/>
         <source>Network error</source>
         <translation>Chyba sítě</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/Trial.cpp" line="390"/>
-        <location filename="../../src/Licensing/Trial.cpp" line="408"/>
-        <location filename="../../src/Licensing/Trial.cpp" line="429"/>
+        <location filename="../../src/Licensing/Trial.cpp" line="379"/>
+        <location filename="../../src/Licensing/Trial.cpp" line="397"/>
+        <location filename="../../src/Licensing/Trial.cpp" line="418"/>
         <source>Trial Activation Error</source>
         <translation>Chyba Aktivace Zkušební Verze</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/Trial.cpp" line="405"/>
+        <location filename="../../src/Licensing/Trial.cpp" line="394"/>
         <source>Invalid server response</source>
         <translation>Neplatná odpověď serveru</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/Trial.cpp" line="406"/>
+        <location filename="../../src/Licensing/Trial.cpp" line="395"/>
         <source>The server returned malformed data: %1</source>
         <translation>Server vrátil chybná data: %1</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/Trial.cpp" line="426"/>
+        <location filename="../../src/Licensing/Trial.cpp" line="415"/>
         <source>Unexpected server response</source>
         <translation>Neočekávaná odpověď serveru</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/Trial.cpp" line="427"/>
+        <location filename="../../src/Licensing/Trial.cpp" line="416"/>
         <source>The server response is missing required fields.</source>
         <translation>V odpovědi serveru chybí požadovaná pole.</translation>
     </message>
@@ -26618,8 +26657,8 @@ This script may use Lua 5.3 bitwise syntax, which this runtime does not support.
 </translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="489"/>
         <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="230"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="489"/>
         <source>Frame Parser Disabled</source>
         <translation>Analyzátor Rámců Zakázán</translation>
     </message>
@@ -26685,8 +26724,8 @@ Serial Studio může přepsat nepodporované operátory jako volání bit.* a zn
 %1</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="680"/>
         <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="560"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="680"/>
         <source>Missing Parse Function</source>
         <translation>Chybějící Funkce Parse</translation>
     </message>
@@ -26702,8 +26741,8 @@ Ujistěte se, že váš kód obsahuje:
 function parse(frame) ... end</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="743"/>
         <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="612"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="743"/>
         <source>Parse Function Runtime Error</source>
         <translation>Chyba Běhu Funkce Parse</translation>
     </message>
@@ -26869,22 +26908,22 @@ function parse(%1) { ... }
 Parametr oddělovače již není potřeba.</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ModuleManager.cpp" line="276"/>
+        <location filename="../../src/Misc/ModuleManager.cpp" line="277"/>
         <source>Critical</source>
         <translation>Kritické</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ModuleManager.cpp" line="276"/>
+        <location filename="../../src/Misc/ModuleManager.cpp" line="277"/>
         <source>Warning</source>
         <translation>Varování</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/CLI.cpp" line="869"/>
+        <location filename="../../src/Misc/CLI.cpp" line="870"/>
         <source>Project file not found</source>
         <translation>Soubor projektu nenalezen</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/CLI.cpp" line="870"/>
+        <location filename="../../src/Misc/CLI.cpp" line="871"/>
         <source>The project file referenced by this shortcut could not be found:
 
 %1</source>
@@ -26893,17 +26932,17 @@ Parametr oddělovače již není potřeba.</translation>
 %1</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/CLI.cpp" line="873"/>
+        <location filename="../../src/Misc/CLI.cpp" line="874"/>
         <source>Would you like to delete this shortcut?</source>
         <translation>Chcete tento zástupce smazat?</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/CLI.cpp" line="877"/>
+        <location filename="../../src/Misc/CLI.cpp" line="878"/>
         <source>Delete Shortcut</source>
         <translation>Smazat Zástupce</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/CLI.cpp" line="879"/>
+        <location filename="../../src/Misc/CLI.cpp" line="880"/>
         <source>Quit</source>
         <translation>Ukončit</translation>
     </message>
@@ -27321,7 +27360,7 @@ Parametr oddělovače již není potřeba.</translation>
         <translation>Server neodeslal žádnou odpověď</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/CLI.h" line="66"/>
+        <location filename="../../src/Misc/CLI.h" line="67"/>
         <source>Listen for API clients on &lt;port&gt; instead of 7777.</source>
         <translation>Naslouchat API klientům na &lt;port&gt; místo 7777.</translation>
     </message>
@@ -27337,12 +27376,12 @@ Parametr oddělovače již není potřeba.</translation>
         <translation>Poškozené časování bloku v relaci %1</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="79"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="80"/>
         <source>This session is being recorded</source>
         <translation>Tato relace se právě zaznamenává</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="80"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="81"/>
         <source>Stop the recording before deleting or editing this session; its rows are still being written.</source>
         <translation>Před smazáním nebo úpravou této relace zastavte záznam; řádky se stále zapisují.</translation>
     </message>
@@ -27447,6 +27486,59 @@ Parametr oddělovače již není potřeba.</translation>
         <location filename="../../../core/Devices/IO/Audio/SoundBank.cpp" line="215"/>
         <source>Sample-rate conversion failed for this file</source>
         <translation>Převod vzorkovací frekvence selhal pro tento soubor</translation>
+    </message>
+    <message numerus="yes">
+        <location filename="../../src/Misc/ProFeatureNotice.cpp" line="60"/>
+        <source>%n dataset transform(s)</source>
+        <translation>
+            <numerusform>%n transformace(í) datové sady</numerusform>
+            <numerusform>%n transformace(í) datové sady</numerusform>
+            <numerusform>%n transformace(í) datové sady</numerusform>
+        </translation>
+    </message>
+    <message numerus="yes">
+        <location filename="../../src/Misc/ProFeatureNotice.cpp" line="61"/>
+        <source>%n Variables table(s)</source>
+        <translation>
+            <numerusform>%n tabulka(ek) proměnných</numerusform>
+            <numerusform>%n tabulka(ek) proměnných</numerusform>
+            <numerusform>%n tabulka(ek) proměnných</numerusform>
+        </translation>
+    </message>
+    <message>
+        <location filename="../../src/Misc/ProFeatureNotice.cpp" line="65"/>
+        <source>This project uses %1 and %2.</source>
+        <translation>Tento projekt používá %1 a %2.</translation>
+    </message>
+    <message>
+        <location filename="../../src/Misc/ProFeatureNotice.cpp" line="67"/>
+        <source>This project uses %1.</source>
+        <translation>Tento projekt používá %1.</translation>
+    </message>
+    <message>
+        <location filename="../../src/Misc/ProFeatureNotice.cpp" line="70"/>
+        <source>A project with this content needs Serial Studio Pro to connect. To use it for free, remove the transforms and the tables from the project.</source>
+        <translation>Projekt s tímto obsahem vyžaduje Serial Studio Pro pro připojení. Chcete-li jej používat zdarma, odeberte transformace a tabulky z projektu.</translation>
+    </message>
+    <message>
+        <location filename="../../src/Misc/ProFeatureNotice.cpp" line="98"/>
+        <source>Get Serial Studio Pro</source>
+        <translation>Získat Serial Studio Pro</translation>
+    </message>
+    <message>
+        <location filename="../../src/Misc/ProFeatureNotice.cpp" line="102"/>
+        <source>This feature requires Serial Studio Pro</source>
+        <translation>Tato funkce vyžaduje Serial Studio Pro</translation>
+    </message>
+    <message>
+        <location filename="../../src/Misc/ProFeatureNotice.cpp" line="103"/>
+        <source>This build includes the GPLv3 feature set only. The official build adds the Pro features, with a free 14-day trial.</source>
+        <translation>Toto sestavení obsahuje pouze sadu funkcí GPLv3. Oficiální sestavení přidává funkce Pro s bezplatnou 14denní zkušební verzí.</translation>
+    </message>
+    <message>
+        <location filename="../../src/Misc/ProFeatureNotice.cpp" line="107"/>
+        <source>Serial Studio Pro</source>
+        <translation>Serial Studio Pro</translation>
     </message>
 </context>
 <context>
@@ -28676,93 +28768,93 @@ Přidejte absolutní adresy výše pro dotazování řadiče.</translation>
         <translation type="vanished">Obrázky (*.png *.jpg *.jpeg *.svg)</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="651"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="652"/>
         <source>Open Session File</source>
         <translation>Otevřít Soubor Relace</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="653"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="654"/>
         <source>Session files (*.db)</source>
         <translation>Soubory relací (*.db)</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="1298"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="1305"/>
         <source>Cannot open session file</source>
         <translation>Nelze otevřít soubor relace</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="886"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="893"/>
         <source>Delete session from %1?</source>
         <translation>Odstranit relaci z %1?</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="889"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="896"/>
         <source>Delete Session</source>
         <translation>Odstranit Relaci</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="1158"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="1165"/>
         <source>No project data</source>
         <translation>Žádná data projektu</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="887"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="894"/>
         <source>All readings and raw data for this session are permanently removed.</source>
         <translation>Všechna měření a nezpracovaná data této relace budou trvale odstraněna.</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="709"/>
-        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="718"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="716"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="725"/>
         <source>Lock Session File</source>
         <translation>Zamknout Soubor Relace</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="710"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="717"/>
         <source>Choose a password to lock the session file:</source>
         <translation>Zvolte heslo pro zamknutí souboru relace:</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="719"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="726"/>
         <source>Confirm the password:</source>
         <translation>Potvrďte heslo:</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="727"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="734"/>
         <source>Passwords do not match</source>
         <translation>Hesla se neshodují</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="728"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="735"/>
         <source>The two passwords you entered do not match. The session file was not locked.</source>
         <translation>Zadaná hesla se neshodují. Soubor relace nebyl zamknut.</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="764"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="771"/>
         <source>Unlock Session File</source>
         <translation>Odemknout Soubor Relace</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="765"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="772"/>
         <source>Enter the session file password:</source>
         <translation>Zadejte heslo souboru relace:</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="775"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="782"/>
         <source>Incorrect password</source>
         <translation>Nesprávné heslo</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="776"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="783"/>
         <source>The password you entered does not match the one stored in the session file.</source>
         <translation>Zadané heslo neodpovídá heslu uloženému v souboru relace.</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="876"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="883"/>
         <source>Session file locked</source>
         <translation>Soubor relace zamknut</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="877"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="884"/>
         <source>Unlock the session file before deleting recorded sessions.</source>
         <translation>Před odstraněním zaznamenaných relací odemkněte soubor relace.</translation>
     </message>
@@ -28833,37 +28925,37 @@ Přidejte absolutní adresy výše pro dotazování řadiče.</translation>
         <translation type="vanished">Nelze vygenerovat sestavu.</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="1159"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="1166"/>
         <source>This session file does not contain an embedded project.</source>
         <translation>Tento soubor relace neobsahuje vložený projekt.</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="1168"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="1175"/>
         <source>Invalid project data</source>
         <translation>Neplatná data projektu</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="1169"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="1176"/>
         <source>The embedded project JSON is malformed and cannot be restored.</source>
         <translation>Vložený JSON projektu je poškozený a nelze jej obnovit.</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="1179"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="1186"/>
         <source>Restore Project</source>
         <translation>Obnovit Projekt</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="1179"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="1186"/>
         <source>Serial Studio projects (*.ssproj *.json)</source>
         <translation>Projekty Serial Studio (*.ssproj *.json)</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="1187"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="1194"/>
         <source>Cannot write file</source>
         <translation>Nelze zapsat soubor</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="1187"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="1194"/>
         <source>Check file permissions and try again.</source>
         <translation>Zkontrolujte oprávnění souboru a zkuste to znovu.</translation>
     </message>
@@ -29161,63 +29253,63 @@ Přidejte absolutní adresy výše pro dotazování řadiče.</translation>
 <context>
     <name>Sessions::Player</name>
     <message>
-        <location filename="../../../core/Storage/Sessions/Player.cpp" line="328"/>
+        <location filename="../../../core/Storage/Sessions/Player.cpp" line="329"/>
         <source>Open Session File</source>
         <translation>Otevřít Soubor Relace</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/Player.cpp" line="330"/>
+        <location filename="../../../core/Storage/Sessions/Player.cpp" line="331"/>
         <source>Session files (*.db)</source>
         <translation>Soubory relací (*.db)</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/Player.cpp" line="412"/>
+        <location filename="../../../core/Storage/Sessions/Player.cpp" line="420"/>
         <source>Device Connection Active</source>
         <translation>Aktivní Připojení k Zařízení</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/Player.cpp" line="413"/>
+        <location filename="../../../core/Storage/Sessions/Player.cpp" line="421"/>
         <source>To use this feature, you must disconnect from the device. Do you want to proceed?</source>
         <translation>Pro použití této funkce je nutné odpojit zařízení. Chcete pokračovat?</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/Player.cpp" line="455"/>
-        <location filename="../../../core/Storage/Sessions/Player.cpp" line="482"/>
+        <location filename="../../../core/Storage/Sessions/Player.cpp" line="463"/>
+        <location filename="../../../core/Storage/Sessions/Player.cpp" line="490"/>
         <source>Cannot open session file</source>
         <translation>Nelze Otevřít Soubor Relace</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/Player.cpp" line="456"/>
+        <location filename="../../../core/Storage/Sessions/Player.cpp" line="464"/>
         <source>Unknown error</source>
         <translation>Neznámá chyba</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/Player.cpp" line="475"/>
+        <location filename="../../../core/Storage/Sessions/Player.cpp" line="483"/>
         <source>No project data</source>
         <translation>Žádná data projektu</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/Player.cpp" line="476"/>
+        <location filename="../../../core/Storage/Sessions/Player.cpp" line="484"/>
         <source>This session does not contain an embedded project file — the dashboard falls back to a quick-plot layout.</source>
         <translation>Tato relace neobsahuje vložený soubor projektu — dashboard se vrací k rychlému rozložení grafů.</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/Player.cpp" line="483"/>
+        <location filename="../../../core/Storage/Sessions/Player.cpp" line="491"/>
         <source>Check file permissions and try again.</source>
         <translation>Zkontrolujte oprávnění souboru a zkuste to znovu.</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/Player.cpp" line="633"/>
+        <location filename="../../../core/Storage/Sessions/Player.cpp" line="641"/>
         <source>Sessions</source>
         <translation>Relace</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/Player.cpp" line="635"/>
+        <location filename="../../../core/Storage/Sessions/Player.cpp" line="643"/>
         <source>Recording uses an older copy of the project</source>
         <translation>Záznam používá starší kopii projektu</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/Player.cpp" line="636"/>
+        <location filename="../../../core/Storage/Sessions/Player.cpp" line="644"/>
         <source>The dashboard shown is the one embedded in the recording; the project on disk has changed since. Close the session to return to the current project.</source>
         <translation>Zobrazený dashboard je ten vložený v záznamu; projekt na disku se od té doby změnil. Zavřete relaci pro návrat k aktuálnímu projektu.</translation>
     </message>
@@ -32801,27 +32893,27 @@ Zapněte Vložit Projekt pro zabudování projektu do zástupce, aby fungoval i 
 <context>
     <name>UI::AlarmMonitor</name>
     <message>
-        <location filename="../../../core/Ui/UI/AlarmMonitor.cpp" line="224"/>
+        <location filename="../../../core/Ui/UI/AlarmMonitor.cpp" line="246"/>
         <source>Alarm</source>
         <translation>Alarm</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/AlarmMonitor.cpp" line="225"/>
+        <location filename="../../../core/Ui/UI/AlarmMonitor.cpp" line="247"/>
         <source>critical</source>
         <translation>kritické</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/AlarmMonitor.cpp" line="225"/>
+        <location filename="../../../core/Ui/UI/AlarmMonitor.cpp" line="247"/>
         <source>warning</source>
         <translation>varování</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/AlarmMonitor.cpp" line="229"/>
+        <location filename="../../../core/Ui/UI/AlarmMonitor.cpp" line="251"/>
         <source>Value %1%2 entered the %3 band (%4–%5).</source>
         <translation>Hodnota %1%2 vstoupila do pásma %3 (%4–%5).</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/AlarmMonitor.cpp" line="235"/>
+        <location filename="../../../core/Ui/UI/AlarmMonitor.cpp" line="257"/>
         <source>Alarms</source>
         <translation>Alarmy</translation>
     </message>
@@ -32829,22 +32921,22 @@ Zapněte Vložit Projekt pro zabudování projektu do zástupce, aby fungoval i 
 <context>
     <name>UI::Alarms::AlarmAnnunciator</name>
     <message>
-        <location filename="../../../core/Ui/UI/Alarms/AlarmAnnunciator.cpp" line="425"/>
+        <location filename="../../../core/Ui/UI/Alarms/AlarmAnnunciator.cpp" line="427"/>
         <source>System default</source>
         <translation>Výchozí pro systém</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/Alarms/AlarmAnnunciator.cpp" line="500"/>
+        <location filename="../../../core/Ui/UI/Alarms/AlarmAnnunciator.cpp" line="502"/>
         <source>Path climbs out of the project folder</source>
         <translation>Cesta vede mimo složku projektu</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/Alarms/AlarmAnnunciator.cpp" line="568"/>
+        <location filename="../../../core/Ui/UI/Alarms/AlarmAnnunciator.cpp" line="570"/>
         <source>Unknown sound slot '%1'</source>
         <translation>Neznámý zvukový slot '%1'</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/Alarms/AlarmAnnunciator.cpp" line="826"/>
+        <location filename="../../../core/Ui/UI/Alarms/AlarmAnnunciator.cpp" line="828"/>
         <source>Alarms</source>
         <translation>Alarmy</translation>
     </message>
@@ -32856,57 +32948,57 @@ Zapněte Vložit Projekt pro zabudování projektu do zástupce, aby fungoval i 
 <context>
     <name>UI::Alarms::AnnunciatorChecker</name>
     <message>
-        <location filename="../../../core/Ui/UI/Alarms/AnnunciatorChecker.cpp" line="71"/>
+        <location filename="../../../core/Ui/UI/Alarms/AnnunciatorChecker.cpp" line="72"/>
         <source>Alarm sound file unavailable: %1</source>
         <translation>Zvukový soubor alarmu není k dispozici: %1</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/Alarms/AnnunciatorChecker.cpp" line="73"/>
+        <location filename="../../../core/Ui/UI/Alarms/AnnunciatorChecker.cpp" line="74"/>
         <source>Pick a valid PCM WAV file, or clear the override to use the bundled sound.</source>
         <translation>Vyberte platný soubor PCM WAV nebo zrušte přepsání pro použití vestavěného zvuku.</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/Alarms/AnnunciatorChecker.cpp" line="81"/>
+        <location filename="../../../core/Ui/UI/Alarms/AnnunciatorChecker.cpp" line="82"/>
         <source>Aural alerts are off, but this project defines alarms</source>
         <translation>Zvukové výstrahy jsou vypnuty, ale tento projekt definuje alarmy</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/Alarms/AnnunciatorChecker.cpp" line="82"/>
+        <location filename="../../../core/Ui/UI/Alarms/AnnunciatorChecker.cpp" line="83"/>
         <source>The project configures alarm bands or alarm sounds, and none of them will be heard while the master enable is off.</source>
         <translation>Projekt konfiguruje pásma alarmů nebo zvuky alarmů, a žádný z nich nebude slyšen, pokud je hlavní povolení vypnuté.</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/Alarms/AnnunciatorChecker.cpp" line="84"/>
+        <location filename="../../../core/Ui/UI/Alarms/AnnunciatorChecker.cpp" line="85"/>
         <source>Enable alarm sounds in Preferences &gt; Sounds, or remove the project's alarm configuration.</source>
         <translation>Povolte zvuky alarmů v Předvolby &gt; Zvuky, nebo odeberte konfiguraci alarmů projektu.</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/Alarms/AnnunciatorChecker.cpp" line="102"/>
+        <location filename="../../../core/Ui/UI/Alarms/AnnunciatorChecker.cpp" line="103"/>
         <source>No audio output device is available</source>
         <translation>Není k dispozici žádné výstupní zvukové zařízení</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/Alarms/AnnunciatorChecker.cpp" line="103"/>
+        <location filename="../../../core/Ui/UI/Alarms/AnnunciatorChecker.cpp" line="104"/>
         <source>Alarm sounds cannot play until an output device is present.</source>
         <translation>Zvuky alarmů nelze přehrát, dokud není k dispozici výstupní zařízení.</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/Alarms/AnnunciatorChecker.cpp" line="104"/>
+        <location filename="../../../core/Ui/UI/Alarms/AnnunciatorChecker.cpp" line="105"/>
         <source>Connect an audio output, or disable sounds in Preferences &gt; Sounds.</source>
         <translation>Připojte zvukový výstup, nebo zakažte zvuky v Předvolby &gt; Zvuky.</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/Alarms/AnnunciatorChecker.cpp" line="110"/>
+        <location filename="../../../core/Ui/UI/Alarms/AnnunciatorChecker.cpp" line="111"/>
         <source>Alarm sound device '%1' not found</source>
         <translation>Zvukové zařízení alarmu '%1' nenalezeno</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/Alarms/AnnunciatorChecker.cpp" line="111"/>
+        <location filename="../../../core/Ui/UI/Alarms/AnnunciatorChecker.cpp" line="112"/>
         <source>Alarm sounds are playing on the system default output instead.</source>
         <translation>Zvuky alarmů se přehrávají na výchozím systémovém výstupu.</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/Alarms/AnnunciatorChecker.cpp" line="112"/>
+        <location filename="../../../core/Ui/UI/Alarms/AnnunciatorChecker.cpp" line="113"/>
         <source>Reconnect the device, or pick another one in Preferences &gt; Sounds.</source>
         <translation>Znovu připojte zařízení, nebo vyberte jiné v Předvolby &gt; Zvuky.</translation>
     </message>

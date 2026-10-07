@@ -261,6 +261,11 @@ API::CommandResponse API::Handlers::IOManagerHandler::connect(const QString& id,
       id, ErrorCode::ExecutionError, QStringLiteral("Already connected"));
   }
 
+  const auto refusal = manager.connectRefusal();
+  if (refusal != IO::DeviceTableQuery::ConnectRefusal::None)
+    return CommandResponse::makeError(
+      id, ErrorCode::OperationFailed, IO::EntitlementGate::refusalReason(refusal));
+
   if (!manager.configurationOk()) {
     return CommandResponse::makeError(
       id, ErrorCode::ExecutionError, QStringLiteral("Device configuration is invalid"));

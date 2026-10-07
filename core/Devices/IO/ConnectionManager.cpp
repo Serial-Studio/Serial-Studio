@@ -72,12 +72,16 @@ IO::ConnectionManager::ConnectionManager(Core::Bus::MessageBus& bus, IIngestBind
   , m_fileTransmission(nullptr)
   , m_io(m_binder, m_replyCapture, m_devices, m_paused, m_fileTransmission)
   , m_query(m_devices, m_project)
+  , m_entitlement(m_query, m_fanOut, m_busType, m_operationMode)
   , m_resourceGuard(m_devices, m_project)
   , m_driverFactory(m_uiDrivers, m_bus)
   , m_streamConfigs(m_operationMode, m_frameConfig, m_project)
   , m_uiSync(m_uiDrivers, m_operationMode, m_project, m_bus)
 {
   m_busBridge.seedFromRetainedState();
+  m_entitlement.bind(
+    this,
+    {[this] { rebuildDevices(); }, [this] { disconnectDevice(); }, [this] { connectDevice(); }});
   m_uiDrivers.attachMessageBus(m_bus);
   connect(this, &ConnectionManager::busTypeChanged, this, &ConnectionManager::configurationChanged);
 
@@ -559,13 +563,10 @@ void IO::ConnectionManager::connectDevice()
 #ifdef BUILD_COMMERCIAL
   if (!SS_LICENSE_GUARD())
     return;
-
-  if (!Core::License::activated()
-      && m_query.connectRequiresEntitlement(m_busType, m_operationMode)) {
-    Core::License::requestProFeature(QStringLiteral("driver.connect"), [this] { connectDevice(); });
-    return;
-  }
 #endif
+
+  if (m_entitlement.refuseConnect(true))
+    return;
 
   if (m_operationMode == SerialStudio::ProjectFile && !m_resourceGuard.verifyProjectSources())
     return;
@@ -588,6 +589,15 @@ void IO::ConnectionManager::connectDevice()
 
   m_fanOut.endFanOut();
   concludeConnectRequest();
+}
+
+/**
+ * @brief Names why a connect would be refused in the current licensing state (None when it would
+ *        proceed), so the API reports the reason instead of a silent no-op.
+ */
+IO::DeviceTableQuery::ConnectRefusal IO::ConnectionManager::connectRefusal() const
+{
+  return m_entitlement.pendingRefusal();
 }
 
 /**
@@ -679,6 +689,8 @@ void IO::ConnectionManager::disconnectDevice()
 
   if (hadSession)
     Q_EMIT sessionClosed();
+
+  m_entitlement.releaseDeferredRebuild();
 }
 
 /**
@@ -749,7 +761,9 @@ void IO::ConnectionManager::setupExternalConnections()
                    {[this] { rebuildDevices(); },
                     [this] { resetFrameReader(); },
                     [this](int sourceId) { onProjectSourceChanged(sourceId); },
-                    [this] { rebuildStreamWorkers(); }});
+                    [this] { rebuildStreamWorkers(); },
+                    [this] { return m_entitlement.deferRebuild(); },
+                    [this] { m_entitlement.observeContent(); }});
   m_uiSync.wire(*this, [this](int sourceId) { return driver(sourceId); });
 
   for (auto* driver : m_uiDrivers.all())
@@ -898,7 +912,7 @@ void IO::ConnectionManager::disconnectDevice(int deviceId)
 void IO::ConnectionManager::connectDevice(HAL_Driver* driver)
 {
   const int deviceId = deviceIdForDriver(driver);
-  if (deviceId >= 0)
+  if (deviceId >= 0 && !m_entitlement.refuseRecovery())
     openDevice(deviceId, ResumePolicy::KeepPause);
 }
 
@@ -1330,6 +1344,7 @@ void IO::ConnectionManager::rebuildDevices()
   }
 
   m_rebuildingDevices = true;
+  m_entitlement.noteRebuild();
 
   const auto opMode       = m_operationMode;
   const bool wasConnected = isConnected();
@@ -1411,13 +1426,8 @@ void IO::ConnectionManager::rebuildDevices()
       this, [this, restored] { setBusType(restored); }, Qt::QueuedConnection);
   }
 
-  const auto reconnectIfDropped = [this] {
-    if (!isConnected())
-      connectDevice();
-  };
-
   if (wasConnected)
-    QMetaObject::invokeMethod(this, reconnectIfDropped, Qt::QueuedConnection);
+    m_entitlement.queueReconnect();
 
   m_rebuildingDevices = false;
 }

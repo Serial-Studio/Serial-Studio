@@ -375,8 +375,10 @@ static bool multiSelectionEditKeepsModel(QStandardItem* item,
 }
 
 /**
- * @brief Fans a single aggregate-form field edit out across every selected item, as one modified
- *        state and one autosave, then rebuilds the aggregate model to refresh common/mixed.
+ * @brief Fans one aggregate-form edit out across the selection as one modified state and one
+ *        autosave, then rebuilds the aggregate model. The flush is posted: its pipeline re-sync
+ *        spins a nested event loop, which would destroy the committing QML delegate mid-handler
+ *        once the model is rebuilt.
  */
 void EditorMultiSelect::onMultiSelectionItemChanged(QStandardItem* item)
 {
@@ -454,7 +456,7 @@ void EditorMultiSelect::onMultiSelectionItemChanged(QStandardItem* item)
   if (multiSelectionEditKeepsModel(item, rebuild)) {
     m_editor.m_batchApplying = false;
     pm.setAutoSaveSuspended(false);
-    pm.flushAutoSave();
+    QTimer::singleShot(0, &m_editor, [this] { m_model.flushAutoSave(); });
     return;
   }
 
@@ -462,12 +464,13 @@ void EditorMultiSelect::onMultiSelectionItemChanged(QStandardItem* item)
   pm.setAutoSaveSuspended(false);
 
   buildMultiDatasetModel();
-  pm.flushAutoSave();
+  QTimer::singleShot(0, &m_editor, [this] { m_model.flushAutoSave(); });
 }
 
 /**
- * @brief Fans one aggregate-form field edit out across every selected output widget, as one
- * modified state and one autosave, then rebuilds the aggregate model to refresh common/mixed.
+ * @brief Fans one aggregate-form edit out across every selected output widget as one modified
+ *        state and one autosave, then rebuilds the aggregate model. The flush is posted, as in
+ *        onMultiSelectionItemChanged: a nested event loop must not run under the QML handler.
  */
 void EditorMultiSelect::fanOutputWidgetSelectionEdit(QStandardItem* item)
 {
@@ -507,7 +510,7 @@ void EditorMultiSelect::fanOutputWidgetSelectionEdit(QStandardItem* item)
   if (multiSelectionEditKeepsModel(item, PropertyHooks::RebuildHint::None)) {
     m_editor.m_batchApplying = false;
     pm.setAutoSaveSuspended(false);
-    pm.flushAutoSave();
+    QTimer::singleShot(0, &m_editor, [this] { m_model.flushAutoSave(); });
     return;
   }
 
@@ -515,7 +518,7 @@ void EditorMultiSelect::fanOutputWidgetSelectionEdit(QStandardItem* item)
   pm.setAutoSaveSuspended(false);
 
   buildMultiOutputWidgetModel();
-  pm.flushAutoSave();
+  QTimer::singleShot(0, &m_editor, [this] { m_model.flushAutoSave(); });
 }
 
 /**

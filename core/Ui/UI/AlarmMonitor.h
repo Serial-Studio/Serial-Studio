@@ -34,8 +34,8 @@ namespace UI {
 class Dashboard;
 
 /**
- * @brief Dataset-level alarm-band tracker; posts band-entry notifications independently of
- *        whether any widget displaying the dataset is instantiated or visible.
+ * @brief Dataset-level alarm-band tracker for datasets whose bands a widget draws, unless
+ *        suppressed (spec 0093); notifies whether or not that widget is on screen.
  */
 class AlarmMonitor : public QObject {
   Q_OBJECT
@@ -58,6 +58,8 @@ private:
 
 public:
   [[nodiscard]] static AlarmMonitor& instance();
+
+  [[nodiscard]] bool tracks(int uniqueId) const noexcept;
 
   void setupExternalConnections();
 

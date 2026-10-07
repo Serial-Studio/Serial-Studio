@@ -6,6 +6,9 @@ poniżej odblokowują się w chwili, gdy wypróbujesz jedną z nich, z
 bezpłatnym 14-dniowym okresem próbnym. Do jego rozpoczęcia nie jest
 potrzebne konto ani płatność.
 
+Bezpłatna do użytku osobistego, edukacyjnego i open source; użytek
+komercyjny wymaga licencji Pro.
+
 → Wsparcie: alex@serial-studio.com
 → Umów się na rozmowę: https://calendly.com/serial-studio
 → Dowiedz się więcej: https://serial-studio.com/

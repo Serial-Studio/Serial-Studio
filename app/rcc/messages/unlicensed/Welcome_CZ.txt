@@ -4,6 +4,8 @@ Toto je bezplatná verze Serial Studio Pro: všechny základní funkce
 lze používat zdarma a bez časového omezení. Funkce Pro uvedené níže
 se odemknou ve chvíli, kdy některou vyzkoušíte, s bezplatnou 14denní
 zkušební dobou. K jejímu zahájení není potřeba účet ani platba.
+Zdarma pro osobní, vzdělávací a open-source použití; komerční
+použití vyžaduje licenci Pro.
 
 → Podpora: alex@serial-studio.com
 → Naplánovat hovor: https://calendly.com/serial-studio

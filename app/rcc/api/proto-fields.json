@@ -2,6 +2,55 @@
   "_generated": "AUTO-GENERATED from app/rcc/api/api-schema.json by scripts/generate-property-registry.py; never edit by hand.",
   "_note": "gRPC field numbers are append-only released state. A parameter keeps its number forever, a parameter that leaves the API moves its number into 'reserved' and is never reassigned, and 1 is reserved in every message for the request id.",
   "commands": {
+    "alarms.acknowledge": {
+      "fields": {},
+      "reserved": [],
+      "next": 2
+    },
+    "alarms.clear": {
+      "fields": {},
+      "reserved": [],
+      "next": 2
+    },
+    "alarms.getProjectSounds": {
+      "fields": {},
+      "reserved": [],
+      "next": 2
+    },
+    "alarms.reset": {
+      "fields": {},
+      "reserved": [],
+      "next": 2
+    },
+    "alarms.setMuted": {
+      "fields": {
+        "muted": 2
+      },
+      "reserved": [],
+      "next": 3
+    },
+    "alarms.setProjectSounds": {
+      "fields": {
+        "sounds": 2
+      },
+      "reserved": [],
+      "next": 3
+    },
+    "alarms.silence": {
+      "fields": {},
+      "reserved": [],
+      "next": 2
+    },
+    "alarms.state": {
+      "fields": {},
+      "reserved": [],
+      "next": 2
+    },
+    "alarms.test": {
+      "fields": {},
+      "reserved": [],
+      "next": 2
+    },
     "api.getCommands": {
       "fields": {},
       "reserved": [],
@@ -2087,6 +2136,7 @@
         "pltMax": 27,
         "pltMin": 28,
         "sourceId": 29,
+        "suppressAlarms": 42,
         "title": 30,
         "transformCode": 31,
         "transformLanguage": 32,
@@ -2100,7 +2150,7 @@
         "xAxisId": 40
       },
       "reserved": [],
-      "next": 42
+      "next": 43
     },
     "project.dryRun.endToEnd": {
       "fields": {

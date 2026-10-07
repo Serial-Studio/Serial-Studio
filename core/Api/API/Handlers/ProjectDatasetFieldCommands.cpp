@@ -29,6 +29,8 @@
 #include "API/Handlers/ProjectApiSupport.h"
 #include "API/SchemaBuilder.h"
 #include "Core/DataModel/Frame.h"
+#include "Core/DataModel/FrameSupport.h"
+#include "Core/License.h"
 #include "Core/SerialStudio.h"
 #include "DataModel/PipelineModules.h"
 #include "DataModel/ProjectModel.h"
@@ -125,8 +127,11 @@ void API::Handlers::ProjectDatasetFieldCommands::registerAlarmCommands()
                    "(\"#rrggbb\" override or empty for severity default), label, blink}. Also "
                    "returns rangeMin/rangeMax (the dataset's wgtMin/wgtMax) so callers can "
                    "validate band ranges before writing back. An empty array means no alarms "
-                   "configured. Applies to bar / gauge / meter widgets and LED-panel datasets; "
-                   "calling on other widget types succeeds with an empty array."),
+                   "configured. Bands are drawn, notified and alarmed only when the dataset has "
+                   "a bar, gauge or meter widget or is an LED-panel member (and is not hidden "
+                   "from the dashboard), or belongs to a bar-panel group; on any other dataset "
+                   "they are stored and ignored, and this call still returns them. A dataset "
+                   "with suppressAlarms set still draws its bands but never notifies or alarms."),
     makeSchema({
       {  QString(Keys::GroupId),QStringLiteral("integer"),QStringLiteral("Owning group id")                  },
       {QString(Keys::DatasetId),
@@ -145,9 +150,13 @@ void API::Handlers::ProjectDatasetFieldCommands::registerAlarmCommands()
                    "(surfaces in band-edge notifications). blink is optional (boolean; LED "
                    "panels flash the LED while the band is active). Bands may have gaps and "
                    "may overlap; rendering paints them in array order behind the value "
-                   "indicator. Severity >= Warning triggers a notification when the value "
-                   "enters the band, even when no widget is visible (3-second per-dataset "
-                   "cooldown suppresses oscillation spam).\n"
+                   "indicator. Severity >= Warning triggers a notification and an alarm point "
+                   "when the value enters the band, whether or not the widget is on screen "
+                   "(3-second per-dataset cooldown suppresses oscillation spam). That happens "
+                   "only when the dataset has a bar, gauge or meter widget or is an LED-panel "
+                   "member (and is not hidden from the dashboard), or belongs to a bar-panel "
+                   "group, and suppressAlarms is false; bands on any other dataset are stored "
+                   "but never notify or alarm, and a suppressed dataset still draws them.\n"
                    "Pass an empty array to clear all alarms."),
     makeSchema({
       {                     QString(Keys::GroupId),QStringLiteral("integer"),QStringLiteral("Owning group id")                             },
@@ -394,6 +403,9 @@ API::CommandResponse API::Handlers::ProjectDatasetFieldCommands::datasetSetTrans
     updated.transformLanguage = inherited;
     languageInherited         = true;
   }
+
+  if (SerialStudio::authorsTransform(*dit, updated) && !Core::License::activated())
+    return CommandResponse::makeError(id, ErrorCode::OperationFailed, transformsRequirePro());
 
   pm.updateDataset(groupId, datasetId, updated, true);
 

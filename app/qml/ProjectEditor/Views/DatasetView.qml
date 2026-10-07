@@ -331,17 +331,13 @@ Widgets.Pane {
 
             Widgets.ToolbarButton {
               iconSize: 24
-              text: qsTr("Alarm Bands")
               toolbarButton: false
+              text: qsTr("Alarm Bands")
               Layout.alignment: Qt.AlignVCenter
-              enabled: Cpp_JSON_ProjectEditor.currentDatasetIsEditable
-                       && (Cpp_JSON_ProjectEditor.datasetOptions & SerialStudio.DatasetBar
-                           || Cpp_JSON_ProjectEditor.datasetOptions & SerialStudio.DatasetGauge
-                           || Cpp_JSON_ProjectEditor.datasetOptions & SerialStudio.DatasetMeter
-                           || Cpp_JSON_ProjectEditor.datasetOptions & SerialStudio.DatasetLED)
+              enabled: Cpp_JSON_ProjectEditor.alarmBandsApplicable
               onClicked: Cpp_JSON_ProjectEditor.openAlarmBandsEditorForSelection()
               icon.source: Cpp_Misc_IconRegistry.icon("editor", "alarm-bands", 24)
-              ToolTip.text: qsTr("Define colored value ranges with severity tiers for this dataset's gauge or LED.")
+              ToolTip.text: qsTr("Define colored value ranges with severity tiers. Available for Bar, Gauge, Meter, LED, and Bar Panel datasets.")
             }
 
             Widgets.ToolbarButton {

@@ -11,7 +11,7 @@ Copyright (c) 2020–2026 Alex Spataru <https://github.com/alex-spataru>
 → https://store.serial-studio.com/
 
 专业功能：
-→ MQTT、XY 和 3D 可视化
+→ MQTT 和 3D 可视化
 → Audio、CAN Bus、Modbus、USB、HID 和 Process I/O 驱动
 → 输出控件、MDF4 导出和 XMODEM/YMODEM/ZMODEM 传输
 → 历史数据库、变量和数值转换 (JS + Lua)

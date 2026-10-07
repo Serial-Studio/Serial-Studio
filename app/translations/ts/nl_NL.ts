@@ -4666,16 +4666,26 @@ Schakel dit alleen in op vertrouwde netwerken. Niet-vertrouwde clients kunnen li
     </message>
     <message>
         <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="298"/>
+        <source>Remove Transform</source>
+        <translation>Transformatie Verwijderen</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="299"/>
         <source>Remove every user workspace</source>
         <translation>Verwijder alle gebruikerswerkruimtes</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="299"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="300"/>
+        <source>Remove the value transform from this dataset</source>
+        <translation>Verwijder de waardetransformatie uit deze dataset</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="301"/>
         <source>Rename</source>
         <translation>Hernoemen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="300"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="302"/>
         <source>Rename this item</source>
         <translation>Hernoem dit item</translation>
     </message>
@@ -4684,167 +4694,167 @@ Schakel dit alleen in op vertrouwde netwerken. Niet-vertrouwde clients kunnen li
         <translation type="vanished">Herstellen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="301"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="303"/>
         <source>Replay</source>
         <translation>Afspelen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="302"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="304"/>
         <source>Replay selected session on the dashboard</source>
         <translation>Speel geselecteerde sessie af op het dashboard</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="303"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="305"/>
         <source>Reset</source>
         <translation>Resetten</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="304"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="306"/>
         <source>Reset Alarms</source>
         <translation>Alarmen Resetten</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="305"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="307"/>
         <source>Reset to Auto Layout</source>
         <translation>Herstel naar Automatische Indeling</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="306"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="308"/>
         <source>Restore</source>
         <translation>Herstellen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="307"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="309"/>
         <source>Restore Backup</source>
         <translation>Back-up Herstellen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="308"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="310"/>
         <source>Restore Project</source>
         <translation>Project Herstellen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="309"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="311"/>
         <source>Restore a recent automatic snapshot of the current project</source>
         <translation>Herstel een recente automatische momentopname van het huidige project</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="310"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="312"/>
         <source>Restore the project file from this session file</source>
         <translation>Herstel het projectbestand uit dit sessiebestand</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="311"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="313"/>
         <source>Resume</source>
         <translation>Hervatten</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="312"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="314"/>
         <source>Review project, link, and script diagnostics</source>
         <translation>Bekijk project-, link- en scriptdiagnose</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="313"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="315"/>
         <source>Run API commands and script macros interactively</source>
         <translation>Voer API-opdrachten en scriptmacro's interactief uit</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="314"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="316"/>
         <source>Save</source>
         <translation>Opslaan</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="315"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="317"/>
         <source>Save As</source>
         <translation>Opslaan Als</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="316"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="318"/>
         <source>Save Project</source>
         <translation>Project Opslaan</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="317"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="319"/>
         <source>Save Project As</source>
         <translation>Project Opslaan Als</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="318"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="320"/>
         <source>Search</source>
         <translation>Zoeken</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="319"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="321"/>
         <source>Search and run any Serial Studio command</source>
         <translation>Zoek en voer elke Serial Studio-opdracht uit</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="320"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="322"/>
         <source>Seed Aliases from Titles</source>
         <translation>Aliassen Afleiden van Titels</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="321"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="323"/>
         <source>Select Bluetooth Low Energy communication</source>
         <translation>Selecteer Bluetooth Low Energy-communicatie</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="322"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="324"/>
         <source>Select CAN Bus communication (Pro)</source>
         <translation>Selecteer CAN Bus-communicatie (Pro)</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="323"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="325"/>
         <source>Select EtherNet/IP communication (Pro)</source>
         <translation>Selecteer EtherNet/IP-communicatie (Pro)</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="324"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="326"/>
         <source>Select HID device communication (Pro)</source>
         <translation>Selecteer HID-apparaatcommunicatie (Pro)</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="325"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="327"/>
         <source>Select IEC 60870-5-104 communication (Pro)</source>
         <translation>Selecteer IEC 60870-5-104-communicatie (Pro)</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="326"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="328"/>
         <source>Select MODBUS communication (Pro)</source>
         <translation>Selecteer MODBUS-communicatie (Pro)</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="327"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="329"/>
         <source>Select OPC UA communication (Pro)</source>
         <translation>Selecteer OPC UA-communicatie (Pro)</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="328"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="330"/>
         <source>Select Serial port (UART) communication</source>
         <translation>Selecteer seriële poort (UART) communicatie</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="329"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="331"/>
         <source>Select Siemens S7comm communication (Pro)</source>
         <translation>Selecteer Siemens S7comm-communicatie (Pro)</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="330"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="332"/>
         <source>Select TCP/UDP network communication</source>
         <translation>Selecteer TCP/UDP-netwerkcommunicatie</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="331"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="333"/>
         <source>Select audio input device (Pro)</source>
         <translation>Selecteer audio-invoerapparaat (Pro)</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="332"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="334"/>
         <source>Select process pipe communication (Pro)</source>
         <translation>Selecteer process pipe-communicatie (Pro)</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="333"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="335"/>
         <source>Select raw USB communication (Pro)</source>
         <translation>Selecteer ruwe USB-communicatie (Pro)</translation>
     </message>
@@ -4857,12 +4867,12 @@ Schakel dit alleen in op vertrouwde netwerken. Niet-vertrouwde clients kunnen li
         <translation type="vanished">Sessies</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="334"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="336"/>
         <source>Set a password and lock the Project Editor</source>
         <translation>Stel een wachtwoord in en vergrendel de Projecteditor</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="335"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="337"/>
         <source>Set a password to prevent session deletions</source>
         <translation>Stel een wachtwoord in om sessieverwijderingen te voorkomen</translation>
     </message>
@@ -4871,207 +4881,207 @@ Schakel dit alleen in op vertrouwde netwerken. Niet-vertrouwde clients kunnen li
         <translation type="vanished">Hulp Bij Gedeeld Geheugen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="336"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="338"/>
         <source>Show</source>
         <translation>Tonen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="337"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="339"/>
         <source>Show All Hidden Groups</source>
         <translation>Toon Alle Verborgen Groepen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="338"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="340"/>
         <source>Show application info and license details</source>
         <translation>Toon applicatie-informatie en licentiegegevens</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="339"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="341"/>
         <source>Show this dataset as a 2D plot</source>
         <translation>Toon deze dataset als een 2D-grafiek</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="340"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="342"/>
         <source>Show this dataset as a bar or level</source>
         <translation>Toon deze dataset als een balk of niveau</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="341"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="343"/>
         <source>Show this dataset as a compass</source>
         <translation>Toon deze dataset als een kompas</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="342"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="344"/>
         <source>Show this dataset as a gauge</source>
         <translation>Toon deze dataset als een meter</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="343"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="345"/>
         <source>Show this dataset as a waterfall plot</source>
         <translation>Toon deze dataset als een waterval-grafiek</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="344"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="346"/>
         <source>Show this dataset as an FFT plot</source>
         <translation>Toon deze dataset als een FFT-grafiek</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="345"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="347"/>
         <source>Show this dataset as an LED indicator</source>
         <translation>Toon deze dataset als een LED-indicator</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="346"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="348"/>
         <source>Show this dataset as an analog meter</source>
         <translation>Toon deze dataset als een analoge meter</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="347"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="349"/>
         <source>Show timestamps in the console</source>
         <translation>Toon tijdstempels in de console</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="348"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="350"/>
         <source>Siemens S7</source>
         <translation>Siemens S7</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="349"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="351"/>
         <source>Silence Alarms</source>
         <translation>Alarmen Dempen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="350"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="352"/>
         <source>Silence every alarm and event sound</source>
         <translation>Demp elk alarm- en gebeurtenisgeluid</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="351"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="353"/>
         <source>Slider</source>
         <translation>Schuifregelaar</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="352"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="354"/>
         <source>Start Menu</source>
         <translation>Startmenu</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="353"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="355"/>
         <source>Stop the alarm sound; points stay unacknowledged and a new alarm re-sounds</source>
         <translation>Stop het alarmgeluid; punten blijven onbevestigd en een nieuw alarm klinkt opnieuw</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="354"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="356"/>
         <source>Stopwatch</source>
         <translation>Stopwatch</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="355"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="357"/>
         <source>Switch to Console Only mode (no parsing)</source>
         <translation>Schakel naar Console-modus (geen parsing)</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="356"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="358"/>
         <source>Switch to Project File mode (parse via a project)</source>
         <translation>Schakel naar Projectbestand-modus (parse via een project)</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="357"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="359"/>
         <source>Switch to Quick Plot mode (comma-separated values)</source>
         <translation>Schakel naar Snelle Plot-modus (kommagescheiden waarden)</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="358"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="360"/>
         <source>Table</source>
         <translation>Tabel</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="359"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="361"/>
         <source>Test Alarm Sounds</source>
         <translation>Alarmgeluiden Testen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="360"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="362"/>
         <source>Text Field</source>
         <translation>Tekstveld</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="361"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="363"/>
         <source>Toggle</source>
         <translation>Schakelaar</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="362"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="364"/>
         <source>Toggle hexadecimal console display</source>
         <translation>Schakel hexadecimale consoleweergave</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="363"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="365"/>
         <source>Tools</source>
         <translation>Hulpmiddelen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="364"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="366"/>
         <source>Top Level</source>
         <translation>Hoogste Niveau</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="365"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="367"/>
         <source>UART</source>
         <translation>UART</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="366"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="368"/>
         <source>USB</source>
         <translation>USB</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="367"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="369"/>
         <source>Undo</source>
         <translation>Ongedaan Maken</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="368"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="370"/>
         <source>Undo the last project edit</source>
         <translation>Maak de laatste projectbewerking ongedaan</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="369"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="371"/>
         <source>Unlock</source>
         <translation>Ontgrendelen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="370"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="372"/>
         <source>Unmute Sounds</source>
         <translation>Geluiden Ontdempen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="371"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="373"/>
         <source>Variables Help</source>
         <translation>Variabelen Help</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="372"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="374"/>
         <source>View detailed documentation and ask questions on DeepWiki</source>
         <translation>Bekijk gedetailleerde documentatie en stel vragen op DeepWiki</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="373"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="375"/>
         <source>Visualizations</source>
         <translation>Visualisaties</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="374"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="376"/>
         <source>Watch another Serial Studio instance's dashboard over the network</source>
         <translation>Bekijk het dashboard van een andere Serial Studio-instantie via het netwerk</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="375"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="377"/>
         <source>Waterfall</source>
         <translation>Waterval</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="376"/>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="378"/>
         <source>Web View</source>
         <translation>Webweergave</translation>
     </message>
@@ -5818,22 +5828,22 @@ Schakel dit alleen in op vertrouwde netwerken. Niet-vertrouwde clients kunnen li
         <translation>Categorie</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="359"/>
+        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="364"/>
         <source>No constants match.</source>
         <translation>Geen overeenkomende constanten.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="380"/>
+        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="385"/>
         <source>%1 constants</source>
         <translation>%1 constanten</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="381"/>
+        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="386"/>
         <source>%1 of %2 constants</source>
         <translation>%1 van %2 constanten</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="385"/>
+        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="390"/>
         <source>Close</source>
         <translation>Sluiten</translation>
     </message>
@@ -6093,13 +6103,13 @@ Schakel dit alleen in op vertrouwde netwerken. Niet-vertrouwde clients kunnen li
     </message>
     <message>
         <location filename="../../../core/Ui/UI/Dashboard/WidgetMapBuilder.cpp" line="178"/>
-        <location filename="../../../core/Ui/UI/Dashboard/WidgetMapBuilder.cpp" line="193"/>
+        <location filename="../../../core/Ui/UI/Dashboard/WidgetMapBuilder.cpp" line="194"/>
         <source>%1 (Fallback)</source>
         <translation>%1 (Terugval)</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/Dashboard/WidgetMapBuilder.cpp" line="215"/>
-        <location filename="../../../core/Ui/UI/Dashboard/WidgetMapBuilder.cpp" line="293"/>
+        <location filename="../../../core/Ui/UI/Dashboard/WidgetMapBuilder.cpp" line="225"/>
+        <location filename="../../../core/Ui/UI/Dashboard/WidgetMapBuilder.cpp" line="303"/>
         <source>LED Panel (%1)</source>
         <translation>LED-paneel (%1)</translation>
     </message>
@@ -6331,22 +6341,22 @@ Schakel dit alleen in op vertrouwde netwerken. Niet-vertrouwde clients kunnen li
         <translation>Waarde</translation>
     </message>
     <message>
+        <location filename="../../qml/Widgets/Dashboard/DataGrid.qml" line="108"/>
         <location filename="../../rcc/extensions/widget/datagrid/DataGrid.qml" line="111"/>
         <location filename="../../rcc/extensions/widget/datagrid/DataGrid.qml" line="118"/>
-        <location filename="../../qml/Widgets/Dashboard/DataGrid.qml" line="108"/>
         <source>Pause</source>
         <translation>Pauzeren</translation>
     </message>
     <message>
+        <location filename="../../qml/Widgets/Dashboard/DataGrid.qml" line="108"/>
         <location filename="../../rcc/extensions/widget/datagrid/DataGrid.qml" line="111"/>
         <location filename="../../rcc/extensions/widget/datagrid/DataGrid.qml" line="118"/>
-        <location filename="../../qml/Widgets/Dashboard/DataGrid.qml" line="108"/>
         <source>Resume</source>
         <translation>Hervatten</translation>
     </message>
     <message>
-        <location filename="../../rcc/extensions/widget/datagrid/DataGrid.qml" line="335"/>
         <location filename="../../qml/Widgets/Dashboard/DataGrid.qml" line="323"/>
+        <location filename="../../rcc/extensions/widget/datagrid/DataGrid.qml" line="335"/>
         <source>Awaiting data…</source>
         <translation>Wachten op gegevens…</translation>
     </message>
@@ -6588,7 +6598,7 @@ Schakel dit alleen in op vertrouwde netwerken. Niet-vertrouwde clients kunnen li
     </message>
     <message>
         <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="175"/>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="697"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="703"/>
         <source>Open Lua Library</source>
         <translation>Lua-bibliotheek Openen</translation>
     </message>
@@ -6643,37 +6653,37 @@ Schakel dit alleen in op vertrouwde netwerken. Niet-vertrouwde clients kunnen li
         <translation>Transformatie — %1</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="453"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="459"/>
         <source>The value transform has a syntax error and was not applied.</source>
         <translation>De waardetransformatie bevat een syntaxfout en is niet toegepast.</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="462"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="468"/>
         <source>The value transform must define a transform(value) function.</source>
         <translation>De waardetransformatie moet een transform(value)-functie definiëren.</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="463"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="469"/>
         <source>Define a transform(value) function that returns a number, or use Clear to remove the transform.</source>
         <translation>Definieer een transform(value)-functie die een getal retourneert, of gebruik Wissen om de transformatie te verwijderen.</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="481"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="487"/>
         <source>Enter a value</source>
         <translation>Voer een waarde in</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="488"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="494"/>
         <source>Invalid number</source>
         <translation>Ongeldig getal</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="529"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="535"/>
         <source>Format Document	Ctrl+Shift+I</source>
         <translation>Document Formatteren	ctrl+shift+i</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="530"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="536"/>
         <source>Format Selection	Ctrl+I</source>
         <translation>Selectie Formatteren	ctrl+i</translation>
     </message>
@@ -6738,7 +6748,7 @@ v
 </translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="827"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="833"/>
         <source>--
 -- Define a transform(value) function that receives the live
 -- dataset reading and returns a transformed number. If no
@@ -6797,7 +6807,7 @@ v
 --</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="855"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="861"/>
         <source>/*
  * Define a transform(value) function that receives the live
  * dataset reading and returns a transformed number. If no
@@ -6854,39 +6864,39 @@ v
  * Gebruik het Template-vervolgkeuzemenu voor kant-en-klare</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="996"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1002"/>
         <source>Failed to create the Lua engine.</source>
         <translation>Kan de Lua-engine niet aanmaken.</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1022"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1028"/>
         <source>Failed to create the JavaScript engine.</source>
         <translation>Kan de JavaScript-engine niet aanmaken.</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1038"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1044"/>
         <source>The transform did not finish evaluating within %1 ms.</source>
         <translation>De transformatie is niet binnen %1 ms geëvalueerd.</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1043"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1049"/>
         <source>Line %1: %2</source>
         <translation>Regel %1: %2</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1109"/>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1143"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1115"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1149"/>
         <source>Error in shared library: %1</source>
         <translation>Fout in gedeelde bibliotheek: %1</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1148"/>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1161"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1154"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1167"/>
         <source>Error: the transform did not finish within %1 ms</source>
         <translation>Fout: de transformatie is niet binnen %1 ms voltooid</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1209"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1215"/>
         <source>Select Template…</source>
         <translation>Selecteer Sjabloon…</translation>
     </message>
@@ -6947,27 +6957,27 @@ v
  *</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1099"/>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1133"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1105"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1139"/>
         <source>Engine error</source>
         <translation>Engine-fout</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1089"/>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1115"/>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1123"/>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1151"/>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1164"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1095"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1121"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1129"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1157"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1170"/>
         <source>Error: %1</source>
         <translation>Fout: %1</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="698"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="704"/>
         <source>Open JavaScript Library</source>
         <translation>Javascript-bibliotheek Openen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="793"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="799"/>
         <source>#
 # An arithmetic expression evaluated once per sample. No function,
 # no statements: the value of the expression is the new reading.
@@ -7036,13 +7046,13 @@ v
 </translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1119"/>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1155"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1125"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1161"/>
         <source>Error: transform() not defined</source>
         <translation>Fout: transform() niet gedefinieerd</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1126"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1132"/>
         <source>Error: transform() must return a number</source>
         <translation>Fout: transform() moet een getal retourneren</translation>
     </message>
@@ -7940,12 +7950,12 @@ Voeg %4 dataset(s) toe met de standaardwaarden van de sjabloon?</translation>
         <translation>Vaste decimalen voor de waarde-weergave; overschrijft het formaat (-1 = auto)</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="655"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="713"/>
         <source>Auto-detect</source>
         <translation>Automatisch Detecteren</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="655"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="713"/>
         <source>Manual Delimiters</source>
         <translation>Handmatige Scheidingstekens</translation>
     </message>
@@ -8600,6 +8610,16 @@ Voeg %4 dataset(s) toe met de standaardwaarden van de sjabloon?</translation>
         <translation>Toon vasthoudmarkeringen bij de laagste en hoogste waargenomen waarden sinds de laatste gegevensreset</translation>
     </message>
     <message>
+        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="752"/>
+        <source>Suppress Alarms</source>
+        <translation>Alarmen Onderdrukken</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="753"/>
+        <source>Keep the bands on the widget but never notify, raise an alarm point or sound for them</source>
+        <translation>Houd de banden op de widget maar geef nooit een melding, verhoog een alarmpunt of geluid ervoor</translation>
+    </message>
+    <message>
         <source>Scale the FFT frequency axis in decades so low octaves stay readable</source>
         <translation type="vanished">Schaal de FFT-frequentieas in decaden zodat lage octaven leesbaar blijven</translation>
     </message>
@@ -8649,7 +8669,7 @@ Voeg %4 dataset(s) toe met de standaardwaarden van de sjabloon?</translation>
         <translation type="vanished">Aan</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="784"/>
+        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="797"/>
         <source>LED lights up when value meets or exceeds this threshold; define alarm bands for multi-state colors</source>
         <translation>LED licht op wanneer waarde deze drempel bereikt of overschrijdt; definieer alarmbereiken voor meertoestandskleuren</translation>
     </message>
@@ -8658,7 +8678,7 @@ Voeg %4 dataset(s) toe met de standaardwaarden van de sjabloon?</translation>
         <translation type="vanished">Painter Widget</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="672"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="730"/>
         <source>Web View</source>
         <translation>Webweergave</translation>
     </message>
@@ -8868,7 +8888,7 @@ Voeg %4 dataset(s) toe met de standaardwaarden van de sjabloon?</translation>
         <translation type="vanished">Bovengrens van het weergavebereik van de meter of balk</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="685"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="743"/>
         <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="663"/>
         <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="690"/>
         <source>Auto</source>
@@ -8931,22 +8951,22 @@ Voeg %4 dataset(s) toe met de standaardwaarden van de sjabloon?</translation>
         <translation type="vanished">Activeert een visueel alarm wanneer de waarde deze drempel overschrijdt</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="756"/>
+        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="769"/>
         <source>LED Display Settings</source>
         <translation>LED-weergave-instellingen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="769"/>
+        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="782"/>
         <source>Show in LED Panel</source>
         <translation>Tonen in LED-Paneel</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="770"/>
+        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="783"/>
         <source>Enable visual status monitoring using an LED display</source>
         <translation>Schakel visuele statusbewaking in met een LED-weergave</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="783"/>
+        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="796"/>
         <source>LED On Threshold (required)</source>
         <translation>LED Aan-drempel (vereist)</translation>
     </message>
@@ -8959,207 +8979,207 @@ Voeg %4 dataset(s) toe met de standaardwaarden van de sjabloon?</translation>
         <translation type="vanished">Painter-code Bewerken</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="497"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="555"/>
         <source>Edit Canvas Code</source>
         <translation>Canvascode Bewerken</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="521"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="579"/>
         <source>Edit Transmit Function</source>
         <translation>Verzendfunctie Bewerken</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="619"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="677"/>
         <source>Rectangular (None)</source>
         <translation>Rechthoekig (Geen)</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="619"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="677"/>
         <source>Bartlett (Triangular)</source>
         <translation>Bartlett (Driehoekig)</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="619"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="677"/>
         <source>Hann</source>
         <translation>Hann</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="620"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="678"/>
         <source>Hamming</source>
         <translation>Hamming</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="620"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="678"/>
         <source>Blackman</source>
         <translation>Blackman</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="620"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="678"/>
         <source>Blackman-Harris</source>
         <translation>Blackman-harris</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="620"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="678"/>
         <source>Nuttall</source>
         <translation>Nuttall</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="621"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="679"/>
         <source>Blackman-Nuttall</source>
         <translation>Blackman-nuttall</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="621"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="679"/>
         <source>Flat Top</source>
         <translation>Flat Top</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="621"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="679"/>
         <source>Welch</source>
         <translation>Welch</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="621"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="679"/>
         <source>Bartlett-Hann</source>
         <translation>Bartlett-hann</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="622"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="680"/>
         <source>Bohman</source>
         <translation>Bohman</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="622"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="680"/>
         <source>Cosine (Sine)</source>
         <translation>Cosine (Sinus)</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="622"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="680"/>
         <source>Lanczos</source>
         <translation>Lanczos</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="622"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="680"/>
         <source>Parzen</source>
         <translation>Parzen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="633"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="691"/>
         <source>Off</source>
         <translation>Uit</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="633"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="691"/>
         <source>Auto Start</source>
         <translation>Automatisch Starten</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="633"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="691"/>
         <source>Start on Trigger</source>
         <translation>Starten bij Trigger</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="633"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="691"/>
         <source>Toggle on Trigger</source>
         <translation>Schakelen bij Trigger</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="634"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="692"/>
         <source>Repeat N Times</source>
         <translation>N Keer Herhalen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="637"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="695"/>
         <source>Plain Text (UTF8)</source>
         <translation>Platte Tekst (UTF8)</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="637"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="695"/>
         <source>Hexadecimal</source>
         <translation>Hexadecimaal</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="637"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="695"/>
         <source>Base64</source>
         <translation>Base64</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="638"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="696"/>
         <source>Binary (Direct)</source>
         <translation>Binair (Direct)</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="643"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="701"/>
         <source>No Checksum</source>
         <translation>Geen Checksum</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="647"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="705"/>
         <source>End Delimiter Only</source>
         <translation>Alleen Eindscheidingsteken</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="647"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="705"/>
         <source>Start Delimiter Only</source>
         <translation>Alleen Startscheidingsteken</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="648"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="706"/>
         <source>Start + End Delimiter</source>
         <translation>Start- + Eindscheidingsteken</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="648"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="706"/>
         <source>No Delimiters</source>
         <translation>Geen Scheidingstekens</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="658"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="716"/>
         <source>Button</source>
         <translation>Knop</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="658"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="716"/>
         <source>Slider</source>
         <translation>Schuifregelaar</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="658"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="716"/>
         <source>Toggle</source>
         <translation>Schakelaar</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="658"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="716"/>
         <source>Text Field</source>
         <translation>Tekstveld</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="659"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="717"/>
         <source>Knob</source>
         <translation>Draaiknop</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="663"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="721"/>
         <source>Bar Panel</source>
         <translation>Balkpaneel</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="664"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="722"/>
         <source>Data Grid</source>
         <translation>Gegevensraster</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="665"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="723"/>
         <source>GPS Map</source>
         <translation>GPS-kaart</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="666"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="724"/>
         <source>Gyroscope</source>
         <translation>Gyroscoop</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="667"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="725"/>
         <source>Multi-Plot</source>
         <translation>Meervoudige Plot</translation>
     </message>
@@ -9168,51 +9188,51 @@ Voeg %4 dataset(s) toe met de standaardwaarden van de sjabloon?</translation>
         <translation type="vanished">Meervoudige Plot</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="668"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="726"/>
         <source>Accelerometer</source>
         <translation>Accelerometer</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="669"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="727"/>
         <source>3D Plot</source>
         <translation>3D-plot</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="670"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="728"/>
         <source>Image View</source>
         <translation>Afbeeldingsweergave</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="671"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="729"/>
         <source>Canvas Widget</source>
         <translation>Canvaswidget</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="673"/>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="676"/>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="693"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="731"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="734"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="751"/>
         <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputStateRows.cpp" line="121"/>
         <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputStateRows.cpp" line="140"/>
         <source>None</source>
         <translation>Geen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="677"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="735"/>
         <source>Bar</source>
         <translation>Balk</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="678"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="736"/>
         <source>Gauge</source>
         <translation>Meter</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="679"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="737"/>
         <source>Compass</source>
         <translation>Kompas</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="680"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="738"/>
         <source>Meter</source>
         <translation>Meter</translation>
     </message>
@@ -9221,52 +9241,52 @@ Voeg %4 dataset(s) toe met de standaardwaarden van de sjabloon?</translation>
         <translation type="vanished">Thermometer</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="686"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="744"/>
         <source>Integer (0 decimals)</source>
         <translation>Integer (0 decimalen)</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="687"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="745"/>
         <source>1 decimal</source>
         <translation>1 decimaal</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="688"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="746"/>
         <source>2 decimals</source>
         <translation>2 decimalen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="689"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="747"/>
         <source>3 decimals</source>
         <translation>3 decimalen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="690"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="748"/>
         <source>Scientific</source>
         <translation>Wetenschappelijk</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="694"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="752"/>
         <source>New Line (\n)</source>
         <translation>Nieuwe Regel (</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="695"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="753"/>
         <source>Carriage Return (\r)</source>
         <translation>Carriage Return (\r)</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="696"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="754"/>
         <source>CRLF (\r\n)</source>
         <translation>CRLF (\r</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="699"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="757"/>
         <source>No</source>
         <translation>Nee</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="700"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="758"/>
         <source>Yes</source>
         <translation>Ja</translation>
     </message>
@@ -9529,57 +9549,57 @@ Voeg %4 dataset(s) toe met de standaardwaarden van de sjabloon?</translation>
         <translation>Alarmgeluiden Wijzigen</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="953"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="955"/>
         <source>Change Project Title</source>
         <translation>Projecttitel Wijzigen</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="969"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="971"/>
         <source>Edit Control Script</source>
         <translation>Controlescript Bewerken</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="988"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="990"/>
         <source>Edit Shared Library</source>
         <translation>Gedeelde Bibliotheek Bewerken</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1005"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1007"/>
         <source>Edit JavaScript Library</source>
         <translation>Javascript-bibliotheek Bewerken</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1021"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1023"/>
         <source>Change Point Count</source>
         <translation>Puntenaantal Wijzigen</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1039"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1041"/>
         <source>Change Plot Time Range</source>
         <translation>Plotbereik Wijzigen</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1061"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1063"/>
         <source>Toggle Freeze</source>
         <translation>Bevriezen Schakelen</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1076"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1078"/>
         <source>Toggle Change-Driven Transforms</source>
         <translation>Wijzigingsgestuurde Transformaties Schakelen</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1093"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1095"/>
         <source>Toggle Fast Lua Execution</source>
         <translation>Schakel Snelle Lua-uitvoering In/uit</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1114"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1116"/>
         <source>Enable Fast Lua Execution?</source>
         <translation>Snelle Lua-Uitvoering Inschakelen?</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1115"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1117"/>
         <source>Fast mode runs Lua parsers and transforms through the JIT compiler (up to ~40x faster), but the runaway-script watchdog cannot operate: a script stuck in an infinite loop will stall its data source until you disconnect.
 
 Enable it only for scripts you trust and have tested in Safe mode first.</source>
@@ -9588,37 +9608,37 @@ Enable it only for scripts you trust and have tested in Safe mode first.</source
 Schakel dit alleen in voor scripts die u vertrouwt en eerst in Veilige modus hebt getest.</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1120"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1122"/>
         <source>Fast Lua Execution</source>
         <translation>Snelle Lua-uitvoering</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1149"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1151"/>
         <source>Change Frame Start Sequence</source>
         <translation>Framestartreeks Wijzigen</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1168"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1170"/>
         <source>Change Frame End Sequence</source>
         <translation>Frameeindreeks Wijzigen</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1187"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1189"/>
         <source>Change Checksum</source>
         <translation>Checksum Wijzigen</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1206"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1208"/>
         <source>Change Frame Detection</source>
         <translation>Framedetectie Wijzigen</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1225"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1227"/>
         <source>Change Decoder</source>
         <translation>Decoder Wijzigen</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1244"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1246"/>
         <source>Toggle Hex Delimiters</source>
         <translation>Hex-scheidingstekens Schakelen</translation>
     </message>
@@ -9763,12 +9783,12 @@ Schakel dit alleen in voor scripts die u vertrouwt en eerst in Veilige modus heb
         <translation type="vanished">Serial Studio-projectbestanden (*.ssproj)</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="780"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="782"/>
         <source>Untitled Project</source>
         <translation>Naamloos Project</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="798"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="800"/>
         <source>Device A</source>
         <translation>Apparaat A</translation>
     </message>
@@ -11020,17 +11040,21 @@ Geldig formaat: 01 A2 FF 3C</translation>
         <translation>Schakel analoge meterwidget (halve boog) in</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="344"/>
-        <source>Define colored value ranges with severity tiers for this dataset's gauge or LED.</source>
-        <translation>Definieer gekleurde waardebereiken met ernstniveaus voor de meter of LED van deze dataset.</translation>
+        <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="340"/>
+        <source>Define colored value ranges with severity tiers. Available for Bar, Gauge, Meter, LED, and Bar Panel datasets.</source>
+        <translation>Definieer gekleurde waardebereiken met ernstniveaus. Beschikbaar voor Bar, Gauge, Meter, LED en Bar Panel datasets.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="350"/>
+        <source>Define colored value ranges with severity tiers for this dataset's gauge or LED.</source>
+        <translation type="vanished">Definieer gekleurde waardebereiken met ernstniveaus voor de meter of LED van deze dataset.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="346"/>
         <source>Freq. Markers</source>
         <translation>Freq. Markeringen</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="357"/>
+        <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="353"/>
         <source>Pin labeled frequencies or bands on the FFT plot and waterfall, with optional warning and alarm levels.</source>
         <translation>Markeer gelabelde frequenties of banden op de FFT-plot en waterval, met optionele waarschuwings- en alarmniveaus.</translation>
     </message>
@@ -11058,7 +11082,7 @@ Geldig formaat: 01 A2 FF 3C</translation>
         <translation>Gedrag</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="334"/>
+        <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="335"/>
         <source>Alarm Bands</source>
         <translation>Alarmbanden</translation>
     </message>
@@ -11067,32 +11091,32 @@ Geldig formaat: 01 A2 FF 3C</translation>
         <translation type="vanished">Definieer gekleurde waardebereiken met ernstniveaus voor de meter van deze dataset.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="363"/>
+        <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="359"/>
         <source>Transform</source>
         <translation>Transformatie</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="367"/>
+        <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="363"/>
         <source>Edit a value transform expression for calibration, filtering, or unit conversion</source>
         <translation>Bewerk een waardetransformatie-expressie voor kalibratie, filtering of eenheidsconversie</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="380"/>
+        <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="376"/>
         <source>Duplicate</source>
         <translation>Dupliceren</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="385"/>
+        <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="381"/>
         <source>Duplicate this dataset with the same configuration</source>
         <translation>Dupliceer deze dataset met dezelfde configuratie</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="390"/>
+        <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="386"/>
         <source>Delete</source>
         <translation>Verwijderen</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="393"/>
+        <location filename="../../qml/ProjectEditor/Views/DatasetView.qml" line="389"/>
         <source>Delete this dataset from the group</source>
         <translation>Verwijder deze dataset uit de groep</translation>
     </message>
@@ -11591,22 +11615,22 @@ Geldig formaat: 01 A2 FF 3C</translation>
         <translation>Numerieke Alias</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorCommit.cpp" line="879"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorCommit.cpp" line="865"/>
         <source>Edit Alarms</source>
         <translation>Alarmen Bewerken</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorCommit.cpp" line="1019"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorCommit.cpp" line="1005"/>
         <source>Rename Dataset</source>
         <translation>Dataset Hernoemen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorCommit.cpp" line="1040"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorCommit.cpp" line="1026"/>
         <source>Edit Dataset</source>
         <translation>Dataset Bewerken</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorCommit.cpp" line="1219"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorCommit.cpp" line="1205"/>
         <source>Edit Output Widget</source>
         <translation>Uitvoerwidget Bewerken</translation>
     </message>
@@ -11987,7 +12011,7 @@ Geldig formaat: 01 A2 FF 3C</translation>
     </message>
     <message>
         <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="750"/>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1181"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1165"/>
         <source>General Information</source>
         <translation>Algemene Informatie</translation>
     </message>
@@ -12074,7 +12098,7 @@ Geldig formaat: 01 A2 FF 3C</translation>
     </message>
     <message>
         <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="865"/>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1306"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1290"/>
         <source>Text Encoding</source>
         <translation>Tekstcodering</translation>
     </message>
@@ -12170,112 +12194,112 @@ Geldig formaat: 01 A2 FF 3C</translation>
         <translation>Aan</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1192"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1176"/>
         <source>Label</source>
         <translation>Label</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1193"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1177"/>
         <source>Display label</source>
         <translation>Weergavelabel</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1203"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1187"/>
         <source>Button Icon</source>
         <translation>Knoppictogram</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1212"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1196"/>
         <source>Colorize Icon</source>
         <translation>Pictogram Inkleuren</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1213"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1197"/>
         <source>Tint the icon with the button color</source>
         <translation>Kleur het pictogram met de knopkleur</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1222"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1206"/>
         <source>Automatic</source>
         <translation>Automatisch</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1223"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1207"/>
         <source>Button Color</source>
         <translation>Knopkleur</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1224"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1208"/>
         <source>Custom fill color for this button; automatic uses the group accent</source>
         <translation>Aangepaste vulkleur voor deze knop; automatisch gebruikt het groepsaccent</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1235"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1219"/>
         <source>Button Size</source>
         <translation>Knopgrootte</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1236"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1220"/>
         <source>Scales the button, its icon and its caption</source>
         <translation>Schaalt de knop, het pictogram en het bijschrift</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1245"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1229"/>
         <source>Toggle Button</source>
         <translation>Schakelknop</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1246"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1230"/>
         <source>Stay pressed and transmit 1 (on) / 0 (off) instead of a single click</source>
         <translation>Blijf ingedrukt en verzend 1 (aan) / 0 (uit) in plaats van een enkele klik</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1268"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1252"/>
         <source>On Label</source>
         <translation>Aan-label</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1269"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1253"/>
         <source>Caption shown while latched (defaults to the label)</source>
         <translation>Bijschrift getoond terwijl vergrendeld (standaard het label)</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1278"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1262"/>
         <source>Off Label</source>
         <translation>Uit-label</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1279"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1263"/>
         <source>Caption shown while released (defaults to the label)</source>
         <translation>Bijschrift getoond terwijl losgelaten (standaard het label)</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1295"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1279"/>
         <source>Initial Value</source>
         <translation>Beginwaarde</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1307"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1291"/>
         <source>Character encoding used when transmit() returns a string value</source>
         <translation>Tekencodering gebruikt wanneer transmit() een tekenreekswaarde retourneert</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1326"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1310"/>
         <source>Value Range</source>
         <translation>Waardebereik</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1337"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1321"/>
         <source>Minimum Value</source>
         <translation>Minimumwaarde</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1346"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1330"/>
         <source>Maximum Value</source>
         <translation>Maximumwaarde</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1355"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorForms.cpp" line="1339"/>
         <source>Step Size</source>
         <translation>Stapgrootte</translation>
     </message>
@@ -12672,11 +12696,11 @@ Geldig formaat: 01 A2 FF 3C</translation>
         <translation>Gemengd</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorMultiSelect.cpp" line="432"/>
-        <location filename="../../../core/Ui/ProjectEditor/EditorMultiSelect.cpp" line="433"/>
-        <location filename="../../../core/Ui/ProjectEditor/EditorMultiSelect.cpp" line="494"/>
-        <location filename="../../../core/Ui/ProjectEditor/EditorMultiSelect.cpp" line="495"/>
-        <location filename="../../../core/Ui/ProjectEditor/EditorMultiSelect.cpp" line="551"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorMultiSelect.cpp" line="434"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorMultiSelect.cpp" line="435"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorMultiSelect.cpp" line="497"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorMultiSelect.cpp" line="498"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorMultiSelect.cpp" line="554"/>
         <source>Edit Selection</source>
         <translation>Selectie Bewerken</translation>
     </message>
@@ -14883,7 +14907,7 @@ Voeg hierboven controller-tags toe om ze te pollen.</translation>
 <context>
     <name>IO::ConnectionManager</name>
     <message>
-        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="242"/>
+        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="247"/>
         <source>UART/COM</source>
         <translation>UART/COM</translation>
     </message>
@@ -14892,67 +14916,67 @@ Voeg hierboven controller-tags toe om ze te pollen.</translation>
         <translation type="vanished">Netwerksocket</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="242"/>
+        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="247"/>
         <source>Network</source>
         <translation>Netwerk</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="242"/>
+        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="247"/>
         <source>Bluetooth LE</source>
         <translation>Bluetooth LE</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="244"/>
+        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="249"/>
         <source>Audio</source>
         <translation>Audio</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="244"/>
+        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="249"/>
         <source>Modbus</source>
         <translation>Modbus</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="244"/>
+        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="249"/>
         <source>CAN Bus</source>
         <translation>CAN-bus</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="244"/>
+        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="249"/>
         <source>USB Device</source>
         <translation>USB-apparaat</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="244"/>
+        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="249"/>
         <source>HID Device</source>
         <translation>HID-apparaat</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="245"/>
+        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="250"/>
         <source>Process</source>
         <translation>Proces</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="245"/>
+        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="250"/>
         <source>MQTT Subscriber</source>
         <translation>MQTT-abonnee</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="245"/>
+        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="250"/>
         <source>OPC UA</source>
         <translation>OPC UA</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="245"/>
+        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="250"/>
         <source>Siemens S7</source>
         <translation>Siemens S7</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="246"/>
+        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="251"/>
         <source>EtherNet/IP</source>
         <translation>Ethernet/IP</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="246"/>
+        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="251"/>
         <source>IEC 60870-5-104</source>
         <translation>IEC 60870-5-104</translation>
     </message>
@@ -14965,7 +14989,7 @@ Voeg hierboven controller-tags toe om ze te pollen.</translation>
         <translation type="vanished">Activeer uw licentie om Serial Studio te blijven gebruiken.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="647"/>
+        <location filename="../../../core/Devices/IO/ConnectionManager.cpp" line="658"/>
         <source>connection attempt failed</source>
         <translation>verbindingspoging mislukt</translation>
     </message>
@@ -16777,7 +16801,7 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
 <context>
     <name>IO::Drivers::OpcUa</name>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="332"/>
+        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="333"/>
         <source>OPC UA Initialization Failed</source>
         <translation>OPC Ua-initialisatie Mislukt</translation>
     </message>
@@ -16786,29 +16810,29 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
         <translation type="vanished">De %1-backend is niet beschikbaar in deze build.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="494"/>
+        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="495"/>
         <source>OPC UA Connection Failed</source>
         <translation>OPC Ua-verbinding Mislukt</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="495"/>
+        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="496"/>
         <source>Unable to connect to "%1".</source>
         <translation>Kan geen verbinding maken met "%1".</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="496"/>
-        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="642"/>
-        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="1279"/>
+        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="497"/>
+        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="650"/>
+        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="1287"/>
         <source>"%1": %2</source>
         <translation>"%1": %2</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="512"/>
+        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="513"/>
         <source>OPC UA Connection Lost</source>
         <translation>OPC Ua-verbinding Verbroken</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="526"/>
+        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="527"/>
         <source>Timed out after %1 s</source>
         <translation>Time-out na %1 s</translation>
     </message>
@@ -16817,7 +16841,7 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
         <translation type="vanished">De server heeft de verbinding gesloten</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="572"/>
+        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="573"/>
         <source>The server closed the session</source>
         <translation>De server heeft de sessie gesloten</translation>
     </message>
@@ -16862,13 +16886,13 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
         <translation type="vanished">Onverwachte backend-fout</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="598"/>
+        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="606"/>
         <source>"%1" is not a valid endpoint URL</source>
         <translation>"%1" is geen geldige endpoint-URL</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="599"/>
-        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="1279"/>
+        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="607"/>
+        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="1287"/>
         <source>OPC UA Discovery</source>
         <translation>OPC Ua-ontdekking</translation>
     </message>
@@ -16877,12 +16901,12 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
         <translation type="vanished">De %1-backend is niet beschikbaar in deze build</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="641"/>
+        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="649"/>
         <source>Discovery failed: %1</source>
         <translation>Ontdekking mislukt: %1</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="642"/>
+        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="650"/>
         <source>OPC UA Discovery Failed</source>
         <translation>OPC Ua-ontdekking Mislukt</translation>
     </message>
@@ -16891,38 +16915,43 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
         <translation type="vanished">Geen None-policy-endpoint; beveiligde kanalen worden niet ondersteund in deze versie</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="324"/>
+        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="325"/>
         <source>The connection is not configured: check the endpoint and the tag list</source>
         <translation>De verbinding is niet geconfigureerd: controleer het endpoint en de taglijst</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="331"/>
-        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="607"/>
+        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="332"/>
+        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="615"/>
         <source>The %1 stack is not available in this build</source>
         <translation>De %1-stack is niet beschikbaar in deze build</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="370"/>
+        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="371"/>
         <source>The connection attempt could not be started</source>
         <translation>De verbindingspoging kon niet worden gestart</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="384"/>
+        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="385"/>
         <source>OPC UA Certificate</source>
         <translation>OPC Ua-certificaat</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="385"/>
+        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="386"/>
         <source>The client certificate could not be generated; secure channels will be refused.</source>
         <translation>Het clientcertificaat kon niet worden gegenereerd; beveiligde kanalen worden geweigerd.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="640"/>
+        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="598"/>
+        <source>OPC UA access requires an active Serial Studio Pro license or trial</source>
+        <translation>OPC UA-toegang vereist een actieve Serial Studio Pro-licentie of trial</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="648"/>
         <source>The server did not answer within %1 s</source>
         <translation>De server heeft niet binnen %1 s geantwoord</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="672"/>
+        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="680"/>
         <source>Endpoint discovery failed</source>
         <translation>Endpoint-ontdekking mislukt</translation>
     </message>
@@ -16987,40 +17016,40 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
         <translation type="vanished">Kon geen bladersessie openen op %1</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="729"/>
-        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="757"/>
+        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="737"/>
+        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="765"/>
         <source>Failed to load generated project</source>
         <translation>Gegenereerd project laden mislukt</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="730"/>
-        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="758"/>
+        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="738"/>
+        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="766"/>
         <source>The generated project JSON could not be loaded.</source>
         <translation>De gegenereerde project-JSON kon niet worden geladen.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="743"/>
+        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="751"/>
         <source>No tags selected</source>
         <translation>Geen tags geselecteerd</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="744"/>
+        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="752"/>
         <source>Browse the server and select at least one tag before generating a project.</source>
         <translation>Blader door de server en selecteer minimaal één tag voordat u een project genereert.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="747"/>
-        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="771"/>
+        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="755"/>
+        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="779"/>
         <source>OPC UA Project Generator</source>
         <translation>OPC UA Projectgenerator</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="766"/>
+        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="774"/>
         <source>Successfully generated project with %1 groups and %2 datasets.</source>
         <translation>Project succesvol gegenereerd met %1 groepen en %2 datasets.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="769"/>
+        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="777"/>
         <source>The project editor is now open for customization.</source>
         <translation>De projecteditor is nu geopend voor aanpassing.</translation>
     </message>
@@ -17061,22 +17090,22 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
         <translation type="vanished">Ongeldig</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="1508"/>
+        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="1516"/>
         <source>Security Policy</source>
         <translation>Beveiligingsbeleid</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="1516"/>
+        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="1524"/>
         <source>Security Mode</source>
         <translation>Beveiligingsmodus</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="1525"/>
+        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="1533"/>
         <source>User Certificate</source>
         <translation>Gebruikerscertificaat</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="1533"/>
+        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="1541"/>
         <source>User Private Key</source>
         <translation>Privésleutel Gebruiker</translation>
     </message>
@@ -17085,52 +17114,52 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
         <translation type="vanished">Ondertekenen &amp; Versleutelen</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="846"/>
+        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="854"/>
         <source>Connecting to %1</source>
         <translation>Verbinden met %1</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="849"/>
+        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="857"/>
         <source>Not connected</source>
         <translation>Niet verbonden</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="857"/>
+        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="865"/>
         <source>Subscribing, %1 of %2 tags</source>
         <translation>Abonneren, %1 van %2 tags</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="862"/>
+        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="870"/>
         <source>Subscribed %1 tags, polling %2 refused, %3 Hz</source>
         <translation>Geabonneerd op %1 tags, polling %2 geweigerd, %3 Hz</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="868"/>
+        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="876"/>
         <source>Polling (server refused subscriptions), %1 tags, %2 Hz</source>
         <translation>Polling (server weigerde abonnementen), %1 tags, %2 Hz</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="872"/>
+        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="880"/>
         <source>Subscribed, %1 tags, %2 Hz</source>
         <translation>Geabonneerd, %1 tags, %2 Hz</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="902"/>
+        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="910"/>
         <source>Anonymous</source>
         <translation>Anoniem</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="902"/>
+        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="910"/>
         <source>Username / Password</source>
         <translation>Gebruikersnaam / Wachtwoord</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="902"/>
+        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="910"/>
         <source>X.509 Certificate</source>
         <translation>X.509-certificaat</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="1278"/>
+        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="1286"/>
         <source>No endpoint this build can open with the selected identity</source>
         <translation>Geen endpoint dat deze build kan openen met de geselecteerde identiteit</translation>
     </message>
@@ -17155,27 +17184,27 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
         <translation type="vanished">Het servercertificaat kon niet worden geparseerd</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="1468"/>
+        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="1476"/>
         <source>Endpoint URL</source>
         <translation>Endpoint-URL</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="1475"/>
+        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="1483"/>
         <source>Authentication</source>
         <translation>Authenticatie</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="1483"/>
+        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="1491"/>
         <source>Username</source>
         <translation>Gebruikersnaam</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="1491"/>
+        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="1499"/>
         <source>Password</source>
         <translation>Wachtwoord</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="1499"/>
+        <location filename="../../../core/Devices/IO/Drivers/OpcUa.cpp" line="1507"/>
         <source>Poll Interval (ms)</source>
         <translation>Poll-Interval (ms)</translation>
     </message>
@@ -19551,32 +19580,32 @@ Om deze plaats op een ander apparaat te hergebruiken, stuur een e-mail naar alex
         <translation>Deze Functie Maakt Deel uit van Serial Studio Pro. De Trial Ontgrendelt Alle Pro-Functies Gedurende 14 Dagen, Zonder Account en Zonder Betaling. Een Internetverbinding is Vereist om de Trial op Deze Machine te Registreren.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/TrialGate.cpp" line="133"/>
+        <location filename="../../src/Licensing/TrialGate.cpp" line="134"/>
         <source>Serial Studio Pro Trial</source>
         <translation>Serial Studio Pro Trial</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/TrialGate.cpp" line="164"/>
+        <location filename="../../src/Licensing/TrialGate.cpp" line="166"/>
         <source>Activate License</source>
         <translation>Licentie Activeren</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/TrialGate.cpp" line="165"/>
+        <location filename="../../src/Licensing/TrialGate.cpp" line="167"/>
         <source>Get Serial Studio Pro</source>
         <translation>Serial Studio Pro Aanschaffen</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/TrialGate.cpp" line="169"/>
+        <location filename="../../src/Licensing/TrialGate.cpp" line="171"/>
         <source>This feature requires Serial Studio Pro</source>
         <translation>Deze Functie Vereist Serial Studio Pro</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/TrialGate.cpp" line="170"/>
+        <location filename="../../src/Licensing/TrialGate.cpp" line="172"/>
         <source>Your trial has ended. All free features remain fully functional; activate a license or purchase one to use Pro features again.</source>
         <translation>Uw Trial is Verlopen. Alle Gratis Functies Blijven Volledig Functioneel; Activeer een Licentie of Koop er een om Pro-Functies Opnieuw te Gebruiken.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/TrialGate.cpp" line="173"/>
+        <location filename="../../src/Licensing/TrialGate.cpp" line="176"/>
         <source>Serial Studio Pro</source>
         <translation>Serial Studio Pro</translation>
     </message>
@@ -20172,7 +20201,7 @@ Geef de benodigde inloggegevens op.</translation>
     </message>
     <message>
         <location filename="../../../core/Storage/MQTT/Publisher.cpp" line="665"/>
-        <location filename="../../../core/Storage/MQTT/Publisher.cpp" line="1395"/>
+        <location filename="../../../core/Storage/MQTT/Publisher.cpp" line="1397"/>
         <source>MQTT Test Connection</source>
         <translation>MQTT Testverbinding</translation>
     </message>
@@ -20197,28 +20226,28 @@ Geef de benodigde inloggegevens op.</translation>
         <translation>Selecteer Privésleutel</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/MQTT/Publisher.cpp" line="1392"/>
+        <location filename="../../../core/Storage/MQTT/Publisher.cpp" line="1394"/>
         <source>MQTT broker reachable</source>
         <translation>MQTT broker bereikbaar</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/MQTT/Publisher.cpp" line="1392"/>
+        <location filename="../../../core/Storage/MQTT/Publisher.cpp" line="1394"/>
         <source>MQTT broker unreachable</source>
         <translation>MQTT broker onbereikbaar</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/MQTT/Publisher.cpp" line="1406"/>
+        <location filename="../../../core/Storage/MQTT/Publisher.cpp" line="1408"/>
         <source>MQTT broker connection failed</source>
         <translation>MQTT broker verbinding mislukt</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/MQTT/Publisher.cpp" line="1406"/>
-        <location filename="../../../core/Storage/MQTT/Publisher.cpp" line="1565"/>
+        <location filename="../../../core/Storage/MQTT/Publisher.cpp" line="1408"/>
+        <location filename="../../../core/Storage/MQTT/Publisher.cpp" line="1567"/>
         <source>MQTT Publisher</source>
         <translation>MQTT Publisher</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/MQTT/Publisher.cpp" line="1562"/>
+        <location filename="../../../core/Storage/MQTT/Publisher.cpp" line="1564"/>
         <source>MQTT Client Certificate Error</source>
         <translation>MQTT Clientcertificaat-fout</translation>
     </message>
@@ -21605,8 +21634,8 @@ Wilt u de downloadpagina openen?</translation>
         <translation>Kon Info.plist niet schrijven: %1</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/Misc/ShortcutGenerator_macOS.cpp" line="271"/>
         <location filename="../../../core/Ui/Misc/ShortcutGenerator_Linux.cpp" line="140"/>
+        <location filename="../../../core/Ui/Misc/ShortcutGenerator_macOS.cpp" line="271"/>
         <source>Windows shortcut writer is not available on this platform.</source>
         <translation>Windows-snelkoppelingsschrijver is niet beschikbaar op dit platform.</translation>
     </message>
@@ -21637,8 +21666,8 @@ Wilt u de downloadpagina openen?</translation>
         <translation>Opslaan van .lnk-bestand mislukt (HRESULT 0x%1).</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/Misc/ShortcutGenerator_Windows.cpp" line="185"/>
         <location filename="../../../core/Ui/Misc/ShortcutGenerator_Linux.cpp" line="154"/>
+        <location filename="../../../core/Ui/Misc/ShortcutGenerator_Windows.cpp" line="185"/>
         <source>macOS shortcut writer is not available on this platform.</source>
         <translation>MacOS-snelkoppelingsschrijver is niet beschikbaar op dit platform.</translation>
     </message>
@@ -22341,32 +22370,36 @@ Voeg hierboven groepen toe om meerdere registertypes te pollen.</translation>
         <translation>Alarmbanden</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/MultiSelectionView.qml" line="303"/>
-        <source>Define colored value ranges and apply them to every selected dataset.</source>
-        <translation>Definieer gekleurde waardebereiken en pas deze toe op elke geselecteerde dataset.</translation>
+        <location filename="../../qml/ProjectEditor/Views/MultiSelectionView.qml" line="304"/>
+        <source>Define colored value ranges and apply them to the selected Bar, Gauge, Meter, LED, and Bar Panel datasets.</source>
+        <translation>Definieer gekleurde waardebereiken en pas ze toe op de geselecteerde Bar, Gauge, Meter, LED en Bar Panel datasets.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/MultiSelectionView.qml" line="322"/>
+        <source>Define colored value ranges and apply them to every selected dataset.</source>
+        <translation type="vanished">Definieer gekleurde waardebereiken en pas deze toe op elke geselecteerde dataset.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/ProjectEditor/Views/MultiSelectionView.qml" line="323"/>
         <source>Duplicate</source>
         <translation>Dupliceren</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/MultiSelectionView.qml" line="324"/>
+        <location filename="../../qml/ProjectEditor/Views/MultiSelectionView.qml" line="325"/>
         <source>Duplicate every selected dataset</source>
         <translation>Dupliceer elke geselecteerde dataset</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/MultiSelectionView.qml" line="332"/>
+        <location filename="../../qml/ProjectEditor/Views/MultiSelectionView.qml" line="333"/>
         <source>Delete</source>
         <translation>Verwijderen</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/MultiSelectionView.qml" line="335"/>
+        <location filename="../../qml/ProjectEditor/Views/MultiSelectionView.qml" line="336"/>
         <source>Delete every selected dataset</source>
         <translation>Verwijder elke geselecteerde dataset</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/MultiSelectionView.qml" line="375"/>
+        <location filename="../../qml/ProjectEditor/Views/MultiSelectionView.qml" line="376"/>
         <source>Editing %1 items. Shared fields apply to all; per-item fields are locked.</source>
         <translation>%1 items bewerken. Gedeelde velden gelden voor alle; per-item velden zijn vergrendeld.</translation>
     </message>
@@ -22374,38 +22407,38 @@ Voeg hierboven groepen toe om meerdere registertypes te pollen.</translation>
 <context>
     <name>NativeTemplates</name>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryRaw.cpp" line="116"/>
         <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryHex.cpp" line="127"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryRaw.cpp" line="116"/>
         <source>Bytes per value</source>
         <translation>Bytes per waarde</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryRaw.cpp" line="117"/>
         <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryHex.cpp" line="128"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryRaw.cpp" line="117"/>
         <source>Number of bytes combined into each channel value.</source>
         <translation>Aantal bytes dat wordt gecombineerd tot elke kanaalwaarde.</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryRaw.cpp" line="125"/>
         <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryHex.cpp" line="136"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryRaw.cpp" line="125"/>
         <source>Endianness</source>
         <translation>Endianness</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryRaw.cpp" line="126"/>
         <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryHex.cpp" line="137"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryRaw.cpp" line="126"/>
         <source>Byte order used when combining multi-byte values.</source>
         <translation>Bytevolgorde die wordt gebruikt bij het combineren van multi-bytewaarden.</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryRaw.cpp" line="134"/>
         <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryHex.cpp" line="145"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryRaw.cpp" line="134"/>
         <source>Signed values</source>
         <translation>Getekende waarden</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryRaw.cpp" line="135"/>
         <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryHex.cpp" line="146"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryRaw.cpp" line="135"/>
         <source>Interprets each value as two's-complement signed.</source>
         <translation>Interpreteert elke waarde als two's-complement getekend.</translation>
     </message>
@@ -22420,9 +22453,9 @@ Voeg hierboven groepen toe om meerdere registertypes te pollen.</translation>
         <translation>Door komma's gescheiden tag:index-vermeldingen, bijv. 1:0,2:1,3:2. Tags kunnen decimaal zijn of met 0x-prefix hexadecimaal.</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/TextNmea0183.cpp" line="219"/>
         <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinarySirf.cpp" line="216"/>
         <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/BinaryUbx.cpp" line="226"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/TextNmea0183.cpp" line="219"/>
         <source>Validate checksum</source>
         <translation>Checksum valideren</translation>
     </message>
@@ -24682,17 +24715,17 @@ Klik op Vernieuwen om de lijst bij te werken.</translation>
 <context>
     <name>ProjectEditorMenuBindings</name>
     <message>
-        <location filename="../../qml/Commands/ProjectEditorMenuBindings.qml" line="401"/>
+        <location filename="../../qml/Commands/ProjectEditorMenuBindings.qml" line="402"/>
         <source>Dataset Container</source>
         <translation>Datasetcontainer</translation>
     </message>
     <message>
-        <location filename="../../qml/Commands/ProjectEditorMenuBindings.qml" line="406"/>
+        <location filename="../../qml/Commands/ProjectEditorMenuBindings.qml" line="407"/>
         <source>Data Grid</source>
         <translation>Gegevensraster</translation>
     </message>
     <message>
-        <location filename="../../qml/Commands/ProjectEditorMenuBindings.qml" line="411"/>
+        <location filename="../../qml/Commands/ProjectEditorMenuBindings.qml" line="412"/>
         <source>Bar Panel</source>
         <translation>Balkpaneel</translation>
     </message>
@@ -24701,42 +24734,42 @@ Klik op Vernieuwen om de lijst bij te werken.</translation>
         <translation type="vanished">Meervoudige Plot</translation>
     </message>
     <message>
-        <location filename="../../qml/Commands/ProjectEditorMenuBindings.qml" line="416"/>
+        <location filename="../../qml/Commands/ProjectEditorMenuBindings.qml" line="417"/>
         <source>Multi-Plot</source>
         <translation>Meervoudige Plot</translation>
     </message>
     <message>
-        <location filename="../../qml/Commands/ProjectEditorMenuBindings.qml" line="421"/>
+        <location filename="../../qml/Commands/ProjectEditorMenuBindings.qml" line="422"/>
         <source>3D Plot</source>
         <translation>3D-plot</translation>
     </message>
     <message>
-        <location filename="../../qml/Commands/ProjectEditorMenuBindings.qml" line="426"/>
+        <location filename="../../qml/Commands/ProjectEditorMenuBindings.qml" line="427"/>
         <source>Accelerometer</source>
         <translation>Accelerometer</translation>
     </message>
     <message>
-        <location filename="../../qml/Commands/ProjectEditorMenuBindings.qml" line="431"/>
+        <location filename="../../qml/Commands/ProjectEditorMenuBindings.qml" line="432"/>
         <source>Gyroscope</source>
         <translation>Gyroscoop</translation>
     </message>
     <message>
-        <location filename="../../qml/Commands/ProjectEditorMenuBindings.qml" line="436"/>
+        <location filename="../../qml/Commands/ProjectEditorMenuBindings.qml" line="437"/>
         <source>GPS Map</source>
         <translation>GPS-kaart</translation>
     </message>
     <message>
-        <location filename="../../qml/Commands/ProjectEditorMenuBindings.qml" line="441"/>
+        <location filename="../../qml/Commands/ProjectEditorMenuBindings.qml" line="442"/>
         <source>Image View</source>
         <translation>Afbeeldingsweergave</translation>
     </message>
     <message>
-        <location filename="../../qml/Commands/ProjectEditorMenuBindings.qml" line="446"/>
+        <location filename="../../qml/Commands/ProjectEditorMenuBindings.qml" line="447"/>
         <source>Web View</source>
         <translation>Webweergave</translation>
     </message>
     <message>
-        <location filename="../../qml/Commands/ProjectEditorMenuBindings.qml" line="451"/>
+        <location filename="../../qml/Commands/ProjectEditorMenuBindings.qml" line="452"/>
         <source>Canvas Widget</source>
         <translation>Canvas Widget</translation>
     </message>
@@ -24745,22 +24778,22 @@ Klik op Vernieuwen om de lijst bij te werken.</translation>
         <translation type="vanished">Painter Widget</translation>
     </message>
     <message>
-        <location filename="../../qml/Commands/ProjectEditorMenuBindings.qml" line="712"/>
+        <location filename="../../qml/Commands/ProjectEditorMenuBindings.qml" line="713"/>
         <source>Hide Selected (%1)</source>
         <translation>Verberg Geselecteerde (%1)</translation>
     </message>
     <message>
-        <location filename="../../qml/Commands/ProjectEditorMenuBindings.qml" line="713"/>
+        <location filename="../../qml/Commands/ProjectEditorMenuBindings.qml" line="714"/>
         <source>Show Selected (%1)</source>
         <translation>Toon Geselecteerde (%1)</translation>
     </message>
     <message>
-        <location filename="../../qml/Commands/ProjectEditorMenuBindings.qml" line="725"/>
+        <location filename="../../qml/Commands/ProjectEditorMenuBindings.qml" line="726"/>
         <source>Duplicate Selected (%1)</source>
         <translation>Dupliceer Geselecteerde (%1)</translation>
     </message>
     <message>
-        <location filename="../../qml/Commands/ProjectEditorMenuBindings.qml" line="744"/>
+        <location filename="../../qml/Commands/ProjectEditorMenuBindings.qml" line="745"/>
         <source>Delete Selected (%1)</source>
         <translation>Verwijder Geselecteerde (%1)</translation>
     </message>
@@ -24768,40 +24801,40 @@ Klik op Vernieuwen om de lijst bij te werken.</translation>
 <context>
     <name>ProjectModel</name>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectBulkOps.cpp" line="132"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectBulkOps.cpp" line="133"/>
         <source>Duplicate Selection</source>
         <translation>Selectie Dupliceren</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectBulkOps.cpp" line="210"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectBulkOps.cpp" line="223"/>
         <source>Delete Selection</source>
         <translation>Selectie Verwijderen</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectBulkOps.cpp" line="299"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectBulkOps.cpp" line="312"/>
         <source>Delete %1 selected items?</source>
         <translation>%1 geselecteerde items verwijderen?</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectBulkOps.cpp" line="300"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="504"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="531"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaces.cpp" line="818"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectBulkOps.cpp" line="313"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="509"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="536"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaces.cpp" line="858"/>
         <source>This action cannot be undone.</source>
         <translation>Deze actie kan niet ongedaan worden gemaakt.</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectBulkOps.cpp" line="302"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectBulkOps.cpp" line="315"/>
         <source>Delete Items</source>
         <translation>Items Verwijderen</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectBulkOps.cpp" line="323"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectBulkOps.cpp" line="336"/>
         <source>Move Selection</source>
         <translation>Selectie Verplaatsen</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectBulkOps.cpp" line="388"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectBulkOps.cpp" line="401"/>
         <source>Toggle Selection</source>
         <translation>Selectie Schakelen</translation>
     </message>
@@ -25039,10 +25072,10 @@ Opnieuw laden?</translation>
         <translation>Wilt u outputwidget "%1" verwijderen?</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectOutputWidgets.cpp" line="239"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="313"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="355"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="348"/>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="390"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="425"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectOutputWidgets.cpp" line="239"/>
         <source>This action cannot be undone. Do you wish to proceed?</source>
         <translation>Deze actie kan niet ongedaan worden gemaakt. Doorgaan?</translation>
     </message>
@@ -25089,178 +25122,183 @@ Opnieuw laden?</translation>
         <translation>Groep Bewerken</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="159"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="178"/>
+        <source>Remove Transform</source>
+        <translation>Transformatie Verwijderen</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="194"/>
         <source>Edit Dataset</source>
         <translation>Dataset Bewerken</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="202"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="237"/>
         <source>Edit Action</source>
         <translation>Actie Bewerken</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="223"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="258"/>
         <source>Seed Dataset Aliases</source>
         <translation>Dataset-aliassen Initialiseren</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="260"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="295"/>
         <source>Toggle Group</source>
         <translation>Groep Schakelen</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="283"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="318"/>
         <source>Toggle Dataset</source>
         <translation>Dataset Schakelen</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="312"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="347"/>
         <source>Do you want to delete group "%1"?</source>
         <translation>Wil je groep "%1" verwijderen?</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="326"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="361"/>
         <source>Delete Group</source>
         <translation>Groep Verwijderen</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="354"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="389"/>
         <source>Do you want to delete action "%1"?</source>
         <translation>Wil je actie "%1" verwijderen?</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="368"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="403"/>
         <source>Delete Action</source>
         <translation>Actie Verwijderen</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="388"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="423"/>
         <source>Do you want to delete dataset "%1"?</source>
         <translation>Wil je dataset "%1" verwijderen?</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="409"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="444"/>
         <source>Delete Dataset</source>
         <translation>Dataset Verwijderen</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="466"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="1191"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="501"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="1226"/>
         <source>Duplicate Group</source>
         <translation>Groep Dupliceren</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="509"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="1309"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="544"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="1344"/>
         <source>Duplicate Action</source>
         <translation>Actie Dupliceren</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="543"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="1252"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="578"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="1287"/>
         <source>Duplicate Dataset</source>
         <translation>Dataset Dupliceren</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="580"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="859"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="615"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="894"/>
         <source>Add Group</source>
         <translation>Groep Toevoegen</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="616"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="651"/>
         <source>Group</source>
         <translation>Groep</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="625"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="660"/>
         <source>Add Dataset</source>
         <translation>Dataset Toevoegen</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="637"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="672"/>
         <source>New Dataset</source>
         <translation>Nieuwe Dataset</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="640"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="675"/>
         <source>New Plot</source>
         <translation>Nieuwe Plot</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="644"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="679"/>
         <source>New FFT Plot</source>
         <translation>Nieuwe FFT-plot</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="648"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="683"/>
         <source>New Level Indicator</source>
         <translation>Nieuwe Niveauindicator</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="652"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="687"/>
         <source>New Gauge</source>
         <translation>Nieuwe Meter</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="656"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="691"/>
         <source>New Compass</source>
         <translation>Nieuw Kompas</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="662"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="697"/>
         <source>New Meter</source>
         <translation>Nieuwe Meter</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="666"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="701"/>
         <source>New LED Indicator</source>
         <translation>Nieuwe LED-indicator</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="670"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="705"/>
         <source>New Waterfall</source>
         <translation>Nieuwe Waterval</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="701"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="736"/>
         <source>Edit Canvas Datasets</source>
         <translation>Canvasdatasets Bewerken</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="722"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="757"/>
         <source>Channel %1</source>
         <translation>Kanaal %1</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="745"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="780"/>
         <source>Change Dataset Option</source>
         <translation>Dataset-optie Wijzigen</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="798"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="826"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="833"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="861"/>
         <source>Add Action</source>
         <translation>Actie Toevoegen</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="807"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="837"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="842"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="872"/>
         <source>New Action</source>
         <translation>Nieuwe Actie</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="897"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="932"/>
         <source>Change Group Widget</source>
         <translation>Groepswidget Wijzigen</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="945"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="980"/>
         <source>Are you sure you want to change the group-level widget?</source>
         <translation>Weet u zeker dat u de widget op groepsniveau wilt wijzigen?</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="946"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="981"/>
         <source>Existing datasets for this group are deleted</source>
         <translation>Bestaande datasets voor deze groep worden verwijderd</translation>
     </message>
@@ -25312,23 +25350,23 @@ Opnieuw laden?</translation>
         <translation>Z</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="1017"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="671"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="1052"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="699"/>
         <source>Move Group</source>
         <translation>Groep Verplaatsen</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="1074"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="1109"/>
         <source>Move Dataset</source>
         <translation>Dataset Verplaatsen</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="1116"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="1151"/>
         <source>Move Action</source>
         <translation>Actie Verplaatsen</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="1339"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="1374"/>
         <source>Rename Group</source>
         <translation>Groep Hernoemen</translation>
     </message>
@@ -25369,26 +25407,26 @@ Opnieuw laden?</translation>
         <translation>Nieuw Werkruimteprofiel</translation>
     </message>
     <message>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="1375"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="1404"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="1430"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="522"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="549"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="576"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="762"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="788"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="983"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="1010"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="1036"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectSources.cpp" line="295"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="393"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="421"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="449"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="472"/>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaceProfiles.cpp" line="373"/>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaceProfiles.cpp" line="395"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="1340"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="1369"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="1395"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="388"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="416"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="444"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="467"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectSources.cpp" line="288"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaces.cpp" line="771"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaces.cpp" line="797"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="499"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="521"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="548"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="734"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="760"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="955"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="982"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="1008"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaces.cpp" line="811"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaces.cpp" line="837"/>
         <source>Name:</source>
         <translation>Naam:</translation>
     </message>
@@ -25418,12 +25456,12 @@ Opnieuw laden?</translation>
         <translation>Toon de werkruimtes van:</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="1368"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="1403"/>
         <source>Rename Dataset</source>
         <translation>Dataset Hernoemen</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="1394"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectEntities.cpp" line="1429"/>
         <source>Rename Action</source>
         <translation>Actie Hernoemen</translation>
     </message>
@@ -25433,91 +25471,91 @@ Opnieuw laden?</translation>
         <translation>Tabel Toevoegen</translation>
     </message>
     <message>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="1012"/>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="124"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="390"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="984"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="395"/>
         <source>Shared Table</source>
         <translation>Gedeelde Tabel</translation>
     </message>
     <message>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="153"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="512"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="517"/>
         <source>Delete Table</source>
         <translation>Tabel Verwijderen</translation>
     </message>
     <message>
         <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="168"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="415"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="420"/>
         <source>Rename Table</source>
         <translation>Tabel Hernoemen</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="242"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="247"/>
         <source>Add Variable</source>
         <translation>Variabele Toevoegen</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="251"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="256"/>
         <source>variable</source>
         <translation>variabele</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="281"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="533"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="286"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="538"/>
         <source>Delete Variable</source>
         <translation>Variabele Verwijderen</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="312"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="317"/>
         <source>Edit Variable</source>
         <translation>Variabele Bewerken</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="387"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="981"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="1009"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="392"/>
         <source>New Shared Table</source>
         <translation>Nieuwe Gedeelde Tabel</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="443"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="448"/>
         <source>New Variable</source>
         <translation>Nieuwe Variabele</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="466"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="471"/>
         <source>Rename Variable</source>
         <translation>Variabele Hernoemen</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="505"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="510"/>
         <source>This removes %1 variable(s) along with the table. This action cannot be undone.</source>
         <translation>Dit verwijdert %1 variabele(n) samen met de tabel. Deze actie kan niet ongedaan worden gemaakt.</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="509"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="530"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaces.cpp" line="817"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="514"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="535"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaces.cpp" line="857"/>
         <source>Delete "%1"?</source>
         <translation>"%1" Verwijderen?</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="561"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="566"/>
         <source>Export Table</source>
         <translation>Tabel Exporteren</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="563"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="606"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="568"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="616"/>
         <source>CSV files (*.csv)</source>
         <translation>CSV-bestanden (*.CSV)</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="604"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="614"/>
         <source>Import Table</source>
         <translation>Tabel Importeren</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="615"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectTables.cpp" line="625"/>
         <source>Import Table CSV</source>
         <translation>Tabel-CSV Importeren</translation>
     </message>
@@ -25562,180 +25600,180 @@ Opnieuw laden?</translation>
         <translation>Apparaat Dupliceren</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectSources.cpp" line="211"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectSources.cpp" line="329"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectSources.cpp" line="362"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectSources.cpp" line="218"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectSources.cpp" line="336"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectSources.cpp" line="369"/>
         <source>Edit Device</source>
         <translation>Apparaat Bewerken</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectSources.cpp" line="243"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectSources.cpp" line="250"/>
         <source>Rename Device</source>
         <translation>Apparaat Hernoemen</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectSources.cpp" line="259"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectSources.cpp" line="378"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectSources.cpp" line="266"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectSources.cpp" line="385"/>
         <source>Change Bus Type</source>
         <translation>Bustype Wijzigen</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectSources.cpp" line="287"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectSources.cpp" line="294"/>
         <source>Rename Data Source</source>
         <translation>Gegevensbron Hernoemen</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectSources.cpp" line="414"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectSources.cpp" line="474"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectSources.cpp" line="612"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectSources.cpp" line="421"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectSources.cpp" line="481"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectSources.cpp" line="619"/>
         <source>Edit Frame Parser</source>
         <translation>Frame-parser Bewerken</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectSources.cpp" line="426"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectSources.cpp" line="488"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectSources.cpp" line="433"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectSources.cpp" line="495"/>
         <source>Change Parser Language</source>
         <translation>Parsertaal Wijzigen</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectSources.cpp" line="442"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectSources.cpp" line="515"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectSources.cpp" line="567"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectSources.cpp" line="449"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectSources.cpp" line="522"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectSources.cpp" line="574"/>
         <source>Change Parser Template</source>
         <translation>Parsersjabloon Wijzigen</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectSources.cpp" line="454"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectSources.cpp" line="539"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectSources.cpp" line="461"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectSources.cpp" line="546"/>
         <source>Change Parser Parameters</source>
         <translation>Parserparameters Wijzigen</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectSources.cpp" line="583"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectSources.cpp" line="590"/>
         <source>Change Stream Lane</source>
         <translation>Streamlane Wijzigen</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaces.cpp" line="392"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaces.cpp" line="773"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="523"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="551"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaces.cpp" line="397"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaces.cpp" line="813"/>
         <source>Workspace</source>
         <translation>Werkruimte</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaces.cpp" line="770"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="520"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="548"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaces.cpp" line="810"/>
         <source>New Workspace</source>
         <translation>Nieuwe Werkruimte</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaces.cpp" line="796"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaces.cpp" line="836"/>
         <source>Rename Workspace</source>
         <translation>Werkruimte Hernoemen</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaces.cpp" line="820"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaces.cpp" line="860"/>
         <source>Delete Workspace</source>
         <translation>Werkruimte Verwijderen</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaces.cpp" line="882"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaces.cpp" line="922"/>
         <source>Overview</source>
         <translation>Overzicht</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaces.cpp" line="891"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaces.cpp" line="931"/>
         <source>All Data</source>
         <translation>Alle Gegevens</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaces.cpp" line="1160"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaces.cpp" line="1205"/>
         <source>Discard workspace customisations?</source>
         <translation>Werkruimte-aanpassingen verwijderen?</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaces.cpp" line="1161"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaces.cpp" line="1206"/>
         <source>Switching off Customize discards your edits and rebuilds the workspace list from the project's groups.</source>
         <translation>Aanpassen uitschakelen verwijdert uw bewerkingen en herbouwt de werkruimtelijst vanuit de groepen van het project.</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaces.cpp" line="1164"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectWorkspaces.cpp" line="1209"/>
         <source>Customize Workspaces</source>
         <translation>Werkruimten Aanpassen</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="326"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="501"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="611"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="736"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="824"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="957"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="329"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="524"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="639"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="764"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="852"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="985"/>
         <source>Folder</source>
         <translation>Map</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="498"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="733"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="954"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="521"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="761"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="982"/>
         <source>New Folder</source>
         <translation>Nieuwe Map</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="547"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="624"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="759"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="837"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="1007"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="575"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="652"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="787"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="865"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="1035"/>
         <source>Rename Folder</source>
         <translation>Map Hernoemen</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="569"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="781"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="1029"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="597"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="809"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="1057"/>
         <source>Delete folder "%1"?</source>
         <translation>Map "%1" verwijderen?</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="570"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="598"/>
         <source>The folder is removed; its workspaces and sub-folders move up to the parent.</source>
         <translation>De map wordt verwijderd; de werkruimten en submappen worden verplaatst naar de bovenliggende map.</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="573"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="644"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="784"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="858"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="1033"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="601"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="672"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="812"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="886"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="1061"/>
         <source>Delete Folder</source>
         <translation>Map Verwijderen</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="602"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="813"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="630"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="841"/>
         <source>Add Folder</source>
         <translation>Map Toevoegen</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="692"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="718"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="913"/>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="939"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="720"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="746"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="941"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="967"/>
         <source>Move Folder</source>
         <translation>Map Verplaatsen</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="782"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="810"/>
         <source>The folder is removed; its groups and sub-folders move up to the parent.</source>
         <translation>De map wordt verwijderd; de groepen en submappen worden verplaatst naar de bovenliggende map.</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="885"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="913"/>
         <source>Move Table</source>
         <translation>Tabel Verplaatsen</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="1030"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/ProjectFolders.cpp" line="1058"/>
         <source>The folder is removed; its tables and sub-folders move up to the parent. The accessor path of those tables changes accordingly.</source>
         <translation>De map wordt verwijderd; de tabellen en submappen worden verplaatst naar de bovenliggende map. Het toegangspad van die tabellen wordt dienovereenkomstig aangepast.</translation>
     </message>
@@ -26516,8 +26554,9 @@ Opnieuw laden?</translation>
     <message numerus="yes">
         <location filename="../../../core/Ui/Console/WelcomeText.cpp" line="70"/>
         <source>Pro trial: %n day(s) remaining.</source>
-        <translation>Pro-proefperiode: %n dag(en) resterend.<numerusform/>
-            <numerusform/>
+        <translation>
+            <numerusform>Pro-proefperiode: %n dag(en) resterend.</numerusform>
+            <numerusform>Pro-proefperiode: %n dag(en) resterend.</numerusform>
         </translation>
     </message>
     <message>
@@ -26531,49 +26570,49 @@ Opnieuw laden?</translation>
         <translation>Kan welkomsttekst niet laden :(</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/Trial.cpp" line="256"/>
+        <location filename="../../src/Licensing/Trial.cpp" line="248"/>
         <source>Your Serial Studio Pro trial has expired</source>
         <translation>Uw Serial Studio Pro-proefperiode is verlopen</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/Trial.cpp" line="257"/>
+        <location filename="../../src/Licensing/Trial.cpp" line="249"/>
         <source>Pro features are locked until a license is activated. All free features remain fully functional, with no time limit.</source>
         <translation>Pro-functies zijn vergrendeld totdat een licentie is geactiveerd. Alle gratis functies blijven volledig functioneel, zonder tijdslimiet.</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/Trial.cpp" line="260"/>
+        <location filename="../../src/Licensing/Trial.cpp" line="252"/>
         <source>Trial Expired</source>
         <translation>Proefperiode Verlopen</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/Trial.cpp" line="387"/>
+        <location filename="../../src/Licensing/Trial.cpp" line="376"/>
         <source>Network error</source>
         <translation>Netwerkfout</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/Trial.cpp" line="390"/>
-        <location filename="../../src/Licensing/Trial.cpp" line="408"/>
-        <location filename="../../src/Licensing/Trial.cpp" line="429"/>
+        <location filename="../../src/Licensing/Trial.cpp" line="379"/>
+        <location filename="../../src/Licensing/Trial.cpp" line="397"/>
+        <location filename="../../src/Licensing/Trial.cpp" line="418"/>
         <source>Trial Activation Error</source>
         <translation>Fout Bij Activeren van Proefperiode</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/Trial.cpp" line="405"/>
+        <location filename="../../src/Licensing/Trial.cpp" line="394"/>
         <source>Invalid server response</source>
         <translation>Ongeldig serverantwoord</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/Trial.cpp" line="406"/>
+        <location filename="../../src/Licensing/Trial.cpp" line="395"/>
         <source>The server returned malformed data: %1</source>
         <translation>De server heeft misvormde gegevens geretourneerd: %1</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/Trial.cpp" line="426"/>
+        <location filename="../../src/Licensing/Trial.cpp" line="415"/>
         <source>Unexpected server response</source>
         <translation>Onverwacht serverantwoord</translation>
     </message>
     <message>
-        <location filename="../../src/Licensing/Trial.cpp" line="427"/>
+        <location filename="../../src/Licensing/Trial.cpp" line="416"/>
         <source>The server response is missing required fields.</source>
         <translation>Het serverantwoord mist vereiste velden.</translation>
     </message>
@@ -26617,8 +26656,8 @@ This script may use Lua 5.3 bitwise syntax, which this runtime does not support.
 </translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="489"/>
         <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="230"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="489"/>
         <source>Frame Parser Disabled</source>
         <translation>Frame-parser Uitgeschakeld</translation>
     </message>
@@ -26684,8 +26723,8 @@ Serial Studio kan de niet-ondersteunde operatoren herschrijven als bit.*-aanroep
 %1</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="680"/>
         <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="560"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="680"/>
         <source>Missing Parse Function</source>
         <translation>Ontbrekende Parse-functie</translation>
     </message>
@@ -26701,8 +26740,8 @@ Zorg ervoor dat uw code het volgende bevat:
 function parse(frame) ... end</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="743"/>
         <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="612"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="743"/>
         <source>Parse Function Runtime Error</source>
         <translation>Runtime-fout in Parse-functie</translation>
     </message>
@@ -26868,22 +26907,22 @@ function parse(%1) { ... }
 De scheidingsteken-parameter is niet langer nodig.</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ModuleManager.cpp" line="276"/>
+        <location filename="../../src/Misc/ModuleManager.cpp" line="277"/>
         <source>Critical</source>
         <translation>Kritiek</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ModuleManager.cpp" line="276"/>
+        <location filename="../../src/Misc/ModuleManager.cpp" line="277"/>
         <source>Warning</source>
         <translation>Waarschuwing</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/CLI.cpp" line="869"/>
+        <location filename="../../src/Misc/CLI.cpp" line="870"/>
         <source>Project file not found</source>
         <translation>Projectbestand niet gevonden</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/CLI.cpp" line="870"/>
+        <location filename="../../src/Misc/CLI.cpp" line="871"/>
         <source>The project file referenced by this shortcut could not be found:
 
 %1</source>
@@ -26892,17 +26931,17 @@ De scheidingsteken-parameter is niet langer nodig.</translation>
 %1</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/CLI.cpp" line="873"/>
+        <location filename="../../src/Misc/CLI.cpp" line="874"/>
         <source>Would you like to delete this shortcut?</source>
         <translation>Wilt u deze snelkoppeling verwijderen?</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/CLI.cpp" line="877"/>
+        <location filename="../../src/Misc/CLI.cpp" line="878"/>
         <source>Delete Shortcut</source>
         <translation>Snelkoppeling Verwijderen</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/CLI.cpp" line="879"/>
+        <location filename="../../src/Misc/CLI.cpp" line="880"/>
         <source>Quit</source>
         <translation>Afsluiten</translation>
     </message>
@@ -27320,7 +27359,7 @@ De scheidingsteken-parameter is niet langer nodig.</translation>
         <translation>De server heeft geen antwoord verzonden</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/CLI.h" line="66"/>
+        <location filename="../../src/Misc/CLI.h" line="67"/>
         <source>Listen for API clients on &lt;port&gt; instead of 7777.</source>
         <translation>Luister naar API-clients op &lt;port&gt; in plaats van 7777.</translation>
     </message>
@@ -27336,12 +27375,12 @@ De scheidingsteken-parameter is niet langer nodig.</translation>
         <translation>Corrupt bloktiming in sessie %1</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="79"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="80"/>
         <source>This session is being recorded</source>
         <translation>Deze sessie wordt opgenomen</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="80"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="81"/>
         <source>Stop the recording before deleting or editing this session; its rows are still being written.</source>
         <translation>Stop de opname voordat u deze sessie verwijdert of bewerkt; de rijen worden nog steeds weggeschreven.</translation>
     </message>
@@ -27446,6 +27485,57 @@ De scheidingsteken-parameter is niet langer nodig.</translation>
         <location filename="../../../core/Devices/IO/Audio/SoundBank.cpp" line="215"/>
         <source>Sample-rate conversion failed for this file</source>
         <translation>Samplefrequentie-conversie mislukt voor dit bestand</translation>
+    </message>
+    <message numerus="yes">
+        <location filename="../../src/Misc/ProFeatureNotice.cpp" line="60"/>
+        <source>%n dataset transform(s)</source>
+        <translation>
+            <numerusform>%n dataset transformatie(s)</numerusform>
+            <numerusform>%n dataset transformatie(s)</numerusform>
+        </translation>
+    </message>
+    <message numerus="yes">
+        <location filename="../../src/Misc/ProFeatureNotice.cpp" line="61"/>
+        <source>%n Variables table(s)</source>
+        <translation>
+            <numerusform>%n variabelentabel(len)</numerusform>
+            <numerusform>%n variabelentabel(len)</numerusform>
+        </translation>
+    </message>
+    <message>
+        <location filename="../../src/Misc/ProFeatureNotice.cpp" line="65"/>
+        <source>This project uses %1 and %2.</source>
+        <translation>Dit project gebruikt %1 en %2.</translation>
+    </message>
+    <message>
+        <location filename="../../src/Misc/ProFeatureNotice.cpp" line="67"/>
+        <source>This project uses %1.</source>
+        <translation>Dit project gebruikt %1.</translation>
+    </message>
+    <message>
+        <location filename="../../src/Misc/ProFeatureNotice.cpp" line="70"/>
+        <source>A project with this content needs Serial Studio Pro to connect. To use it for free, remove the transforms and the tables from the project.</source>
+        <translation>Een project met deze inhoud vereist Serial Studio Pro om verbinding te maken. Verwijder de transformaties en tabellen uit het project om het gratis te gebruiken.</translation>
+    </message>
+    <message>
+        <location filename="../../src/Misc/ProFeatureNotice.cpp" line="98"/>
+        <source>Get Serial Studio Pro</source>
+        <translation>Serial Studio Pro Aanschaffen</translation>
+    </message>
+    <message>
+        <location filename="../../src/Misc/ProFeatureNotice.cpp" line="102"/>
+        <source>This feature requires Serial Studio Pro</source>
+        <translation>Deze Functie Vereist Serial Studio Pro</translation>
+    </message>
+    <message>
+        <location filename="../../src/Misc/ProFeatureNotice.cpp" line="103"/>
+        <source>This build includes the GPLv3 feature set only. The official build adds the Pro features, with a free 14-day trial.</source>
+        <translation>Deze build bevat alleen de GPLv3-functieset. De officiële build voegt de Pro-functies toe, met een gratis proefperiode van 14 dagen.</translation>
+    </message>
+    <message>
+        <location filename="../../src/Misc/ProFeatureNotice.cpp" line="107"/>
+        <source>Serial Studio Pro</source>
+        <translation>Serial Studio Pro</translation>
     </message>
 </context>
 <context>
@@ -28675,93 +28765,93 @@ Voeg hierboven absolute adressen toe om de controller te pollen.</translation>
         <translation type="vanished">Afbeeldingen (*.png *.jpg *.jpeg *.svg)</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="651"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="652"/>
         <source>Open Session File</source>
         <translation>Open Sessiebestand</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="653"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="654"/>
         <source>Session files (*.db)</source>
         <translation>Sessiebestanden (*.db)</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="1298"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="1305"/>
         <source>Cannot open session file</source>
         <translation>Kan sessiebestand niet openen</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="886"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="893"/>
         <source>Delete session from %1?</source>
         <translation>Sessie van %1 verwijderen?</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="889"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="896"/>
         <source>Delete Session</source>
         <translation>Sessie Verwijderen</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="1158"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="1165"/>
         <source>No project data</source>
         <translation>Geen projectgegevens</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="887"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="894"/>
         <source>All readings and raw data for this session are permanently removed.</source>
         <translation>Alle metingen en ruwe gegevens voor deze sessie worden permanent verwijderd.</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="709"/>
-        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="718"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="716"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="725"/>
         <source>Lock Session File</source>
         <translation>Sessiebestand Vergrendelen</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="710"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="717"/>
         <source>Choose a password to lock the session file:</source>
         <translation>Kies een wachtwoord om het sessiebestand te vergrendelen:</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="719"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="726"/>
         <source>Confirm the password:</source>
         <translation>Bevestig het wachtwoord:</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="727"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="734"/>
         <source>Passwords do not match</source>
         <translation>Wachtwoorden komen niet overeen</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="728"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="735"/>
         <source>The two passwords you entered do not match. The session file was not locked.</source>
         <translation>De twee ingevoerde wachtwoorden komen niet overeen. Het sessiebestand is niet vergrendeld.</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="764"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="771"/>
         <source>Unlock Session File</source>
         <translation>Ontgrendel Sessiebestand</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="765"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="772"/>
         <source>Enter the session file password:</source>
         <translation>Voer het sessiebestandwachtwoord in:</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="775"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="782"/>
         <source>Incorrect password</source>
         <translation>Onjuist wachtwoord</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="776"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="783"/>
         <source>The password you entered does not match the one stored in the session file.</source>
         <translation>Het ingevoerde wachtwoord komt niet overeen met het wachtwoord in het sessiebestand.</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="876"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="883"/>
         <source>Session file locked</source>
         <translation>Sessiebestand vergrendeld</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="877"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="884"/>
         <source>Unlock the session file before deleting recorded sessions.</source>
         <translation>Ontgrendel het sessiebestand voordat opgenomen sessies worden verwijderd.</translation>
     </message>
@@ -28832,37 +28922,37 @@ Voeg hierboven absolute adressen toe om de controller te pollen.</translation>
         <translation type="vanished">Kan het rapport niet genereren.</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="1159"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="1166"/>
         <source>This session file does not contain an embedded project.</source>
         <translation>Dit sessiebestand bevat geen ingesloten project.</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="1168"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="1175"/>
         <source>Invalid project data</source>
         <translation>Ongeldige projectgegevens</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="1169"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="1176"/>
         <source>The embedded project JSON is malformed and cannot be restored.</source>
         <translation>De ingesloten project-JSON is onjuist geformatteerd en kan niet worden hersteld.</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="1179"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="1186"/>
         <source>Restore Project</source>
         <translation>Project Herstellen</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="1179"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="1186"/>
         <source>Serial Studio projects (*.ssproj *.json)</source>
         <translation>Serial Studio-projecten (*.ssproj *.json)</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="1187"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="1194"/>
         <source>Cannot write file</source>
         <translation>Kan bestand niet schrijven</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="1187"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseManager.cpp" line="1194"/>
         <source>Check file permissions and try again.</source>
         <translation>Controleer bestandsrechten en probeer opnieuw.</translation>
     </message>
@@ -29160,63 +29250,63 @@ Voeg hierboven absolute adressen toe om de controller te pollen.</translation>
 <context>
     <name>Sessions::Player</name>
     <message>
-        <location filename="../../../core/Storage/Sessions/Player.cpp" line="328"/>
+        <location filename="../../../core/Storage/Sessions/Player.cpp" line="329"/>
         <source>Open Session File</source>
         <translation>Open Sessiebestand</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/Player.cpp" line="330"/>
+        <location filename="../../../core/Storage/Sessions/Player.cpp" line="331"/>
         <source>Session files (*.db)</source>
         <translation>Sessiebestanden (*.db)</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/Player.cpp" line="412"/>
+        <location filename="../../../core/Storage/Sessions/Player.cpp" line="420"/>
         <source>Device Connection Active</source>
         <translation>Apparaatverbinding Actief</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/Player.cpp" line="413"/>
+        <location filename="../../../core/Storage/Sessions/Player.cpp" line="421"/>
         <source>To use this feature, you must disconnect from the device. Do you want to proceed?</source>
         <translation>Om deze functie te gebruiken moet de verbinding met het apparaat worden verbroken. Doorgaan?</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/Player.cpp" line="455"/>
-        <location filename="../../../core/Storage/Sessions/Player.cpp" line="482"/>
+        <location filename="../../../core/Storage/Sessions/Player.cpp" line="463"/>
+        <location filename="../../../core/Storage/Sessions/Player.cpp" line="490"/>
         <source>Cannot open session file</source>
         <translation>Kan sessiebestand niet openen</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/Player.cpp" line="456"/>
+        <location filename="../../../core/Storage/Sessions/Player.cpp" line="464"/>
         <source>Unknown error</source>
         <translation>Onbekende fout</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/Player.cpp" line="475"/>
+        <location filename="../../../core/Storage/Sessions/Player.cpp" line="483"/>
         <source>No project data</source>
         <translation>Geen projectgegevens</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/Player.cpp" line="476"/>
+        <location filename="../../../core/Storage/Sessions/Player.cpp" line="484"/>
         <source>This session does not contain an embedded project file — the dashboard falls back to a quick-plot layout.</source>
         <translation>Deze sessie bevat geen ingesloten projectbestand — het dashboard valt terug op een snelle-plot-indeling.</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/Player.cpp" line="483"/>
+        <location filename="../../../core/Storage/Sessions/Player.cpp" line="491"/>
         <source>Check file permissions and try again.</source>
         <translation>Controleer bestandsrechten en probeer opnieuw.</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/Player.cpp" line="633"/>
+        <location filename="../../../core/Storage/Sessions/Player.cpp" line="641"/>
         <source>Sessions</source>
         <translation>Sessies</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/Player.cpp" line="635"/>
+        <location filename="../../../core/Storage/Sessions/Player.cpp" line="643"/>
         <source>Recording uses an older copy of the project</source>
         <translation>Opname gebruikt een oudere kopie van het project</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/Player.cpp" line="636"/>
+        <location filename="../../../core/Storage/Sessions/Player.cpp" line="644"/>
         <source>The dashboard shown is the one embedded in the recording; the project on disk has changed since. Close the session to return to the current project.</source>
         <translation>Het getoonde dashboard is het dashboard dat in de opname is opgeslagen; het project op schijf is sindsdien gewijzigd. Sluit de sessie om terug te keren naar het huidige project.</translation>
     </message>
@@ -32772,27 +32862,27 @@ Schakel Project Insluiten in om het project in de snelkoppeling in te bakken, zo
 <context>
     <name>UI::AlarmMonitor</name>
     <message>
-        <location filename="../../../core/Ui/UI/AlarmMonitor.cpp" line="224"/>
+        <location filename="../../../core/Ui/UI/AlarmMonitor.cpp" line="246"/>
         <source>Alarm</source>
         <translation>Alarm</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/AlarmMonitor.cpp" line="225"/>
+        <location filename="../../../core/Ui/UI/AlarmMonitor.cpp" line="247"/>
         <source>critical</source>
         <translation>kritiek</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/AlarmMonitor.cpp" line="225"/>
+        <location filename="../../../core/Ui/UI/AlarmMonitor.cpp" line="247"/>
         <source>warning</source>
         <translation>waarschuwing</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/AlarmMonitor.cpp" line="229"/>
+        <location filename="../../../core/Ui/UI/AlarmMonitor.cpp" line="251"/>
         <source>Value %1%2 entered the %3 band (%4–%5).</source>
         <translation>Waarde %1%2 is de %3-band binnengegaan (%4–%5).</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/AlarmMonitor.cpp" line="235"/>
+        <location filename="../../../core/Ui/UI/AlarmMonitor.cpp" line="257"/>
         <source>Alarms</source>
         <translation>Alarmen</translation>
     </message>
@@ -32800,22 +32890,22 @@ Schakel Project Insluiten in om het project in de snelkoppeling in te bakken, zo
 <context>
     <name>UI::Alarms::AlarmAnnunciator</name>
     <message>
-        <location filename="../../../core/Ui/UI/Alarms/AlarmAnnunciator.cpp" line="425"/>
+        <location filename="../../../core/Ui/UI/Alarms/AlarmAnnunciator.cpp" line="427"/>
         <source>System default</source>
         <translation>Systeemstandaard</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/Alarms/AlarmAnnunciator.cpp" line="500"/>
+        <location filename="../../../core/Ui/UI/Alarms/AlarmAnnunciator.cpp" line="502"/>
         <source>Path climbs out of the project folder</source>
         <translation>Pad verlaat de projectmap</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/Alarms/AlarmAnnunciator.cpp" line="568"/>
+        <location filename="../../../core/Ui/UI/Alarms/AlarmAnnunciator.cpp" line="570"/>
         <source>Unknown sound slot '%1'</source>
         <translation>Onbekend geluidsslot '%1'</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/Alarms/AlarmAnnunciator.cpp" line="826"/>
+        <location filename="../../../core/Ui/UI/Alarms/AlarmAnnunciator.cpp" line="828"/>
         <source>Alarms</source>
         <translation>Alarmen</translation>
     </message>
@@ -32827,57 +32917,57 @@ Schakel Project Insluiten in om het project in de snelkoppeling in te bakken, zo
 <context>
     <name>UI::Alarms::AnnunciatorChecker</name>
     <message>
-        <location filename="../../../core/Ui/UI/Alarms/AnnunciatorChecker.cpp" line="71"/>
+        <location filename="../../../core/Ui/UI/Alarms/AnnunciatorChecker.cpp" line="72"/>
         <source>Alarm sound file unavailable: %1</source>
         <translation>Alarmgeluidsbestand niet beschikbaar: %1</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/Alarms/AnnunciatorChecker.cpp" line="73"/>
+        <location filename="../../../core/Ui/UI/Alarms/AnnunciatorChecker.cpp" line="74"/>
         <source>Pick a valid PCM WAV file, or clear the override to use the bundled sound.</source>
         <translation>Kies een geldig PCM WAV-bestand of wis de overschrijving om het meegeleverde geluid te gebruiken.</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/Alarms/AnnunciatorChecker.cpp" line="81"/>
+        <location filename="../../../core/Ui/UI/Alarms/AnnunciatorChecker.cpp" line="82"/>
         <source>Aural alerts are off, but this project defines alarms</source>
         <translation>Geluidsalarmen zijn uit, maar dit project definieert alarmen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/Alarms/AnnunciatorChecker.cpp" line="82"/>
+        <location filename="../../../core/Ui/UI/Alarms/AnnunciatorChecker.cpp" line="83"/>
         <source>The project configures alarm bands or alarm sounds, and none of them will be heard while the master enable is off.</source>
         <translation>Het project configureert alarmbanden of alarmgeluiden, en geen daarvan zal worden gehoord terwijl de hoofdschakelaar uit staat.</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/Alarms/AnnunciatorChecker.cpp" line="84"/>
+        <location filename="../../../core/Ui/UI/Alarms/AnnunciatorChecker.cpp" line="85"/>
         <source>Enable alarm sounds in Preferences &gt; Sounds, or remove the project's alarm configuration.</source>
         <translation>Schakel alarmgeluiden in via Voorkeuren &gt; Geluiden, of verwijder de alarmconfiguratie van het project.</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/Alarms/AnnunciatorChecker.cpp" line="102"/>
+        <location filename="../../../core/Ui/UI/Alarms/AnnunciatorChecker.cpp" line="103"/>
         <source>No audio output device is available</source>
         <translation>Geen audio-uitvoerapparaat beschikbaar</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/Alarms/AnnunciatorChecker.cpp" line="103"/>
+        <location filename="../../../core/Ui/UI/Alarms/AnnunciatorChecker.cpp" line="104"/>
         <source>Alarm sounds cannot play until an output device is present.</source>
         <translation>Alarmgeluiden kunnen niet worden afgespeeld totdat een uitvoerapparaat aanwezig is.</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/Alarms/AnnunciatorChecker.cpp" line="104"/>
+        <location filename="../../../core/Ui/UI/Alarms/AnnunciatorChecker.cpp" line="105"/>
         <source>Connect an audio output, or disable sounds in Preferences &gt; Sounds.</source>
         <translation>Sluit een audio-uitvoer aan of schakel geluiden uit in Voorkeuren &gt; Geluiden.</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/Alarms/AnnunciatorChecker.cpp" line="110"/>
+        <location filename="../../../core/Ui/UI/Alarms/AnnunciatorChecker.cpp" line="111"/>
         <source>Alarm sound device '%1' not found</source>
         <translation>Alarmgeluid-apparaat '%1' niet gevonden</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/Alarms/AnnunciatorChecker.cpp" line="111"/>
+        <location filename="../../../core/Ui/UI/Alarms/AnnunciatorChecker.cpp" line="112"/>
         <source>Alarm sounds are playing on the system default output instead.</source>
         <translation>Alarmgeluiden worden afgespeeld op de standaard systeemuitvoer.</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/Alarms/AnnunciatorChecker.cpp" line="112"/>
+        <location filename="../../../core/Ui/UI/Alarms/AnnunciatorChecker.cpp" line="113"/>
         <source>Reconnect the device, or pick another one in Preferences &gt; Sounds.</source>
         <translation>Sluit het apparaat opnieuw aan of kies een ander in Voorkeuren &gt; Geluiden.</translation>
     </message>

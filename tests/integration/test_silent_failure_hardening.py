@@ -55,9 +55,13 @@ def _findings(api_client) -> list:
     return api_client.command("problems.run").get("findings", [])
 
 
-def _load_band_project(api_client, datasets=None, transforms=None) -> None:
+def _load_band_project(
+    api_client, datasets=None, transforms=None, widget="gauge", suppressed=False
+) -> None:
     """Builds a one-group network project; datasets is a list of titles (frame
-    index 1..N), transforms an optional {index: (code, language)} map."""
+    index 1..N), transforms an optional {index: (code, language)} map, widget
+    the dataset widget id ("" for none), suppressed whether every dataset
+    carries Suppress Alarms."""
     datasets = datasets or ["EGT"]
     transforms = transforms or {}
 
@@ -70,6 +74,7 @@ def _load_band_project(api_client, datasets=None, transforms=None) -> None:
         time.sleep(0.1)
         fields = dict(
             title=title,
+            widget=widget,
             widgetMin=0,
             widgetMax=1000,
             alarmBands=[
@@ -81,6 +86,9 @@ def _load_band_project(api_client, datasets=None, transforms=None) -> None:
             code, language = transforms[i + 1]
             fields["transformCode"] = code
             fields["transformLanguage"] = language
+
+        if suppressed:
+            fields["suppressAlarms"] = True
 
         api_client.update_dataset(0, i, **fields)
         time.sleep(0.1)
@@ -347,6 +355,38 @@ def test_disabled_annunciator_finding_matches_state(api_client, clean_state):
         assert "alarms.disabled" not in codes
     else:
         assert "alarms.disabled" in codes
+
+
+@pytest.mark.integration
+@pytest.mark.project
+def test_disabled_finding_needs_applicable_bands(api_client, clean_state):
+    _fresh(api_client)
+    if _state(api_client)["enabled"]:
+        pytest.skip("master enable is on and no API can switch it off")
+
+    _load_band_project(api_client, widget="")
+    time.sleep(0.5)
+    assert "alarms.disabled" not in _finding_codes(api_client)
+
+    api_client.update_dataset(0, 0, widget="gauge")
+    time.sleep(0.5)
+    assert "alarms.disabled" in _finding_codes(api_client)
+
+
+@pytest.mark.integration
+@pytest.mark.project
+def test_disabled_finding_ignores_suppressed_bands(api_client, clean_state):
+    _fresh(api_client)
+    if _state(api_client)["enabled"]:
+        pytest.skip("master enable is on and no API can switch it off")
+
+    _load_band_project(api_client, suppressed=True)
+    time.sleep(0.5)
+    assert "alarms.disabled" not in _finding_codes(api_client)
+
+    api_client.update_dataset(0, 0, suppressAlarms=False)
+    time.sleep(0.5)
+    assert "alarms.disabled" in _finding_codes(api_client)
 
 
 @pytest.mark.integration

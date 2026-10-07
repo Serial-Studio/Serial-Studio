@@ -35,8 +35,21 @@
  */
 
 namespace SerialStudio {
+/**
+ * @brief Counts of the project content that needs an entitlement to run (spec 0094): datasets
+ *        with non-blank transform code and user tables. Both zero means the project is free.
+ */
+struct ProContentSummary {
+  int transforms;
+  int tables;
+};
+
 [[nodiscard]] bool commercialCfg(const QVector<DataModel::Group>& g);
 [[nodiscard]] bool commercialCfg(const std::vector<DataModel::Group>& g);
+[[nodiscard]] ProContentSummary proContentSummary(const std::vector<DataModel::Group>& g,
+                                                  int tableCount);
+[[nodiscard]] bool authorsTransform(const DataModel::Dataset& before,
+                                    const DataModel::Dataset& after);
 [[nodiscard]] bool groupEligibleForWorkspace(const DataModel::Group& g);
 [[nodiscard]] XAxisMode groupXAxisMode(const DataModel::Group& g);
 [[nodiscard]] XAxisPolicy resolveXAxisPolicy(const DataModel::Dataset& d,

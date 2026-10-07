@@ -4,6 +4,8 @@ Copyright (c) 2020–2026 Alex Spataru <https://github.com/alex-spataru>
 没有时间限制。下方的 Pro 功能在您试用其中任意一项时即会解锁，
 并附带 14 天免费试用。开始试用无需账号或付款。
 
+个人、教育和开源用途免费；商业用途需要 Pro 许可证。
+
 → 支持: alex@serial-studio.com
 → 安排通话: https://calendly.com/serial-studio
 → 了解更多: https://serial-studio.com/

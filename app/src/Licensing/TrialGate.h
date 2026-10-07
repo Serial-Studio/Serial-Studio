@@ -59,8 +59,8 @@ private slots:
 
 private:
   void handleIntent(const QString& featureId, Core::License::ProFeatureRetry retry);
-  void offerTrial(Core::License::ProFeatureRetry retry);
-  void offerActivation();
+  void offerTrial(const QString& featureId, Core::License::ProFeatureRetry retry);
+  void offerActivation(const QString& featureId);
 
 private:
   bool m_prompting;

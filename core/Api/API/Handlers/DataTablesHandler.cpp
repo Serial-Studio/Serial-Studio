@@ -27,6 +27,7 @@
 #include "API/CommandRegistry.h"
 #include "API/SchemaBuilder.h"
 #include "Core/DataModel/Frame.h"
+#include "Core/License.h"
 #include "Core/SerialStudio.h"
 #include "DataModel/DataTable.h"
 #include "DataModel/FrameBuilder.h"
@@ -47,6 +48,18 @@
 
   out = params.value(key).toString();
   return !out.isEmpty();
+}
+
+/**
+ * @brief The refusal every table-authoring command returns without an entitlement (spec 0094);
+ *        deleting stays open so a project can always be made free again.
+ */
+[[nodiscard]] static API::CommandResponse variablesLicenseError(const QString& id)
+{
+  return API::CommandResponse::makeError(
+    id,
+    API::ErrorCode::OperationFailed,
+    Core::License::requiresProMessage(QStringLiteral("Variables")));
 }
 
 /**
@@ -397,6 +410,9 @@ API::CommandResponse API::Handlers::DataTablesHandler::tableGet(const QString& i
 API::CommandResponse API::Handlers::DataTablesHandler::tableAdd(const QString& id,
                                                                 const QJsonObject& params)
 {
+  if (!Core::License::activated())
+    return variablesLicenseError(id);
+
   const QString desired =
     params.value(QStringLiteral("name")).toString(QStringLiteral("Shared Table"));
 
@@ -471,6 +487,9 @@ API::CommandResponse API::Handlers::DataTablesHandler::tableDelete(const QString
 API::CommandResponse API::Handlers::DataTablesHandler::tableRename(const QString& id,
                                                                    const QJsonObject& params)
 {
+  if (!Core::License::activated())
+    return variablesLicenseError(id);
+
   QString oldName;
   QString newName;
   if (!requireString(params, QStringLiteral("oldName"), oldName))
@@ -534,6 +553,9 @@ API::CommandResponse API::Handlers::DataTablesHandler::tableRename(const QString
 API::CommandResponse API::Handlers::DataTablesHandler::registerAdd(const QString& id,
                                                                    const QJsonObject& params)
 {
+  if (!Core::License::activated())
+    return variablesLicenseError(id);
+
   QString table;
   QString name;
   if (!requireString(params, QStringLiteral("table"), table))
@@ -660,6 +682,9 @@ API::CommandResponse API::Handlers::DataTablesHandler::registerDelete(const QStr
 API::CommandResponse API::Handlers::DataTablesHandler::registerUpdate(const QString& id,
                                                                       const QJsonObject& params)
 {
+  if (!Core::License::activated())
+    return variablesLicenseError(id);
+
   QString table;
   QString name;
   if (!requireString(params, QStringLiteral("table"), table))

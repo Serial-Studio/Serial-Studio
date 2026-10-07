@@ -6,6 +6,9 @@ Funcțiile Pro de mai jos se deblochează în momentul în care încercați
 una, cu o perioadă de încercare gratuită de 14 zile. Nu este nevoie
 de cont sau de plată pentru a o începe.
 
+Gratuită pentru uz personal, educațional și open-source; utilizarea
+comercială necesită o licență Pro.
+
 → Suport: alex@serial-studio.com
 → Programați un apel: https://calendly.com/serial-studio
 → Aflați mai multe: https://serial-studio.com/

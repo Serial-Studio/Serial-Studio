@@ -21,6 +21,8 @@
 
 #include "Core/DataModel/FrameSupport.h"
 
+#include <algorithm>
+
 //--------------------------------------------------------------------------------------------------
 // Commercial feature detection, appreciate your respect for this project
 //--------------------------------------------------------------------------------------------------
@@ -81,6 +83,49 @@ bool SerialStudio::commercialCfg(const std::vector<DataModel::Group>& g)
       return true;
 
   return false;
+}
+
+//--------------------------------------------------------------------------------------------------
+// Pro content detection
+//--------------------------------------------------------------------------------------------------
+
+/**
+ * @brief True when @p code holds anything but whitespace; scans in place, no trimmed copy.
+ */
+static bool hasCode(const QString& code)
+{
+  return std::any_of(code.cbegin(), code.cend(), [](const QChar c) { return !c.isSpace(); });
+}
+
+/**
+ * @brief Summarizes the content that needs an entitlement to run: datasets with non-blank
+ *        transform code, plus the user tables the caller counted.
+ */
+SerialStudio::ProContentSummary SerialStudio::proContentSummary(
+  const std::vector<DataModel::Group>& g, const int tableCount)
+{
+  int transforms = 0;
+  for (const auto& group : g)
+    for (const auto& dataset : group.datasets)
+      if (hasCode(dataset.transformCode))
+        ++transforms;
+
+  return {transforms, qMax(0, tableCount)};
+}
+
+/**
+ * @brief Whether replacing @p before with @p after writes a transform: non-blank code that differs
+ *        from what was there in code, language or parameters. Clearing never counts (spec 0094 R7).
+ */
+bool SerialStudio::authorsTransform(const DataModel::Dataset& before,
+                                    const DataModel::Dataset& after)
+{
+  if (!hasCode(after.transformCode))
+    return false;
+
+  return after.transformCode != before.transformCode
+      || after.transformLanguage != before.transformLanguage
+      || after.transformParams != before.transformParams;
 }
 
 //--------------------------------------------------------------------------------------------------

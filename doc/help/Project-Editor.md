@@ -321,11 +321,12 @@ Datasets map to individual data fields in your device's output.
 
 **Alarm bands**
 
-- **Alarm Bands** (dataset toolbar, next to **Transform**). Opens a dialog to define colored value ranges with severity tiers for Bar, Gauge, Meter, and LED datasets. Each band has a min/max range, a severity (Info / OK / Warning / Critical), an optional color override and label, and a blink toggle for LED panels. Opening the dialog for an LED dataset with no bands pre-fills one band from the **LED On Threshold** so existing setups migrate in place.
+- **Alarm Bands** (dataset toolbar, next to **Transform**). Opens a dialog to define colored value ranges with severity tiers for Bar, Gauge, Meter, and LED datasets and for any dataset in a Bar Panel group. The button is disabled for every other dataset, and for a dataset with **Hide on Dashboard** on outside a Bar Panel, because bands there are ignored (see [Alarm bands](Widget-Reference.md#alarm-bands)). With several datasets selected, the button applies one set of bands to the selected datasets that qualify and leaves the rest unchanged. Each band has a min/max range, a severity (Info / OK / Warning / Critical), an optional color override and label, and a blink toggle for LED panels. Opening the dialog for an LED dataset with no bands pre-fills one band from the **LED On Threshold** so existing setups migrate in place. To keep a dataset's bands on screen without alerting, turn on **Suppress Alarms** under **Widget Settings**.
 
 **Widget Settings**
 
 - **Minimum Value (optional) / Maximum Value (optional).** Range for Bar, Gauge, and Meter displays; falls back to the General section's Minimum Value / Maximum Value when left unset.
+- **Suppress Alarms.** Shown while the dataset has alarm bands that a widget draws. Keeps the bands on the widget but stops the dataset's band notifications, alarm points, and sounds. With several datasets selected, the row follows the first one, and a change applies to every selected dataset.
 
 ### Step 5: add actions (optional)
 

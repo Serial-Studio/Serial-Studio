@@ -299,8 +299,9 @@ Widgets.Pane {
               toolbarButton: false
               text: qsTr("Alarm Bands")
               Layout.alignment: Qt.AlignVCenter
+              enabled: Cpp_JSON_ProjectEditor.alarmBandsApplicable
               icon.source: Cpp_Misc_IconRegistry.icon("editor", "alarm-bands", 24)
-              ToolTip.text: qsTr("Define colored value ranges and apply them to every selected dataset.")
+              ToolTip.text: qsTr("Define colored value ranges and apply them to the selected Bar, Gauge, Meter, LED, and Bar Panel datasets.")
               onClicked: Cpp_JSON_ProjectEditor.openAlarmBandsEditorForSelection()
             }
           }

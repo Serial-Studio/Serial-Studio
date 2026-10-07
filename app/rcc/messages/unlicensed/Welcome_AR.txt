@@ -5,6 +5,9 @@ Copyright (c) 2020–2026 Alex Spataru <https://github.com/alex-spataru>
 إحداها، مع فترة تجريبية مجانية مدتها 14 يومًا. لا يلزم إنشاء حساب
 أو إجراء أي دفع لبدء التجربة.
 
+مجانية للاستخدام الشخصي والتعليمي ومشاريع المصادر المفتوحة؛ أما
+الاستخدام التجاري فيتطلب ترخيص Pro.
+
 ← الدعم: alex@serial-studio.com
 ← جدولة مكالمة: https://calendly.com/serial-studio
 ← لمعرفة المزيد: https://serial-studio.com/

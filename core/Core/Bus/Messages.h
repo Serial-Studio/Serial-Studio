@@ -301,7 +301,8 @@ struct ProjectStructureSnapshot final {
   int sourceId;
   quint64 generation;
   QString transformLibrary;    ///< Shared Lua transform library (spec 0083)
-  QString transformLibraryJs;  ///< Shared JS transform library (spec 0083 addendum), appended last
+  QString transformLibraryJs;  ///< Shared JS transform library (spec 0083 addendum)
+  int userTableCount;          ///< User tables the project defines (spec 0094), appended last
 };
 
 /**

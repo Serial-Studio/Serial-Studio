@@ -11,7 +11,7 @@ Copyright (c) 2020–2026 Alex Spataru <https://github.com/alex-spataru>
 ← https://store.serial-studio.com/
 
 תכונות Pro:
-← MQTT, XY והדמיה תלת-ממדית
+← MQTT והדמיה תלת-ממדית
 ← מנהלי התקנים לאודיו, CAN Bus, Modbus, USB, HID ו-Process I/O
 ← ווידג'טים לפלט, ייצוא MDF4 והעברות XMODEM/YMODEM/ZMODEM
 ← Historian, משתנים ושינויי ערכים (JS + Lua)

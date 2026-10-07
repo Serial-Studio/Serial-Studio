@@ -6,6 +6,9 @@ Pro ci-dessous se débloquent dès que vous en essayez une, avec un
 essai gratuit de 14 jours. Aucun compte ni paiement n'est requis
 pour le démarrer.
 
+Gratuite pour un usage personnel, éducatif et open source ; l'usage
+commercial nécessite une licence Pro.
+
 → Support : alex@serial-studio.com
 → Programmer un appel : https://calendly.com/serial-studio
 → En savoir plus : https://serial-studio.com/

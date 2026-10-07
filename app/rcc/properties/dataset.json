@@ -38,7 +38,8 @@
     "FftLogX",
     "FftBallistics",
     "FftBallisticsRelease",
-    "ExtremeHold"
+    "ExtremeHold",
+    "SuppressAlarms"
   ],
   "struct": {
     "type": "DataModel::Dataset",
@@ -412,6 +413,11 @@
       "signature": "bool extremeHoldApplicable(const DataModel::Dataset& d, const DataModel::ProjectModel& pm)",
       "origin": "PropertyHooks.cpp:extremeHoldApplicable (spec 0052)"
     },
+    "alarmBandsDrawn": {
+      "kind": "predicate",
+      "signature": "bool alarmBandsDrawn(const DataModel::Dataset& d, const DataModel::ProjectModel& pm)",
+      "origin": "PropertyHooks.cpp:alarmBandsDrawn (spec 0093)"
+    },
     "ledEnabled": {
       "kind": "predicate",
       "signature": "bool ledEnabled(const DataModel::Dataset& d, const DataModel::ProjectModel& pm)",
@@ -650,7 +656,8 @@
         "rows": [
           "WgtMin",
           "WgtMax",
-          "ExtremeHold"
+          "ExtremeHold",
+          "SuppressAlarms"
         ]
       },
       {
@@ -1560,6 +1567,31 @@
       "api": {
         "expose": true,
         "name": "extremeHold"
+      }
+    },
+    {
+      "id": "SuppressAlarms",
+      "field": "suppressAlarms",
+      "jsonKey": "SuppressAlarms",
+      "formId": "kDatasetView_SuppressAlarms",
+      "type": "bool",
+      "default": false,
+      "scope": "document",
+      "persist": "whenTrue",
+      "section": "widget",
+      "widget": "CheckBox",
+      "label": "Suppress Alarms",
+      "description": "Keep the bands on the widget but never notify, raise an alarm point or sound for them",
+      "visibleWhen": "alarmBandsDrawn",
+      "undo": {
+        "label": "Edit Dataset",
+        "coalesce": false
+      },
+      "rebuildTree": true,
+      "api": {
+        "expose": true,
+        "name": "suppressAlarms",
+        "rebuildTree": true
       }
     },
     {

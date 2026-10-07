@@ -120,6 +120,24 @@ bool Core::License::remoteDispatchActive()
 }
 
 /**
+ * @brief The one wording for a refusal reported as text (API error, log line), naming what needs
+ *        Pro; a GPL build says Pro is not part of it rather than pointing at a licence it cannot
+ *        use.
+ */
+QString Core::License::requiresProMessage(const QString& subject)
+{
+#ifdef BUILD_COMMERCIAL
+  return QStringLiteral("Serial Studio Pro is required for %1. Activate a license or start the "
+                        "14-day trial.")
+    .arg(subject);
+#else
+  return QStringLiteral("Serial Studio Pro is required for %1. This GPL build does not include "
+                        "Pro features.")
+    .arg(subject);
+#endif
+}
+
+/**
  * @brief Raises a command-rate Pro-feature intent from a gate site's refusal branch (explicit
  *        user gestures only, never from a per-frame or per-message path); a build or mode
  *        without an installed handler keeps the silent refusal, as does a call from any thread

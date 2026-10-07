@@ -5,6 +5,9 @@ Copyright (c) 2020–2026 Alex Spataru <https://github.com/alex-spataru>
 ロック解除され、14日間の無料トライアルが始まります。開始にアカウント
 や支払いは必要ありません。
 
+個人利用、教育、オープンソースでの利用は無料です。商用利用には
+Proライセンスが必要です。
+
 → サポート: alex@serial-studio.com
 → 通話をスケジュール: https://calendly.com/serial-studio
 → 詳細はこちら: https://serial-studio.com/

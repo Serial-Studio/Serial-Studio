@@ -6,6 +6,9 @@ Copyright (c) 2020–2026 Alex Spataru <https://github.com/alex-spataru>
 14-денним пробним періодом. Для його початку не потрібні ні обліковий
 запис, ні оплата.
 
+Безкоштовна для особистого, навчального та open-source
+використання; для комерційного використання потрібна ліцензія Pro.
+
 → Підтримка: alex@serial-studio.com
 → Запланувати дзвінок: https://calendly.com/serial-studio
 → Дізнатися більше: https://serial-studio.com/

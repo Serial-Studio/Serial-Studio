@@ -181,6 +181,14 @@ See `api_semantics` for the full alias list.
 | `"datagrid"`         | (none)                                     | Shows raw values.                                 |
 | `"barpanel"`         | `wgtMin` / `wgtMax` per dataset            | One band-zoned bar per dataset; fill takes the active alarm band's color; `barPanelStyle` (group key) picks auto/horizontal/vertical; `extremeHold` per dataset adds min/max hold markers. |
 
+Alarm bands (`alarmBands`) notify and sound only on a dataset with a `bar`,
+`gauge` or `meter` widget or the `led` option (and `hideOnDashboard` off), or on
+any dataset in a `barpanel` group. On any other dataset, a plot-only one
+included, they are stored and ignored, so give the dataset one of those widgets
+when the user asks for an alarm. Set `suppressAlarms: true` to keep a dataset's
+bands drawn without notifications or sound, for a zone the user wants to see
+but not hear.
+
 FFT and Waterfall also honor `fftWindow`, the window function applied before
 the transform (reduces spectral leakage). Integer values: 0=Rectangular,
 1=Bartlett, 2=Hann, 3=Hamming, 4=Blackman, 5=Blackman-Harris (default),

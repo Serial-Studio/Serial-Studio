@@ -33,6 +33,10 @@ namespace Core::Bus {
 struct ProjectStructureSnapshot;
 }  // namespace Core::Bus
 
+namespace SerialStudio {
+struct ProContentSummary;
+}  // namespace SerialStudio
+
 namespace IO {
 
 class DeviceManager;
@@ -46,6 +50,16 @@ class HAL_Driver;
 class DeviceTableQuery {
 public:
   using DeviceTable = std::unordered_map<int, std::unique_ptr<DeviceManager>>;
+
+  /**
+   * @brief Why a connect needs an entitlement, in the order the checks run.
+   */
+  enum class ConnectRefusal {
+    None,
+    ProBus,
+    MultiSource,
+    ProContent,
+  };
 
   DeviceTableQuery(const DeviceTable& devices,
                    const std::shared_ptr<const Core::Bus::ProjectStructureSnapshot>& project);
@@ -61,8 +75,12 @@ public:
   [[nodiscard]] bool anyDeviceConnecting() const;
   [[nodiscard]] int connectedDeviceCount() const;
   [[nodiscard]] bool projectConfigurationOk() const;
-  [[nodiscard]] bool connectRequiresEntitlement(SerialStudio::BusType busType,
-                                                SerialStudio::OperationMode mode) const;
+  [[nodiscard]] ConnectRefusal busRefusal(SerialStudio::BusType busType,
+                                          SerialStudio::OperationMode mode) const;
+  [[nodiscard]] ConnectRefusal connectRefusal(SerialStudio::BusType busType,
+                                              SerialStudio::OperationMode mode) const;
+  [[nodiscard]] SerialStudio::ProContentSummary projectContent(
+    SerialStudio::OperationMode mode) const;
   [[nodiscard]] int deviceIdForDriver(const HAL_Driver* driver) const;
   [[nodiscard]] std::vector<int> deviceIdSnapshot(bool projectSourcesOnly) const;
 

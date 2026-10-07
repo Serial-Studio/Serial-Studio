@@ -130,6 +130,9 @@ class ProjectEditor : public QObject {
   Q_PROPERTY(bool currentDatasetIsEditable
              READ currentDatasetIsEditable
              NOTIFY editableOptionsChanged)
+  Q_PROPERTY(bool alarmBandsApplicable
+             READ alarmBandsApplicable
+             NOTIFY editableOptionsChanged)
   Q_PROPERTY(bool selectedGroupEnabled
              READ selectedGroupEnabled
              NOTIFY editableOptionsChanged)
@@ -374,6 +377,9 @@ public:
   [[nodiscard]] bool currentGroupIsEditable() const;
   [[nodiscard]] bool currentDatasetIsEditable() const;
   [[nodiscard]] bool datasetWidgetEditable(const DataModel::Dataset& dataset) const;
+  [[nodiscard]] bool alarmBandsApplicable() const;
+  [[nodiscard]] bool datasetAlarmBandsApplicable(const DataModel::Dataset& dataset) const;
+  [[nodiscard]] QVector<DataModel::Dataset> alarmBandSelection() const;
   [[nodiscard]] bool selectedGroupEnabled() const;
   [[nodiscard]] bool selectedDatasetEnabled() const;
   [[nodiscard]] bool currentGroupIsOutputPanel() const;

@@ -31,6 +31,7 @@
 #include "Core/SerialStudio.h"
 #include "DataModel/PipelineModules.h"
 #include "DataModel/ProjectModel.h"
+#include "DataModel/WidgetResolution.h"
 #include "IO/ConnectionManager.h"
 #include "ProjectEditorItemIds.h"
 #include "UI/WidgetExtensions.h"
@@ -293,6 +294,63 @@ bool DataModel::ProjectEditor::datasetWidgetEditable(const DataModel::Dataset& d
   }
 
   return true;
+}
+
+/**
+ * @brief Returns true when the Alarm Bands action applies (spec 0093): the selected dataset shows
+ *        its bands on a band-drawing widget, or at least one member of a dataset multi-selection
+ *        does.
+ */
+bool DataModel::ProjectEditor::alarmBandsApplicable() const
+{
+  if (m_currentView == DatasetView)
+    return datasetAlarmBandsApplicable(m_selectedDataset);
+
+  if (m_currentView == MultiSelectionView && m_batchKind == KindDataset)
+    return !alarmBandSelection().isEmpty();
+
+  return false;
+}
+
+/**
+ * @brief Returns true when a widget draws @p dataset's bands, by the rule the alarm side builds on
+ *        (a suppressed dataset still qualifies); the owning group is read from the live project.
+ */
+bool DataModel::ProjectEditor::datasetAlarmBandsApplicable(const DataModel::Dataset& dataset) const
+{
+  const auto& groups = m_projectModelRef.groups();
+  const auto groupId = dataset.groupId;
+  if (groupId < 0 || static_cast<size_t>(groupId) >= groups.size())
+    return false;
+
+  return SerialStudio::datasetRendersAlarmBands(dataset, groups[groupId]);
+}
+
+/**
+ * @brief Returns the members of the current multi-selection whose alarm bands are applicable,
+ *        read live from the project model; the band dialog opens over and writes to these only.
+ */
+QVector<DataModel::Dataset> DataModel::ProjectEditor::alarmBandSelection() const
+{
+  QVector<DataModel::Dataset> selection;
+  const auto& groups = m_projectModelRef.groups();
+  for (const auto& item : m_batchItems) {
+    if (item.first < 0 || static_cast<size_t>(item.first) >= groups.size())
+      continue;
+
+    const auto& group = groups[item.first];
+    for (const auto& dataset : group.datasets) {
+      if (dataset.datasetId != item.second)
+        continue;
+
+      if (SerialStudio::datasetRendersAlarmBands(dataset, group))
+        selection.append(dataset);
+
+      break;
+    }
+  }
+
+  return selection;
 }
 
 /**

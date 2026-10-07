@@ -11,7 +11,7 @@ Copyright (c) 2020–2026 Alex Spataru <https://github.com/alex-spataru>
 ← https://store.serial-studio.com/
 
 ميزات النسخة الاحترافية:
-← التصور باستخدام MQTT، XY، و3D
+← التصور باستخدام MQTT و3D
 ← برامج تشغيل الصوت، CAN Bus، Modbus، USB، HID، وProcess I/O
 ← أدوات الإخراج، تصدير MDF4، ونقل XMODEM/YMODEM/ZMODEM
 ← Historian، المتغيرات، وتحويل القيم (JS + Lua)

@@ -67,6 +67,9 @@ static void writeDatasetFlags(QJsonObject& obj, const Dataset& d)
   if (d.extremeHold)
     obj.insert(Keys::ExtremeHold, true);
 
+  if (d.suppressAlarms)
+    obj.insert(Keys::SuppressAlarms, true);
+
   obj.insert(Keys::LED, d.led);
   if (d.overviewDisplay)
     obj.insert(Keys::Overview, true);
@@ -186,6 +189,7 @@ static void readDatasetFlags(Dataset& d, const QJsonObject& obj)
   d.fftBallistics = ss_jsr(obj, Keys::FFTBallistics, false).toBool();
   d.fftLogX = ss_jsr(obj, Keys::FFTLogX, false).toBool();
   d.extremeHold = ss_jsr(obj, Keys::ExtremeHold, false).toBool();
+  d.suppressAlarms = ss_jsr(obj, Keys::SuppressAlarms, false).toBool();
   d.led = ss_jsr(obj, Keys::LED, false).toBool();
   d.overviewDisplay = ss_jsr(obj, Keys::Overview, false).toBool();
   d.enabled = !ss_jsr(obj, Keys::Disabled, false).toBool();

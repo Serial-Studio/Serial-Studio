@@ -52,14 +52,15 @@ requires a `LemonSqueezy::activatedChanged` connection, recorded here.
 ## Spec 0092 refresh (2026-10-03) — lazy trial & graceful degradation
 
 New funnel: gate sites raise Pro intent through `Core::License::requestProFeature(featureId,
-retry)` (root-installed handler, `Licensing::TrialGate`, GUI builds only; no-op in GPL/headless
-and under an active `API::RemoteDispatchScope`). Prompts fire from explicit gestures only; the
+retry)` (root-installed handler: `Licensing::TrialGate` in commercial GUI builds,
+`Misc::ProFeatureNotice` in GPL GUI builds since 2026-10-06; no-op headless and under an active
+`API::RemoteDispatchScope`). Prompts fire from explicit gestures only; the
 `LicenseStateChanged` fan-out does the unlocking, so retry closures exist only on session-long
 objects (ConnectionManager, MDF4 Player), never widgets.
 
 | Consumer | Change | Class now |
 |---|---|---|
-| `Devices/IO/ConnectionManager.cpp` connectDevice | Expired trial no longer blocks free buses (R6); Pro-bus connect raises intent with reconnect retry (`DeviceTableQuery::connectRequiresEntitlement`) | sample + intent |
+| `Devices/IO/ConnectionManager.cpp` connectDevice | Expired trial no longer blocks free buses (R6); Pro-bus connect raises intent with reconnect retry (`DeviceTableQuery::connectRequiresEntitlement`; since spec 0094 `DeviceTableQuery::connectRefusal`) | sample + intent |
 | `Ui/Console/Export.cpp`, `Storage/MDF4/Export.cpp`, `Storage/Sessions/Export.cpp` | Adopted the InfluxDB replay: `m_exportRequested` + license watch re-applies BOTH directions under a `m_licenseReplay` guard; refused branches stop clobbering persisted intent; gesture refusals raise intent | bakes, wired both ways |
 | `Storage/InfluxDB/Export.cpp` | Gesture refusal raises intent (`m_inApply`/`m_licenseReplay` keep config loads and replays silent) | unchanged wiring + intent |
 | `Ui/UI/Dashboard/PlotControlBank.cpp` | `disableSweeps()` on entitlement-OFF via DashboardWiring license watch (saved-config restore can no longer resurrect an unentitled sweep) | bakes, wired |
@@ -108,7 +109,7 @@ phantom re-publishes) and a once-per-machine expiry notice (`trial/notified`, po
 | Workspace CRUD mutated the auto list after a refused customize enable | Every call site of the enable idiom (9 in ProjectWorkspaces, 6 in ProjectFolders) halts when the gate refuses; reorder hoists the guard pre-mutation |
 | `.db` drop / `sessions.*` played Historian recordings ungated | `Sessions::Player::openFile(path,id)` + `DatabaseManager::openDatabase(path)` gate with `sessions.playback` / `sessions.historian` (retry-capable; remote-silent) |
 | Duplicate Device bypassed the multi-source gate | `duplicateSource` mirrors `addSource`'s check |
-| Multi-source with free buses connected end to end | `connectRequiresEntitlement` returns true for `sources.size() > 1` |
+| Multi-source with free buses connected end to end | `connectRequiresEntitlement` returns true for `sources.size() > 1` (since spec 0094: `DeviceTableQuery::busRefusal` returns `MultiSource`) |
 | `project.workspace.autoGenerate` set the customize flag directly | Gated on `activated()` before materializing |
 | `project.workspace.customize` reported success after refusal | Handler returns an error when the setter refused |
 | `notifications.post`/`resolve` ran unlicensed (docs promise an error) | Both handlers error on `!activated()` |
@@ -146,3 +147,29 @@ autoExecuteOnConnect consent, consent-grant scoping, Lua notify silent no-op).
   stored id only as the degraded-read fallback (maintainer: the crash the cache guarded against
   had a different cause). `tst_machine_id` now pins fresh-read-wins. **Open:** export-replay first-use
   consent for file-originated sinks to unknown hosts (small spec).
+
+## Spec 0094 (2026-10-06) — Pro-content connect gate
+
+**Supersedes the 2026-10-04 ruling above that loaded projects keep running transforms and
+tables unlicensed.** The reason behind that ruling still holds and is kept: silently changing
+displayed data is worse than a leak. The new gate never changes a value; a project with Pro
+content does not connect at all without an entitlement. Custom workspaces are NOT covered: the
+planned view-only fallback was cut during implementation, so a project that already customizes
+its workspaces still shows them unlicensed (editor-only gate, as ruled on 2026-10-04).
+
+| Consumer | Change | Class now |
+|---|---|---|
+| `Devices/IO/ConnectionManager/EntitlementGate.cpp` (new sub-object; the facade was 12 lines under the size cap) | Owns the connect verdict: `DeviceTableQuery::connectRefusal` adds `ProContent` after the bus and multi-source reasons; `refuseConnect` raises `project.pro-content` (or `driver.connect`) with the connect as retry and logs the reason. Applies in GPL builds for the content reason only | sample + intent |
+| `Core/DataModel/FrameSupport.cpp` `proContentSummary` | The one rule: datasets with non-blank transform code, plus the user-table count carried by `ProjectStructureSnapshot::userTableCount` | pure |
+| `Devices/IO/ConnectionManager/BusBridge.cpp` licence subscription | Asks `EntitlementGate::deferRebuild` first: a publication the devices were already rebuilt for is skipped, and a live or dialing single free-bus session holds the rebuild until the user disconnects (re-checked when it runs) | wired |
+| `EntitlementGate::observeContent` (after every snapshot and mode change) | Without an entitlement, a live session whose transforms or tables exceed its admission ends a turn later; `refuseRecovery` refuses a driver reopen on the same terms; neither fires on a licence ending, which changes no content (R8) | sample + intent |
+| `EntitlementGate::queueReconnect` (rebuild tail) | Captures `remoteDispatchActive()` at queue time; a reconnect owed to a remote request refuses silently | sample |
+| `Api/API/Handlers/IOManagerHandler.cpp` `io.connect` | Returns `OPERATION_FAILED` with the reason for every entitlement refusal (was success with `connected: false`); checked before the configuration verdict, branching on the enum | sample |
+| `Api/API/Handlers/ProjectDatasetFieldCommands.cpp`, `ProjectUpdateCommands.cpp`, `DataTablesHandler.cpp` | Writing a transform (`SerialStudio::authorsTransform`: non-blank code changed in code, language or params) and table or variable authoring return `OPERATION_FAILED` unlicensed, worded by `Core::License::requiresProMessage`; clearing, deleting and whole-project loads stay open | sample |
+| `Pipeline/DataModel/Project/ProjectEntities.cpp` `clearDatasetTransform` | Deliberately UNGATED, with its own undo scope and an immediate runtime resync: removing Pro content is the free way out | none |
+| `Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp` `onApply` | Non-empty code re-checks the licence at apply time (the dialog can outlive a trial) | sample + intent |
+| `app/src/Licensing/TrialGate.cpp`, `app/src/Misc/ProFeatureNotice.cpp` | Both prompts append `contentDetail(featureId)`, matched on `Core::License::kProContentFeature`; the GPL root also binds the remote-dispatch probe; no entitlement decision changed | text only |
+
+Playback is not gated: CSV, MDF4 and Historian replay never run a transform (`m_playerOpen`
+keeps the engines down), so there is nothing for a playback gate to protect. Mirror viewers
+show publisher-computed values and never call `connectDevice()`.

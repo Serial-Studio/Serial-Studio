@@ -109,6 +109,7 @@
 #include "Misc/HighDpiScaling.h"
 #include "Misc/IconEngine.h"
 #include "Misc/ProblemCenter.h"
+#include "Misc/ProFeatureNotice.h"
 #include "Misc/SimdSettings.h"
 #include "Misc/ThemeManager.h"
 #include "Misc/Utilities.h"
@@ -747,6 +748,8 @@ void Misc::ModuleManager::initializeQmlInterface()
   registerCoreContextProperties(c);
 #ifdef BUILD_COMMERCIAL
   registerCommercialContextProperties(c);
+#else
+  Misc::ProFeatureNotice::install(m_headless);
 #endif
   registerAppMetadataProperties(c, grpcAvailable);
 

@@ -1,5 +1,87 @@
 [
     {
+        "description": "Acknowledge every alerting point (ISA-18.1)",
+        "name": "alarms.acknowledge",
+        "properties": {
+        },
+        "required": [
+        ]
+    },
+    {
+        "description": "Drop every point, acknowledged ones included",
+        "name": "alarms.clear",
+        "properties": {
+        },
+        "required": [
+        ]
+    },
+    {
+        "description": "Return the project's sound overrides object",
+        "name": "alarms.getProjectSounds",
+        "properties": {
+        },
+        "required": [
+        ]
+    },
+    {
+        "description": "Reset return-to-normal points (sequences M and R)",
+        "name": "alarms.reset",
+        "properties": {
+        },
+        "required": [
+        ]
+    },
+    {
+        "description": "Mute or unmute all alarm and event sounds",
+        "name": "alarms.setMuted",
+        "properties": {
+            "muted": {
+                "description": "true silences every sound",
+                "type": "boolean"
+            }
+        },
+        "required": [
+            "muted"
+        ]
+    },
+    {
+        "description": "Replace the project's sound overrides (validates paths)",
+        "name": "alarms.setProjectSounds",
+        "properties": {
+            "sounds": {
+                "description": "{ sequence: 'A-4'|'A'|'M-4'|'M'|'R-4'|'R', channels: { <channel>: { warning, caution, advisory } } } with WAV paths, relative to the project file",
+                "type": "object"
+            }
+        },
+        "required": [
+            "sounds"
+        ]
+    },
+    {
+        "description": "Silence the audible; points stay unacknowledged",
+        "name": "alarms.silence",
+        "properties": {
+        },
+        "required": [
+        ]
+    },
+    {
+        "description": "Annunciator state: sequence, mute, highest priority, unacknowledged count, the sounding burst and every active point",
+        "name": "alarms.state",
+        "properties": {
+        },
+        "required": [
+        ]
+    },
+    {
+        "description": "Play every priority sound and walk the annunciator",
+        "name": "alarms.test",
+        "properties": {
+        },
+        "required": [
+        ]
+    },
+    {
         "description": "Get list of all available commands",
         "name": "api.getCommands",
         "properties": {
@@ -543,7 +625,7 @@
         ]
     },
     {
-        "description": "Replace the project's control script source (params: code). The script is persisted in the project and applied to the live runtime; if a device is connected it is recompiled and restarted immediately. Validate first with controlScript.dryRun.",
+        "description": "Replace the project's control script source (params: code). The script is persisted in the project and applied to the live runtime; if a device is connected it is recompiled and restarted immediately. Validate first with controlScript.dryRun. Remote clients must clear the one-time script-install consent prompt (the user's answer is remembered for the rest of the session); in-process callers are not prompted.",
         "name": "controlScript.set",
         "properties": {
             "code": {
@@ -556,7 +638,7 @@
         ]
     },
     {
-        "description": "Replace the control script source (alias of controlScript.set; params: code; matches the project.frameParser.setCode naming convention).",
+        "description": "Replace the control script source (alias of controlScript.set; params: code; matches the project.frameParser.setCode naming convention). Remote clients must clear the one-time script-install consent prompt (the user's answer is remembered for the rest of the session); in-process callers are not prompted.",
         "name": "controlScript.setCode",
         "properties": {
             "code": {
@@ -2983,7 +3065,7 @@
         ]
     },
     {
-        "description": "Transmit raw bytes to the device (params: data - base64 encoded). Hardware-write: remote clients must clear the one-time device-write consent prompt (the user's answer is remembered for the rest of the session); in-process scripts are not prompted. Failure modes: not connected (connection_lost), bus busy (bus_busy). Prefer console.send for text protocols.",
+        "description": "Transmit raw bytes to the device (params: data - base64 encoded). Hardware-write: remote clients must clear the one-time device-write consent prompt (the user's answer is persisted); in-process scripts are not prompted. Failure modes: not connected (connection_lost), bus busy (bus_busy). Prefer console.send for text protocols.",
         "name": "io.writeData",
         "properties": {
             "data": {
@@ -3393,7 +3475,7 @@
         ]
     },
     {
-        "description": "Patch action fields by id (params: actionId, plus any of title, icon, txData, eolSequence, timerMode, timerIntervalMs, repeatCount, sourceId, txEncoding, binaryData, autoExecuteOnConnect). Unknown fields are accepted but ignored, and surfaced in result.warnings[].fields with code 'unknown_field'.",
+        "description": "Patch action fields by id (params: actionId, plus any of title, icon, txData, eolSequence, timerMode, timerIntervalMs, repeatCount, sourceId, txEncoding, binaryData, autoExecuteOnConnect, and checksum: a registry name like 'CRC-16-MODBUS', empty = none, appended to the payload after the EOL). Unknown fields are accepted but ignored, and surfaced in result.warnings[].fields with code 'unknown_field'.",
         "name": "project.action.update",
         "properties": {
             "actionId": {
@@ -3851,7 +3933,7 @@
         ]
     },
     {
-        "description": "Returns the dataset's coloured alarm bands as a JSON array. Each entry: {min, max, severity (0=Info, 1=OK, 2=Warning, 3=Critical), color (\"#rrggbb\" override or empty for severity default), label, blink}. Also returns rangeMin/rangeMax (the dataset's wgtMin/wgtMax) so callers can validate band ranges before writing back. An empty array means no alarms configured. Applies to bar / gauge / meter widgets and LED-panel datasets; calling on other widget types succeeds with an empty array.",
+        "description": "Returns the dataset's coloured alarm bands as a JSON array. Each entry: {min, max, severity (0=Info, 1=OK, 2=Warning, 3=Critical), color (\"#rrggbb\" override or empty for severity default), label, blink}. Also returns rangeMin/rangeMax (the dataset's wgtMin/wgtMax) so callers can validate band ranges before writing back. An empty array means no alarms configured. Bands are drawn, notified and alarmed only when the dataset has a bar, gauge or meter widget or is an LED-panel member (and is not hidden from the dashboard), or belongs to a bar-panel group; on any other dataset they are stored and ignored, and this call still returns them. A dataset with suppressAlarms set still draws its bands but never notifies or alarms.",
         "name": "project.dataset.getAlarmBands",
         "properties": {
             "datasetId": {
@@ -3994,7 +4076,7 @@
         ]
     },
     {
-        "description": "Atomically replaces the dataset's alarmBands array. Each band entry must provide numeric min and max (max>min; bands with max<=min are silently dropped and counted in result.droppedInvalid), and an integer severity (0=Info, 1=OK, 2=Warning, 3=Critical). color is optional (\"#rrggbb\" override; empty/missing = severity's theme colour). label is optional (surfaces in band-edge notifications). blink is optional (boolean; LED panels flash the LED while the band is active). Bands may have gaps and may overlap; rendering paints them in array order behind the value indicator. Severity >= Warning triggers a notification when the value enters the band, even when no widget is visible (3-second per-dataset cooldown suppresses oscillation spam).\nPass an empty array to clear all alarms.",
+        "description": "Atomically replaces the dataset's alarmBands array. Each band entry must provide numeric min and max (max>min; bands with max<=min are silently dropped and counted in result.droppedInvalid), and an integer severity (0=Info, 1=OK, 2=Warning, 3=Critical). color is optional (\"#rrggbb\" override; empty/missing = severity's theme colour). label is optional (surfaces in band-edge notifications). blink is optional (boolean; LED panels flash the LED while the band is active). Bands may have gaps and may overlap; rendering paints them in array order behind the value indicator. Severity >= Warning triggers a notification and an alarm point when the value enters the band, whether or not the widget is on screen (3-second per-dataset cooldown suppresses oscillation spam). That happens only when the dataset has a bar, gauge or meter widget or is an LED-panel member (and is not hidden from the dashboard), or belongs to a bar-panel group, and suppressAlarms is false; bands on any other dataset are stored but never notify or alarm, and a suppressed dataset still draws them.\nPass an empty array to clear all alarms.",
         "name": "project.dataset.setAlarmBands",
         "properties": {
             "alarmBands": {
@@ -4163,7 +4245,7 @@
         ]
     },
     {
-        "description": "Set dataset transformCode. Empty clears. Pass `language` whenever you author code so the dataset's transformLanguage matches the syntax you wrote -- mismatches compile-fail silently. Lua (1) is the recommended default; it's measurably faster than JavaScript on hot transforms. If this dataset is compute-only (no slot in the parser output array), also set virtual=true via project.dataset.setVirtual or project.dataset.update. Validate with project.dataset.transform.dryRun before setting. **Call meta.fetchScriptingDocs{kind: 'transform_lua' | 'transform_js'} first** for the transform(value) signature, table API (tableGet/tableSet/datasetGetRaw/datasetGetFinal), and execution-order rules -- a transform may read RAW values from any dataset but only FINAL values of datasets earlier in project.dataset.getExecutionOrder.",
+        "description": "Set dataset transformCode. Empty clears. Pass `language` whenever you author code so the dataset's transformLanguage matches the syntax you wrote -- mismatches compile-fail silently. Lua (1) is the recommended default; it's measurably faster than JavaScript on hot transforms. If this dataset is compute-only (no slot in the parser output array), also set virtual=true via project.dataset.setVirtual or project.dataset.update. Validate with project.dataset.transform.dryRun before setting. **Call meta.fetchScriptingDocs{kind: 'transform_lua' | 'transform_js'} first** for the transform(value) signature, table API (tableGet/tableSet/datasetGetRaw/datasetGetFinal), and execution-order rules -- a transform may read RAW values from any dataset but only FINAL values of datasets earlier in project.dataset.getExecutionOrder. Remote clients must clear the one-time script-install consent prompt (the user's answer is remembered for the rest of the session); in-process callers are not prompted.",
         "name": "project.dataset.setTransformCode",
         "properties": {
             "code": {
@@ -4404,6 +4486,10 @@
                 "description": "Source (device) this dataset belongs to",
                 "type": "integer"
             },
+            "suppressAlarms": {
+                "description": "Keep the bands on the widget but never notify, raise an alarm point or sound for them",
+                "type": "boolean"
+            },
             "title": {
                 "description": "Name of the dataset, used for labeling and identification",
                 "type": "string"
@@ -4642,7 +4728,7 @@
         ]
     },
     {
-        "description": "Set frame parser code (params: code, optional sourceId, optional language). Always pass `language` when authoring code to lock in the runtime engine -- mismatch = silent compile failure. Lua (1) is the recommended default; it's faster than JavaScript on the hotpath at typical telemetry rates. Use JavaScript only when you need a JS-specific library or feature. Validate with project.frameParser.dryRun (or dryCompile for a syntax-only check) before setCode. **Call meta.fetchScriptingDocs{kind: 'frame_parser_lua' | 'frame_parser_js'} first** for the parse() signature, return-shape rules, and the tableGet/tableSet API. For Built-In (2), prefer project.frameParser.setTemplate; passing the JSON descriptor as `code` also works.",
+        "description": "Set frame parser code (params: code, optional sourceId, optional language). Always pass `language` when authoring code to lock in the runtime engine -- mismatch = silent compile failure. Lua (1) is the recommended default; it's faster than JavaScript on the hotpath at typical telemetry rates. Use JavaScript only when you need a JS-specific library or feature. Validate with project.frameParser.dryRun (or dryCompile for a syntax-only check) before setCode. **Call meta.fetchScriptingDocs{kind: 'frame_parser_lua' | 'frame_parser_js'} first** for the parse() signature, return-shape rules, and the tableGet/tableSet API. For Built-In (2), prefer project.frameParser.setTemplate; passing the JSON descriptor as `code` also works. Remote clients must clear the one-time script-install consent prompt (the user's answer is remembered for the rest of the session); in-process callers are not prompted.",
         "name": "project.frameParser.setCode",
         "properties": {
             "code": {
@@ -4872,7 +4958,7 @@
         ]
     },
     {
-        "description": "Replace the current project with a JSON object IN MEMORY (no file association). Use when you have a project shape ready to install -- e.g. building a project from scratch in one shot, or implementing a custom template. The JSON shape must match the .ssproj schema (top-level: title, frameStart, frameEnd, frameDetection, decoder, frameParser, groups, actions, ...). Prefer project.template.apply for canned starters. Pass dryRun:true to return wouldDiscard + wouldApply summaries without loading.",
+        "description": "Replace the current project with a JSON object IN MEMORY (no file association). Use when you have a project shape ready to install -- e.g. building a project from scratch in one shot, or implementing a custom template. The JSON shape must match the .ssproj schema (top-level: title, frameStart, frameEnd, frameDetection, decoder, frameParser, groups, actions, ...). Prefer project.template.apply for canned starters. Pass dryRun:true to return wouldDiscard + wouldApply summaries without loading. Remote clients must clear the one-time script-install consent prompt (the user's answer is remembered for the rest of the session); in-process callers are not prompted.",
         "name": "project.loadJson",
         "properties": {
             "config": {
@@ -5081,7 +5167,7 @@
         ]
     },
     {
-        "description": "Open a .ssproj or .json project file. Replaces the current project. Auto-switches operationMode to ProjectFile if it was QuickPlot or ConsoleOnly. Path must be absolute. Pass dryRun:true to read the file and return wouldDiscard + wouldApply summaries without loading. Re-opening the project that is already loaded is a no-op that keeps unsaved edits: the reply reports reloaded:false for it.",
+        "description": "Open a .ssproj or .json project file. Replaces the current project. Auto-switches operationMode to ProjectFile if it was QuickPlot or ConsoleOnly. Path must be absolute. Pass dryRun:true to read the file and return wouldDiscard + wouldApply summaries without loading. Re-opening the project that is already loaded is a no-op that keeps unsaved edits: the reply reports reloaded:false for it. Remote clients must clear the one-time script-install consent prompt (the user's answer is remembered for the rest of the session); in-process callers are not prompted.",
         "name": "project.open",
         "properties": {
             "dryRun": {
@@ -5241,7 +5327,7 @@
         ]
     },
     {
-        "description": "Set the canvas widget code for a group (params: groupId, code). **JavaScript only** -- canvas scripts run in QJSEngine, not Lua. Available globals: ctx (2D canvas context, QPainter-like), w, h (canvas dimensions), datasetGetFinal(uid)/datasetGetRaw(uid). The entry point is paint(ctx, w, h) and an optional zero-arg onFrame() callback. Validate with project.painter.dryRun before setCode. **Always call meta.fetchScriptingDocs{kind:'painter_js'} first** for the full API surface and worked examples -- don't invent canvas methods from JS DOM Canvas, the surface is QPainter-shaped.",
+        "description": "Set the canvas widget code for a group (params: groupId, code). **JavaScript only** -- canvas scripts run in QJSEngine, not Lua. Available globals: ctx (2D canvas context, QPainter-like), w, h (canvas dimensions), datasetGetFinal(uid)/datasetGetRaw(uid). The entry point is paint(ctx, w, h) and an optional zero-arg onFrame() callback. Validate with project.painter.dryRun before setCode. **Always call meta.fetchScriptingDocs{kind:'painter_js'} first** for the full API surface and worked examples -- don't invent canvas methods from JS DOM Canvas, the surface is QPainter-shaped. Remote clients must clear the one-time script-install consent prompt (the user's answer is remembered for the rest of the session); in-process callers are not prompted.",
         "name": "project.painter.setCode",
         "properties": {
             "code": {
@@ -5420,7 +5506,7 @@
         ]
     },
     {
-        "description": "Set per-source JS frame parser (params: sourceId, code)",
+        "description": "Set per-source JS frame parser (params: sourceId, code). Remote clients must clear the one-time script-install consent prompt (the user's answer is remembered for the rest of the session); in-process callers are not prompted.",
         "name": "project.source.setFrameParserCode",
         "properties": {
             "code": {
@@ -5524,7 +5610,7 @@
         ]
     },
     {
-        "description": "Replace the current project with a starter template -- the right first move when the user says \"set me up an X project\" rather than \"add an X to my existing project\". DESTRUCTIVE: discards any unsaved current state; auto-save will write the new template to disk shortly after. After applying, narrate what landed (groups, datasets) so the user knows what they got, then proceed with any follow-up edits the user requested. Available templates and their best fit:\n  blank: empty project, one default UART source. Use when the user wants to build everything themselves.\n  imu_uart: 9-DOF IMU (accelerometer X/Y/Z + gyro X/Y/Z + mag X/Y/Z) over UART, comma-separated, $ start / ; end. Replace the frame parser if your device frames differ.\n  gps_uart_nmea: GPS over UART using NMEA 0183 ($GPGGA). Lat/lon/altitude/satellites/HDOP/fixQuality. Map widget configured.\n  scope_multichannel_uart: 8 generic channels over UART, comma-separated, all plot-enabled. Adapt for ADC streams or sensor arrays.\n  telemetry_udp: CSV body parser with 5 generic value channels, intended for UDP telemetry. The template does NOT configure the connection -- set up the UDP listener via io.network.* after applying.\n  mqtt_subscriber (Pro): MQTT subscriber-mode skeleton. After applying, configure the broker via project.mqtt.subscriber.setConfig.\nPass dryRun:true to return wouldDiscard + wouldApply summaries without applying. Useful when the user is choosing between two templates.",
+        "description": "Replace the current project with a starter template -- the right first move when the user says \"set me up an X project\" rather than \"add an X to my existing project\". DESTRUCTIVE: discards any unsaved current state; auto-save will write the new template to disk shortly after. After applying, narrate what landed (groups, datasets) so the user knows what they got, then proceed with any follow-up edits the user requested. Available templates and their best fit:\n  blank: empty project, one default UART source. Use when the user wants to build everything themselves.\n  imu_uart: 9-DOF IMU (accelerometer X/Y/Z + gyro X/Y/Z + mag X/Y/Z) over UART, comma-separated, $ start / ; end. Replace the frame parser if your device frames differ.\n  gps_uart_nmea: GPS over UART using NMEA 0183 ($GPGGA). Lat/lon/altitude/satellites/HDOP/fixQuality. Map widget configured.\n  scope_multichannel_uart: 8 generic channels over UART, comma-separated, all plot-enabled. Adapt for ADC streams or sensor arrays.\n  telemetry_udp: CSV body parser with 5 generic value channels, intended for UDP telemetry. The template does NOT configure the connection -- set up the UDP listener via io.network.* after applying.\n  mqtt_subscriber (Pro): MQTT subscriber-mode skeleton. After applying, configure the broker via project.mqtt.subscriber.setConfig.\nPass dryRun:true to return wouldDiscard + wouldApply summaries without applying. Useful when the user is choosing between two templates. Remote clients must clear the one-time script-install consent prompt (the user's answer is remembered for the rest of the session); in-process callers are not prompted.",
         "name": "project.template.apply",
         "properties": {
             "dryRun": {
@@ -5578,7 +5664,7 @@
         ]
     },
     {
-        "description": "Replace a shared transform library (params: code, [language]; empty code clears it). Persisted in the project; every transform engine recompiles immediately. Validate first with project.transformLibrary.dryRun.",
+        "description": "Replace a shared transform library (params: code, [language]; empty code clears it). Persisted in the project; every transform engine recompiles immediately. Validate first with project.transformLibrary.dryRun. Remote clients must clear the one-time script-install consent prompt (the user's answer is remembered for the rest of the session); in-process callers are not prompted.",
         "name": "project.transformLibrary.set",
         "properties": {
             "code": {
@@ -6272,7 +6358,7 @@
         ]
     },
     {
-        "description": "Launch a helper process (e.g. \"python\" with a script path). Control script only -- rejected over the network/SDK. workingDir defaults to the project directory. Returns a processId. The process is terminated automatically when the device disconnects, the project changes, or the app quits.",
+        "description": "Launch a helper process (e.g. \"python\" with a script path). Control script only -- rejected over the network/SDK -- and gated by a one-time per-project consent prompt: the first launch answers CONSENT_REQUIRED while the user is asked, and the control script restarts once they allow it. workingDir defaults to the project directory. Returns a processId. The process is terminated automatically when the device disconnects, the project changes, or the app quits.",
         "name": "system.exec",
         "properties": {
             "args": {
@@ -6317,7 +6403,7 @@
         ]
     },
     {
-        "description": "List the helper processes currently managed by system.exec.",
+        "description": "List the helper processes currently managed by system.exec. Control script only.",
         "name": "system.runningProcesses",
         "properties": {
         },

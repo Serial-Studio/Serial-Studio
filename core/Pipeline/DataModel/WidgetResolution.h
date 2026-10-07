@@ -39,4 +39,8 @@ namespace SerialStudio {
 [[nodiscard]] DashboardWidget getDashboardWidget(const DataModel::Group& group);
 [[nodiscard]] QList<DashboardWidget> getDashboardWidgets(const DataModel::Dataset& dataset);
 [[nodiscard]] int extensionGroupWidgetCount(const std::vector<DataModel::Group>& groups);
+[[nodiscard]] bool datasetRendersAlarmBands(const DataModel::Dataset& dataset,
+                                            const DataModel::Group& group);
+[[nodiscard]] bool datasetRaisesBandAlarms(const DataModel::Dataset& dataset,
+                                           const DataModel::Group& group);
 }  // namespace SerialStudio

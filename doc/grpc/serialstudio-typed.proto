@@ -47,6 +47,44 @@ message CommandList {
 
 // Per-command request messages
 
+message AlarmsAcknowledgeRequest {
+  string id = 1;
+}
+
+message AlarmsClearRequest {
+  string id = 1;
+}
+
+message AlarmsGetProjectSoundsRequest {
+  string id = 1;
+}
+
+message AlarmsResetRequest {
+  string id = 1;
+}
+
+message AlarmsSetMutedRequest {
+  string id = 1;
+  bool muted = 2;
+}
+
+message AlarmsSetProjectSoundsRequest {
+  string id = 1;
+  google.protobuf.Struct sounds = 2;
+}
+
+message AlarmsSilenceRequest {
+  string id = 1;
+}
+
+message AlarmsStateRequest {
+  string id = 1;
+}
+
+message AlarmsTestRequest {
+  string id = 1;
+}
+
 message ApiGetCommandsRequest {
   string id = 1;
 }
@@ -1635,6 +1673,7 @@ message ProjectDatasetUpdateRequest {
   string widget = 39;  // enum: "", "bar", "compass", "gauge", "meter"
   int64 xAxisId = 40;
   bool extremeHold = 41;
+  bool suppressAlarms = 42;
 }
 
 message ProjectDryRunEndToEndRequest {
@@ -2360,6 +2399,33 @@ message UiWindowSetWindowStateRequest {
 
 // Typed service with per-command RPCs
 service SerialStudioTypedAPI {
+  // Acknowledge every alerting point (ISA-18.1)
+  rpc AlarmsAcknowledge(AlarmsAcknowledgeRequest) returns (CommandResponse);
+
+  // Drop every point, acknowledged ones included
+  rpc AlarmsClear(AlarmsClearRequest) returns (CommandResponse);
+
+  // Return the project's sound overrides object
+  rpc AlarmsGetProjectSounds(AlarmsGetProjectSoundsRequest) returns (CommandResponse);
+
+  // Reset return-to-normal points (sequences M and R)
+  rpc AlarmsReset(AlarmsResetRequest) returns (CommandResponse);
+
+  // Mute or unmute all alarm and event sounds
+  rpc AlarmsSetMuted(AlarmsSetMutedRequest) returns (CommandResponse);
+
+  // Replace the project's sound overrides (validates paths)
+  rpc AlarmsSetProjectSounds(AlarmsSetProjectSoundsRequest) returns (CommandResponse);
+
+  // Silence the audible; points stay unacknowledged
+  rpc AlarmsSilence(AlarmsSilenceRequest) returns (CommandResponse);
+
+  // Annunciator state: sequence, mute, highest priority, unacknowledged count, the sounding burst and every active point
+  rpc AlarmsState(AlarmsStateRequest) returns (CommandResponse);
+
+  // Play every priority sound and walk the annunciator
+  rpc AlarmsTest(AlarmsTestRequest) returns (CommandResponse);
+
   // Get list of all available commands
   rpc ApiGetCommands(ApiGetCommandsRequest) returns (CommandResponse);
 
@@ -2468,10 +2534,10 @@ service SerialStudioTypedAPI {
   // Returns whether the control script is currently running.
   rpc ControlScriptGetStatus(ControlScriptGetStatusRequest) returns (CommandResponse);
 
-  // Replace the project's control script source (params: code). The script is persisted in the project and applied to the live runtime; if a device is connected it is recompiled and restarted immediately. Validate first with controlScript.dryRun.
+  // Replace the project's control script source (params: code). The script is persisted in the project and applied to the live runtime; if a device is connected it is recompiled and restarted immediately. Validate first with controlScript.dryRun. Remote clients must clear the one-time script-install consent prompt (the user's answer is remembered for the rest of the session); in-process callers are not prompted.
   rpc ControlScriptSet(ControlScriptSetRequest) returns (CommandResponse);
 
-  // Replace the control script source (alias of controlScript.set; params: code; matches the project.frameParser.setCode naming convention).
+  // Replace the control script source (alias of controlScript.set; params: code; matches the project.frameParser.setCode naming convention). Remote clients must clear the one-time script-install consent prompt (the user's answer is remembered for the rest of the session); in-process callers are not prompted.
   rpc ControlScriptSetCode(ControlScriptSetCodeRequest) returns (CommandResponse);
 
   // Close the current CSV file
@@ -3068,7 +3134,7 @@ service SerialStudioTypedAPI {
   // Set transfer mode (params: mode - 0=Bulk, 1=Advanced, 2=Isochronous)
   rpc IoUsbSetTransferMode(IoUsbSetTransferModeRequest) returns (CommandResponse);
 
-  // Transmit raw bytes to the device (params: data - base64 encoded). Hardware-write: remote clients must clear the one-time device-write consent prompt (the user's answer is remembered for the rest of the session); in-process scripts are not prompted. Failure modes: not connected (connection_lost), bus busy (bus_busy). Prefer console.send for text protocols.
+  // Transmit raw bytes to the device (params: data - base64 encoded). Hardware-write: remote clients must clear the one-time device-write consent prompt (the user's answer is persisted); in-process scripts are not prompted. Failure modes: not connected (connection_lost), bus busy (bus_busy). Prefer console.send for text protocols.
   rpc IoWriteData(IoWriteDataRequest) returns (CommandResponse);
 
   // Activate the stored license key against the server
@@ -3176,7 +3242,7 @@ service SerialStudioTypedAPI {
   // List all actions
   rpc ProjectActionList(ProjectActionListRequest) returns (CommandResponse);
 
-  // Patch action fields by id (params: actionId, plus any of title, icon, txData, eolSequence, timerMode, timerIntervalMs, repeatCount, sourceId, txEncoding, binaryData, autoExecuteOnConnect). Unknown fields are accepted but ignored, and surfaced in result.warnings[].fields with code 'unknown_field'.
+  // Patch action fields by id (params: actionId, plus any of title, icon, txData, eolSequence, timerMode, timerIntervalMs, repeatCount, sourceId, txEncoding, binaryData, autoExecuteOnConnect, and checksum: a registry name like 'CRC-16-MODBUS', empty = none, appended to the payload after the EOL). Unknown fields are accepted but ignored, and surfaced in result.warnings[].fields with code 'unknown_field'.
   rpc ProjectActionUpdate(ProjectActionUpdateRequest) returns (CommandResponse);
 
   // Load current project into FrameBuilder
@@ -3276,7 +3342,7 @@ service SerialStudioTypedAPI {
   // Duplicate a dataset by id (params: groupId, datasetId)
   rpc ProjectDatasetDuplicate(ProjectDatasetDuplicateRequest) returns (CommandResponse);
 
-  // Returns the dataset's coloured alarm bands as a JSON array. Each entry: {min, max, severity (0=Info, 1=OK, 2=Warning, 3=Critical), color ("#rrggbb" override or empty for severity default), label, blink}. Also returns rangeMin/rangeMax (the dataset's wgtMin/wgtMax) so callers can validate band ranges before writing back. An empty array means no alarms configured. Applies to bar / gauge / meter widgets and LED-panel datasets; calling on other widget types succeeds with an empty array.
+  // Returns the dataset's coloured alarm bands as a JSON array. Each entry: {min, max, severity (0=Info, 1=OK, 2=Warning, 3=Critical), color ("#rrggbb" override or empty for severity default), label, blink}. Also returns rangeMin/rangeMax (the dataset's wgtMin/wgtMax) so callers can validate band ranges before writing back. An empty array means no alarms configured. Bands are drawn, notified and alarmed only when the dataset has a bar, gauge or meter widget or is an LED-panel member (and is not hidden from the dashboard), or belongs to a bar-panel group; on any other dataset they are stored and ignored, and this call still returns them. A dataset with suppressAlarms set still draws its bands but never notifies or alarms.
   rpc ProjectDatasetGetAlarmBands(ProjectDatasetGetAlarmBandsRequest) returns (CommandResponse);
 
   // Resolve a dataset by title path. Preferred for human-readable addressing -- survives uniqueId reordering.
@@ -3300,7 +3366,7 @@ service SerialStudioTypedAPI {
   // Reorder a dataset within its group. Changes datasetId (and therefore uniqueId) for the moved dataset and any it crossed; workspace refs re-anchor automatically. Scripts that pinned a uniqueId must be updated -- prefer dataset.getByPath in scripts. Pass dryRun:true to preview the renumbering without committing.
   rpc ProjectDatasetMove(ProjectDatasetMoveRequest) returns (CommandResponse);
 
-  // Atomically replaces the dataset's alarmBands array. Each band entry must provide numeric min and max (max>min; bands with max<=min are silently dropped and counted in result.droppedInvalid), and an integer severity (0=Info, 1=OK, 2=Warning, 3=Critical). color is optional ("#rrggbb" override; empty/missing = severity's theme colour). label is optional (surfaces in band-edge notifications). blink is optional (boolean; LED panels flash the LED while the band is active). Bands may have gaps and may overlap; rendering paints them in array order behind the value indicator. Severity >= Warning triggers a notification when the value enters the band, even when no widget is visible (3-second per-dataset cooldown suppresses oscillation spam).
+  // Atomically replaces the dataset's alarmBands array. Each band entry must provide numeric min and max (max>min; bands with max<=min are silently dropped and counted in result.droppedInvalid), and an integer severity (0=Info, 1=OK, 2=Warning, 3=Critical). color is optional ("#rrggbb" override; empty/missing = severity's theme colour). label is optional (surfaces in band-edge notifications). blink is optional (boolean; LED panels flash the LED while the band is active). Bands may have gaps and may overlap; rendering paints them in array order behind the value indicator. Severity >= Warning triggers a notification and an alarm point when the value enters the band, whether or not the widget is on screen (3-second per-dataset cooldown suppresses oscillation spam). That happens only when the dataset has a bar, gauge or meter widget or is an LED-panel member (and is not hidden from the dashboard), or belongs to a bar-panel group, and suppressAlarms is false; bands on any other dataset are stored but never notify or alarm, and a suppressed dataset still draws them.
   // Pass an empty array to clear all alarms.
   rpc ProjectDatasetSetAlarmBands(ProjectDatasetSetAlarmBandsRequest) returns (CommandResponse);
 
@@ -3313,7 +3379,7 @@ service SerialStudioTypedAPI {
   // Apply several DatasetOption flags at once (plural form of project.dataset.setOption). Pass `options` as the bitwise OR of the flags you want enabled; any flag NOT set in the value is disabled. Bits: 1=Plot, 2=FFT, 4=Bar, 8=Gauge, 16=Compass, 32=LED, 64=Waterfall (Pro). Bar/Gauge/Compass are mutually exclusive -- if more than one is set, the highest bit wins. Updates the group's compatibleWidgetTypes immediately. NOTE: these are DatasetOption bitflags, NOT DashboardWidget enum values -- the numbers do not line up with project.workspace.addWidget's widgetType.
   rpc ProjectDatasetSetOptions(ProjectDatasetSetOptionsRequest) returns (CommandResponse);
 
-  // Set dataset transformCode. Empty clears. Pass `language` whenever you author code so the dataset's transformLanguage matches the syntax you wrote -- mismatches compile-fail silently. Lua (1) is the recommended default; it's measurably faster than JavaScript on hot transforms. If this dataset is compute-only (no slot in the parser output array), also set virtual=true via project.dataset.setVirtual or project.dataset.update. Validate with project.dataset.transform.dryRun before setting. **Call meta.fetchScriptingDocs{kind: 'transform_lua' | 'transform_js'} first** for the transform(value) signature, table API (tableGet/tableSet/datasetGetRaw/datasetGetFinal), and execution-order rules -- a transform may read RAW values from any dataset but only FINAL values of datasets earlier in project.dataset.getExecutionOrder.
+  // Set dataset transformCode. Empty clears. Pass `language` whenever you author code so the dataset's transformLanguage matches the syntax you wrote -- mismatches compile-fail silently. Lua (1) is the recommended default; it's measurably faster than JavaScript on hot transforms. If this dataset is compute-only (no slot in the parser output array), also set virtual=true via project.dataset.setVirtual or project.dataset.update. Validate with project.dataset.transform.dryRun before setting. **Call meta.fetchScriptingDocs{kind: 'transform_lua' | 'transform_js'} first** for the transform(value) signature, table API (tableGet/tableSet/datasetGetRaw/datasetGetFinal), and execution-order rules -- a transform may read RAW values from any dataset but only FINAL values of datasets earlier in project.dataset.getExecutionOrder. Remote clients must clear the one-time script-install consent prompt (the user's answer is remembered for the rest of the session); in-process callers are not prompted.
   rpc ProjectDatasetSetTransformCode(ProjectDatasetSetTransformCodeRequest) returns (CommandResponse);
 
   // Toggle the virtual flag on a dataset (params: groupId, datasetId, virtual)
@@ -3363,7 +3429,7 @@ service SerialStudioTypedAPI {
   // List the Built-In (C++) frame parser templates. Returns {templates: [{id, name, description}], count}. Built-In templates parse without user code and are the fastest option; configure one with project.frameParser.setTemplate after inspecting its parameters via project.frameParser.getTemplateSchema.
   rpc ProjectFrameParserListTemplates(ProjectFrameParserListTemplatesRequest) returns (CommandResponse);
 
-  // Set frame parser code (params: code, optional sourceId, optional language). Always pass `language` when authoring code to lock in the runtime engine -- mismatch = silent compile failure. Lua (1) is the recommended default; it's faster than JavaScript on the hotpath at typical telemetry rates. Use JavaScript only when you need a JS-specific library or feature. Validate with project.frameParser.dryRun (or dryCompile for a syntax-only check) before setCode. **Call meta.fetchScriptingDocs{kind: 'frame_parser_lua' | 'frame_parser_js'} first** for the parse() signature, return-shape rules, and the tableGet/tableSet API. For Built-In (2), prefer project.frameParser.setTemplate; passing the JSON descriptor as `code` also works.
+  // Set frame parser code (params: code, optional sourceId, optional language). Always pass `language` when authoring code to lock in the runtime engine -- mismatch = silent compile failure. Lua (1) is the recommended default; it's faster than JavaScript on the hotpath at typical telemetry rates. Use JavaScript only when you need a JS-specific library or feature. Validate with project.frameParser.dryRun (or dryCompile for a syntax-only check) before setCode. **Call meta.fetchScriptingDocs{kind: 'frame_parser_lua' | 'frame_parser_js'} first** for the parse() signature, return-shape rules, and the tableGet/tableSet API. For Built-In (2), prefer project.frameParser.setTemplate; passing the JSON descriptor as `code` also works. Remote clients must clear the one-time script-install consent prompt (the user's answer is remembered for the rest of the session); in-process callers are not prompted.
   rpc ProjectFrameParserSetCode(ProjectFrameParserSetCodeRequest) returns (CommandResponse);
 
   // Switch a source between JavaScript, Lua and Built-In frame parsers. WARNING: for JS/Lua this WIPES any existing frameParser code for that source -- the loaded default template for the new language replaces it. If you want to preserve+translate, frameParser.getCode first, switch, then frameParser.setCode with the translated source. Switching to Built-In (2) seeds the default 'delimited' template and leaves JS/Lua code intact for round-trips.
@@ -3407,7 +3473,7 @@ service SerialStudioTypedAPI {
   // Patch group fields by id (params: groupId, plus any of title, widget, columns, sourceId, painterCode). Unknown fields are accepted but ignored, and surfaced in result.warnings[].fields with code 'unknown_field'.
   rpc ProjectGroupUpdate(ProjectGroupUpdateRequest) returns (CommandResponse);
 
-  // Replace the current project with a JSON object IN MEMORY (no file association). Use when you have a project shape ready to install -- e.g. building a project from scratch in one shot, or implementing a custom template. The JSON shape must match the .ssproj schema (top-level: title, frameStart, frameEnd, frameDetection, decoder, frameParser, groups, actions, ...). Prefer project.template.apply for canned starters. Pass dryRun:true to return wouldDiscard + wouldApply summaries without loading.
+  // Replace the current project with a JSON object IN MEMORY (no file association). Use when you have a project shape ready to install -- e.g. building a project from scratch in one shot, or implementing a custom template. The JSON shape must match the .ssproj schema (top-level: title, frameStart, frameEnd, frameDetection, decoder, frameParser, groups, actions, ...). Prefer project.template.apply for canned starters. Pass dryRun:true to return wouldDiscard + wouldApply summaries without loading. Remote clients must clear the one-time script-install consent prompt (the user's answer is remembered for the rest of the session); in-process callers are not prompted.
   rpc ProjectLoadJson(ProjectLoadJsonRequest) returns (CommandResponse);
 
   // Read the MQTT publisher configuration (broker, mode, TLS, etc.). The password is NEVER returned -- inspect 'hasCredentials' instead. Use 'modes', 'mqttVersions', 'sslProtocols', 'peerVerifyModes' as the canonical enum tables when interpreting the integer fields.
@@ -3431,7 +3497,7 @@ service SerialStudioTypedAPI {
   // Reset to a blank project (one default UART source, no groups, no datasets, no actions, no workspaces). DESTRUCTIVE: discards the loaded project. Use only when the user explicitly says "start over" or "new project". For starting a TYPED project, prefer project.template.apply -- it gives the user a useful skeleton instead of an empty canvas. Pass dryRun:true to see what the current project (wouldDiscard) looks like before wiping it.
   rpc ProjectNew(ProjectNewRequest) returns (CommandResponse);
 
-  // Open a .ssproj or .json project file. Replaces the current project. Auto-switches operationMode to ProjectFile if it was QuickPlot or ConsoleOnly. Path must be absolute. Pass dryRun:true to read the file and return wouldDiscard + wouldApply summaries without loading. Re-opening the project that is already loaded is a no-op that keeps unsaved edits: the reply reports reloaded:false for it.
+  // Open a .ssproj or .json project file. Replaces the current project. Auto-switches operationMode to ProjectFile if it was QuickPlot or ConsoleOnly. Path must be absolute. Pass dryRun:true to read the file and return wouldDiscard + wouldApply summaries without loading. Re-opening the project that is already loaded is a no-op that keeps unsaved edits: the reply reports reloaded:false for it. Remote clients must clear the one-time script-install consent prompt (the user's answer is remembered for the rest of the session); in-process callers are not prompted.
   rpc ProjectOpen(ProjectOpenRequest) returns (CommandResponse);
 
   // Add an output widget to a group (params: groupId, type)
@@ -3458,7 +3524,7 @@ service SerialStudioTypedAPI {
   // Get the canvas widget JS for a group (params: groupId)
   rpc ProjectPainterGetCode(ProjectPainterGetCodeRequest) returns (CommandResponse);
 
-  // Set the canvas widget code for a group (params: groupId, code). **JavaScript only** -- canvas scripts run in QJSEngine, not Lua. Available globals: ctx (2D canvas context, QPainter-like), w, h (canvas dimensions), datasetGetFinal(uid)/datasetGetRaw(uid). The entry point is paint(ctx, w, h) and an optional zero-arg onFrame() callback. Validate with project.painter.dryRun before setCode. **Always call meta.fetchScriptingDocs{kind:'painter_js'} first** for the full API surface and worked examples -- don't invent canvas methods from JS DOM Canvas, the surface is QPainter-shaped.
+  // Set the canvas widget code for a group (params: groupId, code). **JavaScript only** -- canvas scripts run in QJSEngine, not Lua. Available globals: ctx (2D canvas context, QPainter-like), w, h (canvas dimensions), datasetGetFinal(uid)/datasetGetRaw(uid). The entry point is paint(ctx, w, h) and an optional zero-arg onFrame() callback. Validate with project.painter.dryRun before setCode. **Always call meta.fetchScriptingDocs{kind:'painter_js'} first** for the full API surface and worked examples -- don't invent canvas methods from JS DOM Canvas, the surface is QPainter-shaped. Remote clients must clear the one-time script-install consent prompt (the user's answer is remembered for the rest of the session); in-process callers are not prompted.
   rpc ProjectPainterSetCode(ProjectPainterSetCodeRequest) returns (CommandResponse);
 
   // Replay the most recently undone project-document step. Returns {performed:false, reason} when there is nothing to redo. Any new mutation after an undo discards the redo tail.
@@ -3494,7 +3560,7 @@ service SerialStudioTypedAPI {
   // List all project sources
   rpc ProjectSourceList(ProjectSourceListRequest) returns (CommandResponse);
 
-  // Set per-source JS frame parser (params: sourceId, code)
+  // Set per-source JS frame parser (params: sourceId, code). Remote clients must clear the one-time script-install consent prompt (the user's answer is remembered for the rest of the session); in-process callers are not prompted.
   rpc ProjectSourceSetFrameParserCode(ProjectSourceSetFrameParserCodeRequest) returns (CommandResponse);
 
   // Set multiple driver properties at once (params: sourceId, settings)
@@ -3513,7 +3579,7 @@ service SerialStudioTypedAPI {
   //   scope_multichannel_uart: 8 generic channels over UART, comma-separated, all plot-enabled. Adapt for ADC streams or sensor arrays.
   //   telemetry_udp: CSV body parser with 5 generic value channels, intended for UDP telemetry. The template does NOT configure the connection -- set up the UDP listener via io.network.* after applying.
   //   mqtt_subscriber (Pro): MQTT subscriber-mode skeleton. After applying, configure the broker via project.mqtt.subscriber.setConfig.
-  // Pass dryRun:true to return wouldDiscard + wouldApply summaries without applying. Useful when the user is choosing between two templates.
+  // Pass dryRun:true to return wouldDiscard + wouldApply summaries without applying. Useful when the user is choosing between two templates. Remote clients must clear the one-time script-install consent prompt (the user's answer is remembered for the rest of the session); in-process callers are not prompted.
   rpc ProjectTemplateApply(ProjectTemplateApplyRequest) returns (CommandResponse);
 
   // List built-in starter project templates (id, title, description). Use this BEFORE project.template.apply when the user asks for a starter ("set me up an IMU project", "give me a GPS template").
@@ -3525,7 +3591,7 @@ service SerialStudioTypedAPI {
   // Get a project's shared transform library (params: [language], lua by default or js): one chunk whose top-level functions every dataset transform of that language can call.
   rpc ProjectTransformLibraryGet(ProjectTransformLibraryGetRequest) returns (CommandResponse);
 
-  // Replace a shared transform library (params: code, [language]; empty code clears it). Persisted in the project; every transform engine recompiles immediately. Validate first with project.transformLibrary.dryRun.
+  // Replace a shared transform library (params: code, [language]; empty code clears it). Persisted in the project; every transform engine recompiles immediately. Validate first with project.transformLibrary.dryRun. Remote clients must clear the one-time script-install consent prompt (the user's answer is remembered for the rest of the session); in-process callers are not prompted.
   rpc ProjectTransformLibrarySet(ProjectTransformLibrarySetRequest) returns (CommandResponse);
 
   // Undo the most recent project-document mutation (from any surface: editor UI, API, or batch -- one shared history). A batch or cascade reverts atomically as one step. Returns {performed:false, reason} when history is empty; never an error. History clears on project load/new. Not for workspace or widget-layout edits (those are outside undo history).
@@ -3671,7 +3737,7 @@ service SerialStudioTypedAPI {
   // List every live stream source: sourceId, channel count, sample rate, and the dataset uniqueIds its blocks carry.
   rpc StreamGetSources(StreamGetSourcesRequest) returns (CommandResponse);
 
-  // Launch a helper process (e.g. "python" with a script path). Control script only -- rejected over the network/SDK. workingDir defaults to the project directory. Returns a processId. The process is terminated automatically when the device disconnects, the project changes, or the app quits.
+  // Launch a helper process (e.g. "python" with a script path). Control script only -- rejected over the network/SDK -- and gated by a one-time per-project consent prompt: the first launch answers CONSENT_REQUIRED while the user is asked, and the control script restarts once they allow it. workingDir defaults to the project directory. Returns a processId. The process is terminated automatically when the device disconnects, the project changes, or the app quits.
   rpc SystemExec(SystemExecRequest) returns (CommandResponse);
 
   // Terminate a managed helper process by id. Control script only.
@@ -3680,7 +3746,7 @@ service SerialStudioTypedAPI {
   // Return the loaded project's directory, file path, and file name. Use this to resolve paths relative to the .ssproj (e.g. a sibling Python script) before calling system.exec.
   rpc SystemProjectDir(SystemProjectDirRequest) returns (CommandResponse);
 
-  // List the helper processes currently managed by system.exec.
+  // List the helper processes currently managed by system.exec. Control script only.
   rpc SystemRunningProcesses(SystemRunningProcessesRequest) returns (CommandResponse);
 
   // Get serialized layout JSON from WindowManager

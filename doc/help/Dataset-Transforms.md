@@ -2,6 +2,8 @@
 
 Per-dataset scripting for calibration, unit conversion, filtering, and signal conditioning. Each dataset can optionally define a `transform(value)` function that converts the raw parsed value into an engineering value before it reaches the dashboard.
 
+Dataset transforms are a **Pro feature**: opening the transform editor needs a license or an active trial, and so does connecting with a project that contains a transform. To run such a project without one, right-click the dataset in the Project Editor and choose **Remove Transform**; removing is always free and can be undone.
+
 ## Overview
 
 The frame parser (`parse(frame)`) produces an array of raw values. Each value is mapped to a dataset by its Frame Index. Before the value reaches the dashboard, an optional transform function can modify it:

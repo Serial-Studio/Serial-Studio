@@ -6,6 +6,9 @@ funciones Pro que se muestran abajo se desbloquean en cuanto prueba
 una, con una prueba gratuita de 14 días. No se necesita cuenta ni
 pago para comenzarla.
 
+Gratuita para uso personal, educativo y de código abierto; el uso
+comercial requiere una licencia Pro.
+
 → Soporte: alex@serial-studio.com
 → Agendar una llamada: https://calendly.com/serial-studio
 → Más información: https://serial-studio.com/

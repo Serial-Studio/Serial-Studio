@@ -741,6 +741,19 @@ void DataModel::ProjectEditor::buildWidgetRangeRows(CustomModel* model,
   item_extreme_hold->setData(tr("Show hold markers at the lowest and highest values observed "
                                 "since the last data reset"), ParameterDescription);
   model->appendRow(item_extreme_hold);
+
+  if (PropertyHooks::alarmBandsDrawn(dataset, m_projectModelRef)) {
+    auto* item_suppress_alarms = new QStandardItem();
+    item_suppress_alarms->setEditable(true);
+    item_suppress_alarms->setData(true, Active);
+    item_suppress_alarms->setData(CheckBox, WidgetType);
+    item_suppress_alarms->setData(dataset.suppressAlarms, EditableValue);
+    item_suppress_alarms->setData(kDatasetView_SuppressAlarms, ParameterType);
+    item_suppress_alarms->setData(tr("Suppress Alarms"), ParameterName);
+    item_suppress_alarms->setData(tr("Keep the bands on the widget but never notify, raise an "
+                                     "alarm point or sound for them"), ParameterDescription);
+    model->appendRow(item_suppress_alarms);
+  }
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -939,6 +952,9 @@ static bool applyDatasetFlagEdit(int formId, const QVariant& value, DataModel::D
     case kDatasetView_ExtremeHold:
       d.extremeHold = value.toBool();
       return true;
+    case kDatasetView_SuppressAlarms:
+      d.suppressAlarms = value.toBool();
+      return true;
     case kDatasetView_LED:
       d.led = value.toBool();
       return true;
@@ -1013,6 +1029,8 @@ static bool datasetRowVisible(int formId,
       return PropertyHooks::insidePainterGroup(d, pm);
     case kDatasetView_WaterfallYAxis:
       return PropertyHooks::waterfallEnabled(d, pm);
+    case kDatasetView_SuppressAlarms:
+      return PropertyHooks::alarmBandsDrawn(d, pm);
     case kDatasetView_LED_High:
       return PropertyHooks::ledBandsAbsent(d, pm);
     default:
@@ -1096,6 +1114,8 @@ QVariant Registry::datasetFormValue(int formId,
       return d.wgtMax;
     case kDatasetView_ExtremeHold:
       return d.extremeHold;
+    case kDatasetView_SuppressAlarms:
+      return d.suppressAlarms;
     case kDatasetView_LED:
       return d.led;
     case kDatasetView_LED_High:

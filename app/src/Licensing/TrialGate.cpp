@@ -27,6 +27,7 @@
 #include "API/CommandRegistry.h"
 #include "Core/Licensing/CommercialToken.h"
 #include "LemonSqueezy.h"
+#include "Misc/ProFeatureNotice.h"
 #include "Misc/Utilities.h"
 #include "Trial.h"
 
@@ -90,8 +91,6 @@ void Licensing::TrialGate::requestProFeature(const QString& featureId)
 void Licensing::TrialGate::handleIntent(const QString& featureId,
                                         Core::License::ProFeatureRetry retry)
 {
-  Q_UNUSED(featureId);
-
   if (API::RemoteDispatchScope::active() != nullptr)
     return;
 
@@ -110,9 +109,9 @@ void Licensing::TrialGate::handleIntent(const QString& featureId,
   }
 
   if (m_trial.firstRun())
-    offerTrial(std::move(retry));
+    offerTrial(featureId, std::move(retry));
   else if (m_trial.trialExpired())
-    offerActivation();
+    offerActivation(featureId);
 }
 
 /**
@@ -121,14 +120,16 @@ void Licensing::TrialGate::handleIntent(const QString& featureId,
  *        box was up, and arms the pending flag only when a fetch actually started, so a no-op
  *        enableTrial() can never wedge the gate. Blocking box sanctioned: gesture stack only.
  */
-void Licensing::TrialGate::offerTrial(Core::License::ProFeatureRetry retry)
+void Licensing::TrialGate::offerTrial(const QString& featureId,
+                                      Core::License::ProFeatureRetry retry)
 {
   m_prompting      = true;
   const int answer = Misc::Utilities::showMessageBox(
     tr("Start your free 14-day Serial Studio Pro trial?"),
     tr("This feature is part of Serial Studio Pro. The trial unlocks every Pro feature "
        "for 14 days, with no account and no payment. An internet connection is required "
-       "to register the trial on this machine."),
+       "to register the trial on this machine.")
+      + Misc::ProFeatureNotice::contentDetail(featureId),
     QMessageBox::Question,
     tr("Serial Studio Pro Trial"),
     QMessageBox::Yes | QMessageBox::No,
@@ -156,9 +157,10 @@ void Licensing::TrialGate::offerTrial(Core::License::ProFeatureRetry retry)
 
 /**
  * @brief The post-expiry choice (spec 0092 R5): activate an existing license, open the store
- *        page, or dismiss. Never offers the trial again.
+ *        page, or dismiss. Never offers the trial again. A refused connect on a project with
+ *        Pro content appends what it contains (spec 0094).
  */
-void Licensing::TrialGate::offerActivation()
+void Licensing::TrialGate::offerActivation(const QString& featureId)
 {
   ButtonTextMap labels;
   labels[QMessageBox::Yes] = tr("Activate License");
@@ -168,7 +170,8 @@ void Licensing::TrialGate::offerActivation()
   const int answer = Misc::Utilities::showMessageBox(
     tr("This feature requires Serial Studio Pro"),
     tr("Your trial has ended. All free features remain fully functional; activate a "
-       "license or purchase one to use Pro features again."),
+       "license or purchase one to use Pro features again.")
+      + Misc::ProFeatureNotice::contentDetail(featureId),
     QMessageBox::Information,
     tr("Serial Studio Pro"),
     QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel,

@@ -1079,30 +1079,14 @@ void EditorForms::openAlarmBandsEditorForSelection()
 }
 
 /**
- * @brief Emits openAlarmBandsEditor for a dataset multi-selection: the scale is the union of each
- *        member's effective range, and bands are prefilled only when every dataset already agrees
- *        (otherwise the editor starts empty and Apply writes one common set to all).
+ * @brief Emits openAlarmBandsEditor for a dataset multi-selection, over the members whose bands
+ *        are applicable (spec 0093): the scale is the union of their effective ranges, and bands
+ *        are prefilled only when they all agree (otherwise the editor starts empty and Apply
+ *        writes one common set to each of them).
  */
 void EditorForms::openAlarmBandsEditorForMultiSelection()
 {
-  auto& pm = m_model;
-
-  QVector<DataModel::Dataset> sel;
-  {
-    const auto& groups = pm.groups();
-    for (const auto& pr : m_editor.m_batchItems) {
-      const int gid = pr.first, dsid = pr.second;
-      if (gid < 0 || static_cast<size_t>(gid) >= groups.size())
-        continue;
-
-      for (const auto& d : groups[gid].datasets)
-        if (d.datasetId == dsid) {
-          sel.append(d);
-          break;
-        }
-    }
-  }
-
+  const auto sel = m_editor.alarmBandSelection();
   if (sel.isEmpty())
     return;
 

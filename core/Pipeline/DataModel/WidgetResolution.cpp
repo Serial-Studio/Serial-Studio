@@ -189,3 +189,37 @@ int SerialStudio::extensionGroupWidgetCount(const std::vector<DataModel::Group>&
 
   return count;
 }
+
+/**
+ * @brief Whether a band-drawing widget is configured for @p dataset: its group renders a bar
+ *        panel, or the dataset is not hidden and resolves to a bar, gauge, meter or LED. The one
+ *        alarm-band applicability rule (spec 0093), built on the two resolvers above so it cannot
+ *        drift from the dashboard. Rebuild and command rate only: the dataset resolver allocates.
+ */
+bool SerialStudio::datasetRendersAlarmBands(const DataModel::Dataset& dataset,
+                                            const DataModel::Group& group)
+{
+  if (getDashboardWidget(group) == DashboardBarPanel)
+    return true;
+
+  if (dataset.hideOnDashboard)
+    return false;
+
+  const auto widgets = getDashboardWidgets(dataset);
+  return widgets.contains(DashboardBar) || widgets.contains(DashboardGauge)
+      || widgets.contains(DashboardMeter) || widgets.contains(DashboardLED);
+}
+
+/**
+ * @brief Whether @p dataset's bands notify, raise alarm points and sound: it has bands, a widget
+ *        draws them, and Suppress Alarms is off. The alarm side asks this; the editor's band gates
+ *        ask datasetRendersAlarmBands, since suppressed bands stay drawn and editable (spec 0093).
+ */
+bool SerialStudio::datasetRaisesBandAlarms(const DataModel::Dataset& dataset,
+                                           const DataModel::Group& group)
+{
+  if (dataset.suppressAlarms || dataset.alarmBands.empty())
+    return false;
+
+  return datasetRendersAlarmBands(dataset, group);
+}

@@ -353,7 +353,8 @@ void MessageBusTests::everyVocabularyTopicComposesByBracedInit()
     -1,
     quint64(1),
     QString(),
-    QString());
+    QString(),
+    0);
   bus.publish<Core::Bus::ConnectionAboutToOpen>(0);
   bus.publishState<Core::Bus::ActiveUiDriverSettings>(0, QJsonObject());
   bus.publish<Core::Bus::SourceSettingsCaptureRequested>(0, 0);

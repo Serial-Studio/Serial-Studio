@@ -103,7 +103,24 @@ wired in `ModuleManager::setupCrossModuleConnections`) rebuilds per-dataset trac
 `Dataset*` across signals; `resetData(true)` emits `updated()` *before* `widgetCountChanged`,
 so cached pointers would dangle. Consequences:
 
-- Notifications fire even when the dataset's widget is hidden, popped out, or `hideOnDashboard`.
+- **Applicability has one home (spec 0093).** Two functions in
+  `core/Pipeline/DataModel/WidgetResolution.cpp`, both built on `getDashboardWidget` /
+  `getDashboardWidgets`. `datasetRendersAlarmBands(dataset, group)` says whether a widget draws
+  the bands: true for any member of a Bar Panel group, or for a dataset that is not
+  `hideOnDashboard` and resolves to Bar, Gauge, Meter or LED. The Project Editor's
+  `alarmBandsApplicable` property and its multi-selection filter ask it.
+  `datasetRaisesBandAlarms(dataset, group)` adds "has bands" and "`suppressAlarms` is off" (the
+  per-dataset opt-out; suppressed bands stay drawn and editable). `rebuildTrackers` walks
+  `rawFrame()`'s (group, dataset) pairs with it, `AnnunciatorChecker::definesAlarms` calls it,
+  and the annunciator's reap asks `AlarmMonitor::tracks(id)`. Never restate their terms (a QML
+  bitmask, a second widget-string test, a `suppressAlarms` check elsewhere): a second copy
+  re-opens the orphan-alarm bug, where a band drawn nowhere sounds and the editor refuses to
+  open it. Bands on a non-applicable dataset stay in the file and are ignored, never cleared.
+  `m_hasConfiguredAlarms` is also re-derived on the annunciator's 1 Hz health tick, so the
+  taskbar bell follows every edit path within a second, offline ones included: the Alarm Bands
+  dialog and multi-selection commits emit no `groupsChanged`, so a signal hook would miss them.
+- Notifications fire whether or not an applicable dataset's widget is on screen (outside the
+  active workspace, minimised, popped out).
 - `Bar` / `Gauge` / `Meter` / `LEDPanel` are display-only band consumers; do not re-add
   per-widget `NotificationCenter` posts (that double-fires when a dataset is both a band
   widget and `led: true`).

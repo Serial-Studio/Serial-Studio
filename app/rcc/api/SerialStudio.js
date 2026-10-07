@@ -377,6 +377,7 @@ if (typeof __ss_bridge !== 'undefined') {
   };
 }
 
+var alarms = (typeof alarms !== 'undefined') ? alarms : {};
 var api = (typeof api !== 'undefined') ? api : {};
 var assistant = (typeof assistant !== 'undefined') ? assistant : {};
 assistant.dataset = assistant.dataset || {};
@@ -438,6 +439,53 @@ var stream = (typeof stream !== 'undefined') ? stream : {};
 var system = (typeof system !== 'undefined') ? system : {};
 var ui = (typeof ui !== 'undefined') ? ui : {};
 ui.window = ui.window || {};
+
+alarms.acknowledge = function() {
+  var p = {};
+  return apiCall('alarms.acknowledge', p);
+};
+
+alarms.clear = function() {
+  var p = {};
+  return apiCall('alarms.clear', p);
+};
+
+alarms.getProjectSounds = function() {
+  var p = {};
+  return apiCall('alarms.getProjectSounds', p);
+};
+
+alarms.reset = function() {
+  var p = {};
+  return apiCall('alarms.reset', p);
+};
+
+alarms.setMuted = function(muted) {
+  var p = {};
+  p['muted'] = muted;
+  return apiCall('alarms.setMuted', p);
+};
+
+alarms.setProjectSounds = function(sounds) {
+  var p = {};
+  p['sounds'] = sounds;
+  return apiCall('alarms.setProjectSounds', p);
+};
+
+alarms.silence = function() {
+  var p = {};
+  return apiCall('alarms.silence', p);
+};
+
+alarms.state = function() {
+  var p = {};
+  return apiCall('alarms.state', p);
+};
+
+alarms.test = function() {
+  var p = {};
+  return apiCall('alarms.test', p);
+};
 
 api.getCommands = function() {
   var p = {};

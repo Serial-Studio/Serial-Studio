@@ -22,6 +22,7 @@
 #include "IO/ConnectionManager/DeviceTableQuery.h"
 
 #include "Core/Bus/Messages.h"
+#include "Core/DataModel/FrameSupport.h"
 #include "Core/IO/HAL_Driver.h"
 #include "Core/SSAssert.h"
 #include "IO/DeviceManager.h"
@@ -128,13 +129,12 @@ bool IO::DeviceTableQuery::projectConfigurationOk() const
 }
 
 /**
- * @brief Whether the pending connect touches a license-gated bus (spec 0092): free buses stay
- *        connectable in every licensing state, only the gated set routes through the Pro-intent
- *        seam. Default-gated on purpose, mirroring DriverFactory: a new bus is Pro until someone
- *        decides otherwise.
+ * @brief Names what the buses of the pending connect need: free buses connect in every licensing
+ *        state (spec 0092), a new bus is Pro until someone decides otherwise (as in DriverFactory),
+ *        and a project with several sources is Pro. An empty snapshot falls back to the bus.
  */
-bool IO::DeviceTableQuery::connectRequiresEntitlement(const SerialStudio::BusType busType,
-                                                      const SerialStudio::OperationMode mode) const
+IO::DeviceTableQuery::ConnectRefusal IO::DeviceTableQuery::busRefusal(
+  const SerialStudio::BusType busType, const SerialStudio::OperationMode mode) const
 {
   const auto freeBus = [](SerialStudio::BusType type) {
     return type == SerialStudio::BusType::UART || type == SerialStudio::BusType::Network
@@ -142,16 +142,48 @@ bool IO::DeviceTableQuery::connectRequiresEntitlement(const SerialStudio::BusTyp
   };
 
   if (mode != SerialStudio::ProjectFile || !m_project || m_project->sources.empty())
-    return !freeBus(busType);
+    return freeBus(busType) ? ConnectRefusal::None : ConnectRefusal::ProBus;
 
   if (m_project->sources.size() > 1)
-    return true;
+    return ConnectRefusal::MultiSource;
 
-  bool gated = false;
   for (const auto& src : m_project->sources)
-    gated = gated || !freeBus(static_cast<SerialStudio::BusType>(src.busType));
+    if (!freeBus(static_cast<SerialStudio::BusType>(src.busType)))
+      return ConnectRefusal::ProBus;
 
-  return gated;
+  return ConnectRefusal::None;
+}
+
+/**
+ * @brief Names why the pending connect needs an entitlement: its buses first, then the project's
+ *        transforms and user tables (spec 0094), read from the snapshot so no binding can be
+ *        forgotten.
+ */
+IO::DeviceTableQuery::ConnectRefusal IO::DeviceTableQuery::connectRefusal(
+  const SerialStudio::BusType busType, const SerialStudio::OperationMode mode) const
+{
+  const auto bus = busRefusal(busType, mode);
+  if (bus != ConnectRefusal::None)
+    return bus;
+
+  const auto content = projectContent(mode);
+  if (content.transforms > 0 || content.tables > 0)
+    return ConnectRefusal::ProContent;
+
+  return ConnectRefusal::None;
+}
+
+/**
+ * @brief Counts the Pro content the project would run: none outside ProjectFile mode, where no
+ *        project transform or table is in play.
+ */
+SerialStudio::ProContentSummary IO::DeviceTableQuery::projectContent(
+  const SerialStudio::OperationMode mode) const
+{
+  if (mode != SerialStudio::ProjectFile || !m_project)
+    return {0, 0};
+
+  return SerialStudio::proContentSummary(m_project->groups, m_project->userTableCount);
 }
 
 /**

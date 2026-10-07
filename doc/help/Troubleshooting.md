@@ -650,28 +650,34 @@ Common issues:
 
 ### Pro features show as locked
 
-**Problem:** Pro features are grayed out or show a Buy License / Activate prompt.
+**Problem:** Using a Pro feature shows a trial or activation prompt instead of opening it.
 
 **Possible causes:**
+- No trial has been started on this machine
+- The project contains a dataset transform or a Variables table, which need Pro to connect; the prompt lists how many. Right-click the dataset and choose **Remove Transform**, or delete the table, to run the project for free
 - Trial expired
 - License key not activated
 - Using GPL build instead of official binary
 
 **Solutions:**
 
-1. **Check license status:**
-   - Click **Activate** in the toolbar to open the Licensing dialog
-   - It shows whether a Pro license or trial is active
+1. **Start the trial:**
+   - If the prompt asks **Start your free 14-day Serial Studio Pro trial?**, answer **Yes**
+   - Internet connection required to register the trial; the feature opens once registration completes
 
-2. **Activate license key:**
+2. **Check license status:**
+   - Click **About** in the toolbar, then **Manage License**, to open the Licensing dialog
+   - While a trial runs, the console welcome text shows the days remaining; after it ends, it shows `Pro trial expired. Free features remain fully functional.`
+
+3. **Activate license key:**
    - In the Licensing dialog, paste your license key and click **Activate**
    - Internet connection required for activation
 
-3. **Download official binary:**
+4. **Download official binary:**
    - If you compiled from source with GPL-only modules, download the official binary from [serial-studio.com](https://serial-studio.com)
    - The official binary includes Pro features (locked behind license)
 
-4. **Check trial status:**
+5. **Check trial status:**
    - Trial is 14 days, one trial per version per hardware
    - A new Serial Studio release starts a fresh trial
    - Based on hardware ID (can't reset by reinstalling)

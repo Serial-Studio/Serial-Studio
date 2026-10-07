@@ -23,12 +23,14 @@
 
 #include <cmath>
 #include <QDateTime>
+#include <QSet>
 
 #include "Core/Bus/Messages.h"
 #include "Core/DataModel/Frame.h"
 #include "Core/SSAssert.h"
 #include "DataModel/NotificationCenter.h"
 #include "DataModel/PipelineModules.h"
+#include "DataModel/WidgetResolution.h"
 #include "UI/Dashboard.h"
 
 //--------------------------------------------------------------------------------------------------
@@ -74,18 +76,25 @@ void UI::AlarmMonitor::setupExternalConnections()
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Rebuilds the per-dataset tracker list from the Dashboard's dataset map; the baseline
- *        band is re-captured on the next evaluation so layout rebuilds never re-fire alarms.
+ * @brief Rebuilds the per-dataset tracker list from the Dashboard's dataset map, one tracker per
+ *        dataset whose bands raise alarms: drawn by a widget and not suppressed (spec 0093); the
+ *        baseline band is re-captured on the next evaluation so layout rebuilds never re-fire.
  */
 void UI::AlarmMonitor::rebuildTrackers()
 {
   m_trackers.clear();
   SS_ASSERT(m_dashboard != nullptr, return);
 
+  QSet<int> applicable;
+  for (const auto& group : m_dashboard->rawFrame().groups)
+    for (const auto& dataset : group.datasets)
+      if (SerialStudio::datasetRaisesBandAlarms(dataset, group))
+        applicable.insert(dataset.uniqueId);
+
   const auto& datasets = m_dashboard->datasets();
   for (auto it = datasets.cbegin(); it != datasets.cend(); ++it) {
     const auto& dataset = it.value();
-    if (dataset.alarmBands.empty())
+    if (dataset.alarmBands.empty() || !applicable.contains(it.key()))
       continue;
 
     Tracker tracker;
@@ -119,6 +128,19 @@ void UI::AlarmMonitor::rebuildTrackers()
   }
 
   Q_EMIT trackersRebuilt();
+}
+
+/**
+ * @brief Whether a tracker exists for @p uniqueId; the annunciator reaps the band points whose
+ *        dataset this stops answering for.
+ */
+bool UI::AlarmMonitor::tracks(int uniqueId) const noexcept
+{
+  for (const auto& tracker : m_trackers)
+    if (tracker.uniqueId == uniqueId)
+      return true;
+
+  return false;
 }
 
 //--------------------------------------------------------------------------------------------------

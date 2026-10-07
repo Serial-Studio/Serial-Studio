@@ -2,7 +2,7 @@
 
 This page is the complete map of Serial Studio's buttons: the main toolbar at the top of the window, the dashboard Start menu and taskbar, the Setup panel, the Project Editor toolbar, and the small toolbar that sits on top of each dashboard widget. Hover any button in the application to see the same tooltip text quoted here.
 
-Buttons marked **(Pro)** require a Serial Studio Pro license (or an active trial). In the free GPL build they are hidden, not just disabled.
+Buttons marked **(Pro)** require a Serial Studio Pro license (or an active trial). In an official binary with neither, they stay visible: using one offers the 14-day trial, or the activation prompt once the trial has expired. GPL builds hide them.
 
 ## The main window at a glance
 
@@ -70,7 +70,6 @@ The driver buttons are a single-choice group: the active driver's label is shown
 
 | Button | Icon | What it does | Notes |
 |--------|------|--------------|-------|
-| **Activate** **(Pro)** | <img src="cmd:license.activate" alt="License Management" width="16" height="16"> | Opens license management to activate Serial Studio Pro. | Shown only when a Pro trial has expired and no license is active. |
 | **Connect / Disconnect** | <img src="cmd:io.toggleConnection:checked" alt="Connect" width="16" height="16"> <img src="cmd:io.disconnect" alt="Disconnect" width="16" height="16"> | Opens or closes the connection to the configured device. This is a toggle: when connected the icon and label change to **Disconnect**. | Disabled until the connection is fully configured, and while a CSV / MDF4 / session player is open. |
 
 ## Setup panel
@@ -144,7 +143,7 @@ The taskbar runs along the bottom of the dashboard.
 
 ### A note on workspaces
 
-A **workspace** is a saved arrangement of dashboard windows. Each project includes a default workspace; you can add your own to keep different views of the same data (an overview screen, a diagnostics screen) and switch between them from the taskbar or the Start menu. User workspaces have IDs at or above 5000 and only those can be renamed or deleted.
+A **workspace** is a saved arrangement of dashboard windows. Each project includes a default workspace; you can add your own to keep different views of the same data (an overview screen, a diagnostics screen) and switch between them from the taskbar or the Start menu. User workspaces have IDs at or above 5000 and only those can be renamed or deleted. Switching a project to custom workspaces is a Pro feature.
 
 Once you have more than a few workspaces, **Ctrl+K** opens the [Command Palette](Command-Palette.md): a searchable grid of every workspace, laid out like virtual desktops, alongside the dashboard's tools and open widgets. Start typing to filter the list, use the arrow keys to move the highlight, press Enter to switch, or Escape to close without changing anything. However you switch, the rebuilt dashboard slides in vertically in the direction of travel, rising up from below when you move to a later workspace and dropping down from above when you move back, so it stays easy to keep your bearings.
 

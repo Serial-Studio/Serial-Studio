@@ -537,6 +537,11 @@ public:
     return m_presentation.tablesForDiagram();
   }
 
+  Q_INVOKABLE [[nodiscard]] bool datasetHasTransform(int groupId, int datasetId) const
+  {
+    return m_entities.datasetHasTransform(groupId, datasetId);
+  }
+
   Q_INVOKABLE [[nodiscard]] QJsonObject serializeToJson() const
   {
     return m_persistence.serializeToJson();
@@ -797,6 +802,11 @@ public slots:
   void duplicateDataset(int groupId, int datasetId)
   {
     m_entities.duplicateDataset(groupId, datasetId);
+  }
+
+  void clearDatasetTransform(int groupId, int datasetId)
+  {
+    m_entities.clearDatasetTransform(groupId, datasetId);
   }
 
   void setGroupEnabled(int groupId, bool enabled) { m_entities.setGroupEnabled(groupId, enabled); }

@@ -26,6 +26,11 @@ project.dataset.setTransformCode {groupId, datasetId, code, language: 1}
 project.dataset.update            {groupId, datasetId, transformCode, transformLanguage: 1}
 ```
 
+Both calls fail with `OPERATION_FAILED` when no license or trial is active; passing
+empty code to clear a transform always works. A project that contains a transform
+or a user table also needs a license or trial to connect, so `io.connect` returns
+`OPERATION_FAILED` naming that reason instead of opening the device.
+
 ## Expression: language 3, the cheapest option
 
 A third `transformLanguage` exists: **Expression** (`language: 3`). No

@@ -26,6 +26,7 @@
 
 #include "Core/DataModel/Frame.h"
 #include "Core/EnumLabels.h"
+#include "Core/License.h"
 #include "Core/SerialStudio.h"
 #include "DataModel/PipelineModules.h"
 #include "DataModel/ProjectModel.h"
@@ -360,4 +361,12 @@ QString API::Handlers::ProjectApiSupport::detectLanguageMismatch(const QString& 
                           "(JavaScript) or rewrite the code in Lua.");
 
   return QString();
+}
+
+/**
+ * @brief The refusal text both transform setters return without an entitlement (spec 0094 R9).
+ */
+QString API::Handlers::ProjectApiSupport::transformsRequirePro()
+{
+  return Core::License::requiresProMessage(QStringLiteral("dataset transforms"));
 }

@@ -22,14 +22,15 @@
 #include "UI/Alarms/AnnunciatorChecker.h"
 
 #include "DataModel/ProjectModel.h"
+#include "DataModel/WidgetResolution.h"
 #include "IO/Audio/SoundPlayer.h"
 #include "UI/Alarms/SoundTheme.h"
 
 using Finding = Misc::ProblemCenter::Finding;
 
 /**
- * @brief Walks the project for alarm intent: a band on any enabled dataset, or a sounds map.
- *        Command/rebuild rate only, never per frame.
+ * @brief Walks the project for alarm intent: an enabled dataset whose bands raise alarms (drawn
+ *        by a widget and not suppressed, spec 0093), or a sounds map. Command/rebuild rate only.
  */
 bool UI::Alarms::AnnunciatorChecker::definesAlarms(const DataModel::ProjectModel& project)
 {
@@ -42,7 +43,7 @@ bool UI::Alarms::AnnunciatorChecker::definesAlarms(const DataModel::ProjectModel
       continue;
 
     for (const auto& dataset : group.datasets)
-      if (dataset.enabled && !dataset.alarmBands.empty())
+      if (dataset.enabled && SerialStudio::datasetRaisesBandAlarms(dataset, group))
         return true;
   }
 

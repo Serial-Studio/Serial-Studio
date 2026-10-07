@@ -59,6 +59,7 @@ end
 --
 -- Whether a given global exists depends on which engine is running the script.
 
+alarms = alarms or {}
 api = api or {}
 assistant = assistant or {}
 assistant.dataset = assistant.dataset or {}
@@ -120,6 +121,53 @@ stream = stream or {}
 system = system or {}
 ui = ui or {}
 ui.window = ui.window or {}
+
+function alarms.acknowledge()
+  local p = {}
+  return apiCall('alarms.acknowledge', p)
+end
+
+function alarms.clear()
+  local p = {}
+  return apiCall('alarms.clear', p)
+end
+
+function alarms.getProjectSounds()
+  local p = {}
+  return apiCall('alarms.getProjectSounds', p)
+end
+
+function alarms.reset()
+  local p = {}
+  return apiCall('alarms.reset', p)
+end
+
+function alarms.setMuted(muted)
+  local p = {}
+  p['muted'] = muted
+  return apiCall('alarms.setMuted', p)
+end
+
+function alarms.setProjectSounds(sounds)
+  local p = {}
+  p['sounds'] = sounds
+  return apiCall('alarms.setProjectSounds', p)
+end
+
+function alarms.silence()
+  local p = {}
+  return apiCall('alarms.silence', p)
+end
+
+function alarms.state()
+  local p = {}
+  return apiCall('alarms.state', p)
+end
+
+function alarms.test()
+  local p = {}
+  return apiCall('alarms.test', p)
+end
 
 function api.getCommands()
   local p = {}

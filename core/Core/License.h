@@ -45,6 +45,12 @@ using ProFeatureRetry = std::function<void()>;
  */
 using ProFeatureHandler = std::function<void(const QString&, ProFeatureRetry)>;
 
+/**
+ * @brief The intent raised when a connect or a live session is refused for the project's own
+ *        content (spec 0094); the prompts match on it to say what the project contains.
+ */
+inline constexpr char kProContentFeature[] = "project.pro-content";
+
 [[nodiscard]] bool activated() noexcept;
 [[nodiscard]] quint8 tier() noexcept;
 [[nodiscard]] bool trialExpired() noexcept;
@@ -54,5 +60,6 @@ void set(bool activated, quint8 tier, bool trialExpired, int trialDaysRemaining)
 void setProFeatureHandler(ProFeatureHandler handler);
 void setRemoteDispatchProbe(std::function<bool()> probe);
 [[nodiscard]] bool remoteDispatchActive();
+[[nodiscard]] QString requiresProMessage(const QString& subject);
 void requestProFeature(const QString& featureId, ProFeatureRetry retry = {});
 }  // namespace Core::License

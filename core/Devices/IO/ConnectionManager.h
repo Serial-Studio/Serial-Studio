@@ -44,6 +44,7 @@
 #include "IO/ConnectionManager/DeviceTableQuery.h"
 #include "IO/ConnectionManager/DriverFactory.h"
 #include "IO/ConnectionManager/DriverUiRegistry.h"
+#include "IO/ConnectionManager/EntitlementGate.h"
 #include "IO/ConnectionManager/ExclusiveResourceGuard.h"
 #include "IO/ConnectionManager/ReplyCapture.h"
 #include "IO/ConnectionManager/StreamConfigBuilder.h"
@@ -210,6 +211,7 @@ public:
   [[nodiscard]] Q_INVOKABLE qint64 writeDataToDevice(int deviceId, const QByteArray& data) override;
   [[nodiscard]] Q_INVOKABLE bool isDeviceConnected(int deviceId) const;
   [[nodiscard]] bool lastCloseRequested() const noexcept;
+  [[nodiscard]] DeviceTableQuery::ConnectRefusal connectRefusal() const;
 
   [[nodiscard]] qint64 writeAndArmReply(int deviceId, const QByteArray& data) override;
   [[nodiscard]] QByteArray pollReplyBuffer(int deviceId) const override;
@@ -297,6 +299,7 @@ private:
   ReplyCapture m_replyCapture;
   DeviceIoRouter m_io;
   DeviceTableQuery m_query;
+  EntitlementGate m_entitlement;
   ExclusiveResourceGuard m_resourceGuard;
   DriverUiRegistry m_uiDrivers;
   DriverFactory m_driverFactory;

@@ -93,6 +93,7 @@ UI::Alarms::AlarmAnnunciator::AlarmAnnunciator(const Modules& modules, QObject* 
   , m_ticksUntilRetry(0)
   , m_burstStartedMs(0)
   , m_soundingPriority(Priority::None)
+  , m_monitor(nullptr)
   , m_modules(modules)
   , m_events(modules.bus, modules.connectionManager, this)
   , m_sequence(Sequence::A4)
@@ -159,6 +160,7 @@ void UI::Alarms::AlarmAnnunciator::setupExternalConnections(bool headless,
   SS_ASSERT(!m_notifications.isActive(), return);
 
   m_headless = headless;
+  m_monitor  = monitor;
   if (monitor) {
     connect(monitor, &UI::AlarmMonitor::bandTransition, this, &AlarmAnnunciator::onBandTransition);
     connect(
@@ -868,10 +870,10 @@ void UI::Alarms::AlarmAnnunciator::onNotificationPosted(const Core::Bus::Notific
 }
 
 /**
- * @brief Band trackers were rebuilt: drop the points whose dataset no longer exists or lost its
- *        bands; the monitor's next baseline emission re-seeds the survivors, so an acknowledged
- *        point survives the rebuild. A held table skips the reap: the disconnect reset empties
- *        the dashboard's dataset map, which would otherwise reap every held point (0088 R3).
+ * @brief Band trackers were rebuilt: drop the points whose dataset the monitor stopped tracking
+ *        (gone, bands removed, no band-drawing widget, or suppressed: spec 0093); its next
+ *        baseline emission re-seeds the survivors, so an acknowledged point survives the rebuild.
+ *        A held table skips the reap, since the disconnect reset leaves no trackers (0088 R3).
  */
 void UI::Alarms::AlarmAnnunciator::onTrackersRebuilt()
 {
@@ -879,14 +881,12 @@ void UI::Alarms::AlarmAnnunciator::onTrackersRebuilt()
   if (m_dropHold)
     return;
 
-  const auto& datasets = m_modules.dashboard.datasets();
   std::vector<PointKey> stale;
   for (const auto& point : m_sequence.points()) {
     if (point.key.kind != PointKind::Band)
       continue;
 
-    const auto it = datasets.constFind(point.key.id);
-    if (it == datasets.cend() || it.value().alarmBands.empty())
+    if (!m_monitor || !m_monitor->tracks(point.key.id))
       stale.push_back(point.key);
   }
 
@@ -1017,12 +1017,14 @@ void UI::Alarms::AlarmAnnunciator::onTestStep()
 }
 
 /**
- * @brief 1 Hz housekeeping: frees retired buffers, ends a finished Advisory one-shot, and
- *        handles a lost device by falling back to the default and rebinding when it returns.
+ * @brief 1 Hz housekeeping: re-derives the configured-alarms flag (dialog and multi-selection
+ *        edits emit no groupsChanged, spec 0093), frees retired buffers, ends a finished Advisory
+ *        one-shot, and handles a lost device by falling back to the default and rebinding.
  */
 void UI::Alarms::AlarmAnnunciator::onHealthTick()
 {
   m_player.collectGarbage();
+  refreshConfiguredAlarms();
 
   const bool advisoryDone = m_soundingPriority == Priority::Advisory
                          && !m_player.laneActive(IO::Audio::SoundPlayer::AlarmLane);

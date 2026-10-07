@@ -1709,6 +1709,34 @@ def _write_numerus_forms(translation, forms: tuple[str, ...]) -> None:
         etree.SubElement(translation, "numerusform").text = text
 
 
+def _translation_is_empty(message, translation) -> bool:
+    """Return True when TRANSLATION carries no usable text.
+
+    A plural entry keeps its text in <numerusform> children, so its own .text
+    is only whitespace and must never be read as "empty".
+    """
+    if _message_is_numerus(message, translation):
+        return _numerus_forms(translation) is None
+    return not (translation.text or "").strip()
+
+
+def _set_translation_text(message, translation, text: str) -> None:
+    """Store TEXT in TRANSLATION, filling every plural form of a numerus entry.
+
+    lupdate already emitted the language's plural-form count, and the LLM
+    returns a single %n string, so that string fills each existing form.
+    Writing a numerus entry's .text instead produces a file lrelease rejects.
+    """
+    if not _message_is_numerus(message, translation):
+        translation.text = text
+        return
+
+    count = max(1, len(translation.findall("numerusform")))
+    _write_numerus_forms(translation, (text,) * count)
+    if translation.text is not None and translation.text.strip():
+        translation.text = "\n" + " " * 12
+
+
 def _index_reuse_entries(root):
     """Split every translatable message into finished donors and pending entries.
 
@@ -1961,16 +1989,15 @@ def translate_ts_file(
 
             file_total += 1
 
-            translation_text = translation.text or ""
-            needs_translation = (
-                translation.get("type") == "unfinished" or not translation_text.strip()
-            )
+            needs_translation = translation.get(
+                "type"
+            ) == "unfinished" or _translation_is_empty(message, translation)
             if not needs_translation:
                 continue
 
             pinned = PINNED_TRANSLATIONS.get(source.text, {}).get(lang_code)
             if pinned is not None:
-                translation.text = pinned
+                _set_translation_text(message, translation, pinned)
                 translation.attrib.pop("type", None)
                 log_fn(
                     f"[PINNED] '{source.text}' → '{pinned}' (manual translation, no LLM call)"
@@ -2052,7 +2079,7 @@ def translate_ts_file(
             continue
 
         for node, (text, score) in zip(translation_nodes, results):
-            node.text = text
+            _set_translation_text(node.getparent(), node, text)
             if score >= min_score:
                 node.attrib.pop("type", None)
             else:
@@ -2105,14 +2132,13 @@ def _fill_en_us_translations(root) -> int:
             if translation is None:
                 translation = etree.SubElement(message, "translation")
 
-            translation_text = translation.text or ""
-            needs_fill = (
-                translation.get("type") == "unfinished" or not translation_text.strip()
-            )
+            needs_fill = translation.get(
+                "type"
+            ) == "unfinished" or _translation_is_empty(message, translation)
             if not needs_fill:
                 continue
 
-            translation.text = source.text
+            _set_translation_text(message, translation, source.text)
             translation.attrib.pop("type", None)
             filled += 1
     return filled
@@ -2209,7 +2235,7 @@ def verify_capitalization_ts_file(filename):
                     or translation.get("type") == "unfinished"
                 ):
                     print(f"[PIN] {source.text} → {pinned}")
-                    translation.text = pinned
+                    _set_translation_text(message, translation, pinned)
                     translation.attrib.pop("type", None)
                     total_fixed += 1
                 continue

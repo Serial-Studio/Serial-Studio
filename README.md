@@ -23,11 +23,11 @@ Runs on Windows, macOS, Linux, and Raspberry Pi.
 
 **Read PLCs without a gateway (Pro).** OPC UA covers modern controllers: browse the address space, tick the tags you want, and the project generates itself. Three direct drivers cover the rest of the plant floor, no KEPServer-class gateway in between. S7comm polls absolute addresses (`DB5.DBD20:REAL`, `MW10`) on Siemens S7-300, S7-400, S7-1200, and S7-1500 controllers. EtherNet/IP polls symbolic tag names on Allen-Bradley ControlLogix, CompactLogix, MicroLogix, Micro800, SLC 500, and PLC-5, plus Omron NJ/NX. IEC 60870-5-104 interrogates RTUs and substation gateways and streams their spontaneous reports, generating the project from the station's own database. All three are read-only clients: connecting Serial Studio to a running machine cannot change its state. On the MQTT side, Sparkplug B works in both directions — subscribe as a host application and generate a project from the birth certificates, or publish your dashboard as an edge node.
 
-**Visualize data.** 17 widgets in the GPL build: line plots, gauges, bar charts, meters, GPS maps, FFT spectrum, accelerometer, gyroscope, compass, data grids, LED panels, terminal, multi-channel plots, web view, bar panel, plus a Clock and Stopwatch utility widget pair. Bar, Gauge, Compass, and Meter each render as a two-page swipe view (page 0 is the analog face, page 1 is a large digital readout), so a single tile shows both the trend at a glance and the exact value. Pro adds 3D Plot, XY Plot, Waterfall (spectrogram), Image View (live camera), the Canvas widget, and output widgets (buttons, sliders, knobs, an Output Panel, and a Notification Log). Canvas is a JavaScript `paint(ctx, w, h)` callback with a Canvas2D-style API and 18 templates: oscilloscope, polar plot, artificial horizon, audio VU, dial gauge, heatmap, sparklines, vector field, XY scope, and others.
+**Visualize data.** 17 widgets in the GPL build: line plots, gauges, bar charts, meters, GPS maps, FFT spectrum, accelerometer, gyroscope, compass, data grids, LED panels, terminal, multi-channel plots, web view, bar panel, plus a Clock and Stopwatch utility widget pair. Bar, Gauge, Compass, and Meter each render as a two-page swipe view (page 0 is the analog face, page 1 is a large digital readout), so a single tile shows both the trend at a glance and the exact value. Pro adds 3D Plot, Waterfall (spectrogram), Image View (live camera), the Canvas widget, and output widgets (buttons, sliders, knobs, an Output Panel, and a Notification Log). Canvas is a JavaScript `paint(ctx, w, h)` callback with a Canvas2D-style API and 18 templates: oscilloscope, polar plot, artificial horizon, audio VU, dial gauge, heatmap, sparklines, vector field, XY scope, and others.
 
-**Build dashboards.** The Project Editor defines groups, datasets, and widgets through forms. Or skip the project file: print CSV from your device and Quick Plot draws it. Workspaces split big projects into tabs with a searchable taskbar.
+**Build dashboards.** The Project Editor defines groups, datasets, and widgets through forms. Or skip the project file: print CSV from your device and Quick Plot draws it. Custom workspaces (Pro) split big projects into tabs with a searchable taskbar.
 
-**Parse and transform data.** Frame parsers come in three flavors: Built-In templates (compiled C++ parsers you configure through a form, no code, the default for new projects), JavaScript, and Lua (LuaJIT 2.1, 5.1 syntax with compatibility shims). 28 script templates cover MAVLink, NMEA 0183/2000, UBX, SiRF, RTCM, MessagePack, TLV, COBS, SLIP, JSON, XML, YAML, INI, Modbus, and others. Per-dataset transforms (EMA, scaling, calibration, unit conversion) run every frame as short JS or Lua snippets. Variables act as a shared bus so transforms can derive computed datasets from each other.
+**Parse and transform data.** Frame parsers come in three flavors: Built-In templates (compiled C++ parsers you configure through a form, no code, the default for new projects), JavaScript, and Lua (LuaJIT 2.1, 5.1 syntax with compatibility shims). 28 script templates cover MAVLink, NMEA 0183/2000, UBX, SiRF, RTCM, MessagePack, TLV, COBS, SLIP, JSON, XML, YAML, INI, Modbus, and others. Per-dataset transforms (EMA, scaling, calibration, unit conversion) run every frame as short JS or Lua snippets. Variables act as a shared bus so transforms can derive computed datasets from each other. Transforms and Variables are Pro.
 
 **Send commands back (Pro).** Buttons, toggles, sliders, knobs, text fields, and freeform output panels run JS templates that emit GCode, SCPI, Modbus, NMEA, CAN, or whatever your device speaks. Actions run on demand or on a timer.
 
@@ -100,9 +100,9 @@ All Linux packages (AppImage, DEB, RPM, x64 and ARM64) bundle their own glibc, s
 - **Canvas widget (Pro):** scriptable Canvas2D-style canvas driven by a JS `paint(ctx, w, h)` callback. Watchdog-protected QJSEngine, persistent script state across frames, 18 templates (oscilloscope, polar plot, artificial horizon, audio VU meter, dial gauge, heatmap, LED matrix, sparklines, vector field, XY scope, and more).
 - **Output widgets:** buttons, toggles, sliders, knobs, text fields, and freeform panels, with JS templates for GCode, SCPI, Modbus, NMEA, CAN, and more (Pro).
 - **Custom parsing:** Built-In template, JavaScript, or Lua (LuaJIT 2.1, 5.1 syntax with compatibility shims) frame parsers, plus 28 script templates (MAVLink, NMEA 0183/2000, UBX, SiRF, RTCM, MessagePack, TLV, COBS, SLIP, JSON, XML, YAML, INI, Modbus, and more).
-- **Per-dataset transforms:** short JS or Lua snippets to filter, scale, calibrate, or derive values every frame.
-- **Variables:** shared bus for system datasets, user-defined constants and computed variables, and computed datasets built entirely from transforms.
-- **Workspaces:** split large projects into focused dashboard tabs, with a taskbar search.
+- **Per-dataset transforms:** short JS or Lua snippets to filter, scale, calibrate, or derive values every frame (Pro).
+- **Variables:** shared bus for system datasets, user-defined constants and computed variables, and computed datasets built entirely from transforms (Pro).
+- **Custom workspaces:** split large projects into focused dashboard tabs, with a taskbar search (Pro).
 - **CSV export:** every frame, ready for Excel, Python, MATLAB, or R.
 - **MDF4:** read and write MDF4/MF4 for CAN Bus, LIN, FlexRay, and analog (Pro).
 - **Historian:** record frames and raw bytes into SQLite, then browse, tag, export, and replay them (Pro).
@@ -243,9 +243,9 @@ On Windows the default generator is Visual Studio, which is multi-config: it ign
 
 You can also open `CMakeLists.txt` in Qt Creator or any CMake-aware IDE without extra setup.
 
-The default build is the GPLv3 edition. It includes the core: UART, network (TCP/UDP/WebSocket/HTTP), and BLE drivers, the Project Editor, Quick Plot and Console modes, the standard widgets (line plot, gauge, bar, GPS, FFT, accelerometer, gyroscope, compass, data grid, LED panel, terminal, multi-plot), Built-In, JavaScript, and Lua frame parsers, per-dataset transforms, CSV export, and the local TCP/MCP API.
+The default build is the GPLv3 edition. It includes the core: UART, network (TCP/UDP/WebSocket/HTTP), and BLE drivers, the Project Editor, Quick Plot and Console modes, the standard widgets (line plot, gauge, bar, GPS, FFT, accelerometer, gyroscope, compass, data grid, LED panel, terminal, multi-plot), Built-In, JavaScript, and Lua frame parsers, CSV export, and the local TCP/MCP API.
 
-Pro-only modules are not built into the GPL edition: MQTT (Sparkplug B included), Modbus, CAN Bus, OPC UA, Siemens S7comm, EtherNet/IP, IEC 60870-5-104, the InfluxDB sink, Audio, USB, HID, Process I/O, multi-source projects, the 3D Plot, XY Plot, Waterfall, Image View, and Canvas widgets, the output widgets, MDF4 import/export, the Historian, session reports, XMODEM/YMODEM/ZMODEM file transfer, the Modbus register-map and CAN DBC importers, and the AI Assistant. Some of those depend on proprietary Qt modules (Modbus, CAN Bus, MQTT, OPC UA); others are commercial-licensed code in this repository. See [Pro vs Free Features](./doc/help/Pro-vs-Free.md) for the full matrix.
+Pro-only modules are not built into the GPL edition: MQTT (Sparkplug B included), Modbus, CAN Bus, OPC UA, Siemens S7comm, EtherNet/IP, IEC 60870-5-104, the InfluxDB sink, Audio, USB, HID, Process I/O, multi-source projects, the 3D Plot, Waterfall, Image View, and Canvas widgets, the output widgets, MDF4 import/export, the Historian, session reports, XMODEM/YMODEM/ZMODEM file transfer, the Modbus register-map and CAN DBC importers, and the AI Assistant. Some of those depend on proprietary Qt modules (Modbus, CAN Bus, MQTT, OPC UA); others are commercial-licensed code in this repository. Per-dataset transforms, Variables, and custom workspaces are Pro features too: the GPL edition cannot create or edit them, and a project that contains a transform or a Variables table needs Pro to connect (removing them is free). The notification log is also Pro. See [Pro vs Free Features](./doc/help/Pro-vs-Free.md) for the full matrix.
 
 If you are a Pro user or have a commercial license, [contact the maintainer](mailto:alex@serial-studio.com) for build instructions and activation details.
 
@@ -256,7 +256,7 @@ Serial Studio is developed and maintained by [Alex Spataru](https://github.com/a
 If Serial Studio is useful to you, here are a few ways to support it:
 
 - [Donate via PayPal](https://www.paypal.com/donate?hosted_button_id=XN68J47QJKYDE): keeps the project active.
-- [Buy a commercial license](https://serial-studio.com): unlocks Pro features, official binaries, and priority support. GPL builds compiled from source are governed by the GPLv3 alone, with no additional restrictions.
+- [Buy a commercial license](https://serial-studio.com): unlocks Pro features and priority support. GPL builds compiled from source are governed by the GPLv3 alone, with no additional restrictions.
 - [Become an affiliate](https://store.serial-studio.com/affiliates): a good fit for content creators who want to earn a commission by referring new customers.
 
 Commercial licenses directly fund development, bug fixes, and new features.
@@ -273,21 +273,22 @@ Source files are individually marked with SPDX headers, either `GPL-3.0-or-later
 
 ## Picking the right version
 
-The table below shows licensing, feature access, and obligations for each edition.
+The official binary runs without a license. Its free features work with no time limit for personal, educational, and open-source use, and the first Pro feature you use offers a 14-day Pro trial; when the trial ends, Pro features lock and the free features keep working. Commercial use of the official binary requires a Pro license. The table below shows licensing, feature access, and obligations for each edition.
 
-| Feature / use case     | GPL version *(build it yourself)*    | Trial version *(official binary)*    | Pro version *(activated official binary)*   |
-|------------------------|--------------------------------------|--------------------------------------|---------------------------------------------|
-| **Commercial use**     | ✅ Permitted under GPLv3             | ❌ Evaluation only                   | ✅ Fully licensed                            |
-| **Official support**   | ❌ Community only                    | ❌ None                              | ✅ Priority support                          |
-| **Pro features**       | ❌ Not included                      | ✅ Included                          | ✅ Included                                  |
-| **Usage restrictions** | Must comply with GPL and Qt terms    | 14-day trial, no redistribution      | Bound by commercial license terms           |
-| **Precompiled binary** | ❌ Must build from source            | ✅ Provided for trial only           | ✅ Provided                                  |
-| **Qt licensing**       | Requires GPL-compatible Qt           | Qt licensing covered by vendor       | Qt licensing covered by vendor              |
-| **Activation system**  | ❌ Not applicable                    | ✅ Trial disables after 14 days      | ✅ Requires a valid license key              |
-| **Business use**       | ✅ Permitted (no Pro features)       | ❌ Evaluation only                   | ✅ Fully allowed                             |
-| **Best for**           | OSS devs, students, contributors     | Hobbyists, personal evaluation       | Businesses, teams, commercial products      |
+| Feature / use case     | GPL build *(compiled from source)*   | Official binary *(no license)*        | Official binary *(Pro license)*             |
+|------------------------|--------------------------------------|---------------------------------------|---------------------------------------------|
+| **Free features**      | ✅ Included                          | ✅ Included, no time limit            | ✅ Included                                  |
+| **Pro features**       | ❌ Not included                      | 14-day trial, then locked             | ✅ Included                                  |
+| **Commercial use**     | ✅ Permitted under GPLv3             | ❌ Requires a Pro license             | ✅ Fully licensed                            |
+| **Official support**   | ❌ Community only                    | ❌ Community only                     | ✅ Priority support                          |
+| **Usage restrictions** | Must comply with GPL and Qt terms    | Bound by the EULA, no redistribution  | Bound by commercial license terms           |
+| **Precompiled binary** | ❌ Must build from source            | ✅ Provided                           | ✅ Provided                                  |
+| **Qt licensing**       | Requires GPL-compatible Qt           | Qt licensing covered by vendor        | Qt licensing covered by vendor              |
+| **Activation system**  | ❌ Not applicable                    | None; the trial registers the machine | ✅ Requires a valid license key              |
+| **Business use**       | ✅ Permitted (no Pro features)       | ❌ Requires a Pro license             | ✅ Fully allowed                             |
+| **Best for**           | OSS devs, students, contributors     | Hobbyists, personal evaluation        | Businesses, teams, commercial products      |
 
-The GPL build carries the full GPLv3 grant: use for any purpose, commercial use included, with no restrictions beyond the GPL's own terms. It excludes the Pro modules. Pro features and official binaries are proprietary; using them beyond the 14-day trial requires a commercial license. A file's SPDX header states its license; files marked commercial-only carry no GPL rights.
+The GPL build carries the full GPLv3 grant: use for any purpose, commercial use included, with no restrictions beyond the GPL's own terms. It excludes the Pro modules. Pro features and official binaries are proprietary: the official binaries are governed by the [EULA](EULA.md), and using Pro features beyond the 14-day trial requires a commercial license. A file's SPDX header states its license; files marked commercial-only carry no GPL rights.
 
 ## Contributing
 

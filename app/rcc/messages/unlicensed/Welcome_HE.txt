@@ -5,6 +5,9 @@ Copyright (c) 2020–2026 Alex Spataru <https://github.com/alex-spataru>
 ברגע שתנסה אחת מהן, עם תקופת ניסיון חינמית של 14 יום.
 אין צורך בחשבון או בתשלום כדי להתחיל.
 
+חינמית לשימוש אישי, לימודי ובקוד פתוח; שימוש מסחרי מחייב
+רישיון Pro.
+
 ← תמיכה: alex@serial-studio.com
 ← קבע שיחה: https://calendly.com/serial-studio
 ← למד עוד: https://serial-studio.com/

@@ -11,7 +11,7 @@ Like this project? Consider supporting development with Serial Studio Pro:
 → https://store.serial-studio.com/
 
 Pro features:
-→ MQTT, XY, and 3D visualization
+→ MQTT and 3D visualization
 → Audio, CAN Bus, Modbus, USB, HID, and Process I/O drivers
 → Output widgets, MDF4 export, and XMODEM/YMODEM/ZMODEM transfers
 → Historian, Variables, and value transforms (JS + Lua)

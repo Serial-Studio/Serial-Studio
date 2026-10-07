@@ -294,6 +294,7 @@ private:
   int m_ticksUntilRetry;
   qint64 m_burstStartedMs;
   Priority m_soundingPriority;
+  UI::AlarmMonitor* m_monitor;
   QString m_soundingFile;
   Modules m_modules;
   QTimer m_testTimer;

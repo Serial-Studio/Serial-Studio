@@ -333,6 +333,18 @@ ss_add_unit_test(tst_workspace_rebind
 )
 
 #
+# Alarm-band applicability (spec 0093): the one rule the alarm monitor, the annunciator and the
+# Project Editor share, tabulated over the dataset shapes without a dashboard or a project model.
+#
+ss_add_unit_test(tst_alarm_band_applicability
+  SOURCES tst_alarm_band_applicability.cpp
+          ${SS_CORE_SRC}/Pipeline/DataModel/WidgetResolution.cpp
+  LIBS    Qt6::Core
+          Qt6::Gui
+          SerialStudio::Core
+)
+
+#
 # "Add to current project" (spec 0083): the pure id remap an importer's project goes through
 # before the loader appends it. Frame.h's serializers and readers come with SerialStudio::Core.
 #
@@ -1253,6 +1265,16 @@ ss_add_unit_test(tst_serialstudio_enums
 #
 ss_add_unit_test(tst_license_state
   SOURCES tst_license_state.cpp
+  LIBS    Qt6::Core
+          SerialStudio::Core
+)
+
+#
+# Contract of the Pro-content rule the connect gate reads (spec 0094): which project content
+# needs an entitlement to run, and which does not.
+#
+ss_add_unit_test(tst_pro_content
+  SOURCES tst_pro_content.cpp
   LIBS    Qt6::Core
           SerialStudio::Core
 )

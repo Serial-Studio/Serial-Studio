@@ -38,6 +38,7 @@ Full text: `LICENSES/LicenseRef-SerialStudio-Commercial.txt`
 ## What you can do
 
 - Use the GPL version for any purpose, commercial use included, under GPLv3 terms.
+- Use the free features of the official binaries for personal, educational, and open-source work, with no license and no time limit.
 - Modify and redistribute the source code under GPLv3.
 - Use the Pro version commercially with a valid Commercial License.
 - Evaluate Pro features during the 14-day trial.
@@ -45,7 +46,7 @@ Full text: `LICENSES/LicenseRef-SerialStudio-Commercial.txt`
 
 ## What you cannot do
 
-- Use official binaries beyond the trial without buying a license.
+- Use the official binaries commercially without a Pro license.
 - Remove or bypass license checks or activation mechanisms.
 - Redistribute Pro binaries without written authorization.
 - Include or link Pro modules into a GPL build.

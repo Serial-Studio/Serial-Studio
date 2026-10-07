@@ -297,24 +297,42 @@ def test_channel_map_round_trips_through_project_json(api_client, clean_state):
 # ---------------------------------------------------------------------------
 
 
-def _load_band_project(api_client) -> None:
+GROUP_DATA_GRID = 0
+GROUP_BAR_PANEL = 10
+
+BANDS = [
+    {"min": 0, "max": 800, "severity": 1, "label": "Normal"},
+    {"min": 800, "max": 1000, "severity": 3, "label": "Redline"},
+]
+
+
+def _load_band_project(
+    api_client, widget="gauge", hidden=False, bar_panel=False, suppressed=False
+) -> None:
     api_client.create_new_project(title="Alarm bands")
     time.sleep(0.3)
-    api_client.command("project.group.add", {"title": "Engine", "widgetType": 0})
+    api_client.command(
+        "project.group.add",
+        {
+            "title": "Engine",
+            "widgetType": GROUP_BAR_PANEL if bar_panel else GROUP_DATA_GRID,
+        },
+    )
     time.sleep(0.2)
     api_client.command("project.dataset.add", {"groupId": 0, "options": 0})
     time.sleep(0.1)
-    api_client.update_dataset(
-        0,
-        0,
+    fields = dict(
         title="EGT",
+        widget=widget,
+        hideOnDashboard=hidden,
         widgetMin=0,
         widgetMax=1000,
-        alarmBands=[
-            {"min": 0, "max": 800, "severity": 1, "label": "Normal"},
-            {"min": 800, "max": 1000, "severity": 3, "label": "Redline"},
-        ],
+        alarmBands=BANDS,
     )
+    if suppressed:
+        fields["suppressAlarms"] = True
+
+    api_client.update_dataset(0, 0, **fields)
     time.sleep(0.2)
     api_client.command(
         "project.frameParser.setCode",
@@ -385,3 +403,159 @@ def test_band_entry_raises_and_disconnect_clears(
     assert state["points"] == []
     assert state["ringbackPending"] is False
     assert state["sounding"] is None
+
+
+# ---------------------------------------------------------------------------
+# Spec 0093 — alarm-band applicability
+# ---------------------------------------------------------------------------
+
+
+def _band_run(api_client, device_simulator, values=(500.0, 520.0, 900.0, 950.0)):
+    api_client.configure_network(host="127.0.0.1", port=9000, socket_type="tcp")
+    api_client.connect_device()
+    assert device_simulator.wait_for_connection(timeout=5.0)
+
+    _send(device_simulator, list(values))
+    time.sleep(1.5)
+
+
+def _band_events(api_client) -> list:
+    if not api_client.command_exists("notifications.list"):
+        return []
+
+    events = api_client.command("notifications.list").get("events", [])
+    return [e for e in events if e.get("title") == "EGT"]
+
+
+@pytest.mark.integration
+@pytest.mark.project
+@pytest.mark.network
+def test_band_without_widget_raises_no_point(api_client, device_simulator, clean_state):
+    _fresh(api_client)
+    _load_band_project(api_client, widget="")
+    _band_run(api_client, device_simulator)
+
+    assert _point(_state(api_client), "EGT") == {}
+    assert _band_events(api_client) == []
+
+
+@pytest.mark.integration
+@pytest.mark.project
+@pytest.mark.network
+def test_bar_panel_member_without_widget_raises_point(
+    api_client, device_simulator, clean_state
+):
+    _fresh(api_client)
+    _load_band_project(api_client, widget="", bar_panel=True)
+    _band_run(api_client, device_simulator)
+
+    point = _point(_state(api_client), "EGT")
+    assert point.get("kind") == "band"
+    assert point.get("priority") == 2
+
+
+@pytest.mark.integration
+@pytest.mark.project
+@pytest.mark.network
+def test_hidden_gauge_raises_no_point(api_client, device_simulator, clean_state):
+    _fresh(api_client)
+    _load_band_project(api_client, widget="gauge", hidden=True)
+    _band_run(api_client, device_simulator)
+
+    assert _point(_state(api_client), "EGT") == {}
+
+
+@pytest.mark.integration
+@pytest.mark.project
+@pytest.mark.network
+def test_removing_and_restoring_the_widget_toggles_the_point(
+    api_client, device_simulator, clean_state
+):
+    _fresh(api_client)
+    _load_band_project(api_client)
+    _band_run(api_client, device_simulator)
+    assert _point(_state(api_client), "EGT").get("kind") == "band"
+
+    api_client.update_dataset(0, 0, widget="")
+    time.sleep(0.5)
+    _send(device_simulator, [900.0, 950.0, 960.0])
+    time.sleep(1.5)
+    assert _point(_state(api_client), "EGT") == {}
+
+    api_client.update_dataset(0, 0, widget="gauge")
+    time.sleep(0.5)
+    _send(device_simulator, [900.0, 950.0, 960.0])
+    time.sleep(1.5)
+    assert _point(_state(api_client), "EGT").get("kind") == "band"
+
+
+@pytest.mark.integration
+@pytest.mark.project
+def test_bands_on_widgetless_dataset_survive_export(api_client, clean_state):
+    _fresh(api_client)
+    _load_band_project(api_client, widget="")
+
+    exported = api_client.command("project.exportJson")["config"]
+    datasets = [d for g in exported.get("groups", []) for d in g.get("datasets", [])]
+    egt = [d for d in datasets if d.get("title") == "EGT"]
+    assert len(egt) == 1
+    assert len(egt[0].get("alarmBands", [])) == len(BANDS)
+
+
+# ---------------------------------------------------------------------------
+# Spec 0093 amendment 1 — per-dataset alarm suppression
+# ---------------------------------------------------------------------------
+
+
+def _datasets_of(config: dict) -> list:
+    return [d for g in config.get("groups", []) for d in g.get("datasets", [])]
+
+
+def _egt_of(config: dict) -> dict:
+    egt = [d for d in _datasets_of(config) if d.get("title") == "EGT"]
+    assert len(egt) == 1
+    return egt[0]
+
+
+@pytest.mark.integration
+@pytest.mark.project
+@pytest.mark.network
+def test_suppressed_gauge_raises_no_point(api_client, device_simulator, clean_state):
+    _fresh(api_client)
+    _load_band_project(api_client, suppressed=True)
+    _band_run(api_client, device_simulator)
+
+    assert _point(_state(api_client), "EGT") == {}
+    assert _band_events(api_client) == []
+
+    api_client.update_dataset(0, 0, suppressAlarms=False)
+    time.sleep(0.5)
+    _send(device_simulator, [900.0, 950.0, 960.0])
+    time.sleep(1.5)
+
+    point = _point(_state(api_client), "EGT")
+    assert point.get("kind") == "band"
+    assert point.get("priority") == 2
+
+
+@pytest.mark.integration
+@pytest.mark.project
+def test_suppress_alarms_round_trips_through_export(api_client, clean_state):
+    _fresh(api_client)
+    _load_band_project(api_client, suppressed=True)
+
+    exported = api_client.command("project.exportJson")["config"]
+    assert _egt_of(exported).get("suppressAlarms") is True
+
+    api_client.create_new_project(title="Round trip")
+    time.sleep(0.3)
+    api_client.load_project_from_json(exported)
+    time.sleep(0.5)
+
+    reloaded = api_client.command("project.exportJson")["config"]
+    assert _egt_of(reloaded).get("suppressAlarms") is True
+
+    _load_band_project(api_client)
+    plain = api_client.command("project.exportJson")["config"]
+    assert "alarmBands" in _egt_of(plain)
+    assert all("suppressAlarms" not in d for d in _datasets_of(plain))

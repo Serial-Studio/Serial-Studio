@@ -26,7 +26,7 @@ It works with any device that sends data via serial port, Bluetooth LE, MQTT, Mo
 The core is open source, with two flavors:
 
 1. **GPL version (open source).** Built from source under GPL-3.0. Includes core features, but leaves out Pro modules like MQTT, Modbus, CAN Bus, 3D plotting, and the Waterfall widget.
-2. **Pro version (proprietary).** Official binary with everything, plus a 14-day trial. Individual, team, and test-stand plans are available as monthly, yearly, or lifetime licenses; check current pricing at [serial-studio.com/pricing](https://serial-studio.com/pricing).
+2. **Official binary (proprietary).** Runs the free features without a license and with no time limit. Pro features unlock with a license, or with a 14-day trial that starts the first time one is used. Individual, team, and test-stand plans are available as monthly, yearly, or lifetime licenses; check current pricing at [serial-studio.com/pricing](https://serial-studio.com/pricing).
 
 Pro features are proprietary. They're not open source. See the [License Agreement](License-Agreement.md) and [Pro vs GPL](#pro-vs-gpl) for details.
 
@@ -53,7 +53,7 @@ See [Pro vs Free](Pro-vs-Free.md) for a detailed comparison.
 
 ### Can I use Serial Studio for commercial projects?
 
-**Official binaries:** yes, with a Pro license. Commercial use covers business use, revenue-generating projects, client-facing systems, and grant- or privately-funded research.
+**Official binaries:** yes, with a Pro license. Without one, the free features are for personal, educational, and open-source use, and the 14-day trial covers evaluation only. Commercial use covers business use, revenue-generating projects, client-facing systems, and grant- or privately-funded research.
 
 **GPL build:** yes. A build compiled from source with GPL modules only is GPLv3 software, and the GPLv3 permits commercial use. It doesn't include Pro features like MQTT, Modbus, CAN Bus, or 3D visualization; businesses that need those, the official binaries, or email support buy a Pro license or evaluate with the 14-day trial.
 
@@ -518,6 +518,10 @@ Current packages bundle their own glibc and run on any distribution from the Deb
 | HID devices (hidapi)             | ❌                         | ✅                             |
 | Process I/O                      | ❌                         | ✅                             |
 | Multi-device projects            | ❌                         | ✅                             |
+| Dataset value transforms         | ❌                         | ✅                             |
+| Variables                        | ❌                         | ✅                             |
+| Custom workspaces                | ❌                         | ✅                             |
+| Notification log                 | ❌                         | ✅                             |
 | CSV export and playback          | ✅                         | ✅                             |
 | MDF4 playback and export         | ❌                         | ✅                             |
 | Historian (SQLite)               | ❌                         | ✅                             |
@@ -538,18 +542,18 @@ is sold as monthly, yearly, or lifetime licenses, in these seat tiers:
   production equipment, 20 offline device activations.
 
 Monthly and yearly plans renew until cancelled; the lifetime and Test Stand
-plans are one-time perpetual purchases. The official binary includes a 14-day
-free trial. For teams that need more than 10 seats, email
+plans are one-time perpetual purchases. The official binary offers a 14-day
+free trial the first time a Pro feature is used. For teams that need more than 10 seats, email
 alex@serial-studio.com for a quote.
 
 ### Can I try Pro features before buying?
 
-Yes. Download the official binary and you get a 14-day trial with all Pro features enabled.
+Yes. The official binary runs the free features without a license. The first time a Pro feature is used, Serial Studio asks whether to start a 14-day trial with all Pro features enabled. Starting it needs an internet connection; it needs no account and no payment.
 
 After 14 days:
 
 - Enter a license key to keep using Pro features.
-- Or keep using the GPL features for free (MQTT, 3D, and others will be disabled).
+- Or keep using the free features, with no time limit (MQTT, 3D, and the other Pro features lock).
 
 ### I'm a student or educator. Is there a discount?
 

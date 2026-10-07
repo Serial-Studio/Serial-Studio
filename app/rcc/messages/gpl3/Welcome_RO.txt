@@ -12,7 +12,7 @@ cu Serial Studio Pro:
 → https://store.serial-studio.com/
 
 Funcții Pro:
-→ Vizualizare MQTT, XY și 3D
+→ Vizualizare MQTT și 3D
 → Drivere Audio, CAN Bus, Modbus, USB, HID și Process I/O
 → Widget-uri de ieșire, export MDF4 și transferuri XMODEM/YMODEM/ZMODEM
 → Historian, Variabile și transformări (JS + Lua)

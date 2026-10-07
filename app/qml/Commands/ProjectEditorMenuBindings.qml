@@ -106,6 +106,7 @@ QtObject {
     "editor.menu.moveToTopLevel": root.cmdMoveToTopLevel,
     "editor.menu.editFrameParser": root.cmdEditFrameParser,
     "editor.menu.editTransform": root.cmdEditTransform,
+    "editor.menu.removeTransform": root.cmdRemoveTransform,
     "editor.menu.editPainterCode": root.cmdEditPainterCode,
     "editor.menu.editControlLoop": root.cmdEditControlLoop,
     "editor.menu.configureMqtt": root.cmdConfigureMqtt,
@@ -798,6 +799,16 @@ QtObject {
     readonly property bool visible: root.targetKind === ProjectEditor.KindDataset
     function run() {
       Cpp_JSON_ProjectEditor.openTransformEditorFor(root.targetParentId, root.targetId)
+    }
+  }
+
+  readonly property QtObject cmdRemoveTransform: QtObject {
+    readonly property bool visible: root.singleTarget
+                                    && root.targetKind === ProjectEditor.KindDataset
+                                    && Cpp_JSON_ProjectModel.datasetHasTransform(
+                                         root.targetParentId, root.targetId)
+    function run() {
+      Cpp_JSON_ProjectModel.clearDatasetTransform(root.targetParentId, root.targetId)
     }
   }
 

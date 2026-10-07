@@ -435,7 +435,8 @@ int DataModel::DatasetTransformEditor::targetDatasetId() const noexcept
 
 /**
  * @brief Applies valid code; on a syntax error or missing transform() it warns and keeps the
- *        dialog open so the user does not lose their edits.
+ *        dialog open so the user does not lose their edits. Writing code needs an entitlement
+ *        at apply time too, since the dialog can outlive the trial it was opened under.
  */
 void DataModel::DatasetTransformEditor::onApply()
 {
@@ -444,6 +445,11 @@ void DataModel::DatasetTransformEditor::onApply()
   if (code.trimmed().isEmpty() || isDefaultPlaceholder(code, m_language)) {
     Q_EMIT transformApplied(QString(), m_language, m_targetGroupId, m_targetDatasetId, params());
     QDialog::accept();
+    return;
+  }
+
+  if (!Core::License::activated()) {
+    Core::License::requestProFeature(QStringLiteral("dataset.transforms"));
     return;
   }
 

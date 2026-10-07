@@ -4,6 +4,8 @@
 
 Serial Studio Pro can record every connected session to a per-project SQLite database. You can browse, tag, annotate, export to CSV, and replay those sessions through the full dashboard exactly as they originally arrived. The result is a searchable archive of every run, without the per-file sprawl of CSV exports.
 
+Recording, browsing, and replay each need a license or an active trial. Once a license or trial ends, Serial Studio no longer opens the database, but the file is a standard SQLite database and stays readable with any SQLite tool.
+
 ## Recording pipeline
 
 Recording runs in parallel with the dashboard. Frames, raw bytes, and table snapshots are enqueued lock-free on the main thread, then written by a background worker in batched transactions, so disk I/O never blocks the data path.

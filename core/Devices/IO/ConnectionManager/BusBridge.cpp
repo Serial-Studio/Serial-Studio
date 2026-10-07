@@ -71,9 +71,9 @@ void IO::ConnectionBusBridge::seedFromRetainedState()
 
 /**
  * @brief Keeps the cached members current (direct, the publisher shares the GUI thread), queues
- *        the mode/framing/licence reactions behind them, dispatches the project snapshot the way
- *        the facade's four model connections fired (structure and per-source framing direct, the
- *        stream rebuilds queued) and retains the catalog fact. The licence hop stays queued.
+ *        the mode/framing/licence reactions and dispatches the project snapshot (structure and
+ *        framing direct, streams queued). The content watch (spec 0094) runs direct after every
+ *        snapshot and mode change, so it still sees the dispatch scope of the request behind it.
  */
 void IO::ConnectionBusBridge::wire(ConnectionManager& facade, Reactions reactions)
 {
@@ -81,11 +81,15 @@ void IO::ConnectionBusBridge::wire(ConnectionManager& facade, Reactions reaction
   SS_ASSERT(reactions.resetFrameReader != nullptr, return);
   SS_ASSERT(reactions.reconfigureSource != nullptr, return);
   SS_ASSERT(reactions.rebuildStreams != nullptr, return);
+  SS_ASSERT(reactions.deferLicenseRebuild != nullptr, return);
+  SS_ASSERT(reactions.observeContent != nullptr, return);
 
+  const auto observe   = std::move(reactions.observeContent);
   m_operationModeCache = m_bus.subscribe<Core::Bus::OperationModeChanged>(
     &facade,
-    [this](const std::shared_ptr<const Core::Bus::OperationModeChanged>& message) {
+    [this, observe](const std::shared_ptr<const Core::Bus::OperationModeChanged>& message) {
       m_operationMode = static_cast<SerialStudio::OperationMode>(message->mode);
+      observe();
     },
     Qt::DirectConnection,
     true);
@@ -99,6 +103,7 @@ void IO::ConnectionBusBridge::wire(ConnectionManager& facade, Reactions reaction
 
   const auto rebuild          = std::move(reactions.rebuildDevices);
   const auto reset            = std::move(reactions.resetFrameReader);
+  const auto defer            = std::move(reactions.deferLicenseRebuild);
   m_resetReaderOnConfigChange = m_bus.subscribe<Core::Bus::FrameConfigChanged>(
     &facade,
     [reset](const std::shared_ptr<const Core::Bus::FrameConfigChanged>&) { reset(); },
@@ -109,7 +114,10 @@ void IO::ConnectionBusBridge::wire(ConnectionManager& facade, Reactions reaction
     Qt::QueuedConnection);
   m_rebuildOnLicenseChange = m_bus.subscribe<Core::Bus::LicenseStateChanged>(
     &facade,
-    [rebuild](const std::shared_ptr<const Core::Bus::LicenseStateChanged>&) { rebuild(); },
+    [rebuild, defer](const std::shared_ptr<const Core::Bus::LicenseStateChanged>&) {
+      if (!defer())
+        rebuild();
+    },
     Qt::QueuedConnection);
 
   const auto reconfigure    = std::move(reactions.reconfigureSource);
@@ -126,7 +134,7 @@ void IO::ConnectionBusBridge::wire(ConnectionManager& facade, Reactions reaction
 
   m_projectSnapshot = m_bus.subscribe<Core::Bus::ProjectStructureSnapshot>(
     &facade,
-    [this, rebuild, reconfigure, rebuildStreams, &facade](
+    [this, rebuild, reconfigure, rebuildStreams, observe, &facade](
       const std::shared_ptr<const Core::Bus::ProjectStructureSnapshot>& snapshot) {
       using Snapshot = Core::Bus::ProjectStructureSnapshot;
       m_project      = snapshot;
@@ -137,6 +145,8 @@ void IO::ConnectionBusBridge::wire(ConnectionManager& facade, Reactions reaction
       else if (snapshot->change == Snapshot::StreamLane
                || snapshot->change == Snapshot::LuaFastMode)
         QMetaObject::invokeMethod(&facade, rebuildStreams, Qt::QueuedConnection);
+
+      observe();
     },
     Qt::DirectConnection);
 }

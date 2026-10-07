@@ -11,7 +11,7 @@ Thích dự án này? Hãy cân nhắc hỗ trợ phát triển với Serial Stu
 → https://store.serial-studio.com/
 
 Tính năng Pro:
-→ Hình ảnh hóa MQTT, XY và 3D
+→ Hình ảnh hóa MQTT và 3D
 → Trình điều khiển Âm thanh, CAN Bus, Modbus, USB, HID và Process I/O
 → Tiện ích đầu ra, xuất MDF4 và truyền XMODEM/YMODEM/ZMODEM
 → Historian, Biến và biến đổi giá trị (JS + Lua)

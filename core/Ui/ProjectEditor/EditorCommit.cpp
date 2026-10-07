@@ -851,37 +851,23 @@ void EditorCommit::setProjectSoundSequence(const QString& letter)
 }
 
 /**
- * @brief Writes @p bands onto every dataset in the current multi-selection, as one modified state
- *        and one autosave, then rebuilds the aggregate model.
+ * @brief Writes @p bands onto the multi-selection members whose bands are applicable (spec 0093)
+ *        as one undo step and one autosave, then rebuilds the aggregate model; the other members
+ *        keep theirs, and an empty set returns before the undo frame so nothing is recorded.
  */
 void EditorCommit::commitAlarmBandsForSelection(const std::vector<DataModel::AlarmBand>& bands)
 {
-  auto& pm = m_model;
-
-  QVector<DataModel::Dataset> sel;
-  QVector<QPair<int, int>> ids;
-  {
-    const auto& groups = pm.groups();
-    for (const auto& pr : m_editor.m_batchItems) {
-      const int gid = pr.first, dsid = pr.second;
-      if (gid < 0 || static_cast<size_t>(gid) >= groups.size())
-        continue;
-
-      for (const auto& d : groups[gid].datasets)
-        if (d.datasetId == dsid) {
-          sel.append(d);
-          ids.append(pr);
-          break;
-        }
-    }
-  }
+  auto& pm       = m_model;
+  const auto sel = m_editor.alarmBandSelection();
+  if (sel.isEmpty())
+    return;
 
   const ProjectUndoFrame undo_frame{pm, tr("Edit Alarms")};
   pm.setAutoSaveSuspended(true);
-  for (int i = 0; i < sel.size(); ++i) {
-    DataModel::Dataset ds = sel[i];
+  for (const auto& member : sel) {
+    DataModel::Dataset ds = member;
     ds.alarmBands         = bands;
-    pm.updateDataset(ids[i].first, ids[i].second, ds, false);
+    pm.updateDataset(ds.groupId, ds.datasetId, ds, false);
   }
   pm.setAutoSaveSuspended(false);
 

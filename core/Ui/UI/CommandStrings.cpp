@@ -25,7 +25,7 @@
 #include <QtTranslation>
 
 // clang-format off
-[[maybe_unused]] static constexpr std::array<const char*, 348> kCommandStrings = {{
+[[maybe_unused]] static constexpr std::array<const char*, 350> kCommandStrings = {{
   QT_TRANSLATE_NOOP("Commands", "3D Plot"),
   QT_TRANSLATE_NOOP("Commands", "AI Assistant"),
   QT_TRANSLATE_NOOP("Commands", "AI Wiki & Chat"),
@@ -295,7 +295,9 @@
   QT_TRANSLATE_NOOP("Commands", "Redo"),
   QT_TRANSLATE_NOOP("Commands", "Redo the last undone project edit"),
   QT_TRANSLATE_NOOP("Commands", "Remote Dashboard"),
+  QT_TRANSLATE_NOOP("Commands", "Remove Transform"),
   QT_TRANSLATE_NOOP("Commands", "Remove every user workspace"),
+  QT_TRANSLATE_NOOP("Commands", "Remove the value transform from this dataset"),
   QT_TRANSLATE_NOOP("Commands", "Rename"),
   QT_TRANSLATE_NOOP("Commands", "Rename this item"),
   QT_TRANSLATE_NOOP("Commands", "Replay"),

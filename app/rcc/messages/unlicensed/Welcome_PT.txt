@@ -6,6 +6,9 @@ são desbloqueados assim que você experimenta um deles, com um teste
 gratuito de 14 dias. Não é necessário conta nem pagamento para
 iniciá-lo.
 
+Gratuita para uso pessoal, educacional e de código aberto; o uso
+comercial requer uma licença Pro.
+
 → Suporte: alex@serial-studio.com
 → Agende uma chamada: https://calendly.com/serial-studio
 → Saiba mais: https://serial-studio.com/

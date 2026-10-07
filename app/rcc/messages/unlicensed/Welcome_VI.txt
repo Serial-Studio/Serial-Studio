@@ -4,6 +4,8 @@ Copyright (c) 2020–2026 Alex Spataru <https://github.com/alex-spataru>
 lõi đều được dùng miễn phí, không giới hạn thời gian. Các tính năng Pro
 bên dưới sẽ được mở khóa ngay khi bạn dùng thử một tính năng, kèm bản
 dùng thử miễn phí 14 ngày. Không cần tài khoản hay thanh toán để bắt đầu.
+Miễn phí cho mục đích cá nhân, giáo dục và mã nguồn mở; sử dụng
+thương mại cần có giấy phép Pro.
 
 → Hỗ trợ: alex@serial-studio.com
 → Đặt lịch cuộc gọi: https://calendly.com/serial-studio

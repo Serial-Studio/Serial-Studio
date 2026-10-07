@@ -83,6 +83,8 @@ public:
   void duplicateGroup(int groupId);
   void deleteDataset(int groupId, int datasetId, bool confirm);
   void duplicateDataset(int groupId, int datasetId);
+  void clearDatasetTransform(int groupId, int datasetId);
+  [[nodiscard]] bool datasetHasTransform(int groupId, int datasetId) const;
   void deleteAction(int actionId, bool confirm);
   void duplicateAction(int actionId);
 

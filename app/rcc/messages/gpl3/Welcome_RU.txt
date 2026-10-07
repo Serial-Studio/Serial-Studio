@@ -11,7 +11,7 @@ GNU GPLv3. Вы можете использовать, модифицирова�
 → https://store.serial-studio.com/
 
 Профессиональные функции:
-→ Визуализация MQTT, XY и 3D
+→ Визуализация MQTT и 3D
 → Драйверы Audio, CAN Bus, Modbus, USB, HID и Process I/O
 → Виджеты вывода, экспорт MDF4 и передача XMODEM/YMODEM/ZMODEM
 → Historian, Переменные и преобразования (JS + Lua)

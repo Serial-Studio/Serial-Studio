@@ -11,7 +11,7 @@ derivados permanezcan de código abierto bajo los mismos términos.
 → https://store.serial-studio.com/
 
 Características Pro:
-→ Visualización MQTT, XY y 3D
+→ Visualización MQTT y 3D
 → Controladores Audio, CAN Bus, Modbus, USB, HID y Process I/O
 → Widgets de salida, exportación MDF4 y transferencias XMODEM/YMODEM/ZMODEM
 → Historian, Variables y transformaciones (JS + Lua)

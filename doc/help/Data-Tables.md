@@ -4,6 +4,8 @@
 
 Shared variables that any dataset transform can read and write. Use them for project-wide constants (calibration factors, thresholds, scale values) and for computed values that flow between transforms, either within a single frame or across frames (running filters, integrators, latched state).
 
+Variables are a **Pro feature**: creating, duplicating, or importing a table, and adding a variable, need a license or an active trial. So does connecting with a project that defines a table; deleting the table is always free and makes the project connect again.
+
 ## Overview
 
 A **shared table** is a named collection of **variables**. Each variable has a name, a type, and a default value, and it stores either a number or a string. Tables are defined once in the Project Editor and saved with the project file. At runtime, every transform can read and write them through a small four-function API.

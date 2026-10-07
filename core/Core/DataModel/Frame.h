@@ -350,6 +350,7 @@ struct alignas(8) Dataset {
   bool hideOnDashboard = false;  ///< Suppress dataset-level dashboard tile (painter still sees it)
   bool extremeHold     = false;  ///< Show min/max hold markers on analog widgets
   bool enabled         = true;   ///< False excludes the dataset from frame building (editor-only)
+  bool suppressAlarms  = false;  ///< Bands stay drawn but never notify, raise a point or sound
   double fftMin        = 0;      ///< Minimum value (for FFT)
   double fftMax        = 0;      ///< Maximum value (for FFT)
   double pltMin        = 0;      ///< Minimum value (for plots)

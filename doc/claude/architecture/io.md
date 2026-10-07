@@ -77,6 +77,19 @@ The spec-0034 `IO::ConnectionFlows` layer and the hook family it drove (`support
 today is spec 0050's bare `HAL_Driver::openFinished(bool, reason)` verdict signal — a
 namesake of a removed 0034 hook, but a different, much smaller thing (see below).
 
+- **A connect the licensing state does not cover is refused first of all (specs 0092, 0094).**
+  `IO::EntitlementGate::refuseConnect()` runs at the top of `connectDevice()`, before
+  `beginRequest()`, and names one of three reasons from `DeviceTableQuery::connectRefusal()`: a
+  gated bus, a multi-source project, or Pro content (a dataset with non-blank transform code or
+  a user table, counted by `SerialStudio::proContentSummary` over the project snapshot). It
+  raises the Pro intent with the connect as its retry. The content reason applies in GPL builds
+  too; the other two are commercial-only. Never move the check into the frame pipeline: a
+  project that runs without its transforms shows uncalibrated values. The gate also watches a
+  running session: `observeContent()` (after every snapshot and mode change) ends an unentitled
+  session whose content grows past what its connect admitted, and `refuseRecovery()` holds a
+  driver's own reopen to the same rule. The device rebuild a licence transition asks for is
+  held while a single free-bus session or dial is live and re-checked when released, so expiry
+  never closes a running session. A rebuild's reconnect captures remote origin at queue time.
 - **A project connect is refused before it starts when two sources claim one port.**
   `ConnectionManager::connectDevice()` runs `IO::ExclusiveResourceGuard::verifyProjectSources()`
   in ProjectFile mode *before* `m_fanOut.beginRequest()`, because an abort after that strands

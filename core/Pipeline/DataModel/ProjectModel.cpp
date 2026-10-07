@@ -728,7 +728,8 @@ void DataModel::ProjectModel::wireStructureSnapshot()
 
 /**
  * @brief Retains the project structure the libraries below read (sources, groups, the Lua mode,
- *        the frame detection and the file path) with the kind of change that produced it.
+ *        the frame detection, the file path and the user-table count the connect gate needs)
+ *        with the kind of change that produced it.
  */
 void DataModel::ProjectModel::publishStructureSnapshot(int change, int sourceId)
 {
@@ -741,7 +742,8 @@ void DataModel::ProjectModel::publishStructureSnapshot(int change, int sourceId)
                                                           sourceId,
                                                           ++m_structureGeneration,
                                                           m_transformLibrary,
-                                                          m_transformLibraryJs);
+                                                          m_transformLibraryJs,
+                                                          m_tables.count());
 }
 
 //--------------------------------------------------------------------------------------------------

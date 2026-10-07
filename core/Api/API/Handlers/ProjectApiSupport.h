@@ -113,4 +113,9 @@ void appendStaleProjectWarning(QJsonObject& result,
  */
 [[nodiscard]] QString detectLanguageMismatch(const QString& code, int language);
 
+/**
+ * @brief The refusal text both transform setters return without an entitlement (spec 0094 R9).
+ */
+[[nodiscard]] QString transformsRequirePro();
+
 }  // namespace API::Handlers::ProjectApiSupport
