@@ -32,6 +32,7 @@
 #include "Core/Bus/MessageBus.h"
 #include "Core/Bus/Messages.h"
 #include "Core/License.h"
+#include "Core/ModuleConstruction.h"
 #include "Core/Prompt/UserPrompt.h"
 #include "Core/Services.h"
 #include "Core/SSAssert.h"
@@ -68,7 +69,6 @@ DataModel::ProjectModel::ProjectModel(Core::Bus::MessageBus& bus)
   , m_luaFastMode(false)
   , m_nextUniqueId(1)
   , m_modified(false)
-  , m_initialized(false)
   , m_silentReload(false)
   , m_workspaceRegenPending(false)
   , m_filePath("")
@@ -142,7 +142,6 @@ DataModel::ProjectModel::ProjectModel(Core::Bus::MessageBus& bus)
 
   connect(this, &ProjectModel::groupsChanged, this, &ProjectModel::scheduleWorkspaceRegen);
 
-  m_initialized = true;
   m_history.setEnabled(true);
 }
 
@@ -152,7 +151,7 @@ DataModel::ProjectModel::ProjectModel(Core::Bus::MessageBus& bus)
  */
 DataModel::ProjectModel& DataModel::ProjectModel::instance()
 {
-  SS_ASSERT(s_instance != nullptr, qFatal("ProjectModel::instance() before adoption"));
+  SS_ASSERT(s_instance != nullptr, Core::ModuleConstruction::reportUnavailable(staticMetaObject));
   return *s_instance;
 }
 
@@ -783,10 +782,10 @@ void DataModel::ProjectModel::newJsonFile()
   m_pointCount              = 100;
   m_plotTimeRange           = 10.0;
   m_frozen                  = false;
-  m_changeDrivenTransforms  = false;
-  m_luaFastMode             = false;
-  m_nextUniqueId            = 1;
-  m_controlScriptCode       = "";
+  m_changeDrivenTransforms.store(false, std::memory_order_relaxed);
+  m_luaFastMode       = false;
+  m_nextUniqueId      = 1;
+  m_controlScriptCode = "";
   m_transformLibrary.clear();
   m_transformLibraryJs.clear();
   static auto& controlScript = DataModel::ControlScript::instance();
@@ -1072,12 +1071,12 @@ void DataModel::ProjectModel::setFrozen(const bool frozen)
  */
 void DataModel::ProjectModel::setChangeDrivenTransforms(const bool enabled)
 {
-  if (m_changeDrivenTransforms == enabled)
+  if (m_changeDrivenTransforms.load(std::memory_order_relaxed) == enabled)
     return;
 
   const ProjectUndoScope undo_scope{*this, tr("Toggle Change-Driven Transforms")};
 
-  m_changeDrivenTransforms = enabled;
+  m_changeDrivenTransforms.store(enabled, std::memory_order_relaxed);
   setModified(true);
   Q_EMIT changeDrivenTransformsChanged();
 }

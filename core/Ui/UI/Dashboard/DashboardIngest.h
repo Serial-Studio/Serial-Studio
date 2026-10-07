@@ -157,6 +157,26 @@ struct PlotClock {
 };
 
 /**
+ * @brief The per-source plot clocks and the display time they publish, as ONE value: a cleared
+ *        clock restarts at the next publish, so a display time left behind stamps rings on a
+ *        timeline that no longer exists. Clearing, saving and restoring either half alone is
+ *        what blanked QuickPlot audio after every rebuild (2026-08-18).
+ */
+struct PlotClockState {
+  QMap<int, PlotClock> sources;
+  double displayTimeSec = 0.0;
+
+  /**
+   * @brief Drops every source clock together with the display time.
+   */
+  void reset()
+  {
+    sources.clear();
+    displayTimeSec = 0.0;
+  }
+};
+
+/**
  * @brief The dashboard state the ingest path reads and writes. Every entry stays owned by
  *        UI::Dashboard and is bound here by reference: the push tables hold raw pointers into
  *        these containers, so handing the ingest its own copies would move what they address.
@@ -168,8 +188,7 @@ struct IngestBindings {
   bool& updateRetryInProgress;
   const int& widgetCount;
   const int& points;
-  double& plotDisplayTimeSec;
-  QMap<int, PlotClock>& plotClocks;
+  PlotClockState& plotClocks;
   const SerialStudio::WidgetMap& widgetMap;
   QMap<int, DSP::AxisData>& xAxisData;
   QMap<int, DSP::AxisData>& yAxisData;
@@ -308,8 +327,7 @@ private:
 #ifdef BUILD_COMMERCIAL
   const int& m_points;
 #endif
-  double& m_plotDisplayTimeSec;
-  QMap<int, PlotClock>& m_plotClocks;
+  PlotClockState& m_plotClocks;
   const SerialStudio::WidgetMap& m_widgetMap;
   QMap<int, DSP::AxisData>& m_xAxisData;
   QMap<int, DSP::AxisData>& m_yAxisData;

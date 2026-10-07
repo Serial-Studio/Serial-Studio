@@ -136,7 +136,9 @@ qt_add_library(
   DataModel/ExportStructure.cpp
   DataModel/FrameBuilder.cpp
   DataModel/ReplayPlaybackEngine.cpp
+  DataModel/CachedFlag.cpp
   DataModel/FrameBuilder/BlockPublisher.cpp
+  DataModel/FrameBuilder/BuilderFlagAudit.cpp
   DataModel/FrameBuilder/BlockStager.cpp
   DataModel/FrameBuilder/ExternalWiring.cpp
   DataModel/FrameBuilder/ReplayIngest.cpp
@@ -260,7 +262,9 @@ qt_add_library(
   DataModel/WidgetResolution.h
   DataModel/FrameBuilder.h
   DataModel/RepublishGate.h
+  DataModel/CachedFlag.h
   DataModel/FrameBuilder/BlockPublisher.h
+  DataModel/FrameBuilder/BuilderFlagAudit.h
   DataModel/FrameBuilder/BlockStager.h
   DataModel/FrameBuilder/ExternalWiring.h
   DataModel/FrameBuilder/ReplayIngest.h

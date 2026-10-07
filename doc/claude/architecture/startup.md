@@ -100,8 +100,8 @@ Two entries in that list carry their own reason to sit where they do:
 `deriveFrameConfig()`, whose ProjectFile branch calls `ProjectModel::instance()` (AppState.cpp), so
 on a machine whose saved `operation_mode` is ProjectFile, ProjectModel is constructed *inside*
 AppState's ctor; on a QuickPlot machine it is constructed later. `ProjectModel`'s ctor then calls
-`newJsonFile()`, which emits `groupsChanged` while AppState is still mid-init (the fenced comment at
-ProjectModel.cpp:162 exists for exactly this reason). Constructing ProjectModel first makes the
+`newJsonFile()`, which emits `groupsChanged` while AppState is still mid-init (the fenced comment above
+the `newJsonFile()` call in ProjectModel's ctor exists for exactly this reason). Constructing ProjectModel first makes the
 settings-conditional edge impossible.
 
 **The list above is machine-checked.** `scripts/doc-anchors.json` carries an `ordered` anchor,
@@ -113,7 +113,7 @@ tell `CSV::Export` from `Console::Export`; the two companion anchors
 (`composition-root-players`, `composition-root-exports`) pin their presence instead. Keep the
 whole list inside one paragraph: the anchor's doc scope ends at the first blank line.
 
-`ModuleManager::instantiateCoreModules()` (called first inside `setupCrossModuleConnections`)
+`ModuleManager::instantiateCoreModules()` (private, reached only through `composeSession()`)
 enforces this order directly in code: it force-constructs every core singleton in the pinned
 sequence above (ProjectModel before AppState; the four-entry commercial licensing block and the
 session/MQTT block under `BUILD_COMMERCIAL`; Dashboard last), replacing the old
@@ -123,12 +123,18 @@ publication line.
 
 **The pinned order creates a protected surface: everything reachable from ProjectModel's ctor
 (`newJsonFile()`, `watchProjectFile()`, `scheduleAutoSave()`, `ControlScript::setCode`) runs
-BEFORE AppState and Dashboard exist.** Calling `AppState::instance()` or `UI::Dashboard::instance()`
-from that closure recurses the Meyers guard on ProjectFile machines and aborts at startup
-(`__cxa_guard_acquire detected recursive initialization` — this shipped and crashed once, 2026-07-07).
-`newJsonFile()`'s Dashboard sync is gated on `m_initialized` (set at the end of the ctor);
+BEFORE AppState and Dashboard exist.** In 2026-07 a reach from that closure recursed the Meyers
+guard and aborted at startup (`__cxa_guard_acquire detected recursive initialization`, 2026-07-07).
+That class is closed for the adopted modules: since spec 0039 each is adopted after construction and
+its `instance()` fails by name before adoption, and since spec 0095 the message says why
+(`Core::ModuleConstruction`: still under construction, not yet constructed in the pinned order and
+which constructor reached it, or outside a session). The residual hazard is a function-static
+singleton (`ControlScript::instance()` and the other non-adopted ones), which the singleton
+census counts (`static-cache` bucket; `code-verify.py --singleton-census --check` fails on growth).
 `scheduleAutoSave()` is safe only because the empty-`m_filePath` early-return precedes its AppState
-read. Any new code in this closure must keep those guards or add its own `m_initialized` gate.
+read, and `ControlScript::setCode("")` is a no-op at construction (equal code returns early).
+**Re-run the ctor-edge proof when a module ctor closure gains a new function-static singleton
+reach** (census-visible), not on every edit to the closure.
 
 **MMCSS coexistence contract (Windows).** Registering the main thread with MMCSS
 (`AvSetMmThreadCharacteristics`) **before the Qt message handler is installed** — or treating
@@ -220,15 +226,17 @@ ctors with `friend class ::SessionContext`; the composition root constructs them
 which `moveToThread`s `FrameBuilder` and `FrameParser` onto the processing thread. Everything
 before it — `restoreLastProject()`, the initial `readCode()`, every `setupExternalConnections`
 — therefore runs same-thread, and only steady-state traffic crosses the boundary. The headless
-and benchmark bootstraps call `instantiateCoreModules()` without
+and benchmark bootstraps call `composeSession()` without
 `setupCrossModuleConnections()`, so they stay single-threaded by construction (which is why
 the spec-0044 verifier and `--benchmark-hotpath` measure the same pipeline they always did).
 The pipeline thread is joined in `stopFrameConsumerWorkers()` **before**
 `SessionContext::shutdown()` frees the modules, with `prepareShutdown()` queued ahead of the
 quit so Lua states and QJSEngines die on the thread that owns them.
 
-**Every composition root calls `ModuleManager::bindInterfaces()` right after
-`instantiateCoreModules()`.** Construction wires nothing, and since spec 0075 the publish path
+**Every composition root goes through `ModuleManager::composeSession(BindMode)`** (spec 0095),
+which runs `instantiateCoreModules()` and then `bindInterfaces()`. Both are private, so a root
+cannot construct without choosing a bind mode; the schema dump's `BindMode::SchemaOnly` is the one
+explicit exemption, because it publishes nothing. Construction wires nothing, and since spec 0075 the publish path
 holds its pipeline as a bound pointer (`BlockPublisher::Sinks::pipeline`) rather than reaching
 `IO::PipelineHost::instance()` per block; since spec 0077 the sinks are bound the same way, as
 `DataModel::IBlockSink*`, and the device router's raw taps as `IO::IRawByteTap*`.

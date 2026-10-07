@@ -144,8 +144,8 @@ void DataModel::ControlScript::shutdown()
   ControlScriptWorker::requestShutdown();
   QMetaObject::invokeMethod(m_worker, "stop", Qt::QueuedConnection);
 
-  if (m_running) {
-    m_running = false;
+  if (m_running.load(std::memory_order_relaxed)) {
+    m_running.store(false, std::memory_order_relaxed);
     Q_EMIT runningChanged();
   }
 
@@ -190,7 +190,7 @@ QString DataModel::ControlScript::code() const
  */
 bool DataModel::ControlScript::running() const
 {
-  return m_running;
+  return m_running.load(std::memory_order_relaxed);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -295,7 +295,7 @@ void DataModel::ControlScript::onConnectedChanged()
 {
   const bool run = shouldRun();
 
-  if (!run && m_running) {
+  if (!run && m_running.load(std::memory_order_relaxed)) {
     m_shouldRun = false;
     stopWorker();
     return;
@@ -319,8 +319,8 @@ void DataModel::ControlScript::onWorkerError(const QString& message)
   m_lastError      = message;
   m_stoppedOnError = true;
 
-  if (m_running) {
-    m_running = false;
+  if (m_running.load(std::memory_order_relaxed)) {
+    m_running.store(false, std::memory_order_relaxed);
     Q_EMIT runningChanged();
   }
 
@@ -332,7 +332,7 @@ void DataModel::ControlScript::onWorkerError(const QString& message)
  */
 bool DataModel::ControlScript::stoppedOnError() const noexcept
 {
-  return m_stoppedOnError && !m_running;
+  return m_stoppedOnError && !m_running.load(std::memory_order_relaxed);
 }
 
 /**
@@ -350,13 +350,13 @@ const QString& DataModel::ControlScript::lastError() const noexcept
  */
 void DataModel::ControlScript::startWorker()
 {
-  if (m_running || m_code.trimmed().isEmpty() || !shouldRun())
+  if (m_running.load(std::memory_order_relaxed) || m_code.trimmed().isEmpty() || !shouldRun())
     return;
 
   m_lastError.clear();
   m_stoppedOnError = false;
   QMetaObject::invokeMethod(m_worker, "start", Qt::QueuedConnection, Q_ARG(QString, m_code));
-  m_running = true;
+  m_running.store(true, std::memory_order_relaxed);
 
   SS_ASSERT_LOG(!m_tableArmed);
   if (DataModel::TableApiScan::referencesTableApi(m_code)) {
@@ -385,8 +385,8 @@ void DataModel::ControlScript::stopWorker()
     DataModel::pipelineModules().frameBuilder.releaseTableApiUser();
   }
 
-  if (m_running) {
-    m_running = false;
+  if (m_running.load(std::memory_order_relaxed)) {
+    m_running.store(false, std::memory_order_relaxed);
     Q_EMIT runningChanged();
   }
 }

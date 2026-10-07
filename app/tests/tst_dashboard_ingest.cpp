@@ -100,9 +100,8 @@ struct Stores {
   bool updateRetryInProgress = false;
   int widgetCount            = 3;
   int points                 = kPoints;
-  double plotDisplayTimeSec  = 0.0;
 
-  QMap<int, UI::PlotClock> plotClocks;
+  UI::PlotClockState plotClocks;
   SerialStudio::WidgetMap widgetMap;
   QMap<int, DSP::AxisData> xAxisData;
   QMap<int, DSP::AxisData> yAxisData;
@@ -140,7 +139,6 @@ struct Stores {
                               .updateRetryInProgress = updateRetryInProgress,
                               .widgetCount           = widgetCount,
                               .points                = points,
-                              .plotDisplayTimeSec    = plotDisplayTimeSec,
                               .plotClocks            = plotClocks,
                               .widgetMap             = widgetMap,
                               .xAxisData             = xAxisData,
@@ -501,7 +499,7 @@ void DashboardIngestTest::plotClockContinuesFromBlockSpan()
   QVERIFY(qFuzzyIsNull(one));
   QVERIFY(two >= one + 0.5);
   QVERIFY(three >= two + 0.5);
-  QCOMPARE(stores.plotDisplayTimeSec, three);
+  QCOMPARE(stores.plotClocks.displayTimeSec, three);
 }
 
 /**

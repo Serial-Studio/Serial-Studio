@@ -467,6 +467,7 @@ void Widgets::AudioExportWorker::finalizeSession(AudioSession& session)
  */
 Widgets::AudioExport::AudioExport()
   : AudioExportBase({.queueCapacity = 65536, .flushThreshold = 4096, .timerIntervalMs = 33})
+  , m_anyActiveSession(false)
 {
   connect(this,
           &Widgets::AudioExport::activeSessionsChanged,
@@ -513,11 +514,12 @@ DataModel::FrameConsumerWorkerBase* Widgets::AudioExport::createWorker()
 
 /**
  * @brief Returns true while any recording session is open; ConnectionManager reads this so the
- *        stream workers build export payloads while only WAV recording consumes them.
+ *        stream workers build export payloads while only WAV recording consumes them. Reads the
+ *        atomic summary, never the session set, because the pipeline thread polls it too.
  */
 bool Widgets::AudioExport::hasActiveSessions() const noexcept
 {
-  return !m_activeSessions.isEmpty();
+  return m_anyActiveSession.load(std::memory_order_relaxed);
 }
 
 /**
@@ -588,6 +590,7 @@ void Widgets::AudioExport::openSession(SerialStudio::DashboardWidget kind,
   config.outputPath =
     QStringLiteral("%1/%2-%3%4.wav").arg(dir, stamp, slug, QString::number(index));
   m_activeSessions.insert(key);
+  m_anyActiveSession.store(!m_activeSessions.isEmpty(), std::memory_order_relaxed);
   {
     const QMutexLocker locker(&m_sessionDatasetsMutex);
     m_sessionDatasets.insert(key, config.uniqueId);
@@ -607,6 +610,7 @@ void Widgets::AudioExport::closeSession(SerialStudio::DashboardWidget kind, int 
   SS_ASSERT(m_worker != nullptr, return);
   const quint32 key = sessionKey(kind, index);
   m_activeSessions.remove(key);
+  m_anyActiveSession.store(!m_activeSessions.isEmpty(), std::memory_order_relaxed);
   {
     const QMutexLocker locker(&m_sessionDatasetsMutex);
     m_sessionDatasets.remove(key);
@@ -625,6 +629,7 @@ void Widgets::AudioExport::closeAllSessions()
 {
   SS_ASSERT(m_worker != nullptr, return);
   m_activeSessions.clear();
+  m_anyActiveSession.store(!m_activeSessions.isEmpty(), std::memory_order_relaxed);
   {
     const QMutexLocker locker(&m_sessionDatasetsMutex);
     m_sessionDatasets.clear();
@@ -646,6 +651,7 @@ void Widgets::AudioExport::onSessionOpenFailed(quint32 key)
   SS_ASSERT_LOG(thread() == QThread::currentThread());
 
   m_activeSessions.remove(key);
+  m_anyActiveSession.store(!m_activeSessions.isEmpty(), std::memory_order_relaxed);
   {
     const QMutexLocker locker(&m_sessionDatasetsMutex);
     m_sessionDatasets.remove(key);

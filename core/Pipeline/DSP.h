@@ -387,6 +387,53 @@ typedef struct {
 } MultiLineSeries;
 
 /**
+ * @brief Slot count of a time ring. The only source is a sample rate over a window: a ring
+ *        bounded in samples alone runs out of history as soon as the rate is high (44.1 kHz
+ *        filled a 10 s axis to 5.9 s), so a bare count does not convert into one.
+ */
+class RingCapacity {
+public:
+  static constexpr int kMaxSamples = 1 << 22;
+
+  /**
+   * @brief Slots that hold @p windowSec seconds at @p rateHz, truncated, within [1, kMaxSamples].
+   */
+  [[nodiscard]] static RingCapacity fromRate(double windowSec, double rateHz) noexcept
+  {
+    const double want = windowSec * rateHz;
+    if (!(want >= 1.0))
+      return RingCapacity(1);
+
+    return RingCapacity(static_cast<int>(std::min(want, static_cast<double>(kMaxSamples))));
+  }
+
+  /**
+   * @brief This capacity raised to at least @p floor slots (a policy bound, never a source).
+   */
+  [[nodiscard]] RingCapacity atLeast(int floor) const noexcept
+  {
+    return RingCapacity(std::clamp(floor, m_slots, kMaxSamples));
+  }
+
+  /**
+   * @brief This capacity lowered to at most @p ceiling slots (a policy bound, never a source).
+   */
+  [[nodiscard]] RingCapacity atMost(int ceiling) const noexcept
+  {
+    return RingCapacity(std::clamp(ceiling, 1, m_slots));
+  }
+
+  [[nodiscard]] int value() const noexcept { return m_slots; }
+
+private:
+  friend struct TimeRing;
+
+  explicit RingCapacity(int slotCount) noexcept : m_slots(slotCount) {}
+
+  int m_slots;
+};
+
+/**
  * @brief Bounded (time, value) ring that decimates on ingest to span a fixed window.
  */
 struct TimeRing {
@@ -405,10 +452,11 @@ struct TimeRing {
    *        grid cell may retain two slots (min + max), so the interval reserves both to
    *        keep a saturated source spanning the full window.
    */
-  explicit TimeRing(int capacity = 1, double windowSec = 1.0)
-    : time(static_cast<std::size_t>(capacity < 1 ? 1 : capacity))
-    , value(static_cast<std::size_t>(capacity < 1 ? 1 : capacity))
-    , interval(2.0 * windowSec / std::max(1, capacity))
+  explicit TimeRing(RingCapacity capacity = RingCapacity::fromRate(1.0, 1.0),
+                    double windowSec      = 1.0)
+    : time(static_cast<std::size_t>(capacity.value()))
+    , value(static_cast<std::size_t>(capacity.value()))
+    , interval(2.0 * windowSec / capacity.value())
     , nextEmit(0.0)
     , accMin(0.0)
     , accMax(0.0)
@@ -439,20 +487,27 @@ struct TimeRing {
    *        initial sizing assumed still span its axis: a ring bounded below the source's rate
    *        runs out of history in seconds and the trace stops short of the left edge.
    */
-  void resizeCapacity(int capacity, double windowSec)
+  void resizeCapacity(RingCapacity capacity, double windowSec)
   {
-    if (capacity < 1 || !(windowSec > 0.0))
+    const int slotCount = capacity.value();
+    if (!(windowSec > 0.0) || static_cast<std::size_t>(slotCount) == time.capacity())
       return;
 
-    if (static_cast<std::size_t>(capacity) == time.capacity())
-      return;
+    time.resize(static_cast<std::size_t>(slotCount));
+    value.resize(static_cast<std::size_t>(slotCount));
 
-    time.resize(static_cast<std::size_t>(capacity));
-    value.resize(static_cast<std::size_t>(capacity));
-
-    interval  = 2.0 * windowSec / static_cast<double>(capacity);
+    interval  = 2.0 * windowSec / static_cast<double>(slotCount);
     nextEmit  = 0.0;
     cellSlots = 0;
+  }
+
+  /**
+   * @brief This ring's capacity, for sizing a sibling ring identically: a copy of a capacity that
+   *        was already derived from a rate, never a new sample count.
+   */
+  [[nodiscard]] RingCapacity ringCapacity() const noexcept
+  {
+    return RingCapacity(static_cast<int>(time.capacity()));
   }
 
   /**
@@ -613,7 +668,8 @@ struct EnvelopeRing {
    * @brief Constructs level 0 with `capacity` slots over `windowSec` seconds and derives the
    *        coarse levels from that capacity.
    */
-  explicit EnvelopeRing(int capacity = 1, double windowSec = 1.0)
+  explicit EnvelopeRing(RingCapacity capacity = RingCapacity::fromRate(1.0, 1.0),
+                        double windowSec      = 1.0)
     : level0(capacity, windowSec), levels(), openCell(0), openCellValid(false)
   {
     buildLevels();
@@ -689,12 +745,9 @@ struct EnvelopeRing {
    *        rebuilds the coarse levels from what it retained. Rare by construction: only the
    *        display-tick growth path and a time-range change reach it.
    */
-  void resizeCapacity(int capacity, double windowSec)
+  void resizeCapacity(RingCapacity capacity, double windowSec)
   {
-    if (capacity < 1 || !(windowSec > 0.0))
-      return;
-
-    if (static_cast<std::size_t>(capacity) == level0.time.capacity())
+    if (!(windowSec > 0.0) || static_cast<std::size_t>(capacity.value()) == level0.time.capacity())
       return;
 
     level0.resizeCapacity(capacity, windowSec);
@@ -934,7 +987,7 @@ struct SweepEngine {
    * @brief Allocates `curveCount` front/back rings, each constructed individually: FixedQueue
    *        copies share their backing array, so a copy-fill would alias every curve.
    */
-  void configure(int curveCount, int capacity, double window)
+  void configure(int curveCount, RingCapacity capacity, double window)
   {
     windowSec                = window > 0 ? window : 1.0;
     const std::size_t curves = static_cast<std::size_t>(curveCount < 0 ? 0 : curveCount);
@@ -981,7 +1034,7 @@ struct SweepEngine {
       SweepSegment segment;
       segment.curves.reserve(curves);
       for (std::size_t c = 0; c < curves; ++c)
-        segment.curves.emplace_back(static_cast<int>(capacity), windowSec);
+        segment.curves.emplace_back(front.front().ringCapacity(), windowSec);
 
       segments.push_back(std::move(segment));
     }

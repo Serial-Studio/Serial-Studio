@@ -133,7 +133,7 @@ void DataModel::ProjectPersistence::serializeDocumentScalars(QJsonObject& json) 
   json.insert(Keys::PointCount, m_model.m_pointCount);
   json.insert(Keys::PlotTimeRange, m_model.m_plotTimeRange);
   json.insert(Keys::Frozen, m_model.m_frozen);
-  json.insert(Keys::ChangeDrivenTransforms, m_model.m_changeDrivenTransforms);
+  json.insert(Keys::ChangeDrivenTransforms, m_model.changeDrivenTransforms());
   json.insert(Keys::LuaFastMode, m_model.m_luaFastMode);
   json.insert(Keys::HexadecimalDelimiters, m_model.m_hexadecimalDelimiters);
 

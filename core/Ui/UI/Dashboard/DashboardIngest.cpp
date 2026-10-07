@@ -108,7 +108,6 @@ UI::DashboardIngest::DashboardIngest(const IngestBindings& bindings, IngestHost&
 #ifdef BUILD_COMMERCIAL
   , m_points(bindings.points)
 #endif
-  , m_plotDisplayTimeSec(bindings.plotDisplayTimeSec)
   , m_plotClocks(bindings.plotClocks)
   , m_widgetMap(bindings.widgetMap)
   , m_xAxisData(bindings.xAxisData)
@@ -642,7 +641,7 @@ double UI::DashboardIngest::advancePlotClock(int sourceId,
   // code-verify off
   // Scoped tight: reconfigureDashboard move-assigns m_plotClocks, so this reference must not
   // survive past this function.
-  PlotClock& clk = m_plotClocks[sourceId];
+  PlotClock& clk = m_plotClocks.sources[sourceId];
   // code-verify on
 
   if (!clk.originSet) [[unlikely]] {
@@ -672,11 +671,11 @@ double UI::DashboardIngest::advancePlotClock(int sourceId,
     clk.groupCount    = 1;
   }
   if (blockSpanSec > 0) {
-    const double continued = clk.displayTimeSec + clk.blockSpanSec;
-    const double blockNext = qMax(clk.relativeFrameTimeSec, continued);
-    clk.blockSpanSec       = blockSpanSec;
-    clk.displayTimeSec     = blockNext;
-    m_plotDisplayTimeSec   = blockNext;
+    const double continued      = clk.displayTimeSec + clk.blockSpanSec;
+    const double blockNext      = qMax(clk.relativeFrameTimeSec, continued);
+    clk.blockSpanSec            = blockSpanSec;
+    clk.displayTimeSec          = blockNext;
+    m_plotClocks.displayTimeSec = blockNext;
     return blockNext;
   }
 
@@ -689,8 +688,8 @@ double UI::DashboardIngest::advancePlotClock(int sourceId,
       && forwardError < kSmoothMaxForwardSec)
     displayNext = expected;
 
-  clk.displayTimeSec   = displayNext;
-  m_plotDisplayTimeSec = displayNext;
+  clk.displayTimeSec          = displayNext;
+  m_plotClocks.displayTimeSec = displayNext;
   return displayNext;
 }
 
@@ -780,7 +779,7 @@ void UI::DashboardIngest::updateDataSeries(int sourceId)
     auto& rings = rIt.value();
     for (const auto& tc : p.timeCurves)
       if (tc.curveIndex >= 0 && static_cast<std::size_t>(tc.curveIndex) < rings.size())
-        rings[tc.curveIndex].appendDecimated(m_plotDisplayTimeSec, *tc.value);
+        rings[tc.curveIndex].appendDecimated(m_plotClocks.displayTimeSec, *tc.value);
   };
 
   auto feedMultiSweep = [this](const MultiPush& p) {
@@ -797,7 +796,7 @@ void UI::DashboardIngest::updateDataSeries(int sourceId)
 
     const int last  = static_cast<int>(p.timeCurves.size()) - 1;
     const int tc    = qBound(0, sweep.triggerCurve, last);
-    const double st = sweep.advance(m_plotDisplayTimeSec, *p.timeCurves[tc].value);
+    const double st = sweep.advance(m_plotClocks.displayTimeSec, *p.timeCurves[tc].value);
     if (st < 0)
       return;
 
@@ -942,7 +941,7 @@ void UI::DashboardIngest::updateLineSeries(int sourceId)
     if (!sweep.enabled || sweep.back.empty())
       return;
 
-    const double st = sweep.advance(m_plotDisplayTimeSec, *p.value);
+    const double st = sweep.advance(m_plotClocks.displayTimeSec, *p.value);
     if (st >= 0)
       sweep.back[0].appendDecimated(st, *p.value);
   };
@@ -957,7 +956,7 @@ void UI::DashboardIngest::updateLineSeries(int sourceId)
         continue;
 
       if (*c.activeFlag) {
-        rIt.value().appendDecimated(m_plotDisplayTimeSec, *p.value);
+        rIt.value().appendDecimated(m_plotClocks.displayTimeSec, *p.value);
         feedSweep(p);
         break;
       }

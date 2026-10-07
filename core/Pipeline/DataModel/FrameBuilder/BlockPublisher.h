@@ -27,6 +27,7 @@
 #include "Core/DataModel/DataBlock.h"
 #include "Core/DataModel/IBlockSink.h"
 #include "Core/HotpathOptimization.h"
+#include "DataModel/CachedFlag.h"
 
 namespace IO {
 class PipelineHost;
@@ -57,7 +58,7 @@ public:
     IBlockSink* grpc   = nullptr;
   };
 
-  explicit BlockPublisher(const bool& maskSinks);
+  BlockPublisher(const bool& maskSinks, CachedFlagChecker& checker);
 
   BlockPublisher(BlockPublisher&&)                 = delete;
   BlockPublisher(const BlockPublisher&)            = delete;
@@ -70,6 +71,7 @@ public:
 
   [[nodiscard]] bool bound() const noexcept;
   [[nodiscard]] bool anyAsyncSink() const noexcept;
+  [[nodiscard]] bool deriveSinkFlag() const;
   [[nodiscard]] const Sinks& sinks() const noexcept;
 
 private:
@@ -79,7 +81,7 @@ private:
 private:
   // Binds FrameBuilder::m_maskSinks, whose address never moves; BlockStager binds the same bool
   const bool& m_maskSinks;
-  bool m_anyAsyncSink;
+  Cached<bool> m_anyAsyncSink;
   Sinks m_sinks;
 };
 

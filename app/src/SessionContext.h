@@ -24,6 +24,8 @@
 #include <memory>
 #include <utility>
 
+#include "Core/ModuleConstruction.h"
+
 class AppState;
 
 namespace Core::Bus {
@@ -104,15 +106,19 @@ private:
   friend class Misc::ModuleManager;
 
   /**
-   * @brief Builds a session subsystem whose constructor is private to this context. The composition
-   *        root is the only caller, so a module stays unconstructible everywhere else while the
-   *        pinned order keeps one construction per line (spec 0039 M2). The bus (slot 0, spec 0077)
-   *        and any earlier slot's interface are handed in by reference the same way.
+   * @brief Builds a session subsystem whose constructor is private to this context; the composition
+   *        root is the only caller and the pinned order keeps one construction per line (spec 0039
+   *        M2). The bus and earlier slots' interfaces are handed in by reference. A QObject module
+   *        is marked under construction meanwhile, so a reach into it fails by name (spec 0095).
    */
   template<typename T, typename... Args>
   [[nodiscard]] static std::unique_ptr<T> create(Args&&... args)
   {
-    return std::unique_ptr<T>(new T(std::forward<Args>(args)...));
+    if constexpr (requires { T::staticMetaObject; }) {
+      const Core::ModuleConstruction::Scope scope(T::staticMetaObject);
+      return std::unique_ptr<T>(new T(std::forward<Args>(args)...));
+    } else
+      return std::unique_ptr<T>(new T(std::forward<Args>(args)...));
   }
 
   int m_sessionId;

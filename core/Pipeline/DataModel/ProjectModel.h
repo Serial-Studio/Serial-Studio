@@ -21,6 +21,7 @@
 
 #pragma once
 
+#include <atomic>
 #include <QJsonArray>
 #include <QJsonDocument>
 #include <QJsonObject>
@@ -374,7 +375,10 @@ public:
 
   [[nodiscard]] bool frozen() const noexcept { return m_frozen; }
 
-  [[nodiscard]] bool changeDrivenTransforms() const noexcept { return m_changeDrivenTransforms; }
+  [[nodiscard]] bool changeDrivenTransforms() const noexcept
+  {
+    return m_changeDrivenTransforms.load(std::memory_order_relaxed);
+  }
 
   [[nodiscard]] bool luaFastMode() const noexcept { return m_luaFastMode; }
 
@@ -1355,11 +1359,10 @@ private:
   int m_pointCount;
   double m_plotTimeRange;
   bool m_frozen;
-  bool m_changeDrivenTransforms;
+  std::atomic<bool> m_changeDrivenTransforms;
   bool m_luaFastMode;
   int m_nextUniqueId;
   bool m_modified;
-  bool m_initialized;
   bool m_silentReload;
   bool m_workspaceRegenPending;
   QString m_filePath;

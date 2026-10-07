@@ -183,6 +183,7 @@ public:
   [[nodiscard]] bool dequeueDashboardBlock(DataModel::DataBlockPtr& out);
   [[nodiscard]] bool dequeueStructureSnapshot(DataModel::StructureSnapshotPtr& out);
   void setDashboardAccepting(bool accepting) noexcept;
+  [[nodiscard]] bool dashboardAccepting() const noexcept;
   void noteDisplayDrops(quint64 count) noexcept;
 
   void bumpFlushEpoch() noexcept;

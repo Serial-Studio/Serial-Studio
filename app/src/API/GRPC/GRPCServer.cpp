@@ -423,7 +423,7 @@ API::GRPC::GRPCServer& API::GRPC::GRPCServer::instance()
  */
 bool API::GRPC::GRPCServer::enabled() const noexcept
 {
-  return m_enabled;
+  return m_enabled.load(std::memory_order_relaxed);
 }
 
 /**
@@ -460,7 +460,7 @@ int API::GRPC::GRPCServer::clientCount() const noexcept
  */
 void API::GRPC::GRPCServer::setEnabled(const bool enabled)
 {
-  if (m_enabled == enabled)
+  if (m_enabled.load(std::memory_order_relaxed) == enabled)
     return;
 
   if (enabled)
@@ -468,7 +468,7 @@ void API::GRPC::GRPCServer::setEnabled(const bool enabled)
   else
     stopServer();
 
-  m_enabled = enabled;
+  m_enabled.store(enabled, std::memory_order_relaxed);
   Q_EMIT enabledChanged();
 }
 
@@ -477,7 +477,7 @@ void API::GRPC::GRPCServer::setEnabled(const bool enabled)
  */
 void API::GRPC::GRPCServer::ingestBlock(const DataModel::DataBlockPtr& block)
 {
-  if (!m_enabled || m_clientCount.load() <= 0)
+  if (!m_enabled.load(std::memory_order_relaxed) || m_clientCount.load() <= 0)
     return;
 
   m_frameQueue.try_enqueue(block);
@@ -498,7 +498,7 @@ void API::GRPC::GRPCServer::setTemplateFrame(int sourceId, const DataModel::Fram
  */
 void API::GRPC::GRPCServer::hotpathTxData(const QByteArray& data)
 {
-  if (!m_enabled || data.isEmpty())
+  if (!m_enabled.load(std::memory_order_relaxed) || data.isEmpty())
     return;
 
   m_rawQueue.try_enqueue(RawPacket{data, std::chrono::steady_clock::now()});
@@ -551,7 +551,7 @@ void API::GRPC::GRPCServer::exportProto()
  */
 void API::GRPC::GRPCServer::onExternalConnectionsChanged()
 {
-  if (!m_enabled)
+  if (!m_enabled.load(std::memory_order_relaxed))
     return;
 
   stopServer();

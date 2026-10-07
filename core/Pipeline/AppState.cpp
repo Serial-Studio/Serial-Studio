@@ -26,6 +26,7 @@
 #include "Core/Bus/MessageBus.h"
 #include "Core/Bus/Messages.h"
 #include "Core/DataModel/Frame.h"
+#include "Core/ModuleConstruction.h"
 #include "Core/SSAssert.h"
 #include "DataModel/FrameBuilder.h"
 #include "DataModel/ProjectModel.h"
@@ -61,7 +62,7 @@ AppState::AppState(Core::Bus::MessageBus& bus)
  */
 AppState& AppState::instance()
 {
-  SS_ASSERT(s_instance != nullptr, qFatal("AppState::instance() before adoption"));
+  SS_ASSERT(s_instance != nullptr, Core::ModuleConstruction::reportUnavailable(staticMetaObject));
   return *s_instance;
 }
 

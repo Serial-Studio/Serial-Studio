@@ -381,9 +381,9 @@ void CLI::scheduleExitAfter(QApplication& app)
 
 /**
  * @brief Runs the frame-extraction throughput benchmark and maps the result to an exit code.
- *        The benchmark exits before any ModuleManager is built, so it runs the pinned module
- *        order itself, interface bind included: instantiateCoreModules() constructs the modules
- *        but binds nothing, and the publish path holds its pipeline as a pointer (spec 0039 M2).
+ *        The benchmark exits before any ModuleManager is built, so it composes the session itself
+ *        through composeSession(), interface bind included: the publish path holds its pipeline as
+ *        a pointer (spec 0039 M2), and an unbound root would publish through a null host.
  */
 CLI::ProcessResult CLI::runHotpathBenchmark()
 {
@@ -425,8 +425,7 @@ CLI::ProcessResult CLI::runHotpathBenchmark()
       channels = qMin(val, kMaxChannels);
   }
 
-  Misc::ModuleManager::instantiateCoreModules();
-  Misc::ModuleManager::bindInterfaces();
+  Misc::ModuleManager::composeSession(Misc::ModuleManager::BindMode::Full);
   Misc::ModuleManager::registerApiHandlers();
 
   const int rc =
@@ -473,7 +472,7 @@ CLI::ProcessResult CLI::runSessionVerification()
     options.sessionId = val;
   }
 
-  Misc::ModuleManager::instantiateCoreModules();
+  Misc::ModuleManager::composeSession(Misc::ModuleManager::BindMode::Full);
   Misc::ModuleManager::setupHeadlessSessionConnections();
 
   Sessions::Verifier verifier(options, SessionContext::current().bus());
@@ -522,7 +521,7 @@ CLI::ProcessResult CLI::runSessionRegression()
     options.sessionId = val;
   }
 
-  Misc::ModuleManager::instantiateCoreModules();
+  Misc::ModuleManager::composeSession(Misc::ModuleManager::BindMode::Full);
   Misc::ModuleManager::setupHeadlessSessionConnections();
 
   Sessions::Verifier verifier(options, SessionContext::current().bus());
@@ -543,7 +542,7 @@ CLI::ProcessResult CLI::runSessionRegression()
  */
 CLI::ProcessResult CLI::dumpApiSchema(const QString& path)
 {
-  Misc::ModuleManager::instantiateCoreModules();
+  Misc::ModuleManager::composeSession(Misc::ModuleManager::BindMode::SchemaOnly);
   Misc::ModuleManager::registerApiHandlers();
   static auto& commandRegistry = API::CommandRegistry::instance();
   const auto& commands         = commandRegistry.commands();

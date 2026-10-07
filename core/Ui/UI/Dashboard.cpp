@@ -24,6 +24,7 @@
 #include "API/Mirror/MirrorSession.h"
 #include "AppState.h"
 #include "Core/License.h"
+#include "Core/ModuleConstruction.h"
 #include "Core/Runtime.h"
 #include "Core/Services.h"
 #include "Core/SSAssert.h"
@@ -33,6 +34,7 @@
 #include "DataModel/ProjectModel.h"
 #include "IO/ConnectionManager.h"
 #include "IO/PipelineHost.h"
+#include "UI/Dashboard/TimeRingSizing.h"
 #include "UI/WidgetExtensions.h"
 #include "UI/WidgetRegistry.h"
 #include "UI/Widgets/FFTWindow.h"
@@ -51,20 +53,57 @@ UI::Dashboard* UI::Dashboard::s_instance = nullptr;
 // Constants
 //--------------------------------------------------------------------------------------------------
 
-constexpr int kDefaultPlotPoints   = 1000;
-constexpr int kDefaultPlotBuckets  = 1024;
-constexpr int kMaxTimeRingSamples  = 262144;
-constexpr double kAssumedMaxRateHz = 1024000.0;
-constexpr double kTimeRingHeadroom = 1.25;
-
-// Ceiling for a rate-sized ring: one cell per sample to 256 kHz on a 10 s axis, folding at 1 MHz
-constexpr int kMaxRateSizedRingSamples = 1 << 22;
-constexpr double kRingGrowthFactor     = 1.5;
+constexpr int kDefaultPlotPoints = 1000;
 
 // Ring-drain budget per display tick: kDrainBudgetNs / fps == 40% of the tick period
 constexpr qint64 kDrainBudgetNs = 400000000LL;
 constexpr int kMaxDisplayFps    = 240;
 constexpr int kBudgetCheckMask  = 7;
+
+const DataModel::CachedFlagSpec UI::Dashboard::kStreamAvailableSpec{
+  .name = "Dashboard::m_streamAvailable",
+  .fresh =
+    [](const void* owner) {
+      return static_cast<int>(static_cast<const Dashboard*>(owner)->streamAvailable());
+    },
+  .repair  = [](void* owner) { static_cast<Dashboard*>(owner)->updateStreamAvailable(); },
+  .settled = nullptr,
+  .cached  = nullptr,
+};
+
+const DataModel::CachedFlagSpec UI::Dashboard::kAcceptingMirrorSpec{
+  .name = "PipelineHost::m_dashboardAccepting",
+  .fresh =
+    [](const void* owner) {
+      return static_cast<int>(
+        static_cast<bool>(static_cast<const Dashboard*>(owner)->m_streamAvailable));
+    },
+  .repair  = [](void* owner) { static_cast<Dashboard*>(owner)->updateStreamAvailable(); },
+  .settled = nullptr,
+  .cached =
+    [](const void* owner) {
+      return static_cast<int>(
+        static_cast<const Dashboard*>(owner)->m_pipelineHost.dashboardAccepting());
+    },
+};
+
+const DataModel::CachedFlagSpec UI::Dashboard::kOperationModeMirrorSpec{
+  .name = "PipelineHost::m_operationMode",
+  .fresh =
+    [](const void* owner) {
+      return static_cast<int>(static_cast<const Dashboard*>(owner)->m_appState->operationMode());
+    },
+  .repair =
+    [](void* owner) {
+      auto* dashboard = static_cast<Dashboard*>(owner);
+      dashboard->m_pipelineHost.refreshOperationModeMirror(dashboard->m_appState->operationMode());
+    },
+  .settled = nullptr,
+  .cached =
+    [](const void* owner) {
+      return static_cast<int>(static_cast<const Dashboard*>(owner)->m_pipelineHost.operationMode());
+    },
+};
 
 /**
  * @brief Restores the saved run/pause flag of every widget the rebuild kept. Only keys the fresh
@@ -78,47 +117,6 @@ static void restoreRunFlags(const QMap<int, bool>& saved, QMap<int, bool>& live)
     if (slot != live.end())
       slot.value() = it.value();
   }
-}
-
-/**
- * @brief Time-ring capacity for a window: enough for the assumed max rate, capped.
- */
-static int timeRingCapacity(const double plotTimeRangeSec)
-{
-  const double want = plotTimeRangeSec * kAssumedMaxRateHz;
-  if (want >= static_cast<double>(kMaxTimeRingSamples))
-    return kMaxTimeRingSamples;
-
-  return std::max(kDefaultPlotBuckets, static_cast<int>(want));
-}
-
-/**
- * @brief Time-ring capacity for a stream source: enough slots to hold the window at the source's
- *        real sample rate, bounded by a per-ring byte budget. Sizing off the actual rate is what
- *        keeps the trace spanning the whole axis -- a ring bounded in samples runs out of history
- *        in seconds as soon as the rate is high (44.1 kHz filled a 10 s axis to 5.9 s).
- */
-static int streamRingCapacity(const double windowSec, const double sampleRateHz)
-{
-  const double want = windowSec * sampleRateHz;
-  const double cap  = static_cast<double>(kMaxRateSizedRingSamples);
-  return static_cast<int>(std::clamp(want, static_cast<double>(kDefaultPlotBuckets), cap));
-}
-
-/**
- * @brief Builds a scrolling-history ring for the visible window plus headroom, so a
- *        saturated min/max source (two slots per decimation cell) still spans the full
- *        axis instead of erasing at the left edge. A positive @p sampleRateHz sizes the ring
- *        for that rate, so a stream keeps one cell per sample until the byte budget binds.
- */
-static DSP::EnvelopeRing makeHistoryRing(const double plotTimeRangeSec,
-                                         const double sampleRateHz = 0)
-{
-  const double window = plotTimeRangeSec * kTimeRingHeadroom;
-  if (sampleRateHz > 0)
-    return DSP::EnvelopeRing(streamRingCapacity(window, sampleRateHz), window);
-
-  return DSP::EnvelopeRing(timeRingCapacity(window), window);
 }
 
 /**
@@ -157,11 +155,11 @@ UI::Dashboard::Dashboard(Core::Bus::MessageBus& bus, IO::ConnectionManager& conn
   , m_updateRequired(false)
   , m_thinningActive(false)
   , m_updateRetryInProgress(false)
+  , m_flagChecker(this)
   , m_layoutValid(false)
-  , m_streamAvailable(false)
+  , m_streamAvailable(m_flagChecker, kStreamAvailableSpec, false)
   , m_openReplayPlayers(0)
   , m_plotTimeRange(10.0)
-  , m_plotDisplayTimeSec(0)
   , m_pltXAxis(kDefaultPlotPoints)
   , m_multipltXAxis(kDefaultPlotPoints)
   , m_tools(m_settings, connectionManager, *m_projectModel)
@@ -205,7 +203,6 @@ UI::Dashboard::Dashboard(Core::Bus::MessageBus& bus, IO::ConnectionManager& conn
                                 .updateRetryInProgress = m_updateRetryInProgress,
                                 .widgetCount           = m_widgetCount,
                                 .points                = m_points,
-                                .plotDisplayTimeSec    = m_plotDisplayTimeSec,
                                 .plotClocks            = m_plotClocks,
                                 .widgetMap             = m_widgetMap,
                                 .xAxisData             = m_xAxisData,
@@ -311,14 +308,19 @@ void UI::Dashboard::applyOperationModeDefaults()
 }
 
 /**
- * @brief Wires the display tick, the 1 Hz thinning poll and the per-tick ring-drain budget, which
- *        is re-derived whenever the user changes the display frame rate.
+ * @brief Wires the display tick, the 1 Hz thinning poll, the 1 Hz cached-flag audit (spec 0095:
+ *        the stream flag plus the two pipeline mirrors it feeds) and the per-tick ring-drain
+ *        budget, which is re-derived whenever the user changes the display frame rate.
  */
 void UI::Dashboard::connectDisplayTimers()
 {
+  m_flagChecker.add(kAcceptingMirrorSpec, nullptr, nullptr);
+  m_flagChecker.add(kOperationModeMirrorSpec, nullptr, nullptr);
+
   static auto* timerEvents = &Core::services().timerEvents;
   connect(timerEvents, &Misc::TimerEvents::uiTimeout, this, &UI::Dashboard::onDisplayTick);
   connect(timerEvents, &Misc::TimerEvents::timeout1Hz, this, &UI::Dashboard::pollThinningState);
+  connect(timerEvents, &Misc::TimerEvents::timeout1Hz, this, [this] { m_flagChecker.check(); });
 
   const auto refreshDrainBudget = [this] {
     m_drainBudgetNs = kDrainBudgetNs / qBound(1, timerEvents->fps(), kMaxDisplayFps);
@@ -460,17 +462,15 @@ void UI::Dashboard::growTimeRing(DSP::EnvelopeRing& ring,
   if (ring.level0.time.size() < ring.level0.time.capacity())
     return;
 
-  const auto clockIt = m_plotClocks.constFind(sourceId);
-  if (clockIt == m_plotClocks.cend() || !(clockIt->samplePeriodSec > 0))
+  const auto clockIt = m_plotClocks.sources.constFind(sourceId);
+  if (clockIt == m_plotClocks.sources.cend())
     return;
 
-  const double want    = windowSec / clockIt->samplePeriodSec;
-  const double ceiling = static_cast<double>(kMaxRateSizedRingSamples);
-  const double desired = std::clamp(want, static_cast<double>(kDefaultPlotBuckets), ceiling);
-  if (desired < static_cast<double>(ring.level0.time.capacity()) * kRingGrowthFactor)
-    return;
-
-  ring.resizeCapacity(static_cast<int>(desired), windowSec);
+  const auto slotCount = static_cast<int>(ring.level0.time.capacity());
+  const auto desired =
+    TimeRingSizing::grownCapacity(slotCount, windowSec, clockIt->samplePeriodSec);
+  if (desired)
+    ring.resizeCapacity(*desired, windowSec);
 }
 
 /**
@@ -481,7 +481,7 @@ void UI::Dashboard::growTimeRing(DSP::EnvelopeRing& ring,
  */
 void UI::Dashboard::growTimeRings()
 {
-  const double window = m_plotTimeRange * kTimeRingHeadroom;
+  const double window = TimeRingSizing::historyWindowSec(m_plotTimeRange);
 
   for (auto it = m_plotTimeRings.begin(); it != m_plotTimeRings.end(); ++it)
     growTimeRing(
@@ -549,7 +549,7 @@ void UI::Dashboard::restorePersistedSettings()
  */
 UI::Dashboard& UI::Dashboard::instance()
 {
-  SS_ASSERT(s_instance != nullptr, qFatal("UI::Dashboard::instance() before adoption"));
+  SS_ASSERT(s_instance != nullptr, Core::ModuleConstruction::reportUnavailable(staticMetaObject));
   return *s_instance;
 }
 
@@ -1188,8 +1188,8 @@ void UI::Dashboard::clearPlotData()
 /**
  * @brief Rebuilds every plot ring from a replay seek window (spec 0020), then re-anchors what the
  *        rewritten timeline invalidated: the sweep captures and the plot clocks. Resetting the
- *        clocks stays the facade's job -- m_plotClocks and m_plotDisplayTimeSec are one state and
- *        only resetPlotClocks() clears both.
+ *        clocks stays the facade's job: m_plotClocks holds the clocks and their display time as
+ *        one PlotClockState, and resetPlotClocks() is the one place that clears it.
  */
 void UI::Dashboard::bulkLoadPlotWindow(const QVector<double>& timesSec,
                                        const QHash<qint64, QVector<double>>& series)
@@ -1307,8 +1307,7 @@ void UI::Dashboard::setSettingsPersistent(const bool persistent)
  */
 void UI::Dashboard::resetPlotClocks()
 {
-  m_plotClocks.clear();
-  m_plotDisplayTimeSec = 0.0;
+  m_plotClocks.reset();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1382,18 +1381,16 @@ void UI::Dashboard::reconfigureDashboard(const DataModel::Frame& frame)
 
   const bool pro = Core::License::activated();
 
-  auto savedSourceFrames  = m_sourceRawFrames;
-  auto savedClocks        = m_plotClocks;
-  const double savedClock = m_plotDisplayTimeSec;
+  auto savedSourceFrames = m_sourceRawFrames;
+  auto savedClocks       = m_plotClocks;
 
   auto savedPlotRings      = m_replaySeek.snapshotPlotTimeRings();
   auto savedMultiplotRings = m_replaySeek.snapshotMultiplotTimeRings();
 
   resetData(false);
 
-  m_sourceRawFrames    = std::move(savedSourceFrames);
-  m_plotClocks         = std::move(savedClocks);
-  m_plotDisplayTimeSec = savedClock;
+  m_sourceRawFrames = std::move(savedSourceFrames);
+  m_plotClocks      = std::move(savedClocks);
 
   m_lastFrame = frame;
 
@@ -1695,9 +1692,9 @@ void UI::Dashboard::configureLineSeries()
     const auto& yDataset = getDatasetWidget(SerialStudio::DashboardPlot, i);
 
     if (useTimeXAxis(yDataset)) {
-      const int cap = timeRingCapacity(m_plotTimeRange);
-      m_plotTimeRings.insert(
-        i, makeHistoryRing(m_plotTimeRange, streamSampleRate(m_pipelineHost, yDataset.sourceId)));
+      const auto cap    = TimeRingSizing::frameLaneCapacity(m_plotTimeRange);
+      const double rate = streamSampleRate(m_pipelineHost, yDataset.sourceId);
+      m_plotTimeRings.insert(i, TimeRingSizing::historyRing(m_plotTimeRange, rate));
 
       DSP::SweepEngine sweep;
       sweep.configure(1, cap, m_plotTimeRange);
@@ -1793,12 +1790,12 @@ void UI::Dashboard::configureMultiLineSeries()
     m_activeMultiplots.insert(i, true);
 
     if (useTimeXAxisGroup(group)) {
-      const int cap     = timeRingCapacity(m_plotTimeRange);
+      const auto cap    = TimeRingSizing::frameLaneCapacity(m_plotTimeRange);
       const double rate = streamSampleRate(m_pipelineHost, group.sourceId);
       std::vector<DSP::EnvelopeRing> rings;
       rings.reserve(group.datasets.size());
       for (size_t j = 0; j < group.datasets.size(); ++j)
-        rings.push_back(makeHistoryRing(m_plotTimeRange, rate));
+        rings.push_back(TimeRingSizing::historyRing(m_plotTimeRange, rate));
 
       m_multiplotTimeRings.insert(i, std::move(rings));
 

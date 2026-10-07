@@ -72,7 +72,7 @@ private slots:
 void TstSweepSegments::retentionClampsToBudget()
 {
   DSP::SweepEngine engine;
-  engine.configure(1, 1024, 1.0);
+  engine.configure(1, DSP::RingCapacity::fromRate(1.0, 1024.0), 1.0);
   QCOMPARE(engine.segmentCapacity(), 0);
 
   engine.setSegmentRetention(8);
@@ -83,7 +83,7 @@ void TstSweepSegments::retentionClampsToBudget()
   QCOMPARE(engine.segmentCapacity(), DSP::SweepEngine::kMaxSegments);
 
   DSP::SweepEngine big;
-  big.configure(4, 262144, 10.0);
+  big.configure(4, DSP::RingCapacity::fromRate(10.0, 26214.4), 10.0);
   big.setSegmentRetention(64);
   const std::size_t perSegment = 4u * 262144u * DSP::SweepEngine::kSegmentSlotBytes;
   QVERIFY(static_cast<std::size_t>(big.segmentCapacity()) * perSegment
@@ -101,7 +101,7 @@ void TstSweepSegments::retentionClampsToBudget()
 void TstSweepSegments::completedSweepsAreRetainedNewestFirst()
 {
   DSP::SweepEngine engine;
-  engine.configure(1, 256, 0.01);
+  engine.configure(1, DSP::RingCapacity::fromRate(0.01, 25600.0), 0.01);
   engine.setTrigger(0.0, DSP::SweepEngine::kRising, DSP::SweepEngine::kNormal, 0.0, 0);
   engine.enabled = true;
   engine.setSegmentRetention(4);
@@ -131,7 +131,7 @@ void TstSweepSegments::completedSweepsAreRetainedNewestFirst()
 void TstSweepSegments::segmentsAreDeepCopies()
 {
   DSP::SweepEngine engine;
-  engine.configure(1, 256, 0.01);
+  engine.configure(1, DSP::RingCapacity::fromRate(0.01, 25600.0), 0.01);
   engine.setTrigger(0.0, DSP::SweepEngine::kRising, DSP::SweepEngine::kNormal, 0.0, 0);
   engine.enabled = true;
   engine.setSegmentRetention(2);
@@ -159,7 +159,7 @@ void TstSweepSegments::segmentsAreDeepCopies()
 void TstSweepSegments::wrapAndClear()
 {
   DSP::SweepEngine engine;
-  engine.configure(1, 256, 0.01);
+  engine.configure(1, DSP::RingCapacity::fromRate(0.01, 25600.0), 0.01);
   engine.setTrigger(0.0, DSP::SweepEngine::kRising, DSP::SweepEngine::kNormal, 0.0, 0);
   engine.enabled = true;
   engine.setSegmentRetention(3);
@@ -189,7 +189,7 @@ void TstSweepSegments::wrapAndClear()
 void TstSweepSegments::takeoverRequiresSameShape()
 {
   DSP::SweepEngine source;
-  source.configure(1, 256, 0.01);
+  source.configure(1, DSP::RingCapacity::fromRate(0.01, 25600.0), 0.01);
   source.setTrigger(0.0, DSP::SweepEngine::kRising, DSP::SweepEngine::kNormal, 0.0, 0);
   source.enabled = true;
   source.setSegmentRetention(2);
@@ -197,20 +197,20 @@ void TstSweepSegments::takeoverRequiresSameShape()
   QCOMPARE(source.segmentCount(), 1);
 
   DSP::SweepEngine same;
-  same.configure(1, 256, 0.01);
+  same.configure(1, DSP::RingCapacity::fromRate(0.01, 25600.0), 0.01);
   same.takeSegmentsFrom(source);
   QCOMPARE(same.segmentCapacity(), 2);
   QCOMPARE(same.segmentCount(), 1);
   QCOMPARE(same.segment(0)->curves.front().value[0], 4.0);
 
   DSP::SweepEngine wider;
-  wider.configure(2, 256, 0.01);
+  wider.configure(2, DSP::RingCapacity::fromRate(0.01, 25600.0), 0.01);
   wider.takeSegmentsFrom(source);
   QCOMPARE(wider.segmentCapacity(), 2);
   QCOMPARE(wider.segmentCount(), 0);
 
   DSP::SweepEngine bigger;
-  bigger.configure(1, 512, 0.01);
+  bigger.configure(1, DSP::RingCapacity::fromRate(0.01, 51200.0), 0.01);
   bigger.takeSegmentsFrom(source);
   QCOMPARE(bigger.segmentCapacity(), 2);
   QCOMPARE(bigger.segmentCount(), 0);

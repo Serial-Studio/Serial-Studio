@@ -267,10 +267,11 @@ including the spec-0055 block caps, the time-ring/plot-clock rules, and the kern
   routed lambda.** Any new GUI-callable script API follows the same rule — see
   [doc/claude/architecture/scripting.md](doc/claude/architecture/scripting.md) "Data Tables".
 - **`FrameReader` and `CircularBuffer` are pipeline-thread / SPSC. Never add mutexes.** Recreate
-  via `resetFrameReader()` / `reconfigure()`.
+  via `resetFrameReader()` / `reconfigure()`. Debt: no lint yet (common-mistakes.md "Unenforced
+  invariants").
 - **In-pipeline signal hops must be `Qt::DirectConnection`.** Queued between two
   pipeline-thread objects fills the 65536-slot queue at 10+ kHz and drops frames. GUI↔pipeline
-  traffic is chunk/command/tick rate only — never a per-frame queued emission.
+  traffic is chunk/command/tick rate only — never a per-frame queued emission. Debt: no lint yet.
 - **No allocation on the publish path.** Blocks come from a pool (`use_count()==1` probe,
   aliasing shared_ptr) with columns sized once at bind — `DataModel::BlockStager` owns it on the
   frame lane, `StreamProcessor::claimBlockSlot()` on the stream lane. The one copy is
@@ -283,34 +284,32 @@ including the spec-0055 block caps, the time-ring/plot-clock rules, and the kern
   `IO::StreamWorker` thread but emit `blockReady` **queued to the pipeline thread**, the SINGLE
   producer for every sink. Structure travels separately as a `StructureSnapshot`. Never add a
   rate cap or a per-view reduction; an overrun drops whole blocks and counts them.
-- **Two republish lanes, one obligation each (spec 0064).** A table-fed virtual dataset publishes
-  ONLY through the synthetic refresh, and it has a sink-fed lane (`dashboardTick()`) and a masked
-  lane (`reprocessFrames()`, `refreshStreamDrivenFrames()` on every UI tick while a stream source
-  produces). They must never share one "already republished" mark: the masked lane consumes the
-  change-driven transform clock, so sharing it makes the export lane see `changed == false` and
-  skip — dashboard live, every recording empty. `DataModel::RepublishGate` keeps them apart; any
-  lane seeing a change marks the sinks dirty, only an export publish clears it. Never gate an
-  export publish on "did THIS pass see a change".
+- **Two republish lanes, one obligation each (spec 0064).** The sink-fed lane (`dashboardTick()`)
+  and the masked lane (`reprocessFrames()`, `refreshStreamDrivenFrames()`) never share one
+  "already republished" mark, or the dashboard stays live while every recording comes out empty.
+  A pass holds one `DataModel::RepublishLane`, so it cannot ask with one lane and record with the
+  other. Enforced: compile:DataModel::RepublishLane, ctest:tst_republish_lanes. Detail:
+  dataflow.md "The Two Republish Lanes".
 - **The session boundary is the sink contract (spec 0075).** Recording sinks close on
   `FrameBuilder::sessionBoundary(connected, paused)` — pause included — and the builder flushes
   every open block BEFORE emitting, so the tail lands in the file that was open. The export-time
   tie-break is per source (`monotonicSourceNs`) and a uniform-grid block never takes it.
 - **Time rings are sized from a rate, never a sample count alone**, and a ring's clock never
-  rewinds; `m_plotClocks` and `m_plotDisplayTimeSec` are ONE state (`resetPlotClocks()`), never
-  cleared one without the other. Dashboard ingest lives in `UI::DashboardIngest`, which binds
-  both by reference; `resetPlotClocks()` stays in the facade. Full rules + both 2026-08 incidents:
+  rewinds: a ring takes a `DSP::RingCapacity` (built only from a rate over a window), and the plot
+  clocks and their display time are ONE `UI::PlotClockState`. Enforced: compile:DSP::RingCapacity,
+  compile:UI::PlotClockState, ctest:tst_time_ring_sizing. Full rules + both 2026-08 incidents:
   [doc/claude/architecture/dashboard.md](doc/claude/architecture/dashboard.md) "Time-Ring Sizing".
 - **Native + PlainText parses through the span fast lane** (`trySpanLane` →
   `parseUtf8Spans` → `applyDatasetValuesSpans`): byte views + in-place QString writes,
-  zero steady-state allocation. The hotpath reads **cached** flags (`m_operationMode`,
-  `m_playerOpen`, `m_anyAsyncSink`, `m_captureLatestFrame`, `m_changeDriven`, Dashboard
-  `m_streamAvailable`) — a new input to any of them must wire its change signal to the cache
-  refresh (`BlockPublisher::refreshSinkFlag` for the sink flag) or frames/exports silently stop. Flag mechanics: dataflow.md "Cached Hotpath
+  zero steady-state allocation. The hotpath reads **cached** flags, each a `DataModel::Cached<T>`
+  re-derived and repaired at 1 Hz (spec 0095): a new input still wires its change signal to the
+  cache refresh, and a new cache must be a `Cached<T>`, never a plain `bool`. Enforced:
+  ctest:tst_cached_flags, anchor:cached-hotpath-flags. Mechanics: dataflow.md "Cached Hotpath
   Flags", read before touching any of them. `streamAvailable()` also reads the spec-0040
   mirror flag (`API::MirrorSession::mirroring()`, a plain module-static bool — never a
   construction).
 - **Source owns time.** Stamp at the driver boundary; never re-stamp in export/report
-  workers (use `monotonicFrameNs(...)` as the safety net only).
+  workers (use `monotonicFrameNs(...)` as the safety net only). Debt: no lint yet.
 - **Driver opens are synchronous calls; most drivers dial asynchronously behind them.**
   `DeviceManager::open()` calls `HAL_Driver::open(mode)` directly — no async-open hook, no task
   runner. In-flight dials report via `HAL_Driver::isConnecting()` (eleven overrides now, TCP
@@ -330,14 +329,16 @@ including the spec-0055 block caps, the time-ring/plot-clock rules, and the kern
   `core/Core/IO/LinkStats.h`. A polled-PLC worker's counters are atomics (a documented deviation:
   the poll thread writes while the GUI samples).
 - **JS scripts**: always `JsScriptEngine::guardedCall()`, never `parseFunction.call()`.
-  `setInterrupted(true)` only in `JsWatchdogThread.cpp`.
+  `setInterrupted(true)` only in `JsWatchdogThread.cpp`. Debt: no lint yet.
 - **256 kHz is a CI gate, not a slogan.** `--benchmark-hotpath` drives the real parse pipeline
   with nine gates tiered off `--min-fps` (default 256000), from Native numeric at 4x
   (1.024 MHz) down to JS mixed at 64 kHz, plus 0.5x consumer-path floors (full tier table in
   the `ss-hotpath` skill); `ci.yml` runs it per push/PR as a hard gate on the PGO-optimized
-  binary. Don't regress it. `datasets+publish` is ~70-80% of per-frame time.
+  binary. Don't regress it. `datasets+publish` is ~70-80% of per-frame time. Enforced:
+  anchor:hotpath-min-fps (the gate itself is `--benchmark-hotpath` in `ci.yml`).
 - **The message bus is not a hotpath primitive.** `Core::Bus::MessageBus` publishes allocate once
-  and may queue a cross-thread call; hotpath TUs never touch it (`bus-on-hotpath` lint, spec 0076).
+  and may queue a cross-thread call; hotpath TUs never touch it (spec 0076). Enforced:
+  code-verify:bus-on-hotpath.
   Frames and blocks keep the pooled SPSC path; the bus carries command/state/notification traffic.
 - **Reuse the kernels; never inline intrinsics or invent a macro.** `core/Core/DSPSimd.h`
   (spec 0021, bit-exact per lane) and `core/Core/HotpathOptimization.h`
@@ -346,6 +347,7 @@ including the spec-0055 block caps, the time-ring/plot-clock rules, and the kern
   runtime through `DSP::activeSimdLevel()` (spec 0081: Scalar / SSE4 / AVX2 on x86-64, Scalar /
   NEON on aarch64); the AVX2 bodies live in `core/Core/DSPSimdAvx2.h` as `SS_NEVER_INLINE
   SS_TARGET_AVX2` functions under the same bit-exact contract, and no TU is ever compiled wide.
+  Debt: no intrinsic-header lint yet.
 
 ## Startup & Composition Root — Non-Negotiable
 
@@ -355,26 +357,27 @@ Full contract, including the ctor-edge proof and the licensing consumer inventor
 - **`ModuleManager::instantiateCoreModules()` pins singleton construction order** (ProjectModel
   before AppState, Dashboard last). Never reorder or add entries without re-running the ctor-edge
   proof in [doc/claude/specs/0001-composition-root/](doc/claude/specs/0001-composition-root/).
-- **ProjectModel's ctor closure is a protected surface** (`newJsonFile`, `watchProjectFile`,
-  `scheduleAutoSave`, the `ControlScript::setCode` chain): it runs before AppState/Dashboard
-  exist; calling their `instance()` there recurses the Meyers guard and aborts — shipped and
-  crashed once (2026-07-07). Gate new code on `m_initialized`.
-- **A ctor-edge proof dies when ctor-reachable code changes.** Any edit inside that closure
-  re-triggers the check, no matter how unrelated the edit looks.
+  Enforced: anchor:composition-root-order.
+- **ProjectModel's ctor closure runs before AppState/Dashboard exist** (`newJsonFile`,
+  `watchProjectFile`, `scheduleAutoSave`, the `ControlScript::setCode` chain). A reach into an
+  adopted module there fails by name (under construction, not yet constructed, or outside a
+  session) instead of the 2026-07-07 Meyers-guard abort. The residual hazard is a new
+  function-static singleton reach in a module ctor closure, and that, not any edit to the closure,
+  is what re-triggers the ctor-edge proof. Enforced: compile:Core::ModuleConstruction,
+  script:scripts/code-verify.py#--singleton-census.
 - **`SessionContext` (spec 0039) owns the nine core modules** as `unique_ptr` slots adopted
   inside `instantiateCoreModules()`. Ctor/dtor stay empty; adopted addresses never change;
   `shutdown()` releases in exact reverse pinned order, after the pipeline thread and every stream
   worker join in `stopFrameConsumerWorkers()`. **Never call `SessionContext::current()` from a
   method body** — composition root only: `adopt*()` binds each module's private `s_instance`,
   `shutdown()` clears it, `instance()` reads it, and no library includes `SessionContext.h`
-  (spec 0077); the singleton census (`code-verify.py --singleton-census --check`) fails on any
-  increase.
-- **Every composition root calls `ModuleManager::bindInterfaces()` right after
-  `instantiateCoreModules()`.** Construction wires nothing, and the publish path holds its pipeline
-  and its sinks as bound pointers (specs 0075/0077), not singleton reaches: `bindInterfaces()` is
-  the ONE list of block sinks, raw-byte taps and the per-frame tap, shared by the GUI, headless
-  session and `--benchmark-hotpath` roots. Skip it and the first flushed block publishes through a
-  null host; leave a sink out and its recording is a valid-looking empty file.
+  (spec 0077). Enforced: code-verify:arch-session-adopt-site,
+  script:scripts/code-verify.py#--singleton-census.
+- **Every composition root goes through `ModuleManager::composeSession(BindMode)`**, which builds
+  the pinned order and then binds the ONE list of block sinks, raw-byte taps and the per-frame tap
+  (`bindInterfaces()`); both halves are private, and the schema dump's `SchemaOnly` is the one
+  exemption. An unbound root publishes through a null host, and a sink left out of the list
+  records a valid-looking empty file. Enforced: compile:Misc::ModuleManager::composeSession.
 - **License-gated state must exist before `restoreLastProject()` or re-derive on
   `activatedChanged`.** The licensing block is the FIRST thing `instantiateCoreModules()` builds
   after Translator (spec 0042). `activatedChanged` fires only on real token-validity transitions.
@@ -389,9 +392,9 @@ area. The hazard column names what breaks silently — the doc holds the rule.
 
 | Touching | Read | Hazard |
 |----------|------|--------|
-| Any `ProjectModel` mutator, undo/redo (spec 0031) | [project.md](doc/claude/architecture/project.md) "Undo History" | Mementos are two-phase: `ProjectUndoScope` stages, the first `setModified(true)` commits — omit it and nothing is recorded. Lint: `undo-scope-missing`. |
+| Any `ProjectModel` mutator, undo/redo (spec 0031) | [project.md](doc/claude/architecture/project.md) "Undo History" | Mementos are two-phase: `ProjectUndoScope` stages, the first `setModified(true)` commits — omit it and nothing is recorded. Enforced: code-verify:undo-scope-missing. |
 | A dataset property or any API-surface generator (specs 0036, 0037) | [project.md](doc/claude/architecture/project.md) | `app/rcc/properties/dataset.json` generates six checked-in artifacts — **never hand-edit a generated file**. gRPC field numbers are append-only; a moved one fails CI. |
-| A toolbar button, palette entry, context menu, shortcut, or fixed icon (specs 0028/0063) | [commands-icons.md](doc/claude/architecture/commands-icons.md) | Icons resolve ONLY via `Misc::IconRegistry` — never hardcode `qrc:/icons/...`. New command = one manifest entry + one bindings entry; run `scripts/registry-verify.py`. Project Editor context menus are registry-driven too (`editor-menus.json` + `ProjectEditorMenuBindings.qml` + `CommandMenu.qml`) — never hand-write a `Menu` there. |
+| A toolbar button, palette entry, context menu, shortcut, or fixed icon (specs 0028/0063) | [commands-icons.md](doc/claude/architecture/commands-icons.md) | Icons resolve ONLY via `Misc::IconRegistry` — never hardcode `qrc:/icons/...`. New command = one manifest entry + one bindings entry; Enforced: script:scripts/registry-verify.py. Project Editor context menus are registry-driven too (`editor-menus.json` + `ProjectEditorMenuBindings.qml` + `CommandMenu.qml`) — never hand-write a `Menu` there. |
 | Installable widgets, `UI::WidgetExtensions` (spec 0038) | [dashboard.md](doc/claude/architecture/dashboard.md) | Packages resolve to `DashboardExtension = 100`, persist as `"ext:<id>"`; `readsStringValues` is what registers one in `string_targets`. Trust model is consent, not containment — never call an extension sandboxed. |
 | Alarm bands: `UI::AlarmMonitor` trackers, the annunciator's band points, the Project Editor's Alarm Bands buttons, the `suppressAlarms` option (spec 0093) | [dashboard.md](doc/claude/architecture/dashboard.md) "Alarm Bands" | Whether a dataset's bands are drawn has ONE home, `SerialStudio::datasetRendersAlarmBands` (Bar, Gauge, Meter, LED, or any member of a Bar Panel group; a hidden dataset only in a Bar Panel); whether they alarm is `datasetRaisesBandAlarms` beside it (drawn, non-empty, `suppressAlarms` off). A second copy of either lets a band drawn nowhere sound while the editor refuses to open it. Bands on other datasets are kept and ignored, never cleared. |
 | `core/Ui/Console/Annotations.*`, `ConsoleAnnotations.qml` (spec 0059) | [dashboard.md](doc/claude/architecture/dashboard.md) "Frame annotation layer" | `annotate()` stages, `commitPending()` publishes per tick — reading `count()` right after needs a commit. `reset()` clears the model *before* re-reading the offset. |

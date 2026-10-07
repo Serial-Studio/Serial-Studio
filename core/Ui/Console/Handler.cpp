@@ -35,6 +35,7 @@
 #include "Core/Bus/MessageBus.h"
 #include "Core/Bus/Messages.h"
 #include "Core/Checksum.h"
+#include "Core/ModuleConstruction.h"
 #include "Core/SerialStudio.h"
 #include "Core/Services.h"
 #include "Core/SSAssert.h"
@@ -178,7 +179,7 @@ Console::Handler::Handler(Core::Bus::MessageBus& bus, IO::ConnectionManager& con
  */
 Console::Handler& Console::Handler::instance()
 {
-  SS_ASSERT(s_instance != nullptr, qFatal("Console::Handler::instance() before adoption"));
+  SS_ASSERT(s_instance != nullptr, Core::ModuleConstruction::reportUnavailable(staticMetaObject));
   return *s_instance;
 }
 

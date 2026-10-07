@@ -6,9 +6,11 @@
 > in `doc/claude/architecture/`; their rows here are pointers.
 >
 > A row is closed only when something mechanical catches the class. Rows added from
-> 2026-09-09 on end their Fix with `Codified:` naming the check (a `code-verify.py` rule, a
-> `claim-verify.py` anchor, a hook in `.claude/hooks/`, a ctest/pytest) or `not yet`; older
-> rows carry no tag. `not yet` is open debt, written down but still repeatable. Add rows with
+> 2026-09-09 on end their Fix with `Codified:` naming the check as `kind:name` markers
+> (`code-verify:<rule>`, `anchor:<name>`, `hook:<file>`, `ctest:<suite>`, `script:<path>`,
+> `compile:<Symbol>`), which `claim-verify.py` resolves and fails on when the mechanism does not
+> exist (spec 0095), or `not yet`; older rows carry no tag. `not yet` is open debt, written down
+> but still repeatable; the class-level debt list is "Unenforced invariants" at the end. Add rows with
 > `/ss-log-mistake`, which asks the mechanical question before the row lands.
 
 ## Hotpath & Frame Pool
@@ -21,7 +23,7 @@
 | `std::make_shared<DataModel::TimestampedFrame>(...)` directly on the FrameBuilder hotpath | Use `acquireFrame(src)` / `acquireFrame(src, ts)`. Direct `make_shared` bypasses the slot pool and brings back per-frame heap allocs. |
 | Calling `.toDouble()` on **any** receiver (`QString`, `QStringView`, `QByteArray`, `QVariant`, `QJsonValue`) | Use the matching `SerialStudio::toDouble(...)` overload (inline, fast_float-backed). `code-verify.py:qt-todouble-direct` blocks direct calls outside `SerialStudio.h`/`ThirdParty/`. Qt's string parser walks the full locale + double-conversion pipeline even for plainly non-numeric text (measured >2x parse-throughput loss); the `QVariant`/`QJsonValue` overloads additionally parse string-typed payloads (JSON `"5.5"` loads as 5.5 instead of silently 0) and fall back to Qt for non-string types. `Frame.h` can't include `SerialStudio.h` (circular) — that's why the number-parsing `read()`/`serialize()` family lives out-of-line in `Frame.cpp`. |
 | Treating `CapturedData::data` as a smart pointer (`*data->data`, `data->data->size()`, `if (!data->data)`) | It's a `QByteArray` now. Use `data->data`, `data->data.size()`, `data->data.isEmpty()`. The shared_ptr indirection was removed because `QByteArray` is already COW with atomic refcount. |
-| Adding a new input to `Dashboard::streamAvailable()`, the `FrameBuilder` any-async-sink poll, or `SerialStudio::isAnyPlayerOpen()` without wiring its change signal to the matching cache refresh (`updateStreamAvailable` / `BlockPublisher::refreshSinkFlag` / the player lambdas) | The hotpath reads **cached** flags, not the live getters. A missed signal leaves the cache stale: frames silently never reach the dashboard, or exports silently stop. Wire the new signal with `Qt::DirectConnection` (queued refreshes lag a full event-loop turn behind frames already flowing). Flag mechanics: [architecture/dataflow.md](architecture/dataflow.md) "Cached Hotpath Flags". |
+| Adding a new input to `Dashboard::streamAvailable()`, the `FrameBuilder` any-async-sink poll, or `SerialStudio::isAnyPlayerOpen()` without wiring its change signal to the matching cache refresh (`updateStreamAvailable` / `BlockPublisher::refreshSinkFlag` / the player lambdas) | The hotpath reads **cached** flags, not the live getters. A missed signal leaves the cache stale: frames silently never reach the dashboard, or exports silently stop. Dashboard-side inputs wire `Qt::DirectConnection` (the cache is GUI-affine); FrameBuilder's refresh slots are pipeline-affine and auto-queue from GUI emitters by design (spec 0051 M3), so never force those Direct. The 1 Hz `CachedFlagChecker` (spec 0095) repairs a missed wire within about two seconds and reports it, and that report is a bug. Flag mechanics: [architecture/dataflow.md](architecture/dataflow.md) "Cached Hotpath Flags". |
 | Polling a singleton getter per frame on the parse/publish path (`AppState::operationMode()`, consumer `enabled()`, `isAnyPlayerOpen()`, per-frame `std::map::find`) | Cache it as a member refreshed by the owning signal; the per-frame cost of guarded-static hops + map walks is what dragged the native parser gate down. See the cached members in `FrameBuilder` (`m_operationMode`, `m_playerOpen`, `m_anyAsyncSink`) and `FrameParser` (`m_engine0Cache`). |
 | Returning `QList<QStringList>` from a new native template when a single-row view split would do | Implement `INativeParser::parseSpans` (views into the frame bytes, `-1` when the contract can't hold: multi-row, latch state, content rewriting like quote-unescaping). The span lane is what lets Native parse without per-token allocations; the QList path is the fallback, not the default. |
 | Writing `dataset.value` / slot strings via implicit-share assignment on the span lane | Use `assign_utf8_in_place` / `assign_string_in_place` (Frame.h). A share-assign re-links buffers, so the next in-place write detaches and re-allocates every frame — the zero-alloc steady state silently degrades back to per-frame mallocs. |
@@ -119,11 +121,11 @@
 | Mistake | Fix |
 |---------|-----|
 | Bundled scope creep — slipping an unrelated bug-fix, "small cleanup", rename, or import-sort into the same diff as the user's actual ask | Name it in chat first ("noticed X — want it in this pass?"). Every unrelated file you touch costs the reviewer an audit pass, and "all the changes were individually correct" doesn't restore the trust the surprise diff cost. The user can always say yes; they can't say no after the fact. |
-| Duplicating a pinned constant into a second file with an "update in lockstep" comment (the canary in `.claude/hooks/canary-check.py` mirrors CLAUDE.md) | Bind the copy in `scripts/doc-anchors.json` so `claim-verify.py` fails when either side drifts. A lockstep comment is a reminder, and a reminder is not enforcement: the Qt 6.11.2 bump on 2026-08-20 left the hook on 6.11.1, and it reported CANARY MUTATED on every healthy turn for three weeks before anyone looked. Codified: `qt-version` anchor, 2026-09-09. |
-| Ending a turn that edited files on "done", "fixed", "verified" or "tests pass" without having run the check the claim rests on | Run it (`code-verify.py --check` on the touched files at minimum, the relevant pytest/ctest when one exists) and report the actual result, or scope the claim to what was verified by reading. "Done" is the one word the reviewer cannot audit from the diff. Codified: `.claude/hooks/claim-check.py`, Stop hook, warn only, 2026-09-09. |
+| Duplicating a pinned constant into a second file with an "update in lockstep" comment (the canary in `.claude/hooks/canary-check.py` mirrors CLAUDE.md) | Bind the copy in `scripts/doc-anchors.json` so `claim-verify.py` fails when either side drifts. A lockstep comment is a reminder, and a reminder is not enforcement: the Qt 6.11.2 bump on 2026-08-20 left the hook on 6.11.1, and it reported CANARY MUTATED on every healthy turn for three weeks before anyone looked. Codified: anchor:qt-version, 2026-09-09. |
+| Ending a turn that edited files on "done", "fixed", "verified" or "tests pass" without having run the check the claim rests on | Run it (`code-verify.py --check` on the touched files at minimum, the relevant pytest/ctest when one exists) and report the actual result, or scope the claim to what was verified by reading. "Done" is the one word the reviewer cannot audit from the diff. Codified: hook:claim-check.py (Stop hook, warn only), 2026-09-09. |
 | Treating a subagent's report as ground truth — writing docs, edits, or follow-up agent prompts on top of its claims without checking | Spot-check before you build: open 2-3 of the cited files/symbols (or grep for them) yourself before propagating anything a subagent reported. Agent reports are leads, not facts — the 2026 AI-docs audits repeatedly traced shipped wrong claims back to unverified agent output. Same discipline for cached workflow results: an empty result is a finding to verify, not proof of absence. |
 | Auditing a cross-cutting obligation (license gates, consent prompts, undo coverage) by enumerating the EXISTING check sites and tracing each one, then declaring the sweep complete | Enumerate from the obligation's authoritative source toward the code and treat "no check found" as the finding. For license gates there are two such sources, both maintained for other reasons and therefore always current: the advertised Pro feature list (`app/rcc/messages/pro/Welcome_EN.txt`) and the `if(BUILD_COMMERCIAL)` file lists in `app/CMakeLists.txt` + `core/*/CMakeLists.txt` — the build system IS the Pro-surface inventory. Silent because a grep for check symbols cannot return a hit for a check that does not exist: the spec-0092 sweep shipped with the AI assistant, the Historian window, and file transfers fully ungated; the maintainer's ten-minute first-run test found all three, and the maintainer named the CMake lists the audit never consulted (2026-10-04). Codified: not yet. |
-| Verifying a batch/pattern edit with the linter alone and handing it off as done — the 2026-10-03/04 failures (missing include, `return;` in an `int` function, half-cut multi-line QML binding) were all compiler-class and lint-invisible | Run `scripts/syntax-check.py` on every edited C++ file before claiming the edit compiles; treat a SKIP (stale database) as "unverified" and say so. Silent because lint checks shape while only the compiler checks truth, and the editor cannot see types across an anchor boundary. Codified: `scripts/syntax-check.py` + `.claude/hooks/syntax-on-save.py` (PostToolUse), CLAUDE.md "Never build — but always syntax-check", 2026-10-04. |
+| Verifying a batch/pattern edit with the linter alone and handing it off as done — the 2026-10-03/04 failures (missing include, `return;` in an `int` function, half-cut multi-line QML binding) were all compiler-class and lint-invisible | Run `scripts/syntax-check.py` on every edited C++ file before claiming the edit compiles; treat a SKIP (stale database) as "unverified" and say so. Silent because lint checks shape while only the compiler checks truth, and the editor cannot see types across an anchor boundary. Codified: script:scripts/syntax-check.py, hook:syntax-on-save.py (PostToolUse), CLAUDE.md "Never build — but always syntax-check", 2026-10-04. |
 
 ## Diagnosing a GUI Stall — Sample, Don't Theorize
 
@@ -141,3 +143,30 @@ Related: `MacroEditor` grabs its offscreen widget only when dirty or focused
 ([scripting.md](architecture/scripting.md) "Embedded Code Editors"); the project-editor siblings
 still grab per tick. Never give a main-window-embedded editor an unconditional per-tick `grab()`
 — that cost 13% of the GUI thread all session (2026-08-17, found by sampling, not by reading).
+
+## Unenforced invariants
+
+Rules that a tool could hold but none does yet (spec 0095 R19), ordered by blast radius: silent
+data loss first. Each stays prose until its `Debt:` turns into an `Enforced:` marker on the rule.
+
+1. **A plain `bool` used as a hotpath cache.** Every `Cached<T>` is audited at 1 Hz, but a cache
+   that never became one is invisible to every tool; the result is the old failure (frames or
+   recordings silently stop). Debt: a code-verify rule over the hotpath TUs' boolean members.
+2. **The player-open mask's upstream hop.** `FrameBuilder::m_playerOpen` is audited against the
+   bus-fed `m_playerOpenMask`, but nothing compares the mask with the players' real state.
+   Debt: a GUI-side audit entry once the players expose a pollable open state.
+3. **A queued hop between two pipeline-thread objects** (CLAUDE.md "In-pipeline signal hops must be
+   `Qt::DirectConnection`"). Debt: a code-verify rule on `connect()` calls whose sender and receiver
+   are both pipeline-affine.
+4. **A mutex in `FrameReader` / `CircularBuffer`.** Debt: a code-verify rule banning lock types in
+   those TUs.
+5. **Re-stamping time in an export or report worker** (source owns time). Debt: a lint on clock
+   reads in `core/Storage/**` workers.
+6. **`parseFunction.call()` instead of `JsScriptEngine::guardedCall()`, or `setInterrupted(true)`
+   outside `JsWatchdogThread.cpp`.** Debt: a grep-class code-verify rule.
+7. **Inline SIMD intrinsics outside `DSPSimd.h` / `DSPSimdAvx2.h`.** Debt: a code-verify rule on
+   intrinsic headers.
+8. **A hand-edited generated file.** `sanitize-commit.py` regenerates and so masks the edit locally.
+   Debt: a CI check that regeneration leaves the tree unchanged.
+9. **An assistant command missing from `command_safety.json`** (falls through to Confirm). Debt: a
+   test that every registered command sits in exactly one tier.

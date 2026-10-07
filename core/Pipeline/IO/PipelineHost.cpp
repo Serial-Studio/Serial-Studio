@@ -22,6 +22,7 @@
 #include "IO/PipelineHost.h"
 
 #include "Core/IO/IRawFrameTap.h"
+#include "Core/ModuleConstruction.h"
 #include "Core/SSAssert.h"
 #include "DataModel/FrameBuilder.h"
 #include "DataModel/Scripting/FrameParser.h"
@@ -94,7 +95,7 @@ IO::PipelineHost::~PipelineHost()
  */
 IO::PipelineHost& IO::PipelineHost::instance()
 {
-  SS_ASSERT(s_instance != nullptr, qFatal("PipelineHost::instance() before adoption"));
+  SS_ASSERT(s_instance != nullptr, Core::ModuleConstruction::reportUnavailable(staticMetaObject));
   return *s_instance;
 }
 
@@ -588,6 +589,14 @@ bool IO::PipelineHost::dequeueStructureSnapshot(DataModel::StructureSnapshotPtr&
 void IO::PipelineHost::setDashboardAccepting(bool accepting) noexcept
 {
   m_dashboardAccepting.store(accepting, std::memory_order_relaxed);
+}
+
+/**
+ * @brief The mirrored dashboard-accepting flag, read back by the Dashboard's cached-flag audit.
+ */
+bool IO::PipelineHost::dashboardAccepting() const noexcept
+{
+  return m_dashboardAccepting.load(std::memory_order_relaxed);
 }
 
 /**

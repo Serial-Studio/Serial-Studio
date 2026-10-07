@@ -24,6 +24,10 @@ ground truth in the tree:
     anchor-drift         a constant in scripts/doc-anchors.json whose code-side
                          pattern no longer matches, or whose doc-side literal
                          has gone missing
+    enforcer-missing     an `Enforced:` / `Codified:` marker names a lint rule,
+                         ctest, anchor, script, hook or symbol that does not
+                         exist (spec 0095 M5): a rule that claims a mechanism
+                         must point at a real one
 
 `doc/claude/specs/**` is deliberately out of scope: a spec is a dated record of
 what was decided, not a live claim about the tree, and files legitimately move
@@ -491,6 +495,80 @@ def check_symbols(
     return out
 
 
+ENFORCER_MARKER_RE = re.compile(r"\b(?:Enforced|Codified):\s*(.*)")
+ENFORCER_ITEM_RE = re.compile(r"\b(code-verify|ctest|anchor|script|hook|compile):([^\s,;`)]+)")
+CODE_VERIFY_SOURCES = ("scripts/code-verify.py", "scripts/code_verify_rules.py")
+CTEST_LIST = "app/tests/CMakeLists.txt"
+HOOKS_DIR = ".claude/hooks"
+
+
+class EnforcerIndex:
+    """The mechanisms an `Enforced:` marker may name, read once per run."""
+
+    def __init__(self, index: SourceIndex):
+        self.index = index
+        self.rules = "\n".join(
+            (REPO_ROOT / name).read_text(encoding="utf-8", errors="replace")
+            for name in CODE_VERIFY_SOURCES
+            if (REPO_ROOT / name).is_file()
+        )
+        ctests = REPO_ROOT / CTEST_LIST
+        self.ctests = (
+            ctests.read_text(encoding="utf-8", errors="replace") if ctests.is_file() else ""
+        )
+        try:
+            spec = json.loads(ANCHORS_PATH.read_text(encoding="utf-8"))
+            self.anchors = {a.get("name") for a in spec.get("anchors", [])}
+        except (OSError, ValueError):
+            self.anchors = set()
+
+    def resolves(self, kind: str, name: str) -> bool:
+        """Whether `kind:name` names a mechanism that exists in the tree."""
+        if kind == "code-verify":
+            return f'"{name}"' in self.rules or f"'{name}'" in self.rules
+        if kind == "ctest":
+            return re.search(rf"ss_add_unit_test\(\s*{re.escape(name)}\b", self.ctests) is not None
+        if kind == "anchor":
+            return name in self.anchors
+        if kind == "hook":
+            return (REPO_ROOT / HOOKS_DIR / name).is_file()
+        if kind == "script":
+            path, _, flag = name.partition("#")
+            target = REPO_ROOT / path
+            if not target.is_file():
+                return False
+            return not flag or flag in target.read_text(encoding="utf-8", errors="replace")
+        if kind == "compile":
+            return name in self.index.blob or name.split("::")[-1] in self.index.idents
+        return False
+
+
+def check_enforcers(
+    path: Path, lines: list[str], visible: list[bool], enforcers: EnforcerIndex
+) -> list[Finding]:
+    """Every mechanism an `Enforced:` or `Codified:` marker names must exist."""
+    out: list[Finding] = []
+    for number, line in enumerate(lines, start=1):
+        if not visible[number - 1]:
+            continue
+        marker = ENFORCER_MARKER_RE.search(line)
+        if marker is None:
+            continue
+        for kind, name in ENFORCER_ITEM_RE.findall(marker.group(1)):
+            name = name.rstrip(".:")
+            if not enforcers.resolves(kind, name):
+                out.append(
+                    Finding(
+                        path,
+                        number,
+                        "enforcer-missing",
+                        f"`{kind}:{name}` names no {kind} mechanism in the tree",
+                        True,
+                    )
+                )
+    return out
+
+
 def _out_of_order(placed: list) -> list:
     """The entries to move: everything outside the longest already-correct run.
 
@@ -813,6 +891,7 @@ def main(argv: list[str]) -> int:
         return 2
 
     index = build_source_index()
+    enforcers = EnforcerIndex(index)
 
     findings: list[Finding] = []
     for doc in docs:
@@ -821,6 +900,7 @@ def main(argv: list[str]) -> int:
         findings.extend(check_paths(doc, lines, visible))
         findings.extend(check_links(doc, lines, visible))
         findings.extend(check_symbols(doc, lines, visible, index))
+        findings.extend(check_enforcers(doc, lines, visible, enforcers))
 
     findings.extend(check_anchors())
     findings.sort(key=lambda f: (f.path.as_posix(), f.line, f.kind))

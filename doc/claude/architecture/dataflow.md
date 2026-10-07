@@ -186,9 +186,9 @@ refresh and they are not interchangeable:
 
 | Caller | Call | Sinks |
 |--------|------|-------|
-| Control script / `dashboard.tick` | `dashboardTick()` -> `republishFrames(true)` | **fed** |
-| `dashboard.reprocess`, watchdog renders | `reprocessFrames()` -> `republishFrames(false)` | masked |
-| `refreshStreamDrivenFrames()`, UI tick while a stream source produces | `republishFrames(false)` | masked |
+| Control script / `dashboard.tick` | `dashboardTick()` -> `republishFrames(exportLane())` | **fed** |
+| `dashboard.reprocess`, watchdog renders | `reprocessFrames()` -> `republishFrames(dashboardLane())` | masked |
+| `refreshStreamDrivenFrames()`, UI tick while a stream source produces | `republishFrames(dashboardLane())` | masked |
 
 Both lanes run `reprocessDatasetValues()`, which honors the change-driven skip. **They must not
 share one "already republished" mark.** They did until spec 0064, and the result was that any
@@ -206,6 +206,11 @@ FrameBuilder's link set) keeps the lanes apart:
 - the export lane asks whether the **sinks** are behind (`sinkDirty`), not whether this pass saw a
   change;
 - only an export publish clears the mark.
+
+Never gate an export publish on "did THIS pass see a change". Since spec 0095 a pass holds one
+`DataModel::RepublishLane`, issued by `RepublishGate::dashboardLane()` or `exportLane()`: its
+`feedsExports()` drives the gate questions and the sink mask alike, and the gate's bool-taking
+methods are private, so a pass can no longer ask with one lane and record with the other.
 
 `tst_republish_lanes` pins the asymmetry; `tests/integration/test_export_replay_fidelity.py`
 reproduces the original failure end-to-end with no hardware (parser returns no datasets,
@@ -267,11 +272,20 @@ never per-frame signals. Known frame-path sites:
 
 ## Cached Hotpath Flags
 
-The hotpath reads **cached** flags, never live getters: `m_operationMode`, `m_playerOpen`,
-`m_anyAsyncSink`, `m_captureLatestFrame`, `m_changeDriven`, and Dashboard
-`m_streamAvailable`. A new input to any of them must wire its change signal to the matching
+The hotpath reads **cached** flags, never live getters. A cached hotpath flag is, by definition,
+a `DataModel::Cached<T>` member (spec 0095 M1): it cannot be declared without registering its
+derivation with its owner's `CachedFlagChecker`, which re-derives every flag at 1 Hz on the
+owner's thread and, when a mismatch survives two consecutive checks, reports it once, aborts a
+debug build and repairs through the owner's refresh path. The registered flags are FrameBuilder
+`m_playerOpen`, `m_captureDatasetValues`, `m_captureLatestFrame`, `m_changeDriven` and
+`m_operationMode`, BlockPublisher `m_anyAsyncSink`, and Dashboard `m_streamAvailable` (whose
+checker also audits the `PipelineHost` dashboard-accepting and operation-mode mirrors). The
+frame-builder derivations live in `BuilderFlagAudit`, and the refresh slots assign from the same
+helpers. A plain `bool` used as a cache is invisible to every tool, so never add one.
+
+A new input to any of them must wire its change signal to the matching
 cache refresh (`updateStreamAvailable` / `BlockPublisher::refreshSinkFlag` / the player lambdas) or
-frames/exports silently stop. `m_playerOpen` is the cache the two per-frame
+the cache sits stale until the 1 Hz audit repairs it, and that repair report is a bug. `m_playerOpen` is the cache the two per-frame
 `isFinalValuePlayerOpen()` calls became (spec 0075 A5); the two getters are byte-identical
 implementations, which is what makes that substitution exact rather than approximate. **Two-thread refresh rule (spec 0051 M3):** FrameBuilder's
 refresh slots are pipeline-affine, so their connections auto-queue from GUI emitters —

@@ -40,6 +40,7 @@ extern "C" {
 #include "Core/Bus/MessageBus.h"
 #include "Core/Bus/Messages.h"
 #include "Core/License.h"
+#include "Core/ModuleConstruction.h"
 #include "Core/SSAssert.h"
 
 #ifdef BUILD_COMMERCIAL
@@ -91,7 +92,7 @@ DataModel::NotificationCenter::~NotificationCenter() = default;
  */
 DataModel::NotificationCenter& DataModel::NotificationCenter::instance()
 {
-  SS_ASSERT(s_instance != nullptr, qFatal("NotificationCenter::instance() before adoption"));
+  SS_ASSERT(s_instance != nullptr, Core::ModuleConstruction::reportUnavailable(staticMetaObject));
   return *s_instance;
 }
 

@@ -139,7 +139,7 @@ private:
   static constexpr std::size_t kCacheLine = 64;
 
   Server& m_apiServer;
-  bool m_enabled;
+  alignas(kCacheLine) std::atomic<bool> m_enabled;
   alignas(kCacheLine) std::atomic<int> m_clientCount;
   alignas(kCacheLine) std::atomic<bool> m_writerRunning;
 

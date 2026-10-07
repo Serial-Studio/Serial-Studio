@@ -22,6 +22,7 @@
 
 #pragma once
 
+#include <atomic>
 #include <cstdint>
 #include <memory>
 #include <QHash>
@@ -169,6 +170,7 @@ protected:
 
 private:
   QSet<quint32> m_activeSessions;
+  std::atomic<bool> m_anyActiveSession;
   // Read by the pipeline thread in ingestBlock(), mutated by the GUI on session open/close
   mutable QMutex m_sessionDatasetsMutex;
   QHash<quint32, int> m_sessionDatasets;

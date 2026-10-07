@@ -184,15 +184,15 @@ private slots:
  */
 void TstEnvelopeRing::sizing()
 {
-  const DSP::EnvelopeRing tiny(1, 1.0);
+  const DSP::EnvelopeRing tiny(DSP::RingCapacity::fromRate(1.0, 1.0), 1.0);
   QCOMPARE(tiny.coarseLevelCount(), 0);
 
-  const DSP::EnvelopeRing small(1024, 1.0);
+  const DSP::EnvelopeRing small(DSP::RingCapacity::fromRate(1.0, 1024.0), 1.0);
   QCOMPARE(small.coarseLevelCount(), 2);
   QCOMPARE(small.levels[0].cells.capacity(), std::size_t(33));
   QCOMPARE(small.levels[1].cells.capacity(), std::size_t(3));
 
-  const DSP::EnvelopeRing large(262144, 10.0);
+  const DSP::EnvelopeRing large(DSP::RingCapacity::fromRate(10.0, 26214.4), 10.0);
   QCOMPARE(large.coarseLevelCount(), 4);
   QCOMPARE(large.levels[0].cells.capacity(), std::size_t(8193));
   QCOMPARE(large.levels[3].cells.capacity(), std::size_t(3));
@@ -213,7 +213,7 @@ void TstEnvelopeRing::sizing()
  */
 void TstEnvelopeRing::rampMatchesBruteForce()
 {
-  DSP::EnvelopeRing ring(4096, 1.0);
+  DSP::EnvelopeRing ring(DSP::RingCapacity::fromRate(1.0, 4096.0), 1.0);
   QCOMPARE(ring.coarseLevelCount(), 2);
 
   std::vector<Sample> log;
@@ -238,7 +238,7 @@ void TstEnvelopeRing::rampMatchesBruteForce()
  */
 void TstEnvelopeRing::wrapKeepsLevelsConsistent()
 {
-  DSP::EnvelopeRing ring(1024, 1.0);
+  DSP::EnvelopeRing ring(DSP::RingCapacity::fromRate(1.0, 1024.0), 1.0);
   QCOMPARE(ring.coarseLevelCount(), 2);
 
   std::vector<Sample> log;
@@ -262,11 +262,11 @@ void TstEnvelopeRing::wrapKeepsLevelsConsistent()
  */
 void TstEnvelopeRing::resizeRebuildsLevels()
 {
-  DSP::EnvelopeRing ring(1024, 1.0);
+  DSP::EnvelopeRing ring(DSP::RingCapacity::fromRate(1.0, 1024.0), 1.0);
   std::vector<Sample> log;
   feedCells(ring, 0, 700, 3, log);
 
-  ring.resizeCapacity(4096, 1.0);
+  ring.resizeCapacity(DSP::RingCapacity::fromRate(1.0, 4096.0), 1.0);
   QCOMPARE(ring.level0.time.capacity(), std::size_t(4096));
   QCOMPARE(ring.coarseLevelCount(), 2);
   QVERIFY(!ring.openCellValid);
@@ -289,7 +289,7 @@ void TstEnvelopeRing::resizeRebuildsLevels()
  */
 void TstEnvelopeRing::levelSelection()
 {
-  DSP::EnvelopeRing ring(4096, 1.0);
+  DSP::EnvelopeRing ring(DSP::RingCapacity::fromRate(1.0, 4096.0), 1.0);
   std::vector<Sample> log;
   feedCells(ring, 0, 1500, 5, log);
 
@@ -306,7 +306,7 @@ void TstEnvelopeRing::levelSelection()
   QCOMPARE(ring.selectLevel(1.0, 0, oldest), 0);
   QCOMPARE(ring.selectLevel(1.0, 100, std::numeric_limits<double>::quiet_NaN()), 0);
 
-  const DSP::EnvelopeRing empty(4096, 1.0);
+  const DSP::EnvelopeRing empty(DSP::RingCapacity::fromRate(1.0, 4096.0), 1.0);
   QCOMPARE(empty.selectLevel(1.0, 10, 0.0), 0);
 }
 
@@ -316,7 +316,7 @@ void TstEnvelopeRing::levelSelection()
  */
 void TstEnvelopeRing::coverageFallback()
 {
-  DSP::EnvelopeRing ring(4096, 1.0);
+  DSP::EnvelopeRing ring(DSP::RingCapacity::fromRate(1.0, 4096.0), 1.0);
   std::vector<Sample> log;
   feedCells(ring, 0, 3000, 5, log);
   QVERIFY(ring.levels[0].cells.full());
@@ -337,7 +337,7 @@ void TstEnvelopeRing::coverageFallback()
  */
 void TstEnvelopeRing::rejectsNonFinite()
 {
-  DSP::EnvelopeRing ring(1024, 1.0);
+  DSP::EnvelopeRing ring(DSP::RingCapacity::fromRate(1.0, 1024.0), 1.0);
   std::vector<Sample> log;
   feedCells(ring, 0, 100, 4, log);
 
@@ -368,7 +368,7 @@ void TstEnvelopeRing::rejectsNonFinite()
  */
 void TstEnvelopeRing::downsampleReadsCoarseLevel()
 {
-  DSP::EnvelopeRing ring(4096, 1.0);
+  DSP::EnvelopeRing ring(DSP::RingCapacity::fromRate(1.0, 4096.0), 1.0);
   std::vector<Sample> log;
   feedCells(ring, 0, 1500, 5, log);
 

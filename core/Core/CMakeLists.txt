@@ -70,6 +70,8 @@ qt_add_library(
   License.cpp
   Runtime.h
   Runtime.cpp
+  ModuleConstruction.h
+  ModuleConstruction.cpp
   IO/FrameConfig.h
   DataModel/Frame.h
   DataModel/Frame.cpp

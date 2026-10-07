@@ -22,6 +22,7 @@
 #pragma once
 
 #include <array>
+#include <atomic>
 #include <QObject>
 #include <QString>
 #include <QThread>
@@ -90,7 +91,7 @@ private:
   QString m_code;
   QString m_lastError;
   bool m_ready;
-  bool m_running;
+  std::atomic<bool> m_running;
   bool m_shouldRun;
   bool m_shutdown;
   bool m_stoppedOnError;

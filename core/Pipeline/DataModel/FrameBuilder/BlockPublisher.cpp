@@ -22,14 +22,15 @@
 #include "DataModel/FrameBuilder/BlockPublisher.h"
 
 #include "Core/SSAssert.h"
+#include "DataModel/FrameBuilder/BuilderFlagAudit.h"
 #include "IO/PipelineHost.h"
 
 /**
- * @brief Binds the sink mask the replay and synthetic lanes raise; the sinks themselves arrive
- *        later, from the composition root.
+ * @brief Binds the sink mask the replay and synthetic lanes raise and registers the cached sink
+ *        flag with the builder's cross-check; the sinks arrive later, from the composition root.
  */
-DataModel::BlockPublisher::BlockPublisher(const bool& maskSinks)
-  : m_maskSinks(maskSinks), m_anyAsyncSink(false)
+DataModel::BlockPublisher::BlockPublisher(const bool& maskSinks, CachedFlagChecker& checker)
+  : m_maskSinks(maskSinks), m_anyAsyncSink(checker, BuilderFlagAudit::kAnyAsyncSink, false)
 {}
 
 /**
@@ -72,11 +73,22 @@ const DataModel::BlockPublisher::Sinks& DataModel::BlockPublisher::sinks() const
  */
 void DataModel::BlockPublisher::refreshSinkFlag()
 {
+  m_anyAsyncSink = deriveSinkFlag();
+}
+
+/**
+ * @brief The any-async-consumer verdict derived from scratch: the one expression the refresh and
+ *        the 1 Hz cross-check share. Every sinkActive() answers from an atomic (IBlockSink).
+ */
+bool DataModel::BlockPublisher::deriveSinkFlag() const
+{
+  SS_ASSERT(m_sinks.sinkCount <= Sinks::kMaxSinks, return true);
+
   bool any = false;
   for (std::size_t i = 0; i < m_sinks.sinkCount; ++i)
     any = any || m_sinks.sinks[i]->sinkActive();
 
-  m_anyAsyncSink = any;
+  return any;
 }
 
 /**

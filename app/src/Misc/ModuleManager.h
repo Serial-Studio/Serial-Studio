@@ -74,11 +74,19 @@ signals:
   void automaticUpdatesChanged();
 
 public:
+  /**
+   * @brief What a composition root needs: a publishing session binds every sink and tap; the
+   *        schema dump only reads the command registry and publishes nothing.
+   */
+  enum class BindMode {
+    Full,
+    SchemaOnly
+  };
+
   ModuleManager();
   ~ModuleManager() override;
   static void bootstrapCoreServices();
-  static void instantiateCoreModules();
-  static void bindInterfaces();
+  static void composeSession(BindMode mode);
   static void registerApiHandlers();
   static void releaseAnnunciator();
   static void wireAnnunciator(bool headless, Misc::ProblemCenter& problemCenter);
@@ -105,6 +113,8 @@ public slots:
   void setEphemeralSession(const bool ephemeral);
 
 private:
+  static void instantiateCoreModules();
+  static void bindInterfaces();
   void setupCrossModuleConnections();
   void registerCoreContextProperties(QQmlContext* ctx);
   void registerAppMetadataProperties(QQmlContext* ctx, bool grpcAvailable);

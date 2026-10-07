@@ -73,6 +73,7 @@
 #include "Core/Runtime.h"
 #include "Core/SerialStudio.h"
 #include "Core/Services.h"
+#include "Core/SSAssert.h"
 #include "Core/TimerEvents.h"
 #include "Core/Translator.h"
 #include "Core/WorkspaceManager.h"
@@ -968,6 +969,21 @@ void Misc::ModuleManager::wireAnnunciator(bool headless, Misc::ProblemCenter& pr
 }
 
 /**
+ * @brief The one entry every composition root takes (spec 0095 M4): the pinned construction order,
+ *        then the interface bind unless the root publishes nothing. Construction wires nothing, so
+ *        a publishing root that skipped the bind would flush its first block through a null host
+ *        and record valid-looking empty files; with this entry it cannot skip it.
+ */
+void Misc::ModuleManager::composeSession(const BindMode mode)
+{
+  SS_ASSERT(mode == BindMode::Full || mode == BindMode::SchemaOnly, return);
+
+  instantiateCoreModules();
+  if (mode == BindMode::Full)
+    bindInterfaces();
+}
+
+/**
  * @brief Binds the seams every root needs before any wiring or the first device open (spec 0077):
  *        block sinks (two read-only observers named by slot), raw-byte taps and the per-frame tap.
  *        ONE list for the GUI, headless and benchmark roots: a sink missing here never reaches
@@ -1050,7 +1066,6 @@ void Misc::ModuleManager::registerApiHandlers()
  */
 void Misc::ModuleManager::setupHeadlessSessionConnections()
 {
-  bindInterfaces();
   registerApiHandlers();
   DataModel::NotificationCenter::instance().setupExternalConnections();
   DataModel::FrameBuilder::instance().setupExternalConnections();
@@ -1174,8 +1189,7 @@ void Misc::ModuleManager::wireTrialGate()
  */
 void Misc::ModuleManager::setupCrossModuleConnections()
 {
-  instantiateCoreModules();
-  bindInterfaces();
+  composeSession(BindMode::Full);
   registerApiHandlers();
 
   auto* appState             = &AppState::instance();

@@ -30,9 +30,7 @@
 // four channels while its dashboard updated normally.
 
 namespace {
-constexpr bool kDashboard = false;
-constexpr bool kExport    = true;
-constexpr int kSource     = 0;
+constexpr int kSource = 0;
 }  // namespace
 
 class RepublishLanesTest : public QObject {
@@ -46,6 +44,7 @@ private slots:
   void repeatedMaskedRefreshesNeverStarveTheExportLane();
   void templatePublishSuppressesTheDashboardLaneOnly();
   void clearRestoresTheFirstPublishObligation();
+  void lanesCarryTheirIdentity();
 };
 
 /**
@@ -54,8 +53,8 @@ private slots:
 void RepublishLanesTest::bothLanesOweAFirstPublish()
 {
   DataModel::RepublishGate gate;
-  QVERIFY(gate.needed(kSource, false, kDashboard));
-  QVERIFY(gate.needed(kSource, false, kExport));
+  QVERIFY(gate.dashboardLane().needed(kSource, false));
+  QVERIFY(gate.exportLane().needed(kSource, false));
 }
 
 /**
@@ -65,10 +64,10 @@ void RepublishLanesTest::bothLanesOweAFirstPublish()
 void RepublishLanesTest::dashboardLaneSuppressesUnchangedSource()
 {
   DataModel::RepublishGate gate;
-  gate.notePublished(kSource, kDashboard);
+  gate.dashboardLane().notePublished(kSource);
 
-  QVERIFY(!gate.needed(kSource, false, kDashboard));
-  QVERIFY(gate.needed(kSource, true, kDashboard));
+  QVERIFY(!gate.dashboardLane().needed(kSource, false));
+  QVERIFY(gate.dashboardLane().needed(kSource, true));
 }
 
 /**
@@ -79,10 +78,10 @@ void RepublishLanesTest::exportLaneSuppressesUnchangedSourceOnceSinksAreCurrent(
 {
   DataModel::RepublishGate gate;
   gate.noteChanged(kSource);
-  gate.notePublished(kSource, kExport);
+  gate.exportLane().notePublished(kSource);
 
   QVERIFY(!gate.sinkDirty(kSource));
-  QVERIFY(!gate.needed(kSource, false, kExport));
+  QVERIFY(!gate.exportLane().needed(kSource, false));
 }
 
 /**
@@ -95,10 +94,10 @@ void RepublishLanesTest::maskedRefreshDoesNotDischargeTheExportLane()
   DataModel::RepublishGate gate;
 
   gate.noteChanged(kSource);
-  gate.notePublished(kSource, kDashboard);
+  gate.dashboardLane().notePublished(kSource);
 
   QVERIFY(gate.sinkDirty(kSource));
-  QVERIFY(gate.needed(kSource, false, kExport));
+  QVERIFY(gate.exportLane().needed(kSource, false));
 }
 
 /**
@@ -111,12 +110,12 @@ void RepublishLanesTest::repeatedMaskedRefreshesNeverStarveTheExportLane()
 
   for (int i = 0; i < 1000; ++i) {
     gate.noteChanged(kSource);
-    gate.notePublished(kSource, kDashboard);
-    QVERIFY(gate.needed(kSource, false, kExport));
+    gate.dashboardLane().notePublished(kSource);
+    QVERIFY(gate.exportLane().needed(kSource, false));
   }
 
-  gate.notePublished(kSource, kExport);
-  QVERIFY(!gate.needed(kSource, false, kExport));
+  gate.exportLane().notePublished(kSource);
+  QVERIFY(!gate.exportLane().needed(kSource, false));
 }
 
 /**
@@ -128,11 +127,11 @@ void RepublishLanesTest::templatePublishSuppressesTheDashboardLaneOnly()
   DataModel::RepublishGate gate;
   gate.notePublishedTemplate(kSource);
 
-  QVERIFY(!gate.needed(kSource, false, kDashboard));
-  QVERIFY(!gate.needed(kSource, false, kExport));
+  QVERIFY(!gate.dashboardLane().needed(kSource, false));
+  QVERIFY(!gate.exportLane().needed(kSource, false));
 
   gate.noteChanged(kSource);
-  QVERIFY(gate.needed(kSource, false, kExport));
+  QVERIFY(gate.exportLane().needed(kSource, false));
 }
 
 /**
@@ -142,11 +141,32 @@ void RepublishLanesTest::clearRestoresTheFirstPublishObligation()
 {
   DataModel::RepublishGate gate;
   gate.noteChanged(kSource);
-  gate.notePublished(kSource, kExport);
+  gate.exportLane().notePublished(kSource);
   gate.clear();
 
-  QVERIFY(gate.needed(kSource, false, kDashboard));
-  QVERIFY(gate.needed(kSource, false, kExport));
+  QVERIFY(gate.dashboardLane().needed(kSource, false));
+  QVERIFY(gate.exportLane().needed(kSource, false));
+}
+
+/**
+ * @brief Each handle answers for the lane it was issued as: only the export handle feeds the
+ *        sinks, and only its publish brings them current.
+ */
+void RepublishLanesTest::lanesCarryTheirIdentity()
+{
+  DataModel::RepublishGate gate;
+  const auto dashboard = gate.dashboardLane();
+  auto exports         = gate.exportLane();
+
+  QVERIFY(!dashboard.feedsExports());
+  QVERIFY(exports.feedsExports());
+
+  gate.noteChanged(kSource);
+  gate.dashboardLane().notePublished(kSource);
+  QVERIFY(gate.sinkDirty(kSource));
+
+  exports.notePublished(kSource);
+  QVERIFY(!gate.sinkDirty(kSource));
 }
 
 QTEST_APPLESS_MAIN(RepublishLanesTest)

@@ -25,6 +25,7 @@
 #include <QList>
 #include <QThread>
 
+#include "Core/ModuleConstruction.h"
 #include "Core/SerialStudio.h"
 #include "Core/Services.h"
 #include "Core/SSAssert.h"
@@ -111,7 +112,7 @@ void DataModel::FrameParser::releaseEngines()
  */
 DataModel::FrameParser& DataModel::FrameParser::instance()
 {
-  SS_ASSERT(s_instance != nullptr, qFatal("FrameParser::instance() before adoption"));
+  SS_ASSERT(s_instance != nullptr, Core::ModuleConstruction::reportUnavailable(staticMetaObject));
   return *s_instance;
 }
 

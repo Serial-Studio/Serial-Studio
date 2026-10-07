@@ -44,10 +44,12 @@ extern "C" {
 #include <stdexcept>
 
 #include "Core/IO/IDeviceWriter.h"
+#include "Core/ModuleConstruction.h"
 #include "Core/Services.h"
 #include "Core/SSAssert.h"
 #include "Core/TimerEvents.h"
 #include "DataModel/ActionBytes.h"
+#include "DataModel/FrameBuilder/BuilderFlagAudit.h"
 #include "DataModel/NotificationCenter.h"
 #include "DataModel/ProjectModel.h"
 #include "DataModel/Scripting/ControlScript.h"
@@ -129,20 +131,21 @@ DataModel::FrameBuilder* DataModel::FrameBuilder::s_instance = nullptr;
  */
 DataModel::FrameBuilder::FrameBuilder(Core::Bus::MessageBus& bus)
   : m_bus(bus)
+  , m_flagChecker(this)
   , m_quickPlotChannels(-1)
   , m_parseBudgetEnabled(true)
   , m_lastConnectedState(false)
   , m_lastPausedState(false)
-  , m_playerOpen(false)
+  , m_playerOpen(m_flagChecker, BuilderFlagAudit::kPlayerOpen, false)
   , m_playerOpenMask{}
-  , m_captureDatasetValues(false)
+  , m_captureDatasetValues(m_flagChecker, BuilderFlagAudit::kCaptureDatasetValues, false)
   , m_captureFlagsDirty(true)
   , m_externalTableUsers(0)
-  , m_captureLatestFrame(false)
-  , m_changeDriven(false)
+  , m_captureLatestFrame(m_flagChecker, BuilderFlagAudit::kCaptureLatestFrame, false)
+  , m_changeDriven(m_flagChecker, BuilderFlagAudit::kChangeDriven, false)
   , m_shuttingDown(false)
   , m_seenEngineEpoch(-1)
-  , m_operationMode(SerialStudio::ProjectFile)
+  , m_operationMode(m_flagChecker, BuilderFlagAudit::kOperationMode, SerialStudio::ProjectFile)
   , m_projectDecoderMethod(SerialStudio::PlainText)
   , m_parsedFrameCount(0)
   , m_skippedFrameCount(0)
@@ -163,7 +166,7 @@ DataModel::FrameBuilder::FrameBuilder(Core::Bus::MessageBus& bus)
   , m_framePoolGeneration(1)
   , m_maskSinks(false)
   , m_stager(*this, m_framePoolGeneration, m_maskSinks)
-  , m_publisher(m_maskSinks)
+  , m_publisher(m_maskSinks, m_flagChecker)
   , m_deferredProjectSnapshot(std::nullopt)
   , m_wiring(*this, m_playerOpenMask)
 {
@@ -192,7 +195,7 @@ void DataModel::FrameBuilder::prepareShutdown()
  */
 DataModel::FrameBuilder& DataModel::FrameBuilder::instance()
 {
-  SS_ASSERT(s_instance != nullptr, qFatal("FrameBuilder::instance() before adoption"));
+  SS_ASSERT(s_instance != nullptr, Core::ModuleConstruction::reportUnavailable(staticMetaObject));
   return *s_instance;
 }
 
@@ -569,6 +572,7 @@ void DataModel::FrameBuilder::setupExternalConnections()
   connect(&Core::services().timerEvents, &Misc::TimerEvents::timeout1Hz, this, [this] {
     m_parseBudget.maintain(BudgetClock::now());
     m_latestTap.publishParseLoads();
+    m_flagChecker.check();
   });
 
   wireDisplayTickHooks(Core::services().timerEvents, IO::PipelineHost::instance());
@@ -749,10 +753,7 @@ void DataModel::FrameBuilder::releaseReplayPoolStorage()
 void DataModel::FrameBuilder::refreshLatestFrameCapture()
 {
   const bool wasEnabled = m_captureLatestFrame;
-
-  static auto& controlScript = DataModel::ControlScript::instance();
-  const auto* server         = m_publisher.sinks().server;
-  m_captureLatestFrame       = controlScript.running() || (server && server->sinkActive());
+  m_captureLatestFrame  = BuilderFlagAudit::deriveCaptureLatest(*this);
 
   if (wasEnabled && !m_captureLatestFrame)
     clearLatestFrames();
@@ -1199,7 +1200,7 @@ void DataModel::FrameBuilder::refreshStreamDrivenFrames()
   if (m_operationMode != SerialStudio::ProjectFile)
     return;
 
-  (void)republishFrames(false);
+  (void)republishFrames(m_republishGate.dashboardLane());
 }
 
 /**
@@ -1210,14 +1211,14 @@ void DataModel::FrameBuilder::refreshStreamDrivenFrames()
  */
 bool DataModel::FrameBuilder::emitRepublishedFrame(const DataModel::Frame& frame,
                                                    int key,
-                                                   bool feedExports)
+                                                   Lane lane)
 {
   const int sourceId = frame.sourceId;
   m_stager.flush(sourceId);
 
   const quint64 before    = m_stager.blockNumber(sourceId);
   const bool previousMask = m_maskSinks;
-  m_maskSinks             = m_maskSinks || !feedExports || !frameIsTableFed(frame);
+  m_maskSinks             = m_maskSinks || !lane.feedsExports() || !frameIsTableFed(frame);
 
   m_stager.stage(sourceId, frame, DataModel::TimestampedFrame::SteadyClock::now());
   m_stager.flush(sourceId);
@@ -1227,17 +1228,17 @@ bool DataModel::FrameBuilder::emitRepublishedFrame(const DataModel::Frame& frame
   if (m_stager.blockNumber(sourceId) == before)
     return false;
 
-  m_republishGate.notePublished(key, feedExports);
+  lane.notePublished(key);
   return true;
 }
 
 /**
  * @brief Re-runs every dataset transform from the last raw values and republishes the live
- *        frames: dashboard only with @p feedExports false, full sink fan-out with it true. A
+ *        frames: dashboard only on the dashboard lane, full sink fan-out on the export lane. A
  *        frame republishes only on a changed dataset value or its first publish, so a synthetic
  *        tick never touches the plot clock of a source whose data did not change.
  */
-bool DataModel::FrameBuilder::republishFrames(bool feedExports)
+bool DataModel::FrameBuilder::republishFrames(Lane lane)
 {
   if (m_operationMode != SerialStudio::ProjectFile)
     return false;
@@ -1261,11 +1262,11 @@ bool DataModel::FrameBuilder::republishFrames(bool feedExports)
     }
 
     any_source = true;
-    published  = republishOneFrame(frame, frame.sourceId, feedExports) || published;
+    published  = republishOneFrame(frame, frame.sourceId, lane) || published;
   }
 
   if (!any_source && !m_frame.groups.empty() && !m_frame.title.isEmpty())
-    published = republishOneFrame(m_frame, combined_frame_key, feedExports) || published;
+    published = republishOneFrame(m_frame, combined_frame_key, lane) || published;
 
   return published;
 }
@@ -1275,16 +1276,16 @@ bool DataModel::FrameBuilder::republishFrames(bool feedExports)
  *        publish. An export publish is what clears the sink-dirty mark: until one lands, the
  *        recording sinks are behind the values the dashboard already shows (spec 0064).
  */
-bool DataModel::FrameBuilder::republishOneFrame(DataModel::Frame& frame, int key, bool feedExports)
+bool DataModel::FrameBuilder::republishOneFrame(DataModel::Frame& frame, int key, Lane lane)
 {
   const bool changed = reprocessDatasetValues(frame);
   if (changed)
     m_republishGate.noteChanged(key);
 
-  if (!m_republishGate.needed(key, changed, feedExports))
+  if (!lane.needed(key, changed))
     return false;
 
-  return emitRepublishedFrame(frame, key, feedExports);
+  return emitRepublishedFrame(frame, key, lane);
 }
 
 /**
@@ -1306,7 +1307,7 @@ bool DataModel::FrameBuilder::reprocessFrames()
     return published;
   }
 
-  return republishFrames(false);
+  return republishFrames(m_republishGate.dashboardLane());
 }
 
 /**
@@ -1338,7 +1339,7 @@ bool DataModel::FrameBuilder::dashboardTick()
     for (const auto& g : m_frame.groups)
       (void)ensureSourceFrame(g.sourceId);
 
-  return republishFrames(true);
+  return republishFrames(m_republishGate.exportLane());
 }
 
 /**
@@ -2353,15 +2354,8 @@ void DataModel::FrameBuilder::endDatasetPass(bool armedJsWatchdog)
  */
 void DataModel::FrameBuilder::refreshDatasetCaptureFlag()
 {
-  static auto& parser        = DataModel::FrameParser::instance();
-  const bool transforms_read = m_transforms.referencesTableApi();
-  const bool external_users  = m_externalTableUsers > 0;
-  const bool parser_reads    = parser.anyEngineReferencesTableApi();
-
-  m_captureDatasetValues    = !m_playerOpen && m_tableStore.isInitialized()
-                           && (transforms_read || external_users || parser_reads);
-  static auto& projectModel = DataModel::ProjectModel::instance();
-  m_changeDriven            = projectModel.changeDrivenTransforms();
+  m_captureDatasetValues = BuilderFlagAudit::deriveCaptureDatasetValues(*this);
+  m_changeDriven         = BuilderFlagAudit::deriveChangeDriven();
   m_datasetDeps.clear();
   m_captureFlagsDirty = false;
 }

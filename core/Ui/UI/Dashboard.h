@@ -35,6 +35,7 @@
 
 #include "Core/DataModel/DataBlock.h"
 #include "Core/SerialStudio.h"
+#include "DataModel/CachedFlag.h"
 #include "DataModel/IDashboardControl.h"
 #include "DataModel/IDashboardFrames.h"
 #include "DataModel/IReplayPlotSink.h"
@@ -509,6 +510,10 @@ private:
   void drainBlockRing(const QElapsedTimer& clock, qint64 budgetNs);
 
 private:
+  static const DataModel::CachedFlagSpec kStreamAvailableSpec;
+  static const DataModel::CachedFlagSpec kAcceptingMirrorSpec;
+  static const DataModel::CachedFlagSpec kOperationModeMirrorSpec;
+
   // Resolved once at construction: Dashboard is built last, so no method body resolves a singleton.
   Core::Bus::MessageBus& m_bus;
   IO::ConnectionManager& m_connectionManager;
@@ -526,15 +531,15 @@ private:
   bool m_thinningActive;
 
   bool m_updateRetryInProgress;
+  DataModel::CachedFlagChecker m_flagChecker;
 
   // False while cached Dataset*/ring pointers are stale (post-reset, pre-reconfigure)
   bool m_layoutValid;
-  bool m_streamAvailable;
+  DataModel::Cached<bool> m_streamAvailable;
   quint8 m_openReplayPlayers;
 
   double m_plotTimeRange;
-  double m_plotDisplayTimeSec;
-  QMap<int, PlotClock> m_plotClocks;
+  PlotClockState m_plotClocks;
 
   DSP::AxisData m_pltXAxis;
   DSP::AxisData m_pltNullY;

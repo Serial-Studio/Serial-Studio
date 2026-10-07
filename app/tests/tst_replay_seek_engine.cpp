@@ -168,7 +168,7 @@ void ReplaySeekEngineTest::timeRingsAreClearedAndNormalized()
 {
   Stores stores;
   stores.widgetDatasets[SerialStudio::DashboardPlot] = {makeDataset(0, 10)};
-  stores.plotTimeRings.insert(0, DSP::EnvelopeRing(64, 1.0));
+  stores.plotTimeRings.insert(0, DSP::EnvelopeRing(DSP::RingCapacity::fromRate(1.0, 64.0), 1.0));
   stores.plotTimeRings[0].appendDecimated(500.0, 1.0);
   stores.plotTimeRings[0].appendDecimated(501.0, 2.0);
 
@@ -219,8 +219,8 @@ void ReplaySeekEngineTest::multiplotCurvesFillTheirOwnRings()
   stores.widgetGroups[SerialStudio::DashboardMultiPlot] = {makeGroup(3, 30, {20, 21})};
 
   std::vector<DSP::EnvelopeRing> rings;
-  rings.push_back(DSP::EnvelopeRing(64, 1.0));
-  rings.push_back(DSP::EnvelopeRing(64, 1.0));
+  rings.push_back(DSP::EnvelopeRing(DSP::RingCapacity::fromRate(1.0, 64.0), 1.0));
+  rings.push_back(DSP::EnvelopeRing(DSP::RingCapacity::fromRate(1.0, 64.0), 1.0));
   stores.multiplotTimeRings.insert(0, std::move(rings));
 
   QHash<qint64, QVector<double>> series;
@@ -247,8 +247,8 @@ void ReplaySeekEngineTest::restoreReturnsRingsToTheirOwnPlot()
 {
   Stores stores;
   stores.widgetDatasets[SerialStudio::DashboardPlot] = {makeDataset(0, 10), makeDataset(1, 10)};
-  stores.plotTimeRings.insert(0, DSP::EnvelopeRing(64, 1.0));
-  stores.plotTimeRings.insert(1, DSP::EnvelopeRing(64, 1.0));
+  stores.plotTimeRings.insert(0, DSP::EnvelopeRing(DSP::RingCapacity::fromRate(1.0, 64.0), 1.0));
+  stores.plotTimeRings.insert(1, DSP::EnvelopeRing(DSP::RingCapacity::fromRate(1.0, 64.0), 1.0));
 
   QHash<qint64, QVector<double>> series;
   series.insert(UI::ReplaySeekEngine::seekKey(0, 10), {1.0, 1.0, 1.0, 1.0});
@@ -260,8 +260,8 @@ void ReplaySeekEngineTest::restoreReturnsRingsToTheirOwnPlot()
   auto snapshot = engine.snapshotPlotTimeRings();
   QCOMPARE(snapshot.size(), 2);
 
-  stores.plotTimeRings[0] = DSP::EnvelopeRing(64, 1.0);
-  stores.plotTimeRings[1] = DSP::EnvelopeRing(64, 1.0);
+  stores.plotTimeRings[0] = DSP::EnvelopeRing(DSP::RingCapacity::fromRate(1.0, 64.0), 1.0);
+  stores.plotTimeRings[1] = DSP::EnvelopeRing(DSP::RingCapacity::fromRate(1.0, 64.0), 1.0);
   QCOMPARE(stores.plotTimeRings[0].level0.time.size(), static_cast<std::size_t>(0));
 
   engine.restorePlotTimeRings(snapshot);

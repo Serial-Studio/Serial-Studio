@@ -584,6 +584,30 @@ ss_add_unit_test(tst_envelope_ring
           SerialStudio::Core
 )
 
+ss_add_unit_test(tst_module_construction
+  SOURCES tst_module_construction.cpp
+          ${SS_CORE_SRC}/Core/ModuleConstruction.cpp
+  LIBS    Qt6::Core
+)
+
+ss_add_unit_test(tst_cached_flags
+  SOURCES tst_cached_flags.cpp
+          ${SS_CORE_SRC}/Pipeline/DataModel/CachedFlag.cpp
+  LIBS    Qt6::Core
+          SerialStudio::Core
+)
+
+ss_add_unit_test(tst_time_ring_sizing
+  SOURCES tst_time_ring_sizing.cpp
+          ${SS_CORE_SRC}/Ui/UI/Dashboard/TimeRingSizing.cpp
+          ${SS_CORE_SRC}/Pipeline/Platform/AppPlatform.cpp
+  LIBS    Qt6::Core
+          Qt6::Gui
+          Qt6::Widgets
+          ${SS_PLATFORM_LIBS}
+          SerialStudio::Core
+)
+
 #
 # Retained sweep segments of DSP::SweepEngine (spec 0061): same DSP.h link set as
 # tst_envelope_ring.

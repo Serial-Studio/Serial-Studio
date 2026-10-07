@@ -198,11 +198,11 @@ bool MQTT::Publisher::enabled() const noexcept
 }
 
 /**
- * @brief The publisher's verdict for this sink: the broker publisher consumes blocks while enabled.
+ * @brief Sink verdict: consumes blocks while enabled (atomic mirror; polled off the GUI thread).
  */
 bool MQTT::Publisher::sinkActive() const noexcept
 {
-  return enabled();
+  return m_hotEnabled.load(std::memory_order_relaxed);
 }
 
 /**

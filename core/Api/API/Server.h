@@ -183,8 +183,8 @@ private:
   ServerAuth m_auth;
   ClientReception m_reception;
   int m_port;
-  int m_clientCount;
-  bool m_enabled;
+  std::atomic<int> m_clientCount;
+  alignas(64) std::atomic<bool> m_enabled;
   bool m_mirrorLinked;
   bool m_externalConnections;
   QTcpServer m_server;

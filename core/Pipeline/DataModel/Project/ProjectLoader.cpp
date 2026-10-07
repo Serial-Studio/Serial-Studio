@@ -1360,7 +1360,8 @@ void DataModel::ProjectLoader::loadFrozen(const QJsonObject& json)
  */
 void DataModel::ProjectLoader::loadChangeDrivenTransforms(const QJsonObject& json)
 {
-  m_model.m_changeDrivenTransforms = json.value(Keys::ChangeDrivenTransforms).toBool(false);
+  m_model.m_changeDrivenTransforms.store(json.value(Keys::ChangeDrivenTransforms).toBool(false),
+                                         std::memory_order_relaxed);
 }
 
 /**

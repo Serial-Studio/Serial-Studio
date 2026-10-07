@@ -112,6 +112,7 @@ private:
   static FrameBuilder* s_instance;
   explicit FrameBuilder(Core::Bus::MessageBus& bus);
   friend class ExternalWiring;
+  friend class BuilderFlagAudit;
 
   [[nodiscard]] bool anyPlayerOpen() const
   {
@@ -254,6 +255,7 @@ private slots:
   void refreshProjectSourceSnapshot();
 
 private:
+  using Lane               = DataModel::RepublishLane;
   using BudgetClock        = DataModel::ParseBudget::Clock;
   using TransformFrameInfo = DataModel::TransformFrameInfo;
 
@@ -272,20 +274,21 @@ private:
   };
 
   Core::Bus::MessageBus& m_bus;
+  DataModel::CachedFlagChecker m_flagChecker;
   int m_quickPlotChannels;
   bool m_parseBudgetEnabled;
   bool m_lastConnectedState;
   bool m_lastPausedState;
-  bool m_playerOpen;
+  DataModel::Cached<bool> m_playerOpen;
   std::array<bool, DataModel::ExternalWiring::kPlayerSlots> m_playerOpenMask;
-  bool m_captureDatasetValues;
+  DataModel::Cached<bool> m_captureDatasetValues;
   bool m_captureFlagsDirty;
   int m_externalTableUsers;
-  bool m_captureLatestFrame;
-  bool m_changeDriven;
+  DataModel::Cached<bool> m_captureLatestFrame;
+  DataModel::Cached<bool> m_changeDriven;
   bool m_shuttingDown;
   int m_seenEngineEpoch;
-  SerialStudio::OperationMode m_operationMode;
+  DataModel::Cached<SerialStudio::OperationMode> m_operationMode;
   SerialStudio::DecoderMethod m_projectDecoderMethod;
   DataModel::ParseBudget m_parseBudget;
 
@@ -392,8 +395,8 @@ private:
   void invalidateFramePool() noexcept;
   SS_COLD void notePoolExhausted();
   [[nodiscard]] size_t claimPoolSlot(int sourceId, bool hintedOnly = false) noexcept;
-  bool republishOneFrame(DataModel::Frame& frame, int key, bool feedExports);
-  bool emitRepublishedFrame(const DataModel::Frame& frame, int key, bool feedExports);
+  bool republishOneFrame(DataModel::Frame& frame, int key, Lane lane);
+  bool emitRepublishedFrame(const DataModel::Frame& frame, int key, Lane lane);
   void bindSlotTemplate(PooledFrameSlot* slot, const DataModel::Frame& src);
   [[nodiscard]] bool preparePooledSlot(PooledFrameSlot* slot, const DataModel::Frame& src);
 
@@ -414,7 +417,7 @@ private:
                            const DataModel::Frame& src,
                            const DataModel::TimestampedFrame::SteadyTimePoint& ts);
   void publishSourceTemplateFrame(const DataModel::Source& src);
-  [[nodiscard]] bool republishFrames(bool feedExports);
+  [[nodiscard]] bool republishFrames(Lane lane);
   void wireDisplayTickHooks(Misc::TimerEvents& timers, IO::PipelineHost& pipeline);
   void wireAsyncSinkHooks();
   void refreshDatasetCaptureFlag();

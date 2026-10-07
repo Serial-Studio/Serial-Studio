@@ -36,8 +36,8 @@ class ProjectModel;
 /**
  * @brief Disk side of the project document: serialization, the save/save-as/headless-save paths,
  *        the debounced autosave, and the on-disk change watcher. Constructed inside ProjectModel's
- *        protected ctor closure, so nothing here may reach another module's instance() before
- *        ProjectModel::m_initialized is set.
+ *        protected ctor closure, so nothing here may reach another module's instance() while the
+ *        project model is under construction (a reach fails by name, spec 0095 M4).
  */
 class ProjectPersistence : public QObject {
   Q_OBJECT

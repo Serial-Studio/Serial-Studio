@@ -247,6 +247,41 @@
           "must_contain": "`Console::Export`"
         }
       ]
+    },
+    {
+      "name": "cached-hotpath-flags",
+      "kind": "ordered",
+      "note": "Spec 0095 M1: every Cached<T> member of FrameBuilder must be listed, in declaration order, where dataflow.md defines a cached hotpath flag. A new cached flag cannot ship undocumented.",
+      "source": "core/Pipeline/DataModel/FrameBuilder.h",
+      "source_pattern": "Cached<[^>]*>\\s+(m_\\w+);",
+      "docs": [
+        {
+          "path": "doc/claude/architecture/dataflow.md",
+          "scope": "A cached hotpath flag is, by definition[\\s\\S]*?\n\n"
+        }
+      ]
+    },
+    {
+      "name": "cached-hotpath-flag-publisher",
+      "source": "core/Pipeline/DataModel/FrameBuilder/BlockPublisher.h",
+      "source_pattern": "Cached<bool>\\s+m_anyAsyncSink;",
+      "docs": [
+        {
+          "path": "doc/claude/architecture/dataflow.md",
+          "must_contain": "BlockPublisher `m_anyAsyncSink`"
+        }
+      ]
+    },
+    {
+      "name": "cached-hotpath-flag-dashboard",
+      "source": "core/Ui/UI/Dashboard.h",
+      "source_pattern": "Cached<bool>\\s+m_streamAvailable;",
+      "docs": [
+        {
+          "path": "doc/claude/architecture/dataflow.md",
+          "must_contain": "Dashboard `m_streamAvailable`"
+        }
+      ]
     }
   ]
 }

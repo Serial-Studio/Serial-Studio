@@ -400,14 +400,14 @@ fallback pattern; installing a direct bridge on the worker engine is a threading
 transforms re-run only on frame arrival, so table writes made while the device is silent
 don't render until the next frame. Two SDK calls close that gap, both running the same
 transform-only pass (`reprocessDatasetValues`) over the live frames (per-source frames when
-populated, else `m_frame`) and sharing the private `republishFrames(bool feedExports)` helper:
-`dashboardTick()` (`dashboard.reprocess` → `FrameBuilder::reprocessFrames`, `feedExports`
-false) runs **synchronously** and publishes to `Dashboard::hotpathRxFrame` directly, skipping
+populated, else `m_frame`) and sharing the private `republishFrames(RepublishLane)` helper:
+`reprocessFrames()` (`dashboard.reprocess` → `FrameBuilder::reprocessFrames`, the dashboard
+lane) runs **synchronously** and publishes to `Dashboard::hotpathRxFrame` directly, skipping
 the sink fan-out so a synthetic refresh never re-records samples already
 exported on arrival; `dashboardTick()` (`dashboard.tick` → `FrameBuilder::dashboardTick`,
-`feedExports` true) runs **synchronously**: the call seeds the source frames (from the project
+the export lane) runs **synchronously**: the call seeds the source frames (from the project
 template when none has arrived yet, so it works from the very first `loop()`) and runs one
-`republishFrames(true)` immediately, publishing *through* `BlockPublisher::publish` so a table-driven
+export-lane `republishFrames()` immediately, publishing *through* `BlockPublisher::publish` so a table-driven
 control-script simulation both renders and feeds the CSV/MDF4/session/MQTT/API exports (still
 gated on `m_anyAsyncSink`). Every tick renders its own frame, so a per-frame control-script
 curve (a Lorenz attractor, for example) is not decimated. The `dashboard.tick` response

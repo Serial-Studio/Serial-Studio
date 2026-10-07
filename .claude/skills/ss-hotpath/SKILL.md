@@ -98,11 +98,12 @@ block. Never per-sample across a thread boundary.
   share ONE `clone_block_trimmed` copy. Structure travels separately as a `StructureSnapshot`
   on pool-generation bumps. Never add a rate cap or a per-view reduction.
   Detail: `doc/claude/architecture/dataflow.md`.
-- **Time rings are sized from a rate, never a sample count alone** (`kMaxRateSizedRingSamples`
-  ceiling): stream lane sizes at build from the real rate (`streamRingCapacity`); the frame lane
+- **Time rings are sized from a rate, never a sample count alone** (`DSP::RingCapacity`, built
+  only by `fromRate`; `kMaxSamples` ceiling): stream lane sizes at build from the real rate
+  (`TimeRingSizing::streamLaneCapacity`); the frame lane
   re-sizes a *saturated* ring once from the plot clock's smoothed period (`growTimeRing`, upward
-  only). `m_plotClocks` and `m_plotDisplayTimeSec` are ONE state — cleared, saved and restored
-  together via `Dashboard::resetPlotClocks()`, never one without the other. `appendDecimated`
+  only). The plot clocks and their display time are ONE `UI::PlotClockState`, cleared, saved and
+  restored together by construction (`Dashboard::resetPlotClocks()`). `appendDecimated`
   clamps sub-cell backward jitter forward; a jump back over a whole cell drops the retained span
   (clamping it wedges the ring shut). Detail: `doc/claude/architecture/dashboard.md`.
 - **Kernels and macros:** portable SIMD lives in `core/Core/DSPSimd.h` (spec 0021, per-lane

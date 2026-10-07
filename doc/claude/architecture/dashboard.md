@@ -15,7 +15,7 @@ facade:
 
 - **`UI::IngestBindings`** binds facade state by reference (the widget map, the axis and series
   containers, the time rings, the sweep engines, the dataset and extreme tables, the push-table
-  vectors, `m_layoutValid`, `m_updateRequired`, `m_plotClocks`, `m_plotDisplayTimeSec`, ...).
+  vectors, `m_layoutValid`, `m_updateRequired`, `m_plotClocks` (a `UI::PlotClockState`), ...).
   Every entry stays owned by `UI::Dashboard`: the push tables hold raw pointers **into** these
   containers, so handing the ingest its own copies would move what they address.
 - **`UI::IngestHost`** is the callback interface the facade implements: the series allocators the
@@ -24,9 +24,10 @@ facade:
   and the commercial 3D/waterfall pair), `handleMissingDataset()` for the layout-repair hand-off,
   and three const queries.
 
-**`resetPlotClocks()` stayed in the facade on purpose.** `m_plotClocks` and
-`m_plotDisplayTimeSec` are ONE state; the ingest binds both by reference and writes them only
-through `advancePlotClock`, so the single clear path is still `Dashboard::resetPlotClocks()`.
+**`resetPlotClocks()` stayed in the facade on purpose.** The per-source clocks and their display
+time are ONE value, `UI::PlotClockState` (spec 0095 M3); the ingest binds it by reference and
+writes it only through `advancePlotClock`, so the single clear path is still
+`Dashboard::resetPlotClocks()` (`PlotClockState::reset()`).
 Note also that the `PlotClock&` `advancePlotClock` resolves must not outlive the call —
 `reconfigureDashboard` move-assigns `m_plotClocks`.
 
@@ -287,9 +288,9 @@ reserved per cell so a saturated source still spans the window). Cell boundaries
 **absolute time grid** and `appendDecimated` (`DSP.h`) maintains the open cell's slots in
 place, so both envelope edges survive, slot contents are independent of sampling phase (no
 beat aliasing / shimmer -- the old drifting single peak-pick had both), and the newest
-sample is visible immediately at any input rate. Capacity is sized in `Dashboard.cpp` by
-`timeRingCapacity(plotTimeRangeSec)`: `min(plotTimeRange * kAssumedMaxRateHz, kMaxTimeRingSamples)`
-with a floor of `kDefaultPlotBuckets` (`50000` Hz assumption, `262144` cap, `1024` floor). Storage
+sample is visible immediately at any input rate. Capacity is a `DSP::RingCapacity`, which only a
+rate over a window can produce; the frame-lane policy is `TimeRingSizing::frameLaneCapacity`
+(the window at the assumed 1.024 MHz maximum, `262144` cap, `1024` floor). Storage
 is `m_plotTimeRings` / `m_multiplotTimeRings` (keyed by widget index; the multiplot one is a
 `std::vector<EnvelopeRing>` per curve). **Since spec 0057 the history ring is a
 `DSP::EnvelopeRing`**: `level0` is the `TimeRing` just described, unchanged, and `levels[k-1]`
@@ -299,7 +300,7 @@ nesting). A completed level-0 cell folds into every coarser open cell (`foldOpen
 nine merges, never a rescan); coarse levels are sized `ceil(cells0 / 16^k) + 1` while at least
 three cells remain, so they cost 16/15 of level 0's bytes and never allocate after construction
 (level 0's `resizeCapacity` rebuilds them from its retained slots). Sweep engines keep plain
-`TimeRing`s. The hotpath appends `numericValue` at `m_plotDisplayTimeSec`
+`TimeRing`s. The hotpath appends `numericValue` at `m_plotClocks.displayTimeSec`
 via `m_timePushes` (single plots) and `m_multiplotPushes` with its `TimeCurve` list (multi). The
 widget side calls `Dashboard::plotTimeRing(idx)` / `multiplotTimeRings(idx)` and renders through
 `DSP::downsampleTimeWindow(ring, ...)`, which asks `EnvelopeRing::selectLevel(span, pixels,
@@ -314,10 +315,10 @@ already-decimated ring whose pixel columns are bucketed on an **absolute column-
 (anchor quantized to the column width, drawing still uses true newest-rebased positions), so
 per-column sample membership stays stable as the window slides -- a newest-anchored bucket grid
 re-grouped every render and shimmered like heat haze. This is why 10 s of 48 kHz audio works:
-the ring caps at `kMaxTimeRingSamples` and `appendDecimated` collapses bursts into bounded
+the ring caps at `RingCapacity::kMaxSamples` and `appendDecimated` collapses bursts into bounded
 envelope slots, bounded memory/CPU, axis fixed at `[-T, 0]` (never recompute the axis from raw
 extremes). **Display
-clock** (`m_plotDisplayTimeSec`, `hotpathRxFrame`): sources without a cadence stamp many frames
+clock** (`m_plotClocks.displayTimeSec`, `hotpathRxFrame`): sources without a cadence stamp many frames
 at one coarse wall-clock tick (~15 ms on Windows), which would compress them onto a single
 decimator interval and lose temporal spread; the display clock spreads same-timestamp frames
 by a smoothed per-sample period so sub-tick windows still render. It is self-correcting
@@ -533,7 +534,7 @@ one). Session-DB persistence of segments is not implemented yet.
 
 **Stream-lane sources feed the same engines by a second path (spec 0051 M4).** Audio and any other
 `isStreamCapable()` source never reaches `updateLineSeries`/`updateDataSeries`, where the frame lane
-advances the sweep inline once per display tick at `m_plotDisplayTimeSec`; until this was wired the
+advances the sweep inline once per display tick at `m_plotClocks.displayTimeSec`; until this was wired the
 trigger was simply dead for those sources while the plain time rings kept updating, so the plot looked
 alive. `applyBlockColumn` now calls `feedPlotBlockSweep` per active plot the column targets, and
 `applyBlock` calls `feedMultiplotBlockSweep` per enabled, active multiplot after the column loop (a
@@ -814,9 +815,11 @@ Windows SDR white level, so a bare HDR swapchain renders wrong gamma. Therefore:
 
 ## Time-Ring Sizing & the Plot Clocks — Non-Negotiable
 
-**Time rings are sized from a rate, never from a sample count alone**
-(`kMaxRateSizedRingSamples` is the shared ceiling): the stream lane sizes at build from the
-source's real rate (`streamRingCapacity`), the frame lane cannot know its rate then, so a
+**Time rings are sized from a rate, never from a sample count alone** (compile-enforced since
+spec 0095: a ring takes a `DSP::RingCapacity`, built only by `fromRate`, with
+`RingCapacity::kMaxSamples` as the shared ceiling; the policies live in `UI::TimeRingSizing`). The
+stream lane sizes at build from the source's real rate (`streamLaneCapacity`), the frame lane
+cannot know its rate then, so a
 *saturated* ring re-sizes once from the plot clock's smoothed period (`growTimeRing`, upward
 only). A ring bounded in samples alone runs out of history in seconds (44.1 kHz filled a 10 s
 axis to 5.9 s, 2026-08-15).
@@ -825,13 +828,13 @@ axis to 5.9 s, 2026-08-15).
 `appendDecimated` clamps sub-cell backward jitter forward to keep the grid monotonic, but a jump
 back over a whole cell drops the retained span: clamping it instead wedges the ring shut (no new
 cell can open) until wall time climbs past the stale stamp, and the plot draws a single point at
-the right edge meanwhile. Producer side: `m_plotClocks` and `m_plotDisplayTimeSec` are ONE state,
-cleared, saved and restored together via `Dashboard::resetPlotClocks()`, never one without the
-other. Clearing the map alone left QuickPlot audio blank for seconds after each rebuild
+the right edge meanwhile. Producer side: the clocks and their display time are ONE value,
+`UI::PlotClockState`, so they are cleared, saved and restored together by construction (the reset
+is `Dashboard::resetPlotClocks()`). Clearing the map alone left QuickPlot audio blank for seconds after each rebuild
 (2026-08-18).
 
 **A rebuild never seeds a time ring.** `updateDataSeries()` called with no source refills the
-sample-count series only. `m_plotDisplayTimeSec` is a single global owned by whichever source
+sample-count series only. `m_plotClocks.displayTimeSec` is a single global owned by whichever source
 published last, so seeding every ring from it rewinds every other source's ring; the rings a
 rebuild keeps come from `restorePlotTimeRings()`, and the next real block appends on the source's
 own clock.

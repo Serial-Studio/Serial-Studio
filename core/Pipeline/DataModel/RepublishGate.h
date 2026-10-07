@@ -25,6 +25,31 @@
 
 namespace DataModel {
 
+class RepublishGate;
+
+/**
+ * @brief One synthetic-refresh lane's view of the gate. Its identity (dashboard-only or feeding
+ *        the recording sinks) is fixed when the gate hands it out, so one pass can never ask with
+ *        one lane and record with the other: the mix-up spec 0064 shipped is unrepresentable.
+ */
+class RepublishLane {
+public:
+  [[nodiscard]] bool feedsExports() const noexcept { return m_feedsExports; }
+
+  [[nodiscard]] bool needed(int key, bool changed) const;
+  void notePublished(int key);
+
+private:
+  friend class RepublishGate;
+
+  RepublishLane(RepublishGate& gate, bool feedsExports) noexcept
+    : m_gate(gate), m_feedsExports(feedsExports)
+  {}
+
+  RepublishGate& m_gate;
+  bool m_feedsExports;
+};
+
 /**
  * @brief Per-source bookkeeping for the two synthetic-refresh lanes (spec 0064): the dashboard
  *        lane and the export lane must not share one "already republished" mark, or a masked
@@ -32,6 +57,16 @@ namespace DataModel {
  */
 class RepublishGate {
 public:
+  /**
+   * @brief The masked lane: republishes to the dashboard only, never discharging the sinks.
+   */
+  [[nodiscard]] RepublishLane dashboardLane() noexcept { return RepublishLane(*this, false); }
+
+  /**
+   * @brief The export lane: the only lane whose publish brings the recording sinks current.
+   */
+  [[nodiscard]] RepublishLane exportLane() noexcept { return RepublishLane(*this, true); }
+
   /**
    * @brief Drops every mark; a new session owes both lanes a first publish again.
    */
@@ -53,8 +88,16 @@ public:
   void notePublishedTemplate(int key) { m_published.insert(key); }
 
   /**
-   * @brief Whether this lane still owes @p key a publish. The export lane asks whether the SINKS
-   *        are behind; the dashboard lane keeps the cheaper "changed, or never published" rule.
+   * @brief Whether the recording sinks are behind @p key's current values.
+   */
+  [[nodiscard]] bool sinkDirty(int key) const { return m_sinkDirty.contains(key); }
+
+private:
+  friend class RepublishLane;
+
+  /**
+   * @brief Whether a lane still owes @p key a publish. The export lane asks whether the SINKS are
+   *        behind; the dashboard lane keeps the cheaper "changed, or never published" rule.
    */
   [[nodiscard]] bool needed(int key, bool changed, bool feedExports) const
   {
@@ -74,14 +117,25 @@ public:
       m_sinkDirty.remove(key);
   }
 
-  /**
-   * @brief Whether the recording sinks are behind @p key's current values.
-   */
-  [[nodiscard]] bool sinkDirty(int key) const { return m_sinkDirty.contains(key); }
-
 private:
   QSet<int> m_published;
   QSet<int> m_sinkDirty;
 };
+
+/**
+ * @brief Whether this lane still owes @p key a publish.
+ */
+inline bool RepublishLane::needed(int key, bool changed) const
+{
+  return m_gate.needed(key, changed, m_feedsExports);
+}
+
+/**
+ * @brief Records this lane's completed publish of @p key.
+ */
+inline void RepublishLane::notePublished(int key)
+{
+  m_gate.notePublished(key, m_feedsExports);
+}
 
 }  // namespace DataModel

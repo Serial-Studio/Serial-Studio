@@ -93,6 +93,7 @@ qt_add_library(
   UI/Dashboard/DashboardIngest.cpp
   UI/Dashboard/PlotControlBank.cpp
   UI/Dashboard/ReplaySeekEngine.cpp
+  UI/Dashboard/TimeRingSizing.cpp
   UI/Dashboard/DashboardViewState.cpp
   UI/Dashboard/DashboardWiring.cpp
   UI/Dashboard/WidgetMapBuilder.cpp
@@ -202,6 +203,7 @@ qt_add_library(
   UI/Dashboard/DashboardIngest.h
   UI/Dashboard/PlotControlBank.h
   UI/Dashboard/ReplaySeekEngine.h
+  UI/Dashboard/TimeRingSizing.h
   UI/Dashboard/DashboardViewState.h
   UI/Dashboard/DashboardWiring.h
   UI/Dashboard/WidgetMapBuilder.h

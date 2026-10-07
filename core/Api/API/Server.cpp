@@ -151,7 +151,7 @@ int API::Server::maxClients() noexcept
  */
 bool API::Server::enabled() const noexcept
 {
-  return m_enabled;
+  return m_enabled.load(std::memory_order_relaxed);
 }
 
 /**
@@ -191,7 +191,7 @@ bool API::Server::externalConnections() const noexcept
  */
 int API::Server::clientCount() const noexcept
 {
-  return m_clientCount;
+  return m_clientCount.load(std::memory_order_relaxed);
 }
 
 /**
@@ -227,14 +227,14 @@ void API::Server::setPort(const int port)
   m_settings.setValue("API/Port", m_port);
   Q_EMIT portChanged();
 
-  if (!m_enabled)
+  if (!m_enabled.load(std::memory_order_relaxed))
     return;
 
   dropConnections();
   if (startListening())
     return;
 
-  m_enabled = false;
+  m_enabled.store(false, std::memory_order_relaxed);
   Q_EMIT enabledChanged();
 }
 
@@ -323,8 +323,8 @@ void API::Server::setEnabled(const bool enabled)
   if (closeResources)
     dropConnections();
 
-  if (m_enabled != effectiveEnabled) {
-    m_enabled = effectiveEnabled;
+  if (m_enabled.load(std::memory_order_relaxed) != effectiveEnabled) {
+    m_enabled.store(effectiveEnabled, std::memory_order_relaxed);
     Q_EMIT enabledChanged();
   } else if (enabled != effectiveEnabled)
     Q_EMIT enabledChanged();
@@ -392,14 +392,14 @@ void API::Server::applyExternalConnections(const bool enabled)
   if (m_externalConnections)
     m_auth.ensureAuthToken();
 
-  if (!m_enabled)
+  if (!m_enabled.load(std::memory_order_relaxed))
     return;
 
   dropConnections();
   if (startListening())
     return;
 
-  m_enabled = false;
+  m_enabled.store(false, std::memory_order_relaxed);
   Q_EMIT enabledChanged();
 }
 
@@ -1112,8 +1112,8 @@ void API::Server::onSocketDisconnected(QTcpSocket* socket, const QString& sessio
  */
 void API::Server::onClientCountChanged(int count)
 {
-  if (m_clientCount != count) {
-    m_clientCount = count;
+  if (m_clientCount.load(std::memory_order_relaxed) != count) {
+    m_clientCount.store(count, std::memory_order_relaxed);
     Q_EMIT clientCountChanged();
   }
 }

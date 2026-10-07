@@ -30,6 +30,7 @@
 #include "Core/DiagnosticsTypes.h"
 #include "Core/IO/StreamConfig.h"
 #include "Core/License.h"
+#include "Core/ModuleConstruction.h"
 #include "Core/Prompt/UserPrompt.h"
 #include "Core/Services.h"
 #include "Core/SSAssert.h"
@@ -105,7 +106,7 @@ IO::ConnectionManager::~ConnectionManager()
  */
 IO::ConnectionManager& IO::ConnectionManager::instance()
 {
-  SS_ASSERT(s_instance != nullptr, qFatal("ConnectionManager::instance() before adoption"));
+  SS_ASSERT(s_instance != nullptr, Core::ModuleConstruction::reportUnavailable(staticMetaObject));
   return *s_instance;
 }
 
