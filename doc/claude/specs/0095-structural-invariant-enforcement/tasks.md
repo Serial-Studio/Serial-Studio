@@ -199,7 +199,11 @@ updated: 2026-10-07
 
 - **Does:** the maintainer builds and runs `--benchmark-hotpath`. All nine gates must pass.
 - **Deps:** T1–T14
-- [ ] done
+- **Result (2026-10-08):** CI run 37668278964 on `3657d2ca2` (PGO builds): every gate passed on macOS arm64, Linux x86_64,
+  Linux arm64 and Windows x86_64 (Native numeric 3.72 / 1.77 / 0.99 / 0.47 M frames/s against
+  the 256k target). The "allocation count tainted" notice that left `HOTPATH_ALLOC_GATE=n/a`
+  also appears in the previous commit's run, so it predates this spec.
+- [x] done
 
 ## M1 — cached-flag cross-check
 
@@ -284,6 +288,8 @@ updated: 2026-10-07
 
 - **Does:** run `--benchmark-hotpath` (all nine gates) and `pytest tests/integration/ -v`.
 - **Deps:** T16–T21
+- **Result (2026-10-08):** benchmark half met by the same CI run as T15. The
+  `pytest tests/integration/` half is still open (needs a running app).
 - [ ] done
 
 ## M4 — construction-order guard
@@ -356,6 +362,10 @@ updated: 2026-10-07
   `hook` and `compile` kinds, plus an `enforcer-missing` error.
 - **Verify:** `pytest scripts/tests/test_claim_verify_enforcers.py`; a seeded bogus marker
   fails (AC9).
+- **Follow-up (2026-10-08):** the first cut read only the marker's own line, so an item wrapped
+  onto the bullet's next line was never checked; a bogus `ctest:` seeded there passed.
+  `_marker_spans()` now follows the bullet's continuation lines, pinned by
+  `test_wrapped_marker_items_are_checked`. The live docs still resolve with zero errors.
 - **Deps:** none
 - [x] done
 
@@ -380,6 +390,12 @@ updated: 2026-10-07
   5297 to 5305 lines. It did not shrink, because the newly enforced rules were short and the
   markers add a line each. The gain is that every rule's status is now explicit and checked;
   real shrinkage needs the Debt items closed.
+- **Collapse pass (2026-10-08):** the first pass marked the enforced bullets but kept their full
+  rationale. The nine `Enforced:` bullets, plus three long judgment bullets that restated their
+  linked doc (driver opens, diagnostics, kernels), are now one sentence plus marker and pointer,
+  each checked against its target doc first (dataflow, dashboard, startup, io, kernels,
+  directory-map "Message bus", the `ss-hotpath` skill). CLAUDE.md went from 448 to 412 lines and
+  the live guidance from 5305 to 5269.
 - **Verify:** `claim-verify.py`; the canary anchors (`qt-version`, `cxx-standard`) still pass.
 - **Deps:** T29, M1–M4 landed
 - [x] done

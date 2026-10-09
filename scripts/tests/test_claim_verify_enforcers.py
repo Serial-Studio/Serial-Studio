@@ -1,7 +1,8 @@
 # SPDX-FileCopyrightText: 2026 Alex Spataru <https://serial-studio.com/>
 # SPDX-License-Identifier: GPL-3.0-or-later
 """Tests for claim-verify's enforcer markers (spec 0095 M5): a rule that claims a mechanism with
-`Enforced:` or `Codified:` must name one that exists, and a marker naming nothing real fails."""
+`Enforced:` or `Codified:` must name one that exists, and a marker naming nothing real fails.
+"""
 
 from __future__ import annotations
 
@@ -14,7 +15,9 @@ SCRIPTS = Path(__file__).resolve().parents[1]
 
 def _load():
     sys.path.insert(0, str(SCRIPTS))
-    spec = importlib.util.spec_from_file_location("claim_verify", SCRIPTS / "claim-verify.py")
+    spec = importlib.util.spec_from_file_location(
+        "claim_verify", SCRIPTS / "claim-verify.py"
+    )
     module = importlib.util.module_from_spec(spec)
     sys.modules["claim_verify"] = module
     spec.loader.exec_module(module)
@@ -53,6 +56,16 @@ def test_codified_ledger_tags_are_checked_too():
 def test_debt_and_not_yet_name_nothing_to_resolve():
     assert _findings("Codified: not yet.") == []
     assert _findings("Debt: ctest:tst_planned_later") == []
+
+
+def test_wrapped_marker_items_are_checked():
+    text = (
+        "- **Rule.** Something binding. Enforced:\n"
+        "  compile:DSP::RingCapacity, ctest:tst_no_such_suite. Detail: a doc.\n"
+        "- **Next rule.** ctest:tst_also_missing is prose, not a marker."
+    )
+    found = _findings(text)
+    assert [(f.line, f.kind) for f in found] == [(2, "enforcer-missing")]
 
 
 def test_fenced_regions_are_skipped():

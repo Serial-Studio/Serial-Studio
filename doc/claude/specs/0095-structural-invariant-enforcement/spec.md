@@ -165,7 +165,8 @@ fails exactly when attention lapses.
   (demonstrated once during implementation, then reverted).
 - [ ] **AC3** (R6) — A compile-fail probe (a lane asked the other lane's question) fails
   `scripts/syntax-check.py`; demonstrated once, not checked in.
-- [ ] **AC4** (R7–R8) — Republish-lane ctests pass, including the new masked-refresh case.
+- [x] **AC4** (R7–R8) — Republish-lane ctests pass, including the new masked-refresh case
+  (CI run 37668278964: 186/186 ctests on Linux x86_64, Linux arm64, TSan and ASan+UBSan).
 - [ ] **AC5** (R9) — A compile-fail probe sizing a time ring from a bare integer fails
   `scripts/syntax-check.py`.
 - [ ] **AC6** (R10–R11) — Existing dashboard/time-ring tests pass; in the running app, a 48 kHz
@@ -175,12 +176,14 @@ fails exactly when attention lapses.
   turn in the pinned order; each produces its distinct named message (debug-abort hook).
 - [ ] **AC8** (R13–R14) — Removing the interface binding from one publishing root fails a
   check; adding a new function-static singleton reach in a startup path grows a census.
-- [ ] **AC9** (R16–R18) — claim-verify passes on the triaged docs and fails on a seeded bogus
-  enforcer name; the live guidance line count is reported before and after.
-- [ ] **AC11** (R20–R22) — Read-back: every `sinkActive()` implementation and every checker
+- [x] **AC9** (R16–R18) — claim-verify passes on the triaged docs and fails on a seeded bogus
+  enforcer name; the live guidance line count is reported before and after (tasks.md T30:
+  CLAUDE.md 445 → 412, live guidance 5297 → 5269).
+- [x] **AC11** (R20–R22) — Read-back: every `sinkActive()` implementation and every checker
   derive input resolves to an atomic load or pipeline-owned state (recorded in tasks.md T6);
-  TSan-clean where the maintainer runs a TSan build.
-- [ ] **AC10** (all) — `--benchmark-hotpath` passes all nine gates; `sanitize-commit.py` clean.
+  TSan-clean where the maintainer runs a TSan build (CI TSan job: ctest suite clean, no reports).
+- [x] **AC10** (all) — `--benchmark-hotpath` passes all nine gates; `sanitize-commit.py` clean
+  (tasks.md T15; sanitize ran before `3657d2ca2`).
 
 ## Constraints & Invariants
 

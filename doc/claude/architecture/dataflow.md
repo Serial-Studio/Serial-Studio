@@ -335,7 +335,7 @@ The problem center reads link and script health from **plain counters polled on
 `Misc::TimerEvents::timeout1Hz`**, never from a per-frame signal. The frame path only
 increments; nothing on it emits, allocates, locks, or calls into `Misc::ProblemCenter`.
 
-- **`FrameReader`** (main-thread, SPSC — plain `quint64`, no atomics): `m_bytesIn` (chunk size
+- **`FrameReader`** (pipeline-thread, SPSC — plain `quint64`, no atomics): `m_bytesIn` (chunk size
   in `processData`), `m_framesExtracted` (next to the existing `noteDroppedFrame` accounting in
   `enqueueCaptured` and the `NoDelimiters` branch), `m_checksumErrors` (inside the existing
   `ValidationStatus::ChecksumError` branch), and `m_totalOverflowBytes`, accumulated inside the

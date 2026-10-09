@@ -496,7 +496,9 @@ def check_symbols(
 
 
 ENFORCER_MARKER_RE = re.compile(r"\b(?:Enforced|Codified):\s*(.*)")
-ENFORCER_ITEM_RE = re.compile(r"\b(code-verify|ctest|anchor|script|hook|compile):([^\s,;`)]+)")
+ENFORCER_ITEM_RE = re.compile(
+    r"\b(code-verify|ctest|anchor|script|hook|compile):([^\s,;`)]+)"
+)
 CODE_VERIFY_SOURCES = ("scripts/code-verify.py", "scripts/code_verify_rules.py")
 CTEST_LIST = "app/tests/CMakeLists.txt"
 HOOKS_DIR = ".claude/hooks"
@@ -514,7 +516,9 @@ class EnforcerIndex:
         )
         ctests = REPO_ROOT / CTEST_LIST
         self.ctests = (
-            ctests.read_text(encoding="utf-8", errors="replace") if ctests.is_file() else ""
+            ctests.read_text(encoding="utf-8", errors="replace")
+            if ctests.is_file()
+            else ""
         )
         try:
             spec = json.loads(ANCHORS_PATH.read_text(encoding="utf-8"))
@@ -527,7 +531,10 @@ class EnforcerIndex:
         if kind == "code-verify":
             return f'"{name}"' in self.rules or f"'{name}'" in self.rules
         if kind == "ctest":
-            return re.search(rf"ss_add_unit_test\(\s*{re.escape(name)}\b", self.ctests) is not None
+            return (
+                re.search(rf"ss_add_unit_test\(\s*{re.escape(name)}\b", self.ctests)
+                is not None
+            )
         if kind == "anchor":
             return name in self.anchors
         if kind == "hook":
@@ -537,7 +544,9 @@ class EnforcerIndex:
             target = REPO_ROOT / path
             if not target.is_file():
                 return False
-            return not flag or flag in target.read_text(encoding="utf-8", errors="replace")
+            return not flag or flag in target.read_text(
+                encoding="utf-8", errors="replace"
+            )
         if kind == "compile":
             return name in self.index.blob or name.split("::")[-1] in self.index.idents
         return False
@@ -554,19 +563,45 @@ def check_enforcers(
         marker = ENFORCER_MARKER_RE.search(line)
         if marker is None:
             continue
-        for kind, name in ENFORCER_ITEM_RE.findall(marker.group(1)):
-            name = name.rstrip(".:")
-            if not enforcers.resolves(kind, name):
-                out.append(
-                    Finding(
-                        path,
-                        number,
-                        "enforcer-missing",
-                        f"`{kind}:{name}` names no {kind} mechanism in the tree",
-                        True,
+        for item_line, text in _marker_spans(lines, visible, number, marker.group(1)):
+            for kind, name in ENFORCER_ITEM_RE.findall(text):
+                name = name.rstrip(".:")
+                if not enforcers.resolves(kind, name):
+                    out.append(
+                        Finding(
+                            path,
+                            item_line,
+                            "enforcer-missing",
+                            f"`{kind}:{name}` names no {kind} mechanism in the tree",
+                            True,
+                        )
                     )
-                )
     return out
+
+
+def _marker_spans(
+    lines: list[str], visible: list[bool], number: int, head: str
+) -> list[tuple[int, str]]:
+    """The marker's text, line by line, including the bullet's wrapped continuation lines.
+
+    A marker wrapped at 100 columns puts its later items on the next indented line; reading only
+    the marker's own line let a bogus item there pass silently. The span ends at a blank line, a
+    new bullet or table row, an unindented line, or a `Debt:` marker.
+    """
+    spans = [(number, head.split("Debt:")[0])]
+    if "Debt:" in head:
+        return spans
+    for index in range(number, len(lines)):
+        text = lines[index]
+        stripped = text.strip()
+        if not visible[index] or not stripped or not text[:1].isspace():
+            break
+        if stripped.startswith(("- ", "* ", "|")) or ENFORCER_MARKER_RE.search(text):
+            break
+        spans.append((index + 1, stripped.split("Debt:")[0]))
+        if "Debt:" in stripped:
+            break
+    return spans
 
 
 def _out_of_order(placed: list) -> list:
