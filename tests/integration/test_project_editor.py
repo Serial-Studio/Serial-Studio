@@ -69,6 +69,28 @@ def test_add_single_group(api_client, clean_state):
 
 
 @pytest.mark.project
+def test_dataset_add_refuses_fixed_layout_group(api_client, clean_state):
+    """A widget that fixes its datasets (Plot3D) refuses dataset.add and addMany with
+    INVALID_PARAM instead of silently parking the dataset in a new generic group."""
+    from utils.api_client import APIError
+
+    api_client.command("project.group.add", {"title": "Attitude", "widgetType": 6})
+    time.sleep(0.2)
+    before = _status(api_client)
+
+    with pytest.raises(APIError, match="INVALID_PARAM"):
+        api_client.command("project.dataset.add", {"groupId": 0, "options": 0})
+    with pytest.raises(APIError, match="INVALID_PARAM"):
+        api_client.command(
+            "project.dataset.addMany", {"groupId": 0, "count": 2, "options": 0}
+        )
+
+    after = _status(api_client)
+    assert after["groupCount"] == before["groupCount"]
+    assert after["datasetCount"] == before["datasetCount"]
+
+
+@pytest.mark.project
 def test_add_multiple_groups(api_client, clean_state):
     """Adding N groups yields exactly N groups."""
     for i in range(3):

@@ -2579,6 +2579,12 @@ Add a dataset to a group.
 - `options` (int, required): Dataset options (bit flags 0-127): 1=Plot, 2=FFT, 4=Bar,
   8=Gauge, 16=Compass, 32=LED, 64=Waterfall
 
+**Errors:**
+- `INVALID_PARAM`: Unknown `groupId`, or a group whose widget fixes its own dataset layout
+  (Plot3D, Gyroscope, Accelerometer, GPS Map, Output groups and the like). Only plain,
+  Multi-Plot, Data Grid and Bar Panel groups accept datasets; `project.dataset.addMany`
+  applies the same rule.
+
 **Returns:**
 ```json
 {

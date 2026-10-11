@@ -210,11 +210,12 @@ def test_api_server_enabled_state_tracks_listen_failure():
     setter = body.group(0)
 
     assert "startListening()" in setter, "the setter must consult the real bind"
+    store = r"m_enabled(?:\.store\(|\s*=\s*)(\w+)"
+    stored = re.search(store, setter)
+    assert stored is not None, "the setter must store the flag (plain or atomic)"
     assert (
-        "m_enabled = enabled;" not in setter
+        stored.group(1) != "enabled"
     ), "the stored flag must follow the listen outcome, not the request"
-    stored = re.search(r"m_enabled = (\w+);", setter)
-    assert stored is not None and stored.group(1) != "enabled"
     assert (
         setter.count("Q_EMIT enabledChanged();") == 2
     ), "a refused listen must still notify so the UI reverts"

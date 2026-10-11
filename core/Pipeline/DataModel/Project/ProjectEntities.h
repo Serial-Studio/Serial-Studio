@@ -68,6 +68,7 @@ public:
   void addAction(int sourceId);
   void addActionFromTemplate(const Action& action);
   void ensureValidGroup(int sourceId);
+  [[nodiscard]] static bool acceptsDatasets(const Group& group);
   void ensurePainterDatasets(int groupId, const QVariantList& specs);
   void changeDatasetOption(const SerialStudio::DatasetOption option, const bool checked);
   [[nodiscard]] bool setGroupWidget(const int group, const SerialStudio::GroupWidget widget);

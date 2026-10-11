@@ -608,27 +608,36 @@ void DataModel::ProjectEntities::duplicateCurrentDataset()
 //--------------------------------------------------------------------------------------------------
 
 /**
+ * @brief Whether a group takes user-added datasets; Output groups and widgets that fix their own
+ *        dataset layout (Plot3D, Gyroscope, GPS and the like) do not.
+ */
+bool DataModel::ProjectEntities::acceptsDatasets(const Group& group)
+{
+  if (group.groupType == DataModel::GroupType::Output)
+    return false;
+
+  switch (SerialStudio::groupWidgetFromId(group.widget)) {
+    case SerialStudio::MultiPlot:
+    case SerialStudio::DataGrid:
+    case SerialStudio::BarPanel:
+    case SerialStudio::NoGroupWidget:
+      return true;
+    default:
+      return false;
+  }
+}
+
+/**
  * @brief Ensures a compatible group is selected before adding a dataset; honors sourceId scoping.
  */
 void DataModel::ProjectEntities::ensureValidGroup(int sourceId)
 {
   const ProjectUndoScope undo_scope{m_model, ProjectModel::tr("Add Group")};
   const auto isValidGroup = [sourceId](const DataModel::Group& g) -> bool {
-    if (g.groupType == DataModel::GroupType::Output)
-      return false;
-
     if (sourceId >= 0 && g.sourceId != sourceId)
       return false;
 
-    switch (SerialStudio::groupWidgetFromId(g.widget)) {
-      case SerialStudio::MultiPlot:
-      case SerialStudio::DataGrid:
-      case SerialStudio::BarPanel:
-      case SerialStudio::NoGroupWidget:
-        return true;
-      default:
-        return false;
-    }
+    return acceptsDatasets(g);
   };
 
   auto& groups          = m_model.m_groups;

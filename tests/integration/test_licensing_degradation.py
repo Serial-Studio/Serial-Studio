@@ -49,16 +49,13 @@ def test_pro_project_loads_degraded_not_blocked(api_client, clean_state):
 
     api_client.command("project.group.add", {"title": "Attitude", "widgetType": 6})
     time.sleep(0.2)
-    for _ in range(3):
-        api_client.command("project.dataset.add", {"options": 0})
-        time.sleep(0.1)
 
     status = api_client.command("project.exportJson")
     config = status.get("config", {})
     groups = config.get("groups", [])
     assert len(groups) == 1, "the Pro-widget group must exist regardless of licensing"
 
-    loaded = api_client.command("project.loadIntoFrameBuilder")
+    loaded = api_client.command("project.activate")
     assert loaded.get(
         "loaded", False
     ), "a Pro-featured project must load (degraded when unlicensed), never be blocked"

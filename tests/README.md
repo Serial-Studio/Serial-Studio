@@ -631,7 +631,7 @@ def test_my_custom_project(api_client, device_simulator, clean_state):
 
     # 5. Load project into FrameBuilder
     api_client.set_operation_mode("project")
-    result = api_client.command("project.loadIntoFrameBuilder")
+    result = api_client.command("project.activate")
     assert result["loaded"]
 
     # 6. Configure network and connect

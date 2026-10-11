@@ -3747,6 +3747,7 @@
           "widgetType": 5
         },
         {
+          "datasetUniqueId": 20000,
           "groupId": 1150013,
           "relativeIndex": 0,
           "widgetType": 12
@@ -3757,56 +3758,67 @@
           "widgetType": 4
         },
         {
+          "datasetUniqueId": 40000,
           "groupId": 1150015,
           "relativeIndex": 0,
           "widgetType": 11
         },
         {
+          "datasetUniqueId": 40000,
           "groupId": 1150015,
           "relativeIndex": 0,
           "widgetType": 9
         },
         {
+          "datasetUniqueId": 40001,
           "groupId": 1150015,
           "relativeIndex": 1,
           "widgetType": 11
         },
         {
+          "datasetUniqueId": 40001,
           "groupId": 1150015,
           "relativeIndex": 1,
           "widgetType": 9
         },
         {
+          "datasetUniqueId": 40002,
           "groupId": 1150015,
           "relativeIndex": 0,
           "widgetType": 10
         },
         {
+          "datasetUniqueId": 40002,
           "groupId": 1150015,
           "relativeIndex": 2,
           "widgetType": 9
         },
         {
+          "datasetUniqueId": 50000,
           "groupId": 1150016,
           "relativeIndex": 2,
           "widgetType": 11
         },
         {
+          "datasetUniqueId": 50000,
           "groupId": 1150016,
           "relativeIndex": 3,
           "widgetType": 9
         },
         {
+          "datasetUniqueId": 50001,
           "groupId": 1150016,
           "relativeIndex": 1,
           "widgetType": 10
         },
         {
+          "datasetUniqueId": 50002,
           "groupId": 1150016,
           "relativeIndex": 2,
           "widgetType": 10
         },
         {
+          "datasetUniqueId": 50002,
           "groupId": 1150016,
           "relativeIndex": 4,
           "widgetType": 9
@@ -3822,6 +3834,7 @@
           "widgetType": 5
         },
         {
+          "datasetUniqueId": 1080000,
           "groupId": 1150019,
           "relativeIndex": 1,
           "widgetType": 12
@@ -3832,56 +3845,67 @@
           "widgetType": 4
         },
         {
+          "datasetUniqueId": 1100000,
           "groupId": 1150021,
           "relativeIndex": 3,
           "widgetType": 11
         },
         {
+          "datasetUniqueId": 1100000,
           "groupId": 1150021,
           "relativeIndex": 5,
           "widgetType": 9
         },
         {
+          "datasetUniqueId": 1100001,
           "groupId": 1150021,
           "relativeIndex": 4,
           "widgetType": 11
         },
         {
+          "datasetUniqueId": 1100001,
           "groupId": 1150021,
           "relativeIndex": 6,
           "widgetType": 9
         },
         {
+          "datasetUniqueId": 1100002,
           "groupId": 1150021,
           "relativeIndex": 3,
           "widgetType": 10
         },
         {
+          "datasetUniqueId": 1100002,
           "groupId": 1150021,
           "relativeIndex": 7,
           "widgetType": 9
         },
         {
+          "datasetUniqueId": 1110000,
           "groupId": 1150022,
           "relativeIndex": 5,
           "widgetType": 11
         },
         {
+          "datasetUniqueId": 1110000,
           "groupId": 1150022,
           "relativeIndex": 8,
           "widgetType": 9
         },
         {
+          "datasetUniqueId": 1110001,
           "groupId": 1150022,
           "relativeIndex": 4,
           "widgetType": 10
         },
         {
+          "datasetUniqueId": 1110002,
           "groupId": 1150022,
           "relativeIndex": 5,
           "widgetType": 10
         },
         {
+          "datasetUniqueId": 1110002,
           "groupId": 1150022,
           "relativeIndex": 9,
           "widgetType": 9
@@ -3935,6 +3959,7 @@
       "title": "Alpha Heading",
       "widgetRefs": [
         {
+          "datasetUniqueId": 20000,
           "groupId": 1150013,
           "relativeIndex": 0,
           "widgetType": 12
@@ -3957,31 +3982,37 @@
       "title": "Alpha Flight",
       "widgetRefs": [
         {
+          "datasetUniqueId": 40000,
           "groupId": 1150015,
           "relativeIndex": 0,
           "widgetType": 11
         },
         {
+          "datasetUniqueId": 40000,
           "groupId": 1150015,
           "relativeIndex": 0,
           "widgetType": 9
         },
         {
+          "datasetUniqueId": 40001,
           "groupId": 1150015,
           "relativeIndex": 1,
           "widgetType": 11
         },
         {
+          "datasetUniqueId": 40001,
           "groupId": 1150015,
           "relativeIndex": 1,
           "widgetType": 9
         },
         {
+          "datasetUniqueId": 40002,
           "groupId": 1150015,
           "relativeIndex": 0,
           "widgetType": 10
         },
         {
+          "datasetUniqueId": 40002,
           "groupId": 1150015,
           "relativeIndex": 2,
           "widgetType": 9
@@ -3993,26 +4024,31 @@
       "title": "Alpha Power",
       "widgetRefs": [
         {
+          "datasetUniqueId": 50000,
           "groupId": 1150016,
           "relativeIndex": 2,
           "widgetType": 11
         },
         {
+          "datasetUniqueId": 50000,
           "groupId": 1150016,
           "relativeIndex": 3,
           "widgetType": 9
         },
         {
+          "datasetUniqueId": 50001,
           "groupId": 1150016,
           "relativeIndex": 1,
           "widgetType": 10
         },
         {
+          "datasetUniqueId": 50002,
           "groupId": 1150016,
           "relativeIndex": 2,
           "widgetType": 10
         },
         {
+          "datasetUniqueId": 50002,
           "groupId": 1150016,
           "relativeIndex": 4,
           "widgetType": 9
@@ -4046,6 +4082,7 @@
       "title": "Bravo Heading",
       "widgetRefs": [
         {
+          "datasetUniqueId": 1080000,
           "groupId": 1150019,
           "relativeIndex": 1,
           "widgetType": 12
@@ -4068,31 +4105,37 @@
       "title": "Bravo Flight",
       "widgetRefs": [
         {
+          "datasetUniqueId": 1100000,
           "groupId": 1150021,
           "relativeIndex": 3,
           "widgetType": 11
         },
         {
+          "datasetUniqueId": 1100000,
           "groupId": 1150021,
           "relativeIndex": 5,
           "widgetType": 9
         },
         {
+          "datasetUniqueId": 1100001,
           "groupId": 1150021,
           "relativeIndex": 4,
           "widgetType": 11
         },
         {
+          "datasetUniqueId": 1100001,
           "groupId": 1150021,
           "relativeIndex": 6,
           "widgetType": 9
         },
         {
+          "datasetUniqueId": 1100002,
           "groupId": 1150021,
           "relativeIndex": 3,
           "widgetType": 10
         },
         {
+          "datasetUniqueId": 1100002,
           "groupId": 1150021,
           "relativeIndex": 7,
           "widgetType": 9
@@ -4104,26 +4147,31 @@
       "title": "Bravo Power",
       "widgetRefs": [
         {
+          "datasetUniqueId": 1110000,
           "groupId": 1150022,
           "relativeIndex": 5,
           "widgetType": 11
         },
         {
+          "datasetUniqueId": 1110000,
           "groupId": 1150022,
           "relativeIndex": 8,
           "widgetType": 9
         },
         {
+          "datasetUniqueId": 1110001,
           "groupId": 1150022,
           "relativeIndex": 4,
           "widgetType": 10
         },
         {
+          "datasetUniqueId": 1110002,
           "groupId": 1150022,
           "relativeIndex": 5,
           "widgetType": 10
         },
         {
+          "datasetUniqueId": 1110002,
           "groupId": 1150022,
           "relativeIndex": 9,
           "widgetType": 9

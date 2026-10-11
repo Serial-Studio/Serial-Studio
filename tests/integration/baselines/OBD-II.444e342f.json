@@ -530,11 +530,13 @@
           "widgetType": 1
         },
         {
+          "datasetUniqueId": 5,
           "groupId": 0,
           "relativeIndex": 3,
           "widgetType": 9
         },
         {
+          "datasetUniqueId": 1,
           "groupId": 0,
           "relativeIndex": 0,
           "widgetType": 11

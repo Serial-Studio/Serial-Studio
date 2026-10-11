@@ -58,6 +58,22 @@ static SerialStudio::DatasetOption pickHeadlineDatasetOption(int options)
   return SerialStudio::DatasetGeneric;
 }
 
+/**
+ * @brief Refusal for a dataset add aimed at a group whose widget fixes its dataset layout; the
+ *        editor would silently park the dataset in a new generic group instead.
+ */
+static API::CommandResponse fixedGroupError(const QString& id,
+                                            const int groupId,
+                                            const DataModel::Group& group)
+{
+  return API::CommandResponse::makeError(
+    id,
+    API::ErrorCode::InvalidParam,
+    QStringLiteral("Group %1 (widget '%2') does not accept datasets; only plain, Multi-Plot, "
+                   "Data Grid and Bar Panel groups do")
+      .arg(QString::number(groupId), group.widget));
+}
+
 }  // namespace API::Handlers
 
 namespace API::Handlers {
@@ -146,7 +162,9 @@ void API::Handlers::ProjectDatasetCommands::registerCreateCommands()
                    "  64 = Waterfall (Pro; spectrogram, FFT-driven)\n"
                    "  0 = no widget (raw column for export only)\n"
                    "Combine: 1|8 = 9 = plot AND gauge. After creation, set title, "
-                   "units, ranges, and transformCode via project.dataset.update."),
+                   "units, ranges, and transformCode via project.dataset.update.\n"
+                   "Only plain, Multi-Plot, Data Grid and Bar Panel groups accept datasets; "
+                   "a widget that fixes its layout (Plot3D, Gyroscope, GPS, ...) refuses."),
     makeSchema({
       {QStringLiteral("groupId"),
        QStringLiteral("integer"),
@@ -353,6 +371,9 @@ API::CommandResponse API::Handlers::ProjectDatasetCommands::datasetAdd(const QSt
     return CommandResponse::makeError(
       id, ErrorCode::InvalidParam, QStringLiteral("Group id not found: %1").arg(groupId));
 
+  if (!DataModel::ProjectEntities::acceptsDatasets(groups[groupId]))
+    return fixedGroupError(id, groupId, groups[groupId]);
+
   SerialStudio::DatasetOption headline = SerialStudio::DatasetGeneric;
   for (const auto cand : {SerialStudio::DatasetPlot,
                           SerialStudio::DatasetFFT,
@@ -421,6 +442,9 @@ API::CommandResponse API::Handlers::ProjectDatasetCommands::datasetAddMany(
   if (groupId < 0 || static_cast<size_t>(groupId) >= groups.size())
     return CommandResponse::makeError(
       id, ErrorCode::InvalidParam, QStringLiteral("Group id not found: %1").arg(groupId));
+
+  if (!DataModel::ProjectEntities::acceptsDatasets(groups[groupId]))
+    return fixedGroupError(id, groupId, groups[groupId]);
 
   const QString titlePattern = params.value(QStringLiteral("titlePattern")).toString();
   const int startNumber      = params.contains(QStringLiteral("startNumber"))

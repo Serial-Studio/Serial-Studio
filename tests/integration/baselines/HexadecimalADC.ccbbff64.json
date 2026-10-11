@@ -3,6 +3,7 @@
     {
       "autoExecuteOnConnect": true,
       "binary": false,
+      "checksum": "",
       "eol": "\n",
       "icon": "Play Property",
       "repeatCount": 3,
@@ -16,6 +17,7 @@
     {
       "autoExecuteOnConnect": false,
       "binary": false,
+      "checksum": "",
       "eol": "\n",
       "icon": "Resistor",
       "repeatCount": 3,
@@ -29,6 +31,7 @@
     {
       "autoExecuteOnConnect": false,
       "binary": false,
+      "checksum": "",
       "eol": "\n",
       "icon": "Services",
       "repeatCount": 3,

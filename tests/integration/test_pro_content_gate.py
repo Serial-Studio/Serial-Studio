@@ -41,7 +41,7 @@ def _new_project_with_dataset(api_client, title: str) -> dict:
     time.sleep(0.3)
     api_client.command("project.group.add", {"title": "Sensors", "widgetType": 0})
     time.sleep(0.2)
-    api_client.command("project.dataset.add", {"options": 0})
+    api_client.command("project.dataset.add", {"groupId": 0, "options": 0})
     time.sleep(0.2)
     return api_client.command("project.exportJson").get("config", {})
 
