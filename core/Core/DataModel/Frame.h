@@ -357,6 +357,7 @@ struct alignas(8) Dataset {
   double pltMax        = 0;      ///< Maximum value (for plots)
   double wgtMin        = 0;      ///< Minimum value (for widgets)
   double wgtMax        = 0;      ///< Maximum value (for widgets)
+  double alarmDeadband = 0;      ///< Hysteresis before the active alarm band releases (0 = none)
   double ledHigh       = 80;     ///< LED activation threshold
   qint64 displaySampleMs = 0;    ///< Transient GUI receipt time; never serialized
   double numericValue    = 0;    ///< Parsed numeric value after transforms

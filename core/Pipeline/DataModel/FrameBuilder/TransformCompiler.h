@@ -44,6 +44,7 @@ extern "C" {
 #include "DataModel/FrameBuilder/TransformSupport.h"
 #include "DataModel/Scripting/ExpressionTransform.h"
 #include "DataModel/Scripting/JsWatchdog.h"
+#include "DataModel/Scripting/LuaMemoryBudget.h"
 
 namespace DataModel {
 
@@ -88,6 +89,7 @@ struct TransformEngine {
   lua_State* luaState = nullptr;
   QJSEngine* jsEngine = nullptr;
   std::unique_ptr<JsWatchdog> jsWatchdog;
+  std::unique_ptr<LuaMemoryBudget> luaBudget;
   std::map<int, LuaTransformRef> luaRefs;
   std::map<int, JsTransformRef> jsRefs;
   QDeadlineTimer luaDeadline{QDeadlineTimer::Forever};

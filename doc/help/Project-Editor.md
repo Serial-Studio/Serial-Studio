@@ -327,6 +327,7 @@ Datasets map to individual data fields in your device's output.
 
 - **Minimum Value (optional) / Maximum Value (optional).** Range for Bar, Gauge, and Meter displays; falls back to the General section's Minimum Value / Maximum Value when left unset.
 - **Suppress Alarms.** Shown while the dataset has alarm bands that a widget draws. Keeps the bands on the widget but stops the dataset's band notifications, alarm points, and sounds. With several datasets selected, the row follows the first one, and a change applies to every selected dataset.
+- **Alarm Deadband.** Shown under the same condition. Hysteresis in the dataset's units: once a band is active it holds until the value leaves it by more than this amount, so a reading hovering on a threshold raises one alarm instead of one per frame. A step into a more severe band is never delayed. 0 (the default) disables it.
 
 ### Step 5: add actions (optional)
 

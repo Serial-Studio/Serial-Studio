@@ -34,6 +34,7 @@ extern "C" {
 
 #include "DataModel/Scripting/JsWatchdog.h"
 #include "DataModel/Scripting/LuaDeadlineHook.h"
+#include "DataModel/Scripting/LuaMemoryBudget.h"
 
 namespace DataModel {
 
@@ -101,6 +102,7 @@ private:
   bool m_timedOut;
   lua_State* m_luaState;
   LuaDeadlineHook m_luaHook;
+  LuaMemoryBudget m_luaBudget;
   std::unique_ptr<QJSEngine> m_jsEngine;
   std::unique_ptr<JsWatchdog> m_jsWatchdog;
 };

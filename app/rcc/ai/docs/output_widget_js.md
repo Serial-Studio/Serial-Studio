@@ -42,10 +42,12 @@ The Modbus/CAN helpers below are injected as globals, alongside the full
 host API: `apiCall`, `tableGet`/`tableSet`, `datasetGetRaw`/`datasetGetFinal`
 (each takes a numeric `uniqueId` or a string dataset `alias`: string = alias,
 number = uniqueId, no coercion),
-`deviceWrite`, `actionFire`, `notify*`, the dashboard helpers, and the
-generated `SerialStudio` SDK. Protocol logic beyond these helpers you build
-yourself in the function body (see the bundled reference
-scripts below — they self-contain their protocol logic, they are NOT globals).
+`deviceWrite`, `actionFire`, `notify*`, the dashboard helpers, the checksum
+helpers `checksum(algorithm, data)` / `checksumHex(algorithm, data)` /
+`checksumAlgorithms()`, and the generated `SerialStudio` SDK. Protocol logic
+beyond these helpers you build yourself in the function body (see the bundled
+reference scripts below — they self-contain their protocol logic, they are NOT
+globals).
 
 ```js
 modbusWriteRegister(address, value)  // 16-bit holding register -> 4-byte payload
@@ -54,11 +56,17 @@ modbusWriteCoil(address, on)         // coil ON=0xFF00 / OFF=0x0000 -> 4-byte pa
 modbusWriteFloat(address, value)     // IEEE-754 float over two registers -> 6-byte payload
 canSendFrame(id, payload)            // payload = string or Array<number> -> [id_hi,id_lo,dlc,...data]
 canSendValue(id, value, bytes = 2)   // big-endian integer over canSendFrame
+checksum(algorithm, data)            // digest bytes as a binary string, wire order (MODBUS LE, rest BE)
+checksumHex(algorithm, data)         // same digest as lowercase hex
+checksumAlgorithms()                 // ['XOR-8','MOD-256','CRC-8','CRC-16','CRC-16-MODBUS','CRC-16-CCITT','Fletcher-16','CRC-32','Adler-32']
 ```
 
-These produce raw binary payloads (returned as strings). There is **no**
-`crc16` / `nmea` / `slcan` / `gcode` / `scpi` / `packet` global — those names
-do not exist. Author that logic inline or adapt a bundled reference script.
+These produce raw binary payloads (returned as strings). `data` for the
+checksum helpers is a binary string or an array of byte values; an unknown
+algorithm throws. There is **no** `crc16` / `nmea` / `slcan` / `gcode` /
+`scpi` / `packet` global — those names do not exist (use
+`checksum('CRC-16', ...)` for a CRC). Author the rest inline or adapt a
+bundled reference script.
 
 ## Bundled reference scripts
 

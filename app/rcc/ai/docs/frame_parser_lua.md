@@ -61,6 +61,15 @@ no-op. A table inside folders is addressed by its full `/`-joined folder path (t
 are bare names); `project.dataTable.list` reports that path. Full reference in the transform and
 SDK docs.
 
+## Checksums
+
+`checksum(algorithm, data)` returns the digest as a byte string in wire order (`CRC-16-MODBUS`
+little-endian, the rest big-endian) and `checksumHex(algorithm, data)` the same as lowercase hex;
+`checksumAlgorithms()` lists the names (`XOR-8`, `MOD-256`, `CRC-8`, `CRC-16`, `CRC-16-MODBUS`,
+`CRC-16-CCITT`, `Fletcher-16`, `CRC-32`, `Adler-32`). `data` is a string or a table of byte
+values; an unknown algorithm raises a Lua error. A trailer check is one line:
+`if checksumHex("XOR-8", body) ~= trailer:lower() then return {} end`.
+
 ## Console logging
 
 `print(...)` and a JS-style `console` table route to the application

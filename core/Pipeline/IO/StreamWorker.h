@@ -45,6 +45,7 @@ extern "C" {
 #include "Core/ThirdParty/readerwriterqueue.h"
 #include "DataModel/Scripting/ExpressionTransform.h"
 #include "DataModel/Scripting/JsWatchdog.h"
+#include "DataModel/Scripting/LuaMemoryBudget.h"
 
 namespace DataModel {
 class FrameBuilder;
@@ -152,6 +153,7 @@ private:
   void bindBlockColumns(DataModel::DataBlock& block) const;
   void setupLuaState();
   void setupJsEngine();
+  void installJsChecksumPrelude();
   void installJsTablePrelude();
   static void luaWatchdogHook(lua_State* L, lua_Debug* ar);
 
@@ -167,6 +169,7 @@ private:
   QJSEngine* m_js;
   std::unique_ptr<DataModel::JsWatchdog> m_jsWatchdog;
   QDeadlineTimer m_luaDeadline;
+  DataModel::LuaMemoryBudget m_luaBudget;
   bool m_inBlock;
   bool m_jsTimedOut;
   bool m_luaTableArmed;

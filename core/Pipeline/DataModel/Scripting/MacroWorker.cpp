@@ -27,6 +27,7 @@
 
 #include "Core/Api/ICommandExecutor.h"
 #include "Core/SSAssert.h"
+#include "DataModel/Scripting/ChecksumApi.h"
 #include "DataModel/Scripting/ControlScriptWorker.h"
 #include "DataModel/Scripting/JsWatchdog.h"
 #include "DataModel/Scripting/ScriptApiCall.h"
@@ -255,6 +256,7 @@ void DataModel::MacroWorker::run(const QString& source)
   auto bridge_value = m_engine->newQObject(m_bridge);
   m_engine->globalObject().setProperty(QStringLiteral("__ss_bridge"), bridge_value);
   m_engine->globalObject().setProperty(QStringLiteral("__ss_control"), QJSValue(true));
+  DataModel::ChecksumApi::installJS(m_engine.get());
 
   QFile sdk_file(QStringLiteral(":/api/SerialStudio.js"));
   if (sdk_file.open(QFile::ReadOnly))

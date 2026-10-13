@@ -51,6 +51,7 @@ extern "C" {
 #include "DataModel/FrameBuilder/TransformCompiler.h"
 #include "DataModel/NotificationCenter.h"
 #include "DataModel/PipelineModules.h"
+#include "DataModel/Scripting/ChecksumApi.h"
 #include "DataModel/Scripting/ExpressionTransform.h"
 #include "DataModel/Scripting/LuaCompat.h"
 #include "DataModel/Scripting/ScriptApiCall.h"
@@ -1006,6 +1007,7 @@ DataModel::DatasetTransformEditor::TransformStatus DataModel::DatasetTransformEd
     lua_State* L = session.luaState();
     DataModel::installLuaCompat(L);
     DataModel::NotificationCenter::installScriptApi(L);
+    DataModel::ChecksumApi::installLua(L);
     frameBuilder.installTableApiNamesLua(L);
 
     if (!libraryCode.trimmed().isEmpty() && session.runLuaChunk(libraryCode, "library") != LUA_OK)
@@ -1107,6 +1109,7 @@ QString DataModel::DatasetTransformEditor::testTransform(const QString& code,
     lua_State* L = session.luaState();
     DataModel::installLuaCompat(L);
     DataModel::NotificationCenter::installScriptApi(L);
+    DataModel::ChecksumApi::installLua(L);
     m_frameBuilder.injectTableApiLua(L);
     DataModel::TableApiUserLease tableUser(m_frameBuilder);
 

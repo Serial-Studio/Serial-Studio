@@ -139,7 +139,7 @@ static QString applyDatasetStringFields2(DataModel::Dataset& d,
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Applies declared number fields onto d (part 1 of 3); returns a non-empty error string when
+ * @brief Applies declared number fields onto d (part 1 of 4); returns a non-empty error string when
  *        a value is rejected.
  */
 static QString applyDatasetNumberFields1(DataModel::Dataset& d,
@@ -191,7 +191,7 @@ static QString applyDatasetNumberFields1(DataModel::Dataset& d,
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Applies declared number fields onto d (part 2 of 3); returns a non-empty error string when
+ * @brief Applies declared number fields onto d (part 2 of 4); returns a non-empty error string when
  *        a value is rejected.
  */
 static QString applyDatasetNumberFields2(DataModel::Dataset& d,
@@ -236,7 +236,7 @@ static QString applyDatasetNumberFields2(DataModel::Dataset& d,
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Applies declared number fields onto d (part 3 of 3); returns a non-empty error string when
+ * @brief Applies declared number fields onto d (part 3 of 4); returns a non-empty error string when
  *        a value is rejected.
  */
 static QString applyDatasetNumberFields3(DataModel::Dataset& d,
@@ -244,8 +244,6 @@ static QString applyDatasetNumberFields3(DataModel::Dataset& d,
                                          bool& rebuildTree,
                                          QSet<QString>& consumed)
 {
-  Q_UNUSED(rebuildTree);
-
   const auto key_decimal_points = takeDatasetField(params, consumed, {Keys::DecimalPoints});
   if (!key_decimal_points.isEmpty())
     d.decimalPoints = qBound(-1, params.value(key_decimal_points).toInt(), 15);
@@ -262,6 +260,17 @@ static QString applyDatasetNumberFields3(DataModel::Dataset& d,
   if (!key_wgt_max.isEmpty())
     d.wgtMax = SerialStudio::toDouble(params.value(key_wgt_max));
 
+  const auto key_alarm_deadband = takeDatasetField(params, consumed, {Keys::AlarmDeadband});
+  if (!key_alarm_deadband.isEmpty()) {
+    const auto candidate = SerialStudio::toDouble(params.value(key_alarm_deadband));
+    if (!PropertyHooks::isValidAlarmDeadband(candidate))
+      return QStringLiteral("Invalid alarmDeadband: must be >= 0 (dataset units, 0 = no "
+                            "hysteresis)");
+
+    d.alarmDeadband = candidate;
+    rebuildTree = true;
+  }
+
   const auto key_led_high = takeDatasetField(params, consumed, {Keys::LedHigh});
   if (!key_led_high.isEmpty())
     d.ledHigh = SerialStudio::toDouble(params.value(key_led_high));
@@ -275,6 +284,22 @@ static QString applyDatasetNumberFields3(DataModel::Dataset& d,
 
     d.transformLanguage = candidate;
   }
+
+  return QString();
+}
+
+//--------------------------------------------------------------------------------------------------
+
+/**
+ * @brief Applies declared number fields onto d (part 4 of 4); returns a non-empty error string when
+ *        a value is rejected.
+ */
+static QString applyDatasetNumberFields4(DataModel::Dataset& d,
+                                         const QJsonObject& params,
+                                         bool& rebuildTree,
+                                         QSet<QString>& consumed)
+{
+  Q_UNUSED(rebuildTree);
 
   const auto key_source_id = takeDatasetField(
     params, consumed,
@@ -482,6 +507,9 @@ QString API::Handlers::ProjectHandler::applyDatasetUpdateParams(DataModel::Datas
     return err;
 
   if (auto err = applyDatasetNumberFields3(d, params, rebuildTree, consumed); !err.isEmpty())
+    return err;
+
+  if (auto err = applyDatasetNumberFields4(d, params, rebuildTree, consumed); !err.isEmpty())
     return err;
 
   if (auto err = applyDatasetFlagFields1(d, params, rebuildTree, consumed); !err.isEmpty())
@@ -697,6 +725,13 @@ static void datasetSchemaPart3(QJsonObject& props)
                                      "Keep the bands on the widget but never notify, raise an "
                                      "alarm point or sound for them",
                                      QJsonArray()));
+  props.insert(Keys::AlarmDeadband,
+               datasetSchemaProperty("number",
+                                     "Hysteresis in the dataset's units: the active band holds "
+                                     "until the value leaves it by this much, so a reading "
+                                     "hovering on a threshold does not re-alarm on every frame (0 "
+                                     "= none)",
+                                     QJsonArray()));
   props.insert(Keys::LED,
                datasetSchemaProperty("boolean",
                                      "Enable visual status monitoring using an LED display",
@@ -705,10 +740,6 @@ static void datasetSchemaPart3(QJsonObject& props)
                datasetSchemaProperty("number",
                                      "LED lights up when value meets or exceeds this threshold; "
                                      "define alarm bands for multi-state colors",
-                                     QJsonArray()));
-  props.insert(Keys::Overview,
-               datasetSchemaProperty("boolean",
-                                     "Show this dataset in the project overview panel",
                                      QJsonArray()));
 }
 
@@ -719,6 +750,10 @@ static void datasetSchemaPart3(QJsonObject& props)
  */
 static void datasetSchemaPart4(QJsonObject& props)
 {
+  props.insert(Keys::Overview,
+               datasetSchemaProperty("boolean",
+                                     "Show this dataset in the project overview panel",
+                                     QJsonArray()));
   props.insert(Keys::TransformCode,
                datasetSchemaProperty("string",
                                      "Per-dataset transform script; runs on every parsed value",

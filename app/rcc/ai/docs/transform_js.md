@@ -81,6 +81,9 @@ tableGetH(handle)                              // read by handle (fast path; no 
 tableSetH(handle, value)                       // write by handle (computed variables only)
 datasetGetRaw(uniqueId | "alias")              // raw value; EARLIER dataset = this frame, later = previous frame
 datasetGetFinal(uniqueId | "alias")            // final value of an EARLIER dataset (this frame)
+checksum(algorithm, data)                      // digest as a binary string, wire order; data = string | byte array
+checksumHex(algorithm, data)                   // same digest as lowercase hex
+checksumAlgorithms()                           // ['XOR-8', 'MOD-256', 'CRC-8', 'CRC-16', 'CRC-16-MODBUS', ...]
 ```
 
 Both accept **either** a numeric `uniqueId` **or** a string `alias`. A string

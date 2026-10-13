@@ -53,4 +53,5 @@ void setActionIconResolver(ActionIconResolver resolver) noexcept;
 [[nodiscard]] bool isValidDatasetIndex(int index);
 [[nodiscard]] bool isValidFftWindow(int window);
 [[nodiscard]] bool isValidTransformLanguage(int language);
+[[nodiscard]] bool isValidAlarmDeadband(double deadband);
 }  // namespace DataModel::PropertyHooks

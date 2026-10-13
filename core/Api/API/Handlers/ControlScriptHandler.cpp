@@ -28,6 +28,7 @@
 #include "API/SchemaBuilder.h"
 #include "DataModel/PipelineModules.h"
 #include "DataModel/ProjectModel.h"
+#include "DataModel/Scripting/ChecksumApi.h"
 #include "DataModel/Scripting/ControlScript.h"
 #include "DataModel/Scripting/ScriptDryRun.h"
 
@@ -192,6 +193,7 @@ API::CommandResponse API::Handlers::ControlScriptHandler::dryRun(const QString& 
                    "var __ss_control = true;"),
     QStringLiteral("bridge-stub.js"));
 
+  DataModel::ChecksumApi::installJS(session.jsEngine());
   QFile sdkFile(QStringLiteral(":/api/SerialStudio.js"));
   if (sdkFile.open(QFile::ReadOnly))
     (void)session.evaluate(QString::fromUtf8(sdkFile.readAll()), QStringLiteral("SerialStudio.js"));

@@ -293,7 +293,7 @@ If you delete the dataset or variable a control was bound to, the project still 
 
 ## Protocol Helper Functions
 
-Every output widget's JavaScript engine includes built-in helper functions for Modbus and CAN Bus protocols. These handle binary byte-packing so you don't have to construct raw bytes manually.
+Every output widget's JavaScript engine includes built-in helper functions for Modbus and CAN Bus protocols. These handle binary byte-packing so you don't have to construct raw bytes manually. The checksum helpers (`checksum`, `checksumHex`, `checksumAlgorithms`) are available too, so a protocol that trails its payload with a CRC appends `checksum('CRC-16-MODBUS', payload)` instead of carrying its own table; see [Checksum Helpers](JavaScript-API.md#checksum-helpers).
 
 ### Modbus Helpers
 

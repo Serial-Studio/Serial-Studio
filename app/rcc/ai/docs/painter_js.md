@@ -147,6 +147,7 @@ datasetGetFinal(uniqueId | "alias")            // final value of any dataset
 // Closed-loop control APIs (shared with parsers and transforms)
 deviceWrite(data, sourceId?)                   // -> { ok, error? }
 actionFire(actionId)                           // -> { ok, error? }
+checksum(algorithm, data)                      // digest as a binary string (wire order); checksumHex() for hex
 
 // Dashboard helpers (shared with parsers and transforms)
 clearPlots()                                   // wipe plot/multiplot/FFT/GPS/3D/waterfall

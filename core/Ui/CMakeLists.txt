@@ -208,6 +208,7 @@ qt_add_library(
   UI/Dashboard/DashboardWiring.h
   UI/Dashboard/WidgetMapBuilder.h
   UI/DashboardWidget.h
+  UI/AlarmDeadband.h
   UI/AlarmMonitor.h
   UI/Alarms/AlarmAnnunciator.h
   UI/Alarms/AnnunciatorChecker.h

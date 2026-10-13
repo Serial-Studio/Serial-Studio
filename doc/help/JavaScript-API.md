@@ -247,6 +247,11 @@ Each project has one Lua execution mode, **Fast Lua Execution**, off by default 
 500 ms deadline every 10,000 VM instructions. A parser call that blows the deadline is
 interrupted with `execution timed out after 500 ms`. Three consecutive timeouts on the same
 source disable that source's parser; fix the script and reload the project to re-enable it.
+The same hook enforces a memory budget of 256 MiB per Lua state (parser, transforms, and the
+editor's test runs each have their own): a chunk that pushes the state past it fails with
+`Lua memory budget exceeded (N MiB in use, limit 256 MiB)`, that frame is dropped, and the state
+keeps running, so a script that holds its data in a global keeps failing until it releases it.
+A single allocation of 256 MiB or more is refused outright.
 
 **Fast mode:** the JIT compiler is forced on and the instruction-count hook is never
 installed. A JIT-compiled trace never fires a debug hook, so leaving the watchdog armed
@@ -423,6 +428,8 @@ function parse(frame)
 end
 ```
 
+The hand-rolled loop is only there to show the shape; the built-in helpers do the same in one call, in either language: `if checksumHex("XOR-8", data) ~= checkHex:lower() then return {} end`. See [Checksum Helpers](#checksum-helpers).
+
 ### Example 6: Multi-Message State Machine
 
 **Lua:**
@@ -475,6 +482,27 @@ The trailing `unit` is optional (1 to 247). When given, the write targets that d
 | `canSendValue(id, value, bytes)` | Send a numeric value packed big-endian (1--8 bytes, default 2) |
 
 > **Note:** Output widget transmit functions always use JavaScript. The Lua/JavaScript language selection applies only to the frame parser `parse()` function.
+
+## Checksum Helpers
+
+Every script engine, in both languages, exposes the checksum library the frame reader uses for its own trailer validation, so a parser, transform, output widget, canvas or control script never needs its own CRC table:
+
+| Function | Description |
+|----------|-------------|
+| `checksum(algorithm, data)` | Digest bytes as a binary string in wire order (`CRC-16-MODBUS` little-endian, the rest big-endian), ready to append to a payload |
+| `checksumHex(algorithm, data)` | The same digest as lowercase hex, for comparing against a text trailer |
+| `checksumAlgorithms()` | The algorithm names: `XOR-8`, `MOD-256`, `CRC-8`, `CRC-16`, `CRC-16-MODBUS`, `CRC-16-CCITT`, `Fletcher-16`, `CRC-32`, `Adler-32` |
+
+`data` is a string (one byte per character in JavaScript, raw bytes in Lua) or an array of byte values (a Lua table of numbers). An unknown algorithm or an argument of any other type raises an error in the script. In Lua the digest is a plain string, so `checksum("CRC-16", body):byte(1, -1)` yields the bytes as numbers; in JavaScript use `charCodeAt`.
+
+```lua
+-- Validate a "payload*HH" frame with an XOR-8 trailer
+function parse(frame)
+  local body, trailer = frame:match("^(.+)%*(%x%x)$")
+  if not body or checksumHex("XOR-8", body) ~= trailer:lower() then return {} end
+  return body:split(",")
+end
+```
 
 ## Writing back to the device: `deviceWrite()`
 

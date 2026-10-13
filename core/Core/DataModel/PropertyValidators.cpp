@@ -21,6 +21,8 @@
 
 #include "Core/DataModel/PropertyValidators.h"
 
+#include <cmath>
+
 #include "Core/SerialStudio.h"
 
 static DataModel::PropertyHooks::ColorValidator s_colorValidator         = nullptr;
@@ -72,6 +74,14 @@ bool DataModel::PropertyHooks::isValidColor(const QString& color)
 bool DataModel::PropertyHooks::isValidDatasetIndex(int index)
 {
   return index >= 0;
+}
+
+/**
+ * @brief Returns true when @p deadband is a usable hysteresis width: finite and not negative.
+ */
+bool DataModel::PropertyHooks::isValidAlarmDeadband(double deadband)
+{
+  return std::isfinite(deadband) && deadband >= 0;
 }
 
 /**

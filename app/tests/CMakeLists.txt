@@ -263,6 +263,19 @@ ss_add_unit_test(tst_checksums
 )
 
 #
+# The script-facing checksum helpers over that registry, in both languages: wire-order bytes, hex,
+# string and byte-array inputs, the error on a bad algorithm or argument, and the name list.
+#
+ss_add_unit_test(tst_checksum_api
+  SOURCES tst_checksum_api.cpp
+          ${SS_CORE_SRC}/Pipeline/DataModel/Scripting/ChecksumApi.cpp
+  LIBS    Qt6::Core
+          Qt6::Qml
+          luajit
+          SerialStudio::Core
+)
+
+#
 # The unified TX encoder (spec 0091): console sends and project Actions share encode_tx(), and
 # this suite pins the byte contract (EOL placement, checksum-over-payload+EOL, Action wrapper
 # parity). ActionBytes.cpp is a Pipeline TU so it recompiles here; Core5Compat comes with
@@ -342,6 +355,15 @@ ss_add_unit_test(tst_alarm_band_applicability
   LIBS    Qt6::Core
           Qt6::Gui
           SerialStudio::Core
+)
+
+#
+# Alarm deadband: the one hysteresis rule the alarm monitor applies when a value leaves its active
+# band, tabulated over release, hold, sibling and escalation cases. Header-only, so no link set.
+#
+ss_add_unit_test(tst_alarm_deadband
+  SOURCES tst_alarm_deadband.cpp
+  LIBS    Qt6::Core
 )
 
 #
@@ -1200,10 +1222,12 @@ ss_add_unit_test(tst_stream_worker
           ${SS_CORE_SRC}/Core/IO/HAL_Driver.h
           ${SS_CORE_SRC}/Pipeline/IO/StreamWorker.cpp
           ${SS_CORE_SRC}/Pipeline/DataModel/FrameBuilder/TransformSupport.cpp
+          ${SS_CORE_SRC}/Pipeline/DataModel/Scripting/ChecksumApi.cpp
           ${SS_CORE_SRC}/Pipeline/DataModel/Scripting/ExpressionTransform.cpp
           ${SS_CORE_SRC}/Pipeline/DataModel/Scripting/JsWatchdog.cpp
           ${SS_CORE_SRC}/Pipeline/DataModel/Scripting/JsWatchdogThread.cpp
           ${SS_CORE_SRC}/Pipeline/DataModel/Scripting/LuaCompat.cpp
+          ${SS_CORE_SRC}/Pipeline/DataModel/Scripting/LuaMemoryBudget.cpp
           ${SS_CORE_SRC}/Pipeline/Platform/AppPlatform.cpp
   LIBS    Qt6::Core
           Qt6::Gui
@@ -2174,6 +2198,20 @@ ss_add_unit_test(tst_test_doubles
 ss_add_unit_test(tst_lua_deadline_hook
   SOURCES tst_lua_deadline_hook.cpp
           ${SS_CORE_SRC}/Pipeline/DataModel/Scripting/LuaDeadlineHook.cpp
+          ${SS_CORE_SRC}/Pipeline/DataModel/Scripting/LuaMemoryBudget.cpp
+  LIBS    Qt6::Core
+          luajit
+          SerialStudio::Core
+)
+
+#
+# The Safe-mode Lua memory budget: the allocator wrapper counts what the state holds, the count
+# hook turns an over-budget chunk into a Lua error, a single oversized request is refused outright,
+# and the state stays usable (and closes cleanly through the restored allocator) afterwards.
+#
+ss_add_unit_test(tst_lua_memory_budget
+  SOURCES tst_lua_memory_budget.cpp
+          ${SS_CORE_SRC}/Pipeline/DataModel/Scripting/LuaMemoryBudget.cpp
   LIBS    Qt6::Core
           luajit
           SerialStudio::Core
@@ -2189,6 +2227,7 @@ ss_add_unit_test(tst_script_dryrun
   SOURCES tst_script_dryrun.cpp
           ${SS_CORE_SRC}/Pipeline/DataModel/Scripting/ScriptDryRun.cpp
           ${SS_CORE_SRC}/Pipeline/DataModel/Scripting/LuaDeadlineHook.cpp
+          ${SS_CORE_SRC}/Pipeline/DataModel/Scripting/LuaMemoryBudget.cpp
           ${SS_CORE_SRC}/Pipeline/DataModel/Scripting/JsWatchdog.cpp
           ${SS_CORE_SRC}/Pipeline/DataModel/Scripting/JsWatchdogThread.cpp
   LIBS    Qt6::Core
@@ -2220,6 +2259,7 @@ ss_add_unit_test(tst_transmit_script_check
           ${SS_CORE_SRC}/Pipeline/DataModel/Scripting/TransmitScriptCheck.cpp
           ${SS_CORE_SRC}/Pipeline/DataModel/Scripting/ScriptDryRun.cpp
           ${SS_CORE_SRC}/Pipeline/DataModel/Scripting/LuaDeadlineHook.cpp
+          ${SS_CORE_SRC}/Pipeline/DataModel/Scripting/LuaMemoryBudget.cpp
           ${SS_CORE_SRC}/Pipeline/DataModel/Scripting/JsWatchdog.cpp
           ${SS_CORE_SRC}/Pipeline/DataModel/Scripting/JsWatchdogThread.cpp
   LIBS    Qt6::Core

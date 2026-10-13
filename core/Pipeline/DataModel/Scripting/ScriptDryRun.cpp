@@ -94,6 +94,7 @@ DataModel::ScriptDryRun::ScriptDryRun(Language language, int budgetMs, const cha
   , m_timedOut(false)
   , m_luaState(nullptr)
   , m_luaHook(sanitizedBudget(budgetMs), sanitizedLabel(label))
+  , m_luaBudget()
   , m_jsEngine(nullptr)
   , m_jsWatchdog(nullptr)
 {
@@ -114,16 +115,14 @@ DataModel::ScriptDryRun::ScriptDryRun(Language language, int budgetMs, const cha
  */
 DataModel::ScriptDryRun::~ScriptDryRun()
 {
-  if (m_luaState)
-    lua_close(m_luaState);
-
+  LuaMemoryBudget::closeState(m_luaState);
   m_luaState = nullptr;
 }
 
 /**
- * @brief Creates the sandboxed interpreter state. The JIT is switched off because a count hook
- *        never fires inside a compiled trace, and an uninterruptible validation is what this whole
- *        helper exists to prevent.
+ * @brief Creates the sandboxed interpreter state under the deadline hook and the Safe-mode memory
+ *        budget. The JIT is switched off because a count hook never fires inside a compiled trace,
+ *        and an uninterruptible validation is what this whole helper exists to prevent.
  */
 void DataModel::ScriptDryRun::createLuaState()
 {
@@ -139,6 +138,7 @@ void DataModel::ScriptDryRun::createLuaState()
 
   luaJIT_setmode(m_luaState, 0, LUAJIT_MODE_ENGINE | LUAJIT_MODE_OFF);
   m_luaHook.install(m_luaState);
+  m_luaBudget.install(m_luaState);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -291,8 +291,7 @@ QString DataModel::ScriptDryRun::luaError()
   SS_ASSERT(m_luaState != nullptr, return QString());
   SS_ASSERT_LOG(lua_gettop(m_luaState) > 0);
 
-  const char* message = lua_tostring(m_luaState, -1);
-  return QString::fromUtf8(message ? message : "");
+  return LuaMemoryBudget::errorText(m_luaState);
 }
 
 //--------------------------------------------------------------------------------------------------

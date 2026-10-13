@@ -13,4 +13,9 @@
 --   Device output:
 --     deviceWrite(data, sourceId)   actionFire(actionId)
 --
+--   Checksums (every engine; the digest comes back as a byte string in wire order,
+--   CRC-16-MODBUS little-endian and the rest big-endian; data is a string or a
+--   table of byte values):
+--     checksum(algorithm, data)     checksumHex(algorithm, data)   checksumAlgorithms()
+--
 -- Whether a given global exists depends on which engine is running the script.

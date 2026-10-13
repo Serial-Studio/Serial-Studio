@@ -46,6 +46,7 @@ extern "C" {
 #include "Core/SSAssert.h"
 #include "DataModel/FrameBuilder.h"
 #include "DataModel/NotificationCenter.h"
+#include "DataModel/Scripting/ChecksumApi.h"
 #include "DataModel/Scripting/DashboardApi.h"
 #include "DataModel/Scripting/DeviceWriteApi.h"
 #include "DataModel/Scripting/LuaCompatJIT.h"
@@ -629,6 +630,7 @@ void DataModel::ScriptApiCall::installHelperBridgesJS(QJSEngine* js,
   DataModel::DeviceWriteApi::installJS(js, sourceId);
   DataModel::ActionFireApi::installJS(js);
   DataModel::DashboardApi::installJS(js);
+  DataModel::ChecksumApi::installJS(js);
 }
 
 /**
@@ -670,6 +672,7 @@ void DataModel::ScriptApiCall::installAll(lua_State* L, int sourceId, TableApi t
   DataModel::DeviceWriteApi::installLua(L, sourceId);
   DataModel::ActionFireApi::installLua(L);
   DataModel::DashboardApi::installLua(L);
+  DataModel::ChecksumApi::installLua(L);
 
   installLua(L, sourceId);
 }

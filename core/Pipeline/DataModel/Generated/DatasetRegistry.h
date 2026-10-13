@@ -72,6 +72,7 @@ typedef enum {
   kDatasetView_FFT_BallisticsRelease,
   kDatasetView_ExtremeHold,
   kDatasetView_SuppressAlarms,
+  kDatasetView_AlarmDeadband,
 } DatasetItem;
 
 namespace DataModel::Registry {
@@ -206,6 +207,9 @@ inline constexpr DatasetProperty kDatasetProperties[] = {
   {"SuppressAlarms", "suppressAlarms", "suppressAlarms", "Edit Dataset", "dataset",
    kDatasetView_SuppressAlarms, PropertyType::Bool, PropertyWidget::CheckBox,
    PersistRule::WhenTrue, true, false, true, false},
+  {"AlarmDeadband", "alarmDeadband", "alarmDeadband", "Edit Dataset", "dataset",
+   kDatasetView_AlarmDeadband, PropertyType::Double, PropertyWidget::FloatField,
+   PersistRule::WhenPositive, true, true, true, false},
   {"Led", "led", "led", "Edit Dataset", "dataset", kDatasetView_LED, PropertyType::Bool,
    PropertyWidget::CheckBox, PersistRule::Always, true, false, true, false},
   {"LedHigh", "ledHigh", "ledHigh", "Edit Dataset", "dataset", kDatasetView_LED_High,
@@ -235,7 +239,7 @@ inline constexpr DatasetProperty kDatasetProperties[] = {
 /**
  * @brief Number of declared dataset properties.
  */
-inline constexpr int kDatasetPropertyCount = 43;
+inline constexpr int kDatasetPropertyCount = 44;
 
 /**
  * @brief Returns the property bound to a form-field id, or null when none is.

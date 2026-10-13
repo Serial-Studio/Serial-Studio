@@ -32,6 +32,7 @@
 #include "Core/Api/ICommandExecutor.h"
 #include "Core/IO/IDeviceWriter.h"
 #include "Core/SSAssert.h"
+#include "DataModel/Scripting/ChecksumApi.h"
 #include "DataModel/Scripting/DeviceWriteApi.h"
 #include "DataModel/Scripting/JsWatchdog.h"
 #include "DataModel/Scripting/ScriptApiCall.h"
@@ -402,6 +403,7 @@ bool DataModel::ControlScriptWorker::compile(const QString& source, QString& err
   auto bridgeVal = m_engine->newQObject(m_bridge);
   m_engine->globalObject().setProperty(QStringLiteral("__ss_bridge"), bridgeVal);
   m_engine->globalObject().setProperty(QStringLiteral("__ss_control"), QJSValue(true));
+  DataModel::ChecksumApi::installJS(m_engine.get());
 
   QFile sdkFile(QStringLiteral(":/api/SerialStudio.js"));
   if (sdkFile.open(QFile::ReadOnly))

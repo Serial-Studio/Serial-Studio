@@ -31,6 +31,7 @@
 #include "DataModel/NotificationCenter.h"
 #include "DataModel/PipelineModules.h"
 #include "DataModel/WidgetResolution.h"
+#include "UI/AlarmDeadband.h"
 #include "UI/Dashboard.h"
 
 //--------------------------------------------------------------------------------------------------
@@ -104,6 +105,7 @@ void UI::AlarmMonitor::rebuildTrackers()
     tracker.initialized   = false;
     tracker.rangeMin      = qMin(dataset.wgtMin, dataset.wgtMax);
     tracker.rangeMax      = qMax(dataset.wgtMin, dataset.wgtMax);
+    tracker.deadband      = qMax(0.0, dataset.alarmDeadband);
     tracker.title         = dataset.title;
     tracker.units         = dataset.units;
     tracker.lastFireMs    = {0, 0, 0, 0};
@@ -194,10 +196,33 @@ int UI::AlarmMonitor::bandIndexFor(const Tracker& tracker, double value) noexcep
 }
 
 /**
+ * @brief The band the tracker reports for @a value: the containing band, except that the band
+ *        last reported holds on while the value sits within the dataset's deadband of its edges
+ *        and the move would not escalate (UI::AlarmDeadband::holdsActiveBand).
+ */
+int UI::AlarmMonitor::resolveBand(const Tracker& tracker, double value) noexcept
+{
+  const int candidate = bandIndexFor(tracker, value);
+  const int active    = tracker.lastFiredBand;
+  if (!tracker.initialized || active < 0 || candidate == active)
+    return candidate;
+
+  SS_ASSERT(active < static_cast<int>(tracker.bands.size()), return candidate);
+  const auto& band            = tracker.bands[active];
+  const int candidateSeverity = candidate < 0 ? -1 : tracker.bands[candidate].severity;
+  if (AlarmDeadband::holdsActiveBand(
+        value, band.min, band.max, band.severity, candidateSeverity, tracker.deadband))
+    return active;
+
+  return candidate;
+}
+
+/**
  * @brief Posts a notification on transition into a Warning or Critical band; the value is first
- *        clamped to the widget range widened to the band extents. Every band change, baseline
- *        capture included, is emitted as bandTransition (spec 0087) ahead of the notification
- *        cooldown, so a rebuilt tracker re-seeds its point without a notification.
+ *        clamped to the widget range widened to the band extents, then resolved through the
+ *        deadband hold. Every band change, baseline capture included, is emitted as
+ *        bandTransition (spec 0087) ahead of the notification cooldown, so a rebuilt tracker
+ *        re-seeds its point without a notification.
  */
 void UI::AlarmMonitor::processValue(Tracker& tracker, double value)
 {
@@ -206,7 +231,7 @@ void UI::AlarmMonitor::processValue(Tracker& tracker, double value)
   if (tracker.rangeMax > tracker.rangeMin)
     value = qBound(tracker.rangeMin, value, tracker.rangeMax);
 
-  const int idx = bandIndexFor(tracker, value);
+  const int idx = resolveBand(tracker, value);
   if (idx >= 0)
     tracker.hint = idx;
 

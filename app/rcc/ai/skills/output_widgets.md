@@ -59,9 +59,13 @@ and `canSendValue`. Every Modbus helper takes an optional trailing `unit`
 (1-247) to write to another device on the same bus; the payload then
 carries a `0xFF 0x83 <unit>` prefix, so set the control's `txEncoding` to
 Latin-1 or the bytes above 127 are re-encoded and the driver refuses them.
-NMEA, GRBL, GCode, SCPI, SLCAN, CRC, and binary-packet logic are NOT
-globals — adapt a bundled reference script (next section) that self-contains
-that code. Full details: `meta.fetchScriptingDocs{kind: "output_widget_js"}`.
+Checksums are globals too: `checksum(algorithm, data)` returns the digest as
+a binary string in wire order and `checksumHex` the hex form, for `XOR-8`,
+`MOD-256`, `CRC-8`, `CRC-16`, `CRC-16-MODBUS`, `CRC-16-CCITT`, `Fletcher-16`,
+`CRC-32` and `Adler-32`. NMEA, GRBL, GCode, SCPI, SLCAN, and binary-packet
+framing are NOT globals — adapt a bundled reference script (next section)
+that self-contains that code. Full details:
+`meta.fetchScriptingDocs{kind: "output_widget_js"}`.
 
 ```js
 // Simple: send a Modbus-shaped command on button click

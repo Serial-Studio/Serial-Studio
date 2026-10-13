@@ -31,6 +31,7 @@
 #include "DataModel/NotificationCenter.h"
 #include "DataModel/PipelineModules.h"
 #include "DataModel/ProjectModel.h"
+#include "DataModel/Scripting/ChecksumApi.h"
 #include "DataModel/Scripting/LuaCompat.h"
 #include "DataModel/Scripting/ScriptDryRun.h"
 
@@ -347,6 +348,7 @@ void DataModel::TransformLibraryEditor::evaluate()
   lua_State* L = session.luaState();
   DataModel::installLuaCompat(L);
   DataModel::NotificationCenter::installScriptApi(L);
+  DataModel::ChecksumApi::installLua(L);
   if (session.runLuaChunk(text(), "library") != LUA_OK) {
     const QString error =
       session.timedOut()

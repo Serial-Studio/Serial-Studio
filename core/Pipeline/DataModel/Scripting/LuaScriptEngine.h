@@ -30,6 +30,7 @@ extern "C" {
 #include <QDeadlineTimer>
 
 #include "DataModel/Scripting/IScriptEngine.h"
+#include "DataModel/Scripting/LuaMemoryBudget.h"
 
 namespace DataModel {
 
@@ -107,6 +108,7 @@ private:
   quint64 m_errorCount;
   QString m_lastError;
   QDeadlineTimer m_deadline;
+  LuaMemoryBudget m_memoryBudget;
 };
 
 }  // namespace DataModel

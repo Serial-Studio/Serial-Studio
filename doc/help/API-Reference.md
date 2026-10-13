@@ -2693,6 +2693,9 @@ Patch any subset of dataset fields by group id and dataset id. Changing `transfo
   only when `alarmBands` is not present
 - `suppressAlarms` (bool, optional): Keeps the dataset's bands drawn but stops its band
   notifications, alarm points and sounds
+- `alarmDeadband` (number, optional, `>= 0`): Hysteresis in the dataset's units; the active band
+  holds until the value leaves it by more than this, and a step into a more severe band is never
+  delayed (0 = none)
 - `displayTickCount` (int, optional, clamped to `>= 0`)
 - `displayFormat` (string, optional)
 - `decimalPoints` (int, optional, clamped to `-1..15`)

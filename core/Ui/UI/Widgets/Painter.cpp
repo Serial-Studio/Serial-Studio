@@ -29,6 +29,7 @@
 #  include "DataModel/FrameBuilder.h"
 #  include "DataModel/NotificationCenter.h"
 #  include "DataModel/PipelineModules.h"
+#  include "DataModel/Scripting/ChecksumApi.h"
 #  include "DataModel/Scripting/DashboardApi.h"
 #  include "DataModel/Scripting/DeviceWriteApi.h"
 #  include "DataModel/Scripting/ScriptApiCall.h"
@@ -165,6 +166,7 @@ Widgets::Painter::Painter(int index, QQuickItem* parent)
   DataModel::ActionFireApi::installJS(&m_engine);
 
   DataModel::DashboardApi::installJS(&m_engine);
+  DataModel::ChecksumApi::installJS(&m_engine);
 
   DataModel::ScriptApiCall::installJS(&m_engine, 0);
 

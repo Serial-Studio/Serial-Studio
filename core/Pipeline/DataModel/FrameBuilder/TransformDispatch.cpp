@@ -37,6 +37,7 @@ extern "C" {
 
 #include "Core/SerialStudio.h"
 #include "Core/SSAssert.h"
+#include "DataModel/Scripting/LuaMemoryBudget.h"
 
 //--------------------------------------------------------------------------------------------------
 // Constants
@@ -180,9 +181,10 @@ QVariant DataModel::TransformDispatch::applyLua(DataModel::TransformEngine& engi
     engine.luaDeadline = QDeadlineTimer(QDeadlineTimer::Forever);
 
     if (pcallStatus != LUA_OK) [[unlikely]] {
+      const QString error = LuaMemoryBudget::errorText(L);
       qWarning() << "[TransformDispatch] Lua transform call failed for dataset" << uniqueId << ":"
-                 << lua_tostring(L, -1);
-      m_transforms.noteTransformError(uniqueId, lua_tostring(L, -1));
+                 << error;
+      m_transforms.noteTransformError(uniqueId, error);
       lua_pop(L, 1);
       return rawValue;
     }

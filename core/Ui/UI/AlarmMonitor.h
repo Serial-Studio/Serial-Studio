@@ -83,6 +83,7 @@ private:
     bool initialized;
     double rangeMin;
     double rangeMax;
+    double deadband;
     QString title;
     QString units;
     std::array<qint64, 4> lastFireMs;
@@ -90,6 +91,7 @@ private:
   };
 
   [[nodiscard]] static int bandIndexFor(const Tracker& tracker, double value) noexcept;
+  [[nodiscard]] static int resolveBand(const Tracker& tracker, double value) noexcept;
   void processValue(Tracker& tracker, double value);
 
   std::vector<Tracker> m_trackers;

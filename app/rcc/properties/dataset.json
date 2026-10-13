@@ -39,7 +39,8 @@
     "FftBallistics",
     "FftBallisticsRelease",
     "ExtremeHold",
-    "SuppressAlarms"
+    "SuppressAlarms",
+    "AlarmDeadband"
   ],
   "struct": {
     "type": "DataModel::Dataset",
@@ -363,6 +364,11 @@
       "signature": "bool isValidTransformLanguage(int language)",
       "origin": "ProjectHandlerEntities.cpp:applyDatasetDisplayAndTransformFields"
     },
+    "deadbandNonNegative": {
+      "kind": "validator",
+      "signature": "bool isValidAlarmDeadband(double deadband)",
+      "origin": "PropertyValidators.cpp:isValidAlarmDeadband (alarm deadband, 2026-10)"
+    },
     "insidePainterGroup": {
       "kind": "predicate",
       "signature": "bool insidePainterGroup(const DataModel::Dataset& d, const DataModel::ProjectModel& pm)",
@@ -657,7 +663,8 @@
           "WgtMin",
           "WgtMax",
           "ExtremeHold",
-          "SuppressAlarms"
+          "SuppressAlarms",
+          "AlarmDeadband"
         ]
       },
       {
@@ -1591,6 +1598,35 @@
       "api": {
         "expose": true,
         "name": "suppressAlarms",
+        "rebuildTree": true
+      }
+    },
+    {
+      "id": "AlarmDeadband",
+      "field": "alarmDeadband",
+      "jsonKey": "AlarmDeadband",
+      "formId": "kDatasetView_AlarmDeadband",
+      "type": "double",
+      "default": 0,
+      "scope": "document",
+      "persist": "whenPositive",
+      "readTransform": "toDouble",
+      "section": "widget",
+      "widget": "FloatField",
+      "label": "Alarm Deadband",
+      "description": "Hysteresis in the dataset's units: the active band holds until the value leaves it by this much, so a reading hovering on a threshold does not re-alarm on every frame (0 = none)",
+      "placeholder": 0,
+      "visibleWhen": "alarmBandsDrawn",
+      "validate": "deadbandNonNegative",
+      "apiError": "Invalid alarmDeadband: must be >= 0 (dataset units, 0 = no hysteresis)",
+      "rebuildTree": true,
+      "undo": {
+        "label": "Edit Dataset",
+        "coalesce": true
+      },
+      "api": {
+        "expose": true,
+        "name": "alarmDeadband",
         "rebuildTree": true
       }
     },

@@ -754,6 +754,22 @@ void DataModel::ProjectEditor::buildWidgetRangeRows(CustomModel* model,
                                      "alarm point or sound for them"), ParameterDescription);
     model->appendRow(item_suppress_alarms);
   }
+
+  if (PropertyHooks::alarmBandsDrawn(dataset, m_projectModelRef)) {
+    auto* item_alarm_deadband = new QStandardItem();
+    item_alarm_deadband->setEditable(true);
+    item_alarm_deadband->setData(true, Active);
+    item_alarm_deadband->setData(FloatField, WidgetType);
+    item_alarm_deadband->setData(dataset.alarmDeadband, EditableValue);
+    item_alarm_deadband->setData(kDatasetView_AlarmDeadband, ParameterType);
+    item_alarm_deadband->setData(0, PlaceholderValue);
+    item_alarm_deadband->setData(tr("Alarm Deadband"), ParameterName);
+    item_alarm_deadband->setData(tr("Hysteresis in the dataset's units: the active band holds "
+                                    "until the value leaves it by this much, so a reading "
+                                    "hovering on a threshold does not re-alarm on every frame (0 "
+                                    "= none)"), ParameterDescription);
+    model->appendRow(item_alarm_deadband);
+  }
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -909,6 +925,9 @@ static bool applyDatasetNumberEdit(int formId, const QVariant& value, DataModel:
     case kDatasetView_WgtMax:
       d.wgtMax = SerialStudio::toDouble(value);
       return true;
+    case kDatasetView_AlarmDeadband:
+      d.alarmDeadband = SerialStudio::toDouble(value);
+      return true;
     case kDatasetView_LED_High:
       d.ledHigh = SerialStudio::toDouble(value);
       return true;
@@ -1031,6 +1050,8 @@ static bool datasetRowVisible(int formId,
       return PropertyHooks::waterfallEnabled(d, pm);
     case kDatasetView_SuppressAlarms:
       return PropertyHooks::alarmBandsDrawn(d, pm);
+    case kDatasetView_AlarmDeadband:
+      return PropertyHooks::alarmBandsDrawn(d, pm);
     case kDatasetView_LED_High:
       return PropertyHooks::ledBandsAbsent(d, pm);
     default:
@@ -1116,6 +1137,8 @@ QVariant Registry::datasetFormValue(int formId,
       return d.extremeHold;
     case kDatasetView_SuppressAlarms:
       return d.suppressAlarms;
+    case kDatasetView_AlarmDeadband:
+      return d.alarmDeadband;
     case kDatasetView_LED:
       return d.led;
     case kDatasetView_LED_High:

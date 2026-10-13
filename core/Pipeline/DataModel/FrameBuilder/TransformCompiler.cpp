@@ -41,11 +41,13 @@ extern "C" {
 #include "Core/SSAssert.h"
 #include "DataModel/NotificationCenter.h"
 #include "DataModel/ProjectModel.h"
+#include "DataModel/Scripting/ChecksumApi.h"
 #include "DataModel/Scripting/DashboardApi.h"
 #include "DataModel/Scripting/DeviceWriteApi.h"
 #include "DataModel/Scripting/LuaCompat.h"
 #include "DataModel/Scripting/LuaCompatJIT.h"
 #include "DataModel/Scripting/LuaDeadlineHook.h"
+#include "DataModel/Scripting/LuaMemoryBudget.h"
 #include "DataModel/Scripting/ScriptApiCall.h"
 
 //--------------------------------------------------------------------------------------------------
@@ -312,6 +314,7 @@ void DataModel::TransformCompiler::compileLua(TransformEngine& engine,
     DataModel::DeviceWriteApi::installLua(state, ctx->sourceId);
     DataModel::ActionFireApi::installLua(state);
     DataModel::DashboardApi::installLua(state);
+    DataModel::ChecksumApi::installLua(state);
     DataModel::ScriptApiCall::installLua(state, ctx->sourceId);
     DataModel::NotificationCenter::installScriptApi(state);
 
@@ -336,6 +339,8 @@ void DataModel::TransformCompiler::compileLua(TransformEngine& engine,
   } else {
     luaJIT_setmode(L, 0, LUAJIT_MODE_ENGINE | LUAJIT_MODE_OFF);
     LuaDeadlineHook::enable(L);
+    engine.luaBudget = std::make_unique<LuaMemoryBudget>();
+    engine.luaBudget->install(L);
   }
 
   engine.luaDeadline.setRemainingTime(kTransformWatchdogMs);
@@ -637,10 +642,11 @@ void DataModel::TransformCompiler::destroy()
     engine.luaRefs.clear();
 
     if (engine.luaState) {
-      lua_close(engine.luaState);
+      LuaMemoryBudget::closeState(engine.luaState);
       engine.luaState = nullptr;
     }
 
+    engine.luaBudget.reset();
     engine.jsWatchdog.reset();
 
     delete engine.jsEngine;

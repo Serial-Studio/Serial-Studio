@@ -236,6 +236,16 @@ function canSendValue(id, value, bytes) {
   return canSendFrame(id, arr);
 }
 
+// Checksums (bridge: __ss_ck, ChecksumApi). checksum() returns the digest bytes
+// as a binary string in wire order (CRC-16-MODBUS little-endian, the rest
+// big-endian), ready to append to a payload; checksumHex() returns the same as
+// lowercase hex. `data` is a binary string or an array of byte values.
+if (typeof __ss_ck !== 'undefined') {
+  checksum           = function(algorithm, data) { return __ss_ck.checksum(algorithm, data); };
+  checksumHex        = function(algorithm, data) { return __ss_ck.checksumHex(algorithm, data); };
+  checksumAlgorithms = function()                { return __ss_ck.checksumAlgorithms(); };
+}
+
 // Control-script See/Decide/Act helpers (bridge: __ss_bridge, worker thread only).
 // newFrame() returns the latest received frame exactly once per arrival (null when
 // nothing new); refreshDashboard() re-runs every dataset transform from the last

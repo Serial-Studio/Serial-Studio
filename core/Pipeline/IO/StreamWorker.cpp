@@ -45,8 +45,10 @@ extern "C" {
 #include "DataModel/FrameBuilder.h"
 #include "DataModel/FrameBuilder/TransformCompiler.h"
 #include "DataModel/FrameBuilder/TransformSupport.h"
+#include "DataModel/Scripting/ChecksumApi.h"
 #include "DataModel/Scripting/LuaCompat.h"
 #include "DataModel/Scripting/LuaCompatJIT.h"
+#include "DataModel/Scripting/LuaMemoryBudget.h"
 #include "DataModel/Scripting/TableApiScan.h"
 #include "Platform/AppPlatform.h"
 
@@ -106,6 +108,7 @@ IO::StreamProcessor::StreamProcessor(const StreamConfig& config,
   , m_js(nullptr)
   , m_jsWatchdog(nullptr)
   , m_luaDeadline(QDeadlineTimer::Forever)
+  , m_luaBudget()
   , m_inBlock(false)
   , m_jsTimedOut(false)
   , m_luaTableArmed(false)
@@ -161,13 +164,15 @@ void IO::StreamProcessor::luaWatchdogHook(lua_State* L, lua_Debug* ar)
   if (!self) [[unlikely]]
     return;
 
+  DataModel::LuaMemoryBudget::check(L);
   if (self->m_luaDeadline.hasExpired()) [[unlikely]]
     luaL_error(L, "stream transform timed out after %d ms", kWatchdogMs);
 }
 
 /**
  * @brief Creates the sandboxed Lua state on the worker thread with the project's Safe/Fast mode
- *        applied: Safe = interpreter + count hook, Fast = JIT + no hook (one mode, spec 0051 R20).
+ *        applied: Safe = interpreter + count hook + memory budget, Fast = JIT + no hook (one mode,
+ *        spec 0051 R20).
  *        The shared data-table closures are injected for parity with frame-lane transforms; from
  *        this thread they route through the readTableView/writeTableStore marshal (spec 0051 M5).
  */
@@ -187,6 +192,7 @@ void IO::StreamProcessor::setupLuaState()
     auto* self = static_cast<StreamProcessor*>(lua_touserdata(state, 1));
     openSafeStreamLibs(state);
     DataModel::installLuaCompat(state);
+    DataModel::ChecksumApi::installLua(state);
     lua_pushlightuserdata(state, self);
     lua_setfield(state, LUA_REGISTRYINDEX, "__ss_stream__");
     return 0;
@@ -211,6 +217,7 @@ void IO::StreamProcessor::setupLuaState()
   } else {
     luaJIT_setmode(L, 0, LUAJIT_MODE_ENGINE | LUAJIT_MODE_OFF);
     lua_sethook(L, &StreamProcessor::luaWatchdogHook, LUA_MASKCOUNT, kHookInstrCount);
+    m_luaBudget.install(L);
   }
 
   QString libraryError;
@@ -238,6 +245,8 @@ void IO::StreamProcessor::setupJsEngine()
   m_jsWatchdog =
     std::make_unique<DataModel::JsWatchdog>(m_js, kWatchdogMs, QStringLiteral("stream transform"));
 
+  DataModel::ChecksumApi::installJS(m_js);
+  installJsChecksumPrelude();
   if (m_frameBuilder)
     installJsTablePrelude();
 
@@ -254,6 +263,22 @@ void IO::StreamProcessor::setupJsEngine()
     qWarning() << "[StreamWorker] Shared JavaScript library failed:"
                << result.property(QStringLiteral("message")).toString();
   }
+}
+
+/**
+ * @brief Defines the checksum globals over the __ss_ck bridge, mirroring the SDK prelude block.
+ */
+void IO::StreamProcessor::installJsChecksumPrelude()
+{
+  SS_ASSERT(m_js != nullptr, return);
+
+  static const QString kChecksumPrelude =
+    QStringLiteral("if (typeof __ss_ck !== 'undefined') {"
+                   " checksum = function(a, d) { return __ss_ck.checksum(a, d); };"
+                   " checksumHex = function(a, d) { return __ss_ck.checksumHex(a, d); };"
+                   " checksumAlgorithms = function() { return __ss_ck.checksumAlgorithms(); };"
+                   "}");
+  (void)m_js->evaluate(kChecksumPrelude);
 }
 
 /**
@@ -450,7 +475,7 @@ void IO::StreamProcessor::teardownEngines()
   }
 
   if (m_lua) {
-    lua_close(m_lua);
+    DataModel::LuaMemoryBudget::closeState(m_lua);
     m_lua = nullptr;
   }
 
@@ -705,7 +730,7 @@ bool IO::StreamProcessor::runLuaBlockTransform(ChannelState& state,
 
     if (lua_pcall(L, 2, 1, 0) != LUA_OK) [[unlikely]] {
       qWarning() << "[StreamWorker] transform_block failed for dataset" << state.config.uniqueId
-                 << ":" << lua_tostring(L, -1);
+                 << ":" << DataModel::LuaMemoryBudget::errorText(L);
       lua_pop(L, 1);
       m_luaDeadline = QDeadlineTimer(QDeadlineTimer::Forever);
       return false;

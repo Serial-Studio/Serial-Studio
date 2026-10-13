@@ -47,6 +47,7 @@ nothing executes (no `apiCall`, no `tableSet` side effects).
 | `tableSet(table, register, value)` | Write a Computed variable; rejected for parser-owned or constant variables. Follow with `refreshDashboard()` to render. |
 | `notify(level, ...)`, `notifyInfo`, `notifyWarning`, `notifyCritical`, `notifyClear` | Notification center (Pro). Accept `(title)`, `(title, subtitle)`, or `(channel, title, subtitle)`. Constants `Info`, `Warning`, `Critical`. |
 | `modbusWriteRegister/Coil/Float`, `canSendFrame`, `canSendValue` | Pure protocol encoders returning byte strings for transmission. |
+| `checksum(algorithm, data)`, `checksumHex(algorithm, data)`, `checksumAlgorithms()` | Digest of a binary string or byte array as a wire-order byte string / lowercase hex; algorithms `XOR-8`, `MOD-256`, `CRC-8`, `CRC-16`, `CRC-16-MODBUS`, `CRC-16-CCITT`, `Fletcher-16`, `CRC-32`, `Adler-32`. An unknown algorithm throws. |
 | `io.*`, `project.*`, `dashboard.*`, ... | Generated SDK wrappers over `apiCall` for every API command (e.g. `io.getLatestFrame()`, `io.writeData(...)`, `io.ble.writeCharacteristic(uuid, hex, SerialStudio.Hex)`). |
 | `console.log(...)` | Goes to the application log. |
 

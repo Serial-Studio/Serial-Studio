@@ -187,7 +187,9 @@ any dataset in a `barpanel` group. On any other dataset, a plot-only one
 included, they are stored and ignored, so give the dataset one of those widgets
 when the user asks for an alarm. Set `suppressAlarms: true` to keep a dataset's
 bands drawn without notifications or sound, for a zone the user wants to see
-but not hear.
+but not hear. Set `alarmDeadband` (dataset units, `>= 0`) when a value hovers
+around a threshold: the active band holds until the value leaves it by that
+margin, and a step into a more severe band is never delayed.
 
 FFT and Waterfall also honor `fftWindow`, the window function applied before
 the transform (reduces spectral leakage). Integer values: 0=Rectangular,

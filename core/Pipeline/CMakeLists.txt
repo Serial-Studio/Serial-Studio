@@ -68,10 +68,12 @@ qt_add_library(
   DataModel/Scripting/LuaCompat.cpp
   DataModel/Scripting/LuaMigration.cpp
   DataModel/Scripting/LuaDeadlineHook.cpp
+  DataModel/Scripting/LuaMemoryBudget.cpp
   DataModel/Scripting/ScriptDryRun.cpp
   DataModel/Scripting/TransmitScriptCheck.cpp
   DataModel/Scripting/TransmitScriptEnvironment.cpp
   DataModel/Scripting/ExpressionTransform.cpp
+  DataModel/Scripting/ChecksumApi.cpp
   DataModel/Scripting/DashboardApi.cpp
   DataModel/Scripting/DeviceWriteApi.cpp
   DataModel/Scripting/ScriptApiCall.cpp
@@ -188,10 +190,12 @@ qt_add_library(
   DataModel/Scripting/LuaCompatJIT.h
   DataModel/Scripting/LuaMigration.h
   DataModel/Scripting/LuaDeadlineHook.h
+  DataModel/Scripting/LuaMemoryBudget.h
   DataModel/Scripting/ScriptDryRun.h
   DataModel/Scripting/TransmitScriptCheck.h
   DataModel/Scripting/TransmitScriptEnvironment.h
   DataModel/Scripting/ExpressionTransform.h
+  DataModel/Scripting/ChecksumApi.h
   DataModel/Scripting/DashboardApi.h
   DataModel/Scripting/DeviceWriteApi.h
   DataModel/IDashboardControl.h

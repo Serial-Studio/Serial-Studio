@@ -35,7 +35,12 @@ The QJSEngine running parsers is isolated from the host system. Available:
 `deviceWrite`, `actionFire`, the seven dashboard helpers,
 `tableGet`/`tableSet`/`datasetGetRaw`/`datasetGetFinal`, the handle fast path
 `tableHandle`/`tableHandleMany`/`tableGetH`/`tableSetH`, `notify*`,
-`apiCall`, and the generated `SerialStudio` SDK (`io.*`, `project.*`, ...):
+`apiCall`, the checksum helpers `checksum(algorithm, data)` /
+`checksumHex(algorithm, data)` / `checksumAlgorithms()` (the frame reader's own
+CRC library: `XOR-8`, `MOD-256`, `CRC-8`, `CRC-16`, `CRC-16-MODBUS`,
+`CRC-16-CCITT`, `Fletcher-16`, `CRC-32`, `Adler-32`; `data` is a string or a
+byte array, the digest comes back as a binary string or lowercase hex), and
+the generated `SerialStudio` SDK (`io.*`, `project.*`, ...):
 
 - **No** `XMLHttpRequest`, `fetch`, `setTimeout`, `setInterval`.
 - **No** filesystem, network, or Qt API access.

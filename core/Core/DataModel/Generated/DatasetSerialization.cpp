@@ -108,6 +108,9 @@ static void writeDatasetNumbers(QJsonObject& obj, const Dataset& d)
 
   obj.insert(Keys::WgtMin, qMin(d.wgtMin, d.wgtMax));
   obj.insert(Keys::WgtMax, qMax(d.wgtMin, d.wgtMax));
+  if (d.alarmDeadband > 0)
+    obj.insert(Keys::AlarmDeadband, d.alarmDeadband);
+
   obj.insert(Keys::LedHigh, d.ledHigh);
   if (!d.transformCode.isEmpty())
     obj.insert(Keys::TransformLanguage, d.transformLanguage);
@@ -217,6 +220,7 @@ static void readDatasetNumbers(Dataset& d, const QJsonObject& obj)
   d.decimalPoints = ss_jsr(obj, Keys::DecimalPoints, -1).toInt();
   d.wgtMin = SerialStudio::toDouble(ss_jsr(obj, Keys::WgtMin, 0));
   d.wgtMax = SerialStudio::toDouble(ss_jsr(obj, Keys::WgtMax, 0));
+  d.alarmDeadband = SerialStudio::toDouble(ss_jsr(obj, Keys::AlarmDeadband, 0));
   d.ledHigh = SerialStudio::toDouble(ss_jsr(obj, Keys::LedHigh, 80));
   d.transformLanguage = ss_jsr(obj, Keys::TransformLanguage, -1).toInt();
   d.uniqueId = ss_jsr(obj, Keys::UniqueId, -1).toInt();

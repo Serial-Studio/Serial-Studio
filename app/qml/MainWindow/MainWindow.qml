@@ -578,7 +578,8 @@ Widgets.SmartWindow {
       }
 
       //
-      // Main layout
+      // Main layout; the negative top margin overlaps the toolbar's bottom border, so it
+      // is zero whenever no toolbar bar sits above the stack (runtime mode, collapsed bar)
       //
       StackView {
         id: stack
@@ -587,7 +588,7 @@ Widgets.SmartWindow {
         Layout.fillWidth: true
         Layout.fillHeight: true
         Layout.topMargin: {
-          if (root.dashboardVisible && !root.toolbarBarShown)
+          if (app.runtimeMode || (root.dashboardVisible && !root.toolbarBarShown))
             return 0
 
           return root.visibility === Window.FullScreen ? -6 : -1

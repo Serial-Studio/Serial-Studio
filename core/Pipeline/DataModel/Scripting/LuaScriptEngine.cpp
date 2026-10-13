@@ -42,11 +42,13 @@ extern "C" {
 #include "DataModel/FrameBuilder.h"
 #include "DataModel/NotificationCenter.h"
 #include "DataModel/ProjectModel.h"
+#include "DataModel/Scripting/ChecksumApi.h"
 #include "DataModel/Scripting/DashboardApi.h"
 #include "DataModel/Scripting/DeviceWriteApi.h"
 #include "DataModel/Scripting/LuaCellCollector.h"
 #include "DataModel/Scripting/LuaCompat.h"
 #include "DataModel/Scripting/LuaCompatJIT.h"
+#include "DataModel/Scripting/LuaMemoryBudget.h"
 #include "DataModel/Scripting/LuaMigration.h"
 #include "DataModel/Scripting/ScriptApiCall.h"
 #include "DataModel/Scripting/ScriptCells.h"
@@ -161,6 +163,7 @@ static int bootstrapEngineState(lua_State* L)
   DataModel::DeviceWriteApi::installLua(L, ctx->sourceId);
   DataModel::ActionFireApi::installLua(L);
   DataModel::DashboardApi::installLua(L);
+  DataModel::ChecksumApi::installLua(L);
   DataModel::ScriptApiCall::installLua(L, ctx->sourceId);
 
   lua_pushlightuserdata(L, ctx->self);
@@ -325,7 +328,7 @@ static void closeLuaState(lua_State* state)
       [] { frameBuilder.tableStore().clearLookupCache(); });
   }
 
-  lua_close(state);
+  DataModel::LuaMemoryBudget::closeState(state);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -346,6 +349,7 @@ DataModel::LuaScriptEngine::LuaScriptEngine()
   , m_errorCount(0)
   , m_lastError()
   , m_deadline(QDeadlineTimer::Forever)
+  , m_memoryBudget()
 {
   createState();
 }
@@ -363,7 +367,8 @@ DataModel::LuaScriptEngine::~LuaScriptEngine()
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Creates a fresh Lua state with safe libraries and watchdog hook.
+ * @brief Creates a fresh Lua state with safe libraries and, in Safe mode, the watchdog hook and
+ *        the memory budget the hook enforces.
  */
 void DataModel::LuaScriptEngine::createState()
 {
@@ -396,6 +401,7 @@ void DataModel::LuaScriptEngine::createState()
   } else {
     luaJIT_setmode(m_state, 0, LUAJIT_MODE_ENGINE | LUAJIT_MODE_OFF);
     lua_sethook(m_state, watchdogHook, LUA_MASKCOUNT, kHookInstructionCount);
+    m_memoryBudget.install(m_state);
   }
 
   m_deadline            = QDeadlineTimer(QDeadlineTimer::Forever);
@@ -469,6 +475,7 @@ void DataModel::LuaScriptEngine::watchdogHook(lua_State* L, lua_Debug* ar)
   if (!self) [[unlikely]]
     return;
 
+  LuaMemoryBudget::check(L);
   if (self->m_deadline.hasExpired()) [[unlikely]]
     luaL_error(L, "execution timed out after %d ms", kRuntimeWatchdogMs);
 }
@@ -776,7 +783,7 @@ int DataModel::LuaScriptEngine::runParse(const char* data, qsizetype len)
   m_deadline       = QDeadlineTimer(QDeadlineTimer::Forever);
 
   if (status != LUA_OK) [[unlikely]] {
-    const QString err = QString::fromUtf8(lua_tostring(m_state, -1));
+    const QString err = LuaMemoryBudget::errorText(m_state);
     lua_pop(m_state, 1);
     qWarning() << "[LuaScriptEngine] Parse error:" << err;
     noteError(err);
@@ -906,7 +913,7 @@ QList<QStringList> DataModel::LuaScriptEngine::parseBinary(const QByteArray& fra
     m_deadline       = QDeadlineTimer(QDeadlineTimer::Forever);
 
     if (status != LUA_OK) [[unlikely]] {
-      const QString err = QString::fromUtf8(lua_tostring(m_state, -1));
+      const QString err = LuaMemoryBudget::errorText(m_state);
       lua_pop(m_state, 1);
       qWarning() << "[LuaScriptEngine] Parse error:" << err;
       noteError(err);

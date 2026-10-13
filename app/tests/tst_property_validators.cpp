@@ -56,6 +56,9 @@ private slots:
 
   void isValidTransformLanguage_data();
   void isValidTransformLanguage();
+
+  void isValidAlarmDeadband_data();
+  void isValidAlarmDeadband();
 };
 
 //--------------------------------------------------------------------------------------------------
@@ -190,6 +193,32 @@ void TstPropertyValidators::isValidTransformLanguage()
   QFETCH(bool, expected);
 
   QCOMPARE(DataModel::PropertyHooks::isValidTransformLanguage(language), expected);
+}
+
+//--------------------------------------------------------------------------------------------------
+// isValidAlarmDeadband
+//--------------------------------------------------------------------------------------------------
+
+void TstPropertyValidators::isValidAlarmDeadband_data()
+{
+  QTest::addColumn<double>("deadband");
+  QTest::addColumn<bool>("expected");
+
+  QTest::newRow("zero disables hysteresis") << 0.0 << true;
+  QTest::newRow("small positive") << 0.5 << true;
+  QTest::newRow("large positive") << 1e6 << true;
+  QTest::newRow("negative") << -0.1 << false;
+  QTest::newRow("negative infinity") << -std::numeric_limits<double>::infinity() << false;
+  QTest::newRow("positive infinity") << std::numeric_limits<double>::infinity() << false;
+  QTest::newRow("NaN") << std::numeric_limits<double>::quiet_NaN() << false;
+}
+
+void TstPropertyValidators::isValidAlarmDeadband()
+{
+  QFETCH(double, deadband);
+  QFETCH(bool, expected);
+
+  QCOMPARE(DataModel::PropertyHooks::isValidAlarmDeadband(deadband), expected);
 }
 
 QTEST_APPLESS_MAIN(TstPropertyValidators)

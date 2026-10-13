@@ -31,6 +31,7 @@ extern "C" {
 #include <QtGlobal>
 
 #include "Core/SSAssert.h"
+#include "DataModel/Scripting/LuaMemoryBudget.h"
 
 //--------------------------------------------------------------------------------------------------
 // Registry binding
@@ -50,14 +51,16 @@ struct LuaDeadlineContext {
 };
 
 /**
- * @brief LUA_MASKCOUNT hook: raises a Lua error once the armed deadline elapses. luaL_error()
- *        longjmps out of the running chunk, which is why this only ever runs on the thread that
- *        owns the state -- the error has to unwind that thread's own protected call.
+ * @brief LUA_MASKCOUNT hook: raises a Lua error once the state is over its memory budget or the
+ *        armed deadline elapses. luaL_error() longjmps out of the running chunk, which is why this
+ *        only ever runs on the thread that owns the state -- the error has to unwind that thread's
+ *        own protected call.
  */
 static void luaDeadlineHookFn(lua_State* L, lua_Debug* ar)
 {
   Q_UNUSED(ar)
 
+  DataModel::LuaMemoryBudget::check(L);
   lua_getfield(L, LUA_REGISTRYINDEX, kDeadlineRegistryKey);
   auto* context = static_cast<LuaDeadlineContext*>(lua_touserdata(L, -1));
   lua_pop(L, 1);

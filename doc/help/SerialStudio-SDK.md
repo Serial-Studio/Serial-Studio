@@ -185,6 +185,35 @@ These build a wire-format byte string and **return it directly** (no envelope). 
 | `canSendFrame(id, payload)` | CAN frame from a byte array or string payload. |
 | `canSendValue(id, value, bytes?)` | CAN frame carrying a big-endian numeric value (default 2 bytes). |
 
+### Checksums (pure helpers)
+
+The frame reader's checksum library is exposed to every engine, so a script never carries its own CRC table. `data` is a binary string (one character per byte, the same convention the encoders above return) or an array of byte values; in Lua a plain string is already bytes, and a table of numbers works too.
+
+| Function | Produces |
+|---|---|
+| `checksum(algorithm, data)` | The digest bytes as a binary string in wire order: `CRC-16-MODBUS` little-endian, every other multi-byte algorithm big-endian. Append it to a payload as-is. |
+| `checksumHex(algorithm, data)` | The same digest as lowercase hex, for comparing against a text frame's trailer. |
+| `checksumAlgorithms()` | The algorithm names: `XOR-8`, `MOD-256`, `CRC-8`, `CRC-16`, `CRC-16-MODBUS`, `CRC-16-CCITT`, `Fletcher-16`, `CRC-32`, `Adler-32`. |
+
+An unknown algorithm or a `data` argument that is neither a string nor an array raises an error in the script (a `TypeError` in JavaScript, a Lua error in Lua). Data longer than 1 MiB is rejected the same way.
+
+```js
+// Output widget: Modbus RTU write with its CRC appended
+function transmit(value) {
+  var pdu = String.fromCharCode(0x01, 0x06) + modbusWriteRegister(0x10, value);
+  return pdu + checksum('CRC-16-MODBUS', pdu);
+}
+```
+
+```lua
+-- Frame parser: drop a frame whose "*XX" trailer does not match
+function parse(frame)
+  local body, trailer = frame:match("^(.+)%*(%x%x)$")
+  if not body or checksumHex("XOR-8", body) ~= trailer:lower() then return {} end
+  return body:split(",")
+end
+```
+
 ## Where each surface lives
 
 Not every helper exists in every engine; the SDK guards each block on whether the host installed the matching bridge. This table is the quick lookup. An absent function is undefined rather than throwing, so a `typeof` guard (JS) or `if name then` (Lua) keeps a shared snippet portable.
@@ -199,6 +228,7 @@ Not every helper exists in every engine; the SDK guards each block on whether th
 | Dashboard control, `actionFire` | yes | yes | yes | yes |
 | `notify*`, `mqttPublish` (Pro) | yes | yes | yes | yes |
 | Protocol encoders (`modbus*`, `can*`) | yes | yes | yes | yes |
+| Checksums (`checksum`, `checksumHex`, `checksumAlgorithms`) | yes | yes | yes | yes |
 
 Every script kind installs the same host bridges, so `transmit()` has the identical `io.*`/table/dashboard/apiCall surface as a frame parser or the Control Loop. What sets it apart: `transmit()` runs from a user action on the widget (a knob turn, a button press), not from an arriving frame, so there is nothing new to read with `newFrame()`; and it has no `delay()` / `deviceWriteAndWait()`, the worker-thread blocking calls that exist only for the Control Loop. Language note: `transmit()` is **always JavaScript**; the Lua/JavaScript choice applies only to the frame parser.
 
@@ -331,6 +361,7 @@ The SDK is identical in spirit in Lua; only the spellings change:
 - The encoding enum is `SerialStudio.Hex` / `.Text` / `.Base64`, same as JS.
 - Wrappers are global functions with dotted names (`io.writeData`, `io.ble.writeCharacteristic`); optional arguments go in a trailing table.
 - Bridge availability differs per engine; a portable snippet guards with `if tableGet then ... end`. `delay` and `deviceWriteAndWait` are Control-Loop-only. The See/Decide/Act helpers (`newFrame`, `refreshDashboard`, `dashboardTick`, `ensureDashboard`) are JavaScript-only across the board — they run in any JavaScript engine (frame parser, transform, Control Loop, Output widget), but have no Lua equivalent.
+- The checksum helpers are native globals in every Lua engine: `checksum(algorithm, data)` returns the digest as a byte string (`s:byte(1, -1)` unpacks it), `checksumHex` the hex form, and `data` may be a string or a table of byte values.
 
 ```lua
 function transform(value)

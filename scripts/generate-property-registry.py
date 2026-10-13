@@ -1484,6 +1484,7 @@ def validator_function(validate: str) -> str:
         "indexNonNegative": "isValidDatasetIndex",
         "fftWindowRange": "isValidFftWindow",
         "transformLanguageDomain": "isValidTransformLanguage",
+        "deadbandNonNegative": "isValidAlarmDeadband",
     }[validate]
 
 

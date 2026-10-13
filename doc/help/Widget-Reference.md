@@ -235,6 +235,8 @@ Bands take effect only on a dataset that one of these widgets shows: a dataset w
 
 To keep a dataset's bands on screen without alerting, turn on **Suppress Alarms** in the dataset's Widget Settings (`suppressAlarms: true` in the project file). The widgets draw the bands exactly as before, but the dataset posts no band notification and raises no alarm point. A tachometer redline that should be seen but not heard is the usual case.
 
+A value that hovers on a band edge would otherwise enter and leave the band on every frame, raising a point each time. **Alarm Deadband** (`alarmDeadband`, in the dataset's units, default 0) adds hysteresis: once a band is active it stays the reported band until the value has left it by more than the deadband. The hold only ever delays a step down: a move into a more severe band takes effect immediately, so a deadband never postpones a Critical. A temperature with a Warning band at 80 and a deadband of 1 alarms at 80.0 and clears at 78.9, not at 79.9.
+
 **Band schema.** Under the dataset's `alarmBands` array, each entry is an object:
 
 | Field      | Type   | Required | Notes |
@@ -325,6 +327,7 @@ Every dataset in a project file supports these visualization-related fields:
 | `ledHigh`          | double | 80      | LED activation threshold (used only when `alarmBands` is empty). |
 | `alarmBands`       | array  | `[]`    | Colored value bands for bar/gauge/meter widgets, LED panels, and bar panels; ignored on any other dataset. Each entry: `{min, max, severity, color?, label?, blink?}`; see [Alarm bands](#alarm-bands). Legacy `alarmEnabled` / `alarmLow` / `alarmHigh` keys from older releases are still read and migrated to bands on load, but no longer written. |
 | `suppressAlarms`   | bool   | false   | Keeps the dataset's alarm bands drawn but stops its band notifications, alarm points, and sounds. Written only when true. Editor label "Suppress Alarms". |
+| `alarmDeadband`    | double | 0       | Hysteresis in the dataset's units: the active alarm band holds until the value leaves it by more than this; escalation is never delayed. Must be >= 0; written only when positive. Editor label "Alarm Deadband". |
 | `fftSamples`       | int    | 256     | FFT window size (power of 2, 8 to 262144). |
 | `fftWindow`        | int    | 5       | FFT window function, applied to both the FFT plot and the waterfall: 0 = Rectangular, 1 = Bartlett, 2 = Hann, 3 = Hamming, 4 = Blackman, 5 = Blackman-Harris, 6 = Nuttall, 7 = Blackman-Nuttall, 8 = Flat Top, 9 = Welch, 10 = Bartlett-Hann, 11 = Bohman, 12 = Cosine, 13 = Lanczos, 14 = Parzen. |
 | `fftSamplingRate`  | int    | 100     | FFT sampling rate in Hz. |

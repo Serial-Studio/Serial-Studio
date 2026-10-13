@@ -26,6 +26,7 @@
 #include "API/SchemaBuilder.h"
 #include "DataModel/PipelineModules.h"
 #include "DataModel/ProjectModel.h"
+#include "DataModel/Scripting/ChecksumApi.h"
 #include "DataModel/Scripting/LuaCompat.h"
 #include "DataModel/Scripting/ScriptDryRun.h"
 
@@ -201,6 +202,7 @@ API::CommandResponse API::Handlers::TransformLibraryHandler::dryRun(const QStrin
       id, ErrorCode::ExecutionError, QStringLiteral("Failed to create the dry-run engine"));
 
   DataModel::installLuaCompat(session.luaState());
+  DataModel::ChecksumApi::installLua(session.luaState());
   const bool valid = code.trimmed().isEmpty() || session.runLuaChunk(code, "library") == LUA_OK;
 
   QJsonObject result;

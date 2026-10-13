@@ -1114,8 +1114,9 @@ void DataModel::ProjectModel::requestLuaFastMode(const bool enabled)
   const int choice = Core::Prompt::showMessageBox(
     tr("Enable Fast Lua Execution?"),
     tr("Fast mode runs Lua parsers and transforms through the JIT compiler (up to ~40x "
-       "faster), but the runaway-script watchdog cannot operate: a script stuck in an "
-       "infinite loop will stall its data source until you disconnect.\n\n"
+       "faster), but the runaway-script watchdog and the Safe-mode memory budget cannot "
+       "operate: a script stuck in an infinite loop will stall its data source until you "
+       "disconnect, and one that keeps allocating will grow without limit.\n\n"
        "Enable it only for scripts you trust and have tested in Safe mode first."),
     Core::Prompt::Warning,
     tr("Fast Lua Execution"),
