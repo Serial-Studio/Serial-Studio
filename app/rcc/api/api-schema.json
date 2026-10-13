@@ -3555,7 +3555,7 @@
         ]
     },
     {
-        "description": "Set the freeze-mode title presentation for one widget (widgetType + uniqueId): bar shows the panel header, painted shows the title on the instrument face (Bar/Gauge/Meter only, their default), hidden shows no title while the dashboard is frozen. Every other widget type defaults to bar; writing a widget's default clears its stored entry.",
+        "description": "Set the freeze-mode title presentation for one widget (widgetType + uniqueId): bar shows the panel header, painted shows the title on the instrument face (Bar/Gauge/Meter only, their default), both shows the header and the face title (Bar/Gauge/Meter only), hidden shows no title while the dashboard is frozen. Every other widget type defaults to bar; writing a widget's default clears its stored entry.",
         "name": "project.dashboard.setWidgetFreezeTitle",
         "properties": {
             "mode": {
@@ -3852,7 +3852,7 @@
         ]
     },
     {
-        "description": "Add a dataset to a group. A dataset is one channel of incoming data: it gets one column in CSV/MDF4 export, one entry in the frame parser's output array (its `index` field), and zero or more dashboard widgets driven by the `options` bitflags.\nPass `options` as the bitwise OR of the visualizations you want:\n  1 = Plot (time-series line)\n  2 = FFT (frequency-domain plot)\n  4 = Bar\n  8 = Gauge (radial dial; needs widgetMin/widgetMax)\n  16 = Compass (heading 0-360)\n  32 = LED (binary indicator with ledHigh threshold)\n  64 = Waterfall (Pro; spectrogram, FFT-driven)\n  0 = no widget (raw column for export only)\nCombine: 1|8 = 9 = plot AND gauge. After creation, set title, units, ranges, and transformCode via project.dataset.update.",
+        "description": "Add a dataset to a group. A dataset is one channel of incoming data: it gets one column in CSV/MDF4 export, one entry in the frame parser's output array (its `index` field), and zero or more dashboard widgets driven by the `options` bitflags.\nPass `options` as the bitwise OR of the visualizations you want:\n  1 = Plot (time-series line)\n  2 = FFT (frequency-domain plot)\n  4 = Bar\n  8 = Gauge (radial dial; needs widgetMin/widgetMax)\n  16 = Compass (heading 0-360)\n  32 = LED (binary indicator with ledHigh threshold)\n  64 = Waterfall (Pro; spectrogram, FFT-driven)\n  0 = no widget (raw column for export only)\nCombine: 1|8 = 9 = plot AND gauge. After creation, set title, units, ranges, and transformCode via project.dataset.update.\nOnly plain, Multi-Plot, Data Grid and Bar Panel groups accept datasets; a widget that fixes its layout (Plot3D, Gyroscope, GPS, ...) refuses.",
         "name": "project.dataset.add",
         "properties": {
             "groupId": {
@@ -4327,6 +4327,10 @@
         "description": "Patch dataset fields by id: params are groupId, datasetId, plus any of the writable fields declared in this command's schema -- read the typed 'properties' block for each field's type, description and enum domain instead of guessing from prose.\nFields whose project-file spelling differs from the API name (plotMin, plotMax, widgetMin, widgetMax, xAxis, datasetSourceId) are accepted as aliases, so an object read back from the API can be written straight through without loss.\nNested collections: alarmBands takes an array of {min,max,severity,color,label,blink} objects (severity=0..3 for Info/Ok/Warning/Critical), and legacy alarmLow/alarmHigh/alarmEnabled still drive the 2-band simple mode; fftMarkers takes an array of {freq,endFreq,label,color,warningDb,alarmDb} objects (see project.dataset.setFFTMarkers for field semantics).\nThe boolean fields graph/fft/led/waterfall toggle the same flags as project.dataset.setOption -- use them here when patching multiple fields at once. Multiplot groups follow the group's FIRST dataset for plotLogX/plotLogY, so set those flags on every member to keep the group coherent.\nUnknown fields are accepted but ignored, and surfaced in result.warnings[].fields with code 'unknown_field' so the caller can self-correct on the next turn instead of silently mis-applying a typo.\nREMINDERS for compute-only datasets:\n  - Set virtual=true when the dataset's value comes from transformCode rather than from a slot in the parser output. Without virtual=true the dataset still tries to read channels[index-1] and ends up empty.\n  - `index` is the 1-based parser-output slot (0 = unassigned). Patchable via this call; bulk-renumbering 40 datasets is best done through project.batch to avoid round-trip overhead.\n  - Set transformLanguage explicitly (0=JavaScript, 1=Lua, -1=inherit from source). Mismatched language vs code = silent compile failure. Lua is the recommended default; it's faster on the hotpath.",
         "name": "project.dataset.update",
         "properties": {
+            "alarmDeadband": {
+                "description": "Hysteresis in the dataset's units: the active band holds until the value leaves it by this much, so a reading hovering on a threshold does not re-alarm on every frame (0 = none)",
+                "type": "number"
+            },
             "alias": {
                 "description": "Stable name for getDataset-style script/API lookups; must be unique (optional)",
                 "type": "string"

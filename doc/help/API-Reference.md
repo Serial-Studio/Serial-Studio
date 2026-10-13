@@ -939,6 +939,7 @@ Get the latest raw frame received from the device, including channel tokens not 
   "sequence": 42,
   "timestampMs": 123456,
   "ageMs": 8,
+  "mirrorAgeMs": 3,
   "sourceId": 0,
   "text": "25.3,60\n",
   "valueCount": 2,
@@ -948,6 +949,7 @@ Get the latest raw frame received from the device, including channel tokens not 
 
 **Notes:**
 - `timestampMs` is a monotonic clock in milliseconds, not Unix epoch time; use it only for deltas between frames
+- `mirrorAgeMs` is how long ago the copy served here was refreshed; `ageMs - mirrorAgeMs` is the bus silence the host saw, so a slow GUI cannot read as a silent link
 - Capture runs only while a control loop is running or the API server is enabled; `hasData: false` means no data or no active consumer
 
 ### UART Driver Commands (12)
@@ -1979,13 +1981,15 @@ the same dataset keep independent modes. Persisted under `widgetDisplay.freezeTi
 **Parameters:**
 - `widgetType` (int): `SerialStudio::DashboardWidget` enum value of the widget
 - `uniqueId` (int): Stable uniqueId of the dataset or group the widget displays
-- `mode` (string): `bar`, `painted`, or `hidden`
+- `mode` (string): `bar`, `painted`, `both`, or `hidden`
 
 **Modes:**
 - `bar`: panel-style freeze header shown (painted instrument titles are suppressed so the
   name appears exactly once); the default for every widget except Bar, Gauge, and Meter
 - `painted`: title drawn on the instrument face, no freeze header; only valid for Bar,
   Gauge, and Meter, and their default
+- `both`: panel-style freeze header and the painted face title together; only valid for
+  Bar, Gauge, and Meter
 - `hidden`: no title anywhere while frozen (label-free instrument faces)
 
 Responses always carry the resolved mode, and writing a widget's own default removes its

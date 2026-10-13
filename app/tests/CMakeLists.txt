@@ -2098,6 +2098,19 @@ ss_add_unit_test(tst_table_snapshot_channel
 )
 
 #
+# Data-table store rebuild semantics: an identical layout keeps the generation, the cached
+# handles and the live values (the 2026-10-13 silent-board hole); a changed layout or a clear
+# retires every old handle. Same link set and PipelineHost stubs as the snapshot channel.
+#
+ss_add_unit_test(tst_data_table_layout
+  SOURCES tst_data_table_layout.cpp
+          ${SS_CORE_SRC}/Pipeline/DataModel/DataTable.cpp
+          ${SS_CORE_SRC}/Pipeline/DataModel/TextCodec.cpp
+  LIBS    Qt6::Core Qt6::Core5Compat Qt6::Gui Qt6::Qml
+          SerialStudio::Core
+)
+
+#
 # Chat digest builders (spec 0070): handoff digest window, title selection, stale-card
 # downgrade -- pure over QVariantList, with the Redactor scrub in the link set.
 #

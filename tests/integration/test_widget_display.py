@@ -178,6 +178,12 @@ class TestWidgetTitleOverrides:
                 {"widgetType": FFT_TYPE, "uniqueId": RPM_UID, "mode": "painted"},
             )
 
+        with pytest.raises(APIError):
+            api_client.command(
+                "project.dashboard.setWidgetFreezeTitle",
+                {"widgetType": FFT_TYPE, "uniqueId": RPM_UID, "mode": "both"},
+            )
+
     def test_freeze_mode_set_and_default_clears(self, api_client, clean_state):
         """AC7: non-default modes persist per (widgetType, uniqueId); writing the
         per-type default (painted for gauges) removes the stored entry."""
@@ -201,6 +207,21 @@ class TestWidgetTitleOverrides:
         exported = api_client.command("project.exportJson", {})["config"]
         freeze = exported.get("widgetDisplay", {}).get("freezeTitle", {})
         assert f"{GAUGE_TYPE}:{RPM_UID}" not in freeze
+
+    def test_freeze_mode_both_persists_on_gauge(self, api_client, clean_state):
+        """AC7: both (header plus face title) is a non-default mode for gauges."""
+        _load_fixture(api_client)
+
+        result = api_client.command(
+            "project.dashboard.setWidgetFreezeTitle",
+            {"widgetType": GAUGE_TYPE, "uniqueId": RPM_UID, "mode": "both"},
+        )
+        assert result["mode"] == "both"
+        assert result["previous"] == "painted"
+
+        exported = api_client.command("project.exportJson", {})["config"]
+        freeze = exported.get("widgetDisplay", {}).get("freezeTitle", {})
+        assert freeze.get(f"{GAUGE_TYPE}:{RPM_UID}") == "both"
 
     def test_round_trip_through_save_and_reload(
         self, api_client, clean_state, tmp_path

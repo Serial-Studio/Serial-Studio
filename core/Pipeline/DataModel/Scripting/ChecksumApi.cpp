@@ -194,6 +194,17 @@ void DataModel::ChecksumApi::installLua(lua_State* L)
 //--------------------------------------------------------------------------------------------------
 
 /**
+ * @brief True for a typed-array instance (Uint8Array and friends): QJSValue::isArray() never
+ *        reports one, but its prototype chain carries BYTES_PER_ELEMENT next to a length.
+ */
+[[nodiscard]] static bool jsTypedArray(const QJSValue& value)
+{
+  return value.isObject() && !value.isArray()
+      && value.hasProperty(QStringLiteral("BYTES_PER_ELEMENT"))
+      && value.hasProperty(QStringLiteral("length"));
+}
+
+/**
  * @brief Reads the data argument as raw bytes: a string by its Latin-1 code points (the SDK's
  *        binary-string convention), an array or typed array one byte per element, an ArrayBuffer
  *        as-is.
@@ -209,7 +220,7 @@ void DataModel::ChecksumApi::installLua(lua_State* L)
     return true;
   }
 
-  if (value.isArray()) {
+  if (value.isArray() || jsTypedArray(value)) {
     const auto length = static_cast<qsizetype>(value.property(QStringLiteral("length")).toUInt());
     if (length > kMaxChecksumBytes)
       return false;

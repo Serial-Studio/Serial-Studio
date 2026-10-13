@@ -582,6 +582,11 @@ setter refuses an enable) and in `Taskbar.qml` (entry-click restore, right-click
 remove-from-workspace, auto-layout button). Freeze is orthogonal to `taskbarHidden` and
 deliberately mode-agnostic (persists across operation-mode switches within a session).
 
+Freeze title mode is per widget (`widgetDisplay.freezeTitle`, key `<widgetType>:<uniqueId>`):
+`bar` (panel header only), `painted` (face title only; Bar/Gauge/Meter, their default), `both`
+(header and face title; Bar/Gauge/Meter only) and `hidden` (no title; exclusive). `both` is
+rejected wherever `painted` is. Old files hold only bar/painted/hidden and keep their meaning.
+
 ## Manual Layout Mode — Smart Guides & the 48x48 Floor (spec 0010)
 
 Manual-mode (auto-layout off) drag/resize snapping lives in `UI::Snap`

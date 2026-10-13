@@ -1674,6 +1674,7 @@ message ProjectDatasetUpdateRequest {
   int64 xAxisId = 40;
   bool extremeHold = 41;
   bool suppressAlarms = 42;
+  double alarmDeadband = 43;
 }
 
 message ProjectDryRunEndToEndRequest {
@@ -3269,7 +3270,7 @@ service SerialStudioTypedAPI {
   // Set the visible plot time window (alias of dashboard.setTimeRange; the value is per-project and survives project reload).
   rpc ProjectDashboardSetTimeRange(ProjectDashboardSetTimeRangeRequest) returns (CommandResponse);
 
-  // Set the freeze-mode title presentation for one widget (widgetType + uniqueId): bar shows the panel header, painted shows the title on the instrument face (Bar/Gauge/Meter only, their default), hidden shows no title while the dashboard is frozen. Every other widget type defaults to bar; writing a widget's default clears its stored entry.
+  // Set the freeze-mode title presentation for one widget (widgetType + uniqueId): bar shows the panel header, painted shows the title on the instrument face (Bar/Gauge/Meter only, their default), both shows the header and the face title (Bar/Gauge/Meter only), hidden shows no title while the dashboard is frozen. Every other widget type defaults to bar; writing a widget's default clears its stored entry.
   rpc ProjectDashboardSetWidgetFreezeTitle(ProjectDashboardSetWidgetFreezeTitleRequest) returns (CommandResponse);
 
   // Set a display-title override for the dataset/group with the given uniqueId. Without widgetType the override is entity-level (every widget of that dataset/group); with widgetType it targets only that widget kind (e.g. only the FFT of a dataset) and wins over the entity-level entry. Display-only: widget captions, freeze headers, painted instrument titles and taskbar entries show it, while exports, dashboard.getData and project.* responses keep the canonical title. Empty/absent title clears the override.
@@ -3325,6 +3326,7 @@ service SerialStudioTypedAPI {
   //   64 = Waterfall (Pro; spectrogram, FFT-driven)
   //   0 = no widget (raw column for export only)
   // Combine: 1|8 = 9 = plot AND gauge. After creation, set title, units, ranges, and transformCode via project.dataset.update.
+  // Only plain, Multi-Plot, Data Grid and Bar Panel groups accept datasets; a widget that fixes its layout (Plot3D, Gyroscope, GPS, ...) refuses.
   rpc ProjectDatasetAdd(ProjectDatasetAddRequest) returns (CommandResponse);
 
   // Bulk-create N datasets in one call -- the right tool whenever you would otherwise loop project.dataset.add. Avoids per-call overhead and the autosave-debounce churn that comes with rapid mutation bursts. After creation, individual datasets can still be patched with project.dataset.update or another project.batch round-trip.

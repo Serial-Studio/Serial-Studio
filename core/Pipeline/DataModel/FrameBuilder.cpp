@@ -890,7 +890,7 @@ void DataModel::FrameBuilder::applyProjectSnapshot(ProjectSnapshot snapshot)
 
   finalize_frame(m_frame);
   invalidateFramePool();
-  initializeTableStore();
+  initializeTableStore(false);
   compileTransforms();
   parseBudgetReset();
   m_shortFrameWatch.rebuild(m_frame);
@@ -1454,9 +1454,7 @@ void DataModel::FrameBuilder::onConnectedChanged()
     return;
 
   SS_ASSERT_LOG(!m_frame.title.isEmpty());
-  initializeTableStore();
-  static auto& parser = DataModel::FrameParser::instance();
-  parser.readCode();
+  initializeTableStore(true);
   compileTransforms();
 
   auto* writer        = &DataModel::requireDeviceWriter();
@@ -2695,7 +2693,7 @@ void DataModel::FrameBuilder::rebuildTransformsForPlayback()
     return;
   }
 
-  initializeTableStore();
+  initializeTableStore(false);
   compileTransforms();
 }
 
@@ -2787,14 +2785,22 @@ void DataModel::FrameBuilder::rebuildTransformEngines()
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Initializes the DataTableStore from the project model and current frame. Must run
- *        BEFORE scripts (re)load: evaluation resolves table handles (top level or the load-time
- *        parse() probe), and a later rebuild would bump the generation and stale them all.
+ * @brief Initializes the DataTableStore from the project model and current frame, then reloads
+ *        the frame parsers when asked (the connect edge) or when the rebuild moved the handle
+ *        generation under a live session: a parser keeps the handles it resolved, and a re-sync
+ *        that stales them silently kills every board it was writing (BADAQ, 2026-10-13). An
+ *        unchanged layout keeps the generation, so a routine re-sync touches no engine.
  */
-void DataModel::FrameBuilder::initializeTableStore()
+void DataModel::FrameBuilder::initializeTableStore(bool reloadParsers)
 {
+  const int generation = m_tableStore.generation();
   m_tableApi.initializeStore(m_frame);
   m_captureFlagsDirty = true;
+  if (!reloadParsers && !(m_lastConnectedState && m_tableStore.generation() != generation))
+    return;
+
+  static auto& parser = DataModel::FrameParser::instance();
+  parser.readCode();
 }
 
 /**

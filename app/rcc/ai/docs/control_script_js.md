@@ -39,7 +39,7 @@ nothing executes (no `apiCall`, no `tableSet` side effects).
 |---|---|
 | `apiCall(method, params)` | Call ANY API command by name; marshalled (blocking) to the GUI thread. Returns the command's response object (`{ok, result?, error?}`). |
 | `delay(ms)` | Sleep without tripping the watchdog. |
-| `newFrame(sourceId?)` | Latest received frame, returned exactly once per arrival; `null` when nothing new. Fields: `sourceId`, `sequence`, `timestampMs` (monotonic clock; never compare with `Date.now()`), `ageMs` (milliseconds since arrival; use this for staleness/watchdogs), `values` (the parser tokens, with `valueCount` and optional `base64`), `text`. |
+| `newFrame(sourceId?)` | Latest received frame, returned exactly once per arrival; `null` when nothing new. Fields: `sourceId`, `sequence`, `timestampMs` (monotonic clock; never compare with `Date.now()`), `ageMs` (milliseconds since arrival; use this for staleness/watchdogs), `mirrorAgeMs` (how long ago the host refreshed the copy you read; subtract it from `ageMs` so GUI lag never reads as bus silence), `values` (the parser tokens, with `valueCount` and optional `base64`), `text`. |
 | `refreshDashboard()` | Re-runs every dataset transform from the last received values and republishes to the dashboard (no export side effects). Call after `tableSet()` writes so they render while the device is silent. |
 | `ensureDashboard(spec)` | Declaratively create missing groups/datasets (matched by title / parser index). Existing items are never modified; memoized, so calling it every `loop()` is free. |
 | `dashboardTick()` | Wraps `dashboard.tick`: synthesizes a frame from current dataset values and fans it out to every consumer (dashboard AND CSV/MDF4/Historian/MQTT/API exports), unlike `refreshDashboard()`, which has no export side effects. |
@@ -66,7 +66,8 @@ mirrored as `raw:<alias>` / `final:<alias>`.
 
 Use `ageMs` instead of bookkeeping arrival times with `Date.now()`: it is computed by the
 host from the same monotonic clock that stamps frames, needs no per-script state, and is
-immune to reconnect races:
+immune to reconnect races. Judge silence with `ageMs - mirrorAgeMs`: the copy a script reads
+refreshes on the display tick, so a GUI busy with plots adds lag that is not bus silence:
 
 ```js
 const TIMEOUT_MS  = 1000;

@@ -46,6 +46,7 @@ struct LatestFrameInfo {
   quint64 sequence;
   qint64 timestampMs;
   quint64 channelsSequence;
+  qint64 servedMs;
   QStringList channels;
   IO::CapturedDataPtr chunk;
 };
@@ -100,6 +101,7 @@ private:
   const DataModel::ParseBudget& m_budget;
 
   quint64 m_publishedSequence;
+  std::atomic<qint64> m_servedMs;
 
   // code-verify off
   // One is armed once by the first GUI-thread reader, the other toggles once per display tick.

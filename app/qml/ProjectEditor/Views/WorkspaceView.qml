@@ -357,7 +357,7 @@ Widgets.Pane {
                 readonly property bool paintsTitle:
                   SerialStudioHelpers.dashboardWidgetPaintsTitle(modelData.widgetType)
                 readonly property var modeKeys:
-                  paintsTitle ? ["bar", "painted", "hidden"] : ["bar", "hidden"]
+                  paintsTitle ? ["bar", "painted", "both", "hidden"] : ["bar", "hidden"]
 
                 flat: true
                 anchors.fill: parent
@@ -365,7 +365,8 @@ Widgets.Pane {
                 font: Cpp_Misc_CommonFonts.uiFont
                 enabled: modelData.uniqueId >= 0
                 model: paintsTitle
-                       ? [qsTr("Title Bar"), qsTr("Painted Title"), qsTr("Hidden")]
+                       ? [qsTr("Title Bar"), qsTr("Painted Title"),
+                          qsTr("Title Bar + Painted"), qsTr("Hidden")]
                        : [qsTr("Title Bar"), qsTr("Hidden")]
                 currentIndex: Math.max(0, modeKeys.indexOf(modelData.freezeTitleMode))
                 onActivated: (index) => {

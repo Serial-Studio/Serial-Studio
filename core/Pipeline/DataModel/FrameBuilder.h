@@ -487,7 +487,7 @@ private:
 
   void compileTransforms();
   void destroyTransformEngines();
-  void initializeTableStore();
+  void initializeTableStore(bool reloadParsers);
   void rebuildTransformsForPlayback();
   // code-verify on
 };

@@ -486,7 +486,9 @@ API::CommandResponse API::Handlers::IOManagerHandler::getLatestFrame(const QStri
   result[QStringLiteral("sequence")]    = static_cast<qint64>(latest->sequence);
   result[QStringLiteral("timestampMs")] = latest->timestampMs;
   result[QStringLiteral("ageMs")]       = qMax<qint64>(0, now_ms - latest->timestampMs);
-  result[Keys::SourceId]                = latest->sourceId;
+  result[QStringLiteral("mirrorAgeMs")] =
+    (latest->servedMs > 0) ? qMax<qint64>(0, now_ms - latest->servedMs) : 0;
+  result[Keys::SourceId] = latest->sourceId;
 
   const QByteArray& payload = latest->chunk->data;
   if (wantText)

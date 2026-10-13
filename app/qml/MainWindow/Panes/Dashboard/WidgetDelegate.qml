@@ -63,8 +63,8 @@ Widgets.MiniWindow {
   readonly property bool mergeTop: (root.mergedEdges & 4) !== 0
 
   //
-  // Per-widget freeze-title mode ("bar"/"painted"/"hidden"): the project model resolves
-  // the per-type default; the QML fallback only covers Quick Plot mode (no project)
+  // Per-widget freeze-title mode ("bar"/"painted"/"both"/"hidden", only "hidden" exclusive):
+  // the project model resolves the per-type default; the QML fallback only covers Quick Plot
   //
   property int entityUniqueId: -1
   property int entityWidgetType: -1
@@ -74,8 +74,12 @@ Widgets.MiniWindow {
   readonly property string effectiveFreezeTitle: freezeTitleMode !== ""
                                                  ? freezeTitleMode
                                                  : (paintsOwnTitle ? "painted" : "bar")
+  readonly property bool freezeShowsBar: effectiveFreezeTitle === "bar"
+                                         || effectiveFreezeTitle === "both"
+  readonly property bool freezeShowsFace: effectiveFreezeTitle === "painted"
+                                          || effectiveFreezeTitle === "both"
   readonly property bool frozenHeaderVisible: root.frozen
-                                              && root.effectiveFreezeTitle === "bar"
+                                              && root.freezeShowsBar
                                               && root.title.length > 0
   readonly property real frozenHeaderHeight: frozenHeaderVisible
       ? Math.max(32, frozenHeaderMetrics.height + 14) : 0
@@ -83,6 +87,14 @@ Widgets.MiniWindow {
   function refreshFreezeTitleMode() {
     if (entityWidgetType >= 0 && entityUniqueId >= 0)
       freezeTitleMode = Cpp_JSON_ProjectModel.freezeTitleMode(entityWidgetType, entityUniqueId)
+  }
+
+  //
+  // Folds the two independent flags back into the persisted token
+  //
+  function setFreezeTitleFlags(bar, face) {
+    const mode = (bar && face) ? "both" : bar ? "bar" : face ? "painted" : "hidden"
+    Cpp_JSON_ProjectModel.setFreezeTitleMode(root.entityWidgetType, root.entityUniqueId, mode)
   }
 
   onEntityUniqueIdChanged: refreshFreezeTitleMode()
@@ -155,7 +167,8 @@ Widgets.MiniWindow {
       icon.height: 16
       text: qsTr("Rename Widget…")
       enabled: root.displayEditable
-      icon.source: "qrc:/icons/buttons/rename.svg"
+      icon.color: Cpp_ThemeManager.colors["text"]
+      icon.source: Cpp_Misc_IconRegistry.icon("editor", "rename", 16)
       onTriggered: Cpp_JSON_ProjectModel.promptRenameWidget(root.entityWidgetType,
                                                             root.entityUniqueId, root.title)
     }
@@ -166,15 +179,15 @@ Widgets.MiniWindow {
       icon.width: 16
       icon.height: 16
       title: qsTr("Freeze Title")
-      icon.source: "qrc:/icons/buttons/freeze.svg"
+      icon.color: Cpp_ThemeManager.colors["text"]
+      icon.source: Cpp_Misc_IconRegistry.icon("commands", "freeze", 16)
 
       MenuItem {
         checkable: true
         text: qsTr("Title Bar")
+        checked: root.freezeShowsBar
         enabled: root.displayEditable
-        checked: root.effectiveFreezeTitle === "bar"
-        onTriggered: Cpp_JSON_ProjectModel.setFreezeTitleMode(root.entityWidgetType,
-                                                              root.entityUniqueId, "bar")
+        onTriggered: root.setFreezeTitleFlags(!root.freezeShowsBar, root.freezeShowsFace)
       }
 
       MenuItem {
@@ -182,10 +195,9 @@ Widgets.MiniWindow {
         text: qsTr("Painted Title")
         visible: root.paintsOwnTitle
         enabled: root.displayEditable
+        checked: root.freezeShowsFace
         height: visible ? implicitHeight : 0
-        checked: root.effectiveFreezeTitle === "painted"
-        onTriggered: Cpp_JSON_ProjectModel.setFreezeTitleMode(root.entityWidgetType,
-                                                              root.entityUniqueId, "painted")
+        onTriggered: root.setFreezeTitleFlags(root.freezeShowsBar, !root.freezeShowsFace)
       }
 
       MenuItem {
@@ -193,8 +205,7 @@ Widgets.MiniWindow {
         text: qsTr("Hidden")
         enabled: root.displayEditable
         checked: root.effectiveFreezeTitle === "hidden"
-        onTriggered: Cpp_JSON_ProjectModel.setFreezeTitleMode(root.entityWidgetType,
-                                                              root.entityUniqueId, "hidden")
+        onTriggered: root.setFreezeTitleFlags(false, false)
       }
     }
 
@@ -207,6 +218,7 @@ Widgets.MiniWindow {
       height: visible ? implicitHeight : 0
       visible: root.extensionConfig.length > 0
       onTriggered: root.showExtensionSettings()
+      icon.color: Cpp_ThemeManager.colors["text"]
       icon.source: Cpp_Misc_IconRegistry.icon("commands", "settings", 16)
     }
 
@@ -218,8 +230,9 @@ Widgets.MiniWindow {
       icon.width: 16
       icon.height: 16
       text: qsTr("Open in External Window")
-      icon.source: "qrc:/icons/buttons/expand.svg"
       onTriggered: root.externalWindowClicked()
+      icon.color: Cpp_ThemeManager.colors["text"]
+      icon.source: Cpp_Misc_IconRegistry.icon("editor", "expand", 16)
     }
   }
 

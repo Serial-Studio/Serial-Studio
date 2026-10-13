@@ -165,6 +165,10 @@ private:
 
   void captureRead(int slot) const;
 
+  [[nodiscard]] static QByteArray layoutFingerprint(const std::vector<TableDef>& userTables,
+                                                    const std::vector<TableFolder>& tableFolders,
+                                                    const Frame& templateFrame);
+
   void noteMissingLookup(const QString& table, const QString& reg) const;
   void noteMissingDataset(int uniqueId, const char* kind) const;
   void noteMissingAlias(const QString& alias, const char* kind) const;
@@ -173,6 +177,7 @@ private:
   bool m_initialized;
   int m_generation;
   quint64 m_writeClock;
+  QByteArray m_layoutFingerprint;
 
   std::vector<RegisterValue> m_storage;
   QHash<QPair<QString, QString>, int> m_index;

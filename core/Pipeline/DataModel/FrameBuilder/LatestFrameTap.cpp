@@ -21,21 +21,31 @@
 
 #include "DataModel/FrameBuilder/LatestFrameTap.h"
 
+#include <chrono>
 #include <QCoreApplication>
 #include <QThread>
 #include <utility>
 
 #include "Core/SSAssert.h"
 
+/**
+ * @brief Steady-clock milliseconds, the same clock the capture stamps use.
+ */
+static qint64 steadyNowMs()
+{
+  using namespace std::chrono;
+  return duration_cast<milliseconds>(steady_clock::now().time_since_epoch()).count();
+}
+
 //--------------------------------------------------------------------------------------------------
 // Construction
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Default-constructs an empty latest-frame snapshot (no chunk, sequence 0).
+ * @brief Default-constructs an empty latest-frame snapshot (no chunk, sequence 0, never served).
  */
 DataModel::LatestFrameInfo::LatestFrameInfo()
-  : sourceId(-1), sequence(0), timestampMs(0), channelsSequence(0)
+  : sourceId(-1), sequence(0), timestampMs(0), channelsSequence(0), servedMs(0)
 {}
 
 /**
@@ -54,6 +64,7 @@ DataModel::LatestFrameTap::LatestFrameTap(const QObject& owner,
   , m_captureSequence(captureSequence)
   , m_budget(budget)
   , m_publishedSequence(0)
+  , m_servedMs(0)
   , m_guiUsers(false)
   , m_publishRequested(false)
   , m_mirrorRing(kMirrorSlots)
@@ -110,7 +121,12 @@ DataModel::LatestFrameInfo DataModel::LatestFrameTap::guiLatestFrame(int sourceI
     return LatestFrameInfo();
 
   const auto it = mirror->frames.constFind(key);
-  return (it != mirror->frames.constEnd()) ? it.value() : LatestFrameInfo();
+  if (it == mirror->frames.constEnd())
+    return LatestFrameInfo();
+
+  LatestFrameInfo info = it.value();
+  info.servedMs        = m_servedMs.load(std::memory_order_acquire);
+  return info;
 }
 
 /**
@@ -137,7 +153,9 @@ std::vector<DataModel::LatestFrameTap::ParseLoad> DataModel::LatestFrameTap::gui
 
 /**
  * @brief Builder-thread half of the latest-frame mirror: copies the capture map for the GUI when
- *        a new frame landed since the last publish. Runs at display-tick rate, never per frame.
+ *        a new frame landed since the last publish, and stamps every served request so a reader
+ *        can tell mirror lag (a slow GUI or a backlogged builder) from bus silence. Runs at
+ *        display-tick rate, never per frame.
  */
 void DataModel::LatestFrameTap::publish()
 {
@@ -145,6 +163,7 @@ void DataModel::LatestFrameTap::publish()
   SS_ASSERT_LOG(m_captureSequence >= m_publishedSequence);
 
   m_publishRequested.store(false, std::memory_order_release);
+  m_servedMs.store(steadyNowMs(), std::memory_order_release);
 
   if (m_captureSequence == m_publishedSequence)
     return;

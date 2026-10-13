@@ -97,12 +97,56 @@ DataModel::DataTableStore::DataTableStore()
 {}
 
 /**
- * @brief Pre-allocates registers for user tables and the system dataset table.
+ * @brief Serialises everything initialize() would lay out (table paths, register names, types
+ *        and defaults in order, then the dataset slots and aliases) so an identical rebuild can
+ *        be recognised and skipped: a skipped rebuild keeps the generation every cached handle
+ *        carries and the live values a running session has written.
+ */
+QByteArray DataModel::DataTableStore::layoutFingerprint(
+  const std::vector<TableDef>& userTables,
+  const std::vector<TableFolder>& tableFolders,
+  const Frame& templateFrame)
+{
+  QByteArray key;
+  const auto put = [&key](const QString& text) {
+    key.append(text.toUtf8());
+    key.append('\0');
+  };
+
+  for (const auto& table : userTables) {
+    put(tableFullPath(tableFolders, table.parentFolderId, table.name));
+    for (const auto& reg : table.registers) {
+      put(reg.name);
+      key.append(static_cast<char>(reg.type));
+      put(reg.defaultValue.toString());
+    }
+
+    key.append('\n');
+  }
+
+  for (const auto& group : templateFrame.groups) {
+    for (const auto& dataset : group.datasets) {
+      put(QString::number(dataset.uniqueId));
+      put(dataset.alias);
+    }
+  }
+
+  return key;
+}
+
+/**
+ * @brief Pre-allocates registers for user tables and the system dataset table. A rebuild whose
+ *        layout matches the current one is a no-op, so a project re-sync under a live session
+ *        neither stales the handles scripts cached nor resets the values they wrote.
  */
 void DataModel::DataTableStore::initialize(const std::vector<TableDef>& userTables,
                                            const std::vector<TableFolder>& tableFolders,
                                            const Frame& templateFrame)
 {
+  QByteArray fingerprint = layoutFingerprint(userTables, tableFolders, templateFrame);
+  if (m_initialized && fingerprint == m_layoutFingerprint)
+    return;
+
   clear();
   ++m_generation;
 
@@ -166,7 +210,8 @@ void DataModel::DataTableStore::initialize(const std::vector<TableDef>& userTabl
         registerDatasetAlias(dataset.alias, dataset.uniqueId);
   }
 
-  m_initialized = true;
+  m_initialized       = true;
+  m_layoutFingerprint = std::move(fingerprint);
 }
 
 /**
@@ -184,6 +229,7 @@ void DataModel::DataTableStore::clear()
   m_warnedMissing.clear();
   m_warnedMissingDatasets.clear();
   m_warnedMissingAliases.clear();
+  m_layoutFingerprint.clear();
   clearLookupCache();
   m_initialized = false;
 }

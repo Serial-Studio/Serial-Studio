@@ -40,10 +40,10 @@ InstrumentBase {
 
   //
   // Freeze-mode title gate: the delegate arbitrates the per-widget mode; painted titles
-  // hide while frozen unless the effective mode is "painted" (name shown at most once)
+  // hide while frozen unless the mode shows the face title ("painted" or "both")
   //
   readonly property bool titleFrozenOut: windowRoot && windowRoot.frozen === true
-                                         && windowRoot.effectiveFreezeTitle !== "painted"
+                                         && !windowRoot.freezeShowsFace
   readonly property string displayTitle: windowRoot && windowRoot.title ? windowRoot.title
                                                                         : model.title
 

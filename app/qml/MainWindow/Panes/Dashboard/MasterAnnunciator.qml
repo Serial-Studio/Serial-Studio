@@ -53,6 +53,14 @@ Item {
                                        : priority === 0 ? "#3daee9"
                                        : Cpp_ThemeManager.colors["taskbar_text"]
 
+  //
+  // The one animated colour the bell icon and the count text both follow, so a flash edge or
+  // a priority change can never reach one of them before the other
+  //
+  property color tone: root.lit ? root.priorityColor : Cpp_ThemeManager.colors["taskbar_text"]
+
+  Behavior on tone { ColorAnimation { duration: 120 } }
+
   Layout.preferredHeight: 24
   Layout.alignment: Qt.AlignVCenter
   Layout.preferredWidth: _bell.implicitWidth
@@ -78,8 +86,8 @@ Item {
   }
 
   //
-  // Bell button: the ICON carries the priority colour (and the flash), the background stays
-  // the taskbar's own tray-button chrome. Left click opens the panel, right click acknowledges.
+  // Bell button: icon and count text carry the priority colour (and the flash) through the shared
+  // tone, the background stays the tray-button chrome. Left click opens, right click acknowledges.
   //
   Widgets.IconButton {
     id: _bell
@@ -90,13 +98,11 @@ Item {
     highlighted: _panel.opened
     text: Cpp_UI_Alarms.unacknowledgedCount > 0 ? String(Cpp_UI_Alarms.unacknowledgedCount) : ""
     font: Cpp_Misc_CommonFonts.customUiFont(0.85, true)
-    color: root.lit ? root.priorityColor : Cpp_ThemeManager.colors["taskbar_text"]
-    icon.color: root.lit ? root.priorityColor : Cpp_ThemeManager.colors["taskbar_text"]
+    color: root.tone
+    icon.color: root.tone
     icon.source: Cpp_UI_Alarms.muted
                  ? "qrc:/icons/buttons/alarm-mute.svg"
                  : "qrc:/icons/buttons/alarm-annunciator.svg"
-
-    Behavior on icon.color { ColorAnimation { duration: 120 } }
 
     background: Rectangle {
       radius: 3

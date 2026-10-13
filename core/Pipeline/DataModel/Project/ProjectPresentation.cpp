@@ -410,8 +410,9 @@ QString DataModel::ProjectPresentation::widgetDisplayTitle(int widgetType, int u
 }
 
 /**
- * @brief Returns the freeze-title mode ("bar", "painted" or "hidden") for the given widget;
- *        unset widgets resolve to "painted" for title-painting instruments, "bar" otherwise.
+ * @brief Returns the freeze-title mode ("bar", "painted", "both" or "hidden") for the given
+ *        widget; unset widgets resolve to "painted" for title-painting instruments, "bar"
+ *        otherwise. Only "hidden" is exclusive: "both" shows the panel header and the face title.
  */
 QString DataModel::ProjectPresentation::freezeTitleMode(int widgetType, int uniqueId) const
 {
@@ -496,10 +497,10 @@ void DataModel::ProjectPresentation::setFreezeTitleMode(int widgetType,
   if (appState.operationMode() != SerialStudio::ProjectFile)
     return;
 
-  const auto widget = static_cast<SerialStudio::DashboardWidget>(widgetType);
-  const bool paints = SerialStudio::dashboardWidgetPaintsTitle(widget);
-  if (mode != QLatin1String("bar") && mode != QLatin1String("hidden")
-      && !(mode == QLatin1String("painted") && paints))
+  const auto widget   = static_cast<SerialStudio::DashboardWidget>(widgetType);
+  const bool paints   = SerialStudio::dashboardWidgetPaintsTitle(widget);
+  const bool showFace = (mode == QLatin1String("painted") || mode == QLatin1String("both"));
+  if (mode != QLatin1String("bar") && mode != QLatin1String("hidden") && !(showFace && paints))
     return;
 
   const auto fallback = paints ? QLatin1String("painted") : QLatin1String("bar");

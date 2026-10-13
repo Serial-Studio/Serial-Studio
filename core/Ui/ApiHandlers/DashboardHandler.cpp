@@ -244,9 +244,10 @@ void API::Handlers::DashboardHandler::registerWidgetDisplayCommands()
     QStringLiteral("project.dashboard.setWidgetFreezeTitle"),
     QStringLiteral("Set the freeze-mode title presentation for one widget (widgetType + "
                    "uniqueId): bar shows the panel header, painted shows the title on the "
-                   "instrument face (Bar/Gauge/Meter only, their default), hidden shows no "
-                   "title while the dashboard is frozen. Every other widget type defaults to "
-                   "bar; writing a widget's default clears its stored entry."),
+                   "instrument face (Bar/Gauge/Meter only, their default), both shows the "
+                   "header and the face title (Bar/Gauge/Meter only), hidden shows no title "
+                   "while the dashboard is frozen. Every other widget type defaults to bar; "
+                   "writing a widget's default clears its stored entry."),
     setModeSchema,
     &setWidgetFreezeTitle);
 }
@@ -652,20 +653,20 @@ API::CommandResponse API::Handlers::DashboardHandler::setWidgetFreezeTitle(
   const bool paints    = SerialStudio::dashboardWidgetPaintsTitle(
     static_cast<SerialStudio::DashboardWidget>(widgetType));
 
-  const auto mode = params.value(QStringLiteral("mode")).toString();
-  if (mode != QLatin1String("bar") && mode != QLatin1String("painted")
-      && mode != QLatin1String("hidden")) {
+  const auto mode     = params.value(QStringLiteral("mode")).toString();
+  const bool showFace = (mode == QLatin1String("painted") || mode == QLatin1String("both"));
+  if (mode != QLatin1String("bar") && mode != QLatin1String("hidden") && !showFace) {
     return CommandResponse::makeError(
       id,
       ErrorCode::InvalidParam,
-      QStringLiteral("Invalid mode \"%1\": must be bar, painted or hidden.").arg(mode));
+      QStringLiteral("Invalid mode \"%1\": must be bar, painted, both or hidden.").arg(mode));
   }
 
-  if (mode == QLatin1String("painted") && !paints) {
+  if (showFace && !paints) {
     return CommandResponse::makeError(
       id,
       ErrorCode::InvalidParam,
-      QStringLiteral("Mode \"painted\" is only valid for Bar, Gauge and Meter widgets."));
+      QStringLiteral("Mode \"%1\" is only valid for Bar, Gauge and Meter widgets.").arg(mode));
   }
 
   const int uniqueId = params.value(Keys::UniqueId).toInt(-1);

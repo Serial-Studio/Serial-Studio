@@ -40,7 +40,7 @@ Item {
   // Freeze-mode title gate (same contract as the other painted-title widgets)
   //
   readonly property bool titleFrozenOut: windowRoot && windowRoot.frozen === true
-                                         && windowRoot.effectiveFreezeTitle !== "painted"
+                                         && !windowRoot.freezeShowsFace
   readonly property string displayTitle: windowRoot && windowRoot.title ? windowRoot.title
                                                                         : ""
 
