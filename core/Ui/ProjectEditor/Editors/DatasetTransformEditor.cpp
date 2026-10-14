@@ -49,12 +49,10 @@ extern "C" {
 #include "DataModel/Editors/EditorFormatting.h"
 #include "DataModel/FrameBuilder.h"
 #include "DataModel/FrameBuilder/TransformCompiler.h"
-#include "DataModel/NotificationCenter.h"
 #include "DataModel/PipelineModules.h"
-#include "DataModel/Scripting/ChecksumApi.h"
 #include "DataModel/Scripting/ExpressionTransform.h"
+#include "DataModel/Scripting/InertScriptSurface.h"
 #include "DataModel/Scripting/LuaCompat.h"
-#include "DataModel/Scripting/ScriptApiCall.h"
 #include "DataModel/Scripting/ScriptDryRun.h"
 #include "DataModel/Scripting/ScriptTemplates.h"
 #include "Misc/CommonFonts.h"
@@ -112,7 +110,6 @@ DataModel::DatasetTransformEditor::DatasetTransformEditor(QWidget* parent)
   , m_commonFonts(Misc::CommonFonts::instance())
   , m_themeManager(Misc::ThemeManager::instance())
   , m_translator(Core::services().translator)
-  , m_frameBuilder(DataModel::pipelineModules().frameBuilder)
 {
   setWindowTitle(tr("Dataset Value Transform"));
   setMinimumSize(kMinDialogWidth, kMinDialogHeight);
@@ -997,6 +994,7 @@ DataModel::DatasetTransformEditor::TransformStatus DataModel::DatasetTransformEd
            : TransformStatus::SyntaxError;
   }
 
+  DataModel::InertScriptSurface surface;
   if (language == SerialStudio::Lua) {
     ScriptDryRun session(ScriptDryRun::Language::Lua, kScriptDryRunBudgetMs, "transform");
     if (!session.valid()) {
@@ -1006,9 +1004,10 @@ DataModel::DatasetTransformEditor::TransformStatus DataModel::DatasetTransformEd
 
     lua_State* L = session.luaState();
     DataModel::installLuaCompat(L);
-    DataModel::NotificationCenter::installScriptApi(L);
-    DataModel::ChecksumApi::installLua(L);
-    frameBuilder.installTableApiNamesLua(L);
+    if (!surface.installLua(L)) {
+      error = tr("Failed to prepare the Lua engine.");
+      return TransformStatus::SyntaxError;
+    }
 
     if (!libraryCode.trimmed().isEmpty() && session.runLuaChunk(libraryCode, "library") != LUA_OK)
       qWarning() << "[DatasetTransformEditor] Shared library failed:" << session.luaError();
@@ -1031,8 +1030,11 @@ DataModel::DatasetTransformEditor::TransformStatus DataModel::DatasetTransformEd
     return TransformStatus::SyntaxError;
   }
 
-  DataModel::ScriptApiCall::installAll(
-    session.jsEngine(), 0, DataModel::ScriptApiCall::TableApi::NamesOnly);
+  if (!surface.installJs(session.jsEngine())) {
+    error = tr("Failed to prepare the JavaScript engine.");
+    return TransformStatus::SyntaxError;
+  }
+
   if (!libraryCode.trimmed().isEmpty()) {
     const auto libraryResult = session.evaluate(libraryCode, QStringLiteral("library.js"));
     if (libraryResult.isError())
@@ -1099,8 +1101,7 @@ QString DataModel::DatasetTransformEditor::testTransform(const QString& code,
     return QString::number(runtime.run(inputValue, 0.0, table), 'g', kResultPrecision);
   }
 
-  m_frameBuilder.refreshTableStoreFromProjectModel();
-
+  DataModel::InertScriptSurface surface;
   if (language == SerialStudio::Lua) {
     ScriptDryRun session(ScriptDryRun::Language::Lua, kScriptDryRunBudgetMs, "transform");
     if (!session.valid())
@@ -1108,10 +1109,8 @@ QString DataModel::DatasetTransformEditor::testTransform(const QString& code,
 
     lua_State* L = session.luaState();
     DataModel::installLuaCompat(L);
-    DataModel::NotificationCenter::installScriptApi(L);
-    DataModel::ChecksumApi::installLua(L);
-    m_frameBuilder.injectTableApiLua(L);
-    DataModel::TableApiUserLease tableUser(m_frameBuilder);
+    if (!surface.installLua(L))
+      return tr("Engine error");
 
     if (!m_libraryCode.trimmed().isEmpty()
         && session.runLuaChunk(m_libraryCode, "library") != LUA_OK)
@@ -1141,8 +1140,9 @@ QString DataModel::DatasetTransformEditor::testTransform(const QString& code,
   if (!session.valid())
     return tr("Engine error");
 
-  DataModel::ScriptApiCall::installAll(session.jsEngine(), 0);
-  DataModel::TableApiUserLease tableUser(m_frameBuilder);
+  if (!surface.installJs(session.jsEngine()))
+    return tr("Engine error");
+
   (void)session.evaluate(
     QStringLiteral("var params = %1;").arg(DataModel::transformParamsJson(params())),
     QStringLiteral("params.js"));

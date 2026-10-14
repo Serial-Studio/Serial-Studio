@@ -197,7 +197,7 @@ Every device action still requires your explicit per-call approval in the chat, 
     </message>
     <message>
         <location filename="../../../core/Ui/AI/Conversation.cpp" line="188"/>
-        <location filename="../../../core/Ui/AI/Conversation.cpp" line="845"/>
+        <location filename="../../../core/Ui/AI/Conversation.cpp" line="850"/>
         <source>AI subsystem not initialized</source>
         <translation>AI 하위 시스템이 초기화되지 않음</translation>
     </message>
@@ -212,7 +212,12 @@ Every device action still requires your explicit per-call approval in the chat, 
         <translation>이번 턴의 도구 호출 한도에 도달했습니다. 더 이상 도구가 실행되지 않습니다.</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/AI/Conversation.cpp" line="860"/>
+        <location filename="../../../core/Ui/AI/Conversation.cpp" line="634"/>
+        <source>This call runs a command that is blocked for the assistant, or nests another batch.</source>
+        <translation>이 호출은 어시스턴트에 대해 차단된 명령을 실행하거나 다른 배치를 중첩합니다.</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/AI/Conversation.cpp" line="865"/>
         <source>Waiting for %1 to respond. Loading the model and processing the prompt can take a while on local hardware...</source>
         <translation>%1의 응답 대기 중. 로컬 하드웨어에서 모델 로드 및 프롬프트 처리에 시간이 걸릴 수 있습니다...</translation>
     </message>
@@ -233,17 +238,17 @@ Every device action still requires your explicit per-call approval in the chat, 
         <translation type="vanished">필드 왕복 실패: %1</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/AI/Conversation.cpp" line="1210"/>
+        <location filename="../../../core/Ui/AI/Conversation.cpp" line="1215"/>
         <source>You have reached the tool-call budget for this turn. Do not request more tools. Summarize what you found so far, and if the task is incomplete, say which steps remain so the user can tell you to continue.</source>
         <translation>이번 턴의 도구 호출 한도에 도달했습니다. 더 이상 도구를 요청하지 마십시오. 지금까지 찾은 내용을 요약하고, 작업이 완료되지 않았다면 남은 단계를 알려 사용자가 계속 진행하도록 할 수 있습니다.</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/AI/Conversation.cpp" line="1462"/>
+        <location filename="../../../core/Ui/AI/Conversation.cpp" line="1467"/>
         <source>The model stopped reproducing its context-integrity line. Long conversations degrade silently; recent replies may be less reliable.</source>
         <translation>모델이 컨텍스트 무결성 라인 재생성을 중단했습니다. 긴 대화는 조용히 저하되며, 최근 응답의 신뢰도가 낮을 수 있습니다.</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/AI/Conversation.cpp" line="1465"/>
+        <location filename="../../../core/Ui/AI/Conversation.cpp" line="1470"/>
         <source>The model altered its context-integrity line (drifted segment: %1). Long conversations degrade silently; recent replies may be less reliable.</source>
         <translation>모델이 컨텍스트 무결성 라인을 변경했습니다(드리프트 세그먼트: %1). 긴 대화는 조용히 저하되며, 최근 응답의 신뢰도가 낮을 수 있습니다.</translation>
     </message>
@@ -252,17 +257,17 @@ Every device action still requires your explicit per-call approval in the chat, 
         <translation type="vanished">도구 호출 한도 초과</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/AI/Conversation.cpp" line="692"/>
+        <location filename="../../../core/Ui/AI/Conversation.cpp" line="697"/>
         <source>(The model returned an empty response. Try rephrasing, switching to a different model, or checking that the request is allowed by the provider's safety filters.)</source>
         <translation>(모델이 빈 응답을 반환했습니다. 다른 표현으로 다시 시도하거나, 다른 모델로 전환하거나, 제공업체의 안전 필터에서 요청이 허용되는지 확인하십시오.)</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/AI/Conversation.cpp" line="864"/>
+        <location filename="../../../core/Ui/AI/Conversation.cpp" line="869"/>
         <source>Sending request to %1...</source>
         <translation>%1에 요청 전송 중...</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/AI/Conversation.cpp" line="882"/>
+        <location filename="../../../core/Ui/AI/Conversation.cpp" line="887"/>
         <source>Provider returned no reply</source>
         <translation>제공업체가 응답을 반환하지 않음</translation>
     </message>
@@ -366,7 +371,7 @@ Every device action still requires your explicit per-call approval in the chat, 
 <context>
     <name>API::ConsentGate</name>
     <message>
-        <location filename="../../../core/Api/API/Server/ConsentGate.cpp" line="151"/>
+        <location filename="../../../core/Api/API/Server/ConsentGate.cpp" line="164"/>
         <source>Serial Studio</source>
         <translation>Serial Studio</translation>
     </message>
@@ -392,6 +397,19 @@ Every device action still requires your explicit per-call approval in the chat, 
         <location filename="../../src/API/GRPC/GRPCServer.cpp" line="633"/>
         <source>Failed to bind to %1</source>
         <translation>%1에 바인딩 실패</translation>
+    </message>
+</context>
+<context>
+    <name>API::LaunchConsent</name>
+    <message>
+        <location filename="../../../core/Api/API/LaunchConsent.cpp" line="40"/>
+        <source>Allow this project to launch programs?</source>
+        <translation>이 프로젝트가 프로그램을 실행하도록 허용하시겠습니까?</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Api/API/LaunchConsent.cpp" line="41"/>
+        <source>This project wants to run programs with your user account's privileges, from its scripts or from a Process I/O source. Only allow this for projects you trust.</source>
+        <translation>이 프로젝트는 스크립트 또는 Process I/O 소스에서 사용자 계정의 권한으로 프로그램을 실행하려고 합니다. 신뢰할 수 있는 프로젝트에만 허용하십시오.</translation>
     </message>
 </context>
 <context>
@@ -432,22 +450,22 @@ Every device action still requires your explicit per-call approval in the chat, 
 <context>
     <name>API::MirrorSession</name>
     <message>
-        <location filename="../../../core/Api/API/Mirror/MirrorSession.cpp" line="334"/>
+        <location filename="../../../core/Api/API/Mirror/MirrorSession.cpp" line="335"/>
         <source>Enter a host name and a port to attach</source>
         <translation>연결하려면 호스트 이름과 포트를 입력하십시오</translation>
     </message>
     <message>
-        <location filename="../../../core/Api/API/Mirror/MirrorSession.cpp" line="341"/>
+        <location filename="../../../core/Api/API/Mirror/MirrorSession.cpp" line="342"/>
         <source>Disconnect the local device or close the open recording before attaching to a remote dashboard</source>
         <translation>원격 대시보드에 연결하기 전에 로컬 장치의 연결을 끊거나 열린 녹화를 닫으십시오</translation>
     </message>
     <message>
-        <location filename="../../../core/Api/API/Mirror/MirrorSession.cpp" line="546"/>
+        <location filename="../../../core/Api/API/Mirror/MirrorSession.cpp" line="550"/>
         <source>The remote sent a project this build cannot load</source>
         <translation>원격이 이 빌드에서 로드할 수 없는 프로젝트를 전송했습니다</translation>
     </message>
     <message>
-        <location filename="../../../core/Api/API/Mirror/MirrorSession.cpp" line="638"/>
+        <location filename="../../../core/Api/API/Mirror/MirrorSession.cpp" line="642"/>
         <source>This build resolves the remote project to a different dataset layout</source>
         <translation>이 빌드는 원격 프로젝트를 다른 데이터셋 레이아웃으로 해석합니다</translation>
     </message>
@@ -455,57 +473,67 @@ Every device action still requires your explicit per-call approval in the chat, 
 <context>
     <name>API::ProcessLauncher</name>
     <message>
-        <location filename="../../../core/Api/API/ProcessLauncher.cpp" line="63"/>
         <source>Allow this project's scripts to launch programs?</source>
-        <translation>이 프로젝트의 스크립트가 프로그램을 실행하도록 허용하시겠습니까?</translation>
+        <translation type="vanished">이 프로젝트의 스크립트가 프로그램을 실행하도록 허용하시겠습니까?</translation>
     </message>
     <message>
-        <location filename="../../../core/Api/API/ProcessLauncher.cpp" line="64"/>
         <source>Scripts run programs with your user account's privileges. Only allow this for projects you trust.</source>
-        <translation>스크립트는 사용자 계정의 권한으로 프로그램을 실행합니다. 신뢰할 수 있는 프로젝트에만 허용하십시오.</translation>
+        <translation type="vanished">스크립트는 사용자 계정의 권한으로 프로그램을 실행합니다. 신뢰할 수 있는 프로젝트에만 허용하십시오.</translation>
     </message>
     <message>
-        <location filename="../../../core/Api/API/ProcessLauncher.cpp" line="123"/>
+        <location filename="../../../core/Api/API/ProcessLauncher.cpp" line="116"/>
         <source>No program specified</source>
         <translation>프로그램이 지정되지 않음</translation>
     </message>
     <message>
-        <location filename="../../../core/Api/API/ProcessLauncher.cpp" line="127"/>
+        <location filename="../../../core/Api/API/ProcessLauncher.cpp" line="120"/>
         <source>This project's script wants to run:
 %1</source>
         <translation>이 프로젝트의 스크립트가 다음을 실행하려고 합니다:
 %1</translation>
     </message>
     <message>
-        <location filename="../../../core/Api/API/ProcessLauncher.cpp" line="131"/>
+        <location filename="../../../core/Api/API/ProcessLauncher.cpp" line="124"/>
         <source>Launching programs needs the user's consent; a prompt was shown</source>
         <translation>프로그램 실행에는 사용자 동의가 필요합니다. 프롬프트가 표시되었습니다</translation>
     </message>
     <message>
-        <location filename="../../../core/Api/API/ProcessLauncher.cpp" line="136"/>
+        <location filename="../../../core/Api/API/ProcessLauncher.cpp" line="129"/>
         <source>Launching programs was denied by the user</source>
         <translation>프로그램 실행이 사용자에 의해 거부되었습니다</translation>
     </message>
     <message>
-        <location filename="../../../core/Api/API/ProcessLauncher.cpp" line="142"/>
+        <location filename="../../../core/Api/API/ProcessLauncher.cpp" line="135"/>
         <source>Program "%1" not found in PATH</source>
         <translation>프로그램 "%1"을(를) PATH에서 찾을 수 없습니다</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Api/API/ProcessLauncher.cpp" line="206"/>
+        <source>This project's Process I/O source wants to run:
+%1</source>
+        <translation>이 프로젝트의 Process I/O 소스가 다음을 실행하려고 합니다:
+%1</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Api/API/ProcessLauncher.cpp" line="209"/>
+        <source>in %1</source>
+        <translation>%1에서</translation>
     </message>
 </context>
 <context>
     <name>API::Server</name>
     <message>
-        <location filename="../../../core/Api/API/Server.cpp" line="255"/>
+        <location filename="../../../core/Api/API/Server.cpp" line="256"/>
         <source>Unable to start API TCP server</source>
         <translation>API TCP 서버를 시작할 수 없음</translation>
     </message>
     <message>
-        <location filename="../../../core/Api/API/Server.cpp" line="345"/>
+        <location filename="../../../core/Api/API/Server.cpp" line="346"/>
         <source>Allow External API Connections?</source>
         <translation>외부 API 연결을 허용하시겠습니까?</translation>
     </message>
     <message>
-        <location filename="../../../core/Api/API/Server.cpp" line="346"/>
+        <location filename="../../../core/Api/API/Server.cpp" line="347"/>
         <source>Exposing the API server to external hosts allows other devices on your network to connect to Serial Studio on port 7777.
 
 Only enable this on trusted networks. Untrusted clients may read live data or send commands to your device.</source>
@@ -530,12 +558,12 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
         <translation type="vanished">Serial Studio</translation>
     </message>
     <message>
-        <location filename="../../../core/Api/API/Server.cpp" line="1022"/>
+        <location filename="../../../core/Api/API/Server.cpp" line="1023"/>
         <source>API server</source>
         <translation>API 서버</translation>
     </message>
     <message>
-        <location filename="../../../core/Api/API/Server.cpp" line="1022"/>
+        <location filename="../../../core/Api/API/Server.cpp" line="1023"/>
         <source>Invalid pending connection</source>
         <translation>잘못된 대기 중인 연결</translation>
     </message>
@@ -543,22 +571,22 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
 <context>
     <name>API::ServerAuth</name>
     <message>
-        <location filename="../../../core/Api/API/Server/ServerAuth.cpp" line="38"/>
+        <location filename="../../../core/Api/API/Server/ServerAuth.cpp" line="39"/>
         <source>Allow API device control?</source>
         <translation>API 장치 제어를 허용하시겠습니까?</translation>
     </message>
     <message>
-        <location filename="../../../core/Api/API/Server/ServerAuth.cpp" line="39"/>
+        <location filename="../../../core/Api/API/Server/ServerAuth.cpp" line="40"/>
         <source>A program using Serial Studio's local API is requesting to send data to the connected device. Allow API clients to write to the device?</source>
         <translation>Serial Studio의 로컬 API를 사용하는 프로그램이 연결된 장치로 데이터를 전송하도록 요청하고 있습니다. API 클라이언트가 장치에 쓰기를 수행하도록 허용하시겠습니까?</translation>
     </message>
     <message>
-        <location filename="../../../core/Api/API/Server/ServerAuth.cpp" line="44"/>
+        <location filename="../../../core/Api/API/Server/ServerAuth.cpp" line="45"/>
         <source>Allow API clients to modify project scripts?</source>
         <translation>API 클라이언트가 프로젝트 스크립트를 수정하도록 허용하시겠습니까?</translation>
     </message>
     <message>
-        <location filename="../../../core/Api/API/Server/ServerAuth.cpp" line="45"/>
+        <location filename="../../../core/Api/API/Server/ServerAuth.cpp" line="46"/>
         <source>A program using Serial Studio's local API wants to change this project's scripts. Scripts run with the application's full privileges, including launching programs. Allow API clients to modify project scripts?</source>
         <translation>Serial Studio의 로컬 API를 사용하는 프로그램이 이 프로젝트의 스크립트를 변경하려고 합니다. 스크립트는 프로그램 실행을 포함하여 애플리케이션의 모든 권한으로 실행됩니다. API 클라이언트가 프로젝트 스크립트를 수정하도록 허용하시겠습니까?</translation>
     </message>
@@ -6537,158 +6565,158 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
 <context>
     <name>DataModel::DatasetTransformEditor</name>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="117"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="114"/>
         <source>Dataset Value Transform</source>
         <translation>데이터셋 값 변환</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="156"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="153"/>
         <source>Lua</source>
         <translation>Lua</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="156"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="153"/>
         <source>JavaScript</source>
         <translation>JavaScript</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="188"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="185"/>
         <source>Language:</source>
         <translation>언어:</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="191"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="188"/>
         <source>Template:</source>
         <translation>템플릿:</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="165"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="162"/>
         <source>Enter raw value (e.g., 1024)</source>
         <translation>원시 값 입력 (예: 1024)</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="170"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="167"/>
         <source>Test</source>
         <translation>테스트</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="171"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="168"/>
         <source>Clear</source>
         <translation>지우기</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="207"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="204"/>
         <source>Input:</source>
         <translation>입력:</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="210"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="207"/>
         <source>Output:</source>
         <translation>출력:</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="173"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="170"/>
         <source>Apply</source>
         <translation>적용</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="156"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="153"/>
         <source>Expression</source>
         <translation>표현식</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="174"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="171"/>
         <source>Cancel</source>
         <translation>취소</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="176"/>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="704"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="173"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="701"/>
         <source>Open Lua Library</source>
         <translation>Lua 라이브러리 열기</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="177"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="174"/>
         <source>Show the project's shared library for this language in the Project Editor. Functions defined there can be called from this transform by name.</source>
         <translation>프로젝트 편집기에서 이 언어의 프로젝트 공유 라이브러리를 표시합니다. 여기에 정의된 함수는 이 변환에서 이름으로 호출할 수 있습니다.</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="222"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="219"/>
         <source>Parameters</source>
         <translation>매개변수</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="224"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="221"/>
         <source>Constants that belong to this dataset. The transform reads them as params.&lt;name&gt;.</source>
         <translation>이 데이터셋에 속한 상수입니다. 변환은 이를 params.&lt;이름&gt;으로 읽습니다.</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="226"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="223"/>
         <source>Name</source>
         <translation>이름</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="226"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="223"/>
         <source>Value</source>
         <translation>값</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="232"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="229"/>
         <source>Numbers and true/false keep their type; any other value is a string.</source>
         <translation>숫자와 true/false는 타입이 유지되며, 다른 값은 문자열입니다.</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="235"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="232"/>
         <source>&lt;b&gt;No Parameters&lt;/b&gt;&lt;br&gt;Parameters are constants that belong to this dataset, such as a scale factor or a sensor offset. The transform reads them as &lt;code&gt;params.name&lt;/code&gt;, so one formula in the Lua Library can serve every dataset that differs only in its constants.</source>
         <translation>&lt;b&gt;매개변수 없음&lt;/b&gt;&lt;br&gt;매개변수는 스케일 팩터나 센서 오프셋과 같이 이 데이터셋에 속한 상수입니다. 변환은 이를 &lt;code&gt;params.name&lt;/code&gt;으로 읽으므로, Lua 라이브러리의 하나의 수식이 상수만 다른 모든 데이터셋에 사용될 수 있습니다.</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="244"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="241"/>
         <source>Add Parameter</source>
         <translation>매개변수 추가</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="245"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="242"/>
         <source>Remove</source>
         <translation>제거</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="355"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="352"/>
         <source>Transform — %1</source>
         <translation>변환 — %1</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="460"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="457"/>
         <source>The value transform has a syntax error and was not applied.</source>
         <translation>값 변환에 구문 오류가 있어 적용되지 않았습니다.</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="469"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="466"/>
         <source>The value transform must define a transform(value) function.</source>
         <translation>값 변환은 transform(value) 함수를 정의해야 합니다.</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="470"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="467"/>
         <source>Define a transform(value) function that returns a number, or use Clear to remove the transform.</source>
         <translation>숫자를 반환하는 transform(value) 함수를 정의하거나, 지우기를 사용하여 변환을 제거하십시오.</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="488"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="485"/>
         <source>Enter a value</source>
         <translation>값 입력</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="495"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="492"/>
         <source>Invalid number</source>
         <translation>잘못된 숫자</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="536"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="533"/>
         <source>Format Document	Ctrl+Shift+I</source>
         <translation>문서 서식 지정	Ctrl+Shift+I</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="537"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="534"/>
         <source>Format Selection	Ctrl+I</source>
         <translation>선택 영역 서식 지정	Ctrl+I</translation>
     </message>
@@ -6753,7 +6781,7 @@ v
 </translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="834"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="831"/>
         <source>--
 -- Define a transform(value) function that receives the live
 -- dataset reading and returns a transformed number. If no
@@ -6812,7 +6840,7 @@ v
 </translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="862"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="859"/>
         <source>/*
  * Define a transform(value) function that receives the live
  * dataset reading and returns a transformed number. If no
@@ -6869,27 +6897,37 @@ v
  */</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1003"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1001"/>
         <source>Failed to create the Lua engine.</source>
         <translation>Lua 엔진 생성에 실패했습니다.</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1030"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1008"/>
+        <source>Failed to prepare the Lua engine.</source>
+        <translation>Lua 엔진 준비에 실패했습니다.</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1029"/>
         <source>Failed to create the JavaScript engine.</source>
         <translation>JavaScript 엔진 생성에 실패했습니다.</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1046"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1034"/>
+        <source>Failed to prepare the JavaScript engine.</source>
+        <translation>JavaScript 엔진 준비에 실패했습니다.</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1048"/>
         <source>The transform did not finish evaluating within %1 ms.</source>
         <translation>변환이 %1 ms 내에 평가를 완료하지 못했습니다.</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1051"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1053"/>
         <source>Line %1: %2</source>
         <translation>줄 %1: %2</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1118"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1117"/>
         <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1152"/>
         <source>Error in shared library: %1</source>
         <translation>공유 라이브러리 오류: %1</translation>
@@ -6962,27 +7000,29 @@ v
  */</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1107"/>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1142"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1108"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1113"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1141"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1144"/>
         <source>Engine error</source>
         <translation>엔진 오류</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1097"/>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1124"/>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1132"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1099"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1123"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1131"/>
         <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1160"/>
         <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1173"/>
         <source>Error: %1</source>
         <translation>오류: %1</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="705"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="702"/>
         <source>Open JavaScript Library</source>
         <translation>JavaScript 라이브러리 열기</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="800"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="797"/>
         <source>#
 # An arithmetic expression evaluated once per sample. No function,
 # no statements: the value of the expression is the new reading.
@@ -7051,13 +7091,13 @@ v
 </translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1128"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1127"/>
         <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1164"/>
         <source>Error: transform() not defined</source>
         <translation>오류: transform()이 정의되지 않음</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1135"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1134"/>
         <source>Error: transform() must return a number</source>
         <translation>오류: transform()은 숫자를 반환해야 함</translation>
     </message>
@@ -17417,118 +17457,129 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
 <context>
     <name>IO::Drivers::Process</name>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Process.cpp" line="247"/>
+        <location filename="../../../core/Devices/IO/Drivers/Process.cpp" line="249"/>
+        <location filename="../../../core/Devices/IO/Drivers/Process.cpp" line="260"/>
         <source>Failed to start process</source>
         <translation>프로세스 시작 실패</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Process.cpp" line="248"/>
+        <location filename="../../../core/Devices/IO/Drivers/Process.cpp" line="250"/>
         <source>Executable "%1" not found in PATH.</source>
         <translation>실행 파일 "%1"을(를) PATH에서 찾을 수 없습니다.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Process.cpp" line="425"/>
+        <location filename="../../../core/Devices/IO/Drivers/Process.cpp" line="258"/>
+        <source>Waiting for permission to launch "%1".</source>
+        <translation>"%1" 실행 권한을 기다리는 중입니다.</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Devices/IO/Drivers/Process.cpp" line="259"/>
+        <source>Launching "%1" was denied for this project.</source>
+        <translation>이 프로젝트에 대해 "%1" 실행이 거부되었습니다.</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Devices/IO/Drivers/Process.cpp" line="435"/>
         <source>Select Executable</source>
         <translation>실행 파일 선택</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Process.cpp" line="449"/>
+        <location filename="../../../core/Devices/IO/Drivers/Process.cpp" line="459"/>
         <source>Select Working Directory</source>
         <translation>작업 디렉터리 선택</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Process.cpp" line="474"/>
+        <location filename="../../../core/Devices/IO/Drivers/Process.cpp" line="484"/>
         <source>Select Named Pipe / FIFO</source>
         <translation>Named Pipe / FIFO 선택</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Process.cpp" line="616"/>
+        <location filename="../../../core/Devices/IO/Drivers/Process.cpp" line="626"/>
         <source>The process crashed.</source>
         <translation>프로세스가 충돌했습니다.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Process.cpp" line="617"/>
+        <location filename="../../../core/Devices/IO/Drivers/Process.cpp" line="627"/>
         <source>Exit code: %1</source>
         <translation>종료 코드: %1</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Process.cpp" line="622"/>
+        <location filename="../../../core/Devices/IO/Drivers/Process.cpp" line="632"/>
         <source>Process "%1" stopped</source>
         <translation>프로세스 "%1" 중지됨</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Process.cpp" line="632"/>
+        <location filename="../../../core/Devices/IO/Drivers/Process.cpp" line="642"/>
         <source>Failed to start</source>
         <translation>시작 실패</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Process.cpp" line="636"/>
+        <location filename="../../../core/Devices/IO/Drivers/Process.cpp" line="646"/>
         <source>Unknown error</source>
         <translation>알 수 없는 오류</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Process.cpp" line="640"/>
+        <location filename="../../../core/Devices/IO/Drivers/Process.cpp" line="650"/>
         <source>Process Error</source>
         <translation>프로세스 오류</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Process.cpp" line="654"/>
+        <location filename="../../../core/Devices/IO/Drivers/Process.cpp" line="664"/>
         <source>The pipe closed before the peer attached.</source>
         <translation>피어가 연결되기 전에 파이프가 닫혔습니다</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Process.cpp" line="657"/>
+        <location filename="../../../core/Devices/IO/Drivers/Process.cpp" line="667"/>
         <source>Pipe Closed</source>
         <translation>파이프 닫힘</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Process.cpp" line="658"/>
+        <location filename="../../../core/Devices/IO/Drivers/Process.cpp" line="668"/>
         <source>The named pipe "%1" was closed on the other end.</source>
         <translation>명명된 파이프 "%1"이(가) 반대편에서 닫혔습니다.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Process.cpp" line="679"/>
+        <location filename="../../../core/Devices/IO/Drivers/Process.cpp" line="689"/>
         <source>Pipe Error</source>
         <translation>Pipe 오류</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Process.cpp" line="676"/>
-        <location filename="../../../core/Devices/IO/Drivers/Process.cpp" line="679"/>
+        <location filename="../../../core/Devices/IO/Drivers/Process.cpp" line="686"/>
+        <location filename="../../../core/Devices/IO/Drivers/Process.cpp" line="689"/>
         <source>Could not open named pipe: %1</source>
         <translation>Named Pipe를 열 수 없음: %1</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Process.cpp" line="920"/>
+        <location filename="../../../core/Devices/IO/Drivers/Process.cpp" line="930"/>
         <source>Mode</source>
         <translation>모드</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Process.cpp" line="923"/>
+        <location filename="../../../core/Devices/IO/Drivers/Process.cpp" line="933"/>
         <source>Launch Process</source>
         <translation>프로세스 실행</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Process.cpp" line="923"/>
+        <location filename="../../../core/Devices/IO/Drivers/Process.cpp" line="933"/>
         <source>Named Pipe</source>
         <translation>명명된 파이프</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Process.cpp" line="928"/>
+        <location filename="../../../core/Devices/IO/Drivers/Process.cpp" line="938"/>
         <source>Executable</source>
         <translation>실행 파일</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Process.cpp" line="936"/>
+        <location filename="../../../core/Devices/IO/Drivers/Process.cpp" line="946"/>
         <source>Arguments</source>
         <translation>인수</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Process.cpp" line="944"/>
+        <location filename="../../../core/Devices/IO/Drivers/Process.cpp" line="954"/>
         <source>Working Directory</source>
         <translation>작업 디렉터리</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Process.cpp" line="952"/>
+        <location filename="../../../core/Devices/IO/Drivers/Process.cpp" line="962"/>
         <source>Pipe Path</source>
         <translation>파이프 경로</translation>
     </message>
@@ -21137,47 +21188,47 @@ Please provide the necessary credentials.</source>
         <translation>모두 거부</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/MessageBubble.qml" line="335"/>
-        <location filename="../../qml/AI/MessageBubble.qml" line="410"/>
-        <location filename="../../qml/AI/MessageBubble.qml" line="462"/>
+        <location filename="../../qml/AI/MessageBubble.qml" line="337"/>
+        <location filename="../../qml/AI/MessageBubble.qml" line="412"/>
+        <location filename="../../qml/AI/MessageBubble.qml" line="464"/>
         <source>Copy</source>
         <translation>복사</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/MessageBubble.qml" line="340"/>
-        <location filename="../../qml/AI/MessageBubble.qml" line="415"/>
-        <location filename="../../qml/AI/MessageBubble.qml" line="467"/>
+        <location filename="../../qml/AI/MessageBubble.qml" line="342"/>
+        <location filename="../../qml/AI/MessageBubble.qml" line="417"/>
+        <location filename="../../qml/AI/MessageBubble.qml" line="469"/>
         <source>Copy All</source>
         <translation>모두 복사</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/MessageBubble.qml" line="348"/>
-        <location filename="../../qml/AI/MessageBubble.qml" line="423"/>
+        <location filename="../../qml/AI/MessageBubble.qml" line="350"/>
+        <location filename="../../qml/AI/MessageBubble.qml" line="425"/>
         <source>Select All</source>
         <translation>모두 선택</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/MessageBubble.qml" line="355"/>
+        <location filename="../../qml/AI/MessageBubble.qml" line="357"/>
         <source>Remember this…</source>
         <translation>기억하기…</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/MessageBubble.qml" line="358"/>
+        <location filename="../../qml/AI/MessageBubble.qml" line="360"/>
         <source>As a preference about me</source>
         <translation>나에 대한 선호사항으로</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/MessageBubble.qml" line="362"/>
+        <location filename="../../qml/AI/MessageBubble.qml" line="364"/>
         <source>As a correction / lesson</source>
         <translation>수정/학습 내용으로</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/MessageBubble.qml" line="366"/>
+        <location filename="../../qml/AI/MessageBubble.qml" line="368"/>
         <source>As a fact about this project</source>
         <translation>이 프로젝트에 대한 사실로서</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/MessageBubble.qml" line="370"/>
+        <location filename="../../qml/AI/MessageBubble.qml" line="372"/>
         <source>As a reference</source>
         <translation>참조로서</translation>
     </message>
@@ -21279,6 +21330,16 @@ Please provide the necessary credentials.</source>
         <location filename="../../qml/AI/MessageWebView.qml" line="83"/>
         <source>Copy</source>
         <translation>복사</translation>
+    </message>
+    <message>
+        <location filename="../../qml/AI/MessageWebView.qml" line="84"/>
+        <source>Runs these operations</source>
+        <translation>이러한 작업을 실행합니다</translation>
+    </message>
+    <message>
+        <location filename="../../qml/AI/MessageWebView.qml" line="85"/>
+        <source>+%1 more</source>
+        <translation>+%1개 더</translation>
     </message>
 </context>
 <context>
@@ -26831,7 +26892,7 @@ Reload it?</source>
         <translation>일반 I/O 오류</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="203"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="222"/>
         <source>
 
 This script may use Lua 5.3 bitwise syntax, which this runtime does not support. Replace: %1. The bit and bit32 libraries are available in every script.</source>
@@ -26840,13 +26901,13 @@ This script may use Lua 5.3 bitwise syntax, which this runtime does not support.
 </translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="501"/>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="230"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="546"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="267"/>
         <source>Frame Parser Disabled</source>
         <translation>프레임 파서 비활성화됨</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="502"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="547"/>
         <source>The Lua frame parser for source %1 timed out %2 frames in a row and has been disabled to keep Serial Studio responsive.
 
 Most likely cause: an infinite loop or extremely slow operation in the script body. Fix the script and reload the project to re-enable parsing.</source>
@@ -26855,13 +26916,13 @@ Most likely cause: an infinite loop or extremely slow operation in the script bo
 가장 가능성 높은 원인: 스크립트 본문의 무한 루프 또는 매우 느린 작업. 스크립트를 수정하고 프로젝트를 다시 로드하여 파싱을 재활성화하십시오.</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="270"/>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="310"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="289"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="329"/>
         <source>Lua Syntax Error</source>
         <translation>Lua 구문 오류</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="271"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="290"/>
         <source>The parser code contains an error:
 
 %1
@@ -26874,17 +26935,17 @@ Serial Studio can rewrite the unsupported operators as bit.* calls and reload th
 Serial Studio는 지원되지 않는 연산자를 bit.* 호출로 재작성하여 파서를 다시 로드할 수 있습니다. bit 라이브러리는 32비트 정수에서 작동하므로 32비트보다 큰 값은 재작성 후 래핑됩니다.</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="281"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="300"/>
         <source>Fix Automatically</source>
         <translation>자동으로 수정</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="282"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="301"/>
         <source>Leave Unchanged</source>
         <translation>변경하지 않음</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="311"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="330"/>
         <source>The parser code contains an error:
 
 %1</source>
@@ -26893,12 +26954,12 @@ Serial Studio는 지원되지 않는 연산자를 bit.* 호출로 재작성하�
 %1</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="672"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="721"/>
         <source>Lua Runtime Error</source>
         <translation>Lua 런타임 오류</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="673"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="722"/>
         <source>The parser code triggered an error:
 
 %1</source>
@@ -26907,13 +26968,13 @@ Serial Studio는 지원되지 않는 연산자를 bit.* 호출로 재작성하�
 %1</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="694"/>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="560"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="743"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="600"/>
         <source>Missing Parse Function</source>
         <translation>Parse 함수 누락</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="695"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="744"/>
         <source>The 'parse' function is not defined in the script.
 
 Please ensure your code includes:
@@ -26924,13 +26985,13 @@ function parse(frame) ... end</source>
 function parse(frame) ... end</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="757"/>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="612"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="806"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="652"/>
         <source>Parse Function Runtime Error</source>
         <translation>Parse 함수 런타임 오류</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="758"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="807"/>
         <source>The parse function contains an error:
 
 %1
@@ -26943,12 +27004,12 @@ Please fix the error in the function body.</source>
 함수 본문의 오류를 수정하십시오.</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="221"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="255"/>
         <source>parse() timed out after %1 ms</source>
         <translation>parse() 시간 초과 (%1 ms)</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="231"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="268"/>
         <source>The JavaScript frame parser for source %1 timed out %2 frames in a row and has been disabled to keep Serial Studio responsive.
 
 Most likely cause: an infinite loop or extremely slow operation in the script body. Fix the script and reload the project to re-enable parsing.</source>
@@ -26957,12 +27018,12 @@ Most likely cause: an infinite loop or extremely slow operation in the script bo
 가장 가능성 높은 원인: 스크립트 본문의 무한 루프 또는 매우 느린 작업. 스크립트를 수정하고 프로젝트를 다시 로드하여 파싱을 재활성화하십시오.</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="501"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="541"/>
         <source>JavaScript Timed Out</source>
         <translation>JavaScript 시간 초과</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="502"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="542"/>
         <source>The parser code did not finish evaluating within %1 ms and was interrupted.
 
 Most likely cause: an infinite loop at the top level of the script.</source>
@@ -26971,12 +27032,12 @@ Most likely cause: an infinite loop at the top level of the script.</source>
 가장 가능성 높은 원인: 스크립트 최상위 레벨의 무한 루프입니다.</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="519"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="559"/>
         <source>JavaScript Syntax Error</source>
         <translation>JavaScript 구문 오류</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="520"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="560"/>
         <source>The parser code contains a syntax error at line %1:
 
 %2</source>
@@ -26985,12 +27046,12 @@ Most likely cause: an infinite loop at the top level of the script.</source>
 %2</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="534"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="574"/>
         <source>JavaScript Exception Occurred</source>
         <translation>JavaScript 예외 발생</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="535"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="575"/>
         <source>The parser code triggered the following exceptions:
 
 %1</source>
@@ -26999,7 +27060,7 @@ Most likely cause: an infinite loop at the top level of the script.</source>
 %1</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="561"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="601"/>
         <source>The 'parse' function is not defined in the script.
 
 Please ensure your code includes:
@@ -27010,7 +27071,7 @@ function parse(frame) { ... }</source>
 function parse(frame) { ... }</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="613"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="653"/>
         <source>The parse function contains an error at line %1:
 
 %2
@@ -27023,12 +27084,12 @@ Please fix the error in the function body.</source>
 함수 본문의 오류를 수정하십시오.</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="715"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="759"/>
         <source>Invalid Function Declaration</source>
         <translation>잘못된 함수 선언</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="716"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="760"/>
         <source>No callable 'parse' export found.
 
 Define one of:
@@ -27041,7 +27102,7 @@ Define one of:
   const parse = (frame) =&gt; { ... }</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="732"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="776"/>
         <source>The 'parse' function must accept at least one parameter (the frame payload).</source>
         <translation>'parse' 함수는 최소 하나의 매개변수(프레임 페이로드)를 받아야 합니다.</translation>
     </message>
@@ -27056,7 +27117,7 @@ function parse(frame) { ... }</source>
 function parse(frame) { ... }</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="731"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="775"/>
         <source>Invalid Function Parameter</source>
         <translation>잘못된 함수 매개변수</translation>
     </message>
@@ -27071,12 +27132,12 @@ function parse(frame) { ... }</source>
 function parse(frame) { ... }</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="697"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="741"/>
         <source>Deprecated Function Signature</source>
         <translation>더 이상 사용되지 않는 함수 서명</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="698"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="742"/>
         <source>The 'parse' function uses the old two-parameter format: parse(%1, %2)
 
 This format is no longer supported. Please update to the new single-parameter format:
@@ -27101,12 +27162,12 @@ function parse(%1) { ... }
         <translation>경고</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/CLI.cpp" line="922"/>
+        <location filename="../../src/Misc/CLI.cpp" line="926"/>
         <source>Project file not found</source>
         <translation>프로젝트 파일을 찾을 수 없음</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/CLI.cpp" line="923"/>
+        <location filename="../../src/Misc/CLI.cpp" line="927"/>
         <source>The project file referenced by this shortcut could not be found:
 
 %1</source>
@@ -27115,17 +27176,17 @@ function parse(%1) { ... }
 %1</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/CLI.cpp" line="926"/>
+        <location filename="../../src/Misc/CLI.cpp" line="930"/>
         <source>Would you like to delete this shortcut?</source>
         <translation>이 바로 가기를 삭제하시겠습니까?</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/CLI.cpp" line="930"/>
+        <location filename="../../src/Misc/CLI.cpp" line="934"/>
         <source>Delete Shortcut</source>
         <translation>바로 가기 삭제</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/CLI.cpp" line="932"/>
+        <location filename="../../src/Misc/CLI.cpp" line="936"/>
         <source>Quit</source>
         <translation>종료</translation>
     </message>
@@ -32467,95 +32528,105 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
 <context>
     <name>ToolCallCard</name>
     <message>
-        <location filename="../../qml/AI/ToolCallCard.qml" line="69"/>
+        <location filename="../../qml/AI/ToolCallCard.qml" line="71"/>
         <source>Awaiting approval</source>
         <translation>승인 대기 중</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/ToolCallCard.qml" line="70"/>
+        <location filename="../../qml/AI/ToolCallCard.qml" line="72"/>
         <source>Done</source>
         <translation>완료</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/ToolCallCard.qml" line="71"/>
+        <location filename="../../qml/AI/ToolCallCard.qml" line="73"/>
         <source>Error</source>
         <translation>오류</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/ToolCallCard.qml" line="72"/>
+        <location filename="../../qml/AI/ToolCallCard.qml" line="74"/>
         <source>Denied</source>
         <translation>거부됨</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/ToolCallCard.qml" line="73"/>
+        <location filename="../../qml/AI/ToolCallCard.qml" line="75"/>
         <source>Blocked</source>
         <translation>차단됨</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/ToolCallCard.qml" line="74"/>
+        <location filename="../../qml/AI/ToolCallCard.qml" line="76"/>
         <source>Running</source>
         <translation>실행 중</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/ToolCallCard.qml" line="162"/>
+        <location filename="../../qml/AI/ToolCallCard.qml" line="164"/>
         <source>Verified</source>
         <translation>검증됨</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/ToolCallCard.qml" line="162"/>
+        <location filename="../../qml/AI/ToolCallCard.qml" line="164"/>
         <source>Verify failed</source>
         <translation>검증 실패</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/ToolCallCard.qml" line="202"/>
+        <location filename="../../qml/AI/ToolCallCard.qml" line="204"/>
         <source>Verification failed: %1</source>
         <translation>검증 실패: %1</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/ToolCallCard.qml" line="203"/>
+        <location filename="../../qml/AI/ToolCallCard.qml" line="205"/>
         <source>The applied change failed its verification check.</source>
         <translation>적용된 변경 사항이 검증 확인에 실패했습니다.</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/ToolCallCard.qml" line="212"/>
+        <location filename="../../qml/AI/ToolCallCard.qml" line="214"/>
         <source>Restore checkpoint…</source>
         <translation>체크포인트 복원…</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/ToolCallCard.qml" line="231"/>
+        <location filename="../../qml/AI/ToolCallCard.qml" line="234"/>
+        <source>Runs these operations</source>
+        <translation>다음 작업 실행</translation>
+    </message>
+    <message>
+        <location filename="../../qml/AI/ToolCallCard.qml" line="261"/>
+        <source>+%1 more</source>
+        <translation>+%1개 더</translation>
+    </message>
+    <message>
+        <location filename="../../qml/AI/ToolCallCard.qml" line="275"/>
         <source>Approve</source>
         <translation>승인</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/ToolCallCard.qml" line="237"/>
+        <location filename="../../qml/AI/ToolCallCard.qml" line="281"/>
         <source>Deny</source>
         <translation>거부</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/ToolCallCard.qml" line="254"/>
+        <location filename="../../qml/AI/ToolCallCard.qml" line="298"/>
         <source>Arguments</source>
         <translation>인수</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/ToolCallCard.qml" line="291"/>
-        <location filename="../../qml/AI/ToolCallCard.qml" line="351"/>
+        <location filename="../../qml/AI/ToolCallCard.qml" line="335"/>
+        <location filename="../../qml/AI/ToolCallCard.qml" line="395"/>
         <source>Copy</source>
         <translation>복사</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/ToolCallCard.qml" line="296"/>
-        <location filename="../../qml/AI/ToolCallCard.qml" line="356"/>
+        <location filename="../../qml/AI/ToolCallCard.qml" line="340"/>
+        <location filename="../../qml/AI/ToolCallCard.qml" line="400"/>
         <source>Copy All</source>
         <translation>모두 복사</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/ToolCallCard.qml" line="304"/>
-        <location filename="../../qml/AI/ToolCallCard.qml" line="364"/>
+        <location filename="../../qml/AI/ToolCallCard.qml" line="348"/>
+        <location filename="../../qml/AI/ToolCallCard.qml" line="408"/>
         <source>Select All</source>
         <translation>모두 선택</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/ToolCallCard.qml" line="312"/>
+        <location filename="../../qml/AI/ToolCallCard.qml" line="356"/>
         <source>Result</source>
         <translation>결과</translation>
     </message>

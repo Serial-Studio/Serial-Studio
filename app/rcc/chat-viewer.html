@@ -445,6 +445,29 @@
       gap: 8px;
     }
 
+    .tool-ops {
+      margin-top: 6px;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      font-size: 0.85em;
+    }
+
+    .tool-op {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .tool-op-name {
+      font-weight: 600;
+    }
+
+    .tool-op-detail {
+      color: var(--mid);
+      font-family: monospace;
+    }
+
     .tool-body {
       margin-top: 6px;
       display: none;
@@ -615,7 +638,9 @@
       copy:          "Copy",
       payloadOnDevice: "Payload sent to device",
       payloadText:     "Text",
-      payloadHex:      "Hex"
+      payloadHex:      "Hex",
+      operations:      "Runs these operations",
+      moreOperations:  "+{n} more"
     };
 
     var STATUS = {
@@ -763,6 +788,25 @@
       html += '<div class="tool-name">' + escapeHtml(card.name || "") + '</div>';
       html += statusPill(card.status);
       html += '</div>';
+
+      // Every operation a batch will run, visible before it is approved (spec 0098 R9).
+      if (card.ops && card.ops.length > 0) {
+        html += '<div class="tool-ops">';
+        html += '<div class="field-label">' + escapeHtml(L10N.operations) + '</div>';
+        for (var i = 0; i < card.ops.length; ++i) {
+          var op = card.ops[i] || {};
+          html += '<div class="tool-op"><span class="tool-op-name">' +
+                  escapeHtml(op.command || "") + '</span>';
+          if (op.detail)
+            html += ' <span class="tool-op-detail">' + escapeHtml(op.detail) + '</span>';
+          html += '</div>';
+        }
+        var total = card.opsTotal || card.ops.length;
+        if (total > card.ops.length)
+          html += '<div class="tool-op">' + escapeHtml(
+            L10N.moreOperations.replace("{n}", String(total - card.ops.length))) + '</div>';
+        html += '</div>';
+      }
 
       if (card.status === 1 && !grouped) {
         html += '<div class="tool-confirm-row">';

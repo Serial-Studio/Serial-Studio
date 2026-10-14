@@ -28,7 +28,8 @@
 #include <QStringList>
 #include <QVariantList>
 
-#include "API/Server/ConsentGate.h"
+#include "API/LaunchConsent.h"
+#include "Core/IO/LaunchAuthorizer.h"
 
 class QProcess;
 
@@ -44,10 +45,12 @@ namespace API {
 /**
  * @brief Owns helper processes spawned by the project control script, terminating every one on
  *        device disconnect, project change, and application quit so no helper is orphaned.
- *        Launching is gated by a per-project user consent: a script runs programs only once
- *        the user said yes for THIS project file (session-only for a project without one).
+ *        It is also the launch authorizer every program start asks (spec 0098), so a script's
+ *        system.exec and a Process source answer to one per-project consent.
  */
-class ProcessLauncher : public QObject {
+class ProcessLauncher
+  : public QObject
+  , public IO::ILaunchAuthorizer {
   Q_OBJECT
 
 signals:
@@ -73,19 +76,25 @@ public:
                            const QStringList& arguments,
                            const QString& workingDirectory,
                            QString& error);
+  [[nodiscard]] IO::LaunchVerdict authorizeLaunch(const QString& program,
+                                                  const QStringList& arguments,
+                                                  const QString& workingDir) override;
   [[nodiscard]] bool kill(int processId);
   void killAll();
 
   [[nodiscard]] QVariantList runningProcesses() const;
 
+public slots:
+  void onRemoteProgramChanged();
+
 private slots:
   void onAboutToQuit();
+  void onConsentGranted();
   void onProjectFileChanged();
 
 private:
   [[nodiscard]] static QStringList extraSearchPaths();
   [[nodiscard]] static QString resolveExecutable(const QString& name);
-  [[nodiscard]] static QString consentKeyFor(const QString& projectPath);
 
   void logLine(int id, const QString& name, const QString& message);
   void logProcessOutput(int id, const QString& name, const QByteArray& data);
@@ -94,7 +103,8 @@ private:
 private:
   int m_nextId;
   QSettings m_settings;
-  ConsentGate m_consent;
+  LaunchConsent m_consent;
+  bool m_reconnectOnGrant;
   QString m_lastProjectPath;
   QHash<int, QProcess*> m_processes;
   IO::ConnectionManager* m_connectionManager;

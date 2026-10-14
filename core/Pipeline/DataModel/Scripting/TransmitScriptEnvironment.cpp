@@ -29,9 +29,10 @@
 
 /**
  * @brief Replaces the effectful bridges with recorders. The SDK prelude resolves __ss_dw / __ss_af
- *        / __ss_bridge / __ss by name inside its wrapper closures at call time, so reassigning
- *        them here neuters deviceWrite(), actionFire(), apiCall(), tableSet(), tableSetH() and
- *        mqttPublish() while every wrapper the script can name still exists. The __ss replacement
+ *        / __ss_bridge / __ss / __ss_db / __nc by name inside its wrapper closures at call time,
+ *        so reassigning them here neuters deviceWrite(), actionFire(), apiCall(), tableSet(),
+ *        tableSetH(), mqttPublish(), the dashboard controls and notify() while every wrapper the
+ *        script can name still exists. The __ss replacement
  *        forwards every read to the real bridge: a script that reads a table or a dataset to build
  *        its payload has to preview as the same script that ships. Each replacement carries a
  *        judged marker so the install can be verified rather than assumed.
@@ -54,6 +55,16 @@ static const auto kInertBridges =
                  "    __ss_bridge = { judged: true, call: function(m, p) {"
                  "      judged.calls += 1;"
                  "      return { ok: false, judged: true, error: 'inert while validating' }; } };"
+                 "  var shown = function() { return { ok: true, judged: true }; };"
+                 "  var quiet = function() {};"
+                 "  if (typeof __ss_db !== 'undefined')"
+                 "    __ss_db = { judged: true, clearPlots: shown, setPlotPoints: shown,"
+                 "      setTerminalVisible: shown, setNotificationLogVisible: shown,"
+                 "      setClockVisible: shown, setStopwatchVisible: shown,"
+                 "      setActiveWorkspace: shown };"
+                 "  if (typeof __nc !== 'undefined')"
+                 "    __nc = { judged: true, post: quiet, postInfo: quiet, postWarning: quiet,"
+                 "      postCritical: quiet, resolve: quiet };"
                  "  if (typeof __ss !== 'undefined') {"
                  "    var live = __ss;"
                  "    var inert = { judged: true,"
@@ -84,6 +95,8 @@ static const auto kInertProbe = QStringLiteral(
   "  if (typeof __ss_dw !== 'undefined' && __ss_dw.judged !== true) return false;"
   "  if (typeof __ss_af !== 'undefined' && __ss_af.judged !== true) return false;"
   "  if (typeof __ss_bridge !== 'undefined' && __ss_bridge.judged !== true) return false;"
+  "  if (typeof __ss_db !== 'undefined' && __ss_db.judged !== true) return false;"
+  "  if (typeof __nc !== 'undefined' && __nc.judged !== true) return false;"
   "  if (typeof __ss !== 'undefined' && __ss.judged !== true) return false;"
   "  return true;"
   "})();");

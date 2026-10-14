@@ -1,0 +1,12 @@
+<!--
+  SPDX-FileCopyrightText: 2020-2026 Alex Spataru <alex@serial-studio.com>
+  SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial
+
+  AI::CommandRegistry loads its tier map from :/ai/command_safety.json. The real file is aliased
+  in rather than copied, so tst_assistant_batch_tiers judges the tiers the assistant ships with.
+-->
+<RCC>
+    <qresource prefix="/">
+        <file alias="ai/command_safety.json">../../rcc/ai/command_safety.json</file>
+    </qresource>
+</RCC>

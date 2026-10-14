@@ -903,7 +903,8 @@ static QString resolveCheckpoint(const QJsonObject& params)
 
 /**
  * @brief Restore a previously taken snapshot into ProjectModel and persist it to disk; the
- *        pre-restore snapshot keeps the action reversible.
+ *        pre-restore snapshot keeps the action reversible. Only the open project's own
+ *        checkpoints are accepted (spec 0098 R7), checked before anything is written.
  */
 API::CommandResponse API::Handlers::AssistantHandler::restore(const QString& id,
                                                               const QJsonObject& params)
@@ -917,8 +918,15 @@ API::CommandResponse API::Handlers::AssistantHandler::restore(const QString& id,
                      "assistant.listCheckpoints to discover available references."));
 
   static auto& backupManager = Misc::BackupManager::instance();
-  const auto reverse         = backupManager.snapshot(QStringLiteral("pre-restore"));
+  if (!backupManager.isOwnCheckpoint(path))
+    return CommandResponse::makeError(
+      id,
+      ErrorCode::InvalidParam,
+      QStringLiteral("%1 is not a checkpoint of the open project. Use assistant.listCheckpoints "
+                     "to find one.")
+        .arg(path));
 
+  const auto reverse = backupManager.snapshot(QStringLiteral("pre-restore"));
   if (!backupManager.restore(path))
     return CommandResponse::makeError(
       id,

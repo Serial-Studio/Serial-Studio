@@ -389,6 +389,18 @@ ss_add_unit_test(tst_sealed_strip
 )
 
 #
+# The mirror viewer's publisher-logic strip (spec 0098 R10/AC6) beside it: parser, transform,
+# library, control and transmit code, connection settings and the MQTT/InfluxDB blocks go, the
+# legacy root "frameParser" key included, and Canvas code stays for its draw-only surface.
+#
+ss_add_unit_test(tst_publisher_logic_strip
+  SOURCES tst_publisher_logic_strip.cpp
+          ${SS_CORE_SRC}/Pipeline/DataModel/Project/ProjectSealing.cpp
+  LIBS    Qt6::Core
+          SerialStudio::Core
+)
+
+#
 # The frame value types, the generated serializer and the ProjectModel-free validators all live in
 # SerialStudio::Core (spec 0077), so the suite links without the icon registry, theme manager and
 # player singletons. Core5Compat comes with TextCodec.cpp: the East-Asian encodings go through
@@ -1698,14 +1710,16 @@ ss_add_unit_test(tst_conversation_metatools
 )
 
 #
-# The API socket's credential and reception guards (spec 0070) plus the ONE remote command policy
-# (control-script-only, script-install consent, device-write consent). ServerAuth links its two
-# ConsentGates; with no prompter bound the queued prompt answers its default "no", so the suite
-# needs no QtWidgets and no live server. ClientReception drives its ReceptionHost stub, so
-# QTcpSocket is only ever an opaque handle and Qt6::Network is here for that type alone.
+# The API socket's credential and reception guards (spec 0070) plus the ONE remote command policy,
+# decided by command capability (spec 0098: unclassified and control-script-only refused, script
+# and project-load consent, device-write consent, the launch-consent announcement). ServerAuth
+# links its two ConsentGates; with no prompter bound the queued prompt answers its default "no",
+# so the suite needs no QtWidgets and no live server. ClientReception drives its ReceptionHost
+# stub, so QTcpSocket is only ever an opaque handle and Qt6::Network is here for that type alone.
 #
 ss_add_unit_test(tst_server_auth
   SOURCES tst_server_auth.cpp
+          ${SS_CORE_SRC}/Api/API/CommandCapabilities.cpp
           ${SS_CORE_SRC}/Api/API/Server/AuthPrimitives.cpp
           ${SS_CORE_SRC}/Api/API/Server/ClientReception.cpp
           ${SS_CORE_SRC}/Api/API/Server/ConsentGate.cpp
@@ -1724,6 +1738,20 @@ ss_add_unit_test(tst_server_auth
 #
 ss_add_unit_test(tst_consent_gate
   SOURCES tst_consent_gate.cpp
+          ${SS_CORE_SRC}/Api/API/Server/ConsentGate.cpp
+  LIBS    Qt6::Core
+          Qt6::Gui
+          SerialStudio::Core
+)
+
+#
+# The per-project launch consent (spec 0098 R8/R13/AC11) on top of that gate: a remote change
+# clears it once per project per session, a save-as onto a trusted file asks again, the headless
+# operator's project starts granted, and AUTO_CONSENT is never cleared.
+#
+ss_add_unit_test(tst_launch_consent
+  SOURCES tst_launch_consent.cpp
+          ${SS_CORE_SRC}/Api/API/LaunchConsent.cpp
           ${SS_CORE_SRC}/Api/API/Server/ConsentGate.cpp
   LIBS    Qt6::Core
           Qt6::Gui
@@ -1771,6 +1799,22 @@ ss_add_unit_test(tst_sealed_policy_registry
 )
 if(TARGET tst_sealed_policy_registry)
   target_compile_definitions(tst_sealed_policy_registry
+    PRIVATE SS_API_SCHEMA_PATH="${CMAKE_CURRENT_SOURCE_DIR}/../rcc/api/api-schema.json")
+endif()
+
+#
+# The remote gate's command capabilities (spec 0098 AC7): the same committed-snapshot sweep, so a
+# command added without a capability classification fails CI by name instead of reaching a remote
+# client unclassified (the gate refuses it, but the sweep says why).
+#
+ss_add_unit_test(tst_command_capability_registry
+  SOURCES tst_command_capability_registry.cpp
+          ${SS_CORE_SRC}/Api/API/CommandCapabilities.cpp
+  LIBS    Qt6::Core
+          SerialStudio::Core
+)
+if(TARGET tst_command_capability_registry)
+  target_compile_definitions(tst_command_capability_registry
     PRIVATE SS_API_SCHEMA_PATH="${CMAKE_CURRENT_SOURCE_DIR}/../rcc/api/api-schema.json")
 endif()
 
@@ -2391,6 +2435,25 @@ ss_add_unit_test(tst_sentinel_probe
           ${SS_CORE_SRC}/Ui/AI/Logging.cpp
   LIBS    Qt6::Core
 )
+
+#
+# The assistant's whole-call tier (spec 0098 R9/AC5): a batch takes its strictest op's tier, so a
+# blocked op, a device op with device control off and an always-confirm op are each treated as a
+# direct call would be, and batches never nest. support/ai-safety.qrc aliases the shipped
+# command_safety.json, so the suite judges the real tier map.
+#
+qt_add_resources(SS_TEST_AI_SAFETY_RCC ${CMAKE_CURRENT_SOURCE_DIR}/support/ai-safety.qrc)
+
+ss_add_unit_test(tst_assistant_batch_tiers
+  SOURCES tst_assistant_batch_tiers.cpp
+          ${SS_CORE_SRC}/Ui/AI/CommandRegistry.cpp
+          ${SS_CORE_SRC}/Ui/AI/Logging.cpp
+  LIBS    Qt6::Core
+          SerialStudio::Core
+)
+if(TARGET tst_assistant_batch_tiers)
+  target_sources(tst_assistant_batch_tiers PRIVATE ${SS_TEST_AI_SAFETY_RCC})
+endif()
 
 #
 # The assistant's filesystem trust boundary plus the worker lane the two read tools run on

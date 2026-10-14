@@ -38,6 +38,32 @@ that true rather than aspirational.
 `{"ok": false, "error": "blocked"}` and marks the card blocked; `Confirm` consults
 `Assistant::autoApproveEdits()`; `AlwaysConfirm` never auto-approves; `Safe` runs.
 
+**A call's tier is its effective tier (spec 0098 R9).** `dispatchByCallSafety()` routes by
+`AI::CommandRegistry::effectiveSafety(name, args)`, never by `safetyOf(name)` alone: the strictest
+of the call's own tier and the tier of every command it will run. `plannedCommands()` reads those
+from the arguments: a batch's `ops` (`project.batch`, `assistant.project.bulkApply`, bounded at
+1024), the setter an `assistant.script.apply` forwards to, and the fixed fan-out of
+`assistant.workspace.addTile`. The ordering is `strictness()` (Safe, Confirm, AlwaysConfirm,
+Blocked), NOT the enum's wire values (Blocked is 2, AlwaysConfirm 3). A planned command that is
+itself a dispatcher (`isDispatcher()`) counts as Blocked, so batches never nest. What follows: a
+blocked op denies the whole batch before anything runs, an always-confirm op needs a click even
+with auto-approve on, a device-gated op stays Blocked while "Allow device control" is off, and
+the approval card lists every op (`plannedOpsSummary` in `ToolTurnRunner.cpp`: past 50 ops the
+ordinary ones fold into "+N more", but every op stricter than Confirm is always listed). A new dispatcher command is added to `isDispatcher()` and `plannedCommands()`
+or its inner ops skip the tiers.
+Enforced: ctest:tst_assistant_batch_tiers.
+
+**Nested registry calls are re-checked under `API::DispatchPolicyScope`.** `executeCommand` in
+`Tools/ToolDispatch.cpp` opens one around the registry call with `approvedPolicy()`: every
+`CommandRegistry::execute` beneath it, outer or nested, is refused when its own tier is Blocked,
+when it is a dispatcher below depth 0, or when it is stricter than what the user approved. It is a
+stack of its own and deliberately NOT `RemoteDispatchScope`: licensing's prompt probes read the
+remote scope to tell a remote origin, so putting the assistant there would change licensing
+behavior. Every `RemoteDispatchScope`, remote or trusted, carries an empty `DispatchPolicyScope`
+that shadows the assistant's policy: a consented script's `apiCall` under an assistant call
+keeps the trust its author has, and a TCP, MCP or gRPC request served inside an assistant
+call's nested event loop answers to its own origin, not the assistant's tiers.
+
 ## Checkpoint Semantics — The Assistant Does Not Save Your File
 
 **A successful mutating tool call takes a checkpoint, not a save.** `Conversation` arms a
@@ -65,6 +91,14 @@ labelled `pre-restore`, restores the chosen checkpoint, and persists the result.
 why the two sit in different tiers — `assistant.checkpoint` and `assistant.listCheckpoints` are
 `Safe`, `assistant.restore` is `AlwaysConfirm`. A checkpoint is addressable by `path`, `timestamp`
 or `label`.
+
+Through the API it restores only what `Misc::BackupManager::isOwnCheckpoint` accepts (spec 0098
+R7): an existing file directly in the open project's backup folder, named the way `snapshot()`
+names them, carrying the snapshot metadata. Anything else answers `INVALID_PARAM` before the
+pre-restore snapshot or any write, so a path to someone else's project can never be installed
+over the open one. The local Backup Recovery dialog calls `BackupManager` directly and is
+unchanged. A remote client also needs the script-changes consent for it, because a restore loads
+a project (the `LoadsProject` capability in `API::CommandCapabilities`).
 
 Separately, `API::CommandRegistry::execute()` takes its own pre-mutation snapshot for any mutating
 command, whatever the origin; the assistant's debounce is on top of that, not instead of it.

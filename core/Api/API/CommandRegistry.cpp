@@ -289,10 +289,10 @@ static const API::RemoteDispatchScope*& activeRemoteScope() noexcept
 }
 
 /**
- * @brief Pushes this scope over the current one.
+ * @brief Pushes this scope over the current one, and an empty policy over any caller's.
  */
 API::RemoteDispatchScope::RemoteDispatchScope(RemoteGate gate)
-  : m_gate(std::move(gate)), m_previous(activeRemoteScope())
+  : m_gate(std::move(gate)), m_previous(activeRemoteScope()), m_policyShadow(DispatchPolicy())
 {
   SS_ASSERT_LOG(QThread::currentThread() == qApp->thread());
   activeRemoteScope() = this;
@@ -328,6 +328,62 @@ std::optional<API::CommandResponse> API::RemoteDispatchScope::authorize(
 }
 
 //--------------------------------------------------------------------------------------------------
+// Dispatch policy scope
+//--------------------------------------------------------------------------------------------------
+
+/**
+ * @brief The innermost policy scope, or null when none is open (GUI-thread only).
+ */
+static const API::DispatchPolicyScope*& activePolicyScope() noexcept
+{
+  static const API::DispatchPolicyScope* scope = nullptr;
+  return scope;
+}
+
+/**
+ * @brief Pushes this scope over the current one, recording the nesting depth it opened at.
+ */
+API::DispatchPolicyScope::DispatchPolicyScope(DispatchPolicy policy)
+  : m_baseDepth(ExecuteDepthGuard::depth())
+  , m_policy(std::move(policy))
+  , m_previous(activePolicyScope())
+{
+  SS_ASSERT_LOG(QThread::currentThread() == qApp->thread());
+  activePolicyScope() = this;
+}
+
+/**
+ * @brief Restores the scope this one shadowed.
+ */
+API::DispatchPolicyScope::~DispatchPolicyScope()
+{
+  SS_ASSERT_LOG(activePolicyScope() == this);
+  activePolicyScope() = m_previous;
+}
+
+/**
+ * @brief The scope the next execute() answers to.
+ */
+const API::DispatchPolicyScope* API::DispatchPolicyScope::active() noexcept
+{
+  return activePolicyScope();
+}
+
+/**
+ * @brief Runs the policy with the call's depth under this scope; an empty policy allows all.
+ */
+std::optional<API::CommandResponse> API::DispatchPolicyScope::authorize(
+  const QString& id, const QString& name, const QJsonObject& params) const
+{
+  if (!m_policy)
+    return std::nullopt;
+
+  const int depth = ExecuteDepthGuard::depth() - m_baseDepth;
+  SS_ASSERT_LOG(depth >= 0);
+  return m_policy(id, name, params, depth);
+}
+
+//--------------------------------------------------------------------------------------------------
 // Execution
 //--------------------------------------------------------------------------------------------------
 
@@ -351,6 +407,11 @@ API::CommandResponse API::CommandRegistry::execute(const QString& name,
 
   if (const auto* scope = RemoteDispatchScope::active()) {
     if (auto refused = scope->authorize(id, name, params))
+      return *refused;
+  }
+
+  if (const auto* policy = DispatchPolicyScope::active()) {
+    if (auto refused = policy->authorize(id, name, params))
       return *refused;
   }
 

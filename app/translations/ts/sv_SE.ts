@@ -197,7 +197,7 @@ Varje enhetsåtgärd kräver fortfarande ditt uttryckliga godkännande per anrop
     </message>
     <message>
         <location filename="../../../core/Ui/AI/Conversation.cpp" line="188"/>
-        <location filename="../../../core/Ui/AI/Conversation.cpp" line="845"/>
+        <location filename="../../../core/Ui/AI/Conversation.cpp" line="850"/>
         <source>AI subsystem not initialized</source>
         <translation>AI-undersystem ej initierat</translation>
     </message>
@@ -212,7 +212,12 @@ Varje enhetsåtgärd kräver fortfarande ditt uttryckliga godkännande per anrop
         <translation>Verktygsanropsbudgeten nådd för denna omgång; inga fler verktyg kommer att köras.</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/AI/Conversation.cpp" line="860"/>
+        <location filename="../../../core/Ui/AI/Conversation.cpp" line="634"/>
+        <source>This call runs a command that is blocked for the assistant, or nests another batch.</source>
+        <translation>Det här anropet kör ett kommando som är blockerat för assistenten, eller kapslar in en annan batch.</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/AI/Conversation.cpp" line="865"/>
         <source>Waiting for %1 to respond. Loading the model and processing the prompt can take a while on local hardware...</source>
         <translation>Väntar på svar från %1. Att ladda modellen och bearbeta prompten kan ta en stund på lokal hårdvara...</translation>
     </message>
@@ -233,17 +238,17 @@ Varje enhetsåtgärd kräver fortfarande ditt uttryckliga godkännande per anrop
         <translation type="vanished">Fält rundade inte: %1</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/AI/Conversation.cpp" line="1210"/>
+        <location filename="../../../core/Ui/AI/Conversation.cpp" line="1215"/>
         <source>You have reached the tool-call budget for this turn. Do not request more tools. Summarize what you found so far, and if the task is incomplete, say which steps remain so the user can tell you to continue.</source>
         <translation>Du har nått verktygsanropsbudgeten för denna omgång. Begär inte fler verktyg. Sammanfatta vad du hittade hittills, och om uppgiften är ofullständig, ange vilka steg som återstår så att användaren kan be dig fortsätta.</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/AI/Conversation.cpp" line="1462"/>
+        <location filename="../../../core/Ui/AI/Conversation.cpp" line="1467"/>
         <source>The model stopped reproducing its context-integrity line. Long conversations degrade silently; recent replies may be less reliable.</source>
         <translation>Modellen slutade reproducera sin kontextintegritetslinje. Långa konversationer försämras tyst; senaste svar kan vara mindre tillförlitliga.</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/AI/Conversation.cpp" line="1465"/>
+        <location filename="../../../core/Ui/AI/Conversation.cpp" line="1470"/>
         <source>The model altered its context-integrity line (drifted segment: %1). Long conversations degrade silently; recent replies may be less reliable.</source>
         <translation>Modellen ändrade sin kontextintegritetslinje (avviket segment: %1). Långa konversationer försämras tyst; senaste svar kan vara mindre tillförlitliga.</translation>
     </message>
@@ -252,17 +257,17 @@ Varje enhetsåtgärd kräver fortfarande ditt uttryckliga godkännande per anrop
         <translation type="vanished">Budget för verktygsanrop överskriden</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/AI/Conversation.cpp" line="692"/>
+        <location filename="../../../core/Ui/AI/Conversation.cpp" line="697"/>
         <source>(The model returned an empty response. Try rephrasing, switching to a different model, or checking that the request is allowed by the provider's safety filters.)</source>
         <translation>(Modellen returnerade ett tomt svar. Försök omformulera, byt till en annan modell eller kontrollera att förfrågan tillåts av leverantörens säkerhetsfilter.)</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/AI/Conversation.cpp" line="864"/>
+        <location filename="../../../core/Ui/AI/Conversation.cpp" line="869"/>
         <source>Sending request to %1...</source>
         <translation>Skickar förfrågan till %1...</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/AI/Conversation.cpp" line="882"/>
+        <location filename="../../../core/Ui/AI/Conversation.cpp" line="887"/>
         <source>Provider returned no reply</source>
         <translation>Leverantör returnerade inget svar</translation>
     </message>
@@ -366,7 +371,7 @@ Varje enhetsåtgärd kräver fortfarande ditt uttryckliga godkännande per anrop
 <context>
     <name>API::ConsentGate</name>
     <message>
-        <location filename="../../../core/Api/API/Server/ConsentGate.cpp" line="151"/>
+        <location filename="../../../core/Api/API/Server/ConsentGate.cpp" line="164"/>
         <source>Serial Studio</source>
         <translation>Serial Studio</translation>
     </message>
@@ -392,6 +397,19 @@ Varje enhetsåtgärd kräver fortfarande ditt uttryckliga godkännande per anrop
         <location filename="../../src/API/GRPC/GRPCServer.cpp" line="633"/>
         <source>Failed to bind to %1</source>
         <translation>Misslyckades att binda till %1</translation>
+    </message>
+</context>
+<context>
+    <name>API::LaunchConsent</name>
+    <message>
+        <location filename="../../../core/Api/API/LaunchConsent.cpp" line="40"/>
+        <source>Allow this project to launch programs?</source>
+        <translation>Tillåt detta projekt att starta program?</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Api/API/LaunchConsent.cpp" line="41"/>
+        <source>This project wants to run programs with your user account's privileges, from its scripts or from a Process I/O source. Only allow this for projects you trust.</source>
+        <translation>Detta projekt vill köra program med ditt användarkonto's behörigheter, från dess skript eller från en Process I/O-källa. Tillåt endast detta för projekt du litar på.</translation>
     </message>
 </context>
 <context>
@@ -432,22 +450,22 @@ Varje enhetsåtgärd kräver fortfarande ditt uttryckliga godkännande per anrop
 <context>
     <name>API::MirrorSession</name>
     <message>
-        <location filename="../../../core/Api/API/Mirror/MirrorSession.cpp" line="334"/>
+        <location filename="../../../core/Api/API/Mirror/MirrorSession.cpp" line="335"/>
         <source>Enter a host name and a port to attach</source>
         <translation>Ange ett värdnamn och en port för att ansluta</translation>
     </message>
     <message>
-        <location filename="../../../core/Api/API/Mirror/MirrorSession.cpp" line="341"/>
+        <location filename="../../../core/Api/API/Mirror/MirrorSession.cpp" line="342"/>
         <source>Disconnect the local device or close the open recording before attaching to a remote dashboard</source>
         <translation>Koppla från den lokala enheten eller stäng den öppna inspelningen innan du ansluter till en fjärrinstrumentpanel</translation>
     </message>
     <message>
-        <location filename="../../../core/Api/API/Mirror/MirrorSession.cpp" line="546"/>
+        <location filename="../../../core/Api/API/Mirror/MirrorSession.cpp" line="550"/>
         <source>The remote sent a project this build cannot load</source>
         <translation>Fjärren skickade ett projekt som denna version inte kan läsa in</translation>
     </message>
     <message>
-        <location filename="../../../core/Api/API/Mirror/MirrorSession.cpp" line="638"/>
+        <location filename="../../../core/Api/API/Mirror/MirrorSession.cpp" line="642"/>
         <source>This build resolves the remote project to a different dataset layout</source>
         <translation>Denna version tolkar fjärrprojektet till en annan datauppsättningslayout</translation>
     </message>
@@ -455,57 +473,67 @@ Varje enhetsåtgärd kräver fortfarande ditt uttryckliga godkännande per anrop
 <context>
     <name>API::ProcessLauncher</name>
     <message>
-        <location filename="../../../core/Api/API/ProcessLauncher.cpp" line="63"/>
         <source>Allow this project's scripts to launch programs?</source>
-        <translation>Tillåt detta projekts skript att starta program?</translation>
+        <translation type="vanished">Tillåt detta projekts skript att starta program?</translation>
     </message>
     <message>
-        <location filename="../../../core/Api/API/ProcessLauncher.cpp" line="64"/>
         <source>Scripts run programs with your user account's privileges. Only allow this for projects you trust.</source>
-        <translation>Skript kör program med ditt användarkonto's behörigheter. Tillåt endast detta för projekt du litar på.</translation>
+        <translation type="vanished">Skript kör program med ditt användarkonto's behörigheter. Tillåt endast detta för projekt du litar på.</translation>
     </message>
     <message>
-        <location filename="../../../core/Api/API/ProcessLauncher.cpp" line="123"/>
+        <location filename="../../../core/Api/API/ProcessLauncher.cpp" line="116"/>
         <source>No program specified</source>
         <translation>Inget program angivet</translation>
     </message>
     <message>
-        <location filename="../../../core/Api/API/ProcessLauncher.cpp" line="127"/>
+        <location filename="../../../core/Api/API/ProcessLauncher.cpp" line="120"/>
         <source>This project's script wants to run:
 %1</source>
         <translation>Detta projekts skript vill köra:
 %1</translation>
     </message>
     <message>
-        <location filename="../../../core/Api/API/ProcessLauncher.cpp" line="131"/>
+        <location filename="../../../core/Api/API/ProcessLauncher.cpp" line="124"/>
         <source>Launching programs needs the user's consent; a prompt was shown</source>
         <translation>Att starta program kräver användarens samtycke; en prompt visades</translation>
     </message>
     <message>
-        <location filename="../../../core/Api/API/ProcessLauncher.cpp" line="136"/>
+        <location filename="../../../core/Api/API/ProcessLauncher.cpp" line="129"/>
         <source>Launching programs was denied by the user</source>
         <translation>Att starta program nekades av användaren</translation>
     </message>
     <message>
-        <location filename="../../../core/Api/API/ProcessLauncher.cpp" line="142"/>
+        <location filename="../../../core/Api/API/ProcessLauncher.cpp" line="135"/>
         <source>Program "%1" not found in PATH</source>
         <translation>Program "%1" hittades inte i PATH</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Api/API/ProcessLauncher.cpp" line="206"/>
+        <source>This project's Process I/O source wants to run:
+%1</source>
+        <translation>Detta projekts Process I/O-källa vill köra:
+%1</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Api/API/ProcessLauncher.cpp" line="209"/>
+        <source>in %1</source>
+        <translation>i %1</translation>
     </message>
 </context>
 <context>
     <name>API::Server</name>
     <message>
-        <location filename="../../../core/Api/API/Server.cpp" line="255"/>
+        <location filename="../../../core/Api/API/Server.cpp" line="256"/>
         <source>Unable to start API TCP server</source>
         <translation>Kan inte starta API TCP-server</translation>
     </message>
     <message>
-        <location filename="../../../core/Api/API/Server.cpp" line="345"/>
+        <location filename="../../../core/Api/API/Server.cpp" line="346"/>
         <source>Allow External API Connections?</source>
         <translation>Tillåt Externa API-anslutningar?</translation>
     </message>
     <message>
-        <location filename="../../../core/Api/API/Server.cpp" line="346"/>
+        <location filename="../../../core/Api/API/Server.cpp" line="347"/>
         <source>Exposing the API server to external hosts allows other devices on your network to connect to Serial Studio on port 7777.
 
 Only enable this on trusted networks. Untrusted clients may read live data or send commands to your device.</source>
@@ -530,12 +558,12 @@ Aktivera endast detta i betrodda nätverk. Ej betrodda klienter kan läsa liveda
         <translation type="vanished">Serial Studio</translation>
     </message>
     <message>
-        <location filename="../../../core/Api/API/Server.cpp" line="1022"/>
+        <location filename="../../../core/Api/API/Server.cpp" line="1023"/>
         <source>API server</source>
         <translation>API-server</translation>
     </message>
     <message>
-        <location filename="../../../core/Api/API/Server.cpp" line="1022"/>
+        <location filename="../../../core/Api/API/Server.cpp" line="1023"/>
         <source>Invalid pending connection</source>
         <translation>Ogiltig väntande anslutning</translation>
     </message>
@@ -543,22 +571,22 @@ Aktivera endast detta i betrodda nätverk. Ej betrodda klienter kan läsa liveda
 <context>
     <name>API::ServerAuth</name>
     <message>
-        <location filename="../../../core/Api/API/Server/ServerAuth.cpp" line="38"/>
+        <location filename="../../../core/Api/API/Server/ServerAuth.cpp" line="39"/>
         <source>Allow API device control?</source>
         <translation>Tillåt API-enhetskontroll?</translation>
     </message>
     <message>
-        <location filename="../../../core/Api/API/Server/ServerAuth.cpp" line="39"/>
+        <location filename="../../../core/Api/API/Server/ServerAuth.cpp" line="40"/>
         <source>A program using Serial Studio's local API is requesting to send data to the connected device. Allow API clients to write to the device?</source>
         <translation>Ett program som använder Serial Studios lokala API begär att skicka data till den anslutna enheten. Tillåt API-klienter att skriva till enheten?</translation>
     </message>
     <message>
-        <location filename="../../../core/Api/API/Server/ServerAuth.cpp" line="44"/>
+        <location filename="../../../core/Api/API/Server/ServerAuth.cpp" line="45"/>
         <source>Allow API clients to modify project scripts?</source>
         <translation>Tillåt API-klienter att ändra projektskript?</translation>
     </message>
     <message>
-        <location filename="../../../core/Api/API/Server/ServerAuth.cpp" line="45"/>
+        <location filename="../../../core/Api/API/Server/ServerAuth.cpp" line="46"/>
         <source>A program using Serial Studio's local API wants to change this project's scripts. Scripts run with the application's full privileges, including launching programs. Allow API clients to modify project scripts?</source>
         <translation>Ett program som använder Serial Studios lokala API vill ändra detta projekts skript. Skript körs med applikationens fulla behörigheter, inklusive att starta program. Tillåt API-klienter att ändra projektskript?</translation>
     </message>
@@ -6537,158 +6565,158 @@ Aktivera endast detta i betrodda nätverk. Ej betrodda klienter kan läsa liveda
 <context>
     <name>DataModel::DatasetTransformEditor</name>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="117"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="114"/>
         <source>Dataset Value Transform</source>
         <translation>Datamängdsvärdetransform</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="156"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="153"/>
         <source>Lua</source>
         <translation>Lua</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="156"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="153"/>
         <source>JavaScript</source>
         <translation>Javascript</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="188"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="185"/>
         <source>Language:</source>
         <translation>Språk:</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="191"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="188"/>
         <source>Template:</source>
         <translation>Mall:</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="165"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="162"/>
         <source>Enter raw value (e.g., 1024)</source>
         <translation>Ange råvärde (t.ex. 1024)</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="170"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="167"/>
         <source>Test</source>
         <translation>Testa</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="171"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="168"/>
         <source>Clear</source>
         <translation>Rensa</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="207"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="204"/>
         <source>Input:</source>
         <translation>Ingång:</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="210"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="207"/>
         <source>Output:</source>
         <translation>Utgång:</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="173"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="170"/>
         <source>Apply</source>
         <translation>Tillämpa</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="156"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="153"/>
         <source>Expression</source>
         <translation>Uttryck</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="174"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="171"/>
         <source>Cancel</source>
         <translation>Avbryt</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="176"/>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="704"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="173"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="701"/>
         <source>Open Lua Library</source>
         <translation>Öppna Lua-bibliotek</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="177"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="174"/>
         <source>Show the project's shared library for this language in the Project Editor. Functions defined there can be called from this transform by name.</source>
         <translation>Visa projektets delade bibliotek för detta språk i Projektredigeraren. Funktioner som definieras där kan anropas från denna transform med namn.</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="222"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="219"/>
         <source>Parameters</source>
         <translation>Parametrar</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="224"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="221"/>
         <source>Constants that belong to this dataset. The transform reads them as params.&lt;name&gt;.</source>
         <translation>Konstanter som tillhör denna datamängd. Transformeringen läser dem som params.&lt;name&gt;.</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="226"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="223"/>
         <source>Name</source>
         <translation>Namn</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="226"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="223"/>
         <source>Value</source>
         <translation>Värde</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="232"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="229"/>
         <source>Numbers and true/false keep their type; any other value is a string.</source>
         <translation>Tal och true/false behåller sin typ; alla andra värden är strängar.</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="235"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="232"/>
         <source>&lt;b&gt;No Parameters&lt;/b&gt;&lt;br&gt;Parameters are constants that belong to this dataset, such as a scale factor or a sensor offset. The transform reads them as &lt;code&gt;params.name&lt;/code&gt;, so one formula in the Lua Library can serve every dataset that differs only in its constants.</source>
         <translation>&lt;b&gt;Inga Parametrar&lt;/b&gt;&lt;br&gt;Parametrar är konstanter som tillhör denna datamängd, såsom en skalfaktor eller en sensoroffset. Transformeringen läser dem som &lt;code&gt;params.name&lt;/code&gt;, så att en formel i Lua-biblioteket kan tjäna varje datamängd som endast skiljer sig åt i sina konstanter.</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="244"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="241"/>
         <source>Add Parameter</source>
         <translation>Lägg till Parameter</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="245"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="242"/>
         <source>Remove</source>
         <translation>Ta Bort</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="355"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="352"/>
         <source>Transform — %1</source>
         <translation>Transformering — %1</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="460"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="457"/>
         <source>The value transform has a syntax error and was not applied.</source>
         <translation>Värdetransformen har ett syntaxfel och tillämpades inte.</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="469"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="466"/>
         <source>The value transform must define a transform(value) function.</source>
         <translation>Värdetransformen måste definiera en transform(value)-funktion.</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="470"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="467"/>
         <source>Define a transform(value) function that returns a number, or use Clear to remove the transform.</source>
         <translation>Definiera en transform(value)-funktion som returnerar ett tal, eller använd Rensa för att ta bort transformen.</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="488"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="485"/>
         <source>Enter a value</source>
         <translation>Ange ett värde</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="495"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="492"/>
         <source>Invalid number</source>
         <translation>Ogiltigt tal</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="536"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="533"/>
         <source>Format Document	Ctrl+Shift+I</source>
         <translation>Formatera Dokument	ctrl+shift+i</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="537"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="534"/>
         <source>Format Selection	Ctrl+I</source>
         <translation>Formatera Markering	ctrl+i</translation>
     </message>
@@ -6753,7 +6781,7 @@ v
 </translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="834"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="831"/>
         <source>--
 -- Define a transform(value) function that receives the live
 -- dataset reading and returns a transformed number. If no
@@ -6812,7 +6840,7 @@ v
 </translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="862"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="859"/>
         <source>/*
  * Define a transform(value) function that receives the live
  * dataset reading and returns a transformed number. If no
@@ -6869,27 +6897,37 @@ v
  * klicka på Testa för att prova din funktion.</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1003"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1001"/>
         <source>Failed to create the Lua engine.</source>
         <translation>Misslyckades med att skapa Lua-motorn.</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1030"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1008"/>
+        <source>Failed to prepare the Lua engine.</source>
+        <translation>Misslyckades med att förbereda Lua-motorn.</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1029"/>
         <source>Failed to create the JavaScript engine.</source>
         <translation>Misslyckades med att skapa JavaScript-motorn.</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1046"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1034"/>
+        <source>Failed to prepare the JavaScript engine.</source>
+        <translation>Misslyckades med att förbereda JavaScript-motorn.</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1048"/>
         <source>The transform did not finish evaluating within %1 ms.</source>
         <translation>Transformeringen slutförde inte utvärderingen inom %1 ms.</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1051"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1053"/>
         <source>Line %1: %2</source>
         <translation>Rad %1: %2</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1118"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1117"/>
         <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1152"/>
         <source>Error in shared library: %1</source>
         <translation>Fel i delat bibliotek: %1</translation>
@@ -6962,27 +7000,29 @@ v
  * klicka på Testa för att prova din funktion.</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1107"/>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1142"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1108"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1113"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1141"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1144"/>
         <source>Engine error</source>
         <translation>Motorfel</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1097"/>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1124"/>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1132"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1099"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1123"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1131"/>
         <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1160"/>
         <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1173"/>
         <source>Error: %1</source>
         <translation>Fel: %1</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="705"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="702"/>
         <source>Open JavaScript Library</source>
         <translation>Öppna Javascript-bibliotek</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="800"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="797"/>
         <source>#
 # An arithmetic expression evaluated once per sample. No function,
 # no statements: the value of the expression is the new reading.
@@ -7051,13 +7091,13 @@ v
 </translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1128"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1127"/>
         <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1164"/>
         <source>Error: transform() not defined</source>
         <translation>Fel: transform() ej definierad</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1135"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1134"/>
         <source>Error: transform() must return a number</source>
         <translation>Fel: transform() måste returnera ett tal</translation>
     </message>
@@ -17417,118 +17457,129 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
 <context>
     <name>IO::Drivers::Process</name>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Process.cpp" line="247"/>
+        <location filename="../../../core/Devices/IO/Drivers/Process.cpp" line="249"/>
+        <location filename="../../../core/Devices/IO/Drivers/Process.cpp" line="260"/>
         <source>Failed to start process</source>
         <translation>Misslyckades att starta process</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Process.cpp" line="248"/>
+        <location filename="../../../core/Devices/IO/Drivers/Process.cpp" line="250"/>
         <source>Executable "%1" not found in PATH.</source>
         <translation>Körbar fil "%1" hittades inte i PATH.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Process.cpp" line="425"/>
+        <location filename="../../../core/Devices/IO/Drivers/Process.cpp" line="258"/>
+        <source>Waiting for permission to launch "%1".</source>
+        <translation>Väntar på tillåtelse att starta "%1".</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Devices/IO/Drivers/Process.cpp" line="259"/>
+        <source>Launching "%1" was denied for this project.</source>
+        <translation>Starten av "%1" nekades för detta projekt.</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Devices/IO/Drivers/Process.cpp" line="435"/>
         <source>Select Executable</source>
         <translation>Välj Körbar Fil</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Process.cpp" line="449"/>
+        <location filename="../../../core/Devices/IO/Drivers/Process.cpp" line="459"/>
         <source>Select Working Directory</source>
         <translation>Välj Arbetskatalog</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Process.cpp" line="474"/>
+        <location filename="../../../core/Devices/IO/Drivers/Process.cpp" line="484"/>
         <source>Select Named Pipe / FIFO</source>
         <translation>Välj Named Pipe / FIFO</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Process.cpp" line="616"/>
+        <location filename="../../../core/Devices/IO/Drivers/Process.cpp" line="626"/>
         <source>The process crashed.</source>
         <translation>Processen kraschade.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Process.cpp" line="617"/>
+        <location filename="../../../core/Devices/IO/Drivers/Process.cpp" line="627"/>
         <source>Exit code: %1</source>
         <translation>Avslutningskod: %1</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Process.cpp" line="622"/>
+        <location filename="../../../core/Devices/IO/Drivers/Process.cpp" line="632"/>
         <source>Process "%1" stopped</source>
         <translation>Processen "%1" stoppades</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Process.cpp" line="632"/>
+        <location filename="../../../core/Devices/IO/Drivers/Process.cpp" line="642"/>
         <source>Failed to start</source>
         <translation>Misslyckades att starta</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Process.cpp" line="636"/>
+        <location filename="../../../core/Devices/IO/Drivers/Process.cpp" line="646"/>
         <source>Unknown error</source>
         <translation>Okänt fel</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Process.cpp" line="640"/>
+        <location filename="../../../core/Devices/IO/Drivers/Process.cpp" line="650"/>
         <source>Process Error</source>
         <translation>Processfel</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Process.cpp" line="654"/>
+        <location filename="../../../core/Devices/IO/Drivers/Process.cpp" line="664"/>
         <source>The pipe closed before the peer attached.</source>
         <translation>Röret stängdes innan motparten anslöt.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Process.cpp" line="657"/>
+        <location filename="../../../core/Devices/IO/Drivers/Process.cpp" line="667"/>
         <source>Pipe Closed</source>
         <translation>Pipe Stängd</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Process.cpp" line="658"/>
+        <location filename="../../../core/Devices/IO/Drivers/Process.cpp" line="668"/>
         <source>The named pipe "%1" was closed on the other end.</source>
         <translation>Den namngivna pipen "%1" stängdes i andra änden.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Process.cpp" line="679"/>
+        <location filename="../../../core/Devices/IO/Drivers/Process.cpp" line="689"/>
         <source>Pipe Error</source>
         <translation>Pipe-fel</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Process.cpp" line="676"/>
-        <location filename="../../../core/Devices/IO/Drivers/Process.cpp" line="679"/>
+        <location filename="../../../core/Devices/IO/Drivers/Process.cpp" line="686"/>
+        <location filename="../../../core/Devices/IO/Drivers/Process.cpp" line="689"/>
         <source>Could not open named pipe: %1</source>
         <translation>Kunde inte öppna named pipe: %1</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Process.cpp" line="920"/>
+        <location filename="../../../core/Devices/IO/Drivers/Process.cpp" line="930"/>
         <source>Mode</source>
         <translation>Läge</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Process.cpp" line="923"/>
+        <location filename="../../../core/Devices/IO/Drivers/Process.cpp" line="933"/>
         <source>Launch Process</source>
         <translation>Starta Process</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Process.cpp" line="923"/>
+        <location filename="../../../core/Devices/IO/Drivers/Process.cpp" line="933"/>
         <source>Named Pipe</source>
         <translation>Namngiven Pipe</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Process.cpp" line="928"/>
+        <location filename="../../../core/Devices/IO/Drivers/Process.cpp" line="938"/>
         <source>Executable</source>
         <translation>Körbar Fil</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Process.cpp" line="936"/>
+        <location filename="../../../core/Devices/IO/Drivers/Process.cpp" line="946"/>
         <source>Arguments</source>
         <translation>Argument</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Process.cpp" line="944"/>
+        <location filename="../../../core/Devices/IO/Drivers/Process.cpp" line="954"/>
         <source>Working Directory</source>
         <translation>Arbetskatalog</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Process.cpp" line="952"/>
+        <location filename="../../../core/Devices/IO/Drivers/Process.cpp" line="962"/>
         <source>Pipe Path</source>
         <translation>Pipe-sökväg</translation>
     </message>
@@ -21137,47 +21188,47 @@ Ange nödvändiga inloggningsuppgifter.</translation>
         <translation>Neka alla</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/MessageBubble.qml" line="335"/>
-        <location filename="../../qml/AI/MessageBubble.qml" line="410"/>
-        <location filename="../../qml/AI/MessageBubble.qml" line="462"/>
+        <location filename="../../qml/AI/MessageBubble.qml" line="337"/>
+        <location filename="../../qml/AI/MessageBubble.qml" line="412"/>
+        <location filename="../../qml/AI/MessageBubble.qml" line="464"/>
         <source>Copy</source>
         <translation>Kopiera</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/MessageBubble.qml" line="340"/>
-        <location filename="../../qml/AI/MessageBubble.qml" line="415"/>
-        <location filename="../../qml/AI/MessageBubble.qml" line="467"/>
+        <location filename="../../qml/AI/MessageBubble.qml" line="342"/>
+        <location filename="../../qml/AI/MessageBubble.qml" line="417"/>
+        <location filename="../../qml/AI/MessageBubble.qml" line="469"/>
         <source>Copy All</source>
         <translation>Kopiera Alla</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/MessageBubble.qml" line="348"/>
-        <location filename="../../qml/AI/MessageBubble.qml" line="423"/>
+        <location filename="../../qml/AI/MessageBubble.qml" line="350"/>
+        <location filename="../../qml/AI/MessageBubble.qml" line="425"/>
         <source>Select All</source>
         <translation>Markera Allt</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/MessageBubble.qml" line="355"/>
+        <location filename="../../qml/AI/MessageBubble.qml" line="357"/>
         <source>Remember this…</source>
         <translation>Kom Ihåg Detta…</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/MessageBubble.qml" line="358"/>
+        <location filename="../../qml/AI/MessageBubble.qml" line="360"/>
         <source>As a preference about me</source>
         <translation>Som en Preferens om Mig</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/MessageBubble.qml" line="362"/>
+        <location filename="../../qml/AI/MessageBubble.qml" line="364"/>
         <source>As a correction / lesson</source>
         <translation>Som en Korrigering / Lektion</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/MessageBubble.qml" line="366"/>
+        <location filename="../../qml/AI/MessageBubble.qml" line="368"/>
         <source>As a fact about this project</source>
         <translation>Som ett faktum om detta projekt</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/MessageBubble.qml" line="370"/>
+        <location filename="../../qml/AI/MessageBubble.qml" line="372"/>
         <source>As a reference</source>
         <translation>Som en referens</translation>
     </message>
@@ -21279,6 +21330,16 @@ Ange nödvändiga inloggningsuppgifter.</translation>
         <location filename="../../qml/AI/MessageWebView.qml" line="83"/>
         <source>Copy</source>
         <translation>Kopiera</translation>
+    </message>
+    <message>
+        <location filename="../../qml/AI/MessageWebView.qml" line="84"/>
+        <source>Runs these operations</source>
+        <translation>Kör dessa operationer</translation>
+    </message>
+    <message>
+        <location filename="../../qml/AI/MessageWebView.qml" line="85"/>
+        <source>+%1 more</source>
+        <translation>+%1 till</translation>
     </message>
 </context>
 <context>
@@ -26832,7 +26893,7 @@ Läs in den igen?</translation>
         <translation>Allmänt I/O-fel</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="203"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="222"/>
         <source>
 
 This script may use Lua 5.3 bitwise syntax, which this runtime does not support. Replace: %1. The bit and bit32 libraries are available in every script.</source>
@@ -26841,13 +26902,13 @@ This script may use Lua 5.3 bitwise syntax, which this runtime does not support.
 </translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="501"/>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="230"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="546"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="267"/>
         <source>Frame Parser Disabled</source>
         <translation>Frame-parser Inaktiverad</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="502"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="547"/>
         <source>The Lua frame parser for source %1 timed out %2 frames in a row and has been disabled to keep Serial Studio responsive.
 
 Most likely cause: an infinite loop or extremely slow operation in the script body. Fix the script and reload the project to re-enable parsing.</source>
@@ -26856,13 +26917,13 @@ Most likely cause: an infinite loop or extremely slow operation in the script bo
 Troligaste orsak: en oändlig loop eller extremt långsam operation i skriptkroppen. Åtgärda skriptet och ladda om projektet för att återaktivera parsning.</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="270"/>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="310"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="289"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="329"/>
         <source>Lua Syntax Error</source>
         <translation>Lua-syntaxfel</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="271"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="290"/>
         <source>The parser code contains an error:
 
 %1
@@ -26875,17 +26936,17 @@ Serial Studio can rewrite the unsupported operators as bit.* calls and reload th
 Serial Studio kan skriva om de operatorer som inte stöds som bit.*-anrop och ladda om parsern. Bit-biblioteket fungerar på 32-bitars heltal, så ett värde bredare än 32 bitar kommer att lindas om när det skrivs om.</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="281"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="300"/>
         <source>Fix Automatically</source>
         <translation>Åtgärda Automatiskt</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="282"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="301"/>
         <source>Leave Unchanged</source>
         <translation>Lämna Oförändrad</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="311"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="330"/>
         <source>The parser code contains an error:
 
 %1</source>
@@ -26894,12 +26955,12 @@ Serial Studio kan skriva om de operatorer som inte stöds som bit.*-anrop och la
 %1</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="672"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="721"/>
         <source>Lua Runtime Error</source>
         <translation>Lua-körningsfel</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="673"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="722"/>
         <source>The parser code triggered an error:
 
 %1</source>
@@ -26908,13 +26969,13 @@ Serial Studio kan skriva om de operatorer som inte stöds som bit.*-anrop och la
 %1</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="694"/>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="560"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="743"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="600"/>
         <source>Missing Parse Function</source>
         <translation>Parse-funktion Saknas</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="695"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="744"/>
         <source>The 'parse' function is not defined in the script.
 
 Please ensure your code includes:
@@ -26925,13 +26986,13 @@ Säkerställ att din kod innehåller:
 function parse(frame) ... end</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="757"/>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="612"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="806"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="652"/>
         <source>Parse Function Runtime Error</source>
         <translation>Körningsfel i Parse-funktionen</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="758"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="807"/>
         <source>The parse function contains an error:
 
 %1
@@ -26944,12 +27005,12 @@ Please fix the error in the function body.</source>
 Åtgärda felet i funktionskroppen.</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="221"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="255"/>
         <source>parse() timed out after %1 ms</source>
         <translation>parse() överskred tidsgränsen efter %1 ms</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="231"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="268"/>
         <source>The JavaScript frame parser for source %1 timed out %2 frames in a row and has been disabled to keep Serial Studio responsive.
 
 Most likely cause: an infinite loop or extremely slow operation in the script body. Fix the script and reload the project to re-enable parsing.</source>
@@ -26958,12 +27019,12 @@ Most likely cause: an infinite loop or extremely slow operation in the script bo
 Troligaste orsak: en oändlig loop eller extremt långsam operation i skriptkroppen. Åtgärda skriptet och ladda om projektet för att återaktivera parsning.</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="501"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="541"/>
         <source>JavaScript Timed Out</source>
         <translation>Javascript Överskred Tidsgränsen</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="502"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="542"/>
         <source>The parser code did not finish evaluating within %1 ms and was interrupted.
 
 Most likely cause: an infinite loop at the top level of the script.</source>
@@ -26972,12 +27033,12 @@ Most likely cause: an infinite loop at the top level of the script.</source>
 Troligaste orsak: en oändlig loop på toppnivån i skriptet.</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="519"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="559"/>
         <source>JavaScript Syntax Error</source>
         <translation>Javascript-syntaxfel</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="520"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="560"/>
         <source>The parser code contains a syntax error at line %1:
 
 %2</source>
@@ -26986,12 +27047,12 @@ Troligaste orsak: en oändlig loop på toppnivån i skriptet.</translation>
 %2</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="534"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="574"/>
         <source>JavaScript Exception Occurred</source>
         <translation>Javascript-undantag Inträffade</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="535"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="575"/>
         <source>The parser code triggered the following exceptions:
 
 %1</source>
@@ -27000,7 +27061,7 @@ Troligaste orsak: en oändlig loop på toppnivån i skriptet.</translation>
 %1</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="561"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="601"/>
         <source>The 'parse' function is not defined in the script.
 
 Please ensure your code includes:
@@ -27011,7 +27072,7 @@ Säkerställ att din kod inkluderar:
 function parse(frame) { ... }</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="613"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="653"/>
         <source>The parse function contains an error at line %1:
 
 %2
@@ -27024,12 +27085,12 @@ Please fix the error in the function body.</source>
 Åtgärda felet i funktionskroppen.</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="715"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="759"/>
         <source>Invalid Function Declaration</source>
         <translation>Ogiltig Funktionsdeklaration</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="716"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="760"/>
         <source>No callable 'parse' export found.
 
 Define one of:
@@ -27042,7 +27103,7 @@ Definiera en av:
   const parse = (frame) =&gt; { ... }</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="732"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="776"/>
         <source>The 'parse' function must accept at least one parameter (the frame payload).</source>
         <translation>Funktionen 'parse' måste acceptera minst en parameter (frame-payloaden).</translation>
     </message>
@@ -27057,7 +27118,7 @@ Förväntad format:
 function parse(frame) { ... }</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="731"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="775"/>
         <source>Invalid Function Parameter</source>
         <translation>Ogiltig Funktionsparameter</translation>
     </message>
@@ -27072,12 +27133,12 @@ Förväntad format:
 function parse(frame) { ... }</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="697"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="741"/>
         <source>Deprecated Function Signature</source>
         <translation>Föråldrad Funktionssignatur</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="698"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="742"/>
         <source>The 'parse' function uses the old two-parameter format: parse(%1, %2)
 
 This format is no longer supported. Please update to the new single-parameter format:
@@ -27102,12 +27163,12 @@ Separatorparametern behövs inte längre.</translation>
         <translation>Varning</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/CLI.cpp" line="922"/>
+        <location filename="../../src/Misc/CLI.cpp" line="926"/>
         <source>Project file not found</source>
         <translation>Projektfilen hittades inte</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/CLI.cpp" line="923"/>
+        <location filename="../../src/Misc/CLI.cpp" line="927"/>
         <source>The project file referenced by this shortcut could not be found:
 
 %1</source>
@@ -27116,17 +27177,17 @@ Separatorparametern behövs inte längre.</translation>
 %1</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/CLI.cpp" line="926"/>
+        <location filename="../../src/Misc/CLI.cpp" line="930"/>
         <source>Would you like to delete this shortcut?</source>
         <translation>Vill du ta bort denna genväg?</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/CLI.cpp" line="930"/>
+        <location filename="../../src/Misc/CLI.cpp" line="934"/>
         <source>Delete Shortcut</source>
         <translation>Ta Bort Genväg</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/CLI.cpp" line="932"/>
+        <location filename="../../src/Misc/CLI.cpp" line="936"/>
         <source>Quit</source>
         <translation>Avsluta</translation>
     </message>
@@ -32470,95 +32531,105 @@ Aktivera Bädda in Projekt för att baka in projektet i genvägen, så att den f
 <context>
     <name>ToolCallCard</name>
     <message>
-        <location filename="../../qml/AI/ToolCallCard.qml" line="69"/>
+        <location filename="../../qml/AI/ToolCallCard.qml" line="71"/>
         <source>Awaiting approval</source>
         <translation>Väntar på godkännande</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/ToolCallCard.qml" line="70"/>
+        <location filename="../../qml/AI/ToolCallCard.qml" line="72"/>
         <source>Done</source>
         <translation>Klar</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/ToolCallCard.qml" line="71"/>
+        <location filename="../../qml/AI/ToolCallCard.qml" line="73"/>
         <source>Error</source>
         <translation>Fel</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/ToolCallCard.qml" line="72"/>
+        <location filename="../../qml/AI/ToolCallCard.qml" line="74"/>
         <source>Denied</source>
         <translation>Nekad</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/ToolCallCard.qml" line="73"/>
+        <location filename="../../qml/AI/ToolCallCard.qml" line="75"/>
         <source>Blocked</source>
         <translation>Blockerad</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/ToolCallCard.qml" line="74"/>
+        <location filename="../../qml/AI/ToolCallCard.qml" line="76"/>
         <source>Running</source>
         <translation>Körs</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/ToolCallCard.qml" line="162"/>
+        <location filename="../../qml/AI/ToolCallCard.qml" line="164"/>
         <source>Verified</source>
         <translation>Verifierad</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/ToolCallCard.qml" line="162"/>
+        <location filename="../../qml/AI/ToolCallCard.qml" line="164"/>
         <source>Verify failed</source>
         <translation>Verifiering misslyckades</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/ToolCallCard.qml" line="202"/>
+        <location filename="../../qml/AI/ToolCallCard.qml" line="204"/>
         <source>Verification failed: %1</source>
         <translation>Verifiering misslyckades: %1</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/ToolCallCard.qml" line="203"/>
+        <location filename="../../qml/AI/ToolCallCard.qml" line="205"/>
         <source>The applied change failed its verification check.</source>
         <translation>Den tillämpade ändringen klarade inte verifieringskontrollen.</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/ToolCallCard.qml" line="212"/>
+        <location filename="../../qml/AI/ToolCallCard.qml" line="214"/>
         <source>Restore checkpoint…</source>
         <translation>Återställ kontrollpunkt…</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/ToolCallCard.qml" line="231"/>
+        <location filename="../../qml/AI/ToolCallCard.qml" line="234"/>
+        <source>Runs these operations</source>
+        <translation>Kör dessa operationer</translation>
+    </message>
+    <message>
+        <location filename="../../qml/AI/ToolCallCard.qml" line="261"/>
+        <source>+%1 more</source>
+        <translation>+%1 till</translation>
+    </message>
+    <message>
+        <location filename="../../qml/AI/ToolCallCard.qml" line="275"/>
         <source>Approve</source>
         <translation>Godkänn</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/ToolCallCard.qml" line="237"/>
+        <location filename="../../qml/AI/ToolCallCard.qml" line="281"/>
         <source>Deny</source>
         <translation>Neka</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/ToolCallCard.qml" line="254"/>
+        <location filename="../../qml/AI/ToolCallCard.qml" line="298"/>
         <source>Arguments</source>
         <translation>Argument</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/ToolCallCard.qml" line="291"/>
-        <location filename="../../qml/AI/ToolCallCard.qml" line="351"/>
+        <location filename="../../qml/AI/ToolCallCard.qml" line="335"/>
+        <location filename="../../qml/AI/ToolCallCard.qml" line="395"/>
         <source>Copy</source>
         <translation>Kopiera</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/ToolCallCard.qml" line="296"/>
-        <location filename="../../qml/AI/ToolCallCard.qml" line="356"/>
+        <location filename="../../qml/AI/ToolCallCard.qml" line="340"/>
+        <location filename="../../qml/AI/ToolCallCard.qml" line="400"/>
         <source>Copy All</source>
         <translation>Kopiera Allt</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/ToolCallCard.qml" line="304"/>
-        <location filename="../../qml/AI/ToolCallCard.qml" line="364"/>
+        <location filename="../../qml/AI/ToolCallCard.qml" line="348"/>
+        <location filename="../../qml/AI/ToolCallCard.qml" line="408"/>
         <source>Select All</source>
         <translation>Markera Allt</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/ToolCallCard.qml" line="312"/>
+        <location filename="../../qml/AI/ToolCallCard.qml" line="356"/>
         <source>Result</source>
         <translation>Resultat</translation>
     </message>

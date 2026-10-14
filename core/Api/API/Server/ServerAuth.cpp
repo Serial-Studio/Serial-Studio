@@ -21,6 +21,7 @@
 
 #include "API/Server/ServerAuth.h"
 
+#include "API/CommandCapabilities.h"
 #include "API/Server/AuthPrimitives.h"
 
 //--------------------------------------------------------------------------------------------------
@@ -154,24 +155,46 @@ static std::optional<API::CommandResponse> refusalFor(const API::ConsentVerdict 
 }
 
 /**
- * @brief The ONE policy for a remote-origin command, outer or nested: control-script-only commands
- *        are refused outright, script installs and device writes each clear their consent gate,
- *        everything else passes. Returns the refusal to send, or nothing when the command may run.
+ * @brief The ONE policy for a remote-origin command, outer or nested, decided by its capabilities
+ *        (spec 0098): unclassified and control-script-only commands are refused, every consent
+ *        that applies must pass, and a command that changed what the project runs announces it
+ *        so the project's launch consent is asked again (R13).
  */
 std::optional<API::CommandResponse> API::ServerAuth::authorizeRemoteCommand(
   const QString& id, const QString& command, const QJsonObject& params)
 {
-  if (API::Auth::commandIsControlScriptOnly(command))
+  namespace Caps          = API::CommandCapabilities;
+  const auto capabilities = Caps::of(command, params);
+  if (!capabilities.has_value())
+    return CommandResponse::makeError(
+      id,
+      ErrorCode::ExecutionError,
+      QStringLiteral("%1 has no capability classification and is not available to API clients")
+        .arg(command));
+
+  if (capabilities->testFlag(Caps::ControlScriptOnly))
     return CommandResponse::makeError(
       id,
       ErrorCode::ExecutionError,
       QStringLiteral("%1 is control-script only and not available to API clients").arg(command));
 
-  if (API::Auth::commandInstallsScript(command, params))
-    return refusalFor(m_scriptInstall.authorize(command), id, QStringLiteral("Script changes"));
+  const bool changesScripts = capabilities->testAnyFlags(Caps::InstallsScript | Caps::LoadsProject);
+  if (changesScripts) {
+    auto refused =
+      refusalFor(m_scriptInstall.authorize(command), id, QStringLiteral("Script changes"));
+    if (refused.has_value())
+      return refused;
+  }
 
-  if (API::Auth::commandWritesToDevice(command, params))
-    return refusalFor(m_deviceWrite.authorize(command), id, QStringLiteral("Device writes"));
+  if (capabilities->testFlag(Caps::WritesDevice)) {
+    auto refused =
+      refusalFor(m_deviceWrite.authorize(command), id, QStringLiteral("Device writes"));
+    if (refused.has_value())
+      return refused;
+  }
+
+  if (changesScripts || capabilities->testFlag(Caps::ChoosesProgram))
+    Q_EMIT remoteProgramChanged();
 
   return std::nullopt;
 }

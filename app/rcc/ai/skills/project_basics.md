@@ -193,6 +193,20 @@ Returns:
 }
 ```
 
+### How a batch is approved
+
+A batch is approved as one call, and it takes the tier of its strictest op:
+
+- The approval card lists every op, so the user sees exactly what will run.
+- If any op is blocked for you (licensing, `system.*`, or a device command while "Allow
+  device control" is off), the whole batch is refused before anything runs, and the
+  reply names that op. Remove it and send the rest.
+- If any op always needs the user's click, the batch does too, even with auto-approve on.
+- An op cannot be `project.batch` or `assistant.project.bulkApply`. Batches do not nest.
+
+Keep batches to edits of one kind. Put a delete or a project load in a separate call
+so the user can approve it on its own.
+
 ### `project.dataset.addMany`: exact shape
 
 ```json

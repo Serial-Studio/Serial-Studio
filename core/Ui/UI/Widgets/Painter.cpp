@@ -21,6 +21,7 @@
 #  include <QQuickWindow>
 #  include <QStringList>
 
+#  include "API/Mirror/MirrorSession.h"
 #  include "AppState.h"
 #  include "Core/DataModel/Frame.h"
 #  include "Core/SerialStudio.h"
@@ -32,6 +33,7 @@
 #  include "DataModel/Scripting/ChecksumApi.h"
 #  include "DataModel/Scripting/DashboardApi.h"
 #  include "DataModel/Scripting/DeviceWriteApi.h"
+#  include "DataModel/Scripting/InertScriptSurface.h"
 #  include "DataModel/Scripting/ScriptApiCall.h"
 #  include "Misc/ThemeManager.h"
 #  include "UI/Dashboard.h"
@@ -126,7 +128,8 @@ static constexpr int kSlowPaintMs       = 30;
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Constructs the painter widget bound to a dashboard slot.
+ * @brief Constructs the painter widget bound to a dashboard slot. Built while mirroring, its
+ *        engine gets the draw-only surface instead of the live bridges (spec 0098 R11).
  */
 Widgets::Painter::Painter(int index, QQuickItem* parent)
   : QQuickPaintedItem(parent)
@@ -144,10 +147,13 @@ Widgets::Painter::Painter(int index, QQuickItem* parent)
   , m_slowPaintWarned(false)
   , m_pointerDown(false)
   , m_rendering(false)
+  , m_drawOnly(API::MirrorSession::mirroring())
+  , m_inertReady(false)
   , m_slowPaintStreak(0)
   , m_lastPointerX(0.0)
   , m_lastPointerY(0.0)
   , m_frameSeq(0)
+  , m_inert(m_drawOnly ? std::make_unique<DataModel::InertScriptSurface>() : nullptr)
   , m_watchdog(&m_engine, kPainterWatchdogMs, QStringLiteral("Painter"))
   , m_ctx(new PainterContext(this))
   , m_bridge(new PainterDataBridge(this))
@@ -158,17 +164,22 @@ Widgets::Painter::Painter(int index, QQuickItem* parent)
   setAcceptHoverEvents(true);
   setAcceptTouchEvents(false);
 
-  m_engine.installExtensions(QJSEngine::ConsoleExtension | QJSEngine::GarbageCollectionExtension);
-  DataModel::NotificationCenter::installScriptApi(&m_engine);
-  m_frameBuilder.injectTableApiJS(&m_engine);
+  if (m_drawOnly) {
+    m_engine.installExtensions(QJSEngine::GarbageCollectionExtension);
+    m_inertReady = m_inert->installJs(&m_engine);
+  } else {
+    m_engine.installExtensions(QJSEngine::ConsoleExtension | QJSEngine::GarbageCollectionExtension);
+    DataModel::NotificationCenter::installScriptApi(&m_engine);
+    m_frameBuilder.injectTableApiJS(&m_engine);
 
-  DataModel::DeviceWriteApi::installJS(&m_engine, 0);
-  DataModel::ActionFireApi::installJS(&m_engine);
+    DataModel::DeviceWriteApi::installJS(&m_engine, 0);
+    DataModel::ActionFireApi::installJS(&m_engine);
 
-  DataModel::DashboardApi::installJS(&m_engine);
-  DataModel::ChecksumApi::installJS(&m_engine);
+    DataModel::DashboardApi::installJS(&m_engine);
+    DataModel::ChecksumApi::installJS(&m_engine);
 
-  DataModel::ScriptApiCall::installJS(&m_engine, 0);
+    DataModel::ScriptApiCall::installJS(&m_engine, 0);
+  }
 
   const auto projectPath = m_appState.projectFilePath();
   if (!projectPath.isEmpty())
@@ -204,12 +215,13 @@ Widgets::Painter::Painter(int index, QQuickItem* parent)
 }
 
 /**
- * @brief Destroys the painter widget and drops its table-API user (spec 0086); the QJSEngine and
- *        child QObjects clean up automatically.
+ * @brief Destroys the painter widget and drops its table-API user (spec 0086); a draw-only
+ *        painter never took one. The QJSEngine and child QObjects clean up automatically.
  */
 Widgets::Painter::~Painter()
 {
-  m_frameBuilder.releaseTableApiUser();
+  if (!m_drawOnly)
+    m_frameBuilder.releaseTableApiUser();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -687,7 +699,7 @@ QString Widgets::Painter::fallbackTemplate()
 /**
  * @brief Compiles the user JS, looks up paint() and (optional) onFrame(). The evaluate runs
  *        under the armed watchdog so a top-level infinite loop in a painter script cannot
- *        freeze the GUI thread.
+ *        freeze the GUI thread. On a mirror viewer only a draw-only engine runs code (spec 0098).
  */
 bool Widgets::Painter::compile(const QString& code)
 {
@@ -701,6 +713,13 @@ bool Widgets::Painter::compile(const QString& code)
   m_onWheelFn       = QJSValue();
   m_onDoubleClickFn = QJSValue();
   m_hasOnFrame      = false;
+
+  const bool liveOnAViewer = API::MirrorSession::mirroring() && !m_drawOnly;
+  if (liveOnAViewer || (m_drawOnly && !m_inertReady)) [[unlikely]] {
+    setLastError(QStringLiteral("compile: Canvas code on a remote dashboard can only draw"));
+    setRuntimeOk(false);
+    return false;
+  }
 
   if (!m_bootstrapOk) [[unlikely]] {
     setRuntimeOk(false);

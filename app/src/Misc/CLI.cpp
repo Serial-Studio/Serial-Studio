@@ -36,6 +36,7 @@
 #include "AppState.h"
 #include "Benchmark/HotpathBenchmark.h"
 #include "Core/AppInfo.h"
+#include "Core/Runtime.h"
 #include "Core/SerialStudio.h"
 #include "Core/TimerEvents.h"
 #include "DataModel/FrameBuilder.h"
@@ -742,6 +743,9 @@ bool CLI::applyProjectAndAutoConnect(QApplication& app)
     static auto& projectModel = DataModel::ProjectModel::instance();
     if (m_parser.isSet(m_opts.profileOpt))
       projectModel.setRequestedWorkspaceProfile(m_parser.value(m_opts.profileOpt));
+
+    if (m_parser.isSet(m_opts.headlessOpt))
+      Core::Runtime::setOperatorProject(project);
 
     projectModel.openJsonFile(project);
   }

@@ -29,6 +29,7 @@
 #include <QStandardPaths>
 #include <QTimer>
 
+#include "Core/IO/LaunchAuthorizer.h"
 #include "IO/ConnectionManager.h"
 
 // Grace the terminated child gets before it is killed, off the GUI thread
@@ -233,7 +234,8 @@ qint64 IO::Drivers::Process::write(const QByteArray& data)
 }
 
 /**
- * @brief Opens the data channel (spawns process or starts pipe reader thread).
+ * @brief Opens the data channel (spawns process or starts pipe reader thread). A launch first
+ *        asks the project's launch consent (spec 0098 R8), whatever triggered the connect.
  */
 bool IO::Drivers::Process::open(const QIODevice::OpenMode mode)
 {
@@ -250,6 +252,14 @@ bool IO::Drivers::Process::open(const QIODevice::OpenMode mode)
     }
 
     const QStringList args = QProcess::splitCommand(m_arguments);
+    const auto verdict     = IO::authorizeLaunch(resolved, args, m_workingDir);
+    if (verdict != IO::LaunchVerdict::Allowed) {
+      const auto reason = verdict == IO::LaunchVerdict::ConsentRequired
+                          ? tr("Waiting for permission to launch \"%1\".").arg(m_executable)
+                          : tr("Launching \"%1\" was denied for this project.").arg(m_executable);
+      logDriverError(tr("Failed to start process"), reason);
+      return false;
+    }
 
     m_dropReported = false;
     m_process      = new QProcess(this);

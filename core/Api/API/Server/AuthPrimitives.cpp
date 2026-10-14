@@ -21,11 +21,7 @@
 
 #include "API/Server/AuthPrimitives.h"
 
-#include <QHash>
 #include <QRandomGenerator>
-#include <QSet>
-
-#include "Core/DataModel/FrameKeys.h"
 
 //--------------------------------------------------------------------------------------------------
 // Constants
@@ -85,101 +81,4 @@ bool API::Auth::constantTimeEquals(const QByteArray& a, const QByteArray& b)
     diff |= static_cast<quint8>(a[i]) ^ static_cast<quint8>(b[i]);
 
   return diff == 0;
-}
-
-//--------------------------------------------------------------------------------------------------
-// Command classification
-//--------------------------------------------------------------------------------------------------
-
-/**
- * @brief Whether a command may only be issued by an in-process control script.
- */
-bool API::Auth::commandIsControlScriptOnly(const QString& command)
-{
-  static const QSet<QString> kControlScriptOnlyCommands = {
-    QStringLiteral("system.exec"),
-    QStringLiteral("system.kill"),
-    QStringLiteral("system.runningProcesses"),
-  };
-
-  return kControlScriptOnlyCommands.contains(command);
-}
-
-/**
- * @brief Whether a command reaches the connected hardware, and therefore has to clear the
- *        device-write consent gate before a remote client may run it. An action update counts
- *        when it changes the bytes, target or arming of an action (auto-execute and timers
- *        write later with no further prompt); duplicating copies whatever is armed.
- */
-bool API::Auth::commandWritesToDevice(const QString& command, const QJsonObject& params)
-{
-  static const QSet<QString> kDeviceWriteCommands = {
-    QStringLiteral("io.writeData"),
-    QStringLiteral("io.ble.writeCharacteristic"),
-    QStringLiteral("console.send"),
-  };
-
-  if (kDeviceWriteCommands.contains(command))
-    return true;
-
-  if (command == QStringLiteral("project.action.duplicate"))
-    return true;
-
-  if (command != QStringLiteral("project.action.update"))
-    return false;
-
-  if (params.value(QStringLiteral("autoExecuteOnConnect")).toBool())
-    return true;
-
-  if (params.value(QStringLiteral("timerMode")).toInt() != 0)
-    return true;
-
-  static const QStringList kTxParams = {
-    QStringLiteral("txData"),
-    QStringLiteral("binaryData"),
-    QStringLiteral("checksum"),
-    QStringLiteral("eolSequence"),
-    QStringLiteral("txEncoding"),
-    QString(Keys::SourceId),
-    QStringLiteral("repeatCount"),
-    QStringLiteral("timerIntervalMs"),
-  };
-
-  for (const auto& key : kTxParams)
-    if (params.contains(key))
-      return true;
-
-  return false;
-}
-
-/**
- * @brief Whether a command installs script code into the project: unconditionally for the
- *        setters and loaders, and for the generic updaters only when the call carries a code field.
- */
-bool API::Auth::commandInstallsScript(const QString& command, const QJsonObject& params)
-{
-  static const QSet<QString> kScriptInstallCommands = {
-    QStringLiteral("controlScript.set"),
-    QStringLiteral("controlScript.setCode"),
-    QStringLiteral("project.frameParser.setCode"),
-    QStringLiteral("project.source.setFrameParserCode"),
-    QStringLiteral("project.dataset.setTransformCode"),
-    QStringLiteral("project.transformLibrary.set"),
-    QStringLiteral("project.painter.setCode"),
-    QStringLiteral("project.loadJson"),
-    QStringLiteral("project.open"),
-    QStringLiteral("project.template.apply"),
-  };
-
-  static const QHash<QString, QString> kScriptParamByCommand = {
-    {     QStringLiteral("project.dataset.update"),    QStringLiteral("transformCode")},
-    {       QStringLiteral("project.group.update"),      QStringLiteral("painterCode")},
-    {QStringLiteral("project.outputWidget.update"), QStringLiteral("transmitFunction")},
-  };
-
-  if (kScriptInstallCommands.contains(command))
-    return true;
-
-  const auto param = kScriptParamByCommand.constFind(command);
-  return param != kScriptParamByCommand.constEnd() && params.contains(param.value());
 }

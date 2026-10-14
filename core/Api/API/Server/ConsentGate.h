@@ -61,6 +61,7 @@ public:
 
 public slots:
   void grant();
+  void revoke();
   void rebind(const QString& settingsKey);
   void showPrompt();
 

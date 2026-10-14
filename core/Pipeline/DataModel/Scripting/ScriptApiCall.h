@@ -64,6 +64,8 @@ private:
  */
 class ScriptApiCall {
 public:
+  static void evaluateSdk(lua_State* L);
+  static void evaluateSdk(QJSEngine* js);
   static void installLua(lua_State* L, int sourceId);
   static void installJS(QJSEngine* js, int sourceId);
   static void bindSourceIdJS(QJSEngine* js, const int* sourceId);

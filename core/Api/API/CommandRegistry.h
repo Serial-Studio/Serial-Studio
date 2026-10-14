@@ -51,6 +51,41 @@ struct CommandDefinition {
 };
 
 /**
+ * @brief Policy a caller with tiers of its own (the in-app assistant, spec 0098) installs for the
+ *        commands dispatched under it: the refusal to send, or nothing when the command may run.
+ *        @p depth is 0 for the outermost execute() under the scope.
+ */
+using DispatchPolicy = std::function<std::optional<CommandResponse>(
+  const QString& id, const QString& name, const QJsonObject& params, int depth)>;
+
+/**
+ * @brief RAII marker like RemoteDispatchScope, on a stack of its own so the remote-origin probes
+ *        never see it: every CommandRegistry::execute under it, outer or nested, answers to
+ *        @p policy. A trusted dispatch opens one with an empty policy, shadowing it, so a
+ *        consented script keeps full trust under an assistant call.
+ */
+class DispatchPolicyScope {
+public:
+  explicit DispatchPolicyScope(DispatchPolicy policy);
+  ~DispatchPolicyScope();
+  DispatchPolicyScope(DispatchPolicyScope&&)                 = delete;
+  DispatchPolicyScope(const DispatchPolicyScope&)            = delete;
+  DispatchPolicyScope& operator=(DispatchPolicyScope&&)      = delete;
+  DispatchPolicyScope& operator=(const DispatchPolicyScope&) = delete;
+
+public:
+  [[nodiscard]] static const DispatchPolicyScope* active() noexcept;
+  [[nodiscard]] std::optional<CommandResponse> authorize(const QString& id,
+                                                         const QString& name,
+                                                         const QJsonObject& params) const;
+
+private:
+  int m_baseDepth;
+  DispatchPolicy m_policy;
+  const DispatchPolicyScope* m_previous;
+};
+
+/**
  * @brief Policy a remote entry point installs for the commands dispatched under it: the refusal
  *        to send, or nothing when the command may run.
  */
@@ -58,10 +93,10 @@ using RemoteGate = std::function<std::optional<CommandResponse>(
   const QString& id, const QString& name, const QJsonObject& params)>;
 
 /**
- * @brief RAII marker that every CommandRegistry::execute under it, outer or nested, answers to
- *        @p gate, so a project.batch op or an assistant forward cannot outrun the origin check.
- *        Remote entry points (TCP, MCP, gRPC) open one with the server's policy; a trusted
- *        dispatch opens one with an empty gate, shadowing any remote scope it runs inside.
+ * @brief RAII marker: every CommandRegistry::execute under it, outer or nested, answers to @p gate
+ *        (the server's policy for TCP/MCP/gRPC; empty, so trusted, for a script). It also shadows
+ *        a caller's DispatchPolicyScope (spec 0098): a request served in an assistant call's
+ *        nested event loop answers to its own origin, not the assistant's tiers.
  */
 class RemoteDispatchScope {
 public:
@@ -81,6 +116,7 @@ public:
 private:
   RemoteGate m_gate;
   const RemoteDispatchScope* m_previous;
+  DispatchPolicyScope m_policyShadow;
 };
 
 /**

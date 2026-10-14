@@ -277,6 +277,8 @@ Item {
           callId: modelData.callId
           toolName: modelData.name
           argsJson: modelData.args
+          ops: modelData.ops !== undefined ? modelData.ops : []
+          opsTotal: modelData.opsTotal !== undefined ? modelData.opsTotal : 0
           resultJson: modelData.result
           statusValue: modelData.status
           expansionStore: root.expansionStore

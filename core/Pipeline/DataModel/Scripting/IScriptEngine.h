@@ -32,6 +32,15 @@ namespace DataModel {
 class ScriptCellRows;
 
 /**
+ * @brief Which host bridges an engine gets: the live ones, or the inert stand-ins of a dry run or
+ *        compile check (spec 0098).
+ */
+enum class ScriptSurface : quint8 {
+  Live,
+  Inert,
+};
+
+/**
  * @brief Abstract script engine interface used by the frame parser.
  */
 class IScriptEngine {

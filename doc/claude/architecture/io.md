@@ -98,6 +98,33 @@ namesake of a removed 0034 hook, but a different, much smaller thing (see below)
   (serial backends only) answer with the canonical port name from
   `IO::Drivers::SerialPorts::resourceName()`. A driver that claims a device no second opener can
   share answers here too, or the loser fails with a busy error naming neither source.
+- **A program start asks `IO::authorizeLaunch`, whatever chose the program (spec 0098 R8).**
+  `Process::open()` in Launch mode asks it after resolving the executable and before
+  `QProcess::start`, so it is the ONE spawn gate for a driver and it cannot depend on an origin:
+  the Connect button, `io.connect`, an `io.setBusType` that reuses the saved program, a project
+  load and a driver reconnect all pass through `open()`. A per-command check is not enough, since
+  the generic `project.source.setProperty` chose a program past the dedicated `io.process.*`
+  commands. `IO::ILaunchAuthorizer` (`core/Core/IO/LaunchAuthorizer.h`) is the interface the
+  layer below the API calls; `API::ProcessLauncher` implements it over the `API::LaunchConsent`
+  that `system.exec` asks too, and binds itself in `setupExternalConnections()` through
+  `IO::setLaunchAuthorizer`. An unbound root answers `Denied`, never `Allowed`. The call never
+  blocks: an unanswered consent posts its prompt and answers `ConsentRequired`, the driver fails
+  the open with a logged driver error (never a modal), and the launcher latches
+  `m_reconnectOnGrant`, so the consent's `granted` signal retries `connectDevice()` ONCE (queued,
+  skipped when already connected; a project switch drops the latch). Only Launch mode asks; Named pipe starts nothing.
+  A new way for a driver to start a program goes through `IO::authorizeLaunch`.
+  Enforced: ctest:tst_launch_consent.
+- **The launch consent follows the project file, and a remote edit cannot inherit a grant (R13).**
+  `LaunchConsent::bindProject()` rebinds the gate to the file's key on `jsonFileChanged`.
+  `ServerAuth::authorizeRemoteCommand` emits `Server::remoteProgramChanged` for any remote command
+  that installs script code, loads a project or chooses a program, and
+  `LaunchConsent::noteRemoteChange()` revokes the open project's answer ONCE per session
+  (`m_cleared`) and marks the session tainted, so a rebind clears the newly bound file once too.
+  An answer given after the clear is never cleared again. Headless has two grants and no prompt:
+  `SERIAL_STUDIO_API_AUTO_CONSENT=1` grants in memory and disables the clearing, and the project
+  the operator named with `--headless` (`Core::Runtime::setOperatorProject`, set in
+  `CLI::applyProjectAndAutoConnect`) is granted in memory by `bindProject()` unless the session is
+  already tainted. Any other headless start is `Denied`.
 - **Serial pickers show one label, and the label is also the id.** Every serial combo is built
   from `SerialPorts::listPorts()`, whose labels are `portName` plus the device description. The
   CAN backend registry hands that same string to `Entry::create()`, so `SerialCanBackendBase`'s

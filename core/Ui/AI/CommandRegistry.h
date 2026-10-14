@@ -12,8 +12,10 @@
 #pragma once
 
 #include <QHash>
+#include <QJsonObject>
 #include <QSet>
 #include <QString>
+#include <QStringList>
 
 namespace AI {
 
@@ -37,6 +39,12 @@ public:
   [[nodiscard]] Safety safetyOf(const QString& commandName) const;
   [[nodiscard]] bool deviceControlAllowed() const;
   [[nodiscard]] bool isDeviceGated(const QString& commandName) const;
+  [[nodiscard]] Safety effectiveSafety(const QString& commandName, const QJsonObject& args) const;
+
+  [[nodiscard]] static int strictness(Safety safety) noexcept;
+  [[nodiscard]] static bool isDispatcher(const QString& commandName);
+  [[nodiscard]] static QStringList plannedCommands(const QString& commandName,
+                                                   const QJsonObject& args);
 
   void setDeviceControlAllowed(bool allowed);
 

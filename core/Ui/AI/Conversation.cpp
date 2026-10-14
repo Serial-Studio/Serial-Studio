@@ -614,20 +614,25 @@ void AI::Conversation::onToolCallRequested(const QString& callId,
 }
 
 /**
- * @brief Routes a non-meta tool call by its CommandRegistry safety tag.
+ * @brief Routes a non-meta tool call by its effective safety tag (spec 0098 R9): a batch takes
+ *        its strictest op's tier, so an always-confirm op needs a click even with auto-approve.
  */
 void AI::Conversation::dispatchByCallSafety(const QString& callId,
                                             const QString& requestedName,
                                             const QJsonObject& arguments)
 {
   const QString name = m_dispatcher->canonicalToolName(requestedName);
-  const auto safety  = m_commands.safetyOf(name);
+  const auto safety  = m_commands.effectiveSafety(name, arguments);
   qCDebug(serialStudioAI) << "Tool call" << name << "safety=" << static_cast<int>(safety);
 
   if (safety == Safety::Blocked) {
     QJsonObject denial;
     denial[QStringLiteral("ok")]    = false;
     denial[QStringLiteral("error")] = QStringLiteral("blocked");
+    if (m_commands.safetyOf(name) != Safety::Blocked)
+      denial[QStringLiteral("reason")] =
+        tr("This call runs a command that is blocked for the assistant, or nests another batch.");
+
     appendToolCallCard(callId, name, arguments, CallStatus::Blocked);
     recordToolResult(callId, name, denial);
     updateToolCallCard(callId, CallStatus::Blocked, denial);

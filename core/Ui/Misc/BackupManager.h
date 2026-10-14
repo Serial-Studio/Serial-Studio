@@ -66,6 +66,7 @@ public:
   Q_INVOKABLE [[nodiscard]] QString backupDirectory() const override;
   Q_INVOKABLE [[nodiscard]] QVariantMap summarize(const QString& path) const;
   Q_INVOKABLE [[nodiscard]] QVariantMap currentSummary() const;
+  [[nodiscard]] bool isOwnCheckpoint(const QString& path) const;
 
   [[nodiscard]] bool enabled() const noexcept;
   void setEnabled(bool on) noexcept;

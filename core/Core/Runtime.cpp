@@ -30,6 +30,7 @@ static int s_sessionId        = 0;
 static std::atomic<bool> s_sealed{false};
 static QString s_sealedMountRoot;
 static QString s_sealedProjectFolder;
+static QString s_operatorProject;
 
 /**
  * @brief Whether the headless hotpath benchmark is feeding frames; the benchmark is
@@ -104,4 +105,20 @@ void Core::Runtime::seal(const QString& mountRoot, const QString& projectFolder)
   s_sealedMountRoot     = mountRoot;
   s_sealedProjectFolder = projectFolder;
   s_sealed.store(true, std::memory_order_release);
+}
+
+/**
+ * @brief The project a headless run named on its command line, or empty (spec 0098). GUI thread.
+ */
+const QString& Core::Runtime::operatorProject() noexcept
+{
+  return s_operatorProject;
+}
+
+/**
+ * @brief Records the headless run's command-line project, before the CLI opens it.
+ */
+void Core::Runtime::setOperatorProject(const QString& projectPath) noexcept
+{
+  s_operatorProject = projectPath;
 }

@@ -197,7 +197,7 @@ Every device action still requires your explicit per-call approval in the chat, 
     </message>
     <message>
         <location filename="../../../core/Ui/AI/Conversation.cpp" line="188"/>
-        <location filename="../../../core/Ui/AI/Conversation.cpp" line="845"/>
+        <location filename="../../../core/Ui/AI/Conversation.cpp" line="850"/>
         <source>AI subsystem not initialized</source>
         <translation>AI सबसिस्टम इनिशियलाइज़ नहीं है</translation>
     </message>
@@ -212,7 +212,12 @@ Every device action still requires your explicit per-call approval in the chat, 
         <translation>इस बारी के लिए टूल-कॉल बजट पूरा हो गया; अब कोई और टूल नहीं चलेगा।</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/AI/Conversation.cpp" line="860"/>
+        <location filename="../../../core/Ui/AI/Conversation.cpp" line="634"/>
+        <source>This call runs a command that is blocked for the assistant, or nests another batch.</source>
+        <translation>यह कॉल एक कमांड चलाता है जो सहायक के लिए अवरुद्ध है, या दूसरे बैच को नेस्ट करता है।</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/AI/Conversation.cpp" line="865"/>
         <source>Waiting for %1 to respond. Loading the model and processing the prompt can take a while on local hardware...</source>
         <translation>%1 के जवाब का इंतज़ार है। लोकल हार्डवेयर पर मॉडल लोड करने और प्रॉम्प्ट प्रोसेस करने में समय लग सकता है...</translation>
     </message>
@@ -233,17 +238,17 @@ Every device action still requires your explicit per-call approval in the chat, 
         <translation type="vanished">फ़ील्ड राउंड-ट्रिप नहीं हुए: %1</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/AI/Conversation.cpp" line="1210"/>
+        <location filename="../../../core/Ui/AI/Conversation.cpp" line="1215"/>
         <source>You have reached the tool-call budget for this turn. Do not request more tools. Summarize what you found so far, and if the task is incomplete, say which steps remain so the user can tell you to continue.</source>
         <translation>आपने इस बारी के लिए टूल-कॉल बजट पूरा कर लिया है। अब और टूल का अनुरोध न करें। अब तक जो मिला है उसे सारांशित करें, और यदि कार्य अधूरा है, तो बताएं कि कौन से चरण शेष हैं ताकि उपयोगकर्ता आपको जारी रखने के लिए कह सके।</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/AI/Conversation.cpp" line="1462"/>
+        <location filename="../../../core/Ui/AI/Conversation.cpp" line="1467"/>
         <source>The model stopped reproducing its context-integrity line. Long conversations degrade silently; recent replies may be less reliable.</source>
         <translation>मॉडल ने अपनी context-integrity लाइन को पुनः उत्पन्न करना बंद कर दिया। लंबी बातचीत चुपचाप खराब हो जाती है; हाल के उत्तर कम विश्वसनीय हो सकते हैं।</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/AI/Conversation.cpp" line="1465"/>
+        <location filename="../../../core/Ui/AI/Conversation.cpp" line="1470"/>
         <source>The model altered its context-integrity line (drifted segment: %1). Long conversations degrade silently; recent replies may be less reliable.</source>
         <translation>मॉडल ने अपनी context-integrity लाइन को बदल दिया (विचलित खंड: %1)। लंबी बातचीत चुपचाप खराब हो जाती है; हाल के उत्तर कम विश्वसनीय हो सकते हैं।</translation>
     </message>
@@ -252,17 +257,17 @@ Every device action still requires your explicit per-call approval in the chat, 
         <translation type="vanished">Tool-call बजट सीमा पार हो गई</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/AI/Conversation.cpp" line="692"/>
+        <location filename="../../../core/Ui/AI/Conversation.cpp" line="697"/>
         <source>(The model returned an empty response. Try rephrasing, switching to a different model, or checking that the request is allowed by the provider's safety filters.)</source>
         <translation>(मॉडल ने खाली रिस्पॉन्स दिया। दोबारा शब्दों में बदलकर प्रयास करें, किसी अन्य मॉडल पर स्विच करें, या जांचें कि प्रोवाइडर के सेफ्टी फ़िल्टर द्वारा रिक्वेस्ट की अनुमति है।)</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/AI/Conversation.cpp" line="864"/>
+        <location filename="../../../core/Ui/AI/Conversation.cpp" line="869"/>
         <source>Sending request to %1...</source>
         <translation>%1 को रिक्वेस्ट भेजी जा रही है...</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/AI/Conversation.cpp" line="882"/>
+        <location filename="../../../core/Ui/AI/Conversation.cpp" line="887"/>
         <source>Provider returned no reply</source>
         <translation>प्रोवाइडर ने कोई रिप्लाई नहीं दी</translation>
     </message>
@@ -366,7 +371,7 @@ Every device action still requires your explicit per-call approval in the chat, 
 <context>
     <name>API::ConsentGate</name>
     <message>
-        <location filename="../../../core/Api/API/Server/ConsentGate.cpp" line="151"/>
+        <location filename="../../../core/Api/API/Server/ConsentGate.cpp" line="164"/>
         <source>Serial Studio</source>
         <translation>Serial Studio</translation>
     </message>
@@ -392,6 +397,19 @@ Every device action still requires your explicit per-call approval in the chat, 
         <location filename="../../src/API/GRPC/GRPCServer.cpp" line="633"/>
         <source>Failed to bind to %1</source>
         <translation>%1 से बाइंड करने में विफल</translation>
+    </message>
+</context>
+<context>
+    <name>API::LaunchConsent</name>
+    <message>
+        <location filename="../../../core/Api/API/LaunchConsent.cpp" line="40"/>
+        <source>Allow this project to launch programs?</source>
+        <translation>क्या इस प्रोजेक्ट को प्रोग्राम लॉन्च करने की अनुमति दें?</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Api/API/LaunchConsent.cpp" line="41"/>
+        <source>This project wants to run programs with your user account's privileges, from its scripts or from a Process I/O source. Only allow this for projects you trust.</source>
+        <translation>यह प्रोजेक्ट अपनी स्क्रिप्ट्स या Process I/O स्रोत से आपके यूज़र अकाउंट के विशेषाधिकारों के साथ प्रोग्राम चलाना चाहता है। केवल विश्वसनीय प्रोजेक्ट्स के लिए ही इसकी अनुमति दें।</translation>
     </message>
 </context>
 <context>
@@ -432,22 +450,22 @@ Every device action still requires your explicit per-call approval in the chat, 
 <context>
     <name>API::MirrorSession</name>
     <message>
-        <location filename="../../../core/Api/API/Mirror/MirrorSession.cpp" line="334"/>
+        <location filename="../../../core/Api/API/Mirror/MirrorSession.cpp" line="335"/>
         <source>Enter a host name and a port to attach</source>
         <translation>अटैच करने के लिए होस्ट नाम और पोर्ट दर्ज करें</translation>
     </message>
     <message>
-        <location filename="../../../core/Api/API/Mirror/MirrorSession.cpp" line="341"/>
+        <location filename="../../../core/Api/API/Mirror/MirrorSession.cpp" line="342"/>
         <source>Disconnect the local device or close the open recording before attaching to a remote dashboard</source>
         <translation>रिमोट डैशबोर्ड से अटैच करने से पहले लोकल डिवाइस डिस्कनेक्ट करें या खुली रिकॉर्डिंग बंद करें</translation>
     </message>
     <message>
-        <location filename="../../../core/Api/API/Mirror/MirrorSession.cpp" line="546"/>
+        <location filename="../../../core/Api/API/Mirror/MirrorSession.cpp" line="550"/>
         <source>The remote sent a project this build cannot load</source>
         <translation>रिमोट ने एक प्रोजेक्ट भेजा जिसे यह बिल्ड लोड नहीं कर सकता</translation>
     </message>
     <message>
-        <location filename="../../../core/Api/API/Mirror/MirrorSession.cpp" line="638"/>
+        <location filename="../../../core/Api/API/Mirror/MirrorSession.cpp" line="642"/>
         <source>This build resolves the remote project to a different dataset layout</source>
         <translation>यह बिल्ड रिमोट प्रोजेक्ट को एक भिन्न डेटासेट लेआउट में रिज़ॉल्व करता है</translation>
     </message>
@@ -455,57 +473,67 @@ Every device action still requires your explicit per-call approval in the chat, 
 <context>
     <name>API::ProcessLauncher</name>
     <message>
-        <location filename="../../../core/Api/API/ProcessLauncher.cpp" line="63"/>
         <source>Allow this project's scripts to launch programs?</source>
-        <translation>क्या इस प्रोजेक्ट की स्क्रिप्ट्स को प्रोग्राम लॉन्च करने की अनुमति दें?</translation>
+        <translation type="vanished">क्या इस प्रोजेक्ट की स्क्रिप्ट्स को प्रोग्राम लॉन्च करने की अनुमति दें?</translation>
     </message>
     <message>
-        <location filename="../../../core/Api/API/ProcessLauncher.cpp" line="64"/>
         <source>Scripts run programs with your user account's privileges. Only allow this for projects you trust.</source>
-        <translation>स्क्रिप्ट्स आपके यूज़र अकाउंट के विशेषाधिकारों के साथ प्रोग्राम चलाती हैं। केवल विश्वसनीय प्रोजेक्ट्स के लिए ही इसकी अनुमति दें।</translation>
+        <translation type="vanished">स्क्रिप्ट्स आपके यूज़र अकाउंट के विशेषाधिकारों के साथ प्रोग्राम चलाती हैं। केवल विश्वसनीय प्रोजेक्ट्स के लिए ही इसकी अनुमति दें।</translation>
     </message>
     <message>
-        <location filename="../../../core/Api/API/ProcessLauncher.cpp" line="123"/>
+        <location filename="../../../core/Api/API/ProcessLauncher.cpp" line="116"/>
         <source>No program specified</source>
         <translation>कोई प्रोग्राम निर्दिष्ट नहीं</translation>
     </message>
     <message>
-        <location filename="../../../core/Api/API/ProcessLauncher.cpp" line="127"/>
+        <location filename="../../../core/Api/API/ProcessLauncher.cpp" line="120"/>
         <source>This project's script wants to run:
 %1</source>
         <translation>इस प्रोजेक्ट की स्क्रिप्ट निम्नलिखित चलाना चाहती है:
 %1</translation>
     </message>
     <message>
-        <location filename="../../../core/Api/API/ProcessLauncher.cpp" line="131"/>
+        <location filename="../../../core/Api/API/ProcessLauncher.cpp" line="124"/>
         <source>Launching programs needs the user's consent; a prompt was shown</source>
         <translation>प्रोग्राम लॉन्च करने के लिए यूज़र की सहमति आवश्यक है; एक प्रॉम्प्ट दिखाया गया</translation>
     </message>
     <message>
-        <location filename="../../../core/Api/API/ProcessLauncher.cpp" line="136"/>
+        <location filename="../../../core/Api/API/ProcessLauncher.cpp" line="129"/>
         <source>Launching programs was denied by the user</source>
         <translation>यूज़र द्वारा प्रोग्राम लॉन्च करना अस्वीकृत किया गया</translation>
     </message>
     <message>
-        <location filename="../../../core/Api/API/ProcessLauncher.cpp" line="142"/>
+        <location filename="../../../core/Api/API/ProcessLauncher.cpp" line="135"/>
         <source>Program "%1" not found in PATH</source>
         <translation>प्रोग्राम "%1" PATH में नहीं मिला</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Api/API/ProcessLauncher.cpp" line="206"/>
+        <source>This project's Process I/O source wants to run:
+%1</source>
+        <translation>इस प्रोजेक्ट का Process I/O स्रोत निम्नलिखित चलाना चाहता है:
+%1</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Api/API/ProcessLauncher.cpp" line="209"/>
+        <source>in %1</source>
+        <translation>%1 में</translation>
     </message>
 </context>
 <context>
     <name>API::Server</name>
     <message>
-        <location filename="../../../core/Api/API/Server.cpp" line="255"/>
+        <location filename="../../../core/Api/API/Server.cpp" line="256"/>
         <source>Unable to start API TCP server</source>
         <translation>API TCP सर्वर प्रारंभ करने में असमर्थ</translation>
     </message>
     <message>
-        <location filename="../../../core/Api/API/Server.cpp" line="345"/>
+        <location filename="../../../core/Api/API/Server.cpp" line="346"/>
         <source>Allow External API Connections?</source>
         <translation>बाहरी API कनेक्शन की अनुमति दें?</translation>
     </message>
     <message>
-        <location filename="../../../core/Api/API/Server.cpp" line="346"/>
+        <location filename="../../../core/Api/API/Server.cpp" line="347"/>
         <source>Exposing the API server to external hosts allows other devices on your network to connect to Serial Studio on port 7777.
 
 Only enable this on trusted networks. Untrusted clients may read live data or send commands to your device.</source>
@@ -530,12 +558,12 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
         <translation type="vanished">Serial Studio</translation>
     </message>
     <message>
-        <location filename="../../../core/Api/API/Server.cpp" line="1022"/>
+        <location filename="../../../core/Api/API/Server.cpp" line="1023"/>
         <source>API server</source>
         <translation>API सर्वर</translation>
     </message>
     <message>
-        <location filename="../../../core/Api/API/Server.cpp" line="1022"/>
+        <location filename="../../../core/Api/API/Server.cpp" line="1023"/>
         <source>Invalid pending connection</source>
         <translation>अमान्य लंबित कनेक्शन</translation>
     </message>
@@ -543,22 +571,22 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
 <context>
     <name>API::ServerAuth</name>
     <message>
-        <location filename="../../../core/Api/API/Server/ServerAuth.cpp" line="38"/>
+        <location filename="../../../core/Api/API/Server/ServerAuth.cpp" line="39"/>
         <source>Allow API device control?</source>
         <translation>API डिवाइस नियंत्रण की अनुमति दें?</translation>
     </message>
     <message>
-        <location filename="../../../core/Api/API/Server/ServerAuth.cpp" line="39"/>
+        <location filename="../../../core/Api/API/Server/ServerAuth.cpp" line="40"/>
         <source>A program using Serial Studio's local API is requesting to send data to the connected device. Allow API clients to write to the device?</source>
         <translation>Serial Studio की लोकल API का उपयोग करने वाला एक प्रोग्राम कनेक्टेड डिवाइस को डेटा भेजने का अनुरोध कर रहा है। API क्लाइंट को डिवाइस पर लिखने की अनुमति दें?</translation>
     </message>
     <message>
-        <location filename="../../../core/Api/API/Server/ServerAuth.cpp" line="44"/>
+        <location filename="../../../core/Api/API/Server/ServerAuth.cpp" line="45"/>
         <source>Allow API clients to modify project scripts?</source>
         <translation>क्या API क्लाइंट्स को प्रोजेक्ट स्क्रिप्ट्स संशोधित करने की अनुमति दें?</translation>
     </message>
     <message>
-        <location filename="../../../core/Api/API/Server/ServerAuth.cpp" line="45"/>
+        <location filename="../../../core/Api/API/Server/ServerAuth.cpp" line="46"/>
         <source>A program using Serial Studio's local API wants to change this project's scripts. Scripts run with the application's full privileges, including launching programs. Allow API clients to modify project scripts?</source>
         <translation>Serial Studio की लोकल API का उपयोग करने वाला एक प्रोग्राम इस प्रोजेक्ट की स्क्रिप्ट्स बदलना चाहता है। स्क्रिप्ट्स एप्लिकेशन के पूर्ण विशेषाधिकारों के साथ चलती हैं, जिसमें प्रोग्राम लॉन्च करना शामिल है। क्या API क्लाइंट्स को प्रोजेक्ट स्क्रिप्ट्स संशोधित करने की अनुमति दें?</translation>
     </message>
@@ -6537,158 +6565,158 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
 <context>
     <name>DataModel::DatasetTransformEditor</name>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="117"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="114"/>
         <source>Dataset Value Transform</source>
         <translation>डेटासेट मान ट्रांसफ़ॉर्म</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="156"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="153"/>
         <source>Lua</source>
         <translation>Lua</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="156"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="153"/>
         <source>JavaScript</source>
         <translation>JavaScript</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="188"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="185"/>
         <source>Language:</source>
         <translation>भाषा:</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="191"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="188"/>
         <source>Template:</source>
         <translation>टेम्पलेट:</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="165"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="162"/>
         <source>Enter raw value (e.g., 1024)</source>
         <translation>कच्चा मान दर्ज करें (उदा., 1024)</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="170"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="167"/>
         <source>Test</source>
         <translation>परीक्षण करें</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="171"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="168"/>
         <source>Clear</source>
         <translation>साफ़ करें</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="207"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="204"/>
         <source>Input:</source>
         <translation>इनपुट:</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="210"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="207"/>
         <source>Output:</source>
         <translation>आउटपुट:</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="173"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="170"/>
         <source>Apply</source>
         <translation>लागू करें</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="156"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="153"/>
         <source>Expression</source>
         <translation>अभिव्यक्ति</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="174"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="171"/>
         <source>Cancel</source>
         <translation>रद्द करें</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="176"/>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="704"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="173"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="701"/>
         <source>Open Lua Library</source>
         <translation>Lua लाइब्रेरी खोलें</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="177"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="174"/>
         <source>Show the project's shared library for this language in the Project Editor. Functions defined there can be called from this transform by name.</source>
         <translation>Project Editor में इस भाषा के लिए प्रोजेक्ट की साझा लाइब्रेरी दिखाएं। वहां परिभाषित फ़ंक्शन को इस ट्रांसफ़ॉर्म से नाम द्वारा कॉल किया जा सकता है।</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="222"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="219"/>
         <source>Parameters</source>
         <translation>पैरामीटर</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="224"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="221"/>
         <source>Constants that belong to this dataset. The transform reads them as params.&lt;name&gt;.</source>
         <translation>इस डेटासेट से संबंधित कॉन्स्टेंट्स। ट्रांसफ़ॉर्म उन्हें params.&lt;name&gt; के रूप में पढ़ता है।</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="226"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="223"/>
         <source>Name</source>
         <translation>नाम</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="226"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="223"/>
         <source>Value</source>
         <translation>मान</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="232"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="229"/>
         <source>Numbers and true/false keep their type; any other value is a string.</source>
         <translation>नंबर और true/false अपना टाइप बनाए रखते हैं; कोई भी अन्य वैल्यू स्ट्रिंग है।</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="235"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="232"/>
         <source>&lt;b&gt;No Parameters&lt;/b&gt;&lt;br&gt;Parameters are constants that belong to this dataset, such as a scale factor or a sensor offset. The transform reads them as &lt;code&gt;params.name&lt;/code&gt;, so one formula in the Lua Library can serve every dataset that differs only in its constants.</source>
         <translation>&lt;b&gt;कोई पैरामीटर नहीं&lt;/b&gt;&lt;br&gt;पैरामीटर ऐसे कॉन्स्टेंट्स हैं जो इस डेटासेट से संबंधित होते हैं, जैसे स्केल फ़ैक्टर या सेंसर ऑफ़सेट। ट्रांसफ़ॉर्म उन्हें &lt;code&gt;params.name&lt;/code&gt; के रूप में पढ़ता है, इसलिए Lua Library में एक फ़ॉर्मूला हर उस डेटासेट के लिए काम कर सकता है जो केवल अपने कॉन्स्टेंट्स में भिन्न है।</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="244"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="241"/>
         <source>Add Parameter</source>
         <translation>पैरामीटर जोड़ें</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="245"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="242"/>
         <source>Remove</source>
         <translation>हटाएं</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="355"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="352"/>
         <source>Transform — %1</source>
         <translation>ट्रांसफ़ॉर्म — %1</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="460"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="457"/>
         <source>The value transform has a syntax error and was not applied.</source>
         <translation>मान ट्रांसफ़ॉर्म में सिंटैक्स त्रुटि है और लागू नहीं किया गया।</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="469"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="466"/>
         <source>The value transform must define a transform(value) function.</source>
         <translation>मान ट्रांसफ़ॉर्म में transform(value) फ़ंक्शन परिभाषित होना चाहिए।</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="470"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="467"/>
         <source>Define a transform(value) function that returns a number, or use Clear to remove the transform.</source>
         <translation>एक transform(value) फ़ंक्शन परिभाषित करें जो संख्या रिटर्न करे, या ट्रांसफ़ॉर्म हटाने के लिए Clear का उपयोग करें।</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="488"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="485"/>
         <source>Enter a value</source>
         <translation>मान दर्ज करें</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="495"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="492"/>
         <source>Invalid number</source>
         <translation>अमान्य संख्या</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="536"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="533"/>
         <source>Format Document	Ctrl+Shift+I</source>
         <translation>दस्तावेज़ फ़ॉर्मेट करें	Ctrl+Shift+I</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="537"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="534"/>
         <source>Format Selection	Ctrl+I</source>
         <translation>चयन फ़ॉर्मेट करें	Ctrl+I</translation>
     </message>
@@ -6753,7 +6781,7 @@ v
 </translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="834"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="831"/>
         <source>--
 -- Define a transform(value) function that receives the live
 -- dataset reading and returns a transformed number. If no
@@ -6812,7 +6840,7 @@ v
 --</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="862"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="859"/>
         <source>/*
  * Define a transform(value) function that receives the live
  * dataset reading and returns a transformed number. If no
@@ -6869,27 +6897,37 @@ v
  */</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1003"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1001"/>
         <source>Failed to create the Lua engine.</source>
         <translation>Lua इंजन बनाने में विफल।</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1030"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1008"/>
+        <source>Failed to prepare the Lua engine.</source>
+        <translation>Lua इंजन तैयार करने में विफल।</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1029"/>
         <source>Failed to create the JavaScript engine.</source>
         <translation>JavaScript इंजन बनाने में विफल।</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1046"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1034"/>
+        <source>Failed to prepare the JavaScript engine.</source>
+        <translation>JavaScript इंजन तैयार करने में विफल।</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1048"/>
         <source>The transform did not finish evaluating within %1 ms.</source>
         <translation>ट्रांसफ़ॉर्म %1 ms के भीतर मूल्यांकन पूरा नहीं कर सका।</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1051"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1053"/>
         <source>Line %1: %2</source>
         <translation>पंक्ति %1: %2</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1118"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1117"/>
         <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1152"/>
         <source>Error in shared library: %1</source>
         <translation>शेयर्ड लाइब्रेरी में एरर: %1</translation>
@@ -6962,27 +7000,29 @@ v
  * तैयार उदाहरणों के लिए टेम्पलेट ड्रॉपडाउन का उपयोग करें,</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1107"/>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1142"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1108"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1113"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1141"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1144"/>
         <source>Engine error</source>
         <translation>इंजन त्रुटि</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1097"/>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1124"/>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1132"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1099"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1123"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1131"/>
         <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1160"/>
         <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1173"/>
         <source>Error: %1</source>
         <translation>त्रुटि: %1</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="705"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="702"/>
         <source>Open JavaScript Library</source>
         <translation>JavaScript लाइब्रेरी खोलें</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="800"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="797"/>
         <source>#
 # An arithmetic expression evaluated once per sample. No function,
 # no statements: the value of the expression is the new reading.
@@ -7051,13 +7091,13 @@ v
 </translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1128"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1127"/>
         <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1164"/>
         <source>Error: transform() not defined</source>
         <translation>त्रुटि: transform() परिभाषित नहीं है</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1135"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1134"/>
         <source>Error: transform() must return a number</source>
         <translation>त्रुटि: transform() को एक संख्या लौटानी चाहिए</translation>
     </message>
@@ -9618,9 +9658,9 @@ Add %4 dataset(s) using the template's defaults?</source>
         <source>Fast mode runs Lua parsers and transforms through the JIT compiler (up to ~40x faster), but the runaway-script watchdog and the Safe-mode memory budget cannot operate: a script stuck in an infinite loop will stall its data source until you disconnect, and one that keeps allocating will grow without limit.
 
 Enable it only for scripts you trust and have tested in Safe mode first.</source>
-        <translation type="unfinished">Fast mode Lua पार्सर और ट्रांसफॉर्म को JIT कंपाइलर के माध्यम से चलाता है (लगभग 40x तेज़), लेकिन runaway-script watchdog और Safe-mode मेमोरी बजट काम नहीं कर सकते: एक अनंत लूप में फंसी स्क्रिप्ट अपने डेटा स्रोत को तब तक रोक देगी जब तक आप डिस्कनेक्ट न करें, और जो लगातार आवंटित करती है वह बिना सीमा के बढ़ेगी।
+        <translation>Fast mode Lua पार्सर्स और ट्रांसफॉर्म्स को JIT कंपाइलर के माध्यम से चलाता है (लगभग 40x तेज़), लेकिन runaway-script watchdog और Safe-mode मेमोरी बजट काम नहीं कर सकते: एक अनंत लूप में फंसी स्क्रिप्ट अपने डेटा स्रोत को तब तक रोक देगी जब तक आप डिस्कनेक्ट न करें, और जो लगातार आवंटित करती रहे वह बिना सीमा के बढ़ेगी।
 
-इसे केवल उन स्क्रिप्ट के लिए सक्षम करें जिन पर आप विश्वास करते हैं और पहले Safe mode में परीक्षण कर चुके हैं।</translation>
+इसे केवल उन स्क्रिप्ट्स के लिए सक्षम करें जिन पर आप विश्वास करते हैं और जिन्हें आपने पहले Safe mode में परीक्षण किया है।</translation>
     </message>
     <message>
         <source>Fast mode runs Lua parsers and transforms through the JIT compiler (up to ~40x faster), but the runaway-script watchdog cannot operate: a script stuck in an infinite loop will stall its data source until you disconnect.
@@ -17417,118 +17457,129 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
 <context>
     <name>IO::Drivers::Process</name>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Process.cpp" line="247"/>
+        <location filename="../../../core/Devices/IO/Drivers/Process.cpp" line="249"/>
+        <location filename="../../../core/Devices/IO/Drivers/Process.cpp" line="260"/>
         <source>Failed to start process</source>
         <translation>प्रोसेस प्रारंभ करने में विफल</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Process.cpp" line="248"/>
+        <location filename="../../../core/Devices/IO/Drivers/Process.cpp" line="250"/>
         <source>Executable "%1" not found in PATH.</source>
         <translation>निष्पादन योग्य "%1" PATH में नहीं मिला।</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Process.cpp" line="425"/>
+        <location filename="../../../core/Devices/IO/Drivers/Process.cpp" line="258"/>
+        <source>Waiting for permission to launch "%1".</source>
+        <translation>"%1" लॉन्च करने की अनुमति की प्रतीक्षा में।</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Devices/IO/Drivers/Process.cpp" line="259"/>
+        <source>Launching "%1" was denied for this project.</source>
+        <translation>इस प्रोजेक्ट के लिए "%1" लॉन्च करने से इनकार कर दिया गया।</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Devices/IO/Drivers/Process.cpp" line="435"/>
         <source>Select Executable</source>
         <translation>एक्ज़ीक्यूटेबल चुनें</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Process.cpp" line="449"/>
+        <location filename="../../../core/Devices/IO/Drivers/Process.cpp" line="459"/>
         <source>Select Working Directory</source>
         <translation>वर्किंग डायरेक्टरी चुनें</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Process.cpp" line="474"/>
+        <location filename="../../../core/Devices/IO/Drivers/Process.cpp" line="484"/>
         <source>Select Named Pipe / FIFO</source>
         <translation>नेम्ड पाइप / FIFO चुनें</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Process.cpp" line="616"/>
+        <location filename="../../../core/Devices/IO/Drivers/Process.cpp" line="626"/>
         <source>The process crashed.</source>
         <translation>प्रोसेस क्रैश हो गया।</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Process.cpp" line="617"/>
+        <location filename="../../../core/Devices/IO/Drivers/Process.cpp" line="627"/>
         <source>Exit code: %1</source>
         <translation>एग्ज़िट कोड: %1</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Process.cpp" line="622"/>
+        <location filename="../../../core/Devices/IO/Drivers/Process.cpp" line="632"/>
         <source>Process "%1" stopped</source>
         <translation>प्रोसेस "%1" रुक गया</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Process.cpp" line="632"/>
+        <location filename="../../../core/Devices/IO/Drivers/Process.cpp" line="642"/>
         <source>Failed to start</source>
         <translation>प्रारंभ करने में विफल</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Process.cpp" line="636"/>
+        <location filename="../../../core/Devices/IO/Drivers/Process.cpp" line="646"/>
         <source>Unknown error</source>
         <translation>अज्ञात त्रुटि</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Process.cpp" line="640"/>
+        <location filename="../../../core/Devices/IO/Drivers/Process.cpp" line="650"/>
         <source>Process Error</source>
         <translation>प्रोसेस त्रुटि</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Process.cpp" line="654"/>
+        <location filename="../../../core/Devices/IO/Drivers/Process.cpp" line="664"/>
         <source>The pipe closed before the peer attached.</source>
         <translation>पीयर अटैच होने से पहले पाइप बंद हो गया</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Process.cpp" line="657"/>
+        <location filename="../../../core/Devices/IO/Drivers/Process.cpp" line="667"/>
         <source>Pipe Closed</source>
         <translation>पाइप बंद हो गई</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Process.cpp" line="658"/>
+        <location filename="../../../core/Devices/IO/Drivers/Process.cpp" line="668"/>
         <source>The named pipe "%1" was closed on the other end.</source>
         <translation>नामित पाइप "%1" दूसरे छोर पर बंद कर दी गई।</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Process.cpp" line="679"/>
+        <location filename="../../../core/Devices/IO/Drivers/Process.cpp" line="689"/>
         <source>Pipe Error</source>
         <translation>पाइप त्रुटि</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Process.cpp" line="676"/>
-        <location filename="../../../core/Devices/IO/Drivers/Process.cpp" line="679"/>
+        <location filename="../../../core/Devices/IO/Drivers/Process.cpp" line="686"/>
+        <location filename="../../../core/Devices/IO/Drivers/Process.cpp" line="689"/>
         <source>Could not open named pipe: %1</source>
         <translation>नेम्ड पाइप खोल नहीं सका: %1</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Process.cpp" line="920"/>
+        <location filename="../../../core/Devices/IO/Drivers/Process.cpp" line="930"/>
         <source>Mode</source>
         <translation>मोड</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Process.cpp" line="923"/>
+        <location filename="../../../core/Devices/IO/Drivers/Process.cpp" line="933"/>
         <source>Launch Process</source>
         <translation>प्रोसेस लॉन्च करें</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Process.cpp" line="923"/>
+        <location filename="../../../core/Devices/IO/Drivers/Process.cpp" line="933"/>
         <source>Named Pipe</source>
         <translation>नेम्ड पाइप</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Process.cpp" line="928"/>
+        <location filename="../../../core/Devices/IO/Drivers/Process.cpp" line="938"/>
         <source>Executable</source>
         <translation>एक्ज़ीक्यूटेबल</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Process.cpp" line="936"/>
+        <location filename="../../../core/Devices/IO/Drivers/Process.cpp" line="946"/>
         <source>Arguments</source>
         <translation>आर्ग्युमेंट्स</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Process.cpp" line="944"/>
+        <location filename="../../../core/Devices/IO/Drivers/Process.cpp" line="954"/>
         <source>Working Directory</source>
         <translation>वर्किंग डायरेक्टरी</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Process.cpp" line="952"/>
+        <location filename="../../../core/Devices/IO/Drivers/Process.cpp" line="962"/>
         <source>Pipe Path</source>
         <translation>पाइप पाथ</translation>
     </message>
@@ -21137,47 +21188,47 @@ Please provide the necessary credentials.</source>
         <translation>सभी अस्वीकृत करें</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/MessageBubble.qml" line="335"/>
-        <location filename="../../qml/AI/MessageBubble.qml" line="410"/>
-        <location filename="../../qml/AI/MessageBubble.qml" line="462"/>
+        <location filename="../../qml/AI/MessageBubble.qml" line="337"/>
+        <location filename="../../qml/AI/MessageBubble.qml" line="412"/>
+        <location filename="../../qml/AI/MessageBubble.qml" line="464"/>
         <source>Copy</source>
         <translation>कॉपी करें</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/MessageBubble.qml" line="340"/>
-        <location filename="../../qml/AI/MessageBubble.qml" line="415"/>
-        <location filename="../../qml/AI/MessageBubble.qml" line="467"/>
+        <location filename="../../qml/AI/MessageBubble.qml" line="342"/>
+        <location filename="../../qml/AI/MessageBubble.qml" line="417"/>
+        <location filename="../../qml/AI/MessageBubble.qml" line="469"/>
         <source>Copy All</source>
         <translation>सभी कॉपी करें</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/MessageBubble.qml" line="348"/>
-        <location filename="../../qml/AI/MessageBubble.qml" line="423"/>
+        <location filename="../../qml/AI/MessageBubble.qml" line="350"/>
+        <location filename="../../qml/AI/MessageBubble.qml" line="425"/>
         <source>Select All</source>
         <translation>सभी चुनें</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/MessageBubble.qml" line="355"/>
+        <location filename="../../qml/AI/MessageBubble.qml" line="357"/>
         <source>Remember this…</source>
         <translation>इसे याद रखें…</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/MessageBubble.qml" line="358"/>
+        <location filename="../../qml/AI/MessageBubble.qml" line="360"/>
         <source>As a preference about me</source>
         <translation>मेरे बारे में प्राथमिकता के रूप में</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/MessageBubble.qml" line="362"/>
+        <location filename="../../qml/AI/MessageBubble.qml" line="364"/>
         <source>As a correction / lesson</source>
         <translation>सुधार / सबक के रूप में</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/MessageBubble.qml" line="366"/>
+        <location filename="../../qml/AI/MessageBubble.qml" line="368"/>
         <source>As a fact about this project</source>
         <translation>इस प्रोजेक्ट के बारे में एक तथ्य के रूप में</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/MessageBubble.qml" line="370"/>
+        <location filename="../../qml/AI/MessageBubble.qml" line="372"/>
         <source>As a reference</source>
         <translation>एक संदर्भ के रूप में</translation>
     </message>
@@ -21279,6 +21330,16 @@ Please provide the necessary credentials.</source>
         <location filename="../../qml/AI/MessageWebView.qml" line="83"/>
         <source>Copy</source>
         <translation>कॉपी करें</translation>
+    </message>
+    <message>
+        <location filename="../../qml/AI/MessageWebView.qml" line="84"/>
+        <source>Runs these operations</source>
+        <translation>ये ऑपरेशन चलाता है</translation>
+    </message>
+    <message>
+        <location filename="../../qml/AI/MessageWebView.qml" line="85"/>
+        <source>+%1 more</source>
+        <translation>+%1 अधिक</translation>
     </message>
 </context>
 <context>
@@ -26832,7 +26893,7 @@ Reload it?</source>
         <translation>सामान्य I/O त्रुटि</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="203"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="222"/>
         <source>
 
 This script may use Lua 5.3 bitwise syntax, which this runtime does not support. Replace: %1. The bit and bit32 libraries are available in every script.</source>
@@ -26841,13 +26902,13 @@ This script may use Lua 5.3 bitwise syntax, which this runtime does not support.
 </translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="501"/>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="230"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="546"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="267"/>
         <source>Frame Parser Disabled</source>
         <translation>Frame Parser अक्षम</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="502"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="547"/>
         <source>The Lua frame parser for source %1 timed out %2 frames in a row and has been disabled to keep Serial Studio responsive.
 
 Most likely cause: an infinite loop or extremely slow operation in the script body. Fix the script and reload the project to re-enable parsing.</source>
@@ -26856,13 +26917,13 @@ Most likely cause: an infinite loop or extremely slow operation in the script bo
 संभावित कारण: स्क्रिप्ट बॉडी में अनंत लूप या अत्यधिक धीमा ऑपरेशन। स्क्रिप्ट को ठीक करें और पार्सिंग पुनः सक्षम करने के लिए प्रोजेक्ट को फिर से लोड करें।</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="270"/>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="310"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="289"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="329"/>
         <source>Lua Syntax Error</source>
         <translation>Lua सिंटैक्स त्रुटि</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="271"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="290"/>
         <source>The parser code contains an error:
 
 %1
@@ -26875,17 +26936,17 @@ Serial Studio can rewrite the unsupported operators as bit.* calls and reload th
 Serial Studio असमर्थित ऑपरेटरों को bit.* कॉल के रूप में फिर से लिख सकता है और पार्सर को पुनः लोड कर सकता है। bit लाइब्रेरी 32-बिट इंटीजर पर काम करती है, इसलिए 32 बिट से अधिक चौड़ाई वाला मान फिर से लिखे जाने पर रैप हो जाएगा।</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="281"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="300"/>
         <source>Fix Automatically</source>
         <translation>स्वचालित रूप से ठीक करें</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="282"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="301"/>
         <source>Leave Unchanged</source>
         <translation>अपरिवर्तित छोड़ें</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="311"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="330"/>
         <source>The parser code contains an error:
 
 %1</source>
@@ -26894,12 +26955,12 @@ Serial Studio असमर्थित ऑपरेटरों को bit.* क
 %1</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="672"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="721"/>
         <source>Lua Runtime Error</source>
         <translation>Lua रनटाइम त्रुटि</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="673"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="722"/>
         <source>The parser code triggered an error:
 
 %1</source>
@@ -26908,13 +26969,13 @@ Serial Studio असमर्थित ऑपरेटरों को bit.* क
 %1</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="694"/>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="560"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="743"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="600"/>
         <source>Missing Parse Function</source>
         <translation>Parse फ़ंक्शन अनुपलब्ध</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="695"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="744"/>
         <source>The 'parse' function is not defined in the script.
 
 Please ensure your code includes:
@@ -26925,13 +26986,13 @@ function parse(frame) ... end</source>
 function parse(frame) ... end</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="757"/>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="612"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="806"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="652"/>
         <source>Parse Function Runtime Error</source>
         <translation>Parse फ़ंक्शन रनटाइम त्रुटि</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="758"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="807"/>
         <source>The parse function contains an error:
 
 %1
@@ -26944,12 +27005,12 @@ Please fix the error in the function body.</source>
 कृपया फ़ंक्शन बॉडी में त्रुटि ठीक करें।</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="221"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="255"/>
         <source>parse() timed out after %1 ms</source>
         <translation>parse() %1 ms के बाद समय समाप्त</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="231"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="268"/>
         <source>The JavaScript frame parser for source %1 timed out %2 frames in a row and has been disabled to keep Serial Studio responsive.
 
 Most likely cause: an infinite loop or extremely slow operation in the script body. Fix the script and reload the project to re-enable parsing.</source>
@@ -26958,12 +27019,12 @@ Most likely cause: an infinite loop or extremely slow operation in the script bo
 संभावित कारण: स्क्रिप्ट बॉडी में अनंत लूप या अत्यधिक धीमा ऑपरेशन। स्क्रिप्ट को ठीक करें और पार्सिंग पुनः सक्षम करने के लिए प्रोजेक्ट को फिर से लोड करें।</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="501"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="541"/>
         <source>JavaScript Timed Out</source>
         <translation>JavaScript टाइमआउट हो गया</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="502"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="542"/>
         <source>The parser code did not finish evaluating within %1 ms and was interrupted.
 
 Most likely cause: an infinite loop at the top level of the script.</source>
@@ -26972,12 +27033,12 @@ Most likely cause: an infinite loop at the top level of the script.</source>
 संभावित कारण: स्क्रिप्ट के शीर्ष स्तर पर एक अनंत लूप।</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="519"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="559"/>
         <source>JavaScript Syntax Error</source>
         <translation>JavaScript सिंटैक्स त्रुटि</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="520"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="560"/>
         <source>The parser code contains a syntax error at line %1:
 
 %2</source>
@@ -26986,12 +27047,12 @@ Most likely cause: an infinite loop at the top level of the script.</source>
 %2</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="534"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="574"/>
         <source>JavaScript Exception Occurred</source>
         <translation>JavaScript अपवाद घटित हुआ</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="535"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="575"/>
         <source>The parser code triggered the following exceptions:
 
 %1</source>
@@ -27000,7 +27061,7 @@ Most likely cause: an infinite loop at the top level of the script.</source>
 %1</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="561"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="601"/>
         <source>The 'parse' function is not defined in the script.
 
 Please ensure your code includes:
@@ -27011,7 +27072,7 @@ function parse(frame) { ... }</source>
 function parse(frame) { ... }</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="613"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="653"/>
         <source>The parse function contains an error at line %1:
 
 %2
@@ -27024,12 +27085,12 @@ Please fix the error in the function body.</source>
 कृपया फ़ंक्शन बॉडी में त्रुटि ठीक करें।</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="715"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="759"/>
         <source>Invalid Function Declaration</source>
         <translation>अमान्य फ़ंक्शन घोषणा</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="716"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="760"/>
         <source>No callable 'parse' export found.
 
 Define one of:
@@ -27042,7 +27103,7 @@ Define one of:
   const parse = (frame) =&gt; { ... }</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="732"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="776"/>
         <source>The 'parse' function must accept at least one parameter (the frame payload).</source>
         <translation>'parse' फ़ंक्शन को कम से कम एक पैरामीटर (फ्रेम पेलोड) स्वीकार करना चाहिए।</translation>
     </message>
@@ -27057,7 +27118,7 @@ function parse(frame) { ... }</source>
 function parse(frame) { ... }</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="731"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="775"/>
         <source>Invalid Function Parameter</source>
         <translation>अमान्य फ़ंक्शन पैरामीटर</translation>
     </message>
@@ -27072,12 +27133,12 @@ function parse(frame) { ... }</source>
 function parse(frame) { ... }</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="697"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="741"/>
         <source>Deprecated Function Signature</source>
         <translation>पुराना फ़ंक्शन सिग्नेचर</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="698"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="742"/>
         <source>The 'parse' function uses the old two-parameter format: parse(%1, %2)
 
 This format is no longer supported. Please update to the new single-parameter format:
@@ -27102,12 +27163,12 @@ function parse(%1) { ... }
         <translation>चेतावनी</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/CLI.cpp" line="922"/>
+        <location filename="../../src/Misc/CLI.cpp" line="926"/>
         <source>Project file not found</source>
         <translation>प्रोजेक्ट फ़ाइल नहीं मिली</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/CLI.cpp" line="923"/>
+        <location filename="../../src/Misc/CLI.cpp" line="927"/>
         <source>The project file referenced by this shortcut could not be found:
 
 %1</source>
@@ -27116,17 +27177,17 @@ function parse(%1) { ... }
 %1</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/CLI.cpp" line="926"/>
+        <location filename="../../src/Misc/CLI.cpp" line="930"/>
         <source>Would you like to delete this shortcut?</source>
         <translation>क्या आप यह शॉर्टकट डिलीट करना चाहते हैं?</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/CLI.cpp" line="930"/>
+        <location filename="../../src/Misc/CLI.cpp" line="934"/>
         <source>Delete Shortcut</source>
         <translation>शॉर्टकट डिलीट करें</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/CLI.cpp" line="932"/>
+        <location filename="../../src/Misc/CLI.cpp" line="936"/>
         <source>Quit</source>
         <translation>बंद करें</translation>
     </message>
@@ -32498,95 +32559,105 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
 <context>
     <name>ToolCallCard</name>
     <message>
-        <location filename="../../qml/AI/ToolCallCard.qml" line="69"/>
+        <location filename="../../qml/AI/ToolCallCard.qml" line="71"/>
         <source>Awaiting approval</source>
         <translation>अनुमोदन की प्रतीक्षा में</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/ToolCallCard.qml" line="70"/>
+        <location filename="../../qml/AI/ToolCallCard.qml" line="72"/>
         <source>Done</source>
         <translation>पूर्ण</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/ToolCallCard.qml" line="71"/>
+        <location filename="../../qml/AI/ToolCallCard.qml" line="73"/>
         <source>Error</source>
         <translation>त्रुटि</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/ToolCallCard.qml" line="72"/>
+        <location filename="../../qml/AI/ToolCallCard.qml" line="74"/>
         <source>Denied</source>
         <translation>अस्वीकृत</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/ToolCallCard.qml" line="73"/>
+        <location filename="../../qml/AI/ToolCallCard.qml" line="75"/>
         <source>Blocked</source>
         <translation>अवरुद्ध</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/ToolCallCard.qml" line="74"/>
+        <location filename="../../qml/AI/ToolCallCard.qml" line="76"/>
         <source>Running</source>
         <translation>चल रहा है</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/ToolCallCard.qml" line="162"/>
+        <location filename="../../qml/AI/ToolCallCard.qml" line="164"/>
         <source>Verified</source>
         <translation>सत्यापित</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/ToolCallCard.qml" line="162"/>
+        <location filename="../../qml/AI/ToolCallCard.qml" line="164"/>
         <source>Verify failed</source>
         <translation>सत्यापन विफल</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/ToolCallCard.qml" line="202"/>
+        <location filename="../../qml/AI/ToolCallCard.qml" line="204"/>
         <source>Verification failed: %1</source>
         <translation>सत्यापन विफल: %1</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/ToolCallCard.qml" line="203"/>
+        <location filename="../../qml/AI/ToolCallCard.qml" line="205"/>
         <source>The applied change failed its verification check.</source>
         <translation>लागू किया गया परिवर्तन सत्यापन जांच में विफल रहा।</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/ToolCallCard.qml" line="212"/>
+        <location filename="../../qml/AI/ToolCallCard.qml" line="214"/>
         <source>Restore checkpoint…</source>
         <translation>चेकपॉइंट पुनर्स्थापित करें…</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/ToolCallCard.qml" line="231"/>
+        <location filename="../../qml/AI/ToolCallCard.qml" line="234"/>
+        <source>Runs these operations</source>
+        <translation>ये ऑपरेशन चलाता है</translation>
+    </message>
+    <message>
+        <location filename="../../qml/AI/ToolCallCard.qml" line="261"/>
+        <source>+%1 more</source>
+        <translation>+%1 अधिक</translation>
+    </message>
+    <message>
+        <location filename="../../qml/AI/ToolCallCard.qml" line="275"/>
         <source>Approve</source>
         <translation>स्वीकृत करें</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/ToolCallCard.qml" line="237"/>
+        <location filename="../../qml/AI/ToolCallCard.qml" line="281"/>
         <source>Deny</source>
         <translation>अस्वीकार करें</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/ToolCallCard.qml" line="254"/>
+        <location filename="../../qml/AI/ToolCallCard.qml" line="298"/>
         <source>Arguments</source>
         <translation>आर्ग्युमेंट्स</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/ToolCallCard.qml" line="291"/>
-        <location filename="../../qml/AI/ToolCallCard.qml" line="351"/>
+        <location filename="../../qml/AI/ToolCallCard.qml" line="335"/>
+        <location filename="../../qml/AI/ToolCallCard.qml" line="395"/>
         <source>Copy</source>
         <translation>कॉपी करें</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/ToolCallCard.qml" line="296"/>
-        <location filename="../../qml/AI/ToolCallCard.qml" line="356"/>
+        <location filename="../../qml/AI/ToolCallCard.qml" line="340"/>
+        <location filename="../../qml/AI/ToolCallCard.qml" line="400"/>
         <source>Copy All</source>
         <translation>सभी कॉपी करें</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/ToolCallCard.qml" line="304"/>
-        <location filename="../../qml/AI/ToolCallCard.qml" line="364"/>
+        <location filename="../../qml/AI/ToolCallCard.qml" line="348"/>
+        <location filename="../../qml/AI/ToolCallCard.qml" line="408"/>
         <source>Select All</source>
         <translation>सभी चुनें</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/ToolCallCard.qml" line="312"/>
+        <location filename="../../qml/AI/ToolCallCard.qml" line="356"/>
         <source>Result</source>
         <translation>परिणाम</translation>
     </message>

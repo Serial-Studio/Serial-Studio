@@ -21,6 +21,7 @@
 
 #pragma once
 
+#include <memory>
 #include <QJSEngine>
 #include <QJSValue>
 
@@ -29,13 +30,18 @@
 
 namespace DataModel {
 
+class InertScriptSurface;
+
 /**
- * @brief JavaScript script engine implementation backed by QJSEngine.
+ * @brief JavaScript script engine implementation backed by QJSEngine. An Inert engine (spec 0098)
+ *        runs on a surface it owns or borrows; the owned one is declared first so it outlives the
+ *        QJSEngine, and a borrowed one must outlive the engine.
  */
 class JsScriptEngine final : public IScriptEngine {
 public:
-  JsScriptEngine();
-  ~JsScriptEngine() override = default;
+  explicit JsScriptEngine(ScriptSurface surface = ScriptSurface::Live);
+  explicit JsScriptEngine(InertScriptSurface& sharedSurface);
+  ~JsScriptEngine() override;
 
   [[nodiscard]] bool loadScript(const QString& script,
                                 int sourceId,
@@ -61,6 +67,8 @@ public:
   void resetErrorStats() override;
 
 private:
+  JsScriptEngine(std::unique_ptr<InertScriptSurface> ownedSurface, InertScriptSurface* surface);
+
   static constexpr int kRuntimeWatchdogMs      = 500;
   static constexpr int kMaxConsecutiveTimeouts = 3;
 
@@ -80,6 +88,8 @@ private:
   [[nodiscard]] bool validateParseSignature(const QString& script, bool showMessageBoxes);
 
 private:
+  std::unique_ptr<InertScriptSurface> m_ownedSurface;
+  InertScriptSurface* m_inert;
   QJSEngine m_engine;
   QJSValue m_parseFunction;
   QJSValue m_hexToArray;

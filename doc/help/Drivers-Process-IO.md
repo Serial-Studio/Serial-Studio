@@ -72,6 +72,17 @@ In Launch mode the child runs under `QProcess` on the main thread, with event-dr
 
 On connect, Serial Studio spawns the child process and reads its output until the child exits or the user disconnects. The child runs with merged output channels, so anything the child writes to stderr is captured alongside stdout and treated as incoming data. The extra search directories are also appended to the child's PATH, so a script that spawns `python3` or similar finds it even when Serial Studio was launched from a desktop shortcut. Data sent from the console is written to the child's stdin.
 
+### Launch consent
+
+Launch mode runs a program with your account's privileges, so it asks before it starts one. The first time a project starts its Process I/O program, Serial Studio asks **Allow this project to launch programs?** and names the program. This is the same per-project consent a control script's `system.exec` needs. It applies whatever chose the program or triggered the start: the Connect button, an API connect, a reconnect, a project load, or a program set through the API.
+
+- **Yes** starts the program, and the connect that was refused while the prompt was open is retried once. Later connects of that project do not ask again; the answer is remembered per project file.
+- **No** blocks the start. It holds until the project is reopened or Serial Studio restarts.
+- After a remote API client changes the project's scripts or program, or loads a project, the project's remembered answer is cleared once per session, so the next start asks again. Once you answer yes again, later remote changes in the same session leave it granted.
+- In a headless run, a project named on the command line (`--headless`) may launch its programs for that run without a prompt. Any other headless start is denied unless `SERIAL_STUDIO_API_AUTO_CONSENT=1` is set.
+
+Named pipe mode starts no program and never asks.
+
 ### Named pipe mode configuration
 
 | Setting | Controls |
@@ -125,11 +136,14 @@ The TCP API and the in-app AI assistant configure this driver through the `io.pr
 | `io.process.listRunning` | none | Refreshes and returns running processes as `name [pid]` |
 | `io.process.getConfig` | none | Returns mode, executable, arguments, workingDir, pipePath |
 
+These commands only set the program. Starting it asks the [launch consent](#launch-consent), whoever set the program, so a remote client that points a source at a program still cannot run it without your answer.
+
 Transport details are in the [API Reference](API-Reference.md); command safety tiers are in [AI Assistant](AI-Assistant.md#the-safety-tiers).
 
 ## Common pitfalls
 
 - **No data appears.** The child is usually buffering its own output. Standard-library functions block-buffer stdout (typically 4 KB or more) when it is not attached to a terminal. Force a flush after each line: in Python use `print(..., flush=True)` or `sys.stdout.flush()`; in C use `fflush(stdout)`; for programs you cannot modify, `stdbuf -oL my_program` (Linux coreutils) forces line-buffered output.
+- **"Waiting for permission to launch" or "was denied for this project".** The [launch consent](#launch-consent) prompt is open, or it was answered no. Answer the prompt (a yes retries the connect), or reopen the project to be asked again after a no.
 - **Child process exits immediately.** Serial Studio drains any remaining output, shows a dialog titled `Process "<name>" stopped`, with the exit code, and disconnects. Run the child from a normal terminal first to confirm it starts.
 - **Path issues.** Spaces and Unicode in executable paths or arguments can be misparsed. The arguments field is split with `QProcess::splitCommand`, which groups double-quoted substrings into one argument; single quotes are not special. Wrap an argument that contains spaces in double quotes.
 - **Working directory matters.** Some programs read configuration files relative to their working directory. Set the Working Directory field accordingly.

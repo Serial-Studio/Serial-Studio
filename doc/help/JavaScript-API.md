@@ -579,6 +579,7 @@ end
 - `"deviceWrite: data is empty"`: the payload was zero bytes.
 - `"deviceWrite: data must be a string"` (Lua) / `"... string or byte array"` (JS): wrong argument type.
 - `"deviceWrite: sourceId must be a number"`: the optional second argument was non-numeric.
+- `"dryRun"`: the script is running in a test or dry run, which never writes to a device (see [In dry-run code](#in-dry-run-code)).
 
 ### When NOT to use it
 
@@ -788,7 +789,7 @@ end
 
 ## Calling any API command: `apiCall()`
 
-Beyond the focused helpers above, parsers can invoke Serial Studio's API commands through a generic gateway. This is the same surface exposed on TCP port 7777 for external clients, now reachable from inside the parser, dataset transforms, control loop, and Canvas widgets. Because these are all the project's own first-party scripts, the gateway is ungated for them: the full command catalog is callable with no allow-list, no rate limit, and no payload cap. The gates live on the network side instead — a remote TCP client still clears the user-consent prompts before any device write and before installing or replacing project scripts — with one exception every caller shares: `system.exec` asks once per project before a script may launch programs (see [Control Script](Control-Script.md)).
+Beyond the focused helpers above, parsers can invoke Serial Studio's API commands through a generic gateway. This is the same surface exposed on TCP port 7777 for external clients, now reachable from inside the parser, dataset transforms, control loop, and Canvas widgets. Because these are all the project's own first-party scripts, the gateway is ungated for them: the full command catalog is callable with no allow-list, no rate limit, and no payload cap. The gates live on the network side instead — a remote TCP client still clears the user-consent prompts before any device write and before installing or replacing project scripts — with one exception every caller shares: starting a program (`system.exec`, or a Process I/O source launching its program) asks once per project (see [Control Script](Control-Script.md) and [Process I/O](Drivers-Process-IO.md#launch-consent)).
 
 ```text
 apiCall(method, params?) -> { ok, result?, error?, errorCode?, errorData? }
@@ -809,6 +810,10 @@ A second helper, `apiCallList()`, returns an array of every registered command n
 | `errorData`  | failure      | Optional structured diagnostic payload (e.g. nearest-name suggestions).      |
 
 `apiCall` never throws. Every failure mode (unknown command, bad params, internal exception) returns a structured `{ ok = false, ... }` table.
+
+### In dry-run code
+
+The **Test With Sample Data** dialog, the transform editor's test, and the dry-run API commands (`project.frameParser.dryRun`, `project.dataset.transform.dryRun`, and the rest listed under [Dry Runs Have No Side Effects](API-Reference.md#dry-runs-have-no-side-effects)) run your script on an inert surface, so a test leaves no trace. There, `apiCall()` returns `{ ok = false, error = "dryRun" }` without dispatching anything, and so do `deviceWrite()`, `actionFire()` and the dashboard helpers. `notify*`, `console` and `print` output is dropped, `mqttPublish` returns `-1`, and table writes go to a scratch copy that is discarded: reads see the current values, the live tables never change. A script that checks `ok` behaves in a dry run as it does with no device attached.
 
 ### Examples
 

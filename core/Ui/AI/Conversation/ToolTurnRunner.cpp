@@ -8,6 +8,8 @@
 
 #include "AI/Conversation/ToolTurnRunner.h"
 
+#include <algorithm>
+#include <QJsonArray>
 #include <QJsonDocument>
 #include <QVariantMap>
 
@@ -155,6 +157,94 @@ bool AI::ToolTurnRunner::batchComplete(bool replyLive) const noexcept
 //--------------------------------------------------------------------------------------------------
 
 /**
+ * @brief The indexes of the ops a card lists, in batch order: the ops stricter than Confirm
+ *        first (up to 200), then the others until the cap, so the op that raised the batch's tier
+ *        does not hide behind "+N more" (spec 0098 R9).
+ */
+static QList<qsizetype> listedOpIndexes(const AI::CommandRegistry& registry,
+                                        const QStringList& planned)
+{
+  constexpr qsizetype kMaxListedOps = 50;
+  constexpr qsizetype kMaxStrictOps = 200;
+  const int confirm                 = AI::CommandRegistry::strictness(AI::Safety::Confirm);
+
+  QList<bool> strict(planned.size(), false);
+  qsizetype strictCount = 0;
+  for (qsizetype i = 0; i < planned.size(); ++i) {
+    const auto tier  = AI::CommandRegistry::strictness(registry.safetyOf(planned.at(i)));
+    strict[i]        = tier > confirm || AI::CommandRegistry::isDispatcher(planned.at(i));
+    strictCount     += strict.at(i) ? 1 : 0;
+  }
+
+  auto strictBudget = std::min(strictCount, kMaxStrictOps);
+  auto budget       = std::max<qsizetype>(0, kMaxListedOps - strictBudget);
+  QList<qsizetype> indexes;
+  for (qsizetype i = 0; i < planned.size(); ++i) {
+    if (strict.at(i)) {
+      if (strictBudget > 0) {
+        indexes.append(i);
+        --strictBudget;
+      }
+
+      continue;
+    }
+
+    if (budget > 0) {
+      indexes.append(i);
+      --budget;
+    }
+  }
+
+  return indexes;
+}
+
+/**
+ * @brief A batch op's params as one compact line, never cut inside a surrogate pair.
+ */
+static QString opDetail(const QJsonArray& ops, const qsizetype index)
+{
+  constexpr int kMaxDetailLength = 96;
+  if (index < 0 || index >= ops.size())
+    return QString();
+
+  const auto params = ops.at(index).toObject().value(QStringLiteral("params")).toObject();
+  auto detail       = QString::fromUtf8(QJsonDocument(params).toJson(QJsonDocument::Compact));
+  if (detail.size() <= kMaxDetailLength)
+    return detail;
+
+  auto cut = kMaxDetailLength - 1;
+  if (detail.at(cut - 1).isHighSurrogate())
+    --cut;
+
+  return detail.left(cut) + QChar(0x2026);
+}
+
+/**
+ * @brief The operations a call will run, one line each, for its approval card (spec 0098 R9): the
+ *        command plus, for a batch, a compact view of its params. The total travels beside it.
+ */
+static QVariantList plannedOpsSummary(const AI::CommandRegistry& registry,
+                                      const QString& name,
+                                      const QJsonObject& arguments)
+{
+  const auto planned   = AI::CommandRegistry::plannedCommands(name, arguments);
+  const auto ops       = arguments.value(QStringLiteral("ops")).toArray();
+  const bool fromBatch = AI::CommandRegistry::isDispatcher(name);
+
+  QVariantList out;
+  for (const auto i : listedOpIndexes(registry, planned)) {
+    const auto detail = fromBatch ? opDetail(ops, i) : QString();
+
+    QVariantMap op;
+    op[QStringLiteral("command")] = planned.at(i);
+    op[QStringLiteral("detail")]  = detail;
+    out.append(op);
+  }
+
+  return out;
+}
+
+/**
  * @brief Returns "discovery" for read-only / meta calls, "execution" otherwise.
  */
 QString AI::ToolTurnRunner::categoryOf(const QString& name) const
@@ -196,6 +286,12 @@ bool AI::ToolTurnRunner::appendCard(const QString& callId,
   card[QStringLiteral("args")]     = QJsonDocument(arguments).toJson(QJsonDocument::Indented);
   card[QStringLiteral("status")]   = static_cast<int>(status);
   card[QStringLiteral("result")]   = QString();
+
+  const auto planned = AI::CommandRegistry::plannedCommands(name, arguments);
+  if (!planned.isEmpty()) {
+    card[QStringLiteral("ops")]      = plannedOpsSummary(m_commands, name, arguments);
+    card[QStringLiteral("opsTotal")] = static_cast<int>(planned.size());
+  }
 
   calls.append(card);
   map.insert(QStringLiteral("toolCalls"), calls);

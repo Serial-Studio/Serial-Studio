@@ -31,6 +31,8 @@
  *        and never a construction. The seal (spec 0096) marks a process that opened a deployment
  *        package: it is one-way, so every project-content exit can trust it for the process life,
  *        and it records where the package's files are mounted and which folder they came from.
+ *        The operator project (spec 0098) is the one a headless run named on its command line,
+ *        whose program launches the operator consented to by naming it.
  */
 
 namespace Core::Runtime {
@@ -42,4 +44,6 @@ void setSessionId(int id) noexcept;
 [[nodiscard]] const QString& sealedMountRoot() noexcept;
 [[nodiscard]] const QString& sealedProjectFolder() noexcept;
 void seal(const QString& mountRoot, const QString& projectFolder) noexcept;
+[[nodiscard]] const QString& operatorProject() noexcept;
+void setOperatorProject(const QString& projectPath) noexcept;
 }  // namespace Core::Runtime

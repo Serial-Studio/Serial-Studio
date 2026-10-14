@@ -92,7 +92,8 @@ static QList<IO::CapturedDataPtr> drainExtractedFrames(IO::FrameReader& reader)
 }
 
 /**
- * @brief Builds a one-shot script engine for the dryRun path.
+ * @brief Builds a one-shot script engine for the dryRun path, on the inert surface: the code is
+ *        the caller's, so it runs with no reach past the engine (spec 0098 R5).
  */
 static std::unique_ptr<DataModel::IScriptEngine> makeEngineForLanguage(int language)
 {
@@ -100,9 +101,9 @@ static std::unique_ptr<DataModel::IScriptEngine> makeEngineForLanguage(int langu
     return std::make_unique<DataModel::CFrameParser>();
 
   if (language == SerialStudio::Lua)
-    return std::make_unique<DataModel::LuaScriptEngine>();
+    return std::make_unique<DataModel::LuaScriptEngine>(DataModel::ScriptSurface::Inert);
 
-  return std::make_unique<DataModel::JsScriptEngine>();
+  return std::make_unique<DataModel::JsScriptEngine>(DataModel::ScriptSurface::Inert);
 }
 
 //--------------------------------------------------------------------------------------------------

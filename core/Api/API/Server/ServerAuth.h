@@ -47,6 +47,7 @@ class ServerAuth : public QObject {
 
 signals:
   void authTokenChanged();
+  void remoteProgramChanged();
 
 public:
   explicit ServerAuth(QSettings& settings);

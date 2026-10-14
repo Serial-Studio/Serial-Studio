@@ -187,6 +187,10 @@ The dashboard helpers (`clearPlots()`, `setPlotPoints(n)`, `setTerminalVisible(b
 
 See [Frame Parser Scripting](JavaScript-API.md) for full signatures and failure modes shared across parsers, transforms, and canvas scripts.
 
+## Canvas code on a remote dashboard
+
+When a dashboard is mirrored from another instance (see [Remote Dashboard](Remote-Dashboard.md)), the publisher's Canvas widgets still draw on the viewer, but their code can only draw. The script runs on a draw-only surface: `apiCall()`, `deviceWrite()`, `actionFire()` and the dashboard helpers answer `{ ok: false, error: "dryRun" }`, `console` output is dropped, and nothing the script does reaches the viewer's devices, files, or processes. `datasets`, `group`, `frame`, `theme` and `ctx` work as usual, so `paint()` and `onFrame()` draw the same picture they draw on the publisher.
+
 ## Drawing API
 
 The context exposes a Canvas2D-style API backed by `QCanvas`. The sections below cover the commonly used methods and properties. Additional Canvas2D members are implemented (`roundRect`, `arcTo`, `ellipse`, `transform` / `setTransform` / `getTransform`, `setLineDash` / `getLineDash`, `isPointInPath`, `isPointInStroke`, `measureText`, `globalCompositeOperation`, `miterLimit`, `lineDashOffset`, the `shadow*` properties, and image-smoothing controls). Calling a member that does not exist throws.

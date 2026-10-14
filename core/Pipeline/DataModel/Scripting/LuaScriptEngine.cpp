@@ -45,6 +45,7 @@ extern "C" {
 #include "DataModel/Scripting/ChecksumApi.h"
 #include "DataModel/Scripting/DashboardApi.h"
 #include "DataModel/Scripting/DeviceWriteApi.h"
+#include "DataModel/Scripting/InertScriptSurface.h"
 #include "DataModel/Scripting/LuaCellCollector.h"
 #include "DataModel/Scripting/LuaCompat.h"
 #include "DataModel/Scripting/LuaCompatJIT.h"
@@ -139,8 +140,24 @@ static void openSafeLibs(lua_State* L)
  */
 struct EngineBootstrapCtx {
   DataModel::LuaScriptEngine* self;
+  DataModel::InertScriptSurface* inert;
   int sourceId;
 };
+
+/**
+ * @brief The dry-run bootstrap (spec 0098): the same sandbox and compat shims, then the inert
+ *        surface in place of every live bridge. A surface that does not verify fails the state.
+ */
+static int bootstrapInertEngineState(lua_State* L, EngineBootstrapCtx* ctx)
+{
+  DataModel::installLuaCompat(L);
+  if (!ctx->inert->installLua(L))
+    return luaL_error(L, "the dry-run surface did not verify");
+
+  lua_pushlightuserdata(L, ctx->self);
+  lua_setfield(L, LUA_REGISTRYINDEX, "__ss_engine__");
+  return 0;
+}
 
 /**
  * @brief Runs the whole sandbox/library/API installation under lua_pcall protection: on LuaJIT
@@ -152,6 +169,8 @@ static int bootstrapEngineState(lua_State* L)
   auto* ctx = static_cast<EngineBootstrapCtx*>(lua_touserdata(L, 1));
 
   openSafeLibs(L);
+  if (ctx->inert != nullptr)
+    return bootstrapInertEngineState(L, ctx);
 
   DataModel::installLuaConsole(L);
   DataModel::installLuaCompat(L);
@@ -313,16 +332,18 @@ static void reportSyntaxError(
 }
 
 /**
- * @brief Closes a Lua state after invalidating the interned-key cache it may have populated.
- *        The cache clear is skipped during teardown: the store dies moments later, and reaching
- *        it from a destructor would marshal across threads while no event loop is pumping.
+ * @brief Closes a Lua state after invalidating the interned-key cache it may have populated:
+ *        skipped in teardown (no event loop pumps a cross-thread marshal then), and for an inert
+ *        state only its scratch store's cache is dropped, so nothing marshals (spec 0098).
  */
-static void closeLuaState(lua_State* state)
+static void closeLuaState(lua_State* state, const DataModel::InertScriptSurface* inert)
 {
   if (!state)
     return;
 
-  if (!IO::PipelineHost::tearingDown()) {
+  if (inert != nullptr)
+    inert->forgetLookupCache();
+  else if (!IO::PipelineHost::tearingDown()) {
     static auto& frameBuilder = DataModel::FrameBuilder::instance();
     frameBuilder.invokeOnBuilderThreadBlocking(
       [] { frameBuilder.tableStore().clearLookupCache(); });
@@ -336,9 +357,28 @@ static void closeLuaState(lua_State* state)
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Constructs the Lua script engine and creates its sandboxed state.
+ * @brief Constructs the Lua script engine and creates its sandboxed state; an Inert engine first
+ *        builds the dry-run surface every one of its states installs.
  */
-DataModel::LuaScriptEngine::LuaScriptEngine()
+DataModel::LuaScriptEngine::LuaScriptEngine(const ScriptSurface surface)
+  : LuaScriptEngine(
+      surface == ScriptSurface::Inert ? std::make_unique<InertScriptSurface>() : nullptr, nullptr)
+{}
+
+/**
+ * @brief Constructs an Inert engine on a surface shared with sibling engines, so one dry run lays
+ *        its scratch tables out once and every engine in it sees the others' table writes.
+ */
+DataModel::LuaScriptEngine::LuaScriptEngine(InertScriptSurface& sharedSurface)
+  : LuaScriptEngine(nullptr, &sharedSurface)
+{}
+
+/**
+ * @brief The one real constructor: @p surface is the borrowed inert surface, or null to use
+ *        @p ownedSurface (itself null for a Live engine).
+ */
+DataModel::LuaScriptEngine::LuaScriptEngine(std::unique_ptr<InertScriptSurface> ownedSurface,
+                                            InertScriptSurface* surface)
   : m_state(nullptr)
   , m_loaded(false)
   , m_disabled(false)
@@ -350,6 +390,8 @@ DataModel::LuaScriptEngine::LuaScriptEngine()
   , m_lastError()
   , m_deadline(QDeadlineTimer::Forever)
   , m_memoryBudget()
+  , m_ownedSurface(std::move(ownedSurface))
+  , m_inert(surface != nullptr ? surface : m_ownedSurface.get())
 {
   createState();
 }
@@ -384,21 +426,21 @@ void DataModel::LuaScriptEngine::createState()
 
   lua_atpanic(m_state, luaPanicHandler);
 
-  EngineBootstrapCtx ctx{this, m_sourceId};
+  EngineBootstrapCtx ctx{this, m_inert, m_sourceId};
   lua_pushcfunction(m_state, bootstrapEngineState);
   lua_pushlightuserdata(m_state, &ctx);
   const int status = guardedPcall(m_state, 1, 0, 0);
   if (status != LUA_OK) [[unlikely]] {
     qWarning() << "[LuaScriptEngine] Engine bootstrap failed:"
                << QString::fromUtf8(lua_tostring(m_state, -1));
-    closeLuaState(m_state);
+    closeLuaState(m_state, m_inert);
     m_state    = nullptr;
     m_loaded   = false;
     m_disabled = true;
     return;
   }
 
-  if (luaProjectModel().luaFastMode()) {
+  if (!m_inert && luaProjectModel().luaFastMode()) {
     luaJIT_setmode(m_state, 0, LUAJIT_MODE_ENGINE | LUAJIT_MODE_ON);
   } else {
     luaJIT_setmode(m_state, 0, LUAJIT_MODE_ENGINE | LUAJIT_MODE_OFF);
@@ -420,7 +462,7 @@ void DataModel::LuaScriptEngine::createState()
  */
 void DataModel::LuaScriptEngine::destroyState()
 {
-  closeLuaState(m_state);
+  closeLuaState(m_state, m_inert);
   m_memoryBudget.reset();
   m_state    = nullptr;
   m_loaded   = false;
@@ -497,6 +539,9 @@ bool DataModel::LuaScriptEngine::noteTimeoutAndCheckDisabled(int sourceId)
   m_disabled = true;
   qWarning() << "[LuaScriptEngine] Source" << sourceId << "disabled after"
              << kMaxConsecutiveTimeouts << "consecutive watchdog timeouts.";
+  if (m_inert)
+    return true;
+
   Core::Prompt::showMessageBox(
     QObject::tr("Frame Parser Disabled"),
     QObject::tr("The Lua frame parser for source %1 timed out %2 frames in a row "
@@ -593,7 +638,7 @@ bool DataModel::LuaScriptEngine::loadScript(const QString& script,
   const int prevConsecutiveTimeouts = m_consecutiveTimeouts;
 
   auto restorePrevious = [&]() {
-    closeLuaState(m_state);
+    closeLuaState(m_state, m_inert);
     m_memoryBudget        = std::move(prevBudget);
     m_state               = prevState;
     m_sourceId            = prevSourceId;
@@ -608,6 +653,10 @@ bool DataModel::LuaScriptEngine::loadScript(const QString& script,
   m_sourceId           = sourceId;
   m_referencesTableApi = DataModel::ScriptApiCall::referencesTableApi(script);
   createState();
+  if (m_state == nullptr) {
+    restorePrevious();
+    return false;
+  }
 
   try {
     const QByteArray utf8 = script.toUtf8();
@@ -642,7 +691,7 @@ bool DataModel::LuaScriptEngine::loadScript(const QString& script,
     m_parseRef = luaL_ref(m_state, LUA_REGISTRYINDEX);
     m_loaded   = true;
 
-    closeLuaState(prevState);
+    closeLuaState(prevState, m_inert);
     return true;
   } catch (const std::exception& e) {
     qWarning() << "[LuaScriptEngine] Source" << sourceId << "load uncaught exception:" << e.what();

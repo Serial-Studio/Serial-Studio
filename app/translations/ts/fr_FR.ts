@@ -197,7 +197,7 @@ Chaque action sur le périphérique nécessite toujours votre approbation explic
     </message>
     <message>
         <location filename="../../../core/Ui/AI/Conversation.cpp" line="188"/>
-        <location filename="../../../core/Ui/AI/Conversation.cpp" line="845"/>
+        <location filename="../../../core/Ui/AI/Conversation.cpp" line="850"/>
         <source>AI subsystem not initialized</source>
         <translation>Sous-système IA non initialisé</translation>
     </message>
@@ -212,7 +212,12 @@ Chaque action sur le périphérique nécessite toujours votre approbation explic
         <translation>Budget d'appels d'outils atteint pour ce tour ; aucun autre outil ne sera exécuté.</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/AI/Conversation.cpp" line="860"/>
+        <location filename="../../../core/Ui/AI/Conversation.cpp" line="634"/>
+        <source>This call runs a command that is blocked for the assistant, or nests another batch.</source>
+        <translation>Cet appel exécute une commande bloquée pour l'assistant, ou imbrique un autre lot.</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/AI/Conversation.cpp" line="865"/>
         <source>Waiting for %1 to respond. Loading the model and processing the prompt can take a while on local hardware...</source>
         <translation>En attente de réponse de %1. Le chargement du modèle et le traitement de l'invite peuvent prendre du temps sur du matériel local…</translation>
     </message>
@@ -233,17 +238,17 @@ Chaque action sur le périphérique nécessite toujours votre approbation explic
         <translation type="vanished">Les champs n'ont pas effectué l'aller-retour : %1</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/AI/Conversation.cpp" line="1210"/>
+        <location filename="../../../core/Ui/AI/Conversation.cpp" line="1215"/>
         <source>You have reached the tool-call budget for this turn. Do not request more tools. Summarize what you found so far, and if the task is incomplete, say which steps remain so the user can tell you to continue.</source>
         <translation>Vous avez atteint le budget d'appels d'outils pour ce tour. Ne demandez plus d'outils. Résumez ce que vous avez trouvé jusqu'à présent, et si la tâche est incomplète, indiquez les étapes restantes afin que l'utilisateur puisse vous demander de continuer.</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/AI/Conversation.cpp" line="1462"/>
+        <location filename="../../../core/Ui/AI/Conversation.cpp" line="1467"/>
         <source>The model stopped reproducing its context-integrity line. Long conversations degrade silently; recent replies may be less reliable.</source>
         <translation>Le modèle a cessé de reproduire sa ligne d'intégrité de contexte. Les conversations longues se dégradent silencieusement ; les réponses récentes peuvent être moins fiables.</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/AI/Conversation.cpp" line="1465"/>
+        <location filename="../../../core/Ui/AI/Conversation.cpp" line="1470"/>
         <source>The model altered its context-integrity line (drifted segment: %1). Long conversations degrade silently; recent replies may be less reliable.</source>
         <translation>Le modèle a modifié sa ligne d'intégrité de contexte (segment dérivé : %1). Les conversations longues se dégradent silencieusement ; les réponses récentes peuvent être moins fiables.</translation>
     </message>
@@ -252,17 +257,17 @@ Chaque action sur le périphérique nécessite toujours votre approbation explic
         <translation type="vanished">Budget d'appels d'outils dépassé</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/AI/Conversation.cpp" line="692"/>
+        <location filename="../../../core/Ui/AI/Conversation.cpp" line="697"/>
         <source>(The model returned an empty response. Try rephrasing, switching to a different model, or checking that the request is allowed by the provider's safety filters.)</source>
         <translation>(Le modèle a retourné une réponse vide. Essayez de reformuler, de changer de modèle ou de vérifier que la requête est autorisée par les filtres de sécurité du fournisseur.)</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/AI/Conversation.cpp" line="864"/>
+        <location filename="../../../core/Ui/AI/Conversation.cpp" line="869"/>
         <source>Sending request to %1...</source>
         <translation>Envoi de la requête à %1…</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/AI/Conversation.cpp" line="882"/>
+        <location filename="../../../core/Ui/AI/Conversation.cpp" line="887"/>
         <source>Provider returned no reply</source>
         <translation>Le fournisseur n'a retourné aucune réponse</translation>
     </message>
@@ -366,7 +371,7 @@ Chaque action sur le périphérique nécessite toujours votre approbation explic
 <context>
     <name>API::ConsentGate</name>
     <message>
-        <location filename="../../../core/Api/API/Server/ConsentGate.cpp" line="151"/>
+        <location filename="../../../core/Api/API/Server/ConsentGate.cpp" line="164"/>
         <source>Serial Studio</source>
         <translation>Serial Studio</translation>
     </message>
@@ -392,6 +397,19 @@ Chaque action sur le périphérique nécessite toujours votre approbation explic
         <location filename="../../src/API/GRPC/GRPCServer.cpp" line="633"/>
         <source>Failed to bind to %1</source>
         <translation>Échec de liaison à %1</translation>
+    </message>
+</context>
+<context>
+    <name>API::LaunchConsent</name>
+    <message>
+        <location filename="../../../core/Api/API/LaunchConsent.cpp" line="40"/>
+        <source>Allow this project to launch programs?</source>
+        <translation>Autoriser ce projet à lancer des programmes ?</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Api/API/LaunchConsent.cpp" line="41"/>
+        <source>This project wants to run programs with your user account's privileges, from its scripts or from a Process I/O source. Only allow this for projects you trust.</source>
+        <translation>Ce projet souhaite exécuter des programmes avec les privilèges de votre compte utilisateur, à partir de ses scripts ou d'une source Process I/O. Autorisez cela uniquement pour les projets de confiance.</translation>
     </message>
 </context>
 <context>
@@ -432,22 +450,22 @@ Chaque action sur le périphérique nécessite toujours votre approbation explic
 <context>
     <name>API::MirrorSession</name>
     <message>
-        <location filename="../../../core/Api/API/Mirror/MirrorSession.cpp" line="334"/>
+        <location filename="../../../core/Api/API/Mirror/MirrorSession.cpp" line="335"/>
         <source>Enter a host name and a port to attach</source>
         <translation>Entrer un nom d'hôte et un port pour s'attacher</translation>
     </message>
     <message>
-        <location filename="../../../core/Api/API/Mirror/MirrorSession.cpp" line="341"/>
+        <location filename="../../../core/Api/API/Mirror/MirrorSession.cpp" line="342"/>
         <source>Disconnect the local device or close the open recording before attaching to a remote dashboard</source>
         <translation>Déconnecter le périphérique local ou fermer l'enregistrement ouvert avant de s'attacher à un tableau de bord distant</translation>
     </message>
     <message>
-        <location filename="../../../core/Api/API/Mirror/MirrorSession.cpp" line="546"/>
+        <location filename="../../../core/Api/API/Mirror/MirrorSession.cpp" line="550"/>
         <source>The remote sent a project this build cannot load</source>
         <translation>Le distant a envoyé un projet que cette version ne peut pas charger</translation>
     </message>
     <message>
-        <location filename="../../../core/Api/API/Mirror/MirrorSession.cpp" line="638"/>
+        <location filename="../../../core/Api/API/Mirror/MirrorSession.cpp" line="642"/>
         <source>This build resolves the remote project to a different dataset layout</source>
         <translation>Cette version résout le projet distant vers une disposition de jeux de données différente</translation>
     </message>
@@ -455,57 +473,67 @@ Chaque action sur le périphérique nécessite toujours votre approbation explic
 <context>
     <name>API::ProcessLauncher</name>
     <message>
-        <location filename="../../../core/Api/API/ProcessLauncher.cpp" line="63"/>
         <source>Allow this project's scripts to launch programs?</source>
-        <translation>Autoriser les scripts de ce projet à lancer des programmes ?</translation>
+        <translation type="vanished">Autoriser les scripts de ce projet à lancer des programmes ?</translation>
     </message>
     <message>
-        <location filename="../../../core/Api/API/ProcessLauncher.cpp" line="64"/>
         <source>Scripts run programs with your user account's privileges. Only allow this for projects you trust.</source>
-        <translation>Les scripts exécutent des programmes avec les privilèges de votre compte utilisateur. Autorisez cela uniquement pour les projets de confiance.</translation>
+        <translation type="vanished">Les scripts exécutent des programmes avec les privilèges de votre compte utilisateur. Autorisez cela uniquement pour les projets de confiance.</translation>
     </message>
     <message>
-        <location filename="../../../core/Api/API/ProcessLauncher.cpp" line="123"/>
+        <location filename="../../../core/Api/API/ProcessLauncher.cpp" line="116"/>
         <source>No program specified</source>
         <translation>Aucun programme spécifié</translation>
     </message>
     <message>
-        <location filename="../../../core/Api/API/ProcessLauncher.cpp" line="127"/>
+        <location filename="../../../core/Api/API/ProcessLauncher.cpp" line="120"/>
         <source>This project's script wants to run:
 %1</source>
         <translation>Le script de ce projet souhaite exécuter :
 %1</translation>
     </message>
     <message>
-        <location filename="../../../core/Api/API/ProcessLauncher.cpp" line="131"/>
+        <location filename="../../../core/Api/API/ProcessLauncher.cpp" line="124"/>
         <source>Launching programs needs the user's consent; a prompt was shown</source>
         <translation>Le lancement de programmes nécessite le consentement de l'utilisateur ; une invite a été affichée</translation>
     </message>
     <message>
-        <location filename="../../../core/Api/API/ProcessLauncher.cpp" line="136"/>
+        <location filename="../../../core/Api/API/ProcessLauncher.cpp" line="129"/>
         <source>Launching programs was denied by the user</source>
         <translation>Le lancement de programmes a été refusé par l'utilisateur</translation>
     </message>
     <message>
-        <location filename="../../../core/Api/API/ProcessLauncher.cpp" line="142"/>
+        <location filename="../../../core/Api/API/ProcessLauncher.cpp" line="135"/>
         <source>Program "%1" not found in PATH</source>
         <translation>Programme « %1 » introuvable dans PATH</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Api/API/ProcessLauncher.cpp" line="206"/>
+        <source>This project's Process I/O source wants to run:
+%1</source>
+        <translation>La source Process I/O de ce projet souhaite exécuter :
+%1</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Api/API/ProcessLauncher.cpp" line="209"/>
+        <source>in %1</source>
+        <translation>dans %1</translation>
     </message>
 </context>
 <context>
     <name>API::Server</name>
     <message>
-        <location filename="../../../core/Api/API/Server.cpp" line="255"/>
+        <location filename="../../../core/Api/API/Server.cpp" line="256"/>
         <source>Unable to start API TCP server</source>
         <translation>Impossible de démarrer le serveur TCP de l'API</translation>
     </message>
     <message>
-        <location filename="../../../core/Api/API/Server.cpp" line="345"/>
+        <location filename="../../../core/Api/API/Server.cpp" line="346"/>
         <source>Allow External API Connections?</source>
         <translation>Autoriser les Connexions API Externes ?</translation>
     </message>
     <message>
-        <location filename="../../../core/Api/API/Server.cpp" line="346"/>
+        <location filename="../../../core/Api/API/Server.cpp" line="347"/>
         <source>Exposing the API server to external hosts allows other devices on your network to connect to Serial Studio on port 7777.
 
 Only enable this on trusted networks. Untrusted clients may read live data or send commands to your device.</source>
@@ -530,12 +558,12 @@ Activez cette option uniquement sur des réseaux de confiance. Des clients non f
         <translation type="vanished">Serial Studio</translation>
     </message>
     <message>
-        <location filename="../../../core/Api/API/Server.cpp" line="1022"/>
+        <location filename="../../../core/Api/API/Server.cpp" line="1023"/>
         <source>API server</source>
         <translation>Serveur API</translation>
     </message>
     <message>
-        <location filename="../../../core/Api/API/Server.cpp" line="1022"/>
+        <location filename="../../../core/Api/API/Server.cpp" line="1023"/>
         <source>Invalid pending connection</source>
         <translation>Connexion en attente non valide</translation>
     </message>
@@ -543,22 +571,22 @@ Activez cette option uniquement sur des réseaux de confiance. Des clients non f
 <context>
     <name>API::ServerAuth</name>
     <message>
-        <location filename="../../../core/Api/API/Server/ServerAuth.cpp" line="38"/>
+        <location filename="../../../core/Api/API/Server/ServerAuth.cpp" line="39"/>
         <source>Allow API device control?</source>
         <translation>Autoriser le contrôle du périphérique par l'API ?</translation>
     </message>
     <message>
-        <location filename="../../../core/Api/API/Server/ServerAuth.cpp" line="39"/>
+        <location filename="../../../core/Api/API/Server/ServerAuth.cpp" line="40"/>
         <source>A program using Serial Studio's local API is requesting to send data to the connected device. Allow API clients to write to the device?</source>
         <translation>Un programme utilisant l'API locale de Serial Studio demande à envoyer des données au périphérique connecté. Autoriser les clients API à écrire sur le périphérique ?</translation>
     </message>
     <message>
-        <location filename="../../../core/Api/API/Server/ServerAuth.cpp" line="44"/>
+        <location filename="../../../core/Api/API/Server/ServerAuth.cpp" line="45"/>
         <source>Allow API clients to modify project scripts?</source>
         <translation>Autoriser les clients API à modifier les scripts du projet ?</translation>
     </message>
     <message>
-        <location filename="../../../core/Api/API/Server/ServerAuth.cpp" line="45"/>
+        <location filename="../../../core/Api/API/Server/ServerAuth.cpp" line="46"/>
         <source>A program using Serial Studio's local API wants to change this project's scripts. Scripts run with the application's full privileges, including launching programs. Allow API clients to modify project scripts?</source>
         <translation>Un programme utilisant l'API locale de Serial Studio souhaite modifier les scripts de ce projet. Les scripts s'exécutent avec les privilèges complets de l'application, y compris le lancement de programmes. Autoriser les clients API à modifier les scripts du projet ?</translation>
     </message>
@@ -6537,158 +6565,158 @@ Activez cette option uniquement sur des réseaux de confiance. Des clients non f
 <context>
     <name>DataModel::DatasetTransformEditor</name>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="117"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="114"/>
         <source>Dataset Value Transform</source>
         <translation>Transformation de Valeur de Jeu de Données</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="156"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="153"/>
         <source>Lua</source>
         <translation>Lua</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="156"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="153"/>
         <source>JavaScript</source>
         <translation>Javascript</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="188"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="185"/>
         <source>Language:</source>
         <translation>Langage :</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="191"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="188"/>
         <source>Template:</source>
         <translation>Modèle :</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="165"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="162"/>
         <source>Enter raw value (e.g., 1024)</source>
         <translation>Entrer la valeur brute (ex. : 1024)</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="170"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="167"/>
         <source>Test</source>
         <translation>Tester</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="171"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="168"/>
         <source>Clear</source>
         <translation>Effacer</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="207"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="204"/>
         <source>Input:</source>
         <translation>Entrée :</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="210"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="207"/>
         <source>Output:</source>
         <translation>Sortie :</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="173"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="170"/>
         <source>Apply</source>
         <translation>Appliquer</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="156"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="153"/>
         <source>Expression</source>
         <translation>Expression</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="174"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="171"/>
         <source>Cancel</source>
         <translation>Annuler</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="176"/>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="704"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="173"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="701"/>
         <source>Open Lua Library</source>
         <translation>Ouvrir la Bibliothèque Lua</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="177"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="174"/>
         <source>Show the project's shared library for this language in the Project Editor. Functions defined there can be called from this transform by name.</source>
         <translation>Afficher la bibliothèque partagée du projet pour ce langage dans l'Éditeur de Projet. Les fonctions qui y sont définies peuvent être appelées depuis cette transformation par leur nom.</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="222"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="219"/>
         <source>Parameters</source>
         <translation>Paramètres</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="224"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="221"/>
         <source>Constants that belong to this dataset. The transform reads them as params.&lt;name&gt;.</source>
         <translation>Constantes appartenant à ce jeu de données. La transformation les lit sous la forme params.&lt;nom&gt;.</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="226"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="223"/>
         <source>Name</source>
         <translation>Nom</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="226"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="223"/>
         <source>Value</source>
         <translation>Valeur</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="232"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="229"/>
         <source>Numbers and true/false keep their type; any other value is a string.</source>
         <translation>Les nombres et true/false conservent leur type ; toute autre valeur est une chaîne.</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="235"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="232"/>
         <source>&lt;b&gt;No Parameters&lt;/b&gt;&lt;br&gt;Parameters are constants that belong to this dataset, such as a scale factor or a sensor offset. The transform reads them as &lt;code&gt;params.name&lt;/code&gt;, so one formula in the Lua Library can serve every dataset that differs only in its constants.</source>
         <translation>&lt;b&gt;Aucun Paramètre&lt;/b&gt;&lt;br&gt;Les paramètres sont des constantes qui appartiennent à ce jeu de données, comme un facteur d'échelle ou un décalage de capteur. La transformation les lit comme &lt;code&gt;params.name&lt;/code&gt;, de sorte qu'une seule formule dans la bibliothèque Lua peut servir tous les jeux de données qui ne diffèrent que par leurs constantes.</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="244"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="241"/>
         <source>Add Parameter</source>
         <translation>Ajouter un Paramètre</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="245"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="242"/>
         <source>Remove</source>
         <translation>Supprimer</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="355"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="352"/>
         <source>Transform — %1</source>
         <translation>Transformation — %1</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="460"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="457"/>
         <source>The value transform has a syntax error and was not applied.</source>
         <translation>La transformation de valeur contient une erreur de syntaxe et n'a pas été appliquée.</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="469"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="466"/>
         <source>The value transform must define a transform(value) function.</source>
         <translation>La transformation de valeur doit définir une fonction transform(value).</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="470"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="467"/>
         <source>Define a transform(value) function that returns a number, or use Clear to remove the transform.</source>
         <translation>Définissez une fonction transform(value) qui retourne un nombre, ou utilisez Effacer pour supprimer la transformation.</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="488"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="485"/>
         <source>Enter a value</source>
         <translation>Saisir une valeur</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="495"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="492"/>
         <source>Invalid number</source>
         <translation>Nombre invalide</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="536"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="533"/>
         <source>Format Document	Ctrl+Shift+I</source>
         <translation>Formater le Document	ctrl+shift+i</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="537"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="534"/>
         <source>Format Selection	Ctrl+I</source>
         <translation>Formater la Sélection	ctrl+i</translation>
     </message>
@@ -6753,7 +6781,7 @@ v
 </translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="834"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="831"/>
         <source>--
 -- Define a transform(value) function that receives the live
 -- dataset reading and returns a transformed number. If no
@@ -6812,7 +6840,7 @@ v
 -- prêts à l'emploi, ou cliquez sur Tester pour essayer</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="862"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="859"/>
         <source>/*
  * Define a transform(value) function that receives the live
  * dataset reading and returns a transformed number. If no
@@ -6869,27 +6897,37 @@ v
  * l'emploi, ou cliquer sur Tester pour essayer votre fonction.</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1003"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1001"/>
         <source>Failed to create the Lua engine.</source>
         <translation>Échec de la création du moteur Lua.</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1030"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1008"/>
+        <source>Failed to prepare the Lua engine.</source>
+        <translation>Échec de la préparation du moteur Lua.</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1029"/>
         <source>Failed to create the JavaScript engine.</source>
         <translation>Échec de la création du moteur JavaScript.</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1046"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1034"/>
+        <source>Failed to prepare the JavaScript engine.</source>
+        <translation>Échec de la préparation du moteur JavaScript.</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1048"/>
         <source>The transform did not finish evaluating within %1 ms.</source>
         <translation>La transformation n'a pas terminé son évaluation dans les %1 ms.</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1051"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1053"/>
         <source>Line %1: %2</source>
         <translation>Ligne %1 : %2</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1118"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1117"/>
         <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1152"/>
         <source>Error in shared library: %1</source>
         <translation>Erreur dans la bibliothèque partagée : %1</translation>
@@ -6962,27 +7000,29 @@ v
  * l'emploi, ou cliquez sur Tester pour essayer votre fonction.</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1107"/>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1142"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1108"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1113"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1141"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1144"/>
         <source>Engine error</source>
         <translation>Erreur du moteur</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1097"/>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1124"/>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1132"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1099"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1123"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1131"/>
         <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1160"/>
         <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1173"/>
         <source>Error: %1</source>
         <translation>Erreur : %1</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="705"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="702"/>
         <source>Open JavaScript Library</source>
         <translation>Ouvrir la Bibliothèque Javascript</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="800"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="797"/>
         <source>#
 # An arithmetic expression evaluated once per sample. No function,
 # no statements: the value of the expression is the new reading.
@@ -7051,13 +7091,13 @@ v
 </translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1128"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1127"/>
         <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1164"/>
         <source>Error: transform() not defined</source>
         <translation>Erreur : transform() non définie</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1135"/>
+        <location filename="../../../core/Ui/ProjectEditor/Editors/DatasetTransformEditor.cpp" line="1134"/>
         <source>Error: transform() must return a number</source>
         <translation>Erreur : transform() doit retourner un nombre</translation>
     </message>
@@ -17417,118 +17457,129 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
 <context>
     <name>IO::Drivers::Process</name>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Process.cpp" line="247"/>
+        <location filename="../../../core/Devices/IO/Drivers/Process.cpp" line="249"/>
+        <location filename="../../../core/Devices/IO/Drivers/Process.cpp" line="260"/>
         <source>Failed to start process</source>
         <translation>Échec du démarrage du processus</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Process.cpp" line="248"/>
+        <location filename="../../../core/Devices/IO/Drivers/Process.cpp" line="250"/>
         <source>Executable "%1" not found in PATH.</source>
         <translation>Exécutable « %1 » introuvable dans PATH.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Process.cpp" line="425"/>
+        <location filename="../../../core/Devices/IO/Drivers/Process.cpp" line="258"/>
+        <source>Waiting for permission to launch "%1".</source>
+        <translation>En attente de permission pour lancer « %1 ».</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Devices/IO/Drivers/Process.cpp" line="259"/>
+        <source>Launching "%1" was denied for this project.</source>
+        <translation>Le lancement de « %1 » a été refusé pour ce projet.</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Devices/IO/Drivers/Process.cpp" line="435"/>
         <source>Select Executable</source>
         <translation>Sélectionner L'exécutable</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Process.cpp" line="449"/>
+        <location filename="../../../core/Devices/IO/Drivers/Process.cpp" line="459"/>
         <source>Select Working Directory</source>
         <translation>Sélectionner le Répertoire de Travail</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Process.cpp" line="474"/>
+        <location filename="../../../core/Devices/IO/Drivers/Process.cpp" line="484"/>
         <source>Select Named Pipe / FIFO</source>
         <translation>Sélectionner le Tube Nommé / FIFO</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Process.cpp" line="616"/>
+        <location filename="../../../core/Devices/IO/Drivers/Process.cpp" line="626"/>
         <source>The process crashed.</source>
         <translation>Le processus s'est arrêté de manière inattendue.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Process.cpp" line="617"/>
+        <location filename="../../../core/Devices/IO/Drivers/Process.cpp" line="627"/>
         <source>Exit code: %1</source>
         <translation>Code de sortie : %1</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Process.cpp" line="622"/>
+        <location filename="../../../core/Devices/IO/Drivers/Process.cpp" line="632"/>
         <source>Process "%1" stopped</source>
         <translation>Processus « %1 » arrêté</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Process.cpp" line="632"/>
+        <location filename="../../../core/Devices/IO/Drivers/Process.cpp" line="642"/>
         <source>Failed to start</source>
         <translation>Échec du démarrage</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Process.cpp" line="636"/>
+        <location filename="../../../core/Devices/IO/Drivers/Process.cpp" line="646"/>
         <source>Unknown error</source>
         <translation>Erreur inconnue</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Process.cpp" line="640"/>
+        <location filename="../../../core/Devices/IO/Drivers/Process.cpp" line="650"/>
         <source>Process Error</source>
         <translation>Erreur de Processus</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Process.cpp" line="654"/>
+        <location filename="../../../core/Devices/IO/Drivers/Process.cpp" line="664"/>
         <source>The pipe closed before the peer attached.</source>
         <translation>Le pipe s'est fermé avant l'attachement du pair</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Process.cpp" line="657"/>
+        <location filename="../../../core/Devices/IO/Drivers/Process.cpp" line="667"/>
         <source>Pipe Closed</source>
         <translation>Tube Fermé</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Process.cpp" line="658"/>
+        <location filename="../../../core/Devices/IO/Drivers/Process.cpp" line="668"/>
         <source>The named pipe "%1" was closed on the other end.</source>
         <translation>Le tube nommé « %1 » a été fermé à l'autre extrémité.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Process.cpp" line="679"/>
+        <location filename="../../../core/Devices/IO/Drivers/Process.cpp" line="689"/>
         <source>Pipe Error</source>
         <translation>Erreur de Tube</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Process.cpp" line="676"/>
-        <location filename="../../../core/Devices/IO/Drivers/Process.cpp" line="679"/>
+        <location filename="../../../core/Devices/IO/Drivers/Process.cpp" line="686"/>
+        <location filename="../../../core/Devices/IO/Drivers/Process.cpp" line="689"/>
         <source>Could not open named pipe: %1</source>
         <translation>Impossible d'ouvrir le tube nommé : %1</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Process.cpp" line="920"/>
+        <location filename="../../../core/Devices/IO/Drivers/Process.cpp" line="930"/>
         <source>Mode</source>
         <translation>Mode</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Process.cpp" line="923"/>
+        <location filename="../../../core/Devices/IO/Drivers/Process.cpp" line="933"/>
         <source>Launch Process</source>
         <translation>Lancer le Processus</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Process.cpp" line="923"/>
+        <location filename="../../../core/Devices/IO/Drivers/Process.cpp" line="933"/>
         <source>Named Pipe</source>
         <translation>Canal Nommé</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Process.cpp" line="928"/>
+        <location filename="../../../core/Devices/IO/Drivers/Process.cpp" line="938"/>
         <source>Executable</source>
         <translation>Exécutable</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Process.cpp" line="936"/>
+        <location filename="../../../core/Devices/IO/Drivers/Process.cpp" line="946"/>
         <source>Arguments</source>
         <translation>Arguments</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Process.cpp" line="944"/>
+        <location filename="../../../core/Devices/IO/Drivers/Process.cpp" line="954"/>
         <source>Working Directory</source>
         <translation>Répertoire de Travail</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Process.cpp" line="952"/>
+        <location filename="../../../core/Devices/IO/Drivers/Process.cpp" line="962"/>
         <source>Pipe Path</source>
         <translation>Chemin du Canal</translation>
     </message>
@@ -21137,47 +21188,47 @@ Veuillez fournir les identifiants nécessaires.</translation>
         <translation>Tout Refuser</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/MessageBubble.qml" line="335"/>
-        <location filename="../../qml/AI/MessageBubble.qml" line="410"/>
-        <location filename="../../qml/AI/MessageBubble.qml" line="462"/>
+        <location filename="../../qml/AI/MessageBubble.qml" line="337"/>
+        <location filename="../../qml/AI/MessageBubble.qml" line="412"/>
+        <location filename="../../qml/AI/MessageBubble.qml" line="464"/>
         <source>Copy</source>
         <translation>Copier</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/MessageBubble.qml" line="340"/>
-        <location filename="../../qml/AI/MessageBubble.qml" line="415"/>
-        <location filename="../../qml/AI/MessageBubble.qml" line="467"/>
+        <location filename="../../qml/AI/MessageBubble.qml" line="342"/>
+        <location filename="../../qml/AI/MessageBubble.qml" line="417"/>
+        <location filename="../../qml/AI/MessageBubble.qml" line="469"/>
         <source>Copy All</source>
         <translation>Tout Copier</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/MessageBubble.qml" line="348"/>
-        <location filename="../../qml/AI/MessageBubble.qml" line="423"/>
+        <location filename="../../qml/AI/MessageBubble.qml" line="350"/>
+        <location filename="../../qml/AI/MessageBubble.qml" line="425"/>
         <source>Select All</source>
         <translation>Tout Sélectionner</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/MessageBubble.qml" line="355"/>
+        <location filename="../../qml/AI/MessageBubble.qml" line="357"/>
         <source>Remember this…</source>
         <translation>Retenir ceci…</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/MessageBubble.qml" line="358"/>
+        <location filename="../../qml/AI/MessageBubble.qml" line="360"/>
         <source>As a preference about me</source>
         <translation>Comme une préférence à mon sujet</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/MessageBubble.qml" line="362"/>
+        <location filename="../../qml/AI/MessageBubble.qml" line="364"/>
         <source>As a correction / lesson</source>
         <translation>Comme une correction / leçon</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/MessageBubble.qml" line="366"/>
+        <location filename="../../qml/AI/MessageBubble.qml" line="368"/>
         <source>As a fact about this project</source>
         <translation>En tant que fait concernant ce projet</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/MessageBubble.qml" line="370"/>
+        <location filename="../../qml/AI/MessageBubble.qml" line="372"/>
         <source>As a reference</source>
         <translation>En tant que référence</translation>
     </message>
@@ -21279,6 +21330,16 @@ Veuillez fournir les identifiants nécessaires.</translation>
         <location filename="../../qml/AI/MessageWebView.qml" line="83"/>
         <source>Copy</source>
         <translation>Copier</translation>
+    </message>
+    <message>
+        <location filename="../../qml/AI/MessageWebView.qml" line="84"/>
+        <source>Runs these operations</source>
+        <translation>Exécute ces opérations</translation>
+    </message>
+    <message>
+        <location filename="../../qml/AI/MessageWebView.qml" line="85"/>
+        <source>+%1 more</source>
+        <translation>+%1 de plus</translation>
     </message>
 </context>
 <context>
@@ -26832,7 +26893,7 @@ Le recharger ?</translation>
         <translation>Erreur d'E/S générale</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="203"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="222"/>
         <source>
 
 This script may use Lua 5.3 bitwise syntax, which this runtime does not support. Replace: %1. The bit and bit32 libraries are available in every script.</source>
@@ -26841,13 +26902,13 @@ This script may use Lua 5.3 bitwise syntax, which this runtime does not support.
 </translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="501"/>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="230"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="546"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="267"/>
         <source>Frame Parser Disabled</source>
         <translation>Analyseur de Trames Désactivé</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="502"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="547"/>
         <source>The Lua frame parser for source %1 timed out %2 frames in a row and has been disabled to keep Serial Studio responsive.
 
 Most likely cause: an infinite loop or extremely slow operation in the script body. Fix the script and reload the project to re-enable parsing.</source>
@@ -26856,13 +26917,13 @@ Most likely cause: an infinite loop or extremely slow operation in the script bo
 Cause la plus probable : une boucle infinie ou une opération extrêmement lente dans le corps du script. Corrigez le script et rechargez le projet pour réactiver l'analyse.</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="270"/>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="310"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="289"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="329"/>
         <source>Lua Syntax Error</source>
         <translation>Erreur de Syntaxe Lua</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="271"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="290"/>
         <source>The parser code contains an error:
 
 %1
@@ -26875,17 +26936,17 @@ Serial Studio can rewrite the unsupported operators as bit.* calls and reload th
 Serial Studio peut réécrire les opérateurs non pris en charge sous forme d'appels bit.* et recharger l'analyseur. La bibliothèque bit fonctionne sur des entiers 32 bits, donc une valeur supérieure à 32 bits bouclera une fois réécrite.</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="281"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="300"/>
         <source>Fix Automatically</source>
         <translation>Corriger Automatiquement</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="282"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="301"/>
         <source>Leave Unchanged</source>
         <translation>Laisser Inchangé</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="311"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="330"/>
         <source>The parser code contains an error:
 
 %1</source>
@@ -26894,12 +26955,12 @@ Serial Studio peut réécrire les opérateurs non pris en charge sous forme d'ap
 %1</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="672"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="721"/>
         <source>Lua Runtime Error</source>
         <translation>Erreur D'exécution Lua</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="673"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="722"/>
         <source>The parser code triggered an error:
 
 %1</source>
@@ -26908,13 +26969,13 @@ Serial Studio peut réécrire les opérateurs non pris en charge sous forme d'ap
 %1</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="694"/>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="560"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="743"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="600"/>
         <source>Missing Parse Function</source>
         <translation>Fonction Parse Manquante</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="695"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="744"/>
         <source>The 'parse' function is not defined in the script.
 
 Please ensure your code includes:
@@ -26925,13 +26986,13 @@ Assurez-vous que votre code inclut :
 function parse(frame) ... end</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="757"/>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="612"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="806"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="652"/>
         <source>Parse Function Runtime Error</source>
         <translation>Erreur D'exécution de la Fonction D'analyse</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="758"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="807"/>
         <source>The parse function contains an error:
 
 %1
@@ -26944,12 +27005,12 @@ Please fix the error in the function body.</source>
 Veuillez corriger l'erreur dans le corps de la fonction.</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="221"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="255"/>
         <source>parse() timed out after %1 ms</source>
         <translation>parse() a expiré après %1 ms</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="231"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="268"/>
         <source>The JavaScript frame parser for source %1 timed out %2 frames in a row and has been disabled to keep Serial Studio responsive.
 
 Most likely cause: an infinite loop or extremely slow operation in the script body. Fix the script and reload the project to re-enable parsing.</source>
@@ -26958,12 +27019,12 @@ Most likely cause: an infinite loop or extremely slow operation in the script bo
 Cause la plus probable : une boucle infinie ou une opération extrêmement lente dans le corps du script. Corrigez le script et rechargez le projet pour réactiver l'analyse.</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="501"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="541"/>
         <source>JavaScript Timed Out</source>
         <translation>Délai D'expiration Javascript Dépassé</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="502"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="542"/>
         <source>The parser code did not finish evaluating within %1 ms and was interrupted.
 
 Most likely cause: an infinite loop at the top level of the script.</source>
@@ -26972,12 +27033,12 @@ Most likely cause: an infinite loop at the top level of the script.</source>
 Cause la plus probable : une boucle infinie au niveau supérieur du script.</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="519"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="559"/>
         <source>JavaScript Syntax Error</source>
         <translation>Erreur de Syntaxe Javascript</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="520"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="560"/>
         <source>The parser code contains a syntax error at line %1:
 
 %2</source>
@@ -26986,12 +27047,12 @@ Cause la plus probable : une boucle infinie au niveau supérieur du script.</tra
 %2</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="534"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="574"/>
         <source>JavaScript Exception Occurred</source>
         <translation>Exception Javascript Survenue</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="535"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="575"/>
         <source>The parser code triggered the following exceptions:
 
 %1</source>
@@ -27000,7 +27061,7 @@ Cause la plus probable : une boucle infinie au niveau supérieur du script.</tra
 %1</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="561"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="601"/>
         <source>The 'parse' function is not defined in the script.
 
 Please ensure your code includes:
@@ -27011,7 +27072,7 @@ Assurez-vous que votre code inclut :
 function parse(frame) { ... }</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="613"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="653"/>
         <source>The parse function contains an error at line %1:
 
 %2
@@ -27024,12 +27085,12 @@ Please fix the error in the function body.</source>
 Veuillez corriger l'erreur dans le corps de la fonction.</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="715"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="759"/>
         <source>Invalid Function Declaration</source>
         <translation>Déclaration de Fonction Invalide</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="716"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="760"/>
         <source>No callable 'parse' export found.
 
 Define one of:
@@ -27042,7 +27103,7 @@ Définissez l’une des options suivantes :
   const parse = (frame) =&gt; { ... }</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="732"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="776"/>
         <source>The 'parse' function must accept at least one parameter (the frame payload).</source>
         <translation>La fonction 'parse' doit accepter au moins un paramètre (la charge utile de la trame).</translation>
     </message>
@@ -27057,7 +27118,7 @@ Format attendu :
 function parse(frame) { ... }</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="731"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="775"/>
         <source>Invalid Function Parameter</source>
         <translation>Paramètre de Fonction Invalide</translation>
     </message>
@@ -27072,12 +27133,12 @@ Format attendu :
 function parse(frame) { ... }</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="697"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="741"/>
         <source>Deprecated Function Signature</source>
         <translation>Signature de Fonction Obsolète</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="698"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="742"/>
         <source>The 'parse' function uses the old two-parameter format: parse(%1, %2)
 
 This format is no longer supported. Please update to the new single-parameter format:
@@ -27102,12 +27163,12 @@ Le paramètre de séparateur n'est plus nécessaire.</translation>
         <translation>Avertissement</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/CLI.cpp" line="922"/>
+        <location filename="../../src/Misc/CLI.cpp" line="926"/>
         <source>Project file not found</source>
         <translation>Fichier de projet introuvable</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/CLI.cpp" line="923"/>
+        <location filename="../../src/Misc/CLI.cpp" line="927"/>
         <source>The project file referenced by this shortcut could not be found:
 
 %1</source>
@@ -27116,17 +27177,17 @@ Le paramètre de séparateur n'est plus nécessaire.</translation>
 %1</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/CLI.cpp" line="926"/>
+        <location filename="../../src/Misc/CLI.cpp" line="930"/>
         <source>Would you like to delete this shortcut?</source>
         <translation>Voulez-vous supprimer ce raccourci ?</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/CLI.cpp" line="930"/>
+        <location filename="../../src/Misc/CLI.cpp" line="934"/>
         <source>Delete Shortcut</source>
         <translation>Supprimer le Raccourci</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/CLI.cpp" line="932"/>
+        <location filename="../../src/Misc/CLI.cpp" line="936"/>
         <source>Quit</source>
         <translation>Quitter</translation>
     </message>
@@ -32498,95 +32559,105 @@ Activer Intégrer le Projet pour incorporer le projet dans le raccourci, afin qu
 <context>
     <name>ToolCallCard</name>
     <message>
-        <location filename="../../qml/AI/ToolCallCard.qml" line="69"/>
+        <location filename="../../qml/AI/ToolCallCard.qml" line="71"/>
         <source>Awaiting approval</source>
         <translation>En Attente d'Approbation</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/ToolCallCard.qml" line="70"/>
+        <location filename="../../qml/AI/ToolCallCard.qml" line="72"/>
         <source>Done</source>
         <translation>Terminé</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/ToolCallCard.qml" line="71"/>
+        <location filename="../../qml/AI/ToolCallCard.qml" line="73"/>
         <source>Error</source>
         <translation>Erreur</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/ToolCallCard.qml" line="72"/>
+        <location filename="../../qml/AI/ToolCallCard.qml" line="74"/>
         <source>Denied</source>
         <translation>Refusé</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/ToolCallCard.qml" line="73"/>
+        <location filename="../../qml/AI/ToolCallCard.qml" line="75"/>
         <source>Blocked</source>
         <translation>Bloqué</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/ToolCallCard.qml" line="74"/>
+        <location filename="../../qml/AI/ToolCallCard.qml" line="76"/>
         <source>Running</source>
         <translation>En Cours D'exécution</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/ToolCallCard.qml" line="162"/>
+        <location filename="../../qml/AI/ToolCallCard.qml" line="164"/>
         <source>Verified</source>
         <translation>Vérifié</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/ToolCallCard.qml" line="162"/>
+        <location filename="../../qml/AI/ToolCallCard.qml" line="164"/>
         <source>Verify failed</source>
         <translation>Échec de la Vérification</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/ToolCallCard.qml" line="202"/>
+        <location filename="../../qml/AI/ToolCallCard.qml" line="204"/>
         <source>Verification failed: %1</source>
         <translation>Échec de la vérification : %1</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/ToolCallCard.qml" line="203"/>
+        <location filename="../../qml/AI/ToolCallCard.qml" line="205"/>
         <source>The applied change failed its verification check.</source>
         <translation>La modification appliquée a échoué lors de la vérification.</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/ToolCallCard.qml" line="212"/>
+        <location filename="../../qml/AI/ToolCallCard.qml" line="214"/>
         <source>Restore checkpoint…</source>
         <translation>Restaurer le point de contrôle…</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/ToolCallCard.qml" line="231"/>
+        <location filename="../../qml/AI/ToolCallCard.qml" line="234"/>
+        <source>Runs these operations</source>
+        <translation>Exécute ces opérations</translation>
+    </message>
+    <message>
+        <location filename="../../qml/AI/ToolCallCard.qml" line="261"/>
+        <source>+%1 more</source>
+        <translation>+%1 de plus</translation>
+    </message>
+    <message>
+        <location filename="../../qml/AI/ToolCallCard.qml" line="275"/>
         <source>Approve</source>
         <translation>Approuver</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/ToolCallCard.qml" line="237"/>
+        <location filename="../../qml/AI/ToolCallCard.qml" line="281"/>
         <source>Deny</source>
         <translation>Refuser</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/ToolCallCard.qml" line="254"/>
+        <location filename="../../qml/AI/ToolCallCard.qml" line="298"/>
         <source>Arguments</source>
         <translation>Arguments</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/ToolCallCard.qml" line="291"/>
-        <location filename="../../qml/AI/ToolCallCard.qml" line="351"/>
+        <location filename="../../qml/AI/ToolCallCard.qml" line="335"/>
+        <location filename="../../qml/AI/ToolCallCard.qml" line="395"/>
         <source>Copy</source>
         <translation>Copier</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/ToolCallCard.qml" line="296"/>
-        <location filename="../../qml/AI/ToolCallCard.qml" line="356"/>
+        <location filename="../../qml/AI/ToolCallCard.qml" line="340"/>
+        <location filename="../../qml/AI/ToolCallCard.qml" line="400"/>
         <source>Copy All</source>
         <translation>Tout Copier</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/ToolCallCard.qml" line="304"/>
-        <location filename="../../qml/AI/ToolCallCard.qml" line="364"/>
+        <location filename="../../qml/AI/ToolCallCard.qml" line="348"/>
+        <location filename="../../qml/AI/ToolCallCard.qml" line="408"/>
         <source>Select All</source>
         <translation>Tout Sélectionner</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/ToolCallCard.qml" line="312"/>
+        <location filename="../../qml/AI/ToolCallCard.qml" line="356"/>
         <source>Result</source>
         <translation>Résultat</translation>
     </message>

@@ -112,8 +112,8 @@ path runs under a protected bootstrap so `lua_atpanic` is unreachable.
   timeout answers `ErrorCode::ScriptTimeout` (`SCRIPT_TIMEOUT`). Two deltas worth knowing:
   dry-run Lua now runs with the **JIT off**, because a count hook never fires inside a compiled
   trace and an uninterruptible validation is the bug being fixed; and the dry-run sandbox does
-  not strip `load`/`dofile`/`string.dump`, matching what the editors did before, while the
-  runtime transform sandbox does.
+  not strip `load`/`string.dump`, matching what the editors did before, while the runtime
+  transform sandbox does. It does strip `dofile`/`loadfile` (spec 0098): a dry run reads no file.
 - Per-source `frameParserLanguage` (0 = JS, 1 = Lua, 2 = Native) picks the engine in
   `FrameParser::engineForSource()`. JS/Lua templates in `app/rcc/scripts/parser/{js,lua}/`
   + `templates.json`; native templates are compiled in (`nativeTemplates()` registry,
@@ -160,6 +160,52 @@ lane, so `assign_utf8_in_place`, the spec-0085 raw rule, transforms, capture and
 are one body; numeric detection is skipped for `Number` cells. Binary decoders and Native keep
 their own lanes. `TransformDispatch` (the per-dataset transform call, formerly inline in
 `FrameBuilder.cpp`) moved to its own class to keep the TU under the census.
+
+## Dry Runs Are Inert (spec 0098)
+
+Code a caller supplies runs only with that caller's own permissions, and a dry run or compile
+check IS code the caller supplies, from the API without a prompt, the assistant, or an editor. So
+a dry run never gets a live bridge: it leaves no trace outside itself and returns the diagnostics
+it always did. No reply shape changed. Three mechanisms, by what the session needs:
+
+- **`DataModel::InertScriptSurface`** (`Scripting/InertScriptSurface.{h,cpp}`) is the host
+  surface of an engine built `ScriptSurface::Inert` (the `JsScriptEngine` / `LuaScriptEngine`
+  ctor argument, `Live` by default). An Inert engine installs the surface INSTEAD of the live
+  bridges (`installJs` / `installLua`); it never installs a live bridge and overwrites it.
+  `apiCall`, `deviceWrite`, `actionFire` and the dashboard controls answer
+  `{ok:false, error:'dryRun'}`, `notify*` / `console` / `print` are dropped, `mqttPublish`
+  returns -1, and the table API runs on a scratch `DataTableStore` laid out from the project at its
+  starting values (writes are discarded). It never reads the GUI mirror:
+  `FrameBuilder::guiTableApiContext()` registers a GUI table user for good, and every display tick
+  would then publish a snapshot nothing reads. It is GUI-thread
+  only, so every table call is direct: nothing marshals into the pipeline thread. The SDK prelude
+  is evaluated over the stand-ins (`ScriptApiCall::evaluateSdk`), so every wrapper a script can
+  name still exists. Users: `FrameParserPipeline` (`project.frameParser.dryRun`, the Test dialog),
+  `ProjectDryRunCommands` (`dryCompile`, `transform.dryRun`, `endToEnd`), `project.validate`'s
+  scratch engine, `DatasetTransformEditor` (validate and test), and a mirror viewer's Canvas
+  widgets ([mirror.md](mirror.md)). A Lua dry run is always Safe mode: the deadline hook plus the
+  memory budget, whatever `luaFastMode` says.
+- **`verify()` makes the install a proof, not an assumption.** `InertScriptSurface::verify`
+  checks that every bridge global is still the stand-in (JS: each carries `inert: true`; Lua:
+  identity against the table of what the chunk installed, held in the registry). `loadScript`
+  runs it before every load of user code and refuses on false, and the Lua bootstrap fails the
+  state when the first install does not verify. It is a check, not an assertion, because
+  top-level user code can reassign a global and the next load on that engine must then fail.
+  **A new host global belongs in the stand-in chunk AND in the probe**, or a dry run reaches it.
+  Debt: nothing mechanical ties the probe list to the globals an engine can carry; the spec 0098
+  AC1 marker sweep is the intended backstop.
+- **`ScriptDryRun` sessions install only what they need.** `project.painter.dryRun` and
+  `controlScript.dryRun` stub their own globals, `project.transformLibrary.dryRun` gives the
+  chunk no host API at all, and the transmit preview (`project.outputWidget.dryRun`, the output
+  editor) runs under `TransmitScriptEnvironment` (`TransmitScriptSurface::Judging`), whose
+  "judged" recorders replace device, action, apiCall, table writes, MQTT, the dashboard controls
+  and notify while reads still reach the real bridge, so the preview shows the payload the live
+  widget would send.
+
+Whoever adds a dry-run path picks one of the three; building a bare `JsScriptEngine()` for a
+caller's code is the bug. Dry-run commands carry the `RunsInertCode` capability in
+`API::CommandCapabilities` (`core/Api/API/CommandCapabilities.h`), which is why the remote gate
+asks no consent for them. A command that runs caller code any other way must not claim it.
 
 ## Embedded Code Editors — Hidden-Widget Plumbing
 

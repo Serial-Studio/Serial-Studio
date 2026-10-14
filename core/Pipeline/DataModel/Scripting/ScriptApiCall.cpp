@@ -566,6 +566,17 @@ void DataModel::ScriptApiCall::installLua(lua_State* L, int sourceId)
   lua_pushcfunction(L, luaApiCallList);
   lua_setglobal(L, "apiCallList");
 
+  evaluateSdk(L);
+}
+
+/**
+ * @brief Evaluates the SerialStudio Lua SDK over whatever apiCall the state already has: the
+ *        live one, or the inert stand-in of a dry run (spec 0098).
+ */
+void DataModel::ScriptApiCall::evaluateSdk(lua_State* L)
+{
+  SS_ASSERT(L != nullptr, return);
+
   static const QByteArray sdk = loadSdk(QStringLiteral(":/api/SerialStudio.lua"));
   if (!sdk.isEmpty())
     (void)luaL_dostring(L, sdk.constData());
@@ -587,6 +598,17 @@ void DataModel::ScriptApiCall::installJS(QJSEngine* js, int sourceId)
   auto* bridge   = new DataModel::ScriptApiCallBridge(sourceId, js);
   auto bridgeVal = js->newQObject(bridge);
   global.setProperty(QStringLiteral("__ss_bridge"), bridgeVal);
+
+  evaluateSdk(js);
+}
+
+/**
+ * @brief Evaluates the SerialStudio JS SDK over whatever bridges the engine already has: the live
+ *        ones, or the inert stand-ins of a dry run (spec 0098).
+ */
+void DataModel::ScriptApiCall::evaluateSdk(QJSEngine* js)
+{
+  SS_ASSERT(js != nullptr, return);
 
   static const QByteArray sdk = loadSdk(QStringLiteral(":/api/SerialStudio.js"));
   if (!sdk.isEmpty())

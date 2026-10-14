@@ -146,9 +146,9 @@ QByteArray API::CommandHandler::processMessage(const QByteArray& data, const Com
 
 /**
  * @brief Process a single command request under the origin's dispatch scope: a remote request
- *        answers to the server's policy for this command AND every command it nests
- *        (project.batch ops, assistant forwards); a trusted request shadows any remote scope it
- *        runs inside.
+ *        answers to the server's policy for it and every command it nests; a trusted request
+ *        shadows any remote scope it runs inside. Both scopes also shadow a caller's dispatch
+ *        policy (spec 0098), which governs that caller's own commands only.
  */
 API::CommandResponse API::CommandHandler::processCommand(const CommandRequest& request,
                                                          const CommandOrigin origin)

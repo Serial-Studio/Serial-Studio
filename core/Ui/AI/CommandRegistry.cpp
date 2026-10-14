@@ -8,6 +8,7 @@
 
 #include "AI/CommandRegistry.h"
 
+#include <algorithm>
 #include <QFile>
 #include <QJsonArray>
 #include <QJsonObject>
@@ -129,6 +130,98 @@ bool AI::CommandRegistry::deviceControlAllowed() const
 bool AI::CommandRegistry::isDeviceGated(const QString& commandName) const
 {
   return m_deviceGated.contains(commandName);
+}
+
+/**
+ * @brief The tier a call actually needs (spec 0098 R9): the strictest of its own and of every
+ *        command it will run. A planned command that itself dispatches others counts as Blocked,
+ *        so nothing nests past one level of batching.
+ */
+AI::Safety AI::CommandRegistry::effectiveSafety(const QString& commandName,
+                                                const QJsonObject& args) const
+{
+  auto tier = safetyOf(commandName);
+  for (const auto& planned : plannedCommands(commandName, args)) {
+    const auto inner = isDispatcher(planned) ? Safety::Blocked : safetyOf(planned);
+    if (strictness(inner) > strictness(tier))
+      tier = inner;
+  }
+
+  return tier;
+}
+
+/**
+ * @brief Orders tiers by how much they demand of the user; the enum's values are wire ids and
+ *        do not sort that way (Blocked is 2, AlwaysConfirm 3).
+ */
+int AI::CommandRegistry::strictness(const Safety safety) noexcept
+{
+  switch (safety) {
+    case Safety::Safe:
+      return 0;
+    case Safety::Confirm:
+      return 1;
+    case Safety::AlwaysConfirm:
+      return 2;
+    case Safety::Blocked:
+      return 3;
+  }
+
+  return 3;
+}
+
+/**
+ * @brief Whether a command runs other commands on the caller's behalf.
+ */
+bool AI::CommandRegistry::isDispatcher(const QString& commandName)
+{
+  return commandName == QStringLiteral("project.batch")
+      || commandName == QStringLiteral("assistant.project.bulkApply");
+}
+
+/**
+ * @brief The commands a call will run besides itself, read from its arguments: a batch's ops, the
+ *        setter a script apply forwards to, and the fixed fan-out of a tile add. Bounded by the
+ *        batch limit the API enforces.
+ */
+QStringList AI::CommandRegistry::plannedCommands(const QString& commandName,
+                                                 const QJsonObject& args)
+{
+  constexpr int kMaxPlannedOps = 1024;
+
+  QStringList planned;
+  if (isDispatcher(commandName)) {
+    const auto ops   = args.value(QStringLiteral("ops")).toArray();
+    const auto count = std::min<qsizetype>(ops.size(), kMaxPlannedOps);
+    for (qsizetype i = 0; i < count; ++i)
+      planned.append(ops.at(i).toObject().value(QStringLiteral("command")).toString());
+
+    return planned;
+  }
+
+  if (commandName == QStringLiteral("assistant.script.apply")) {
+    static const QHash<QString, QString> kSetterByKind = {
+      {QStringLiteral("frame_parser"),      QStringLiteral("project.frameParser.setCode")},
+      {   QStringLiteral("transform"), QStringLiteral("project.dataset.setTransformCode")},
+      {     QStringLiteral("painter"),          QStringLiteral("project.painter.setCode")},
+    };
+    const auto setter = kSetterByKind.value(args.value(QStringLiteral("kind")).toString());
+    if (!setter.isEmpty())
+      planned.append(setter);
+
+    return planned;
+  }
+
+  if (commandName == QStringLiteral("assistant.workspace.addTile"))
+    planned = {
+      QStringLiteral("project.workspace.add"),
+      QStringLiteral("project.dataset.setOptions"),
+      QStringLiteral("project.dataset.update"),
+      QStringLiteral("project.workspace.setCustomizeMode"),
+      QStringLiteral("project.workspace.addWidget"),
+    };
+
+  return planned;
 }
 
 /**

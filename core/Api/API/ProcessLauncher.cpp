@@ -22,7 +22,6 @@
 #include "API/ProcessLauncher.h"
 
 #include <QCoreApplication>
-#include <QCryptographicHash>
 #include <QDebug>
 #include <QDir>
 #include <QFileInfo>
@@ -30,10 +29,13 @@
 #include <QProcess>
 #include <QProcessEnvironment>
 #include <QStandardPaths>
+#include <QThread>
 #include <QTimer>
 #include <QVariantMap>
 
 #include "API/HandlerContext.h"
+#include "API/Server.h"
+#include "Core/Runtime.h"
 #include "Core/SSAssert.h"
 #include "DataModel/PipelineModules.h"
 #include "DataModel/ProjectModel.h"
@@ -43,33 +45,17 @@
 static constexpr int kTerminateGraceMs = 2000;
 
 /**
- * @brief Whether the headless override pre-granted every consent (CI, --headless operators).
- */
-static bool headlessConsent()
-{
-  return qEnvironmentVariableIntValue("SERIAL_STUDIO_API_AUTO_CONSENT") != 0;
-}
-
-/**
  * @brief Constructs the launcher with an empty process table and an unbound consent (no project
- *        yet). The headless override grants it: an operator who set it opted into scripts running
- *        programs.
+ *        yet); LaunchConsent applies the headless override.
  */
 API::ProcessLauncher::ProcessLauncher(QObject* parent)
   : QObject(parent)
   , m_nextId(1)
-  , m_consent(m_settings,
-              QString(),
-              tr("Allow this project's scripts to launch programs?"),
-              tr("Scripts run programs with your user account's privileges. Only allow this for "
-                 "projects you trust."),
-              this)
+  , m_consent(m_settings, this)
+  , m_reconnectOnGrant(false)
   , m_connectionManager(nullptr)
   , m_projectModel(nullptr)
-{
-  if (headlessConsent())
-    m_consent.grant();
-}
+{}
 
 /**
  * @brief Returns the singleton instance.
@@ -82,7 +68,8 @@ API::ProcessLauncher& API::ProcessLauncher::instance()
 
 /**
  * @brief Wires lifecycle signals so every spawned helper is reaped on disconnect, project
- *        change, and application quit.
+ *        change, and application quit, and becomes the launch authorizer every program start
+ *        asks (spec 0098). A root that never wires the launcher refuses every launch.
  */
 void API::ProcessLauncher::setupExternalConnections()
 {
@@ -90,13 +77,19 @@ void API::ProcessLauncher::setupExternalConnections()
   m_projectModel      = &DataModel::pipelineModules().projectModel;
 
   m_lastProjectPath = m_projectModel->jsonFilePath();
-  if (!headlessConsent())
-    m_consent.rebind(consentKeyFor(m_lastProjectPath));
+  m_consent.setOperatorConsentedPath(Core::Runtime::operatorProject());
+  m_consent.bindProject(m_lastProjectPath);
+  IO::setLaunchAuthorizer(this);
 
   connect(&m_consent,
-          &ConsentGate::granted,
+          &LaunchConsent::granted,
           &DataModel::pipelineModules().controlScript,
           &DataModel::ControlScript::restart);
+  connect(&m_consent, &LaunchConsent::granted, this, &API::ProcessLauncher::onConsentGranted);
+  connect(&API::handlerContext().server,
+          &API::Server::remoteProgramChanged,
+          this,
+          &API::ProcessLauncher::onRemoteProgramChanged);
   connect(m_connectionManager,
           &IO::ConnectionManager::sessionClosed,
           this,
@@ -197,6 +190,35 @@ int API::ProcessLauncher::launch(const QString& program,
   logLine(id, logName, QStringLiteral("started"));
   Q_EMIT processStarted(id);
   return id;
+}
+
+/**
+ * @brief The launch gate a Process I/O source asks before it starts a program (spec 0098 R8):
+ *        the same per-project consent as system.exec. A start refused while the prompt is
+ *        pending reconnects once the user says yes.
+ */
+IO::LaunchVerdict API::ProcessLauncher::authorizeLaunch(const QString& program,
+                                                        const QStringList& arguments,
+                                                        const QString& workingDir)
+{
+  SS_ASSERT(QThread::currentThread() == thread(), return IO::LaunchVerdict::Denied);
+
+  auto request = tr("This project's Process I/O source wants to run:\n%1")
+                   .arg((QStringList(program) + arguments).join(QLatin1Char(' ')));
+  if (!workingDir.isEmpty())
+    request += QStringLiteral("\n") + tr("in %1").arg(workingDir);
+
+  const auto verdict = m_consent.authorize(request);
+  if (verdict == ConsentVerdict::Allowed)
+    return IO::LaunchVerdict::Allowed;
+
+  if (verdict == ConsentVerdict::Denied) {
+    m_reconnectOnGrant = false;
+    return IO::LaunchVerdict::Denied;
+  }
+
+  m_reconnectOnGrant = true;
+  return IO::LaunchVerdict::ConsentRequired;
 }
 
 /**
@@ -363,27 +385,43 @@ void API::ProcessLauncher::onAboutToQuit()
 }
 
 /**
- * @brief The settings key a project file's launch consent persists under; empty (session-only)
- *        for a project that has no file.
+ * @brief A remote client changed what the project runs (spec 0098 R13): its launch consent is
+ *        asked again, once this session.
  */
-QString API::ProcessLauncher::consentKeyFor(const QString& projectPath)
+void API::ProcessLauncher::onRemoteProgramChanged()
 {
-  if (projectPath.isEmpty())
-    return QString();
+  m_consent.noteRemoteChange();
+}
 
-  const auto digest =
-    QCryptographicHash::hash(QDir::cleanPath(projectPath).toUtf8(), QCryptographicHash::Sha1);
-  return QStringLiteral("API/ScriptExecConsent/") + QString::fromLatin1(digest.toHex());
+/**
+ * @brief Retries the connect a Process source's consent prompt refused, once, queued so it never
+ *        runs under the prompt's own stack.
+ */
+void API::ProcessLauncher::onConsentGranted()
+{
+  if (!m_reconnectOnGrant || m_connectionManager == nullptr)
+    return;
+
+  m_reconnectOnGrant = false;
+  QMetaObject::invokeMethod(
+    this,
+    [this] {
+      if (!m_connectionManager->isConnected())
+        m_connectionManager->connectDevice();
+    },
+    Qt::QueuedConnection);
 }
 
 /**
  * @brief Reaps every helper when the loaded project's file path actually changes, and rebinds
  *        the launch consent to the new file: a yes given to one project never carries to another.
- *        The headless grant is process-wide and survives the rebind.
+ *        A pending reconnect belonged to the old project and is dropped. The operator project is
+ *        applied first, so a command-line project the session had already restored still counts.
  */
 void API::ProcessLauncher::onProjectFileChanged()
 {
   SS_ASSERT(m_projectModel != nullptr, return);
+  m_consent.setOperatorConsentedPath(Core::Runtime::operatorProject());
   const auto path = m_projectModel->jsonFilePath();
   if (path == m_lastProjectPath)
     return;
@@ -392,9 +430,9 @@ void API::ProcessLauncher::onProjectFileChanged()
     qInfo() << "[ProcessLauncher] project changed to" << path << ", stopping" << m_processes.size()
             << "helper process(es)";
 
-  m_lastProjectPath = path;
+  m_lastProjectPath  = path;
+  m_reconnectOnGrant = false;
   killAll();
 
-  if (!headlessConsent())
-    m_consent.rebind(consentKeyFor(path));
+  m_consent.bindProject(path);
 }

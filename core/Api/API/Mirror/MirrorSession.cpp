@@ -40,6 +40,7 @@
 #include "Core/SSAssert.h"
 #include "DataModel/IDashboardFrames.h"
 #include "DataModel/PipelineModules.h"
+#include "DataModel/Project/ProjectSealing.h"
 #include "DataModel/ProjectModel.h"
 #include "IO/ConnectionManager.h"
 
@@ -533,14 +534,17 @@ void API::MirrorSession::onStructure(const QJsonObject& structure)
 /**
  * @brief Loads the remote's project document and display state. The source path is deliberately
  *        empty: a mirrored project is not the viewer's file, and an empty path is what keeps the
- *        debounced autosave from writing the remote's layout over the user's own project.
+ *        debounced autosave from writing the remote's layout over the user's own project. Every
+ *        piece of publisher logic is stripped first, so the viewer only displays (spec 0098).
  */
 bool API::MirrorSession::applyRemoteState(const QJsonObject& structure)
 {
   auto& project = m_projectModel;
 
   m_appState.setOperationMode(SerialStudio::ProjectFile);
-  const auto document = QJsonDocument(structure.value(QStringLiteral("project")).toObject());
+  auto remote = structure.value(QStringLiteral("project")).toObject();
+  DataModel::stripPublisherLogic(remote);
+  const auto document = QJsonDocument(remote);
   if (!project.loadFromJsonDocument(document)) {
     setError(QStringLiteral("MIRROR_BAD_PROJECT"),
              tr("The remote sent a project this build cannot load"));

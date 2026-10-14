@@ -66,6 +66,25 @@ lifecycle); plus `API/Handlers/MirrorHandler` and `app/qml/Dialogs/RemoteAttach.
   drops the first snapshot.
 - A mirrored project loads with an **empty source path** — that is what stops the debounced
   autosave from overwriting the user's own project with the remote layout.
+- **The viewer strips the publisher's logic before it loads the project (spec 0098 R10).**
+  `applyRemoteState()` runs `DataModel::stripPublisherLogic` on the structure's `"project"`
+  object before `loadFromJsonDocument`: parser code and params, dataset transform code and params,
+  both transform libraries, the control script, output-widget `transmitFunction`, every source's
+  connection settings, the MQTT publisher and InfluxDB blocks, and the legacy root `"frameParser"`
+  key (left in, the loader copies it back into source 0). The publisher still sends the whole
+  document; the strip is receive-side because the viewer is the party that must not trust it, and
+  the wire is untouched (`kWireVersion` stays 1). It lives in `ProjectSealing.{h,cpp}` beside the sealed copy (spec 0096) and differs from
+  `stripSealedContent` in two ways: Canvas code is kept, and the legacy root key goes. A new
+  project field that holds code or a connection setting joins both strips.
+  Enforced: ctest:tst_publisher_logic_strip.
+- **Canvas code on a viewer is draw-only (R11).** `Widgets::Painter` asks
+  `API::MirrorSession::mirroring()` at construction. While mirroring, `m_drawOnly` installs
+  `DataModel::InertScriptSurface` ([scripting.md](scripting.md) "Dry Runs Are Inert") instead of
+  the live bridges, drops the console extension, and never takes a table-API lease, so `apiCall`,
+  `deviceWrite` and `actionFire` answer `dryRun` and nothing reaches a device, file or process.
+  `compile()` refuses ("Canvas code on a remote dashboard can only draw") when the surface did
+  not install, or when a live Painter outlives the attach. `datasets`, `group`, `frame`, `theme`
+  and `ctx` are unchanged, so every data widget renders as before.
 - Attach is exclusive with a local stream (`canAttach` requires no local
   `streamAvailable()`); concurrent local+remote needs spec 0039 M3. Detach must restore the
   captured `LocalState` on every exit path, including fatal transport failure.
@@ -77,7 +96,8 @@ lifecycle); plus `API/Handlers/MirrorHandler` and `app/qml/Dialogs/RemoteAttach.
 
 - **No commercial gate today** — spec 0040 leaves publisher/viewer gating an open question;
   both ship in GPL and commercial builds. Access control is transport-level: API auth token +
-  loopback binding, `--api-external` / `--api-token <hex>` for headless opt-in. The
+  loopback binding, `--api-external` / `--api-token <hex>` for headless opt-in. A spoofed or
+  hostile publisher is harmless to a viewer by the two strips above, not by authentication. The
   RemoteAttach dialog remembers tokens per endpoint (`Mirror/EndpointTokens` QSettings map,
   plaintext by design — same protection as the publisher's own token); `forgetEndpoint()`
   drops the token with the endpoint, and an attach with an empty token clears any stored one.
@@ -95,7 +115,8 @@ Codec: `tests/unit/test_mirror_protocol.py` (pure Python, no app) + reference cl
 `tests/utils/mirror_client.py` + fixtures `tests/fixtures/mirror/` (regenerate via
 `generate_fixtures.py` on any wire change). Live: `tests/integration/test_remote_mirror.py`
 (maintainer-run, `SS_MIRROR_HOST/PORT/TOKEN`), bandwidth probe
-`tests/manual/mirror_bandwidth_live.py`.
+`tests/manual/mirror_bandwidth_live.py`. The viewer-side strip is `tst_publisher_logic_strip`
+(ctest tier).
 
 ## Spec 0055 — the viewer publishes blocks
 

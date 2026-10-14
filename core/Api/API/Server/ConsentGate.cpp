@@ -82,6 +82,19 @@ void API::ConsentGate::grant()
 }
 
 /**
+ * @brief Forgets the decision under the bound key, a persisted "yes" included, so the next
+ *        authorize() asks again (spec 0098 R13). An empty key touches no setting.
+ */
+void API::ConsentGate::revoke()
+{
+  m_state = State::Unset;
+  m_detail.clear();
+
+  if (!m_key.isEmpty())
+    m_settings.remove(m_key);
+}
+
+/**
  * @brief Points the gate at another settings key and forgets the current decision, restoring
  *        whatever that key persisted. An empty key keeps the next decision session-only.
  */

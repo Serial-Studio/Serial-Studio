@@ -31,12 +31,15 @@
  *        and transform params, every source's connection settings, the MQTT publisher and InfluxDB
  *        blocks, and the project-lock hash. Structure (groups, datasets, widgets, workspaces) is
  *        kept, so a mirror viewer and a historian replay can still render the data widgets.
+ *        Beside it, the publisher-logic strip a mirror viewer applies to what it receives (spec
+ *        0098): the same logic fields, with Canvas code kept for its draw-only surface.
  */
 namespace DataModel {
 inline constexpr QLatin1StringView kSealedRecordingKey{"sealedRecording"};
 
 void stripSealedContent(QJsonObject& project);
 void stripSealedContent(Frame& frame);
+void stripPublisherLogic(QJsonObject& project);
 [[nodiscard]] QJsonObject sealedCopy(QJsonObject project);
 [[nodiscard]] bool isSealedRecording(const QString& projectJson);
 }  // namespace DataModel

@@ -89,6 +89,8 @@ private slots:
   void grantIsInMemoryAndSignals();
   void rebindForgetsTheDecision();
   void persistedYesRestoresOnConstruction();
+  void revokeForgetsAPersistedYes();
+  void revokeOnAnEmptyKeyTouchesNoSetting();
 
 private:
   [[nodiscard]] static QString freshKey();
@@ -271,6 +273,48 @@ void TstConsentGate::persistedYesRestoresOnConstruction()
   QVERIFY(gate.isGranted());
   QCOMPARE(gate.authorize(), API::ConsentVerdict::Allowed);
   QCOMPARE(m_prompter.prompts, 0);
+}
+
+/**
+ * @brief Revoking a persisted "yes" removes it from settings and the next ask prompts again
+ *        (spec 0098 R13); a later "yes" persists again.
+ */
+void TstConsentGate::revokeForgetsAPersistedYes()
+{
+  QSettings settings;
+  const auto key = freshKey();
+  settings.setValue(key, true);
+  API::ConsentGate gate(settings, key, QStringLiteral("Allow?"), QStringLiteral("Why."));
+  QVERIFY(gate.isGranted());
+
+  gate.revoke();
+  QVERIFY(!gate.isGranted());
+  QVERIFY(!settings.contains(key));
+  QCOMPARE(gate.authorize(), API::ConsentVerdict::ConsentRequired);
+
+  m_prompter.answer = Core::Prompt::Yes;
+  QCoreApplication::processEvents();
+  QCOMPARE(m_prompter.prompts, 1);
+  QCOMPARE(gate.authorize(), API::ConsentVerdict::Allowed);
+  QCOMPARE(settings.value(key, false).toBool(), true);
+}
+
+/**
+ * @brief Revoking a session-only "yes" forgets it without writing or removing any setting.
+ */
+void TstConsentGate::revokeOnAnEmptyKeyTouchesNoSetting()
+{
+  QSettings settings;
+  const auto unrelated = freshKey();
+  settings.setValue(unrelated, true);
+  API::ConsentGate gate(settings, QString(), QStringLiteral("Allow?"), QStringLiteral("Why."));
+
+  gate.grant();
+  QVERIFY(gate.isGranted());
+  gate.revoke();
+  QVERIFY(!gate.isGranted());
+  QCOMPARE(settings.value(unrelated, false).toBool(), true);
+  QCOMPARE(settings.allKeys().size(), 1);
 }
 
 QTEST_GUILESS_MAIN(TstConsentGate)

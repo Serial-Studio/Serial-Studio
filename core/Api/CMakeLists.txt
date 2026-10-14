@@ -53,6 +53,8 @@ qt_add_library(
   API/MCPHandler.cpp
   API/PathPolicy.cpp
   API/SealedPolicy.cpp
+  API/CommandCapabilities.cpp
+  API/LaunchConsent.cpp
   API/ProcessLauncher.cpp
   API/TerminalBridge.cpp
   API/Handlers/IOManagerHandler.cpp
@@ -108,6 +110,8 @@ qt_add_library(
   API/MCPHandler.h
   API/PathPolicy.h
   API/SealedPolicy.h
+  API/CommandCapabilities.h
+  API/LaunchConsent.h
   API/ProcessLauncher.h
   API/TerminalBridge.h
   API/Handlers/IOManagerHandler.h

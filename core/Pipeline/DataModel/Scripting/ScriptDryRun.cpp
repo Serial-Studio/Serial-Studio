@@ -121,8 +121,8 @@ DataModel::ScriptDryRun::~ScriptDryRun()
 
 /**
  * @brief Creates the sandboxed interpreter state under the deadline hook and the Safe-mode memory
- *        budget. The JIT is switched off because a count hook never fires inside a compiled trace,
- *        and an uninterruptible validation is what this whole helper exists to prevent.
+ *        budget, without the file loaders (a dry run reads no file, spec 0098). The JIT is off
+ *        because a count hook never fires inside a compiled trace.
  */
 void DataModel::ScriptDryRun::createLuaState()
 {
@@ -134,6 +134,12 @@ void DataModel::ScriptDryRun::createLuaState()
   for (const luaL_Reg* lib = kDryRunSafeLibs; lib->func; ++lib) {
     luaL_requiref(m_luaState, lib->name, lib->func, 1);
     lua_pop(m_luaState, 1);
+  }
+
+  static const char* const kFileLoaders[] = {"dofile", "loadfile"};
+  for (const char* name : kFileLoaders) {
+    lua_pushnil(m_luaState);
+    lua_setglobal(m_luaState, name);
   }
 
   luaJIT_setmode(m_luaState, 0, LUAJIT_MODE_ENGINE | LUAJIT_MODE_OFF);

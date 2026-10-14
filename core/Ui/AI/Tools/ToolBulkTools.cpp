@@ -53,10 +53,14 @@ static QJsonObject compactBatchRowResult(const QJsonObject& opResult)
 
 /**
  * @brief True when a fanned-out inner command (Safe/Confirm tier) may run without an extra
- *        AI confirmation; Blocked and AlwaysConfirm (incl. deviceGated) ops are rejected.
+ *        AI confirmation; Blocked and AlwaysConfirm (incl. deviceGated) ops are rejected, and so
+ *        is any op that dispatches others, so a bulk apply can never nest a second batch.
  */
 bool innerOpAllowed(const QString& commandName)
 {
+  if (AI::CommandRegistry::isDispatcher(commandName))
+    return false;
+
   static auto& aiReg = AI::CommandRegistry::instance();
   const auto safety  = aiReg.safetyOf(commandName);
   return safety == AI::Safety::Safe || safety == AI::Safety::Confirm;
@@ -75,7 +79,10 @@ QJsonObject makeInnerOpRejection(const QString& commandName)
   out[QStringLiteral("error")]   = QStringLiteral("inner_op_blocked");
   out[QStringLiteral("command")] = commandName;
   out[QStringLiteral("safety")]  = static_cast<int>(safety);
-  if (aiReg.isDeviceGated(commandName) && !aiReg.deviceControlAllowed())
+  if (AI::CommandRegistry::isDispatcher(commandName))
+    out[QStringLiteral("hint")] =
+      QStringLiteral("Batches cannot nest; put these ops directly in the one batch.");
+  else if (aiReg.isDeviceGated(commandName) && !aiReg.deviceControlAllowed())
     out[QStringLiteral("hint")] =
       QStringLiteral("This op drives the device; enable 'Allow device control' or run it as a "
                      "separate confirmed tool call. Batch fan-out cannot satisfy that gate.");

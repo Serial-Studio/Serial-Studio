@@ -85,6 +85,7 @@ signals:
   void enabledChanged();
   void authTokenChanged();
   void clientCountChanged();
+  void remoteProgramChanged();
   void streamSubscribersChanged();
   void externalConnectionsChanged();
 

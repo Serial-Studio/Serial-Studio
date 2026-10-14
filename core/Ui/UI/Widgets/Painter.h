@@ -13,6 +13,7 @@
 
 #ifdef BUILD_COMMERCIAL
 
+#  include <memory>
 #  include <QHoverEvent>
 #  include <QImage>
 #  include <QJSEngine>
@@ -30,6 +31,7 @@ class AppState;
 
 namespace DataModel {
 class FrameBuilder;
+class InertScriptSurface;
 }  // namespace DataModel
 
 namespace Misc {
@@ -118,6 +120,8 @@ private:
   bool m_slowPaintWarned;
   bool m_pointerDown;
   bool m_rendering;
+  bool m_drawOnly;
+  bool m_inertReady;
   int m_slowPaintStreak;
   qreal m_lastPointerX;
   qreal m_lastPointerY;
@@ -127,6 +131,7 @@ private:
   QImage m_cache;
   QSize m_cacheSize;
 
+  std::unique_ptr<DataModel::InertScriptSurface> m_inert;
   QJSEngine m_engine;
   DataModel::JsWatchdog m_watchdog;
   QJSValue m_paintFn;

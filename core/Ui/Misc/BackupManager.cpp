@@ -29,6 +29,7 @@
 #include <QJsonArray>
 #include <QJsonDocument>
 #include <QJsonObject>
+#include <QRegularExpression>
 #include <QSaveFile>
 #include <QStandardPaths>
 #include <QTimer>
@@ -175,6 +176,34 @@ QString Misc::BackupManager::snapshot(const QString& label)
   enforceRetention(dir);
   Q_EMIT snapshotTaken(fullPath);
   return fullPath;
+}
+
+/**
+ * @brief Whether @p path is a checkpoint this app recorded for the open project (spec 0098 R7):
+ *        an existing file directly in the project's backup folder, named the way snapshot()
+ *        names them, carrying the snapshot metadata. The API's restore accepts nothing else.
+ */
+bool Misc::BackupManager::isOwnCheckpoint(const QString& path) const
+{
+  static const QRegularExpression kCheckpointName(
+    QStringLiteral(
+      R"(^\d{4}-\d{2}-\d{2}T\d{2}-\d{2}-\d{2}-\d{3}(__[\p{L}\p{N}_-]{1,32})?\.ssproj$)"),
+    QRegularExpression::UseUnicodePropertiesOption);
+
+  const QFileInfo file(path);
+  if (path.isEmpty() || !file.isFile() || !kCheckpointName.match(file.fileName()).hasMatch())
+    return false;
+
+  const QFileInfo folder(backupDirectory());
+  if (!folder.isDir() || file.canonicalPath() != folder.canonicalFilePath())
+    return false;
+
+  QFile in(file.canonicalFilePath());
+  if (!in.open(QIODevice::ReadOnly))
+    return false;
+
+  const auto doc = QJsonDocument::fromJson(in.readAll());
+  return doc.isObject() && doc.object().value(kBackupMetaKey).isObject();
 }
 
 /**

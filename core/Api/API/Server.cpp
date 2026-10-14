@@ -77,6 +77,7 @@ API::Server::Server()
   connect(
     this, &API::Server::clientCountChanged, this, &DataModel::IBlockSink::sinkActivityChanged);
   connect(&m_auth, &ServerAuth::authTokenChanged, this, &Server::authTokenChanged);
+  connect(&m_auth, &ServerAuth::remoteProgramChanged, this, &Server::remoteProgramChanged);
 
   m_externalConnections = m_settings.value("API/ExternalConnections", false).toBool();
   if (m_externalConnections)

@@ -47,6 +47,7 @@
 #include "DataModel/Scripting/CFrameParser.h"
 #include "DataModel/Scripting/FrameParser.h"
 #include "DataModel/Scripting/FrameParserPipeline.h"
+#include "DataModel/Scripting/InertScriptSurface.h"
 #include "DataModel/Scripting/JsScriptEngine.h"
 #include "DataModel/Scripting/LuaScriptEngine.h"
 #include "DataModel/Scripting/NativeTemplates/NativeTemplate.h"
@@ -313,18 +314,34 @@ namespace API::Handlers {
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Builds the right script engine for a language tag (0=JS, 1=Lua, 2=Native).
+ * @brief Builds the right script engine for a language tag (0=JS, 1=Lua, 2=Native), always on
+ *        the inert surface: caller-supplied code must run with no reach past the engine (spec
+ *        0098 R5). With @p shared the engine borrows that surface instead of building its own.
  */
-static std::unique_ptr<DataModel::IScriptEngine> makeScriptEngine(int language)
+static std::unique_ptr<DataModel::IScriptEngine> makeScriptEngine(
+  int language, DataModel::InertScriptSurface* shared = nullptr)
 {
   if (language == SerialStudio::Native)
     return std::make_unique<DataModel::CFrameParser>();
 
   if (language == SerialStudio::Lua)
-    return std::make_unique<DataModel::LuaScriptEngine>();
+    return shared ? std::make_unique<DataModel::LuaScriptEngine>(*shared)
+                  : std::make_unique<DataModel::LuaScriptEngine>(DataModel::ScriptSurface::Inert);
 
-  return std::make_unique<DataModel::JsScriptEngine>();
+  return shared ? std::make_unique<DataModel::JsScriptEngine>(*shared)
+                : std::make_unique<DataModel::JsScriptEngine>(DataModel::ScriptSurface::Inert);
 }
+
+/**
+ * @brief The engines of one endToEnd dry run, all on one inert surface declared first so it
+ *        outlives them: the scratch tables are laid out once per call, and a transform's table
+ *        write is visible to the next one, as it is live.
+ */
+struct DryRunEngines {
+  DataModel::InertScriptSurface surface;
+  std::map<int, std::unique_ptr<DataModel::IScriptEngine>> transforms;
+  std::map<int, bool> transformOk;
+};
 
 /**
  * @brief Parses a delimiter field (frameStart / frameEnd) honoring the hexadecimalDelimiters flag.
@@ -855,20 +872,20 @@ static QString wrapTransformForParser(const QString& code, int language)
 /**
  * @brief Applies a single dataset's transform to a raw cell value via a cached engine.
  */
-static QJsonValue applyTransformForDryRun(
-  const DataModel::Dataset& dataset,
-  int defaultLanguage,
-  const QString& rawCell,
-  std::map<int, std::unique_ptr<DataModel::IScriptEngine>>& engines,
-  std::map<int, bool>& engineOk)
+static QJsonValue applyTransformForDryRun(const DataModel::Dataset& dataset,
+                                          int defaultLanguage,
+                                          const QString& rawCell,
+                                          DryRunEngines& cache)
 {
+  auto& engines        = cache.transforms;
+  auto& engineOk       = cache.transformOk;
   const int datasetKey = dataset.uniqueId;
   const int language =
     (dataset.transformLanguage == -1) ? defaultLanguage : dataset.transformLanguage;
 
   auto it = engines.find(datasetKey);
   if (it == engines.end()) {
-    auto engine    = makeScriptEngine(language);
+    auto engine    = makeScriptEngine(language, &cache.surface);
     const auto src = wrapTransformForParser(dataset.transformCode, language);
     const bool ok  = engine->loadScript(src, dataset.sourceId, false);
 
@@ -896,14 +913,12 @@ static QJsonValue applyTransformForDryRun(
 /**
  * @brief Build a single dataset entry for an endToEndDryRun row.
  */
-static QJsonObject buildDryRunDatasetEntry(
-  const DataModel::Dataset& dataset,
-  int groupId,
-  const QStringList& row,
-  int language,
-  bool verbose,
-  std::map<int, std::unique_ptr<DataModel::IScriptEngine>>& transformEngines,
-  std::map<int, bool>& transformEngineOk)
+static QJsonObject buildDryRunDatasetEntry(const DataModel::Dataset& dataset,
+                                           int groupId,
+                                           const QStringList& row,
+                                           int language,
+                                           bool verbose,
+                                           DryRunEngines& engines)
 {
   const int idx = dataset.index;
   QString rawCell;
@@ -922,8 +937,7 @@ static QJsonObject buildDryRunDatasetEntry(
     entry[QStringLiteral("raw")] = rawCell;
 
   if (!dataset.transformCode.isEmpty()) {
-    entry[QStringLiteral("final")] =
-      applyTransformForDryRun(dataset, language, rawCell, transformEngines, transformEngineOk);
+    entry[QStringLiteral("final")] = applyTransformForDryRun(dataset, language, rawCell, engines);
     entry[QStringLiteral("transformApplied")] = true;
     return entry;
   }
@@ -938,14 +952,12 @@ static QJsonObject buildDryRunDatasetEntry(
 /**
  * @brief Build a single parsed-row payload for an endToEndDryRun frame.
  */
-static QJsonObject buildDryRunRow(
-  const QStringList& row,
-  int sourceId,
-  const std::vector<DataModel::Group>& groups,
-  int language,
-  bool verbose,
-  std::map<int, std::unique_ptr<DataModel::IScriptEngine>>& transformEngines,
-  std::map<int, bool>& transformEngineOk)
+static QJsonObject buildDryRunRow(const QStringList& row,
+                                  int sourceId,
+                                  const std::vector<DataModel::Group>& groups,
+                                  int language,
+                                  bool verbose,
+                                  DryRunEngines& engines)
 {
   QJsonArray datasetResults;
   for (const auto& group : groups) {
@@ -953,8 +965,8 @@ static QJsonObject buildDryRunRow(
       if (dataset.sourceId != sourceId)
         continue;
 
-      datasetResults.append(buildDryRunDatasetEntry(
-        dataset, group.groupId, row, language, verbose, transformEngines, transformEngineOk));
+      datasetResults.append(
+        buildDryRunDatasetEntry(dataset, group.groupId, row, language, verbose, engines));
     }
   }
 
@@ -1012,7 +1024,8 @@ API::CommandResponse API::Handlers::ProjectDryRunCommands::endToEndDryRun(const 
                        ? params.value(QStringLiteral("language")).toInt()
                        : source.frameParserLanguage;
 
-  auto parser = makeScriptEngine(language);
+  DryRunEngines engines;
+  auto parser = makeScriptEngine(language, &engines.surface);
   if (!parser->loadScript(code, sourceId, false))
     return CommandResponse::makeError(
       id,
@@ -1020,8 +1033,6 @@ API::CommandResponse API::Handlers::ProjectDryRunCommands::endToEndDryRun(const 
       QStringLiteral("Frame parser failed to compile or define parse(frame).")
         + frameParserCompileHint(code, language));
 
-  std::map<int, std::unique_ptr<DataModel::IScriptEngine>> transformEngines;
-  std::map<int, bool> transformEngineOk;
   const auto& groups = pm.groups();
 
   QJsonArray frameResults;
@@ -1030,8 +1041,7 @@ API::CommandResponse API::Handlers::ProjectDryRunCommands::endToEndDryRun(const 
 
     QJsonArray rowResults;
     for (const auto& row : parsed)
-      rowResults.append(buildDryRunRow(
-        row, sourceId, groups, language, verbose, transformEngines, transformEngineOk));
+      rowResults.append(buildDryRunRow(row, sourceId, groups, language, verbose, engines));
 
     QJsonObject perFrame;
     perFrame[QStringLiteral("rows")]     = rowResults;
@@ -1040,7 +1050,7 @@ API::CommandResponse API::Handlers::ProjectDryRunCommands::endToEndDryRun(const 
   }
 
   QJsonArray failedTransforms;
-  for (const auto& [uid, ok] : transformEngineOk)
+  for (const auto& [uid, ok] : engines.transformOk)
     if (!ok)
       failedTransforms.append(uid);
 
@@ -1060,9 +1070,10 @@ API::CommandResponse API::Handlers::ProjectDryRunCommands::endToEndDryRun(const 
 
   result[QStringLiteral("hint")] =
     QStringLiteral("rawCells[i] maps to dataset.index = i+1. The table API "
-                   "(tableGet/tableSet/datasetGetRaw/datasetGetFinal) is NOT injected in "
-                   "this dry-run -- transforms that read other datasets will see 0/null. "
-                   "Computed datasets show their transform applied to the raw cell at "
-                   "their index (which is normally 0/unset for computed entries).");
+                   "(tableGet/tableSet/datasetGetRaw/datasetGetFinal) runs on a scratch copy "
+                   "of the tables at the project's starting values: writes are discarded with the "
+                   "dry run and other datasets read as their starting values. Computed "
+                   "datasets show their transform applied to the raw cell at their index "
+                   "(which is normally 0/unset for computed entries).");
   return CommandResponse::makeSuccess(id, result);
 }

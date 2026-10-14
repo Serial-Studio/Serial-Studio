@@ -1174,7 +1174,8 @@ static void addIssue(QJsonArray& issues,
 }
 
 /**
- * @brief Builds a throwaway script engine for compile-only checks (never touches live m_engines).
+ * @brief Builds a throwaway script engine for compile-only checks (never touches live m_engines),
+ *        on the inert surface: a compile check leaves no trace outside itself (spec 0098 R5).
  */
 static std::unique_ptr<DataModel::IScriptEngine> makeScratchEngine(int language)
 {
@@ -1182,9 +1183,9 @@ static std::unique_ptr<DataModel::IScriptEngine> makeScratchEngine(int language)
     return std::make_unique<DataModel::CFrameParser>();
 
   if (language == SerialStudio::Lua)
-    return std::make_unique<DataModel::LuaScriptEngine>();
+    return std::make_unique<DataModel::LuaScriptEngine>(DataModel::ScriptSurface::Inert);
 
-  return std::make_unique<DataModel::JsScriptEngine>();
+  return std::make_unique<DataModel::JsScriptEngine>(DataModel::ScriptSurface::Inert);
 }
 
 /**

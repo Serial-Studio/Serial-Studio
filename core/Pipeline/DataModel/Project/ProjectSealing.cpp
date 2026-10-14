@@ -53,12 +53,23 @@
 }
 
 /**
- * @brief Strips one group: its Canvas code, its datasets' transforms and its output widgets'
- *        transmit functions.
+ * @brief Whether a strip keeps Canvas code: a mirror viewer runs it draw-only, a sealed copy
+ *        never carries it.
  */
-[[nodiscard]] static QJsonObject stripGroup(QJsonObject group)
+enum class CanvasCode : quint8 {
+  Strip,
+  Keep,
+};
+
+/**
+ * @brief Strips one group: its datasets' transforms, its output widgets' transmit functions and,
+ *        unless @p canvas keeps it, its Canvas code.
+ */
+[[nodiscard]] static QJsonObject stripGroup(QJsonObject group, const CanvasCode canvas)
 {
-  group.remove(Keys::PainterCode);
+  if (canvas == CanvasCode::Strip)
+    group.remove(Keys::PainterCode);
+
   if (group.contains(Keys::Datasets))
     group.insert(Keys::Datasets,
                  stripEach(group.value(Keys::Datasets).toArray(),
@@ -72,17 +83,18 @@
 }
 
 /**
- * @brief Removes script source, credentials and integration settings from a project document in
- *        place; keys that are absent stay absent, so the rest of the document is unchanged.
+ * @brief The one strip both front ends share, so their logic keys cannot drift apart: script
+ *        source at the root (the legacy "frameParser" key included, which the loader copies back
+ *        into source 0), integration blocks, every source's parser and connection, and each group.
  */
-void DataModel::stripSealedContent(QJsonObject& project)
+static void stripLogic(QJsonObject& project, const CanvasCode canvas)
 {
   for (const auto key : {Keys::ControlScriptCode,
                          Keys::TransformLibrary,
                          Keys::TransformLibraryJs,
-                         Keys::PasswordHash,
                          Keys::MqttPublisher,
-                         Keys::InfluxSink})
+                         Keys::InfluxSink,
+                         QLatin1StringView("frameParser")})
     project.remove(key);
 
   if (project.contains(Keys::Sources))
@@ -96,10 +108,29 @@ void DataModel::stripSealedContent(QJsonObject& project)
   const auto groups = project.value(Keys::Groups).toArray();
   QJsonArray stripped;
   for (const auto& group : groups)
-    stripped.append(group.isObject() ? QJsonValue(stripGroup(group.toObject())) : group);
+    stripped.append(group.isObject() ? QJsonValue(stripGroup(group.toObject(), canvas)) : group);
 
   SS_ASSERT_LOG(stripped.size() == groups.size());
   project.insert(Keys::Groups, stripped);
+}
+
+/**
+ * @brief Removes script source, credentials and integration settings from a project document in
+ *        place; keys that are absent stay absent, so the rest of the document is unchanged.
+ */
+void DataModel::stripSealedContent(QJsonObject& project)
+{
+  project.remove(Keys::PasswordHash);
+  stripLogic(project, CanvasCode::Strip);
+}
+
+/**
+ * @brief Removes every piece of publisher logic from a document a mirror viewer is about to load
+ *        (spec 0098 R10), in place. Canvas code stays: the viewer runs it draw-only (R11).
+ */
+void DataModel::stripPublisherLogic(QJsonObject& project)
+{
+  stripLogic(project, CanvasCode::Keep);
 }
 
 /**

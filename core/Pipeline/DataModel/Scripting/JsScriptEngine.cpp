@@ -32,6 +32,7 @@
 #include "DataModel/NotificationCenter.h"
 #include "DataModel/Scripting/DashboardApi.h"
 #include "DataModel/Scripting/DeviceWriteApi.h"
+#include "DataModel/Scripting/InertScriptSurface.h"
 #include "DataModel/Scripting/JsCellCollector.h"
 #include "DataModel/Scripting/ScriptApiCall.h"
 #include "DataModel/Scripting/ScriptCells.h"
@@ -195,22 +196,55 @@ static QList<QStringList> convertJsResult(const QJSValue& jsResult)
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Constructs the JS engine with safe extensions and the runtime watchdog.
+ * @brief Constructs the JS engine with safe extensions and the runtime watchdog. An Inert engine
+ *        gets the dry-run surface instead of the live bridges and no console extension, and is
+ *        disabled if that surface does not verify.
  */
-DataModel::JsScriptEngine::JsScriptEngine()
-  : m_watchdog(&m_engine, kRuntimeWatchdogMs, QStringLiteral("JsScriptEngine"))
+DataModel::JsScriptEngine::JsScriptEngine(const ScriptSurface surface)
+  : JsScriptEngine(
+      surface == ScriptSurface::Inert ? std::make_unique<InertScriptSurface>() : nullptr, nullptr)
+{}
+
+/**
+ * @brief Constructs an Inert engine on a surface shared with sibling engines, so one dry run lays
+ *        its scratch tables out once and every engine in it sees the others' table writes.
+ */
+DataModel::JsScriptEngine::JsScriptEngine(InertScriptSurface& sharedSurface)
+  : JsScriptEngine(nullptr, &sharedSurface)
+{}
+
+/**
+ * @brief The one real constructor: @p surface is the borrowed inert surface, or null to use
+ *        @p ownedSurface (itself null for a Live engine).
+ */
+DataModel::JsScriptEngine::JsScriptEngine(std::unique_ptr<InertScriptSurface> ownedSurface,
+                                          InertScriptSurface* surface)
+  : m_ownedSurface(std::move(ownedSurface))
+  , m_inert(surface != nullptr ? surface : m_ownedSurface.get())
+  , m_watchdog(&m_engine, kRuntimeWatchdogMs, QStringLiteral("JsScriptEngine"))
   , m_disabled(false)
   , m_referencesTableApi(false)
   , m_sourceId(0)
   , m_consecutiveTimeouts(0)
   , m_errorCount(0)
 {
+  if (m_inert) {
+    m_engine.installExtensions(QJSEngine::GarbageCollectionExtension);
+    m_disabled = !m_inert->installJs(&m_engine);
+    return;
+  }
+
   m_engine.installExtensions(QJSEngine::ConsoleExtension | QJSEngine::GarbageCollectionExtension);
 
   DataModel::ScriptApiCall::installAll(
     &m_engine, m_sourceId, DataModel::ScriptApiCall::TableApi::NamesOnly);
   DataModel::ScriptApiCall::bindSourceIdJS(&m_engine, &m_sourceId);
 }
+
+/**
+ * @brief Out of line so the inert surface's type is complete where it is destroyed.
+ */
+DataModel::JsScriptEngine::~JsScriptEngine() = default;
 
 /**
  * @brief Records a watchdog timeout and disables the parser after too many in a row.
@@ -226,6 +260,9 @@ bool DataModel::JsScriptEngine::noteTimeoutAndCheckDisabled(int sourceId)
   m_disabled = true;
   qWarning() << "[JsScriptEngine] Source" << sourceId << "disabled after" << kMaxConsecutiveTimeouts
              << "consecutive watchdog timeouts.";
+  if (m_inert)
+    return true;
+
   Core::Prompt::showMessageBox(
     QObject::tr("Frame Parser Disabled"),
     QObject::tr("The JavaScript frame parser for source %1 timed out %2 frames "
@@ -486,7 +523,10 @@ bool DataModel::JsScriptEngine::validateScriptSyntax(const QString& script,
   SS_ASSERT(sourceId >= 0, return false);
 
   m_parseFunction = QJSValue();
-  m_engine.installExtensions(QJSEngine::ConsoleExtension | QJSEngine::GarbageCollectionExtension);
+  if (m_inert)
+    m_engine.installExtensions(QJSEngine::GarbageCollectionExtension);
+  else
+    m_engine.installExtensions(QJSEngine::ConsoleExtension | QJSEngine::GarbageCollectionExtension);
 
   QStringList exceptionStackTrace;
   m_watchdog.arm();
@@ -634,6 +674,9 @@ bool DataModel::JsScriptEngine::loadScript(const QString& script,
   SS_ASSERT(sourceId >= 0, return false);
   SS_ASSERT(!script.isEmpty(), return false);
 
+  if (m_inert && !InertScriptSurface::verify(&m_engine))
+    return false;
+
   QJSValue prevParseFn      = m_parseFunction;
   QJSValue prevHexToArr     = m_hexToArray;
   const bool prevReferences = m_referencesTableApi;
@@ -677,7 +720,8 @@ bool DataModel::JsScriptEngine::loadScript(const QString& script,
   m_hexToArray = m_engine.globalObject().property(QStringLiteral("__ss_internal_hex_to_array__"));
 
   m_sourceId = sourceId;
-  DataModel::DeviceWriteApi::installJS(&m_engine, m_sourceId);
+  if (!m_inert)
+    DataModel::DeviceWriteApi::installJS(&m_engine, m_sourceId);
 
   m_disabled            = false;
   m_consecutiveTimeouts = 0;

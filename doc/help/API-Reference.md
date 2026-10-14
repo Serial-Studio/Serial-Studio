@@ -81,7 +81,7 @@ The API Server is available in both **Serial Studio GPL** and **Serial Studio Pr
 
 ## Calling the API from Frame Parsers, Transforms, and Canvas Widgets
 
-The commands in this document are also reachable from inside Serial Studio's scripting surfaces (Lua and JavaScript) via a generic `apiCall()` gateway. No TCP socket required: the call is dispatched in-process on the dashboard thread. A project's own scripts are first-party code, so the gateway is ungated for them — the full catalog below is callable with no allow-list, rate limit, or payload cap. The consent prompts for device writes and script changes apply only to remote clients; launching a program through `system.exec` asks once per project whoever calls it. See [Consent Prompts](#consent-prompts) and [Frame Parser Scripting](JavaScript-API.md) for examples.
+The commands in this document are also reachable from inside Serial Studio's scripting surfaces (Lua and JavaScript) via a generic `apiCall()` gateway. No TCP socket required: the call is dispatched in-process on the dashboard thread. A project's own scripts are first-party code, so the gateway is ungated for them — the full catalog below is callable with no allow-list, rate limit, or payload cap. The consent prompts for device writes and script changes apply only to remote clients; starting a program (`system.exec`, or a Process I/O source launching its program) asks once per project whoever causes it. In dry-run code, `apiCall` answers `{ ok: false, error: "dryRun" }` instead of dispatching (see [Dry Runs Have No Side Effects](#dry-runs-have-no-side-effects)). See [Consent Prompts](#consent-prompts) and [Frame Parser Scripting](JavaScript-API.md) for examples.
 
 ```lua
 local r = apiCall("project.dataset.list")
@@ -286,22 +286,94 @@ netstat -an | grep 7777
 
 Three actions need a one-time "yes" from the person at the screen. Each is refused with
 `CONSENT_REQUIRED` while its prompt is open; the client retries once the prompt is answered. A
-"no" holds until Serial Studio restarts and is never saved.
+"no" holds until Serial Studio restarts and is never saved; a "no" to the launch prompt also ends
+when the project is reopened.
 
 | Prompt | Who triggers it | Covers | Remembered |
 |--------|-----------------|--------|------------|
 | **Allow API device control?** | Remote API/MCP/gRPC clients | `io.writeData`, `io.ble.writeCharacteristic`, `console.send`, raw-mode bytes, and `project.action.update` / `project.action.duplicate` when the call changes an action's payload, target or arming | Per session |
-| **Allow API clients to modify project scripts?** | Remote API/MCP/gRPC clients | `controlScript.set`/`setCode`, `project.frameParser.setCode`, `project.source.setFrameParserCode`, `project.dataset.setTransformCode`, `project.transformLibrary.set`, `project.painter.setCode`, `project.loadJson`, `project.open`, `project.template.apply`, and `project.dataset.update` / `project.group.update` / `project.outputWidget.update` when the call carries `transformCode` / `painterCode` / `transmitFunction` | Per session |
-| **Allow this project's scripts to launch programs?** | Any script calling `system.exec`, including the project's own control script | `system.exec` | Per project file; session-only for a project without a file |
+| **Allow API clients to modify project scripts?** | Remote API/MCP/gRPC clients | `controlScript.set`/`setCode`, `project.frameParser.setCode`, `project.source.setFrameParserCode`, `project.dataset.setTransformCode`, `project.transformLibrary.set`, `project.painter.setCode`, `extensions.install`, every command that loads a project (`project.loadJson`, `project.open`, `project.template.apply`, `assistant.restore`, `sessions.regress`, `sessions.verify`, `sessions.replay`), and `project.dataset.update` / `project.group.update` / `project.outputWidget.update` when the call carries `transformCode` / `painterCode` / `transmitFunction` | Per session |
+| **Allow this project to launch programs?** | Any script calling `system.exec`, including the project's own control script, and any Process I/O source starting its program, whoever chose the program | `system.exec`, and the Launch-mode start of a Process I/O source | Per project file; session-only for a project without a file |
 
 Project scripts run with the application's full privileges: a script installed over the API
 can call `system.exec` as first-party code, which is why installing one needs the second
 prompt. The gate applies to the whole dispatch, so a `project.batch` op or an assistant
 command that forwards to one of these commands is checked the same way as a direct call.
 
+Loading a project runs the scripts inside it, so every command that loads one asks for the
+script-changes prompt, whatever the project contains. That includes the Historian's
+`sessions.regress`, `sessions.verify` and `sessions.replay`, which load the project stored with
+a recording. The candidate project's code never runs before the prompt is answered, in the app
+or in the helper process that `sessions.regress` and `sessions.verify` start.
+
+Through the API, `assistant.restore` accepts only a checkpoint Serial Studio recorded for the
+open project: the `backupPath` a mutation returned, or a path from `assistant.listCheckpoints`.
+Any other file is refused with `INVALID_PARAM` and the open project's file is left untouched.
+The Backup Recovery dialog in the app is unchanged.
+
+The launch prompt guards every way a program can start, not only `system.exec`. A Process I/O
+source in Launch mode asks it before it starts, whether the start came from the Connect button,
+an `io.connect` call, a reconnect or a project load, and whether the program was chosen in the
+Project Editor, by `io.process.setExecutable`, or through the generic source-property commands.
+Once the project holds a "yes", later starts do not ask again. After a "yes", the refused connect
+is retried once. See [Process I/O](Drivers-Process-IO.md#launch-consent).
+
+When a remote client changes the scripts or the program of a project, or loads a project, that
+project's remembered launch consent is cleared the first time this session, so its next launch
+asks again. Once the person grants it again, later remote changes in the same session leave it
+granted.
+
+#### Consent by command class
+
+The remote gate decides by what a command can do, not by its name. Every registered command
+carries a classification, and a command with none is refused to remote clients. A test in the
+build fails while any command is unclassified, so a new command cannot reach a remote client by
+being forgotten. A command whose effect depends on its arguments is classified by what the
+given arguments do: `io.uart.setBaudRate` never asks, and `project.dataset.update` asks for the
+script-changes prompt only when the call carries `transformCode`.
+
+| Class | Examples | What a remote client needs |
+|-------|----------|----------------------------|
+| Reads, and settings that change nothing that runs | `io.getStatus`, `dashboard.setFps`, `io.uart.setBaudRate` | No prompt |
+| Installs script code | `project.frameParser.setCode`, `controlScript.set`, `project.dataset.setTransformCode`, `extensions.install` | Script-changes prompt |
+| Loads a project | `project.open`, `project.loadJson`, `project.template.apply`, `assistant.restore`, `sessions.regress`, `sessions.verify`, `sessions.replay` | Script-changes prompt |
+| Writes to a device | `io.writeData`, `console.send`, `io.ble.writeCharacteristic` | Device-control prompt |
+| Chooses the program a source starts | `io.process.setExecutable`, `io.process.setArguments`, `io.process.setWorkingDir`, `io.process.setMode`, `io.setBusType` switching to Process, `project.source.setProperty` with a program key | No prompt at the call; the first such change in a session clears the project's launch consent, so the next start asks |
+| Starts a program | `io.connect` on a Process I/O source in Launch mode | Launch prompt, at the start |
+| Control script only | `system.exec`, `system.kill`, `system.runningProcesses` | Refused to every remote client |
+| Runs code with no effect | The dry runs and compile checks below | No prompt, because they have no side effects |
+| Runs other commands | `project.batch`, `assistant.project.bulkApply`, `assistant.script.apply`, `assistant.workspace.addTile` | Each inner command is checked as if it were called directly |
+
 Headless runs cannot show a prompt, so a remote-triggered action is denied and a warning names
 the override: set `SERIAL_STUDIO_API_AUTO_CONSENT=1` to grant all three consents for that
-process (used by CI). The grant is in memory only and is not saved.
+process (used by CI). The grant is in memory only and is not saved. The one launch grant that
+needs no override is the project named on the command line of a `--headless` run: the operator
+who started the process chose it, so it may launch its programs for that run.
+
+### Dry Runs Have No Side Effects
+
+A dry run or compile check evaluates code a caller supplies, so it runs on an inert surface and
+needs no consent prompt. That covers `project.frameParser.dryCompile`,
+`project.frameParser.dryRun`, `project.dataset.transform.dryRun`, `project.dryRun.endToEnd`,
+`project.outputWidget.dryRun`, `project.painter.dryRun`, `project.transformLibrary.dryRun`,
+`controlScript.dryRun`, `project.validate` and `assistant.script.dryRun`, in JavaScript and Lua
+alike, plus the previews in the Project Editor's transform editor. The code runs, but nothing it
+does leaves the dry run:
+
+- `apiCall`, `deviceWrite`, `actionFire` and the dashboard helpers (`clearPlots`,
+  `setActiveWorkspace` and the rest) never take effect. Most dry runs answer them with
+  `{ ok: false, error: "dryRun" }`; the output-widget dry run records the calls and answers
+  `judged: true`, so a transmit preview still runs to the end. No command is dispatched, no byte
+  reaches a device, and no process starts.
+- `notify*`, `console.*` and `print` output is dropped, and `mqttPublish` returns `-1`.
+- Tables and variables are a scratch copy at the project's starting values, not the live ones:
+  writes are discarded with the dry run, so a live table never changes, and a dry run of the same
+  code gives the same result whether or not a device is connected.
+- A Lua dry run always uses the Safe-mode watchdog and memory budget, whatever the project's Fast
+  Lua setting is.
+
+The replies are unchanged: valid and invalid code report the same diagnostics as before, with no
+extra field.
 
 ### Security Best Practices
 
@@ -712,7 +784,7 @@ build, 🔵 in commercial builds only. A handful of 🟢 sections hold individua
 (`project.source.add`, `delete` and `update` answer `COMMERCIAL_REQUIRED` in a GPL build);
 those carry the 🔵 badge inside the section.
 
-When a command is invoked through the AI Assistant rather than a raw TCP/JSON client, it is additionally gated by a five-tier safety system (Safe, Confirm, Always confirm, Device-gated, Blocked); see [The safety tiers](AI-Assistant.md#the-safety-tiers).
+When a command is invoked through the AI Assistant rather than a raw TCP/JSON client, it is additionally gated by a five-tier safety system (Safe, Confirm, Always confirm, Device-gated, Blocked); see [The safety tiers](AI-Assistant.md#the-safety-tiers). A batch (`project.batch`, `assistant.project.bulkApply`) takes the strictest tier among its operations: a blocked operation refuses the whole batch before anything runs, an always-confirm operation needs a click even with auto-approve on, a batch inside a batch is refused, and the approval card lists every operation.
 
 **GPL Build (267 commands):**
 - API introspection: 1 command
@@ -2268,7 +2340,8 @@ configuration. Fails if the project has no groups, or no datasets and no image/c
 #### 🟢 `project.validate`
 Walk the loaded project and report inconsistencies: missing source references, frame parser
 compile errors, empty groups, duplicate dataset indexes, and similar issues. Call before
-`project.save` when building a project programmatically.
+`project.save` when building a project programmatically. The compile checks it runs are inert: no
+side effects (see [Dry Runs Have No Side Effects](#dry-runs-have-no-side-effects)).
 
 **Parameters:** None
 
@@ -2880,7 +2953,7 @@ If this dataset is compute-only (no slot in the parser output array), also set `
 When `language` was omitted, the response also includes `languageInherited: true` and an `inheritNotice` string. When the code's syntax looks like it does not match `language`, the response includes a `warning` string. When `code` is non-empty but the dataset is not virtual and has no parser slot (`index <= 0`), the response includes a `hint` string.
 
 #### 🟢 `project.dataset.transform.dryRun`
-Compile and run a value-transform script against sample values, without touching the live project or any dataset.
+Compile and run a value-transform script against sample values, without touching the live project or any dataset. Inert: no side effects (see [Dry Runs Have No Side Effects](#dry-runs-have-no-side-effects)).
 
 **Parameters:**
 - `code` (string): Transform source. Must define `transform(value)`.
@@ -3302,7 +3375,7 @@ array (`code: "unknown_field"`) rather than failing the command.
 
 #### 🟢 `project.outputWidget.dryRun`
 Compile an output-widget transmit function without touching the live
-project. Verifies the script compiles and defines `transmit(value)`.
+project. Verifies the script compiles and defines `transmit(value)`. Inert: no side effects (see [Dry Runs Have No Side Effects](#dry-runs-have-no-side-effects)).
 `transmitFunction` is JavaScript only and runs with the same table API (plus,
 in Pro builds, the injected Modbus/CAN helper globals) as the live widget.
 Validate here before `project.outputWidget.update`.
@@ -3382,7 +3455,7 @@ itself requires a Pro license, but this command is not license-gated.
 ```
 
 #### 🟢 `project.painter.dryRun`
-Compile a canvas program without touching the live project or rendering to a canvas.
+Compile a canvas program without touching the live project or rendering to a canvas. Inert: no side effects (see [Dry Runs Have No Side Effects](#dry-runs-have-no-side-effects)).
 
 **Parameters:**
 - `code` (string): Canvas source. Must define `paint(ctx, w, h)`.
@@ -3571,7 +3644,7 @@ Select a Built-In frame parser template for a source and switch the source to th
 Params are validated against the template's schema before the change is applied. Fails with an `InvalidParam` error for an unknown template id, invalid params, or an unknown `sourceId`. Preview the parsed output before or after applying with `project.frameParser.dryRun` (language 2, the JSON descriptor as `code`).
 
 #### 🟢 `project.frameParser.dryCompile`
-Compile-only check for frame parser code. Catches syntax errors and the "wrong-language" mismatch without executing the parser.
+Compile-only check for frame parser code. Catches syntax errors and the "wrong-language" mismatch without executing the parser. Inert: no side effects (see [Dry Runs Have No Side Effects](#dry-runs-have-no-side-effects)).
 
 **Parameters:**
 - `code` (string): Frame parser source.
@@ -3589,7 +3662,7 @@ Compile-only check for frame parser code. Catches syntax errors and the "wrong-l
 `ok:true` omits `error` and `warning`. `warning` is only produced for JavaScript/Lua when the code's shape suggests the other language; for Built-In (`language: 2`) `error` instead names the expected `{"template": id, "params": {...}}` descriptor shape.
 
 #### 🟢 `project.frameParser.dryRun`
-Compile and execute frame parser code against raw stream bytes, driving the full pipeline (extraction, decoder, `parse()`) without touching the live project.
+Compile and execute frame parser code against raw stream bytes, driving the full pipeline (extraction, decoder, `parse()`) without touching the live project. Inert: no side effects (see [Dry Runs Have No Side Effects](#dry-runs-have-no-side-effects)).
 
 **Parameters:**
 - `code` (string): Frame parser source.
@@ -3685,7 +3758,7 @@ When `dryRun` is true, the top-level response also includes `"dryRun": true`,
 ```
 
 #### 🟢 `project.dryRun.endToEnd`
-Run one or more sample frames through the project's frame parser, then apply every dataset's transform in execution order, without touching live state.
+Run one or more sample frames through the project's frame parser, then apply every dataset's transform in execution order, without touching live state. Inert: no side effects (see [Dry Runs Have No Side Effects](#dry-runs-have-no-side-effects)).
 
 **Parameters:**
 - `sampleFrame` (string, optional): Single frame body (no delimiters). One of `sampleFrame` / `sampleFrames` is required.
@@ -3725,7 +3798,7 @@ Run one or more sample frames through the project's frame parser, then apply eve
   ]
 }
 ```
-`rawCells[i]` maps to `dataset.index = i + 1`. The table API (`tableGet`/`tableSet`/`datasetGetRaw`/`datasetGetFinal`) is not injected here: transforms that read other datasets see 0/null; test those individually with `project.dataset.transform.dryRun`. If one or more dataset transforms fail to compile, the response still succeeds: their `final` value is `null`, their `uniqueId` is listed in `transformCompileFailures`, and a top-level `warning` is added. A frame-parser compile failure, a missing `sampleFrame`/`sampleFrames`, or an out-of-range `sourceId` returns an error response instead.
+`rawCells[i]` maps to `dataset.index = i + 1`. The table API (`tableGet`/`tableSet`/`datasetGetRaw`/`datasetGetFinal`) runs on a scratch copy of the tables here, at the project's starting values: writes are discarded with the dry run, and other datasets read as their starting values. If one or more dataset transforms fail to compile, the response still succeeds: their `final` value is `null`, their `uniqueId` is listed in `transformCompileFailures`, and a top-level `warning` is added. A frame-parser compile failure, a missing `sampleFrame`/`sampleFrames`, or an out-of-range `sourceId` returns an error response instead.
 
 #### 🟢 `project.transformLibrary.get`
 Read one of the project's shared transform libraries: a chunk whose top-level
@@ -3761,7 +3834,7 @@ the Problem Center and the transforms compile without it. Validate with
 #### 🟢 `project.transformLibrary.dryRun`
 Load and run library source in a throwaway sandboxed engine (Lua interpreter
 with the deadline hook, or a watchdogged `QJSEngine`) without installing it.
-Nothing in the project changes.
+Nothing in the project changes. Inert: no side effects (see [Dry Runs Have No Side Effects](#dry-runs-have-no-side-effects)).
 
 **Parameters:**
 - `code` (string, required): Library source
@@ -4659,7 +4732,7 @@ Alias of `controlScript.set`.
 
 #### 🟢 `controlScript.dryRun`
 Compile the source in a sandboxed engine without installing or running it. Reports syntax errors
-with line numbers and checks that `setup()` and/or `loop()` are defined.
+with line numbers and checks that `setup()` and/or `loop()` are defined. Inert: no side effects (see [Dry Runs Have No Side Effects](#dry-runs-have-no-side-effects)).
 
 **Parameters:**
 - `code` (string): Control script source to validate
@@ -4696,7 +4769,8 @@ Helper-process control for the control script. `system.exec`, `system.kill` and
 through the SDK, because launching a process from a remote client is not something an API
 token should buy. `system.exec` is also gated by a one-time **per-project consent prompt**
 naming the program: the first call answers `CONSENT_REQUIRED` while the user is asked, the
-control script restarts on "yes" so `setup()` runs again, and a "no" holds for the session. A
+control script restarts on "yes" so `setup()` runs again, and a "no" holds until the project is
+reopened or Serial Studio restarts. The same prompt guards a Process I/O source's start. A
 script installed over the API is still first-party code, so installing one needs the
 script-install consent first (see [Consent Prompts](#consent-prompts)). A launched process is
 terminated automatically when the device disconnects or the project closes.
@@ -4762,7 +4836,9 @@ count, the structure part count, and the names of the connection-scoped mirror c
 Return the mirror structure for the current epoch: the ordered `(sourceId, uniqueId)` dataset
 list every snapshot is positional against, the layout hash over it, the remote's operation mode,
 plot window and frozen flag, and the serialized project. A large project is split into the
-`structureParts` that `mirror.getInfo` reports; fetch each part by index.
+`structureParts` that `mirror.getInfo` reports; fetch each part by index. The serialized project is
+the whole project document, and a viewer removes the publisher's scripts and connection settings
+before it loads it (see the [trust model](Remote-Dashboard.md#trust-model)).
 
 **Parameters:**
 - `part` (int, optional): Structure part to fetch, when the project spans more than one
@@ -5034,7 +5110,9 @@ List the rolling snapshots for the loaded project, newest first.
 
 #### 🟢 `assistant.restore`
 Restore a checkpoint, replacing the current project state. Unsaved state is overwritten, so a
-defensive pre-restore snapshot is taken first and returned as `reverseSnapshotPath`.
+defensive pre-restore snapshot is taken first and returned as `reverseSnapshotPath`. Through the
+API only a checkpoint of the open project is accepted (any other file answers `INVALID_PARAM`),
+and a remote client needs the script-changes prompt, because the restored project's scripts run.
 
 **Parameters:**
 - `path` (string), `timestamp` (string) or `label` (string): Which checkpoint to restore
@@ -5755,7 +5833,8 @@ Set free-form notes on a stored session.
 - `notes` (string): Notes text
 
 #### 🔵 `sessions.replay`
-Start the player on a stored session.
+Start the player on a stored session. It loads the project stored with the recording, so a remote
+client needs the script-changes prompt.
 
 **Parameters:**
 - `sessionId` (int): Session id
@@ -5768,7 +5847,8 @@ Export a stored session to CSV. Runs asynchronously.
 
 #### 🔵 `sessions.verify`
 Verify a stored session's reproducibility in a child process. Poll `sessions.getVerification`
-for the verdict.
+for the verdict. It loads the project stored with the recording, so a remote client needs the
+script-changes prompt.
 
 **Parameters:**
 - `sessionId` (int): Session id
@@ -5781,7 +5861,8 @@ Return the latest stored verification verdict for a session.
 
 #### 🔵 `sessions.regress`
 Compare a stored session, or every session carrying a tag, against a candidate project in a
-child process. Poll `sessions.getRegression` for the drift report.
+child process. Poll `sessions.getRegression` for the drift report. The candidate project's code
+runs in that process, so a remote client needs the script-changes prompt first.
 
 **Parameters:**
 - `sessionId` (int) or `tag` (string): What to compare
@@ -6316,7 +6397,9 @@ Get complete HID driver configuration.
 (`BusType::Process`) either launches an external executable or attaches to a
 named pipe/FIFO; select it via `io.setBusType` with `busType=8` before
 configuring it. Executable and path parameters are checked against the
-same allow-list as other filesystem-facing commands.
+same allow-list as other filesystem-facing commands. These commands only set the program: starting
+it asks the project's launch prompt, whoever chose the program (see
+[Consent Prompts](#consent-prompts)).
 
 #### 🔵 `io.process.setMode`
 Set the driver mode.

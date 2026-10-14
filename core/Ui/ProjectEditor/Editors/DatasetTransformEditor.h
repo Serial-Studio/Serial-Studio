@@ -45,8 +45,6 @@ class Translator;
 
 namespace DataModel {
 
-class FrameBuilder;
-
 /**
  * @brief Dialog for editing per-dataset value transform scripts (Lua, JS or Expression) with their
  *        named parameters (spec 0083); the project's Lua library is edited from the tree.
@@ -171,7 +169,6 @@ private:
   Misc::CommonFonts& m_commonFonts;
   Misc::ThemeManager& m_themeManager;
   Misc::Translator& m_translator;
-  DataModel::FrameBuilder& m_frameBuilder;
 };
 
 }  // namespace DataModel

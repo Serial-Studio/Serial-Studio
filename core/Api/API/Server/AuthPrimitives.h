@@ -22,7 +22,6 @@
 #pragma once
 
 #include <QByteArray>
-#include <QJsonObject>
 #include <QString>
 
 namespace API {
@@ -44,25 +43,6 @@ namespace Auth {
  * @brief Compares two byte arrays in constant time to avoid token timing side channels.
  */
 [[nodiscard]] bool constantTimeEquals(const QByteArray& a, const QByteArray& b);
-
-/**
- * @brief Whether a command may only be issued by an in-process control script, never by a remote
- *        API client.
- */
-[[nodiscard]] bool commandIsControlScriptOnly(const QString& command);
-
-/**
- * @brief Whether a command reaches the connected hardware, and therefore has to clear the
- *        device-write consent gate before a remote client may run it.
- */
-[[nodiscard]] bool commandWritesToDevice(const QString& command, const QJsonObject& params);
-
-/**
- * @brief Whether a command (with these parameters) installs script code into the project. Every
- *        project script runs with Trusted origin and reaches the full command surface, system.exec
- *        included, so a remote client has to clear the script-install consent gate first.
- */
-[[nodiscard]] bool commandInstallsScript(const QString& command, const QJsonObject& params);
 
 }  // namespace Auth
 }  // namespace API

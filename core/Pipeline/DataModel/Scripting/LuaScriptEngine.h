@@ -35,12 +35,17 @@ extern "C" {
 
 namespace DataModel {
 
+class InertScriptSurface;
+
 /**
- * @brief Lua 5.4 script engine implementation with an instruction-count watchdog.
+ * @brief Lua 5.4 script engine implementation with an instruction-count watchdog. An Inert engine
+ *        (spec 0098) installs the dry-run surface, owned or borrowed, into every state it creates
+ *        and always runs with the Safe-mode watchdog and memory budget.
  */
 class LuaScriptEngine final : public IScriptEngine {
 public:
-  LuaScriptEngine();
+  explicit LuaScriptEngine(ScriptSurface surface = ScriptSurface::Live);
+  explicit LuaScriptEngine(InertScriptSurface& sharedSurface);
   ~LuaScriptEngine() override;
 
   [[nodiscard]] bool loadScript(const QString& script,
@@ -68,6 +73,8 @@ public:
   void resetErrorStats() override;
 
 private:
+  LuaScriptEngine(std::unique_ptr<InertScriptSurface> ownedSurface, InertScriptSurface* surface);
+
   void createState();
   void destroyState();
 
@@ -110,6 +117,8 @@ private:
   QString m_lastError;
   QDeadlineTimer m_deadline;
   std::unique_ptr<LuaMemoryBudget> m_memoryBudget;
+  std::unique_ptr<InertScriptSurface> m_ownedSurface;
+  InertScriptSurface* m_inert;
 };
 
 }  // namespace DataModel

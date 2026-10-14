@@ -70,6 +70,7 @@ qt_add_library(
   DataModel/Scripting/LuaDeadlineHook.cpp
   DataModel/Scripting/LuaMemoryBudget.cpp
   DataModel/Scripting/ScriptDryRun.cpp
+  DataModel/Scripting/InertScriptSurface.cpp
   DataModel/Scripting/TransmitScriptCheck.cpp
   DataModel/Scripting/TransmitScriptEnvironment.cpp
   DataModel/Scripting/ExpressionTransform.cpp
@@ -193,6 +194,7 @@ qt_add_library(
   DataModel/Scripting/LuaDeadlineHook.h
   DataModel/Scripting/LuaMemoryBudget.h
   DataModel/Scripting/ScriptDryRun.h
+  DataModel/Scripting/InertScriptSurface.h
   DataModel/Scripting/TransmitScriptCheck.h
   DataModel/Scripting/TransmitScriptEnvironment.h
   DataModel/Scripting/ExpressionTransform.h

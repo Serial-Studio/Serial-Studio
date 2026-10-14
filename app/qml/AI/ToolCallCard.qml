@@ -18,6 +18,8 @@ Rectangle {
   //
   // Public properties
   //
+  property var ops: []
+  property int opsTotal: 0
   property string callId: ""
   property int statusValue: 0
   property string toolName: ""
@@ -215,6 +217,48 @@ Rectangle {
           "The last edit failed verification. Call assistant.listCheckpoints, then "
           + "restore the most recent checkpoint with assistant.restore and wait for "
           + "my approval.")
+      }
+    }
+
+    //
+    // Every operation a batch will run, visible before it is approved (spec 0098 R9)
+    //
+    ColumnLayout {
+      spacing: 2
+      Layout.fillWidth: true
+      visible: root.ops && root.ops.length > 0
+
+      Label {
+        opacity: 0.8
+        Layout.fillWidth: true
+        text: qsTr("Runs these operations")
+        color: Cpp_ThemeManager.colors["text"]
+        font: Cpp_Misc_CommonFonts.customUiFont(0.85, true)
+      }
+
+      Repeater {
+        model: root.ops
+
+        delegate: Label {
+          required property var modelData
+
+          Layout.fillWidth: true
+          elide: Text.ElideRight
+          textFormat: Text.PlainText
+          font: Cpp_Misc_CommonFonts.monoFont
+          color: Cpp_ThemeManager.colors["text"]
+          text: modelData.detail ? modelData.command + "  " + modelData.detail
+                                 : modelData.command
+        }
+      }
+
+      Label {
+        opacity: 0.8
+        Layout.fillWidth: true
+        font: Cpp_Misc_CommonFonts.uiFont
+        color: Cpp_ThemeManager.colors["text"]
+        visible: root.ops && root.opsTotal > root.ops.length
+        text: qsTr("+%1 more").arg(root.opsTotal - (root.ops ? root.ops.length : 0))
       }
     }
 

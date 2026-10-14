@@ -80,7 +80,9 @@ Item {
       result:        qsTr("Result"),
       groupTitle:    qsTr("Approve {n} actions in {family}?"),
       groupSubtitle: qsTr("These calls will run together. Expand each card to inspect arguments."),
-      copy:          qsTr("Copy")
+      copy:          qsTr("Copy"),
+      operations:    qsTr("Runs these operations"),
+      moreOperations: qsTr("+%1 more").arg("{n}")
     }
     view.runJavaScript("setL10N(" + JSON.stringify(src) + ");")
   }
