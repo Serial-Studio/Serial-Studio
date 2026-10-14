@@ -62,6 +62,22 @@
 				<string>ssproj</string>
 			</array>
 		</dict>
+		<dict>
+			<key>CFBundleTypeName</key>
+			<string>Serial Studio Deployment Package</string>
+			<key>CFBundleTypeRole</key>
+			<string>Viewer</string>
+			<key>LSHandlerRank</key>
+			<string>Owner</string>
+			<key>LSItemContentTypes</key>
+			<array>
+				<string>com.serial-studio.ssdeploy</string>
+			</array>
+			<key>CFBundleTypeExtensions</key>
+			<array>
+				<string>ssdeploy</string>
+			</array>
+		</dict>
 	</array>
 	<key>UTExportedTypeDeclarations</key>
 	<array>
@@ -83,6 +99,25 @@
 				</array>
 				<key>public.mime-type</key>
 				<string>application/x-serial-studio-project</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>UTTypeIdentifier</key>
+			<string>com.serial-studio.ssdeploy</string>
+			<key>UTTypeDescription</key>
+			<string>Serial Studio Deployment Package</string>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>public.data</string>
+			</array>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<array>
+					<string>ssdeploy</string>
+				</array>
+				<key>public.mime-type</key>
+				<string>application/x-serial-studio-deployment</string>
 			</dict>
 		</dict>
 	</array>

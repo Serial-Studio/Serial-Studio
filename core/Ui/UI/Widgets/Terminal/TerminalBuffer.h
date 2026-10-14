@@ -142,6 +142,7 @@ public:
 
 private:
   void trimFront(int linesToDrop);
+  [[nodiscard]] qsizetype appendRun(QStringView string);
   void replaceData(int x, int y, const QChar& byte);
   [[nodiscard]] QStringView lineContentView(QStringView line) const;
 

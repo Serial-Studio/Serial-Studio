@@ -38,6 +38,7 @@
 #include "Core/SSAssert.h"
 #include "DataModel/IDashboardFrames.h"
 #include "DataModel/PipelineModules.h"
+#include "DataModel/Project/ProjectSealing.h"
 #include "DataModel/ProjectModel.h"
 
 //--------------------------------------------------------------------------------------------------
@@ -390,10 +391,14 @@ void API::MirrorPublisher::rebuildStructure()
   m_tNs.assign(m_sourceIds.size(), 0);
   m_sourceOrigins.assign(m_sourceIds.size(), -1);
 
+  auto project = m_projectModel.serializeToJson();
+  if (Core::Runtime::sealed())
+    DataModel::stripSealedContent(project);
+
   m_structure = Mirror::encodeStructure(m_epoch,
                                         m_datasets,
                                         m_sourceIds,
-                                        m_projectModel.serializeToJson(),
+                                        project,
                                         static_cast<int>(m_appState.operationMode()),
                                         dashboard.plotTimeRange(),
                                         dashboard.frozen(),

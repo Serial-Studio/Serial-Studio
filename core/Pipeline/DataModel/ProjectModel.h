@@ -669,6 +669,8 @@ public slots:
 
   bool openJsonFile(const QString& path) { return m_loader.openJsonFile(path); }
 
+  void openDeployment(const QString& path) { m_loader.openDeployment(path); }
+
   [[nodiscard]] bool lastOpenReloaded() const noexcept { return m_loader.lastOpenReloaded(); }
 
   bool loadFromJsonDocument(const QJsonDocument& document, const QString& sourcePath = {})

@@ -154,6 +154,11 @@ if(BUILD_COMMERCIAL)
 
     Licensing/CommercialToken.h
     Licensing/CommercialToken.cpp
+    Deploy/PackageFormat.h
+    Deploy/PackageCodec.h
+    Deploy/PackageCodec.cpp
+    Deploy/ResourceTree.h
+    Deploy/ResourceTree.cpp
   )
   if(LICENSE_GUARDS_INCLUDE_DIR)
     target_include_directories(SerialStudioCore PUBLIC ${LICENSE_GUARDS_INCLUDE_DIR})

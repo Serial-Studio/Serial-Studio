@@ -291,6 +291,8 @@ public:
   [[nodiscard]] int defaultCharWidth() const;
   [[nodiscard]] int defaultCharHeight() const;
   [[nodiscard]] qsizetype bufferLength() const;
+  [[nodiscard]] qint64 displayMark() const noexcept;
+  [[nodiscard]] QString displaySince(qint64 mark, bool& complete) const;
 
   [[nodiscard]] int currentDeviceId() const noexcept;
   [[nodiscard]] int currentDeviceIndex() const noexcept;
@@ -356,6 +358,8 @@ private:
   QString dataToString(QByteArrayView data);
   QString plainTextStr(QByteArrayView data);
   [[nodiscard]] QString appendToDevice(int deviceId, const QString& str, bool addTimestamp);
+  void recordDisplay(const QString& text);
+  void resetDisplayHistory();
 
 private:
   Core::Bus::MessageBus& m_bus;
@@ -393,6 +397,10 @@ private:
   IO::CircularBuffer<QByteArray, char> m_textBuffer;
 
   QString m_pendingDisplay;
+  QString m_displayHistory;
+  qint64 m_displayHistoryStart;
+  qint64 m_displayTotal;
+  int m_displayHistoryLines;
 
   Misc::CommonFonts* m_commonFonts;
   Misc::Translator* m_translator;

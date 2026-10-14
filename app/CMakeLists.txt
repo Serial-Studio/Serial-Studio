@@ -492,6 +492,7 @@ if(BUILD_COMMERCIAL)
     src/Licensing/OfflineSelfTest.h
     src/Licensing/GuardSelfTest.h
     src/API/Handlers/LicensingHandler.h
+    src/Misc/DeploymentSession.h
     src/ThirdParty/tweetnacl.h
     src/ThirdParty/ed25519_verify.h
   )
@@ -507,6 +508,7 @@ if(BUILD_COMMERCIAL)
     src/Licensing/OfflineSelfTest.cpp
     src/Licensing/GuardSelfTest.cpp
     src/API/Handlers/LicensingHandler.cpp
+    src/Misc/DeploymentSession.cpp
     src/ThirdParty/tweetnacl.c
     src/ThirdParty/ed25519_verify.cpp
   )
@@ -889,6 +891,8 @@ qt_add_shaders(${PROJECT_EXECUTABLE} "hdr_shaders"
     shaders/hdr_boost.frag
     shaders/stroke_hdr.vert
     shaders/stroke_hdr.frag
+    shaders/stroke_sdf.vert
+    shaders/stroke_sdf.frag
 )
 
 if(BUILD_COMMERCIAL)
@@ -1255,6 +1259,12 @@ elseif(UNIX)
     FILES ${CMAKE_CURRENT_SOURCE_DIR}/deploy/linux/serial-studio-ssproj.xml
     DESTINATION share/mime/packages
   )
+  if(BUILD_COMMERCIAL)
+    install(
+      FILES ${CMAKE_CURRENT_SOURCE_DIR}/deploy/linux/serial-studio-ssdeploy.xml
+      DESTINATION share/mime/packages
+    )
+  endif()
 endif()
 
 #---------------------------------------------------------------------------------------------------

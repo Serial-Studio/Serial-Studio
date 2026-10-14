@@ -137,6 +137,14 @@ def test_dashboard_get_status_fields(api_client, clean_state):
     for field in expected_fields:
         assert field in status, f"Missing field in dashboard.getStatus: {field}"
 
+    memory = status["plotMemory"]
+    for field in ("historyBytes", "railBytes", "timeCurves", "inexactCurves"):
+        assert isinstance(
+            memory[field], (int, float)
+        ), f"plotMemory.{field} not numeric"
+    assert isinstance(memory["railBinding"], bool)
+    assert isinstance(memory["inexact"], list)
+
 
 @pytest.mark.integration
 def test_dashboard_get_status_reflects_changes(api_client, clean_state):

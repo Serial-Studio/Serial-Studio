@@ -121,6 +121,7 @@ qt_add_library(
   DataModel/Project/ProjectPresentation.cpp
   DataModel/Project/ProjectLoader.cpp
   DataModel/Project/ProjectMerge.cpp
+  DataModel/Project/ProjectSealing.cpp
   DataModel/Project/ProjectFolders.cpp
   DataModel/Project/ProjectWorkspaceProfiles.cpp
   DataModel/Project/ProjectWorkspaces.cpp
@@ -244,6 +245,7 @@ qt_add_library(
   DataModel/Project/ProjectPresentation.h
   DataModel/Project/ProjectLoader.h
   DataModel/Project/ProjectMerge.h
+  DataModel/Project/ProjectSealing.h
   DataModel/Project/ProjectFolders.h
   DataModel/Project/ProjectWorkspaceProfiles.h
   DataModel/Project/ProjectWorkspaces.h
@@ -287,6 +289,7 @@ qt_add_library(
   DataModel/ReplayPlaybackEngine.h
   DataModel/NotificationCenter.h
   DSP.h
+  DSP/FixedQueue.h
   DSPDownsample.h
 )
 

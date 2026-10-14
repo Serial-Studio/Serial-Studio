@@ -57,6 +57,7 @@ Widgets::Plot::Plot(const int index, QQuickItem* parent)
   , m_logY(false)
   , m_sweepRetention(0)
   , m_lastSegmentCount(0)
+  , m_historyExact(true)
 {
   if (VALIDATE_WIDGET(SerialStudio::DashboardPlot, m_index)) {
     const auto& yDataset = GET_DATASET(SerialStudio::DashboardPlot, m_index);
@@ -315,6 +316,15 @@ SerialStudio::SweepMode Widgets::Plot::sweepMode() const noexcept
 SerialStudio::TriggerEdge Widgets::Plot::triggerEdge() const noexcept
 {
   return m_base.triggerEdge();
+}
+
+/**
+ * @brief True while the plot's history keeps every sample; false once the per-curve ceiling or
+ *        the plot-memory rail made it decimate (spec 0097 R7), which the plot shows.
+ */
+bool Widgets::Plot::historyExact() const noexcept
+{
+  return m_historyExact;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -620,6 +630,12 @@ void Widgets::Plot::updateData()
     const auto& ring = m_dashboard.plotTimeRing(m_index);
     (void)DSP::downsampleTimeWindow(ring, xLo, xHi, m_dataW, m_dataH, m_data, &ws);
     applyLogYToRender();
+
+    if (ring.exact() != m_historyExact) [[unlikely]] {
+      m_historyExact = ring.exact();
+      Q_EMIT historyExactChanged();
+    }
+
     return;
   }
 

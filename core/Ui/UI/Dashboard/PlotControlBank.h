@@ -22,6 +22,7 @@
 #pragma once
 
 #include <QMap>
+#include <vector>
 
 #include "DSP.h"
 
@@ -42,6 +43,10 @@ struct PlotControlBindings {
 #endif
   QMap<int, DSP::SweepEngine>& plotSweep;
   QMap<int, DSP::SweepEngine>& multiplotSweep;
+  const QMap<int, DSP::EnvelopeRing>& plotTimeRings;
+  const QMap<int, std::vector<DSP::EnvelopeRing>>& multiplotTimeRings;
+  const double& plotTimeRange;
+  DSP::RingBudget& plotBudget;
 };
 
 /**
@@ -100,6 +105,16 @@ public:
   void restoreMultiplotSweepConfig(const QMap<int, DSP::SweepEngine>& saved);
 
 private:
+  [[nodiscard]] const DSP::EnvelopeRing* plotHistory(int index) const;
+  [[nodiscard]] const DSP::EnvelopeRing* multiplotHistory(int index, int& curves) const;
+
+  void releaseSweep(DSP::SweepEngine& engine);
+  void shapeOrRelease(DSP::SweepEngine& engine,
+                      bool on,
+                      const DSP::EnvelopeRing* densest,
+                      int curves);
+
+private:
   QMap<int, bool>& m_activePlots;
   QMap<int, bool>& m_activeFFTPlots;
   QMap<int, bool>& m_activeMultiplots;
@@ -108,6 +123,10 @@ private:
 #endif
   QMap<int, DSP::SweepEngine>& m_plotSweep;
   QMap<int, DSP::SweepEngine>& m_multiplotSweep;
+  const QMap<int, DSP::EnvelopeRing>& m_plotTimeRings;
+  const QMap<int, std::vector<DSP::EnvelopeRing>>& m_multiplotTimeRings;
+  const double& m_plotTimeRange;
+  DSP::RingBudget& m_plotBudget;
 };
 
 }  // namespace UI

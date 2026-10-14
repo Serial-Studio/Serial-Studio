@@ -42,310 +42,9 @@
 #include "Core/Concepts.h"
 #include "Core/DSPSimd.h"
 #include "Core/SSAssert.h"
-#include "Platform/AppPlatform.h"
+#include "DSP/FixedQueue.h"
 
 namespace DSP {
-//--------------------------------------------------------------------------------------------------
-// Fixed queue implementation with a circular buffer
-//--------------------------------------------------------------------------------------------------
-
-/**
- * @brief Rounds @a value up to the next power of two (>= 2). Used by FixedQueue
- *        to size its backing storage so wrap-around can mask with `& (cap-1)`.
- */
-[[nodiscard]] inline std::size_t roundUpToPowerOfTwo(std::size_t value) noexcept
-{
-  std::size_t v = value < 2 ? 2 : value;
-  --v;
-  v |= v >> 1;
-  v |= v >> 2;
-  v |= v >> 4;
-  v |= v >> 8;
-  v |= v >> 16;
-  if constexpr (sizeof(std::size_t) > 4)
-    v |= v >> 32;
-
-  return v + 1;
-}
-
-/**
- * @brief A fixed-capacity, auto-overwriting circular buffer (FIFO queue) with pow2 storage.
- */
-template<typename T>
-  requires std::copy_constructible<T> && std::is_copy_assignable_v<T>
-class FixedQueue {
-public:
-  /**
-   * @brief Constructs a FixedQueue with a given logical capacity. Backing storage
-   *        is rounded up to the next power of two for fast wrap-around.
-   */
-  explicit FixedQueue(std::size_t capacity = 100)
-    : m_capacity(capacity < 1 ? 1 : capacity)
-    , m_storageCapacity(roundUpToPowerOfTwo(capacity < 1 ? 1 : capacity))
-    , m_storageMask(m_storageCapacity - 1)
-    , m_data(makeStorage(m_storageCapacity))
-    , m_start(0)
-    , m_size(0)
-  {}
-
-  /**
-   * @brief Copy constructor.
-   */
-  FixedQueue(const FixedQueue&) = default;
-
-  /**
-   * @brief Copy assignment operator.
-   */
-  FixedQueue& operator=(const FixedQueue&) = default;
-
-  /**
-   * @brief Move constructor.
-   */
-  FixedQueue(FixedQueue&&) noexcept = default;
-
-  /**
-   * @brief Move assignment operator.
-   */
-  FixedQueue& operator=(FixedQueue&&) noexcept = default;
-
-  /**
-   * @brief Provides read-only access to an element at a given index.
-   */
-  [[nodiscard]] const T& operator[](std::size_t index) const
-  {
-    SS_ASSERT_LOG(index < m_size);
-    return m_data[wrappedIndex(index < m_size ? index : 0)];
-  }
-
-  /**
-   * @brief Provides mutable access to an element at a given index.
-   */
-  [[nodiscard]] T& operator[](std::size_t index)
-  {
-    SS_ASSERT_LOG(index < m_size);
-    return m_data[wrappedIndex(index < m_size ? index : 0)];
-  }
-
-  /**
-   * @brief Returns the current number of elements in the queue.
-   */
-  [[nodiscard]] std::size_t size() const { return m_size; }
-
-  /**
-   * @brief Returns the maximum capacity of the queue.
-   */
-  [[nodiscard]] std::size_t capacity() const { return m_capacity; }
-
-  /**
-   * @brief Checks whether the queue is full.
-   */
-  [[nodiscard]] bool full() const { return m_size == m_capacity; }
-
-  /**
-   * @brief Checks whether the queue is empty.
-   */
-  [[nodiscard]] bool empty() const { return m_size == 0; }
-
-  /**
-   * @brief Returns the storage index of the front (oldest) element. Pair with
-   *        `nextIndex()` (or `storageMask()`) to walk the ring without modulo.
-   */
-  [[nodiscard]] std::size_t frontIndex() const { return m_start; }
-
-  /**
-   * @brief Returns `(idx + 1) & storageMask` -- the next storage position when
-   *        walking the ring from `frontIndex()`. Use instead of `% capacity()`.
-   */
-  [[nodiscard]] std::size_t nextIndex(std::size_t idx) const noexcept
-  {
-    return (idx + 1) & m_storageMask;
-  }
-
-  /**
-   * @brief Returns the storage AND-mask. Lets advanced callers inline the
-   *        wrap (`idx = (idx + n) & mask`) when walking by a stride > 1.
-   */
-  [[nodiscard]] std::size_t storageMask() const noexcept { return m_storageMask; }
-
-  /**
-   * @brief Returns the backing storage size (>= capacity()), always a power of two.
-   *        Use for span/wrap math that operates on the raw buffer indices.
-   */
-  [[nodiscard]] std::size_t storageCapacity() const noexcept { return m_storageCapacity; }
-
-  /**
-   * @brief Provides read-only access to an element at a given index.
-   */
-  [[nodiscard]] const T& at(std::size_t index) const
-  {
-    SS_ASSERT_LOG(index < m_capacity);
-    return m_data[wrappedIndex(index < m_capacity ? index : 0)];
-  }
-
-  /**
-   * @brief Returns a reference to the first (oldest) element in the queue.
-   */
-  [[nodiscard]] const T& front() const
-  {
-    if (m_size == 0) [[unlikely]] {
-      qWarning() << "DSP::RingBuffer::front() called on empty buffer";
-      return m_data[0];
-    }
-
-    return m_data[m_start];
-  }
-
-  /**
-   * @brief Returns a reference to the most recently added element in the queue.
-   */
-  [[nodiscard]] const T& back() const
-  {
-    if (m_size == 0) [[unlikely]] {
-      qWarning() << "DSP::RingBuffer::back() called on empty buffer";
-      return m_data[0];
-    }
-
-    return m_data[wrappedIndex(m_size - 1)];
-  }
-
-  /**
-   * @brief Returns a raw pointer to the internal buffer (read-only).
-   */
-  [[nodiscard]] const T* raw() const { return m_data.get(); }
-
-  /**
-   * @brief Returns a raw pointer to the internal buffer (mutable).
-   */
-  [[nodiscard]] T* raw() { return m_data.get(); }
-
-  /**
-   * @brief Clears all elements from the queue.
-   */
-  void clear()
-  {
-    m_start = 0;
-    m_size  = 0;
-  }
-
-  /**
-   * @brief Fills the queue with a repeated value, overwriting all contents.
-   */
-  void fill(const T& value)
-  {
-    clear();
-    for (std::size_t i = 0; i < m_capacity; ++i)
-      push(value);
-  }
-
-  /**
-   * @brief Fills the queue with increasing values starting from a given base.
-   */
-  void fillRange(const T& start, const T& step = 1)
-    requires Concepts::Numeric<T>
-  {
-    clear();
-    for (std::size_t i = 0; i < m_capacity; ++i)
-      push(start + static_cast<T>(i) * step);
-  }
-
-  /**
-   * @brief Inserts an element by copy. Overwrites oldest element if full.
-   */
-  void push(const T& item)
-  {
-    m_data[endIndex()] = item;
-    advance();
-  }
-
-  /**
-   * @brief Inserts an element by move. Overwrites oldest element if full.
-   */
-  void push(T&& item)
-  {
-    m_data[endIndex()] = std::move(item);
-    advance();
-  }
-
-  /**
-   * @brief Resizes the queue to a new capacity, preserving the most recent elements.
-   */
-  void resize(std::size_t newCapacity)
-  {
-    if (newCapacity < 1)
-      newCapacity = 1;
-
-    if (newCapacity == m_capacity)
-      return;
-
-    const std::size_t newStorage = roundUpToPowerOfTwo(newCapacity);
-    std::shared_ptr<T[]> newData = makeStorage(newStorage);
-    std::size_t elementsToCopy   = std::min(m_size, newCapacity);
-    for (std::size_t i = 0; i < elementsToCopy; ++i)
-      newData[i] = std::move((*this)[m_size - elementsToCopy + i]);
-
-    m_start           = 0;
-    m_size            = elementsToCopy;
-    m_capacity        = newCapacity;
-    m_storageCapacity = newStorage;
-    m_storageMask     = newStorage - 1;
-    m_data            = std::move(newData);
-  }
-
-private:
-  // Plot-scale buffers are written per frame; smaller ones would waste page-locked quota
-  static constexpr std::size_t kPinThresholdBytes = 64 * 1024;
-
-  /**
-   * @brief Allocates the backing array, pinning plot-scale buffers into physical memory. The
-   *        deleter owns the unpin, so shared copies / snapshots / resize stay leak-free.
-   */
-  [[nodiscard]] static std::shared_ptr<T[]> makeStorage(std::size_t n)
-  {
-    SS_ASSERT_LOG(n > 0);
-
-    T* data                 = new T[n];
-    const std::size_t bytes = n * sizeof(T);
-    if (bytes >= kPinThresholdBytes && Platform::AppPlatform::lockMemoryResident(data, bytes)) {
-      return std::shared_ptr<T[]>(data, [bytes](T* p) {
-        Platform::AppPlatform::unlockMemoryResident(p, bytes);
-        delete[] p;
-      });
-    }
-
-    return std::shared_ptr<T[]>(data);
-  }
-
-  /**
-   * @brief Computes the storage index where the next element will be inserted.
-   */
-  std::size_t endIndex() const { return (m_start + m_size) & m_storageMask; }
-
-  /**
-   * @brief Computes the storage index for a logical element index.
-   */
-  std::size_t wrappedIndex(std::size_t index) const { return (m_start + index) & m_storageMask; }
-
-  /**
-   * @brief Advances the internal index after an insertion.
-   *        If the queue is full, the oldest element is overwritten.
-   */
-  void advance()
-  {
-    if (m_size < m_capacity)
-      ++m_size;
-    else
-      m_start = (m_start + 1) & m_storageMask;
-  }
-
-private:
-  std::size_t m_capacity;         ///< Logical (user-requested) capacity.
-  std::size_t m_storageCapacity;  ///< Backing storage size (pow2, >= m_capacity).
-  std::size_t m_storageMask;      ///< m_storageCapacity - 1; AND-mask for wrap.
-  std::shared_ptr<T[]> m_data;    ///< Shared pointer to the internal buffer.
-  std::size_t m_start;            ///< Storage index of the oldest element.
-  std::size_t m_size;             ///< Current number of elements.
-};
-
 //--------------------------------------------------------------------------------------------------
 // Type Aliases
 //--------------------------------------------------------------------------------------------------
@@ -434,7 +133,18 @@ private:
 };
 
 /**
- * @brief Bounded (time, value) ring that decimates on ingest to span a fixed window.
+ * @brief How a TimeRing stores what it is given: every sample in its own slot (Exact), or a
+ *        min/max pair per absolute-time grid cell so a fixed capacity spans the window
+ *        (Decimating). A ring is exact while it can afford every sample (spec 0097).
+ */
+enum class RingMode {
+  Decimating,
+  Exact
+};
+
+/**
+ * @brief Bounded (time, value) ring over a fixed window: exact (one slot per sample) or
+ *        decimating on ingest to a min/max envelope per grid cell.
  */
 struct TimeRing {
   AxisData time;
@@ -446,16 +156,18 @@ struct TimeRing {
   double accMinTime;
   double accMaxTime;
   int cellSlots;
+  RingMode mode;
 
   /**
    * @brief Constructs the ring with `capacity` slots covering `windowSec` seconds. Each
    *        grid cell may retain two slots (min + max), so the interval reserves both to
-   *        keep a saturated source spanning the full window.
+   *        keep a saturated source spanning the full window. Storage is exactly the capacity.
    */
   explicit TimeRing(RingCapacity capacity = RingCapacity::fromRate(1.0, 1.0),
-                    double windowSec      = 1.0)
-    : time(static_cast<std::size_t>(capacity.value()))
-    , value(static_cast<std::size_t>(capacity.value()))
+                    double windowSec      = 1.0,
+                    RingMode ringMode     = RingMode::Decimating)
+    : time(static_cast<std::size_t>(capacity.value()), ExactStorage{})
+    , value(static_cast<std::size_t>(capacity.value()), ExactStorage{})
     , interval(2.0 * windowSec / capacity.value())
     , nextEmit(0.0)
     , accMin(0.0)
@@ -463,7 +175,36 @@ struct TimeRing {
     , accMinTime(0.0)
     , accMaxTime(0.0)
     , cellSlots(0)
+    , mode(ringMode)
   {}
+
+  /**
+   * @brief True while every appended sample keeps its own slot.
+   */
+  [[nodiscard]] bool exact() const noexcept { return mode == RingMode::Exact; }
+
+  /**
+   * @brief Bytes held by the sample storage.
+   */
+  [[nodiscard]] std::size_t bytes() const noexcept
+  {
+    return (time.storageCapacity() + value.storageCapacity()) * sizeof(ssfp_t);
+  }
+
+  /**
+   * @brief Switches an exact ring to min/max decimation on a grid sized so the current
+   *        capacity spans @p windowSec. Retained samples stay; the next append opens a cell.
+   */
+  void setDecimating(double windowSec)
+  {
+    SS_ASSERT(windowSec > 0.0, return);
+    SS_ASSERT(time.capacity() > 0, return);
+
+    mode      = RingMode::Decimating;
+    interval  = 2.0 * windowSec / static_cast<double>(time.capacity());
+    nextEmit  = 0.0;
+    cellSlots = 0;
+  }
 
   /**
    * @brief Re-grids the decimation cell in place, keeping retained samples: older data stays at
@@ -532,10 +273,10 @@ struct TimeRing {
   }
 
   /**
-   * @brief Appends one (time, value) as a per-cell min/max pair on an absolute time grid; the
-   *        open cell updates in place. Sub-cell backward jitter clamps forward, but a jump back
-   *        over a whole cell is a restarted clock and drops the retained span: clamping it
-   *        wedges the ring shut until wall time catches up.
+   * @brief Appends one (time, value): its own slot in exact mode, else a per-cell min/max pair
+   *        on an absolute time grid with the open cell updated in place. Sub-cell backward
+   *        jitter clamps forward, but a jump back over a whole cell is a restarted clock and
+   *        drops the retained span: clamping it wedges the ring shut until wall time catches up.
    */
   void appendDecimated(double t, double v)
   {
@@ -554,6 +295,12 @@ struct TimeRing {
         clear();
       else
         t = time[held - 1];
+    }
+
+    if (mode == RingMode::Exact) {
+      time.push(t);
+      value.push(v);
+      return;
     }
 
     appendChecked(t, v);
@@ -644,8 +391,65 @@ struct EnvelopeLevel {
    * @brief Sizes the level to @p capacity cells covering 2^shift level-0 cells each.
    */
   explicit EnvelopeLevel(std::size_t capacity = 1, int shiftBits = 4)
-    : cells(capacity < 1 ? 1 : capacity), openIndex(0), shift(shiftBits), openValid(false)
+    : cells(capacity < 1 ? 1 : capacity, ExactStorage{})
+    , openIndex(0)
+    , shift(shiftBits)
+    , openValid(false)
   {}
+};
+
+/**
+ * @brief Byte budget shared by every time-plot history ring (spec 0097 R7). Growth asks for a
+ *        grant; a refused grant leaves that ring at its size, decimating. Nothing shrinks to
+ *        make room. Owned by the dashboard and recomputed from the live rings on every rebuild.
+ */
+struct RingBudget {
+  std::size_t used;
+  std::size_t limit;
+  bool binding;
+
+  /**
+   * @brief Constructs an empty budget capped at @p limitBytes.
+   */
+  explicit RingBudget(std::size_t limitBytes = std::numeric_limits<std::size_t>::max())
+    : used(0), limit(limitBytes), binding(false)
+  {}
+
+  /**
+   * @brief Grants up to @p wanted bytes; anything short of it marks the rail binding.
+   */
+  [[nodiscard]] std::size_t grant(std::size_t wanted) noexcept
+  {
+    const std::size_t room = used < limit ? limit - used : 0;
+    if (wanted <= room)
+      return wanted;
+
+    binding = true;
+    return room;
+  }
+
+  /**
+   * @brief Records a ring's footprint moving from @p before to @p after bytes.
+   */
+  void charge(std::size_t before, std::size_t after) noexcept
+  {
+    if (after >= before) {
+      used += after - before;
+      return;
+    }
+
+    const std::size_t freed = before - after;
+    used                    = used > freed ? used - freed : 0;
+  }
+};
+
+/**
+ * @brief Why a history ring stopped keeping every sample.
+ */
+enum class RingLimit {
+  None,
+  Ceiling,
+  Rail
 };
 
 /**
@@ -659,20 +463,133 @@ struct EnvelopeRing {
   static constexpr int kMaxCoarseLevels       = 9;
   static constexpr std::size_t kMinLevelCells = 3;
 
+  // Coverage growth tuning (spec 0097); byte bound = level 0 + pyramid share per slot, plus slack
+  static constexpr double kGrowthHeadroom        = 1.1;
+  static constexpr double kMinGrowthFactor       = 1.25;
+  static constexpr double kTrustedSpanFraction   = 0.1;
+  static constexpr std::size_t kSlotBytesBound   = 18;
+  static constexpr std::size_t kGrowthSlackBytes = 1024;
+
   TimeRing level0;
   std::vector<EnvelopeLevel> levels;
+  RingLimit limit;
+  double windowSec;
+  double openNextEmit;
+  double openMin;
+  double openMax;
+  double openMinTime;
+  double openMaxTime;
   std::int64_t openCell;
   bool openCellValid;
 
   /**
-   * @brief Constructs level 0 with `capacity` slots over `windowSec` seconds and derives the
-   *        coarse levels from that capacity.
+   * @brief Constructs level 0 with `capacity` slots over `window` seconds in @p mode and
+   *        derives the coarse levels from that capacity. The pyramid keeps its own open-cell
+   *        accumulator on level 0's grid, so it folds the same cells whether level 0 decimates
+   *        or keeps every sample (spec 0097).
    */
   explicit EnvelopeRing(RingCapacity capacity = RingCapacity::fromRate(1.0, 1.0),
-                        double windowSec      = 1.0)
-    : level0(capacity, windowSec), levels(), openCell(0), openCellValid(false)
+                        double window         = 1.0,
+                        RingMode mode         = RingMode::Decimating)
+    : level0(capacity, window, mode)
+    , levels()
+    , limit(RingLimit::None)
+    , windowSec(window)
+    , openNextEmit(0.0)
+    , openMin(0.0)
+    , openMax(0.0)
+    , openMinTime(0.0)
+    , openMaxTime(0.0)
+    , openCell(0)
+    , openCellValid(false)
   {
     buildLevels();
+  }
+
+  /**
+   * @brief True while level 0 keeps every appended sample.
+   */
+  [[nodiscard]] bool exact() const noexcept { return level0.exact(); }
+
+  /**
+   * @brief Samples per second level 0 currently holds: retained count over retained span.
+   */
+  [[nodiscard]] double retainedRateHz() const noexcept
+  {
+    const std::size_t n = level0.time.size();
+    if (n < 2)
+      return 0.0;
+
+    const double span = level0.time[n - 1] - level0.time[0];
+    return span > 0.0 ? static_cast<double>(n - 1) / span : 0.0;
+  }
+
+  /**
+   * @brief Bytes held by level 0 and every coarse level.
+   */
+  [[nodiscard]] std::size_t bytes() const noexcept
+  {
+    std::size_t total = level0.bytes();
+    for (const auto& level : levels)
+      total += level.cells.storageCapacity() * sizeof(EnvelopeCell);
+
+    return total;
+  }
+
+  /**
+   * @brief Switches level 0 to min/max decimation at its current capacity over the ring's
+   *        window, recording @p reason. The grid is the one the pyramid already folds on, so
+   *        coarse levels continue.
+   */
+  void setDecimating(RingLimit reason)
+  {
+    level0.setDecimating(windowSec);
+    limit = reason;
+  }
+
+  /**
+   * @brief Coverage growth (spec 0097) before @p incoming samples ending at @p tNewest: grows an
+   *        exact ring that would evict an in-window sample to coverageNeed() within @p budget.
+   *        Never shrinks; decimates only if the grown ring still cannot hold the window's
+   *        samples, recording whether the per-ring ceiling or the rail stopped it.
+   */
+  bool growFor(std::size_t incoming, double tNewest, RingBudget& budget)
+  {
+    SS_ASSERT(windowSec > 0.0, return false);
+    SS_ASSERT(level0.time.capacity() > 0, return false);
+
+    const std::size_t size = level0.time.size();
+    const std::size_t cap  = level0.time.capacity();
+    if (!level0.exact() || size + incoming <= cap)
+      return false;
+
+    const std::size_t evicted = size + incoming - cap;
+    if (evicted <= size && level0.time[evicted - 1] < tNewest - windowSec)
+      return false;
+
+    const std::size_t total = size + incoming;
+    const double density    = coverageDensity(total, tNewest);
+    const double required   = density > 0.0 ? density * windowSec : static_cast<double>(total);
+    const RingCapacity need = coverageNeed(total, density);
+    const auto needSlots    = static_cast<std::size_t>(need.value());
+    const std::size_t extra = needSlots > cap ? needSlots - cap : 0;
+    const std::size_t room =
+      budget.grant(extra > 0 ? extra * kSlotBytesBound + kGrowthSlackBytes : 0);
+    const std::size_t usable  = room > kGrowthSlackBytes ? room - kGrowthSlackBytes : 0;
+    const RingCapacity target = need.atMost(static_cast<int>(cap + usable / kSlotBytesBound));
+    const bool grows          = static_cast<std::size_t>(target.value()) > cap;
+
+    if (grows) {
+      const std::size_t before = bytes();
+      resizeCapacity(target, windowSec);
+      budget.charge(before, bytes());
+    }
+
+    if (static_cast<double>(target.value()) < required)
+      setDecimating(target.value() >= RingCapacity::kMaxSamples ? RingLimit::Ceiling
+                                                                : RingLimit::Rail);
+
+    return grows;
   }
 
   /**
@@ -745,21 +662,22 @@ struct EnvelopeRing {
    *        rebuilds the coarse levels from what it retained. Rare by construction: only the
    *        display-tick growth path and a time-range change reach it.
    */
-  void resizeCapacity(RingCapacity capacity, double windowSec)
+  void resizeCapacity(RingCapacity capacity, double window)
   {
-    if (!(windowSec > 0.0) || static_cast<std::size_t>(capacity.value()) == level0.time.capacity())
+    if (!(window > 0.0) || static_cast<std::size_t>(capacity.value()) == level0.time.capacity())
       return;
 
-    level0.resizeCapacity(capacity, windowSec);
+    windowSec = window;
+    level0.resizeCapacity(capacity, window);
     buildLevels();
     rebuildLevelsFromLevel0();
   }
 
   /**
-   * @brief Appends one (time, value): rejects non-finite input, folds the level-0 cell this
-   *        sample closes into the coarse levels, then decimates through appendChecked(). A
-   *        restarted producer clock drops the pyramid with level 0. The open-cell test takes
-   *        no branch hint: a rate-sized stream ring opens a cell on about every other sample.
+   * @brief Appends one (time, value): rejects non-finite input, folds the grid cell this sample
+   *        closes (same boundaries as TimeRing::opensCell(), so a decimating ring folds the same
+   *        cells as before), then stores it in level 0: its own slot when exact, else through
+   *        appendChecked(). A restarted producer clock drops the pyramid with level 0.
    */
   void appendDecimated(double t, double v)
   {
@@ -779,18 +697,51 @@ struct EnvelopeRing {
         t = level0.time[n - 1];
     }
 
-    if (level0.opensCell(t)) {
-      if (openCellValid)
-        foldOpenCell();
+    accumulateOpenCell(t, v);
 
-      openCell      = cellIndex(t);
-      openCellValid = true;
+    if (level0.mode == RingMode::Exact) {
+      level0.time.push(t);
+      level0.value.push(v);
+      return;
     }
 
     level0.appendChecked(t, v);
   }
 
 private:
+  /**
+   * @brief Measured samples per second of @p total samples ending at @p tNewest, or 0 while the
+   *        retained span is under a tenth of the window (too short to trust).
+   */
+  [[nodiscard]] double coverageDensity(std::size_t total, double tNewest) const
+  {
+    SS_ASSERT_LOG(windowSec > 0.0);
+    SS_ASSERT_LOG(total > 0);
+
+    const double span = level0.time.size() > 0 ? tNewest - level0.time[0] : 0.0;
+    return span >= windowSec * kTrustedSpanFraction ? static_cast<double>(total) / span : 0.0;
+  }
+
+  /**
+   * @brief Capacity an exact ring grows to for @p total samples at @p density (0 = untrusted):
+   *        the window at that density plus headroom, else double; at least one step (none for
+   *        an empty ring) and the samples at hand, at most the per-ring ceiling.
+   */
+  [[nodiscard]] RingCapacity coverageNeed(std::size_t total, double density) const
+  {
+    SS_ASSERT_LOG(windowSec > 0.0);
+    SS_ASSERT_LOG(density >= 0.0);
+
+    const auto cap      = static_cast<double>(level0.time.capacity());
+    const auto ceiling  = static_cast<double>(RingCapacity::kMaxSamples);
+    const double factor = density > 0.0 ? kMinGrowthFactor : 2.0;
+    const double step   = level0.time.size() > 0 ? cap * factor : 0.0;
+
+    return RingCapacity::fromRate(windowSec * kGrowthHeadroom, density)
+      .atLeast(static_cast<int>(std::min(step, ceiling)))
+      .atLeast(static_cast<int>(std::min(static_cast<double>(total), ceiling)));
+  }
+
   /**
    * @brief Sizes the coarse levels from level 0's capacity: cells0 = capacity / 2 (a saturated
    *        grid keeps two slots per cell), level k holds ceil(cells0 / 16^k) + 1 cells while that
@@ -811,18 +762,47 @@ private:
   }
 
   /**
-   * @brief Folds level 0's closed cell (its acc* extremes) into every coarse level's open cell.
+   * @brief Opens a fresh grid cell for (t, v) when t crosses the open cell's boundary, folding
+   *        the closed one into the coarse levels first; otherwise widens the open cell's
+   *        extremes. Same boundary and tie rules as TimeRing::appendChecked().
+   */
+  void accumulateOpenCell(double t, double v)
+  {
+    if (!openCellValid || level0.time.size() == 0 || t >= openNextEmit) {
+      if (openCellValid)
+        foldOpenCell();
+
+      openCell      = cellIndex(t);
+      openNextEmit  = (std::floor(t / level0.interval) + 1.0) * level0.interval;
+      openMin       = v;
+      openMax       = v;
+      openMinTime   = t;
+      openMaxTime   = t;
+      openCellValid = true;
+      return;
+    }
+
+    const bool lowers = v < openMin;
+    const bool raises = v > openMax;
+    openMin           = lowers ? v : openMin;
+    openMinTime       = lowers ? t : openMinTime;
+    openMax           = raises ? v : openMax;
+    openMaxTime       = raises ? t : openMaxTime;
+  }
+
+  /**
+   * @brief Folds the closed grid cell (the open-cell extremes) into every coarse level.
    */
   void foldOpenCell()
   {
     SS_ASSERT(openCellValid, return);
 
-    const bool minFirst = level0.accMinTime <= level0.accMaxTime;
+    const bool minFirst = openMinTime <= openMaxTime;
     EnvelopeCell cell;
-    cell.t0 = minFirst ? level0.accMinTime : level0.accMaxTime;
-    cell.v0 = minFirst ? level0.accMin : level0.accMax;
-    cell.t1 = minFirst ? level0.accMaxTime : level0.accMinTime;
-    cell.v1 = minFirst ? level0.accMax : level0.accMin;
+    cell.t0 = minFirst ? openMinTime : openMaxTime;
+    cell.v0 = minFirst ? openMin : openMax;
+    cell.t1 = minFirst ? openMaxTime : openMinTime;
+    cell.v1 = minFirst ? openMax : openMin;
     foldCell(openCell, cell);
   }
 
@@ -938,6 +918,9 @@ struct SweepEngine {
   std::size_t segmentFill;
   int segmentRetention;
 
+  RingCapacity shapeCapacity;
+  int shapeCurves;
+
   double windowSec;
   double timebaseSec;
   double level;
@@ -964,6 +947,8 @@ struct SweepEngine {
     : segmentHead(0)
     , segmentFill(0)
     , segmentRetention(0)
+    , shapeCapacity(RingCapacity::fromRate(1.0, 1.0))
+    , shapeCurves(0)
     , windowSec(1.0)
     , timebaseSec(0.0)
     , level(0.0)
@@ -984,21 +969,45 @@ struct SweepEngine {
   {}
 
   /**
-   * @brief Allocates `curveCount` front/back rings, each constructed individually: FixedQueue
-   *        copies share their backing array, so a copy-fill would alias every curve.
+   * @brief Records the shape and allocates it: setShape() then allocate().
    */
   void configure(int curveCount, RingCapacity capacity, double window)
   {
-    windowSec                = window > 0 ? window : 1.0;
-    const std::size_t curves = static_cast<std::size_t>(curveCount < 0 ? 0 : curveCount);
+    setShape(curveCount, capacity, window);
+    allocate();
+  }
 
-    front.clear();
-    back.clear();
+  /**
+   * @brief Records `curveCount` curves of `capacity` slots over `window` seconds without
+   *        allocating, releasing any rings held (spec 0097 R4: a sweep that is off costs nothing).
+   */
+  void setShape(int curveCount, RingCapacity capacity, double window)
+  {
+    windowSec     = window > 0 ? window : 1.0;
+    shapeCapacity = capacity;
+    shapeCurves   = curveCount < 0 ? 0 : curveCount;
+    release();
+  }
+
+  /**
+   * @brief Allocates the recorded shape's front/back rings and retained segments, each ring
+   *        constructed individually: FixedQueue copies share their backing array, so a
+   *        copy-fill would alias every curve. No-op when already allocated.
+   */
+  void allocate()
+  {
+    SS_ASSERT(shapeCurves >= 0, return);
+    SS_ASSERT_LOG(windowSec > 0.0);
+
+    if (allocated())
+      return;
+
+    const auto curves = static_cast<std::size_t>(shapeCurves);
     front.reserve(curves);
     back.reserve(curves);
     for (std::size_t i = 0; i < curves; ++i) {
-      front.emplace_back(capacity, windowSec);
-      back.emplace_back(capacity, windowSec);
+      front.emplace_back(shapeCapacity, windowSec);
+      back.emplace_back(shapeCapacity, windowSec);
     }
 
     retuneRings();
@@ -1007,13 +1016,85 @@ struct SweepEngine {
   }
 
   /**
+   * @brief Grows an allocated engine's rings to @p capacity in place (TimeRing::resizeCapacity
+   *        keeps the newest samples), so a capture in progress, a frozen single-shot trace and
+   *        the trigger state survive. Never shrinks. The retained-segment store is re-sized
+   *        under its memory bound, so it restarts: a smaller slot would truncate new captures.
+   */
+  void growCapacity(RingCapacity capacity)
+  {
+    SS_ASSERT_LOG(windowSec > 0.0);
+    if (!allocated() || capacity.value() <= shapeCapacity.value())
+      return;
+
+    shapeCapacity = capacity;
+    for (auto& r : front)
+      r.resizeCapacity(capacity, activeWindow());
+
+    for (auto& r : back)
+      r.resizeCapacity(capacity, activeWindow());
+
+    setSegmentRetention(segmentRetention);
+  }
+
+  /**
+   * @brief Frees every ring and retained segment; the trigger configuration, the shape and the
+   *        requested retention stay, so allocate() restores the same engine.
+   */
+  void release()
+  {
+    SS_ASSERT_LOG(front.size() == back.size());
+    front.clear();
+    front.shrink_to_fit();
+    back.clear();
+    back.shrink_to_fit();
+    segments.clear();
+    segments.shrink_to_fit();
+    resetState();
+  }
+
+  /**
+   * @brief True while the rings for the recorded shape exist.
+   */
+  [[nodiscard]] bool allocated() const noexcept
+  {
+    return shapeCurves > 0 && front.size() == static_cast<std::size_t>(shapeCurves);
+  }
+
+  /**
+   * @brief Bytes held by the front/back rings and every retained segment.
+   */
+  [[nodiscard]] std::size_t bytes() const noexcept
+  {
+    std::size_t total = 0;
+    for (const auto& ring : front)
+      total += ring.bytes();
+
+    for (const auto& ring : back)
+      total += ring.bytes();
+
+    for (const auto& segment : segments)
+      for (const auto& ring : segment.curves)
+        total += ring.bytes();
+
+    return total;
+  }
+
+  /**
    * @brief Requests retention of the last @p count completed sweeps (0 = off). The effective
    *        count is clamped so `count * curves * capacity * 16 B` stays under kMaxSegmentBytes;
-   *        segments are pre-sized here so completeSweep() never allocates.
+   *        segments are pre-sized here so completeSweep() never allocates. An unallocated
+   *        engine only records the request.
    */
   void setSegmentRetention(int count)
   {
     segmentRetention = std::clamp(count, 0, kMaxSegments);
+    if (front.empty()) {
+      segments.clear();
+      segmentHead = 0;
+      segmentFill = 0;
+      return;
+    }
 
     const std::size_t curves   = front.size();
     const std::size_t capacity = front.empty() ? 0 : front.front().time.capacity();

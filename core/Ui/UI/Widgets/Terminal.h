@@ -33,6 +33,7 @@
 #include "UI/Widgets/Terminal/AnsiPalette.h"
 #include "UI/Widgets/Terminal/AnsiStateMachine.h"
 #include "UI/Widgets/Terminal/TerminalBuffer.h"
+#include "UI/Widgets/Terminal/TerminalCatchUp.h"
 #include "UI/Widgets/Terminal/TerminalSearch.h"
 
 namespace Console {
@@ -190,11 +191,13 @@ private slots:
   void applyScrollbackLimit();
   void append(const QString& data);
   void appendString(QStringView string);
+  void onDisplayString(const QString& data);
   void removeStringFromCursor(const Widgets::Terminal::Direction direction = RightDirection,
                               int len                                      = INT_MAX);
 
 private:
   void initBuffer();
+  void catchUp();
   void syncAutoscroll();
   void syncBufferGeometry();
   void drainBufferEvents();
@@ -316,6 +319,7 @@ private:
   TerminalBuffer m_buffer;
   AnsiStateMachine m_ansi;
   TerminalSearch m_search;
+  TerminalCatchUp m_catchUp;
 
   QFont m_badgeFont;
   QFontMetrics m_badgeMetrics;

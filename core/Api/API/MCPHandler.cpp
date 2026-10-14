@@ -29,7 +29,9 @@
 #include "API/Server.h"
 #include "Core/AppInfo.h"
 #include "Core/DataModel/Frame.h"
+#include "Core/Runtime.h"
 #include "DataModel/IDashboardFrames.h"
+#include "DataModel/Project/ProjectSealing.h"
 
 //--------------------------------------------------------------------------------------------------
 // Constructor & singleton access
@@ -383,7 +385,10 @@ API::MCP::MCPResponse API::MCPHandler::handleResourcesRead(const MCP::MCPRequest
     const auto& frame  = dashboard.processedFrame();
     const bool hasData = !frame.groups.empty();
 
-    auto frameJson                       = DataModel::serialize(frame);
+    auto frameJson = DataModel::serialize(frame);
+    if (Core::Runtime::sealed())
+      DataModel::stripSealedContent(frameJson);
+
     frameJson[QStringLiteral("hasData")] = hasData;
     if (!hasData)
       frameJson[QStringLiteral("_summary")] = QStringLiteral(
@@ -397,9 +402,13 @@ API::MCP::MCPResponse API::MCPHandler::handleResourcesRead(const MCP::MCPRequest
     auto& dashboard   = API::handlerContext().dashboard;
     const auto& frame = dashboard.processedFrame();
 
+    auto frameJson = DataModel::serialize(frame);
+    if (Core::Runtime::sealed())
+      DataModel::stripSealedContent(frameJson);
+
     QJsonArray history;
     if (!frame.groups.empty())
-      history.append(DataModel::serialize(frame));
+      history.append(frameJson);
 
     content[QStringLiteral("uri")] = uri;
     content[QStringLiteral("text")] =

@@ -21,6 +21,7 @@
 #  include <QPainterPathStroker>
 #  include <QPixmap>
 
+#  include "Core/Runtime.h"
 #  include "Misc/CommonFonts.h"
 #  include "UI/Widgets/Painter/PainterBlur.h"
 #  include "UI/Widgets/Painter/PainterEnums.h"
@@ -1161,6 +1162,26 @@ QColor Widgets::PainterContext::parseColor(const QString& spec) const
 }
 
 /**
+ * @brief Maps a drawImage path onto a deployment package's mount (spec 0096): a path relative to
+ *        the author's project folder, or an absolute one under it, lands in the mount's project/
+ *        tree; anything else, or a file the package did not carry, resolves to nothing.
+ */
+[[nodiscard]] static QString resolveSealedImagePath(const QString& src)
+{
+  const auto& folder = Core::Runtime::sealedProjectFolder();
+  QString relative   = src;
+  if (!folder.isEmpty() && src.startsWith(folder + QLatin1Char('/')))
+    relative = src.mid(folder.size() + 1);
+
+  if (relative.isEmpty() || QFileInfo(relative).isAbsolute()
+      || relative.contains(QLatin1String("..")))
+    return QString();
+
+  const QString path = Core::Runtime::sealedMountRoot() + QStringLiteral("/project/") + relative;
+  return QFileInfo::exists(path) ? path : QString();
+}
+
+/**
  * @brief Resolves a drawImage source path through the sandbox.
  */
 QString Widgets::PainterContext::resolveImagePath(const QString& src) const
@@ -1173,6 +1194,9 @@ QString Widgets::PainterContext::resolveImagePath(const QString& src) const
 
   if (src.contains(QLatin1String("://")))
     return QString();
+
+  if (Core::Runtime::sealed())
+    return resolveSealedImagePath(src);
 
   if (m_projectDir.isEmpty())
     return QString();

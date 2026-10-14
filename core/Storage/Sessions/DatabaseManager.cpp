@@ -41,6 +41,7 @@
 #  include "Core/SSAssert.h"
 #  include "Core/WorkspaceManager.h"
 #  include "DataModel/PipelineModules.h"
+#  include "DataModel/Project/ProjectSealing.h"
 #  include "DataModel/ProjectModel.h"
 #  include "Misc/PasswordHash.h"
 #  include "Sessions/DatabaseManager/DatabaseSchema.h"
@@ -1130,7 +1131,8 @@ void Sessions::DatabaseManager::storeProjectMetadata()
 
   SS_ASSERT(m_projectModel != nullptr, return);
 
-  const auto json = QJsonDocument(m_projectModel->serializeToJson()).toJson(QJsonDocument::Compact);
+  const auto json = QJsonDocument(DataModel::sealedCopy(m_projectModel->serializeToJson()))
+                      .toJson(QJsonDocument::Compact);
 
   setBusy(true);
   QMetaObject::invokeMethod(m_worker,

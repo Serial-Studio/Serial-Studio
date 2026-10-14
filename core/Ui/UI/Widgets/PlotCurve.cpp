@@ -32,7 +32,16 @@
 #include "Core/SSAssert.h"
 #include "Misc/HdrOutput.h"
 #include "UI/Widgets/GpuStroke.h"
+#include "UI/Widgets/SdfStroke.h"
+#include "UI/Widgets/SdfStrokeMaterial.h"
 #include "UI/Widgets/StrokeHdrMaterial.h"
+
+//--------------------------------------------------------------------------------------------------
+// Constants
+//--------------------------------------------------------------------------------------------------
+
+// Ancestors walked for inherited opacity; deeper than any dashboard scene, bounds the loop
+constexpr int kMaxOpacityDepth = 64;
 
 /**
  * @brief Builds the stroke material for the current mode; both node creation and the swap
@@ -57,8 +66,10 @@ Widgets::PlotCurve::PlotCurve(QQuickItem* parent)
   , m_yMin(0)
   , m_yMax(1)
   , m_hdrMaterial(false)
+  , m_sdfNode(false)
 {
   setFlag(ItemHasContents, true);
+  connect(this, &QQuickItem::opacityChanged, this, &QQuickItem::update);
 }
 
 /**
@@ -328,10 +339,56 @@ void Widgets::PlotCurve::emitRibbon(QSGGeometry::ColoredPoint2D* vertices,
 }
 
 /**
- * @brief Rebuilds the ribbon node from the source series: project to pixels once, one
- *        counting pass sizes the vertex/index buffers (stable sizes reuse the allocation),
- *        one streaming pass fills them. Fully-offscreen runs are culled by run visibility,
- *        so zoomed curves cost the visible slice, not the full series.
+ * @brief Counts signed-distance quads over each visible run of two or more points, mirroring
+ *        countRibbon()'s walk so both paths cull the same offscreen runs.
+ */
+void Widgets::PlotCurve::countSdf(const QPointF* pts,
+                                  const qsizetype count,
+                                  qsizetype& vertexCount,
+                                  qsizetype& indexCount) const
+{
+  vertexCount = 0;
+  indexCount  = 0;
+
+  SS_ASSERT(pts != nullptr, return);
+  SS_ASSERT(count >= 2, return);
+
+  qsizetype start = 0;
+  while (start < count) {
+    const qsizetype len = GpuStroke::runLength(pts, count, start);
+    if (len >= 2 && runVisible(pts, start, len))
+      SdfStroke::countRun(len, vertexCount, indexCount);
+
+    start += len;
+  }
+}
+
+/**
+ * @brief True when the curve draws through the signed-distance path: only fully opaque
+ *        strokes, since overlapping capsules would blend a translucent stroke twice at joins.
+ *        Opacity is checked up the parent chain, because the shader applies the inherited one
+ *        (a fading dashboard canvas must draw the ribbon). Read during sync, GUI blocked.
+ */
+bool Widgets::PlotCurve::useSdfStroke() const noexcept
+{
+  if (m_color.alphaF() < 1.0)
+    return false;
+
+  int depth = 0;
+  for (const QQuickItem* item = this; item != nullptr && depth < kMaxOpacityDepth; ++depth) {
+    if (item->opacity() < 1.0)
+      return false;
+
+    item = item->parentItem();
+  }
+
+  return true;
+}
+
+/**
+ * @brief Rebuilds the curve node from the source series: project to pixels once, then the
+ *        signed-distance path for opaque strokes or the tessellated ribbon otherwise. A path
+ *        switch replaces the node, because the two vertex layouts differ.
  */
 QSGNode* Widgets::PlotCurve::updatePaintNode(QSGNode* oldNode, UpdatePaintNodeData* data)
 {
@@ -357,6 +414,92 @@ QSGNode* Widgets::PlotCurve::updatePaintNode(QSGNode* oldNode, UpdatePaintNodeDa
   projectToPixels(pts, n, w, h);
   const QPointF* px = m_px.constData();
 
+  const bool sdf = useSdfStroke();
+  if (oldNode && sdf != m_sdfNode) {
+    delete oldNode;
+    oldNode       = nullptr;
+    m_hdrMaterial = false;
+  }
+
+  m_sdfNode = sdf;
+  if (sdf)
+    return updateSdfNode(oldNode, pts, px, n);
+
+  return updateRibbonNode(oldNode, pts, px, n);
+}
+
+/**
+ * @brief Signed-distance path (spec 0097): one quad per visible segment, a static index pattern
+ *        written only when the grow-only buffer reallocates, a degenerate padded tail, and the
+ *        style (color, face, feather, HDR boost) on the material instead of on every vertex.
+ */
+QSGNode* Widgets::PlotCurve::updateSdfNode(QSGNode* oldNode,
+                                           const QPointF* pts,
+                                           const QPointF* px,
+                                           const qsizetype n)
+{
+  qsizetype vertexCount = 0;
+  qsizetype indexCount  = 0;
+  countSdf(pts, n, vertexCount, indexCount);
+  if (vertexCount < SdfStroke::kVerticesPerSegment || vertexCount > GpuStroke::kMaxGeometry
+      || indexCount > GpuStroke::kMaxGeometry) {
+    delete oldNode;
+    return nullptr;
+  }
+
+  const double hw     = std::max(0.5, m_lineWidth * 0.5);
+  const double face   = std::max(0.25, hw - SdfStroke::kFeatherPx * 0.5);
+  const double extent = face + SdfStroke::kFeatherPx;
+  const float boost   = std::max(1.0f, Misc::HdrOutput::effectiveBoost(window()));
+  const auto vertices = static_cast<int>(vertexCount);
+  const auto indices  = static_cast<int>(indexCount);
+
+  auto* node = static_cast<QSGGeometryNode*>(oldNode);
+  if (!node) {
+    node           = new QSGGeometryNode;
+    auto* geometry = new QSGGeometry(SdfStroke::attributes(), 0, 0, QSGGeometry::UnsignedIntType);
+    geometry->setDrawingMode(QSGGeometry::DrawTriangles);
+    node->setGeometry(geometry);
+    node->setFlag(QSGNode::OwnsGeometry);
+    node->setMaterial(new SdfStrokeMaterial);
+    node->setFlag(QSGNode::OwnsMaterial);
+  }
+
+  auto* material = static_cast<SdfStrokeMaterial*>(node->material());
+  if (material->setStyle(m_color, static_cast<float>(face), SdfStroke::kFeatherPx, boost))
+    node->markDirty(QSGNode::DirtyMaterial);
+
+  auto* geometry = node->geometry();
+  SS_ASSERT(geometry != nullptr, return node);
+  if (GpuStroke::reserveGeometry(geometry, vertices, indices))
+    SdfStroke::writeIndexPattern(geometry);
+
+  int v           = 0;
+  auto* data      = static_cast<SdfStroke::Vertex*>(geometry->vertexData());
+  qsizetype start = 0;
+  while (start < n) {
+    const qsizetype len = GpuStroke::runLength(pts, n, start);
+    if (len >= 2 && runVisible(pts, start, len))
+      SdfStroke::emitRun(data, v, px, start, len, extent);
+
+    start += len;
+  }
+
+  SdfStroke::padTail(geometry, v);
+  node->markDirty(QSGNode::DirtyGeometry);
+  return node;
+}
+
+/**
+ * @brief Tessellated ribbon path (translucent strokes): one counting pass sizes the buffers
+ *        (stable sizes reuse the allocation), one streaming pass fills them. Fully-offscreen runs
+ *        are culled by run visibility, so zoomed curves cost the visible slice.
+ */
+QSGNode* Widgets::PlotCurve::updateRibbonNode(QSGNode* oldNode,
+                                              const QPointF* pts,
+                                              const QPointF* px,
+                                              const qsizetype n)
+{
   qsizetype vertexCount = 0;
   qsizetype indexCount  = 0;
   countRibbon(pts, px, n, vertexCount, indexCount);

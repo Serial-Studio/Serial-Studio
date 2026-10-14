@@ -40,6 +40,23 @@ struct Credentials {
  */
 class CredentialVault {
 public:
+  /**
+   * @brief While alive in a sealed session (spec 0096), every vault write lands in an in-memory
+   *        overlay and marks its slot package-owned; package-owned slots never reach the settings
+   *        file, and reads prefer them. GUI thread; one is open only while a package's included
+   *        credentials are applied.
+   */
+  class TransientScope {
+  public:
+    TransientScope();
+    ~TransientScope();
+
+    TransientScope(TransientScope&&)                 = delete;
+    TransientScope(const TransientScope&)            = delete;
+    TransientScope& operator=(TransientScope&&)      = delete;
+    TransientScope& operator=(const TransientScope&) = delete;
+  };
+
   explicit CredentialVault(const QString& scope = QStringLiteral("mqtt"));
 
   [[nodiscard]] Credentials credentials(const QString& host, quint16 port) const;
@@ -55,6 +72,8 @@ public:
 
 private:
   [[nodiscard]] static QString settingsKey(const QString& host, quint16 port);
+  [[nodiscard]] QString readField(const QString& key, const QString& field) const;
+  [[nodiscard]] bool writeField(const QString& key, const QString& field, const QString& value);
 
 private:
   QString m_group;

@@ -26,6 +26,8 @@
 #include <QHash>
 #include <QStringList>
 
+#include "Core/Runtime.h"
+
 #ifdef Q_OS_WIN
 #  include <windows.h>
 #endif
@@ -135,10 +137,16 @@ static QString normalizedPath(const QString& path, bool allowNonexistent)
 }
 
 /**
- * @brief Validate a file path against the API allowlist, if configured.
+ * @brief Validate a file path against the API allowlist, if configured. A sealed session refuses
+ *        every Qt resource path first, so no allowlist widening can read a package's files back
+ *        out (spec 0096).
  */
 bool API::isPathAllowed(const QString& filePath, const bool allowNonexistent)
 {
+  if (Core::Runtime::sealed()
+      && (filePath.startsWith(QLatin1Char(':')) || filePath.startsWith(QLatin1String("qrc:"))))
+    return false;
+
   QStringList roots;
   if (qEnvironmentVariableIsSet("SERIAL_STUDIO_API_ALLOWED_PATHS")) {
     const QString envValue = QString::fromLocal8Bit(qgetenv("SERIAL_STUDIO_API_ALLOWED_PATHS"));

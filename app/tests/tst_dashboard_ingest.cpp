@@ -130,6 +130,8 @@ struct Stores {
   QMap<SerialStudio::DashboardWidget, QVector<DataModel::Dataset>> widgetDatasets;
   QMap<int, DataModel::Frame> sourceRawFrames;
   QHash<int, quint64> sourceStructureGen;
+  DSP::RingBudget plotBudget;
+  double plotTimeRange = 10.0;
 
   [[nodiscard]] UI::IngestBindings bindings()
   {
@@ -167,7 +169,9 @@ struct Stores {
                               .widgetGroups       = widgetGroups,
                               .widgetDatasets     = widgetDatasets,
                               .sourceRawFrames    = sourceRawFrames,
-                              .sourceStructureGen = sourceStructureGen};
+                              .sourceStructureGen = sourceStructureGen,
+                              .plotBudget         = plotBudget,
+                              .plotTimeRange      = plotTimeRange};
   }
 };
 

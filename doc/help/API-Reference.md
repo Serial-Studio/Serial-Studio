@@ -1765,9 +1765,23 @@ Get all dashboard configuration settings.
   "timeRange": 10.0,
   "widgetCount": 3,
   "datasetCount": 12,
-  "running": false
+  "running": false,
+  "plotMemory": {
+    "historyBytes": 2457600,
+    "railBytes": 536870912,
+    "railBinding": false,
+    "timeCurves": 12,
+    "inexactCurves": 1,
+    "inexact": [
+      {"uniqueId": 3, "retainedRateHz": 4000.0, "bytes": 1048576, "reason": "ceiling"}
+    ]
+  }
 }
 ```
+
+`plotMemory.inexact` lists the time-plot curves whose history no longer keeps every sample;
+`reason` is `ceiling` (per-curve limit), `rail` (the plot-memory limit), or `none` when no
+limit was recorded.
 
 **Example:**
 ```bash
@@ -2029,6 +2043,9 @@ is on are returned; turn the flag on with `project.dataset.setOption` for the re
 - `count` (int, optional): Samples per dataset, 1 to 256, default 32
 - `uniqueIds` (array, optional): Only datasets whose uniqueId or alias is listed; unresolved
   aliases are skipped
+
+Rows for time-axis plots also carry `historyBytes`, `retainedRateHz` and `exact` (false once
+the curve's history is decimated).
 
 #### 🟢 `dashboard.reprocess`
 Re-run every dataset transform from the last received values and republish the frames to the

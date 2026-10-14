@@ -37,6 +37,7 @@
 #include "AppState.h"
 #include "Core/AppInfo.h"
 #include "Core/Prompt/UserPrompt.h"
+#include "Core/Runtime.h"
 #include "Core/SSAssert.h"
 #include "DataModel/FrameBuilder.h"
 #include "DataModel/NotificationCenter.h"
@@ -278,7 +279,7 @@ void DataModel::ProjectPersistence::serializePresentationAndSinks(QJsonObject& j
  */
 bool DataModel::ProjectPersistence::askSave()
 {
-  if (!m_model.modified())
+  if (!m_model.modified() || Core::Runtime::sealed())
     return true;
 
   static auto& appState = AppState::instance();
@@ -340,7 +341,7 @@ bool DataModel::ProjectPersistence::askSave()
  */
 bool DataModel::ProjectPersistence::saveJsonFile(const bool askPath)
 {
-  if (!m_model.validateProject(m_model.m_suppressMessageBoxes))
+  if (Core::Runtime::sealed() || !m_model.validateProject(m_model.m_suppressMessageBoxes))
     return false;
 
   if (m_model.jsonFilePath().isEmpty() || askPath) {
@@ -457,6 +458,11 @@ bool DataModel::ProjectPersistence::finalizeProjectSave()
 bool DataModel::ProjectPersistence::writeProjectFile(const QString& path)
 {
   SS_ASSERT(!path.isEmpty(), return false);
+
+  if (Core::Runtime::sealed()) {
+    qWarning() << "[ProjectModel] A sealed session never writes the project to disk";
+    return false;
+  }
 
   m_model.flushWorkspaceRegen();
   (void)m_model.m_workspaces.rebindWidgetRefs();

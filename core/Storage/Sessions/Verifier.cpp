@@ -39,6 +39,7 @@
 #  include "Core/SSAssert.h"
 #  include "DataModel/FrameBuilder.h"
 #  include "DataModel/PipelineModules.h"
+#  include "DataModel/Project/ProjectSealing.h"
 #  include "DataModel/ProjectModel.h"
 #  include "DataModel/Scripting/FrameParser.h"
 #  include "IO/FrameReader.h"
@@ -168,6 +169,13 @@ int Sessions::Verifier::run()
                 QStringLiteral("load-session"),
                 QStringLiteral("That session could not be found in this file."),
                 QStringLiteral("Choose a completed session from the list and try again."));
+
+  if (DataModel::isSealedRecording(m_projectJson))
+    return fail(QStringLiteral("sealed-recording"),
+                QStringLiteral("load-session"),
+                QStringLiteral("This session was recorded from a deployment package."),
+                QStringLiteral("Its scripts were not stored with it, so it can be replayed but "
+                               "not re-verified. Verify a recording of the original project."));
 
   if (!verifyIntegrity())
     return fail(QStringLiteral("archive-unreadable"),

@@ -54,6 +54,7 @@ constexpr const char* WriteDenied        = "WRITE_DENIED";
 constexpr const char* WriteFailed        = "WRITE_FAILED";
 constexpr const char* ScriptTimeout      = "SCRIPT_TIMEOUT";
 constexpr const char* SessionLive        = "SESSION_LIVE";
+constexpr const char* SealedSession      = "SEALED_SESSION";
 
 }  // namespace ErrorCode
 

@@ -61,6 +61,7 @@ public:
 
   void openJsonFile();
   [[nodiscard]] bool openJsonFile(const QString& path);
+  void openDeployment(const QString& path);
 
   [[nodiscard]] bool lastOpenReloaded() const noexcept { return m_lastOpenReloaded; }
 

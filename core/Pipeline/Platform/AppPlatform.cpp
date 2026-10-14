@@ -510,7 +510,8 @@ void inhibitIdleSleep()
 }
 
 /**
- * @brief Registers .ssproj with this executable in the Windows registry (HKCU).
+ * @brief Registers .ssproj, and on commercial builds .ssdeploy, with this executable in the
+ *        Windows registry (HKCU).
  */
 void registerFileAssociation()
 {
@@ -548,6 +549,17 @@ void registerFileAssociation()
   writeKey(progIdPath + QStringLiteral("\\DefaultIcon"), QStringLiteral("\"%1\",0").arg(exePath));
   writeKey(progIdPath + QStringLiteral("\\shell\\open\\command"), openCmd);
   writeKey(QStringLiteral("Software\\Classes\\.ssproj"), progId);
+
+#  ifdef BUILD_COMMERCIAL
+  const QString packageProgId = QStringLiteral("SerialStudio.ssdeploy");
+  const QString packageKey    = QStringLiteral("Software\\Classes\\%1").arg(packageProgId);
+  const QString packageCmd =
+    QStringLiteral("\"%1\" --deployment \"%2\"").arg(exePath, QStringLiteral("%1"));
+  writeKey(packageKey, QStringLiteral("Serial Studio Deployment Package"));
+  writeKey(packageKey + QStringLiteral("\\DefaultIcon"), QStringLiteral("\"%1\",0").arg(exePath));
+  writeKey(packageKey + QStringLiteral("\\shell\\open\\command"), packageCmd);
+  writeKey(QStringLiteral("Software\\Classes\\.ssdeploy"), packageProgId);
+#  endif
 
   SHChangeNotify(SHCNE_ASSOCCHANGED, SHCNF_IDLIST, nullptr, nullptr);
 #endif

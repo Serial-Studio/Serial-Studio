@@ -454,6 +454,37 @@ namesake of a removed 0034 hook, but a different, much smaller thing (see below)
   follow-up, and the connect/disconnect fan-outs iterate id snapshots because a close can spin
   the event loop into another rebuild.
 
+## Sealed Sessions (spec 0096)
+
+A process that opened a deployment package (`--deployment`, or a double-clicked `.ssdeploy`) is
+**sealed** for its whole life: `Core::Runtime::seal(mountRoot, projectFolder)` runs before the
+composition root, and `Core::Runtime::sealed()` never reverts. The package's files are served from
+an in-memory Qt resource tree at `:/ssdeploy-package` (`Deploy::ResourceTree`), so alarm sounds,
+Canvas images, certificates and bundled extensions read through the `:/` paths they already accept
+and nothing is extracted to disk. The rules a change must keep:
+
+- **Every registered API command is classified** in `API::SealedPolicy` (allowed or denied).
+  `CommandRegistry::execute` refuses an unlisted name with `SEALED_SESSION` before the remote/Trusted
+  scope logic, so scripts, the terminal and nested `project.batch` calls answer to it too.
+  Enforced: ctest:tst_sealed_policy_registry.
+- **Every exit that serializes the project or a live frame consults the seal** and strips through
+  `DataModel::stripSealedContent` (JSON or `Frame` overload) or stores `DataModel::sealedCopy`. The
+  exits today: the mirror structure, both `setTemplateFrame` setters (TCP broadcast, gRPC),
+  `dashboard.getData`, the MCP frame resources, the MQTT publisher's frame JSON and the historian's
+  stored project. A new exit that skips this leaks script source. Enforced: ctest:tst_sealed_strip
+  for the strip itself; a new exit has no mechanical check yet.
+- **A sealed process holds exactly one project and never writes it**: `ProjectLoader` admits one
+  sealed load, saves and autosave refuse, `AppState::restoreLastProject` returns early, and
+  `BackupManager::snapshot` does nothing.
+- **Only code from the package runs**: `WidgetExtensions` scans the mount instead of the user's
+  extension folder, `PluginRunner` launches nothing, the assistant starts no turn.
+- **Included credentials stay in memory**: they are applied inside a
+  `MQTT::CredentialVault::TransientScope`, whose slots never reach the settings file.
+- **A live session never seals itself**: opening a package from the UI (the open dialog, a drop,
+  the Deploy dialog's Open Package) goes through `ProjectLoader::openDeployment`, which starts a new
+  process. That path is reachable only from user gestures. Never route `.ssdeploy` through
+  `openJsonFile(path)`, which API commands reach, or a remote client could spawn processes.
+
 ## ConnectionManager's Sub-objects
 
 The facade owns its concerns as member sub-objects under `core/Devices/IO/ConnectionManager/`, one

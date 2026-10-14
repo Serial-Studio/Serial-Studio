@@ -66,6 +66,7 @@ pipeline.
 |--------|----------|-------------|
 | `--no-toolbar` | | Hide the main window toolbar at startup. |
 | `--runtime` | | Operator runtime mode: hide toolbar, quit when the operator disconnects. An unexpected device drop shows the reconfigure dialog instead of quitting. |
+| `--deployment` | `file` | Open a deployment package (`.ssdeploy`) in a sealed runtime session. Passing a `.ssdeploy` file as the first positional argument does the same. The package's runtime options replace the display and export flags above; bus flags (`--uart`, `--tcp`, ...) and `--api-*` still apply. Cannot be combined with `--headless`. See [Operator Deployments](Operator-Deployments.md#deployment-packages). |
 | `--shortcut-path` | `path` | Path of the shortcut that launched the process. |
 | `--csv-export` | | Enable CSV export on startup. |
 | `--mdf-export` | | Enable MDF4 export on startup. |

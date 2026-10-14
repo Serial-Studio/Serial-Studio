@@ -126,6 +126,9 @@ class MultiPlot : public QQuickItem {
              READ triggerEdge
              WRITE setTriggerEdge
              NOTIFY sweepChanged)
+  Q_PROPERTY(bool historyExact
+             READ historyExact
+             NOTIFY historyExactChanged)
   // clang-format on
 
 signals:
@@ -135,6 +138,7 @@ signals:
   void curvesChanged();
   void runningChanged();
   void dataSizeChanged();
+  void historyExactChanged();
   void interpolationModeChanged();
 
 public:
@@ -176,6 +180,7 @@ public:
   [[nodiscard]] int triggerSource() const noexcept;
   [[nodiscard]] SerialStudio::SweepMode sweepMode() const noexcept;
   [[nodiscard]] SerialStudio::TriggerEdge triggerEdge() const noexcept;
+  [[nodiscard]] bool historyExact() const noexcept;
 
 public slots:
   void draw(QXYSeries* series, const int index);
@@ -223,6 +228,7 @@ private:
   bool m_timeAxis;
   bool m_logX;
   bool m_logY;
+  bool m_historyExact;
   QString m_yLabel;
   QString m_xLabel;
   QStringList m_colors;

@@ -41,7 +41,9 @@
 #  include "API/GRPC/ConversionUtils.h"
 #  include "API/GRPC/ProtoGenerator.h"
 #  include "API/Server.h"
+#  include "Core/Runtime.h"
 #  include "DataModel/FrameBuilder.h"
+#  include "DataModel/Project/ProjectSealing.h"
 #  include "IO/ConnectionManager.h"
 #  include "Misc/Utilities.h"
 
@@ -485,12 +487,17 @@ void API::GRPC::GRPCServer::ingestBlock(const DataModel::DataBlockPtr& block)
 
 /**
  * @brief Adopts one source's structure. gRPC publishes frame-shaped messages (spec 0055 D5) and a
- *        block carries values only, so the writer thread stamps them onto this.
+ *        block carries values only, so the writer thread stamps them onto this. A sealed session
+ *        adopts a stripped copy, made before the lock is taken (spec 0096).
  */
 void API::GRPC::GRPCServer::setTemplateFrame(int sourceId, const DataModel::Frame& frame)
 {
+  auto adopted = frame;
+  if (Core::Runtime::sealed())
+    DataModel::stripSealedContent(adopted);
+
   const std::lock_guard<std::mutex> guard(m_templatesMutex);
-  DataModel::bind_frame_template(m_templates[sourceId], frame);
+  DataModel::bind_frame_template(m_templates[sourceId], adopted);
 }
 
 /**

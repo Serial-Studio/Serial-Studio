@@ -28,6 +28,7 @@
 #include "Core/Bus/MessageBus.h"
 #include "Core/Bus/Messages.h"
 #include "Core/IO/HAL_Driver.h"
+#include "Core/Runtime.h"
 #include "Core/SSAssert.h"
 #include "IO/ConnectionManager/DriverUiRegistry.h"
 #include "IO/Drivers/BluetoothLE.h"
@@ -37,14 +38,14 @@
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Serialises a UI driver's properties the way the project stores them, optionally without
- *        the password-typed ones (the project file is shared; secrets stay in the vault).
+ * @brief Serialises a UI driver's properties the way the project stores them, never the
+ *        password-typed ones: the project file is shared, so secrets stay in the vault.
  */
-[[nodiscard]] static QJsonObject driverSettings(const IO::HAL_Driver& driver, bool skipPasswords)
+[[nodiscard]] static QJsonObject driverSettings(const IO::HAL_Driver& driver)
 {
   QJsonObject settings;
   for (const auto& prop : driver.driverProperties()) {
-    if (skipPasswords && prop.type == IO::DriverProperty::Password)
+    if (prop.type == IO::DriverProperty::Password)
       continue;
 
     settings.insert(prop.key, QJsonValue::fromVariant(prop.value));
@@ -149,7 +150,8 @@ IO::HAL_Driver* IO::UiDriverSync::driverForEditing(int deviceId)
 
 /**
  * @brief Applies source[0]'s bus type (through @p applier) and connection settings to the matching
- *        UI-config driver. Only a saved single-source project is mirrored; true when it was.
+ *        UI-config driver. Only a saved single-source project is mirrored, or a deployment
+ *        package's, which has no file but is the session's one project (spec 0096).
  */
 bool IO::UiDriverSync::syncFromSource0(SerialStudio::BusType current, const BusTypeApplier& applier)
 {
@@ -161,7 +163,7 @@ bool IO::UiDriverSync::syncFromSource0(SerialStudio::BusType current, const BusT
   if (m_operationMode != SerialStudio::ProjectFile || srcs.size() != 1)
     return false;
 
-  if (project->filePath.isEmpty())
+  if (project->filePath.isEmpty() && !Core::Runtime::sealed())
     return false;
 
   const auto& src    = srcs[0];
@@ -229,9 +231,10 @@ void IO::UiDriverSync::publishSource0BusType(SerialStudio::BusType busType) cons
 }
 
 /**
- * @brief Captures the UI-config driver's settings back into source[0] of a single-source project
- *        (asking the project to autosave when @p autosave is set and it lives on disk); true when
- *        the request went out. A change reported by another driver than the active one is ignored.
+ * @brief Captures the UI-config driver's settings, passwords excluded, back into source[0] of a
+ *        single-source project (asking the project to autosave when @p autosave is set and it lives
+ *        on disk); true when the request went out. A change reported by another driver than the
+ *        active one is ignored.
  */
 bool IO::UiDriverSync::captureToSource0(SerialStudio::BusType busType,
                                         HAL_Driver* uiDriver,
@@ -250,7 +253,7 @@ bool IO::UiDriverSync::captureToSource0(SerialStudio::BusType busType,
     return false;
 
   m_bus.publish<Core::Bus::Source0ConnectionSettingsChanged>(
-    static_cast<int>(busType), driverSettings(*uiDriver, false), true, autosave);
+    static_cast<int>(busType), driverSettings(*uiDriver), true, autosave);
   return true;
 }
 
@@ -267,7 +270,7 @@ void IO::UiDriverSync::publishActiveUiDriverSettings(SerialStudio::BusType busTy
     return;
 
   m_bus.publishState<Core::Bus::ActiveUiDriverSettings>(
-    static_cast<int>(busType), uiDriver ? driverSettings(*uiDriver, false) : QJsonObject());
+    static_cast<int>(busType), uiDriver ? driverSettings(*uiDriver) : QJsonObject());
 }
 
 /**
@@ -284,8 +287,7 @@ void IO::UiDriverSync::serveCapture(int sourceId, int busType) const
   if (!driver)
     return;
 
-  m_bus.publish<Core::Bus::SourceConnectionSettingsCaptured>(sourceId,
-                                                             driverSettings(*driver, true));
+  m_bus.publish<Core::Bus::SourceConnectionSettingsCaptured>(sourceId, driverSettings(*driver));
 
   if (m_operationMode != SerialStudio::ProjectFile || !m_liveDriver)
     return;

@@ -1,0 +1,84 @@
+{
+  "title": "Sealed Session Fixture",
+  "schemaVersion": 3,
+  "writerVersion": "4.1.0",
+  "writerVersionAtCreation": "4.1.0",
+  "nextUniqueId": 1000,
+  "controlScriptCode": "// SSMARK_CONTROL\nfunction setup() {}\n\nfunction loop() {\n  delay(1000);\n}\n",
+  "transformLibraryJs": "// SSMARK_LIBRARY\nfunction passThrough(x) {\n  return x;\n}\n",
+  "actions": [],
+  "sources": [
+    {
+      "sourceId": 0,
+      "title": "Simulator",
+      "busType": 1,
+      "connection": {
+        "address": "127.0.0.1",
+        "socketTypeIndex": 0,
+        "tcpPort": 9000
+      },
+      "frameDetection": 0,
+      "frameStart": "",
+      "frameEnd": "\\n",
+      "hexadecimalDelimiters": false,
+      "decoder": 0,
+      "decoderMethod": 0,
+      "checksum": "",
+      "checksumAlgorithm": "",
+      "frameParserLanguage": 0,
+      "frameParserCode": "// SSMARK_PARSER: proprietary frame layout\nvar leaked = 0;\nvar probed = false;\n\nfunction parse(frame) {\n  if (!probed) {\n    probed = true;\n    var reply = apiCall(\"project.exportJson\", {});\n    leaked = reply.ok ? 1 : 0;\n  }\n\n  return [frame.trim(), leaked];\n}\n"
+    }
+  ],
+  "groups": [
+    {
+      "title": "Probe",
+      "uniqueId": 100,
+      "widget": "datagrid",
+      "datasets": [
+        {
+          "datasetId": 0,
+          "groupId": 0,
+          "index": 1,
+          "title": "Value",
+          "units": "",
+          "uniqueId": 101,
+          "value": "",
+          "widget": "",
+          "graph": false,
+          "transformLanguage": 0,
+          "transformCode": "// SSMARK_TRANSFORM\nfunction transform(value) {\n  return passThrough(value);\n}\n"
+        },
+        {
+          "datasetId": 1,
+          "groupId": 0,
+          "index": 2,
+          "title": "Project Export Allowed",
+          "units": "",
+          "uniqueId": 102,
+          "value": "",
+          "widget": "",
+          "graph": false
+        }
+      ]
+    },
+    {
+      "title": "Canvas",
+      "uniqueId": 200,
+      "widget": "painter",
+      "painterCode": "// SSMARK_CANVAS\nfunction paint(ctx, width, height) {}\n",
+      "datasets": [
+        {
+          "datasetId": 0,
+          "groupId": 1,
+          "index": 1,
+          "title": "Canvas Value",
+          "units": "",
+          "uniqueId": 201,
+          "value": "",
+          "widget": "",
+          "graph": false
+        }
+      ]
+    }
+  ]
+}

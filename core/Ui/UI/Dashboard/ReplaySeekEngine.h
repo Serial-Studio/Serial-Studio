@@ -50,6 +50,7 @@ struct ReplaySeekBindings {
   const QMap<int, DataModel::Dataset>& datasets;
   const QMap<SerialStudio::DashboardWidget, QVector<DataModel::Group>>& widgetGroups;
   const QMap<SerialStudio::DashboardWidget, QVector<DataModel::Dataset>>& widgetDatasets;
+  DSP::RingBudget& plotBudget;
 };
 
 /**
@@ -103,6 +104,7 @@ private:
   const QMap<int, DataModel::Dataset>& m_datasets;
   const QMap<SerialStudio::DashboardWidget, QVector<DataModel::Group>>& m_widgetGroups;
   const QMap<SerialStudio::DashboardWidget, QVector<DataModel::Dataset>>& m_widgetDatasets;
+  DSP::RingBudget& m_plotBudget;
 };
 
 }  // namespace UI

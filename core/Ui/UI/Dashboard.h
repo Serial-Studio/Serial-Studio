@@ -46,6 +46,7 @@
 #include "UI/Dashboard/DashboardViewState.h"
 #include "UI/Dashboard/DashboardWiring.h"
 #include "UI/Dashboard/PlotControlBank.h"
+#include "UI/Dashboard/PlotMemoryLedger.h"
 #include "UI/Dashboard/ReplaySeekEngine.h"
 #include "UI/Dashboard/WidgetMapBuilder.h"
 #include "UI/WidgetRegistry.h"
@@ -326,6 +327,8 @@ public:
   [[nodiscard]] const DSP::EnvelopeRing& plotTimeRing(const int index) const;
   [[nodiscard]] const std::vector<DSP::EnvelopeRing>& multiplotTimeRings(const int index) const;
 
+  [[nodiscard]] PlotMemoryReport plotMemory() const { return m_plotMemory.report(); }
+
   [[nodiscard]] const DSP::SweepEngine& plotSweep(const int index) const
   {
     return m_plotControls.plotSweep(index);
@@ -501,11 +504,9 @@ private:
   void configureWaterfallSeries() override;
 #endif
 
-  void growTimeRings();
   void resetPlotClocks();
   void rebuildPushTables();
   void rebuildLineSeriesPreservingState();
-  void growTimeRing(DSP::EnvelopeRing& ring, int sourceId, double windowSec);
   void drainStructureSnapshots();
   void drainBlockRing(const QElapsedTimer& clock, qint64 budgetNs);
 
@@ -594,6 +595,7 @@ private:
   QHash<int, quint64> m_quarantinedSources;
 
   // Declared last: these bind the members above by reference, in declaration order
+  PlotMemoryLedger m_plotMemory;
   DashboardTools m_tools;
   DashboardViewState m_viewState;
   PlotControlBank m_plotControls;

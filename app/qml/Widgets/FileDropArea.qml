@@ -33,7 +33,8 @@ DropArea {
     // Get file name & set color of rectangle accordingly
     if (drag.urls.length > 0) {
       var path = drag.urls[0].toString()
-      if (path.endsWith(".json") || path.endsWith(".csv") || path.endsWith(".ssproj") || path.endsWith(".mf4") || path.endsWith(".dat") || path.endsWith(".db")) {
+      var deployment = Cpp_CommercialBuild && path.toLowerCase().endsWith(".ssdeploy")
+      if (deployment || path.endsWith(".json") || path.endsWith(".csv") || path.endsWith(".ssproj") || path.endsWith(".mf4") || path.endsWith(".dat") || path.endsWith(".db")) {
         drag.accept(Qt.LinkAction)
         dropRectangle.color = Qt.darker(palette.highlight, 1.4)
       }
@@ -69,8 +70,12 @@ DropArea {
     var cleanPath = decodeURIComponent(path);
     var lowerCase = cleanPath.toLowerCase();
 
+    // Deployment packages open in their own sealed window (Pro)
+    if (lowerCase.endsWith(".ssdeploy") && Cpp_CommercialBuild)
+      Cpp_JSON_ProjectModel.openDeployment(cleanPath)
+
     // Process JSON files
-    if (lowerCase.endsWith(".json") || lowerCase.endsWith(".ssproj")) {
+    else if (lowerCase.endsWith(".json") || lowerCase.endsWith(".ssproj")) {
       Cpp_AppState.operationMode = SerialStudio.ProjectFile
       Cpp_JSON_ProjectModel.openJsonFile(cleanPath)
     }

@@ -28,15 +28,18 @@
 #include <QFileInfo>
 #include <QJsonArray>
 #include <QMap>
+#include <QProcess>
 #include <QRegularExpression>
 #include <QSet>
 #include <QTimer>
+#include <QUrl>
 
 #include "AppState.h"
 #include "Core/Bus/MessageBus.h"
 #include "Core/Bus/Messages.h"
 #include "Core/JsonValidator.h"
 #include "Core/Prompt/UserPrompt.h"
+#include "Core/Runtime.h"
 #include "Core/Services.h"
 #include "Core/WorkspaceManager.h"
 #include "DataModel/NotificationCenter.h"
@@ -490,16 +493,55 @@ void DataModel::ProjectLoader::persistLegacyMigration()
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Shows a file-open dialog and loads the selected project; the selection
- * handler defers via a queued invoke so the macOS NSSavePanel KVO callback can
- * unwind before re-entering the model.
+ * @brief Admits the first load of a sealed process and refuses every later one (spec 0096): the
+ *        package's project is the only document that process may ever hold. Unsealed, always true.
+ */
+static bool admitSealedLoad()
+{
+  static bool s_sealedDocumentLoaded = false;
+  if (!Core::Runtime::sealed())
+    return true;
+
+  if (s_sealedDocumentLoaded) {
+    qWarning() << "[ProjectModel] A sealed session holds one project; refusing another load";
+    return false;
+  }
+
+  s_sealedDocumentLoaded = true;
+  return true;
+}
+
+/**
+ * @brief True when @p path names a deployment package, which commercial builds open in a new
+ *        sealed process instead of loading (spec 0096).
+ */
+static bool isDeploymentPackage(const QString& path)
+{
+#ifdef BUILD_COMMERCIAL
+  return path.endsWith(QStringLiteral(".ssdeploy"), Qt::CaseInsensitive);
+#else
+  Q_UNUSED(path);
+  return false;
+#endif
+}
+
+/**
+ * @brief Shows a file-open dialog and loads the selected project, or opens a selected deployment
+ *        package in its own process; the selection handler defers via a queued invoke so the macOS
+ *        NSSavePanel KVO callback can unwind before re-entering the model.
  */
 void DataModel::ProjectLoader::openJsonFile()
 {
+#ifdef BUILD_COMMERCIAL
+  const auto filter = ProjectModel::tr("Project Files (*.json *.ssproj *.ssdeploy)");
+#else
+  const auto filter = ProjectModel::tr("Project Files (*.json *.ssproj)");
+#endif
+
   auto* dialog = new QFileDialog(qApp->activeWindow(),
                                  ProjectModel::tr("Select Project File"),
                                  m_model.jsonProjectsPath(),
-                                 ProjectModel::tr("Project Files (*.json *.ssproj)"));
+                                 filter);
 
   dialog->setFileMode(QFileDialog::ExistingFile);
   dialog->setAttribute(Qt::WA_DeleteOnClose);
@@ -508,11 +550,40 @@ void DataModel::ProjectLoader::openJsonFile()
     if (path.isEmpty())
       return;
 
-    QMetaObject::invokeMethod(
-      &m_model, [this, path]() { (void)openJsonFile(path); }, Qt::QueuedConnection);
+    if (isDeploymentPackage(path))
+      QMetaObject::invokeMethod(
+        &m_model, [this, path]() { openDeployment(path); }, Qt::QueuedConnection);
+    else
+      QMetaObject::invokeMethod(
+        &m_model, [this, path]() { (void)openJsonFile(path); }, Qt::QueuedConnection);
   });
 
   dialog->open();
+}
+
+/**
+ * @brief Opens the deployment package at @p path (a local path or file URL) in a new sealed
+ *        process: a live session is never sealed after the fact (spec 0096). Reached only from
+ *        user gestures (open dialog, drop, Deploy dialog), never from an API command.
+ */
+void DataModel::ProjectLoader::openDeployment(const QString& path)
+{
+  const QUrl url(path);
+  const auto local = url.isLocalFile() ? url.toLocalFile() : path;
+  if (!isDeploymentPackage(local) || !QFileInfo::exists(local)) {
+    qWarning() << "[ProjectModel] Not a deployment package:" << local;
+    return;
+  }
+
+  const QStringList arguments = {QStringLiteral("--deployment"), local};
+  if (QProcess::startDetached(QCoreApplication::applicationFilePath(), arguments))
+    return;
+
+  Core::Prompt::showMessageBox(ProjectModel::tr("Could not open the deployment package"),
+                               ProjectModel::tr("Serial Studio could not start a new window for "
+                                                "\"%1\".")
+                                 .arg(QFileInfo(local).fileName()),
+                               Core::Prompt::Critical);
 }
 
 /**
@@ -635,7 +706,7 @@ void DataModel::ProjectLoader::serveGeneratedProject(
 bool DataModel::ProjectLoader::loadFromJsonDocument(const QJsonDocument& document,
                                                     const QString& sourcePath)
 {
-  if (document.isEmpty())
+  if (document.isEmpty() || !admitSealedLoad())
     return false;
 
   m_model.m_persistence.setAutoSaveSuspended(true);
@@ -889,6 +960,9 @@ static void reportMergeRefused(const DataModel::ProjectModel& model, const QStri
 bool DataModel::ProjectLoader::mergeImportedProject(const QJsonObject& project,
                                                     const QString& label)
 {
+  if (Core::Runtime::sealed())
+    return false;
+
   if (appStateRef().operationMode() != SerialStudio::ProjectFile || m_model.m_groups.empty()) {
     reportMergeRefused(m_model,
                        ProjectModel::tr("Open a project with at least one group first, or choose "

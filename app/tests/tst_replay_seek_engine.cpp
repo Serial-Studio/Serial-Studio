@@ -42,6 +42,8 @@ private slots:
   void sampleRingsCarryXAndYSources();
   void multiplotCurvesFillTheirOwnRings();
   void restoreReturnsRingsToTheirOwnPlot();
+  void restoreKeepsALearnedCapacity();
+  void bulkLoadGrowsAnExactRingToTheWindow();
 };
 
 //--------------------------------------------------------------------------------------------------
@@ -62,6 +64,7 @@ struct Stores {
   QMap<int, DataModel::Dataset> datasets;
   QMap<SerialStudio::DashboardWidget, QVector<DataModel::Group>> widgetGroups;
   QMap<SerialStudio::DashboardWidget, QVector<DataModel::Dataset>> widgetDatasets;
+  DSP::RingBudget plotBudget;
 
   [[nodiscard]] UI::ReplaySeekBindings bindings()
   {
@@ -72,7 +75,8 @@ struct Stores {
                                   .multiplotValues    = multiplotValues,
                                   .datasets           = datasets,
                                   .widgetGroups       = widgetGroups,
-                                  .widgetDatasets     = widgetDatasets};
+                                  .widgetDatasets     = widgetDatasets,
+                                  .plotBudget         = plotBudget};
   }
 };
 
@@ -271,6 +275,63 @@ void ReplaySeekEngineTest::restoreReturnsRingsToTheirOwnPlot()
   QVERIFY(stores.plotTimeRings[1].level0.value.size() > 0);
   QCOMPARE(stores.plotTimeRings[0].level0.value[0], 1.0);
   QCOMPARE(stores.plotTimeRings[1].level0.value[0], 9.0);
+}
+
+/**
+ * @brief Spec 0097: a rebuild at an unchanged window splices the saved ring whole, so the capacity
+ *        it grew to and every sample survive a fresh, smaller ring.
+ */
+void ReplaySeekEngineTest::restoreKeepsALearnedCapacity()
+{
+  Stores stores;
+  stores.widgetDatasets[SerialStudio::DashboardPlot] = {makeDataset(0, 10)};
+
+  DSP::EnvelopeRing grown(DSP::RingCapacity::fromRate(1.0, 4096.0), 1.0, DSP::RingMode::Exact);
+  for (int i = 0; i < 3000; ++i)
+    grown.appendDecimated(static_cast<double>(i) / 4096.0, static_cast<double>(i));
+
+  stores.plotTimeRings.insert(0, std::move(grown));
+  UI::ReplaySeekEngine engine(stores.bindings());
+  auto snapshot = engine.snapshotPlotTimeRings();
+
+  stores.plotTimeRings[0] =
+    DSP::EnvelopeRing(DSP::RingCapacity::fromRate(1.0, 64.0), 1.0, DSP::RingMode::Exact);
+  engine.restorePlotTimeRings(snapshot);
+
+  const auto& ring = stores.plotTimeRings[0];
+  QCOMPARE(ring.level0.time.capacity(), static_cast<std::size_t>(4096));
+  QCOMPARE(ring.level0.time.size(), static_cast<std::size_t>(3000));
+  QVERIFY(ring.exact());
+}
+
+/**
+ * @brief Spec 0097: a seek window larger than a still-small exact ring grows it first, so every
+ *        sample of the window is kept.
+ */
+void ReplaySeekEngineTest::bulkLoadGrowsAnExactRingToTheWindow()
+{
+  Stores stores;
+  stores.widgetDatasets[SerialStudio::DashboardPlot] = {makeDataset(0, 10)};
+  stores.plotTimeRings.insert(
+    0, DSP::EnvelopeRing(DSP::RingCapacity::fromRate(10.0, 100.0), 10.0, DSP::RingMode::Exact));
+
+  QVector<double> times;
+  QVector<double> values;
+  for (int i = 0; i < 5000; ++i) {
+    times.append(static_cast<double>(i) / 1000.0);
+    values.append(static_cast<double>(i % 17));
+  }
+
+  QHash<qint64, QVector<double>> series;
+  series.insert(UI::ReplaySeekEngine::seekKey(0, 10), values);
+
+  UI::ReplaySeekEngine engine(stores.bindings());
+  QVERIFY(engine.bulkLoadPlotWindow(times, series));
+
+  const auto& ring = stores.plotTimeRings[0];
+  QVERIFY(ring.exact());
+  QCOMPARE(ring.level0.time.size(), static_cast<std::size_t>(5000));
+  QCOMPARE(ring.level0.value[4999], static_cast<double>(4999 % 17));
 }
 
 QTEST_APPLESS_MAIN(ReplaySeekEngineTest)

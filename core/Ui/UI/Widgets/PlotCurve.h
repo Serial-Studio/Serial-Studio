@@ -31,10 +31,10 @@
 
 namespace Widgets {
 /**
- * @brief GPU polyline for plot curves: renders a curve series as one connected mitered
- *        triangle strip per run with per-vertex feathered edges (anti-aliasing without
- *        MSAA), built directly on the scene graph. Replaces the QtGraphs LineSeries
- *        stroke, which re-triangulates a QQuickShape path on the CPU every update.
+ * @brief GPU polyline for plot curves on the scene graph (replaces the QtGraphs LineSeries
+ *        stroke and its per-update CPU path triangulation). Opaque curves draw one
+ *        signed-distance quad per segment (spec 0097); translucent ones keep the feathered,
+ *        round-joined tessellation, whose overlaps blend once.
  */
 class PlotCurve : public QQuickItem {
   // clang-format off
@@ -116,6 +116,20 @@ private:
                   const QPointF* px,
                   const qsizetype count,
                   const double hw) const;
+  void countSdf(const QPointF* pts,
+                const qsizetype count,
+                qsizetype& vertexCount,
+                qsizetype& indexCount) const;
+
+  [[nodiscard]] bool useSdfStroke() const noexcept;
+  [[nodiscard]] QSGNode* updateRibbonNode(QSGNode* oldNode,
+                                          const QPointF* pts,
+                                          const QPointF* px,
+                                          const qsizetype n);
+  [[nodiscard]] QSGNode* updateSdfNode(QSGNode* oldNode,
+                                       const QPointF* pts,
+                                       const QPointF* px,
+                                       const qsizetype n);
 
 private:
   QColor m_color;
@@ -125,6 +139,7 @@ private:
   double m_yMin;
   double m_yMax;
   bool m_hdrMaterial;
+  bool m_sdfNode;
 
   QList<QPointF> m_px;
   QPointer<QXYSeries> m_source;

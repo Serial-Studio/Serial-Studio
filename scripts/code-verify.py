@@ -2007,6 +2007,40 @@ def find_hotpath_assert_scope_violations(
     return violations
 
 
+_LOCK_MEMORY_RE = re.compile(r"\b(?:un)?lockMemoryResident\s*\(")
+_LOCK_MEMORY_ALLOWED = (
+    "core/Pipeline/IO/FrameReader.cpp",
+    "core/Pipeline/Platform/AppPlatform.h",
+    "core/Pipeline/Platform/AppPlatform.cpp",
+)
+
+
+def find_lock_memory_scope_violations(
+    raw_lines: list[str], path: Path, fence_mask: list[bool]
+) -> list[Violation]:
+    """Flag `(un)lockMemoryResident(` outside the acquisition-pipeline allowlist (error)."""
+    posix = path.as_posix()
+    if any(posix.endswith(allowed) for allowed in _LOCK_MEMORY_ALLOWED):
+        return []
+
+    violations: list[Violation] = []
+    for i, line in enumerate(raw_lines):
+        if i < len(fence_mask) and fence_mask[i]:
+            continue
+        if _LOCK_MEMORY_RE.search(line):
+            violations.append(
+                Violation(
+                    path,
+                    i + 1,
+                    "lock-memory-scope",
+                    "Display/dashboard storage must stay pageable (spec 0097 R6): "
+                    "pinning pages resident belongs to the acquisition pipeline "
+                    "(FrameReader, AppPlatform) only, never plot or widget memory.",
+                )
+            )
+    return violations
+
+
 _BUS_ON_HOTPATH_RE = re.compile(
     r"Core/Bus/|MessageBus::instance|\b(?:publish|publishState|subscribe|latest)<"
 )
@@ -2226,6 +2260,7 @@ def process_file(path: Path, fix: bool) -> tuple[list[Violation], str | None]:
         violations.extend(
             find_hotpath_assert_scope_violations(raw_lines, path, fence_mask)
             + find_bus_on_hotpath_violations(raw_lines, path, fence_mask)
+            + find_lock_memory_scope_violations(raw_lines, path, fence_mask)
         )
         violations.extend(find_undo_scope_violations(raw_lines, path, fence_mask))
         violations.extend(

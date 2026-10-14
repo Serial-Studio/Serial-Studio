@@ -44,21 +44,38 @@ constexpr int kMaxColumns        = 8192;
 constexpr int kMaxBridgedColumns = 262144;
 
 /**
+ * @brief Straight-alpha color channels in 0..1, converted from the QColor once per paint.
+ */
+struct FillRgb {
+  double r;
+  double g;
+  double b;
+};
+
+/**
+ * @brief Splits a QColor into double channels so the per-vertex path skips the accessors.
+ */
+[[nodiscard]] static FillRgb toFillRgb(const QColor& color)
+{
+  return FillRgb{color.redF(), color.greenF(), color.blueF()};
+}
+
+/**
  * @brief Encodes a premultiplied vertex color for QSGVertexColorMaterial.
  */
 static void setFillVertexColor(QSGGeometry::ColoredPoint2D& vertex,
                                const float x,
                                const float y,
-                               const QColor& color,
+                               const FillRgb& rgb,
                                double alpha)
 {
   SS_ASSERT(alpha >= 0.0 && alpha <= 1.0, alpha = std::clamp(alpha, 0.0, 1.0));
 
   vertex.set(x,
              y,
-             static_cast<unsigned char>(std::lround(color.redF() * alpha * 255.0)),
-             static_cast<unsigned char>(std::lround(color.greenF() * alpha * 255.0)),
-             static_cast<unsigned char>(std::lround(color.blueF() * alpha * 255.0)),
+             static_cast<unsigned char>(std::lround(rgb.r * alpha * 255.0)),
+             static_cast<unsigned char>(std::lround(rgb.g * alpha * 255.0)),
+             static_cast<unsigned char>(std::lround(rgb.b * alpha * 255.0)),
              static_cast<unsigned char>(std::lround(alpha * 255.0)));
 }
 
@@ -415,6 +432,7 @@ void Widgets::PlotAreaFill::emitColumns(QSGGeometry::ColoredPoint2D* vertices,
   SS_ASSERT(refPositive > 0.0, refPositive = 1e-12);
   SS_ASSERT(refNegative > 0.0, refNegative = 1e-12);
 
+  const FillRgb rgb  = toFillRgb(m_fillColor);
   const double sy    = h / (m_yMax - m_yMin);
   const float base_y = static_cast<float>((m_yMax - m_baseline) * sy);
 
@@ -441,15 +459,15 @@ void Widgets::PlotAreaFill::emitColumns(QSGGeometry::ColoredPoint2D* vertices,
     if (j > 0) {
       vertices[j] = vertices[j - 1];
       ++j;
-      setFillVertexColor(vertices[j++], x0, y_top, m_fillColor, a_top);
+      setFillVertexColor(vertices[j++], x0, y_top, rgb, a_top);
     }
 
-    setFillVertexColor(vertices[j++], x0, y_top, m_fillColor, a_top);
-    setFillVertexColor(vertices[j++], x1, y_top, m_fillColor, a_top);
-    setFillVertexColor(vertices[j++], x0, base_y, m_fillColor, kMinAlpha);
-    setFillVertexColor(vertices[j++], x1, base_y, m_fillColor, kMinAlpha);
-    setFillVertexColor(vertices[j++], x0, y_bot, m_fillColor, a_bot);
-    setFillVertexColor(vertices[j++], x1, y_bot, m_fillColor, a_bot);
+    setFillVertexColor(vertices[j++], x0, y_top, rgb, a_top);
+    setFillVertexColor(vertices[j++], x1, y_top, rgb, a_top);
+    setFillVertexColor(vertices[j++], x0, base_y, rgb, kMinAlpha);
+    setFillVertexColor(vertices[j++], x1, base_y, rgb, kMinAlpha);
+    setFillVertexColor(vertices[j++], x0, y_bot, rgb, a_bot);
+    setFillVertexColor(vertices[j++], x1, y_bot, rgb, a_bot);
   }
 
   // code-verify off

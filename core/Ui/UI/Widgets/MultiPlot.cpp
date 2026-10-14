@@ -21,6 +21,7 @@
 
 #include "UI/Widgets/MultiPlot.h"
 
+#include <algorithm>
 #include <utility>
 
 #include "Core/DSPSimd.h"
@@ -73,6 +74,7 @@ Widgets::MultiPlot::MultiPlot(const int index, QQuickItem* parent)
   , m_timeAxis(false)
   , m_logX(false)
   , m_logY(false)
+  , m_historyExact(true)
   , m_triggerSource(0)
   , m_dashboard(UI::Dashboard::instance())
   , m_themeManager(Misc::ThemeManager::instance())
@@ -342,6 +344,14 @@ SerialStudio::SweepMode Widgets::MultiPlot::sweepMode() const noexcept
 SerialStudio::TriggerEdge Widgets::MultiPlot::triggerEdge() const noexcept
 {
   return m_base.triggerEdge();
+}
+
+/**
+ * @brief True while every curve's history keeps every sample (spec 0097 R7).
+ */
+bool Widgets::MultiPlot::historyExact() const noexcept
+{
+  return m_historyExact;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -615,6 +625,13 @@ void Widgets::MultiPlot::updateData()
     const qsizetype plotCount = static_cast<qsizetype>(rings.size());
     if (m_data.size() != plotCount)
       m_data.resize(plotCount);
+
+    const bool exact = std::all_of(
+      rings.cbegin(), rings.cend(), [](const DSP::EnvelopeRing& ring) { return ring.exact(); });
+    if (exact != m_historyExact) [[unlikely]] {
+      m_historyExact = exact;
+      Q_EMIT historyExactChanged();
+    }
 
     for (qsizetype i = 0; i < plotCount; ++i) {
       if (i >= m_visibleCurves.size() || !m_visibleCurves[i])

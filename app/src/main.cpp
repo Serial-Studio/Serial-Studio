@@ -35,6 +35,7 @@
 #include "IO/ConnectionManager.h"
 #include "Misc/CLI.h"
 #include "Misc/CrashTracker.h"
+#include "Misc/DeploymentSession.h"
 #include "Misc/GraphicsBackend.h"
 #include "Misc/HighDpiScaling.h"
 #include "Misc/ModuleManager.h"
@@ -97,6 +98,7 @@ static bool bootstrapModuleManager(Misc::ModuleManager& moduleManager,
   ctx->setContextProperty("CLI_START_FULLSCREEN", cli.fullscreen());
   ctx->setContextProperty("CLI_HIDE_TOOLBAR", cli.hideToolbar());
   ctx->setContextProperty("CLI_RUNTIME_MODE", cli.runtimeMode());
+  ctx->setContextProperty("CLI_DEPLOYMENT_TITLE", cli.deploymentTitle());
   ctx->setContextProperty("CLI_SETTINGS_SUFFIX", settingsSuffix);
 
   moduleManager.initializeQmlInterface();
@@ -160,7 +162,8 @@ static int runConfiguredSession(QApplication& app,
     return ok ? EXIT_SUCCESS : EXIT_FAILURE;
   }
 
-  cli.applyProjectAndAutoConnect(app);
+  if (!cli.applyProjectAndAutoConnect(app))
+    return EXIT_FAILURE;
 
 #ifdef BUILD_COMMERCIAL
   if (cli.runtimeMode())
@@ -211,6 +214,16 @@ static int runApplication(int argc, char** argv, bool headless, const QString& s
 
   Q_INIT_RESOURCE(rcc);
   Q_INIT_RESOURCE(translations);
+
+#ifdef BUILD_COMMERCIAL
+  Misc::DeploymentSession deployment;
+  if (!cli.deploymentPath().isEmpty()) {
+    if (!deployment.open(cli.deploymentPath()))
+      return EXIT_FAILURE;
+
+    cli.attachDeployment(&deployment);
+  }
+#endif
 
   if (!cli.verifyShortcutProject())
     return EXIT_SUCCESS;

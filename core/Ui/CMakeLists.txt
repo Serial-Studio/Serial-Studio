@@ -92,6 +92,7 @@ qt_add_library(
   UI/Dashboard/DashboardTools.cpp
   UI/Dashboard/DashboardIngest.cpp
   UI/Dashboard/PlotControlBank.cpp
+  UI/Dashboard/PlotMemoryLedger.cpp
   UI/Dashboard/ReplaySeekEngine.cpp
   UI/Dashboard/TimeRingSizing.cpp
   UI/Dashboard/DashboardViewState.cpp
@@ -127,6 +128,8 @@ qt_add_library(
   UI/Widgets/PlotBase.cpp
   UI/Widgets/PlotAreaFill.cpp
   UI/Widgets/GpuStroke.cpp
+  UI/Widgets/SdfStroke.cpp
+  UI/Widgets/SdfStrokeMaterial.cpp
   UI/Widgets/PlotCurve.cpp
   UI/Widgets/Compass.cpp
   UI/Widgets/Bar.cpp
@@ -141,6 +144,7 @@ qt_add_library(
   UI/Widgets/Terminal/TerminalBuffer.cpp
   UI/Widgets/Terminal/Vt100Keymap.cpp
   UI/Widgets/Terminal/AnsiStateMachine.cpp
+  UI/Widgets/Terminal/TerminalCatchUp.cpp
   UI/Widgets/Terminal/TerminalSearch.cpp
   UI/Widgets/Gyroscope.cpp
   UI/Widgets/GPS.cpp
@@ -202,6 +206,7 @@ qt_add_library(
   UI/Dashboard/DashboardTools.h
   UI/Dashboard/DashboardIngest.h
   UI/Dashboard/PlotControlBank.h
+  UI/Dashboard/PlotMemoryLedger.h
   UI/Dashboard/ReplaySeekEngine.h
   UI/Dashboard/TimeRingSizing.h
   UI/Dashboard/DashboardViewState.h
@@ -239,6 +244,8 @@ qt_add_library(
   UI/Widgets/PlotBase.h
   UI/Widgets/PlotAreaFill.h
   UI/Widgets/GpuStroke.h
+  UI/Widgets/SdfStroke.h
+  UI/Widgets/SdfStrokeMaterial.h
   UI/Widgets/PlotCurve.h
   UI/Widgets/PlotLogScale.h
   UI/Widgets/PlotAutoScale.h
@@ -259,6 +266,7 @@ qt_add_library(
   UI/Widgets/Terminal/TerminalBuffer.h
   UI/Widgets/Terminal/Vt100Keymap.h
   UI/Widgets/Terminal/AnsiStateMachine.h
+  UI/Widgets/Terminal/TerminalCatchUp.h
   UI/Widgets/Terminal/TerminalSearch.h
   UI/UISessionRegistry.h
   Platform/NativeWindow.h
@@ -397,6 +405,7 @@ if(BUILD_COMMERCIAL)
     UI/Widgets/Output/StateBinding.h
     UI/Widgets/Output/TransmitTarget.h
     UI/Widgets/Output/PanelLayout.h
+    Misc/DeploymentPackager.h
     Misc/ShortcutGenerator.h
     AI/Logging.h
     AI/KeyVault.h
@@ -481,6 +490,7 @@ if(BUILD_COMMERCIAL)
     UI/Widgets/Output/Preview.cpp
     UI/Widgets/Output/StateBinding.cpp
     UI/Widgets/Output/PanelLayout.cpp
+    Misc/DeploymentPackager.cpp
     Misc/ShortcutGenerator.cpp
     AI/Logging.cpp
     AI/KeyVault.cpp

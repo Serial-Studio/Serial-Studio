@@ -21,18 +21,27 @@
 
 #pragma once
 
-#include <optional>
-
 #include "DSP.h"
 
 namespace UI::TimeRingSizing {
 
+[[nodiscard]] const DSP::EnvelopeRing& emptyRing();
 [[nodiscard]] double historyWindowSec(double plotTimeRangeSec) noexcept;
-[[nodiscard]] DSP::RingCapacity frameLaneCapacity(double windowSec) noexcept;
-[[nodiscard]] DSP::RingCapacity streamLaneCapacity(double windowSec, double rateHz) noexcept;
-[[nodiscard]] DSP::EnvelopeRing historyRing(double plotTimeRangeSec, double rateHz);
-[[nodiscard]] std::optional<DSP::RingCapacity> grownCapacity(int currentSlots,
-                                                             double windowSec,
-                                                             double samplePeriodSec) noexcept;
+[[nodiscard]] DSP::RingCapacity initialCapacity(double windowSec, double rateHz) noexcept;
+[[nodiscard]] DSP::RingMode initialMode(double windowSec, double rateHz) noexcept;
+[[nodiscard]] DSP::EnvelopeRing historyRing(double plotTimeRangeSec,
+                                            double rateHz,
+                                            DSP::RingBudget& budget);
+[[nodiscard]] DSP::RingCapacity sweepCapacity(const DSP::EnvelopeRing& history,
+                                              double sweepWindowSec) noexcept;
+void shapeSweep(DSP::SweepEngine& engine,
+                int curves,
+                const DSP::EnvelopeRing& densest,
+                double sweepWindowSec,
+                DSP::RingBudget& budget);
+void growSweep(DSP::SweepEngine& engine,
+               const DSP::EnvelopeRing& densest,
+               double sweepWindowSec,
+               DSP::RingBudget& budget);
 
 }  // namespace UI::TimeRingSizing

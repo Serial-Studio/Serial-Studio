@@ -99,10 +99,10 @@ block. Never per-sample across a thread boundary.
   on pool-generation bumps. Never add a rate cap or a per-view reduction.
   Detail: `doc/claude/architecture/dataflow.md`.
 - **Time rings are sized from a rate, never a sample count alone** (`DSP::RingCapacity`, built
-  only by `fromRate`; `kMaxSamples` ceiling): stream lane sizes at build from the real rate
-  (`TimeRingSizing::streamLaneCapacity`); the frame lane
-  re-sizes a *saturated* ring once from the plot clock's smoothed period (`growTimeRing`, upward
-  only). The plot clocks and their display time are ONE `UI::PlotClockState`, cleared, saved and
+  only by `fromRate`; `kMaxSamples` ceiling) and never for an assumed rate (spec 0097):
+  `TimeRingSizing::initialCapacity` starts stream rings at the real rate and frame-lane rings
+  small, then `EnvelopeRing::growFor` grows on coverage once per block (never per sample, never
+  shrinking, under the 512 MB rail). Display storage is never pinned. The plot clocks and their display time are ONE `UI::PlotClockState`, cleared, saved and
   restored together by construction (`Dashboard::resetPlotClocks()`). `appendDecimated`
   clamps sub-cell backward jitter forward; a jump back over a whole cell drops the retained span
   (clamping it wedges the ring shut). Detail: `doc/claude/architecture/dashboard.md`.

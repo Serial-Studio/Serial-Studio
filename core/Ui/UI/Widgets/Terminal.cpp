@@ -98,7 +98,7 @@ Widgets::Terminal::Terminal(QQuickItem* parent)
   onThemeChanged();
   connect(
     &m_themeManager, &Misc::ThemeManager::themeChanged, this, &Widgets::Terminal::onThemeChanged);
-  connect(&m_consoleHandler, &Console::Handler::displayString, this, &Widgets::Terminal::append);
+  connect(&m_consoleHandler, &Console::Handler::displayString, this, &Terminal::onDisplayString);
   connect(&m_consoleHandler, &Console::Handler::collapseDuplicatesChanged, this, [this] {
     m_buffer.setCollapseDuplicates(m_consoleHandler.collapseDuplicates());
   });
@@ -116,6 +116,7 @@ Widgets::Terminal::Terminal(QQuickItem* parent)
 
   connect(this, &Widgets::Terminal::visibleChanged, this, [=, this] {
     if (isVisible()) {
+      catchUp();
       if (autoscroll() && linesPerPage() > 0) {
         syncBufferGeometry();
         setScrollOffsetY(qMax(0, m_buffer.visualBottomRow() - linesPerPage() + 1));
@@ -1139,6 +1140,7 @@ void Widgets::Terminal::clear()
   initBuffer();
   setCursorPosition(0, 0);
   setAutoscroll(true);
+  m_catchUp.reset();
 
   m_selectionStart       = QPoint();
   m_selectionEnd         = QPoint();
@@ -1519,6 +1521,31 @@ void Widgets::Terminal::append(const QString& data)
 //--------------------------------------------------------------------------------------------------
 // Buffer management
 //--------------------------------------------------------------------------------------------------
+
+/** @brief Console output (spec 0097 R12): a hidden view skips formatting, marking where it stopped.
+ */
+void Widgets::Terminal::onDisplayString(const QString& data)
+{
+  if (isVisible() || m_paused)
+    append(data);
+  else
+    m_catchUp.skip(m_consoleHandler.displayMark(), data.size());
+}
+
+/** @brief On show (R13): continue from the mark if still retained, else rebuild from the history.
+ */
+void Widgets::Terminal::catchUp()
+{
+  if (!m_catchUp.pending())
+    return;
+
+  bool complete        = false;
+  const QString missed = m_consoleHandler.displaySince(m_catchUp.take(), complete);
+  if (!complete)
+    clear();
+
+  append(missed);
+}
 
 /**
  * @brief Pushes the live character geometry into the line store, whose cursor clamp and

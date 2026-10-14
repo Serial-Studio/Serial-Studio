@@ -39,6 +39,11 @@ rm -f "$QT_PLUGINS_PATH/imageformats/libqtiff.so"
 find "$QT_PLUGINS_PATH/sqldrivers" -name 'libqsql*.so' ! -name 'libqsqlite.so' -delete
 
 ./linuxdeploy-${MACHINE_ARCH}.AppImage --appdir AppDir -e ${UNIXNAME} -i ../../app/deploy/linux/${UNIXNAME}.svg -d ../../app/deploy/linux/${UNIXNAME}.desktop --plugin qt
+mkdir -p AppDir/usr/share/mime/packages
+cp ../../app/deploy/linux/serial-studio-ssproj.xml AppDir/usr/share/mime/packages/
+if [ "${UNIXNAME}" = "serial-studio-pro" ]; then
+  cp ../../app/deploy/linux/serial-studio-ssdeploy.xml AppDir/usr/share/mime/packages/
+fi
 mkdir -p AppDir/usr/plugins/canbus
 if [ -d "$QT_PLUGINS_PATH/canbus" ]; then
   cp -r "$QT_PLUGINS_PATH/canbus/"* AppDir/usr/plugins/canbus/ || echo "Warning: Could not copy canbus plugins"

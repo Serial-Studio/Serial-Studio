@@ -162,6 +162,12 @@ UI::Dashboard::Dashboard(Core::Bus::MessageBus& bus, IO::ConnectionManager& conn
   , m_plotTimeRange(10.0)
   , m_pltXAxis(kDefaultPlotPoints)
   , m_multipltXAxis(kDefaultPlotPoints)
+  , m_plotMemory(UI::PlotMemoryBindings{.plotTimeRings      = m_plotTimeRings,
+                                        .multiplotTimeRings = m_multiplotTimeRings,
+                                        .plotSweep          = m_plotSweep,
+                                        .multiplotSweep     = m_multiplotSweep,
+                                        .widgetGroups       = m_widgetGroups,
+                                        .widgetDatasets     = m_widgetDatasets})
   , m_tools(m_settings, connectionManager, *m_projectModel)
   , m_viewState(m_settings)
   , m_plotControls(UI::PlotControlBindings{.activePlots      = m_activePlots,
@@ -170,8 +176,12 @@ UI::Dashboard::Dashboard(Core::Bus::MessageBus& bus, IO::ConnectionManager& conn
 #ifdef BUILD_COMMERCIAL
                                            .activeWaterfalls = m_activeWaterfalls,
 #endif
-                                           .plotSweep      = m_plotSweep,
-                                           .multiplotSweep = m_multiplotSweep})
+                                           .plotSweep          = m_plotSweep,
+                                           .multiplotSweep     = m_multiplotSweep,
+                                           .plotTimeRings      = m_plotTimeRings,
+                                           .multiplotTimeRings = m_multiplotTimeRings,
+                                           .plotTimeRange      = m_plotTimeRange,
+                                           .plotBudget         = m_plotMemory.budget()})
   , m_replaySeek(UI::ReplaySeekBindings{.xAxisData          = m_xAxisData,
                                         .yAxisData          = m_yAxisData,
                                         .plotTimeRings      = m_plotTimeRings,
@@ -179,7 +189,8 @@ UI::Dashboard::Dashboard(Core::Bus::MessageBus& bus, IO::ConnectionManager& conn
                                         .multiplotValues    = m_multipltValues,
                                         .datasets           = m_datasets,
                                         .widgetGroups       = m_widgetGroups,
-                                        .widgetDatasets     = m_widgetDatasets})
+                                        .widgetDatasets     = m_widgetDatasets,
+                                        .plotBudget         = m_plotMemory.budget()})
   , m_widgetMapBuilder(UI::WidgetModelBindings{.widgetCount         = m_widgetCount,
                                                .lastFrame           = m_lastFrame,
                                                .widgetMap           = m_widgetMap,
@@ -231,7 +242,9 @@ UI::Dashboard::Dashboard(Core::Bus::MessageBus& bus, IO::ConnectionManager& conn
                                 .widgetGroups       = m_widgetGroups,
                                 .widgetDatasets     = m_widgetDatasets,
                                 .sourceRawFrames    = m_sourceRawFrames,
-                                .sourceStructureGen = m_sourceStructureGen},
+                                .sourceStructureGen = m_sourceStructureGen,
+                                .plotBudget         = m_plotMemory.budget(),
+                                .plotTimeRange      = m_plotTimeRange},
              *this)
   , m_wiring(*this)
 {
@@ -375,7 +388,6 @@ void UI::Dashboard::onDisplayTick()
 
   SS_ASSERT(m_drainBudgetNs > 0, return);
 
-  growTimeRings();
   drainStructureSnapshots();
   drainBlockRing(clock, m_drainBudgetNs);
 
@@ -447,51 +459,6 @@ void UI::Dashboard::drainBlockRing(const QElapsedTimer& clock, const qint64 budg
 
   block.reset();
   pipeline.noteDisplayDrops(discarded);
-}
-
-/**
- * @brief Grows one saturated time ring whose source's measured cadence outruns the sizing it was
- *        built with. The frame lane cannot know its rate at layout time (that is the device's to
- *        decide), so a full ring is re-sized from the plot clock's smoothed sample period, upward
- *        only: shrinking would throw away history over a momentary lull.
- */
-void UI::Dashboard::growTimeRing(DSP::EnvelopeRing& ring,
-                                 const int sourceId,
-                                 const double windowSec)
-{
-  if (ring.level0.time.size() < ring.level0.time.capacity())
-    return;
-
-  const auto clockIt = m_plotClocks.sources.constFind(sourceId);
-  if (clockIt == m_plotClocks.sources.cend())
-    return;
-
-  const auto slotCount = static_cast<int>(ring.level0.time.capacity());
-  const auto desired =
-    TimeRingSizing::grownCapacity(slotCount, windowSec, clockIt->samplePeriodSec);
-  if (desired)
-    ring.resizeCapacity(*desired, windowSec);
-}
-
-/**
- * @brief Re-checks every time ring against its source's measured cadence. Runs on the display
- *        tick, costs one hash probe per plot, and resizes only on the rare tick where a source
- *        proved faster than its ring; a stream source never triggers it, since its ring is
- *        already sized from the real rate and the plot clock only sees its block cadence.
- */
-void UI::Dashboard::growTimeRings()
-{
-  const double window = TimeRingSizing::historyWindowSec(m_plotTimeRange);
-
-  for (auto it = m_plotTimeRings.begin(); it != m_plotTimeRings.end(); ++it)
-    growTimeRing(
-      it.value(), getDatasetWidget(SerialStudio::DashboardPlot, it.key()).sourceId, window);
-
-  for (auto it = m_multiplotTimeRings.begin(); it != m_multiplotTimeRings.end(); ++it) {
-    const int sourceId = getGroupWidget(SerialStudio::DashboardMultiPlot, it.key()).sourceId;
-    for (auto& ring : it.value())
-      growTimeRing(ring, sourceId, window);
-  }
 }
 
 /**
@@ -955,10 +922,8 @@ const DSP::MultiLineSeries& UI::Dashboard::multiplotData(const int index) const
 const DSP::EnvelopeRing& UI::Dashboard::plotTimeRing(const int index) const
 {
   const auto it = m_plotTimeRings.find(index);
-  if (it == m_plotTimeRings.end()) [[unlikely]] {
-    static const DSP::EnvelopeRing kEmpty{};
-    return kEmpty;
-  }
+  if (it == m_plotTimeRings.end()) [[unlikely]]
+    return TimeRingSizing::emptyRing();
 
   return it.value();
 }
@@ -1083,6 +1048,7 @@ void UI::Dashboard::resetData(const bool notify)
   m_plotSweep.clear();
   m_multiplotSweep.clear();
   resetPlotClocks();
+  m_plotMemory.refresh();
 
   m_widgetCount = 0;
   m_widgetMap.clear();
@@ -1202,6 +1168,7 @@ void UI::Dashboard::bulkLoadPlotWindow(const QVector<double>& timesSec,
 
   m_plotControls.resetSweepStates();
   resetPlotClocks();
+  m_plotMemory.refresh();
   m_updateRequired = true;
 }
 
@@ -1437,6 +1404,7 @@ void UI::Dashboard::reconfigureDashboard(const DataModel::Frame& frame)
 
   m_replaySeek.restorePlotTimeRings(savedPlotRings);
   m_replaySeek.restoreMultiplotTimeRings(savedMultiplotRings);
+  m_plotMemory.refresh();
 
   m_layoutValid = true;
 
@@ -1610,6 +1578,7 @@ void UI::Dashboard::rebuildLineSeriesPreservingState()
 
   restoreRunFlags(savedPlotRunning, m_activePlots);
   restoreRunFlags(savedMultiplotRunning, m_activeMultiplots);
+  m_plotMemory.refresh();
 }
 
 /**
@@ -1667,6 +1636,7 @@ void UI::Dashboard::configureLineSeries()
   m_pltValues.clear();
   m_pltValues.squeeze();
   m_activePlots.clear();
+  m_plotMemory.refresh();
 
   m_pltXAxis = DSP::AxisData(points() + 1);
   m_pltXAxis.fillRange(0, 1);
@@ -1692,12 +1662,12 @@ void UI::Dashboard::configureLineSeries()
     const auto& yDataset = getDatasetWidget(SerialStudio::DashboardPlot, i);
 
     if (useTimeXAxis(yDataset)) {
-      const auto cap    = TimeRingSizing::frameLaneCapacity(m_plotTimeRange);
       const double rate = streamSampleRate(m_pipelineHost, yDataset.sourceId);
-      m_plotTimeRings.insert(i, TimeRingSizing::historyRing(m_plotTimeRange, rate));
+      m_plotTimeRings.insert(
+        i, TimeRingSizing::historyRing(m_plotTimeRange, rate, m_plotMemory.budget()));
 
       DSP::SweepEngine sweep;
-      sweep.configure(1, cap, m_plotTimeRange);
+      sweep.setShape(1, TimeRingSizing::initialCapacity(m_plotTimeRange, rate), m_plotTimeRange);
       m_plotSweep.insert(i, std::move(sweep));
 
       DSP::LineSeries series;
@@ -1774,6 +1744,7 @@ void UI::Dashboard::configureMultiLineSeries()
   m_activeMultiplots.clear();
   m_multiplotTimeRings.clear();
   m_multiplotSweep.clear();
+  m_plotMemory.refresh();
 
   m_multipltXAxis = DSP::AxisData(points() + 1);
   m_multipltXAxis.fillRange(0, 1);
@@ -1790,17 +1761,17 @@ void UI::Dashboard::configureMultiLineSeries()
     m_activeMultiplots.insert(i, true);
 
     if (useTimeXAxisGroup(group)) {
-      const auto cap    = TimeRingSizing::frameLaneCapacity(m_plotTimeRange);
       const double rate = streamSampleRate(m_pipelineHost, group.sourceId);
+      const auto cap    = TimeRingSizing::initialCapacity(m_plotTimeRange, rate);
       std::vector<DSP::EnvelopeRing> rings;
       rings.reserve(group.datasets.size());
       for (size_t j = 0; j < group.datasets.size(); ++j)
-        rings.push_back(TimeRingSizing::historyRing(m_plotTimeRange, rate));
+        rings.push_back(TimeRingSizing::historyRing(m_plotTimeRange, rate, m_plotMemory.budget()));
 
       m_multiplotTimeRings.insert(i, std::move(rings));
 
       DSP::SweepEngine sweep;
-      sweep.configure(static_cast<int>(group.datasets.size()), cap, m_plotTimeRange);
+      sweep.setShape(static_cast<int>(group.datasets.size()), cap, m_plotTimeRange);
       m_multiplotSweep.insert(i, std::move(sweep));
     }
   }

@@ -24,11 +24,32 @@
 #include <QCommandLineOption>
 #include <QCommandLineParser>
 #include <QString>
+#include <QStringList>
 
 class QApplication;
 class QQmlEngine;
 
 namespace Misc {
+
+class DeploymentSession;
+
+/**
+ * @brief Operator runtime options, read from the command line or from a deployment package
+ *        (spec 0096). A package's options win over conflicting command-line flags.
+ */
+struct RuntimeOptions {
+  bool fullscreen       = false;
+  bool actionsPanel     = false;
+  bool fileTransmission = false;
+  bool csvExport        = false;
+  bool mdfExport        = false;
+  bool sessionExport    = false;
+  bool consoleExport    = false;
+  bool taskbarSearch    = true;
+  QString theme;
+  QString taskbarMode;
+  QStringList taskbarButtons;
+};
 
 /**
  * @brief Aggregate of every command-line option the application accepts.
@@ -146,6 +167,10 @@ struct CliOptions {
                                 "Operator runtime mode: hides toolbar, quits on disconnect (Pro)"};
   QCommandLineOption shortcutPathOpt{
     "shortcut-path", "Path of the shortcut that launched this process (Pro)", "path"};
+  QCommandLineOption deploymentOpt{
+    "deployment",
+    "Open a deployment package (.ssdeploy) in a sealed operator runtime session (Pro)",
+    "file"};
   QCommandLineOption csvExportOpt{"csv-export", "Enable CSV export immediately on startup (Pro)"};
   QCommandLineOption mdfExportOpt{"mdf-export", "Enable MDF4 export immediately on startup (Pro)"};
   QCommandLineOption sessionExportOpt{"session-export", "Enable historian export on startup (Pro)"};
@@ -301,14 +326,18 @@ public:
   [[nodiscard]] bool apiExternalEnabled() const;
   [[nodiscard]] bool quickPlot() const;
   [[nodiscard]] QString projectPath() const;
+  [[nodiscard]] QString deploymentTitle() const;
 
   [[nodiscard]] bool verifyShortcutProject() const;
 
-  void applyProjectAndAutoConnect(QApplication& app);
+  [[nodiscard]] bool applyProjectAndAutoConnect(QApplication& app);
   void applyVisualizationOptions();
   void applyBusConfiguration();
 
 #ifdef BUILD_COMMERCIAL
+  [[nodiscard]] QString deploymentPath() const;
+  void attachDeployment(DeploymentSession* session);
+
   void applyThemeOverride();
   void applyOperatorRuntimeSettings();
   void applyExportToggles();
@@ -337,11 +366,21 @@ private:
   int activateLicense(QApplication& app, const QString& licenseKey);
   int deactivateLicense(QApplication& app);
 
-  void applyOperatorTaskbarSettings();
+  [[nodiscard]] RuntimeOptions runtimeOptions() const;
+  [[nodiscard]] QString resolveDeploymentPath() const;
+  void applyOperatorTaskbarSettings(const RuntimeOptions& options);
+  void warnIgnoredDeploymentFlags() const;
 #endif
 
   CliOptions m_opts;
   QCommandLineParser m_parser;
+
+#ifdef BUILD_COMMERCIAL
+  QString m_deploymentPath;
+  RuntimeOptions m_packageOptions;
+  DeploymentSession* m_deployment;
+  bool m_packageOptionsAdopted;
+#endif
 };
 
 }  // namespace Misc

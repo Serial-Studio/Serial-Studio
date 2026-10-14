@@ -35,6 +35,7 @@
 #  include "Core/SSAssert.h"
 #  include "DataModel/FrameBuilder.h"
 #  include "DataModel/PipelineModules.h"
+#  include "DataModel/Project/ProjectSealing.h"
 #  include "DataModel/Scripting/ControlScript.h"
 #  include "IO/FrameReader.h"
 #  include "Sessions/BlockReader.h"
@@ -259,6 +260,12 @@ int Sessions::Verifier::runRegression()
                        QStringLiteral("That session could not be found in this file."),
                        QStringLiteral("Choose a completed session from the list and try "
                                       "again."));
+
+  if (DataModel::isSealedRecording(m_projectJson))
+    return failRegress(QStringLiteral("sealed-recording"),
+                       QStringLiteral("This session was recorded from a deployment package."),
+                       QStringLiteral("Its scripts were not stored with it, so it cannot be "
+                                      "re-run. Compare a recording of the original project."));
 
   classifySession();
 

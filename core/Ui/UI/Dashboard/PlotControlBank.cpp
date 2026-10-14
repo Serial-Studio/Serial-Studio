@@ -21,6 +21,11 @@
 
 #include "UI/Dashboard/PlotControlBank.h"
 
+#include <algorithm>
+
+#include "Core/SSAssert.h"
+#include "UI/Dashboard/TimeRingSizing.h"
+
 #ifdef BUILD_COMMERCIAL
 #  include "Core/Licensing/CommercialToken.h"
 #endif
@@ -41,6 +46,10 @@ UI::PlotControlBank::PlotControlBank(const PlotControlBindings& bindings)
 #endif
   , m_plotSweep(bindings.plotSweep)
   , m_multiplotSweep(bindings.multiplotSweep)
+  , m_plotTimeRings(bindings.plotTimeRings)
+  , m_multiplotTimeRings(bindings.multiplotTimeRings)
+  , m_plotTimeRange(bindings.plotTimeRange)
+  , m_plotBudget(bindings.plotBudget)
 {}
 
 //--------------------------------------------------------------------------------------------------
@@ -181,6 +190,7 @@ void UI::PlotControlBank::setPlotSweep(const int index,
   engine.setTrigger(level, edge, mode, holdoff, 0);
   engine.setTimebase(timebase);
   if (engine.enabled != ok) {
+    shapeOrRelease(engine, ok, plotHistory(index), 1);
     engine.enabled = ok;
     engine.resetState();
   }
@@ -214,6 +224,9 @@ void UI::PlotControlBank::setMultiplotSweep(const int index,
   engine.setTrigger(level, edge, mode, holdoff, triggerCurve);
   engine.setTimebase(timebase);
   if (engine.enabled != ok) {
+    int curves          = 0;
+    const auto* densest = multiplotHistory(index, curves);
+    shapeOrRelease(engine, ok, densest, curves);
     engine.enabled = ok;
     engine.resetState();
   }
@@ -245,8 +258,12 @@ void UI::PlotControlBank::armMultiplotSweep(const int index)
 void UI::PlotControlBank::setPlotSweepRetention(const int index, const int count)
 {
   auto it = m_plotSweep.find(index);
-  if (it != m_plotSweep.end())
-    it.value().setSegmentRetention(count);
+  if (it == m_plotSweep.end())
+    return;
+
+  const std::size_t before = it.value().bytes();
+  it.value().setSegmentRetention(count);
+  m_plotBudget.charge(before, it.value().bytes());
 }
 
 /**
@@ -272,14 +289,14 @@ void UI::PlotControlBank::disableSweeps()
   for (auto it = m_plotSweep.begin(); it != m_plotSweep.end(); ++it) {
     if (it.value().enabled) {
       it.value().enabled = false;
-      it.value().resetState();
+      releaseSweep(it.value());
     }
   }
 
   for (auto it = m_multiplotSweep.begin(); it != m_multiplotSweep.end(); ++it) {
     if (it.value().enabled) {
       it.value().enabled = false;
-      it.value().resetState();
+      releaseSweep(it.value());
     }
   }
 }
@@ -297,6 +314,7 @@ void UI::PlotControlBank::restorePlotSweepConfig(const QMap<int, DSP::SweepEngin
     const auto& src = it.value();
     live->setTrigger(src.level, src.edge, src.mode, src.holdoffSec, src.triggerCurve);
     live->setTimebase(src.timebaseSec);
+    shapeOrRelease(*live, src.enabled, plotHistory(it.key()), 1);
     live->enabled = src.enabled;
     live->takeSegmentsFrom(src);
   }
@@ -312,10 +330,79 @@ void UI::PlotControlBank::restoreMultiplotSweepConfig(const QMap<int, DSP::Sweep
     if (live == m_multiplotSweep.end())
       continue;
 
-    const auto& src = it.value();
+    const auto& src     = it.value();
+    int curves          = 0;
+    const auto* densest = multiplotHistory(it.key(), curves);
     live->setTrigger(src.level, src.edge, src.mode, src.holdoffSec, src.triggerCurve);
     live->setTimebase(src.timebaseSec);
+    shapeOrRelease(*live, src.enabled, densest, curves);
     live->enabled = src.enabled;
     live->takeSegmentsFrom(src);
   }
+}
+
+//--------------------------------------------------------------------------------------------------
+// Lazy sweep storage (spec 0097 R4)
+//--------------------------------------------------------------------------------------------------
+
+/**
+ * @brief History ring of the plot at @p index, or nullptr when the layout has none.
+ */
+const DSP::EnvelopeRing* UI::PlotControlBank::plotHistory(const int index) const
+{
+  const auto it = m_plotTimeRings.constFind(index);
+  return it != m_plotTimeRings.cend() ? &it.value() : nullptr;
+}
+
+/**
+ * @brief Densest history ring of the multiplot at @p index (its curve count into @p curves), or
+ *        nullptr when the layout has none.
+ */
+const DSP::EnvelopeRing* UI::PlotControlBank::multiplotHistory(const int index, int& curves) const
+{
+  curves        = 0;
+  const auto it = m_multiplotTimeRings.constFind(index);
+  if (it == m_multiplotTimeRings.cend() || it.value().empty())
+    return nullptr;
+
+  const auto& rings = it.value();
+  curves            = static_cast<int>(rings.size());
+  return &*std::max_element(rings.cbegin(), rings.cend(), [](const auto& a, const auto& b) {
+    return a.level0.time.capacity() < b.level0.time.capacity();
+  });
+}
+
+/**
+ * @brief Frees @p engine's ring storage and returns its bytes to the plot-history budget; the
+ *        trigger configuration stays.
+ */
+void UI::PlotControlBank::releaseSweep(DSP::SweepEngine& engine)
+{
+  SS_ASSERT_LOG(m_plotBudget.limit > 0);
+  SS_ASSERT_LOG(m_plotTimeRange > 0.0);
+
+  m_plotBudget.charge(engine.bytes(), 0);
+  engine.release();
+}
+
+/**
+ * @brief Allocates @p engine at the density of @p densest when @p on (and not yet allocated), or
+ *        releases it when off, keeping the plot-history budget in step. A sweep that is off holds
+ *        no ring storage; the trigger configuration survives either way.
+ */
+void UI::PlotControlBank::shapeOrRelease(DSP::SweepEngine& engine,
+                                         const bool on,
+                                         const DSP::EnvelopeRing* densest,
+                                         const int curves)
+{
+  SS_ASSERT(!on || curves >= 0, return);
+  SS_ASSERT(m_plotTimeRange > 0.0, return);
+
+  if (!on) {
+    releaseSweep(engine);
+    return;
+  }
+
+  if (densest && curves > 0 && !engine.allocated())
+    TimeRingSizing::shapeSweep(engine, curves, *densest, m_plotTimeRange, m_plotBudget);
 }

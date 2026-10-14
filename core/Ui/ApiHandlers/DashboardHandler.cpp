@@ -31,11 +31,13 @@
 #include "AppState.h"
 #include "Core/DataModel/Frame.h"
 #include "Core/EnumLabels.h"
+#include "Core/Runtime.h"
 #include "Core/SerialStudio.h"
 #include "Core/Services.h"
 #include "Core/TimerEvents.h"
 #include "DataModel/FrameBuilder.h"
 #include "DataModel/PipelineModules.h"
+#include "DataModel/Project/ProjectSealing.h"
 #include "DataModel/ProjectModel.h"
 #include "DSP.h"
 #include "UI/Dashboard.h"
@@ -693,6 +695,48 @@ API::CommandResponse API::Handlers::DashboardHandler::setWidgetFreezeTitle(
 }
 
 /**
+ * @brief Wire name of why a history ring decimates.
+ */
+static QString ringLimitName(const DSP::RingLimit limit)
+{
+  switch (limit) {
+    case DSP::RingLimit::Rail:
+      return QStringLiteral("rail");
+    case DSP::RingLimit::Ceiling:
+      return QStringLiteral("ceiling");
+    case DSP::RingLimit::None:
+      break;
+  }
+
+  return QStringLiteral("none");
+}
+
+/**
+ * @brief Serializes the plot-memory report (spec 0097 R8) for getStatus.
+ */
+static QJsonObject plotMemoryJson(const UI::PlotMemoryReport& report)
+{
+  QJsonArray inexact;
+  for (const auto& curve : report.inexact) {
+    QJsonObject o;
+    o[Keys::UniqueId]                   = curve.uniqueId;
+    o[QStringLiteral("retainedRateHz")] = curve.retainedRateHz;
+    o[QStringLiteral("bytes")]          = static_cast<double>(curve.bytes);
+    o[QStringLiteral("reason")]         = ringLimitName(curve.limit);
+    inexact.append(o);
+  }
+
+  QJsonObject m;
+  m[QStringLiteral("historyBytes")]  = static_cast<double>(report.historyBytes);
+  m[QStringLiteral("railBytes")]     = static_cast<double>(report.railBytes);
+  m[QStringLiteral("railBinding")]   = report.railBinding;
+  m[QStringLiteral("timeCurves")]    = report.timeCurves;
+  m[QStringLiteral("inexactCurves")] = report.inexactCurves;
+  m[QStringLiteral("inexact")]       = inexact;
+  return m;
+}
+
+/**
  * @brief Get all dashboard configuration settings
  */
 API::CommandResponse API::Handlers::DashboardHandler::getStatus(const QString& id,
@@ -727,17 +771,31 @@ API::CommandResponse API::Handlers::DashboardHandler::getStatus(const QString& i
   result[QStringLiteral("widgetCount")]       = widgetCnt;
   result[QStringLiteral("datasetCount")]      = datasetCnt;
   result[QStringLiteral("running")]           = running;
+  const auto plotMemory                       = dashboard.plotMemory();
+  result[QStringLiteral("plotMemory")]        = plotMemoryJson(plotMemory);
+
+  int railLimited = 0;
+  for (const auto& curve : plotMemory.inexact)
+    railLimited += curve.limit == DSP::RingLimit::Rail ? 1 : 0;
+
+  QString decimatedNote;
+  if (plotMemory.inexactCurves > 0)
+    decimatedNote = QStringLiteral(" %1 plot curve(s) are decimated (%2 by the plot-memory "
+                                   "limit, the rest past the per-curve sample ceiling).")
+                      .arg(plotMemory.inexactCurves)
+                      .arg(railLimited);
 
   result[QStringLiteral("_summary")] =
     QStringLiteral("Dashboard mode: %1. %2 widget%3 visible across %4 dataset%5, "
-                   "rendering at %6 fps over a %7 s plot window.")
+                   "rendering at %6 fps over a %7 s plot window.%8")
       .arg(API::EnumLabels::operationModeLabel(modeIndex))
       .arg(widgetCnt)
       .arg(widgetCnt == 1 ? QString() : QStringLiteral("s"))
       .arg(datasetCnt)
       .arg(datasetCnt == 1 ? QString() : QStringLiteral("s"))
       .arg(fps)
-      .arg(timeRange);
+      .arg(timeRange)
+      .arg(decimatedNote);
 
   return CommandResponse::makeSuccess(id, result);
 }
@@ -752,10 +810,14 @@ API::CommandResponse API::Handlers::DashboardHandler::getData(const QString& id,
 
   static auto& dashboard = UI::Dashboard::instance();
 
+  auto frame = DataModel::serialize(dashboard.processedFrame());
+  if (Core::Runtime::sealed())
+    DataModel::stripSealedContent(frame);
+
   QJsonObject result;
   result[QStringLiteral("widgetCount")]  = dashboard.totalWidgetCount();
   result[QStringLiteral("datasetCount")] = dashboard.datasets().size();
-  result[QStringLiteral("frame")]        = DataModel::serialize(dashboard.processedFrame());
+  result[QStringLiteral("frame")]        = frame;
 
   return CommandResponse::makeSuccess(id, result);
 }
@@ -808,9 +870,10 @@ API::CommandResponse API::Handlers::DashboardHandler::tailFrames(const QString& 
     if (filterActive && !filterUids.contains(ds.uniqueId))
       continue;
 
-    const auto& series  = dashboard.plotData(i);
-    const auto& ring    = dashboard.plotTimeRing(i).level0;
-    const bool timeAxis = ring.value.size() > 0;
+    const auto& series   = dashboard.plotData(i);
+    const auto& envelope = dashboard.plotTimeRing(i);
+    const auto& ring     = envelope.level0;
+    const bool timeAxis  = ring.value.size() > 0;
     if (!timeAxis && (!series.x || !series.y))
       continue;
 
@@ -839,6 +902,12 @@ API::CommandResponse API::Handlers::DashboardHandler::tailFrames(const QString& 
     row[QStringLiteral("count")]   = static_cast<int>(take);
     row[QStringLiteral("x")]       = xs;
     row[QStringLiteral("y")]       = ys;
+    if (timeAxis) {
+      row[QStringLiteral("historyBytes")]   = static_cast<double>(envelope.bytes());
+      row[QStringLiteral("retainedRateHz")] = envelope.retainedRateHz();
+      row[QStringLiteral("exact")]          = envelope.exact();
+    }
+
     seriesArr.append(row);
   }
 

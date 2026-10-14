@@ -21,12 +21,16 @@
 
 #pragma once
 
+#include <QString>
+
 /**
  * @file Runtime.h
  * @brief Process-wide runtime facts a library reads as a plain flag (spec 0077): the headless
  *        hotpath benchmark marks itself active here so the dashboard accepts frames without a
  *        device, and the dashboard reads it inside its own constructor, so this is a static bool
- *        and never a construction.
+ *        and never a construction. The seal (spec 0096) marks a process that opened a deployment
+ *        package: it is one-way, so every project-content exit can trust it for the process life,
+ *        and it records where the package's files are mounted and which folder they came from.
  */
 
 namespace Core::Runtime {
@@ -34,4 +38,8 @@ namespace Core::Runtime {
 void setBenchmarkActive(bool active) noexcept;
 [[nodiscard]] int sessionId() noexcept;
 void setSessionId(int id) noexcept;
+[[nodiscard]] bool sealed() noexcept;
+[[nodiscard]] const QString& sealedMountRoot() noexcept;
+[[nodiscard]] const QString& sealedProjectFolder() noexcept;
+void seal(const QString& mountRoot, const QString& projectFolder) noexcept;
 }  // namespace Core::Runtime

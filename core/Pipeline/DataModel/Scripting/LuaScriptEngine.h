@@ -27,6 +27,7 @@ extern "C" {
 }
 // clang-format on
 
+#include <memory>
 #include <QDeadlineTimer>
 
 #include "DataModel/Scripting/IScriptEngine.h"
@@ -108,7 +109,7 @@ private:
   quint64 m_errorCount;
   QString m_lastError;
   QDeadlineTimer m_deadline;
-  LuaMemoryBudget m_memoryBudget;
+  std::unique_ptr<LuaMemoryBudget> m_memoryBudget;
 };
 
 }  // namespace DataModel

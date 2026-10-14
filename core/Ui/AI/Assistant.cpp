@@ -22,6 +22,7 @@
 #include "AI/Providers/OpenAIProvider.h"
 #include "AI/ToolDispatcher.h"
 #include "Core/Licensing/CommercialToken.h"
+#include "Core/Runtime.h"
 #include "DataModel/PipelineModules.h"
 #include "DataModel/ProjectModel.h"
 #include "Misc/Utilities.h"
@@ -675,10 +676,16 @@ void AI::Assistant::clearKey(int providerIdx)
 }
 
 /**
- * @brief Forwards a user message to the active conversation after the availability gate.
+ * @brief Forwards a user message to the active conversation after the availability gate. A
+ *        sealed session starts no turn, so no tool (the registry-free fs tools included) runs.
  */
 void AI::Assistant::sendMessage(const QString& userText)
 {
+  if (Core::Runtime::sealed()) {
+    Q_EMIT errorOccurred(tr("The AI Assistant is not available in a deployment package session"));
+    return;
+  }
+
   if (!isProAvailable()) {
     Q_EMIT errorOccurred(tr("AI Assistant is not available in this build"));
     return;

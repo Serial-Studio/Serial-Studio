@@ -100,7 +100,7 @@ core/
 │   ├── IO/          FrameReader, PipelineHost (frame-processing thread; owns the readers and
 │   │                implements IIngestBinder), StreamWorker (typed stream lane),
 │   │                StreamWorkerPool (the per-source worker lifecycle)
-│   ├── DSP.h DSPDownsample.h
+│   ├── DSP.h DSPDownsample.h, DSP/FixedQueue.h (the ring container, spec 0097)
 │   └── Platform/    AppPlatform.*
 ├── Devices/         (target SerialStudioDevices, alias SerialStudio::Devices) drivers +
 │   │                connection plumbing; reaches nothing above Core/Protocols (spec 0077)
@@ -150,14 +150,15 @@ core/
     │   │            WidgetExtensions (installable widgets, spec 0038), CommandStrings.cpp
     │   │            (generated, never hand-edit), SnapGuides
     │   ├── Dashboard/  DashboardIngest (the block-ingest sub-object + every push table),
-    │   │            DashboardTools
+    │   │            DashboardTools, PlotMemoryLedger (plot-history budget + report, spec 0097)
     │   ├── Alarms/    AlarmAnnunciator (root-owned facade, Cpp_UI_Alarms, alarms.* API) +
     │   │            AnnunciatorSequence (ISA-18.1 point table), SoundTheme, AppEventSounds
     │   │            (spec 0087)
     │   ├── Widgets/Waterfall/  ColorMap (+LUT), Overlay, Tiles, RingTexture (QRhi scanline
     │   │            uploads), SpectrogramNodes (both draw paths)
     │   ├── Widgets/  PlotBase (state Plot/MultiPlot/FFTPlot share, composed not inherited),
-    │   │            GpuStroke (grow-only geometry + degenerate padding), WidgetBands.h
+    │   │            GpuStroke (grow-only geometry + degenerate padding), SdfStroke +
+    │   │            SdfStrokeMaterial (signed-distance plot stroke, spec 0097), WidgetBands.h
     │   └── Widgets/Output/  Button, Toggle, Slider, TextField, Panel (+ PanelLayout), Base
     ├── ProjectEditor/  ProjectEditor (the QML facade: every Q_PROPERTY/Q_INVOKABLE/slot/signal
     │   │            plus the shared state) owning eight by-value sub-objects in the spec 0070

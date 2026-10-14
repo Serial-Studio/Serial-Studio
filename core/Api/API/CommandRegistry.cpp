@@ -28,6 +28,8 @@
 #include <QThread>
 
 #include "API/PathPolicy.h"
+#include "API/SealedPolicy.h"
+#include "Core/Runtime.h"
 #include "Core/SSAssert.h"
 #include "DataModel/FrameBuilder.h"
 #include "DataModel/PipelineModules.h"
@@ -340,6 +342,12 @@ API::CommandResponse API::CommandRegistry::execute(const QString& name,
 {
   if (!hasCommand(name))
     return buildUnknownCommandResponse(name, id);
+
+  if (Core::Runtime::sealed() && !SealedPolicy::allowedWhenSealed(name))
+    return CommandResponse::makeError(
+      id,
+      QString::fromLatin1(ErrorCode::SealedSession),
+      QStringLiteral("%1 is not available in a deployment package session").arg(name));
 
   if (const auto* scope = RemoteDispatchScope::active()) {
     if (auto refused = scope->authorize(id, name, params))

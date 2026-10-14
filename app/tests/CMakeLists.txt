@@ -378,6 +378,17 @@ ss_add_unit_test(tst_project_merge
 )
 
 #
+# The sealed strip (spec 0096): the one function that decides what a sealed copy of a project
+# omits, pinned field by field so a new script-bearing key cannot slip into mirrors or recordings.
+#
+ss_add_unit_test(tst_sealed_strip
+  SOURCES tst_sealed_strip.cpp
+          ${SS_CORE_SRC}/Pipeline/DataModel/Project/ProjectSealing.cpp
+  LIBS    Qt6::Core
+          SerialStudio::Core
+)
+
+#
 # The frame value types, the generated serializer and the ProjectModel-free validators all live in
 # SerialStudio::Core (spec 0077), so the suite links without the icon registry, theme manager and
 # player singletons. Core5Compat comes with TextCodec.cpp: the East-Asian encodings go through
@@ -606,6 +617,15 @@ ss_add_unit_test(tst_envelope_ring
           SerialStudio::Core
 )
 
+ss_add_unit_test(tst_ring_exactness
+  SOURCES tst_ring_exactness.cpp
+  LIBS    Qt6::Core
+          Qt6::Gui
+          Qt6::Widgets
+          ${SS_PLATFORM_LIBS}
+          SerialStudio::Core
+)
+
 ss_add_unit_test(tst_module_construction
   SOURCES tst_module_construction.cpp
           ${SS_CORE_SRC}/Core/ModuleConstruction.cpp
@@ -821,6 +841,34 @@ ss_add_unit_test(tst_tls_identity
 )
 if(TARGET tst_tls_identity)
   target_compile_definitions(tst_tls_identity PRIVATE BUILD_COMMERCIAL)
+endif()
+
+#
+# The .ssdeploy v1 codec and the in-memory resource tree (spec 0096) are commercial-only TUs, so
+# both suites define BUILD_COMMERCIAL themselves; the codec suite also round-trips the committed
+# integration fixture under tests/fixtures/deploy/ (SS_DEPLOY_WRITE_FIXTURE=1 regenerates it).
+#
+ss_add_unit_test(tst_deploy_package_codec
+  SOURCES tst_deploy_package_codec.cpp
+          ${SS_CORE_SRC}/Core/Deploy/PackageCodec.cpp
+  LIBS    Qt6::Core
+          SerialStudio::Core
+)
+if(TARGET tst_deploy_package_codec)
+  target_compile_definitions(tst_deploy_package_codec PRIVATE BUILD_COMMERCIAL
+    SS_DEPLOY_FIXTURE_DIR="${CMAKE_CURRENT_SOURCE_DIR}/../../tests/fixtures/deploy")
+endif()
+
+ss_add_unit_test(tst_deploy_resource_tree
+  SOURCES tst_deploy_resource_tree.cpp
+          ${SS_CORE_SRC}/Core/Deploy/PackageCodec.cpp
+          ${SS_CORE_SRC}/Core/Deploy/ResourceTree.cpp
+  LIBS    Qt6::Core
+          Qt6::Qml
+          SerialStudio::Core
+)
+if(TARGET tst_deploy_resource_tree)
+  target_compile_definitions(tst_deploy_resource_tree PRIVATE BUILD_COMMERCIAL)
 endif()
 
 #
@@ -1705,9 +1753,24 @@ ss_add_unit_test(tst_path_policy_registry
   SOURCES tst_path_policy_registry.cpp
           ${SS_CORE_SRC}/Api/API/PathPolicy.cpp
   LIBS    Qt6::Core
+          SerialStudio::Core
 )
 if(TARGET tst_path_policy_registry)
   target_compile_definitions(tst_path_policy_registry
+    PRIVATE SS_API_SCHEMA_PATH="${CMAKE_CURRENT_SOURCE_DIR}/../rcc/api/api-schema.json")
+endif()
+
+#
+# The sealed-session command policy (spec 0096 AC6): the same committed-snapshot sweep as the path
+# policy above, so a command added without a sealed classification fails CI by name.
+#
+ss_add_unit_test(tst_sealed_policy_registry
+  SOURCES tst_sealed_policy_registry.cpp
+          ${SS_CORE_SRC}/Api/API/SealedPolicy.cpp
+  LIBS    Qt6::Core
+)
+if(TARGET tst_sealed_policy_registry)
+  target_compile_definitions(tst_sealed_policy_registry
     PRIVATE SS_API_SCHEMA_PATH="${CMAKE_CURRENT_SOURCE_DIR}/../rcc/api/api-schema.json")
 endif()
 
@@ -1730,6 +1793,7 @@ ss_add_unit_test(tst_server_worker_caps
   SOURCES tst_server_worker_caps.cpp
           ${SS_CORE_SRC}/Api/API/Server/ServerWorker.cpp
           ${SS_CORE_SRC}/Pipeline/DataModel/TextCodec.cpp
+          ${SS_CORE_SRC}/Pipeline/DataModel/Project/ProjectSealing.cpp
   LIBS    Qt6::Core
           Qt6::Core5Compat
           Qt6::Gui
@@ -2130,6 +2194,7 @@ ss_add_unit_test(tst_chat_digest
 ss_add_unit_test(tst_terminal_buffer
   SOURCES tst_terminal_buffer.cpp
           ${SS_CORE_SRC}/Ui/UI/Widgets/Terminal/TerminalBuffer.cpp
+          ${SS_CORE_SRC}/Ui/UI/Widgets/Terminal/TerminalCatchUp.cpp
           ${SS_CORE_SRC}/Ui/UI/Widgets/Terminal/AnsiPalette.cpp
   LIBS    Qt6::Gui
           SerialStudio::Core
@@ -2500,6 +2565,7 @@ ss_add_unit_test(tst_machine_id_identity
 ss_add_unit_test(tst_dashboard_ingest
   SOURCES tst_dashboard_ingest.cpp
           ${SS_CORE_SRC}/Ui/UI/Dashboard/DashboardIngest.cpp
+          ${SS_CORE_SRC}/Ui/UI/Dashboard/TimeRingSizing.cpp
           ${SS_CORE_SRC}/Pipeline/DataModel/TextCodec.cpp
           ${SS_CORE_SRC}/Pipeline/Platform/AppPlatform.cpp
   LIBS    Qt6::Core
@@ -2577,6 +2643,13 @@ ss_add_unit_test(tst_mmcss_registration
 #
 ss_add_unit_test(tst_plot_curve_geometry
   SOURCES tst_plot_curve_geometry.cpp
+          ${SS_CORE_SRC}/Ui/UI/Widgets/GpuStroke.cpp
+  LIBS    Qt6::Core Qt6::Gui Qt6::Quick SerialStudio::Core
+)
+
+ss_add_unit_test(tst_sdf_stroke_geometry
+  SOURCES tst_sdf_stroke_geometry.cpp
+          ${SS_CORE_SRC}/Ui/UI/Widgets/SdfStroke.cpp
           ${SS_CORE_SRC}/Ui/UI/Widgets/GpuStroke.cpp
   LIBS    Qt6::Core Qt6::Gui Qt6::Quick SerialStudio::Core
 )

@@ -28,7 +28,9 @@
 #include <utility>
 
 #include "Core/Api/CommandProtocol.h"
+#include "Core/Runtime.h"
 #include "Core/SSAssert.h"
+#include "DataModel/Project/ProjectSealing.h"
 
 //--------------------------------------------------------------------------------------------------
 // Constants
@@ -429,9 +431,17 @@ void API::ServerWorker::processItems(const std::vector<DataModel::DataBlockPtr>&
 
 /**
  * @brief Stores one source's structure and rebuilds its uniqueId lookup. Queued from the GUI, so
- *        the assignment never races processItems().
+ *        the assignment never races processItems(). A sealed session stores a stripped copy, so
+ *        the per-sample broadcast never carries script source (spec 0096).
  */
 void API::ServerWorker::setTemplateFrame(int sourceId, const DataModel::Frame& frame)
 {
-  DataModel::bind_frame_template(m_templates[sourceId], frame);
+  if (!Core::Runtime::sealed()) {
+    DataModel::bind_frame_template(m_templates[sourceId], frame);
+    return;
+  }
+
+  auto stripped = frame;
+  DataModel::stripSealedContent(stripped);
+  DataModel::bind_frame_template(m_templates[sourceId], stripped);
 }

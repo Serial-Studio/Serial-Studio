@@ -131,6 +131,9 @@ class Plot : public QQuickItem {
   Q_PROPERTY(int sweepSegmentCapacity
              READ sweepSegmentCapacity
              NOTIFY sweepSegmentsChanged)
+  Q_PROPERTY(bool historyExact
+             READ historyExact
+             NOTIFY historyExactChanged)
   // clang-format on
 
 signals:
@@ -138,6 +141,7 @@ signals:
   void sweepChanged();
   void runningChanged();
   void dataSizeChanged();
+  void historyExactChanged();
   void sweepSegmentsChanged();
   void interpolationModeChanged();
 
@@ -176,6 +180,7 @@ public:
   [[nodiscard]] int sweepRetention() const noexcept;
   [[nodiscard]] int sweepSegmentCount() const;
   [[nodiscard]] int sweepSegmentCapacity() const;
+  [[nodiscard]] bool historyExact() const noexcept;
 
 public slots:
   void draw(QXYSeries* series);
@@ -245,6 +250,7 @@ private:
 
   int m_sweepRetention;
   int m_lastSegmentCount;
+  bool m_historyExact;
   QList<QPointF> m_segmentScratch;
 };
 }  // namespace Widgets

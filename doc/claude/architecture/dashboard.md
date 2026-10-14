@@ -289,8 +289,10 @@ reserved per cell so a saturated source still spans the window). Cell boundaries
 place, so both envelope edges survive, slot contents are independent of sampling phase (no
 beat aliasing / shimmer -- the old drifting single peak-pick had both), and the newest
 sample is visible immediately at any input rate. Capacity is a `DSP::RingCapacity`, which only a
-rate over a window can produce; the frame-lane policy is `TimeRingSizing::frameLaneCapacity`
-(the window at the assumed 1.024 MHz maximum, `262144` cap, `1024` floor). Storage
+rate over a window can produce. **Since spec 0097 a ring keeps every sample while it can**
+(`RingMode::Exact`): level 0 is then a plain FIFO in exact-sized storage, and it falls back to the
+grid just described only at the per-ring ceiling or the plot-memory rail (`RingLimit`), which the
+plot and the API flag; "Time-Ring Sizing" below says how capacity is chosen and grown. Storage
 is `m_plotTimeRings` / `m_multiplotTimeRings` (keyed by widget index; the multiplot one is a
 `std::vector<EnvelopeRing>` per curve). **Since spec 0057 the history ring is a
 `DSP::EnvelopeRing`**: `level0` is the `TimeRing` just described, unchanged, and `levels[k-1]`
@@ -299,7 +301,10 @@ cell covering `16^k` level-0 grid cells (identity = level-0 cell index `>> 4k`, 
 nesting). A completed level-0 cell folds into every coarser open cell (`foldOpenCell`, at most
 nine merges, never a rescan); coarse levels are sized `ceil(cells0 / 16^k) + 1` while at least
 three cells remain, so they cost 16/15 of level 0's bytes and never allocate after construction
-(level 0's `resizeCapacity` rebuilds them from its retained slots). Sweep engines keep plain
+(level 0's `resizeCapacity` rebuilds them from its retained slots). The pyramid folds its own
+open-cell accumulator on that grid (`accumulateOpenCell`, the same boundary and tie rules as
+`appendChecked`), so it is byte-identical in decimating mode and still works when level 0 keeps
+every sample. Sweep engines keep plain
 `TimeRing`s. The hotpath appends `numericValue` at `m_plotClocks.displayTimeSec`
 via `m_timePushes` (single plots) and `m_multiplotPushes` with its `TimeCurve` list (multi). The
 widget side calls `Dashboard::plotTimeRing(idx)` / `multiplotTimeRings(idx)` and renders through
@@ -405,7 +410,7 @@ widgetSettings `showFrequencyMarkers` on both widgets.
 ## GPU Curve Rendering (`Widgets::PlotCurve`)
 
 Plot, FFT, and MultiPlot curves render through a
-custom scene-graph item (independent per-segment quads, 8 verts + 18 indices per visible segment,
+custom scene-graph item (the tessellated path: independent per-segment quads, 8 verts + 18 indices per visible segment,
 each extruded along its own perpendicular — shared join cross-sections collapse to hairlines on
 near-reversals — with a 1 px feather band straddling the stroke edge for AA without MSAA) instead
 of QtGraphs `LineSeries` — the
@@ -417,6 +422,17 @@ CPU every update, which stalled on audio-rate curves. The `LineSeries` objects r
 `PlotWidget.curveLayer` (a clipped item tracking the plot area, above `PlotAreaFill`, below the
 crosshair overlay) and map world coordinates with the same visible-window transform as the
 cursors.
+
+**Opaque curves draw through a signed-distance stroke (spec 0097).** `Widgets::SdfStroke` emits
+one quad per visible segment (4 vertices carrying the corner, the segment's endpoints and its
+run-end cap flags) over a static 6-index pattern that is written only when `reserveGeometry`
+reallocates; `SdfStrokeMaterial` with `app/shaders/stroke_sdf.{vert,frag}` turns the distance to
+the segment into coverage with the same face plus 1 px feather profile. Round joins come from the
+overlapping capsules, flat caps at run ends from the cap flags, and color, widths and the HDR
+boost are uniforms (the transfer copied verbatim from `Misc/HdrTransfer.h`). The cost per segment
+no longer depends on the turn angle, so a dense min/max envelope stops paying a join fan per
+reversal. Translucent strokes (color alpha or item opacity below 1, i.e. retained sweep segments)
+keep the tessellated path, whose overlaps blend once; `tst_sdf_stroke_geometry` pins the counts.
 
 **Geometry buffers are grow-only with a padded degenerate tail (spec 0075 N4).** `QSGGeometry`
 carries ONE pair of counts over one buffer and no separate capacity, so any count change re-lays
@@ -511,8 +527,10 @@ is phase-locked to its interpolated `t0`, so successive completed sweeps overlay
 so long ranges grow left-to-right in real time instead of stalling a multi-second hold; before the first
 completion it always returns `back`. The Dashboard holds `m_plotSweep`/`m_multiplotSweep` (keyed by widget index),
 fed from `TimePush::sweep`/`MultiPush::sweep` in `updateLineSeries`/`updateDataSeries` via the
-`feedSweep`/`feedMultiSweep` lambdas; engines are created in `configureLineSeries`/`configureMultiLineSeries`
-for time plots and the config (including `timebaseSec`) survives a Time-Range rebuild via
+`feedSweep`/`feedMultiSweep` lambdas; engines are created config-only in `configureLineSeries`/`configureMultiLineSeries`
+for time plots (spec 0097: `setShape` stores the shape, `PlotControlBank` allocates after the license
+gate admits an enable and releases on disable, at the history ring's density via
+`TimeRingSizing::shapeSweep`, and a growing history ring re-shapes an enabled sweep) and the config (including `timebaseSec`) survives a Time-Range rebuild via
 `restorePlotSweepConfig`/`restoreMultiplotSweepConfig`. When enabled the widget axis is `[0, activeWindow]`
 (vs rolling `[-T, 0]`) and `updateData` renders the held sweep through `DSP::downsampleWindowAbsolute`
 (no newest-rebase). Config lives per-widget in `widgetSettings`
@@ -822,12 +840,35 @@ Windows SDR white level, so a bare HDR swapchain renders wrong gamma. Therefore:
 
 **Time rings are sized from a rate, never from a sample count alone** (compile-enforced since
 spec 0095: a ring takes a `DSP::RingCapacity`, built only by `fromRate`, with
-`RingCapacity::kMaxSamples` as the shared ceiling; the policies live in `UI::TimeRingSizing`). The
-stream lane sizes at build from the source's real rate (`streamLaneCapacity`), the frame lane
-cannot know its rate then, so a
-*saturated* ring re-sizes once from the plot clock's smoothed period (`growTimeRing`, upward
-only). A ring bounded in samples alone runs out of history in seconds (44.1 kHz filled a 10 s
-axis to 5.9 s, 2026-08-15).
+`RingCapacity::kMaxSamples` as the shared ceiling; the policies live in `UI::TimeRingSizing`). A
+ring bounded in samples alone runs out of history in seconds (44.1 kHz filled a 10 s axis to 5.9 s,
+2026-08-15).
+
+**A ring pays for what arrives, never for an assumed rate (spec 0097).** Before 0097 every
+frame-lane curve reserved a 1.024 MHz window plus two sweep copies, all `mlock`ed: about 12 MB per
+curve at any rate, 471 MB of footprint for 30 plots at 1 kHz. Now:
+
+- `TimeRingSizing::initialCapacity` starts a stream ring at its real rate x the 1.1 growth
+  headroom (a ring of exactly rate x window is one slot short and would grow at its first wrap;
+  exact, or decimating and flagged past `kMaxSamples`) and a frame-lane ring at the 1024-slot
+  floor. `historyRing` takes its bytes from the rail like any growth.
+- The ingest asks `EnvelopeRing::growFor` once per block per target ring (`reserveRing`, plus the
+  frame lane's per-block `reserveFrameLaneRings` pre-pass): one compare in the steady state. It
+  grows only when the append would evict an in-window sample, to the measured density over the
+  window x 1.1 (doubling until a tenth of the window has been seen), never shrinks, and is the one
+  named allocation on the ingest path, outside every per-sample loop. A ring decimates only when
+  the grown ring still cannot hold the window's samples; headroom and growth steps are not
+  coverage, so a ring that fits is never flagged.
+- `UI::PlotMemoryLedger` owns the 512 MB rail (`DSP::RingBudget`), recounted at every rebuild,
+  restore, bulk load and reset; a refused or ceiling-capped ring decimates and records why
+  (`dashboard.getStatus` `plotMemory`, the plot's "Decimated" chip).
+- Sweep storage exists only while sweep is on, and display storage is never pinned
+  (`code-verify:lock-memory-scope`; pinning belongs to `FrameReader`). A history growth grows a
+  running sweep in place (`TimeRingSizing::growSweep`), never re-shapes it: a re-shape resets the
+  capture, re-arming a frozen single-shot trace.
+- A rebuild splices a saved ring back only when that cannot replace an exact ring with a
+  decimating one: decimation is sticky (`growFor` revisits only exact rings), so a stream whose
+  rate dropped would stay coarse.
 
 **A time ring's clock never rewinds, and the clocks never outlive their display time.**
 `appendDecimated` clamps sub-cell backward jitter forward to keep the grid monotonic, but a jump
@@ -841,15 +882,16 @@ is `Dashboard::resetPlotClocks()`). Clearing the map alone left QuickPlot audio 
 **A rebuild never seeds a time ring.** `updateDataSeries()` called with no source refills the
 sample-count series only. `m_plotClocks.displayTimeSec` is a single global owned by whichever source
 published last, so seeding every ring from it rewinds every other source's ring; the rings a
-rebuild keeps come from `restorePlotTimeRings()`, and the next real block appends on the source's
-own clock.
+rebuild keeps come from `restorePlotTimeRings()` (spliced whole at an unchanged window, so a
+ring keeps the capacity it grew to; replayed at the saved density after a window change), and the
+next real block appends on the source's own clock.
 
 **A uniform-grid block continues from the previous block's span, never from the smoothed cadence.**
 `applyBlockColumn()` writes a block out to `base + (samples - 1) * dt`, so the next block's base
 must clear that. Passing `blockSpanSec` to `advancePlotClock()` makes the continuation term
 `previous base + previous samples * dt` and takes `qMax` with the driver's own `t0`: both advance
 at the sample rate, so the clock can neither rewind nor ratchet. The EMA `samplePeriodSec` is still
-maintained (`growTimeRing` sizes frame-lane rings from it) but must not drive the block lane — it
+maintained (the frame lane's display clock spreads same-stamp frames by it) but must not drive the block lane — it
 averages over callback sizes, so it undershoots a long block and overshoots a short one. Both
 failure modes shipped on 2026-08-18: the undershoot wiped 48 kHz audio roughly once a second, and
 "fixing" it by folding the span into `displayTimeSec` double-counted it and ran the axis at 2x with

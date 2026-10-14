@@ -368,11 +368,13 @@ DataModel::LuaScriptEngine::~LuaScriptEngine()
 
 /**
  * @brief Creates a fresh Lua state with safe libraries and, in Safe mode, the watchdog hook and
- *        the memory budget the hook enforces.
+ *        the memory budget the hook enforces. Each state gets its own budget: the budget is the
+ *        state's allocator userdata, and loadScript() keeps the previous state alive meanwhile.
  */
 void DataModel::LuaScriptEngine::createState()
 {
   SS_ASSERT(m_state == nullptr, return);
+  SS_ASSERT(!m_memoryBudget, return);
 
   m_state = luaL_newstate();
   SS_ASSERT(m_state != nullptr, {
@@ -401,7 +403,8 @@ void DataModel::LuaScriptEngine::createState()
   } else {
     luaJIT_setmode(m_state, 0, LUAJIT_MODE_ENGINE | LUAJIT_MODE_OFF);
     lua_sethook(m_state, watchdogHook, LUA_MASKCOUNT, kHookInstructionCount);
-    m_memoryBudget.install(m_state);
+    m_memoryBudget = std::make_unique<LuaMemoryBudget>();
+    m_memoryBudget->install(m_state);
   }
 
   m_deadline            = QDeadlineTimer(QDeadlineTimer::Forever);
@@ -412,11 +415,13 @@ void DataModel::LuaScriptEngine::createState()
 }
 
 /**
- * @brief Closes the Lua state and resets internal flags.
+ * @brief Closes the Lua state, then frees its memory budget (which must outlive it), and resets
+ *        internal flags.
  */
 void DataModel::LuaScriptEngine::destroyState()
 {
   closeLuaState(m_state);
+  m_memoryBudget.reset();
   m_state    = nullptr;
   m_loaded   = false;
   m_deadline = QDeadlineTimer(QDeadlineTimer::Forever);
@@ -580,6 +585,7 @@ bool DataModel::LuaScriptEngine::loadScript(const QString& script,
   SS_ASSERT(!script.isEmpty(), return false);
 
   lua_State* const prevState        = m_state;
+  auto prevBudget                   = std::move(m_memoryBudget);
   const bool prevLoaded             = m_loaded;
   const bool prevDisabled           = m_disabled;
   const int prevSourceId            = m_sourceId;
@@ -588,6 +594,7 @@ bool DataModel::LuaScriptEngine::loadScript(const QString& script,
 
   auto restorePrevious = [&]() {
     closeLuaState(m_state);
+    m_memoryBudget        = std::move(prevBudget);
     m_state               = prevState;
     m_sourceId            = prevSourceId;
     m_parseRef            = prevParseRef;

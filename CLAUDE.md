@@ -293,9 +293,12 @@ including the spec-0055 block caps, the time-ring/plot-clock rules, and the kern
   every open block BEFORE emitting, so the tail lands in the file that was open. The export-time
   tie-break is per source (`monotonicSourceNs`) and a uniform-grid block never takes it.
 - **Time rings are sized from a rate, never a sample count, and a ring's clock never rewinds.**
-  Enforced: compile:DSP::RingCapacity, compile:UI::PlotClockState, ctest:tst_time_ring_sizing.
-  Rules + the 2026-08 incidents: [dashboard.md](doc/claude/architecture/dashboard.md) "Time-Ring
-  Sizing".
+  Since spec 0097 they start rate-true and grow per block on coverage (`EnvelopeRing::growFor`, the
+  one named allocation on the ingest path, never inside a per-sample loop), keep every sample up
+  to the per-curve ceiling or the 512 MB rail, and display storage is never pinned. Enforced:
+  compile:DSP::RingCapacity, compile:UI::PlotClockState, ctest:tst_time_ring_sizing,
+  ctest:tst_ring_exactness, code-verify:lock-memory-scope. Rules + the 2026-08 incidents:
+  [dashboard.md](doc/claude/architecture/dashboard.md) "Time-Ring Sizing".
 - **Native + PlainText parses through the span fast lane** (`trySpanLane` → `parseUtf8Spans` →
   `applyDatasetValuesSpans`), zero steady-state allocation. Hotpath flags are `DataModel::Cached<T>`
   re-derived at 1 Hz (spec 0095); a new input wires its change signal to the cache refresh, a new
@@ -370,6 +373,7 @@ area. The hazard column names what breaks silently — the doc holds the rule.
 | Locating a god object's concerns (`ProjectModel`, `ProjectHandler`, `FrameBuilder`, `Dashboard`) | [directory-map.md](doc/claude/directory-map.md) | Spec 0070 re-formed the god objects into facades owning real sub-object classes (one class = one .h/.cpp, in a sibling dir named after the facade). Never split one class across TUs: decompose into member sub-objects instead. |
 | The connect gate, a dataset transform or user-table mutator, or any new way to author either (spec 0094) | [io.md](doc/claude/architecture/io.md) "Opening a Link" | A project with transforms or user tables refuses to CONNECT unlicensed (`IO::EntitlementGate`, rule in `SerialStudio::proContentSummary`), and a live unlicensed session ends when its content grows past what its connect admitted; it never runs with the math switched off, because uncalibrated values on a dashboard are worse than a refusal. A new authoring path (API command, importer, generator) needs the license refusal too, and removal paths stay ungated on purpose. Playback is not gated: replay never runs a transform. |
 | An API command that installs script code, launches a process, or re-dispatches other commands | [AuthPrimitives.cpp](core/Api/API/Server/AuthPrimitives.cpp), [CommandRegistry.h](core/Api/API/CommandRegistry.h) | Remote origin is a dispatch scope (`RemoteDispatchScope`), never a per-site check: a nested `CommandRegistry::execute` (`project.batch`, assistant forwards) answers to the same gate as the outer call. A new command that installs script code goes into `commandInstallsScript` (any script reaches `system.exec` as Trusted), one that spawns goes through `ProcessLauncher::launch` (per-project consent). `SERIAL_STUDIO_API_AUTO_CONSENT=1` grants every gate for headless runs. |
+| A new API command, or anything that serializes the project or a live frame outward (spec 0096) | [io.md](doc/claude/architecture/io.md) "Sealed Sessions" | A process opened from a `.ssdeploy` package is sealed one-way (`Core::Runtime::sealed()`). A new command needs a classification in `API::SealedPolicy`, and an unclassified name is refused (Enforced: ctest:tst_sealed_policy_registry). A new exit for the project or a live frame consults the seal and strips through `DataModel::stripSealedContent`, or it hands the package's script source to any API client (Enforced: ctest:tst_sealed_strip). |
 | Anything under `core/` or a source that could move there (spec 0076) | [directory-map.md](doc/claude/directory-map.md) "core/" | A library never includes `app/src`; a moved `Q_OBJECT` header listed in both a library and the executable mocs twice; every `.h`/`.cpp` pair lives in one target; a relative include must resolve in exactly one root; an upward include beyond `scripts/layer-baseline.json` fails CI; the bus is never on the per-frame path. |
 
 ## Code Style — Essentials

@@ -206,7 +206,7 @@ void Licensing::TrialGate::onEntitlementChanged()
   if (!m_pendingRetry)
     return;
 
-  QTimer::singleShot(0, this, [this, retry = std::move(m_pendingRetry)] {
+  QTimer::singleShot(0, this, [retry = std::move(m_pendingRetry)] {
     if (retry && Core::License::activated())
       retry();
   });

@@ -209,7 +209,10 @@ Widgets.SmartWindow {
   // Obtain document title
   //
   function updateDocumentTitle() {
-    if (Cpp_AppState.operationMode == SerialStudio.ConsoleOnly)
+    if (CLI_DEPLOYMENT_TITLE.length > 0)
+      documentTitle = CLI_DEPLOYMENT_TITLE
+
+    else if (Cpp_AppState.operationMode == SerialStudio.ConsoleOnly)
       documentTitle = qsTr("Console Only Mode")
 
     else if (Cpp_AppState.operationMode == SerialStudio.QuickPlot)

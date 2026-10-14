@@ -217,6 +217,8 @@ struct IngestBindings {
   QMap<SerialStudio::DashboardWidget, QVector<DataModel::Dataset>>& widgetDatasets;
   QMap<int, DataModel::Frame>& sourceRawFrames;
   QHash<int, quint64>& sourceStructureGen;
+  DSP::RingBudget& plotBudget;
+  const double& plotTimeRange;
 };
 
 /**
@@ -306,6 +308,11 @@ private:
                           double baseSec);
   void feedMultiplotBlockSweep(int groupIndex, const DataModel::DataBlock& block, double baseSec);
 
+  [[nodiscard]] bool reserveRing(DSP::EnvelopeRing& ring, std::size_t incoming, double tNewest);
+  void reserveFrameLaneRings(int sourceId, std::size_t incoming);
+  void growPlotSweep(int plotIndex);
+  void growMultiplotSweep(int groupIndex);
+
   void foldExtremes(int sourceId);
   void updateFftSeries(int sourceId);
   void updateGpsSeries(int sourceId);
@@ -356,6 +363,8 @@ private:
   QMap<SerialStudio::DashboardWidget, QVector<DataModel::Dataset>>& m_widgetDatasets;
   QMap<int, DataModel::Frame>& m_sourceRawFrames;
   QHash<int, quint64>& m_sourceStructureGen;
+  DSP::RingBudget& m_plotBudget;
+  const double& m_plotTimeRange;
 
   std::vector<LinePush> m_yLinePushes;
   std::vector<LinePush> m_xLinePushes;

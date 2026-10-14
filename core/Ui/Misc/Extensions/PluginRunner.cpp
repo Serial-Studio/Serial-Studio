@@ -28,6 +28,7 @@
 #include <QStandardPaths>
 #include <QTimer>
 
+#include "Core/Runtime.h"
 #include "Core/SSAssert.h"
 #include "UI/Dashboard.h"
 
@@ -85,10 +86,14 @@ const QVariantList& Misc::PluginRunner::running() const noexcept
 }
 
 /**
- * @brief Returns the plugin IDs that were running when the previous session ended.
+ * @brief Returns the plugin IDs that were running when the previous session ended; none in a
+ *        sealed session, which never starts a plugin (spec 0096).
  */
 QStringList Misc::PluginRunner::restorableIds() const
 {
+  if (Core::Runtime::sealed())
+    return {};
+
   return m_settings.value("RunningPlugins").toStringList();
 }
 
@@ -125,6 +130,11 @@ bool Misc::PluginRunner::start(const QString& id,
 {
   SS_ASSERT(!id.isEmpty(), return false);
   SS_ASSERT(!isRunning(id), return false);
+
+  if (Core::Runtime::sealed()) {
+    appendOutput(id, tr("Plugins do not run in a deployment package session."));
+    return false;
+  }
 
   auto* process = new QProcess(this);
   process->setWorkingDirectory(pluginDir);
@@ -223,7 +233,8 @@ void Misc::PluginRunner::retireProcess(QProcess* process)
 void Misc::PluginRunner::stopAll()
 {
   const auto ids = m_processes.keys();
-  m_settings.setValue("RunningPlugins", QStringList(ids));
+  if (!Core::Runtime::sealed())
+    m_settings.setValue("RunningPlugins", QStringList(ids));
 
   QList<QProcess*> dying;
   for (const auto& id : ids) {

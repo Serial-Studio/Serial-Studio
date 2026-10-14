@@ -33,6 +33,7 @@
 #include <QStandardPaths>
 #include <QTimer>
 
+#include "Core/Runtime.h"
 #include "Core/SSAssert.h"
 #include "DataModel/PipelineModules.h"
 #include "DataModel/ProjectModel.h"
@@ -115,13 +116,14 @@ void Misc::BackupManager::setupExternalConnections()
 
 /**
  * @brief Write a snapshot of the current ProjectModel state; returns the absolute path (or the
- * existing path if content is byte-identical to the previous snapshot).
+ * existing path if content is byte-identical to the previous snapshot). A sealed session never
+ * snapshots: its project must not reach the disk in plain form (spec 0096).
  */
 QString Misc::BackupManager::snapshot(const QString& label)
 {
   SS_ASSERT(m_projectModel != nullptr, return {});
 
-  if (!m_enabled)
+  if (!m_enabled || Core::Runtime::sealed())
     return {};
 
   auto& pm        = *m_projectModel;

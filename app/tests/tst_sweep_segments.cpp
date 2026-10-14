@@ -64,6 +64,8 @@ private slots:
   void segmentsAreDeepCopies();
   void wrapAndClear();
   void takeoverRequiresSameShape();
+  void offEngineHoldsNoStorage();
+  void growingKeepsTheCapture();
 };
 
 /**
@@ -214,6 +216,74 @@ void TstSweepSegments::takeoverRequiresSameShape()
   bigger.takeSegmentsFrom(source);
   QCOMPARE(bigger.segmentCapacity(), 2);
   QCOMPARE(bigger.segmentCount(), 0);
+}
+
+/**
+ * @brief Spec 0097 R4: an engine whose sweep is off holds no ring storage; allocating builds the
+ *        recorded shape, releasing frees it again, and the trigger configuration and requested
+ *        retention survive both.
+ */
+void TstSweepSegments::offEngineHoldsNoStorage()
+{
+  DSP::SweepEngine engine;
+  engine.setShape(2, DSP::RingCapacity::fromRate(10.0, 26214.4), 10.0);
+  engine.setTrigger(0.5, DSP::SweepEngine::kFalling, DSP::SweepEngine::kNormal, 0.0, 1);
+  engine.setSegmentRetention(4);
+
+  QVERIFY(!engine.allocated());
+  QCOMPARE(engine.bytes(), std::size_t(0));
+  QCOMPARE(engine.segmentCapacity(), 0);
+  QCOMPARE(engine.display(0).time.size(), std::size_t(0));
+
+  engine.allocate();
+  QVERIFY(engine.allocated());
+  QCOMPARE(engine.front.size(), std::size_t(2));
+  QCOMPARE(engine.back.size(), std::size_t(2));
+  QVERIFY(engine.bytes() > 0);
+  QVERIFY(engine.segmentCapacity() >= 1);
+
+  engine.release();
+  QVERIFY(!engine.allocated());
+  QCOMPARE(engine.bytes(), std::size_t(0));
+  QCOMPARE(engine.segmentCapacity(), 0);
+  QCOMPARE(engine.level, 0.5);
+  QCOMPARE(engine.edge, DSP::SweepEngine::kFalling);
+  QCOMPARE(engine.mode, DSP::SweepEngine::kNormal);
+  QCOMPARE(engine.triggerCurve, 1);
+  QCOMPARE(engine.segmentRetention, 4);
+}
+
+/**
+ * @brief Spec 0097 R4: a history growth grows a running sweep in place, so the displayed capture
+ *        and the trigger state survive; the segment store restarts at the new size so later
+ *        captures are not truncated, and growth never shrinks.
+ */
+void TstSweepSegments::growingKeepsTheCapture()
+{
+  DSP::SweepEngine engine;
+  engine.configure(1, DSP::RingCapacity::fromRate(0.01, 25600.0), 0.01);
+  engine.setTrigger(0.0, DSP::SweepEngine::kRising, DSP::SweepEngine::kNormal, 0.0, 0);
+  engine.enabled = true;
+  engine.setSegmentRetention(2);
+  runSweep(engine, 1.0, 7.0);
+
+  QVERIFY(engine.hasFront);
+  QCOMPARE(engine.segmentCount(), 1);
+  const std::size_t shown  = engine.display(0).value.size();
+  const std::size_t before = engine.front[0].time.capacity();
+  QVERIFY(shown > 0);
+
+  engine.growCapacity(DSP::RingCapacity::fromRate(0.01, 102400.0));
+  QVERIFY(engine.allocated());
+  QVERIFY(engine.hasFront);
+  QCOMPARE(engine.segmentCount(), 0);
+  QVERIFY(engine.segmentCapacity() >= 1);
+  QVERIFY(engine.front[0].time.capacity() > before);
+  QCOMPARE(engine.display(0).value.size(), shown);
+  QCOMPARE(engine.display(0).value[0], 7.0);
+
+  engine.growCapacity(DSP::RingCapacity::fromRate(0.01, 25600.0));
+  QVERIFY(engine.front[0].time.capacity() > before);
 }
 
 QTEST_APPLESS_MAIN(TstSweepSegments)

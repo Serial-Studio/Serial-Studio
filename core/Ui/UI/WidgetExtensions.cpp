@@ -32,6 +32,7 @@
 #include "Core/Bus/Messages.h"
 #include "Core/IconRegistry.h"
 #include "Core/JsonValidator.h"
+#include "Core/Runtime.h"
 #include "Core/SerialStudio.h"
 #include "Core/Services.h"
 #include "Core/SSAssert.h"
@@ -408,7 +409,7 @@ QString UI::WidgetExtensions::qmlUrl(const QString& id) const
   const auto& package = descriptor(id);
   const auto path     = package.directory + QStringLiteral("/") + package.qmlFile;
 
-  if (package.bundled)
+  if (path.startsWith(QLatin1Char(':')))
     return QStringLiteral("qrc") + path;
 
   return QUrl::fromLocalFile(path).toString();
@@ -455,7 +456,7 @@ QString UI::WidgetExtensions::iconUrl(const QString& id, const int px) const
     return icons.iconById(package.iconId, px);
 
   const auto path = package.directory + QStringLiteral("/") + package.iconId;
-  if (package.bundled)
+  if (path.startsWith(QLatin1Char(':')))
     return QStringLiteral("qrc") + path;
 
   return QUrl::fromLocalFile(path).toString();
@@ -490,9 +491,10 @@ QVariantMap UI::WidgetExtensions::packageInfo(const QString& id) const
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Rebuilds the catalog: bundled packages first, then the ones installed under the workspace.
- *        Metadata is read eagerly and validated here; no QML is compiled or instantiated, which is
- *        what keeps ten unused packages free at startup.
+ * @brief Rebuilds the catalog: bundled packages first, then the ones installed under the workspace,
+ *        or, in a sealed session, only the ones the deployment package carries (spec 0096).
+ * Metadata is read eagerly and validated here; no QML is compiled or instantiated, which is what
+ * keeps ten unused packages free at startup.
  */
 void UI::WidgetExtensions::rescan()
 {
@@ -504,8 +506,12 @@ void UI::WidgetExtensions::rescan()
 
   scanDirectory(kBundledRoot, true);
 
-  auto& workspaceManager = Core::services().workspaceManager;
-  scanDirectory(workspaceManager.path(QStringLiteral("Extensions/widget")), false);
+  if (Core::Runtime::sealed()) {
+    scanDirectory(Core::Runtime::sealedMountRoot() + QStringLiteral("/extensions"), false);
+  } else {
+    auto& workspaceManager = Core::services().workspaceManager;
+    scanDirectory(workspaceManager.path(QStringLiteral("Extensions/widget")), false);
+  }
 
   resolveDependencies();
 

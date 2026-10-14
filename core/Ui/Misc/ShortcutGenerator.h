@@ -52,6 +52,9 @@ class ShortcutGenerator : public QObject {
   Q_PROPERTY(QString iconFileFilter
              READ iconFileFilter
              CONSTANT)
+  Q_PROPERTY(QObject* packager
+             READ packager
+             CONSTANT)
   // clang-format on
 
 signals:
@@ -75,6 +78,7 @@ public:
   [[nodiscard]] QString iconFileFilter() const;
   [[nodiscard]] QString shortcutFileFilter() const;
   [[nodiscard]] QString shortcutDefaultSuffix() const;
+  [[nodiscard]] QObject* packager() const noexcept;
 
 public slots:
   void generate(const QString& outputPath,
@@ -92,6 +96,11 @@ public slots:
                 const QStringList& taskbarButtons,
                 bool taskbarSearch,
                 const QString& themeName);
+
+  void generatePackageShortcut(const QString& outputPath,
+                               const QString& title,
+                               const QString& iconPath,
+                               const QString& packagePath);
 
   void deleteShortcut(const QString& shortcutPath);
 
@@ -136,6 +145,11 @@ private:
                                        const QString& iconPath,
                                        QString& errorOut);
 
+  void writeShortcut(const QString& outputPath,
+                     const QString& title,
+                     const QString& iconPath,
+                     const QStringList& args);
+
   [[nodiscard]] QString quoteArg(const QString& arg) const;
   [[nodiscard]] bool hasProLicense() const;
   [[nodiscard]] QString extractDefaultIcon() const;
@@ -151,6 +165,9 @@ private:
                                            const QString& title,
                                            const QString& iconFileName,
                                            QString& errorOut);
+
+private:
+  QObject* m_packager;
 };
 
 }  // namespace Misc

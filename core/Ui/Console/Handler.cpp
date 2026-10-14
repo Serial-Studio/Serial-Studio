@@ -21,6 +21,7 @@
 
 #include "Console/Handler.h"
 
+#include <algorithm>
 #include <QApplication>
 #include <QDateTime>
 #include <QFile>
@@ -49,6 +50,13 @@
 #include "Misc/CommonFonts.h"
 
 Console::Handler* Console::Handler::s_instance = nullptr;
+
+//--------------------------------------------------------------------------------------------------
+// Constants
+//--------------------------------------------------------------------------------------------------
+
+// Character budget per scrollback line for the display history (spec 0097 R13)
+constexpr qsizetype kDisplayCharsPerLine = 512;
 
 //--------------------------------------------------------------------------------------------------
 // Constructor & singleton access
@@ -92,6 +100,31 @@ static QString decoratedTimestamp(bool addTimestamp, bool ansiColors)
 }
 
 /**
+ * @brief Flood cap (spec 0097 R14): leading lines past the scrollback would scroll out unseen,
+ *        so they are dropped before formatting, unless they carry an ESC byte a later line may
+ *        depend on. The newline ending the drop stays, closing the view's open line. Callers
+ *        skip it while duplicates collapse, since a collapsed run is one row.
+ */
+static void capToScrollback(QString& pending, const int maxLines)
+{
+  SS_ASSERT(maxLines > 0, return);
+  SS_ASSERT_LOG(!pending.isEmpty());
+
+  const auto lines = pending.count(QLatin1Char('\n'));
+  if (lines <= maxLines)
+    return;
+
+  qsizetype cut = 0;
+  for (qsizetype k = lines - maxLines; k > 0; --k)
+    cut = pending.indexOf(QLatin1Char('\n'), cut) + 1;
+
+  if (cut <= 1 || QStringView(pending).first(cut).contains(QChar(0x1b)))
+    return;
+
+  pending.remove(0, cut - 1);
+}
+
+/**
  * @brief Constructs the console handler singleton.
  */
 Console::Handler::Handler(Core::Bus::MessageBus& bus, IO::ConnectionManager& connectionManager)
@@ -114,6 +147,9 @@ Console::Handler::Handler(Core::Bus::MessageBus& bus, IO::ConnectionManager& con
   , m_currentDeviceId(-1)
   , m_fontFamilyIndex(0)
   , m_textBuffer(10 * 1024)
+  , m_displayHistoryStart(0)
+  , m_displayTotal(0)
+  , m_displayHistoryLines(0)
   , m_commonFonts(&Misc::CommonFonts::instance())
   , m_translator(nullptr)
   , m_connectionManager(&connectionManager)
@@ -163,6 +199,10 @@ Console::Handler::Handler(Core::Bus::MessageBus& bus, IO::ConnectionManager& con
   auto& timerEvents = Core::services().timerEvents;
   connect(&timerEvents, &Misc::TimerEvents::uiTimeout, this, [this]() {
     if (!m_pendingDisplay.isEmpty()) {
+      if (!m_collapseDuplicates)
+        capToScrollback(m_pendingDisplay, m_scrollbackLines);
+
+      recordDisplay(m_pendingDisplay);
       Q_EMIT displayString(m_pendingDisplay);
       m_pendingDisplay.clear();
     }
@@ -473,6 +513,82 @@ qsizetype Console::Handler::bufferLength() const
 }
 
 /**
+ * @brief Monotonic count of characters the console has emitted to its views since startup; a view
+ *        that stops processing while hidden remembers this mark (spec 0097 R12/R13).
+ */
+qint64 Console::Handler::displayMark() const noexcept
+{
+  return m_displayTotal;
+}
+
+/**
+ * @brief The emitted text since @p mark, with @p complete true when all of it is still retained;
+ *        otherwise the whole retained history (up to the scrollback) with @p complete false, so
+ *        the view rebuilds from it instead of continuing.
+ */
+QString Console::Handler::displaySince(const qint64 mark, bool& complete) const
+{
+  complete = false;
+  SS_ASSERT(mark >= 0, return m_displayHistory);
+  SS_ASSERT_LOG(m_displayHistoryStart <= m_displayTotal);
+
+  complete = mark >= m_displayHistoryStart && mark <= m_displayTotal;
+  if (!complete)
+    return m_displayHistory;
+
+  return m_displayHistory.mid(static_cast<qsizetype>(mark - m_displayHistoryStart));
+}
+
+/**
+ * @brief Records emitted text into the display history, bounded by lines and by characters (output
+ *        with no line breaks would otherwise grow it forever): trims whole lines once it runs a
+ *        quarter past the scrollback, or the oldest characters past the character budget. While
+ *        duplicates collapse, lines are not rows, so only the character budget applies.
+ */
+void Console::Handler::recordDisplay(const QString& text)
+{
+  SS_ASSERT(m_displayHistoryStart + m_displayHistory.size() == m_displayTotal,
+            resetDisplayHistory());
+  SS_ASSERT_LOG(m_scrollbackLines > 0);
+
+  m_displayHistory      += text;
+  m_displayTotal        += text.size();
+  m_displayHistoryLines += static_cast<int>(text.count(QLatin1Char('\n')));
+
+  const int limit          = qMax(1, m_scrollbackLines);
+  const int lineDrop       = m_collapseDuplicates ? 0 : m_displayHistoryLines - limit;
+  const qsizetype maxChars = static_cast<qsizetype>(limit) * kDisplayCharsPerLine;
+  const bool tooManyLines  = lineDrop > limit / 4;
+  const bool tooManyChars  = m_displayHistory.size() > maxChars + maxChars / 4;
+  if (!tooManyLines && !tooManyChars)
+    return;
+
+  qsizetype cut = 0;
+  for (int drop = lineDrop; drop > 0; --drop)
+    cut = m_displayHistory.indexOf(QLatin1Char('\n'), cut) + 1;
+
+  cut = std::max(cut, m_displayHistory.size() - maxChars);
+  if (cut <= 0)
+    return;
+
+  const auto dropped     = QStringView(m_displayHistory).first(cut).count(QLatin1Char('\n'));
+  m_displayHistoryLines -= static_cast<int>(dropped);
+  m_displayHistory.remove(0, cut);
+  m_displayHistoryStart += cut;
+}
+
+/**
+ * @brief Forgets the display history at every point the views clear themselves, so a hidden view
+ *        never replays text from before the clear.
+ */
+void Console::Handler::resetDisplayHistory()
+{
+  m_displayHistory.clear();
+  m_displayHistoryStart = m_displayTotal;
+  m_displayHistoryLines = 0;
+}
+
+/**
  * @brief Validates that @a text contains only hex characters and complete byte pairs.
  */
 bool Console::Handler::validateUserHex(const QString& text)
@@ -524,6 +640,7 @@ void Console::Handler::clear()
     it->second.line = TextFormat::LineState{};
   }
 
+  resetDisplayHistory();
   Q_EMIT cleared();
 }
 
@@ -587,6 +704,10 @@ void Console::Handler::setupExternalConnections()
           &IO::ConnectionManager::connectedChanged,
           this,
           &Console::Handler::onDevicesChanged);
+  connect(m_connectionManager, &IO::ConnectionManager::connectedChanged, this, [this] {
+    if (m_connectionManager->isConnected())
+      resetDisplayHistory();
+  });
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1046,11 +1167,13 @@ void Console::Handler::setCurrentDeviceId(int deviceId)
 
   m_textBuffer.clear();
   m_lineState = TextFormat::LineState{};
+  resetDisplayHistory();
   Q_EMIT cleared();
 
   auto it = m_deviceState.find(m_currentDeviceId);
   if (it != m_deviceState.end() && !it->second.buffer.isEmpty()) {
     m_textBuffer.append(it->second.buffer.toUtf8());
+    recordDisplay(it->second.buffer);
     Q_EMIT displayString(it->second.buffer);
   }
 

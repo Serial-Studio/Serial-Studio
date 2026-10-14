@@ -21,6 +21,7 @@
 
 #include "UI/Widgets/Terminal/TerminalBuffer.h"
 
+#include <algorithm>
 #include <climits>
 
 #include "Core/SSAssert.h"
@@ -273,7 +274,9 @@ void Widgets::TerminalBuffer::trimFront(int linesToDrop)
 
 /**
  * @brief Writes @p string at the cursor, wrapping at the column count and trimming the front
- *        first when the row store is already at the scrollback cap.
+ *        first when the row store is already at the scrollback cap. Text that lands at the end
+ *        of its row (the streaming case) is appended a run at a time (spec 0097 R14); an
+ *        overwrite inside a row goes through replaceData() one character at a time.
  */
 void Widgets::TerminalBuffer::appendText(QStringView string)
 {
@@ -281,15 +284,79 @@ void Widgets::TerminalBuffer::appendText(QStringView string)
   if (m_data.size() >= m_maxLines && linesToDrop > 0)
     trimFront(linesToDrop);
 
-  for (const auto& character : string) {
+  qsizetype pos = 0;
+  while (pos < string.size()) {
+    const qsizetype taken = appendRun(string.mid(pos));
+    if (taken > 0) {
+      pos += taken;
+      continue;
+    }
+
     const int cursorX = m_cursor.x();
     const int cursorY = m_cursor.y();
-    replaceData(cursorX, cursorY, character);
+    replaceData(cursorX, cursorY, string[pos]);
     setCursor(cursorX + 1, cursorY);
 
     if (m_cursor.x() >= m_columns)
       setCursor(0, m_cursor.y() + 1);
+
+    ++pos;
   }
+}
+
+/**
+ * @brief Appends the leading run of @p string that fits the cursor's row when the cursor sits
+ *        at that row's end (and its color row is in lockstep): one string append and one color
+ *        insert instead of a lookup, detach check and growth per character. Returns how many
+ *        characters it took, 0 when the cursor is not at the end of its row.
+ */
+qsizetype Widgets::TerminalBuffer::appendRun(QStringView string)
+{
+  SS_ASSERT(m_columns > 0, return 0);
+  SS_ASSERT(m_maxLines > 0, return 0);
+
+  const int x = m_cursor.x();
+  const int y = m_cursor.y();
+  if (string.isEmpty() || x >= m_columns)
+    return 0;
+
+  if (y >= m_data.size()) {
+    m_data.resize(y + 1);
+    m_data[y].reserve(m_columns);
+  }
+
+  while (m_repeatCounts.size() < m_data.size())
+    m_repeatCounts.append(1);
+
+  QString& line = m_data[y];
+  if (x != line.size())
+    return 0;
+
+  if (m_ansiColors && y >= m_colorData.size()) {
+    m_colorData.resize(y + 1);
+    m_colorData[y].reserve(m_columns);
+  }
+
+  if (m_ansiColors && m_colorData[y].size() != line.size())
+    return 0;
+
+  const qsizetype take = std::min<qsizetype>(m_columns - x, string.size());
+  const auto run       = string.first(take);
+  if (std::all_of(run.begin(), run.end(), [](QChar c) { return c.isPrint(); }))
+    line.append(run);
+  else
+    for (const QChar c : run)
+      line.append(c.isPrint() ? c : QChar(' '));
+
+  if (m_ansiColors)
+    m_colorData[y].insert(
+      m_colorData[y].size(), take, CharColor(m_palette.foreground(), m_palette.background()));
+
+  setCursor(x + static_cast<int>(take), y);
+  if (m_cursor.x() >= m_columns)
+    setCursor(0, m_cursor.y() + 1);
+
+  return take;
 }
 
 /**

@@ -27,6 +27,7 @@
 #include "Core/Bus/Messages.h"
 #include "Core/DataModel/Frame.h"
 #include "Core/ModuleConstruction.h"
+#include "Core/Runtime.h"
 #include "Core/SSAssert.h"
 #include "DataModel/FrameBuilder.h"
 #include "DataModel/ProjectModel.h"
@@ -133,10 +134,14 @@ void AppState::setupExternalConnections()
 }
 
 /**
- * @brief Restores the last opened project file after all modules are wired up.
+ * @brief Restores the last opened project file after all modules are wired up. A sealed process
+ *        restores nothing: the package's project must be the one document it ever loads.
  */
 void AppState::restoreLastProject()
 {
+  if (Core::Runtime::sealed())
+    return;
+
   const QString saved_path = m_settings.value("project_file_path", "").toString();
   const auto persistedMode = m_operationMode;
 

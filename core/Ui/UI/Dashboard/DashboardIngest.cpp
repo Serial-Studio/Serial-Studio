@@ -27,6 +27,7 @@
 #include <utility>
 
 #include "Core/SSAssert.h"
+#include "UI/Dashboard/TimeRingSizing.h"
 
 //--------------------------------------------------------------------------------------------------
 // Constants
@@ -137,6 +138,8 @@ UI::DashboardIngest::DashboardIngest(const IngestBindings& bindings, IngestHost&
   , m_widgetDatasets(bindings.widgetDatasets)
   , m_sourceRawFrames(bindings.sourceRawFrames)
   , m_sourceStructureGen(bindings.sourceStructureGen)
+  , m_plotBudget(bindings.plotBudget)
+  , m_plotTimeRange(bindings.plotTimeRange)
 {}
 
 //--------------------------------------------------------------------------------------------------
@@ -231,6 +234,7 @@ void UI::DashboardIngest::applyBlock(const DataModel::DataBlockPtr& block)
 #endif
 
   } else {
+    reserveFrameLaneRings(sid, static_cast<std::size_t>(block->samples));
     for (qsizetype i = 0; i < block->samples; ++i) {
       (void)advancePlotClock(sid, DataModel::sample_time(*block, i));
       if (!applyBlockValues(*block, i, receivedMs)) [[unlikely]]
@@ -338,6 +342,9 @@ void UI::DashboardIngest::applyBlockColumn(const DataModel::BlockColumn& column,
       continue;
 
     auto& ring = ringIt.value();
+    if (reserveRing(ring, count, baseSec + (static_cast<double>(count - 1) * dtSec)))
+      growPlotSweep(plotIndex);
+
     for (std::size_t i = 0; i < count; ++i)
       ring.appendDecimated(baseSec + (static_cast<double>(i) * dtSec), column.values[i]);
 
@@ -357,6 +364,9 @@ void UI::DashboardIngest::applyBlockColumn(const DataModel::BlockColumn& column,
       continue;
 
     auto& ring = rings[curveIndex];
+    if (reserveRing(ring, count, baseSec + (static_cast<double>(count - 1) * dtSec)))
+      growMultiplotSweep(groupIndex);
+
     for (std::size_t i = 0; i < count; ++i)
       ring.appendDecimated(baseSec + (static_cast<double>(i) * dtSec), column.values[i]);
   }
@@ -561,6 +571,118 @@ void UI::DashboardIngest::feedMultiplotBlockSweep(int groupIndex,
       if (m_streamSweepCurves[j])
         sweep.back[j].appendDecimated(st, m_streamSweepCurves[j]->values[i]);
   }
+}
+
+//--------------------------------------------------------------------------------------------------
+// History growth (spec 0097)
+//--------------------------------------------------------------------------------------------------
+
+/**
+ * @brief Coverage growth for one time ring before @p incoming samples ending at @p tNewest: a
+ *        single compare in the steady state, the cold growth itself only when the append would
+ *        evict an in-window sample. Never inside a per-sample loop. Returns true when it grew.
+ */
+bool UI::DashboardIngest::reserveRing(DSP::EnvelopeRing& ring,
+                                      const std::size_t incoming,
+                                      const double tNewest)
+{
+  if (ring.level0.time.size() + incoming <= ring.level0.time.capacity()) [[likely]]
+    return false;
+
+  return ring.growFor(incoming, tNewest, m_plotBudget);
+}
+
+/**
+ * @brief Pre-pass for an irregular block from @p sourceId: the frame lane appends one sample at a
+ *        time, so every time ring it feeds is reserved for the whole block up front. The newest
+ *        retained time stands in for the block's, which only ever grows a ring early, never late.
+ */
+void UI::DashboardIngest::reserveFrameLaneRings(const int sourceId, const std::size_t incoming)
+{
+  SS_ASSERT(incoming > 0, return);
+  SS_ASSERT(sourceId >= 0, return);
+
+  const auto newest = [](const DSP::EnvelopeRing& ring) {
+    return ring.level0.time.size() > 0 ? ring.level0.time.back() : 0.0;
+  };
+
+  for (const auto& p : m_timePushes) {
+    const bool fed =
+      std::any_of(p.consumers.cbegin(), p.consumers.cend(), [sourceId](const auto& c) {
+        return c.sourceId == sourceId && *c.activeFlag;
+      });
+
+    if (!fed)
+      continue;
+
+    auto rIt = m_plotTimeRings.find(p.plotIndex);
+    if (rIt == m_plotTimeRings.end())
+      continue;
+
+    if (reserveRing(rIt.value(), incoming, newest(rIt.value()))) [[unlikely]]
+      growPlotSweep(p.plotIndex);
+  }
+
+  for (const auto& p : m_multiplotPushes) {
+    auto rIt = m_multiplotTimeRings.find(p.groupIndex);
+    if (p.sourceId != sourceId || !*p.activeFlag || rIt == m_multiplotTimeRings.end())
+      continue;
+
+    bool grew = false;
+    for (auto& ring : rIt.value())
+      grew = reserveRing(ring, incoming, newest(ring)) || grew;
+
+    if (grew) [[unlikely]]
+      growMultiplotSweep(p.groupIndex);
+  }
+}
+
+/**
+ * @brief Grows a running plot sweep in place after its history ring grew, so the capture keeps
+ *        the history's resolution without losing what it holds. Cold: a growth is
+ *        logarithmically rare.
+ */
+void UI::DashboardIngest::growPlotSweep(const int plotIndex)
+{
+  SS_ASSERT(plotIndex >= 0, return);
+  SS_ASSERT(m_plotTimeRange > 0.0, return);
+
+  auto sIt = m_plotSweep.find(plotIndex);
+  auto rIt = m_plotTimeRings.find(plotIndex);
+  if (sIt == m_plotSweep.end() || rIt == m_plotTimeRings.end())
+    return;
+
+  auto& engine = sIt.value();
+  if (!engine.enabled || !engine.allocated())
+    return;
+
+  TimeRingSizing::growSweep(engine, rIt.value(), m_plotTimeRange, m_plotBudget);
+}
+
+/**
+ * @brief Grows a running multiplot sweep in place to the density of its densest curve; a no-op
+ *        for every later curve that grows to the same density in the same block.
+ */
+void UI::DashboardIngest::growMultiplotSweep(const int groupIndex)
+{
+  SS_ASSERT(groupIndex >= 0, return);
+  SS_ASSERT(m_plotTimeRange > 0.0, return);
+
+  auto sIt = m_multiplotSweep.find(groupIndex);
+  auto rIt = m_multiplotTimeRings.find(groupIndex);
+  if (sIt == m_multiplotSweep.end() || rIt == m_multiplotTimeRings.end() || rIt.value().empty())
+    return;
+
+  auto& engine = sIt.value();
+  if (!engine.enabled || !engine.allocated())
+    return;
+
+  const auto& rings = rIt.value();
+  const auto densest =
+    std::max_element(rings.cbegin(), rings.cend(), [](const auto& a, const auto& b) {
+      return a.level0.time.capacity() < b.level0.time.capacity();
+    });
+  TimeRingSizing::growSweep(engine, *densest, m_plotTimeRange, m_plotBudget);
 }
 
 /**
@@ -791,7 +913,7 @@ void UI::DashboardIngest::updateDataSeries(int sourceId)
       return;
 
     DSP::SweepEngine& sweep = sIt.value();
-    if (!sweep.enabled)
+    if (!sweep.enabled || sweep.back.empty())
       return;
 
     const int last  = static_cast<int>(p.timeCurves.size()) - 1;

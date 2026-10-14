@@ -67,6 +67,7 @@
 #  include "Licensing/OfflineSelfTest.h"
 #  include "Licensing/Trial.h"
 #  include "MDF4/Export.h"
+#  include "Misc/DeploymentSession.h"
 #  include "Misc/ShortcutGenerator.h"
 #  include "Misc/ThemeManager.h"
 #  include "Sessions/DatabaseManager.h"
@@ -85,6 +86,9 @@ namespace Misc {
  * @brief Builds the CLI parser, application description, and option set.
  */
 CLI::CLI()
+#ifdef BUILD_COMMERCIAL
+  : m_deployment(nullptr), m_packageOptionsAdopted(false)
+#endif
 {
   registerOptions();
 }
@@ -149,6 +153,7 @@ void CLI::registerCommercialOptions()
   m_parser.addOption(m_opts.noToolbarOpt);
   m_parser.addOption(m_opts.runtimeOpt);
   m_parser.addOption(m_opts.shortcutPathOpt);
+  m_parser.addOption(m_opts.deploymentOpt);
   m_parser.addOption(m_opts.csvExportOpt);
   m_parser.addOption(m_opts.mdfExportOpt);
   m_parser.addOption(m_opts.sessionExportOpt);
@@ -295,6 +300,9 @@ bool CLI::isBenchmarkRequested(int argc, char** argv)
 CLI::ProcessResult CLI::process(QApplication& app)
 {
   m_parser.process(app);
+#ifdef BUILD_COMMERCIAL
+  m_deploymentPath = resolveDeploymentPath();
+#endif
 
   if (m_parser.isSet(m_opts.versionOpt)) {
     qDebug() << APP_NAME << "version" << APP_VERSION;
@@ -353,6 +361,15 @@ CLI::ProcessResult CLI::process(QApplication& app)
   if (m_parser.isSet(m_opts.deactivateOpt)) {
     return deactivateLicense(app) == EXIT_SUCCESS ? ProcessResult::ExitSuccess
                                                   : ProcessResult::ExitFailure;
+  }
+
+  if (!deploymentPath().isEmpty()) {
+    if (m_parser.isSet(m_opts.headlessOpt)) {
+      qCritical() << "[CLI] --headless cannot open a deployment package";
+      return ProcessResult::ExitFailure;
+    }
+
+    warnIgnoredDeploymentFlags();
   }
 #endif
 
@@ -606,20 +623,25 @@ CLI::ProcessResult CLI::runSelfTests()
 //---------------------------------------------------------------------------------------------------
 
 /**
- * @brief Returns true if --fullscreen was passed.
+ * @brief Returns true if --fullscreen was passed, or the adopted deployment package asks for it.
  */
 bool CLI::fullscreen() const noexcept
 {
+#ifdef BUILD_COMMERCIAL
+  if (m_packageOptionsAdopted)
+    return m_packageOptions.fullscreen;
+#endif
+
   return m_parser.isSet(m_opts.fullscreenOpt);
 }
 
 /**
- * @brief Returns true if --runtime (Pro operator mode) was passed.
+ * @brief Returns true if --runtime (Pro operator mode) was passed or a deployment package opens.
  */
 bool CLI::runtimeMode() const noexcept
 {
 #ifdef BUILD_COMMERCIAL
-  return m_parser.isSet(m_opts.runtimeOpt);
+  return m_parser.isSet(m_opts.runtimeOpt) || !m_deploymentPath.isEmpty();
 #else
   return false;
 #endif
@@ -658,6 +680,11 @@ bool CLI::apiExternalEnabled() const
  */
 bool CLI::quickPlot() const
 {
+#ifdef BUILD_COMMERCIAL
+  if (!deploymentPath().isEmpty())
+    return false;
+#endif
+
   return m_parser.isSet(m_opts.quickPlotOpt);
 }
 
@@ -666,6 +693,11 @@ bool CLI::quickPlot() const
  */
 QString CLI::projectPath() const
 {
+#ifdef BUILD_COMMERCIAL
+  if (!deploymentPath().isEmpty())
+    return {};
+#endif
+
   if (m_parser.isSet(m_opts.projectOpt))
     return m_parser.value(m_opts.projectOpt);
 
@@ -678,11 +710,30 @@ QString CLI::projectPath() const
 //---------------------------------------------------------------------------------------------------
 
 /**
- * @brief Applies CLI project/quick-plot mode and schedules runtime auto-connect.
+ * @brief The adopted deployment package's title, or empty when none was opened.
  */
-void CLI::applyProjectAndAutoConnect(QApplication& app)
+QString CLI::deploymentTitle() const
+{
+#ifdef BUILD_COMMERCIAL
+  if (m_deployment)
+    return m_deployment->title();
+#endif
+
+  return {};
+}
+
+/**
+ * @brief Applies CLI project/quick-plot mode and schedules runtime auto-connect; false when an
+ *        adopted deployment package's project could not be loaded.
+ */
+bool CLI::applyProjectAndAutoConnect(QApplication& app)
 {
   applyApiServerOptions();
+
+#ifdef BUILD_COMMERCIAL
+  if (m_deployment && !m_deployment->loadProject())
+    return false;
+#endif
 
   const QString project = projectPath();
   if (!project.isEmpty()) {
@@ -701,7 +752,7 @@ void CLI::applyProjectAndAutoConnect(QApplication& app)
   }
 
   if (!runtimeMode())
-    return;
+    return true;
 
   QTimer::singleShot(0, &app, []() {
 #ifdef BUILD_COMMERCIAL
@@ -716,6 +767,8 @@ void CLI::applyProjectAndAutoConnect(QApplication& app)
     if (cm.configurationOk() && !cm.isConnected())
       cm.connectDevice();
   });
+
+  return true;
 }
 
 /**
@@ -902,26 +955,102 @@ static QStringList splitTaskbarButtonIds(const QString& raw)
 }
 
 /**
+ * @brief The deployment package to open, resolved once by process().
+ */
+QString CLI::deploymentPath() const
+{
+  return m_deploymentPath;
+}
+
+/**
+ * @brief Resolves the package to open: --deployment, or a positional *.ssdeploy (double-click).
+ */
+QString CLI::resolveDeploymentPath() const
+{
+  if (m_parser.isSet(m_opts.deploymentOpt))
+    return m_parser.value(m_opts.deploymentOpt);
+
+  const auto positional = m_parser.positionalArguments();
+  if (!positional.isEmpty()
+      && positional.first().endsWith(QStringLiteral(".ssdeploy"), Qt::CaseInsensitive))
+    return positional.first();
+
+  return {};
+}
+
+/**
+ * @brief Adopts an opened deployment package: its runtime options replace the command-line ones,
+ *        and the project step loads its project instead of a file.
+ */
+void CLI::attachDeployment(DeploymentSession* session)
+{
+  SS_ASSERT(session != nullptr && session->isOpen(), return);
+
+  m_deployment            = session;
+  m_packageOptions        = session->runtimeOptions();
+  m_packageOptionsAdopted = true;
+}
+
+/**
+ * @brief The operator runtime options in force: the adopted package's, else the command line's.
+ */
+RuntimeOptions CLI::runtimeOptions() const
+{
+  if (m_packageOptionsAdopted)
+    return m_packageOptions;
+
+  RuntimeOptions options;
+  options.fullscreen       = m_parser.isSet(m_opts.fullscreenOpt);
+  options.actionsPanel     = m_parser.isSet(m_opts.actionsPanelOpt);
+  options.fileTransmission = m_parser.isSet(m_opts.fileTransmissionOpt);
+  options.csvExport        = m_parser.isSet(m_opts.csvExportOpt);
+  options.mdfExport        = m_parser.isSet(m_opts.mdfExportOpt);
+  options.sessionExport    = m_parser.isSet(m_opts.sessionExportOpt);
+  options.consoleExport    = m_parser.isSet(m_opts.consoleExportOpt);
+  options.taskbarSearch    = !m_parser.isSet(m_opts.noTaskbarSearchOpt);
+  options.theme            = m_parser.value(m_opts.themeOpt).trimmed();
+  options.taskbarMode      = m_parser.value(m_opts.taskbarModeOpt).toLower();
+  options.taskbarButtons   = splitTaskbarButtonIds(m_parser.value(m_opts.taskbarButtonsOpt));
+  return options;
+}
+
+/**
+ * @brief Logs every display or export flag a deployment package overrides; bus and API flags
+ *        still apply, so they are not listed.
+ */
+void CLI::warnIgnoredDeploymentFlags() const
+{
+  const QList<const QCommandLineOption*> ignored = {&m_opts.projectOpt,
+                                                    &m_opts.quickPlotOpt,
+                                                    &m_opts.profileOpt,
+                                                    &m_opts.fullscreenOpt,
+                                                    &m_opts.noToolbarOpt,
+                                                    &m_opts.csvExportOpt,
+                                                    &m_opts.mdfExportOpt,
+                                                    &m_opts.sessionExportOpt,
+                                                    &m_opts.consoleExportOpt,
+                                                    &m_opts.actionsPanelOpt,
+                                                    &m_opts.fileTransmissionOpt,
+                                                    &m_opts.taskbarModeOpt,
+                                                    &m_opts.taskbarButtonsOpt,
+                                                    &m_opts.noTaskbarSearchOpt,
+                                                    &m_opts.themeOpt};
+  for (const auto* option : ignored)
+    if (m_parser.isSet(*option))
+      qWarning().noquote() << "[CLI] --" + option->names().constLast()
+                           << "is ignored: the deployment package decides it";
+}
+
+/**
  * @brief Applies taskbar visibility/pinning settings for operator runtime mode.
  */
-void CLI::applyOperatorTaskbarSettings()
+void CLI::applyOperatorTaskbarSettings(const RuntimeOptions& options)
 {
   static auto& tbs = UI::TaskbarSettings::instance();
-  if (m_parser.isSet(m_opts.taskbarModeOpt)) {
-    const QString mode = m_parser.value(m_opts.taskbarModeOpt).toLower();
-    tbs.setTaskbarHidden(mode == QStringLiteral("hidden"));
-    tbs.setAutohide(mode == QStringLiteral("autohide"));
-  } else {
-    tbs.setTaskbarHidden(false);
-    tbs.setAutohide(false);
-  }
-
-  const QStringList pinned = m_parser.isSet(m_opts.taskbarButtonsOpt)
-                             ? splitTaskbarButtonIds(m_parser.value(m_opts.taskbarButtonsOpt))
-                             : QStringList{};
-  tbs.setPinnedButtons(pinned);
-
-  tbs.setSearchEnabled(!m_parser.isSet(m_opts.noTaskbarSearchOpt));
+  tbs.setTaskbarHidden(options.taskbarMode == QStringLiteral("hidden"));
+  tbs.setAutohide(options.taskbarMode == QStringLiteral("autohide"));
+  tbs.setPinnedButtons(options.taskbarButtons);
+  tbs.setSearchEnabled(options.taskbarSearch);
 }
 
 /**
@@ -929,10 +1058,7 @@ void CLI::applyOperatorTaskbarSettings()
  */
 void CLI::applyThemeOverride()
 {
-  if (!m_parser.isSet(m_opts.themeOpt))
-    return;
-
-  const QString name = m_parser.value(m_opts.themeOpt).trimmed();
+  const QString name = runtimeOptions().theme;
   if (name.isEmpty())
     return;
 
@@ -974,17 +1100,18 @@ void CLI::applyOperatorRuntimeSettings()
   taskbarSettings.setSettingsPersistent(false);
   themeManager.setSettingsPersistent(false);
 
-  csvExport.setExportEnabled(m_parser.isSet(m_opts.csvExportOpt));
-  mdf4Export.setExportEnabled(m_parser.isSet(m_opts.mdfExportOpt));
-  sessionsExport.setExportEnabled(m_parser.isSet(m_opts.sessionExportOpt));
-  consoleExport.setExportEnabled(m_parser.isSet(m_opts.consoleExportOpt));
+  const auto options = runtimeOptions();
+  csvExport.setExportEnabled(options.csvExport);
+  mdf4Export.setExportEnabled(options.mdfExport);
+  sessionsExport.setExportEnabled(options.sessionExport);
+  consoleExport.setExportEnabled(options.consoleExport);
 
   dashboard.setTerminalEnabled(false);
   dashboard.setNotificationLogEnabled(false);
-  dashboard.setShowActionPanel(m_parser.isSet(m_opts.actionsPanelOpt));
-  fileTransmission.setRuntimeAccessAllowed(m_parser.isSet(m_opts.fileTransmissionOpt));
+  dashboard.setShowActionPanel(options.actionsPanel);
+  fileTransmission.setRuntimeAccessAllowed(options.fileTransmission);
 
-  applyOperatorTaskbarSettings();
+  applyOperatorTaskbarSettings(options);
 }
 
 /**

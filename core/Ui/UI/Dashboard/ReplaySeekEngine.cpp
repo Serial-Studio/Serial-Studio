@@ -42,6 +42,7 @@ UI::ReplaySeekEngine::ReplaySeekEngine(const ReplaySeekBindings& bindings)
   , m_datasets(bindings.datasets)
   , m_widgetGroups(bindings.widgetGroups)
   , m_widgetDatasets(bindings.widgetDatasets)
+  , m_plotBudget(bindings.plotBudget)
 {}
 
 //--------------------------------------------------------------------------------------------------
@@ -177,6 +178,9 @@ void UI::ReplaySeekEngine::fillSeekPlotSingle(int index,
       return;
 
     rIt.value().clear();
+    if (count > 0)
+      (void)rIt.value().growFor(static_cast<std::size_t>(count), 0.0, m_plotBudget);
+
     for (int k = 0; k < count; ++k)
       rIt.value().appendDecimated(timesSec[k] + timeOffset, values[k]);
 
@@ -230,6 +234,9 @@ void UI::ReplaySeekEngine::fillSeekPlotMulti(int index,
       const auto& values = series.value(seekKey(group.sourceId, ds.uniqueId));
       const int n        = qMin(timesSec.size(), values.size());
       rings[j].clear();
+      if (n > 0)
+        (void)rings[j].growFor(static_cast<std::size_t>(n), 0.0, m_plotBudget);
+
       for (int k = 0; k < n; ++k)
         rings[j].appendDecimated(timesSec[k] + timeOffset, values[k]);
     }
@@ -328,15 +335,55 @@ QHash<qint64, std::vector<DSP::EnvelopeRing>> UI::ReplaySeekEngine::snapshotMult
 }
 
 /**
- * @brief Replays a saved ring's level-0 samples into @p target via appendDecimated, which rebuilds
- *        the coarse levels as a side effect. Used when the new ring has a different capacity /
- *        interval than the saved one.
+ * @brief Replays a saved ring's level-0 samples into @p target, first sizing the target to the
+ *        saved density within what @p budget grants (spec 0097) so a fresh, still-small ring
+ *        cannot wrap away the history it is handed; a short grant decimates it, rail-flagged.
+ *        The saved ring's own verdict is not carried: an exact target re-decides on coverage.
  */
-static void replayTimeRing(const DSP::EnvelopeRing& saved, DSP::EnvelopeRing& target)
+static void replayTimeRing(const DSP::EnvelopeRing& saved,
+                           DSP::EnvelopeRing& target,
+                           DSP::RingBudget& budget)
 {
+  SS_ASSERT(saved.windowSec > 0.0, return);
+  SS_ASSERT(target.windowSec > 0.0, return);
+
+  const std::size_t slotBytes = DSP::EnvelopeRing::kSlotBytesBound;
+  const std::size_t cap       = target.level0.time.capacity();
+  const double density        = static_cast<double>(saved.level0.time.capacity()) / saved.windowSec;
+  const auto sized            = DSP::RingCapacity::fromRate(target.windowSec, density);
+  const auto wanted           = static_cast<std::size_t>(sized.value());
+  if (wanted > cap) {
+    const std::size_t room   = budget.grant((wanted - cap) * slotBytes);
+    const auto granted       = sized.atMost(static_cast<int>(cap + room / slotBytes));
+    const std::size_t before = target.bytes();
+    target.resizeCapacity(granted, target.windowSec);
+    budget.charge(before, target.bytes());
+    if (granted.value() < sized.value() && target.exact())
+      target.setDecimating(DSP::RingLimit::Rail);
+  }
+
   const std::size_t n = std::min(saved.level0.time.size(), saved.level0.value.size());
   for (std::size_t k = 0; k < n; ++k)
     target.appendDecimated(saved.level0.time[k], saved.level0.value[k]);
+}
+
+/**
+ * @brief Restores one saved ring: spliced whole at an unchanged window, keeping what it learned
+ *        from its source; replayed at the saved density when the window changed or a decimating
+ *        ring would replace an exact one (decimation is sticky: a slowed stream stays coarse).
+ */
+static void restoreRing(DSP::EnvelopeRing& live, DSP::EnvelopeRing& kept, DSP::RingBudget& budget)
+{
+  SS_ASSERT(kept.level0.time.raw() != nullptr, return);
+  SS_ASSERT_LOG(live.level0.time.raw() != nullptr);
+
+  const bool sameWindow = qFuzzyCompare(live.windowSec, kept.windowSec);
+  if (sameWindow && (kept.exact() || !live.exact())) {
+    live = std::move(kept);
+    return;
+  }
+
+  replayTimeRing(kept, live, budget);
 }
 
 /**
@@ -359,16 +406,9 @@ void UI::ReplaySeekEngine::restorePlotTimeRings(QHash<qint64, DSP::EnvelopeRing>
     if (savedIt == snapshot.end())
       continue;
 
-    auto& live = ringIt.value();
     auto& kept = savedIt.value();
-    if (kept.level0.time.raw() == nullptr)
-      continue;
-
-    if (live.level0.time.capacity() == kept.level0.time.capacity()
-        && qFuzzyCompare(live.level0.interval, kept.level0.interval))
-      live = std::move(kept);
-    else
-      replayTimeRing(kept, live);
+    if (kept.level0.time.raw() != nullptr)
+      restoreRing(ringIt.value(), kept, m_plotBudget);
 
     snapshot.erase(savedIt);
   }
@@ -398,16 +438,9 @@ void UI::ReplaySeekEngine::restoreMultiplotTimeRings(
     auto& kept = savedIt.value();
 
     const std::size_t count = std::min(live.size(), kept.size());
-    for (std::size_t j = 0; j < count; ++j) {
-      if (kept[j].level0.time.raw() == nullptr)
-        continue;
-
-      if (live[j].level0.time.capacity() == kept[j].level0.time.capacity()
-          && qFuzzyCompare(live[j].level0.interval, kept[j].level0.interval))
-        live[j] = std::move(kept[j]);
-      else
-        replayTimeRing(kept[j], live[j]);
-    }
+    for (std::size_t j = 0; j < count; ++j)
+      if (kept[j].level0.time.raw() != nullptr)
+        restoreRing(live[j], kept[j], m_plotBudget);
 
     snapshot.erase(savedIt);
   }

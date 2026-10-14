@@ -22,6 +22,7 @@
 #  include <QUrl>
 
 #  include "Core/License.h"
+#  include "Misc/DeploymentPackager.h"
 #  include "Misc/Utilities.h"
 
 //--------------------------------------------------------------------------------------------------
@@ -42,9 +43,9 @@ Misc::ShortcutGenerator& Misc::ShortcutGenerator::instance()
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Default-constructs the singleton.
+ * @brief Constructs the singleton and the deployment packager it owns (spec 0096).
  */
-Misc::ShortcutGenerator::ShortcutGenerator() = default;
+Misc::ShortcutGenerator::ShortcutGenerator() : m_packager(new DeploymentPackager(this)) {}
 
 /**
  * @brief Default-destructs the singleton.
@@ -104,6 +105,14 @@ QString Misc::ShortcutGenerator::platformNote() const
   return tr("Place the file under ~/.local/share/applications/ to expose it in your "
             "application launcher.");
 #  endif
+}
+
+/**
+ * @brief The deployment packager behind the dialog's package mode.
+ */
+QObject* Misc::ShortcutGenerator::packager() const noexcept
+{
+  return m_packager;
 }
 
 /**
@@ -218,19 +227,6 @@ void Misc::ShortcutGenerator::generate(const QString& outputPath,
     return;
   }
 
-  if (outputPath.isEmpty()) {
-    Q_EMIT shortcutFailed(tr("No output path was provided."));
-    return;
-  }
-
-  QString resolvedPath =
-    QUrl(outputPath).isLocalFile() ? QUrl(outputPath).toLocalFile() : outputPath;
-
-#  if defined(Q_OS_MAC)
-  if (!resolvedPath.endsWith(QStringLiteral(".app"), Qt::CaseInsensitive))
-    resolvedPath += QStringLiteral(".app");
-#  endif
-
   const QString resolvedProject =
     QUrl(projectFile).isLocalFile() ? QUrl(projectFile).toLocalFile() : projectFile;
 
@@ -247,7 +243,53 @@ void Misc::ShortcutGenerator::generate(const QString& outputPath,
                                     taskbarSearch,
                                     themeName);
 
-  args << QStringLiteral("--shortcut-path") << resolvedPath;
+  writeShortcut(outputPath, title, iconPath, args);
+}
+
+/**
+ * @brief Writes a shortcut that opens a deployment package (spec 0096): the package carries its
+ *        own runtime options, so the only argument is the package itself.
+ */
+void Misc::ShortcutGenerator::generatePackageShortcut(const QString& outputPath,
+                                                      const QString& title,
+                                                      const QString& iconPath,
+                                                      const QString& packagePath)
+{
+  if (!hasProLicense()) {
+    Core::License::requestProFeature(QStringLiteral("shortcuts.generate"));
+    Q_EMIT shortcutFailed(tr("A Pro license is required to generate shortcuts."));
+    return;
+  }
+
+  const QString resolvedPackage =
+    QUrl(packagePath).isLocalFile() ? QUrl(packagePath).toLocalFile() : packagePath;
+  writeShortcut(outputPath, title, iconPath, {QStringLiteral("--deployment"), resolvedPackage});
+}
+
+/**
+ * @brief Resolves the output and icon paths, writes the platform shortcut with @p args plus
+ *        --shortcut-path, and reveals it; reports through shortcutGenerated/shortcutFailed.
+ */
+void Misc::ShortcutGenerator::writeShortcut(const QString& outputPath,
+                                            const QString& title,
+                                            const QString& iconPath,
+                                            const QStringList& args)
+{
+  if (outputPath.isEmpty()) {
+    Q_EMIT shortcutFailed(tr("No output path was provided."));
+    return;
+  }
+
+  QString resolvedPath =
+    QUrl(outputPath).isLocalFile() ? QUrl(outputPath).toLocalFile() : outputPath;
+
+#  if defined(Q_OS_MAC)
+  if (!resolvedPath.endsWith(QStringLiteral(".app"), Qt::CaseInsensitive))
+    resolvedPath += QStringLiteral(".app");
+#  endif
+
+  QStringList arguments = args;
+  arguments << QStringLiteral("--shortcut-path") << resolvedPath;
 
   QString resolvedIcon = iconPath;
   if (QUrl(resolvedIcon).isLocalFile())
@@ -260,7 +302,7 @@ void Misc::ShortcutGenerator::generate(const QString& outputPath,
     resolvedIcon = extractDefaultIcon();
 
   QString error;
-  if (!writeShortcutFile(resolvedPath, title, resolvedIcon, args, error)) {
+  if (!writeShortcutFile(resolvedPath, title, resolvedIcon, arguments, error)) {
     Q_EMIT shortcutFailed(error.isEmpty() ? tr("Failed to write shortcut file.") : error);
     return;
   }

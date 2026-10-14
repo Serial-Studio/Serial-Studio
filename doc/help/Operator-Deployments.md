@@ -8,6 +8,52 @@ The intended workflow: an engineer configures a project once, generates a deploy
 
 > **Serial Studio must be installed on the target machine.** A deployment is a launcher, not a self-contained bundle. It records the absolute path of the Serial Studio executable at the moment it was created, plus the project file path and runtime flags. If Serial Studio isn't installed on the operator's machine (or if it has been uninstalled, moved, or the project file is missing), double-clicking the deployment will fail with the OS's "missing application" or "file not found" error. Install Serial Studio on the target machine first (the same installer the engineer uses), then drop the deployment file onto the desktop.
 
+## Deployment packages
+
+The Deploy dialog can also export a **deployment package**: one `.ssdeploy` file holding the open project and the files it uses. These are alarm sounds, Canvas images, the widget extensions it uses, and any credentials and private keys you choose to include. The package also carries the runtime options from the dialog, its title, and its icon. Copy the file to any machine with a commercial (Pro) build of Serial Studio installed and double-click it. No paths from your machine are needed, and the project file can stay where it is.
+
+| Shortcut to project file | Deployment package |
+|--------------------------|--------------------|
+| Points at a `.ssproj` on this machine | Carries the project and its files inside one file |
+| Breaks if the project file moves | Works anywhere Serial Studio is installed |
+| The project stays readable JSON | The package is binary and does not show its content in a text editor |
+| Editing the project updates every operator | Re-export the package after editing |
+
+Use packages to hand a dashboard to someone else, such as a customer, a test lab or a demo laptop. Keep project shortcuts for in-house benches that share one centrally edited project.
+
+> **Encoded, not encrypted.** A package is binary, so its content does not appear in a text editor. It is not encrypted: anyone who studies the file format can decode it. Do not treat a package as a way to keep secrets from a determined person.
+
+### Contents tab
+
+In package mode the dialog adds a **Contents** tab:
+
+- **Carried Files.** Every file the package will carry, with its size. Canvas images are found by scanning the Canvas code for image file names. Use **Add Files…** for images whose path the code builds while it runs; they must sit inside the project folder.
+- **External Dependencies.** Things the package cannot carry, such as programs the Process driver launches or web pages. The target machine must provide them.
+- **Missing Files.** Referenced files that no longer exist. Export stays blocked until they are back.
+- **Credentials and Private Keys.** Each password and private key the project uses, all excluded by default. Tick an item to carry it inside the package; the dialog then reminds you that anyone with the file can recover it. Excluded items are entered by the operator on first connect, through the same recovery dialog runtime mode always shows, and stay on that machine as usual.
+
+Exporting a package needs a Pro license or the trial, the same as generating a shortcut. Turn on **Desktop Shortcut** on the General tab to get a launcher for the package as well. After the package is saved the dialog stays open and offers **Open Package**, so you can try the result right away.
+
+### Opening a package
+
+Double-click the `.ssdeploy` file. The installers register the file type on Windows, macOS and Linux. Inside Serial Studio, pick the file in the **Open Project** dialog or drag it onto the window. You can also run `serial-studio --deployment demo.ssdeploy`. A package always opens in a new window, so the window you are working in is left as it was. The dashboard opens in runtime mode with the package's options, title and icon. The window title and the taskbar or Dock icon come from the package.
+
+A damaged package, or one changed after export, is refused with a message, and so is a package larger than 64 MiB. A package made by a newer version of Serial Studio names the version it needs.
+
+### Licensing
+
+Opening a package follows the same rules as runtime mode. Any commercial build opens it. A package without Pro content connects without a license. A package that uses Pro features asks for a license or the trial when it connects.
+
+### Sealed sessions
+
+A session opened from a package is **sealed**: the operator cannot read, save, export or edit the project through any part of the app.
+
+- The Project Editor, Preferences, Macros, the Problem Center, the AI assistant, the players, the Extension Manager and the Deploy dialog are unreachable, including from the command palette and keyboard shortcuts.
+- API, gRPC and MCP commands that would return or change the project answer `SEALED_SESSION`. Live data, device control, exports, alarms and window layout keep working, so integrations that read data still run. The same rule applies to the project's own scripts when they call the API.
+- Live frames and mirror viewers carry the layout and values but no script source, so Canvas widgets appear as placeholders on a mirror viewer.
+- Nothing from the package is written to disk in readable form. There are no backups, no project autosave and no copy in the settings. Historian recordings keep what replay needs but not the scripts, so Canvas widgets replay as placeholders and **Verify** and **Regress** report the recording as sealed.
+- Only the widget extensions inside the package load; extensions installed on the machine do not. The usual extension consent prompt appears the first time.
+
 ## What gets created
 
 Pick **Deploy** from the toolbar. Fill in a name, optionally swap the icon, choose where to save, and Serial Studio writes a native launcher for your platform:
@@ -32,13 +78,15 @@ flowchart LR
 
 ## The dialog
 
-Three tabs.
+Three tabs, plus **Contents** when exporting a package.
 
 ### General
 
-- **Icon.** Click the 96×96 preview (or **Change Icon…**) to pick your own. macOS prefers `.icns`, Windows prefers `.ico`, Linux accepts SVG or PNG. Leave it alone to use the bundled deployment icon.
+- **Format.** **Deployment package (.ssdeploy)** (the default) or **Shortcut to the project file**.
+- **Project.** Read-only field showing the currently loaded project. In shortcut mode, use the folder button to switch projects without leaving the dialog. A project must be loaded for **Save** to enable.
+- **Desktop Shortcut.** Package mode only: also writes a launcher for the package.
 - **Name.** Defaults to the project's title. Used as the deployment filename and the displayed label in the operator's shell. Reserved characters (`\ / : * ? " < > |`) are replaced with `_` automatically when saving.
-- **Project.** Read-only field showing the currently loaded project. Use the folder button to switch projects without leaving the dialog. A project must be loaded for **Save** to enable.
+- **Icon.** Click the preview (or **Change Icon…**) to pick your own. macOS prefers `.icns`, Windows prefers `.ico`, Linux accepts SVG or PNG. Leave it alone to use the bundled deployment icon.
 - **Theme.** Defaults to **Same as Serial Studio**, which means the deployment inherits whatever theme the operator's installation has set globally. Pick a specific theme from the dropdown to pin the deployment to that palette regardless of the host's preference. Useful for kiosks where the dashboard should always look the same, or for paired light/dark deployments off the same project. The selection adds `--theme "<name>"` to the launcher; an unknown theme name on the target machine falls back to the host's saved preference with a warning.
 - **Fullscreen.** When on, the deployment adds `--fullscreen` so the dashboard launches full-screen with no window chrome.
 - **Actions Panel.** When on (the default), the deployment adds `--actions-panel` so the dashboard's action panel is shown.
@@ -114,6 +162,7 @@ serial-studio \
 | Flag                | Notes |
 |---------------------|-------|
 | `--project <file>`  | Path to the `.ssproj` to load. Available in GPL builds. |
+| `--deployment <file>` | Open a `.ssdeploy` package in a sealed runtime session (Pro). The package's options replace the display and export flags; bus and API flags still apply. |
 | `--runtime`         | Operator runtime mode (Pro). Implies hide-toolbar, auto-connect, and the recovery dialog. |
 | `--fullscreen`      | Launch the dashboard full-screen. Available in GPL builds. |
 | `--no-toolbar`      | Hide the toolbar without enabling runtime behaviour (Pro). Useful for embedded HMIs that have their own chrome. |
@@ -162,7 +211,7 @@ No. It's a launcher that points at the Serial Studio binary already installed on
 Not via the dialog. Deployments target Project mode; that's the intended use. You can still hand-craft a CLI invocation with `--quick-plot` if you have a reason to.
 
 **Does the deployment bundle the project file inside it?**
-No. It records the absolute path to the `.ssproj`. Move the project, and the deployment breaks (cleanly — see the missing-file flow above).
+A shortcut does not: it records the absolute path to the `.ssproj`, so moving the project breaks it (cleanly — see the missing-file flow above). A [deployment package](#deployment-packages) does: it carries the project and its files in one `.ssdeploy` file.
 
 **Can I edit a deployment after creating it?**
 Yes. Windows `.lnk` exposes Properties → Target. The macOS `.app` keeps a small Bash launcher at `Contents/MacOS/<bundle-name>` (the executable named in `Info.plist`'s `CFBundleExecutable`). Linux `.desktop` files are plain text. All three can be edited by hand if you need to adjust the flags.

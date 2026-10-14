@@ -39,6 +39,7 @@
 #  include "CSV/Player.h"
 #  include "DataModel/FrameBuilder.h"
 #  include "DataModel/PipelineModules.h"
+#  include "DataModel/Project/ProjectSealing.h"
 #  include "DataModel/ProjectModel.h"
 #  include "DataModel/Scripting/ControlScript.h"
 #  include "DataModel/Scripting/FrameParser.h"
@@ -569,7 +570,7 @@ QJsonObject Sessions::ExportWorker::buildReplayProjectJson(const DataModel::Fram
     if (!m_projectSnapshot->isEmpty()) {
       const auto doc = QJsonDocument::fromJson(*m_projectSnapshot);
       if (doc.isObject())
-        return doc.object();
+        return DataModel::sealedCopy(doc.object());
     }
   }
 
@@ -607,7 +608,7 @@ QJsonObject Sessions::ExportWorker::buildReplayProjectJson(const DataModel::Fram
   sourcesArray.append(source);
   json.insert(Keys::Sources, sourcesArray);
 
-  return json;
+  return DataModel::sealedCopy(json);
 }
 
 /**

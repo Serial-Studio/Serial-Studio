@@ -21,8 +21,15 @@
 
 #include "Core/Runtime.h"
 
+#include <atomic>
+
+#include "Core/SSAssert.h"
+
 static bool s_benchmarkActive = false;
 static int s_sessionId        = 0;
+static std::atomic<bool> s_sealed{false};
+static QString s_sealedMountRoot;
+static QString s_sealedProjectFolder;
 
 /**
  * @brief Whether the headless hotpath benchmark is feeding frames; the benchmark is
@@ -56,4 +63,45 @@ int Core::Runtime::sessionId() noexcept
 void Core::Runtime::setSessionId(const int id) noexcept
 {
   s_sessionId = id;
+}
+
+/**
+ * @brief Whether this process opened a deployment package (spec 0096); never reverts to false.
+ */
+bool Core::Runtime::sealed() noexcept
+{
+  return s_sealed.load(std::memory_order_acquire);
+}
+
+/**
+ * @brief The ":/ssdeploy-<id>" root the package's files are served from; empty when unsealed.
+ */
+const QString& Core::Runtime::sealedMountRoot() noexcept
+{
+  return s_sealedMountRoot;
+}
+
+/**
+ * @brief The author's project folder the package was exported from, so absolute asset paths in
+ *        script code can be mapped onto the mount; empty when unsealed.
+ */
+const QString& Core::Runtime::sealedProjectFolder() noexcept
+{
+  return s_sealedProjectFolder;
+}
+
+/**
+ * @brief Seals the process for its whole life. There is no unseal: every exit that refuses project
+ *        content relies on the answer never changing once it has been read. The first call wins;
+ *        the paths are written before the release store, so a reader that sees the seal sees them.
+ */
+void Core::Runtime::seal(const QString& mountRoot, const QString& projectFolder) noexcept
+{
+  SS_ASSERT_LOG(!mountRoot.isEmpty());
+  if (s_sealed.load(std::memory_order_acquire))
+    return;
+
+  s_sealedMountRoot     = mountRoot;
+  s_sealedProjectFolder = projectFolder;
+  s_sealed.store(true, std::memory_order_release);
 }

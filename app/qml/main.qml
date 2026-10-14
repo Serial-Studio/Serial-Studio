@@ -523,17 +523,19 @@ Item {
   }
 
   //
-  // Problem center: standing project, link and script diagnostics
+  // Problem center: standing project, link and script diagnostics; author-only
   //
   function showProblemCenter() {
-    problemCenter.activate()
+    if (!app.runtimeMode)
+      problemCenter.activate()
   }
 
   //
-  // Remote dashboard attach: watch another instance's dashboard, read-only
+  // Remote dashboard attach: watch another instance's dashboard, read-only; author-only
   //
   function showRemoteAttach() {
-    remoteAttachDialog.activate()
+    if (!app.runtimeMode)
+      remoteAttachDialog.activate()
   }
 
   //
@@ -729,10 +731,11 @@ Item {
   }
 
   //
-  // Macros window: available in every build variant
+  // Macros window: available in every build variant; author-only
   //
   function showMacros() {
-    macrosLoader.activate()
+    if (!app.runtimeMode)
+      macrosLoader.activate()
   }
 
   //

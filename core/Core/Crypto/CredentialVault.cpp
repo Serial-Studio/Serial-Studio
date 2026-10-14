@@ -12,11 +12,25 @@
 
 #  include <QChar>
 #  include <QCryptographicHash>
+#  include <QHash>
 #  include <QLoggingCategory>
+#  include <QMutex>
+#  include <QSet>
 
 #  include "Core/Crypto/MachineKey.h"
+#  include "Core/Runtime.h"
+#  include "Core/SSAssert.h"
 
 Q_LOGGING_CATEGORY(lcMqttVault, "serialstudio.mqtt.vault", QtCriticalMsg)
+
+static QMutex s_overlayMutex;
+static QHash<QString, QString> s_overlay;
+static QSet<QString> s_packageOwned;
+static int s_transientDepth = 0;
+
+static const QString kUserField = QStringLiteral("user");
+static const QString kPassField = QStringLiteral("pass");
+static const QString kKeyField  = QStringLiteral("keyPass");
 
 //--------------------------------------------------------------------------------------------------
 // Construction
@@ -35,6 +49,31 @@ MQTT::CredentialVault::CredentialVault(const QString& scope)
 }
 
 //--------------------------------------------------------------------------------------------------
+// Transient scope (spec 0096)
+//--------------------------------------------------------------------------------------------------
+
+/**
+ * @brief Opens a transient scope; only a sealed session may open one.
+ */
+MQTT::CredentialVault::TransientScope::TransientScope()
+{
+  SS_ASSERT_LOG(Core::Runtime::sealed());
+
+  const QMutexLocker locker(&s_overlayMutex);
+  ++s_transientDepth;
+}
+
+/**
+ * @brief Closes the scope; slots it wrote stay package-owned for the rest of the session.
+ */
+MQTT::CredentialVault::TransientScope::~TransientScope()
+{
+  const QMutexLocker locker(&s_overlayMutex);
+  SS_ASSERT(s_transientDepth > 0, return);
+  --s_transientDepth;
+}
+
+//--------------------------------------------------------------------------------------------------
 // Queries
 //--------------------------------------------------------------------------------------------------
 
@@ -49,27 +88,8 @@ MQTT::Credentials MQTT::CredentialVault::credentials(const QString& host, quint1
     return out;
 
   const auto key = settingsKey(host, port);
-  m_settings.beginGroup(m_group);
-  const auto userCipher = m_settings.value(key + QStringLiteral("/user")).toString();
-  const auto passCipher = m_settings.value(key + QStringLiteral("/pass")).toString();
-  m_settings.endGroup();
-
-  if (!userCipher.isEmpty()) {
-    auto plain = m_simpleCrypt.decryptToString(userCipher);
-    if (m_simpleCrypt.lastError() == Licensing::SimpleCrypt::ErrorNoError)
-      out.username = plain;
-    else
-      qCWarning(lcMqttVault) << "User decrypt failed for" << key;
-  }
-
-  if (!passCipher.isEmpty()) {
-    auto plain = m_simpleCrypt.decryptToString(passCipher);
-    if (m_simpleCrypt.lastError() == Licensing::SimpleCrypt::ErrorNoError)
-      out.password = plain;
-    else
-      qCWarning(lcMqttVault) << "Pass decrypt failed for" << key;
-  }
-
+  out.username   = readField(key, kUserField);
+  out.password   = readField(key, kPassField);
   return out;
 }
 
@@ -82,11 +102,19 @@ bool MQTT::CredentialVault::hasCredentials(const QString& host, quint16 port) co
     return false;
 
   const auto key = settingsKey(host, port);
-  m_settings.beginGroup(m_group);
-  const bool present = m_settings.contains(key + QStringLiteral("/user"))
-                    || m_settings.contains(key + QStringLiteral("/pass"));
-  m_settings.endGroup();
+  if (Core::Runtime::sealed()) {
+    const auto prefix = m_group + QLatin1Char('/') + key + QLatin1Char('/');
+    const QMutexLocker locker(&s_overlayMutex);
+    if (s_packageOwned.contains(prefix + kUserField)
+        || s_packageOwned.contains(prefix + kPassField))
+      return !s_overlay.value(prefix + kUserField).isEmpty()
+          || !s_overlay.value(prefix + kPassField).isEmpty();
+  }
 
+  m_settings.beginGroup(m_group);
+  const bool present = m_settings.contains(key + QLatin1Char('/') + kUserField)
+                    || m_settings.contains(key + QLatin1Char('/') + kPassField);
+  m_settings.endGroup();
   return present;
 }
 
@@ -99,21 +127,7 @@ QString MQTT::CredentialVault::keyPassphrase(const QString& host, quint16 port) 
   if (host.isEmpty())
     return QString();
 
-  const auto key = settingsKey(host, port);
-  m_settings.beginGroup(m_group);
-  const auto cipher = m_settings.value(key + QStringLiteral("/keyPass")).toString();
-  m_settings.endGroup();
-
-  if (cipher.isEmpty())
-    return QString();
-
-  auto plain = m_simpleCrypt.decryptToString(cipher);
-  if (m_simpleCrypt.lastError() != Licensing::SimpleCrypt::ErrorNoError) {
-    qCWarning(lcMqttVault) << "Key passphrase decrypt failed for" << key;
-    return QString();
-  }
-
-  return plain;
+  return readField(settingsKey(host, port), kKeyField);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -131,22 +145,14 @@ void MQTT::CredentialVault::setCredentials(const QString& host,
   if (host.isEmpty())
     return;
 
-  const auto key = settingsKey(host, port);
+  const auto key          = settingsKey(host, port);
+  const bool userPersists = writeField(key, kUserField, username);
+  const bool passPersists = writeField(key, kPassField, password);
+  if (!userPersists || !passPersists || !username.isEmpty() || !password.isEmpty())
+    return;
+
   m_settings.beginGroup(m_group);
-
-  if (username.isEmpty())
-    m_settings.remove(key + QStringLiteral("/user"));
-  else
-    m_settings.setValue(key + QStringLiteral("/user"), m_simpleCrypt.encryptToString(username));
-
-  if (password.isEmpty())
-    m_settings.remove(key + QStringLiteral("/pass"));
-  else
-    m_settings.setValue(key + QStringLiteral("/pass"), m_simpleCrypt.encryptToString(password));
-
-  if (username.isEmpty() && password.isEmpty())
-    m_settings.remove(key);
-
+  m_settings.remove(key);
   m_settings.endGroup();
 }
 
@@ -160,28 +166,37 @@ void MQTT::CredentialVault::setKeyPassphrase(const QString& host,
   if (host.isEmpty())
     return;
 
-  const auto key = settingsKey(host, port);
-  m_settings.beginGroup(m_group);
-
-  if (passphrase.isEmpty())
-    m_settings.remove(key + QStringLiteral("/keyPass"));
-  else
-    m_settings.setValue(key + QStringLiteral("/keyPass"),
-                        m_simpleCrypt.encryptToString(passphrase));
-
-  m_settings.endGroup();
+  (void)writeField(settingsKey(host, port), kKeyField, passphrase);
 }
 
 /**
- * @brief Removes any stored credentials for host:port.
+ * @brief Removes any stored credentials for host:port. Slots a deployment package owns are dropped
+ *        from memory only, so the operator's own stored credentials for the host survive.
  */
 void MQTT::CredentialVault::clear(const QString& host, quint16 port)
 {
   if (host.isEmpty())
     return;
 
+  const auto key    = settingsKey(host, port);
+  const auto prefix = m_group + QLatin1Char('/') + key + QLatin1Char('/');
+  if (Core::Runtime::sealed()) {
+    const QMutexLocker locker(&s_overlayMutex);
+    bool owned = false;
+    for (const auto& field : {kUserField, kPassField, kKeyField}) {
+      if (!s_packageOwned.contains(prefix + field))
+        continue;
+
+      owned = true;
+      s_overlay.insert(prefix + field, QString());
+    }
+
+    if (owned)
+      return;
+  }
+
   m_settings.beginGroup(m_group);
-  m_settings.remove(settingsKey(host, port));
+  m_settings.remove(key);
   m_settings.endGroup();
 }
 
@@ -197,6 +212,63 @@ QString MQTT::CredentialVault::settingsKey(const QString& host, quint16 port)
   const auto endpoint = host.trimmed().toLower() + QChar(':') + QString::number(port);
   const auto digest = QCryptographicHash::hash(endpoint.toUtf8(), QCryptographicHash::Sha1).toHex();
   return QString::fromLatin1(digest);
+}
+
+/**
+ * @brief Reads one field: a package-owned slot answers from memory in a sealed session; otherwise
+ *        the settings file is unscrambled as it always was.
+ */
+QString MQTT::CredentialVault::readField(const QString& key, const QString& field) const
+{
+  if (Core::Runtime::sealed()) {
+    const auto slot = m_group + QLatin1Char('/') + key + QLatin1Char('/') + field;
+    const QMutexLocker locker(&s_overlayMutex);
+    if (s_packageOwned.contains(slot))
+      return s_overlay.value(slot);
+  }
+
+  m_settings.beginGroup(m_group);
+  const auto cipher = m_settings.value(key + QLatin1Char('/') + field).toString();
+  m_settings.endGroup();
+  if (cipher.isEmpty())
+    return QString();
+
+  auto plain = m_simpleCrypt.decryptToString(cipher);
+  if (m_simpleCrypt.lastError() != Licensing::SimpleCrypt::ErrorNoError) {
+    qCWarning(lcMqttVault) << "Decrypt failed for" << field << "of" << key;
+    return QString();
+  }
+
+  return plain;
+}
+
+/**
+ * @brief Writes one field. Inside a transient scope, or to a slot a package already owns, the
+ *        value stays in memory and false is returned; otherwise it is scrambled into the settings
+ *        file (empty removes it) and true is returned.
+ */
+bool MQTT::CredentialVault::writeField(const QString& key,
+                                       const QString& field,
+                                       const QString& value)
+{
+  const auto slot = m_group + QLatin1Char('/') + key + QLatin1Char('/') + field;
+  if (Core::Runtime::sealed()) {
+    const QMutexLocker locker(&s_overlayMutex);
+    if (s_transientDepth > 0 || s_packageOwned.contains(slot)) {
+      s_packageOwned.insert(slot);
+      s_overlay.insert(slot, value);
+      return false;
+    }
+  }
+
+  m_settings.beginGroup(m_group);
+  if (value.isEmpty())
+    m_settings.remove(key + QLatin1Char('/') + field);
+  else
+    m_settings.setValue(key + QLatin1Char('/') + field, m_simpleCrypt.encryptToString(value));
+
+  m_settings.endGroup();
+  return true;
 }
 
 #endif  // BUILD_COMMERCIAL

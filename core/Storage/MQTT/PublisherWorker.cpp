@@ -33,7 +33,9 @@
 #  include <QTimer>
 
 #  include "Core/DataModel/ExportSchema.h"
+#  include "Core/Runtime.h"
 #  include "Core/SSAssert.h"
+#  include "DataModel/Project/ProjectSealing.h"
 #  include "MQTT/CsvExpansion.h"
 #  include "MQTT/Publisher.h"
 #  include "MQTT/PublisherScript.h"
@@ -412,6 +414,8 @@ void MQTT::PublisherWorker::publishBatchAsJson(const std::vector<DataModel::Fram
 
   const auto& latest = items.back();
   QJsonObject root   = DataModel::serialize(latest);
+  if (Core::Runtime::sealed())
+    DataModel::stripSealedContent(root);
 
   QMap<int, QJsonArray> valuesByDataset;
   QMap<int, QJsonArray> numericByDataset;

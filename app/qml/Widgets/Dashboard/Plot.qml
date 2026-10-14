@@ -699,5 +699,39 @@ Item {
         }
       }
     }
+
+    //
+    // Spec 0097 R7: shown once the plot history decimates (curve ceiling or memory rail)
+    //
+    Rectangle {
+      id: decimatedChip
+
+      z: 10
+      radius: 3
+      width: decimatedLabel.implicitWidth + 12
+      height: decimatedLabel.implicitHeight + 4
+      color: Cpp_ThemeManager.colors["widget_base"]
+      visible: root.model && !root.model.historyExact
+      border.color: Cpp_ThemeManager.colors["widget_border"]
+      x: parent.curveLayer.x + 4
+      y: parent.curveLayer.y + 4
+
+      Label {
+        id: decimatedLabel
+
+        anchors.centerIn: parent
+        text: qsTr("Decimated")
+        font: Cpp_Misc_CommonFonts.monoFont
+        color: Cpp_ThemeManager.colors["widget_text"]
+      }
+
+      HoverHandler {
+        id: decimatedHover
+      }
+
+      ToolTip.delay: 300
+      ToolTip.visible: decimatedHover.hovered
+      ToolTip.text: qsTr("History limit reached: zooming shows min/max per cell, not every sample")
+    }
   }
 }

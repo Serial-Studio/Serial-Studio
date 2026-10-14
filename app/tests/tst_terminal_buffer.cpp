@@ -26,6 +26,7 @@
 
 #include "UI/Widgets/Terminal/AnsiPalette.h"
 #include "UI/Widgets/Terminal/TerminalBuffer.h"
+#include "UI/Widgets/Terminal/TerminalCatchUp.h"
 
 // Every test function here is self-contained: each builds its own buffer, so Qt Test's
 // declaration-order execution is never load-bearing.
@@ -68,6 +69,9 @@ private slots:
   void visualBottomRowFollowsWrapping();
   void colorRowsTrackCharacters();
   void resetClearsEveryStore();
+  void runAndCharacterFeedsAgree();
+  void catchUpMarksTheFirstSkippedChunk();
+  void hiddenThenCaughtUpEqualsAlwaysVisible();
 };
 
 //--------------------------------------------------------------------------------------------------
@@ -93,6 +97,32 @@ static void feed(Widgets::TerminalBuffer& buffer, const QString& data)
 
     if (pos < len) {
       (void)buffer.processText(data[pos], text, false);
+      ++pos;
+    }
+  }
+
+  buffer.appendText(text);
+}
+
+/**
+ * @brief feed() with VT-100 controls honoured, so carriage returns, backspaces and tabs move the
+ *        cursor and later text overwrites inside a row instead of appending.
+ */
+static void feedVt(Widgets::TerminalBuffer& buffer, const QString& data)
+{
+  QString text;
+  int pos       = 0;
+  const int len = data.size();
+
+  while (pos < len) {
+    const int runStart = pos;
+    pos                = Widgets::TerminalBuffer::scanPrintableRun(data, pos);
+
+    if (pos > runStart)
+      text.append(QStringView(data).mid(runStart, pos - runStart));
+
+    if (pos < len) {
+      (void)buffer.processText(data[pos], text, true);
       ++pos;
     }
   }
@@ -530,6 +560,115 @@ void TstTerminalBuffer::resetClearsEveryStore()
   QVERIFY(buffer.colorRows().isEmpty());
   QVERIFY(buffer.repeatCounts().isEmpty());
   QCOMPARE(buffer.takeDroppedLines(), 0);
+}
+
+/**
+ * @brief Spec 0097 R14: the run fast path must leave exactly the rows, color rows, repeat counts
+ *        and cursor that a character-at-a-time feed leaves, across wraps, carriage-return
+ *        overwrites, backspaces, tabs, padding and non-printable bytes, with colors on and off.
+ */
+void TstTerminalBuffer::runAndCharacterFeedsAgree()
+{
+  const QString stream =
+    QStringLiteral("abcdefghijklmnopqrstuvwxyz0123456789\n"
+                   "row two is here\rROW\n"
+                   "tab\there and\bX done\n"
+                   "\x01\x02 control bytes\n"
+                   "a much longer line that wraps more than twice at a narrow column count\n");
+
+  for (const bool colors : {false, true}) {
+    Widgets::AnsiPalette palette;
+    Widgets::TerminalBuffer whole(palette);
+    Widgets::TerminalBuffer single(palette);
+    for (auto* buffer : {&whole, &single}) {
+      buffer->setColumns(12);
+      buffer->setMaxLines(100);
+      buffer->setAnsiColors(colors);
+      buffer->reset();
+    }
+
+    feedVt(whole, stream);
+    for (const QChar c : stream)
+      feedVt(single, QString(c));
+
+    QCOMPARE(whole.lines(), single.lines());
+    QCOMPARE(whole.repeatCounts(), single.repeatCounts());
+    QCOMPARE(whole.cursor(), single.cursor());
+    QCOMPARE(whole.colorRows().size(), single.colorRows().size());
+    for (qsizetype r = 0; r < whole.colorRows().size(); ++r)
+      QCOMPARE(whole.colorRows()[r].size(), single.colorRows()[r].size());
+
+    if (colors)
+      for (qsizetype r = 0; r < whole.lineCount(); ++r)
+        QCOMPARE(whole.colorRows()[r].size(), whole.lines()[r].size());
+  }
+}
+
+/**
+ * @brief Spec 0097 R12: only the first chunk of a hidden stretch sets the mark, take() hands it
+ *        back once, and reset() (a clear) forgets the stretch.
+ */
+void TstTerminalBuffer::catchUpMarksTheFirstSkippedChunk()
+{
+  Widgets::TerminalCatchUp catchUp;
+  QVERIFY(!catchUp.pending());
+
+  catchUp.skip(100, 40);
+  catchUp.skip(130, 30);
+  QVERIFY(catchUp.pending());
+  QCOMPARE(catchUp.take(), qint64(60));
+  QVERIFY(!catchUp.pending());
+
+  catchUp.skip(200, 10);
+  catchUp.reset();
+  QVERIFY(!catchUp.pending());
+}
+
+/**
+ * @brief Spec 0097 AC11 at buffer level: a view that formats part of a stream, skips the rest
+ *        while hidden and then appends everything since its mark ends up identical to a view that
+ *        was visible throughout (color rows on). ANSI colors are the maintainer's in-app check.
+ */
+void TstTerminalBuffer::hiddenThenCaughtUpEqualsAlwaysVisible()
+{
+  QString stream;
+  for (int i = 0; i < 40; ++i)
+    stream += QStringLiteral("line %1 value %2\n").arg(i).arg(i * 7);
+
+  const int seen = stream.indexOf(QStringLiteral("line 12"));
+  QString emitted;
+  qint64 mark = 0;
+  Widgets::TerminalCatchUp catchUp;
+
+  Widgets::AnsiPalette palette;
+  Widgets::TerminalBuffer visible(palette);
+  Widgets::TerminalBuffer caught(palette);
+  for (auto* buffer : {&visible, &caught}) {
+    buffer->setColumns(20);
+    buffer->setMaxLines(200);
+    buffer->setAnsiColors(true);
+    buffer->reset();
+  }
+
+  feedVt(visible, stream);
+  feedVt(caught, stream.left(seen));
+  for (qsizetype pos = seen; pos < stream.size(); pos += 37) {
+    const QString chunk  = stream.mid(pos, 37);
+    emitted             += chunk;
+    mark                += chunk.size();
+    catchUp.skip(mark + seen, chunk.size());
+  }
+
+  QVERIFY(catchUp.pending());
+  const qint64 since = catchUp.take();
+  QCOMPARE(since, qint64(seen));
+  feedVt(caught, stream.mid(static_cast<qsizetype>(since)));
+
+  QCOMPARE(caught.lines(), visible.lines());
+  QCOMPARE(caught.repeatCounts(), visible.repeatCounts());
+  QCOMPARE(caught.cursor(), visible.cursor());
+  QCOMPARE(caught.colorRows().size(), visible.colorRows().size());
+  QCOMPARE(emitted, stream.mid(seen));
 }
 
 QTEST_APPLESS_MAIN(TstTerminalBuffer)
