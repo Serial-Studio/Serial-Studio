@@ -1947,7 +1947,9 @@ def translate_ts_file(
                 for msg in ctx.findall("message")
                 if msg.findtext("source", default="").strip()
             )
-            progress.update(lang_code, state="done", done=en_total, total=en_total)
+            progress.update(
+                lang_code, state="done", done=en_total, total=en_total, seeded=en_total
+            )
         return
 
     # Reuse pass FIRST: entries whose string only moved to a new context are
@@ -2014,6 +2016,7 @@ def translate_ts_file(
             state="translating",
             total=file_total,
             done=already_done,
+            seeded=already_done,
             flagged=0,
         )
 
@@ -2021,7 +2024,13 @@ def translate_ts_file(
         tree.write(ts_path, encoding="utf-8", xml_declaration=True)
         log_fn(f"{filename}: nothing to translate.")
         if progress is not None:
-            progress.update(lang_code, state="done", total=file_total, done=file_total)
+            progress.update(
+                lang_code,
+                state="done",
+                total=file_total,
+                done=file_total,
+                seeded=file_total,
+            )
         return
 
     total_updated = 0
@@ -2455,6 +2464,7 @@ class Progress:
                 "state": "queued",
                 "done": 0,
                 "total": 0,
+                "seeded": 0,
                 "flagged": 0,
                 "retry_kind": None,
                 "retry_until": 0.0,
@@ -2522,10 +2532,9 @@ class Dashboard:
         self._block_height = 0
         self._enabled = sys.stdout.isatty()
         self._tick = 0
-        # Rate baseline: workers seed `done` with already-validated entries
-        # from prior runs. Counting those against this run's elapsed inflates
-        # the rate. Snapshot the baseline once a worker reports active work.
-        self._rate_baseline_done: int | None = None
+        # Rate clock: starts when the first worker produces. Each row reports
+        # the entries it found already translated as `seeded`, and only
+        # `done - seeded` counts as this run's work.
         self._rate_baseline_at: float | None = None
 
     def start(self) -> None:
@@ -2606,21 +2615,21 @@ class Dashboard:
             1 for r in rows.values() if r["state"] in ("done", "skipped", "error")
         )
 
-        # Snapshot the rate baseline once a worker actually starts producing,
-        # so the rate reflects new work / time-since-real-work-began.
+        # Rate counts only strings translated in this run: entries a worker
+        # found already translated (seeded) were never sent to the LLM, and
+        # each language seeds when it starts, not when the first one did.
         any_active = any(
             r["state"] in ("translating", "calling", "parsing", "copying")
             for r in rows.values()
         )
         now = time.monotonic()
-        if self._rate_baseline_done is None and any_active:
-            self._rate_baseline_done = total_done
+        if self._rate_baseline_at is None and any_active:
             self._rate_baseline_at = now
 
-        if self._rate_baseline_done is not None and self._rate_baseline_at is not None:
-            delta_done = max(0, total_done - self._rate_baseline_done)
+        new_done = sum(max(0, r["done"] - r.get("seeded", 0)) for r in rows.values())
+        if self._rate_baseline_at is not None:
             delta_elapsed = now - self._rate_baseline_at
-            rate = delta_done / delta_elapsed if delta_elapsed > 1.0 else 0.0
+            rate = new_done / delta_elapsed if delta_elapsed > 1.0 else 0.0
         else:
             rate = 0.0
         eta_s = (total_total - total_done) / rate if rate > 0 else 0.0
