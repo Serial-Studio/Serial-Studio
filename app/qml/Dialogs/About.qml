@@ -212,8 +212,9 @@ Widgets.SmartDialog {
       //
       Widgets.PushButton {
         Layout.fillWidth: true
-        visible: Cpp_CommercialBuild
+        enabled: !app.runtimeMode
         text: qsTr("Manage License")
+        visible: Cpp_CommercialBuild
         onClicked: app.showLicenseDialog()
       }
 
@@ -259,6 +260,7 @@ Widgets.SmartDialog {
       //
       Widgets.PushButton {
         Layout.fillWidth: true
+        enabled: !app.runtimeMode
         text: qsTr("Acknowledgements")
         onClicked: app.showAcknowledgements()
       }
@@ -269,6 +271,7 @@ Widgets.SmartDialog {
       Widgets.PushButton {
         Layout.fillWidth: true
         text: qsTr("Benchmark")
+        enabled: !app.runtimeMode
         onClicked: app.showBenchmarkDialog()
       }
 

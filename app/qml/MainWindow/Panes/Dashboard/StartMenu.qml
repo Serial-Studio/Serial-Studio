@@ -803,6 +803,10 @@ Popup {
       commandId: "app.helpCenter"
     }
 
+    StartMenuCommand {
+      commandId: "app.about"
+    }
+
     Rectangle {
       opacity: 0.5
       implicitHeight: 1

@@ -168,7 +168,7 @@ Widgets.MiniWindow {
       text: qsTr("Rename Widget…")
       enabled: root.displayEditable
       icon.color: Cpp_ThemeManager.colors["text"]
-      icon.source: Cpp_Misc_IconRegistry.icon("editor", "rename", 16)
+      icon.source: "qrc:/icons/buttons/rename.svg"
       onTriggered: Cpp_JSON_ProjectModel.promptRenameWidget(root.entityWidgetType,
                                                             root.entityUniqueId, root.title)
     }
@@ -180,7 +180,7 @@ Widgets.MiniWindow {
       icon.height: 16
       title: qsTr("Freeze Title")
       icon.color: Cpp_ThemeManager.colors["text"]
-      icon.source: Cpp_Misc_IconRegistry.icon("commands", "freeze", 16)
+      icon.source: "qrc:/icons/buttons/freeze.svg"
 
       MenuItem {
         checkable: true
@@ -219,7 +219,7 @@ Widgets.MiniWindow {
       visible: root.extensionConfig.length > 0
       onTriggered: root.showExtensionSettings()
       icon.color: Cpp_ThemeManager.colors["text"]
-      icon.source: Cpp_Misc_IconRegistry.icon("commands", "settings", 16)
+      icon.source: "qrc:/icons/buttons/wrench.svg"
     }
 
     MenuSeparator {
@@ -232,7 +232,7 @@ Widgets.MiniWindow {
       text: qsTr("Open in External Window")
       onTriggered: root.externalWindowClicked()
       icon.color: Cpp_ThemeManager.colors["text"]
-      icon.source: Cpp_Misc_IconRegistry.icon("editor", "expand", 16)
+      icon.source: "qrc:/icons/buttons/expand.svg"
     }
   }
 

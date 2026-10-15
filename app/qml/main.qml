@@ -235,7 +235,7 @@ Item {
     }
 
     //
-    // About dialog (gated to author mode by showAboutDialog)
+    // About dialog (license management is disabled inside it in operator mode)
     //
     DialogLoader {
       id: aboutDialog
@@ -636,11 +636,10 @@ Item {
   }
 
   //
-  // About dialog: author-only
+  // About dialog: available in both modes
   //
   function showAboutDialog() {
-    if (!app.runtimeMode)
-      aboutDialog.activate()
+    aboutDialog.activate()
   }
 
   //

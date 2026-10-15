@@ -55,6 +55,7 @@ QtObject {
     "dashboard.stopwatch": root.cmdDashboardStopwatch,
     "app.preferences": root.cmdAppPreferences,
     "app.helpCenter": root.cmdAppHelpCenter,
+    "app.about": root.cmdAppAbout,
     "app.sessions": root.cmdAppSessions,
     "app.fileTransmission": root.cmdAppFileTransmission,
     "app.ai": root.cmdAppAi,
@@ -133,6 +134,14 @@ QtObject {
 
   readonly property QtObject cmdAppHelpCenter: QtObject {
     function run() { app.showHelpCenter() }
+  }
+
+  //
+  // About lives in the main toolbar for authors; operators only reach it from the start menu.
+  //
+  readonly property QtObject cmdAppAbout: QtObject {
+    readonly property bool visible: app.runtimeMode
+    function run() { app.showAboutDialog() }
   }
 
   readonly property QtObject cmdAppSessions: QtObject {
