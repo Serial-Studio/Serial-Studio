@@ -86,7 +86,7 @@ public:
     Q_UNUSED(response);
   }
 
-  void closeSocket(QTcpSocket* socket, const API::ConnectionState& state) override
+  void closeSocket(QTcpSocket* socket, API::ConnectionState& state) override
   {
     Q_UNUSED(socket);
     Q_UNUSED(state);
