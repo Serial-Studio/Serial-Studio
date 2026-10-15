@@ -96,6 +96,7 @@ class QuickPlotProjectTest : public QObject {
   Q_OBJECT
 
 private slots:
+  void initTestCase();
   void sourceKeepsQuickPlotFraming();
   void sourceUsesTheFreeCommaParser();
   void sourceCarriesTheConnectionSettings();
@@ -105,6 +106,15 @@ private slots:
   void audioFftSettingsCarryOver();
   void emptyStructureYieldsNothing();
 };
+
+/**
+ * @brief Takes the SS_ASSERT recovery branch instead of aborting, so the empty-structure guard is
+ *        observable from a debug build.
+ */
+void QuickPlotProjectTest::initTestCase()
+{
+  qputenv("SS_ASSERT_NONFATAL", "1");
+}
 
 /**
  * @brief One device, newline-terminated plain text, end delimiter only.
