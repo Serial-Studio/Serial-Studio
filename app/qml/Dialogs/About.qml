@@ -31,11 +31,12 @@ Widgets.SmartDialog {
   //
   // Custom properties
   //
+  readonly property string appName: Cpp_CommercialBuild ? "Serial Studio Pro" : "Serial Studio"
   readonly property int year: new Date().getFullYear()
   readonly property string buildTag: Cpp_AppCommit !== ""
                                      ? Cpp_AppCommit.substring(0, 7)
                                      : qsTr("local build")
-  readonly property string buildIdentity: Cpp_AppName + " " + Cpp_AppVersion + " ("
+  readonly property string buildIdentity: root.appName + " " + Cpp_AppVersion + " ("
                                           + (Cpp_AppCommit !== "" ? Cpp_AppCommit : buildTag)
                                           + ")"
 
@@ -89,7 +90,7 @@ Widgets.SmartDialog {
 
           Label {
             rightPadding: 16
-            text: Application.displayName
+            text: root.appName
             font: Cpp_Misc_CommonFonts.customUiFont(2, true)
           }
 
@@ -214,8 +215,8 @@ Widgets.SmartDialog {
         Layout.fillWidth: true
         enabled: !app.runtimeMode
         text: qsTr("Manage License")
-        visible: Cpp_CommercialBuild
         onClicked: app.showLicenseDialog()
+        visible: Cpp_CommercialBuild && !app.runtimeMode
       }
 
       //
@@ -261,6 +262,7 @@ Widgets.SmartDialog {
       Widgets.PushButton {
         Layout.fillWidth: true
         enabled: !app.runtimeMode
+        visible: !app.runtimeMode
         text: qsTr("Acknowledgements")
         onClicked: app.showAcknowledgements()
       }
@@ -272,6 +274,7 @@ Widgets.SmartDialog {
         Layout.fillWidth: true
         text: qsTr("Benchmark")
         enabled: !app.runtimeMode
+        visible: !app.runtimeMode
         onClicked: app.showBenchmarkDialog()
       }
 
