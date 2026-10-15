@@ -2446,6 +2446,7 @@ qt_add_resources(SS_TEST_AI_SAFETY_RCC ${CMAKE_CURRENT_SOURCE_DIR}/support/ai-sa
 
 ss_add_unit_test(tst_assistant_batch_tiers
   SOURCES tst_assistant_batch_tiers.cpp
+          ${SS_CORE_SRC}/Api/API/CommandCapabilities.cpp
           ${SS_CORE_SRC}/Ui/AI/CommandRegistry.cpp
           ${SS_CORE_SRC}/Ui/AI/Logging.cpp
   LIBS    Qt6::Core
