@@ -39,6 +39,8 @@ public:
   [[nodiscard]] Safety safetyOf(const QString& commandName) const;
   [[nodiscard]] bool deviceControlAllowed() const;
   [[nodiscard]] bool isDeviceGated(const QString& commandName) const;
+  [[nodiscard]] Safety argumentAwareSafety(const QString& commandName,
+                                           const QJsonObject& args) const;
   [[nodiscard]] Safety effectiveSafety(const QString& commandName, const QJsonObject& args) const;
 
   [[nodiscard]] static int strictness(Safety safety) noexcept;

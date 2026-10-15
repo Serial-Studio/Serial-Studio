@@ -204,7 +204,10 @@ void IO::CircularBuffer<T, StorageType>::clear()
 }
 
 /**
- * @brief Appends data to the circular buffer (lock-free SPSC producer).
+ * @brief Appends data to the circular buffer (lock-free SPSC producer). One slot stays unused so
+ *        `head == tail` is always empty, never "exactly full": a chunk filling the ring to the
+ *        byte used to wrap tail onto head and read back as size() 0, dropping data (spec 0099
+ *        f2/f1). Usable capacity is `m_capacity - 1`; the physical wrap masks against `m_capacity`.
  */
 template<typename T, Concepts::ByteLike StorageType>
 void IO::CircularBuffer<T, StorageType>::append(const T& data)
@@ -213,20 +216,21 @@ void IO::CircularBuffer<T, StorageType>::append(const T& data)
   if (dataSize == 0) [[unlikely]]
     return;
 
-  const uint8_t* src = reinterpret_cast<const uint8_t*>(data.data());
+  const uint8_t* src     = reinterpret_cast<const uint8_t*>(data.data());
+  const qsizetype usable = m_capacity - 1;
 
   qsizetype copySize = dataSize;
-  if (copySize > m_capacity) [[unlikely]] {
-    src      += (copySize - m_capacity);
-    copySize  = m_capacity;
-    m_overflowCount.fetch_add(dataSize - m_capacity, std::memory_order_relaxed);
+  if (copySize > usable) [[unlikely]] {
+    src      += (copySize - usable);
+    copySize  = usable;
+    m_overflowCount.fetch_add(dataSize - usable, std::memory_order_relaxed);
   }
 
   const qsizetype head = m_head.load(std::memory_order_acquire);
   const qsizetype tail = m_tail.load(std::memory_order_relaxed);
 
   qsizetype current_size = (tail >= head) ? (tail - head) : (m_capacity - head + tail);
-  qsizetype free_space   = m_capacity - current_size;
+  qsizetype free_space   = usable - current_size;
 
   if (copySize > free_space) [[unlikely]] {
     const qsizetype overwrite = copySize - free_space;

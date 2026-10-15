@@ -45,6 +45,7 @@ public:
    */
   explicit PlaybackRing(qsizetype capacityBytes)
     : m_buffer(static_cast<std::size_t>(capacityBytes > 0 ? capacityBytes : 1))
+    , m_silenceByte(0)
     , m_head(0)
     , m_tail(0)
     , m_underruns(0)
@@ -105,6 +106,13 @@ public:
   }
 
   /**
+   * @brief Sets the byte an underrun pads with; 0x80 is silence for unsigned 8-bit, 0 otherwise.
+   *        Set on the GUI thread before the device starts, so the render callback reads it
+   * race-free.
+   */
+  void setSilenceByte(unsigned char byte) noexcept { m_silenceByte = byte; }
+
+  /**
    * @brief Producer side: appends @p size bytes, or refuses the write whole.
    */
   [[nodiscard]] bool write(const char* data, qsizetype size) noexcept
@@ -131,7 +139,7 @@ public:
   }
 
   /**
-   * @brief Consumer side: fills @p size bytes of @p out, zero-filling and counting an underrun
+   * @brief Consumer side: fills @p size bytes of @p out, silence-filling and counting an underrun
    *        when fewer were buffered. Returns how many real bytes were delivered.
    */
   [[nodiscard]] qsizetype read(char* out, qsizetype size) noexcept
@@ -155,7 +163,7 @@ public:
     }
 
     if (toRead < size) {
-      std::memset(out + toRead, 0, static_cast<std::size_t>(size - toRead));
+      std::memset(out + toRead, m_silenceByte, static_cast<std::size_t>(size - toRead));
       m_underruns.fetch_add(1, std::memory_order_relaxed);
     }
 
@@ -164,6 +172,7 @@ public:
 
 private:
   std::vector<char> m_buffer;
+  unsigned char m_silenceByte;
 
   alignas(64) std::atomic<quint64> m_head;
   alignas(64) std::atomic<quint64> m_tail;

@@ -315,11 +315,14 @@ void Misc::ExtensionInstaller::startDownloads(const QVariantMap& entry,
 
 /**
  * @brief Removes an installed extension's directory and its manifest record, returning false when
- *        the directory could only be deleted in part.
+ *        the directory could only be deleted in part or id/type is not a safe path component
+ *        (the recursive delete is never built from an unchecked name).
  */
 bool Misc::ExtensionInstaller::uninstall(const QString& id, const QString& type)
 {
   SS_ASSERT(!id.isEmpty(), return false);
+  if (!ExtensionCatalog::isSafePathComponent(id) || !ExtensionCatalog::isSafePathComponent(type))
+    return false;
 
   const auto installDir = extensionsPath() + "/" + type + "/" + id;
   const bool removed    = QDir(installDir).removeRecursively();

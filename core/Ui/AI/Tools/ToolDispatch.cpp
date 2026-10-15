@@ -54,8 +54,7 @@ static API::DispatchPolicy approvedPolicy(const AI::CommandRegistry& registry,
                            const QString& name,
                            const QJsonObject& params,
                            int depth) -> std::optional<API::CommandResponse> {
-    Q_UNUSED(params);
-    const auto tier           = tiers->safetyOf(name);
+    const auto tier           = tiers->argumentAwareSafety(name, params);
     const bool nestedDispatch = depth > 0 && AI::CommandRegistry::isDispatcher(name);
     const bool withinApproval =
       AI::CommandRegistry::strictness(tier) <= AI::CommandRegistry::strictness(approved);

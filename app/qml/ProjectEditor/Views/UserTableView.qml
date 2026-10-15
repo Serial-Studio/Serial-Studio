@@ -405,8 +405,13 @@ Widgets.Pane {
 
              background: Item {}
 
-              onTextEdited: {
-                if (text !== regRow.committedName && text.length > 0) {
+              onEditingFinished: {
+                if (text.length === 0) {
+                  text = regRow.committedName
+                  return
+                }
+
+                if (text !== regRow.committedName) {
                   if (root.commitRegister(regRow.committedName, text,
                                           regRow.committedComputed, regRow.committedValue))
                     regRow.committedName = text
@@ -439,10 +444,17 @@ Widgets.Pane {
 
               background: Item {}
 
-              onTextEdited: {
-                const newVal = modelData.valueType === "number"
-                                 ? parseFloat(text || "0")
-                                 : text
+              onEditingFinished: {
+                const numeric = modelData.valueType === "number"
+                const newVal = numeric ? Number(text) : text
+                if (numeric && (text.trim().length === 0 || !isFinite(newVal))) {
+                  text = String(regRow.committedValue)
+                  return
+                }
+
+                if (newVal === regRow.committedValue)
+                  return
+
                 if (root.commitRegister(regRow.committedName, regRow.committedName,
                                         regRow.committedComputed, newVal))
                   regRow.committedValue = newVal

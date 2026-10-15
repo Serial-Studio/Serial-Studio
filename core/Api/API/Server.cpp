@@ -279,13 +279,24 @@ void API::Server::stopListening()
 }
 
 /**
- * @brief Forgets every connection and tells the worker to drop its sockets.
+ * @brief Forgets every connection and tells the worker to drop its sockets. Each entry goes
+ *        through the same per-connection cleanup a single disconnect runs, because the worker's
+ *        removal notices arrive after the table is gone and are ignored: skipping it here leaked
+ *        MCP sessions and left the stream-subscriber flag set with nobody subscribed.
  */
 void API::Server::dropConnections()
 {
   SS_ASSERT(m_worker != nullptr, return);
 
+  bool wasStreaming = false;
+  for (auto it = m_connections.constBegin(); it != m_connections.constEnd(); ++it)
+    wasStreaming |= teardownConnection(it.value());
+
   m_connections.clear();
+  refreshStreamSubscriberFlag();
+  if (wasStreaming)
+    Q_EMIT streamSubscribersChanged();
+
   if (m_mirrorLinked)
     mirrorPublisher().clearSubscribers();
 
@@ -590,14 +601,16 @@ void API::Server::sendResponse(QTcpSocket* socket, const QByteArray& response)
 }
 
 /**
- * @brief Asks the worker thread to drop one connection, leaving its buffer untouched.
+ * @brief Asks the worker thread to drop one connection, leaving its buffer untouched. Marks the
+ *        connection closing so any byte queued before socketRemoved is dropped, never forwarded.
  */
-void API::Server::closeSocket(QTcpSocket* socket, const ConnectionState& state)
+void API::Server::closeSocket(QTcpSocket* socket, ConnectionState& state)
 {
   SS_ASSERT(socket != nullptr, return);
   SS_ASSERT_LOG(!state.sessionId.isEmpty());
 
-  auto* worker = static_cast<ServerWorker*>(m_worker);
+  state.closing = true;
+  auto* worker  = static_cast<ServerWorker*>(m_worker);
   QMetaObject::invokeMethod(worker,
                             "disconnectSocket",
                             Qt::QueuedConnection,
@@ -958,8 +971,9 @@ void API::Server::pumpStreamQueue(QTcpSocket* socket, ConnectionState& state)
 }
 
 /**
- * @brief Clears the in-flight latch when the worker finished a stream write and sends the next
- *        queued block, which is what paces delivery to the subscriber's actual read rate.
+ * @brief Clears the in-flight latch when the worker reports a stream write drained (or abandoned)
+ *        and sends the next queued block, which is what paces delivery to the subscriber's
+ *        actual read rate.
  */
 void API::Server::onStreamWriteDone(QTcpSocket* socket, const QString& sessionId)
 {
@@ -1080,6 +1094,24 @@ void API::Server::onErrorOccurred(const QAbstractSocket::SocketError socketError
 }
 
 /**
+ * @brief Releases what one connection holds outside the table: its MCP session and its mirror
+ *        subscription. Shared by the single-socket and the bulk teardown so neither can leak what
+ *        the other frees; it never touches the table, so a caller may walk it. True when the
+ *        connection held a stream subscription, which the caller republishes after erasing.
+ */
+bool API::Server::teardownConnection(const ConnectionState& state)
+{
+  SS_ASSERT(!state.sessionId.isEmpty(), return false);
+
+  static auto& mcpHandler = MCPHandler::instance();
+  mcpHandler.clearSession(state.sessionId);
+  if (state.mirrorSubscribed)
+    mirrorPublisher().unsubscribe(state.sessionId);
+
+  return state.streamSubscribed;
+}
+
+/**
  * @brief Clears connection state when the worker reports socket removal. The removal is only
  *        honored when the session id matches: the queued notification can arrive after a new
  *        connection reused the freed socket's address, and removing that entry would leave the
@@ -1092,15 +1124,11 @@ void API::Server::onSocketDisconnected(QTcpSocket* socket, const QString& sessio
 
   const auto it = m_connections.constFind(socket);
   if (it != m_connections.constEnd() && it->sessionId == sessionId) {
-    static auto& mcpHandler = MCPHandler::instance();
-    mcpHandler.clearSession(sessionId);
-    if (it->mirrorSubscribed)
-      mirrorPublisher().unsubscribe(sessionId);
+    const bool wasStreaming = teardownConnection(it.value());
 
     qInfo() << "[API] Client disconnected (via worker):"
             << "- Remaining clients:" << (m_connections.size() - 1);
 
-    const bool wasStreaming = it->streamSubscribed;
     m_connections.erase(it);
     refreshStreamSubscriberFlag();
     if (wasStreaming)

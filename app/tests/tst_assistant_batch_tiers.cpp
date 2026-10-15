@@ -63,6 +63,8 @@ private slots:
   void nestedDispatcherIsBlocked();
   void bulkApplyOpsArePlanned();
   void forwardersPlanTheirCommands();
+  void scriptSettersAlwaysConfirm();
+  void argumentsEscalateAProgramChoice();
 };
 
 /**
@@ -189,7 +191,7 @@ void TstAssistantBatchTiers::forwardersPlanTheirCommands()
   QCOMPARE(AI::CommandRegistry::plannedCommands(QStringLiteral("assistant.script.apply"), painter),
            QStringList({QStringLiteral("project.painter.setCode")}));
   QCOMPARE(registry.effectiveSafety(QStringLiteral("assistant.script.apply"), painter),
-           Safety::Confirm);
+           Safety::AlwaysConfirm);
 
   const auto tile =
     AI::CommandRegistry::plannedCommands(QStringLiteral("assistant.workspace.addTile"), {});
@@ -199,6 +201,50 @@ void TstAssistantBatchTiers::forwardersPlanTheirCommands()
 
   QVERIFY(
     AI::CommandRegistry::plannedCommands(QStringLiteral("project.dataset.update"), {}).isEmpty());
+}
+
+/**
+ * @brief The script-installing setters are always-confirm for the assistant (spec 0098 review):
+ *        installed code runs with full trust, so an auto-approve must not run one silently.
+ */
+void TstAssistantBatchTiers::scriptSettersAlwaysConfirm()
+{
+  auto& registry = AI::CommandRegistry::instance();
+  for (const auto& setter : {QStringLiteral("project.frameParser.setCode"),
+                             QStringLiteral("project.source.setFrameParserCode"),
+                             QStringLiteral("project.dataset.setTransformCode"),
+                             QStringLiteral("project.transformLibrary.set"),
+                             QStringLiteral("project.painter.setCode")})
+    QCOMPARE(registry.safetyOf(setter), Safety::AlwaysConfirm);
+}
+
+/**
+ * @brief A generic source setter that chooses a program is escalated by its arguments to the
+ *        device-gated treatment, the same as the dedicated io.process.* setter (spec 0098 review):
+ *        Blocked while device control is off, AlwaysConfirm once it is on. A non-program key stays
+ *        at the command's own Confirm tier.
+ */
+void TstAssistantBatchTiers::argumentsEscalateAProgramChoice()
+{
+  auto& registry        = AI::CommandRegistry::instance();
+  const auto executable = QJsonObject{
+    {QStringLiteral("key"), QStringLiteral("executable")}
+  };
+  const auto baudRate = QJsonObject{
+    {QStringLiteral("key"), QStringLiteral("baudRate")}
+  };
+
+  registry.setDeviceControlAllowed(false);
+  QCOMPARE(registry.argumentAwareSafety(QStringLiteral("project.source.setProperty"), executable),
+           Safety::Blocked);
+  QCOMPARE(registry.argumentAwareSafety(QStringLiteral("project.source.setProperty"), baudRate),
+           Safety::Confirm);
+
+  registry.setDeviceControlAllowed(true);
+  QCOMPARE(registry.argumentAwareSafety(QStringLiteral("project.source.setProperty"), executable),
+           Safety::AlwaysConfirm);
+  QCOMPARE(registry.argumentAwareSafety(QStringLiteral("project.source.setProperty"), baudRate),
+           Safety::Confirm);
 }
 
 QTEST_GUILESS_MAIN(TstAssistantBatchTiers)

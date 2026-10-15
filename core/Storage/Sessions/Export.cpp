@@ -344,11 +344,16 @@ void Sessions::ExportWorker::applyPublishedStructure(const DataModel::Frame& fra
 }
 
 /**
- * @brief Creates the SQLite database file and writes the schema and session.
+ * @brief Creates the SQLite database file and writes the schema and session. Clears the prior
+ *        session's write-failure latch and dropped count here, on the worker that sets them, so a
+ *        queued GUI open notification cannot erase a fresh failure.
  */
 void Sessions::ExportWorker::createDatabase(const DataModel::Frame& frame)
 {
   SS_ASSERT(!m_dbOpen, return);
+  SS_ASSERT(m_writeFailure != nullptr && m_droppedBlocks != nullptr, return);
+  m_writeFailure->store(false, std::memory_order_relaxed);
+  m_droppedBlocks->store(0, std::memory_order_relaxed);
 
   const auto dbPath  = Sessions::DatabaseManager::canonicalDbPath(frame.title);
   const auto dirPath = QFileInfo(dbPath).absolutePath();
@@ -1263,9 +1268,7 @@ void Sessions::Export::resetSessionHealthBaseline()
   SS_ASSERT(m_controlScript != nullptr, return);
   SS_ASSERT(m_pipelineHost != nullptr, return);
 
-  m_writeFailure.store(false, std::memory_order_relaxed);
   m_rawOverruns.store(0, std::memory_order_relaxed);
-  m_droppedBlocks.store(0, std::memory_order_relaxed);
 
   const auto stats         = m_pipelineHost->linkStats();
   m_lastLinkDroppedSample  = stats.droppedFrames;

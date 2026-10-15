@@ -528,12 +528,12 @@ Každá akce se zařízením stále vyžaduje explicitní schválení pro každ�
         <translation>Nelze spustit API TCP server</translation>
     </message>
     <message>
-        <location filename="../../../core/Api/API/Server.cpp" line="346"/>
+        <location filename="../../../core/Api/API/Server.cpp" line="357"/>
         <source>Allow External API Connections?</source>
         <translation>Povolit Externí API Připojení?</translation>
     </message>
     <message>
-        <location filename="../../../core/Api/API/Server.cpp" line="347"/>
+        <location filename="../../../core/Api/API/Server.cpp" line="358"/>
         <source>Exposing the API server to external hosts allows other devices on your network to connect to Serial Studio on port 7777.
 
 Only enable this on trusted networks. Untrusted clients may read live data or send commands to your device.</source>
@@ -558,12 +558,12 @@ Povolte pouze v důvěryhodných sítích. Nedůvěryhodní klienti mohou číst
         <translation type="vanished">Serial Studio</translation>
     </message>
     <message>
-        <location filename="../../../core/Api/API/Server.cpp" line="1023"/>
+        <location filename="../../../core/Api/API/Server.cpp" line="1037"/>
         <source>API server</source>
         <translation>API server</translation>
     </message>
     <message>
-        <location filename="../../../core/Api/API/Server.cpp" line="1023"/>
+        <location filename="../../../core/Api/API/Server.cpp" line="1037"/>
         <source>Invalid pending connection</source>
         <translation>Neplatné čekající připojení</translation>
     </message>
@@ -779,37 +779,37 @@ Povolte pouze v důvěryhodných sítích. Nedůvěryhodní klienti mohou číst
         <translation>Konfigurace Akcelerometru</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/AccelerometerConfigDialog.qml" line="95"/>
+        <location filename="../../qml/Dialogs/AccelerometerConfigDialog.qml" line="110"/>
         <source>Configure the accelerometer display range and input units.</source>
         <translation>Nastavte rozsah zobrazení akcelerometru a vstupní jednotky.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/AccelerometerConfigDialog.qml" line="109"/>
+        <location filename="../../qml/Dialogs/AccelerometerConfigDialog.qml" line="124"/>
         <source>Display Range</source>
         <translation>Rozsah Zobrazení</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/AccelerometerConfigDialog.qml" line="130"/>
+        <location filename="../../qml/Dialogs/AccelerometerConfigDialog.qml" line="145"/>
         <source>Max G:</source>
         <translation>Max. G:</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/AccelerometerConfigDialog.qml" line="144"/>
+        <location filename="../../qml/Dialogs/AccelerometerConfigDialog.qml" line="159"/>
         <source>Enter max G value</source>
         <translation>Zadejte maximální hodnotu G</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/AccelerometerConfigDialog.qml" line="164"/>
+        <location filename="../../qml/Dialogs/AccelerometerConfigDialog.qml" line="179"/>
         <source>Input Configuration</source>
         <translation>Konfigurace Vstupu</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/AccelerometerConfigDialog.qml" line="184"/>
+        <location filename="../../qml/Dialogs/AccelerometerConfigDialog.qml" line="199"/>
         <source>Input already in G</source>
         <translation>Vstup již v G</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/AccelerometerConfigDialog.qml" line="218"/>
+        <location filename="../../qml/Dialogs/AccelerometerConfigDialog.qml" line="233"/>
         <source>Close</source>
         <translation>Zavřít</translation>
     </message>
@@ -1193,92 +1193,92 @@ Povolte pouze v důvěryhodných sítích. Nedůvěryhodní klienti mohou číst
         <translation>Porucha</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="275"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="283"/>
         <source>Select Alarm Sound</source>
         <translation>Vybrat Zvuk Alarmu</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="277"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="285"/>
         <source>WAV audio (*.wav)</source>
         <translation>WAV audio (*.WAV)</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="277"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="285"/>
         <source>All files (*)</source>
         <translation>Všechny soubory (*)</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="312"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="320"/>
         <source>Choose Band Color</source>
         <translation>Vybrat Barvu Pásma</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="339"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="347"/>
         <source>Presets</source>
         <translation>Předvolby</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="362"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="370"/>
         <source>Preset</source>
         <translation>Předvolba</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="377"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="385"/>
         <source>Choose preset…</source>
         <translation>Vybrat předvolbu…</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="488"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="496"/>
         <source>Blink</source>
         <translation>Blikat</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="495"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="503"/>
         <source>Sound</source>
         <translation>Zvuk</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="616"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="624"/>
         <source>Reset to severity default</source>
         <translation>Obnovit na výchozí závažnost</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="630"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="638"/>
         <source>Click to choose a color. Right-click to reset to severity default.</source>
         <translation>Klikněte pro výběr barvy. Pravým tlačítkem obnovíte výchozí barvu závažnosti.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="631"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="639"/>
         <source>Click to choose a custom color.</source>
         <translation>Klikněte pro výběr vlastní barvy.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="662"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="670"/>
         <source>Flash the LED while the value sits in this band.</source>
         <translation>Blikat LED, když hodnota leží v tomto pásmu.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="690"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="698"/>
         <source>Pick a WAV file to play for this band.</source>
         <translation>Vyberte WAV soubor pro přehrání tohoto pásma.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="706"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="714"/>
         <source>Use the priority's default sound.</source>
         <translation>Použít výchozí zvuk priority.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="779"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="787"/>
         <source>No bands defined. Pick a preset above or add a band to get started.</source>
         <translation>Nejsou definována žádná pásma. Vyberte předvolbu výše nebo přidejte pásmo pro začátek.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="903"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="911"/>
         <source>Apply</source>
         <translation>Použít</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="906"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="914"/>
         <source>Apply changes to the dataset.</source>
         <translation>Použít změny na dataset.</translation>
     </message>
@@ -1291,47 +1291,47 @@ Povolte pouze v důvěryhodných sítích. Nedůvěryhodní klienti mohou číst
         <translation type="vanished">Nahradit aktuální pásma vybranou předvolbou, škálovanou na rozsah tohoto datasetu.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="389"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="397"/>
         <source>Range</source>
         <translation>Rozsah</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="417"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="425"/>
         <source>Bands</source>
         <translation>Pásma</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="428"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="436"/>
         <source>Add Band</source>
         <translation>Přidat Pásmo</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="432"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="440"/>
         <source>Add a new band continuing from the last one.</source>
         <translation>Přidat nové pásmo navazující na poslední.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="463"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="471"/>
         <source>Min</source>
         <translation>Min.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="469"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="477"/>
         <source>Max</source>
         <translation>Max.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="475"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="483"/>
         <source>Severity</source>
         <translation>Závažnost</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="481"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="489"/>
         <source>Color</source>
         <translation>Barva</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="502"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="510"/>
         <source>Label</source>
         <translation>Popisek</translation>
     </message>
@@ -1344,22 +1344,22 @@ Povolte pouze v důvěryhodných sítích. Nedůvěryhodní klienti mohou číst
         <translation type="vanished">auto</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="716"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="724"/>
         <source>(optional)</source>
         <translation>(volitelné)</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="733"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="741"/>
         <source>Move up.</source>
         <translation>Posunout nahoru.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="752"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="760"/>
         <source>Move down.</source>
         <translation>Posunout dolů.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="765"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="773"/>
         <source>Remove this band.</source>
         <translation>Odstranit toto pásmo.</translation>
     </message>
@@ -1368,17 +1368,17 @@ Povolte pouze v důvěryhodných sítích. Nedůvěryhodní klienti mohou číst
         <translation type="vanished">Nejsou definována žádná pásma. Použijte předvolbu nebo přidejte pásmo pro začátek.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="796"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="804"/>
         <source>Preview</source>
         <translation>Náhled</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="892"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="900"/>
         <source>Cancel</source>
         <translation>Zrušit</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="894"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="902"/>
         <source>Discard changes.</source>
         <translation>Zahodit změny.</translation>
     </message>
@@ -2040,56 +2040,56 @@ Povolte pouze v důvěryhodných sítích. Nedůvěryhodní klienti mohou číst
 <context>
     <name>AxisRangeDialog</name>
     <message>
-        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="69"/>
+        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="84"/>
         <source>Axis Range Configuration</source>
         <translation>Konfigurace Rozsahu Osy</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="189"/>
+        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="204"/>
         <source>Configure the visible range for the plot axes. Values update in real-time as you type.</source>
         <translation>Nastavte viditelný rozsah os grafu. Hodnoty se aktualizují v reálném čase při psaní.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="197"/>
+        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="212"/>
         <source>X Axis</source>
         <translation>Osa X</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="222"/>
-        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="293"/>
+        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="237"/>
+        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="308"/>
         <source>Minimum:</source>
         <translation>Minimum:</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="234"/>
-        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="305"/>
+        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="249"/>
+        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="320"/>
         <source>Enter min value</source>
         <translation>Zadejte minimální hodnotu</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="243"/>
-        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="314"/>
+        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="258"/>
+        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="329"/>
         <source>Maximum:</source>
         <translation>Maximum:</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="255"/>
-        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="326"/>
+        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="270"/>
+        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="341"/>
         <source>Enter max value</source>
         <translation>Zadejte maximální hodnotu</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="270"/>
+        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="285"/>
         <source>Y Axis</source>
         <translation>Osa Y</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="345"/>
+        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="360"/>
         <source>Reset</source>
         <translation>Resetovat</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="355"/>
+        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="370"/>
         <source>Close</source>
         <translation>Zavřít</translation>
     </message>
@@ -5361,203 +5361,203 @@ Povolte pouze v důvěryhodných sítích. Nedůvěryhodní klienti mohou číst
         <translation>Soubory CSV (*.CSV)</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="220"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="216"/>
         <source>Track</source>
         <translation>Stopa</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="226"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="222"/>
         <source>Table</source>
         <translation>Tabulka</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="232"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="228"/>
         <source>Payload</source>
         <translation>Payload</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="238"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="234"/>
         <source>Decoder</source>
         <translation>Dekodér</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="325"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="321"/>
         <source>Window</source>
         <translation>Okno</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="342"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="338"/>
         <source>Bytes of history drawn across the lanes</source>
         <translation>Bajty historie vykreslené napříč stopami</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="346"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="342"/>
         <source>bytes</source>
         <translation>bajtů</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="371"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="367"/>
         <source>paused</source>
         <translation>pozastaveno</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="382"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="378"/>
         <source>%1 annotations kept</source>
         <translation>%1 anotací zachováno</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="398"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="394"/>
         <source>Each bar is a byte range the decoder labelled, one lane per decoder row: oldest on the left, newest on the right.</source>
         <translation>Každý pruh představuje rozsah bajtů označený dekodérem, jedna linie na řádek dekodéru: nejstarší vlevo, nejnovější vpravo.</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="401"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="397"/>
         <source>Labelled bytes %1 to %2, oldest on the left.</source>
         <translation>Označené bajty %1 až %2, nejstarší vlevo.</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="408"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="404"/>
         <source>The store is full at %1 labels, so anything older was dropped: shrink the window to see individual labels.</source>
         <translation>Úložiště je plné při %1 označeních, takže vše starší bylo zahozeno: zmenšete okno pro zobrazení jednotlivých označení.</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="511"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="507"/>
         <source>nothing labelled in this window</source>
         <translation>v tomto okně nic neoznačeno</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="564"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="560"/>
         <source>%1 labels</source>
         <translation>%1 označení</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="626"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="622"/>
         <source>%1 labels merged (bytes %2 to %3). Shrink the window to separate them.</source>
         <translation>%1 označení sloučeno (bajty %2 až %3). Zmenšete okno pro jejich oddělení.</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="631"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="627"/>
         <source>%1 (bytes %2 to %3)</source>
         <translation>%1 (bajty %2 až %3)</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="694"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="690"/>
         <source>Row</source>
         <translation>Řádek</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="703"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="699"/>
         <source>All rows</source>
         <translation>Všechny řádky</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="707"/>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="882"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="703"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="878"/>
         <source>Class</source>
         <translation>Třída</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="718"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="714"/>
         <source>All classes</source>
         <translation>Všechny třídy</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="728"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="724"/>
         <source>Export CSV</source>
         <translation>Exportovat CSV</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="733"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="729"/>
         <source>Save every annotation to a spreadsheet</source>
         <translation>Uložit každou anotaci do tabulky</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="865"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="861"/>
         <source>No annotations decoded yet</source>
         <translation>Zatím nebyly dekódovány žádné anotace</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="900"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="896"/>
         <source>Hexadecimal</source>
         <translation>Hexadecimální</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="910"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="906"/>
         <source>Refresh</source>
         <translation>Obnovit</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="913"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="909"/>
         <source>Re-read the bytes of the selected class</source>
         <translation>Znovu načíst bajty vybrané třídy</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="925"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="921"/>
         <source>%1 characters</source>
         <translation>%1 znaků</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="949"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="945"/>
         <source>Pick a class and press Refresh to extract its bytes</source>
         <translation>Vyberte třídu a stiskněte Obnovit pro extrakci bajtů</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="983"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="979"/>
         <source>Apply</source>
         <translation>Použít</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="986"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="982"/>
         <source>Compile the script and start decoding</source>
         <translation>Zkompilovat skript a začít dekódovat</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="999"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="995"/>
         <source>Load a decoder for a known protocol</source>
         <translation>Načíst dekodér pro známý protokol</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="1011"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="1007"/>
         <source>Clear</source>
         <translation>Vymazat</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="1016"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="1012"/>
         <source>Discard the annotations decoded so far</source>
         <translation>Zahodit dosud dekódované anotace</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="1024"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="1020"/>
         <source>Pause</source>
         <translation>Pozastavit</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="1024"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="1020"/>
         <source>Resume</source>
         <translation>Pokračovat</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="1029"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="1025"/>
         <source>Stop decoding, keep the labels already captured</source>
         <translation>Zastavit dekódování, zachovat již zachycené štítky</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="1030"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="1026"/>
         <source>Resume decoding the incoming bytes</source>
         <translation>Obnovit dekódování příchozích bajtů</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="1095"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="1091"/>
         <source>No annotations yet</source>
         <translation>Zatím žádné anotace</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="1108"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="1104"/>
         <source>Annotations label ranges of the incoming byte stream: a small script names each range, and this panel draws them as lanes, lists them, and extracts their bytes.</source>
         <translation>Anotace označují rozsahy příchozího proudu bajtů: malý skript pojmenuje každý rozsah a tento panel je vykreslí jako pruhy, vypíše je a extrahuje jejich bajty.</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="1116"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="1112"/>
         <source>Open Decoder</source>
         <translation>Otevřít Dekodér</translation>
     </message>
@@ -6206,17 +6206,17 @@ Povolte pouze v důvěryhodných sítích. Nedůvěryhodní klienti mohou číst
         <translation>Aktivní jsou záložní widgety. Zakupte licenci pro plnou funkčnost.</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="800"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="808"/>
         <source>Empty Workspace</source>
         <translation>Prázdný Pracovní Prostor</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="814"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="822"/>
         <source>Use the search bar to find and add widgets, or right-click a widget in another workspace to add it here.</source>
         <translation>Použijte vyhledávací lištu k nalezení a přidání widgetů, nebo klikněte pravým tlačítkem na widget v jiném pracovním prostoru a přidejte jej sem.</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="829"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="837"/>
         <source>Search Widgets</source>
         <translation>Hledat Widgety</translation>
     </message>
@@ -6259,7 +6259,7 @@ Povolte pouze v důvěryhodných sítích. Nedůvěryhodní klienti mohou číst
         <translation>API Server Vypnut</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardLayout.qml" line="662"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardLayout.qml" line="675"/>
         <source>Command Palette</source>
         <translation>Paleta Příkazů</translation>
     </message>
@@ -7105,7 +7105,7 @@ v
 <context>
     <name>DataModel::FrameBuilder</name>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/FrameBuilder.cpp" line="327"/>
+        <location filename="../../../core/Pipeline/DataModel/FrameBuilder.cpp" line="328"/>
         <source>A downstream consumer (dashboard, CSV/MDF4 export, historian, or API subscriber) is not draining fast enough, so data is being dropped from the display and from any active recording. Disable a heavy consumer or reduce the data rate.</source>
         <translation>Následný spotřebitel (dashboard, export CSV/MDF4, historik nebo odběratel API) nestíhá zpracovávat data dostatečně rychle, takže data jsou zahazována ze zobrazení i z aktivního záznamu. Zakažte náročného spotřebitele nebo snižte datový tok.</translation>
     </message>
@@ -7126,7 +7126,7 @@ v
         <translation type="vanished">Rychlý Graf</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/FrameBuilder.cpp" line="325"/>
+        <location filename="../../../core/Pipeline/DataModel/FrameBuilder.cpp" line="326"/>
         <source>Block pool exhausted</source>
         <translation>Vyčerpán zásobník bloků</translation>
     </message>
@@ -7135,12 +7135,12 @@ v
         <translation type="vanished">Následný spotřebitel (dashboard, CSV/MDF4 export, databáze relací nebo API odběratel) nestíhá zpracovávat dostatečně rychle, takže data jsou zahazována ze zobrazení i z jakéhokoli aktivního záznamu. Vypněte náročného spotřebitele nebo snižte datový tok.</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/FrameBuilder.cpp" line="2334"/>
+        <location filename="../../../core/Pipeline/DataModel/FrameBuilder.cpp" line="2343"/>
         <source>JavaScript transform exceeded budget</source>
         <translation>Transformace v JavaScriptu překročila limit</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/FrameBuilder.cpp" line="2335"/>
+        <location filename="../../../core/Pipeline/DataModel/FrameBuilder.cpp" line="2344"/>
         <source>A dataset transform took longer than %1 ms; remaining datasets in the frame fell back to raw values until the next frame. Profile or simplify the transform code.</source>
         <translation>Transformace datové sady trvala déle než %1 ms; zbývající datové sady ve frame byly převedeny na surové hodnoty až do dalšího frame. Profilujte nebo zjednodušte kód transformace.</translation>
     </message>
@@ -7995,12 +7995,12 @@ Přidat %4 dataset(ů) s výchozími hodnotami šablony?</translation>
         <translation>Pevný počet desetinných míst pro zobrazení hodnoty; přepíše formát (-1 = auto)</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="713"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="731"/>
         <source>Auto-detect</source>
         <translation>Automatická Detekce</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="713"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="731"/>
         <source>Manual Delimiters</source>
         <translation>Ruční Oddělovače</translation>
     </message>
@@ -8733,7 +8733,7 @@ Přidat %4 dataset(ů) s výchozími hodnotami šablony?</translation>
         <translation type="vanished">Painter Widget</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="730"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="748"/>
         <source>Web View</source>
         <translation>Zobrazení Webu</translation>
     </message>
@@ -8943,7 +8943,7 @@ Přidat %4 dataset(ů) s výchozími hodnotami šablony?</translation>
         <translation type="vanished">Horní mez rozsahu zobrazení měřidla nebo pruhu</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="743"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="761"/>
         <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="663"/>
         <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="690"/>
         <source>Auto</source>
@@ -9034,207 +9034,207 @@ Přidat %4 dataset(ů) s výchozími hodnotami šablony?</translation>
         <translation type="vanished">Upravit Kód Malíře</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="555"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="573"/>
         <source>Edit Canvas Code</source>
         <translation>Upravit Canvas Kód</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="579"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="597"/>
         <source>Edit Transmit Function</source>
         <translation>Upravit Funkci Přenosu</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="677"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="695"/>
         <source>Rectangular (None)</source>
         <translation>Obdélníkové (Žádné)</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="677"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="695"/>
         <source>Bartlett (Triangular)</source>
         <translation>Bartlett (Trojúhelníkové)</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="677"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="695"/>
         <source>Hann</source>
         <translation>Hann</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="678"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="696"/>
         <source>Hamming</source>
         <translation>Hamming</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="678"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="696"/>
         <source>Blackman</source>
         <translation>Blackman</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="678"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="696"/>
         <source>Blackman-Harris</source>
         <translation>Blackman-harris</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="678"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="696"/>
         <source>Nuttall</source>
         <translation>Nuttall</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="679"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="697"/>
         <source>Blackman-Nuttall</source>
         <translation>Blackman-nuttall</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="679"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="697"/>
         <source>Flat Top</source>
         <translation>Flat Top</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="679"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="697"/>
         <source>Welch</source>
         <translation>Welch</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="679"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="697"/>
         <source>Bartlett-Hann</source>
         <translation>Bartlett-hann</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="680"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="698"/>
         <source>Bohman</source>
         <translation>Bohman</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="680"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="698"/>
         <source>Cosine (Sine)</source>
         <translation>Cosine (Sine)</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="680"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="698"/>
         <source>Lanczos</source>
         <translation>Lanczos</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="680"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="698"/>
         <source>Parzen</source>
         <translation>Parzen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="691"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="709"/>
         <source>Off</source>
         <translation>Vypnuto</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="691"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="709"/>
         <source>Auto Start</source>
         <translation>Automatický Start</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="691"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="709"/>
         <source>Start on Trigger</source>
         <translation>Spustit při Triggeru</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="691"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="709"/>
         <source>Toggle on Trigger</source>
         <translation>Přepnout při Triggeru</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="692"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="710"/>
         <source>Repeat N Times</source>
         <translation>Opakovat N-krát</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="695"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="713"/>
         <source>Plain Text (UTF8)</source>
         <translation>Prostý Text (UTF8)</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="695"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="713"/>
         <source>Hexadecimal</source>
         <translation>Hexadecimální</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="695"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="713"/>
         <source>Base64</source>
         <translation>Base64</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="696"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="714"/>
         <source>Binary (Direct)</source>
         <translation>Binární (Přímý)</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="701"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="719"/>
         <source>No Checksum</source>
         <translation>Bez Kontrolního Součtu</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="705"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="723"/>
         <source>End Delimiter Only</source>
         <translation>Pouze Koncový Oddělovač</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="705"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="723"/>
         <source>Start Delimiter Only</source>
         <translation>Pouze Počáteční Oddělovač</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="706"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="724"/>
         <source>Start + End Delimiter</source>
         <translation>Počáteční + Koncový Oddělovač</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="706"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="724"/>
         <source>No Delimiters</source>
         <translation>Bez Oddělovačů</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="716"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="734"/>
         <source>Button</source>
         <translation>Tlačítko</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="716"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="734"/>
         <source>Slider</source>
         <translation>Posuvník</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="716"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="734"/>
         <source>Toggle</source>
         <translation>Přepínač</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="716"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="734"/>
         <source>Text Field</source>
         <translation>Textové Pole</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="717"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="735"/>
         <source>Knob</source>
         <translation>Otočný Ovladač</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="721"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="739"/>
         <source>Bar Panel</source>
         <translation>Sloupcový Panel</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="722"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="740"/>
         <source>Data Grid</source>
         <translation>Datová Mřížka</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="723"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="741"/>
         <source>GPS Map</source>
         <translation>Mapa GPS</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="724"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="742"/>
         <source>Gyroscope</source>
         <translation>Gyroskop</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="725"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="743"/>
         <source>Multi-Plot</source>
         <translation>Vícenásobný Graf</translation>
     </message>
@@ -9243,51 +9243,51 @@ Přidat %4 dataset(ů) s výchozími hodnotami šablony?</translation>
         <translation type="vanished">Vícenásobný Graf</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="726"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="744"/>
         <source>Accelerometer</source>
         <translation>Akcelerometr</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="727"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="745"/>
         <source>3D Plot</source>
         <translation>3D Graf</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="728"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="746"/>
         <source>Image View</source>
         <translation>Zobrazení Obrázku</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="729"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="747"/>
         <source>Canvas Widget</source>
         <translation>Canvas Widget</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="731"/>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="734"/>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="751"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="749"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="752"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="769"/>
         <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputStateRows.cpp" line="121"/>
         <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputStateRows.cpp" line="140"/>
         <source>None</source>
         <translation>Žádný</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="735"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="753"/>
         <source>Bar</source>
         <translation>Sloupcový</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="736"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="754"/>
         <source>Gauge</source>
         <translation>Ukazatel</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="737"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="755"/>
         <source>Compass</source>
         <translation>Kompas</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="738"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="756"/>
         <source>Meter</source>
         <translation>Měřič</translation>
     </message>
@@ -9296,52 +9296,52 @@ Přidat %4 dataset(ů) s výchozími hodnotami šablony?</translation>
         <translation type="vanished">Teploměr</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="744"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="762"/>
         <source>Integer (0 decimals)</source>
         <translation>Celé Číslo (0 desetinných míst)</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="745"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="763"/>
         <source>1 decimal</source>
         <translation>1 desetinné místo</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="746"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="764"/>
         <source>2 decimals</source>
         <translation>2 desetinná místa</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="747"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="765"/>
         <source>3 decimals</source>
         <translation>3 desetinná místa</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="748"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="766"/>
         <source>Scientific</source>
         <translation>Vědecký</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="752"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="770"/>
         <source>New Line (\n)</source>
         <translation>Nový Řádek (</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="753"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="771"/>
         <source>Carriage Return (\r)</source>
         <translation>Návrat Vozíku (\r)</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="754"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="772"/>
         <source>CRLF (\r\n)</source>
         <translation>CRLF (\r</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="757"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="775"/>
         <source>No</source>
         <translation>Ne</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="758"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="776"/>
         <source>Yes</source>
         <translation>Ano</translation>
     </message>
@@ -11711,22 +11711,22 @@ Platný formát: 01 A2 FF 3C</translation>
         <translation>Numerický Alias</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorCommit.cpp" line="865"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorCommit.cpp" line="899"/>
         <source>Edit Alarms</source>
         <translation>Upravit Alarmy</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorCommit.cpp" line="1005"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorCommit.cpp" line="1049"/>
         <source>Rename Dataset</source>
         <translation>Přejmenovat Datovou Sadu</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorCommit.cpp" line="1026"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorCommit.cpp" line="1070"/>
         <source>Edit Dataset</source>
         <translation>Upravit Dataset</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorCommit.cpp" line="1205"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorCommit.cpp" line="1249"/>
         <source>Edit Output Widget</source>
         <translation>Upravit Výstupní Widget</translation>
     </message>
@@ -13111,12 +13111,12 @@ Přidejte tagy řadiče výše pro jejich dotazování.</translation>
         <translation>Žádné značky nakonfigurovány</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="124"/>
+        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="161"/>
         <source>The tag attributes are empty</source>
         <translation>Atributy značky jsou prázdné</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="227"/>
+        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="267"/>
         <source>The %1 client is not available in this build</source>
         <translation>Klient %1 není v tomto sestavení k dispozici</translation>
     </message>
@@ -14292,163 +14292,163 @@ Přidejte tagy řadiče výše pro jejich dotazování.</translation>
         <translation>16 kHz</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="238"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="246"/>
         <source>Choose Marker Color</source>
         <translation>Vybrat Barvu Značky</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="265"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="273"/>
         <source>Presets</source>
         <translation>Předvolby</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="288"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="296"/>
         <source>Preset</source>
         <translation>Předvolba</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="303"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="311"/>
         <source>Choose preset…</source>
         <translation>Vybrat předvolbu…</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="315"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="323"/>
         <source>Frequency range</source>
         <translation>Frekvenční rozsah</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="321"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="329"/>
         <source>0 - %1 Hz</source>
         <translation>0 - %1 Hz</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="343"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="351"/>
         <source>Markers</source>
         <translation>Značky</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="354"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="362"/>
         <source>Add Marker</source>
         <translation>Přidat Značku</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="358"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="366"/>
         <source>Add a new point marker; set an end frequency to turn it into a band.</source>
         <translation>Přidejte nový bodový značkovač; nastavte koncovou frekvenci pro vytvoření pásma.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="389"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="397"/>
         <source>Start (Hz)</source>
         <translation>Začátek (Hz)</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="395"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="403"/>
         <source>End (Hz)</source>
         <translation>Konec (Hz)</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="401"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="409"/>
         <source>Warn (dB)</source>
         <translation>Varování (dB)</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="407"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="415"/>
         <source>Alarm (dB)</source>
         <translation>Alarm (dB)</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="413"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="421"/>
         <source>Color</source>
         <translation>Barva</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="420"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="428"/>
         <source>Label</source>
         <translation>Popisek</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="492"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="500"/>
         <source>(point)</source>
         <translation>(bod)</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="509"/>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="523"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="517"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="531"/>
         <source>(off)</source>
         <translation>(vyp)</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="557"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="565"/>
         <source>Reset to automatic color</source>
         <translation>Obnovit automatickou barvu</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="571"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="579"/>
         <source>Click to choose a color. Right-click to reset to automatic.</source>
         <translation>Klikněte pro výběr barvy. Pravým tlačítkem obnovíte automatickou volbu.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="572"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="580"/>
         <source>Click to choose a custom color.</source>
         <translation>Klikněte pro výběr vlastní barvy.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="593"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="601"/>
         <source>(optional)</source>
         <translation>(volitelné)</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="610"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="618"/>
         <source>Move up.</source>
         <translation>Posunout nahoru.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="629"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="637"/>
         <source>Move down.</source>
         <translation>Posunout dolů.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="642"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="650"/>
         <source>Remove this marker.</source>
         <translation>Odstranit tuto značku.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="656"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="664"/>
         <source>No markers defined. Pick a preset above or add a marker to get started.</source>
         <translation>Nejsou definovány žádné značky. Vyberte předvolbu výše nebo přidejte značku pro začátek.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="673"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="681"/>
         <source>Preview</source>
         <translation>Náhled</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="749"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="757"/>
         <source>0 Hz</source>
         <translation>0 Hz</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="755"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="763"/>
         <source>%1 Hz</source>
         <translation>%1 Hz</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="777"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="785"/>
         <source>Cancel</source>
         <translation>Zrušit</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="779"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="787"/>
         <source>Discard changes.</source>
         <translation>Zahodit změny.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="788"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="796"/>
         <source>Apply</source>
         <translation>Použít</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="791"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="799"/>
         <source>Apply changes to the dataset.</source>
         <translation>Použít změny na dataset.</translation>
     </message>
@@ -15129,27 +15129,27 @@ Přidejte tagy řadiče výše pro jejich dotazování.</translation>
 <context>
     <name>IO::Drivers::Audio</name>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="420"/>
+        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="421"/>
         <source>Audio Device Stopped</source>
         <translation>Zvukové Zařízení Zastaveno</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="421"/>
+        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="422"/>
         <source>The audio backend stopped the stream. The device may have been unplugged or claimed by another application.</source>
         <translation>Zvukový backend zastavil proud. Zařízení mohlo být odpojeno nebo převzato jinou aplikací.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="853"/>
+        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="854"/>
         <source>channels</source>
         <translation>kanály</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="853"/>
+        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="854"/>
         <source> channels</source>
         <translation>kanály</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="836"/>
+        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="837"/>
         <source>Unsigned 8-bit</source>
         <translation>Bez znaménka 8-bit</translation>
     </message>
@@ -15174,78 +15174,78 @@ Přidejte tagy řadiče výše pro jejich dotazování.</translation>
         <translation>Očekáváno %1 hodnot na rámec, získáno %2.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="349"/>
-        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="355"/>
+        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="350"/>
+        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="356"/>
         <source>Audio device error</source>
         <translation>Chyba zvukového zařízení</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="350"/>
+        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="351"/>
         <source>The selected audio device could not be initialized.</source>
         <translation>Vybrané zvukové zařízení nelze inicializovat.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="355"/>
+        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="356"/>
         <source>The selected audio device could not be started.</source>
         <translation>Vybrané zvukové zařízení nelze spustit.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="837"/>
+        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="838"/>
         <source>Signed 16-bit</source>
         <translation>Se znaménkem 16-bit</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="838"/>
+        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="839"/>
         <source>Signed 24-bit</source>
         <translation>Se znaménkem 24-bit</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="839"/>
+        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="840"/>
         <source>Signed 32-bit</source>
         <translation>Se znaménkem 32-bit</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="840"/>
+        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="841"/>
         <source>Float 32-bit</source>
         <translation>Plovoucí řádová čárka 32-bit</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="843"/>
+        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="844"/>
         <source>Mono</source>
         <translation>Mono</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="844"/>
+        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="845"/>
         <source>Stereo</source>
         <translation>Stereo</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="1378"/>
+        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="1379"/>
         <source>Input Device</source>
         <translation>Vstupní Zařízení</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="1386"/>
+        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="1387"/>
         <source>Sample Rate</source>
         <translation>Vzorkovací Frekvence</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="1394"/>
+        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="1395"/>
         <source>Normalization</source>
         <translation>Normalizace</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="1395"/>
+        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="1396"/>
         <source>Publish samples as floats in the -1.0 to 1.0 range</source>
         <translation>Publikovat vzorky jako čísla s plovoucí desetinnou čárkou v rozsahu -1.0 až 1.0</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="1403"/>
+        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="1404"/>
         <source>Sample Format</source>
         <translation>Formát Vzorku</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="1412"/>
+        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="1413"/>
         <source>Channels</source>
         <translation>Kanály</translation>
     </message>
@@ -15347,15 +15347,15 @@ Přidejte tagy řadiče výše pro jejich dotazování.</translation>
 <context>
     <name>IO::Drivers::CANBus</name>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="417"/>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="422"/>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="427"/>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="431"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="418"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="423"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="428"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="432"/>
         <source>CAN Bus Not Available</source>
         <translation>CAN Sběrnice Není Dostupná</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="428"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="429"/>
         <source>No CAN bus plugins found on this system.
 
 CAN bus support on macOS is limited and may require third-party hardware drivers.</source>
@@ -15364,37 +15364,37 @@ CAN bus support on macOS is limited and may require third-party hardware drivers
 Podpora CAN sběrnice v macOS je omezená a může vyžadovat ovladače hardwaru třetích stran.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="432"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="433"/>
         <source>No CAN bus plugins are available on this platform.</source>
         <translation>Na této platformě nejsou dostupné žádné pluginy pro CAN sběrnici.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="443"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="444"/>
         <source>Invalid CAN Configuration</source>
         <translation>Neplatná Konfigurace CAN</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="450"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="451"/>
         <source>Invalid Selection</source>
         <translation>Neplatný Výběr</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="458"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="459"/>
         <source>No Devices Available</source>
         <translation>Žádná Dostupná Zařízení</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="370"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="371"/>
         <source>CAN Device Creation Failed</source>
         <translation>Vytvoření CAN Zařízení Selhalo</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="402"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="403"/>
         <source>CAN Connection Failed</source>
         <translation>CAN Připojení Selhalo</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="418"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="419"/>
         <source>No CAN bus plugins found on this system.
 
 On Linux, ensure SocketCAN kernel modules are loaded.</source>
@@ -15403,7 +15403,7 @@ On Linux, ensure SocketCAN kernel modules are loaded.</source>
 V Linuxu se ujistěte, že jsou načteny moduly jádra SOCKETCAN.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="423"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="424"/>
         <source>No CAN bus plugins found on this system.
 
 On Windows, install CAN hardware drivers (PEAK, Vector, etc.).</source>
@@ -15412,27 +15412,27 @@ On Windows, install CAN hardware drivers (PEAK, Vector, etc.).</source>
 Ve Windows nainstalujte ovladače CAN hardware (PEAK, VECTOR atd.).</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="444"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="445"/>
         <source>The CAN bus configuration is incomplete. Select a valid plugin and interface.</source>
         <translation>Konfigurace CAN sběrnice je neúplná. Vyberte platný modul a rozhraní.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="451"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="452"/>
         <source>The selected plugin or interface is no longer available. Refresh the lists and try again.</source>
         <translation>Vybraný modul nebo rozhraní již není dostupné. Obnovte seznamy a zkuste to znovu.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="459"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="460"/>
         <source>The plugin or interface list is empty. Refresh the lists and ensure your CAN hardware is connected.</source>
         <translation>Seznam modulů nebo rozhraní je prázdný. Obnovte seznamy a ujistěte se, že je CAN hardware připojen.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="372"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="373"/>
         <source>Unable to create CAN bus device. Check your hardware and drivers.</source>
         <translation>Nelze vytvořit CAN zařízení. Zkontrolujte hardware a ovladače.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="400"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="401"/>
         <source>Unable to connect to CAN bus device. Check your hardware connection and settings.</source>
         <translation>Nelze se připojit k CAN zařízení. Zkontrolujte hardwarové připojení a nastavení.</translation>
     </message>
@@ -15445,68 +15445,68 @@ Ve Windows nainstalujte ovladače CAN hardware (PEAK, VECTOR atd.).</translation
         <translation type="vanished">Došlo k chybě, ale zařízení CAN již není dostupné.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1000"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1007"/>
         <source>Error code: %1</source>
         <translation>Kód chyby: %1</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1008"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1015"/>
         <source>CAN Bus Communication Error</source>
         <translation>Chyba Komunikace Sběrnice CAN</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1114"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1121"/>
         <source>No CAN driver selected</source>
         <translation>Nebyl vybrán žádný ovladač CAN</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1051"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1058"/>
         <source>Load SocketCAN kernel modules first</source>
         <translation>Nejprve načtěte moduly jádra SOCKETCAN</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1047"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1054"/>
         <source>Connect a %1 adapter, then refresh</source>
         <translation>Připojte adaptér %1 a poté obnovte</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1054"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1061"/>
         <source>Set up a virtual CAN interface first</source>
         <translation>Nejprve nastavte virtuální rozhraní CAN</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1056"/>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1076"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1063"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1083"/>
         <source>No interfaces found for %1</source>
         <translation>Pro %1 nebyla nalezena žádná rozhraní</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1060"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1067"/>
         <source>Install &lt;a href='https://www.peak-system.com/Drivers.523.0.html?&amp;L=1'&gt;PEAK CAN drivers&lt;/a&gt;</source>
         <translation>Nainstalujte &lt;a href='https://www.PEAK-system.com/Drivers.523.0.html?&amp;L=1'&gt;ovladače PEAK CAN&lt;/a&gt;</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1064"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1071"/>
         <source>Install &lt;a href='https://www.vector.com/us/en/products/products-a-z/libraries-drivers/'&gt;Vector CAN drivers&lt;/a&gt;</source>
         <translation>Nainstalujte &lt;a href='https://www.VECTOR.com/us/en/products/products-a-z/libraries-drivers/'&gt;ovladače VECTOR CAN&lt;/a&gt;</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1068"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1075"/>
         <source>Install &lt;a href='https://www.systec-electronic.com/en/company/support/driver'&gt;SysTec CAN drivers&lt;/a&gt;</source>
         <translation>Nainstalujte &lt;a href='https://www.systec-electronic.com/en/company/support/driver'&gt;ovladače SysTec CAN&lt;/a&gt;</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1071"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1078"/>
         <source>Install %1 drivers</source>
         <translation>Nainstalujte ovladače %1</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1074"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1081"/>
         <source>Install %1 drivers for macOS</source>
         <translation>Nainstalujte ovladače %1 pro macOS</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1088"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1095"/>
         <source>
 
 If the interface is down, bring it up first:
@@ -15517,42 +15517,42 @@ sudo ip link set %1 up type can bitrate %2
 </translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1224"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1231"/>
         <source>Plugin</source>
         <translation>Plugin</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1232"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1239"/>
         <source>Interface</source>
         <translation>Rozhraní</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1240"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1247"/>
         <source>Bitrate</source>
         <translation>Přenosová Rychlost</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1249"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1256"/>
         <source>CAN FD</source>
         <translation>CAN FD</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1256"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1263"/>
         <source>Data Bitrate</source>
         <translation>Datová Přenosová Rychlost</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1266"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1273"/>
         <source>Loopback</source>
         <translation>Zpětná Smyčka</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1273"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1280"/>
         <source>Listen-Only</source>
         <translation>Pouze Naslouchání</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1280"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1287"/>
         <source>Multi-Frame Reassembly</source>
         <translation>Opětovné Sestavení Vícerámcových Zpráv</translation>
     </message>
@@ -15560,17 +15560,17 @@ sudo ip link set %1 up type can bitrate %2
 <context>
     <name>IO::Drivers::EipPollWorker</name>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="354"/>
+        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="398"/>
         <source>"%1": %2</source>
         <translation>"%1": %2</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="361"/>
+        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="405"/>
         <source>The controller did not open every tag within the connection deadline</source>
         <translation>Řadič neotevřel všechny tagy v rámci časového limitu připojení</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="409"/>
+        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="453"/>
         <source>The controller stopped answering tag reads</source>
         <translation>Řadič přestal odpovídat na čtení tagů</translation>
     </message>
@@ -15578,166 +15578,166 @@ sudo ip link set %1 up type can bitrate %2
 <context>
     <name>IO::Drivers::EthernetIp</name>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="681"/>
+        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="725"/>
         <source>The connection is not configured: check the host and the tag list</source>
         <translation>Připojení není nakonfigurováno: zkontrolujte hostitele a seznam tagů</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="722"/>
+        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="766"/>
         <source>EtherNet/IP Connection Failed</source>
         <translation>Připojení Ethernet/IP Selhalo</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="723"/>
+        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="767"/>
         <source>"%1": %2</source>
         <translation>"%1": %2</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="724"/>
+        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="768"/>
         <source>the controller did not answer</source>
         <translation>řadič neodpověděl</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="767"/>
+        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="811"/>
         <source>EtherNet/IP Connection Lost</source>
         <translation>Připojení Ethernet/IP Ztraceno</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="848"/>
+        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="892"/>
         <source>ControlLogix</source>
         <translation>Controllogix</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="849"/>
+        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="893"/>
         <source>CompactLogix</source>
         <translation>Compactlogix</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="850"/>
+        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="894"/>
         <source>MicroLogix</source>
         <translation>Micrologix</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="851"/>
+        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="895"/>
         <source>Micro800</source>
         <translation>Micro800</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="852"/>
+        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="896"/>
         <source>PLC-5</source>
         <translation>PLC-5</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="853"/>
+        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="897"/>
         <source>SLC 500</source>
         <translation>SLC 500</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="854"/>
+        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="898"/>
         <source>Logix PCCC</source>
         <translation>Logix PCCC</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="855"/>
+        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="899"/>
         <source>Omron NJ/NX</source>
         <translation>Omron NJ/NX</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="898"/>
+        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="942"/>
         <source>Not connected</source>
         <translation>Nepřipojeno</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="901"/>
+        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="945"/>
         <source>Polling %1 tags at %2 Hz</source>
         <translation>Dotazování %1 tagů při %2 Hz</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="1118"/>
-        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="1127"/>
+        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="1162"/>
+        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="1171"/>
         <source>EtherNet/IP Tag</source>
         <translation>Ethernet/IP Tag</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="1119"/>
+        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="1163"/>
         <source>The tag name "%1" is too long or contains characters that are not allowed (no '&amp;', '=' or whitespace).</source>
         <translation>Název tagu "%1" je příliš dlouhý nebo obsahuje nepovolené znaky (žádné '&amp;', '=' ani mezery).</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="1127"/>
+        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="1171"/>
         <source>Unknown tag type "%1".</source>
         <translation>Neznámý typ tagu "%1".</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="1179"/>
+        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="1223"/>
         <source>Gateway</source>
         <translation>Brána</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="1186"/>
+        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="1230"/>
         <source>CIP Path</source>
         <translation>CIP Cesta</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="1193"/>
+        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="1237"/>
         <source>Controller Family</source>
         <translation>Rodina Řadičů</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="1201"/>
+        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="1245"/>
         <source>Poll Interval (ms)</source>
         <translation>Interval Dotazování (ms)</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="1295"/>
+        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="1339"/>
         <source>EtherNet/IP Project</source>
         <translation>Projekt Ethernet/IP</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="1300"/>
+        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="1344"/>
         <source>EtherNet/IP</source>
         <translation>Ethernet/IP</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="1329"/>
+        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="1373"/>
         <source>Controller Tags</source>
         <translation>Značky Řadiče</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="1359"/>
-        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="1384"/>
+        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="1403"/>
+        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="1428"/>
         <source>Failed to load generated project</source>
         <translation>Nepodařilo se načíst vygenerovaný projekt</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="1360"/>
-        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="1385"/>
+        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="1404"/>
+        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="1429"/>
         <source>The generated project JSON could not be loaded.</source>
         <translation>Vygenerovaný JSON projektu se nepodařilo načíst.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="1373"/>
+        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="1417"/>
         <source>No tags configured</source>
         <translation>Nejsou nakonfigurovány žádné značky</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="1374"/>
+        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="1418"/>
         <source>Add at least one tag before generating a project.</source>
         <translation>Před vygenerováním projektu přidejte alespoň jednu značku.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="1376"/>
-        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="1396"/>
+        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="1420"/>
+        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="1440"/>
         <source>EtherNet/IP Project Generator</source>
         <translation>Generátor Projektu Ethernet/IP</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="1393"/>
+        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="1437"/>
         <source>Successfully generated project with %1 datasets.</source>
         <translation>Projekt s %1 datovými sadami byl úspěšně vygenerován.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="1394"/>
+        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="1438"/>
         <source>The project editor is now open for customization.</source>
         <translation>Editor projektu je nyní otevřen pro přizpůsobení.</translation>
     </message>
@@ -15901,125 +15901,125 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
         <translation>Stanice odeslala více dat, než vyrovnávací paměť pro příjem pojme</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="537"/>
+        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="538"/>
         <source>The station sent a frame this link could not decode</source>
         <translation>Stanice odeslala rámec, který toto spojení nedokázalo dekódovat</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="688"/>
+        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="692"/>
         <source>The station did not answer within t1</source>
         <translation>Stanice neodpověděla v rámci t1</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="792"/>
+        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="796"/>
         <source>IEC 104 Connection Lost</source>
         <translation>Připojení IEC 104 Ztraceno</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="914"/>
+        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="918"/>
         <source>Not connected</source>
         <translation>Nepřipojeno</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="917"/>
+        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="921"/>
         <source>Starting data transfer…</source>
         <translation>Zahajování přenosu dat…</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="919"/>
+        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="923"/>
         <source>Monitoring %1 point(s) from station %2</source>
         <translation>Monitorování %1 bodu/bodů ze stanice %2</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1201"/>
+        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1205"/>
         <source>Host</source>
         <translation>Hostitel</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1208"/>
+        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1212"/>
         <source>Port</source>
         <translation>Port</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1217"/>
+        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1221"/>
         <source>Common Address</source>
         <translation>Společná Adresa</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1229"/>
+        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1233"/>
         <source>Send Window (k)</source>
         <translation>Okno Odesílání (k)</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1229"/>
+        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1233"/>
         <source>Ack Window (w)</source>
         <translation>Okno Potvrzení (w)</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1242"/>
+        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1246"/>
         <source>Timeout t%1 (ms)</source>
         <translation>Časový Limit t%1 (ms)</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1366"/>
+        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1370"/>
         <source>IEC 60870-5-104 Project</source>
         <translation>Projekt IEC 60870-5-104</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1371"/>
+        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1375"/>
         <source>IEC 60870-5-104</source>
         <translation>IEC 60870-5-104</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1401"/>
+        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1405"/>
         <source>Status Points</source>
         <translation>Stavové Body</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1402"/>
+        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1406"/>
         <source>Counters</source>
         <translation>Čítače</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1402"/>
+        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1406"/>
         <source>Measurements</source>
         <translation>Měření</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1433"/>
-        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1460"/>
+        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1437"/>
+        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1464"/>
         <source>Failed to load generated project</source>
         <translation>Nepodařilo se načíst vygenerovaný projekt</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1434"/>
-        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1461"/>
+        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1438"/>
+        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1465"/>
         <source>The generated project JSON could not be loaded.</source>
         <translation>Vygenerovaný JSON projektu se nepodařilo načíst.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1449"/>
+        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1453"/>
         <source>No points discovered</source>
         <translation>Nebyly objeveny žádné body</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1450"/>
+        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1454"/>
         <source>Connect to the station and let the interrogation finish before generating a project.</source>
         <translation>Připojte se ke stanici a nechte dotazování dokončit před vygenerováním projektu.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1452"/>
-        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1472"/>
+        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1456"/>
+        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1476"/>
         <source>IEC 60870-5-104 Project Generator</source>
         <translation>Generátor Projektu IEC 60870-5-104</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1469"/>
+        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1473"/>
         <source>Successfully generated project with %1 datasets.</source>
         <translation>Projekt s %1 datovými sadami byl úspěšně vygenerován.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1470"/>
+        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1474"/>
         <source>The project editor is now open for customization.</source>
         <translation>Editor projektu je nyní otevřen pro přizpůsobení.</translation>
     </message>
@@ -17587,130 +17587,130 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
 <context>
     <name>IO::Drivers::S7</name>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/S7.cpp" line="661"/>
+        <location filename="../../../core/Devices/IO/Drivers/S7.cpp" line="700"/>
         <source>The connection is not configured: check the host and the variable list</source>
         <translation>Připojení není nakonfigurováno: zkontrolujte hostitele a seznam proměnných</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/S7.cpp" line="702"/>
+        <location filename="../../../core/Devices/IO/Drivers/S7.cpp" line="741"/>
         <source>S7 Connection Failed</source>
         <translation>Připojení S7 Selhalo</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/S7.cpp" line="703"/>
+        <location filename="../../../core/Devices/IO/Drivers/S7.cpp" line="742"/>
         <source>"%1" (rack %2, slot %3): %4</source>
         <translation>"%1" (rack %2, slot %3): %4</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/S7.cpp" line="707"/>
+        <location filename="../../../core/Devices/IO/Drivers/S7.cpp" line="746"/>
         <source>the controller did not answer</source>
         <translation>řadič neodpověděl</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/S7.cpp" line="750"/>
+        <location filename="../../../core/Devices/IO/Drivers/S7.cpp" line="789"/>
         <source>S7 Connection Lost</source>
         <translation>Připojení S7 Ztraceno</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/S7.cpp" line="821"/>
+        <location filename="../../../core/Devices/IO/Drivers/S7.cpp" line="860"/>
         <source>Not connected</source>
         <translation>Nepřipojeno</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/S7.cpp" line="824"/>
+        <location filename="../../../core/Devices/IO/Drivers/S7.cpp" line="863"/>
         <source>Polling %1 variables at %2 Hz</source>
         <translation>Dotazování %1 proměnných při %2 Hz</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/S7.cpp" line="840"/>
+        <location filename="../../../core/Devices/IO/Drivers/S7.cpp" line="879"/>
         <source>invalid</source>
         <translation>neplatný</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/S7.cpp" line="858"/>
+        <location filename="../../../core/Devices/IO/Drivers/S7.cpp" line="897"/>
         <source>The address could not be parsed.</source>
         <translation>Adresu nelze analyzovat.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/S7.cpp" line="1082"/>
+        <location filename="../../../core/Devices/IO/Drivers/S7.cpp" line="1121"/>
         <source>S7 Address</source>
         <translation>Adresa S7</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/S7.cpp" line="1133"/>
+        <location filename="../../../core/Devices/IO/Drivers/S7.cpp" line="1172"/>
         <source>Host</source>
         <translation>Hostitel</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/S7.cpp" line="1140"/>
+        <location filename="../../../core/Devices/IO/Drivers/S7.cpp" line="1179"/>
         <source>Rack</source>
         <translation>Rack</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/S7.cpp" line="1149"/>
+        <location filename="../../../core/Devices/IO/Drivers/S7.cpp" line="1188"/>
         <source>Slot</source>
         <translation>Slot</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/S7.cpp" line="1158"/>
+        <location filename="../../../core/Devices/IO/Drivers/S7.cpp" line="1197"/>
         <source>Poll Interval (ms)</source>
         <translation>Interval Dotazování (ms)</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/S7.cpp" line="1278"/>
+        <location filename="../../../core/Devices/IO/Drivers/S7.cpp" line="1317"/>
         <source>Siemens S7 Project</source>
         <translation>Projekt Siemens S7</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/S7.cpp" line="1283"/>
+        <location filename="../../../core/Devices/IO/Drivers/S7.cpp" line="1322"/>
         <source>Siemens S7</source>
         <translation>Siemens S7</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/S7.cpp" line="1312"/>
+        <location filename="../../../core/Devices/IO/Drivers/S7.cpp" line="1351"/>
         <source>DB%1</source>
         <translation>DB%1</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/S7.cpp" line="1312"/>
+        <location filename="../../../core/Devices/IO/Drivers/S7.cpp" line="1351"/>
         <source>Memory</source>
         <translation>Paměť</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/S7.cpp" line="1342"/>
-        <location filename="../../../core/Devices/IO/Drivers/S7.cpp" line="1367"/>
+        <location filename="../../../core/Devices/IO/Drivers/S7.cpp" line="1381"/>
+        <location filename="../../../core/Devices/IO/Drivers/S7.cpp" line="1406"/>
         <source>Failed to load generated project</source>
         <translation>Nepodařilo se načíst vygenerovaný projekt</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/S7.cpp" line="1343"/>
-        <location filename="../../../core/Devices/IO/Drivers/S7.cpp" line="1368"/>
+        <location filename="../../../core/Devices/IO/Drivers/S7.cpp" line="1382"/>
+        <location filename="../../../core/Devices/IO/Drivers/S7.cpp" line="1407"/>
         <source>The generated project JSON could not be loaded.</source>
         <translation>Vygenerovaný JSON projektu se nepodařilo načíst.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/S7.cpp" line="1356"/>
+        <location filename="../../../core/Devices/IO/Drivers/S7.cpp" line="1395"/>
         <source>No variables configured</source>
         <translation>Nejsou nakonfigurovány žádné proměnné</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/S7.cpp" line="1357"/>
+        <location filename="../../../core/Devices/IO/Drivers/S7.cpp" line="1396"/>
         <source>Add at least one variable before generating a project.</source>
         <translation>Před vygenerováním projektu přidejte alespoň jednu proměnnou.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/S7.cpp" line="1359"/>
-        <location filename="../../../core/Devices/IO/Drivers/S7.cpp" line="1379"/>
+        <location filename="../../../core/Devices/IO/Drivers/S7.cpp" line="1398"/>
+        <location filename="../../../core/Devices/IO/Drivers/S7.cpp" line="1418"/>
         <source>S7 Project Generator</source>
         <translation>Generátor Projektu S7</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/S7.cpp" line="1376"/>
+        <location filename="../../../core/Devices/IO/Drivers/S7.cpp" line="1415"/>
         <source>Successfully generated project with %1 datasets.</source>
         <translation>Projekt s %1 datovými sadami byl úspěšně vygenerován.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/S7.cpp" line="1377"/>
+        <location filename="../../../core/Devices/IO/Drivers/S7.cpp" line="1416"/>
         <source>The project editor is now open for customization.</source>
         <translation>Editor projektu je nyní otevřen pro přizpůsobení.</translation>
     </message>
@@ -17718,27 +17718,27 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
 <context>
     <name>IO::Drivers::S7PollWorker</name>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/S7.cpp" line="147"/>
+        <location filename="../../../core/Devices/IO/Drivers/S7.cpp" line="182"/>
         <source>The ISO connection request could not be sent</source>
         <translation>Požadavek na ISO připojení se nepodařilo odeslat</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/S7.cpp" line="153"/>
+        <location filename="../../../core/Devices/IO/Drivers/S7.cpp" line="188"/>
         <source>The controller refused the ISO connection: check the rack and slot numbers</source>
         <translation>Řadič odmítl ISO připojení: zkontrolujte čísla racku a slotu</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/S7.cpp" line="172"/>
+        <location filename="../../../core/Devices/IO/Drivers/S7.cpp" line="207"/>
         <source>The controller did not answer the S7comm setup request</source>
         <translation>Řadič neodpověděl na požadavek nastavení S7comm</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/S7.cpp" line="178"/>
+        <location filename="../../../core/Devices/IO/Drivers/S7.cpp" line="213"/>
         <source>The controller refused the S7comm session</source>
         <translation>Řadič odmítl relaci S7comm</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/S7.cpp" line="315"/>
+        <location filename="../../../core/Devices/IO/Drivers/S7.cpp" line="354"/>
         <source>The controller closed the S7comm session</source>
         <translation>Řadič ukončil relaci S7comm</translation>
     </message>
@@ -17777,12 +17777,12 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
         <translation>Nelze otevřít sériový port %1: %2</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus/SerialCanBackendBase.cpp" line="205"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus/SerialCanBackendBase.cpp" line="204"/>
         <source>The adapter on %1 did not accept the initialization sequence.</source>
         <translation>Adaptér na %1 nepřijal inicializační sekvenci.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus/SerialCanBackendBase.cpp" line="215"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus/SerialCanBackendBase.cpp" line="214"/>
         <source>The adapter on %1 refused the requested configuration.</source>
         <translation>Adaptér na %1 odmítl požadovanou konfiguraci.</translation>
     </message>
@@ -18633,108 +18633,118 @@ Zařízení nemusí vystavovat datové endpointy ve své aktivní konfiguraci ne
         <translation>Přenos zrušen uživatelem</translation>
     </message>
     <message>
-        <location filename="../../../core/Protocols/FileTransfer/ZMODEM.cpp" line="271"/>
+        <location filename="../../../core/Protocols/FileTransfer/ZMODEM.cpp" line="252"/>
+        <source>Hex header malformed, dropping frame</source>
+        <translation>Malformovaná hex hlavička, zahazuji rámec</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Protocols/FileTransfer/ZMODEM.cpp" line="273"/>
         <source>Hex header CRC mismatch, dropping frame</source>
         <translation>Neshoda CRC hlavičky hex, zahazuji rámec</translation>
     </message>
     <message>
-        <location filename="../../../core/Protocols/FileTransfer/ZMODEM.cpp" line="446"/>
+        <location filename="../../../core/Protocols/FileTransfer/ZMODEM.cpp" line="311"/>
+        <source>Binary header CRC mismatch, dropping frame</source>
+        <translation>Neshoda CRC binární hlavičky, zahazuji rámec</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Protocols/FileTransfer/ZMODEM.cpp" line="491"/>
         <source>Sending file info: %1 (%2 bytes)</source>
         <translation>Odesílám informace o souboru: %1 (%2 bajtů)</translation>
     </message>
     <message>
-        <location filename="../../../core/Protocols/FileTransfer/ZMODEM.cpp" line="469"/>
+        <location filename="../../../core/Protocols/FileTransfer/ZMODEM.cpp" line="514"/>
         <source>Failed to seek to offset %1</source>
         <translation>Selhalo přesunutí na pozici %1</translation>
     </message>
     <message>
-        <location filename="../../../core/Protocols/FileTransfer/ZMODEM.cpp" line="495"/>
+        <location filename="../../../core/Protocols/FileTransfer/ZMODEM.cpp" line="540"/>
         <source>File read error: %1</source>
         <translation>Chyba čtení souboru: %1</translation>
     </message>
     <message>
-        <location filename="../../../core/Protocols/FileTransfer/ZMODEM.cpp" line="500"/>
+        <location filename="../../../core/Protocols/FileTransfer/ZMODEM.cpp" line="545"/>
         <source>File read returned more data than requested</source>
         <translation>Čtení souboru vrátilo více dat, než bylo požadováno</translation>
     </message>
     <message>
-        <location filename="../../../core/Protocols/FileTransfer/ZMODEM.cpp" line="593"/>
+        <location filename="../../../core/Protocols/FileTransfer/ZMODEM.cpp" line="638"/>
         <source>Receiver requests data from offset %1</source>
         <translation>Příjemce požaduje data od pozice %1</translation>
     </message>
     <message>
-        <location filename="../../../core/Protocols/FileTransfer/ZMODEM.cpp" line="602"/>
+        <location filename="../../../core/Protocols/FileTransfer/ZMODEM.cpp" line="647"/>
         <source>Receiver skipped the file</source>
         <translation>Příjemce přeskočil soubor</translation>
     </message>
     <message>
-        <location filename="../../../core/Protocols/FileTransfer/ZMODEM.cpp" line="615"/>
+        <location filename="../../../core/Protocols/FileTransfer/ZMODEM.cpp" line="660"/>
         <source>Too many errors, transfer aborted</source>
         <translation>Příliš mnoho chyb, přenos přerušen</translation>
     </message>
     <message>
-        <location filename="../../../core/Protocols/FileTransfer/ZMODEM.cpp" line="616"/>
+        <location filename="../../../core/Protocols/FileTransfer/ZMODEM.cpp" line="661"/>
         <source>Maximum retries exceeded</source>
         <translation>Překročen maximální počet opakování</translation>
     </message>
     <message>
-        <location filename="../../../core/Protocols/FileTransfer/ZMODEM.cpp" line="422"/>
+        <location filename="../../../core/Protocols/FileTransfer/ZMODEM.cpp" line="467"/>
         <source>Sending ZRQINIT, waiting for receiver…</source>
         <translation>Odesílám ZRQINIT, čekám na příjemce…</translation>
     </message>
     <message>
-        <location filename="../../../core/Protocols/FileTransfer/ZMODEM.cpp" line="532"/>
+        <location filename="../../../core/Protocols/FileTransfer/ZMODEM.cpp" line="577"/>
         <source>File data sent, waiting for confirmation…</source>
         <translation>Data souboru odeslána, čekám na potvrzení…</translation>
     </message>
     <message>
-        <location filename="../../../core/Protocols/FileTransfer/ZMODEM.cpp" line="543"/>
+        <location filename="../../../core/Protocols/FileTransfer/ZMODEM.cpp" line="588"/>
         <source>Sending ZFIN…</source>
         <translation>Odesílání ZFIN…</translation>
     </message>
     <message>
-        <location filename="../../../core/Protocols/FileTransfer/ZMODEM.cpp" line="583"/>
+        <location filename="../../../core/Protocols/FileTransfer/ZMODEM.cpp" line="628"/>
         <source>Receiver ready, sending file info…</source>
         <translation>Přijímač připraven, odesílání informací o souboru…</translation>
     </message>
     <message>
-        <location filename="../../../core/Protocols/FileTransfer/ZMODEM.cpp" line="621"/>
+        <location filename="../../../core/Protocols/FileTransfer/ZMODEM.cpp" line="666"/>
         <source>NAK received, retrying (%1/%2)…</source>
         <translation>Přijat NAK, opakování pokusu (%1/%2)…</translation>
     </message>
     <message>
-        <location filename="../../../core/Protocols/FileTransfer/ZMODEM.cpp" line="642"/>
+        <location filename="../../../core/Protocols/FileTransfer/ZMODEM.cpp" line="687"/>
         <source>Transfer complete</source>
         <translation>Přenos dokončen</translation>
     </message>
     <message>
-        <location filename="../../../core/Protocols/FileTransfer/ZMODEM.cpp" line="652"/>
+        <location filename="../../../core/Protocols/FileTransfer/ZMODEM.cpp" line="697"/>
         <source>Transfer cancelled by receiver</source>
         <translation>Přenos zrušen přijímačem</translation>
     </message>
     <message>
-        <location filename="../../../core/Protocols/FileTransfer/ZMODEM.cpp" line="653"/>
+        <location filename="../../../core/Protocols/FileTransfer/ZMODEM.cpp" line="698"/>
         <source>Receiver cancelled the transfer</source>
         <translation>Přijímač zrušil přenos</translation>
     </message>
     <message>
-        <location filename="../../../core/Protocols/FileTransfer/ZMODEM.cpp" line="661"/>
-        <location filename="../../../core/Protocols/FileTransfer/ZMODEM.cpp" line="662"/>
+        <location filename="../../../core/Protocols/FileTransfer/ZMODEM.cpp" line="706"/>
+        <location filename="../../../core/Protocols/FileTransfer/ZMODEM.cpp" line="707"/>
         <source>Receiver reported a file error</source>
         <translation>Přijímač hlásí chybu souboru</translation>
     </message>
     <message>
-        <location filename="../../../core/Protocols/FileTransfer/ZMODEM.cpp" line="842"/>
+        <location filename="../../../core/Protocols/FileTransfer/ZMODEM.cpp" line="887"/>
         <source>Transfer timed out</source>
         <translation>Časový limit přenosu vypršel</translation>
     </message>
     <message>
-        <location filename="../../../core/Protocols/FileTransfer/ZMODEM.cpp" line="843"/>
+        <location filename="../../../core/Protocols/FileTransfer/ZMODEM.cpp" line="888"/>
         <source>Timeout: no response from receiver</source>
         <translation>Časový limit: žádná odpověď od přijímače</translation>
     </message>
     <message>
-        <location filename="../../../core/Protocols/FileTransfer/ZMODEM.cpp" line="848"/>
+        <location filename="../../../core/Protocols/FileTransfer/ZMODEM.cpp" line="893"/>
         <source>Timeout, retrying (%1/%2)…</source>
         <translation>Časový limit vypršel, opakování pokusu (%1/%2)…</translation>
     </message>
@@ -21465,7 +21475,7 @@ Zadejte potřebná pověření.</translation>
     </message>
     <message>
         <location filename="../../../core/Ui/Misc/Extensions/ExtensionInstaller.cpp" line="224"/>
-        <location filename="../../../core/Ui/Misc/Extensions/ExtensionInstaller.cpp" line="431"/>
+        <location filename="../../../core/Ui/Misc/Extensions/ExtensionInstaller.cpp" line="434"/>
         <source>The verified files could not replace the installed version.</source>
         <translation>Ověřené soubory nelze nahradit nainstalovanou verzí.</translation>
     </message>
@@ -21475,12 +21485,12 @@ Zadejte potřebná pověření.</translation>
         <translation>Metadata rozšíření nelze připravit.</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/Misc/Extensions/ExtensionInstaller.cpp" line="400"/>
+        <location filename="../../../core/Ui/Misc/Extensions/ExtensionInstaller.cpp" line="403"/>
         <source>Download failed: %1</source>
         <translation>Stahování selhalo: %1</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/Misc/Extensions/ExtensionInstaller.cpp" line="405"/>
+        <location filename="../../../core/Ui/Misc/Extensions/ExtensionInstaller.cpp" line="408"/>
         <source>A downloaded file did not match the digest published for it.</source>
         <translation>Stažený soubor neodpovídá publikovanému otisku.</translation>
     </message>
@@ -23506,22 +23516,22 @@ Přidejte skupiny výše pro dotazování více typů registrů.</translation>
         <translation>Filtrovat podle názvu…</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUaTagBrowser.qml" line="429"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUaTagBrowser.qml" line="434"/>
         <source>%1 tag(s), %2 channel(s) selected</source>
         <translation>Vybráno %1 tag(ů), %2 kanál(ů)</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUaTagBrowser.qml" line="436"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUaTagBrowser.qml" line="441"/>
         <source>Select All Readable</source>
         <translation>Vybrat Vše Čitelné</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUaTagBrowser.qml" line="443"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUaTagBrowser.qml" line="448"/>
         <source>Cancel</source>
         <translation>Zrušit</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUaTagBrowser.qml" line="450"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUaTagBrowser.qml" line="455"/>
         <source>OK</source>
         <translation>OK</translation>
     </message>
@@ -26864,12 +26874,12 @@ Načíst jej znovu?</translation>
         <translation>V odpovědi serveru chybí požadovaná pole.</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/Console/Export.cpp" line="179"/>
+        <location filename="../../../core/Ui/Console/Export.cpp" line="172"/>
         <source>Console Output File Error</source>
         <translation>Chyba Souboru Výstupu Konzole</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/Console/Export.cpp" line="180"/>
+        <location filename="../../../core/Ui/Console/Export.cpp" line="173"/>
         <source>Cannot open file for writing!</source>
         <translation>Nelze otevřít soubor pro zápis!</translation>
     </message>
@@ -26894,7 +26904,7 @@ Načíst jej znovu?</translation>
         <translation>Obecná chyba I/O</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="222"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="230"/>
         <source>
 
 This script may use Lua 5.3 bitwise syntax, which this runtime does not support. Replace: %1. The bit and bit32 libraries are available in every script.</source>
@@ -26903,13 +26913,13 @@ This script may use Lua 5.3 bitwise syntax, which this runtime does not support.
 </translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="546"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="554"/>
         <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="267"/>
         <source>Frame Parser Disabled</source>
         <translation>Analyzátor Rámců Zakázán</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="547"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="555"/>
         <source>The Lua frame parser for source %1 timed out %2 frames in a row and has been disabled to keep Serial Studio responsive.
 
 Most likely cause: an infinite loop or extremely slow operation in the script body. Fix the script and reload the project to re-enable parsing.</source>
@@ -26918,13 +26928,13 @@ Most likely cause: an infinite loop or extremely slow operation in the script bo
 Nejpravděpodobnější příčina: nekonečná smyčka nebo extrémně pomalá operace v těle skriptu. Opravte skript a znovu načtěte projekt pro opětovné povolení analýzy.</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="289"/>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="329"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="297"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="337"/>
         <source>Lua Syntax Error</source>
         <translation>Syntaktická Chyba Lua</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="290"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="298"/>
         <source>The parser code contains an error:
 
 %1
@@ -26937,17 +26947,17 @@ Serial Studio can rewrite the unsupported operators as bit.* calls and reload th
 Serial Studio může přepsat nepodporované operátory jako volání bit.* a znovu načíst parser. Knihovna bit pracuje s 32bitovými celými čísly, takže hodnota širší než 32 bitů se po přepsání přetočí.</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="300"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="308"/>
         <source>Fix Automatically</source>
         <translation>Opravit Automaticky</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="301"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="309"/>
         <source>Leave Unchanged</source>
         <translation>Ponechat Beze Změny</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="330"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="338"/>
         <source>The parser code contains an error:
 
 %1</source>
@@ -26956,12 +26966,12 @@ Serial Studio může přepsat nepodporované operátory jako volání bit.* a zn
 %1</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="721"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="730"/>
         <source>Lua Runtime Error</source>
         <translation>Běhová Chyba Lua</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="722"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="731"/>
         <source>The parser code triggered an error:
 
 %1</source>
@@ -26970,13 +26980,13 @@ Serial Studio může přepsat nepodporované operátory jako volání bit.* a zn
 %1</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="743"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="752"/>
         <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="600"/>
         <source>Missing Parse Function</source>
         <translation>Chybějící Funkce Parse</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="744"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="753"/>
         <source>The 'parse' function is not defined in the script.
 
 Please ensure your code includes:
@@ -26987,13 +26997,13 @@ Ujistěte se, že váš kód obsahuje:
 function parse(frame) ... end</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="806"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="815"/>
         <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="652"/>
         <source>Parse Function Runtime Error</source>
         <translation>Chyba Běhu Funkce Parse</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="807"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="816"/>
         <source>The parse function contains an error:
 
 %1
@@ -28654,112 +28664,112 @@ Přidejte absolutní adresy výše pro dotazování řadiče.</translation>
         <translation>Podrobnosti Relace</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="49"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="50"/>
         <source>Reproduced</source>
         <translation>Reprodukováno</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="52"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="53"/>
         <source>Diverged</source>
         <translation>Odchýleno</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="55"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="56"/>
         <source>Partially verified</source>
         <translation>Částečně Ověřeno</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="58"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="59"/>
         <source>Not mechanically verifiable</source>
         <translation>Nelze Mechanicky Ověřit</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="61"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="62"/>
         <source>Verification error</source>
         <translation>Chyba Ověření</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="63"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="64"/>
         <source>Never verified</source>
         <translation>Nikdy Neověřeno</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="71"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="72"/>
         <source>Identical</source>
         <translation>Identické</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="74"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="75"/>
         <source>Value drift</source>
         <translation>Odchylka hodnot</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="77"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="78"/>
         <source>Coverage drift</source>
         <translation>Odchylka Pokrytí</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="80"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="81"/>
         <source>Structural drift</source>
         <translation>Strukturální Odchylka</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="83"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="84"/>
         <source>Not mechanically comparable</source>
         <translation>Mechanicky Neporovnatelné</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="85"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="86"/>
         <source>Check failed</source>
         <translation>Kontrola Selhala</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="114"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="115"/>
         <source>%1 B</source>
         <translation>%1 B</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="117"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="118"/>
         <source>%1 KB</source>
         <translation>%1 KB</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="120"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="121"/>
         <source>%1 MB</source>
         <translation>%1 MB</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="122"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="123"/>
         <source>%1 GB</source>
         <translation>%1 GB</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="146"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="147"/>
         <source>%1 samples over %2 s, %3 datasets</source>
         <translation>%1 vzorků za %2 s, %3 datových sad</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="228"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="234"/>
         <source>Select a session to view details.</source>
         <translation>Vyberte relaci pro zobrazení podrobností.</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="314"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="320"/>
         <source>Project:</source>
         <translation>Projekt:</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="327"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="333"/>
         <source>Started:</source>
         <translation>Zahájeno:</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="340"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="346"/>
         <source>Ended:</source>
         <translation>Ukončeno:</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="346"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="352"/>
         <source>(in progress)</source>
         <translation>(probíhá)</translation>
     </message>
@@ -28768,22 +28778,22 @@ Přidejte absolutní adresy výše pro dotazování řadiče.</translation>
         <translation type="vanished">Rámce:</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="384"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="390"/>
         <source>Notes</source>
         <translation>Poznámky</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="399"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="405"/>
         <source>Add session notes…</source>
         <translation>Přidat poznámky k relaci…</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="400"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="406"/>
         <source>Notes are read-only for completed sessions.</source>
         <translation>Poznámky jsou u dokončených relací pouze pro čtení.</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="485"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="493"/>
         <source>New tag…</source>
         <translation>Nový štítek…</translation>
     </message>
@@ -28804,42 +28814,42 @@ Přidejte absolutní adresy výše pro dotazování řadiče.</translation>
         <translation type="vanished">Odchylka Oproti Aktuálnímu Projektu</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="630"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="638"/>
         <source>Compares this session's decoded values against the project currently open in the editor. The result reflects a transient candidate and is not stored with the session.</source>
         <translation>Porovnává dekódované hodnoty této relace s projektem aktuálně otevřeným v editoru. Výsledek odráží přechodného kandidáta a není uložen s relací.</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="652"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="660"/>
         <source>Candidate: %1 (%2)</source>
         <translation>Kandidát: %1 (%2)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="653"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="661"/>
         <source>untitled</source>
         <translation>bez názvu</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="664"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="672"/>
         <source>Archived-configuration reproduction status: %1</source>
         <translation>Stav reprodukce archivované konfigurace: %1</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="718"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="726"/>
         <source>%1: only in the current project</source>
         <translation>%1: pouze v aktuálním projektu</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="721"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="729"/>
         <source>%1: only in the recorded project</source>
         <translation>%1: pouze v zaznamenaném projektu</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="723"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="731"/>
         <source>%1: %2 of %3 values changed, %4 missing, %5 extra</source>
         <translation>%1: %2 z %3 hodnot změněno, %4 chybí, %5 navíc</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="739"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="747"/>
         <source>…and %1 more datasets are affected.</source>
         <translation>…a %1 dalších datových sad je ovlivněno.</translation>
     </message>
@@ -28876,27 +28886,27 @@ Přidejte absolutní adresy výše pro dotazování řadiče.</translation>
         <translation type="vanished">Odemkněte soubor relace pro mazání relací</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="421"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="429"/>
         <source>Tags</source>
         <translation>Štítky</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="353"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="359"/>
         <source>Size:</source>
         <translation>Velikost:</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="367"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="373"/>
         <source>Stream data:</source>
         <translation>Data streamu:</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="492"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="500"/>
         <source>Add</source>
         <translation>Přidat</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="590"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="598"/>
         <source>Project Comparison</source>
         <translation>Porovnání Projektu</translation>
     </message>
@@ -28993,12 +29003,12 @@ Přidejte absolutní adresy výše pro dotazování řadiče.</translation>
         <translation>Značky</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionList.qml" line="215"/>
+        <location filename="../../qml/DatabaseExplorer/SessionList.qml" line="218"/>
         <source>No sessions found.</source>
         <translation>Nebyly nalezeny žádné relace.</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionList.qml" line="216"/>
+        <location filename="../../qml/DatabaseExplorer/SessionList.qml" line="219"/>
         <source>No session file open.</source>
         <translation>Není otevřen žádný soubor relace.</translation>
     </message>
@@ -29209,52 +29219,52 @@ Přidejte absolutní adresy výše pro dotazování řadiče.</translation>
 <context>
     <name>Sessions::DatabaseWorker</name>
     <message>
-        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="111"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="112"/>
         <source>Empty file path</source>
         <translation>Prázdná cesta k souboru</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="116"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="117"/>
         <source>This file is not a Serial Studio session database.</source>
         <translation>Tento soubor není databáze relací Serial Studio.</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="210"/>
-        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="276"/>
-        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="393"/>
-        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="464"/>
-        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="489"/>
-        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="517"/>
-        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="557"/>
-        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="837"/>
-        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="911"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="211"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="277"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="394"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="465"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="490"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="518"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="558"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="852"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="935"/>
         <source>Database not open</source>
         <translation>Databáze není otevřena</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="219"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="220"/>
         <source>This session is being recorded</source>
         <translation>Tato relace se právě zaznamenává</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="313"/>
-        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="336"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="314"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="337"/>
         <source>Database not open or empty label</source>
         <translation>Databáze není otevřena nebo prázdný popisek</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="438"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="439"/>
         <source>Invalid label</source>
         <translation>Neplatný popisek</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="705"/>
-        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="797"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="706"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="805"/>
         <source>Cancelled</source>
         <translation>Zrušeno</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="923"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="947"/>
         <source>Could not load session data</source>
         <translation>Nelze načíst data relace</translation>
     </message>
@@ -32313,7 +32323,7 @@ Zapněte Vložit Projekt pro zabudování projektu do zástupce, aby fungoval i 
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="392"/>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="929"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="930"/>
         <source>Hex</source>
         <translation>Hex</translation>
     </message>
@@ -32338,22 +32348,22 @@ Zapněte Vložit Projekt pro zabudování projektu do zástupce, aby fungoval i 
         <translation>Knihovna příkazů (historie, piny a akce)</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="822"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="823"/>
         <source>Send Data to Device</source>
         <translation>Odeslat data do zařízení</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="990"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="991"/>
         <source>Stop cyclic send</source>
         <translation>Zastavit cyklické odesílání</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="991"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="992"/>
         <source>Repeat the current command every %1 ms</source>
         <translation>Opakovat aktuální příkaz každých %1 ms</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="1012"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="1013"/>
         <source>Send data to the device</source>
         <translation>Odeslat data do zařízení</translation>
     </message>
@@ -33090,7 +33100,7 @@ Zapněte Vložit Projekt pro zabudování projektu do zástupce, aby fungoval i 
         <translation type="vanished">Uzamkne opakující se signál na místě, jako tlačítko Auto na osciloskopu. Každý průběh začíná ve stejném bodě průběhu, takže zůstává nehybný místo rolování.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="173"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="188"/>
         <source>Trigger</source>
         <translation>Trigger</translation>
     </message>
@@ -33099,57 +33109,57 @@ Zapněte Vložit Projekt pro zabudování projektu do zástupce, aby fungoval i 
         <translation type="vanished">Režim:</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="110"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="125"/>
         <source>Mode</source>
         <translation>Režim</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="135"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="150"/>
         <source>Auto</source>
         <translation>Auto</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="135"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="150"/>
         <source>Normal</source>
         <translation>Normální</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="135"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="150"/>
         <source>Single</source>
         <translation>Jednorázový</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="158"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="173"/>
         <source>Auto free-runs when nothing crosses the level.</source>
         <translation>Auto běží volně, když nic nepřekročí úroveň.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="159"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="174"/>
         <source>Normal waits for a crossing.</source>
         <translation>Normal čeká na překročení.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="160"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="175"/>
         <source>Single captures one sweep, then stops.</source>
         <translation>Single zachytí jeden průběh a poté se zastaví.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="242"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="258"/>
         <source>Slope:</source>
         <translation>Sklon:</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="274"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="290"/>
         <source>Trigger on a downward crossing</source>
         <translation>Trigger při sestupném překročení</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="320"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="336"/>
         <source>Timebase:</source>
         <translation>Časová Základna:</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="389"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="407"/>
         <source>Leave timebase empty to use the plot's time range; lower it to zoom in on a fast signal. Holdoff ignores new triggers for a moment after each.</source>
         <translation>Ponechte časovou základnu prázdnou pro použití časového rozsahu grafu; snižte pro přiblížení rychlého signálu. Holdoff ignoruje nové triggery na chvíli po každém.</translation>
     </message>
@@ -33158,7 +33168,7 @@ Zapněte Vložit Projekt pro zabudování projektu do zástupce, aby fungoval i 
         <translation type="vanished">Signál:</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="231"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="246"/>
         <source>Value to cross</source>
         <translation>Hodnota pro překročení</translation>
     </message>
@@ -33167,17 +33177,17 @@ Zapněte Vložit Projekt pro zabudování projektu do zástupce, aby fungoval i 
         <translation type="vanished">Hrana:</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="255"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="271"/>
         <source>Rising</source>
         <translation>Náběžná</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="259"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="275"/>
         <source>Trigger on an upward crossing</source>
         <translation>Trigger při vzestupném překročení</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="270"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="286"/>
         <source>Falling</source>
         <translation>Sestupná</translation>
     </message>
@@ -33186,7 +33196,7 @@ Zapněte Vložit Projekt pro zabudování projektu do zástupce, aby fungoval i 
         <translation type="vanished">Nový průběh začíná pokaždé, když signál překročí úroveň ve zvoleném směru. Auto také běží volně, když není nalezeno žádné překročení.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="293"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="309"/>
         <source>Timing</source>
         <translation>Časování</translation>
     </message>
@@ -33195,23 +33205,23 @@ Zapněte Vložit Projekt pro zabudování projektu do zástupce, aby fungoval i 
         <translation type="vanished">Časová Základna (ms):</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="333"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="349"/>
         <source>Match time range</source>
         <translation>Shodovat Časový Rozsah</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="346"/>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="376"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="363"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="394"/>
         <source>ms</source>
         <translation>ms</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="352"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="369"/>
         <source>Holdoff:</source>
         <translation>Prodleva:</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="365"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="382"/>
         <source>0</source>
         <translation>0</translation>
     </message>
@@ -33220,17 +33230,17 @@ Zapněte Vložit Projekt pro zabudování projektu do zástupce, aby fungoval i 
         <translation type="vanished">Časová základna nastavuje, kolik času zobrazuje jeden průběh; ponechte prázdné pro použití časového rozsahu grafu. Snižte pro přiblížení rychlého signálu. Holdoff ignoruje nové triggery na chvíli po každém.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="404"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="422"/>
         <source>Capture Next</source>
         <translation>Zachytit Další</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="406"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="424"/>
         <source>Arm for one more single-shot capture</source>
         <translation>Aktivovat pro Další Jednorázové Zachycení</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="218"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="233"/>
         <source>Level:</source>
         <translation>Úroveň:</translation>
     </message>
@@ -33247,7 +33257,7 @@ Zapněte Vložit Projekt pro zabudování projektu do zástupce, aby fungoval i 
         <translation type="vanished">Čas prodlevy</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="197"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="212"/>
         <source>Source:</source>
         <translation>Zdroj:</translation>
     </message>
@@ -33256,7 +33266,7 @@ Zapněte Vložit Projekt pro zabudování projektu do zástupce, aby fungoval i 
         <translation type="vanished">Znovu Aktivovat</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="419"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="437"/>
         <source>Close</source>
         <translation>Zavřít</translation>
     </message>
@@ -33420,22 +33430,22 @@ Zapněte Vložit Projekt pro zabudování projektu do zástupce, aby fungoval i 
 <context>
     <name>UI::Dashboard</name>
     <message>
-        <location filename="../../../core/Ui/UI/Dashboard.cpp" line="1366"/>
+        <location filename="../../../core/Ui/UI/Dashboard.cpp" line="1369"/>
         <source>Console</source>
         <translation>Konzole</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/Dashboard.cpp" line="1374"/>
+        <location filename="../../../core/Ui/UI/Dashboard.cpp" line="1377"/>
         <source>Notifications</source>
         <translation>Oznámení</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/Dashboard.cpp" line="1382"/>
+        <location filename="../../../core/Ui/UI/Dashboard.cpp" line="1385"/>
         <source>Clock</source>
         <translation>Hodiny</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/Dashboard.cpp" line="1389"/>
+        <location filename="../../../core/Ui/UI/Dashboard.cpp" line="1392"/>
         <source>Stopwatch</source>
         <translation>Stopky</translation>
     </message>
@@ -33774,12 +33784,12 @@ Zapněte Vložit Projekt pro zabudování projektu do zástupce, aby fungoval i 
         <translation>Název Proměnné</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="512"/>
+        <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="524"/>
         <source>Delete variable</source>
         <translation>Smazat proměnnou</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="530"/>
+        <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="542"/>
         <source>No variables.</source>
         <translation>Žádné proměnné.</translation>
     </message>
@@ -33812,7 +33822,7 @@ Zapněte Vložit Projekt pro zabudování projektu do zástupce, aby fungoval i 
         <translation>Čtení/zápis</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="479"/>
+        <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="491"/>
         <source>Copy access code %1 to clipboard</source>
         <translation>Zkopírovat přístupový kód %1 do schránky</translation>
     </message>
@@ -33825,7 +33835,7 @@ Zapněte Vložit Projekt pro zabudování projektu do zástupce, aby fungoval i 
         <translation type="vanished">Žádné registry.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="580"/>
+        <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="592"/>
         <source>Register access code copied</source>
         <translation>Přístupový kód registru zkopírován</translation>
     </message>
@@ -34503,32 +34513,32 @@ Chápu, že po jejím skončení budu muset zakoupit licenci nebo sestavit verzi
         <translation>Nový Pracovní Prostor</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/WorkspaceDialog.qml" line="165"/>
+        <location filename="../../qml/Dialogs/WorkspaceDialog.qml" line="176"/>
         <source>Name:</source>
         <translation>Název:</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/WorkspaceDialog.qml" line="174"/>
+        <location filename="../../qml/Dialogs/WorkspaceDialog.qml" line="185"/>
         <source>My Workspace</source>
         <translation>Můj Pracovní Prostor</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/WorkspaceDialog.qml" line="189"/>
+        <location filename="../../qml/Dialogs/WorkspaceDialog.qml" line="200"/>
         <source>Select widgets to include:</source>
         <translation>Vyberte widgety k zahrnutí:</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/WorkspaceDialog.qml" line="197"/>
+        <location filename="../../qml/Dialogs/WorkspaceDialog.qml" line="208"/>
         <source>Filter widgets…</source>
         <translation>Filtrovat widgety…</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/WorkspaceDialog.qml" line="313"/>
+        <location filename="../../qml/Dialogs/WorkspaceDialog.qml" line="318"/>
         <source>Cancel</source>
         <translation>Zrušit</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/WorkspaceDialog.qml" line="320"/>
+        <location filename="../../qml/Dialogs/WorkspaceDialog.qml" line="325"/>
         <source>OK</source>
         <translation>OK</translation>
     </message>

@@ -122,6 +122,14 @@ Widgets.SmartDialog {
     return isNaN(n) ? "" : String(n)
   }
 
+  function parseDecimal(text) {
+    try {
+      return Number.fromLocaleString(Qt.locale(), text)
+    } catch (e) {
+      return NaN
+    }
+  }
+
   function loadMarkers(arr) {
     markersModel.clear()
     if (!arr)
@@ -480,7 +488,7 @@ Widgets.SmartDialog {
                   Layout.alignment: Qt.AlignVCenter
                   validator: DoubleValidator { bottom: 0; top: 1e9 }
                   onEditingFinished: {
-                    const v = Number(text)
+                    const v = root.parseDecimal(text)
                     if (!isNaN(v))
                       markersModel.setProperty(markerRow.index, "freqVal",
                                                Math.min(v, root.nyquist))
@@ -495,7 +503,7 @@ Widgets.SmartDialog {
                   Layout.alignment: Qt.AlignVCenter
                   validator: DoubleValidator { bottom: 0; top: 1e9 }
                   onEditingFinished: {
-                    const v = Number(text)
+                    const v = root.parseDecimal(text)
                     if (text === "" || isNaN(v))
                       markersModel.setProperty(markerRow.index, "endFreqText", "")
                     else
@@ -512,7 +520,7 @@ Widgets.SmartDialog {
                   Layout.alignment: Qt.AlignVCenter
                   validator: DoubleValidator { bottom: -200; top: 100 }
                   onEditingFinished: {
-                    const v = Number(text)
+                    const v = root.parseDecimal(text)
                     markersModel.setProperty(markerRow.index, "warnDbText",
                                              text === "" || isNaN(v) ? "" : String(v))
                   }
@@ -526,7 +534,7 @@ Widgets.SmartDialog {
                   Layout.alignment: Qt.AlignVCenter
                   validator: DoubleValidator { bottom: -200; top: 100 }
                   onEditingFinished: {
-                    const v = Number(text)
+                    const v = root.parseDecimal(text)
                     markersModel.setProperty(markerRow.index, "alarmDbText",
                                              text === "" || isNaN(v) ? "" : String(v))
                   }
@@ -790,7 +798,9 @@ Widgets.SmartDialog {
         icon.source: "qrc:/icons/buttons/apply.svg"
         ToolTip.text: qsTr("Apply changes to the dataset.")
         onClicked: {
-          Cpp_JSON_ProjectEditor.commitFrequencyMarkers(root.collectMarkers())
+          forceActiveFocus()
+          Cpp_JSON_ProjectEditor.commitFrequencyMarkers(root.groupId, root.datasetId,
+                                                        root.collectMarkers())
           root.close()
         }
       }

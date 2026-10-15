@@ -308,10 +308,10 @@ static void jsonValueToLua(lua_State* L, const QJsonValue& v, int depth)
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Runs the API command synchronously and returns the wrapped CommandResponse. Handlers
- *        assume the GUI thread, so a call from a pipeline-hosted engine (parser or transform,
- *        spec 0051 M3) marshals there blocking; the parked bracket lets GUI-side marshals run
- *        inline against the quiescent pipeline instead of deadlocking (PipelineHost contract).
+ * @brief Runs the API command synchronously, marshaling to the GUI thread (blocking) for a
+ *        pipeline-hosted engine; the parked bracket lets GUI-side marshals run inline against the
+ *        quiescent pipeline instead of deadlocking. The flag is cleared inside the GUI dispatch,
+ *        before the pipeline unblocks, so it never runs while flagged parked (spec 0099 f8).
  */
 static API::CommandResponse dispatchApiCall(const QString& method, const QJsonObject& params)
 {
@@ -333,11 +333,12 @@ static API::CommandResponse dispatchApiCall(const QString& method, const QJsonOb
 
   QMetaObject::invokeMethod(
     qApp,
-    [&response, &request, &executor] { response = executor.execute(request); },
+    [&response, &request, &executor, onPipeline] {
+      response = executor.execute(request);
+      if (onPipeline)
+        IO::PipelineHost::setPipelineParkedOnGui(false);
+    },
     Qt::BlockingQueuedConnection);
-
-  if (onPipeline)
-    IO::PipelineHost::setPipelineParkedOnGui(false);
 
   return response;
 }

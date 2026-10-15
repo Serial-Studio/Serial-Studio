@@ -73,6 +73,7 @@ public:
   ~ExportWorker() override;
 
   void closeResources() override;
+  void setSubdirName(const QString& name);
   [[nodiscard]] bool isResourceOpen() const override;
 
 protected:
@@ -87,6 +88,7 @@ private:
   void createFile(int deviceId);
 
 private:
+  QString m_subdirName;
   std::unordered_map<int, DeviceExportState> m_deviceFiles;
 };
 #endif
@@ -147,6 +149,7 @@ protected:
 
 private slots:
 #ifdef BUILD_COMMERCIAL
+  void refreshLogFolder();
   void onWorkerOpenChanged();
 #endif
 

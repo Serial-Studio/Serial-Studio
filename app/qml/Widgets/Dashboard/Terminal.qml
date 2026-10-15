@@ -819,9 +819,12 @@ Item {
         enabled: Cpp_IO_Manager.readWrite
         Layout.alignment: Qt.AlignVCenter
         font: Cpp_Misc_CommonFonts.monoFont
+        property bool sendTextValid: true
         placeholderText: qsTr("Send Data to Device") + "..."
         palette.base: Cpp_ThemeManager.colors["console_base"]
-        palette.text: Cpp_ThemeManager.colors["console_text"]
+        palette.text: (send.sendTextValid || !hexCheckbox.checked)
+                      ? Cpp_ThemeManager.colors["console_text"]
+                      : Cpp_ThemeManager.colors["alarm"]
         palette.highlight: Cpp_ThemeManager.colors["console_highlight"]
         palette.highlightedText: Cpp_ThemeManager.colors["console_text"]
         palette.placeholderText: Cpp_ThemeManager.colors["placeholder_text"]
@@ -888,9 +891,7 @@ Item {
               }
             }
 
-            send.palette.text = isValid
-                ? Cpp_ThemeManager.colors["console_text"]
-                : Cpp_ThemeManager.colors["alarm"];
+            send.sendTextValid = isValid;
           }
         }
 

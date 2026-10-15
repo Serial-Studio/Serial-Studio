@@ -562,16 +562,16 @@ void Misc::ExtensionManager::installExtension()
 
 /**
  * @brief Uninstalls the currently selected addon, returning false on an invalid selection
- *        or a partial-delete failure.
+ *        or a partial-delete failure. The delete path comes from the install record's type,
+ *        never the catalog entry, so catalog content cannot steer the recursive delete.
  */
 bool Misc::ExtensionManager::uninstallExtension()
 {
   if (m_selectedIndex < 0 || m_selectedIndex >= m_filteredExtensions.count())
     return false;
 
-  const auto addon = m_filteredExtensions.at(m_selectedIndex).toMap();
-  const auto id    = addon.value("id").toString();
-  const auto type  = addon.value("type").toString();
+  const auto id   = m_filteredExtensions.at(m_selectedIndex).toMap().value("id").toString();
+  const auto type = m_installer.installedInfo(id).value("type").toString();
 
   if (id.isEmpty() || !isInstalled(id))
     return false;

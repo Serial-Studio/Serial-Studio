@@ -435,9 +435,16 @@ Widgets.Pane {
         clip: true
         visible: !hidden
         Layout.fillWidth: true
-        Layout.preferredHeight: hidden ? 0 : (revealed ? _taskbar.implicitHeight : 0)
+        Layout.preferredHeight: hidden ? 0 : ((revealed || shownFraction > 0)
+                                              ? _taskbar.implicitHeight : 0)
 
-        Behavior on Layout.preferredHeight {
+        //
+        // The slot keeps its full height while the taskbar slides, so the canvas re-lays out
+        // once per reveal/hide instead of every animation frame
+        //
+        property real shownFraction: (!hidden && revealed) ? 1 : 0
+        Behavior on shownFraction {
+          enabled: !Cpp_Misc_GraphicsBackend.reduceMotion
           NumberAnimation { duration: 220; easing.type: Easing.OutCubic }
         }
 
@@ -522,6 +529,10 @@ Widgets.Pane {
           //
           y: parent.height - height
 
+          transform: Translate {
+            y: (1 - _taskbarHost.shownFraction) * _taskbar.height
+          }
+
           visible: opacity > 0
           opacity: Cpp_UI_Dashboard.available ? 1 : 0
           Behavior on opacity {
@@ -538,7 +549,9 @@ Widgets.Pane {
           }
         }
 
+        //
         // Mouse tracking over the taskbar (HoverHandler avoids stealing button hover)
+        //
         HoverHandler {
           id: _taskbarHover
 

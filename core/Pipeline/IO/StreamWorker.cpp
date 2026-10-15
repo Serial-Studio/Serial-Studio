@@ -37,6 +37,7 @@ extern "C" {
 #include <QDebug>
 #include <QList>
 #include <QScopedValueRollback>
+#include <QScopeGuard>
 
 #include "Core/DSPSimd.h"
 #include "Core/HotpathOptimization.h"
@@ -110,6 +111,7 @@ IO::StreamProcessor::StreamProcessor(const StreamConfig& config,
   , m_luaDeadline(QDeadlineTimer::Forever)
   , m_luaBudget()
   , m_inBlock(false)
+  , m_teardownPending(false)
   , m_jsTimedOut(false)
   , m_luaTableArmed(false)
   , m_jsTableArmed(false)
@@ -452,11 +454,17 @@ void IO::StreamProcessor::compileJsEntry(ChannelState& state)
 }
 
 /**
- * @brief Destroys the script engines on the worker thread (queued ahead of thread quit) so Lua
- *        states and QJSEngines die on the thread that owns them.
+ * @brief Destroys the script engines on their owning worker thread. Defers while a block is in
+ *        flight: a transform's table-API read spins a nested loop here, so tearing the engine
+ *        down mid-call would crash (spec 0099 f3); the onSampleBlock guard reruns it on unwind.
  */
 void IO::StreamProcessor::teardownEngines()
 {
+  if (m_inBlock) [[unlikely]] {
+    m_teardownPending = true;
+    return;
+  }
+
   for (auto& state : m_channels) {
     if (m_lua) {
       if (state.luaRef >= 0)
@@ -539,6 +547,12 @@ void IO::StreamProcessor::onSampleBlock(const IO::SampleBlockPtr& block)
     return;
   }
 
+  const auto flushPendingTeardown = qScopeGuard([this] {
+    if (m_teardownPending) {
+      m_teardownPending = false;
+      teardownEngines();
+    }
+  });
   const QScopedValueRollback<bool> reentry_guard(m_inBlock, true);
   const quint64 blockNumber = ++m_blocksProcessed;
   m_observedChannels        = block->channels;

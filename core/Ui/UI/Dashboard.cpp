@@ -1005,6 +1005,9 @@ void UI::Dashboard::setPoints(const int points)
 
 /**
  * @brief Resets all data in the dashboard, including plot values, widget structures, and actions.
+ *        The action reconfigure is gated on @p notify: the notify==false (reconfigure) caller
+ *        re-runs configureActions with the real frame afterward, so the blocking builder marshal
+ *        here would only spin a nested loop on the display tick for a discarded result (0099 f6).
  */
 void UI::Dashboard::resetData(const bool notify)
 {
@@ -1072,7 +1075,7 @@ void UI::Dashboard::resetData(const bool notify)
   m_quarantinedSources.clear();
   m_updateRetryInProgress = false;
 
-  if (m_appState->operationMode() == SerialStudio::ProjectFile) {
+  if (notify && m_appState->operationMode() == SerialStudio::ProjectFile) {
     DataModel::Frame templateFrame;
     auto* builder = m_frameBuilder;
     builder->invokeOnBuilderThreadBlocking(

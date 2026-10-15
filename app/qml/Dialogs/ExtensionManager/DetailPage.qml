@@ -232,7 +232,7 @@ Item {
             const base = Cpp_ExtensionManager.selectedExtension._repoBase || ""
             const isLocal = Cpp_ExtensionManager.selectedExtension._isLocal || false
             if (isLocal)
-              return "file://" + base + ss
+              return (base.startsWith("/") ? "file://" : "file:///") + base + ss
 
             return base + ss
           }

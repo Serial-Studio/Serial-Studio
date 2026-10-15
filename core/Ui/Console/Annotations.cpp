@@ -491,9 +491,9 @@ QString Console::AnnotationModel::payloadText(int cls, int maxBytes) const
  *        stream is flushed before its status is read: QTextStream buffers, so the final chunk
  *        would otherwise land during destruction and a device error on it would go unreported.
  */
-bool Console::AnnotationModel::exportCsv(const QString& path) const
+bool Console::AnnotationModel::exportCsv(const QUrl& url) const
 {
-  QFile file(path);
+  QFile file(url.toLocalFile());
   if (!file.open(QIODevice::WriteOnly | QIODevice::Truncate | QIODevice::Text))
     return false;
 

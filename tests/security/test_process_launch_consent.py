@@ -95,7 +95,9 @@ def _choose_with_set_property(client, program: Program) -> bool:
         try:
             _set_property(client, key, value)
         except APIError as error:
-            assert _is_consent_refusal(error), f"unexpected failure setting {key}: {error}"
+            assert _is_consent_refusal(
+                error
+            ), f"unexpected failure setting {key}: {error}"
             return False
 
     return True
@@ -108,7 +110,9 @@ def _choose_with_set_properties(client, program: Program) -> bool:
         "arguments": program.arguments,
     }
     try:
-        client.command("project.source.setProperties", {"sourceId": 0, "settings": settings})
+        client.command(
+            "project.source.setProperties", {"sourceId": 0, "settings": settings}
+        )
     except APIError as error:
         assert _is_consent_refusal(error), f"unexpected failure: {error}"
         return False
@@ -126,7 +130,9 @@ def _choose_with_dedicated_setters(client, program: Program) -> bool:
         try:
             client.command(command, params)
         except APIError as error:
-            assert _is_consent_refusal(error), f"unexpected failure in {command}: {error}"
+            assert _is_consent_refusal(
+                error
+            ), f"unexpected failure in {command}: {error}"
             return False
 
     return True
@@ -226,7 +232,9 @@ def test_marker_program_writes_its_marker(tmp_path, program):
 # ---------------------------------------------------------------------------
 
 
-def test_program_set_by_set_property_does_not_start_on_connect(api_client, process_source):
+def test_program_set_by_set_property_does_not_start_on_connect(
+    api_client, process_source
+):
     """(a) The generic single-key setter picks the program; connecting starts nothing."""
     chosen = _choose_with_set_property(api_client, process_source)
     if chosen:

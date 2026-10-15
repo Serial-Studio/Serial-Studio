@@ -528,12 +528,12 @@ Cada acción del dispositivo aún requiere tu aprobación explícita por llamada
         <translation>No se puede iniciar el servidor TCP de la API</translation>
     </message>
     <message>
-        <location filename="../../../core/Api/API/Server.cpp" line="346"/>
+        <location filename="../../../core/Api/API/Server.cpp" line="357"/>
         <source>Allow External API Connections?</source>
         <translation>¿Permitir Conexiones Externas a la API?</translation>
     </message>
     <message>
-        <location filename="../../../core/Api/API/Server.cpp" line="347"/>
+        <location filename="../../../core/Api/API/Server.cpp" line="358"/>
         <source>Exposing the API server to external hosts allows other devices on your network to connect to Serial Studio on port 7777.
 
 Only enable this on trusted networks. Untrusted clients may read live data or send commands to your device.</source>
@@ -558,12 +558,12 @@ Habilita esto solo en redes confiables. Clientes no confiables pueden leer datos
         <translation type="vanished">Serial Studio</translation>
     </message>
     <message>
-        <location filename="../../../core/Api/API/Server.cpp" line="1023"/>
+        <location filename="../../../core/Api/API/Server.cpp" line="1037"/>
         <source>API server</source>
         <translation>Servidor de la API</translation>
     </message>
     <message>
-        <location filename="../../../core/Api/API/Server.cpp" line="1023"/>
+        <location filename="../../../core/Api/API/Server.cpp" line="1037"/>
         <source>Invalid pending connection</source>
         <translation>Conexión pendiente no válida</translation>
     </message>
@@ -779,37 +779,37 @@ Habilita esto solo en redes confiables. Clientes no confiables pueden leer datos
         <translation>Configuración del Acelerómetro</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/AccelerometerConfigDialog.qml" line="95"/>
+        <location filename="../../qml/Dialogs/AccelerometerConfigDialog.qml" line="110"/>
         <source>Configure the accelerometer display range and input units.</source>
         <translation>Configurar el rango de visualización y las unidades de entrada del acelerómetro.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/AccelerometerConfigDialog.qml" line="109"/>
+        <location filename="../../qml/Dialogs/AccelerometerConfigDialog.qml" line="124"/>
         <source>Display Range</source>
         <translation>Rango de Visualización</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/AccelerometerConfigDialog.qml" line="130"/>
+        <location filename="../../qml/Dialogs/AccelerometerConfigDialog.qml" line="145"/>
         <source>Max G:</source>
         <translation>G Máx.:</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/AccelerometerConfigDialog.qml" line="144"/>
+        <location filename="../../qml/Dialogs/AccelerometerConfigDialog.qml" line="159"/>
         <source>Enter max G value</source>
         <translation>Ingresar valor G máximo</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/AccelerometerConfigDialog.qml" line="164"/>
+        <location filename="../../qml/Dialogs/AccelerometerConfigDialog.qml" line="179"/>
         <source>Input Configuration</source>
         <translation>Configuración de Entrada</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/AccelerometerConfigDialog.qml" line="184"/>
+        <location filename="../../qml/Dialogs/AccelerometerConfigDialog.qml" line="199"/>
         <source>Input already in G</source>
         <translation>Entrada ya en G</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/AccelerometerConfigDialog.qml" line="218"/>
+        <location filename="../../qml/Dialogs/AccelerometerConfigDialog.qml" line="233"/>
         <source>Close</source>
         <translation>Cerrar</translation>
     </message>
@@ -1193,92 +1193,92 @@ Habilita esto solo en redes confiables. Clientes no confiables pueden leer datos
         <translation>Falla</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="275"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="283"/>
         <source>Select Alarm Sound</source>
         <translation>Seleccionar Sonido de Alarma</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="277"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="285"/>
         <source>WAV audio (*.wav)</source>
         <translation>Audio WAV (*.WAV)</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="277"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="285"/>
         <source>All files (*)</source>
         <translation>Todos los Archivos (*)</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="312"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="320"/>
         <source>Choose Band Color</source>
         <translation>Elegir Color de Banda</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="339"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="347"/>
         <source>Presets</source>
         <translation>Preajustes</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="362"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="370"/>
         <source>Preset</source>
         <translation>Preajuste</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="377"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="385"/>
         <source>Choose preset…</source>
         <translation>Elegir ajuste preestablecido…</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="488"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="496"/>
         <source>Blink</source>
         <translation>Parpadear</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="495"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="503"/>
         <source>Sound</source>
         <translation>Sonido</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="616"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="624"/>
         <source>Reset to severity default</source>
         <translation>Restablecer al predeterminado de severidad</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="630"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="638"/>
         <source>Click to choose a color. Right-click to reset to severity default.</source>
         <translation>Clic para elegir un color. Clic derecho para restablecer al predeterminado de severidad.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="631"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="639"/>
         <source>Click to choose a custom color.</source>
         <translation>Clic para elegir un color personalizado.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="662"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="670"/>
         <source>Flash the LED while the value sits in this band.</source>
         <translation>Hace parpadear el LED mientras el valor se encuentra en esta banda.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="690"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="698"/>
         <source>Pick a WAV file to play for this band.</source>
         <translation>Selecciona un archivo WAV para reproducir en esta banda.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="706"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="714"/>
         <source>Use the priority's default sound.</source>
         <translation>Usar el sonido predeterminado de la prioridad.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="779"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="787"/>
         <source>No bands defined. Pick a preset above or add a band to get started.</source>
         <translation>No hay bandas definidas. Elegir un ajuste preestablecido arriba o agregar una banda para comenzar.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="903"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="911"/>
         <source>Apply</source>
         <translation>Aplicar</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="906"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="914"/>
         <source>Apply changes to the dataset.</source>
         <translation>Aplicar cambios al conjunto de datos.</translation>
     </message>
@@ -1291,47 +1291,47 @@ Habilita esto solo en redes confiables. Clientes no confiables pueden leer datos
         <translation type="vanished">Reemplazar las bandas actuales con el preajuste seleccionado, escalado al rango de este conjunto de datos.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="389"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="397"/>
         <source>Range</source>
         <translation>Rango</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="417"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="425"/>
         <source>Bands</source>
         <translation>Bandas</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="428"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="436"/>
         <source>Add Band</source>
         <translation>Agregar Banda</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="432"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="440"/>
         <source>Add a new band continuing from the last one.</source>
         <translation>Agregar una nueva banda continuando desde la última.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="463"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="471"/>
         <source>Min</source>
         <translation>Mín</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="469"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="477"/>
         <source>Max</source>
         <translation>Máx</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="475"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="483"/>
         <source>Severity</source>
         <translation>Severidad</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="481"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="489"/>
         <source>Color</source>
         <translation>Color</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="502"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="510"/>
         <source>Label</source>
         <translation>Etiqueta</translation>
     </message>
@@ -1344,22 +1344,22 @@ Habilita esto solo en redes confiables. Clientes no confiables pueden leer datos
         <translation type="vanished">automático</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="716"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="724"/>
         <source>(optional)</source>
         <translation>(opcional)</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="733"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="741"/>
         <source>Move up.</source>
         <translation>Mover arriba.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="752"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="760"/>
         <source>Move down.</source>
         <translation>Mover abajo.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="765"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="773"/>
         <source>Remove this band.</source>
         <translation>Eliminar esta banda.</translation>
     </message>
@@ -1368,17 +1368,17 @@ Habilita esto solo en redes confiables. Clientes no confiables pueden leer datos
         <translation type="vanished">No hay bandas definidas. Aplicar un ajuste preestablecido o agregar una banda para comenzar.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="796"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="804"/>
         <source>Preview</source>
         <translation>Vista Previa</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="892"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="900"/>
         <source>Cancel</source>
         <translation>Cancelar</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="894"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="902"/>
         <source>Discard changes.</source>
         <translation>Descartar cambios.</translation>
     </message>
@@ -2040,56 +2040,56 @@ Habilita esto solo en redes confiables. Clientes no confiables pueden leer datos
 <context>
     <name>AxisRangeDialog</name>
     <message>
-        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="69"/>
+        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="84"/>
         <source>Axis Range Configuration</source>
         <translation>Configuración de Rango de Ejes</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="189"/>
+        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="204"/>
         <source>Configure the visible range for the plot axes. Values update in real-time as you type.</source>
         <translation>Configura el rango visible para los ejes del gráfico. Los valores se actualizan en tiempo real mientras escribes.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="197"/>
+        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="212"/>
         <source>X Axis</source>
         <translation>Eje X</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="222"/>
-        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="293"/>
+        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="237"/>
+        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="308"/>
         <source>Minimum:</source>
         <translation>Mínimo:</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="234"/>
-        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="305"/>
+        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="249"/>
+        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="320"/>
         <source>Enter min value</source>
         <translation>Ingresar valor mínimo</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="243"/>
-        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="314"/>
+        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="258"/>
+        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="329"/>
         <source>Maximum:</source>
         <translation>Máximo:</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="255"/>
-        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="326"/>
+        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="270"/>
+        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="341"/>
         <source>Enter max value</source>
         <translation>Ingresar valor máximo</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="270"/>
+        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="285"/>
         <source>Y Axis</source>
         <translation>Eje Y</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="345"/>
+        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="360"/>
         <source>Reset</source>
         <translation>Restablecer</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="355"/>
+        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="370"/>
         <source>Close</source>
         <translation>Cerrar</translation>
     </message>
@@ -5361,203 +5361,203 @@ Habilita esto solo en redes confiables. Clientes no confiables pueden leer datos
         <translation>Archivos CSV (*.CSV)</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="220"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="216"/>
         <source>Track</source>
         <translation>Pista</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="226"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="222"/>
         <source>Table</source>
         <translation>Tabla</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="232"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="228"/>
         <source>Payload</source>
         <translation>Carga Útil</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="238"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="234"/>
         <source>Decoder</source>
         <translation>Decodificador</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="325"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="321"/>
         <source>Window</source>
         <translation>Ventana</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="342"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="338"/>
         <source>Bytes of history drawn across the lanes</source>
         <translation>Bytes de historial dibujados a través de las pistas</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="346"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="342"/>
         <source>bytes</source>
         <translation>bytes</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="371"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="367"/>
         <source>paused</source>
         <translation>pausado</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="382"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="378"/>
         <source>%1 annotations kept</source>
         <translation>%1 anotaciones conservadas</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="398"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="394"/>
         <source>Each bar is a byte range the decoder labelled, one lane per decoder row: oldest on the left, newest on the right.</source>
         <translation>Cada barra es un rango de bytes etiquetado por el decodificador, una línea por fila de decodificador: los más antiguos a la izquierda, los más recientes a la derecha.</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="401"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="397"/>
         <source>Labelled bytes %1 to %2, oldest on the left.</source>
         <translation>Bytes etiquetados %1 a %2, los más antiguos a la izquierda.</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="408"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="404"/>
         <source>The store is full at %1 labels, so anything older was dropped: shrink the window to see individual labels.</source>
         <translation>El almacén está lleno con %1 etiquetas, por lo que se descartaron las más antiguas: reduzca la ventana para ver etiquetas individuales.</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="511"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="507"/>
         <source>nothing labelled in this window</source>
         <translation>nada etiquetado en esta ventana</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="564"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="560"/>
         <source>%1 labels</source>
         <translation>%1 etiquetas</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="626"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="622"/>
         <source>%1 labels merged (bytes %2 to %3). Shrink the window to separate them.</source>
         <translation>%1 etiquetas combinadas (bytes %2 a %3). Reduzca la ventana para separarlas.</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="631"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="627"/>
         <source>%1 (bytes %2 to %3)</source>
         <translation>%1 (bytes %2 a %3)</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="694"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="690"/>
         <source>Row</source>
         <translation>Fila</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="703"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="699"/>
         <source>All rows</source>
         <translation>Todas las Filas</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="707"/>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="882"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="703"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="878"/>
         <source>Class</source>
         <translation>Clase</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="718"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="714"/>
         <source>All classes</source>
         <translation>Todas las Clases</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="728"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="724"/>
         <source>Export CSV</source>
         <translation>Exportar CSV</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="733"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="729"/>
         <source>Save every annotation to a spreadsheet</source>
         <translation>Guardar cada anotación en una hoja de cálculo</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="865"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="861"/>
         <source>No annotations decoded yet</source>
         <translation>Aún no se han decodificado anotaciones</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="900"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="896"/>
         <source>Hexadecimal</source>
         <translation>Hexadecimal</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="910"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="906"/>
         <source>Refresh</source>
         <translation>Actualizar</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="913"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="909"/>
         <source>Re-read the bytes of the selected class</source>
         <translation>Releer los bytes de la clase seleccionada</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="925"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="921"/>
         <source>%1 characters</source>
         <translation>%1 caracteres</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="949"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="945"/>
         <source>Pick a class and press Refresh to extract its bytes</source>
         <translation>Selecciona una clase y presiona Actualizar para extraer sus bytes</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="983"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="979"/>
         <source>Apply</source>
         <translation>Aplicar</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="986"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="982"/>
         <source>Compile the script and start decoding</source>
         <translation>Compilar el script e iniciar la decodificación</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="999"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="995"/>
         <source>Load a decoder for a known protocol</source>
         <translation>Cargar un decodificador para un protocolo conocido</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="1011"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="1007"/>
         <source>Clear</source>
         <translation>Limpiar</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="1016"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="1012"/>
         <source>Discard the annotations decoded so far</source>
         <translation>Descartar las anotaciones decodificadas hasta ahora</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="1024"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="1020"/>
         <source>Pause</source>
         <translation>Pausar</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="1024"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="1020"/>
         <source>Resume</source>
         <translation>Reanudar</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="1029"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="1025"/>
         <source>Stop decoding, keep the labels already captured</source>
         <translation>Detener la decodificación, conservar las etiquetas ya capturadas</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="1030"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="1026"/>
         <source>Resume decoding the incoming bytes</source>
         <translation>Reanudar la decodificación de los bytes entrantes</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="1095"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="1091"/>
         <source>No annotations yet</source>
         <translation>Sin anotaciones aún</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="1108"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="1104"/>
         <source>Annotations label ranges of the incoming byte stream: a small script names each range, and this panel draws them as lanes, lists them, and extracts their bytes.</source>
         <translation>Las anotaciones etiquetan rangos del flujo de bytes entrantes: un pequeño script nombra cada rango, y este panel los dibuja como carriles, los lista y extrae sus bytes.</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="1116"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="1112"/>
         <source>Open Decoder</source>
         <translation>Abrir Decodificador</translation>
     </message>
@@ -6206,17 +6206,17 @@ Habilita esto solo en redes confiables. Clientes no confiables pueden leer datos
         <translation>Widgets de respaldo activos. Adquiere una licencia para funcionalidad completa.</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="800"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="808"/>
         <source>Empty Workspace</source>
         <translation>Espacio de Trabajo Vacío</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="814"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="822"/>
         <source>Use the search bar to find and add widgets, or right-click a widget in another workspace to add it here.</source>
         <translation>Usa la barra de búsqueda para encontrar y agregar widgets, o haz clic derecho en un widget de otro espacio de trabajo para agregarlo aquí.</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="829"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="837"/>
         <source>Search Widgets</source>
         <translation>Buscar Widgets</translation>
     </message>
@@ -6259,7 +6259,7 @@ Habilita esto solo en redes confiables. Clientes no confiables pueden leer datos
         <translation>Servidor API Apagado</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardLayout.qml" line="662"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardLayout.qml" line="675"/>
         <source>Command Palette</source>
         <translation>Paleta de Comandos</translation>
     </message>
@@ -7105,7 +7105,7 @@ v
 <context>
     <name>DataModel::FrameBuilder</name>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/FrameBuilder.cpp" line="327"/>
+        <location filename="../../../core/Pipeline/DataModel/FrameBuilder.cpp" line="328"/>
         <source>A downstream consumer (dashboard, CSV/MDF4 export, historian, or API subscriber) is not draining fast enough, so data is being dropped from the display and from any active recording. Disable a heavy consumer or reduce the data rate.</source>
         <translation>Un consumidor descendente (tablero, exportación CSV/MDF4, historiador o suscriptor de API) no está drenando lo suficientemente rápido, por lo que se están descartando datos de la visualización y de cualquier grabación activa. Deshabilite un consumidor pesado o reduzca la tasa de datos.</translation>
     </message>
@@ -7126,7 +7126,7 @@ v
         <translation type="vanished">Gráfica Rápida</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/FrameBuilder.cpp" line="325"/>
+        <location filename="../../../core/Pipeline/DataModel/FrameBuilder.cpp" line="326"/>
         <source>Block pool exhausted</source>
         <translation>Pool de bloques agotado</translation>
     </message>
@@ -7135,12 +7135,12 @@ v
         <translation type="vanished">Un consumidor descendente (tablero, exportación CSV/MDF4, base de datos de sesión o suscriptor de API) no está drenando lo suficientemente rápido, por lo que se están descartando datos de la visualización y de cualquier grabación activa. Deshabilite un consumidor pesado o reduzca la tasa de datos.</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/FrameBuilder.cpp" line="2334"/>
+        <location filename="../../../core/Pipeline/DataModel/FrameBuilder.cpp" line="2343"/>
         <source>JavaScript transform exceeded budget</source>
         <translation>Transformación de JavaScript excedió el presupuesto</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/FrameBuilder.cpp" line="2335"/>
+        <location filename="../../../core/Pipeline/DataModel/FrameBuilder.cpp" line="2344"/>
         <source>A dataset transform took longer than %1 ms; remaining datasets in the frame fell back to raw values until the next frame. Profile or simplify the transform code.</source>
         <translation>Una transformación de conjunto de datos tomó más de %1 ms; los conjuntos de datos restantes en la trama se asignaron a valores sin procesar hasta la siguiente trama. Perfila o simplifica el código de transformación.</translation>
     </message>
@@ -7995,12 +7995,12 @@ Add %4 dataset(s) using the template's defaults?</source>
         <translation>Lugares decimales fijos para la visualización del valor; anula el formato (-1 = auto)</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="713"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="731"/>
         <source>Auto-detect</source>
         <translation>Detección Automática</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="713"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="731"/>
         <source>Manual Delimiters</source>
         <translation>Delimitadores Manuales</translation>
     </message>
@@ -8733,7 +8733,7 @@ Add %4 dataset(s) using the template's defaults?</source>
         <translation type="vanished">Widget de Pintor</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="730"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="748"/>
         <source>Web View</source>
         <translation>Visor Web</translation>
     </message>
@@ -8943,7 +8943,7 @@ Add %4 dataset(s) using the template's defaults?</source>
         <translation type="vanished">Límite superior del rango de visualización del indicador o barra</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="743"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="761"/>
         <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="663"/>
         <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="690"/>
         <source>Auto</source>
@@ -9034,207 +9034,207 @@ Add %4 dataset(s) using the template's defaults?</source>
         <translation type="vanished">Editar Código de Painter</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="555"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="573"/>
         <source>Edit Canvas Code</source>
         <translation>Editar Código de Lienzo</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="579"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="597"/>
         <source>Edit Transmit Function</source>
         <translation>Editar Función de Transmisión</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="677"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="695"/>
         <source>Rectangular (None)</source>
         <translation>Rectangular (Ninguna)</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="677"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="695"/>
         <source>Bartlett (Triangular)</source>
         <translation>Bartlett (Triangular)</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="677"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="695"/>
         <source>Hann</source>
         <translation>Hann</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="678"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="696"/>
         <source>Hamming</source>
         <translation>Hamming</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="678"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="696"/>
         <source>Blackman</source>
         <translation>Blackman</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="678"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="696"/>
         <source>Blackman-Harris</source>
         <translation>Blackman-harris</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="678"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="696"/>
         <source>Nuttall</source>
         <translation>Nuttall</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="679"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="697"/>
         <source>Blackman-Nuttall</source>
         <translation>Blackman-nuttall</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="679"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="697"/>
         <source>Flat Top</source>
         <translation>Flat Top</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="679"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="697"/>
         <source>Welch</source>
         <translation>Welch</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="679"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="697"/>
         <source>Bartlett-Hann</source>
         <translation>Bartlett-hann</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="680"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="698"/>
         <source>Bohman</source>
         <translation>Bohman</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="680"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="698"/>
         <source>Cosine (Sine)</source>
         <translation>Coseno (Seno)</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="680"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="698"/>
         <source>Lanczos</source>
         <translation>Lanczos</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="680"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="698"/>
         <source>Parzen</source>
         <translation>Parzen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="691"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="709"/>
         <source>Off</source>
         <translation>Apagado</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="691"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="709"/>
         <source>Auto Start</source>
         <translation>Inicio Automático</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="691"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="709"/>
         <source>Start on Trigger</source>
         <translation>Iniciar con Disparador</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="691"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="709"/>
         <source>Toggle on Trigger</source>
         <translation>Alternar con Disparador</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="692"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="710"/>
         <source>Repeat N Times</source>
         <translation>Repetir N Veces</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="695"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="713"/>
         <source>Plain Text (UTF8)</source>
         <translation>Texto Plano (UTF8)</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="695"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="713"/>
         <source>Hexadecimal</source>
         <translation>Hexadecimal</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="695"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="713"/>
         <source>Base64</source>
         <translation>Base64</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="696"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="714"/>
         <source>Binary (Direct)</source>
         <translation>Binario (Directo)</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="701"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="719"/>
         <source>No Checksum</source>
         <translation>Sin Checksum</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="705"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="723"/>
         <source>End Delimiter Only</source>
         <translation>Solo Delimitador Final</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="705"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="723"/>
         <source>Start Delimiter Only</source>
         <translation>Solo Delimitador Inicial</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="706"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="724"/>
         <source>Start + End Delimiter</source>
         <translation>Delimitador Inicial + Final</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="706"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="724"/>
         <source>No Delimiters</source>
         <translation>Sin Delimitadores</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="716"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="734"/>
         <source>Button</source>
         <translation>Botón</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="716"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="734"/>
         <source>Slider</source>
         <translation>Control Deslizante</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="716"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="734"/>
         <source>Toggle</source>
         <translation>Interruptor</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="716"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="734"/>
         <source>Text Field</source>
         <translation>Campo de Texto</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="717"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="735"/>
         <source>Knob</source>
         <translation>Perilla</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="721"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="739"/>
         <source>Bar Panel</source>
         <translation>Panel de Barras</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="722"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="740"/>
         <source>Data Grid</source>
         <translation>Cuadrícula de Datos</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="723"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="741"/>
         <source>GPS Map</source>
         <translation>Mapa GPS</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="724"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="742"/>
         <source>Gyroscope</source>
         <translation>Giroscopio</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="725"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="743"/>
         <source>Multi-Plot</source>
         <translation>Gráfica Múltiple</translation>
     </message>
@@ -9243,51 +9243,51 @@ Add %4 dataset(s) using the template's defaults?</source>
         <translation type="vanished">Gráfica Múltiple</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="726"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="744"/>
         <source>Accelerometer</source>
         <translation>Acelerómetro</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="727"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="745"/>
         <source>3D Plot</source>
         <translation>Gráfica 3D</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="728"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="746"/>
         <source>Image View</source>
         <translation>Visor de Imagen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="729"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="747"/>
         <source>Canvas Widget</source>
         <translation>Widget de Lienzo</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="731"/>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="734"/>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="751"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="749"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="752"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="769"/>
         <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputStateRows.cpp" line="121"/>
         <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputStateRows.cpp" line="140"/>
         <source>None</source>
         <translation>Ninguno</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="735"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="753"/>
         <source>Bar</source>
         <translation>Barra</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="736"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="754"/>
         <source>Gauge</source>
         <translation>Indicador</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="737"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="755"/>
         <source>Compass</source>
         <translation>Brújula</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="738"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="756"/>
         <source>Meter</source>
         <translation>Medidor</translation>
     </message>
@@ -9296,52 +9296,52 @@ Add %4 dataset(s) using the template's defaults?</source>
         <translation type="vanished">Termómetro</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="744"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="762"/>
         <source>Integer (0 decimals)</source>
         <translation>Entero (0 decimales)</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="745"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="763"/>
         <source>1 decimal</source>
         <translation>1 decimal</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="746"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="764"/>
         <source>2 decimals</source>
         <translation>2 decimales</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="747"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="765"/>
         <source>3 decimals</source>
         <translation>3 decimales</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="748"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="766"/>
         <source>Scientific</source>
         <translation>Científico</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="752"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="770"/>
         <source>New Line (\n)</source>
         <translation>Nueva Línea (</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="753"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="771"/>
         <source>Carriage Return (\r)</source>
         <translation>Retorno de Carro (\r)</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="754"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="772"/>
         <source>CRLF (\r\n)</source>
         <translation>CRLF (\r</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="757"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="775"/>
         <source>No</source>
         <translation>No</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="758"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="776"/>
         <source>Yes</source>
         <translation>Sí</translation>
     </message>
@@ -11711,22 +11711,22 @@ Formato válido: 01 A2 FF 3C</translation>
         <translation>Alias Numérico</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorCommit.cpp" line="865"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorCommit.cpp" line="899"/>
         <source>Edit Alarms</source>
         <translation>Editar Alarmas</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorCommit.cpp" line="1005"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorCommit.cpp" line="1049"/>
         <source>Rename Dataset</source>
         <translation>Renombrar Conjunto de Datos</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorCommit.cpp" line="1026"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorCommit.cpp" line="1070"/>
         <source>Edit Dataset</source>
         <translation>Editar Conjunto de Datos</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorCommit.cpp" line="1205"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorCommit.cpp" line="1249"/>
         <source>Edit Output Widget</source>
         <translation>Editar Widget de Salida</translation>
     </message>
@@ -13111,12 +13111,12 @@ Agrega etiquetas del controlador arriba para consultarlas.</translation>
         <translation>Sin etiquetas configuradas</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="124"/>
+        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="161"/>
         <source>The tag attributes are empty</source>
         <translation>Los atributos de la etiqueta están vacíos</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="227"/>
+        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="267"/>
         <source>The %1 client is not available in this build</source>
         <translation>El cliente %1 no está disponible en esta compilación</translation>
     </message>
@@ -14292,163 +14292,163 @@ Agrega etiquetas del controlador arriba para consultarlas.</translation>
         <translation>16 kHz</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="238"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="246"/>
         <source>Choose Marker Color</source>
         <translation>Elegir Color de Marcador</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="265"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="273"/>
         <source>Presets</source>
         <translation>Preajustes</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="288"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="296"/>
         <source>Preset</source>
         <translation>Preajuste</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="303"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="311"/>
         <source>Choose preset…</source>
         <translation>Elegir ajuste preestablecido…</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="315"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="323"/>
         <source>Frequency range</source>
         <translation>Rango de frecuencia</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="321"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="329"/>
         <source>0 - %1 Hz</source>
         <translation>0 - %1 Hz</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="343"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="351"/>
         <source>Markers</source>
         <translation>Marcadores</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="354"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="362"/>
         <source>Add Marker</source>
         <translation>Agregar Marcador</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="358"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="366"/>
         <source>Add a new point marker; set an end frequency to turn it into a band.</source>
         <translation>Agregar un nuevo marcador de punto; establecer una frecuencia final para convertirlo en una banda.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="389"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="397"/>
         <source>Start (Hz)</source>
         <translation>Inicio (Hz)</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="395"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="403"/>
         <source>End (Hz)</source>
         <translation>Fin (Hz)</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="401"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="409"/>
         <source>Warn (dB)</source>
         <translation>Advertencia (dB)</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="407"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="415"/>
         <source>Alarm (dB)</source>
         <translation>Alarma (dB)</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="413"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="421"/>
         <source>Color</source>
         <translation>Color</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="420"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="428"/>
         <source>Label</source>
         <translation>Etiqueta</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="492"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="500"/>
         <source>(point)</source>
         <translation>(punto)</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="509"/>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="523"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="517"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="531"/>
         <source>(off)</source>
         <translation>(apagado)</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="557"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="565"/>
         <source>Reset to automatic color</source>
         <translation>Restablecer a color automático</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="571"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="579"/>
         <source>Click to choose a color. Right-click to reset to automatic.</source>
         <translation>Clic para elegir un color. Clic derecho para restablecer a automático.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="572"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="580"/>
         <source>Click to choose a custom color.</source>
         <translation>Clic para elegir un color personalizado.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="593"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="601"/>
         <source>(optional)</source>
         <translation>(opcional)</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="610"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="618"/>
         <source>Move up.</source>
         <translation>Mover arriba.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="629"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="637"/>
         <source>Move down.</source>
         <translation>Mover abajo.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="642"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="650"/>
         <source>Remove this marker.</source>
         <translation>Eliminar este marcador.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="656"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="664"/>
         <source>No markers defined. Pick a preset above or add a marker to get started.</source>
         <translation>No hay marcadores definidos. Selecciona un preajuste arriba o agrega un marcador para comenzar.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="673"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="681"/>
         <source>Preview</source>
         <translation>Vista Previa</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="749"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="757"/>
         <source>0 Hz</source>
         <translation>0 Hz</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="755"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="763"/>
         <source>%1 Hz</source>
         <translation>%1 Hz</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="777"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="785"/>
         <source>Cancel</source>
         <translation>Cancelar</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="779"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="787"/>
         <source>Discard changes.</source>
         <translation>Descartar cambios.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="788"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="796"/>
         <source>Apply</source>
         <translation>Aplicar</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="791"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="799"/>
         <source>Apply changes to the dataset.</source>
         <translation>Aplicar cambios al conjunto de datos.</translation>
     </message>
@@ -15129,27 +15129,27 @@ Agrega etiquetas del controlador arriba para consultarlas.</translation>
 <context>
     <name>IO::Drivers::Audio</name>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="420"/>
+        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="421"/>
         <source>Audio Device Stopped</source>
         <translation>Dispositivo de Audio Detenido</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="421"/>
+        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="422"/>
         <source>The audio backend stopped the stream. The device may have been unplugged or claimed by another application.</source>
         <translation>El backend de audio detuvo el flujo. El dispositivo pudo haberse desconectado o estar siendo usado por otra aplicación.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="853"/>
+        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="854"/>
         <source>channels</source>
         <translation>canales</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="853"/>
+        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="854"/>
         <source> channels</source>
         <translation>canales</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="836"/>
+        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="837"/>
         <source>Unsigned 8-bit</source>
         <translation>Sin Signo de 8 bits</translation>
     </message>
@@ -15174,78 +15174,78 @@ Agrega etiquetas del controlador arriba para consultarlas.</translation>
         <translation>Se esperaban %1 valor(es) por trama, se obtuvieron %2.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="349"/>
-        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="355"/>
+        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="350"/>
+        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="356"/>
         <source>Audio device error</source>
         <translation>Error de dispositivo de audio</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="350"/>
+        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="351"/>
         <source>The selected audio device could not be initialized.</source>
         <translation>No se pudo inicializar el dispositivo de audio seleccionado.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="355"/>
+        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="356"/>
         <source>The selected audio device could not be started.</source>
         <translation>No se pudo iniciar el dispositivo de audio seleccionado.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="837"/>
+        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="838"/>
         <source>Signed 16-bit</source>
         <translation>Con Signo de 16 bits</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="838"/>
+        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="839"/>
         <source>Signed 24-bit</source>
         <translation>Con Signo de 24 bits</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="839"/>
+        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="840"/>
         <source>Signed 32-bit</source>
         <translation>Con Signo de 32 bits</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="840"/>
+        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="841"/>
         <source>Float 32-bit</source>
         <translation>Flotante de 32 bits</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="843"/>
+        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="844"/>
         <source>Mono</source>
         <translation>Mono</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="844"/>
+        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="845"/>
         <source>Stereo</source>
         <translation>Estéreo</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="1378"/>
+        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="1379"/>
         <source>Input Device</source>
         <translation>Dispositivo de Entrada</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="1386"/>
+        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="1387"/>
         <source>Sample Rate</source>
         <translation>Frecuencia de Muestreo</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="1394"/>
+        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="1395"/>
         <source>Normalization</source>
         <translation>Normalización</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="1395"/>
+        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="1396"/>
         <source>Publish samples as floats in the -1.0 to 1.0 range</source>
         <translation>Publicar muestras como flotantes en el rango de -1.0 a 1.0</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="1403"/>
+        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="1404"/>
         <source>Sample Format</source>
         <translation>Formato de Muestra</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="1412"/>
+        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="1413"/>
         <source>Channels</source>
         <translation>Canales</translation>
     </message>
@@ -15347,15 +15347,15 @@ Agrega etiquetas del controlador arriba para consultarlas.</translation>
 <context>
     <name>IO::Drivers::CANBus</name>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="417"/>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="422"/>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="427"/>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="431"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="418"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="423"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="428"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="432"/>
         <source>CAN Bus Not Available</source>
         <translation>Bus CAN No Disponible</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="428"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="429"/>
         <source>No CAN bus plugins found on this system.
 
 CAN bus support on macOS is limited and may require third-party hardware drivers.</source>
@@ -15364,37 +15364,37 @@ CAN bus support on macOS is limited and may require third-party hardware drivers
 El soporte de bus CAN en macOS es limitado y puede requerir controladores de hardware de terceros.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="432"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="433"/>
         <source>No CAN bus plugins are available on this platform.</source>
         <translation>No hay complementos de bus CAN disponibles en esta plataforma.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="443"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="444"/>
         <source>Invalid CAN Configuration</source>
         <translation>Configuración CAN Inválida</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="450"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="451"/>
         <source>Invalid Selection</source>
         <translation>Selección Inválida</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="458"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="459"/>
         <source>No Devices Available</source>
         <translation>No Hay Dispositivos Disponibles</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="370"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="371"/>
         <source>CAN Device Creation Failed</source>
         <translation>Error al Crear Dispositivo CAN</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="402"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="403"/>
         <source>CAN Connection Failed</source>
         <translation>Error de Conexión CAN</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="418"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="419"/>
         <source>No CAN bus plugins found on this system.
 
 On Linux, ensure SocketCAN kernel modules are loaded.</source>
@@ -15403,7 +15403,7 @@ On Linux, ensure SocketCAN kernel modules are loaded.</source>
 En Linux, asegúrate de que los módulos del kernel SOCKETCAN estén cargados.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="423"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="424"/>
         <source>No CAN bus plugins found on this system.
 
 On Windows, install CAN hardware drivers (PEAK, Vector, etc.).</source>
@@ -15412,27 +15412,27 @@ On Windows, install CAN hardware drivers (PEAK, Vector, etc.).</source>
 En Windows, instala controladores de hardware CAN (PEAK, VECTOR, etc.).</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="444"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="445"/>
         <source>The CAN bus configuration is incomplete. Select a valid plugin and interface.</source>
         <translation>La configuración del bus CAN está incompleta. Selecciona un complemento e interfaz válidos.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="451"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="452"/>
         <source>The selected plugin or interface is no longer available. Refresh the lists and try again.</source>
         <translation>El complemento o interfaz seleccionado ya no está disponible. Actualiza las listas e intenta de nuevo.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="459"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="460"/>
         <source>The plugin or interface list is empty. Refresh the lists and ensure your CAN hardware is connected.</source>
         <translation>La lista de complementos o interfaces está vacía. Actualiza las listas y asegúrate de que tu hardware CAN esté conectado.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="372"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="373"/>
         <source>Unable to create CAN bus device. Check your hardware and drivers.</source>
         <translation>No se puede crear el dispositivo de bus CAN. Verifica tu hardware y controladores.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="400"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="401"/>
         <source>Unable to connect to CAN bus device. Check your hardware connection and settings.</source>
         <translation>No se puede conectar al dispositivo de bus CAN. Verifica la conexión de hardware y la configuración.</translation>
     </message>
@@ -15445,68 +15445,68 @@ En Windows, instala controladores de hardware CAN (PEAK, VECTOR, etc.).</transla
         <translation type="vanished">Ocurrió un error pero el dispositivo CAN ya no está disponible.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1000"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1007"/>
         <source>Error code: %1</source>
         <translation>Código de error: %1</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1008"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1015"/>
         <source>CAN Bus Communication Error</source>
         <translation>Error de Comunicación del Bus CAN</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1114"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1121"/>
         <source>No CAN driver selected</source>
         <translation>No se seleccionó controlador CAN</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1051"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1058"/>
         <source>Load SocketCAN kernel modules first</source>
         <translation>Cargue primero los módulos del kernel SOCKETCAN</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1047"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1054"/>
         <source>Connect a %1 adapter, then refresh</source>
         <translation>Conecte un adaptador %1, luego actualice</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1054"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1061"/>
         <source>Set up a virtual CAN interface first</source>
         <translation>Configure primero una interfaz CAN virtual</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1056"/>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1076"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1063"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1083"/>
         <source>No interfaces found for %1</source>
         <translation>No se encontraron interfaces para %1</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1060"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1067"/>
         <source>Install &lt;a href='https://www.peak-system.com/Drivers.523.0.html?&amp;L=1'&gt;PEAK CAN drivers&lt;/a&gt;</source>
         <translation>Instale los &lt;a href='https://www.PEAK-system.com/Drivers.523.0.html?&amp;L=1'&gt;controladores CAN de PEAK&lt;/a&gt;</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1064"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1071"/>
         <source>Install &lt;a href='https://www.vector.com/us/en/products/products-a-z/libraries-drivers/'&gt;Vector CAN drivers&lt;/a&gt;</source>
         <translation>Instale los &lt;a href='https://www.VECTOR.com/us/en/products/products-a-z/libraries-drivers/'&gt;controladores CAN de VECTOR&lt;/a&gt;</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1068"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1075"/>
         <source>Install &lt;a href='https://www.systec-electronic.com/en/company/support/driver'&gt;SysTec CAN drivers&lt;/a&gt;</source>
         <translation>Instala &lt;a href='https://www.systec-electronic.com/en/company/support/driver'&gt;controladores CAN de SysTec&lt;/a&gt;</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1071"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1078"/>
         <source>Install %1 drivers</source>
         <translation>Instala controladores %1</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1074"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1081"/>
         <source>Install %1 drivers for macOS</source>
         <translation>Instala controladores %1 para macOS</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1088"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1095"/>
         <source>
 
 If the interface is down, bring it up first:
@@ -15517,42 +15517,42 @@ sudo ip link set %1 up type can bitrate %2
 </translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1224"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1231"/>
         <source>Plugin</source>
         <translation>Plugin</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1232"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1239"/>
         <source>Interface</source>
         <translation>Interfaz</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1240"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1247"/>
         <source>Bitrate</source>
         <translation>Tasa de Bits</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1249"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1256"/>
         <source>CAN FD</source>
         <translation>CAN FD</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1256"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1263"/>
         <source>Data Bitrate</source>
         <translation>Tasa de Bits de Datos</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1266"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1273"/>
         <source>Loopback</source>
         <translation>Loopback</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1273"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1280"/>
         <source>Listen-Only</source>
         <translation>Solo Escucha</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1280"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1287"/>
         <source>Multi-Frame Reassembly</source>
         <translation>Reensamblaje de Tramas Múltiples</translation>
     </message>
@@ -15560,17 +15560,17 @@ sudo ip link set %1 up type can bitrate %2
 <context>
     <name>IO::Drivers::EipPollWorker</name>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="354"/>
+        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="398"/>
         <source>"%1": %2</source>
         <translation>"%1": %2</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="361"/>
+        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="405"/>
         <source>The controller did not open every tag within the connection deadline</source>
         <translation>El controlador no abrió todas las etiquetas dentro del plazo de conexión</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="409"/>
+        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="453"/>
         <source>The controller stopped answering tag reads</source>
         <translation>El controlador dejó de responder a las lecturas de etiquetas</translation>
     </message>
@@ -15578,166 +15578,166 @@ sudo ip link set %1 up type can bitrate %2
 <context>
     <name>IO::Drivers::EthernetIp</name>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="681"/>
+        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="725"/>
         <source>The connection is not configured: check the host and the tag list</source>
         <translation>La conexión no está configurada: verifique el host y la lista de etiquetas</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="722"/>
+        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="766"/>
         <source>EtherNet/IP Connection Failed</source>
         <translation>Conexión Ethernet/IP Fallida</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="723"/>
+        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="767"/>
         <source>"%1": %2</source>
         <translation>"%1": %2</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="724"/>
+        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="768"/>
         <source>the controller did not answer</source>
         <translation>el controlador no respondió</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="767"/>
+        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="811"/>
         <source>EtherNet/IP Connection Lost</source>
         <translation>Conexión Ethernet/IP Perdida</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="848"/>
+        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="892"/>
         <source>ControlLogix</source>
         <translation>Controllogix</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="849"/>
+        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="893"/>
         <source>CompactLogix</source>
         <translation>Compactlogix</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="850"/>
+        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="894"/>
         <source>MicroLogix</source>
         <translation>Micrologix</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="851"/>
+        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="895"/>
         <source>Micro800</source>
         <translation>Micro800</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="852"/>
+        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="896"/>
         <source>PLC-5</source>
         <translation>PLC-5</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="853"/>
+        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="897"/>
         <source>SLC 500</source>
         <translation>SLC 500</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="854"/>
+        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="898"/>
         <source>Logix PCCC</source>
         <translation>Logix PCCC</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="855"/>
+        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="899"/>
         <source>Omron NJ/NX</source>
         <translation>Omron NJ/NX</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="898"/>
+        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="942"/>
         <source>Not connected</source>
         <translation>No conectado</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="901"/>
+        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="945"/>
         <source>Polling %1 tags at %2 Hz</source>
         <translation>Sondeando %1 etiquetas a %2 Hz</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="1118"/>
-        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="1127"/>
+        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="1162"/>
+        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="1171"/>
         <source>EtherNet/IP Tag</source>
         <translation>Etiqueta Ethernet/IP</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="1119"/>
+        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="1163"/>
         <source>The tag name "%1" is too long or contains characters that are not allowed (no '&amp;', '=' or whitespace).</source>
         <translation>El nombre de etiqueta "%1" es demasiado largo o contiene caracteres no permitidos (sin '&amp;', '=' ni espacios en blanco).</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="1127"/>
+        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="1171"/>
         <source>Unknown tag type "%1".</source>
         <translation>Tipo de etiqueta desconocido "%1".</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="1179"/>
+        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="1223"/>
         <source>Gateway</source>
         <translation>Gateway</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="1186"/>
+        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="1230"/>
         <source>CIP Path</source>
         <translation>Ruta CIP</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="1193"/>
+        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="1237"/>
         <source>Controller Family</source>
         <translation>Familia de Controlador</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="1201"/>
+        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="1245"/>
         <source>Poll Interval (ms)</source>
         <translation>Intervalo de Sondeo (ms)</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="1295"/>
+        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="1339"/>
         <source>EtherNet/IP Project</source>
         <translation>Proyecto Ethernet/IP</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="1300"/>
+        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="1344"/>
         <source>EtherNet/IP</source>
         <translation>Ethernet/IP</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="1329"/>
+        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="1373"/>
         <source>Controller Tags</source>
         <translation>Etiquetas del Controlador</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="1359"/>
-        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="1384"/>
+        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="1403"/>
+        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="1428"/>
         <source>Failed to load generated project</source>
         <translation>Error al cargar el proyecto generado</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="1360"/>
-        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="1385"/>
+        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="1404"/>
+        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="1429"/>
         <source>The generated project JSON could not be loaded.</source>
         <translation>No se pudo cargar el JSON del proyecto generado.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="1373"/>
+        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="1417"/>
         <source>No tags configured</source>
         <translation>No hay etiquetas configuradas</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="1374"/>
+        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="1418"/>
         <source>Add at least one tag before generating a project.</source>
         <translation>Agregue al menos una etiqueta antes de generar un proyecto.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="1376"/>
-        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="1396"/>
+        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="1420"/>
+        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="1440"/>
         <source>EtherNet/IP Project Generator</source>
         <translation>Generador de Proyectos Ethernet/IP</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="1393"/>
+        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="1437"/>
         <source>Successfully generated project with %1 datasets.</source>
         <translation>Proyecto generado exitosamente con %1 conjuntos de datos.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="1394"/>
+        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="1438"/>
         <source>The project editor is now open for customization.</source>
         <translation>El editor de proyectos está ahora abierto para personalización.</translation>
     </message>
@@ -15901,125 +15901,125 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
         <translation>La estación envió más datos de los que el búfer de recepción puede contener</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="537"/>
+        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="538"/>
         <source>The station sent a frame this link could not decode</source>
         <translation>La estación envió una trama que este enlace no pudo decodificar</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="688"/>
+        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="692"/>
         <source>The station did not answer within t1</source>
         <translation>La estación no respondió dentro de t1</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="792"/>
+        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="796"/>
         <source>IEC 104 Connection Lost</source>
         <translation>Se Perdió la Conexión IEC 104</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="914"/>
+        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="918"/>
         <source>Not connected</source>
         <translation>No conectado</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="917"/>
+        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="921"/>
         <source>Starting data transfer…</source>
         <translation>Iniciando transferencia de datos…</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="919"/>
+        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="923"/>
         <source>Monitoring %1 point(s) from station %2</source>
         <translation>Monitoreando %1 punto(s) de la estación %2</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1201"/>
+        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1205"/>
         <source>Host</source>
         <translation>Host</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1208"/>
+        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1212"/>
         <source>Port</source>
         <translation>Puerto</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1217"/>
+        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1221"/>
         <source>Common Address</source>
         <translation>Dirección Común</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1229"/>
+        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1233"/>
         <source>Send Window (k)</source>
         <translation>Ventana de Envío (k)</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1229"/>
+        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1233"/>
         <source>Ack Window (w)</source>
         <translation>Ventana de Confirmación (w)</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1242"/>
+        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1246"/>
         <source>Timeout t%1 (ms)</source>
         <translation>Tiempo de Espera t%1 (ms)</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1366"/>
+        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1370"/>
         <source>IEC 60870-5-104 Project</source>
         <translation>Proyecto IEC 60870-5-104</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1371"/>
+        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1375"/>
         <source>IEC 60870-5-104</source>
         <translation>IEC 60870-5-104</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1401"/>
+        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1405"/>
         <source>Status Points</source>
         <translation>Puntos de Estado</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1402"/>
+        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1406"/>
         <source>Counters</source>
         <translation>Contadores</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1402"/>
+        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1406"/>
         <source>Measurements</source>
         <translation>Mediciones</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1433"/>
-        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1460"/>
+        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1437"/>
+        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1464"/>
         <source>Failed to load generated project</source>
         <translation>Error al cargar el proyecto generado</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1434"/>
-        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1461"/>
+        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1438"/>
+        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1465"/>
         <source>The generated project JSON could not be loaded.</source>
         <translation>No se pudo cargar el JSON del proyecto generado.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1449"/>
+        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1453"/>
         <source>No points discovered</source>
         <translation>No se descubrieron puntos</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1450"/>
+        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1454"/>
         <source>Connect to the station and let the interrogation finish before generating a project.</source>
         <translation>Conéctese a la estación y deje que termine la interrogación antes de generar un proyecto.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1452"/>
-        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1472"/>
+        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1456"/>
+        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1476"/>
         <source>IEC 60870-5-104 Project Generator</source>
         <translation>Generador de Proyectos IEC 60870-5-104</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1469"/>
+        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1473"/>
         <source>Successfully generated project with %1 datasets.</source>
         <translation>Proyecto generado exitosamente con %1 conjuntos de datos.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1470"/>
+        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1474"/>
         <source>The project editor is now open for customization.</source>
         <translation>El editor de proyectos está ahora abierto para personalización.</translation>
     </message>
@@ -17587,130 +17587,130 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
 <context>
     <name>IO::Drivers::S7</name>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/S7.cpp" line="661"/>
+        <location filename="../../../core/Devices/IO/Drivers/S7.cpp" line="700"/>
         <source>The connection is not configured: check the host and the variable list</source>
         <translation>La conexión no está configurada: verifica el host y la lista de variables</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/S7.cpp" line="702"/>
+        <location filename="../../../core/Devices/IO/Drivers/S7.cpp" line="741"/>
         <source>S7 Connection Failed</source>
         <translation>Falló la Conexión S7</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/S7.cpp" line="703"/>
+        <location filename="../../../core/Devices/IO/Drivers/S7.cpp" line="742"/>
         <source>"%1" (rack %2, slot %3): %4</source>
         <translation>"%1" (rack %2, slot %3): %4</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/S7.cpp" line="707"/>
+        <location filename="../../../core/Devices/IO/Drivers/S7.cpp" line="746"/>
         <source>the controller did not answer</source>
         <translation>el controlador no respondió</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/S7.cpp" line="750"/>
+        <location filename="../../../core/Devices/IO/Drivers/S7.cpp" line="789"/>
         <source>S7 Connection Lost</source>
         <translation>Conexión S7 Perdida</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/S7.cpp" line="821"/>
+        <location filename="../../../core/Devices/IO/Drivers/S7.cpp" line="860"/>
         <source>Not connected</source>
         <translation>No conectado</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/S7.cpp" line="824"/>
+        <location filename="../../../core/Devices/IO/Drivers/S7.cpp" line="863"/>
         <source>Polling %1 variables at %2 Hz</source>
         <translation>Consultando %1 variables a %2 Hz</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/S7.cpp" line="840"/>
+        <location filename="../../../core/Devices/IO/Drivers/S7.cpp" line="879"/>
         <source>invalid</source>
         <translation>inválido</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/S7.cpp" line="858"/>
+        <location filename="../../../core/Devices/IO/Drivers/S7.cpp" line="897"/>
         <source>The address could not be parsed.</source>
         <translation>No se pudo analizar la dirección.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/S7.cpp" line="1082"/>
+        <location filename="../../../core/Devices/IO/Drivers/S7.cpp" line="1121"/>
         <source>S7 Address</source>
         <translation>Dirección S7</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/S7.cpp" line="1133"/>
+        <location filename="../../../core/Devices/IO/Drivers/S7.cpp" line="1172"/>
         <source>Host</source>
         <translation>Host</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/S7.cpp" line="1140"/>
+        <location filename="../../../core/Devices/IO/Drivers/S7.cpp" line="1179"/>
         <source>Rack</source>
         <translation>Rack</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/S7.cpp" line="1149"/>
+        <location filename="../../../core/Devices/IO/Drivers/S7.cpp" line="1188"/>
         <source>Slot</source>
         <translation>Slot</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/S7.cpp" line="1158"/>
+        <location filename="../../../core/Devices/IO/Drivers/S7.cpp" line="1197"/>
         <source>Poll Interval (ms)</source>
         <translation>Intervalo de Sondeo (ms)</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/S7.cpp" line="1278"/>
+        <location filename="../../../core/Devices/IO/Drivers/S7.cpp" line="1317"/>
         <source>Siemens S7 Project</source>
         <translation>Proyecto Siemens S7</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/S7.cpp" line="1283"/>
+        <location filename="../../../core/Devices/IO/Drivers/S7.cpp" line="1322"/>
         <source>Siemens S7</source>
         <translation>Siemens S7</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/S7.cpp" line="1312"/>
+        <location filename="../../../core/Devices/IO/Drivers/S7.cpp" line="1351"/>
         <source>DB%1</source>
         <translation>DB%1</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/S7.cpp" line="1312"/>
+        <location filename="../../../core/Devices/IO/Drivers/S7.cpp" line="1351"/>
         <source>Memory</source>
         <translation>Memoria</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/S7.cpp" line="1342"/>
-        <location filename="../../../core/Devices/IO/Drivers/S7.cpp" line="1367"/>
+        <location filename="../../../core/Devices/IO/Drivers/S7.cpp" line="1381"/>
+        <location filename="../../../core/Devices/IO/Drivers/S7.cpp" line="1406"/>
         <source>Failed to load generated project</source>
         <translation>Error al cargar el proyecto generado</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/S7.cpp" line="1343"/>
-        <location filename="../../../core/Devices/IO/Drivers/S7.cpp" line="1368"/>
+        <location filename="../../../core/Devices/IO/Drivers/S7.cpp" line="1382"/>
+        <location filename="../../../core/Devices/IO/Drivers/S7.cpp" line="1407"/>
         <source>The generated project JSON could not be loaded.</source>
         <translation>No se pudo cargar el JSON del proyecto generado.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/S7.cpp" line="1356"/>
+        <location filename="../../../core/Devices/IO/Drivers/S7.cpp" line="1395"/>
         <source>No variables configured</source>
         <translation>No hay variables configuradas</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/S7.cpp" line="1357"/>
+        <location filename="../../../core/Devices/IO/Drivers/S7.cpp" line="1396"/>
         <source>Add at least one variable before generating a project.</source>
         <translation>Agregue al menos una variable antes de generar un proyecto.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/S7.cpp" line="1359"/>
-        <location filename="../../../core/Devices/IO/Drivers/S7.cpp" line="1379"/>
+        <location filename="../../../core/Devices/IO/Drivers/S7.cpp" line="1398"/>
+        <location filename="../../../core/Devices/IO/Drivers/S7.cpp" line="1418"/>
         <source>S7 Project Generator</source>
         <translation>Generador de Proyectos S7</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/S7.cpp" line="1376"/>
+        <location filename="../../../core/Devices/IO/Drivers/S7.cpp" line="1415"/>
         <source>Successfully generated project with %1 datasets.</source>
         <translation>Proyecto generado exitosamente con %1 conjuntos de datos.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/S7.cpp" line="1377"/>
+        <location filename="../../../core/Devices/IO/Drivers/S7.cpp" line="1416"/>
         <source>The project editor is now open for customization.</source>
         <translation>El editor de proyectos está ahora abierto para personalización.</translation>
     </message>
@@ -17718,27 +17718,27 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
 <context>
     <name>IO::Drivers::S7PollWorker</name>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/S7.cpp" line="147"/>
+        <location filename="../../../core/Devices/IO/Drivers/S7.cpp" line="182"/>
         <source>The ISO connection request could not be sent</source>
         <translation>No se pudo enviar la solicitud de conexión ISO</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/S7.cpp" line="153"/>
+        <location filename="../../../core/Devices/IO/Drivers/S7.cpp" line="188"/>
         <source>The controller refused the ISO connection: check the rack and slot numbers</source>
         <translation>El controlador rechazó la conexión ISO: verifique los números de rack y slot</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/S7.cpp" line="172"/>
+        <location filename="../../../core/Devices/IO/Drivers/S7.cpp" line="207"/>
         <source>The controller did not answer the S7comm setup request</source>
         <translation>El controlador no respondió a la solicitud de configuración S7comm</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/S7.cpp" line="178"/>
+        <location filename="../../../core/Devices/IO/Drivers/S7.cpp" line="213"/>
         <source>The controller refused the S7comm session</source>
         <translation>El controlador rechazó la sesión S7comm</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/S7.cpp" line="315"/>
+        <location filename="../../../core/Devices/IO/Drivers/S7.cpp" line="354"/>
         <source>The controller closed the S7comm session</source>
         <translation>El controlador cerró la sesión S7comm</translation>
     </message>
@@ -17777,12 +17777,12 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
         <translation>No se pudo abrir el puerto serial %1: %2</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus/SerialCanBackendBase.cpp" line="205"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus/SerialCanBackendBase.cpp" line="204"/>
         <source>The adapter on %1 did not accept the initialization sequence.</source>
         <translation>El adaptador en %1 no aceptó la secuencia de inicialización.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus/SerialCanBackendBase.cpp" line="215"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus/SerialCanBackendBase.cpp" line="214"/>
         <source>The adapter on %1 refused the requested configuration.</source>
         <translation>El adaptador en %1 rechazó la configuración solicitada.</translation>
     </message>
@@ -18633,108 +18633,118 @@ El dispositivo puede no exponer endpoints de datos en su configuración activa, 
         <translation>Transferencia cancelada por el usuario</translation>
     </message>
     <message>
-        <location filename="../../../core/Protocols/FileTransfer/ZMODEM.cpp" line="271"/>
+        <location filename="../../../core/Protocols/FileTransfer/ZMODEM.cpp" line="252"/>
+        <source>Hex header malformed, dropping frame</source>
+        <translation>Encabezado hexadecimal malformado, descartando trama</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Protocols/FileTransfer/ZMODEM.cpp" line="273"/>
         <source>Hex header CRC mismatch, dropping frame</source>
         <translation>Error de CRC en encabezado hexadecimal, descartando trama</translation>
     </message>
     <message>
-        <location filename="../../../core/Protocols/FileTransfer/ZMODEM.cpp" line="446"/>
+        <location filename="../../../core/Protocols/FileTransfer/ZMODEM.cpp" line="311"/>
+        <source>Binary header CRC mismatch, dropping frame</source>
+        <translation>Error de CRC en encabezado binario, descartando trama</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Protocols/FileTransfer/ZMODEM.cpp" line="491"/>
         <source>Sending file info: %1 (%2 bytes)</source>
         <translation>Enviando información del archivo: %1 (%2 bytes)</translation>
     </message>
     <message>
-        <location filename="../../../core/Protocols/FileTransfer/ZMODEM.cpp" line="469"/>
+        <location filename="../../../core/Protocols/FileTransfer/ZMODEM.cpp" line="514"/>
         <source>Failed to seek to offset %1</source>
         <translation>Error al buscar el desplazamiento %1</translation>
     </message>
     <message>
-        <location filename="../../../core/Protocols/FileTransfer/ZMODEM.cpp" line="495"/>
+        <location filename="../../../core/Protocols/FileTransfer/ZMODEM.cpp" line="540"/>
         <source>File read error: %1</source>
         <translation>Error de lectura de archivo: %1</translation>
     </message>
     <message>
-        <location filename="../../../core/Protocols/FileTransfer/ZMODEM.cpp" line="500"/>
+        <location filename="../../../core/Protocols/FileTransfer/ZMODEM.cpp" line="545"/>
         <source>File read returned more data than requested</source>
         <translation>La lectura del archivo devolvió más datos de los solicitados</translation>
     </message>
     <message>
-        <location filename="../../../core/Protocols/FileTransfer/ZMODEM.cpp" line="593"/>
+        <location filename="../../../core/Protocols/FileTransfer/ZMODEM.cpp" line="638"/>
         <source>Receiver requests data from offset %1</source>
         <translation>El receptor solicita datos desde el desplazamiento %1</translation>
     </message>
     <message>
-        <location filename="../../../core/Protocols/FileTransfer/ZMODEM.cpp" line="602"/>
+        <location filename="../../../core/Protocols/FileTransfer/ZMODEM.cpp" line="647"/>
         <source>Receiver skipped the file</source>
         <translation>El receptor omitió el archivo</translation>
     </message>
     <message>
-        <location filename="../../../core/Protocols/FileTransfer/ZMODEM.cpp" line="615"/>
+        <location filename="../../../core/Protocols/FileTransfer/ZMODEM.cpp" line="660"/>
         <source>Too many errors, transfer aborted</source>
         <translation>Demasiados errores, transferencia abortada</translation>
     </message>
     <message>
-        <location filename="../../../core/Protocols/FileTransfer/ZMODEM.cpp" line="616"/>
+        <location filename="../../../core/Protocols/FileTransfer/ZMODEM.cpp" line="661"/>
         <source>Maximum retries exceeded</source>
         <translation>Se excedió el máximo de reintentos</translation>
     </message>
     <message>
-        <location filename="../../../core/Protocols/FileTransfer/ZMODEM.cpp" line="422"/>
+        <location filename="../../../core/Protocols/FileTransfer/ZMODEM.cpp" line="467"/>
         <source>Sending ZRQINIT, waiting for receiver…</source>
         <translation>Enviando ZRQINIT, esperando al receptor…</translation>
     </message>
     <message>
-        <location filename="../../../core/Protocols/FileTransfer/ZMODEM.cpp" line="532"/>
+        <location filename="../../../core/Protocols/FileTransfer/ZMODEM.cpp" line="577"/>
         <source>File data sent, waiting for confirmation…</source>
         <translation>Datos del archivo enviados, esperando confirmación…</translation>
     </message>
     <message>
-        <location filename="../../../core/Protocols/FileTransfer/ZMODEM.cpp" line="543"/>
+        <location filename="../../../core/Protocols/FileTransfer/ZMODEM.cpp" line="588"/>
         <source>Sending ZFIN…</source>
         <translation>Enviando ZFIN…</translation>
     </message>
     <message>
-        <location filename="../../../core/Protocols/FileTransfer/ZMODEM.cpp" line="583"/>
+        <location filename="../../../core/Protocols/FileTransfer/ZMODEM.cpp" line="628"/>
         <source>Receiver ready, sending file info…</source>
         <translation>Receptor listo, enviando información del archivo…</translation>
     </message>
     <message>
-        <location filename="../../../core/Protocols/FileTransfer/ZMODEM.cpp" line="621"/>
+        <location filename="../../../core/Protocols/FileTransfer/ZMODEM.cpp" line="666"/>
         <source>NAK received, retrying (%1/%2)…</source>
         <translation>NAK recibido, reintentando (%1/%2)…</translation>
     </message>
     <message>
-        <location filename="../../../core/Protocols/FileTransfer/ZMODEM.cpp" line="642"/>
+        <location filename="../../../core/Protocols/FileTransfer/ZMODEM.cpp" line="687"/>
         <source>Transfer complete</source>
         <translation>Transferencia completa</translation>
     </message>
     <message>
-        <location filename="../../../core/Protocols/FileTransfer/ZMODEM.cpp" line="652"/>
+        <location filename="../../../core/Protocols/FileTransfer/ZMODEM.cpp" line="697"/>
         <source>Transfer cancelled by receiver</source>
         <translation>Transferencia cancelada por el receptor</translation>
     </message>
     <message>
-        <location filename="../../../core/Protocols/FileTransfer/ZMODEM.cpp" line="653"/>
+        <location filename="../../../core/Protocols/FileTransfer/ZMODEM.cpp" line="698"/>
         <source>Receiver cancelled the transfer</source>
         <translation>El receptor canceló la transferencia</translation>
     </message>
     <message>
-        <location filename="../../../core/Protocols/FileTransfer/ZMODEM.cpp" line="661"/>
-        <location filename="../../../core/Protocols/FileTransfer/ZMODEM.cpp" line="662"/>
+        <location filename="../../../core/Protocols/FileTransfer/ZMODEM.cpp" line="706"/>
+        <location filename="../../../core/Protocols/FileTransfer/ZMODEM.cpp" line="707"/>
         <source>Receiver reported a file error</source>
         <translation>El receptor reportó un error de archivo</translation>
     </message>
     <message>
-        <location filename="../../../core/Protocols/FileTransfer/ZMODEM.cpp" line="842"/>
+        <location filename="../../../core/Protocols/FileTransfer/ZMODEM.cpp" line="887"/>
         <source>Transfer timed out</source>
         <translation>Tiempo de espera agotado en la transferencia</translation>
     </message>
     <message>
-        <location filename="../../../core/Protocols/FileTransfer/ZMODEM.cpp" line="843"/>
+        <location filename="../../../core/Protocols/FileTransfer/ZMODEM.cpp" line="888"/>
         <source>Timeout: no response from receiver</source>
         <translation>Tiempo de espera agotado: sin respuesta del receptor</translation>
     </message>
     <message>
-        <location filename="../../../core/Protocols/FileTransfer/ZMODEM.cpp" line="848"/>
+        <location filename="../../../core/Protocols/FileTransfer/ZMODEM.cpp" line="893"/>
         <source>Timeout, retrying (%1/%2)…</source>
         <translation>Tiempo de espera agotado, reintentando (%1/%2)…</translation>
     </message>
@@ -21465,7 +21475,7 @@ Proporcione las credenciales necesarias.</translation>
     </message>
     <message>
         <location filename="../../../core/Ui/Misc/Extensions/ExtensionInstaller.cpp" line="224"/>
-        <location filename="../../../core/Ui/Misc/Extensions/ExtensionInstaller.cpp" line="431"/>
+        <location filename="../../../core/Ui/Misc/Extensions/ExtensionInstaller.cpp" line="434"/>
         <source>The verified files could not replace the installed version.</source>
         <translation>Los archivos verificados no pudieron reemplazar la versión instalada.</translation>
     </message>
@@ -21475,12 +21485,12 @@ Proporcione las credenciales necesarias.</translation>
         <translation>No se pudieron preparar los metadatos de la extensión.</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/Misc/Extensions/ExtensionInstaller.cpp" line="400"/>
+        <location filename="../../../core/Ui/Misc/Extensions/ExtensionInstaller.cpp" line="403"/>
         <source>Download failed: %1</source>
         <translation>Error en la descarga: %1</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/Misc/Extensions/ExtensionInstaller.cpp" line="405"/>
+        <location filename="../../../core/Ui/Misc/Extensions/ExtensionInstaller.cpp" line="408"/>
         <source>A downloaded file did not match the digest published for it.</source>
         <translation>Un archivo descargado no coincidió con el digest publicado para él.</translation>
     </message>
@@ -23506,22 +23516,22 @@ Agregue grupos arriba para sondear múltiples tipos de registros.</translation>
         <translation>Filtrar por nombre…</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUaTagBrowser.qml" line="429"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUaTagBrowser.qml" line="434"/>
         <source>%1 tag(s), %2 channel(s) selected</source>
         <translation>%1 etiqueta(s), %2 canal(es) seleccionado(s)</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUaTagBrowser.qml" line="436"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUaTagBrowser.qml" line="441"/>
         <source>Select All Readable</source>
         <translation>Seleccionar Todos los Legibles</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUaTagBrowser.qml" line="443"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUaTagBrowser.qml" line="448"/>
         <source>Cancel</source>
         <translation>Cancelar</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUaTagBrowser.qml" line="450"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUaTagBrowser.qml" line="455"/>
         <source>OK</source>
         <translation>ACEPTAR</translation>
     </message>
@@ -26863,12 +26873,12 @@ Reload it?</source>
         <translation>La respuesta del servidor no contiene los campos requeridos.</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/Console/Export.cpp" line="179"/>
+        <location filename="../../../core/Ui/Console/Export.cpp" line="172"/>
         <source>Console Output File Error</source>
         <translation>Error de Archivo de Salida de Consola</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/Console/Export.cpp" line="180"/>
+        <location filename="../../../core/Ui/Console/Export.cpp" line="173"/>
         <source>Cannot open file for writing!</source>
         <translation>¡No se puede abrir el archivo para escritura!</translation>
     </message>
@@ -26893,7 +26903,7 @@ Reload it?</source>
         <translation>Error general de E/S</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="222"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="230"/>
         <source>
 
 This script may use Lua 5.3 bitwise syntax, which this runtime does not support. Replace: %1. The bit and bit32 libraries are available in every script.</source>
@@ -26902,13 +26912,13 @@ This script may use Lua 5.3 bitwise syntax, which this runtime does not support.
 </translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="546"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="554"/>
         <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="267"/>
         <source>Frame Parser Disabled</source>
         <translation>Analizador de Tramas Deshabilitado</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="547"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="555"/>
         <source>The Lua frame parser for source %1 timed out %2 frames in a row and has been disabled to keep Serial Studio responsive.
 
 Most likely cause: an infinite loop or extremely slow operation in the script body. Fix the script and reload the project to re-enable parsing.</source>
@@ -26917,13 +26927,13 @@ Most likely cause: an infinite loop or extremely slow operation in the script bo
 Causa más probable: un bucle infinito o una operación extremadamente lenta en el cuerpo del script. Corrija el script y recargue el proyecto para rehabilitar el análisis.</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="289"/>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="329"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="297"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="337"/>
         <source>Lua Syntax Error</source>
         <translation>Error de Sintaxis de Lua</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="290"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="298"/>
         <source>The parser code contains an error:
 
 %1
@@ -26936,17 +26946,17 @@ Serial Studio can rewrite the unsupported operators as bit.* calls and reload th
 Serial Studio puede reescribir los operadores no soportados como llamadas bit.* y recargar el analizador. La biblioteca bit funciona con enteros de 32 bits, por lo que un valor mayor a 32 bits se ajustará una vez reescrito.</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="300"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="308"/>
         <source>Fix Automatically</source>
         <translation>Corregir Automáticamente</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="301"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="309"/>
         <source>Leave Unchanged</source>
         <translation>Dejar sin Cambios</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="330"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="338"/>
         <source>The parser code contains an error:
 
 %1</source>
@@ -26955,12 +26965,12 @@ Serial Studio puede reescribir los operadores no soportados como llamadas bit.* 
 %1</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="721"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="730"/>
         <source>Lua Runtime Error</source>
         <translation>Error de Ejecución de Lua</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="722"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="731"/>
         <source>The parser code triggered an error:
 
 %1</source>
@@ -26969,13 +26979,13 @@ Serial Studio puede reescribir los operadores no soportados como llamadas bit.* 
 %1</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="743"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="752"/>
         <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="600"/>
         <source>Missing Parse Function</source>
         <translation>Falta la Función Parse</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="744"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="753"/>
         <source>The 'parse' function is not defined in the script.
 
 Please ensure your code includes:
@@ -26986,13 +26996,13 @@ Asegúrese de que su código incluya:
 function parse(frame) ... end</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="806"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="815"/>
         <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="652"/>
         <source>Parse Function Runtime Error</source>
         <translation>Error de Ejecución de la Función de Análisis</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="807"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="816"/>
         <source>The parse function contains an error:
 
 %1
@@ -28651,112 +28661,112 @@ Agrega direcciones absolutas arriba para consultar el controlador.</translation>
         <translation>Detalles de la Sesión</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="49"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="50"/>
         <source>Reproduced</source>
         <translation>Reproducido</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="52"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="53"/>
         <source>Diverged</source>
         <translation>Divergió</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="55"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="56"/>
         <source>Partially verified</source>
         <translation>Verificado Parcialmente</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="58"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="59"/>
         <source>Not mechanically verifiable</source>
         <translation>No Verificable Mecánicamente</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="61"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="62"/>
         <source>Verification error</source>
         <translation>Error de Verificación</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="63"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="64"/>
         <source>Never verified</source>
         <translation>Nunca Verificado</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="71"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="72"/>
         <source>Identical</source>
         <translation>Idéntico</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="74"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="75"/>
         <source>Value drift</source>
         <translation>Desviación de valores</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="77"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="78"/>
         <source>Coverage drift</source>
         <translation>Desviación de cobertura</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="80"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="81"/>
         <source>Structural drift</source>
         <translation>Desviación estructural</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="83"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="84"/>
         <source>Not mechanically comparable</source>
         <translation>No comparable mecánicamente</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="85"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="86"/>
         <source>Check failed</source>
         <translation>Verificación fallida</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="114"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="115"/>
         <source>%1 B</source>
         <translation>%1 B</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="117"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="118"/>
         <source>%1 KB</source>
         <translation>%1 KB</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="120"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="121"/>
         <source>%1 MB</source>
         <translation>%1 MB</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="122"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="123"/>
         <source>%1 GB</source>
         <translation>%1 GB</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="146"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="147"/>
         <source>%1 samples over %2 s, %3 datasets</source>
         <translation>%1 muestras durante %2 s, %3 conjuntos de datos</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="228"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="234"/>
         <source>Select a session to view details.</source>
         <translation>Selecciona una sesión para ver los detalles.</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="314"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="320"/>
         <source>Project:</source>
         <translation>Proyecto:</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="327"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="333"/>
         <source>Started:</source>
         <translation>Iniciado:</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="340"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="346"/>
         <source>Ended:</source>
         <translation>Finalizado:</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="346"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="352"/>
         <source>(in progress)</source>
         <translation>(en progreso)</translation>
     </message>
@@ -28765,22 +28775,22 @@ Agrega direcciones absolutas arriba para consultar el controlador.</translation>
         <translation type="vanished">Tramas:</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="384"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="390"/>
         <source>Notes</source>
         <translation>Notas</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="399"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="405"/>
         <source>Add session notes…</source>
         <translation>Agregar notas de sesión…</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="400"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="406"/>
         <source>Notes are read-only for completed sessions.</source>
         <translation>Las notas son de solo lectura para sesiones completadas.</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="485"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="493"/>
         <source>New tag…</source>
         <translation>Nueva etiqueta…</translation>
     </message>
@@ -28801,42 +28811,42 @@ Agrega direcciones absolutas arriba para consultar el controlador.</translation>
         <translation type="vanished">Desviación vs Proyecto Actual</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="630"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="638"/>
         <source>Compares this session's decoded values against the project currently open in the editor. The result reflects a transient candidate and is not stored with the session.</source>
         <translation>Compara los valores decodificados de esta sesión contra el proyecto actualmente abierto en el editor. El resultado refleja un candidato transitorio y no se almacena con la sesión.</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="652"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="660"/>
         <source>Candidate: %1 (%2)</source>
         <translation>Candidato: %1 (%2)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="653"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="661"/>
         <source>untitled</source>
         <translation>sin título</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="664"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="672"/>
         <source>Archived-configuration reproduction status: %1</source>
         <translation>Estado de reproducción de configuración archivada: %1</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="718"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="726"/>
         <source>%1: only in the current project</source>
         <translation>%1: solo en el proyecto actual</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="721"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="729"/>
         <source>%1: only in the recorded project</source>
         <translation>%1: solo en el proyecto grabado</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="723"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="731"/>
         <source>%1: %2 of %3 values changed, %4 missing, %5 extra</source>
         <translation>%1: %2 de %3 valores cambiados, %4 faltantes, %5 adicionales</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="739"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="747"/>
         <source>…and %1 more datasets are affected.</source>
         <translation>…y %1 conjuntos de datos más están afectados.</translation>
     </message>
@@ -28873,27 +28883,27 @@ Agrega direcciones absolutas arriba para consultar el controlador.</translation>
         <translation type="vanished">Desbloquear el archivo de sesión para eliminar sesiones</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="421"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="429"/>
         <source>Tags</source>
         <translation>Etiquetas</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="353"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="359"/>
         <source>Size:</source>
         <translation>Tamaño:</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="367"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="373"/>
         <source>Stream data:</source>
         <translation>Datos de transmisión:</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="492"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="500"/>
         <source>Add</source>
         <translation>Agregar</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="590"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="598"/>
         <source>Project Comparison</source>
         <translation>Comparación de Proyecto</translation>
     </message>
@@ -28990,12 +29000,12 @@ Agrega direcciones absolutas arriba para consultar el controlador.</translation>
         <translation>Etiquetas</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionList.qml" line="215"/>
+        <location filename="../../qml/DatabaseExplorer/SessionList.qml" line="218"/>
         <source>No sessions found.</source>
         <translation>No se encontraron sesiones.</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionList.qml" line="216"/>
+        <location filename="../../qml/DatabaseExplorer/SessionList.qml" line="219"/>
         <source>No session file open.</source>
         <translation>No hay archivo de sesión abierto.</translation>
     </message>
@@ -29206,52 +29216,52 @@ Agrega direcciones absolutas arriba para consultar el controlador.</translation>
 <context>
     <name>Sessions::DatabaseWorker</name>
     <message>
-        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="111"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="112"/>
         <source>Empty file path</source>
         <translation>Ruta de archivo vacía</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="116"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="117"/>
         <source>This file is not a Serial Studio session database.</source>
         <translation>Este archivo no es una base de datos de sesión de Serial Studio.</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="210"/>
-        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="276"/>
-        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="393"/>
-        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="464"/>
-        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="489"/>
-        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="517"/>
-        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="557"/>
-        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="837"/>
-        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="911"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="211"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="277"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="394"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="465"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="490"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="518"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="558"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="852"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="935"/>
         <source>Database not open</source>
         <translation>Base de datos no abierta</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="219"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="220"/>
         <source>This session is being recorded</source>
         <translation>Esta sesión se está grabando</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="313"/>
-        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="336"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="314"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="337"/>
         <source>Database not open or empty label</source>
         <translation>Base de datos no abierta o etiqueta vacía</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="438"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="439"/>
         <source>Invalid label</source>
         <translation>Etiqueta Inválida</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="705"/>
-        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="797"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="706"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="805"/>
         <source>Cancelled</source>
         <translation>Cancelado</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="923"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="947"/>
         <source>Could not load session data</source>
         <translation>No se pudieron cargar los datos de la sesión</translation>
     </message>
@@ -32310,7 +32320,7 @@ Activa Incrustar Proyecto para integrar el proyecto en el acceso directo, de mod
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="392"/>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="929"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="930"/>
         <source>Hex</source>
         <translation>Hex</translation>
     </message>
@@ -32335,22 +32345,22 @@ Activa Incrustar Proyecto para integrar el proyecto en el acceso directo, de mod
         <translation>Biblioteca de comandos (historial, pines y acciones)</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="822"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="823"/>
         <source>Send Data to Device</source>
         <translation>Enviar Datos al Dispositivo</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="990"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="991"/>
         <source>Stop cyclic send</source>
         <translation>Detener envío cíclico</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="991"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="992"/>
         <source>Repeat the current command every %1 ms</source>
         <translation>Repetir el comando actual cada %1 ms</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="1012"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="1013"/>
         <source>Send data to the device</source>
         <translation>Enviar datos al dispositivo</translation>
     </message>
@@ -33087,7 +33097,7 @@ Activa Incrustar Proyecto para integrar el proyecto en el acceso directo, de mod
         <translation type="vanished">Bloquea una señal repetitiva en su lugar, como el botón Auto de un osciloscopio. Cada barrido inicia en el mismo punto de la forma de onda, por lo que se mantiene fija en lugar de desplazarse.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="173"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="188"/>
         <source>Trigger</source>
         <translation>Disparador</translation>
     </message>
@@ -33096,57 +33106,57 @@ Activa Incrustar Proyecto para integrar el proyecto en el acceso directo, de mod
         <translation type="vanished">Modo:</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="110"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="125"/>
         <source>Mode</source>
         <translation>Modo</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="135"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="150"/>
         <source>Auto</source>
         <translation>Automático</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="135"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="150"/>
         <source>Normal</source>
         <translation>Normal</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="135"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="150"/>
         <source>Single</source>
         <translation>Único</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="158"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="173"/>
         <source>Auto free-runs when nothing crosses the level.</source>
         <translation>Auto se ejecuta libremente cuando nada cruza el nivel.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="159"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="174"/>
         <source>Normal waits for a crossing.</source>
         <translation>Normal espera un cruce.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="160"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="175"/>
         <source>Single captures one sweep, then stops.</source>
         <translation>Único captura un barrido y luego se detiene.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="242"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="258"/>
         <source>Slope:</source>
         <translation>Pendiente:</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="274"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="290"/>
         <source>Trigger on a downward crossing</source>
         <translation>Disparar en un cruce descendente</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="320"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="336"/>
         <source>Timebase:</source>
         <translation>Base de Tiempo:</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="389"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="407"/>
         <source>Leave timebase empty to use the plot's time range; lower it to zoom in on a fast signal. Holdoff ignores new triggers for a moment after each.</source>
         <translation>Deja la base de tiempo vacía para usar el rango de tiempo del gráfico; redúcela para acercar una señal rápida. Holdoff ignora nuevos disparadores por un momento después de cada uno.</translation>
     </message>
@@ -33155,7 +33165,7 @@ Activa Incrustar Proyecto para integrar el proyecto en el acceso directo, de mod
         <translation type="vanished">Señal:</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="231"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="246"/>
         <source>Value to cross</source>
         <translation>Valor a Cruzar</translation>
     </message>
@@ -33164,17 +33174,17 @@ Activa Incrustar Proyecto para integrar el proyecto en el acceso directo, de mod
         <translation type="vanished">Flanco:</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="255"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="271"/>
         <source>Rising</source>
         <translation>Ascendente</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="259"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="275"/>
         <source>Trigger on an upward crossing</source>
         <translation>Disparar en un cruce ascendente</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="270"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="286"/>
         <source>Falling</source>
         <translation>Descendente</translation>
     </message>
@@ -33183,7 +33193,7 @@ Activa Incrustar Proyecto para integrar el proyecto en el acceso directo, de mod
         <translation type="vanished">Un nuevo barrido inicia cada vez que la señal cruza el nivel en la dirección elegida. Auto también ejecuta libremente cuando no se encuentra un cruce.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="293"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="309"/>
         <source>Timing</source>
         <translation>Temporización</translation>
     </message>
@@ -33192,23 +33202,23 @@ Activa Incrustar Proyecto para integrar el proyecto en el acceso directo, de mod
         <translation type="vanished">Base de Tiempo (ms):</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="333"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="349"/>
         <source>Match time range</source>
         <translation>Coincidir con Rango de Tiempo</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="346"/>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="376"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="363"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="394"/>
         <source>ms</source>
         <translation>ms</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="352"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="369"/>
         <source>Holdoff:</source>
         <translation>Retención:</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="365"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="382"/>
         <source>0</source>
         <translation>0</translation>
     </message>
@@ -33217,17 +33227,17 @@ Activa Incrustar Proyecto para integrar el proyecto en el acceso directo, de mod
         <translation type="vanished">La base de tiempo establece cuánto tiempo muestra un barrido; déjala vacía para usar el rango de tiempo del gráfico. Redúcela para acercar una señal rápida. Holdoff ignora nuevos disparadores por un momento después de cada uno.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="404"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="422"/>
         <source>Capture Next</source>
         <translation>Capturar Siguiente</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="406"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="424"/>
         <source>Arm for one more single-shot capture</source>
         <translation>Rearmar para una Captura Única Adicional</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="218"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="233"/>
         <source>Level:</source>
         <translation>Nivel:</translation>
     </message>
@@ -33244,7 +33254,7 @@ Activa Incrustar Proyecto para integrar el proyecto en el acceso directo, de mod
         <translation type="vanished">Tiempo de retención</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="197"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="212"/>
         <source>Source:</source>
         <translation>Fuente:</translation>
     </message>
@@ -33253,7 +33263,7 @@ Activa Incrustar Proyecto para integrar el proyecto en el acceso directo, de mod
         <translation type="vanished">Rearmar</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="419"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="437"/>
         <source>Close</source>
         <translation>Cerrar</translation>
     </message>
@@ -33417,22 +33427,22 @@ Activa Incrustar Proyecto para integrar el proyecto en el acceso directo, de mod
 <context>
     <name>UI::Dashboard</name>
     <message>
-        <location filename="../../../core/Ui/UI/Dashboard.cpp" line="1366"/>
+        <location filename="../../../core/Ui/UI/Dashboard.cpp" line="1369"/>
         <source>Console</source>
         <translation>Consola</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/Dashboard.cpp" line="1374"/>
+        <location filename="../../../core/Ui/UI/Dashboard.cpp" line="1377"/>
         <source>Notifications</source>
         <translation>Notificaciones</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/Dashboard.cpp" line="1382"/>
+        <location filename="../../../core/Ui/UI/Dashboard.cpp" line="1385"/>
         <source>Clock</source>
         <translation>Reloj</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/Dashboard.cpp" line="1389"/>
+        <location filename="../../../core/Ui/UI/Dashboard.cpp" line="1392"/>
         <source>Stopwatch</source>
         <translation>Cronómetro</translation>
     </message>
@@ -33771,12 +33781,12 @@ Activa Incrustar Proyecto para integrar el proyecto en el acceso directo, de mod
         <translation>Nombre de Variable</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="512"/>
+        <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="524"/>
         <source>Delete variable</source>
         <translation>Eliminar variable</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="530"/>
+        <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="542"/>
         <source>No variables.</source>
         <translation>Sin variables.</translation>
     </message>
@@ -33809,7 +33819,7 @@ Activa Incrustar Proyecto para integrar el proyecto en el acceso directo, de mod
         <translation>Lectura/escritura</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="479"/>
+        <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="491"/>
         <source>Copy access code %1 to clipboard</source>
         <translation>Copiar código de acceso %1 al portapapeles</translation>
     </message>
@@ -33822,7 +33832,7 @@ Activa Incrustar Proyecto para integrar el proyecto en el acceso directo, de mod
         <translation type="vanished">No hay registros.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="580"/>
+        <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="592"/>
         <source>Register access code copied</source>
         <translation>Código de acceso de registro copiado</translation>
     </message>
@@ -34500,32 +34510,32 @@ Entiendo que cuando termine, necesitaré comprar una licencia o compilar la vers
         <translation>Nuevo Espacio de Trabajo</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/WorkspaceDialog.qml" line="165"/>
+        <location filename="../../qml/Dialogs/WorkspaceDialog.qml" line="176"/>
         <source>Name:</source>
         <translation>Nombre:</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/WorkspaceDialog.qml" line="174"/>
+        <location filename="../../qml/Dialogs/WorkspaceDialog.qml" line="185"/>
         <source>My Workspace</source>
         <translation>Mi Espacio de Trabajo</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/WorkspaceDialog.qml" line="189"/>
+        <location filename="../../qml/Dialogs/WorkspaceDialog.qml" line="200"/>
         <source>Select widgets to include:</source>
         <translation>Seleccionar widgets a incluir:</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/WorkspaceDialog.qml" line="197"/>
+        <location filename="../../qml/Dialogs/WorkspaceDialog.qml" line="208"/>
         <source>Filter widgets…</source>
         <translation>Filtrar widgets…</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/WorkspaceDialog.qml" line="313"/>
+        <location filename="../../qml/Dialogs/WorkspaceDialog.qml" line="318"/>
         <source>Cancel</source>
         <translation>Cancelar</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/WorkspaceDialog.qml" line="320"/>
+        <location filename="../../qml/Dialogs/WorkspaceDialog.qml" line="325"/>
         <source>OK</source>
         <translation>ACEPTAR</translation>
     </message>

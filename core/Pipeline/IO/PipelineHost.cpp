@@ -641,10 +641,10 @@ bool IO::PipelineHost::pipelineParkedOnGui() noexcept
 }
 
 /**
- * @brief Brackets the pipeline thread's blocking apiCall dispatch (set by ScriptApiCall only) and
- *        announces the edge on the pipeline thread. The bracket is the only moment a GUI-side
- *        marshal that ran inline against the parked pipeline can be handed back to it (A3), so a
- *        listener that deferred work while parked learns here that the pipeline is its own again.
+ * @brief Brackets the pipeline thread's blocking apiCall dispatch (set by ScriptApiCall only): the
+ *        park edge fires from the pipeline thread, the unpark edge from the GUI thread inside the
+ *        dispatch so no window has the pipeline running while still flagged parked (spec 0099 f8).
+ *        The DirectConnection listener only POSTS its handback, so it stays correct on either edge.
  */
 void IO::PipelineHost::setPipelineParkedOnGui(bool parked)
 {

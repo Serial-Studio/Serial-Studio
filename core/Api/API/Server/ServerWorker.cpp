@@ -151,21 +151,25 @@ bool API::ServerWorker::isResourceOpen() const
 }
 
 /**
- * @brief Closes all sockets and cleans up resources
+ * @brief Closes all sockets and cleans up resources. Iterates a snapshot of the keys: abort()
+ *        emits disconnected synchronously, which runs removeSocket() and erases the entry from
+ *        m_sockets, so walking the live hash would skip sockets and orphan them.
  */
 void API::ServerWorker::closeResources()
 {
   SS_ASSERT_LOG(QThread::currentThread() == thread());
 
-  for (auto it = m_sockets.keyBegin(); it != m_sockets.keyEnd(); ++it) {
-    auto* socket = *it;
-    if (socket) {
-      socket->abort();
-      socket->deleteLater();
-    }
+  const auto sockets = m_sockets.keys();
+  for (auto* socket : sockets) {
+    if (!socket)
+      continue;
+
+    socket->abort();
+    socket->deleteLater();
   }
 
   m_sockets.clear();
+  m_streamAcks.clear();
   m_mutedSockets.clear();
   m_warnedSockets.clear();
 
@@ -185,9 +189,12 @@ void API::ServerWorker::addSocket(QTcpSocket* socket, const QString& sessionId)
   SS_ASSERT_LOG(socket->state() != QAbstractSocket::UnconnectedState);
 
   m_sockets.insert(socket, sessionId);
+  m_streamAcks.remove(socket);
   m_mutedSockets.remove(socket);
   m_warnedSockets.remove(socket);
+  connect(socket, &QTcpSocket::errorOccurred, this, &ServerWorker::onSocketError);
   connect(socket, &QTcpSocket::readyRead, this, &ServerWorker::onSocketReadyRead);
+  connect(socket, &QTcpSocket::bytesWritten, this, &ServerWorker::onSocketBytesWritten);
   connect(socket, &QTcpSocket::disconnected, this, &ServerWorker::onSocketDisconnected);
 
   if (socket->bytesAvailable() > 0)
@@ -215,6 +222,7 @@ void API::ServerWorker::removeSocket(QTcpSocket* socket)
   m_warnedSockets.remove(socket);
 
   Q_EMIT socketRemoved(socket, sessionId);
+  releaseStreamAck(socket);
   Q_EMIT clientCountChanged(m_sockets.count());
 
   if (socket)
@@ -312,21 +320,76 @@ void API::ServerWorker::writeMirrorPayload(QTcpSocket* socket,
 }
 
 /**
- * @brief Writes one typed stream block and acknowledges it, which is what paces the subscriber:
- *        the server only sends the next block after this ack, so a slow reader accumulates the
- *        bounded per-connection queue (drop-oldest + missed count) instead of the socket buffer.
- *        A session mismatch still acks so the sender's in-flight latch cannot wedge.
+ * @brief Writes one typed stream block and acknowledges it once the socket has drained, which is
+ *        what paces the subscriber: the server sends the next block only after the ack, so a slow
+ *        reader backs up the bounded per-connection queue, not the socket buffer. A stale session,
+ *        a dead socket or an over-cap backlog (block skipped, seq gap) ack at once.
  */
 void API::ServerWorker::writeStreamBlock(QTcpSocket* socket,
                                          const QString& sessionId,
                                          const QByteArray& data)
 {
-  SS_ASSERT(!data.isEmpty(), return);
+  SS_ASSERT(!data.isEmpty(), {
+    Q_EMIT streamWriteDone(socket, sessionId);
+    return;
+  });
 
-  if (socket && m_sockets.value(socket) == sessionId && socket->isWritable())
-    socket->write(data);
+  const bool live = socket && m_sockets.value(socket) == sessionId && socket->isWritable();
+  if (!live || !underWriteCap(socket)) {
+    Q_EMIT streamWriteDone(socket, sessionId);
+    return;
+  }
+
+  socket->write(data);
+  if (socket->bytesToWrite() > 0) {
+    m_streamAcks.insert(socket, sessionId);
+    return;
+  }
 
   Q_EMIT streamWriteDone(socket, sessionId);
+}
+
+/**
+ * @brief Acknowledges the stream write pending on @p socket, if any, so the server's in-flight
+ *        latch releases and the next queued block goes out. A no-op when nothing is pending.
+ */
+void API::ServerWorker::releaseStreamAck(QTcpSocket* socket)
+{
+  SS_ASSERT(socket != nullptr, return);
+
+  const auto it = m_streamAcks.find(socket);
+  if (it == m_streamAcks.end())
+    return;
+
+  const QString sessionId = it.value();
+  m_streamAcks.erase(it);
+  Q_EMIT streamWriteDone(socket, sessionId);
+}
+
+/**
+ * @brief Acks the pending stream write once the socket's write buffer is fully drained; a partial
+ *        flush leaves it pending. The empty-table check keeps the common case (no stream
+ *        subscriber) to one branch on a signal that fires on every flush of every socket.
+ */
+void API::ServerWorker::onSocketBytesWritten()
+{
+  if (m_streamAcks.isEmpty())
+    return;
+
+  auto* socket = qobject_cast<QTcpSocket*>(sender());
+  if (socket && socket->bytesToWrite() == 0)
+    releaseStreamAck(socket);
+}
+
+/**
+ * @brief Releases a pending stream ack when the socket reports an error, so a failed link can
+ *        never leave the sender's in-flight latch set.
+ */
+void API::ServerWorker::onSocketError()
+{
+  auto* socket = qobject_cast<QTcpSocket*>(sender());
+  if (socket)
+    releaseStreamAck(socket);
 }
 
 /**

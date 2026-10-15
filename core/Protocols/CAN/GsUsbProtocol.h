@@ -234,14 +234,17 @@ static_assert(offsetof(GsHostFrameFd, data) == offsetof(GsHostFrame, data),
 /**
  * @brief Solves gs_usb bit-timing segments for a target bitrate from BT_CONST-style limits;
  *        the same solver serves the arbitration and (with data-phase limits) the FD data phase.
- *        Limits arrive from untrusted device firmware, so the search is bounded: brpMax clamps
- *        to kBrpSearchCeiling and the divisor math runs in 64 bits (no wrap, no infinite loop).
+ *        Limits are untrusted firmware input: the search is bounded (brpMax clamps to
+ *        kBrpSearchCeiling, 64-bit divisor math) and inverted segment limits are refused.
  */
 [[nodiscard]] inline bool solveBitTiming(const GsDeviceBtConst& bt,
                                          std::uint32_t bitrate,
                                          GsDeviceBitTiming& out)
 {
   if (bitrate == 0 || bt.fclkCan == 0 || bt.brpMin > bt.brpMax)
+    return false;
+
+  if (bt.tseg2Max < std::max<std::uint32_t>(1, bt.tseg2Min) || bt.tseg1Max < bt.tseg1Min)
     return false;
 
   const std::uint32_t step    = std::max<std::uint32_t>(1, bt.brpInc);

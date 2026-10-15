@@ -124,6 +124,79 @@ static bool exceedsJsonDepthLimit(const QByteArray& data, int maxDepth)
   return false;
 }
 
+/**
+ * @brief First byte that is not ASCII whitespace, or '\0' when there is none. Reads only the
+ *        leading padding, so unlike trimmed() it never copies the buffer once per chunk.
+ */
+static char firstNonSpaceChar(const QByteArray& data)
+{
+  SS_ASSERT(data.size() >= 0, return '\0');
+
+  for (const char ch : data)
+    if (ch != ' ' && (ch < '\t' || ch > '\r'))
+      return ch;
+
+  return '\0';
+}
+
+/**
+ * @brief Folds the bytes appended since the last call into the connection's JSON scan and returns
+ *        true once the top-level value has closed (depth 0, outside a string). Only the new bytes
+ *        are read, so a body that arrives in many chunks costs O(body), not O(body x chunks).
+ *        Quotes and backslash escapes are tracked: a brace inside a string never moves the depth.
+ */
+static bool advanceJsonScan(API::ConnectionState& state)
+{
+  SS_ASSERT(!state.buffer.isEmpty(), return false);
+  SS_ASSERT_LOG(state.jsonScanned >= 0 && state.jsonDepth >= 0);
+
+  if (state.jsonScanned > state.buffer.size())
+    state.resetJsonScan();
+
+  const qsizetype size = state.buffer.size();
+  const char* bytes    = state.buffer.constData();
+  int depth            = state.jsonDepth;
+  bool inString        = state.jsonInString;
+  bool escaped         = state.jsonEscaped;
+
+  for (qsizetype i = state.jsonScanned; i < size; ++i) {
+    const char ch = bytes[i];
+    if (inString && escaped) {
+      escaped = false;
+      continue;
+    }
+
+    if (inString && ch == '\\') {
+      escaped = true;
+      continue;
+    }
+
+    if (inString) {
+      inString = ch != '"';
+      continue;
+    }
+
+    if (ch == '"') {
+      inString = true;
+      continue;
+    }
+
+    if (ch == '{' || ch == '[') {
+      ++depth;
+      continue;
+    }
+
+    if ((ch == '}' || ch == ']') && depth > 0)
+      --depth;
+  }
+
+  state.jsonScanned  = size;
+  state.jsonDepth    = depth;
+  state.jsonInString = inString;
+  state.jsonEscaped  = escaped;
+  return depth == 0 && !inString;
+}
+
 //--------------------------------------------------------------------------------------------------
 // Constructor
 //--------------------------------------------------------------------------------------------------
@@ -154,8 +227,14 @@ void API::ClientReception::consumeBytes(QTcpSocket* socket,
   if (!state)
     return;
 
+  if (state->closing)
+    return;
+
   if (!validateRateLimits(socket, *state, data))
     return;
+
+  if (state->buffer.isEmpty())
+    state->resetJsonScan();
 
   state->buffer.append(data);
 
@@ -200,7 +279,7 @@ void API::ClientReception::drainBuffer(QTcpSocket* socket, const QString& sessio
       --bodyLen;
 
     const QByteArray line = state->buffer.left(bodyLen);
-    state->buffer.remove(0, newlineIndex + 1);
+    state->dropFront(newlineIndex + 1);
 
     const auto trimmedLine = line.trimmed();
     if (trimmedLine.isEmpty())
@@ -284,7 +363,7 @@ bool API::ClientReception::interceptHttpPreamble(QTcpSocket* socket, ConnectionS
   qWarning() << "[API] HTTP request on the API socket:" << state.peerAddress << ":"
              << state.peerPort << "- Disconnecting client";
 
-  state.buffer.clear();
+  state.clearBuffer();
   m_host.closeSocket(socket, state);
   return true;
 }
@@ -314,7 +393,7 @@ bool API::ClientReception::handleAuthHandshake(QTcpSocket* socket, ConnectionSta
     return false;
 
   const QByteArray line = state.buffer.left(newlineIndex).trimmed();
-  state.buffer.remove(0, newlineIndex + 1);
+  state.dropFront(newlineIndex + 1);
 
   bool ok = false;
   QJsonParseError parseError;
@@ -586,7 +665,10 @@ void API::ClientReception::processRawJsonCommand(QTcpSocket* socket,
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Handles a buffered message when no newline delimiter is present.
+ * @brief Handles a buffered message when no newline delimiter is present. A buffer that opens
+ *        with a bracket is JSON: it stays buffered, never cleared and never forwarded, until its
+ *        top-level value closes. A body that outgrows the size limit while open drops the client,
+ *        since discarding it would leak the rest of the body to the device as raw bytes.
  */
 void API::ClientReception::processNoNewlineBuffer(QTcpSocket* socket, const QString& sessionId)
 {
@@ -597,11 +679,24 @@ void API::ClientReception::processNoNewlineBuffer(QTcpSocket* socket, const QStr
     return;
 
   SS_ASSERT_LOG(state->authenticated);
-  const auto trimmed = state->buffer.trimmed();
-
-  const char firstChar = trimmed.isEmpty() ? '\0' : trimmed.at(0);
+  const char firstChar = firstNonSpaceChar(state->buffer);
   if (firstChar == '{' || firstChar == '[') {
-    processBufferedJson(socket, sessionId, trimmed);
+    if (advanceJsonScan(*state)) {
+      processBufferedJson(socket, sessionId, state->buffer.trimmed());
+      return;
+    }
+
+    if (state->buffer.size() > kMaxApiMessageBytes) {
+      qWarning() << "[API] Open message size limit exceeded:" << state->peerAddress << ":"
+                 << state->peerPort << "- Buffer size:" << state->buffer.size()
+                 << "- Limit:" << kMaxApiMessageBytes << "- Disconnecting client";
+
+      m_host.disconnectClient(socket,
+                              *state,
+                              ErrorCode::ExecutionError,
+                              QStringLiteral("API message exceeds size limit"));
+    }
+
     return;
   }
 
@@ -616,7 +711,7 @@ void API::ClientReception::processNoNewlineBuffer(QTcpSocket* socket, const QStr
   }
 
   const QByteArray raw = state->buffer;
-  state->buffer.clear();
+  state->clearBuffer();
   if (!authorizeRawWrite(socket, *state))
     return;
 
@@ -627,10 +722,10 @@ void API::ClientReception::processNoNewlineBuffer(QTcpSocket* socket, const QStr
 }
 
 /**
- * @brief Attempts to parse buffered data as a complete JSON message. Parsing waits for the
- *        closing bracket: a newline-less body arrives in many chunks, and re-parsing the
- *        whole partial buffer per chunk is quadratic (a 1 MB body stalled the GUI thread
- *        for seconds and timed out the next commands).
+ * @brief Parses a newline-less value whose scan has closed (depth 0 outside a string), so the
+ *        buffer holds the whole value and clearing it drops nothing still in flight. Judging
+ *        completion by the end bytes took an inner '}' for the end and lost the command; parsing
+ *        a partial buffer per chunk is quadratic (a 1 MB body stalled the GUI thread for seconds).
  */
 void API::ClientReception::processBufferedJson(QTcpSocket* socket,
                                                const QString& sessionId,
@@ -653,16 +748,9 @@ void API::ClientReception::processBufferedJson(QTcpSocket* socket,
                                                    ErrorCode::ExecutionError,
                                                    QStringLiteral("API message exceeds size limit"))
                           .toJsonBytes());
-    state->buffer.clear();
+    state->clearBuffer();
     return;
   }
-
-  const char firstChar = trimmed.at(0);
-  const char lastChar  = trimmed.back();
-  const bool complete =
-    (firstChar == '{' && lastChar == '}') || (firstChar == '[' && lastChar == ']');
-  if (!complete)
-    return;
 
   if (exceedsJsonDepthLimit(trimmed, kMaxApiJsonDepth)) {
     qWarning() << "[API] JSON depth limit exceeded (buffered):" << state->peerAddress << ":"
@@ -673,7 +761,7 @@ void API::ClientReception::processBufferedJson(QTcpSocket* socket,
       CommandResponse::makeError(
         QString(), ErrorCode::ExecutionError, QStringLiteral("JSON nesting depth exceeds limit"))
         .toJsonBytes());
-    state->buffer.clear();
+    state->clearBuffer();
     return;
   }
 
@@ -681,7 +769,7 @@ void API::ClientReception::processBufferedJson(QTcpSocket* socket,
   QJsonObject json;
   try {
     const bool dispatchable = API::parseMessage(trimmed, type, json) || MCP::isMCPMessage(trimmed);
-    state->buffer.clear();
+    state->clearBuffer();
     if (dispatchable)
       handleJsonMessage(socket, sessionId, trimmed);
     else

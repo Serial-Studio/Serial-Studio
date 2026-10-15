@@ -25,6 +25,7 @@
 #include <QStringList>
 #include <QTemporaryDir>
 #include <QTest>
+#include <QUrl>
 #include <QVariantList>
 
 #include "Console/Annotations.h"
@@ -197,7 +198,7 @@ void TstConsoleAnnotations::filterAndCsvAgree()
   QTemporaryDir dir;
   QVERIFY(dir.isValid());
   const QString path = dir.filePath(QStringLiteral("annotations.csv"));
-  QVERIFY(model.exportCsv(path));
+  QVERIFY(model.exportCsv(QUrl::fromLocalFile(path)));
 
   QFile file(path);
   QVERIFY(file.open(QIODevice::ReadOnly | QIODevice::Text));

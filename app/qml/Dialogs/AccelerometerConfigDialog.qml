@@ -46,13 +46,28 @@ Widgets.SmartDialog {
   property var accelModel: null
 
   //
+  // Parse and format decimals the way the locale-aware validator reads them; NaN on bad input
+  //
+  function parseDecimal(text) {
+    try {
+      return Number.fromLocaleString(Qt.locale(), text)
+    } catch (e) {
+      return NaN
+    }
+  }
+
+  function formatDecimal(text) {
+    return text.replace(".", Qt.locale().decimalPoint)
+  }
+
+  //
   // Display the dialog & load data model properties into the UI
   //
   function openDialog(model) {
     root.accelModel = model
 
     if (model) {
-      maxGField.text = model.maxG.toFixed(1)
+      maxGField.text = root.formatDecimal(model.maxG.toFixed(1))
       inputInGSwitch.checked = model.inputInG
     }
 
@@ -67,11 +82,11 @@ Widgets.SmartDialog {
     if (!accelModel)
       return
 
-    const val = parseFloat(maxGField.text)
+    const val = root.parseDecimal(maxGField.text)
     if (!isNaN(val) && val >= 0.5)
       accelModel.maxG = val
     else
-      maxGField.text = accelModel.maxG.toFixed(1)
+      maxGField.text = root.formatDecimal(accelModel.maxG.toFixed(1))
   }
 
   //

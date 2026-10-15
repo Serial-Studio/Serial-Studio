@@ -528,12 +528,12 @@ Varje enhetsåtgärd kräver fortfarande ditt uttryckliga godkännande per anrop
         <translation>Kan inte starta API TCP-server</translation>
     </message>
     <message>
-        <location filename="../../../core/Api/API/Server.cpp" line="346"/>
+        <location filename="../../../core/Api/API/Server.cpp" line="357"/>
         <source>Allow External API Connections?</source>
         <translation>Tillåt Externa API-anslutningar?</translation>
     </message>
     <message>
-        <location filename="../../../core/Api/API/Server.cpp" line="347"/>
+        <location filename="../../../core/Api/API/Server.cpp" line="358"/>
         <source>Exposing the API server to external hosts allows other devices on your network to connect to Serial Studio on port 7777.
 
 Only enable this on trusted networks. Untrusted clients may read live data or send commands to your device.</source>
@@ -558,12 +558,12 @@ Aktivera endast detta i betrodda nätverk. Ej betrodda klienter kan läsa liveda
         <translation type="vanished">Serial Studio</translation>
     </message>
     <message>
-        <location filename="../../../core/Api/API/Server.cpp" line="1023"/>
+        <location filename="../../../core/Api/API/Server.cpp" line="1037"/>
         <source>API server</source>
         <translation>API-server</translation>
     </message>
     <message>
-        <location filename="../../../core/Api/API/Server.cpp" line="1023"/>
+        <location filename="../../../core/Api/API/Server.cpp" line="1037"/>
         <source>Invalid pending connection</source>
         <translation>Ogiltig väntande anslutning</translation>
     </message>
@@ -779,37 +779,37 @@ Aktivera endast detta i betrodda nätverk. Ej betrodda klienter kan läsa liveda
         <translation>Accelerometerkonfiguration</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/AccelerometerConfigDialog.qml" line="95"/>
+        <location filename="../../qml/Dialogs/AccelerometerConfigDialog.qml" line="110"/>
         <source>Configure the accelerometer display range and input units.</source>
         <translation>Konfigurera accelerometerns visningsområde och indataenheter.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/AccelerometerConfigDialog.qml" line="109"/>
+        <location filename="../../qml/Dialogs/AccelerometerConfigDialog.qml" line="124"/>
         <source>Display Range</source>
         <translation>Visningsområde</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/AccelerometerConfigDialog.qml" line="130"/>
+        <location filename="../../qml/Dialogs/AccelerometerConfigDialog.qml" line="145"/>
         <source>Max G:</source>
         <translation>Max G:</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/AccelerometerConfigDialog.qml" line="144"/>
+        <location filename="../../qml/Dialogs/AccelerometerConfigDialog.qml" line="159"/>
         <source>Enter max G value</source>
         <translation>Ange max G-värde</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/AccelerometerConfigDialog.qml" line="164"/>
+        <location filename="../../qml/Dialogs/AccelerometerConfigDialog.qml" line="179"/>
         <source>Input Configuration</source>
         <translation>Ingångskonfiguration</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/AccelerometerConfigDialog.qml" line="184"/>
+        <location filename="../../qml/Dialogs/AccelerometerConfigDialog.qml" line="199"/>
         <source>Input already in G</source>
         <translation>Ingång redan i G</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/AccelerometerConfigDialog.qml" line="218"/>
+        <location filename="../../qml/Dialogs/AccelerometerConfigDialog.qml" line="233"/>
         <source>Close</source>
         <translation>Stäng</translation>
     </message>
@@ -1193,92 +1193,92 @@ Aktivera endast detta i betrodda nätverk. Ej betrodda klienter kan läsa liveda
         <translation>Fel</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="275"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="283"/>
         <source>Select Alarm Sound</source>
         <translation>Välj Larmljud</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="277"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="285"/>
         <source>WAV audio (*.wav)</source>
         <translation>WAV-ljud (*.WAV)</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="277"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="285"/>
         <source>All files (*)</source>
         <translation>Alla filer (*)</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="312"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="320"/>
         <source>Choose Band Color</source>
         <translation>Välj Bandfärg</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="339"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="347"/>
         <source>Presets</source>
         <translation>Förinställningar</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="362"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="370"/>
         <source>Preset</source>
         <translation>Förinställning</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="377"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="385"/>
         <source>Choose preset…</source>
         <translation>Välj förinställning…</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="488"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="496"/>
         <source>Blink</source>
         <translation>Blinka</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="495"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="503"/>
         <source>Sound</source>
         <translation>Ljud</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="616"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="624"/>
         <source>Reset to severity default</source>
         <translation>Återställ till allvarlighetsgradstandard</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="630"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="638"/>
         <source>Click to choose a color. Right-click to reset to severity default.</source>
         <translation>Klicka för att välja en färg. Högerklicka för att återställa till allvarlighetsgradstandard.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="631"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="639"/>
         <source>Click to choose a custom color.</source>
         <translation>Klicka för att välja en anpassad färg.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="662"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="670"/>
         <source>Flash the LED while the value sits in this band.</source>
         <translation>Blinka LED:en medan värdet ligger i detta intervall.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="690"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="698"/>
         <source>Pick a WAV file to play for this band.</source>
         <translation>Välj en WAV-fil att spela upp för detta band.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="706"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="714"/>
         <source>Use the priority's default sound.</source>
         <translation>Använd prioritetens standardljud.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="779"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="787"/>
         <source>No bands defined. Pick a preset above or add a band to get started.</source>
         <translation>Inga band definierade. Välj en förinställning ovan eller lägg till ett band för att komma igång.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="903"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="911"/>
         <source>Apply</source>
         <translation>Tillämpa</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="906"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="914"/>
         <source>Apply changes to the dataset.</source>
         <translation>Tillämpa ändringar på datasetet.</translation>
     </message>
@@ -1291,47 +1291,47 @@ Aktivera endast detta i betrodda nätverk. Ej betrodda klienter kan läsa liveda
         <translation type="vanished">Ersätt de aktuella banden med den valda förinställningen, skalad till detta datasets område.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="389"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="397"/>
         <source>Range</source>
         <translation>Område</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="417"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="425"/>
         <source>Bands</source>
         <translation>Band</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="428"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="436"/>
         <source>Add Band</source>
         <translation>Lägg till Band</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="432"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="440"/>
         <source>Add a new band continuing from the last one.</source>
         <translation>Lägg till ett nytt band som fortsätter från det senaste.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="463"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="471"/>
         <source>Min</source>
         <translation>Min</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="469"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="477"/>
         <source>Max</source>
         <translation>Max</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="475"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="483"/>
         <source>Severity</source>
         <translation>Allvarlighetsgrad</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="481"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="489"/>
         <source>Color</source>
         <translation>Färg</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="502"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="510"/>
         <source>Label</source>
         <translation>Etikett</translation>
     </message>
@@ -1344,22 +1344,22 @@ Aktivera endast detta i betrodda nätverk. Ej betrodda klienter kan läsa liveda
         <translation type="vanished">auto</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="716"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="724"/>
         <source>(optional)</source>
         <translation>(valfritt)</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="733"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="741"/>
         <source>Move up.</source>
         <translation>Flytta upp.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="752"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="760"/>
         <source>Move down.</source>
         <translation>Flytta ner.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="765"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="773"/>
         <source>Remove this band.</source>
         <translation>Ta bort detta band.</translation>
     </message>
@@ -1368,17 +1368,17 @@ Aktivera endast detta i betrodda nätverk. Ej betrodda klienter kan läsa liveda
         <translation type="vanished">Inga band definierade. Använd en förinställning eller lägg till ett band för att komma igång.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="796"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="804"/>
         <source>Preview</source>
         <translation>Förhandsgranskning</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="892"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="900"/>
         <source>Cancel</source>
         <translation>Avbryt</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="894"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="902"/>
         <source>Discard changes.</source>
         <translation>Kassera ändringar.</translation>
     </message>
@@ -2040,56 +2040,56 @@ Aktivera endast detta i betrodda nätverk. Ej betrodda klienter kan läsa liveda
 <context>
     <name>AxisRangeDialog</name>
     <message>
-        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="69"/>
+        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="84"/>
         <source>Axis Range Configuration</source>
         <translation>Konfiguration av Axelområde</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="189"/>
+        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="204"/>
         <source>Configure the visible range for the plot axes. Values update in real-time as you type.</source>
         <translation>Konfigurera det synliga området för plottaxlarna. Värdena uppdateras i realtid medan du skriver.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="197"/>
+        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="212"/>
         <source>X Axis</source>
         <translation>X-axel</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="222"/>
-        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="293"/>
+        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="237"/>
+        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="308"/>
         <source>Minimum:</source>
         <translation>Minimum:</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="234"/>
-        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="305"/>
+        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="249"/>
+        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="320"/>
         <source>Enter min value</source>
         <translation>Ange minimivärde</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="243"/>
-        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="314"/>
+        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="258"/>
+        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="329"/>
         <source>Maximum:</source>
         <translation>Maximum:</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="255"/>
-        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="326"/>
+        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="270"/>
+        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="341"/>
         <source>Enter max value</source>
         <translation>Ange maximivärde</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="270"/>
+        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="285"/>
         <source>Y Axis</source>
         <translation>Y-axel</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="345"/>
+        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="360"/>
         <source>Reset</source>
         <translation>Återställ</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="355"/>
+        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="370"/>
         <source>Close</source>
         <translation>Stäng</translation>
     </message>
@@ -5361,203 +5361,203 @@ Aktivera endast detta i betrodda nätverk. Ej betrodda klienter kan läsa liveda
         <translation>CSV-filer (*.CSV)</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="220"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="216"/>
         <source>Track</source>
         <translation>Spår</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="226"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="222"/>
         <source>Table</source>
         <translation>Tabell</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="232"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="228"/>
         <source>Payload</source>
         <translation>Nyttolast</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="238"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="234"/>
         <source>Decoder</source>
         <translation>Avkodare</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="325"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="321"/>
         <source>Window</source>
         <translation>Fönster</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="342"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="338"/>
         <source>Bytes of history drawn across the lanes</source>
         <translation>Byte av historik ritade över spåren</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="346"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="342"/>
         <source>bytes</source>
         <translation>byte</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="371"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="367"/>
         <source>paused</source>
         <translation>pausad</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="382"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="378"/>
         <source>%1 annotations kept</source>
         <translation>%1 anteckningar behållna</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="398"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="394"/>
         <source>Each bar is a byte range the decoder labelled, one lane per decoder row: oldest on the left, newest on the right.</source>
         <translation>Varje stapel är ett byteintervall som avkodaren märkt, en bana per avkodarrad: äldst till vänster, nyast till höger.</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="401"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="397"/>
         <source>Labelled bytes %1 to %2, oldest on the left.</source>
         <translation>Märkta byte %1 till %2, äldst till vänster.</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="408"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="404"/>
         <source>The store is full at %1 labels, so anything older was dropped: shrink the window to see individual labels.</source>
         <translation>Lagret är fullt vid %1 märkningar, så allt äldre togs bort: förminska fönstret för att se enskilda märkningar.</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="511"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="507"/>
         <source>nothing labelled in this window</source>
         <translation>inget märkt i detta fönster</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="564"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="560"/>
         <source>%1 labels</source>
         <translation>%1 märkningar</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="626"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="622"/>
         <source>%1 labels merged (bytes %2 to %3). Shrink the window to separate them.</source>
         <translation>%1 märkningar sammanslagna (byte %2 till %3). Förminska fönstret för att separera dem.</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="631"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="627"/>
         <source>%1 (bytes %2 to %3)</source>
         <translation>%1 (byte %2 till %3)</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="694"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="690"/>
         <source>Row</source>
         <translation>Rad</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="703"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="699"/>
         <source>All rows</source>
         <translation>Alla Rader</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="707"/>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="882"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="703"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="878"/>
         <source>Class</source>
         <translation>Klass</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="718"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="714"/>
         <source>All classes</source>
         <translation>Alla klasser</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="728"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="724"/>
         <source>Export CSV</source>
         <translation>Exportera CSV</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="733"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="729"/>
         <source>Save every annotation to a spreadsheet</source>
         <translation>Spara varje annotering till ett kalkylblad</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="865"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="861"/>
         <source>No annotations decoded yet</source>
         <translation>Inga annoteringar avkodade ännu</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="900"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="896"/>
         <source>Hexadecimal</source>
         <translation>Hexadecimal</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="910"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="906"/>
         <source>Refresh</source>
         <translation>Uppdatera</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="913"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="909"/>
         <source>Re-read the bytes of the selected class</source>
         <translation>Läs om byten för den valda klassen</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="925"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="921"/>
         <source>%1 characters</source>
         <translation>%1 tecken</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="949"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="945"/>
         <source>Pick a class and press Refresh to extract its bytes</source>
         <translation>Välj en klass och tryck Uppdatera för att extrahera dess byte</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="983"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="979"/>
         <source>Apply</source>
         <translation>Tillämpa</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="986"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="982"/>
         <source>Compile the script and start decoding</source>
         <translation>Kompilera skriptet och börja avkoda</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="999"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="995"/>
         <source>Load a decoder for a known protocol</source>
         <translation>Ladda en avkodare för ett känt protokoll</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="1011"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="1007"/>
         <source>Clear</source>
         <translation>Rensa</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="1016"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="1012"/>
         <source>Discard the annotations decoded so far</source>
         <translation>Kassera de annoteringar som avkodats hittills</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="1024"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="1020"/>
         <source>Pause</source>
         <translation>Pausa</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="1024"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="1020"/>
         <source>Resume</source>
         <translation>Återuppta</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="1029"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="1025"/>
         <source>Stop decoding, keep the labels already captured</source>
         <translation>Stoppa avkodning, behåll de etiketter som redan fångats</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="1030"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="1026"/>
         <source>Resume decoding the incoming bytes</source>
         <translation>Återuppta avkodning av inkommande bytes</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="1095"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="1091"/>
         <source>No annotations yet</source>
         <translation>Inga annoteringar ännu</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="1108"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="1104"/>
         <source>Annotations label ranges of the incoming byte stream: a small script names each range, and this panel draws them as lanes, lists them, and extracts their bytes.</source>
         <translation>Annoteringar märker intervall i den inkommande byteströmmen: ett litet skript namnger varje intervall, och denna panel ritar dem som banor, listar dem och extraherar deras bytes.</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="1116"/>
+        <location filename="../../qml/Widgets/Dashboard/ConsoleAnnotations.qml" line="1112"/>
         <source>Open Decoder</source>
         <translation>Öppna Avkodare</translation>
     </message>
@@ -6206,17 +6206,17 @@ Aktivera endast detta i betrodda nätverk. Ej betrodda klienter kan läsa liveda
         <translation>Reservwidgetar är aktiva. Köp en licens för full funktionalitet.</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="800"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="808"/>
         <source>Empty Workspace</source>
         <translation>Tom Arbetsyta</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="814"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="822"/>
         <source>Use the search bar to find and add widgets, or right-click a widget in another workspace to add it here.</source>
         <translation>Använd sökfältet för att hitta och lägga till widgetar, eller högerklicka på en widget i en annan arbetsyta för att lägga till den här.</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="829"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="837"/>
         <source>Search Widgets</source>
         <translation>Sök Widgetar</translation>
     </message>
@@ -6259,7 +6259,7 @@ Aktivera endast detta i betrodda nätverk. Ej betrodda klienter kan läsa liveda
         <translation>API-server Av</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardLayout.qml" line="662"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardLayout.qml" line="675"/>
         <source>Command Palette</source>
         <translation>Kommandopalett</translation>
     </message>
@@ -7105,7 +7105,7 @@ v
 <context>
     <name>DataModel::FrameBuilder</name>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/FrameBuilder.cpp" line="327"/>
+        <location filename="../../../core/Pipeline/DataModel/FrameBuilder.cpp" line="328"/>
         <source>A downstream consumer (dashboard, CSV/MDF4 export, historian, or API subscriber) is not draining fast enough, so data is being dropped from the display and from any active recording. Disable a heavy consumer or reduce the data rate.</source>
         <translation>En nedströmskonsument (instrumentpanel, CSV/MDF4-export, historikfunktion eller API-prenumerant) hinner inte dränera tillräckligt snabbt, så data tappas från visningen och från eventuell aktiv inspelning. Inaktivera en tung konsument eller minska datahastigheten.</translation>
     </message>
@@ -7126,7 +7126,7 @@ v
         <translation type="vanished">Snabbdiagram</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/FrameBuilder.cpp" line="325"/>
+        <location filename="../../../core/Pipeline/DataModel/FrameBuilder.cpp" line="326"/>
         <source>Block pool exhausted</source>
         <translation>Block-poolen är uttömd</translation>
     </message>
@@ -7135,12 +7135,12 @@ v
         <translation type="vanished">En nedströmskonsument (instrumentpanel, CSV/MDF4-export, sessions-DB eller API-prenumerant) dränerar inte tillräckligt snabbt, så data tappas bort från visningen och från eventuell aktiv inspelning. Inaktivera en tung konsument eller minska datahastigheten.</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/FrameBuilder.cpp" line="2334"/>
+        <location filename="../../../core/Pipeline/DataModel/FrameBuilder.cpp" line="2343"/>
         <source>JavaScript transform exceeded budget</source>
         <translation>JavaScript-transform överskred budgeten</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/FrameBuilder.cpp" line="2335"/>
+        <location filename="../../../core/Pipeline/DataModel/FrameBuilder.cpp" line="2344"/>
         <source>A dataset transform took longer than %1 ms; remaining datasets in the frame fell back to raw values until the next frame. Profile or simplify the transform code.</source>
         <translation>En datasettransform tog längre än %1 ms; återstående dataset i framen föll tillbaka till råvärden tills nästa frame. Profilera eller förenkla transformkoden.</translation>
     </message>
@@ -7995,12 +7995,12 @@ Lägg till %4 dataset med mallens standardvärden?</translation>
         <translation>Fasta decimaler för värdevisningen; åsidosätter formatet (-1 = auto)</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="713"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="731"/>
         <source>Auto-detect</source>
         <translation>Autodetektera</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="713"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="731"/>
         <source>Manual Delimiters</source>
         <translation>Manuella Avgränsare</translation>
     </message>
@@ -8733,7 +8733,7 @@ Lägg till %4 dataset med mallens standardvärden?</translation>
         <translation type="vanished">Painter-widget</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="730"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="748"/>
         <source>Web View</source>
         <translation>Webbvisning</translation>
     </message>
@@ -8943,7 +8943,7 @@ Lägg till %4 dataset med mallens standardvärden?</translation>
         <translation type="vanished">Övre gräns för mätarens eller stapelns visningsområde</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="743"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="761"/>
         <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="663"/>
         <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="690"/>
         <source>Auto</source>
@@ -9034,207 +9034,207 @@ Lägg till %4 dataset med mallens standardvärden?</translation>
         <translation type="vanished">Redigera Painter-kod</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="555"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="573"/>
         <source>Edit Canvas Code</source>
         <translation>Redigera Canvas-kod</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="579"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="597"/>
         <source>Edit Transmit Function</source>
         <translation>Redigera Överföringsfunktion</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="677"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="695"/>
         <source>Rectangular (None)</source>
         <translation>Rektangulär (Ingen)</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="677"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="695"/>
         <source>Bartlett (Triangular)</source>
         <translation>Bartlett (Triangulär)</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="677"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="695"/>
         <source>Hann</source>
         <translation>Hann</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="678"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="696"/>
         <source>Hamming</source>
         <translation>Hamming</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="678"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="696"/>
         <source>Blackman</source>
         <translation>Blackman</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="678"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="696"/>
         <source>Blackman-Harris</source>
         <translation>Blackman-harris</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="678"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="696"/>
         <source>Nuttall</source>
         <translation>Nuttall</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="679"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="697"/>
         <source>Blackman-Nuttall</source>
         <translation>Blackman-nuttall</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="679"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="697"/>
         <source>Flat Top</source>
         <translation>Flat Top</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="679"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="697"/>
         <source>Welch</source>
         <translation>Welch</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="679"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="697"/>
         <source>Bartlett-Hann</source>
         <translation>Bartlett-hann</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="680"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="698"/>
         <source>Bohman</source>
         <translation>Bohman</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="680"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="698"/>
         <source>Cosine (Sine)</source>
         <translation>Cosinus (Sinus)</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="680"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="698"/>
         <source>Lanczos</source>
         <translation>Lanczos</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="680"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="698"/>
         <source>Parzen</source>
         <translation>Parzen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="691"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="709"/>
         <source>Off</source>
         <translation>Av</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="691"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="709"/>
         <source>Auto Start</source>
         <translation>Starta Automatiskt</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="691"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="709"/>
         <source>Start on Trigger</source>
         <translation>Starta vid Trigger</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="691"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="709"/>
         <source>Toggle on Trigger</source>
         <translation>Växla vid Trigger</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="692"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="710"/>
         <source>Repeat N Times</source>
         <translation>Upprepa N Gånger</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="695"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="713"/>
         <source>Plain Text (UTF8)</source>
         <translation>Oformaterad Text (UTF8)</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="695"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="713"/>
         <source>Hexadecimal</source>
         <translation>Hexadecimal</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="695"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="713"/>
         <source>Base64</source>
         <translation>Base64</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="696"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="714"/>
         <source>Binary (Direct)</source>
         <translation>Binär (Direkt)</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="701"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="719"/>
         <source>No Checksum</source>
         <translation>Ingen Kontrollsumma</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="705"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="723"/>
         <source>End Delimiter Only</source>
         <translation>Endast Slutavgränsare</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="705"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="723"/>
         <source>Start Delimiter Only</source>
         <translation>Endast Startavgränsare</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="706"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="724"/>
         <source>Start + End Delimiter</source>
         <translation>Start- + Slutavgränsare</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="706"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="724"/>
         <source>No Delimiters</source>
         <translation>Inga Avgränsare</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="716"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="734"/>
         <source>Button</source>
         <translation>Knapp</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="716"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="734"/>
         <source>Slider</source>
         <translation>Skjutreglage</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="716"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="734"/>
         <source>Toggle</source>
         <translation>Växlare</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="716"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="734"/>
         <source>Text Field</source>
         <translation>Textfält</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="717"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="735"/>
         <source>Knob</source>
         <translation>Ratt</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="721"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="739"/>
         <source>Bar Panel</source>
         <translation>Stapelpanel</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="722"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="740"/>
         <source>Data Grid</source>
         <translation>Datarutnät</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="723"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="741"/>
         <source>GPS Map</source>
         <translation>GPS-karta</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="724"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="742"/>
         <source>Gyroscope</source>
         <translation>Gyroskop</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="725"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="743"/>
         <source>Multi-Plot</source>
         <translation>Flerplott</translation>
     </message>
@@ -9243,51 +9243,51 @@ Lägg till %4 dataset med mallens standardvärden?</translation>
         <translation type="vanished">Flerplott</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="726"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="744"/>
         <source>Accelerometer</source>
         <translation>Accelerometer</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="727"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="745"/>
         <source>3D Plot</source>
         <translation>3D-plott</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="728"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="746"/>
         <source>Image View</source>
         <translation>Bildvisning</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="729"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="747"/>
         <source>Canvas Widget</source>
         <translation>Canvas-widget</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="731"/>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="734"/>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="751"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="749"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="752"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="769"/>
         <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputStateRows.cpp" line="121"/>
         <location filename="../../../core/Ui/ProjectEditor/EditorForms/OutputStateRows.cpp" line="140"/>
         <source>None</source>
         <translation>Ingen</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="735"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="753"/>
         <source>Bar</source>
         <translation>Stapel</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="736"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="754"/>
         <source>Gauge</source>
         <translation>Mätare</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="737"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="755"/>
         <source>Compass</source>
         <translation>Kompass</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="738"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="756"/>
         <source>Meter</source>
         <translation>Mätare</translation>
     </message>
@@ -9296,52 +9296,52 @@ Lägg till %4 dataset med mallens standardvärden?</translation>
         <translation type="vanished">Termometer</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="744"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="762"/>
         <source>Integer (0 decimals)</source>
         <translation>Heltal (0 decimaler)</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="745"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="763"/>
         <source>1 decimal</source>
         <translation>1 decimal</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="746"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="764"/>
         <source>2 decimals</source>
         <translation>2 decimaler</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="747"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="765"/>
         <source>3 decimals</source>
         <translation>3 decimaler</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="748"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="766"/>
         <source>Scientific</source>
         <translation>Vetenskaplig</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="752"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="770"/>
         <source>New Line (\n)</source>
         <translation>Ny Rad (</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="753"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="771"/>
         <source>Carriage Return (\r)</source>
         <translation>Vagnretur (\r)</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="754"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="772"/>
         <source>CRLF (\r\n)</source>
         <translation>CRLF (\r</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="757"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="775"/>
         <source>No</source>
         <translation>Nej</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="758"/>
+        <location filename="../../../core/Ui/ProjectEditor/ProjectEditor.cpp" line="776"/>
         <source>Yes</source>
         <translation>Ja</translation>
     </message>
@@ -11711,22 +11711,22 @@ Giltigt format: 01 A2 FF 3C</translation>
         <translation>Numeriskt Alias</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorCommit.cpp" line="865"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorCommit.cpp" line="899"/>
         <source>Edit Alarms</source>
         <translation>Redigera Larm</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorCommit.cpp" line="1005"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorCommit.cpp" line="1049"/>
         <source>Rename Dataset</source>
         <translation>Byt Namn på Dataset</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorCommit.cpp" line="1026"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorCommit.cpp" line="1070"/>
         <source>Edit Dataset</source>
         <translation>Redigera Dataset</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/EditorCommit.cpp" line="1205"/>
+        <location filename="../../../core/Ui/ProjectEditor/EditorCommit.cpp" line="1249"/>
         <source>Edit Output Widget</source>
         <translation>Redigera Utmatningswidget</translation>
     </message>
@@ -13111,12 +13111,12 @@ Lägg till styrenhetstaggar ovan för att avläsa dem.</translation>
         <translation>Inga taggar konfigurerade</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="124"/>
+        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="161"/>
         <source>The tag attributes are empty</source>
         <translation>Taggattributen är tomma</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="227"/>
+        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="267"/>
         <source>The %1 client is not available in this build</source>
         <translation>%1-klienten är inte tillgänglig i denna version</translation>
     </message>
@@ -14292,163 +14292,163 @@ Lägg till styrenhetstaggar ovan för att avläsa dem.</translation>
         <translation>16 kHz</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="238"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="246"/>
         <source>Choose Marker Color</source>
         <translation>Välj Markörfärg</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="265"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="273"/>
         <source>Presets</source>
         <translation>Förinställningar</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="288"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="296"/>
         <source>Preset</source>
         <translation>Förinställning</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="303"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="311"/>
         <source>Choose preset…</source>
         <translation>Välj förinställning…</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="315"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="323"/>
         <source>Frequency range</source>
         <translation>Frekvensområde</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="321"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="329"/>
         <source>0 - %1 Hz</source>
         <translation>0 - %1 Hz</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="343"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="351"/>
         <source>Markers</source>
         <translation>Markörer</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="354"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="362"/>
         <source>Add Marker</source>
         <translation>Lägg till Markör</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="358"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="366"/>
         <source>Add a new point marker; set an end frequency to turn it into a band.</source>
         <translation>Lägg till en ny punktmarkör; ange en slutfrekvens för att göra den till ett band.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="389"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="397"/>
         <source>Start (Hz)</source>
         <translation>Start (Hz)</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="395"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="403"/>
         <source>End (Hz)</source>
         <translation>Slut (Hz)</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="401"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="409"/>
         <source>Warn (dB)</source>
         <translation>Varning (dB)</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="407"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="415"/>
         <source>Alarm (dB)</source>
         <translation>Larm (dB)</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="413"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="421"/>
         <source>Color</source>
         <translation>Färg</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="420"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="428"/>
         <source>Label</source>
         <translation>Etikett</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="492"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="500"/>
         <source>(point)</source>
         <translation>(punkt)</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="509"/>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="523"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="517"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="531"/>
         <source>(off)</source>
         <translation>(av)</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="557"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="565"/>
         <source>Reset to automatic color</source>
         <translation>Återställ till automatisk färg</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="571"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="579"/>
         <source>Click to choose a color. Right-click to reset to automatic.</source>
         <translation>Klicka för att välja en färg. Högerklicka för att återställa till automatisk.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="572"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="580"/>
         <source>Click to choose a custom color.</source>
         <translation>Klicka för att välja en anpassad färg.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="593"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="601"/>
         <source>(optional)</source>
         <translation>(valfritt)</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="610"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="618"/>
         <source>Move up.</source>
         <translation>Flytta upp.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="629"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="637"/>
         <source>Move down.</source>
         <translation>Flytta ner.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="642"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="650"/>
         <source>Remove this marker.</source>
         <translation>Ta bort denna markör.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="656"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="664"/>
         <source>No markers defined. Pick a preset above or add a marker to get started.</source>
         <translation>Inga markörer definierade. Välj en förinställning ovan eller lägg till en markör för att komma igång.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="673"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="681"/>
         <source>Preview</source>
         <translation>Förhandsgranskning</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="749"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="757"/>
         <source>0 Hz</source>
         <translation>0 Hz</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="755"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="763"/>
         <source>%1 Hz</source>
         <translation>%1 Hz</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="777"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="785"/>
         <source>Cancel</source>
         <translation>Avbryt</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="779"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="787"/>
         <source>Discard changes.</source>
         <translation>Kassera ändringar.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="788"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="796"/>
         <source>Apply</source>
         <translation>Tillämpa</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="791"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="799"/>
         <source>Apply changes to the dataset.</source>
         <translation>Tillämpa ändringar på datasetet.</translation>
     </message>
@@ -15129,27 +15129,27 @@ Lägg till styrenhetstaggar ovan för att avläsa dem.</translation>
 <context>
     <name>IO::Drivers::Audio</name>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="420"/>
+        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="421"/>
         <source>Audio Device Stopped</source>
         <translation>Ljudenhet Stoppad</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="421"/>
+        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="422"/>
         <source>The audio backend stopped the stream. The device may have been unplugged or claimed by another application.</source>
         <translation>Ljudbackenden stoppade strömmen. Enheten kan ha kopplats bort eller tagits över av en annan applikation.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="853"/>
+        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="854"/>
         <source>channels</source>
         <translation>kanaler</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="853"/>
+        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="854"/>
         <source> channels</source>
         <translation>kanaler</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="836"/>
+        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="837"/>
         <source>Unsigned 8-bit</source>
         <translation>Osignerad 8-bit</translation>
     </message>
@@ -15174,78 +15174,78 @@ Lägg till styrenhetstaggar ovan för att avläsa dem.</translation>
         <translation>Förväntade %1 värde(n) per frame, fick %2.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="349"/>
-        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="355"/>
+        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="350"/>
+        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="356"/>
         <source>Audio device error</source>
         <translation>Ljudenhetsfel</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="350"/>
+        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="351"/>
         <source>The selected audio device could not be initialized.</source>
         <translation>Den valda ljudenheten kunde inte initieras.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="355"/>
+        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="356"/>
         <source>The selected audio device could not be started.</source>
         <translation>Den valda ljudenheten kunde inte startas.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="837"/>
+        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="838"/>
         <source>Signed 16-bit</source>
         <translation>Signerad 16-bit</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="838"/>
+        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="839"/>
         <source>Signed 24-bit</source>
         <translation>Signerad 24-bit</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="839"/>
+        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="840"/>
         <source>Signed 32-bit</source>
         <translation>Signerad 32-bit</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="840"/>
+        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="841"/>
         <source>Float 32-bit</source>
         <translation>Float 32-bit</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="843"/>
+        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="844"/>
         <source>Mono</source>
         <translation>Mono</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="844"/>
+        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="845"/>
         <source>Stereo</source>
         <translation>Stereo</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="1378"/>
+        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="1379"/>
         <source>Input Device</source>
         <translation>Ingångsenhet</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="1386"/>
+        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="1387"/>
         <source>Sample Rate</source>
         <translation>Samplingsfrekvens</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="1394"/>
+        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="1395"/>
         <source>Normalization</source>
         <translation>Normalisering</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="1395"/>
+        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="1396"/>
         <source>Publish samples as floats in the -1.0 to 1.0 range</source>
         <translation>Publicera sampel som flyttal i intervallet -1.0 till 1.0</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="1403"/>
+        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="1404"/>
         <source>Sample Format</source>
         <translation>Samplingsformat</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="1412"/>
+        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="1413"/>
         <source>Channels</source>
         <translation>Kanaler</translation>
     </message>
@@ -15347,15 +15347,15 @@ Lägg till styrenhetstaggar ovan för att avläsa dem.</translation>
 <context>
     <name>IO::Drivers::CANBus</name>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="417"/>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="422"/>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="427"/>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="431"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="418"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="423"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="428"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="432"/>
         <source>CAN Bus Not Available</source>
         <translation>CAN-buss Ej Tillgänglig</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="428"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="429"/>
         <source>No CAN bus plugins found on this system.
 
 CAN bus support on macOS is limited and may require third-party hardware drivers.</source>
@@ -15364,37 +15364,37 @@ CAN bus support on macOS is limited and may require third-party hardware drivers
 CAN-buss-stöd på macOS är begränsat och kan kräva tredjepartshårdvarudrivrutiner.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="432"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="433"/>
         <source>No CAN bus plugins are available on this platform.</source>
         <translation>Inga CAN-buss-plugins är tillgängliga på denna plattform.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="443"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="444"/>
         <source>Invalid CAN Configuration</source>
         <translation>Ogiltig CAN-konfiguration</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="450"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="451"/>
         <source>Invalid Selection</source>
         <translation>Ogiltigt Val</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="458"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="459"/>
         <source>No Devices Available</source>
         <translation>Inga Enheter Tillgängliga</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="370"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="371"/>
         <source>CAN Device Creation Failed</source>
         <translation>Misslyckades Att Skapa CAN-enhet</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="402"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="403"/>
         <source>CAN Connection Failed</source>
         <translation>CAN-anslutning Misslyckades</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="418"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="419"/>
         <source>No CAN bus plugins found on this system.
 
 On Linux, ensure SocketCAN kernel modules are loaded.</source>
@@ -15403,7 +15403,7 @@ On Linux, ensure SocketCAN kernel modules are loaded.</source>
 På Linux, säkerställ att SOCKETCAN-kärnmoduler är laddade.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="423"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="424"/>
         <source>No CAN bus plugins found on this system.
 
 On Windows, install CAN hardware drivers (PEAK, Vector, etc.).</source>
@@ -15412,27 +15412,27 @@ On Windows, install CAN hardware drivers (PEAK, Vector, etc.).</source>
 På Windows, installera CAN-hårdvarudrivrutiner (PEAK, VECTOR, etc.).</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="444"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="445"/>
         <source>The CAN bus configuration is incomplete. Select a valid plugin and interface.</source>
         <translation>CAN-bus-konfigurationen är ofullständig. Välj ett giltigt plugin och gränssnitt.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="451"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="452"/>
         <source>The selected plugin or interface is no longer available. Refresh the lists and try again.</source>
         <translation>Det valda pluginet eller gränssnittet är inte längre tillgängligt. Uppdatera listorna och försök igen.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="459"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="460"/>
         <source>The plugin or interface list is empty. Refresh the lists and ensure your CAN hardware is connected.</source>
         <translation>Plugin- eller gränssnittslistan är tom. Uppdatera listorna och säkerställ att din CAN-hårdvara är ansluten.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="372"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="373"/>
         <source>Unable to create CAN bus device. Check your hardware and drivers.</source>
         <translation>Kan inte skapa CAN-bus-enhet. Kontrollera din hårdvara och drivrutiner.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="400"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="401"/>
         <source>Unable to connect to CAN bus device. Check your hardware connection and settings.</source>
         <translation>Kan inte ansluta till CAN-bus-enhet. Kontrollera din hårdvaruanslutning och inställningar.</translation>
     </message>
@@ -15445,68 +15445,68 @@ På Windows, installera CAN-hårdvarudrivrutiner (PEAK, VECTOR, etc.).</translat
         <translation type="vanished">Ett fel uppstod men CAN-enheten är inte längre tillgänglig.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1000"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1007"/>
         <source>Error code: %1</source>
         <translation>Felkod: %1</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1008"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1015"/>
         <source>CAN Bus Communication Error</source>
         <translation>CAN-busskommunikationsfel</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1114"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1121"/>
         <source>No CAN driver selected</source>
         <translation>Ingen CAN-drivrutin vald</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1051"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1058"/>
         <source>Load SocketCAN kernel modules first</source>
         <translation>Ladda SOCKETCAN-kärnmoduler först</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1047"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1054"/>
         <source>Connect a %1 adapter, then refresh</source>
         <translation>Anslut en %1-adapter och uppdatera sedan</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1054"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1061"/>
         <source>Set up a virtual CAN interface first</source>
         <translation>Konfigurera ett virtuellt CAN-gränssnitt först</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1056"/>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1076"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1063"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1083"/>
         <source>No interfaces found for %1</source>
         <translation>Inga gränssnitt hittades för %1</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1060"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1067"/>
         <source>Install &lt;a href='https://www.peak-system.com/Drivers.523.0.html?&amp;L=1'&gt;PEAK CAN drivers&lt;/a&gt;</source>
         <translation>Installera &lt;a href='https://www.PEAK-system.com/Drivers.523.0.html?&amp;L=1'&gt;PEAK CAN-drivrutiner&lt;/a&gt;</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1064"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1071"/>
         <source>Install &lt;a href='https://www.vector.com/us/en/products/products-a-z/libraries-drivers/'&gt;Vector CAN drivers&lt;/a&gt;</source>
         <translation>Installera &lt;a href='https://www.VECTOR.com/us/en/products/products-a-z/libraries-drivers/'&gt;VECTOR CAN-drivrutiner&lt;/a&gt;</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1068"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1075"/>
         <source>Install &lt;a href='https://www.systec-electronic.com/en/company/support/driver'&gt;SysTec CAN drivers&lt;/a&gt;</source>
         <translation>Installera &lt;a href='https://www.systec-electronic.com/en/company/support/driver'&gt;SysTec CAN-drivrutiner&lt;/a&gt;</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1071"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1078"/>
         <source>Install %1 drivers</source>
         <translation>Installera %1-drivrutiner</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1074"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1081"/>
         <source>Install %1 drivers for macOS</source>
         <translation>Installera %1-drivrutiner för macOS</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1088"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1095"/>
         <source>
 
 If the interface is down, bring it up first:
@@ -15517,42 +15517,42 @@ sudo ip link set %1 up type can bitrate %2
 </translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1224"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1231"/>
         <source>Plugin</source>
         <translation>Plugin</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1232"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1239"/>
         <source>Interface</source>
         <translation>Gränssnitt</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1240"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1247"/>
         <source>Bitrate</source>
         <translation>Bithastighet</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1249"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1256"/>
         <source>CAN FD</source>
         <translation>CAN-FD</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1256"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1263"/>
         <source>Data Bitrate</source>
         <translation>Databithastighet</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1266"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1273"/>
         <source>Loopback</source>
         <translation>Loopback</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1273"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1280"/>
         <source>Listen-Only</source>
         <translation>Endast Lyssning</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1280"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus.cpp" line="1287"/>
         <source>Multi-Frame Reassembly</source>
         <translation>Flerrams-återmontering</translation>
     </message>
@@ -15560,17 +15560,17 @@ sudo ip link set %1 up type can bitrate %2
 <context>
     <name>IO::Drivers::EipPollWorker</name>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="354"/>
+        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="398"/>
         <source>"%1": %2</source>
         <translation>"%1": %2</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="361"/>
+        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="405"/>
         <source>The controller did not open every tag within the connection deadline</source>
         <translation>Styrenheten öppnade inte alla taggar inom anslutningsfristen</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="409"/>
+        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="453"/>
         <source>The controller stopped answering tag reads</source>
         <translation>Styrenheten slutade svara på taggläsningar</translation>
     </message>
@@ -15578,166 +15578,166 @@ sudo ip link set %1 up type can bitrate %2
 <context>
     <name>IO::Drivers::EthernetIp</name>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="681"/>
+        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="725"/>
         <source>The connection is not configured: check the host and the tag list</source>
         <translation>Anslutningen är inte konfigurerad: kontrollera värden och tagglistan</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="722"/>
+        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="766"/>
         <source>EtherNet/IP Connection Failed</source>
         <translation>Ethernet/IP-anslutning Misslyckades</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="723"/>
+        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="767"/>
         <source>"%1": %2</source>
         <translation>"%1": %2</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="724"/>
+        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="768"/>
         <source>the controller did not answer</source>
         <translation>styrenheten svarade inte</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="767"/>
+        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="811"/>
         <source>EtherNet/IP Connection Lost</source>
         <translation>Ethernet/IP-anslutning Förlorad</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="848"/>
+        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="892"/>
         <source>ControlLogix</source>
         <translation>Controllogix</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="849"/>
+        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="893"/>
         <source>CompactLogix</source>
         <translation>Compactlogix</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="850"/>
+        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="894"/>
         <source>MicroLogix</source>
         <translation>Micrologix</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="851"/>
+        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="895"/>
         <source>Micro800</source>
         <translation>Micro800</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="852"/>
+        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="896"/>
         <source>PLC-5</source>
         <translation>PLC-5</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="853"/>
+        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="897"/>
         <source>SLC 500</source>
         <translation>SLC 500</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="854"/>
+        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="898"/>
         <source>Logix PCCC</source>
         <translation>Logix PCCC</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="855"/>
+        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="899"/>
         <source>Omron NJ/NX</source>
         <translation>Omron NJ/NX</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="898"/>
+        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="942"/>
         <source>Not connected</source>
         <translation>Ej ansluten</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="901"/>
+        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="945"/>
         <source>Polling %1 tags at %2 Hz</source>
         <translation>Pollar %1 taggar vid %2 Hz</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="1118"/>
-        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="1127"/>
+        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="1162"/>
+        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="1171"/>
         <source>EtherNet/IP Tag</source>
         <translation>Ethernet/IP-tagg</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="1119"/>
+        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="1163"/>
         <source>The tag name "%1" is too long or contains characters that are not allowed (no '&amp;', '=' or whitespace).</source>
         <translation>Taggnamnet "%1" är för långt eller innehåller otillåtna tecken (inga '&amp;', '=' eller blanksteg).</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="1127"/>
+        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="1171"/>
         <source>Unknown tag type "%1".</source>
         <translation>Okänd taggtyp "%1".</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="1179"/>
+        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="1223"/>
         <source>Gateway</source>
         <translation>Gateway</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="1186"/>
+        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="1230"/>
         <source>CIP Path</source>
         <translation>Cip-sökväg</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="1193"/>
+        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="1237"/>
         <source>Controller Family</source>
         <translation>Styrenhets­familj</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="1201"/>
+        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="1245"/>
         <source>Poll Interval (ms)</source>
         <translation>Pollintervall (ms)</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="1295"/>
+        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="1339"/>
         <source>EtherNet/IP Project</source>
         <translation>Ethernet/IP-projekt</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="1300"/>
+        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="1344"/>
         <source>EtherNet/IP</source>
         <translation>Ethernet/IP</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="1329"/>
+        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="1373"/>
         <source>Controller Tags</source>
         <translation>Styrenhetstaggar</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="1359"/>
-        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="1384"/>
+        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="1403"/>
+        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="1428"/>
         <source>Failed to load generated project</source>
         <translation>Misslyckades att Ladda Genererat Projekt</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="1360"/>
-        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="1385"/>
+        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="1404"/>
+        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="1429"/>
         <source>The generated project JSON could not be loaded.</source>
         <translation>Den genererade projekt-JSON:en kunde inte laddas.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="1373"/>
+        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="1417"/>
         <source>No tags configured</source>
         <translation>Inga Taggar Konfigurerade</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="1374"/>
+        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="1418"/>
         <source>Add at least one tag before generating a project.</source>
         <translation>Lägg till minst en tagg innan du genererar ett projekt.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="1376"/>
-        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="1396"/>
+        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="1420"/>
+        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="1440"/>
         <source>EtherNet/IP Project Generator</source>
         <translation>Ethernet/IP-projektgenerator</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="1393"/>
+        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="1437"/>
         <source>Successfully generated project with %1 datasets.</source>
         <translation>Projekt med %1 dataset genererades framgångsrikt.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="1394"/>
+        <location filename="../../../core/Devices/IO/Drivers/EthernetIp.cpp" line="1438"/>
         <source>The project editor is now open for customization.</source>
         <translation>Projektredigeraren är nu öppen för anpassning.</translation>
     </message>
@@ -15901,125 +15901,125 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
         <translation>Stationen skickade mer än mottagningsbufferten rymmer</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="537"/>
+        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="538"/>
         <source>The station sent a frame this link could not decode</source>
         <translation>Stationen skickade en ram som denna länk inte kunde avkoda</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="688"/>
+        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="692"/>
         <source>The station did not answer within t1</source>
         <translation>Stationen svarade inte inom t1</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="792"/>
+        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="796"/>
         <source>IEC 104 Connection Lost</source>
         <translation>IEC 104-Anslutning Förlorad</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="914"/>
+        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="918"/>
         <source>Not connected</source>
         <translation>Ej ansluten</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="917"/>
+        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="921"/>
         <source>Starting data transfer…</source>
         <translation>Startar dataöverföring…</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="919"/>
+        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="923"/>
         <source>Monitoring %1 point(s) from station %2</source>
         <translation>Övervakar %1 punkt(er) från station %2</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1201"/>
+        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1205"/>
         <source>Host</source>
         <translation>Värd</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1208"/>
+        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1212"/>
         <source>Port</source>
         <translation>Port</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1217"/>
+        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1221"/>
         <source>Common Address</source>
         <translation>Gemensam Adress</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1229"/>
+        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1233"/>
         <source>Send Window (k)</source>
         <translation>Sändfönster (k)</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1229"/>
+        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1233"/>
         <source>Ack Window (w)</source>
         <translation>Bekräftelsefönster (w)</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1242"/>
+        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1246"/>
         <source>Timeout t%1 (ms)</source>
         <translation>Timeout t%1 (ms)</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1366"/>
+        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1370"/>
         <source>IEC 60870-5-104 Project</source>
         <translation>IEC 60870-5-104-Projekt</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1371"/>
+        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1375"/>
         <source>IEC 60870-5-104</source>
         <translation>IEC 60870-5-104</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1401"/>
+        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1405"/>
         <source>Status Points</source>
         <translation>Statuspunkter</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1402"/>
+        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1406"/>
         <source>Counters</source>
         <translation>Räknare</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1402"/>
+        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1406"/>
         <source>Measurements</source>
         <translation>Mätningar</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1433"/>
-        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1460"/>
+        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1437"/>
+        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1464"/>
         <source>Failed to load generated project</source>
         <translation>Misslyckades att Ladda Genererat Projekt</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1434"/>
-        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1461"/>
+        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1438"/>
+        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1465"/>
         <source>The generated project JSON could not be loaded.</source>
         <translation>Den genererade projekt-JSON:en kunde inte laddas.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1449"/>
+        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1453"/>
         <source>No points discovered</source>
         <translation>Inga Punkter Upptäckta</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1450"/>
+        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1454"/>
         <source>Connect to the station and let the interrogation finish before generating a project.</source>
         <translation>Anslut till stationen och låt avfrågan slutföras innan ett projekt genereras.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1452"/>
-        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1472"/>
+        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1456"/>
+        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1476"/>
         <source>IEC 60870-5-104 Project Generator</source>
         <translation>IEC 60870-5-104 Projektgenerator</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1469"/>
+        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1473"/>
         <source>Successfully generated project with %1 datasets.</source>
         <translation>Projekt med %1 dataset har genererats.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1470"/>
+        <location filename="../../../core/Devices/IO/Drivers/Iec104.cpp" line="1474"/>
         <source>The project editor is now open for customization.</source>
         <translation>Projektredigeraren är nu öppen för anpassning.</translation>
     </message>
@@ -17587,130 +17587,130 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
 <context>
     <name>IO::Drivers::S7</name>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/S7.cpp" line="661"/>
+        <location filename="../../../core/Devices/IO/Drivers/S7.cpp" line="700"/>
         <source>The connection is not configured: check the host and the variable list</source>
         <translation>Anslutningen är inte konfigurerad: kontrollera värd och variabellista</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/S7.cpp" line="702"/>
+        <location filename="../../../core/Devices/IO/Drivers/S7.cpp" line="741"/>
         <source>S7 Connection Failed</source>
         <translation>S7-anslutning Misslyckades</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/S7.cpp" line="703"/>
+        <location filename="../../../core/Devices/IO/Drivers/S7.cpp" line="742"/>
         <source>"%1" (rack %2, slot %3): %4</source>
         <translation>"%1" (rack %2, slot %3): %4</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/S7.cpp" line="707"/>
+        <location filename="../../../core/Devices/IO/Drivers/S7.cpp" line="746"/>
         <source>the controller did not answer</source>
         <translation>styrenheten svarade inte</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/S7.cpp" line="750"/>
+        <location filename="../../../core/Devices/IO/Drivers/S7.cpp" line="789"/>
         <source>S7 Connection Lost</source>
         <translation>S7-anslutning Förlorad</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/S7.cpp" line="821"/>
+        <location filename="../../../core/Devices/IO/Drivers/S7.cpp" line="860"/>
         <source>Not connected</source>
         <translation>Ej ansluten</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/S7.cpp" line="824"/>
+        <location filename="../../../core/Devices/IO/Drivers/S7.cpp" line="863"/>
         <source>Polling %1 variables at %2 Hz</source>
         <translation>Pollar %1 variabler vid %2 Hz</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/S7.cpp" line="840"/>
+        <location filename="../../../core/Devices/IO/Drivers/S7.cpp" line="879"/>
         <source>invalid</source>
         <translation>ogiltig</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/S7.cpp" line="858"/>
+        <location filename="../../../core/Devices/IO/Drivers/S7.cpp" line="897"/>
         <source>The address could not be parsed.</source>
         <translation>Adressen kunde inte tolkas.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/S7.cpp" line="1082"/>
+        <location filename="../../../core/Devices/IO/Drivers/S7.cpp" line="1121"/>
         <source>S7 Address</source>
         <translation>S7-adress</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/S7.cpp" line="1133"/>
+        <location filename="../../../core/Devices/IO/Drivers/S7.cpp" line="1172"/>
         <source>Host</source>
         <translation>Värd</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/S7.cpp" line="1140"/>
+        <location filename="../../../core/Devices/IO/Drivers/S7.cpp" line="1179"/>
         <source>Rack</source>
         <translation>Rack</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/S7.cpp" line="1149"/>
+        <location filename="../../../core/Devices/IO/Drivers/S7.cpp" line="1188"/>
         <source>Slot</source>
         <translation>Slot</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/S7.cpp" line="1158"/>
+        <location filename="../../../core/Devices/IO/Drivers/S7.cpp" line="1197"/>
         <source>Poll Interval (ms)</source>
         <translation>Pollintervall (ms)</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/S7.cpp" line="1278"/>
+        <location filename="../../../core/Devices/IO/Drivers/S7.cpp" line="1317"/>
         <source>Siemens S7 Project</source>
         <translation>Siemens S7-projekt</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/S7.cpp" line="1283"/>
+        <location filename="../../../core/Devices/IO/Drivers/S7.cpp" line="1322"/>
         <source>Siemens S7</source>
         <translation>Siemens S7</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/S7.cpp" line="1312"/>
+        <location filename="../../../core/Devices/IO/Drivers/S7.cpp" line="1351"/>
         <source>DB%1</source>
         <translation>DB%1</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/S7.cpp" line="1312"/>
+        <location filename="../../../core/Devices/IO/Drivers/S7.cpp" line="1351"/>
         <source>Memory</source>
         <translation>Minne</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/S7.cpp" line="1342"/>
-        <location filename="../../../core/Devices/IO/Drivers/S7.cpp" line="1367"/>
+        <location filename="../../../core/Devices/IO/Drivers/S7.cpp" line="1381"/>
+        <location filename="../../../core/Devices/IO/Drivers/S7.cpp" line="1406"/>
         <source>Failed to load generated project</source>
         <translation>Misslyckades att Ladda Genererat Projekt</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/S7.cpp" line="1343"/>
-        <location filename="../../../core/Devices/IO/Drivers/S7.cpp" line="1368"/>
+        <location filename="../../../core/Devices/IO/Drivers/S7.cpp" line="1382"/>
+        <location filename="../../../core/Devices/IO/Drivers/S7.cpp" line="1407"/>
         <source>The generated project JSON could not be loaded.</source>
         <translation>Det genererade projekt-JSON kunde inte laddas.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/S7.cpp" line="1356"/>
+        <location filename="../../../core/Devices/IO/Drivers/S7.cpp" line="1395"/>
         <source>No variables configured</source>
         <translation>Inga variabler konfigurerade</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/S7.cpp" line="1357"/>
+        <location filename="../../../core/Devices/IO/Drivers/S7.cpp" line="1396"/>
         <source>Add at least one variable before generating a project.</source>
         <translation>Lägg till minst en variabel innan ett projekt genereras.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/S7.cpp" line="1359"/>
-        <location filename="../../../core/Devices/IO/Drivers/S7.cpp" line="1379"/>
+        <location filename="../../../core/Devices/IO/Drivers/S7.cpp" line="1398"/>
+        <location filename="../../../core/Devices/IO/Drivers/S7.cpp" line="1418"/>
         <source>S7 Project Generator</source>
         <translation>S7-projektgenerator</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/S7.cpp" line="1376"/>
+        <location filename="../../../core/Devices/IO/Drivers/S7.cpp" line="1415"/>
         <source>Successfully generated project with %1 datasets.</source>
         <translation>Projekt med %1 dataset har genererats.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/S7.cpp" line="1377"/>
+        <location filename="../../../core/Devices/IO/Drivers/S7.cpp" line="1416"/>
         <source>The project editor is now open for customization.</source>
         <translation>Projektredigeraren är nu öppen för anpassning.</translation>
     </message>
@@ -17718,27 +17718,27 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
 <context>
     <name>IO::Drivers::S7PollWorker</name>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/S7.cpp" line="147"/>
+        <location filename="../../../core/Devices/IO/Drivers/S7.cpp" line="182"/>
         <source>The ISO connection request could not be sent</source>
         <translation>ISO-anslutningsbegäran kunde inte skickas</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/S7.cpp" line="153"/>
+        <location filename="../../../core/Devices/IO/Drivers/S7.cpp" line="188"/>
         <source>The controller refused the ISO connection: check the rack and slot numbers</source>
         <translation>Styrenheten vägrade ISO-anslutningen: kontrollera rack- och slot-nummer</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/S7.cpp" line="172"/>
+        <location filename="../../../core/Devices/IO/Drivers/S7.cpp" line="207"/>
         <source>The controller did not answer the S7comm setup request</source>
         <translation>Styrenheten svarade inte på S7comm-konfigurationsbegäran</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/S7.cpp" line="178"/>
+        <location filename="../../../core/Devices/IO/Drivers/S7.cpp" line="213"/>
         <source>The controller refused the S7comm session</source>
         <translation>Styrenheten vägrade S7comm-sessionen</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/S7.cpp" line="315"/>
+        <location filename="../../../core/Devices/IO/Drivers/S7.cpp" line="354"/>
         <source>The controller closed the S7comm session</source>
         <translation>Styrenheten stängde S7comm-sessionen</translation>
     </message>
@@ -17777,12 +17777,12 @@ Check that your user is in the 'plugdev' group or that a udev rule grants access
         <translation>Kunde inte öppna seriell port %1: %2</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus/SerialCanBackendBase.cpp" line="205"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus/SerialCanBackendBase.cpp" line="204"/>
         <source>The adapter on %1 did not accept the initialization sequence.</source>
         <translation>Adaptern på %1 accepterade inte initieringssekvensen.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/CANBus/SerialCanBackendBase.cpp" line="215"/>
+        <location filename="../../../core/Devices/IO/Drivers/CANBus/SerialCanBackendBase.cpp" line="214"/>
         <source>The adapter on %1 refused the requested configuration.</source>
         <translation>Adaptern på %1 vägrade den begärda konfigurationen.</translation>
     </message>
@@ -18633,108 +18633,118 @@ Enheten kanske inte exponerar dataändpunkter i sin aktiva konfiguration, eller 
         <translation>Överföring avbruten av användare</translation>
     </message>
     <message>
-        <location filename="../../../core/Protocols/FileTransfer/ZMODEM.cpp" line="271"/>
+        <location filename="../../../core/Protocols/FileTransfer/ZMODEM.cpp" line="252"/>
+        <source>Hex header malformed, dropping frame</source>
+        <translation>Hex-huvud felformat, släpper frame</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Protocols/FileTransfer/ZMODEM.cpp" line="273"/>
         <source>Hex header CRC mismatch, dropping frame</source>
         <translation>Hex-huvud CRC-felmatchning, släpper frame</translation>
     </message>
     <message>
-        <location filename="../../../core/Protocols/FileTransfer/ZMODEM.cpp" line="446"/>
+        <location filename="../../../core/Protocols/FileTransfer/ZMODEM.cpp" line="311"/>
+        <source>Binary header CRC mismatch, dropping frame</source>
+        <translation>Binärt huvud CRC-felmatchning, släpper frame</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Protocols/FileTransfer/ZMODEM.cpp" line="491"/>
         <source>Sending file info: %1 (%2 bytes)</source>
         <translation>Skickar filinformation: %1 (%2 byte)</translation>
     </message>
     <message>
-        <location filename="../../../core/Protocols/FileTransfer/ZMODEM.cpp" line="469"/>
+        <location filename="../../../core/Protocols/FileTransfer/ZMODEM.cpp" line="514"/>
         <source>Failed to seek to offset %1</source>
         <translation>Misslyckades att söka till offset %1</translation>
     </message>
     <message>
-        <location filename="../../../core/Protocols/FileTransfer/ZMODEM.cpp" line="495"/>
+        <location filename="../../../core/Protocols/FileTransfer/ZMODEM.cpp" line="540"/>
         <source>File read error: %1</source>
         <translation>Filläsningsfel: %1</translation>
     </message>
     <message>
-        <location filename="../../../core/Protocols/FileTransfer/ZMODEM.cpp" line="500"/>
+        <location filename="../../../core/Protocols/FileTransfer/ZMODEM.cpp" line="545"/>
         <source>File read returned more data than requested</source>
         <translation>Filläsning returnerade mer data än begärt</translation>
     </message>
     <message>
-        <location filename="../../../core/Protocols/FileTransfer/ZMODEM.cpp" line="593"/>
+        <location filename="../../../core/Protocols/FileTransfer/ZMODEM.cpp" line="638"/>
         <source>Receiver requests data from offset %1</source>
         <translation>Mottagare begär data från offset %1</translation>
     </message>
     <message>
-        <location filename="../../../core/Protocols/FileTransfer/ZMODEM.cpp" line="602"/>
+        <location filename="../../../core/Protocols/FileTransfer/ZMODEM.cpp" line="647"/>
         <source>Receiver skipped the file</source>
         <translation>Mottagare hoppade över filen</translation>
     </message>
     <message>
-        <location filename="../../../core/Protocols/FileTransfer/ZMODEM.cpp" line="615"/>
+        <location filename="../../../core/Protocols/FileTransfer/ZMODEM.cpp" line="660"/>
         <source>Too many errors, transfer aborted</source>
         <translation>För många fel, överföring avbruten</translation>
     </message>
     <message>
-        <location filename="../../../core/Protocols/FileTransfer/ZMODEM.cpp" line="616"/>
+        <location filename="../../../core/Protocols/FileTransfer/ZMODEM.cpp" line="661"/>
         <source>Maximum retries exceeded</source>
         <translation>Maximalt antal återförsök överskridet</translation>
     </message>
     <message>
-        <location filename="../../../core/Protocols/FileTransfer/ZMODEM.cpp" line="422"/>
+        <location filename="../../../core/Protocols/FileTransfer/ZMODEM.cpp" line="467"/>
         <source>Sending ZRQINIT, waiting for receiver…</source>
         <translation>Skickar ZRQINIT, väntar på mottagare…</translation>
     </message>
     <message>
-        <location filename="../../../core/Protocols/FileTransfer/ZMODEM.cpp" line="532"/>
+        <location filename="../../../core/Protocols/FileTransfer/ZMODEM.cpp" line="577"/>
         <source>File data sent, waiting for confirmation…</source>
         <translation>Fildata skickad, väntar på bekräftelse…</translation>
     </message>
     <message>
-        <location filename="../../../core/Protocols/FileTransfer/ZMODEM.cpp" line="543"/>
+        <location filename="../../../core/Protocols/FileTransfer/ZMODEM.cpp" line="588"/>
         <source>Sending ZFIN…</source>
         <translation>Skickar ZFIN…</translation>
     </message>
     <message>
-        <location filename="../../../core/Protocols/FileTransfer/ZMODEM.cpp" line="583"/>
+        <location filename="../../../core/Protocols/FileTransfer/ZMODEM.cpp" line="628"/>
         <source>Receiver ready, sending file info…</source>
         <translation>Mottagare redo, skickar filinformation…</translation>
     </message>
     <message>
-        <location filename="../../../core/Protocols/FileTransfer/ZMODEM.cpp" line="621"/>
+        <location filename="../../../core/Protocols/FileTransfer/ZMODEM.cpp" line="666"/>
         <source>NAK received, retrying (%1/%2)…</source>
         <translation>NAK mottagen, försöker igen (%1/%2)…</translation>
     </message>
     <message>
-        <location filename="../../../core/Protocols/FileTransfer/ZMODEM.cpp" line="642"/>
+        <location filename="../../../core/Protocols/FileTransfer/ZMODEM.cpp" line="687"/>
         <source>Transfer complete</source>
         <translation>Överföring slutförd</translation>
     </message>
     <message>
-        <location filename="../../../core/Protocols/FileTransfer/ZMODEM.cpp" line="652"/>
+        <location filename="../../../core/Protocols/FileTransfer/ZMODEM.cpp" line="697"/>
         <source>Transfer cancelled by receiver</source>
         <translation>Överföring avbruten av mottagare</translation>
     </message>
     <message>
-        <location filename="../../../core/Protocols/FileTransfer/ZMODEM.cpp" line="653"/>
+        <location filename="../../../core/Protocols/FileTransfer/ZMODEM.cpp" line="698"/>
         <source>Receiver cancelled the transfer</source>
         <translation>Mottagare avbröt överföringen</translation>
     </message>
     <message>
-        <location filename="../../../core/Protocols/FileTransfer/ZMODEM.cpp" line="661"/>
-        <location filename="../../../core/Protocols/FileTransfer/ZMODEM.cpp" line="662"/>
+        <location filename="../../../core/Protocols/FileTransfer/ZMODEM.cpp" line="706"/>
+        <location filename="../../../core/Protocols/FileTransfer/ZMODEM.cpp" line="707"/>
         <source>Receiver reported a file error</source>
         <translation>Mottagare rapporterade ett filfel</translation>
     </message>
     <message>
-        <location filename="../../../core/Protocols/FileTransfer/ZMODEM.cpp" line="842"/>
+        <location filename="../../../core/Protocols/FileTransfer/ZMODEM.cpp" line="887"/>
         <source>Transfer timed out</source>
         <translation>Överföring avbröts på grund av timeout</translation>
     </message>
     <message>
-        <location filename="../../../core/Protocols/FileTransfer/ZMODEM.cpp" line="843"/>
+        <location filename="../../../core/Protocols/FileTransfer/ZMODEM.cpp" line="888"/>
         <source>Timeout: no response from receiver</source>
         <translation>Timeout: inget svar från mottagare</translation>
     </message>
     <message>
-        <location filename="../../../core/Protocols/FileTransfer/ZMODEM.cpp" line="848"/>
+        <location filename="../../../core/Protocols/FileTransfer/ZMODEM.cpp" line="893"/>
         <source>Timeout, retrying (%1/%2)…</source>
         <translation>Timeout, försöker igen (%1/%2)…</translation>
     </message>
@@ -21465,7 +21475,7 @@ Ange nödvändiga inloggningsuppgifter.</translation>
     </message>
     <message>
         <location filename="../../../core/Ui/Misc/Extensions/ExtensionInstaller.cpp" line="224"/>
-        <location filename="../../../core/Ui/Misc/Extensions/ExtensionInstaller.cpp" line="431"/>
+        <location filename="../../../core/Ui/Misc/Extensions/ExtensionInstaller.cpp" line="434"/>
         <source>The verified files could not replace the installed version.</source>
         <translation>De verifierade filerna kunde inte ersätta den installerade versionen.</translation>
     </message>
@@ -21475,12 +21485,12 @@ Ange nödvändiga inloggningsuppgifter.</translation>
         <translation>Tilläggets metadata kunde inte förberedas.</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/Misc/Extensions/ExtensionInstaller.cpp" line="400"/>
+        <location filename="../../../core/Ui/Misc/Extensions/ExtensionInstaller.cpp" line="403"/>
         <source>Download failed: %1</source>
         <translation>Nedladdning misslyckades: %1</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/Misc/Extensions/ExtensionInstaller.cpp" line="405"/>
+        <location filename="../../../core/Ui/Misc/Extensions/ExtensionInstaller.cpp" line="408"/>
         <source>A downloaded file did not match the digest published for it.</source>
         <translation>En nedladdad fil matchade inte den publicerade kontrollsumman.</translation>
     </message>
@@ -23506,22 +23516,22 @@ Lägg till grupper ovan för att avläsa flera registertyper.</translation>
         <translation>Filtrera efter namn…</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUaTagBrowser.qml" line="429"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUaTagBrowser.qml" line="434"/>
         <source>%1 tag(s), %2 channel(s) selected</source>
         <translation>%1 tagg(ar), %2 kanal(er) valda</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUaTagBrowser.qml" line="436"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUaTagBrowser.qml" line="441"/>
         <source>Select All Readable</source>
         <translation>Välj Alla Läsbara</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUaTagBrowser.qml" line="443"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUaTagBrowser.qml" line="448"/>
         <source>Cancel</source>
         <translation>Avbryt</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUaTagBrowser.qml" line="450"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUaTagBrowser.qml" line="455"/>
         <source>OK</source>
         <translation>OK</translation>
     </message>
@@ -26863,12 +26873,12 @@ Läs in den igen?</translation>
         <translation>Serversvaret saknar obligatoriska fält.</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/Console/Export.cpp" line="179"/>
+        <location filename="../../../core/Ui/Console/Export.cpp" line="172"/>
         <source>Console Output File Error</source>
         <translation>Konsolens Utdatafilfel</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/Console/Export.cpp" line="180"/>
+        <location filename="../../../core/Ui/Console/Export.cpp" line="173"/>
         <source>Cannot open file for writing!</source>
         <translation>Kan inte öppna fil för skrivning!</translation>
     </message>
@@ -26893,7 +26903,7 @@ Läs in den igen?</translation>
         <translation>Allmänt I/O-fel</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="222"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="230"/>
         <source>
 
 This script may use Lua 5.3 bitwise syntax, which this runtime does not support. Replace: %1. The bit and bit32 libraries are available in every script.</source>
@@ -26902,13 +26912,13 @@ This script may use Lua 5.3 bitwise syntax, which this runtime does not support.
 </translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="546"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="554"/>
         <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="267"/>
         <source>Frame Parser Disabled</source>
         <translation>Frame-parser Inaktiverad</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="547"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="555"/>
         <source>The Lua frame parser for source %1 timed out %2 frames in a row and has been disabled to keep Serial Studio responsive.
 
 Most likely cause: an infinite loop or extremely slow operation in the script body. Fix the script and reload the project to re-enable parsing.</source>
@@ -26917,13 +26927,13 @@ Most likely cause: an infinite loop or extremely slow operation in the script bo
 Troligaste orsak: en oändlig loop eller extremt långsam operation i skriptkroppen. Åtgärda skriptet och ladda om projektet för att återaktivera parsning.</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="289"/>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="329"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="297"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="337"/>
         <source>Lua Syntax Error</source>
         <translation>Lua-syntaxfel</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="290"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="298"/>
         <source>The parser code contains an error:
 
 %1
@@ -26936,17 +26946,17 @@ Serial Studio can rewrite the unsupported operators as bit.* calls and reload th
 Serial Studio kan skriva om de operatorer som inte stöds som bit.*-anrop och ladda om parsern. Bit-biblioteket fungerar på 32-bitars heltal, så ett värde bredare än 32 bitar kommer att lindas om när det skrivs om.</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="300"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="308"/>
         <source>Fix Automatically</source>
         <translation>Åtgärda Automatiskt</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="301"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="309"/>
         <source>Leave Unchanged</source>
         <translation>Lämna Oförändrad</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="330"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="338"/>
         <source>The parser code contains an error:
 
 %1</source>
@@ -26955,12 +26965,12 @@ Serial Studio kan skriva om de operatorer som inte stöds som bit.*-anrop och la
 %1</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="721"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="730"/>
         <source>Lua Runtime Error</source>
         <translation>Lua-körningsfel</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="722"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="731"/>
         <source>The parser code triggered an error:
 
 %1</source>
@@ -26969,13 +26979,13 @@ Serial Studio kan skriva om de operatorer som inte stöds som bit.*-anrop och la
 %1</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="743"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="752"/>
         <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="600"/>
         <source>Missing Parse Function</source>
         <translation>Parse-funktion Saknas</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="744"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="753"/>
         <source>The 'parse' function is not defined in the script.
 
 Please ensure your code includes:
@@ -26986,13 +26996,13 @@ Säkerställ att din kod innehåller:
 function parse(frame) ... end</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="806"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="815"/>
         <location filename="../../../core/Pipeline/DataModel/Scripting/JsScriptEngine.cpp" line="652"/>
         <source>Parse Function Runtime Error</source>
         <translation>Körningsfel i Parse-funktionen</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="807"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/LuaScriptEngine.cpp" line="816"/>
         <source>The parse function contains an error:
 
 %1
@@ -28651,112 +28661,112 @@ Lägg till absoluta adresser ovan för att polla styrenheten.</translation>
         <translation>Sessionsdetaljer</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="49"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="50"/>
         <source>Reproduced</source>
         <translation>Reproducerad</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="52"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="53"/>
         <source>Diverged</source>
         <translation>Divergerad</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="55"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="56"/>
         <source>Partially verified</source>
         <translation>Delvis Verifierad</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="58"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="59"/>
         <source>Not mechanically verifiable</source>
         <translation>Ej Maskinellt Verifierbar</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="61"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="62"/>
         <source>Verification error</source>
         <translation>Verifieringsfel</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="63"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="64"/>
         <source>Never verified</source>
         <translation>Aldrig Verifierad</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="71"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="72"/>
         <source>Identical</source>
         <translation>Identiska</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="74"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="75"/>
         <source>Value drift</source>
         <translation>Värdeavvikelse</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="77"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="78"/>
         <source>Coverage drift</source>
         <translation>Täckningsavvikelse</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="80"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="81"/>
         <source>Structural drift</source>
         <translation>Strukturavvikelse</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="83"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="84"/>
         <source>Not mechanically comparable</source>
         <translation>Ej maskinellt jämförbar</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="85"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="86"/>
         <source>Check failed</source>
         <translation>Kontroll misslyckades</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="114"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="115"/>
         <source>%1 B</source>
         <translation>%1 B</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="117"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="118"/>
         <source>%1 KB</source>
         <translation>%1 KB</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="120"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="121"/>
         <source>%1 MB</source>
         <translation>%1 MB</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="122"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="123"/>
         <source>%1 GB</source>
         <translation>%1 GB</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="146"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="147"/>
         <source>%1 samples over %2 s, %3 datasets</source>
         <translation>%1 sampel över %2 s, %3 dataset</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="228"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="234"/>
         <source>Select a session to view details.</source>
         <translation>Välj en session för att visa detaljer.</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="314"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="320"/>
         <source>Project:</source>
         <translation>Projekt:</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="327"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="333"/>
         <source>Started:</source>
         <translation>Startad:</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="340"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="346"/>
         <source>Ended:</source>
         <translation>Avslutad:</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="346"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="352"/>
         <source>(in progress)</source>
         <translation>(pågår)</translation>
     </message>
@@ -28765,22 +28775,22 @@ Lägg till absoluta adresser ovan för att polla styrenheten.</translation>
         <translation type="vanished">Ramar:</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="384"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="390"/>
         <source>Notes</source>
         <translation>Anteckningar</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="399"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="405"/>
         <source>Add session notes…</source>
         <translation>Lägg till sessionsanteckningar…</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="400"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="406"/>
         <source>Notes are read-only for completed sessions.</source>
         <translation>Anteckningar är skrivskyddade för slutförda sessioner.</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="485"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="493"/>
         <source>New tag…</source>
         <translation>Ny tagg…</translation>
     </message>
@@ -28801,42 +28811,42 @@ Lägg till absoluta adresser ovan för att polla styrenheten.</translation>
         <translation type="vanished">Avvikelse mot Aktuellt Projekt</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="630"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="638"/>
         <source>Compares this session's decoded values against the project currently open in the editor. The result reflects a transient candidate and is not stored with the session.</source>
         <translation>Jämför denna sessions avkodade värden mot projektet som för närvarande är öppet i redigeraren. Resultatet återspeglar en tillfällig kandidat och lagras inte med sessionen.</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="652"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="660"/>
         <source>Candidate: %1 (%2)</source>
         <translation>Kandidat: %1 (%2)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="653"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="661"/>
         <source>untitled</source>
         <translation>namnlös</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="664"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="672"/>
         <source>Archived-configuration reproduction status: %1</source>
         <translation>Arkiverad konfiguration reproduktionsstatus: %1</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="718"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="726"/>
         <source>%1: only in the current project</source>
         <translation>%1: endast i det aktuella projektet</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="721"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="729"/>
         <source>%1: only in the recorded project</source>
         <translation>%1: endast i det inspelade projektet</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="723"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="731"/>
         <source>%1: %2 of %3 values changed, %4 missing, %5 extra</source>
         <translation>%1: %2 av %3 värden ändrade, %4 saknas, %5 extra</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="739"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="747"/>
         <source>…and %1 more datasets are affected.</source>
         <translation>…och %1 fler dataset påverkas.</translation>
     </message>
@@ -28873,27 +28883,27 @@ Lägg till absoluta adresser ovan för att polla styrenheten.</translation>
         <translation type="vanished">Lås upp sessionsfilen för att radera sessioner</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="421"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="429"/>
         <source>Tags</source>
         <translation>Taggar</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="353"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="359"/>
         <source>Size:</source>
         <translation>Storlek:</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="367"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="373"/>
         <source>Stream data:</source>
         <translation>Strömdata:</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="492"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="500"/>
         <source>Add</source>
         <translation>Lägg Till</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="590"/>
+        <location filename="../../qml/DatabaseExplorer/SessionDetail.qml" line="598"/>
         <source>Project Comparison</source>
         <translation>Projektjämförelse</translation>
     </message>
@@ -28990,12 +29000,12 @@ Lägg till absoluta adresser ovan för att polla styrenheten.</translation>
         <translation>Taggar</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionList.qml" line="215"/>
+        <location filename="../../qml/DatabaseExplorer/SessionList.qml" line="218"/>
         <source>No sessions found.</source>
         <translation>Inga sessioner hittades.</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/SessionList.qml" line="216"/>
+        <location filename="../../qml/DatabaseExplorer/SessionList.qml" line="219"/>
         <source>No session file open.</source>
         <translation>Ingen sessionsfil öppen.</translation>
     </message>
@@ -29206,52 +29216,52 @@ Lägg till absoluta adresser ovan för att polla styrenheten.</translation>
 <context>
     <name>Sessions::DatabaseWorker</name>
     <message>
-        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="111"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="112"/>
         <source>Empty file path</source>
         <translation>Tom filsökväg</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="116"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="117"/>
         <source>This file is not a Serial Studio session database.</source>
         <translation>Denna fil är inte en Serial Studio sessionsdatabas.</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="210"/>
-        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="276"/>
-        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="393"/>
-        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="464"/>
-        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="489"/>
-        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="517"/>
-        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="557"/>
-        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="837"/>
-        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="911"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="211"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="277"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="394"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="465"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="490"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="518"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="558"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="852"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="935"/>
         <source>Database not open</source>
         <translation>Databasen är inte öppen</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="219"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="220"/>
         <source>This session is being recorded</source>
         <translation>Denna session spelas in</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="313"/>
-        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="336"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="314"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="337"/>
         <source>Database not open or empty label</source>
         <translation>Databasen är inte öppen eller etikett saknas</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="438"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="439"/>
         <source>Invalid label</source>
         <translation>Ogiltig etikett</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="705"/>
-        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="797"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="706"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="805"/>
         <source>Cancelled</source>
         <translation>Avbruten</translation>
     </message>
     <message>
-        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="923"/>
+        <location filename="../../../core/Storage/Sessions/DatabaseWorker.cpp" line="947"/>
         <source>Could not load session data</source>
         <translation>Kunde inte läsa in sessionsdata</translation>
     </message>
@@ -32282,7 +32292,7 @@ Aktivera Bädda in Projekt för att baka in projektet i genvägen, så att den f
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="392"/>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="929"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="930"/>
         <source>Hex</source>
         <translation>Hex</translation>
     </message>
@@ -32307,22 +32317,22 @@ Aktivera Bädda in Projekt för att baka in projektet i genvägen, så att den f
         <translation>Kommandobibliotek (historik, pins och åtgärder)</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="822"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="823"/>
         <source>Send Data to Device</source>
         <translation>Skicka Data till Enhet</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="990"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="991"/>
         <source>Stop cyclic send</source>
         <translation>Stoppa cyklisk sändning</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="991"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="992"/>
         <source>Repeat the current command every %1 ms</source>
         <translation>Upprepa det aktuella kommandot var %1 ms</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="1012"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="1013"/>
         <source>Send data to the device</source>
         <translation>Skicka data till enheten</translation>
     </message>
@@ -33059,7 +33069,7 @@ Aktivera Bädda in Projekt för att baka in projektet i genvägen, så att den f
         <translation type="vanished">Lås en upprepande signal på plats, som Auto-knappen på ett oscilloskop. Varje svep startar vid samma punkt på vågformen, så den står stilla istället för att rulla förbi.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="173"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="188"/>
         <source>Trigger</source>
         <translation>Trigger</translation>
     </message>
@@ -33068,57 +33078,57 @@ Aktivera Bädda in Projekt för att baka in projektet i genvägen, så att den f
         <translation type="vanished">Läge:</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="110"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="125"/>
         <source>Mode</source>
         <translation>Läge</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="135"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="150"/>
         <source>Auto</source>
         <translation>Auto</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="135"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="150"/>
         <source>Normal</source>
         <translation>Normal</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="135"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="150"/>
         <source>Single</source>
         <translation>Enkel</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="158"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="173"/>
         <source>Auto free-runs when nothing crosses the level.</source>
         <translation>Auto kör fritt när ingenting korsar nivån.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="159"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="174"/>
         <source>Normal waits for a crossing.</source>
         <translation>Normal väntar på en korsning.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="160"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="175"/>
         <source>Single captures one sweep, then stops.</source>
         <translation>Enkel fångar ett svep och stannar sedan.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="242"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="258"/>
         <source>Slope:</source>
         <translation>Lutning:</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="274"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="290"/>
         <source>Trigger on a downward crossing</source>
         <translation>Trigga vid en nedåtgående korsning</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="320"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="336"/>
         <source>Timebase:</source>
         <translation>Tidsbas:</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="389"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="407"/>
         <source>Leave timebase empty to use the plot's time range; lower it to zoom in on a fast signal. Holdoff ignores new triggers for a moment after each.</source>
         <translation>Lämna tidsbas tom för att använda plottens tidsintervall; sänk den för att zooma in på en snabb signal. Holdoff ignorerar nya triggers ett ögonblick efter varje trigger.</translation>
     </message>
@@ -33127,7 +33137,7 @@ Aktivera Bädda in Projekt för att baka in projektet i genvägen, så att den f
         <translation type="vanished">Signal:</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="231"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="246"/>
         <source>Value to cross</source>
         <translation>Värde att korsa</translation>
     </message>
@@ -33136,17 +33146,17 @@ Aktivera Bädda in Projekt för att baka in projektet i genvägen, så att den f
         <translation type="vanished">Flank:</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="255"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="271"/>
         <source>Rising</source>
         <translation>Stigande</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="259"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="275"/>
         <source>Trigger on an upward crossing</source>
         <translation>Trigga vid en uppåtgående korsning</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="270"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="286"/>
         <source>Falling</source>
         <translation>Fallande</translation>
     </message>
@@ -33155,7 +33165,7 @@ Aktivera Bädda in Projekt för att baka in projektet i genvägen, så att den f
         <translation type="vanished">Ett nytt svep börjar varje gång signalen korsar nivån i den valda riktningen. Auto kör även fritt när ingen korsning hittas.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="293"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="309"/>
         <source>Timing</source>
         <translation>Timing</translation>
     </message>
@@ -33164,23 +33174,23 @@ Aktivera Bädda in Projekt för att baka in projektet i genvägen, så att den f
         <translation type="vanished">Tidsbas (ms):</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="333"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="349"/>
         <source>Match time range</source>
         <translation>Matcha tidsintervall</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="346"/>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="376"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="363"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="394"/>
         <source>ms</source>
         <translation>ms</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="352"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="369"/>
         <source>Holdoff:</source>
         <translation>Spärrfördröjning:</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="365"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="382"/>
         <source>0</source>
         <translation>0</translation>
     </message>
@@ -33189,17 +33199,17 @@ Aktivera Bädda in Projekt för att baka in projektet i genvägen, så att den f
         <translation type="vanished">Tidsbas anger hur mycket tid ett svep visar; lämna tomt för att använda plottens tidsintervall. Sänk den för att zooma in på en snabb signal. Holdoff ignorerar nya triggers ett ögonblick efter varje trigger.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="404"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="422"/>
         <source>Capture Next</source>
         <translation>Fånga Nästa</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="406"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="424"/>
         <source>Arm for one more single-shot capture</source>
         <translation>Aktivera för en Ytterligare Engångsfångst</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="218"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="233"/>
         <source>Level:</source>
         <translation>Nivå:</translation>
     </message>
@@ -33216,7 +33226,7 @@ Aktivera Bädda in Projekt för att baka in projektet i genvägen, så att den f
         <translation type="vanished">Spärrfördröjningstid</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="197"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="212"/>
         <source>Source:</source>
         <translation>Källa:</translation>
     </message>
@@ -33225,7 +33235,7 @@ Aktivera Bädda in Projekt för att baka in projektet i genvägen, så att den f
         <translation type="vanished">Återaktivera</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="419"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="437"/>
         <source>Close</source>
         <translation>Stäng</translation>
     </message>
@@ -33389,22 +33399,22 @@ Aktivera Bädda in Projekt för att baka in projektet i genvägen, så att den f
 <context>
     <name>UI::Dashboard</name>
     <message>
-        <location filename="../../../core/Ui/UI/Dashboard.cpp" line="1366"/>
+        <location filename="../../../core/Ui/UI/Dashboard.cpp" line="1369"/>
         <source>Console</source>
         <translation>Konsol</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/Dashboard.cpp" line="1374"/>
+        <location filename="../../../core/Ui/UI/Dashboard.cpp" line="1377"/>
         <source>Notifications</source>
         <translation>Notifikationer</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/Dashboard.cpp" line="1382"/>
+        <location filename="../../../core/Ui/UI/Dashboard.cpp" line="1385"/>
         <source>Clock</source>
         <translation>Klocka</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/Dashboard.cpp" line="1389"/>
+        <location filename="../../../core/Ui/UI/Dashboard.cpp" line="1392"/>
         <source>Stopwatch</source>
         <translation>Stoppur</translation>
     </message>
@@ -33743,12 +33753,12 @@ Aktivera Bädda in Projekt för att baka in projektet i genvägen, så att den f
         <translation>Variabelnamn</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="512"/>
+        <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="524"/>
         <source>Delete variable</source>
         <translation>Ta bort variabel</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="530"/>
+        <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="542"/>
         <source>No variables.</source>
         <translation>Inga variabler.</translation>
     </message>
@@ -33781,7 +33791,7 @@ Aktivera Bädda in Projekt för att baka in projektet i genvägen, så att den f
         <translation>Läs/skriv</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="479"/>
+        <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="491"/>
         <source>Copy access code %1 to clipboard</source>
         <translation>Kopiera åtkomstkod %1 till urklipp</translation>
     </message>
@@ -33794,7 +33804,7 @@ Aktivera Bädda in Projekt för att baka in projektet i genvägen, så att den f
         <translation type="vanished">Inga register.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="580"/>
+        <location filename="../../qml/ProjectEditor/Views/UserTableView.qml" line="592"/>
         <source>Register access code copied</source>
         <translation>Registeråtkomstkod kopierad</translation>
     </message>
@@ -34472,32 +34482,32 @@ Jag förstår att när den löper ut måste jag köpa en licens eller bygga GPLv
         <translation>Ny Arbetsyta</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/WorkspaceDialog.qml" line="165"/>
+        <location filename="../../qml/Dialogs/WorkspaceDialog.qml" line="176"/>
         <source>Name:</source>
         <translation>Namn:</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/WorkspaceDialog.qml" line="174"/>
+        <location filename="../../qml/Dialogs/WorkspaceDialog.qml" line="185"/>
         <source>My Workspace</source>
         <translation>Min Arbetsyta</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/WorkspaceDialog.qml" line="189"/>
+        <location filename="../../qml/Dialogs/WorkspaceDialog.qml" line="200"/>
         <source>Select widgets to include:</source>
         <translation>Välj widgets att inkludera:</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/WorkspaceDialog.qml" line="197"/>
+        <location filename="../../qml/Dialogs/WorkspaceDialog.qml" line="208"/>
         <source>Filter widgets…</source>
         <translation>Filtrera widgets…</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/WorkspaceDialog.qml" line="313"/>
+        <location filename="../../qml/Dialogs/WorkspaceDialog.qml" line="318"/>
         <source>Cancel</source>
         <translation>Avbryt</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/WorkspaceDialog.qml" line="320"/>
+        <location filename="../../qml/Dialogs/WorkspaceDialog.qml" line="325"/>
         <source>OK</source>
         <translation>OK</translation>
     </message>

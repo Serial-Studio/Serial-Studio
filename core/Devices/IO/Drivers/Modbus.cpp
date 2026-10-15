@@ -450,14 +450,14 @@ void IO::Drivers::Modbus::onProbeFinished(bool ok, const QString& reason)
 }
 
 /**
- * @brief Dials the Modbus client once. A refused dial reports its verdict through failDial(); the
- *        established verdict arrives on the client's ConnectedState transition.
+ * @brief Dials the Modbus client once; a refused dial reports through failDial(). The `&& m_device`
+ *        guard spares a torn-down client: a failing RTU port re-enters failDial->doClose inline.
  */
 void IO::Drivers::Modbus::connectClient()
 {
   SS_ASSERT(m_device != nullptr, return failDial(tr("The Modbus client is gone")));
 
-  if (!m_device->connectDevice())
+  if (!m_device->connectDevice() && m_device)
     failDial(m_device->errorString());
 }
 

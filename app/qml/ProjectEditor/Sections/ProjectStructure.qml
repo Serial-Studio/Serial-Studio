@@ -587,15 +587,9 @@ Widgets.Pane {
         //
         // Group flavour of the current row, for the menus that differ by widget type.
         //
-        readonly property string widgetRole: {
-          if (itemKind !== ProjectEditor.KindGroup)
-            return ""
-
-          if (Cpp_JSON_ProjectEditor.currentGroupIsOutputPanel)
-            return "output-panel"
-
-          return Cpp_JSON_ProjectEditor.currentGroupIsPainter ? "painter" : ""
-        }
+        readonly property string widgetRole: itemKind !== ProjectEditor.KindGroup
+                                              ? ""
+                                              : Cpp_JSON_ProjectEditor.groupWidgetRole(itemId)
 
         //
         // Restore expanded state from C++ model

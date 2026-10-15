@@ -23,6 +23,7 @@
 #include "IO/Drivers/EthernetIp.h"
 
 #include <chrono>
+#include <functional>
 #include <iterator>
 #include <QCoreApplication>
 #include <QDebug>
@@ -30,6 +31,7 @@
 #include <QHash>
 #include <QJsonDocument>
 #include <QSet>
+#include <QThread>
 
 #include "Core/Prompt/UserPrompt.h"
 #include "Core/SerialStudio.h"
@@ -47,6 +49,7 @@ static constexpr int kEipMaxIntervalMs                    = 60000;
 static constexpr int kEipDefaultIntervalMs                = 250;
 [[maybe_unused]] static constexpr int kEipCreateTimeoutMs = 5000;
 [[maybe_unused]] static constexpr int kEipReadTimeoutMs   = 1500;
+[[maybe_unused]] static constexpr int kEipPollSliceMs     = 5;
 static constexpr int kEipDeadTickLimit                    = 3;
 static constexpr int kEipDialDeadlineMs                   = 5000;
 static constexpr int kEipJoinTimeoutMs                    = 5000;
@@ -116,17 +119,51 @@ static constexpr const char* kEipPlcTypes[] = {
 #ifdef SS_EIP_ACTIVE
 
 /**
- * @brief Opens one tag handle, or returns -1 with @p error set to what the stack reported.
+ * @brief Polls a tag created with timeout 0 until it settles, in slices of kEipPollSliceMs. A
+ *        timed create is one uninterruptible block inside the stack, so the deadline lives here
+ *        instead: the status is what the blocking create would have reported (PLCTAG_ERR_TIMEOUT
+ *        at kEipCreateTimeoutMs), or PLCTAG_ERR_ABORT as soon as @p cancelled fires.
  */
-[[nodiscard]] static int createHandle(const QByteArray& attributes, QString& error)
+[[nodiscard]] static int awaitCreate(int handle, const std::function<bool()>& cancelled)
+{
+  SS_ASSERT(handle >= 0, return handle);
+  SS_ASSERT_LOG(kEipPollSliceMs > 0);
+
+  QElapsedTimer clock;
+  clock.start();
+  int status = plc_tag_status(handle);
+  for (int slice = 0; slice <= kEipCreateTimeoutMs / kEipPollSliceMs; ++slice) {
+    if (status != PLCTAG_STATUS_PENDING)
+      return status;
+
+    if (cancelled())
+      return PLCTAG_ERR_ABORT;
+
+    if (clock.hasExpired(kEipCreateTimeoutMs))
+      break;
+
+    QThread::msleep(kEipPollSliceMs);
+    status = plc_tag_status(handle);
+  }
+
+  return status == PLCTAG_STATUS_PENDING ? PLCTAG_ERR_TIMEOUT : status;
+}
+
+/**
+ * @brief Opens one tag handle, or returns -1 with @p error set to what the stack reported. The
+ *        create is asynchronous and polled, so @p cancelled ends a dial within one slice.
+ */
+[[nodiscard]] static int createHandle(const QByteArray& attributes,
+                                      QString& error,
+                                      const std::function<bool()>& cancelled)
 {
   SS_ASSERT(!attributes.isEmpty(), {
     error = QCoreApplication::translate("EthernetIp", "The tag attributes are empty");
     return -1;
   });
 
-  const int handle = plc_tag_create(attributes.constData(), kEipCreateTimeoutMs);
-  const int status = handle < 0 ? handle : plc_tag_status(handle);
+  const int handle = plc_tag_create(attributes.constData(), 0);
+  const int status = handle < 0 ? handle : awaitCreate(handle, cancelled);
   if (status == PLCTAG_STATUS_OK)
     return handle;
 
@@ -219,10 +256,13 @@ static void releaseHandles(QList<int>& handles)
 /**
  * @brief Stack-less build: no handle can be opened, and the reason says so once.
  */
-[[nodiscard]] static int createHandle(const QByteArray& attributes, QString& error)
+[[nodiscard]] static int createHandle(const QByteArray& attributes,
+                                      QString& error,
+                                      const std::function<bool()>& cancelled)
 {
   SS_ASSERT_LOG(!attributes.isEmpty());
   Q_UNUSED(attributes);
+  Q_UNUSED(cancelled);
 
   error = QCoreApplication::translate("EthernetIp", "The %1 client is not available in this build")
             .arg(QLatin1String(kEipBackend));
@@ -335,7 +375,7 @@ QByteArray IO::Drivers::EipPollWorker::attributes(const EipTag& tag) const
 /**
  * @brief Creates every tag handle, which is what actually opens the CIP session: a controller that
  *        refuses the first tag fails the attempt here rather than leaving a half-open link behind
- *        a retry timer.
+ *        a retry timer. A cancel fails the attempt through the same path within one poll slice.
  */
 bool IO::Drivers::EipPollWorker::connectToPlc()
 {
@@ -345,11 +385,15 @@ bool IO::Drivers::EipPollWorker::connectToPlc()
   clearAbort();
   noteDialError(QString());
 
+  const std::function<bool()> isAborted = [this] {
+    return aborted();
+  };
+
   QElapsedTimer budget;
   budget.start();
   for (int i = 0; i < m_tags.size(); ++i) {
     QString reason;
-    const int handle = createHandle(attributes(m_tags.at(i)), reason);
+    const int handle = createHandle(attributes(m_tags.at(i)), reason, isAborted);
     if (handle < 0) {
       noteDialError(tr("\"%1\": %2").arg(m_tags.at(i).tag, reason));
       shutdown();

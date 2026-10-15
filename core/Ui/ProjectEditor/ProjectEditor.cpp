@@ -111,6 +111,8 @@ DataModel::ProjectEditor::ProjectEditor()
   , m_scriptsRootItem(nullptr)
   , m_exportRootItem(nullptr)
   , m_seedExpansionFromModel(true)
+  , m_alarmBandsDialogUniqueId(-1)
+  , m_freqMarkersDialogUniqueId(-1)
   , m_treeModel(nullptr)
   , m_selectionModel(nullptr)
   , m_groupModel(nullptr)
@@ -512,6 +514,24 @@ QString DataModel::ProjectEditor::currentGroupPainterCode() const
 bool DataModel::ProjectEditor::currentGroupIsPainter() const
 {
   return m_selectedGroup.widget == QLatin1String("painter");
+}
+
+/**
+ * @brief Context-menu flavour ("output-panel", "painter" or "") of the group at positional
+ *        @p groupId, from that row not the current selection, so a tree context menu matches the
+ *        right-clicked row rather than whatever is selected (spec 0099 f3).
+ */
+QString DataModel::ProjectEditor::groupWidgetRole(int groupId) const
+{
+  const auto& groups = m_projectModelRef.groups();
+  if (groupId < 0 || static_cast<size_t>(groupId) >= groups.size())
+    return QString();
+
+  const auto& group = groups[groupId];
+  if (group.groupType == DataModel::GroupType::Output)
+    return QStringLiteral("output-panel");
+
+  return group.widget == QLatin1String("painter") ? QStringLiteral("painter") : QString();
 }
 
 /**
@@ -1118,9 +1138,11 @@ void DataModel::ProjectEditor::openFrequencyMarkersEditorForSelection()
 /**
  * @brief Forwards to EditorCommit.
  */
-void DataModel::ProjectEditor::commitAlarmBands(const QVariantList& bands)
+void DataModel::ProjectEditor::commitAlarmBands(int groupId,
+                                                int datasetId,
+                                                const QVariantList& bands)
 {
-  m_commit.commitAlarmBands(bands);
+  m_commit.commitAlarmBands(groupId, datasetId, bands);
 }
 
 /**
@@ -1150,9 +1172,11 @@ void DataModel::ProjectEditor::setProjectSoundSequence(const QString& letter)
 /**
  * @brief Forwards to EditorCommit.
  */
-void DataModel::ProjectEditor::commitFrequencyMarkers(const QVariantList& markers)
+void DataModel::ProjectEditor::commitFrequencyMarkers(int groupId,
+                                                      int datasetId,
+                                                      const QVariantList& markers)
 {
-  m_commit.commitFrequencyMarkers(markers);
+  m_commit.commitFrequencyMarkers(groupId, datasetId, markers);
 }
 
 /**

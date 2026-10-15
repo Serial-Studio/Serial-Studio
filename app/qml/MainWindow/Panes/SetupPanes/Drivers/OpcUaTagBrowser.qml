@@ -217,6 +217,11 @@ Window {
 
         Layout.fillWidth: true
         placeholderText: qsTr("Filter by name…")
+
+        //
+        // Filtered rows collapse via implicitHeight, which TreeView only re-measures on a relayout
+        //
+        onTextChanged: Qt.callLater(_tree.forceLayout)
       }
 
       Rectangle {

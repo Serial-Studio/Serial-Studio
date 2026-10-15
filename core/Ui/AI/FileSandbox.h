@@ -92,6 +92,7 @@ private:
 
   QString m_sourceRoot;
   QStringList m_droppedPaths;
+  mutable QString m_workspaceSnapshot;
   mutable QMutex m_dropMutex;
 };
 

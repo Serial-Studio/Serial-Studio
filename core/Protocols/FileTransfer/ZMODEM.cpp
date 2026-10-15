@@ -245,37 +245,72 @@ void IO::Protocols::ZMODEM::processHexByte(quint8 ch)
     return;
   }
 
-  quint8 type          = static_cast<quint8>(type_bytes.at(0));
-  QByteArray arg_bytes = QByteArray::fromHex(m_headerBuf.mid(2, 8));
-  quint32 arg          = 0;
-  if (arg_bytes.size() == 4) {
-    arg = static_cast<quint32>(static_cast<quint8>(arg_bytes[0]))
-        | (static_cast<quint32>(static_cast<quint8>(arg_bytes[1])) << 8)
-        | (static_cast<quint32>(static_cast<quint8>(arg_bytes[2])) << 16)
-        | (static_cast<quint32>(static_cast<quint8>(arg_bytes[3])) << 24);
+  const quint8 type          = static_cast<quint8>(type_bytes.at(0));
+  const QByteArray arg_bytes = QByteArray::fromHex(m_headerBuf.mid(2, 8));
+  const QByteArray crc_bytes = QByteArray::fromHex(m_headerBuf.mid(10, 4));
+  if (arg_bytes.size() != 4 || crc_bytes.size() != 2) [[unlikely]] {
+    Q_EMIT statusMessage(tr("Hex header malformed, dropping frame"));
+    m_parseState = ParseState::Idle;
+    return;
   }
 
-  const QByteArray crc_bytes = QByteArray::fromHex(m_headerBuf.mid(10, 4));
-  if (crc_bytes.size() == 2) {
-    quint8 payload[5];
-    payload[0] = type;
-    payload[1] = static_cast<quint8>(arg & 0xFF);
-    payload[2] = static_cast<quint8>((arg >> 8) & 0xFF);
-    payload[3] = static_cast<quint8>((arg >> 16) & 0xFF);
-    payload[4] = static_cast<quint8>((arg >> 24) & 0xFF);
+  const quint32 arg = static_cast<quint32>(static_cast<quint8>(arg_bytes[0]))
+                    | (static_cast<quint32>(static_cast<quint8>(arg_bytes[1])) << 8)
+                    | (static_cast<quint32>(static_cast<quint8>(arg_bytes[2])) << 16)
+                    | (static_cast<quint32>(static_cast<quint8>(arg_bytes[3])) << 24);
 
-    const quint16 calc_crc = CRC::crc16(payload, 5);
-    const quint16 rx_crc   = static_cast<quint16>((static_cast<quint8>(crc_bytes[0]) << 8)
-                                                  | static_cast<quint8>(crc_bytes[1]));
-    if (calc_crc != rx_crc) [[unlikely]] {
-      Q_EMIT statusMessage(tr("Hex header CRC mismatch, dropping frame"));
-      m_parseState = ParseState::Idle;
-      return;
-    }
+  quint8 payload[5];
+  payload[0] = type;
+  payload[1] = static_cast<quint8>(arg & 0xFF);
+  payload[2] = static_cast<quint8>((arg >> 8) & 0xFF);
+  payload[3] = static_cast<quint8>((arg >> 16) & 0xFF);
+  payload[4] = static_cast<quint8>((arg >> 24) & 0xFF);
+
+  const quint16 calc_crc = CRC::crc16(payload, 5);
+  const quint16 rx_crc   = static_cast<quint16>((static_cast<quint8>(crc_bytes[0]) << 8)
+                                                | static_cast<quint8>(crc_bytes[1]));
+  if (calc_crc != rx_crc) [[unlikely]] {
+    Q_EMIT statusMessage(tr("Hex header CRC mismatch, dropping frame"));
+    m_parseState = ParseState::Idle;
+    return;
   }
 
   parseReceivedHeader(type, arg);
   m_parseState = ParseState::Idle;
+}
+
+/**
+ * @brief Checks the CRC trailing a ZDLE-decoded binary header held in m_headerBuf: five payload
+ *        bytes (type, argument) then CRC-32 low byte first for ZBIN32, or CRC-16 high byte first
+ *        for ZBIN. A mismatch is reported and the caller drops the frame, because acting on a
+ *        header whose bytes were never checked lets line noise drive the sender state machine.
+ */
+bool IO::Protocols::ZMODEM::binaryHeaderCrcValid(bool wide)
+{
+  static constexpr int kPayloadBytes = 5;
+
+  const int crc_bytes = wide ? 4 : 2;
+  SS_ASSERT(m_headerBuf.size() == kPayloadBytes + crc_bytes, return false);
+
+  quint8 raw[kPayloadBytes + 4];
+  for (int i = 0; i < kPayloadBytes + crc_bytes; ++i)
+    raw[i] = static_cast<quint8>(m_headerBuf[i]);
+
+  bool valid = false;
+  if (wide) {
+    const quint32 rx_crc = static_cast<quint32>(raw[5]) | (static_cast<quint32>(raw[6]) << 8)
+                         | (static_cast<quint32>(raw[7]) << 16)
+                         | (static_cast<quint32>(raw[8]) << 24);
+    valid                = CRC::crc32(raw, kPayloadBytes) == rx_crc;
+  } else {
+    const quint16 rx_crc = static_cast<quint16>((raw[5] << 8) | raw[6]);
+    valid                = CRC::crc16(raw, kPayloadBytes) == rx_crc;
+  }
+
+  if (!valid) [[unlikely]]
+    Q_EMIT statusMessage(tr("Binary header CRC mismatch, dropping frame"));
+
+  return valid;
 }
 
 /**
@@ -304,6 +339,11 @@ void IO::Protocols::ZMODEM::processBin32Byte(quint8 ch)
 
   if (m_headerBuf.size() < m_headerBytesExpected)
     return;
+
+  if (!binaryHeaderCrcValid(true)) {
+    m_parseState = ParseState::Idle;
+    return;
+  }
 
   quint8 type = static_cast<quint8>(m_headerBuf[0]);
   quint32 arg = static_cast<quint32>(static_cast<quint8>(m_headerBuf[1]))
@@ -341,6 +381,11 @@ void IO::Protocols::ZMODEM::processBinByte(quint8 ch)
 
   if (m_headerBuf.size() < m_headerBytesExpected)
     return;
+
+  if (!binaryHeaderCrcValid(false)) {
+    m_parseState = ParseState::Idle;
+    return;
+  }
 
   quint8 type = static_cast<quint8>(m_headerBuf[0]);
   quint32 arg = static_cast<quint32>(static_cast<quint8>(m_headerBuf[1]))

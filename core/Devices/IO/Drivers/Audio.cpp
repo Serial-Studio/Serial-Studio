@@ -342,6 +342,7 @@ bool IO::Drivers::Audio::open(const QIODevice::OpenMode mode)
   publishCaptureFormat();
 
   m_playbackRing.reset();
+  m_playbackRing.setSilenceByte(m_config.playback.format == ma_format_u8 ? 0x80 : 0x00);
   seedInputPool(kInputSlotSize);
 
   std::memset(&m_device, 0, sizeof(m_device));

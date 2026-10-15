@@ -150,6 +150,7 @@ DataModel::FrameBuilder::FrameBuilder(Core::Bus::MessageBus& bus)
   , m_parsedFrameCount(0)
   , m_skippedFrameCount(0)
   , m_projectSyncInFlight(false)
+  , m_projectSyncPending(false)
   , m_tableChannel(*this, m_tableStore)
   , m_quickPlot(m_operationMode)
   , m_tableApi(*this, m_tableStore, m_tableChannel.guiSnapshot())
@@ -776,27 +777,35 @@ void DataModel::FrameBuilder::clearLatestFrames()
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Rebuilds m_frame from ProjectModel's in-memory state (no file I/O). The GUI-thread
- *        caller carries the data across, so the builder never blocks back on the GUI: that round
- *        trip re-entered this function and nested loops without bound. A sync arriving while the
- *        pipeline is parked runs INLINE there, where the thread assert drops it (A3), so it waits.
+ * @brief Rebuilds m_frame from ProjectModel's in-memory state (no file I/O); the GUI-thread caller
+ *        carries the data across. A sync arriving while one is in flight is coalesced, not dropped
+ *        (spec 0099 f7): the running loop applies one more snapshot before clearing in-flight, so
+ *        the pipeline never keeps a stale project; a parked sync waits on the deferred snapshot.
  */
 void DataModel::FrameBuilder::syncFromProjectModel()
 {
   if (QThread::currentThread() != thread()) {
-    if (m_projectSyncInFlight.exchange(true, std::memory_order_acq_rel))
-      return;
-
-    auto snapshot = collectProjectSnapshot();
-    if (IO::PipelineHost::pipelineParkedOnGui()) [[unlikely]] {
-      m_deferredProjectSnapshot = std::move(snapshot);
-      m_projectSyncInFlight.store(false, std::memory_order_release);
+    if (m_projectSyncInFlight.exchange(true, std::memory_order_acq_rel)) {
+      m_projectSyncPending.store(true, std::memory_order_release);
       return;
     }
 
-    invokeOnBuilderThreadBlocking([this, snapshot = std::move(snapshot)]() mutable {
-      applyProjectSnapshot(std::move(snapshot));
-    });
+    for (;;) {
+      m_projectSyncPending.store(false, std::memory_order_release);
+      auto snapshot = collectProjectSnapshot();
+      if (IO::PipelineHost::pipelineParkedOnGui()) [[unlikely]] {
+        m_deferredProjectSnapshot = std::move(snapshot);
+        break;
+      }
+
+      invokeOnBuilderThreadBlocking([this, snapshot = std::move(snapshot)]() mutable {
+        applyProjectSnapshot(std::move(snapshot));
+      });
+
+      if (!m_projectSyncPending.load(std::memory_order_acquire))
+        break;
+    }
+
     m_projectSyncInFlight.store(false, std::memory_order_release);
     return;
   }
@@ -2737,11 +2746,15 @@ void DataModel::FrameBuilder::compileTransforms()
 }
 
 /**
- * @brief Runs one GC pass over every per-source transform engine.
+ * @brief Runs one GC pass over every per-source transform engine, then drops the interned-key
+ *        lookup cache: it is keyed by raw Lua string addresses with no reference held, so a GC
+ *        that frees a run-time-built register name lets its address be reused and a stale entry
+ *        would resolve to the wrong slot (spec 0099 f4). Pipeline thread; the clear is 1 Hz.
  */
 void DataModel::FrameBuilder::collectTransformEngineGarbage()
 {
   m_transforms.collectGarbage();
+  m_tableStore.clearLookupCache();
 }
 
 /**

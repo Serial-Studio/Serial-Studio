@@ -53,6 +53,17 @@ ordinary ones fold into "+N more", but every op stricter than Confirm is always 
 or its inner ops skip the tiers.
 Enforced: ctest:tst_assistant_batch_tiers.
 
+**Two tier calibrations the tiers enforce (spec 0098 review).** `argumentAwareSafety(name, args)`
+escalates a command whose arguments pick a program or write to a device
+(`API::CommandCapabilities::of`) to the device-gated treatment, so a generic
+`project.source.setProperty{key:"executable"}` is gated like the dedicated `io.process.*` setter
+rather than riding in at Confirm; `effectiveSafety` and `approvedPolicy` both use it, so the card
+tier and the runtime re-check agree. The script-installing setters (`project.frameParser.setCode`,
+`project.source.setFrameParserCode`, `project.dataset.setTransformCode`,
+`project.transformLibrary.set`, `project.painter.setCode`) sit in `alwaysConfirm`, beside
+`controlScript.setCode`: installed code runs with full trust, so a setter never runs silently
+under auto-approve.
+
 **Nested registry calls are re-checked under `API::DispatchPolicyScope`.** `executeCommand` in
 `Tools/ToolDispatch.cpp` opens one around the registry call with `approvedPolicy()`: every
 `CommandRegistry::execute` beneath it, outer or nested, is refused when its own tier is Blocked,

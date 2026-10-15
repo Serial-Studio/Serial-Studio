@@ -193,12 +193,8 @@ Item {
     title: qsTr("Export annotations")
     nameFilters: [qsTr("CSV files (*.csv)")]
     onAccepted: {
-      let path = selectedFile.toString()
-      if (path.startsWith("file://"))
-        path = decodeURIComponent(path.substring(7))
-
-      if (!root.model.exportCsv(path))
-        console.warn("[ConsoleAnnotations] CSV export failed:", path)
+      if (!root.model.exportCsv(selectedFile))
+        console.warn("[ConsoleAnnotations] CSV export failed:", selectedFile)
     }
   }
 

@@ -439,6 +439,14 @@ Item {
       if (root.slideDirection === 0)
         return
 
+      if (Cpp_Misc_GraphicsBackend.reduceMotion) {
+        root.slideDirection = 0
+        _slideAnimation.stop()
+        _slideTransform.y = 0
+        windowCanvas.opacity = 1
+        return
+      }
+
       _slideTransform.y = root.slideDirection * windowCanvas.height
       root.slideDirection = 0
       _slideAnimation.restart()

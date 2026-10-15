@@ -1,15 +1,15 @@
 {
   "spec": "0039-session-context",
   "regenerate": "python scripts/code-verify.py --singleton-census --accept",
-  "total": 800,
-  "files": 198,
+  "total": 802,
+  "files": 200,
   "buckets": {
     "root": 210,
     "accessor": 71,
     "ctor-capture": 62,
     "deferred": 6,
-    "static-cache": 421,
-    "loose": 30
+    "static-cache": 422,
+    "loose": 31
   },
   "cross_library_total": 0,
   "per_edge": {},
@@ -77,6 +77,7 @@
     "ProcessLauncher": 3,
     "QCanBus": 3,
     "JsWatchdogThread": 3,
+    "QCoreApplication": 3,
     "ConnectionDiagnostics": 3,
     "ImageExport": 3,
     "OfflineLicense": 2,
@@ -96,12 +97,12 @@
     "MCPHandler": 2,
     "NotificationCenter": 2,
     "AI::DocSearch": 2,
-    "QCoreApplication": 2,
     "UISessionRegistry": 2,
     "BenchmarkRunner": 1,
     "Benchmark::BenchmarkRunner": 1,
     "CommandHandler": 1,
     "DataModel::JsWatchdogThread": 1,
+    "FileSandbox": 1,
     "Assistant": 1,
     "WidgetRegistry": 1
   },
@@ -909,6 +910,17 @@
         "loose": 0
       }
     },
+    "core/Pipeline/DataModel/FrameBuilder/BuilderFlagAudit.cpp": {
+      "total": 3,
+      "buckets": {
+        "root": 0,
+        "accessor": 0,
+        "ctor-capture": 0,
+        "deferred": 0,
+        "static-cache": 3,
+        "loose": 0
+      }
+    },
     "core/Pipeline/DataModel/FrameBuilder/ExternalWiring.cpp": {
       "total": 3,
       "buckets": {
@@ -943,13 +955,13 @@
       }
     },
     "core/Pipeline/DataModel/FrameBuilder.cpp": {
-      "total": 27,
+      "total": 24,
       "buckets": {
         "root": 0,
         "accessor": 1,
         "ctor-capture": 0,
         "deferred": 0,
-        "static-cache": 20,
+        "static-cache": 17,
         "loose": 6
       }
     },
@@ -1349,6 +1361,17 @@
         "loose": 0
       }
     },
+    "core/Ui/AI/Conversation/AsyncToolRunner.cpp": {
+      "total": 1,
+      "buckets": {
+        "root": 0,
+        "accessor": 0,
+        "ctor-capture": 0,
+        "deferred": 0,
+        "static-cache": 1,
+        "loose": 0
+      }
+    },
     "core/Ui/AI/Conversation.cpp": {
       "total": 3,
       "buckets": {
@@ -1372,14 +1395,14 @@
       }
     },
     "core/Ui/AI/FileSandbox.cpp": {
-      "total": 1,
+      "total": 2,
       "buckets": {
         "root": 0,
         "accessor": 1,
         "ctor-capture": 0,
         "deferred": 0,
         "static-cache": 0,
-        "loose": 0
+        "loose": 1
       }
     },
     "core/Ui/AI/Providers/LocalProvider.cpp": {

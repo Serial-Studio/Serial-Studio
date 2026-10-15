@@ -749,24 +749,91 @@ bool EditorCommit::validateSelectedDatasetAlias(const QString& newAlias)
 }
 
 /**
- * @brief Commits the result of the AlarmBandsEditor dialog into the currently-selected dataset.
+ * @brief Commits the AlarmBandsEditor result into the dataset the dialog was opened for, resolved
+ *        by its stable uniqueId so a sibling reorder/delete since open cannot retarget a neighbour
+ *        (spec 0099 f1); the batch route fires only for the multi dialog (-1,-1), and a
+ * non-selected target restores the model selection after updateDataset re-seats it.
  */
-void EditorCommit::commitAlarmBands(const QVariantList& bands)
+void EditorCommit::commitAlarmBands(int groupId, int datasetId, const QVariantList& bands)
 {
   const auto parsed = parseAlarmBandList(bands, m_model.jsonFilePath());
-  if (m_editor.m_currentView == MultiSelectionView
+  if (groupId < 0 && m_editor.m_currentView == MultiSelectionView
       && m_editor.m_batchKind == ProjectEditor::KindDataset) {
     commitAlarmBandsForSelection(parsed);
     return;
   }
 
-  auto& pm                              = m_model;
-  m_editor.m_selectedDataset.alarmBands = parsed;
-  pm.updateDataset(m_editor.m_selectedDataset.groupId,
-                   m_editor.m_selectedDataset.datasetId,
-                   m_editor.m_selectedDataset,
-                   false);
-  m_editor.m_forms.buildDatasetModel(m_editor.m_selectedDataset);
+  DataModel::Dataset ds;
+  if (!resolveDialogDataset(m_editor.m_alarmBandsDialogUniqueId, groupId, datasetId, ds))
+    return;
+
+  const bool isSelected = (ds.groupId == m_editor.m_selectedDataset.groupId
+                           && ds.datasetId == m_editor.m_selectedDataset.datasetId);
+  if (isSelected)
+    ds = m_editor.m_selectedDataset;
+
+  ds.alarmBands = parsed;
+  m_model.updateDataset(ds.groupId, ds.datasetId, ds, false);
+  if (isSelected) {
+    m_editor.m_selectedDataset = ds;
+    m_editor.m_forms.buildDatasetModel(ds);
+  } else {
+    m_model.setSelectedDataset(m_editor.m_selectedDataset);
+  }
+}
+
+/**
+ * @brief Copies the dataset with the stable @p uniqueId into @p out; false and @p out untouched
+ *        when none matches, so a dialog whose dataset was removed commits nothing.
+ */
+bool EditorCommit::findDatasetByUniqueId(int uniqueId, DataModel::Dataset& out) const
+{
+  SS_ASSERT(uniqueId >= 0, return false);
+  for (const auto& group : m_model.groups())
+    for (const auto& dataset : group.datasets)
+      if (dataset.uniqueId == uniqueId) {
+        out = dataset;
+        return true;
+      }
+
+  return false;
+}
+
+/**
+ * @brief Resolves the dialog's target dataset by its captured stable uniqueId, falling back to the
+ *        positional ids only when no uniqueId was captured (a legacy/unassigned dataset).
+ */
+bool EditorCommit::resolveDialogDataset(int uniqueId,
+                                        int groupId,
+                                        int datasetId,
+                                        DataModel::Dataset& out) const
+{
+  if (uniqueId >= 0)
+    return findDatasetByUniqueId(uniqueId, out);
+
+  return findDatasetById(groupId, datasetId, out);
+}
+
+/**
+ * @brief Copies the dataset keyed by (groupId, datasetId) into @p out; false and @p out untouched
+ *        when no group or dataset matches, so a stale editor id commits nothing.
+ */
+bool EditorCommit::findDatasetById(int groupId, int datasetId, DataModel::Dataset& out) const
+{
+  for (const auto& group : m_model.groups()) {
+    if (group.groupId != groupId)
+      continue;
+
+    for (const auto& dataset : group.datasets) {
+      if (dataset.datasetId != datasetId)
+        continue;
+
+      out = dataset;
+      return true;
+    }
+  }
+
+  return false;
 }
 
 /**
@@ -876,16 +943,27 @@ void EditorCommit::commitAlarmBandsForSelection(const std::vector<DataModel::Ala
 }
 
 /**
- * @brief Commits the FrequencyMarkersEditor result into the currently-selected dataset; entries
- *        are validated with the same rules as the JSON reader (positive finite frequency wins).
+ * @brief Commits the FrequencyMarkersEditor result into the dataset the dialog was opened for,
+ *        resolved by its stable uniqueId so a sibling reorder/delete cannot retarget a neighbour
+ *        (spec 0099 f1), restoring the model selection when that is not the selected dataset;
+ *        entries validate with the JSON reader's rules (positive finite freq).
  */
-void EditorCommit::commitFrequencyMarkers(const QVariantList& markers)
+void EditorCommit::commitFrequencyMarkers(int groupId, int datasetId, const QVariantList& markers)
 {
   constexpr double nan        = std::numeric_limits<double>::quiet_NaN();
   constexpr double max_freqHz = 2147483648.0;
 
-  m_editor.m_selectedDataset.fftMarkers.clear();
-  m_editor.m_selectedDataset.fftMarkers.reserve(markers.size());
+  DataModel::Dataset ds;
+  if (!resolveDialogDataset(m_editor.m_freqMarkersDialogUniqueId, groupId, datasetId, ds))
+    return;
+
+  const bool isSelected = (ds.groupId == m_editor.m_selectedDataset.groupId
+                           && ds.datasetId == m_editor.m_selectedDataset.datasetId);
+  if (isSelected)
+    ds = m_editor.m_selectedDataset;
+
+  ds.fftMarkers.clear();
+  ds.fftMarkers.reserve(markers.size());
   for (const auto& v : markers) {
     const auto m = v.toMap();
     DataModel::FrequencyMarker marker;
@@ -912,15 +990,16 @@ void EditorCommit::commitFrequencyMarkers(const QVariantList& markers)
         && marker.warningDb > marker.alarmDb)
       std::swap(marker.warningDb, marker.alarmDb);
 
-    m_editor.m_selectedDataset.fftMarkers.push_back(std::move(marker));
+    ds.fftMarkers.push_back(std::move(marker));
   }
 
-  auto& pm = m_model;
-  pm.updateDataset(m_editor.m_selectedDataset.groupId,
-                   m_editor.m_selectedDataset.datasetId,
-                   m_editor.m_selectedDataset,
-                   false);
-  m_editor.m_forms.buildDatasetModel(m_editor.m_selectedDataset);
+  m_model.updateDataset(ds.groupId, ds.datasetId, ds, false);
+  if (isSelected) {
+    m_editor.m_selectedDataset = ds;
+    m_editor.m_forms.buildDatasetModel(ds);
+  } else {
+    m_model.setSelectedDataset(m_editor.m_selectedDataset);
+  }
 }
 
 /**

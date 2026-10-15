@@ -56,12 +56,12 @@ public:
   void onActionItemChanged(QStandardItem* item);
   void onProjectItemChanged(QStandardItem* item);
   void onDatasetItemChanged(QStandardItem* item);
-  void commitAlarmBands(const QVariantList& bands);
+  void commitAlarmBands(int groupId, int datasetId, const QVariantList& bands);
   void commitChannelSounds(const QVariantList& rows);
   [[nodiscard]] QVariantList channelSoundRows() const;
   void setProjectSoundSequence(const QString& letter);
   void onOutputWidgetItemChanged(QStandardItem* item);
-  void commitFrequencyMarkers(const QVariantList& markers);
+  void commitFrequencyMarkers(int groupId, int datasetId, const QVariantList& markers);
   void syncDatasetTreeIcon(const DataModel::Dataset& dataset);
   void syncDatasetTreeVirtualFlag(const DataModel::Dataset& dataset);
   void applyOutputWidgetField(QStandardItem* item, DataModel::OutputWidget& widget);
@@ -70,6 +70,12 @@ private:
   [[nodiscard]] bool validateSelectedDatasetAlias(const QString& newAlias);
   [[nodiscard]] bool datasetFormEditAccepted(int formId, const QVariant& value);
   [[nodiscard]] bool datasetAliasInUse(const QString& alias, int selfUniqueId) const;
+  [[nodiscard]] bool findDatasetById(int groupId, int datasetId, DataModel::Dataset& out) const;
+  [[nodiscard]] bool findDatasetByUniqueId(int uniqueId, DataModel::Dataset& out) const;
+  [[nodiscard]] bool resolveDialogDataset(int uniqueId,
+                                          int groupId,
+                                          int datasetId,
+                                          DataModel::Dataset& out) const;
 
   bool applyGroupWidgetEdit(int widgetIdx, int groupId);
   bool applyGroupTitleEdit(const QString& newTitle, int groupId);

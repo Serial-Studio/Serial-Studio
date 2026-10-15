@@ -62,7 +62,7 @@ static constexpr int kMaxCsvNameAttempts = 64;
  *        leading whitespace instead of reading byte zero, so " =HYPERLINK(...)" cannot walk
  *        past the guard on a space, which simplified() used to prevent incidentally.
  */
-static QString escapeCsvField(const QString& s)
+QString CSV::escapeCsvField(const QString& s)
 {
   QString out     = s;
   qsizetype first = 0;
@@ -522,6 +522,21 @@ void CSV::Export::closeFile()
 }
 
 /**
+ * @brief Queues the cached session structure to the worker as its template. The worker's close
+ *        clears the template, so a boundary that leaves the link live must re-push it.
+ */
+void CSV::Export::refreshTemplateFrame()
+{
+  auto* worker = static_cast<ExportWorker*>(m_worker);
+  SS_ASSERT(worker != nullptr, return);
+
+  QMetaObject::invokeMethod(
+    worker,
+    [worker, frame = m_sessionStructure] { worker->setTemplateFrame(frame); },
+    Qt::QueuedConnection);
+}
+
+/**
  * @brief Syncs cached open state from the worker and emits openChanged.
  */
 void CSV::Export::onWorkerOpenChanged()
@@ -553,6 +568,9 @@ void CSV::Export::setupExternalConnections()
       auto* worker = static_cast<ExportWorker*>(m_worker);
       SS_ASSERT(worker != nullptr, return);
 
+      if (m_sessionStructure.groups.empty() && !frame.groups.empty())
+        m_sessionStructure = frame;
+
       QMetaObject::invokeMethod(
         worker, [worker, frame] { worker->applyPublishedStructure(frame); }, Qt::QueuedConnection);
     });
@@ -560,23 +578,32 @@ void CSV::Export::setupExternalConnections()
           &DataModel::FrameBuilder::sessionStructureReady,
           this,
           [this](const DataModel::Frame& frame) {
-            auto* worker = static_cast<ExportWorker*>(m_worker);
-            SS_ASSERT(worker != nullptr, return);
-
-            QMetaObject::invokeMethod(
-              worker, [worker, frame] { worker->setTemplateFrame(frame); }, Qt::QueuedConnection);
+            m_sessionStructure = frame;
+            refreshTemplateFrame();
           });
   // code-verify off
   // Closing on the builder's session boundary rather than on connectedChanged/pausedChanged is
   // what keeps the last display tick (A2): the builder flushes its open blocks into this sink's
-  // queue before emitting, and close() drains that queue before closing the file.
+  // queue before emitting, and close() drains that queue before closing the file. close() clears
+  // the worker's template, so a boundary that leaves the link live re-pushes it; a disconnect
+  // drops the cache, since the connect boundary precedes sessionStructureReady and an empty
+  // QuickPlot structure would never overwrite a stale one. QuickPlot's real structure arrives on
+  // structurePublished, not sessionStructureReady, so that path seeds the cache while it is still
+  // empty (spec 0099 f6) -- otherwise pause/resume would re-push the empty QuickPlot frame.
   // code-verify on
   connect(&DataModel::pipelineModules().frameBuilder,
           &DataModel::FrameBuilder::sessionBoundary,
           this,
           [this](bool connected, bool paused) {
-            if (!connected || paused)
+            if (!connected || paused) {
               closeFile();
+              if (!connected)
+                DataModel::clear_frame(m_sessionStructure);
+
+              return;
+            }
+
+            refreshTemplateFrame();
           });
 
   m_operationModeWatch = m_bus->subscribe<Core::Bus::OperationModeChanged>(

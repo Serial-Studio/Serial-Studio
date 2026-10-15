@@ -1071,6 +1071,7 @@ void EditorForms::openAlarmBandsEditorForSelection()
     bands.append(entry);
   }
 
+  m_editor.m_alarmBandsDialogUniqueId = m_editor.m_selectedDataset.uniqueId;
   Q_EMIT m_editor.openAlarmBandsEditor(m_editor.m_selectedDataset.groupId,
                                        m_editor.m_selectedDataset.datasetId,
                                        range_min,
@@ -1118,7 +1119,8 @@ void EditorForms::openAlarmBandsEditorForMultiSelection()
   for (int i = 1; i < sel.size() && shared; ++i)
     shared = alarmBandsEqual(sel[i].alarmBands, firstBands);
 
-  const QVariantList bands = shared ? bandsToVariantList(firstBands) : QVariantList();
+  const QVariantList bands            = shared ? bandsToVariantList(firstBands) : QVariantList();
+  m_editor.m_alarmBandsDialogUniqueId = -1;
   Q_EMIT m_editor.openAlarmBandsEditor(-1, -1, range_min, range_max, bands);
 }
 
@@ -1145,6 +1147,7 @@ void EditorForms::openFrequencyMarkersEditorForSelection()
     markers.append(entry);
   }
 
+  m_editor.m_freqMarkersDialogUniqueId = m_editor.m_selectedDataset.uniqueId;
   Q_EMIT m_editor.openFrequencyMarkersEditor(
     m_editor.m_selectedDataset.groupId, m_editor.m_selectedDataset.datasetId, nyquist, markers);
 }

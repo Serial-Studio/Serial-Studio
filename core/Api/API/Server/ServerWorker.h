@@ -80,15 +80,21 @@ private:
   std::map<int, DataModel::FrameTemplate> m_templates;
 
 private slots:
+  void onSocketError();
   void onSocketReadyRead();
+  void onSocketBytesWritten();
   void onSocketDisconnected();
 
 private:
+  void releaseStreamAck(QTcpSocket* socket);
   [[nodiscard]] bool underWriteCap(QTcpSocket* socket);
   [[nodiscard]] bool dropBackloggedClient(QTcpSocket* socket, const QString& sessionId);
 
 private:
   QHash<QTcpSocket*, QString> m_sockets;
+
+  // Stream writes queued on a socket but not yet drained, with the session id their ack carries
+  QHash<QTcpSocket*, QString> m_streamAcks;
 
   // Sockets whose client opted out of the per-frame broadcast; empty for every ordinary client
   QSet<QTcpSocket*> m_mutedSockets;

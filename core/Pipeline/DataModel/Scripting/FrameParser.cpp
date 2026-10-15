@@ -808,6 +808,8 @@ void DataModel::FrameParser::collectGarbage()
 {
   for (auto it = m_engines.begin(); it != m_engines.end(); ++it)
     it->second->collectGarbage();
+
+  DataModel::pipelineModules().frameBuilder.tableStore().clearLookupCache();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -824,25 +826,33 @@ void DataModel::FrameParser::loadTemplateNames()
 }
 
 /**
- * @brief Loads the template at idx into the source and saves it to the project.
+ * @brief Loads the template at idx into the source and saves it to the project. The language
+ *        decision and engine mutation run on the owning pipeline thread (spec 0099 f6): reading
+ *        languageForSource / m_templates from the GUI thread raced the per-frame parse fallback.
  */
 void DataModel::FrameParser::setTemplateIdx(int sourceId, int idx)
 {
-  if (languageForSource(sourceId) == SerialStudio::Native) {
-    setNativeTemplateIdx(sourceId, idx);
-    return;
-  }
-
-  if (idx < 0 || idx >= m_templates.fileCount())
-    return;
-
-  bool loaded = false;
+  bool nativeDispatch = false;
+  bool loaded         = false;
   QString code;
   IO::PipelineHost::runOnObjectThread(this, [&] {
+    if (languageForSource(sourceId) == SerialStudio::Native) {
+      nativeDispatch = true;
+      return;
+    }
+
+    if (idx < 0 || idx >= m_templates.fileCount())
+      return;
+
     engineForSource(sourceId).templateIdx = idx;
     code                                  = templateCode(sourceId);
     loaded                                = loadScript(sourceId, code, !m_suppressMessageBoxes);
   });
+
+  if (nativeDispatch) {
+    setNativeTemplateIdx(sourceId, idx);
+    return;
+  }
 
   if (loaded) {
     IO::PipelineHost::runOnGuiThreadBlocking([&] {
@@ -888,8 +898,12 @@ void DataModel::FrameParser::setNativeTemplateIdx(int sourceId, int idx)
  */
 void DataModel::FrameParser::loadDefaultTemplate(int sourceId, bool guiTrigger)
 {
-  const bool native = (languageForSource(sourceId) == SerialStudio::Native);
-  const int idx     = native ? 0 : m_templates.defaultFileIndex();
+  int idx = 0;
+  IO::PipelineHost::runOnObjectThread(this, [&] {
+    const bool native = (languageForSource(sourceId) == SerialStudio::Native);
+    idx               = native ? 0 : m_templates.defaultFileIndex();
+  });
+
   setTemplateIdx(sourceId, idx);
 
   if (!guiTrigger) {

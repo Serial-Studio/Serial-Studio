@@ -214,6 +214,7 @@ private:
   CapturedData::SteadyClock::duration m_hwStampOffset;
 
   qsizetype m_batchedFrames;
+  quint64 m_nonDataFrames;
   QByteArray m_frameBatch;
   CapturedData::SteadyTimePoint m_batchFirstStamp;
   CapturedData::SteadyTimePoint m_batchLastStamp;

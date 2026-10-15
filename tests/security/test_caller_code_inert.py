@@ -292,7 +292,9 @@ class Sandbox:
                 self._read_register() == self.table_before
             ), f"{what}: caller code changed the live data-table variable"
 
-        assert not self._notification_seen(), f"{what}: caller code posted a notification"
+        assert (
+            not self._notification_seen()
+        ), f"{what}: caller code posted a notification"
 
     # -- code builders ------------------------------------------------------
 
@@ -601,7 +603,9 @@ def test_frame_parser_dry_run_reports_the_api_as_unavailable(
 
 
 @pytest.mark.parametrize("language", [JS, LUA], ids=["js", "lua"])
-def test_transform_dry_run_reports_the_api_as_unavailable(sandbox, api_client, language):
+def test_transform_dry_run_reports_the_api_as_unavailable(
+    sandbox, api_client, language
+):
     """apiCall answers {ok:false, error:'dryRun'} inside a transform."""
     code = sandbox.unavailable_probe(_UNAVAILABLE_TRANSFORM, language)
 
@@ -687,7 +691,9 @@ def test_project_validate_compiles_the_project_inert(
         api_client.command("project.loadJson", {"config": project})
     except APIError as error:
         if _is_consent_refusal(error):
-            pytest.skip(f"project.loadJson needs the script-change consent here: {error}")
+            pytest.skip(
+                f"project.loadJson needs the script-change consent here: {error}"
+            )
 
         raise
 

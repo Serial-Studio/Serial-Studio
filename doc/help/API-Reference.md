@@ -292,7 +292,7 @@ when the project is reopened.
 | Prompt | Who triggers it | Covers | Remembered |
 |--------|-----------------|--------|------------|
 | **Allow API device control?** | Remote API/MCP/gRPC clients | `io.writeData`, `io.ble.writeCharacteristic`, `console.send`, raw-mode bytes, and `project.action.update` / `project.action.duplicate` when the call changes an action's payload, target or arming | Per session |
-| **Allow API clients to modify project scripts?** | Remote API/MCP/gRPC clients | `controlScript.set`/`setCode`, `project.frameParser.setCode`, `project.source.setFrameParserCode`, `project.dataset.setTransformCode`, `project.transformLibrary.set`, `project.painter.setCode`, `extensions.install`, every command that loads a project (`project.loadJson`, `project.open`, `project.template.apply`, `assistant.restore`, `sessions.regress`, `sessions.verify`, `sessions.replay`), and `project.dataset.update` / `project.group.update` / `project.outputWidget.update` when the call carries `transformCode` / `painterCode` / `transmitFunction` | Per session |
+| **Allow API clients to modify project scripts?** | Remote API/MCP/gRPC clients | `controlScript.set`/`setCode`, `project.frameParser.setCode`, `project.source.setFrameParserCode`, `project.dataset.setTransformCode`, `project.transformLibrary.set`, `project.painter.setCode`, `extensions.install`, `extensions.addRepository`, every command that loads a project (`project.loadJson`, `project.open`, `project.template.apply`, `assistant.restore`, `sessions.regress`, `sessions.verify`, `sessions.replay`), and `project.dataset.update` / `project.group.update` / `project.outputWidget.update` when the call carries `transformCode` / `painterCode` / `transmitFunction` | Per session |
 | **Allow this project to launch programs?** | Any script calling `system.exec`, including the project's own control script, and any Process I/O source starting its program, whoever chose the program | `system.exec`, and the Launch-mode start of a Process I/O source | Per project file; session-only for a project without a file |
 
 Project scripts run with the application's full privileges: a script installed over the API
@@ -335,7 +335,7 @@ script-changes prompt only when the call carries `transformCode`.
 | Class | Examples | What a remote client needs |
 |-------|----------|----------------------------|
 | Reads, and settings that change nothing that runs | `io.getStatus`, `dashboard.setFps`, `io.uart.setBaudRate` | No prompt |
-| Installs script code | `project.frameParser.setCode`, `controlScript.set`, `project.dataset.setTransformCode`, `extensions.install` | Script-changes prompt |
+| Installs script code | `project.frameParser.setCode`, `controlScript.set`, `project.dataset.setTransformCode`, `extensions.install`, `extensions.addRepository` | Script-changes prompt |
 | Loads a project | `project.open`, `project.loadJson`, `project.template.apply`, `assistant.restore`, `sessions.regress`, `sessions.verify`, `sessions.replay` | Script-changes prompt |
 | Writes to a device | `io.writeData`, `console.send`, `io.ble.writeCharacteristic` | Device-control prompt |
 | Chooses the program a source starts | `io.process.setExecutable`, `io.process.setArguments`, `io.process.setWorkingDir`, `io.process.setMode`, `io.setBusType` switching to Process, `project.source.setProperty` with a program key | No prompt at the call; the first such change in a session clears the project's launch consent, so the next start asks |

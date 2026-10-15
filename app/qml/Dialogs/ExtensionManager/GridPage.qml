@@ -221,7 +221,7 @@ Item {
 
                   const base = modelData._repoBase || ""
                   if (modelData._isLocal)
-                    return "file://" + base + ss
+                    return (base.startsWith("/") ? "file://" : "file:///") + base + ss
 
                   return base + ss
                 }

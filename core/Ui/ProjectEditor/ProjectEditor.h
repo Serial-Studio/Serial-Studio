@@ -479,12 +479,12 @@ public slots:
   void openTransformEditorFor(int groupId, int datasetId);
   void setSuppressViewChange(bool suppress) noexcept;
   void openAlarmBandsEditorForSelection();
-  void commitAlarmBands(const QVariantList& bands);
+  void commitAlarmBands(int groupId, int datasetId, const QVariantList& bands);
   void openChannelSoundsEditorForProject();
   void commitChannelSounds(const QVariantList& rows);
   void setProjectSoundSequence(const QString& letter);
   void openFrequencyMarkersEditorForSelection();
-  void commitFrequencyMarkers(const QVariantList& markers);
+  void commitFrequencyMarkers(int groupId, int datasetId, const QVariantList& markers);
   void changeDatasetOptionForSelection(int option, bool checked);
 
   Q_INVOKABLE [[nodiscard]] bool moveCurrentGroup(int direction);
@@ -492,6 +492,7 @@ public slots:
   Q_INVOKABLE [[nodiscard]] bool moveCurrentAction(int direction);
   Q_INVOKABLE [[nodiscard]] bool moveCurrentOutputWidget(int direction);
   Q_INVOKABLE [[nodiscard]] bool moveWorkspace(int workspaceId, int direction);
+  Q_INVOKABLE [[nodiscard]] QString groupWidgetRole(int groupId) const;
 
 private slots:
   void appendExtensionWidgets();
@@ -570,6 +571,9 @@ private:
   DataModel::Source m_selectedSource;
   DataModel::Dataset m_selectedDataset;
   DataModel::OutputWidget m_selectedOutputWidget;
+
+  int m_alarmBandsDialogUniqueId;
+  int m_freqMarkersDialogUniqueId;
 
   CustomModel* m_treeModel;
   QItemSelectionModel* m_selectionModel;

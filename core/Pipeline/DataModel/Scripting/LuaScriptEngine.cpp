@@ -150,6 +150,14 @@ struct EngineBootstrapCtx {
  */
 static int bootstrapInertEngineState(lua_State* L, EngineBootstrapCtx* ctx)
 {
+  // code-verify off
+  // The caller supplied this code with no consent (spec 0098), so drop the runtime string
+  // loaders too: openSafeLibs already removed load/dofile/loadfile/string.dump, this adds the
+  // LuaJIT 5.1 loadstring, and the top-level chunk is loaded text-only below.
+  lua_pushnil(L);
+  lua_setglobal(L, "loadstring");
+  // code-verify on
+
   DataModel::installLuaCompat(L);
   if (!ctx->inert->installLua(L))
     return luaL_error(L, "the dry-run surface did not verify");
@@ -659,10 +667,11 @@ bool DataModel::LuaScriptEngine::loadScript(const QString& script,
   }
 
   try {
-    const QByteArray utf8 = script.toUtf8();
-    const auto fileName   = QStringLiteral("parser_%1.lua").arg(sourceId).toUtf8();
+    const QByteArray utf8  = script.toUtf8();
+    const auto fileName    = QStringLiteral("parser_%1.lua").arg(sourceId).toUtf8();
+    const char* const mode = m_inert ? "t" : nullptr;
     const int status =
-      luaL_loadbuffer(m_state, utf8.constData(), utf8.size(), fileName.constData());
+      luaL_loadbufferx(m_state, utf8.constData(), utf8.size(), fileName.constData(), mode);
     if (status != LUA_OK) {
       const QString errorMsg =
         enrichSyntaxError(QString::fromUtf8(lua_tostring(m_state, -1)), script);

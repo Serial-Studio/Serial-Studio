@@ -184,6 +184,14 @@ Widgets.SmartDialog {
     root.requestActivate()
   }
 
+  function parseDecimal(text) {
+    try {
+      return Number.fromLocaleString(Qt.locale(), text)
+    } catch (e) {
+      return NaN
+    }
+  }
+
   function loadBands(arr) {
     bandsModel.clear()
     if (!arr)
@@ -563,7 +571,7 @@ Widgets.SmartDialog {
                   Layout.alignment: Qt.AlignVCenter
                   validator: DoubleValidator { bottom: -1e12; top: 1e12 }
                   onEditingFinished: {
-                    const v = Number(text)
+                    const v = root.parseDecimal(text)
                     if (!isNaN(v))
                       bandsModel.setProperty(bandRow.index, "bandMin", v)
                   }
@@ -576,7 +584,7 @@ Widgets.SmartDialog {
                   Layout.alignment: Qt.AlignVCenter
                   validator: DoubleValidator { bottom: -1e12; top: 1e12 }
                   onEditingFinished: {
-                    const v = Number(text)
+                    const v = root.parseDecimal(text)
                     if (!isNaN(v))
                       bandsModel.setProperty(bandRow.index, "bandMax", v)
                   }
@@ -905,7 +913,8 @@ Widgets.SmartDialog {
         icon.source: "qrc:/icons/buttons/apply.svg"
         ToolTip.text: qsTr("Apply changes to the dataset.")
         onClicked: {
-          Cpp_JSON_ProjectEditor.commitAlarmBands(root.collectBands())
+          forceActiveFocus()
+          Cpp_JSON_ProjectEditor.commitAlarmBands(root.groupId, root.datasetId, root.collectBands())
           root.close()
         }
       }

@@ -171,6 +171,7 @@ private:
   QDeadlineTimer m_luaDeadline;
   DataModel::LuaMemoryBudget m_luaBudget;
   bool m_inBlock;
+  bool m_teardownPending;
   bool m_jsTimedOut;
   bool m_luaTableArmed;
   bool m_jsTableArmed;

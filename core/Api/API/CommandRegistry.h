@@ -154,6 +154,7 @@ public:
 
 private:
   CommandResponse buildUnknownCommandResponse(const QString& name, const QString& id) const;
+  [[nodiscard]] bool commandHonorsDryRun(const QString& name) const;
   void attachErrorMetadata(const QString& name, CommandResponse& response) const;
   static QString classifyErrorCategory(const QString& commandName, const CommandResponse& response);
   static QString dryRunHintForScriptCommand(const QString& commandName);

@@ -78,30 +78,39 @@ void API::Handlers::ProjectBatchCommands::registerCommands()
       "    {command:'project.dataset.update', params:{groupId:0, datasetId:1, title:'LED 2', index:2}},\n"
       "    ...\n"
       "  ]"),
-    makeSchema({
-      arrayProp(
-        QStringLiteral("ops"),
-        QStringLiteral("Array of {command, params} ops to execute sequentially. Max 1024."),
-        QJsonObject{
-                    {QStringLiteral("type"), QStringLiteral("object")},
-                    {QStringLiteral("properties"),
-           QJsonObject{
-             {QStringLiteral("command"),
-              QJsonObject{{QStringLiteral("type"), QStringLiteral("string")},
-                          {QStringLiteral("description"),
-                           QStringLiteral("Registered command name (e.g. "
-                                          "'project.dataset.update'). Not "
-                                          "'project.batch' -- nested batches are rejected.")}}},
-             {QStringLiteral("params"),
-              QJsonObject{{QStringLiteral("type"), QStringLiteral("object")},
-                          {QStringLiteral("description"),
-                           QStringLiteral(
-                             "Arguments object for the command, exactly "
-                             "what you would pass at the top level if calling it directly.")}}}}},
-                    {QStringLiteral("required"),
-           QJsonArray{QStringLiteral("command"), QStringLiteral("params")}}}
-        )
-  }),
+    makeSchema(
+      {
+        arrayProp(
+          QStringLiteral("ops"),
+          QStringLiteral("Array of {command, params} ops to execute sequentially. Max 1024."),
+          QJsonObject{
+                      {QStringLiteral("type"), QStringLiteral("object")},
+                      {QStringLiteral("properties"),
+             QJsonObject{
+               {QStringLiteral("command"),
+                QJsonObject{{QStringLiteral("type"), QStringLiteral("string")},
+                            {QStringLiteral("description"),
+                             QStringLiteral("Registered command name (e.g. "
+                                            "'project.dataset.update'). Not "
+                                            "'project.batch' -- nested batches are rejected.")}}},
+               {QStringLiteral("params"),
+                QJsonObject{{QStringLiteral("type"), QStringLiteral("object")},
+                            {QStringLiteral("description"),
+                             QStringLiteral(
+                               "Arguments object for the command, exactly "
+                               "what you would pass at the top level if calling it directly.")}}}}},
+                      {QStringLiteral("required"),
+             QJsonArray{QStringLiteral("command"), QStringLiteral("params")}}}
+          )
+  },
+      {{QStringLiteral("dryRun"),
+        QStringLiteral("boolean"),
+        QStringLiteral("Preview every op without committing; each op's result still carries its "
+                       "affected-entity payload.")},
+       {QStringLiteral("stopOnError"),
+        QStringLiteral("boolean"),
+        QStringLiteral(
+          "Abort the batch on the first failure (default false: all ops attempted).")}}),
     &projectBatch);
 }
 

@@ -46,6 +46,12 @@ namespace CSV {
 class Export;
 
 /**
+ * @brief Escapes one CSV field per RFC 4180 and neutralizes leading formula-injection chars;
+ *        shared by the live recorder and the Historian's session export.
+ */
+[[nodiscard]] QString escapeCsvField(const QString& s);
+
+/**
  * @brief Worker that performs CSV file I/O on a background thread. One file per session carries
  *        every source (spec 0055 R6): rows are SPARSE -- one row per distinct sample instant, with
  *        cells filled only for the datasets sampled at that instant and nothing forward-filled --
@@ -150,11 +156,15 @@ private slots:
   void onWorkerOpenChanged();
 
 private:
+  void refreshTemplateFrame();
+
+private:
   QSettings m_settings;
   std::atomic<bool> m_isOpen;
   bool m_persistSettings;
   int m_exportInterval;
   Core::Bus::MessageBus* m_bus;
   Core::Bus::Subscription m_operationModeWatch;
+  DataModel::Frame m_sessionStructure;
 };
 }  // namespace CSV

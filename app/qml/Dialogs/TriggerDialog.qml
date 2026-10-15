@@ -56,6 +56,21 @@ Widgets.SmartDialog {
   preferredHeight: layout.implicitHeight
 
   //
+  // Parse and format decimals the way the locale-aware validators read them; NaN on bad input
+  //
+  function parseDecimal(text) {
+    try {
+      return Number.fromLocaleString(Qt.locale(), text)
+    } catch (e) {
+      return NaN
+    }
+  }
+
+  function formatDecimal(text) {
+    return text.replace(".", Qt.locale().decimalPoint)
+  }
+
+  //
   // Display the dialog and load information from the data model pointer
   //
   function openDialog(dataModel, multiPlot) {
@@ -63,7 +78,7 @@ Widgets.SmartDialog {
     root.isMultiPlot = multiPlot === true
 
     if (root.model) {
-      levelField.text = root.model.triggerLevel.toFixed(4)
+      levelField.text = root.formatDecimal(root.model.triggerLevel.toFixed(4))
       holdoffField.text = root.model.holdoff.toFixed(0)
       timebaseField.text = root.model.sweepTimebase > 0
                            ? root.model.sweepTimebase.toFixed(0)
@@ -90,7 +105,7 @@ Widgets.SmartDialog {
 
     function onSweepChanged() {
       if (root.model && !levelField.activeFocus)
-        levelField.text = root.model.triggerLevel.toFixed(4)
+        levelField.text = root.formatDecimal(root.model.triggerLevel.toFixed(4))
     }
   }
 
@@ -232,8 +247,9 @@ Widgets.SmartDialog {
           onTextChanged: {
             if (activeFocus && acceptableInput && root.model)
               Qt.callLater(function() {
-                if (root.model)
-                  root.model.triggerLevel = parseFloat(levelField.text)
+                const level = root.parseDecimal(levelField.text)
+                if (root.model && !isNaN(level))
+                  root.model.triggerLevel = level
               })
           }
         }
@@ -334,10 +350,11 @@ Widgets.SmartDialog {
             onTextChanged: {
               if (activeFocus && root.model)
                 Qt.callLater(function() {
-                  if (root.model)
-                    root.model.sweepTimebase = timebaseField.text.length > 0
-                                               ? parseFloat(timebaseField.text)
-                                               : 0
+                  const timebase = timebaseField.text.length > 0
+                                   ? root.parseDecimal(timebaseField.text)
+                                   : 0
+                  if (root.model && !isNaN(timebase))
+                    root.model.sweepTimebase = timebase
                 })
             }
           }
@@ -366,8 +383,9 @@ Widgets.SmartDialog {
             onTextChanged: {
               if (activeFocus && acceptableInput && root.model)
                 Qt.callLater(function() {
-                  if (root.model)
-                    root.model.holdoff = parseFloat(holdoffField.text)
+                  const holdoff = root.parseDecimal(holdoffField.text)
+                  if (root.model && !isNaN(holdoff))
+                    root.model.holdoff = holdoff
                 })
             }
           }

@@ -418,7 +418,8 @@ API::CommandResponse API::CommandRegistry::execute(const QString& name,
   if (const auto rejected = rejectDisallowedPaths(m_commands[name].pathParams, id, params))
     return *rejected;
 
-  const bool isDryRun = params.value(QStringLiteral("dryRun")).toBool(false);
+  const bool isDryRun =
+    commandHonorsDryRun(name) && params.value(QStringLiteral("dryRun")).toBool(false);
   QString preMutationBackup;
   if (!isDryRun && ExecuteDepthGuard::depth() == 0 && destructiveCommandSet().contains(name)) {
     SS_ASSERT_LOG(m_checkpoints != nullptr);
@@ -459,6 +460,21 @@ API::CommandResponse API::CommandRegistry::execute(const QString& name,
     return CommandResponse::makeError(
       id, ErrorCode::ExecutionError, QStringLiteral("Command execution failed: unknown exception"));
   }
+}
+
+/**
+ * @brief Whether a command honours a dryRun param, true only when its schema declares one: a stray
+ *        dryRun on a command that ignores it must not skip the checkpoint, autosave and re-sync
+ *        while the mutation still lands (spec 0099 f13). The schema is where params are declared,
+ *        so this cannot drift from the handler the way a parallel descriptor flag would.
+ */
+bool API::CommandRegistry::commandHonorsDryRun(const QString& name) const
+{
+  const auto it = m_commands.constFind(name);
+  SS_ASSERT(it != m_commands.cend(), return false);
+  return it->inputSchema.value(QStringLiteral("properties"))
+    .toObject()
+    .contains(QStringLiteral("dryRun"));
 }
 
 /**

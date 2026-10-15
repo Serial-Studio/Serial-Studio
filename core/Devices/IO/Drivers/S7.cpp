@@ -23,13 +23,17 @@
 #include "IO/Drivers/S7.h"
 
 #include <chrono>
+#include <functional>
 #include <QDebug>
 #include <QElapsedTimer>
+#include <QEventLoop>
 #include <QHash>
 #include <QJsonDocument>
+#include <QPointer>
 #include <QSet>
 #include <QStringList>
 #include <QTcpSocket>
+#include <QTimer>
 
 #include "Core/Prompt/UserPrompt.h"
 #include "Core/SerialStudio.h"
@@ -49,6 +53,80 @@ static constexpr int kS7MaxReadRounds     = 64;
 static constexpr int kS7MaxReceiveBytes   = 65536;
 static constexpr int kS7FaultIndexShift   = 8;
 static constexpr int kS7JoinTimeoutMs     = 5000;
+static constexpr int kS7WaitSliceMs       = 50;
+
+//--------------------------------------------------------------------------------------------------
+// Sliced socket waits
+//--------------------------------------------------------------------------------------------------
+
+/**
+ * @brief Waits for readyRead in short slices that sum to @p timeoutMs, so a cancel lands within one
+ *        slice instead of after the whole deadline. A slice that only timed out keeps waiting; a
+ *        closed socket or any other socket error ends the wait at once, as the single wait did.
+ */
+[[nodiscard]] static bool waitReadySliced(QTcpSocket* socket,
+                                          int timeoutMs,
+                                          const std::function<bool()>& cancelled)
+{
+  SS_ASSERT(socket != nullptr, return false);
+  SS_ASSERT_LOG(timeoutMs > 0);
+
+  QElapsedTimer clock;
+  clock.start();
+  while (!clock.hasExpired(timeoutMs)) {
+    if (cancelled() || socket->state() != QAbstractSocket::ConnectedState)
+      return false;
+
+    const auto left = qMax<qint64>(1, timeoutMs - clock.elapsed());
+    if (socket->waitForReadyRead(static_cast<int>(qMin<qint64>(left, kS7WaitSliceMs))))
+      return true;
+
+    if (socket->error() != QAbstractSocket::SocketTimeoutError)
+      return false;
+  }
+
+  return false;
+}
+
+/**
+ * @brief Waits for the socket to connect on a nested loop so a cancel lands within one tick, not at
+ *        the dial deadline (waitForConnected can't be sliced -- Qt aborts the connect each timeout,
+ *        and blocking it starves doClose's BlockingQueuedConnection teardown). The socket is a
+ *        QPointer because that teardown deletes it mid-loop (spec 0099 f5); false on abort/error.
+ */
+[[nodiscard]] static bool awaitConnectedSliced(QTcpSocket* socket,
+                                               int timeoutMs,
+                                               const std::function<bool()>& cancelled)
+{
+  SS_ASSERT(socket != nullptr, return false);
+  SS_ASSERT_LOG(timeoutMs > 0);
+
+  if (socket->state() == QAbstractSocket::ConnectedState)
+    return true;
+
+  if (cancelled() || socket->state() == QAbstractSocket::UnconnectedState)
+    return false;
+
+  QPointer<QTcpSocket> guard(socket);
+  QEventLoop loop;
+  QObject::connect(socket, &QTcpSocket::connected, &loop, &QEventLoop::quit);
+  QObject::connect(socket, &QTcpSocket::errorOccurred, &loop, &QEventLoop::quit);
+
+  QTimer deadline;
+  deadline.setSingleShot(true);
+  QObject::connect(&deadline, &QTimer::timeout, &loop, &QEventLoop::quit);
+  deadline.start(timeoutMs);
+
+  QTimer tick;
+  QObject::connect(&tick, &QTimer::timeout, &loop, [&loop, &guard, &cancelled] {
+    if (!guard || cancelled())
+      loop.quit();
+  });
+  tick.start(kS7WaitSliceMs);
+
+  loop.exec();
+  return guard && guard->state() == QAbstractSocket::ConnectedState;
+}
 
 //--------------------------------------------------------------------------------------------------
 // Poll worker
@@ -137,8 +215,16 @@ bool IO::Drivers::S7PollWorker::dial()
 
   m_socket = new QTcpSocket(this);
   m_socket->connectToHost(m_host, S7Comm::kIsoTsapPort);
-  if (!m_socket->waitForConnected(kS7DialDeadlineMs)) {
-    noteDialError(m_socket->errorString());
+  if (!awaitConnectedSliced(m_socket, kS7DialDeadlineMs, [this] { return aborted(); })) {
+    if (m_socket) {
+      const QString reason =
+        aborted() ? tr("The connection was cancelled")
+        : (m_socket->error() == QAbstractSocket::UnknownSocketError)
+          ? tr("The controller did not answer within %1 s").arg(kS7DialDeadlineMs / 1000)
+          : m_socket->errorString();
+      noteDialError(reason);
+    }
+
     return false;
   }
 
@@ -202,14 +288,18 @@ bool IO::Drivers::S7PollWorker::sendPdu(const QByteArray& pdu)
 
 /**
  * @brief Blocks until one complete TPKT has arrived and hands back the TPDU inside it. Each round
- *        drains whatever the socket already holds BEFORE it waits: the worker's event loop may
- *        have buffered the answer between ticks, and waiting on data that already arrived would
- *        hang the poll until the deadline. A malformed packet is terminal and cannot be resynced.
+ *        drains what the socket already holds BEFORE it waits, since an answer buffered between
+ *        ticks would otherwise hang the poll until the deadline. The wait is sliced so an abort
+ *        lands within one slice; a malformed packet is terminal and cannot be resynced.
  */
 bool IO::Drivers::S7PollWorker::readTpdu(QByteArray& tpdu, int timeoutMs)
 {
   SS_ASSERT(m_socket != nullptr, return false);
   SS_ASSERT_LOG(timeoutMs > 0);
+
+  const std::function<bool()> isAborted = [this] {
+    return aborted();
+  };
 
   QElapsedTimer clock;
   clock.start();
@@ -231,7 +321,7 @@ bool IO::Drivers::S7PollWorker::readTpdu(QByteArray& tpdu, int timeoutMs)
     }
 
     const auto left = timeoutMs - clock.elapsed();
-    if (left <= 0 || !m_socket->waitForReadyRead(static_cast<int>(left)))
+    if (left <= 0 || !waitReadySliced(m_socket, static_cast<int>(left), isAborted))
       return false;
   }
 

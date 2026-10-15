@@ -172,9 +172,9 @@ bool IO::Drivers::SerialCanBackendBase::openReplyIsError(const QByteArray& reply
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Opens the port and puts the adapter on the bus. The verdict reads the adapter's answer
- *        rather than the byte count of the init write: a refused bitrate used to look like a
- *        successful connect until the first frame never arrived.
+ * @brief Opens the port and puts the adapter on the bus. The verdict reads the adapter's answer,
+ *        not the init write's byte count. readyRead is wired only after the ack is read: wired
+ *        earlier it fires inside waitForReadyRead and drains the reply before the check sees it.
  */
 bool IO::Drivers::SerialCanBackendBase::open()
 {
@@ -198,7 +198,6 @@ bool IO::Drivers::SerialCanBackendBase::open()
     return false;
   }
 
-  connect(m_port, &QSerialPort::readyRead, this, &SerialCanBackendBase::onReadyRead);
   connect(m_port, &QSerialPort::errorOccurred, this, &SerialCanBackendBase::onSerialError);
 
   if (!sendInit(bitrate)) {
@@ -222,6 +221,7 @@ bool IO::Drivers::SerialCanBackendBase::open()
     appendBounded(m_rxBuffer, reply, m_bufferOverflows);
   }
 
+  connect(m_port, &QSerialPort::readyRead, this, &SerialCanBackendBase::onReadyRead);
   setState(QCanBusDevice::ConnectedState);
   return true;
 }

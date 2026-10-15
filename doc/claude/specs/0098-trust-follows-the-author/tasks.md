@@ -618,24 +618,39 @@ updated: 2026-10-14
 
 ## Review follow-ups (qt-cpp-review, 2026-10-14)
 
-Applied: the approval card always lists ops stricter than Confirm; the web card's labels are
-translated; the transform editor's unpaired table-API leases and live-store refresh are gone;
-Painter keeps its surface alive on install failure; the scratch store no longer reads the GUI
-mirror; one endToEnd call shares one surface; the two project strips share one core; a denied
-launch clears its pending reconnect; inert Lua closes no longer marshal into the pipeline; every
-dispatch scope shadows a caller's policy; an unbound launch authorizer refuses without aborting;
-the R13 signal is `remoteProgramChanged`.
+Applied in the first pass: the approval card always lists ops stricter than Confirm; the web
+card's labels are translated; the transform editor's unpaired table-API leases and live-store
+refresh are gone; Painter keeps its surface alive on install failure; the scratch store no longer
+reads the GUI mirror; one endToEnd call shares one surface; the two project strips share one core;
+a denied launch clears its pending reconnect; inert Lua closes no longer marshal into the
+pipeline; every dispatch scope shadows a caller's policy; an unbound launch authorizer refuses
+without aborting; the R13 signal is `remoteProgramChanged`.
 
-Open, for the maintainer to decide (not changed in this session):
-- Lua dry-run sandboxes still allow loading precompiled chunks; they should accept text only.
-- `extensions.addRepository` (with auto-update) is classified plain; the assistant tiers already
-  treat it as always-confirm.
-- The assistant tiers judge generic source setters by name only, so a program change through
-  them is Confirm while the dedicated `io.process.*` setters are device-gated.
-- Script setters the assistant uses are Confirm, and installed code then runs with full trust.
-- R13's once-per-session clear can be spent by a harmless change before a harmful one.
-- `assistant.script.apply` / addTile fan-out lists duplicate their tools' lists (drift risk only;
-  the runtime policy re-checks every nested call).
+Applied in the second pass (adversarial findings; protected surface, named in chat before
+landing):
+- **Lua sandboxes accept text only.** The inert engine and `ScriptDryRun` load their top-level
+  chunk with `luaL_loadbufferx(..., "t")` and drop `loadstring` (`load`/`dofile`/`loadfile`/
+  `string.dump` were already gone), so dry-run code cannot load a precompiled chunk. The live,
+  user-authored path keeps the default loader. Confirmed the "t" mode rejects a binary chunk in
+  the bundled LuaJIT.
+- **`extensions.addRepository` is `InstallsScript`.** With auto-update on, adding a repository can
+  replace installed extension code, so a remote add now needs the script-change consent (locked
+  by `tst_server_auth`).
+- **Assistant tiers are argument-aware for program choice.** `argumentAwareSafety` escalates a
+  call whose arguments pick a program or write to a device to the device-gated treatment, so a
+  generic `project.source.setProperty{key:"executable"}` is gated like `io.process.setExecutable`.
+  Used by both the card tier and the runtime nested re-check.
+- **Script setters are always-confirm for the assistant.** The parser/transform/library/painter
+  setters move to `alwaysConfirm`, beside `controlScript.setCode`, so an auto-approve cannot run a
+  full-trust install silently.
+
+Open, for the maintainer to decide (not changed; each a decision already made or a larger design):
+- R13's once-per-session clear can be spent by a harmless program change before a harmful one,
+  because launch consent is per project, not per program (the model chosen on 2026-10-14). Closing
+  it means per-program consent, which the spec did not take.
+- The `assistant.script.apply` / addTile fan-out lists restate their tools' command lists (drift
+  risk only; the runtime policy re-checks every nested call, and the capability sweep covers the
+  names).
 
 ## Definition of Done
 

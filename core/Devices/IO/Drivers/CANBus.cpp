@@ -128,6 +128,7 @@ IO::Drivers::CANBus::CANBus()
   , m_hwStampAnchored(false)
   , m_hwStampOffset(CapturedData::SteadyClock::duration::zero())
   , m_batchedFrames(0)
+  , m_nonDataFrames(0)
 {
   m_pluginList = enumerateCanPlugins();
 
@@ -546,6 +547,7 @@ QVariantMap IO::Drivers::CANBus::reassemblyCounters() const
   map.insert(QStringLiteral("isotp"), reassemblyCountersMap(m_isoTp.counters()));
   map.insert(QStringLiteral("j1939Sessions"), m_j1939.activeSessions());
   map.insert(QStringLiteral("isotpSessions"), m_isoTp.activeSessions());
+  map.insert(QStringLiteral("nonDataFrames"), m_nonDataFrames);
   return map;
 }
 
@@ -822,6 +824,11 @@ void IO::Drivers::CANBus::onFramesReceived()
 
       if (!frame.isValid())
         continue;
+
+      if (frame.frameType() != QCanBusFrame::DataFrame) {
+        ++m_nonDataFrames;
+        continue;
+      }
 
       const QByteArray payload = frame.payload();
       if (payload.size() > 64)

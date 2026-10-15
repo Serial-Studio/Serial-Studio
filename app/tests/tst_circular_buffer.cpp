@@ -66,6 +66,7 @@ private slots:
 
   void setCapacityRoundsAndClears();
   void overflowingAppendCountsTheLostBytes();
+  void exactlyFullChunkIsNotDroppedAsEmpty();
   void oversizedAppendKeepsTheTailOfTheChunk();
 
   void peekRangeIntoReusesTheCallerBuffer();
@@ -263,9 +264,9 @@ void TstCircularBuffer::setCapacityRoundsAndClears()
 }
 
 /**
- * @brief An append that outruns the free space counts every overwritten byte. The ring encodes
- *        "full" and "empty" identically (head == tail), so an overflowing append also leaves
- *        size() reading zero -- the reader's overflow branch exists because of exactly that.
+ * @brief An append that outruns the free space counts every overwritten byte and keeps the ring
+ *        full of the newest bytes. One slot is reserved (spec 0099 f2), so a full ring holds
+ *        capacity - 1 bytes and never reads back as empty.
  */
 void TstCircularBuffer::overflowingAppendCountsTheLostBytes()
 {
@@ -276,8 +277,9 @@ void TstCircularBuffer::overflowingAppendCountsTheLostBytes()
   QCOMPARE(buffer.overflowCount(), qsizetype(0));
 
   buffer.append(QByteArray("ab"));
-  QCOMPARE(buffer.overflowCount(), qsizetype(1));
-  QCOMPARE(buffer.size(), qsizetype(0));
+  QCOMPARE(buffer.overflowCount(), qsizetype(2));
+  QCOMPARE(buffer.size(), qsizetype(7));
+  QCOMPARE(buffer.read(7), QByteArray("34567ab"));
 
   buffer.resetOverflowCount();
   QCOMPARE(buffer.overflowCount(), qsizetype(0));
@@ -293,10 +295,29 @@ void TstCircularBuffer::oversizedAppendKeepsTheTailOfTheChunk()
   buffer.append(QByteArray(20, 'z'));
 
   QCOMPARE(buffer.capacity(), qsizetype(8));
-  QCOMPARE(buffer.overflowCount(), qsizetype(12));
+  QCOMPARE(buffer.overflowCount(), qsizetype(13));
+  QCOMPARE(buffer.size(), qsizetype(7));
 
   buffer.clear();
   QCOMPARE(buffer.overflowCount(), qsizetype(0));
+}
+
+/**
+ * @brief A chunk that fills the ring to the byte is kept, not silently dropped (spec 0099 f2).
+ *        On the pre-fix code this appended capacity bytes, wrapped tail onto head, and read back
+ *        size() == 0 with overflowCount 0 -- total silent loss; the reserve-one ring keeps the
+ *        newest capacity - 1 bytes and reports them.
+ */
+void TstCircularBuffer::exactlyFullChunkIsNotDroppedAsEmpty()
+{
+  IO::CircularBuffer<QByteArray, char> buffer(8);
+
+  buffer.append(QByteArray("ABCDEFGH"));
+
+  QCOMPARE(buffer.size(), qsizetype(7));
+  QCOMPARE(buffer.overflowCount(), qsizetype(1));
+  QCOMPARE(buffer.read(7), QByteArray("BCDEFGH"));
+  QCOMPARE(buffer.size(), qsizetype(0));
 }
 
 //--------------------------------------------------------------------------------------------------

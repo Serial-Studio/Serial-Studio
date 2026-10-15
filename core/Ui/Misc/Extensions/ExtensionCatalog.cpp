@@ -333,12 +333,15 @@ QJsonObject Misc::ExtensionCatalog::resolvePlatform(const QJsonObject& meta,
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Reports whether an identifier may be used as a single install-path component: anything
- *        carrying a separator or a parent reference is refused before it reaches the filesystem.
+ * @brief Reports whether an identifier may be used as a single install-path component: an empty
+ *        string, "." or a name carrying a separator or parent reference is refused before it
+ *        reaches the filesystem, so a recursive delete can never resolve to the parent directory.
  */
 bool Misc::ExtensionCatalog::isSafePathComponent(const QString& component)
 {
-  return !component.contains("..") && !component.contains('/') && !component.contains('\\');
+  return !component.isEmpty() && component != QLatin1String(".")
+      && !component.contains(QLatin1String("..")) && !component.contains('/')
+      && !component.contains('\\');
 }
 
 /**

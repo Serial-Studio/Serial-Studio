@@ -34,6 +34,7 @@
 #include <QSortFilterProxyModel>
 #include <QString>
 #include <QStringList>
+#include <QUrl>
 #include <QVariantList>
 #include <vector>
 
@@ -156,7 +157,7 @@ public:
   [[nodiscard]] Q_INVOKABLE QByteArray payloadBytes(int cls, int maxBytes) const;
   [[nodiscard]] Q_INVOKABLE QString payloadHex(int cls, int maxBytes) const;
   [[nodiscard]] Q_INVOKABLE QString payloadText(int cls, int maxBytes) const;
-  [[nodiscard]] Q_INVOKABLE bool exportCsv(const QString& path) const;
+  [[nodiscard]] Q_INVOKABLE bool exportCsv(const QUrl& url) const;
 
   void reset();
   void commitPending();

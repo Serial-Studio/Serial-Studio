@@ -1284,27 +1284,34 @@ void API::Handlers::AssistantHandler::registerCheckpointCommands()
                    "level to preview every op without committing -- forwarded to "
                    "project.batch which rejects the dryRun when any op is not in the "
                    "dryRun-aware command set."),
-    API::makeSchema({
-      API::arrayProp(
-        QStringLiteral("ops"),
-        QStringLiteral("Array of {command, params} ops. Max 1024. Nested "
-                       "project.batch / assistant.project.bulkApply rejected."),
-        QJsonObject{
-                    {QStringLiteral("type"), QStringLiteral("object")},
-                    {QStringLiteral("properties"),
-           QJsonObject{{QStringLiteral("command"),
-                        QJsonObject{{QStringLiteral("type"), QStringLiteral("string")},
-                                    {QStringLiteral("description"),
-                                     QStringLiteral("Registered command name (e.g. "
-                                                    "'project.dataset.update').")}}},
-                       {QStringLiteral("params"),
-                        QJsonObject{{QStringLiteral("type"), QStringLiteral("object")},
-                                    {QStringLiteral("description"),
-                                     QStringLiteral("Arguments object for the command.")}}}}},
-                    {QStringLiteral("required"),
-           QJsonArray{QStringLiteral("command"), QStringLiteral("params")}}}
-        )
-  }),
+    API::makeSchema(
+      {
+        API::arrayProp(
+          QStringLiteral("ops"),
+          QStringLiteral("Array of {command, params} ops. Max 1024. Nested "
+                         "project.batch / assistant.project.bulkApply rejected."),
+          QJsonObject{
+                      {QStringLiteral("type"), QStringLiteral("object")},
+                      {QStringLiteral("properties"),
+             QJsonObject{{QStringLiteral("command"),
+                          QJsonObject{{QStringLiteral("type"), QStringLiteral("string")},
+                                      {QStringLiteral("description"),
+                                       QStringLiteral("Registered command name (e.g. "
+                                                      "'project.dataset.update').")}}},
+                         {QStringLiteral("params"),
+                          QJsonObject{{QStringLiteral("type"), QStringLiteral("object")},
+                                      {QStringLiteral("description"),
+                                       QStringLiteral("Arguments object for the command.")}}}}},
+                      {QStringLiteral("required"),
+             QJsonArray{QStringLiteral("command"), QStringLiteral("params")}}}
+          )
+  },
+      {{QStringLiteral("dryRun"),
+        QStringLiteral("boolean"),
+        QStringLiteral("Preview every op without committing; forwarded to project.batch.")},
+       {QStringLiteral("stopOnError"),
+        QStringLiteral("boolean"),
+        QStringLiteral("Abort the batch on the first failure (default false).")}}),
     &API::Handlers::AssistantHandler::projectBulkApply);
 }
 

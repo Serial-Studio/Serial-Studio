@@ -8,6 +8,7 @@
 
 #include "AI/FileSandbox.h"
 
+#include <QCoreApplication>
 #include <QDir>
 #include <QDirIterator>
 #include <QFile>
@@ -17,6 +18,7 @@
 #include <QSaveFile>
 #include <QStringConverter>
 #include <QTextStream>
+#include <QThread>
 
 #include "AI/Logging.h"
 #include "Core/Services.h"
@@ -130,17 +132,29 @@ static bool splitSourcePath(const QString& input, QString& tail)
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Returns the base workspace directory (read root and ancestor of the write root).
+ * @brief Returns the base workspace directory (read root and ancestor of the write root). The GUI
+ *        thread resolves it live and refreshes the snapshot; the fs.read/fs.search worker lane
+ *        reads that snapshot under the mutex, never the workspace path the GUI thread reassigns.
  */
 QString AI::FileSandbox::workspaceRoot() const
 {
+  const auto* app = QCoreApplication::instance();
+  if (app && QThread::currentThread() != app->thread()) {
+    const QMutexLocker snapshotLock(&m_dropMutex);
+    if (!m_workspaceSnapshot.isEmpty())
+      return m_workspaceSnapshot;
+  }
+
   auto& workspaceManager = Core::services().workspaceManager;
   const auto base        = workspaceManager.path();
   QDir dir(base);
   if (!dir.exists())
     dir.mkpath(QStringLiteral("."));
 
-  return QFileInfo(base).canonicalFilePath();
+  const auto canonical = QFileInfo(base).canonicalFilePath();
+  const QMutexLocker locker(&m_dropMutex);
+  m_workspaceSnapshot = canonical;
+  return canonical;
 }
 
 /**

@@ -146,7 +146,10 @@ Widgets.Pane {
         MouseArea {
           anchors.fill: parent
           cursorShape: Qt.PointingHandCursor
-          onClicked: Cpp_Sessions_Manager.selectedSessionId = modelData.session_id
+          onClicked: {
+            sessionListView.forceActiveFocus()
+            Cpp_Sessions_Manager.selectedSessionId = modelData.session_id
+          }
         }
 
         RowLayout {

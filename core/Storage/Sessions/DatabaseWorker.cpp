@@ -30,6 +30,7 @@
 #  include <QThread>
 
 #  include "Core/SerialStudio.h"
+#  include "CSV/Export.h"
 #  include "Sessions/BlockReader.h"
 #  include "Sessions/DatabaseManager.h"
 #  include "Sessions/Export.h"
@@ -653,7 +654,7 @@ bool Sessions::DatabaseWorker::loadCsvColumns(int sessionId,
     if (!units.isEmpty())
       label += " (" + units + ")";
 
-    headerCells.append(label);
+    headerCells.append(CSV::escapeCsvField(label));
   }
 
   return true;
@@ -722,13 +723,20 @@ bool Sessions::DatabaseWorker::streamCsvRows(QSqlQuery& readQ,
     if (isNumeric)
       row[col] = QString::number(SerialStudio::toDouble(readQ.value(2)), 'g', 17);
     else
-      row[col] = readQ.value(3).toString();
+      row[col] = CSV::escapeCsvField(readQ.value(3).toString());
 
     ++processed;
     if (totalRows > 0 && (processed % nextProgressTick == 0)) {
       const double pct = static_cast<double>(processed) / static_cast<double>(totalRows);
       Q_EMIT csvExportProgress(std::clamp(pct, 0.0, 1.0));
     }
+  }
+
+  if (readQ.lastError().isValid()) {
+    file.close();
+    file.remove();
+    Q_EMIT csvExportFinished(outputPath, false, readQ.lastError().text());
+    return false;
   }
 
   flushRow();
@@ -817,9 +825,16 @@ bool Sessions::DatabaseWorker::streamCsvRowsFromBlocks(int sessionId,
       if (cells.isEmpty())
         cells = QStringList(colCount);
 
-      cells[colIt.value()] =
-        row.isNumeric ? QString::number(row.finalNumeric, 'g', 17) : row.finalString;
+      cells[colIt.value()] = row.isNumeric ? QString::number(row.finalNumeric, 'g', 17)
+                                           : CSV::escapeCsvField(row.finalString);
     }
+  }
+
+  if (q.lastError().isValid()) {
+    file.close();
+    file.remove();
+    Q_EMIT csvExportFinished(outputPath, false, q.lastError().text());
+    return false;
   }
 
   flushBelow(std::numeric_limits<qint64>::max());
@@ -886,7 +901,16 @@ void Sessions::DatabaseWorker::runCsvExport(int sessionId, const QString& output
   if (!ok)
     return;
 
+  out.flush();
+  const bool flushed = file.flush();
   file.close();
+  if (!flushed || out.status() != QTextStream::Ok || file.error() != QFileDevice::NoError) {
+    const QString reason = file.errorString();
+    file.remove();
+    Q_EMIT csvExportFinished(outputPath, false, reason);
+    return;
+  }
+
   Q_EMIT csvExportProgress(1.0);
   Q_EMIT csvExportFinished(outputPath, true, QString());
 }

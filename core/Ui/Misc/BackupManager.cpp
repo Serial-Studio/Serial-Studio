@@ -272,7 +272,7 @@ QVariantList Misc::BackupManager::list(int limit) const
   QDir d(dir);
   const auto entries = d.entryInfoList(QStringList{QStringLiteral("*.ssproj")},
                                        QDir::Files | QDir::NoDotAndDotDot,
-                                       QDir::Time | QDir::Reversed);
+                                       QDir::Name | QDir::Reversed);
 
   int taken = 0;
   for (const auto& info : entries) {
@@ -529,7 +529,7 @@ void Misc::BackupManager::seedDedupFromNewest(const QString& dir)
   QDir d(dir);
   const auto entries = d.entryInfoList(QStringList{QStringLiteral("*.ssproj")},
                                        QDir::Files | QDir::NoDotAndDotDot,
-                                       QDir::Time | QDir::Reversed);
+                                       QDir::Name | QDir::Reversed);
   if (entries.isEmpty())
     return;
 

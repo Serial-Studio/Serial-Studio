@@ -229,7 +229,9 @@ class TestRefusedWithoutConsent:
         "command,params",
         [
             pytest.param(
-                "project.loadJson", lambda c: {"config": c.project}, id="project.loadJson"
+                "project.loadJson",
+                lambda c: {"config": c.project},
+                id="project.loadJson",
             ),
             pytest.param(
                 "project.open", lambda c: {"filePath": str(c.path)}, id="project.open"
@@ -282,7 +284,9 @@ class TestRefusedWithoutConsent:
 class TestRestoreWithConsent:
     """AC3 with every gate granted: only the open project's own checkpoints restore."""
 
-    def test_foreign_path_is_not_a_checkpoint(self, api_client, candidate, open_project):
+    def test_foreign_path_is_not_a_checkpoint(
+        self, api_client, candidate, open_project
+    ):
         """Past the consent gate the handler still refuses a file the app did not record."""
         before = _sha256(open_project)
 

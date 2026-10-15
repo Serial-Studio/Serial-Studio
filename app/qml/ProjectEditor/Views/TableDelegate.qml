@@ -932,7 +932,7 @@ ColumnLayout {
             // Same commit-time bounds policy as the int field: never key-block the minus sign
             //
             onTextEdited: {
-              if (text === "-" || text === "." || text === "-.")
+              if (text.trim() === "" || text === "-" || text === "." || text === "-.")
                 return;
 
               const num = Number(text);

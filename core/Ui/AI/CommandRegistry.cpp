@@ -15,6 +15,7 @@
 #include <QString>
 
 #include "AI/Logging.h"
+#include "API/CommandCapabilities.h"
 #include "Core/JsonValidator.h"
 
 //--------------------------------------------------------------------------------------------------
@@ -137,15 +138,55 @@ bool AI::CommandRegistry::isDeviceGated(const QString& commandName) const
  *        command it will run. A planned command that itself dispatches others counts as Blocked,
  *        so nothing nests past one level of batching.
  */
+/**
+ * @brief The tier of one command with its arguments: `safetyOf` by name, escalated to the
+ *        device-gated treatment when the arguments pick a program to start or write to a device
+ *        (spec 0098 review). This closes the gap where a generic source setter chooses a Process
+ *        program that the dedicated `io.process.*` setter would have device-gated.
+ */
+AI::Safety AI::CommandRegistry::argumentAwareSafety(const QString& commandName,
+                                                    const QJsonObject& args) const
+{
+  namespace Caps  = API::CommandCapabilities;
+  const auto tier = safetyOf(commandName);
+  const auto caps = Caps::of(commandName, args);
+  if (!caps.has_value()
+      || !caps->testAnyFlags(Caps::ChoosesProgram | Caps::StartsProgram | Caps::WritesDevice))
+    return tier;
+
+  const auto gated = m_deviceControlAllowed ? Safety::AlwaysConfirm : Safety::Blocked;
+  return strictness(gated) > strictness(tier) ? gated : tier;
+}
+
+/**
+ * @brief The tier a call actually needs (spec 0098 R9): the strictest of its own tier and of
+ *        every command it will run, each judged with its own arguments. A planned command that
+ *        itself dispatches others counts as Blocked, so nothing nests past one level.
+ */
 AI::Safety AI::CommandRegistry::effectiveSafety(const QString& commandName,
                                                 const QJsonObject& args) const
 {
-  auto tier = safetyOf(commandName);
-  for (const auto& planned : plannedCommands(commandName, args)) {
-    const auto inner = isDispatcher(planned) ? Safety::Blocked : safetyOf(planned);
+  auto tier           = argumentAwareSafety(commandName, args);
+  const auto escalate = [&](const Safety inner) {
     if (strictness(inner) > strictness(tier))
       tier = inner;
+  };
+
+  if (isDispatcher(commandName)) {
+    const auto ops = args.value(QStringLiteral("ops")).toArray();
+    for (const auto& value : ops) {
+      const auto op  = value.toObject();
+      const auto cmd = op.value(QStringLiteral("command")).toString();
+      escalate(isDispatcher(cmd)
+                 ? Safety::Blocked
+                 : argumentAwareSafety(cmd, op.value(QStringLiteral("params")).toObject()));
+    }
+
+    return tier;
   }
+
+  for (const auto& planned : plannedCommands(commandName, args))
+    escalate(isDispatcher(planned) ? Safety::Blocked : safetyOf(planned));
 
   return tier;
 }

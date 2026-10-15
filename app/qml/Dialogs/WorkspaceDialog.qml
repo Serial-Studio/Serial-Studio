@@ -105,6 +105,17 @@ Widgets.SmartDialog {
   }
 
   //
+  // Toggle a widget's checked state in the model; delegates re-derive checked from it. The map is
+  // copied so the reassignment always notifies and no delegate binding is ever overwritten.
+  //
+  function toggleWidget(wid) {
+    var map = Object.assign({}, root.checkedWidgets)
+    map[wid] = map[wid] !== true
+    root.checkedWidgets = map
+    Cpp_UI_Alarms.playEvent("toggle")
+  }
+
+  //
   // Apply changes
   //
   function apply() {
@@ -262,10 +273,7 @@ Widgets.SmartDialog {
 
                   MouseArea {
                     anchors.fill: parent
-                    onClicked: {
-                      _checkbox.checked = !_checkbox.checked
-                      _checkbox.clicked()
-                    }
+                    onClicked: root.toggleWidget(modelData["windowId"])
                   }
                 }
 
@@ -284,10 +292,7 @@ Widgets.SmartDialog {
 
                   MouseArea {
                     anchors.fill: parent
-                    onClicked: {
-                      _checkbox.checked = !_checkbox.checked
-                      _checkbox.clicked()
-                    }
+                    onClicked: root.toggleWidget(modelData["windowId"])
                   }
                 }
               }

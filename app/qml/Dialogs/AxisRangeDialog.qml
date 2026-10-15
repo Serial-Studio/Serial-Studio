@@ -57,9 +57,24 @@ Widgets.SmartDialog {
 
   function formatValue(worldValue, log) {
     if (log)
-      return Number(toDisplayValue(worldValue, log).toPrecision(6)).toString()
+      return formatDecimal(Number(toDisplayValue(worldValue, log).toPrecision(6)).toString())
 
-    return worldValue.toFixed(4)
+    return formatDecimal(worldValue.toFixed(4))
+  }
+
+  //
+  // Parse and format decimals the way the locale-aware validators read them; NaN on bad input
+  //
+  function parseDecimal(text) {
+    try {
+      return Number.fromLocaleString(Qt.locale(), text)
+    } catch (e) {
+      return NaN
+    }
+  }
+
+  function formatDecimal(text) {
+    return text.replace(".", Qt.locale().decimalPoint)
   }
 
   //
@@ -118,8 +133,8 @@ Widgets.SmartDialog {
       return
 
     if (!root.timeAxis) {
-      const newXMin = toWorldValue(parseFloat(xMinField.text), root.logX)
-      const newXMax = toWorldValue(parseFloat(xMaxField.text), root.logX)
+      const newXMin = toWorldValue(parseDecimal(xMinField.text), root.logX)
+      const newXMax = toWorldValue(parseDecimal(xMaxField.text), root.logX)
       if (!isNaN(newXMin) && !isNaN(newXMax) && newXMin < newXMax) {
         plotWidget.xMin = newXMin
         plotWidget.xMax = newXMax
@@ -135,8 +150,8 @@ Widgets.SmartDialog {
       }
     }
 
-    const newYMin = toWorldValue(parseFloat(yMinField.text), root.logY)
-    const newYMax = toWorldValue(parseFloat(yMaxField.text), root.logY)
+    const newYMin = toWorldValue(parseDecimal(yMinField.text), root.logY)
+    const newYMax = toWorldValue(parseDecimal(yMaxField.text), root.logY)
     if (!isNaN(newYMin) && !isNaN(newYMax) && newYMin < newYMax) {
       plotWidget.yMin = newYMin
       plotWidget.yMax = newYMax

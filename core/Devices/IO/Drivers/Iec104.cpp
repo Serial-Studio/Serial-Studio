@@ -518,7 +518,8 @@ void IO::Drivers::Iec104::onSocketError()
 /**
  * @brief Decodes every complete APDU sitting in the receive buffer. A malformed or out-of-order
  *        frame ends the session: the specification has no resynchronization rule, and guessing
- *        where the next frame starts is how a decoder publishes noise as telemetry.
+ *        where the next frame starts is how a decoder publishes noise as telemetry. A due
+ *        acknowledgement goes out here too, so the 100 ms tick is only the t2 fallback.
  */
 void IO::Drivers::Iec104::drainReceiveBuffer(qint64 nowMs)
 {
@@ -547,6 +548,9 @@ void IO::Drivers::Iec104::drainReceiveBuffer(qint64 nowMs)
 
   if (offset > 0)
     m_rx.remove(0, offset);
+
+  if (m_link.ackDue(nowMs))
+    sendApdu(m_link.encodeSupervisory(nowMs));
 
   if (m_points.size() != discovered)
     Q_EMIT pointsChanged();

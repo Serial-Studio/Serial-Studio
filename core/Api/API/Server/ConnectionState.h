@@ -42,11 +42,21 @@ struct ConnectionState {
   QString peerAddress;
   quint16 peerPort = 0;
   QByteArray buffer;
+
+  // Newline-less JSON scan over buffer[0, jsonScanned): bracket depth, inside a string, after '\'
+  qsizetype jsonScanned = 0;
+  int jsonDepth         = 0;
+  bool jsonInString     = false;
+  bool jsonEscaped      = false;
+
   QElapsedTimer window;
   int messageCount   = 0;
   int byteCount      = 0;
   bool authenticated = false;
   int authAttempts   = 0;
+
+  // Server-initiated disconnect requested; consumeBytes then drops further bytes (spec 0099 f8)
+  bool closing = false;
 
   // Raw forwarding waits for one valid JSON message; the first chunk is sniffed once (spec 0075 I2)
   bool handshakeSeen  = false;
@@ -65,6 +75,36 @@ struct ConnectionState {
   quint64 streamSeq    = 0;
   quint64 streamMissed = 0;
   std::deque<DataModel::DataBlockPtr> streamPending;
+
+  /**
+   * @brief Forgets the JSON scan. It describes a prefix of the buffer, so every buffer edit other
+   *        than an append must drop it or the next scan would resume at a stale offset.
+   */
+  void resetJsonScan()
+  {
+    jsonScanned  = 0;
+    jsonDepth    = 0;
+    jsonInString = false;
+    jsonEscaped  = false;
+  }
+
+  /**
+   * @brief Empties the receive buffer together with the scan that describes it.
+   */
+  void clearBuffer()
+  {
+    buffer.clear();
+    resetJsonScan();
+  }
+
+  /**
+   * @brief Removes the first @p count bytes (a framed line) and the scan that described them.
+   */
+  void dropFront(const qsizetype count)
+  {
+    buffer.remove(0, count);
+    resetJsonScan();
+  }
 };
 
 }  // namespace API

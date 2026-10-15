@@ -149,6 +149,7 @@ private:
   [[nodiscard]] bool startListening();
   void stopListening();
   void dropConnections();
+  [[nodiscard]] bool teardownConnection(const ConnectionState& state);
 
   [[nodiscard]] bool deviceConnected() const override;
   [[nodiscard]] qint64 writeToDevice(const QByteArray& data) override;
@@ -161,7 +162,7 @@ private:
   [[nodiscard]] ConnectionState* stateFor(QTcpSocket* socket, const QString& sessionId) override;
 
   void sendResponse(QTcpSocket* socket, const QByteArray& response) override;
-  void closeSocket(QTcpSocket* socket, const ConnectionState& state) override;
+  void closeSocket(QTcpSocket* socket, ConnectionState& state) override;
   void disconnectClient(QTcpSocket* socket,
                         ConnectionState& state,
                         const QString& errorCode,

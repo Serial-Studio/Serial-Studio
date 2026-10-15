@@ -124,7 +124,16 @@ void Console::ExportWorker::closeResources()
 }
 
 /**
- * @brief Creates a new console log file for the given device.
+ * @brief Stores the sanitized log folder name; runs on the worker thread via a queued call.
+ */
+void Console::ExportWorker::setSubdirName(const QString& name)
+{
+  m_subdirName = name;
+}
+
+/**
+ * @brief Creates a new console log file for the given device. The folder name is the snapshot the
+ *        GUI thread handed over, so the worker reads no GUI-owned project state.
  */
 void Console::ExportWorker::createFile(int deviceId)
 {
@@ -148,23 +157,7 @@ void Console::ExportWorker::createFile(int deviceId)
 
   fileName += QStringLiteral(".txt");
 
-  auto& appState           = DataModel::pipelineModules().appState;
-  auto& projectModel       = DataModel::pipelineModules().projectModel;
-  const auto opMode        = appState.operationMode();
-  const auto& projectTitle = projectModel.title();
-  QString subdirName;
-  switch (opMode) {
-    case SerialStudio::ProjectFile:
-      subdirName = projectTitle.isEmpty() ? QStringLiteral("Untitled") : projectTitle;
-      break;
-    case SerialStudio::QuickPlot:
-      subdirName = QStringLiteral("Quick Plot");
-      break;
-    case SerialStudio::ConsoleOnly:
-      subdirName = QStringLiteral("Console");
-      break;
-  }
-
+  const auto subdirName  = m_subdirName.isEmpty() ? QStringLiteral("Console") : m_subdirName;
   auto& workspaceManager = Core::services().workspaceManager;
   QDir dir(workspaceManager.path("Console"));
   if (!dir.exists(subdirName))
@@ -325,6 +318,15 @@ void Console::Export::setupExternalConnections()
             if (!connected || paused)
               closeFile();
           });
+  connect(&DataModel::pipelineModules().appState,
+          &AppState::operationModeChanged,
+          this,
+          &Console::Export::refreshLogFolder);
+  connect(&DataModel::pipelineModules().projectModel,
+          &DataModel::ProjectModel::titleChanged,
+          this,
+          &Console::Export::refreshLogFolder);
+  refreshLogFolder();
 #endif
 }
 
@@ -397,6 +399,27 @@ void Console::Export::registerData(int deviceId, QStringView data)
 }
 
 #ifdef BUILD_COMMERCIAL
+/**
+ * @brief Snapshots the operation mode and project title on the GUI thread into a sanitized log
+ *        folder name and hands it to the worker, which would otherwise read GUI-owned state.
+ */
+void Console::Export::refreshLogFolder()
+{
+  auto& modules      = DataModel::pipelineModules();
+  const auto& title  = modules.projectModel.title();
+  const auto opMode  = modules.appState.operationMode();
+  QString subdirName = QStringLiteral("Console");
+  if (opMode == SerialStudio::QuickPlot)
+    subdirName = QStringLiteral("Quick Plot");
+  else if (opMode == SerialStudio::ProjectFile)
+    subdirName =
+      title.isEmpty() ? QStringLiteral("Untitled") : Misc::WorkspaceManager::sanitizeName(title);
+
+  auto* worker = static_cast<ExportWorker*>(m_worker);
+  QMetaObject::invokeMethod(
+    worker, [worker, subdirName] { worker->setSubdirName(subdirName); }, Qt::QueuedConnection);
+}
+
 /**
  * @brief Called when the worker thread changes the file open state.
  */

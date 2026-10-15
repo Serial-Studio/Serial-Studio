@@ -302,6 +302,7 @@ private:
   // Latches a project sync already in flight: its blocking marshal pumps the GUI loop, and a
   // nested sync delivered there would spin another loop and recurse without bound
   std::atomic<bool> m_projectSyncInFlight;
+  std::atomic<bool> m_projectSyncPending;
   // code-verify on
 
   // Concern sub-objects: their references bind members declared above, so addresses never move

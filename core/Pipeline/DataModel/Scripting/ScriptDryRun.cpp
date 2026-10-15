@@ -136,11 +136,22 @@ void DataModel::ScriptDryRun::createLuaState()
     lua_pop(m_luaState, 1);
   }
 
-  static const char* const kFileLoaders[] = {"dofile", "loadfile"};
-  for (const char* name : kFileLoaders) {
+  // code-verify off
+  // This state runs caller-supplied code with no consent (spec 0098), so it drops the file
+  // loaders and the string loaders; runLuaChunk loads text-only, never a precompiled chunk.
+  static const char* const kLoaders[] = {"dofile", "loadfile", "load", "loadstring"};
+  for (const char* name : kLoaders) {
     lua_pushnil(m_luaState);
     lua_setglobal(m_luaState, name);
   }
+
+  lua_getglobal(m_luaState, "string");
+  if (lua_istable(m_luaState, -1)) {
+    lua_pushnil(m_luaState);
+    lua_setfield(m_luaState, -2, "dump");
+  }
+  lua_pop(m_luaState, 1);
+  // code-verify on
 
   luaJIT_setmode(m_luaState, 0, LUAJIT_MODE_ENGINE | LUAJIT_MODE_OFF);
   m_luaHook.install(m_luaState);
@@ -247,10 +258,11 @@ int DataModel::ScriptDryRun::runLuaChunk(const QString& code, const char* chunkN
 
   m_timedOut            = false;
   const QByteArray utf8 = code.toUtf8();
-  const int loadStatus  = luaL_loadbuffer(m_luaState,
-                                          utf8.constData(),
-                                          static_cast<size_t>(utf8.size()),
-                                          chunkName ? chunkName : "chunk");
+  const int loadStatus  = luaL_loadbufferx(m_luaState,
+                                           utf8.constData(),
+                                           static_cast<size_t>(utf8.size()),
+                                           chunkName ? chunkName : "chunk",
+                                           "t");
   if (loadStatus != LUA_OK)
     return loadStatus;
 

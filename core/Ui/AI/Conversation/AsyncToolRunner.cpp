@@ -8,6 +8,7 @@
 
 #include "AI/Conversation/AsyncToolRunner.h"
 
+#include "AI/FileSandbox.h"
 #include "AI/Tools/ToolFilesystemTools.h"
 
 //--------------------------------------------------------------------------------------------------
@@ -49,12 +50,17 @@ bool AI::AsyncToolRunner::handles(const QString& name)
 /**
  * @brief Queues one tool call and reports its result on the caller's thread. The generation is
  *        echoed back untouched so the conversation can discard a result whose turn has moved on.
+ *        The workspace root is resolved here on the GUI thread first, so the worker reads that
+ *        snapshot instead of racing the workspace path the GUI thread can reassign.
  */
 void AI::AsyncToolRunner::run(const QString& callId,
                               const QString& name,
                               const QJsonObject& arguments,
                               quint64 generation)
 {
+  static auto& sandbox = FileSandbox::instance();
+  (void)sandbox.workspaceRoot();
+
   m_pool.start([this, callId, name, arguments, generation] {
     const auto reply = ToolDetail::executeFsTool(name, arguments);
     QMetaObject::invokeMethod(

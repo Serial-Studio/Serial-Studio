@@ -34,6 +34,7 @@ Widgets.Pane {
                              : ({})
   property var regression: ({})
   property int regressionAffectedCount: 0
+  property int comparisonSessionId: -999
 
   //
   // Narrowest usable width of the pane; the explorer window derives its minimum
@@ -160,6 +161,11 @@ Widgets.Pane {
       root.verification = root.sessionId >= 0
                           ? Cpp_Sessions_Manager.latestVerification(root.sessionId)
                           : {}
+
+      if (root.sessionId === root.comparisonSessionId)
+        return
+
+      root.comparisonSessionId = root.sessionId
       root.streamStats = []
       root.regression = {}
       root.regressionAffectedCount = 0
@@ -408,10 +414,12 @@ Widgets.Pane {
             border.color: Cpp_ThemeManager.colors["groupbox_border"]
           }
 
-          onEditingFinished: {
+          function commitNotes() {
             if (root.editsAllowed)
               Cpp_Sessions_Manager.selectedSessionNotes = text
           }
+
+          onEditingFinished: commitNotes()
         }
 
         //

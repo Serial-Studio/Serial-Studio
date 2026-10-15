@@ -129,6 +129,7 @@ private:
   void processHexByte(quint8 ch);
   void processBin32Byte(quint8 ch);
   void processBinByte(quint8 ch);
+  [[nodiscard]] bool binaryHeaderCrcValid(bool wide);
 
   [[nodiscard]] static QByteArray toHex(quint8 byte);
 

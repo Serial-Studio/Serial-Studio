@@ -388,6 +388,8 @@ void TstServerAuth::scriptInstallClassification_data()
     << QStringLiteral("project.transformLibrary.set") << none << true;
   QTest::newRow("painter.setCode") << QStringLiteral("project.painter.setCode") << none << true;
   QTest::newRow("extensions.install") << QStringLiteral("extensions.install") << none << true;
+  QTest::newRow("extensions.addRepository")
+    << QStringLiteral("extensions.addRepository") << none << true;
   QTest::newRow("project.loadJson") << QStringLiteral("project.loadJson") << none << true;
   QTest::newRow("project.open") << QStringLiteral("project.open") << none << true;
   QTest::newRow("template.apply") << QStringLiteral("project.template.apply") << none << true;

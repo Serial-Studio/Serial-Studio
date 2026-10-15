@@ -424,7 +424,7 @@ void CSV::Player::nextFrame()
     dashboard.clearPlotData();
 
     int framesToLoad = dashboard.points();
-    int startFrame   = std::max(1, m_framePos - framesToLoad);
+    int startFrame   = std::max(0, m_framePos - framesToLoad);
     processFrameBatch(startFrame, m_framePos);
 
     updateData();
@@ -443,7 +443,7 @@ void CSV::Player::previousFrame()
     dashboard.clearPlotData();
 
     int framesToLoad = dashboard.points();
-    int startFrame   = std::max(1, m_framePos - framesToLoad);
+    int startFrame   = std::max(0, m_framePos - framesToLoad);
     processFrameBatch(startFrame, m_framePos);
 
     updateData();
