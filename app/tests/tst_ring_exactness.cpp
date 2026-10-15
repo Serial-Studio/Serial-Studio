@@ -425,7 +425,9 @@ void RingExactnessTest::rateStepUpGrowsWithoutLoss()
 }
 
 /**
- * @brief AC2: a source that slows down keeps its ring; nothing shrinks mid-session.
+ * @brief AC2: a source that slows down keeps its ring; nothing shrinks mid-session. The fast phase
+ *        may grow the ring (a sample exactly on the window edge counts as in-window), so the
+ *        capacity is pinned after it and must hold through the slow phase.
  */
 void RingExactnessTest::rateStepDownNeverShrinks()
 {
@@ -442,11 +444,15 @@ void RingExactnessTest::rateStepDownNeverShrinks()
 
   std::vector<Sample> input = fast;
   input.insert(input.end(), slow.begin(), slow.end());
-  const std::size_t before = ring.level0.time.capacity();
-  feedBlocks(ring, input, 64, budget);
 
+  const std::size_t initial = ring.level0.time.capacity();
+  feedBlocks(ring, fast, 64, budget);
+  const std::size_t afterFast = ring.level0.time.capacity();
+  QVERIFY(afterFast >= initial);
+
+  feedBlocks(ring, slow, 64, budget);
   QVERIFY(ring.exact());
-  QCOMPARE(ring.level0.time.capacity(), before);
+  QCOMPARE(ring.level0.time.capacity(), afterFast);
   QVERIFY(retainsTail(ring, input));
 }
 

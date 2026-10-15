@@ -595,7 +595,7 @@ static void writeEntries(QCborStreamWriter& writer, const Package& package)
       && (!reader.isLengthKnown() || reader.length() > static_cast<quint64>(kMaxTextChars) * 3))
     return false;
 
-  return skipUnknown(reader);
+  return reader.next(kMaxSkipDepth);
 }
 
 /**

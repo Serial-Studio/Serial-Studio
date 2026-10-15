@@ -465,8 +465,9 @@ void TstFrameDelimiters::timestampsAdvanceByFrameStep()
 }
 
 /**
- * @brief A chunk larger than the scan buffer counts the bytes it could not hold. The ring encodes
- *        "full" as "empty", so the whole chunk is lost, and the reader keeps working afterwards.
+ * @brief A chunk larger than the scan buffer counts the bytes it could not hold. The ring keeps one
+ *        slot empty (spec 0099), so it holds the newest capacity - 1 bytes and counts the rest; the
+ *        next chunk overwrites the oldest held bytes and the reader keeps extracting frames.
  */
 void TstFrameDelimiters::bufferOverflowIsCountedAndDropped()
 {
@@ -476,13 +477,18 @@ void TstFrameDelimiters::bufferOverflowIsCountedAndDropped()
   const qsizetype capacity = 1024 * 1024;
   reader.processData(capture(QByteArray(capacity + 100, 'A')));
 
+  const qsizetype usable = capacity - 1;
   QVERIFY(drainFrames(reader).isEmpty());
-  QCOMPARE(reader.overflowBytes(), quint64(100));
+  QCOMPARE(reader.overflowBytes(), quint64(capacity + 100 - usable));
   QCOMPARE(reader.overflowCount(), qsizetype(0));
   QCOMPARE(reader.bytesReceived(), quint64(capacity + 100));
 
   reader.processData(capture(QByteArray("tail\n")));
-  QCOMPARE(drainFrames(reader), QList<QByteArray>({QByteArray("tail")}));
+  const auto frames = drainFrames(reader);
+  QCOMPARE(frames.size(), qsizetype(1));
+  QCOMPARE(frames.first().size(), usable - 1);
+  QVERIFY(frames.first().startsWith('A'));
+  QVERIFY(frames.first().endsWith("tail"));
 }
 
 /**
