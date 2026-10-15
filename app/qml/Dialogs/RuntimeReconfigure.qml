@@ -163,7 +163,7 @@ Widgets.SmartDialog {
           enabled: !Cpp_IO_Manager.isConnected
           model: Cpp_IO_Manager.availableBuses
           currentIndex: Cpp_IO_Manager.busType
-          displayText: qsTr("I/O Interface: %1").arg(currentText)
+          displayText: qsTr("Connection: %1").arg(currentText)
           onActivated: (index) => {
             if (Cpp_IO_Manager.busType !== index)
               Cpp_IO_Manager.busType = index

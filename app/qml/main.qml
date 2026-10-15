@@ -176,8 +176,18 @@ Item {
   Connections {
     target: Cpp_Examples
     function onProjectFileReady(path) {
-      Cpp_AppState.operationMode = SerialStudio.ProjectFile
+      Cpp_AppState.requestOperationMode(SerialStudio.ProjectFile)
       Cpp_JSON_ProjectModel.openJsonFile(path)
+      app.showProjectEditor()
+    }
+  }
+
+  //
+  // Open the editor on a project made with Save as Project (spec 0100 R8)
+  //
+  Connections {
+    target: Cpp_JSON_ProjectModel
+    function onQuickPlotProjectSaved() {
       app.showProjectEditor()
     }
   }

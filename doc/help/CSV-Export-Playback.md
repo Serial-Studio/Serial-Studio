@@ -116,7 +116,7 @@ During playback, the CSV Player feeds each row through the same data pipeline as
 
 ### Multi-source CSV files
 
-For projects with multiple data sources, the CSV Player maps columns back to their respective source IDs. The header carries labels only, not machine-readable IDs: the mapping is positional, built from the currently loaded project's export schema in unique-ID order, and matched against the file's data columns in that same order. This means the project loaded during playback must be the same one that produced the file (or one with an identical dataset/unique-ID layout) — the player has no way to recover source or dataset identity from header text alone. Reconstructed per-source frames go back into the pipeline at the right routing.
+For projects with multiple devices, the CSV Player maps columns back to their respective source IDs. The header carries labels only, not machine-readable IDs: the mapping is positional, built from the currently loaded project's export schema in unique-ID order, and matched against the file's data columns in that same order. This means the project loaded during playback must be the same one that produced the file (or one with an identical dataset/unique-ID layout) — the player has no way to recover source or dataset identity from header text alone. Reconstructed per-source frames go back into the pipeline at the right routing.
 
 ### Speed control
 
@@ -136,7 +136,7 @@ For per-channel sample rates, channel-level units and metadata, or smaller files
 ## See also
 
 - [MDF4 Export & Playback](MDF4.md): binary logging with per-channel sample rates and channel metadata (Pro).
-- [Historian](Session-Database.md): SQLite-backed project archive with built-in replay (Pro).
+- [Historian](Historian.md): SQLite-backed project archive with built-in replay (Pro).
 - [Getting Started](Getting-Started.md): initial setup and first connection.
 - [Operation Modes](Operation-Modes.md): Quick Plot vs Project File mode.
 - [Project Editor](Project-Editor.md): define datasets and dashboard layout.

@@ -154,7 +154,7 @@ QVariantList EditorSummaries::tablesSummary() const
   for (const auto& table : tables) {
     QVariantMap row;
     row["name"]        = table.name;
-    row["description"] = tr("Shared table defined in &m_editor project");
+    row["description"] = tr("Variables table defined in this project");
     row["isSystem"]    = false;
     row["entryCount"]  = static_cast<int>(table.registers.size());
     result.append(row);

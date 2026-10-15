@@ -179,5 +179,5 @@ For privacy questions or data requests, email alex@serial-studio.com.
   activation policy.
 - [AI Assistant](AI-Assistant.md): how the bring-your-own-key chat panel works
   and what it sends.
-- [Historian](Session-Database.md): how recorded sessions are stored
+- [Historian](Historian.md): how recorded sessions are stored
   locally.

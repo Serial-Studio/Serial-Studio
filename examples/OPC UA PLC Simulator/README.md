@@ -1,5 +1,9 @@
 # OPC UA PLC simulator
 
+**What you'll learn:** an OPC UA client source with typed tags, arrays and bad-status handling, a Lua frame parser, and a generated Data Grid dashboard.
+
+**Prerequisites:** Serial Studio Pro and Python 3 with `asyncua`.
+
 ## Overview
 
 This project exercises Serial Studio's OPC UA client with a simulated bottling line served over OPC UA. The simulator is a small `asyncua` server: a filler with PID level control, a capper with torque feedback and jam counting, a six-zone pasteuriser tunnel, plant utilities, and a diagnostics folder with one sensor that periodically reports a bad status.
@@ -80,7 +84,7 @@ Every value carries a source timestamp from the simulator's clock.
 ## Using the project
 
 1. Start the simulator.
-2. Open `OPC UA PLC Simulator.ssproj` in Serial Studio, or select the **OPC UA** data source, enter the endpoint URL, press **Discover** and **Browse Tags...**, tick the `Plant` folder and press **Generate Project**.
+2. Open `OPC UA PLC Simulator.ssproj` in Serial Studio, or select the **OPC UA** device, enter the endpoint URL, press **Discover** and **Browse Tags...**, tick the `Plant` folder and press **Generate Project**.
 3. Connect. Numeric tags plot, booleans drive LEDs, strings show in the data grid, and `FaultySensor` keeps its last good value while the simulator reports the bad status.
 
 From the command line:

@@ -1,9 +1,8 @@
 Copyright (c) 2020–2026 Alex Spataru <https://github.com/alex-spataru>
-
-You are using a trial version of Serial Studio Pro. This version is
-fully functional for evaluation and personal, non-commercial use only.
-To continue after your trial, upgrade to a paid plan or compile the
-GPLv3 source code yourself.
+You are using a trial version of Serial Studio Pro. This version is fully
+functional for evaluation and personal, non-commercial use only. To continue
+after your trial, upgrade to a paid plan or compile the GPLv3 source code
+yourself.
 
 → Support: alex@serial-studio.com
 → Schedule a call: https://calendly.com/serial-studio

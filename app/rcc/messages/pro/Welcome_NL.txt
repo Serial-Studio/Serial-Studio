@@ -1,8 +1,7 @@
 Copyright (c) 2020–2026 Alex Spataru <https://github.com/alex-spataru>
-
-Bedankt voor het gebruik van Serial Studio Pro en het ondersteunen van 
-open source-ontwikkeling! Uw licentie is actief en goedgekeurd voor 
-commercieel en propriëtair gebruik.
+Bedankt voor het gebruik van Serial Studio Pro en het ondersteunen van open
+source-ontwikkeling! Uw licentie is actief en goedgekeurd voor commercieel en
+propriëtair gebruik.
 
 → Ondersteuning: alex@serial-studio.com
 → Plan een gesprek: https://calendly.com/serial-studio

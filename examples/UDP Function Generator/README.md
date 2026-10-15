@@ -1,5 +1,9 @@
 # UDP function generator example
 
+**What you'll learn:** a UDP source and Quick Plot, using a program that sends sine, triangle, sawtooth and square waveforms as CSV.
+
+**Prerequisites:** the UDP function generator program included in the folder. Serial Studio's free features are enough.
+
 ## Overview
 
 This project shows how to use the **UDP function generator** program to generate and transmit multiple real-time waveforms (sine, triangle, sawtooth, and square) over UDP. The program feeds CSV-formatted data to Serial Studio, so you can visualize the waveforms in real time.
@@ -75,11 +79,11 @@ gcc -o udp_function_generator.exe udp_function_generator.c -lws2_32 -lm
 
 1. **Download and install Serial Studio.** Visit the [official site](https://serial-studio.com/) to download and install.
 2. **Configure Serial Studio.**
-   - Set **I/O Interface** to **Network Socket**.
+   - Set **Connection** to **Network Socket**.
    - Pick **UDP** as the socket type.
    - Set **Remote Address** to `localhost`.
    - Set both the local and remote ports to match the program's `-p` option (default `9000`).
-3. **Select Quick Plot.** In the Setup pane, select the **Quick Plot (Comma Separated Values)** option. It plots numeric values transmitted via UDP in real time.
+3. **Select Quick Plot.** In the Setup pane, select the **Quick Plot** option. It plots numeric values transmitted via UDP in real time.
 4. **Run the program.** Waveforms will show up in Serial Studio's real-time plot.
 
 ## Step by step

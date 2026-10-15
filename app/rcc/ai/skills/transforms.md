@@ -56,7 +56,7 @@ referencing a sibling by name. History: `sample(name, k)` up to 256 back,
 with a bare or braced name, NEVER a quoted string. Lines starting with
 `#` are comments.
 
-Shared tables are readable with `table(name, register)` (`v * table(cal, scale)`),
+Variables tables are readable with `table(name, register)` (`v * table(cal, scale)`),
 read-only: a write needs Lua or JavaScript. Table access is a frame-lane
 feature; on a stream-lane source `table()` is a compile error.
 
@@ -148,7 +148,7 @@ right shape because:
   byte frames every iteration.
 - **Cross-source reach.** A computed dataset's transform can read
   `datasetGetFinal(uniqueId)` of any dataset, including peers from
-  *other* sources via the shared tables. A parser only sees its
+  *other* sources via the Variables tables. A parser only sees its
   own source's bytes.
 - **Unit + range hygiene.** Computed datasets carry their own
   `units`, `plotMin/Max`, `widgetMin/Max`, alarms, and widget

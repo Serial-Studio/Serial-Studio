@@ -137,7 +137,7 @@ Serial Studio publishes every received CAN frame to the frame parser as a binary
 
 In a DBC-imported project the auto-generated parser is a Lua frame parser built from the DBC: a declarative per-message spec plus a generic decoder that dispatches by CAN ID, extracts each signal at the documented bit offset, applies factor and offset, and publishes the value into the matching dataset. The imported source starts on the Lua platform.
 
-When the project is built by hand, the dispatch logic can instead be written in Lua or JavaScript. See [Frame Parser Scripting](JavaScript-API.md).
+When the project is built by hand, the dispatch logic can instead be written in Lua or JavaScript. See [Frame Parser Scripting](Frame-Parser.md).
 
 ### Multi-frame reassembly
 
@@ -219,9 +219,9 @@ For step-by-step setup, see the [Protocol Setup Guides, CAN Bus section](Protoco
 
 - [Auto-Generating Projects](Auto-Generating-Projects.md): DBC file import.
 - [Protocol Setup Guides](Protocol-Setup-Guides.md): step-by-step CAN setup.
-- [Data Sources](Data-Sources.md): driver capability summary across all transports.
+- [Devices](Devices.md): driver capability summary across all transports.
 - [Communication Protocols](Communication-Protocols.md): overview of all supported transports.
 - [Use Cases](Use-Cases.md): automotive and industrial CAN dashboards.
 - [Troubleshooting](Troubleshooting.md): bit-rate, termination, and adapter-detection diagnostics.
 - [Drivers: Modbus](Drivers-Modbus.md): the other industrial protocol.
-- [Frame Parser Scripting](JavaScript-API.md): for editing the generated parser by hand.
+- [Frame Parser Scripting](Frame-Parser.md): for editing the generated parser by hand.

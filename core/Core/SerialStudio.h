@@ -325,6 +325,17 @@ struct XAxisPolicy {
   int xDatasetId = -1;               ///< X source dataset uniqueId (Dataset mode; -1 otherwise)
 };
 
+/**
+ * @brief What a group widget needs from its datasets (spec 0100 R15/R16): a dataset count range
+ *        (@c maxCount -1 means unbounded) and the role tags the widget binds by, one entry per
+ *        required role listing the tags it accepts. Widgets bind by tag, never by order.
+ */
+struct GroupWidgetRequirement {
+  int minCount = 0;
+  int maxCount = -1;
+  QList<QStringList> roles;
+};
+
 // clang-format off
 [[nodiscard]] bool isGroupWidget(DashboardWidget widget);
 [[nodiscard]] bool isDashboardTool(DashboardWidget w);
@@ -340,6 +351,9 @@ struct XAxisPolicy {
 
 [[nodiscard]] QString groupWidgetId(GroupWidget widget);
 [[nodiscard]] GroupWidget groupWidgetFromId(const QString& id);
+[[nodiscard]] GroupWidgetRequirement groupWidgetRequirement(GroupWidget widget);
+[[nodiscard]] bool groupMeetsRequirement(GroupWidget widget, const QStringList& datasetRoles);
+[[nodiscard]] QString groupWidgetRequirementText(GroupWidget widget);
 [[nodiscard]] QString datasetWidgetId(DatasetWidget widget);
 [[nodiscard]] DatasetWidget datasetWidgetFromId(const QString& id);
 

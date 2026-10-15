@@ -1,5 +1,9 @@
 # Testo T549i Pressure Probe
 
+**What you'll learn:** a BLE source with a Control Loop handshake, a binary frame parser, and per-dataset Lua transforms that convert units, shown in a Data Grid.
+
+**Prerequisites:** a Testo T549i pressure probe and a Bluetooth adapter. Serial Studio's free features are enough.
+
 This [Serial Studio](https://github.com/Serial-Studio/Serial-Studio) project turns a [Testo T549i](https://www.testo.com/en/testo-549i/p/0560-2549-02) high-pressure smart probe into a live dashboard over [Bluetooth Low Energy](https://en.wikipedia.org/wiki/Bluetooth_Low_Energy). It is a complete tour of Serial Studio's automation stack in one small project: a Control Loop wakes the probe, a binary frame parser decodes the raw stream, and per-dataset Lua transforms derive the engineering units.
 
 <div align="center"><img src="doc/testo-t549i.jpg" height=220px/></div>

@@ -1,4 +1,4 @@
-# File transmission
+# File transmission (Pro)
 
 Serial Studio can send files to a connected device using plain text, raw binary, or industry-standard transfer protocols (XMODEM, XMODEM-1K, YMODEM, ZMODEM). It's handy for uploading firmware, configuration files, scripts, or any other data to an embedded target over an active connection.
 

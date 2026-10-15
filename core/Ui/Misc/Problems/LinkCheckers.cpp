@@ -446,18 +446,20 @@ static void reportParseThinning(QList<Finding>& out)
 
 /**
  * @brief Collects one group's starved dataset names (frame index above @p watermark), counting
- *        overflow past the cap into @p extra so the finding text stays short and stable.
+ *        overflow past the cap into @p extra so the finding text stays short and stable, and
+ *        records the first starved dataset in @p firstUniqueId as the finding's Go To target.
  */
-static void appendStarvedNames(const DataModel::Group& group,
-                               int watermark,
-                               QStringList& names,
-                               int& extra)
+static void appendStarvedNames(
+  const DataModel::Group& group, int watermark, QStringList& names, int& extra, int& firstUniqueId)
 {
   constexpr int kMaxNamed = 5;
 
   for (const auto& dataset : group.datasets) {
     if (!dataset.enabled || dataset.virtual_ || dataset.index <= watermark)
       continue;
+
+    if (firstUniqueId < 0)
+      firstUniqueId = dataset.uniqueId;
 
     if (names.size() >= kMaxNamed) {
       ++extra;
@@ -472,16 +474,18 @@ static void appendStarvedNames(const DataModel::Group& group,
 }
 
 /**
- * @brief Names the datasets of @p sourceId whose frame index exceeds @p watermark.
+ * @brief Names the datasets of @p sourceId whose frame index exceeds @p watermark; the first one
+ *        found lands in @p firstUniqueId (-1 when none).
  */
-[[nodiscard]] static QString starvedDatasetNames(int sourceId, int watermark)
+[[nodiscard]] static QString starvedDatasetNames(int sourceId, int watermark, int& firstUniqueId)
 {
   QStringList names;
   int extra          = 0;
+  firstUniqueId      = -1;
   const auto& groups = DataModel::pipelineModules().projectModel.groups();
   for (const auto& group : groups)
     if (group.sourceId == sourceId && group.enabled)
-      appendStarvedNames(group, watermark, names, extra);
+      appendStarvedNames(group, watermark, names, extra, firstUniqueId);
 
   QString joined = names.join(QStringLiteral(", "));
   if (extra > 0)
@@ -491,34 +495,18 @@ static void appendStarvedNames(const DataModel::Group& group,
 }
 
 /**
- * @brief Reports datasets starved by short frames (spec 0088 R5): the source's frames deliver
- *        fewer values than the highest configured frame index, sustained across the window, so
- *        the affected datasets keep a stale value that looks live.
+ * @brief Appends the short-frame finding for one offending source, pointing Go To at its first
+ *        starved dataset.
  */
-static void reportShortFrames(QList<Finding>& out)
+static void appendShortFrameFinding(QList<Finding>& out,
+                                    const DataModel::FrameBuilder::ShortFrameStat& offender)
 {
-  DataModel::FrameBuilder::ShortFrameStat offender{-1, 0, 0};
-  const auto stats = frameBuilder().shortFrameStats();
-  for (const auto& stat : stats)
-    if (stat.watermark > 0 && stat.watermark < stat.maxIndex) {
-      offender = stat;
-      break;
-    }
-
-  if (offender.sourceId < 0) {
-    s_shortFrameTicks = 0;
-    return;
-  }
-
-  s_shortFrameTicks = qMin(s_shortFrameTicks + 1, kSustainTicks);
-  if (s_shortFrameTicks < kSustainTicks)
-    return;
-
-  const QString starved = starvedDatasetNames(offender.sourceId, offender.watermark);
+  int firstUniqueId     = -1;
+  const QString starved = starvedDatasetNames(offender.sourceId, offender.watermark, firstUniqueId);
   if (starved.isEmpty())
     return;
 
-  out.append(makeLinkFinding(
+  auto finding = makeLinkFinding(
     Misc::ProblemCenter::Warning,
     "short-frames",
     trLinkProblem("Frames deliver fewer values than the project expects"),
@@ -528,7 +516,38 @@ static void reportShortFrames(QList<Finding>& out)
       .arg(QString::number(offender.watermark), QString::number(offender.maxIndex), starved),
     trLinkProblem("Confirm the device sends every expected value per frame, or "
                   "fix the affected datasets' frame index in the Project "
-                  "Editor.")));
+                  "Editor."));
+
+  finding.entityUniqueId = firstUniqueId;
+  finding.jump           = QStringLiteral("dataset");
+  out.append(finding);
+}
+
+/**
+ * @brief Reports datasets starved by short frames (spec 0088 R5, spec 0100 R12): every source
+ *        whose frames deliver fewer values than its highest configured frame index, sustained
+ *        across the window, gets its own finding, because the starved datasets keep a stale
+ *        value that looks live.
+ */
+static void reportShortFrames(QList<Finding>& out)
+{
+  QList<DataModel::FrameBuilder::ShortFrameStat> offenders;
+  const auto stats = frameBuilder().shortFrameStats();
+  for (const auto& stat : stats)
+    if (stat.watermark > 0 && stat.watermark < stat.maxIndex)
+      offenders.append(stat);
+
+  if (offenders.isEmpty()) {
+    s_shortFrameTicks = 0;
+    return;
+  }
+
+  s_shortFrameTicks = qMin(s_shortFrameTicks + 1, kSustainTicks);
+  if (s_shortFrameTicks < kSustainTicks)
+    return;
+
+  for (const auto& offender : std::as_const(offenders))
+    appendShortFrameFinding(out, offender);
 }
 
 /**

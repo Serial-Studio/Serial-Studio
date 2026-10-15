@@ -1,6 +1,6 @@
 # Audio Driver (Pro)
 
-The Audio driver lets Serial Studio treat any OS-level audio input device as an analog data source: microphones, line-in, audio interfaces, USB DACs, virtual loopback devices, anything the OS can record from. Audio input is a Serial Studio Pro feature, built on miniaudio for direct OS-backend access.
+The Audio driver lets Serial Studio treat any OS-level audio input device as an analog input: microphones, line-in, audio interfaces, USB DACs, virtual loopback devices, anything the OS can record from. Audio input is a Serial Studio Pro feature, built on miniaudio for direct OS-backend access.
 
 It can also feed an analog signal into Serial Studio when no dedicated driver fits. A vibration sensor through a microphone preamp, or a current shunt through a line input, both work the same as a real microphone.
 
@@ -75,7 +75,7 @@ This timestamp accuracy is what keeps audio data lined up in CSV exports and ses
 
 ### What you get downstream
 
-The driver converts each captured buffer to CSV text: one line per sample period, channels separated by commas (`L,R` for stereo). Under line-delimited framing (the Quick Plot default), each line becomes one frame carrying its own sample-clock timestamp, so a 48000 Hz capture produces 48000 frames per second. The [frame parser](JavaScript-API.md) sees the decoded sample values as text, which can be:
+The driver converts each captured buffer to CSV text: one line per sample period, channels separated by commas (`L,R` for stereo). Under line-delimited framing (the Quick Plot default), each line becomes one frame carrying its own sample-clock timestamp, so a 48000 Hz capture produces 48000 frames per second. The [frame parser](Frame-Parser.md) sees the decoded sample values as text, which can be:
 
 - Plotted directly as time-domain waveforms.
 - Fed into an FFT widget for spectrum analysis.
@@ -84,7 +84,7 @@ The driver converts each captured buffer to CSV text: one line per sample period
 
 The FFT and Waterfall widgets share the same per-dataset settings (`fftSamples`, `fftSamplingRate`, `fftMin`, `fftMax`), so a single audio channel can drive both views simultaneously.
 
-In [Quick Plot mode](Operation-Modes.md) the dashboard configures itself: each channel becomes a dataset in an *Audio Input* group with FFT enabled, `fftSamplingRate` set to the device sample rate, `fftSamples` sized to the power of two covering roughly 50 ms of signal (256 to 8192), and plot ranges set to -1 / 1 under normalization or taken from the sample format's limits without it. In a project, set those per-dataset values yourself.
+In [Quick Plot mode](Operation-Modes.md) the dashboard configures itself: each channel becomes a dataset in an *Audio Input* group with FFT enabled, `fftSamplingRate` set to the device sample rate, `fftSamples` sized to the power of two covering roughly 50 ms of signal (256 to 8192), and plot ranges set to -1 / 1 under normalization or taken from the sample format's limits without it. In a project, set those per-dataset values yourself, or start from **Save as Project** in the dashboard's start menu, which carries the Quick Plot values over.
 
 ### Normalization
 
@@ -153,7 +153,7 @@ For step-by-step setup, see the [Protocol Setup Guides, Audio Input section](Pro
 - [Protocol Setup Guides](Protocol-Setup-Guides.md): step-by-step Audio Input setup.
 - [API Reference](API-Reference.md): the `io.audio.*` command set for scripted control.
 - [Operation Modes](Operation-Modes.md): Quick Plot vs Project File, and what gets auto-configured.
-- [Data Sources](Data-Sources.md): driver capability summary across all transports.
+- [Devices](Devices.md): driver capability summary across all transports.
 - [Communication Protocols](Communication-Protocols.md): overview of all supported transports.
 - [Widget Reference](Widget-Reference.md): FFT Plot and Waterfall widget configuration.
 - [Dataset Value Transforms](Dataset-Transforms.md): per-channel calibration, scaling, and filtering of audio samples.

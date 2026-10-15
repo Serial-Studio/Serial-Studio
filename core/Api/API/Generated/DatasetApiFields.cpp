@@ -566,7 +566,8 @@ static void datasetSchemaPart1(QJsonObject& props)
                                      QJsonArray()));
   props.insert(Keys::Index,
                datasetSchemaProperty("integer",
-                                     "Frame position used for aligning datasets in time",
+                                     "Position of this value in the parser's output (first value "
+                                     "= 1). 0 = unassigned.",
                                      QJsonArray()));
   props.insert(Keys::Units,
                datasetSchemaProperty("string",

@@ -1,10 +1,8 @@
 Copyright (c) 2020–2026 Alex Spataru <https://github.com/alex-spataru>
+Bu yazılım, GNU GPLv3 lisansı altında ücretsiz ve açık kaynaktır. Türev
+çalışmaların aynı şartlar altında açık kaynak kalması koşuluyla kullanabilir,
+değiştirebilir ve yeniden dağıtabilirsiniz.
 
-Bu yazılım, GNU GPLv3 lisansı altında ücretsiz ve açık kaynaktır.
-Türev çalışmaların aynı şartlar altında açık kaynak kalması koşuluyla
-kullanabilir, değiştirebilir ve yeniden dağıtabilirsiniz.
-
-→ Lisans: https://www.gnu.org/licenses/gpl-3.0.html
 → Kaynak:  https://github.com/serial-studio/serial-studio
 
 Bu projeyi beğendiniz mi? Serial Studio Pro ile geliştirmeyi desteklemeyi
@@ -17,5 +15,3 @@ Pro özellikler:
 → Historian, Değişkenler ve değer dönüşümleri (JS + Lua)
 → Çok kaynaklı projeler ve özel çalışma alanları
 → Ticari lisans (GPL yükümlülüğü yoktur)
-
-→ Daha fazla bilgi edinin: https://serial-studio.com/

@@ -43,7 +43,7 @@
           "items": [
             { "type": "command", "id": "app.macros" },
             { "type": "command", "id": "app.remoteAttach" },
-            { "type": "command", "id": "app.connectionDiagnostics" }
+            { "type": "command", "id": "app.problems" }
           ] }
       ]
     },

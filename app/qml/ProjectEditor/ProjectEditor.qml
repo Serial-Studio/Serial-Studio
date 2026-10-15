@@ -61,6 +61,7 @@ Widgets.SmartWindow {
   onVisibleChanged: {
     if (visible) {
       Cpp_NativeWindow.addWindow(root)
+      root.ensureProjectMode()
       Cpp_JSON_ProjectModel.openJsonFile(Cpp_AppState.projectFilePath)
     }
 
@@ -69,6 +70,32 @@ Widgets.SmartWindow {
       actionIconPicker.close()
       onlineIconPicker.close()
     }
+  }
+
+  //
+  // Project File mode for editing (spec 0100 R7): switch right away while the link is idle, tell
+  // the user how to go back; while connected or playing back, the overlay explains instead
+  //
+  readonly property bool linkBusy: Cpp_IO_Manager.isConnected
+                                   || Cpp_IO_Manager.isConnecting
+                                   || Cpp_CSV_Player.isOpen
+                                   || Cpp_MDF4_Player.isOpen
+                                   || (Cpp_CommercialBuild && Cpp_Sessions_Player.isOpen)
+
+  function ensureProjectMode() {
+    if (root.linkBusy || Cpp_AppState.operationMode === SerialStudio.ProjectFile)
+      return
+
+    Cpp_AppState.requestOperationMode(SerialStudio.ProjectFile)
+    Cpp_Notifications.postInfo("OperationMode",
+                               qsTr("Switched to Project File mode"),
+                               qsTr("The Project Editor works on project files. To go back, "
+                                    + "choose another Operation Mode in Device Setup."))
+  }
+
+  onLinkBusyChanged: {
+    if (root.visible)
+      root.ensureProjectMode()
   }
 
   //
@@ -416,14 +443,20 @@ Widgets.SmartWindow {
         }
 
         Label {
+          Layout.fillWidth: true
           wrapMode: Label.WordWrap
           Layout.alignment: Qt.AlignHCenter
-          Layout.fillWidth: true
           horizontalAlignment: Label.AlignHCenter
           font: Cpp_Misc_CommonFonts.customUiFont(1.4, true)
-          text: editorOverlay.lockMode
-                ? qsTr("This project is password protected")
-                : qsTr("Editing is available in Project mode")
+          text: {
+            if (editorOverlay.lockMode)
+              return qsTr("This project is password protected")
+
+            if (Cpp_IO_Manager.isConnected)
+              return qsTr("Disconnect to edit the project")
+
+            return qsTr("Close the playback to edit the project")
+          }
         }
 
         Label {
@@ -435,7 +468,8 @@ Widgets.SmartWindow {
           font: Cpp_Misc_CommonFonts.customUiFont(1.2, false)
           text: editorOverlay.lockMode
                 ? qsTr("Enter the password to make changes, or open a different project.")
-                : qsTr("Switch to Project mode to load and edit a project.")
+                : qsTr("The Project Editor needs Project File mode, which starts when the "
+                       + "current session ends. The session keeps running until then.")
         }
 
         Item {
@@ -453,17 +487,18 @@ Widgets.SmartWindow {
             leftPadding: 16
             rightPadding: 12
             icon.color: palette.buttonText
+            visible: editorOverlay.lockMode || Cpp_IO_Manager.isConnected
             icon.source: editorOverlay.lockMode
                          ? "qrc:/icons/buttons/unlock.svg"
                          : "qrc:/icons/buttons/switch.svg"
             text: editorOverlay.lockMode
                   ? qsTr("Unlock")
-                  : qsTr("Switch to Project Mode")
+                  : qsTr("Disconnect and Edit")
             onClicked: {
               if (editorOverlay.lockMode)
                 Cpp_JSON_ProjectModel.unlockProject()
-              else
-                Cpp_AppState.operationMode = SerialStudio.ProjectFile
+              else if (Cpp_IO_Manager.isConnected)
+                Cpp_IO_Manager.toggleConnection()
             }
           }
 

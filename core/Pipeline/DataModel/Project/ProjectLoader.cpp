@@ -610,7 +610,7 @@ bool DataModel::ProjectLoader::openJsonFile(const QString& path)
     return true;
   }
 
-  appStateRef().setOperationMode(SerialStudio::ProjectFile);
+  appStateRef().requestOperationMode(SerialStudio::ProjectFile);
 
   QFile file(resolved);
   QJsonDocument document;
@@ -644,11 +644,11 @@ bool DataModel::ProjectLoader::openJsonFile(const QString& path)
  */
 bool DataModel::ProjectLoader::loadGeneratedProject(const QJsonDocument& document)
 {
-  auto& appState          = AppState::instance();
-  const auto previousMode = appState.operationMode();
-  appState.setOperationMode(SerialStudio::ProjectFile);
+  auto& appState            = AppState::instance();
+  const auto previousTarget = appState.targetOperationMode();
+  appState.requestOperationMode(SerialStudio::ProjectFile);
   if (!loadFromJsonDocument(document, QString())) {
-    appState.setOperationMode(previousMode);
+    appState.requestOperationMode(previousTarget);
     return false;
   }
 
@@ -917,7 +917,7 @@ void DataModel::ProjectLoader::importProjectFromJson(const QJsonObject& project,
               file.close();
 
               static auto& appState = AppState::instance();
-              appState.setOperationMode(SerialStudio::ProjectFile);
+              appState.requestOperationMode(SerialStudio::ProjectFile);
 
               // code-verify off
               // Clear cached path so openJsonFile()'s redundant-reload guard doesn't skip the open.
@@ -1183,7 +1183,7 @@ void DataModel::ProjectLoader::enforceGplSingleSource()
   if (!m_model.m_suppressMessageBoxes)
     Core::Prompt::showMessageBox(
       ProjectModel::tr("Multi-source projects require a Pro license"),
-      ProjectModel::tr("This project contains multiple data sources. Only the first source "
+      ProjectModel::tr("This project contains multiple devices. Only the first device "
                        "has been loaded. A Serial Studio Pro license is required to use "
                        "multi-source projects."),
       Core::Prompt::Information);

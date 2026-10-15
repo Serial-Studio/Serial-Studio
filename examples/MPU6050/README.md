@@ -1,5 +1,9 @@
 # MPU6050 + Serial Studio example
 
+**What you'll learn:** an Accelerometer group and a Gyroscope group fed by a comma-separated serial frame from an Arduino.
+
+**Prerequisites:** an Arduino, an MPU6050 module wired over I2C, and the Arduino IDE. Serial Studio's free features are enough.
+
 ## Overview
 
 This project shows how to use Serial Studio to visualize motion and orientation data from an MPU6050 accelerometer and gyroscope connected to an Arduino. The Arduino sketch reads processed acceleration, gyroscope, and temperature data from the MPU6050 and sends it to Serial Studio over serial for real-time display on widgets like a g-meter or attitude indicator.
@@ -44,7 +48,7 @@ Notes:
 Serial Studio needs to know how to parse the incoming sensor data.
 
 1. **Download and install Serial Studio.** Visit [Serial Studio's website](https://serial-studio.github.io/) to download and install.
-2. **Open Serial Studio and load `MPU6050.ssproj`.** Launch Serial Studio, go to **FRAME PARSING** → Parse via Project File, and select the `MPU6050.ssproj` file from this project. It has everything you need to interpret the Arduino's data.
+2. **Open Serial Studio and load `MPU6050.ssproj`.** Launch Serial Studio, set **Operation Mode** to Project File, and select the `MPU6050.ssproj` file from this project. It has everything you need to interpret the Arduino's data.
 
 #### Building the project from scratch
 

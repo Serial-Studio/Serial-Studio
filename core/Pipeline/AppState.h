@@ -25,6 +25,7 @@
 #include <QSettings>
 #include <QString>
 
+#include "Core/Bus/Subscription.h"
 #include "Core/IO/FrameConfig.h"
 #include "Core/SerialStudio.h"
 
@@ -81,6 +82,7 @@ public:
   [[nodiscard]] QString projectFileName() const;
   [[nodiscard]] const QString& projectFilePath() const noexcept;
   [[nodiscard]] SerialStudio::OperationMode operationMode() const noexcept;
+  [[nodiscard]] SerialStudio::OperationMode targetOperationMode() const noexcept;
   [[nodiscard]] IO::FrameConfig frameConfig() const noexcept;
   [[nodiscard]] bool ephemeralSession() const noexcept;
 
@@ -89,12 +91,14 @@ public slots:
   void restoreLastProject();
   void setEphemeralSession(bool ephemeral);
   void setOperationMode(SerialStudio::OperationMode mode);
+  void requestOperationMode(SerialStudio::OperationMode mode);
 
 private slots:
   void onProjectLoaded();
 
 private:
   void publishState();
+  void applyPendingMode();
 
   [[nodiscard]] IO::FrameConfig deriveFrameConfig() const;
 
@@ -107,4 +111,7 @@ private:
   IO::FrameConfig m_frameConfig;
   DataModel::ProjectModel& m_projectModel;
   DataModel::FrameBuilder* m_frameBuilder;
+  bool m_hasPendingMode;
+  SerialStudio::OperationMode m_pendingMode;
+  Core::Bus::Subscription m_linkState;
 };

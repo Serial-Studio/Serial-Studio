@@ -1,5 +1,9 @@
 # CAN Bus Example for Serial Studio
 
+**What you'll learn:** a CAN Bus source with DBC file import for automatic dashboard generation, a Lua frame parser, a Data Grid, and a custom level-bar widget extension.
+
+**Prerequisites:** Serial Studio Pro, Python 3 for the ECU simulator, and the widget-extension example installed first.
+
 This example shows how to use CAN bus with Serial Studio. It includes a car simulator that sends realistic vehicle data.
 
 > CAN Bus support needs a Serial Studio Pro license. See [serial-studio.com](https://serial-studio.com/) for details.
@@ -13,7 +17,7 @@ missing-widget placeholder.
 ## Quick Start (No Hardware Required!)
 
 ### 1. Start Serial Studio
-- In the Setup panel, select **CAN Bus** from the I/O Interface dropdown
+- In the Setup panel, select **CAN Bus** from the Connection dropdown
 - Select **CAN Driver**: `Virtual CAN`
 - Select **Interface**: `can0`
 - Click **Connect**

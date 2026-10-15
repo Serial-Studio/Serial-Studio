@@ -1,9 +1,8 @@
 Copyright (c) 2020–2026 Alex Spataru <https://github.com/alex-spataru>
-
-Du använder en provversion av Serial Studio Pro. Denna version är
-fullt fungerande för utvärdering och personlig, icke-kommersiell
-användning endast. För att fortsätta efter din provperiod, uppgradera
-till en betald plan eller kompilera GPLv3-källkoden själv.
+Du använder en provversion av Serial Studio Pro. Denna version är fullt
+fungerande för utvärdering och personlig, icke-kommersiell användning endast.
+För att fortsätta efter din provperiod, uppgradera till en betald plan eller
+kompilera GPLv3-källkoden själv.
 
 → Support: alex@serial-studio.com
 → Boka ett samtal: https://calendly.com/serial-studio

@@ -298,12 +298,12 @@ static void checkControlScriptStopped(QList<Finding>& out)
   out.append(makeScriptFinding(
     Misc::ProblemCenter::Warning,
     "control-script-stopped",
-    trScriptProblem("The control script stopped with an error"),
-    trScriptProblem("The project's control script raised a runtime error and is no longer "
+    trScriptProblem("The Control Loop stopped with an error"),
+    trScriptProblem("The project's Control Loop raised a runtime error and is no longer "
                     "running. Notifications it raised can no longer resolve themselves, so any "
                     "alarm they hold open needs an acknowledge. Error: %1")
       .arg(script.lastError()),
-    trScriptProblem("Open the control script in the Project Editor, fix the reported error and "
+    trScriptProblem("Open the Control Loop in the Project Editor, fix the reported error and "
                     "reconnect to restart it."),
     -1,
     QString()));

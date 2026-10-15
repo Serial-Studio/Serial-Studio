@@ -1,4 +1,4 @@
-# Notifications
+# Notifications (Pro)
 
 Dashboard-level notification system for publishing **Info**, **Warning**, and **Critical** events from frame parsers, dataset transforms, output widget scripts, the Control Loop, C++ code, and the MCP API. Every event shows up in a scrollable log on the dashboard and can optionally surface as a native OS desktop notification.
 
@@ -43,7 +43,7 @@ The `transmit(value)` function in output widgets can post notifications too. Use
 
 ### Control Loop
 
-The Control Loop's `setup()` and `loop()` functions have the same five functions available, for example to raise a communication-loss alarm from a staleness watchdog. See [Control Loop (setup / loop)](Control-Script.md) for a worked example.
+The Control Loop's `setup()` and `loop()` functions have the same five functions available, for example to raise a communication-loss alarm from a staleness watchdog. See [Control Loop (setup / loop)](Control-Loop.md) for a worked example.
 
 ### C++ and the MCP API
 
@@ -341,9 +341,9 @@ Warnings are off by default because Qt and QML emit them frequently during norma
 
 - [Aural Alerts](Aural-Alerts.md): Warning and Critical notifications become alarm points that sound and flash the master annunciator; `notifyClear()` returns them to normal.
 - [Dataset Value Transforms](Dataset-Transforms.md): where `notify*` is most commonly used.
-- [Frame Parser Scripting](JavaScript-API.md): the `parse(frame)` function has the same notification API.
+- [Frame Parser Scripting](Frame-Parser.md): the `parse(frame)` function has the same notification API.
 - [Output Controls](Output-Controls.md): `transmit(value)` can also post notifications.
-- [Control Loop (setup / loop)](Control-Script.md): `setup()` and `loop()` can also post notifications, marshalled from the worker thread.
+- [Control Loop (setup / loop)](Control-Loop.md): `setup()` and `loop()` can also post notifications, marshalled from the worker thread.
 - [API Reference](API-Reference.md): `notifications.post`, `notifications.list`, and related commands for external drivers.
 - [MQTT Publisher](MQTT-Publisher.md): the **Publish Notifications** option republishes every event on this bus to MQTT.
 - [Pro vs Free Features](Pro-vs-Free.md): what's gated behind a Pro license.

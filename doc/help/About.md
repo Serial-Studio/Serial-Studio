@@ -36,7 +36,7 @@ Serial Studio grew driver-by-driver as users brought new hardware to it. Most ad
 - **Network sockets (early 2021).** TCP first, then UDP, with UDP multicast added in October 2021. Useful for running Serial Studio on a different machine from the device, or behind a network gateway. This was the moment "Serial Studio" stopped being literally about serial.
 - **MQTT (February–March 2021).** Both publisher and subscriber. The trigger was IoT users who wanted to bridge a fleet of devices through a broker rather than running a dedicated TCP listener per node.
 - **Bluetooth Low Energy (February 2022).** GATT services and characteristics, with shared discovery state across instances so the device list survives QML rebuilds. Brought in for wireless sensors and prototyping boards (ESP32, nRF52) without a USB cable attached.
-- **Audio input (July 2025).** Microphones, line-in, and any OS-level audio device, used as a high-rate analog data source. The audio driver added the FFT pipeline that the rest of the dashboard now reuses, and pushed the codebase to handle 48 kHz+ sample rates without dropping frames.
+- **Audio input (July 2025).** Microphones, line-in, and any OS-level audio device, used as a high-rate analog input. The audio driver added the FFT pipeline that the rest of the dashboard now reuses, and pushed the codebase to handle 48 kHz+ sample rates without dropping frames.
 - **Modbus and CAN Bus (December 2025).** The first explicitly *industrial* drivers. Modbus TCP and RTU, with a register-map importer that turns vendor CSV/XML/JSON into a working project. CAN Bus uses Qt's SocketCAN/PCAN/Vector backends and includes a DBC importer so automotive `.dbc` files decode signals automatically.
 - **Raw USB via libusb (February 2026).** For devices that expose vendor-specific USB endpoints instead of a CDC serial profile. Common on logic analyzers, custom data acquisition boards, and some scientific instruments.
 - **HID and Process I/O (March 2026).** HID via hidapi for game controllers, custom HID firmware, and medical devices. Process I/O for piping data in from any external program: `socat`, `nc`, a Python script, anything that writes to stdout. Both shipped together as the "experimental" tier of drivers.
@@ -82,7 +82,7 @@ The features below are the 4.0 surface in detail. Together they are what turned 
 
 ### Variables: a shared data bus
 
-Datasets are no longer islands. Every project carries an auto-generated **system table** with `raw:<id>` and `final:<id>` variables for every dataset, plus user-defined tables of `Constant` (project-time) and `Computed` (per-frame) variables. Frame parsers, value transforms, and output widgets all read and write the same variables, which means a sensor calibration written once is reusable everywhere. See [Variables](Data-Tables.md).
+Datasets are no longer islands. Every project carries an auto-generated **system table** with `raw:<id>` and `final:<id>` variables for every dataset, plus user-defined tables of `Constant` (project-time) and `Computed` (per-frame) variables. Frame parsers, value transforms, and output widgets all read and write the same variables, which means a sensor calibration written once is reusable everywhere. See [Variables](Variables.md).
 
 ### Per-dataset value transforms
 
@@ -94,11 +94,11 @@ Buttons, toggles, sliders, knobs, text fields, and a freeform Output Panel send 
 
 ### Control Loop and the scripting SDK
 
-Output widgets cover button-press commands; the Control Loop covers automation. A project carries one `setup()` / `loop()` script, the same mental model as an Arduino sketch, that Serial Studio runs on a worker thread over the life of a connection. Through the I/O scripting SDK (`io.*`: device writes, `deviceWriteAndWait` handshakes, latest-frame capture, `dashboardTick`) the loop can send wake-up sequences, poll registers on a timer, keep a link alive, or step a state machine, without touching firmware. The loop runs off the acquisition pipeline and is bounded by a watchdog, so a slow script can't stall parsing or the UI. See [Control Loop](Control-Script.md).
+Output widgets cover button-press commands; the Control Loop covers automation. A project carries one `setup()` / `loop()` script, the same mental model as an Arduino sketch, that Serial Studio runs on a worker thread over the life of a connection. Through the I/O scripting SDK (`io.*`: device writes, `deviceWriteAndWait` handshakes, latest-frame capture, `dashboardTick`) the loop can send wake-up sequences, poll registers on a timer, keep a link alive, or step a state machine, without touching firmware. The loop runs off the acquisition pipeline and is bounded by a watchdog, so a slow script can't stall parsing or the UI. See [Control Loop](Control-Loop.md).
 
 ### Historian (Pro)
 
-Serial Studio Pro can record sessions into a SQLite `.db` file. Parsed frames, raw bytes, table snapshots, and project metadata all live in one file. The Historian browses, tags, and exports sessions. The SQLite Player replays a stored session through the live FrameBuilder pipeline so dashboards and reports work identically on recorded data. Session Reports turn the same database into a styled PDF with cover, test info, summary, and per-parameter chart sections. See [Historian](Session-Database.md) and [Session Reports](Session-Reports.md).
+Serial Studio Pro can record sessions into a SQLite `.db` file. Parsed frames, raw bytes, table snapshots, and project metadata all live in one file. The Historian browses, tags, and exports sessions. The SQLite Player replays a stored session through the live FrameBuilder pipeline so dashboards and reports work identically on recorded data. Session Reports turn the same database into a styled PDF with cover, test info, summary, and per-parameter chart sections. See [Historian](Historian.md) and [Session Reports](Session-Reports.md).
 
 ### File transmission
 

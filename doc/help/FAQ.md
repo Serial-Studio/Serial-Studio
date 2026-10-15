@@ -6,7 +6,7 @@ Answers to common questions about Serial Studio, from installation to advanced u
 
 - [General](#general)
 - [Installation and setup](#installation-and-setup)
-- [Data sources and protocols](#data-sources-and-protocols)
+- [Devices and protocols](#devices-and-protocols)
 - [Dashboard configuration](#dashboard-configuration)
 - [Troubleshooting](#troubleshooting)
 - [Pro vs GPL](#pro-vs-gpl)
@@ -43,7 +43,7 @@ The Arduino Serial Plotter is good for quick debugging, but it only works with s
 
 Serial Studio adds:
 
-- More data sources: BLE, MQTT, Modbus TCP/RTU, CAN Bus, TCP/UDP.
+- More connection types: BLE, MQTT, Modbus TCP/RTU, CAN Bus, TCP/UDP.
 - 15+ widgets: gauges, maps, FFT, accelerometers, and others.
 - Custom dashboards through the Project Editor.
 - Save data to CSV.
@@ -111,13 +111,7 @@ flatpak run com.serial_studio.Serial-Studio
 
 ### Why can't I access serial ports on Linux?
 
-You need permission to access serial devices. Add your user to the `dialout` group:
-
-```bash
-sudo usermod -a -G dialout $USER
-```
-
-Then log out and back in for the change to take effect.
+Your user needs permission to open serial devices, which on most distributions means joining a group and logging out and back in. The steps, including the group name on Arch-based systems, are in [Serial port permissions](Linux-Installation.md#serial-port-permissions).
 
 ### How do I build Serial Studio from source?
 
@@ -138,9 +132,9 @@ cmake --build . -j$(nproc)
 
 For macOS and Windows, see the build instructions in the project repository.
 
-## Data sources and protocols
+## Devices and protocols
 
-### What data sources does Serial Studio support?
+### What devices does Serial Studio support?
 
 - **Serial ports:** UART, RS232, RS485 (via USB-serial adapter).
 - **Bluetooth Low Energy (BLE):** GATT characteristics.
@@ -163,11 +157,11 @@ For macOS and Windows, see the build instructions in the project repository.
 4. Set the baud rate (9600 and 115200 are common).
 5. Click **Connect**.
 
-If you don't see your device, check drivers (FTDI, CH340, CP2102) and permissions (on Linux, the `dialout` group).
+If you don't see your device, check drivers (FTDI, CH340, CP2102) and permissions (on Linux, see [Serial port permissions](Linux-Installation.md#serial-port-permissions)).
 
 ### Can I connect multiple devices at once?
 
-Yes (Pro). Multi-device projects let you define several data sources in a single project file, each with its own protocol, connection settings, and frame detection. For example, all at the same time you can connect:
+Yes (Pro). Multi-device projects let you define several devices in a single project file, each with its own protocol, connection settings, and frame detection. For example, all at the same time you can connect:
 
 - An Arduino over UART at 115200 baud.
 - An ESP32 over Bluetooth LE.
@@ -179,7 +173,7 @@ To set this up, open the Project Editor and add sources under the "Sources" sect
 
 ### How do I connect via Bluetooth Low Energy?
 
-1. Select **Bluetooth LE** as the data source.
+1. Select **Bluetooth LE** as the Connection.
 2. Wait for device discovery to finish.
 3. Select your device and characteristic UUID.
 4. Click **Connect**.
@@ -205,7 +199,7 @@ Pro only. Both Modbus TCP and Modbus RTU are supported.
 **Modbus TCP:**
 
 1. Set up a Modbus TCP server (industrial PLC, simulator, or Python script).
-2. Select **Modbus** as the data source.
+2. Select **Modbus** as the Connection.
 3. Enter the server address (for example `192.168.1.100:502`).
 4. Configure registers to read in your project file.
 5. Click **Connect**.
@@ -213,7 +207,7 @@ Pro only. Both Modbus TCP and Modbus RTU are supported.
 **Modbus RTU:**
 
 1. Connect your Modbus RTU device to a serial port.
-2. Select **Modbus** as the data source.
+2. Select **Modbus** as the Connection.
 3. Pick the serial port and set baud rate, parity, and stop bits.
 4. Configure registers to read in your project file.
 5. Click **Connect**.
@@ -225,7 +219,7 @@ See the Modbus PLC Simulator example in `/examples` for a full demo.
 Pro only.
 
 1. Install CAN hardware drivers (or use VirtualCAN for testing).
-2. Select **CAN Bus** as the data source.
+2. Select **CAN Bus** as the Connection.
 3. Choose a driver (VirtualCAN, SocketCAN, PEAK, Vector, and so on).
 4. Select an interface and bitrate.
 5. Import a DBC file to build the dashboard automatically.
@@ -281,11 +275,11 @@ Pro only.
 - Modbus registers.
 - Serial/UART sensors.
 - MQTT messages.
-- Any real-time data source.
+- Any real-time stream.
 
 ### How do I connect via TCP/UDP?
 
-1. Select **Network Socket** as the data source, then set the socket type to TCP or UDP.
+1. Select **Network Socket** as the Connection, then set the socket type to TCP or UDP.
 2. Enter the **Remote Address** (the device's IP address or hostname) and **Remote Port** (the device's listening port for TCP, or the port it sends to for UDP).
 3. For UDP, also set the **Local Port** field — the port Serial Studio binds to receive datagrams. Leave it `0` for automatic assignment unless the device expects a fixed destination port.
 4. Click **Connect**.
@@ -423,7 +417,7 @@ See [Dataset Value Transforms](Dataset-Transforms.md) for the full guide.
 
 **Linux:**
 
-- Add your user to `dialout`: `sudo usermod -a -G dialout $USER`, then log out and back in.
+- Give your user serial access: see [Serial port permissions](Linux-Installation.md#serial-port-permissions).
 - Check `/dev/ttyUSB*` or `/dev/ttyACM*`.
 - Check permissions: `ls -l /dev/ttyUSB0`.
 
@@ -451,7 +445,7 @@ See [Dataset Value Transforms](Dataset-Transforms.md) for the full guide.
 
 ### How do I parse binary or custom protocols?
 
-Use a **frame parser**. Parsers can be written in JavaScript or Lua, or configured (not coded) as a Built-In template; see [Frame Parser Scripting](JavaScript-API.md). JavaScript example:
+Use a **frame parser**. Parsers can be written in JavaScript or Lua, or configured (not coded) as a Built-In template; see [Frame Parser Scripting](Frame-Parser.md). JavaScript example:
 
 1. In the Project Editor, click the **Frame Parser** icon in the project tree.
 2. Write a JavaScript function that parses the raw data:
@@ -782,7 +776,7 @@ Alternatively, use the Pi as a data aggregator: collect sensor data and forward 
 
 Pro only (audio input).
 
-1. Select **Audio** as the data source.
+1. Select **Audio** as the Connection.
 2. Choose an audio input device (microphone, line-in).
 3. Use the FFT widget to see the frequency spectrum.
 4. Use the oscilloscope widget for the waveform.

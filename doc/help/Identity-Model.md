@@ -46,7 +46,7 @@ Treat the integer as opaque: it's allocated, not derived. Two assumptions you'd 
 - You **cannot** recover `(sourceId, groupId, datasetId)` from a `uniqueId` by arithmetic. The legacy formula `sourceId * 1'000'000 + groupId * 10'000 + datasetId` is only used as a one-shot back-fill when loading a project file from before this scheme existed; once the project is saved again, the values are persisted and no longer follow the formula.
 - You **cannot** guess what `uniqueId` a new dataset will receive. It's just the next value from the project's counter (`nextUniqueId`).
 
-`uniqueId` is what transform scripts and shared tables use, because they need a single key that's stable across sources. It's what you read from the live data API and what the system table (`__datasets__`) uses for its `raw:<uniqueId>` and `final:<uniqueId>` variables. The Group struct has its own `uniqueId` field with the same semantics, used inside workspace widget refs.
+`uniqueId` is what transform scripts and Variables tables use, because they need a single key that's stable across sources. It's what you read from the live data API and what the system table (`__datasets__`) uses for its `raw:<uniqueId>` and `final:<uniqueId>` variables. The Group struct has its own `uniqueId` field with the same semantics, used inside workspace widget refs.
 
 ### `alias`
 
@@ -64,8 +64,8 @@ In a project with hundreds of datasets an alias like `ATAM1-CH1` is self-documen
 | `groupId`  | Group-scoped API calls (`project.group.update`, dataset CRUD addressing)                         |
 | `datasetId`| Dataset CRUD addressing (`project.dataset.update`, `project.dataset.setOptions`, `project.dataset.delete`) |
 | `index`    | Maps each slot of the parser's returned array to a dataset; set per dataset in the Project Editor |
-| `uniqueId` | Live-data API (`dashboard.getData`, `dashboard.tailFrames`), transform scripts (`datasetGetRaw(uniqueId)`, `datasetGetFinal(uniqueId)`), shared tables (`raw:<uniqueId>`, `final:<uniqueId>`) |
-| `alias`    | Optional user-chosen name; script dataset lookups (`datasetGetRaw("name")`, `datasetGetFinal("name")`), shared tables (`raw:<alias>`, `final:<alias>`), and any API parameter that accepts a `uniqueId` |
+| `uniqueId` | Live-data API (`dashboard.getData`, `dashboard.tailFrames`), transform scripts (`datasetGetRaw(uniqueId)`, `datasetGetFinal(uniqueId)`), Variables tables (`raw:<uniqueId>`, `final:<uniqueId>`) |
+| `alias`    | Optional user-chosen name; script dataset lookups (`datasetGetRaw("name")`, `datasetGetFinal("name")`), Variables tables (`raw:<alias>`, `final:<alias>`), and any API parameter that accepts a `uniqueId` |
 
 ## Rule of thumb
 
@@ -105,8 +105,8 @@ If something is ever ambiguous, default to looking it up fresh from the project 
 ## See also
 
 - [Project Editor](Project-Editor.md): where datasets, groups, and sources are created and where their IDs come from.
-- [Frame Parser Scripting](JavaScript-API.md): the parser that picks values out of the frame and assigns them to datasets by `index`.
+- [Frame Parser Scripting](Frame-Parser.md): the parser that picks values out of the frame and assigns them to datasets by `index`.
 - [Dataset Value Transforms](Dataset-Transforms.md): per-dataset scripts that read and write variables by `uniqueId`.
-- [Variables](Data-Tables.md): the system table (`__datasets__`) keyed by `raw:<uniqueId>` and `final:<uniqueId>`.
+- [Variables](Variables.md): the system table (`__datasets__`) keyed by `raw:<uniqueId>` and `final:<uniqueId>`.
 - [API Reference](API-Reference.md): the JSON-RPC surface that exposes mutating CRUD by `(groupId, datasetId)` and live reads by `uniqueId`.
 - [Glossary](Glossary.md): definitions for `uniqueId`, `datasetId`, and frame `index`.

@@ -1,5 +1,9 @@
 # HSL Helsinki Public Transit
 
+**What you'll learn:** an MQTT subscriber source with a JavaScript frame parser that filters a public feed to one vehicle, shown on a GPS Map group and a Data Grid.
+
+**Prerequisites:** Serial Studio Pro and an internet connection.
+
 ## Overview
 
 This project subscribes to Helsinki Regional Transport's (HSL) public MQTT feed and visualizes the live position of a single vehicle (bus, tram, or commuter train) in Serial Studio. Around 1,500 vehicles publish position updates roughly once per second, so the JS parser filters the stream down to one target vehicle and converts each `VP` payload into a dashboard row.

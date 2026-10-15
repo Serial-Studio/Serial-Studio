@@ -37,7 +37,7 @@ The toolbar runs along the top of the window, left to right, grouped into sectio
 |--------|------|--------------|-------|
 | **Assistant** **(Pro)** | <img src="cmd:app.ai" alt="AI Assistant" width="16" height="16"> | Opens the [AI Assistant](AI-Assistant.md) to build and edit a project by chatting. | In the free build this button is **Extensions** instead, opening the [extension manager](Extensions.md). |
 | **Deploy** **(Pro)** | <img src="cmd:app.deploy" alt="Deploy Operator App" width="16" height="16"> | Opens the shortcut generator to build a standalone [operator app](Operator-Deployments.md) for the current project. | |
-| **Historian** **(Pro)** | <img src="cmd:app.sessions" alt="Historian" width="16" height="16"> | Opens the [Historian](Session-Database.md) to browse, replay, and export recorded sessions. | |
+| **Historian** **(Pro)** | <img src="cmd:app.sessions" alt="Historian" width="16" height="16"> | Opens the [Historian](Historian.md) to browse, replay, and export recorded sessions. | |
 | **Extensions** **(Pro)** | <img src="cmd:app.extensions" alt="Extensions" width="16" height="16"> | Browse and install [extensions](Extensions.md). | In the free build, the section's first button is Extensions; in Pro it lives here alongside the AI tools. |
 
 ### Preferences and driver selection
@@ -55,7 +55,7 @@ The toolbar runs along the top of the window, left to right, grouped into sectio
 | **CAN Bus** **(Pro)** | <img src="cmd:driver.canbus" alt="CAN Bus" width="16" height="16"> | Selects the [CAN Bus](Drivers-CAN-Bus.md) driver. | |
 | **Process** **(Pro)** | <img src="cmd:driver.process" alt="Process" width="16" height="16"> | Selects the [Process I/O](Drivers-Process-IO.md) driver. | |
 
-The driver buttons are a single-choice group: the active driver's label is shown in bold. They are disabled while a connection is live, while a file player is open, and for multi-source projects (where the source list is fixed by the project). See [Data Sources](Data-Sources.md).
+The driver buttons are a single-choice group: the active driver's label is shown in bold. They are disabled while a connection is live, while a file player is open, and for multi-source projects (where the source list is fixed by the project). See [Devices](Devices.md).
 
 ### Help and about
 
@@ -76,19 +76,19 @@ The driver buttons are a single-choice group: the active driver's label is shown
 
 The Setup panel docks on the right edge of the window and is where you choose how data is parsed and which I/O driver to use. Drag its left edge to resize it and give the Dashboard more space.
 
-### Frame parsing
+### Operation Mode
 
-Three radio buttons pick the [operation mode](Operation-Modes.md):
+The Operation Mode group has three options that pick the [operation mode](Operation-Modes.md):
 
 | Option | What it does |
 |--------|--------------|
-| **Console Only (No Parsing)** | Raw bytes go straight to the terminal. No widgets, no parsing. |
-| **Quick Plot (Comma Separated Values)** | Auto-builds a dashboard from comma-separated numbers. |
-| **Parse via Project File** | Uses a `.ssproj` project to parse frames and build a custom dashboard. Disabled while connected or while a file player is open. |
+| **Console Only** | Raw bytes go straight to the terminal. No widgets, no parsing. |
+| **Quick Plot** | Auto-builds a dashboard from comma-separated numbers. |
+| **Project File** | Uses a `.ssproj` project to parse frames and build a custom dashboard. Disabled while connected or while a file player is open. |
 
-### Device setup
+### Connection
 
-- **I/O Interface** selector: chooses the active driver (the same set as the toolbar driver buttons). Each choice swaps in a driver-specific settings panel below it (port and baud rate for UART, host and port for Network, and so on). See [Communication Protocols](Communication-Protocols.md) and the per-driver pages under [Drivers](Drivers-UART.md).
+- **Connection** selector: chooses the active driver (the same set as the toolbar driver buttons). Each choice swaps in a driver-specific settings panel below it (port and baud rate for UART, host and port for Network, and so on). See [Communication Protocols](Communication-Protocols.md) and the per-driver pages under [Drivers](Drivers-UART.md).
 - An **API Server** status indicator appears in the panel header when the [TCP API](API-Reference.md) is enabled, showing whether clients are connected.
 
 ### Data export
@@ -98,11 +98,11 @@ Switches that arm recording for the session. Each writes to a separate file or s
 | Switch | What it records | Reference |
 |--------|-----------------|-----------|
 | **CSV Spreadsheet** | A `.csv` of every parsed frame. | [CSV Export & Playback](CSV-Export-Playback.md) |
-| **Historian Database** **(Pro)** | A SQLite session in the database. | [Historian](Session-Database.md) |
+| **Historian Database** **(Pro)** | A SQLite session in the database. | [Historian](Historian.md) |
 | **MDF4 Recording** **(Pro)** | An ASAM MDF4 measurement file. | [MDF4](MDF4.md) |
 | **Console Log** **(Pro)** | A transcript of the raw console stream. | |
 
-For a project with two or more data sources, the panel replaces the single-driver controls with an **Open Project Editor** button, because the source list is defined in the project. See [Data Sources](Data-Sources.md).
+For a project with two or more devices, the panel replaces the single-driver controls with an **Open Project Editor** button, because the source list is defined in the project. See [Devices](Devices.md).
 
 **Console Log file location.** Each transcript is written under the workspace's `Console/<subfolder>/` directory, where `<subfolder>` is the project title (ProjectFile mode), `Quick Plot`, or `Console` (Console Only mode). The file is named `yyyy_MMM_dd HH_mm_ss.txt`, with `_deviceN` appended for a multi-device Console Only session. ANSI escape sequences are stripped before writing, and the file is UTF-8 with a byte-order mark.
 
@@ -167,7 +167,7 @@ The [Project Editor](Project-Editor.md) has its own toolbar for building the pro
 | **Protobuf** | <img src="cmd:editor.importProto" alt="Import Protobuf Schema" width="16" height="16"> | Generates a project from a Protocol Buffers `.proto` schema. | See [Auto-Generating Projects](Auto-Generating-Projects.md). |
 | **Restore** | <img src="cmd:editor.restoreBackup" alt="Restore Backup" width="16" height="16"> | Restores a recent automatic snapshot of the project. | See [Backups & Recovery](Backup-Recovery.md). |
 | **Lock** | <img src="cmd:editor.lock" alt="Lock Project Editor" width="16" height="16"> | Sets a password and locks the editor. | See [Project Lock](Project-Lock.md). |
-| **Add Device** **(Pro)** | <img src="cmd:editor.addDevice" alt="Add Device" width="16" height="16"> | Adds another [data source](Data-Sources.md) to the project. | |
+| **Add Device** **(Pro)** | <img src="cmd:editor.addDevice" alt="Add Device" width="16" height="16"> | Adds another [device](Devices.md) to the project. | |
 
 ### Add output controls
 
@@ -189,7 +189,7 @@ The [Project Editor](Project-Editor.md) has its own toolbar for building the pro
 | **Plot** | <img src="cmd:editor.addPlot" alt="Add Plot" width="16" height="16"> | A time-series [plot](Plots.md). |
 | **FFT Plot** | <img src="cmd:editor.addFFT" alt="Add FFT Plot" width="16" height="16"> | An FFT spectrum. |
 | **Gauge** | <img src="cmd:editor.addGauge" alt="Add Gauge" width="16" height="16"> | A gauge. |
-| **Level Indicator** | <img src="cmd:editor.addBar" alt="Add Level Indicator" width="16" height="16"> | A bar. |
+| **Bar** | <img src="cmd:editor.addBar" alt="Add Level Indicator" width="16" height="16"> | A bar. |
 | **Compass** | <img src="cmd:editor.addCompass" alt="Add Compass" width="16" height="16"> | A compass. |
 | **LED Indicator** | <img src="cmd:editor.addLED" alt="Add LED Indicator" width="16" height="16"> | An LED. |
 
@@ -200,7 +200,7 @@ The [Project Editor](Project-Editor.md) has its own toolbar for building the pro
 | **Group** | <img src="cmd:editor.addGroup" alt="Add Group" width="16" height="16"> | A generic dataset group. |
 | **Image** | <img src="icon:widgets/image" alt="image" width="16" height="16"> | An [Image View](Widget-Reference.md#image-view-pro) (Pro). |
 | **Web View** | <img src="cmd:editor.addWebView" alt="Add Web View" width="16" height="16"> | A web viewer. |
-| **Canvas** | <img src="cmd:editor.addPainter" alt="Add Canvas" width="16" height="16"> | A [Canvas](Painter-Widget.md) widget (Pro). |
+| **Canvas** | <img src="cmd:editor.addPainter" alt="Add Canvas" width="16" height="16"> | A [Canvas](Canvas-Widget.md) widget (Pro). |
 | **Table** | <img src="cmd:editor.addDataGrid" alt="Add Data Table" width="16" height="16"> | A Data Grid. |
 | **Multi-Plot** | <img src="cmd:editor.addMultiPlot" alt="Add Multi-Plot" width="16" height="16"> | A [Multi-Plot](Plots.md). |
 | **3D Plot** | <img src="cmd:editor.addPlot3D" alt="Add 3D Plot" width="16" height="16"> | A 3D Plot (Pro). |
@@ -223,7 +223,7 @@ Most visualization widgets carry a small toolbar of icon buttons along their top
 
 A few conventions are shared across widgets:
 
-- **Pause / Resume** stops the widget from ingesting new samples into its own buffer; samples that arrive while paused are dropped, not shown after Resume. Other widgets and the data source are unaffected. The icon swaps between a pause and a play glyph.
+- **Pause / Resume** stops the widget from ingesting new samples into its own buffer; samples that arrive while paused are dropped, not shown after Resume. Other widgets and the device are unaffected. The icon swaps between a pause and a play glyph.
 - **Show Crosshair** overlays a tracking crosshair that follows the cursor.
 - **Reset View** returns pan and zoom to the default; it is disabled until you have zoomed or panned.
 - **Axis Range Settings** (gear icon) opens a dialog to pin fixed minimum and maximum axis values.
@@ -237,7 +237,7 @@ A few conventions are shared across widgets:
 | **Show X Axis Label** | <img src="icon:commands/x" alt="x" width="16" height="16"> | Shows or hides the X-axis label. |
 | **Show Y Axis Label** | <img src="icon:commands/y" alt="y" width="16" height="16"> | Shows or hides the Y-axis label. |
 | **Show Crosshair** | <img src="icon:commands/crosshair" alt="crosshair" width="16" height="16"> | Tracking crosshair that follows the cursor. |
-| **Pause / Resume** | <img src="icon:commands/pause" alt="pause" width="16" height="16"> <img src="icon:commands/resume" alt="resume" width="16" height="16"> | Stops this widget from ingesting new samples into its own buffer; samples that arrive while paused are dropped, not shown after Resume. Other widgets and the data source are unaffected. |
+| **Pause / Resume** | <img src="icon:commands/pause" alt="pause" width="16" height="16"> <img src="icon:commands/resume" alt="resume" width="16" height="16"> | Stops this widget from ingesting new samples into its own buffer; samples that arrive while paused are dropped, not shown after Resume. Other widgets and the device are unaffected. |
 | **Sweep / Trigger Mode** **(Pro)** | <img src="icon:commands/sweep" alt="sweep" width="16" height="16"> | Turns oscilloscope-style [Sweep / Trigger mode](Plots.md#sweep--trigger-mode-pro) on or off. Time-axis plots only. |
 | **Trigger Settings** **(Pro)** | <img src="icon:commands/trigger" alt="trigger" width="16" height="16"> | Opens the **Trigger Settings** dialog (mode, level, slope, holdoff, timebase). Enabled only while Sweep is on. |
 | **Reset View** | <img src="icon:commands/return" alt="return" width="16" height="16"> | Returns pan and zoom to the default; disabled until you have zoomed or panned. |
@@ -253,7 +253,7 @@ The Multi-Plot toolbar matches the Plot toolbar, minus **Show Area Under Plot** 
 | **Show X Axis Label** | <img src="icon:commands/x" alt="x" width="16" height="16"> | Shows or hides the X-axis label. |
 | **Show Y Axis Label** | <img src="icon:commands/y" alt="y" width="16" height="16"> | Shows or hides the Y-axis label. |
 | **Show Crosshair** | <img src="icon:commands/crosshair" alt="crosshair" width="16" height="16"> | Tracking crosshair that follows the cursor. |
-| **Pause / Resume** | <img src="icon:commands/pause" alt="pause" width="16" height="16"> <img src="icon:commands/resume" alt="resume" width="16" height="16"> | Stops this widget from ingesting new samples into its own buffer; samples that arrive while paused are dropped, not shown after Resume. Other widgets and the data source are unaffected. |
+| **Pause / Resume** | <img src="icon:commands/pause" alt="pause" width="16" height="16"> <img src="icon:commands/resume" alt="resume" width="16" height="16"> | Stops this widget from ingesting new samples into its own buffer; samples that arrive while paused are dropped, not shown after Resume. Other widgets and the device are unaffected. |
 | **Sweep / Trigger Mode** **(Pro)** | <img src="icon:commands/sweep" alt="sweep" width="16" height="16"> | Turns oscilloscope-style [Sweep / Trigger mode](Plots.md#sweep--trigger-mode-pro) on or off. The **Source** setting picks which curve the trigger watches. Time-axis plots only. |
 | **Trigger Settings** **(Pro)** | <img src="icon:commands/trigger" alt="trigger" width="16" height="16"> | Opens the **Trigger Settings** dialog (mode, source, level, slope, holdoff, timebase). Enabled only while Sweep is on. |
 | **Reset View** | <img src="icon:commands/return" alt="return" width="16" height="16"> | Returns pan and zoom to the default; disabled until you have zoomed or panned. |
@@ -344,7 +344,7 @@ These widgets have no toolbar; their interaction is direct:
 - **Gyroscope** and **LED Panel** are display-only.
 - **Stopwatch** has its own **Start / Stop**, **Lap**, and **Reset** buttons and a lap table; see [Widget Reference](Widget-Reference.md#stopwatch).
 - **Output** controls (button, slider, toggle, knob, text field) are interactive inputs that send values to the device; see [Output Controls](Output-Controls.md).
-- **Canvas** (Pro) renders entirely from its user script and has no toolbar; see [Canvas Widget](Painter-Widget.md).
+- **Canvas** (Pro) renders entirely from its user script and has no toolbar; see [Canvas Widget](Canvas-Widget.md).
 
 ## Console toolbar
 

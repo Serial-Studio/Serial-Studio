@@ -128,6 +128,7 @@ qt_add_library(
   DataModel/Project/ProjectWorkspaces.cpp
   DataModel/Project/ProjectWorkspaceRefs.cpp
   DataModel/Project/ProjectFixedLayouts.cpp
+  DataModel/Project/QuickPlotProject.cpp
   DataModel/Project/ProjectTables.cpp
   DataModel/Project/ProjectSources.cpp
   DataModel/Project/ProjectEntities.cpp
@@ -253,6 +254,7 @@ qt_add_library(
   DataModel/Project/ProjectWorkspaces.h
   DataModel/Project/ProjectWorkspaceRefs.h
   DataModel/Project/ProjectFixedLayouts.h
+  DataModel/Project/QuickPlotProject.h
   DataModel/Project/ProjectTables.h
   DataModel/Project/ProjectSources.h
   DataModel/Project/ProjectEntities.h

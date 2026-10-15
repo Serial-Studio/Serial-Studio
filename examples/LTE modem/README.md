@@ -1,5 +1,9 @@
 # Serial Studio and LTE modem HUAWEI K5161H
 
+**What you'll learn:** three ways to get the same signal-quality data into a Data Grid: a virtual serial port, MQTT, and UDP.
+
+**Prerequisites:** a HUAWEI K5161H LTE modem, Python 3 with `requests`, and `socat` and `pyserial` for the serial method. The MQTT method needs Serial Studio Pro.
+
 ## Overview
 
 This project shows how to use Serial Studio to visualize signal quality data from a HUAWEI K5161H LTE modem.
@@ -76,10 +80,10 @@ Each frame carries five values, matching the datasets in `LTE Modem.ssproj`: cel
 ### Serial Studio configuration for the virtual serial port
 
 1. Run Serial Studio.
-2. Go to **DEVICE SETUP** → I/O Interface: UART/COM.
-3. Go to **FRAME PARSING** → Parse via Project File.
+2. In **Device Setup**, set Connection to UART/COM.
+3. Set **Operation Mode** to Project File.
 4. Pick **Project file** → `LTE Modem.ssproj`.
-5. Manually enter **COM Port** → `/tmp/ttyV0` and press Enter.
+5. Manually enter **Serial Port** → `/tmp/ttyV0` and press Enter.
 6. Pick **Baud Rate** → 9600.
 7. Click **Connect** in the upper right corner.
 
@@ -128,8 +132,8 @@ After the first frame of data arrives, Serial Studio opens the dashboard with pl
 ### Serial Studio configuration for MQTT
 
 1. Run Serial Studio.
-2. Go to **DEVICE SETUP** → I/O Interface: MQTT Subscriber.
-3. Go to **FRAME PARSING** → Parse via Project File.
+2. In **Device Setup**, set Connection to MQTT Subscriber.
+3. Set **Operation Mode** to Project File.
 4. Pick **Project file** → `LTE Modem.ssproj`.
 5. Set **Hostname** → 127.0.0.1.
 6. Set **Port** → 1883.
@@ -156,8 +160,8 @@ python lte_udp.py
 ### Serial Studio configuration for UDP socket
 
 1. Run Serial Studio.
-2. Go to **DEVICE SETUP** → I/O Interface: Network Socket.
-3. Go to **FRAME PARSING** → Parse via Project File.
+2. In **Device Setup**, set Connection to Network Socket.
+3. Set **Operation Mode** to Project File.
 4. Pick **Project file** → `LTE Modem.ssproj`.
 5. Pick **Socket Type** → UDP.
 6. Set **Remote Address** → 127.0.0.1.

@@ -1,5 +1,9 @@
 # Hydrogen atom: 1s orbital
 
+**What you'll learn:** a Plot 3D group that renders a Monte Carlo electron cloud streamed over UDP.
+
+**Prerequisites:** Serial Studio Pro and Python 3 for the generator script.
+
 ## Overview
 
 This project simulates the electron probability distribution of a hydrogen atom's 1s orbital using Monte Carlo sampling. Data streams over UDP for real-time visualization in Serial Studio.

@@ -1,4 +1,4 @@
-# Output Controls
+# Output Controls (Pro)
 
 ## Overview
 
@@ -293,7 +293,7 @@ If you delete the dataset or variable a control was bound to, the project still 
 
 ## Protocol Helper Functions
 
-Every output widget's JavaScript engine includes built-in helper functions for Modbus and CAN Bus protocols. These handle binary byte-packing so you don't have to construct raw bytes manually. The checksum helpers (`checksum`, `checksumHex`, `checksumAlgorithms`) are available too, so a protocol that trails its payload with a CRC appends `checksum('CRC-16-MODBUS', payload)` instead of carrying its own table; see [Checksum Helpers](JavaScript-API.md#checksum-helpers).
+Every output widget's JavaScript engine includes built-in helper functions for Modbus and CAN Bus protocols. These handle binary byte-packing so you don't have to construct raw bytes manually. The checksum helpers (`checksum`, `checksumHex`, `checksumAlgorithms`) are available too, so a protocol that trails its payload with a CRC appends `checksum('CRC-16-MODBUS', payload)` instead of carrying its own table; see [Checksum Helpers](Frame-Parser.md#checksum-helpers).
 
 ### Modbus Helpers
 
@@ -428,7 +428,7 @@ Output controls are displayed in an Output Panel widget on the dashboard. The pa
 
 ## Multi-Source Projects
 
-In projects with multiple data sources (devices), the target device is determined by the source of the Output Panel group a control belongs to, not by a per-control property. Every control in a group transmits to that group's source. To send to a different device, place the control in an Output Panel group assigned to that source.
+In projects with multiple devices, the target device is determined by the source of the Output Panel group a control belongs to, not by a per-control property. Every control in a group transmits to that group's source. To send to a different device, place the control in an Output Panel group assigned to that source.
 
 ## Output Controls vs. Actions
 
@@ -618,5 +618,5 @@ function transmit(value) {
 - [Project Editor](Project-Editor.md): full guide to creating and configuring projects.
 - [Toolbar & Button Reference](Toolbar-Reference.md): the Project Editor's add-control buttons and the rest of the app's chrome.
 - [Widget Reference](Widget-Reference.md): all input and visualization widget types.
-- [Frame Parser Scripting](JavaScript-API.md): Lua and JavaScript parser reference.
-- [Data Sources](Data-Sources.md): configuring device connections.
+- [Frame Parser Scripting](Frame-Parser.md): Lua and JavaScript parser reference.
+- [Devices](Devices.md): configuring device connections.

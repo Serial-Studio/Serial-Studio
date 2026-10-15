@@ -1,5 +1,9 @@
 # Level Bar — widget extension example
 
+**What you'll learn:** how a widget extension package is built from an `info.json` file and a QML file, using a level bar as the template.
+
+**Prerequisites:** none beyond Serial Studio and a text editor.
+
 A complete widget extension package: a horizontal level bar for one numeric dataset, with a
 colour choice and an optional numeric readout. Copy this folder, rename it, and edit two files.
 

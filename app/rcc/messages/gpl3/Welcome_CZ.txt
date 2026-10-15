@@ -1,10 +1,8 @@
 Copyright (c) 2020–2026 Alex Spataru <https://github.com/alex-spataru>
+Tento software je zdarma a open source pod licencí GNU GPLv3. Můžete jej
+používat, upravovat a redistribuovat, pokud odvozená díla zůstanou open source
+za stejných podmínek.
 
-Tento software je zdarma a open source pod licencí GNU GPLv3.
-Můžete jej používat, upravovat a redistribuovat, pokud odvozená díla
-zůstanou open source za stejných podmínek.
-
-→ Licence: https://www.gnu.org/licenses/gpl-3.0.html
 → Zdroj:   https://github.com/serial-studio/serial-studio
 
 Líbí se vám tento projekt? Zvažte podporu vývoje s Serial Studio Pro:
@@ -17,5 +15,3 @@ Funkce Pro:
 → Historian, Proměnné a transformace hodnot (JS + Lua)
 → Projekty s více zdroji a vlastní pracovní plochy
 → Komerční licence (bez povinností GPL)
-
-→ Více informací: https://serial-studio.com/

@@ -84,7 +84,7 @@ Widgets.Pane {
       //
       CodeEditorToolbar {
         codeEditor: editor
-        helpPage: "Control-Script"
+        helpPage: "control-script"
         importTooltip: qsTr("Import a control loop file")
         resetTooltip: qsTr("Reset to the default control loop")
         helpTooltip: qsTr("Open the control loop documentation")

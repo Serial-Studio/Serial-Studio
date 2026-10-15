@@ -256,7 +256,7 @@ A single allocation of 256 MiB or more is refused outright.
 **Fast mode:** the JIT compiler is forced on and the instruction-count hook is never
 installed. A JIT-compiled trace never fires a debug hook, so leaving the watchdog armed
 would be a silently dead safety control. This runs Lua parsers and transforms up to ~40x
-faster, but a script stuck in an infinite loop stalls its data source until you disconnect;
+faster, but a script stuck in an infinite loop stalls that device's pipeline until you disconnect;
 nothing interrupts it. Enabling Fast mode from the UI requires confirming a warning dialog
 that names this tradeoff. Test scripts in Safe mode first, then switch once trusted.
 
@@ -304,7 +304,7 @@ Globals are reset when: the project is reloaded, parser code is edited and reapp
 
 ### Fast table access with handles
 
-If your parser writes many [table variables](Data-Tables.md) every frame, looking each one up by name with `tableSet(table, variable, value)` becomes the bottleneck. Resolve the names to **handles** once in global state, then write by handle on the per-frame path:
+If your parser writes many [table variables](Variables.md) every frame, looking each one up by name with `tableSet(table, variable, value)` becomes the bottleneck. Resolve the names to **handles** once in global state, then write by handle on the per-frame path:
 
 ```javascript
 // Runs once at load: resolve variable names to handles.
@@ -485,7 +485,7 @@ The trailing `unit` is optional (1 to 247). When given, the write targets that d
 
 ## Checksum Helpers
 
-Every script engine, in both languages, exposes the checksum library the frame reader uses for its own trailer validation, so a parser, transform, output widget, canvas or control script never needs its own CRC table:
+Every script engine, in both languages, exposes the checksum library the frame reader uses for its own trailer validation, so a parser, transform, output widget, canvas or Control Loop never needs its own CRC table:
 
 | Function | Description |
 |----------|-------------|
@@ -789,7 +789,7 @@ end
 
 ## Calling any API command: `apiCall()`
 
-Beyond the focused helpers above, parsers can invoke Serial Studio's API commands through a generic gateway. This is the same surface exposed on TCP port 7777 for external clients, now reachable from inside the parser, dataset transforms, control loop, and Canvas widgets. Because these are all the project's own first-party scripts, the gateway is ungated for them: the full command catalog is callable with no allow-list, no rate limit, and no payload cap. The gates live on the network side instead — a remote TCP client still clears the user-consent prompts before any device write and before installing or replacing project scripts — with one exception every caller shares: starting a program (`system.exec`, or a Process I/O source launching its program) asks once per project (see [Control Script](Control-Script.md) and [Process I/O](Drivers-Process-IO.md#launch-consent)).
+Beyond the focused helpers above, parsers can invoke Serial Studio's API commands through a generic gateway. This is the same surface exposed on TCP port 7777 for external clients, now reachable from inside the parser, dataset transforms, control loop, and Canvas widgets. Because these are all the project's own first-party scripts, the gateway is ungated for them: the full command catalog is callable with no allow-list, no rate limit, and no payload cap. The gates live on the network side instead — a remote TCP client still clears the user-consent prompts before any device write and before installing or replacing project scripts — with one exception every caller shares: starting a program (`system.exec`, or a Process I/O source launching its program) asks once per project (see [Control Loop](Control-Loop.md) and [Process I/O](Drivers-Process-IO.md#launch-consent)).
 
 ```text
 apiCall(method, params?) -> { ok, result?, error?, errorCode?, errorData? }

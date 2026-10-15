@@ -145,9 +145,34 @@ Widgets.Pane {
         Layout.bottomMargin: 0
         Layout.fillWidth: true
         closeButtonEnabled: false
-        titleText: qsTr("Pro features detected in this project.")
+        items: Cpp_JSON_ProjectModel.commercialFeatureSummary
         activationFlag: Cpp_JSON_ProjectModel.containsCommercialFeatures
-        subtitleText: qsTr("Using fallback widgets. Buy a license to unlock full functionality.")
+      }
+
+      //
+      // Computed dataset explanation (spec 0100 R14), next to the greyed frame index
+      //
+      Rectangle {
+        Layout.fillWidth: true
+        Layout.margins: -1
+        border.width: 1
+        implicitHeight: computedLabel.implicitHeight + 16
+        visible: Cpp_JSON_ProjectEditor.selectedDatasetComputed
+        color: Cpp_ThemeManager.colors["groupbox_background"]
+        border.color: Cpp_ThemeManager.colors["groupbox_border"]
+
+        Label {
+          id: computedLabel
+
+          wrapMode: Label.WordWrap
+          anchors.margins: 8
+          anchors.left: parent.left
+          anchors.right: parent.right
+          anchors.verticalCenter: parent.verticalCenter
+          text: qsTr("Computed dataset: its value comes from its transform, not from the frame, "
+                     + "so it has no frame index. A transform that never reads value makes a "
+                     + "dataset computed.")
+        }
       }
 
       //
@@ -237,12 +262,12 @@ Widgets.Pane {
 
             Widgets.ToolbarButton {
               iconSize: 24
+              text: qsTr("Bar")
               toolbarButton: false
-              text: qsTr("Bar/Level")
               Layout.alignment: Qt.AlignVCenter
               enabled: Cpp_JSON_ProjectEditor.currentDatasetIsEditable
               icon.source: Cpp_Misc_IconRegistry.icon("editor", "bar", 24)
-              ToolTip.text: qsTr("Toggle bar/level indicator for this dataset")
+              ToolTip.text: qsTr("Toggle the bar widget for this dataset")
               checked: Cpp_JSON_ProjectEditor.datasetOptions & SerialStudio.DatasetBar
               onClicked: {
                 const option = SerialStudio.DatasetBar

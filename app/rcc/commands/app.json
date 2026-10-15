@@ -550,6 +550,18 @@
       ]
     },
     {
+      "id": "quickplot.saveAsProject",
+      "title": "Save as Project",
+      "icon": "editor/save-as",
+      "tooltip": "Turn the running Quick Plot session into a project you can edit",
+      "kind": "action",
+      "category": "mode",
+      "contexts": [
+        "app",
+        "dashboard"
+      ]
+    },
+    {
       "id": "mode.consoleOnly",
       "title": "Console Only Mode",
       "icon": "widgets/terminal",

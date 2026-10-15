@@ -81,6 +81,10 @@
       "sha256": "f0cea0afeb8912ccdcc79a6ad8242e70b62512f97a19ab2fb49aaae463c65b5d"
     },
     {
+      "path": "examples/Project Tutorial/tutorial.ssproj",
+      "sha256": "5208f4651dd1ecbaaec3f4b3839be0f51c5ec09138a2935e53650274a9068c1e"
+    },
+    {
       "path": "examples/Protobuf Example/Protobuf Example.ssproj",
       "sha256": "e955983649300c0a6974692467c3289cb3b8a6d4cf4eefc7b5c656abcb6ce7d8"
     },

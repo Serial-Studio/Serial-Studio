@@ -204,9 +204,10 @@ function assistant.memory.propose(category, text)
   return apiCall('assistant.memory.propose', p)
 end
 
-function assistant.project.bulkApply(ops)
+function assistant.project.bulkApply(ops, options)
   local p = {}
   p['ops'] = ops
+  if options then for k, v in pairs(options) do p[k] = v end end
   return apiCall('assistant.project.bulkApply', p)
 end
 
@@ -1727,9 +1728,10 @@ function project.activate()
   return apiCall('project.activate', p)
 end
 
-function project.batch(ops)
+function project.batch(ops, options)
   local p = {}
   p['ops'] = ops
+  if options then for k, v in pairs(options) do p[k] = v end end
   return apiCall('project.batch', p)
 end
 

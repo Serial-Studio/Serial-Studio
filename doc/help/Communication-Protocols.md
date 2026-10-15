@@ -58,7 +58,7 @@ Serial/UART is the most common way to connect microcontrollers to a computer. It
 
 **Platform considerations:**
 
-- **Linux:** The user has to belong to the `dialout` (or `uucp`) group to access `/dev/ttyUSBx` and `/dev/ttyACMx` without root.
+- **Linux:** Access to `/dev/ttyUSBx` and `/dev/ttyACMx` without root depends on group membership; see [Serial port permissions](Linux-Installation.md#serial-port-permissions).
 - **Windows:** CH340 and PL2303 adapters may need a manually installed driver. FTDI and CP210x drivers are bundled with Windows 10+.
 - **macOS:** Most USB-serial adapters work without setup. Older CP210x chips may need a signed kext or VCP driver.
 

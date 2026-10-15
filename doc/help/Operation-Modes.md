@@ -2,7 +2,7 @@
 
 ## Overview
 
-Serial Studio has three parsing modes that determine how incoming data is interpreted and displayed. The mode is picked in the Setup panel on the right side of the main window. Every mode works with any data source: Serial (UART), Bluetooth LE, Network (TCP/UDP), and all Pro sources (Audio, Modbus, CAN Bus, MQTT, USB, HID, Process).
+Serial Studio has three parsing modes that determine how incoming data is interpreted and displayed. The mode is picked in the Setup panel on the right side of the main window. Every mode works with any device: Serial (UART), Bluetooth LE, Network (TCP/UDP), and all Pro sources (Audio, Modbus, CAN Bus, MQTT, USB, HID, Process).
 
 The three modes, in order of increasing complexity:
 
@@ -33,7 +33,7 @@ flowchart LR
 | Multi-Source     | No           | No         | Yes (Pro)    |
 | Setup Effort     | None         | None       | Editor       |
 
-> **Note.** All modes work with any data source: Serial, TCP/UDP, BLE, and all Pro drivers (MQTT, Modbus, CAN Bus, Audio, USB, HID, Process I/O).
+> **Note.** All modes work with any device: Serial, TCP/UDP, BLE, and all Pro drivers (MQTT, Modbus, CAN Bus, Audio, USB, HID, Process I/O).
 >
 > **Frame detection options (Project File mode only):** End Only, Start+End, Start Only, No Delimiters.
 
@@ -41,12 +41,12 @@ flowchart LR
 
 ### Selection
 
-Pick the "Console Only (No Parsing)" radio button in the Setup panel.
+Pick the "Console Only (No Parsing)" option under Operation Mode in the Setup panel.
 
 ### How it works
 
 - **Frame detection.** None. Serial Studio doesn't scan for delimiters, doesn't buffer frames, and doesn't build a dashboard.
-- **Data flow.** Raw bytes from the data source go straight to the terminal. The circular buffer, frame queue, and FrameBuilder are all skipped.
+- **Data flow.** Raw bytes from the device go straight to the terminal. The circular buffer, frame queue, and FrameBuilder are all skipped.
 - **Display.** The terminal shows the raw stream in ASCII or hex. You can still save the console transcript to a file.
 - **Transmit.** The console input box still works, so you can send bytes back to the device.
 
@@ -65,7 +65,7 @@ Once you've confirmed the data looks sane, switch to Quick Plot or Project File 
 
 ### Selection
 
-Pick the "Quick Plot (Comma Separated Values)" radio button in the Setup panel.
+Pick the "Quick Plot (Comma Separated Values)" option under Operation Mode in the Setup panel.
 
 ### How it works
 
@@ -110,7 +110,7 @@ Quick Plot visualizes data without any configuration. Use it when you want to ch
 
 ### Selection
 
-Pick the "Parse via Project File" radio button in the Setup panel. Then load or create a project file in the Project Editor (the **Project Editor** button in the toolbar).
+Pick the "Parse via Project File" option under Operation Mode in the Setup panel. Then load or create a project file in the Project Editor (the **Project Editor** button in the toolbar).
 
 ### How it works
 
@@ -119,7 +119,7 @@ Pick the "Parse via Project File" radio button in the Setup panel. Then load or 
 - **Dashboard definition.** A `.ssproj` JSON file on the host defines all groups, datasets, widgets, alarms, FFT settings, and actions.
 - **Device data.** The device sends only raw values (CSV text, binary packets, and so on). Serial Studio maps each value to the corresponding dataset by index.
 - **Frame parser script.** An optional `parse(frame)` function (Lua or JavaScript) can transform arbitrary protocols into the array of values Serial Studio expects.
-- **Multi-source.** A single project file can define multiple data sources, each with its own connection, frame detection, and decoder settings.
+- **Multi-source.** A single project file can define multiple devices, each with its own connection, frame detection, and decoder settings.
 
 This mode provides access to every widget type and configuration option in Serial Studio. It's the most commonly used mode for real-world projects.
 
@@ -149,7 +149,7 @@ The decoder determines how raw bytes are converted before being passed to the fr
 
 ### Frame parser script
 
-Every new source defaults to a Built-In (Native) template: a no-code parser configured through a parameter form, covering CSV, fixed-width, key-value, NMEA, JSON, XML, YAML, MessagePack, Modbus, UBX, MAVLink, and COBS/SLIP formats. See [Frame Parser Reference](JavaScript-API.md) for the full template catalog.
+Every new source defaults to a Built-In (Native) template: a no-code parser configured through a parameter form, covering CSV, fixed-width, key-value, NMEA, JSON, XML, YAML, MessagePack, Modbus, UBX, MAVLink, and COBS/SLIP formats. See [Frame Parser Reference](Frame-Parser.md) for the full template catalog.
 
 When the incoming data isn't covered by a Built-In template, you can write a Lua or JavaScript `parse()` function to transform each frame into the array of values Serial Studio expects. Lua is the default and recommended language for new projects because it's faster.
 
@@ -195,7 +195,7 @@ function parse(frame) {
 
 ### Multi-source support
 
-Project File mode supports multiple data sources within a single project. Each source is an independent entry with its own:
+Project File mode supports multiple devices within a single project. Each source is an independent entry with its own:
 
 - Source ID and title.
 - Bus type (UART, Network, BLE, and so on).
@@ -249,12 +249,12 @@ If you're hooking up a new device and don't yet know what it sends, start in **C
 
 Once you can see clean comma-separated numbers in the console, switch to **Quick Plot**. You'll get a dashboard with one plot per CSV field in seconds, with no configuration.
 
-Once you need more control (specific widget types, unit labels, alarm thresholds, a custom dashboard layout, binary protocol parsing, or multiple concurrent data sources), move to **Project File** mode. Open the Project Editor, define your groups and datasets, save a `.ssproj` file, and load it from the Setup panel. This is the recommended mode for most real-world projects.
+Once you need more control (specific widget types, unit labels, alarm thresholds, a custom dashboard layout, binary protocol parsing, or multiple concurrent devices), move to **Project File** mode. Open the Project Editor, define your groups and datasets, save a `.ssproj` file, and load it from the Setup panel. This is the recommended mode for most real-world projects.
 
 ## See also
 
 - [Project Editor](Project-Editor.md): building and configuring a project file, including picking and configuring a Built-In template.
-- [Frame Parser Reference](JavaScript-API.md): the Built-In template catalog and the Lua/JavaScript `parse()` API in detail.
+- [Frame Parser Reference](Frame-Parser.md): the Built-In template catalog and the Lua/JavaScript `parse()` API in detail.
 - [Dataset Value Transforms](Dataset-Transforms.md): per-dataset value transforms applied after parsing.
-- [Data Sources](Data-Sources.md): the driver types available to any operation mode.
+- [Devices](Devices.md): the driver types available to any operation mode.
 - [Pro vs Free Features](Pro-vs-Free.md): which drivers and dashboard features require a Pro license.

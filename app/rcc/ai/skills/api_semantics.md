@@ -117,7 +117,7 @@ The cycle in prose form, for each parsed frame in a source:
 1. **Datasets walk in (group order, then dataset order within group).**
    For each dataset:
    1. Read raw value from `parse()[index - 1]`.
-   2. Write to the shared table: `setDatasetRaw(uniqueId, value)`.
+   2. Write to the Variables table: `setDatasetRaw(uniqueId, value)`.
    3. If `transformCode` is non-empty, call `transform(value)`. The
       transform sees:
       - All Constant variables (read-only).
@@ -129,7 +129,7 @@ The cycle in prose form, for each parsed frame in a source:
         walk); a later dataset's raw variable still holds the previous
         frame's value.
       - Final values of EARLIER datasets in this frame only.
-   4. Write the result to the shared table: `setDatasetFinal(uniqueId, value)`.
+   4. Write the result to the Variables table: `setDatasetFinal(uniqueId, value)`.
 2. **TimestampedFramePtr fans out.** One shared object reaches the
    dashboard, CSV/MDF4 export, the API server, gRPC, MQTT, and
    the Historian. They all see the same final values.

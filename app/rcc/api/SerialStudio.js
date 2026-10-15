@@ -527,9 +527,10 @@ assistant.memory.propose = function(category, text) {
   return apiCall('assistant.memory.propose', p);
 };
 
-assistant.project.bulkApply = function(ops) {
+assistant.project.bulkApply = function(ops, options) {
   var p = {};
   p['ops'] = ops;
+  if (options) for (var k in options) p[k] = options[k];
   return apiCall('assistant.project.bulkApply', p);
 };
 
@@ -2050,9 +2051,10 @@ project.activate = function() {
   return apiCall('project.activate', p);
 };
 
-project.batch = function(ops) {
+project.batch = function(ops, options) {
   var p = {};
   p['ops'] = ops;
+  if (options) for (var k in options) p[k] = options[k];
   return apiCall('project.batch', p);
 };
 

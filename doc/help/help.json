@@ -6,6 +6,24 @@
   "file": "Getting-Started.md"
  },
  {
+  "id": "concepts",
+  "title": "Concepts",
+  "section": "Basics",
+  "file": "Concepts.md"
+ },
+ {
+  "id": "project-file-tutorial",
+  "title": "Project File Tutorial",
+  "section": "Basics",
+  "file": "Project-File-Tutorial.md"
+ },
+ {
+  "id": "glossary",
+  "title": "Glossary",
+  "section": "Basics",
+  "file": "Glossary.md"
+ },
+ {
   "id": "windows-installation",
   "title": "Windows Installation",
   "section": "Basics",
@@ -25,9 +43,9 @@
  },
  {
   "id": "data-sources",
-  "title": "Data Sources",
+  "title": "Devices",
   "section": "Basics",
-  "file": "Data-Sources.md"
+  "file": "Devices.md"
  },
  {
   "id": "toolbar-reference",
@@ -48,6 +66,12 @@
   "file": "Project-Editor.md"
  },
  {
+  "id": "identity-model",
+  "title": "Dataset Identity Model",
+  "section": "Configuration",
+  "file": "Identity-Model.md"
+ },
+ {
   "id": "project-lock",
   "title": "Project Lock",
   "section": "Configuration",
@@ -55,7 +79,7 @@
  },
  {
   "id": "operator-deployments",
-  "title": "Operator Deployments",
+  "title": "Operator Deployments (Pro)",
   "section": "Configuration",
   "file": "Operator-Deployments.md"
  },
@@ -67,7 +91,7 @@
  },
  {
   "id": "notifications",
-  "title": "Notifications",
+  "title": "Notifications (Pro)",
   "section": "Configuration",
   "file": "Notifications.md"
  },
@@ -91,39 +115,45 @@
  },
  {
   "id": "painter-widget",
-  "title": "Canvas Widget",
+  "title": "Canvas Widget (Pro)",
   "section": "Configuration",
-  "file": "Painter-Widget.md"
+  "file": "Canvas-Widget.md"
  },
  {
   "id": "output-controls",
-  "title": "Output Controls",
+  "title": "Output Controls (Pro)",
   "section": "Configuration",
   "file": "Output-Controls.md"
+ },
+ {
+  "id": "derived-values",
+  "title": "Deriving Values",
+  "section": "Scripting & Data Logic",
+  "file": "Derived-Values.md"
  },
  {
   "id": "javascript-api",
   "title": "Frame Parser Reference",
   "section": "Scripting & Data Logic",
-  "file": "JavaScript-API.md"
+  "file": "Frame-Parser.md"
  },
  {
   "id": "control-script",
   "title": "Control Loop (setup / loop)",
   "section": "Scripting & Data Logic",
-  "file": "Control-Script.md"
+  "file": "Control-Loop.md"
  },
  {
   "id": "dataset-transforms",
-  "title": "Dataset Value Transforms",
+  "title": "Dataset Value Transforms (Pro)",
   "section": "Scripting & Data Logic",
   "file": "Dataset-Transforms.md"
  },
  {
   "id": "data-tables",
-  "title": "Variables",
+  "title": "Variables (Pro)",
   "section": "Scripting & Data Logic",
-  "file": "Data-Tables.md"
+  "file": "Variables.md"
  },
  {
   "id": "serial-studio-sdk",
@@ -163,19 +193,19 @@
  },
  {
   "id": "mqtt-topics",
-  "title": "MQTT Topics & Semantics",
+  "title": "MQTT Topics & Semantics (Pro)",
   "section": "Connectivity",
   "file": "MQTT-Topics.md"
  },
  {
   "id": "mqtt-publisher",
-  "title": "MQTT Publisher",
+  "title": "MQTT Publisher (Pro)",
   "section": "Connectivity",
   "file": "MQTT-Publisher.md"
  },
  {
   "id": "file-transmission",
-  "title": "File Transmission",
+  "title": "File Transmission (Pro)",
   "section": "Connectivity",
   "file": "File-Transmission.md"
  },
@@ -205,67 +235,67 @@
  },
  {
   "id": "drivers-modbus",
-  "title": "Modbus",
+  "title": "Modbus (Pro)",
   "section": "Drivers",
   "file": "Drivers-Modbus.md"
  },
  {
   "id": "drivers-opc-ua",
-  "title": "OPC UA",
+  "title": "OPC UA (Pro)",
   "section": "Drivers",
   "file": "Drivers-OPC-UA.md"
  },
  {
   "id": "drivers-s7",
-  "title": "Siemens S7comm",
+  "title": "Siemens S7comm (Pro)",
   "section": "Drivers",
   "file": "Drivers-S7.md"
  },
  {
   "id": "drivers-ethernet-ip",
-  "title": "EtherNet/IP",
+  "title": "EtherNet/IP (Pro)",
   "section": "Drivers",
   "file": "Drivers-EtherNet-IP.md"
  },
  {
   "id": "drivers-iec-104",
-  "title": "IEC 60870-5-104",
+  "title": "IEC 60870-5-104 (Pro)",
   "section": "Drivers",
   "file": "Drivers-IEC-104.md"
  },
  {
   "id": "drivers-can-bus",
-  "title": "CAN Bus",
+  "title": "CAN Bus (Pro)",
   "section": "Drivers",
   "file": "Drivers-CAN-Bus.md"
  },
  {
   "id": "drivers-audio",
-  "title": "Audio Input",
+  "title": "Audio Input (Pro)",
   "section": "Drivers",
   "file": "Drivers-Audio.md"
  },
  {
   "id": "drivers-usb",
-  "title": "Raw USB",
+  "title": "Raw USB (Pro)",
   "section": "Drivers",
   "file": "Drivers-USB.md"
  },
  {
   "id": "drivers-hid",
-  "title": "HID",
+  "title": "HID (Pro)",
   "section": "Drivers",
   "file": "Drivers-HID.md"
  },
  {
   "id": "drivers-process-io",
-  "title": "Process I/O",
+  "title": "Process I/O (Pro)",
   "section": "Drivers",
   "file": "Drivers-Process-IO.md"
  },
  {
   "id": "drivers-mqtt",
-  "title": "MQTT Subscriber",
+  "title": "MQTT Subscriber (Pro)",
   "section": "Drivers",
   "file": "Drivers-MQTT.md"
  },
@@ -277,25 +307,25 @@
  },
  {
   "id": "mdf4",
-  "title": "MDF4 Export & Playback",
+  "title": "MDF4 Export & Playback (Pro)",
   "section": "Data Management",
   "file": "MDF4.md"
  },
  {
   "id": "session-database",
-  "title": "Historian",
+  "title": "Historian (Pro)",
   "section": "Data Management",
-  "file": "Session-Database.md"
+  "file": "Historian.md"
  },
  {
   "id": "session-reports",
-  "title": "Session Reports",
+  "title": "Session Reports (Pro)",
   "section": "Data Management",
   "file": "Session-Reports.md"
  },
  {
   "id": "influxdb",
-  "title": "InfluxDB Export",
+  "title": "InfluxDB Export (Pro)",
   "section": "Data Management",
   "file": "InfluxDB.md"
  },
@@ -343,7 +373,7 @@
  },
  {
   "id": "ai-assistant",
-  "title": "AI Assistant",
+  "title": "AI Assistant (Pro)",
   "section": "Integration",
   "file": "AI-Assistant.md"
  },
@@ -360,12 +390,6 @@
   "file": "Data-Hotpath.md"
  },
  {
-  "id": "identity-model",
-  "title": "Dataset Identity Model",
-  "section": "Architecture",
-  "file": "Identity-Model.md"
- },
- {
   "id": "threading-and-timing",
   "title": "Threading and Timing Guarantees",
   "section": "Architecture",
@@ -378,22 +402,10 @@
   "file": "Benchmark.md"
  },
  {
-  "id": "about",
-  "title": "About Serial Studio",
-  "section": "Support",
-  "file": "About.md"
- },
- {
   "id": "faq",
   "title": "FAQ",
   "section": "Support",
   "file": "FAQ.md"
- },
- {
-  "id": "glossary",
-  "title": "Glossary",
-  "section": "Support",
-  "file": "Glossary.md"
  },
  {
   "id": "problem-center",
@@ -408,22 +420,28 @@
   "file": "Troubleshooting.md"
  },
  {
-  "id": "use-cases",
-  "title": "Use Cases",
-  "section": "Support",
-  "file": "Use-Cases.md"
+  "id": "about",
+  "title": "About Serial Studio",
+  "section": "About",
+  "file": "About.md"
  },
  {
-  "id": "become-an-affiliate",
-  "title": "Become an Affiliate",
-  "section": "Support",
-  "file": "Become-an-Affiliate.md"
+  "id": "use-cases",
+  "title": "Use Cases",
+  "section": "About",
+  "file": "Use-Cases.md"
  },
  {
   "id": "comparison",
   "title": "Comparison with Alternatives",
-  "section": "Support",
+  "section": "About",
   "file": "Comparison.md"
+ },
+ {
+  "id": "become-an-affiliate",
+  "title": "Become an Affiliate",
+  "section": "About",
+  "file": "Become-an-Affiliate.md"
  },
  {
   "id": "pro-vs-free",

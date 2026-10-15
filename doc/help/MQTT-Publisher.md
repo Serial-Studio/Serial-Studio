@@ -101,7 +101,7 @@ Use this when the consumer wants to apply its own decoding, when you are tee-ing
 
 ### Custom Script
 
-You write a `mqtt(frame)` function (in JavaScript or Lua) that receives the raw bytes of one parsed frame (the same bytes the [Frame Parser](JavaScript-API.md) script sees) and returns the payload to publish, or `nil` / `null` to skip the frame.
+You write a `mqtt(frame)` function (in JavaScript or Lua) that receives the raw bytes of one parsed frame (the same bytes the [Frame Parser](Frame-Parser.md) script sees) and returns the payload to publish, or `nil` / `null` to skip the frame.
 
 ```javascript
 // JavaScript
@@ -185,7 +185,7 @@ Run this after editing broker credentials or TLS settings to catch authenticatio
 
 ## Publishing from frame parsers
 
-The Publisher also exposes a `mqttPublish(topic, payload, qos = 0, retain = false)` function, injected wherever the [Variables](Data-Tables.md) scripting API is available: frame parsers, dataset transforms, and [Canvas widget](Painter-Widget.md) scripts. It pushes computed values to arbitrary topics independent of the **Payload** mode:
+The Publisher also exposes a `mqttPublish(topic, payload, qos = 0, retain = false)` function, injected wherever the [Variables](Variables.md) scripting API is available: frame parsers, dataset transforms, and [Canvas widget](Canvas-Widget.md) scripts. It pushes computed values to arbitrary topics independent of the **Payload** mode:
 
 - Emitting derived metrics (a rolling average, a CRC-validated subset of fields) on their own topics.
 - Mirroring a small fraction of high-rate data to a low-rate topic for cheap remote dashboards.
@@ -211,8 +211,8 @@ Use **Custom Script** mode when the script's main job is shaping the publish pay
 - [MQTT Driver (Subscriber)](Drivers-MQTT.md): the inbound side, when Serial Studio is the consumer.
 - [Notifications](Notifications.md): the event source that feeds **Publish Notifications**.
 - [API Reference](API-Reference.md): the JSON frame schema used by `Dashboard Data (JSON)` mode.
-- [Frame Parser Scripting](JavaScript-API.md): where `mqttPublish()` is callable from.
-- [Variables](Data-Tables.md): the scripting environment that injects `mqttPublish()`.
+- [Frame Parser Scripting](Frame-Parser.md): where `mqttPublish()` is callable from.
+- [Variables](Variables.md): the scripting environment that injects `mqttPublish()`.
 - [Protocol Setup Guides](Protocol-Setup-Guides.md): step-by-step MQTT setup in the project editor.
 - [Pro vs Free Features](Pro-vs-Free.md): MQTT publishing is a Pro feature.
 - [Troubleshooting](Troubleshooting.md): general troubleshooting guide.

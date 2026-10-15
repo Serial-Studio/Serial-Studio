@@ -29,9 +29,12 @@ Rectangle {
   //
   // Custom properties
   //
+  property var items: []
   property bool hidden: false
-  property string titleText: ""
-  property string subtitleText: ""
+  property string titleText: qsTr("This project uses Pro features.")
+  property string subtitleText: qsTr("This build includes the free feature set, so these parts "
+                                     + "are shown with simpler fallback widgets. The official "
+                                     + "Serial Studio build runs them as designed.")
   property bool expandSubtitle: true
   property bool activationFlag: false
   property bool closeButtonEnabled: true
@@ -105,6 +108,14 @@ Rectangle {
         wrapMode: Label.WrapAtWordBoundaryOrAnywhere
         Layout.maximumWidth: Math.max(expandSubtitle ? root.width - 16 - 96 - 12 : 256,
                                       title.implicitWidth)
+      }
+
+      Label {
+        Layout.fillWidth: true
+        wrapMode: Label.WordWrap
+        visible: root.items.length > 0
+        font: Cpp_Misc_CommonFonts.customUiFont(1, true)
+        text: qsTr("Needs Pro: %1").arg(root.items.join(", "))
       }
 
       Item {

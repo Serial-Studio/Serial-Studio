@@ -25,7 +25,6 @@
 #include <QClipboard>
 #include <QFontMetrics>
 #include <QKeyEvent>
-#include <QKeySequence>
 #include <QPainter>
 
 #include "API/HandlerContext.h"
@@ -58,6 +57,7 @@ Widgets::Terminal::Terminal(QQuickItem* parent)
   , m_connectionManager(API::handlerContext().connectionManager)
   , m_translator(Core::services().translator)
   , m_timerEvents(Core::services().timerEvents)
+  , m_silentLinkWatch(m_connectionManager)
   , m_cWidth(0)
   , m_cHeight(0)
   , m_borderX(0)
@@ -107,6 +107,7 @@ Widgets::Terminal::Terminal(QQuickItem* parent)
           this,
           &Widgets::Terminal::applyScrollbackLimit);
   connect(&m_consoleHandler, &Console::Handler::cleared, this, &Widgets::Terminal::clear);
+  connect(&m_silentLinkWatch, &Console::SilentLinkWatch::hint, this, &Terminal::append);
   connect(&m_connectionManager, &IO::ConnectionManager::connectedChanged, this, [=, this] {
     if (m_connectionManager.isConnected())
       clear();
@@ -1438,28 +1439,11 @@ void Widgets::Terminal::onThemeChanged()
  */
 void Widgets::Terminal::loadWelcomeGuide()
 {
-  // clang-format off
-  // code-verify off
-  static const QString logo = \
-    "▒█▀▀▀█ ▒█▀▀▀ ▒█▀▀█ ▀█▀ ▒█▀▀█ ▒█░░░   ▒█▀▀▀█ ▀▀█▀▀ ▒█░▒█ ▒█▀▀▄ ▀█▀ ▒█▀▀▀█\n" \
-    "░▀▀▀▄▄ ▒█▀▀▀ ▒█▄▄▀ ▒█░ ▒█▄▄█ ▒█░░░   ░▀▀▀▄▄ ░▒█░░ ▒█░▒█ ▒█░▒█ ▒█░ ▒█░░▒█\n" \
-    "▒█▄▄▄█ ▒█▄▄▄ ▒█░▒█ ▄█▄ ▒█░▒█ ▒█▄▄█   ▒█▄▄▄█ ░▒█░░ ░▀▄▄▀ ▒█▄▄▀ ▄█▄ ▒█▄▄▄█\n\n";
-  // code-verify on
-  // clang-format on
-
   clear();
   setAutoscroll(false);
-  append(logo);
+  append(Console::welcomeLogo());
   append(Console::welcomeConsoleText(m_translator.language()));
-
-  auto key = QKeySequence(QStringLiteral("Ctrl+K")).toString(QKeySequence::NativeText);
-#ifdef Q_OS_MAC
-  // code-verify off (glyph must match the command symbol NativeText emits)
-  key = key.replace("⌘", "⌘+");
-  // code-verify on
-#endif
-
-  append(tr("Tip: Press %1 anywhere to open the command palette.").arg(key) + QStringLiteral("\n"));
+  append(Console::commandPaletteTip());
   setAutoscroll(true);
 
   const int lines = linesPerPage();

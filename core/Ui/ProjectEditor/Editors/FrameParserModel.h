@@ -25,6 +25,7 @@
 #include <QObject>
 #include <QStringList>
 #include <QVariantList>
+#include <QVariantMap>
 
 class QStandardItem;
 class QAbstractItemModel;
@@ -142,6 +143,7 @@ public:
   [[nodiscard]] QStringList detectionOptions() const;
   [[nodiscard]] QStringList checksumOptions() const;
 
+  Q_INVOKABLE [[nodiscard]] QVariantMap datasetIndexMap() const;
   Q_INVOKABLE [[nodiscard]] bool inputContainsDelimiters(const QString& input, bool hex) const;
 
 public slots:

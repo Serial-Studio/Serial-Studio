@@ -149,7 +149,7 @@ Decoding runs on the interface thread at chunk rate, never on the frame pipeline
 
 ## See also
 
-- [Frame Parser Scripting](JavaScript-API.md): the `parse(frame)` function that turns frames into dataset values.
+- [Frame Parser Scripting](Frame-Parser.md): the `parse(frame)` function that turns frames into dataset values.
 - [Communication Protocols](Communication-Protocols.md): frame detection and delimiters for the parsing pipeline.
 - [Dataset value transforms](Dataset-Transforms.md): per-dataset conditioning of parsed values.
 - [Data Flow](Data-Flow.md): how bytes move from the driver to the dashboard.

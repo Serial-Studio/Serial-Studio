@@ -81,7 +81,7 @@ The API Server is available in both **Serial Studio GPL** and **Serial Studio Pr
 
 ## Calling the API from Frame Parsers, Transforms, and Canvas Widgets
 
-The commands in this document are also reachable from inside Serial Studio's scripting surfaces (Lua and JavaScript) via a generic `apiCall()` gateway. No TCP socket required: the call is dispatched in-process on the dashboard thread. A project's own scripts are first-party code, so the gateway is ungated for them — the full catalog below is callable with no allow-list, rate limit, or payload cap. The consent prompts for device writes and script changes apply only to remote clients; starting a program (`system.exec`, or a Process I/O source launching its program) asks once per project whoever causes it. In dry-run code, `apiCall` answers `{ ok: false, error: "dryRun" }` instead of dispatching (see [Dry Runs Have No Side Effects](#dry-runs-have-no-side-effects)). See [Consent Prompts](#consent-prompts) and [Frame Parser Scripting](JavaScript-API.md) for examples.
+The commands in this document are also reachable from inside Serial Studio's scripting surfaces (Lua and JavaScript) via a generic `apiCall()` gateway. No TCP socket required: the call is dispatched in-process on the dashboard thread. A project's own scripts are first-party code, so the gateway is ungated for them — the full catalog below is callable with no allow-list, rate limit, or payload cap. The consent prompts for device writes and script changes apply only to remote clients; starting a program (`system.exec`, or a Process I/O source launching its program) asks once per project whoever causes it. In dry-run code, `apiCall` answers `{ ok: false, error: "dryRun" }` instead of dispatching (see [Dry Runs Have No Side Effects](#dry-runs-have-no-side-effects)). See [Consent Prompts](#consent-prompts) and [Frame Parser Scripting](Frame-Parser.md) for examples.
 
 ```lua
 local r = apiCall("project.dataset.list")
@@ -95,7 +95,7 @@ const r = apiCall("dashboard.getStatus");
 if (!r.ok) console.warn(r.error);
 ```
 
-Return shape: `{ ok, result?, error?, errorCode?, errorData? }`. See [Frame Parser Scripting -> apiCall](JavaScript-API.md) for the full signature, examples, and the list of focused helpers (`clearPlots`, `deviceWrite`, `actionFire`, `setActiveWorkspace`, ...) that exist as thin shortcuts over `apiCall`.
+Return shape: `{ ok, result?, error?, errorCode?, errorData? }`. See [Frame Parser Scripting -> apiCall](Frame-Parser.md) for the full signature, examples, and the list of focused helpers (`clearPlots`, `deviceWrite`, `actionFire`, `setActiveWorkspace`, ...) that exist as thin shortcuts over `apiCall`.
 
 `apiCall` runs synchronously and never throws. Treat it as a one-shot, event-driven trigger, not as something to invoke on every frame.
 
@@ -4600,7 +4600,7 @@ Data tables hold the project's Variables: named values that parsers, transforms,
 and output widgets share. The `*Register` commands edit the table's **definition** (what
 variables exist, saved in the project); the value commands read and write the **live runtime
 store** and change nothing on disk. Every value command mirrors a scripting global, so the API
-and a script see one store. See [Data Tables](Data-Tables.md).
+and a script see one store. See [Data Tables](Variables.md).
 
 A table that lives inside folders is addressed by its bare name or by its full `/`-joined path.
 
@@ -4705,7 +4705,7 @@ Write a live value by handle. A stale, invalid or constant-variable handle yield
 
 The control script is the project's `setup()` / `loop()` automation. Validate source with
 `dryRun` before installing it: `set` recompiles and restarts the live runtime immediately when a
-device is connected. See [Control Script](Control-Script.md).
+device is connected. See [Control Script](Control-Loop.md).
 
 #### 🟢 `controlScript.get`
 Get the project's control script source.
@@ -5778,7 +5778,7 @@ Snapshot of subscriber driver live state (`isOpen`, `hostname`, `port`).
 
 Recording control, database browsing, and the tag vocabulary shared across stored sessions.
 `verify` and `regress` run in a child process and answer immediately; poll the matching getter
-for the verdict. See [Historian](Session-Database.md).
+for the verdict. See [Historian](Historian.md).
 
 #### 🔵 `sessions.getStatus`
 Return the recording flags: `exportEnabled` and `isOpen`.

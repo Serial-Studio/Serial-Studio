@@ -1,4 +1,4 @@
-# Operator Deployments
+# Operator Deployments (Pro)
 
 A **deployment** is a saved launcher that opens Serial Studio with a specific project file and a fixed set of command-line flags. Double-clicking the launcher starts the dashboard with the project already loaded, the toolbar hidden, and (optionally) auto-connect, fullscreen, and pre-armed exports.
 
@@ -230,5 +230,5 @@ Yes, as long as the update overwrites the binary in place rather than moving it 
 - [Project Lock](Project-Lock.md): pair a locked project with a runtime deployment to limit the editor surface at the workstation.
 - [Operation Modes](Operation-Modes.md): how Project mode (the only one runtime deployments use) compares to QuickPlot and Console-Only.
 - [Project Editor](Project-Editor.md): where the project that the deployment points to is built.
-- [CSV Export & Playback](CSV-Export-Playback.md), [Historian](Session-Database.md): the recorders the Logging tab pre-arms.
+- [CSV Export & Playback](CSV-Export-Playback.md), [Historian](Historian.md): the recorders the Logging tab pre-arms.
 - [Pro vs Free Features](Pro-vs-Free.md): what's bundled with a Pro license.

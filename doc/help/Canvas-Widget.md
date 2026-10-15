@@ -1,4 +1,4 @@
-# Canvas widget
+# Canvas Widget (Pro)
 
 *Formerly called the Painter widget. The feature and the `"painter"` widget key are unchanged — only the name shown in the UI and docs changed.*
 
@@ -185,7 +185,7 @@ function onFrame() {
 
 The dashboard helpers (`clearPlots()`, `setPlotPoints(n)`, `setTerminalVisible(bool)`, `setNotificationLogVisible(bool)`, `setClockVisible(bool)`, `setStopwatchVisible(bool)`, `setActiveWorkspace(idOrName)`) are also available, with the same `{ ok, error }` return shape and the same "fire once on a state transition" guidance. Do not call them from `paint()`.
 
-See [Frame Parser Scripting](JavaScript-API.md) for full signatures and failure modes shared across parsers, transforms, and canvas scripts.
+See [Frame Parser Scripting](Frame-Parser.md) for full signatures and failure modes shared across parsers, transforms, and canvas scripts.
 
 ## Canvas code on a remote dashboard
 
@@ -692,7 +692,7 @@ The image path resolver accepts `qrc:/` resources and paths inside the project f
 ## See also
 
 - [Widget Reference](Widget-Reference.md): the full list of built-in dashboard widgets.
-- [Frame Parser Scripting](JavaScript-API.md): the JavaScript engine on the receiving side of the data pipeline.
+- [Frame Parser Scripting](Frame-Parser.md): the JavaScript engine on the receiving side of the data pipeline.
 - [Output Controls](Output-Controls.md): user-scripted widgets that send data to the device.
 - [Dataset Value Transforms](Dataset-Transforms.md): per-dataset scripts for calibration and filtering.
 - [Project Editor](Project-Editor.md): adding groups, datasets, and Canvas widgets to a project.

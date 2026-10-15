@@ -59,7 +59,7 @@ No project file needed. This mode targets rapid prototyping with CSV-formatted s
 2. Call the `parse(frame)` function in your chosen scripting engine (Lua (LuaJIT 2.1, 5.1 syntax with compatibility shims) or JavaScript).
 3. The function returns a list of values (or a 2D list for multi-frame output).
 4. Map returned values to datasets by their Frame Index.
-5. For each dataset, apply its optional `transform(value)` function to convert the raw value into an engineering value. The walk is single-pass, in group then dataset order: a transform can read any dataset's raw value, but reading the final value of a dataset that comes later in the order returns the previous frame's result. Transforms can also read project constants and publish computed variables in the project's [shared tables](Data-Tables.md); computed variables persist across frames. See [Dataset Value Transforms](Dataset-Transforms.md).
+5. For each dataset, apply its optional `transform(value)` function to convert the raw value into an engineering value. The walk is single-pass, in group then dataset order: a transform can read any dataset's raw value, but reading the final value of a dataset that comes later in the order returns the previous frame's result. Transforms can also read project constants and publish computed variables in the project's [Variables tables](Variables.md); computed variables persist across frames. See [Dataset Value Transforms](Dataset-Transforms.md).
 6. Build the final frame with the populated dataset values. Computed datasets (datasets with no Frame Index) are filled entirely by their transform at this point.
 
 Frames aren't handed to the dashboard and export path one at a time. The frame builder stages
@@ -83,7 +83,7 @@ When CSV export, MDF4 export, the Historian, or the API server is active, every 
 
 - **CSV** writes one file per session under `Documents/Serial Studio/CSV/`. See [CSV Export & Playback](CSV-Export-Playback.md).
 - **MDF4 (Pro)** writes a binary measurement file suitable for automotive and high-rate workflows.
-- **Historian (Pro)** appends every frame, raw byte, and table snapshot to a per-project SQLite file that you can browse, tag, and replay later. See [Historian](Session-Database.md).
+- **Historian (Pro)** appends every frame, raw byte, and table snapshot to a per-project SQLite file that you can browse, tag, and replay later. See [Historian](Historian.md).
 - **API** on port 7777 serializes frames to JSON and broadcasts them to connected clients using MCP (JSON-RPC 2.0) or the legacy protocol. See the [API Reference](API-Reference.md).
 
 ## Troubleshooting data flow
@@ -111,10 +111,10 @@ When CSV export, MDF4 export, the Historian, or the API server is active, every 
 - [Getting Started](Getting-Started.md): first-time setup and Quick Plot tutorial.
 - [Operation Modes](Operation-Modes.md): Quick Plot and Project File modes.
 - [Project Editor](Project-Editor.md): configure frame parsing and dashboard layout.
-- [Frame Parser Scripting](JavaScript-API.md): full Lua and JavaScript parser reference.
+- [Frame Parser Scripting](Frame-Parser.md): full Lua and JavaScript parser reference.
 - [Dataset Value Transforms](Dataset-Transforms.md): per-dataset calibration, filtering, and unit conversion.
-- [Variables](Data-Tables.md): shared constants and computed variables used by transforms.
-- [Historian](Session-Database.md): record, tag, and replay sessions through the same pipeline.
+- [Variables](Variables.md): shared constants and computed variables used by transforms.
+- [Historian](Historian.md): record, tag, and replay sessions through the same pipeline.
 - [Widget Reference](Widget-Reference.md): all 15+ widget types and their data requirements.
 - [Communication Protocols](Communication-Protocols.md): protocol comparison and setup.
 - [Troubleshooting](Troubleshooting.md): fixes for common problems.

@@ -1,5 +1,9 @@
 # Modbus PLC simulator
 
+**What you'll learn:** a Modbus TCP source with a Lua frame parser, a Data Grid dashboard, and a Control Loop that launches the simulator.
+
+**Prerequisites:** Serial Studio Pro and Python 3 with `pymodbus`.
+
 ## Overview
 
 This project exercises Serial Studio's Modbus TCP/RTU support with a physics-based hydraulic test stand simulator. The simulator acts as a Modbus TCP server and produces realistic industrial telemetry, with automatic failure modes and recovery sequences.
@@ -71,7 +75,7 @@ The simulator supports pymodbus 3.x and 4.x automatically.
 
 ### 1. Start the PLC simulator
 
-The project's control script launches `plc_simulator.py` automatically once Serial Studio connects, so this step is only needed to run a modified copy first — for example with the `FAILURE_PROBABILITY` override described in [Observing failure modes](#observing-failure-modes) — before connecting:
+The project's Control Loop launches `plc_simulator.py` automatically once Serial Studio connects, so this step is only needed to run a modified copy first — for example with the `FAILURE_PROBABILITY` override described in [Observing failure modes](#observing-failure-modes) — before connecting:
 
 ```bash
 python3 plc_simulator.py
@@ -104,7 +108,7 @@ python3 plc_simulator.py
    - Open Serial Studio.
    - On the toolbar, click **Open Project**, then pick `Modbus PLC Simulator.ssproj`.
 2. **Configure the Modbus connection:**
-   - **I/O Interface:** `Modbus`.
+   - **Connection:** `Modbus`.
    - **Protocol:** `Modbus TCP`.
    - **Host:** `127.0.0.1` (or the IP address of the machine running the simulator).
    - **Port:** `5020`.
@@ -138,7 +142,7 @@ CSV columns: `address`, `name`, `type`, `dataType`, `units`, `min`, `max`, `scal
 
 To import:
 
-1. Open Serial Studio and pick **Modbus** as the I/O interface.
+1. Open Serial Studio and pick **Modbus** as the Connection.
 2. Click **Import Register Map**.
 3. Pick `modbus_plc_simulator.csv`.
 4. Review the register preview and click **Create Project**.

@@ -264,7 +264,7 @@ DIFFERENT enum: `GroupWidget`.
 | `5`             | NoGroupWidget  | (none; group has no native tile) |
 | `6`             | Plot3D (Pro)   | `6`  (DashboardPlot3D)           |
 | `7`             | ImageView (Pro)| `18` (DashboardImageView)        |
-| `8`             | Painter (Pro)  | `22` (DashboardPainter)          |
+| `8`             | Canvas Widget (Pro) | `22` (DashboardPainter)          |
 | `9`             | WebView        | `16` (DashboardWebView)          |
 
 Reading the API:

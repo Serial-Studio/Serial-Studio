@@ -194,9 +194,9 @@ Widgets.Pane {
             Widgets.ToolbarButton {
               iconSize: 24
               toolbarButton: false
-              text: qsTr("Add Shared Table")
+              text: qsTr("Add Variables Table")
               Layout.alignment: Qt.AlignVCenter
-              ToolTip.text: qsTr("Add shared table")
+              ToolTip.text: qsTr("Add Variables Table")
               onClicked: Cpp_JSON_ProjectModel.promptAddTable()
               icon.source: Cpp_Misc_IconRegistry.icon("editor", "add-table", 24)
             }
@@ -314,7 +314,7 @@ Widgets.Pane {
             opacity: 0.5
             color: Cpp_ThemeManager.colors["text"]
             visible: root.summary.length <= 1 && searchBand.query.trim().length === 0
-            text: qsTr("No shared tables.")
+            text: qsTr("No Variables tables.")
           }
         }
       }

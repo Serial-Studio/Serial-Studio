@@ -154,6 +154,7 @@ qt_add_library(
   Console/Handler.cpp
   Console/SendLibrary.cpp
   Console/WelcomeText.cpp
+  Console/SilentLinkWatch.cpp
   Console/TextFormat.cpp
   Console/Export.cpp
   Misc/Utilities.h
@@ -274,6 +275,7 @@ qt_add_library(
   Console/Handler.h
   Console/SendLibrary.h
   Console/WelcomeText.h
+  Console/SilentLinkWatch.h
   Console/TextFormat.h
   Console/Export.h
 )

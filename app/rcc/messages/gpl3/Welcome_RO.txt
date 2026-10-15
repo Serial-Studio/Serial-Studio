@@ -1,14 +1,12 @@
 Copyright (c) 2020–2026 Alex Spataru <https://github.com/alex-spataru>
+Acest software este gratuit și open source sub licența GNU GPLv3. Îl puteți
+folosi, modifica și redistribui, cu condiția ca lucrările derivate să rămână
+open source sub aceleași condiții.
 
-Acest software este gratuit și open source sub licența GNU GPLv3.
-Îl puteți folosi, modifica și redistribui, cu condiția ca lucrările
-derivate să rămână open source sub aceleași condiții.
-
-→ Licență: https://www.gnu.org/licenses/gpl-3.0.html
 → Sursă:   https://github.com/serial-studio/serial-studio
 
-Vă place acest proiect? Luați în considerare susținerea dezvoltării
-cu Serial Studio Pro:
+Vă place acest proiect? Luați în considerare susținerea dezvoltării cu Serial
+Studio Pro:
 → https://store.serial-studio.com/
 
 Funcții Pro:
@@ -18,5 +16,3 @@ Funcții Pro:
 → Historian, Variabile și transformări (JS + Lua)
 → Proiecte multi-sursă și spații de lucru personalizate
 → Licență comercială (fără obligații GPL)
-
-→ Aflați mai multe: https://serial-studio.com/

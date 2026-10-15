@@ -1,16 +1,13 @@
 Copyright (c) 2020–2026 Alex Spataru <https://github.com/alex-spataru>
+Bu, Serial Studio Pro'nun ücretsiz sürümüdür: tüm temel özellikler süre sınırı
+olmadan ücretsiz kullanılabilir. Aşağıdaki Pro özellikleri, birini denediğiniz
+anda ücretsiz 14 günlük bir deneme süresiyle birlikte açılır. Başlamak için
+hesap veya ödeme gerekmez.
 
-Bu, Serial Studio Pro'nun ücretsiz sürümüdür: tüm temel özellikler
-süre sınırı olmadan ücretsiz kullanılabilir. Aşağıdaki Pro özellikleri,
-birini denediğiniz anda ücretsiz 14 günlük bir deneme süresiyle birlikte
-açılır. Başlamak için hesap veya ödeme gerekmez.
-
-Kişisel, eğitim amaçlı ve açık kaynak kullanım için ücretsizdir;
-ticari kullanım için Pro lisansı gerekir.
+Kişisel, eğitim amaçlı ve açık kaynak kullanım için ücretsizdir; ticari
+kullanım için Pro lisansı gerekir.
 
 → Destek: alex@serial-studio.com
-→ Görüşme planlayın: https://calendly.com/serial-studio
-→ Daha fazla bilgi edinin: https://serial-studio.com/
 
 Mevcut Pro özellikleri:
 → MQTT ve 3D görselleştirme

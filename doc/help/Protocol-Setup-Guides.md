@@ -1,6 +1,6 @@
 # Protocol Setup Guides
 
-Step-by-step setup instructions for every communication protocol supported by Serial Studio. Each guide walks through the exact UI steps required to establish a connection. For protocol overviews and selection guidance, see [Communication Protocols](Communication-Protocols.md); for the driver model and multi-device projects, see [Data Sources](Data-Sources.md).
+Step-by-step setup instructions for every communication protocol supported by Serial Studio. Each guide walks through the exact UI steps required to establish a connection. For protocol overviews and selection guidance, see [Communication Protocols](Communication-Protocols.md); for the driver model and multi-device projects, see [Devices](Devices.md).
 
 ## Serial/UART Setup
 
@@ -11,7 +11,7 @@ Step-by-step setup instructions for every communication protocol supported by Se
 ### Steps
 
 1. Open Serial Studio.
-2. In the **Setup Panel**, select **UART/COM** from the I/O Interface dropdown. Alternatively, click the **UART** button in the toolbar if visible.
+2. In the **Setup Panel**, select **UART/COM** from the Connection dropdown. Alternatively, click the **UART** button in the toolbar if visible.
 3. Select the COM port (Windows), `/dev/ttyUSBx` / `/dev/ttyACMx` (Linux), or `/dev/cu.usbserial-*` (macOS) from the **COM Port** dropdown. If the port does not appear, check the Troubleshooting entries for this driver.
 4. Set the **Baud Rate** to match your device. Default: 9600. Common values: 9600, 115200, 921600. The field is editable, so rates not in the list can be typed directly.
 5. **Data Bits** defaults to 8, **Parity** to None, **Stop Bits** to 1, and **Flow Control** to None; change any of these to match your device.
@@ -21,7 +21,7 @@ Step-by-step setup instructions for every communication protocol supported by Se
 
 ### Troubleshooting
 
-- **Port not listed:** On Linux, add your user to the `dialout` group: `sudo usermod -aG dialout $USER`, then log out and back in. On Windows, install the appropriate USB-serial driver. On all platforms, try a different USB cable or port.
+- **Port not listed:** On Linux, see [Serial port permissions](Linux-Installation.md#serial-port-permissions). On Windows, install the appropriate USB-serial driver. On all platforms, try a different USB cable or port.
 - **No data after connecting:** Verify the baud rate matches the device exactly. Check that your frame delimiters are configured correctly. Try toggling **Send DTR Signal**.
 - **Garbled data:** Baud rate mismatch is the most common cause. Double-check the device documentation.
 
@@ -35,7 +35,7 @@ Full driver reference: [UART](Drivers-UART.md).
 
 ### Steps
 
-1. In the **Setup Panel**, select **Network Socket** from the I/O Interface dropdown.
+1. In the **Setup Panel**, select **Network Socket** from the Connection dropdown.
 2. Set the **Socket Type** to **TCP**.
 3. Enter the **Remote Address** (IP address or hostname of the device). Default: `127.0.0.1`.
 4. Enter the **Remote Port** the device is listening on. Default: 23.
@@ -60,7 +60,7 @@ Full driver reference: [Network](Drivers-Network.md).
 
 ### Steps
 
-1. In the **Setup Panel**, select **Network Socket** from the I/O Interface dropdown.
+1. In the **Setup Panel**, select **Network Socket** from the Connection dropdown.
 2. Set the **Socket Type** to **UDP**.
 3. Enter the **Remote Address** (IP address of the device, or multicast group address). Default: `127.0.0.1`.
 4. Enter the **Remote Port** (the destination port when Serial Studio writes data back). Default: 53. This field is hidden while **Multicast** is checked.
@@ -83,7 +83,7 @@ Full driver reference: [Network](Drivers-Network.md).
 
 ### Steps
 
-1. In the **Setup Panel**, select **Bluetooth LE** from the I/O Interface dropdown.
+1. In the **Setup Panel**, select **Bluetooth LE** from the Connection dropdown.
 2. Ensure Bluetooth is enabled on your computer. Serial Studio starts scanning for BLE devices as soon as the driver is selected.
 3. Wait for device scanning to complete. Your device should appear in the **Device** dropdown.
 4. Select your device from the dropdown.
@@ -112,7 +112,7 @@ MQTT now has two distinct surfaces in Serial Studio. Pick the one that matches w
 
 ### Subscriber: add an MQTT source
 
-For a single-device setup, select **MQTT Subscriber** from the I/O Interface dropdown in the **Setup Panel** and fill in the same fields there. For multi-device projects:
+For a single-device setup, select **MQTT Subscriber** from the Connection dropdown in the **Setup Panel** and fill in the same fields there. For multi-device projects:
 
 1. Open the project editor.
 2. Add a new source under **Devices** (or pick an existing one) and set its **Bus Type** to **MQTT Subscriber**.
@@ -165,7 +165,7 @@ See [MQTT Publisher](MQTT-Publisher.md) for the full reference, including the `m
 
 ### Steps
 
-1. In the **Setup Panel**, select **Modbus** from the I/O Interface dropdown.
+1. In the **Setup Panel**, select **Modbus** from the Connection dropdown.
 2. Set the **Protocol** to **Modbus RTU**.
 3. Select the **Serial Port** corresponding to your RS-485 adapter.
 4. Set the **Baud Rate** to match the device (common: 9600, 19200, 115200).
@@ -205,7 +205,7 @@ Full driver reference: [Modbus](Drivers-Modbus.md).
 
 ### Steps
 
-1. In the **Setup Panel**, select **Modbus** from the I/O Interface dropdown.
+1. In the **Setup Panel**, select **Modbus** from the Connection dropdown.
 2. Set the **Protocol** to **Modbus TCP**.
 3. Enter the **Host** (device IP address or hostname).
 4. Enter the **Port** (Serial Studio prefills 5020; standard Modbus TCP devices listen on 502).
@@ -231,7 +231,7 @@ Serial Studio auto-detects the format from the file extension and accepts **CSV*
 
 ### How to Import
 
-1. In the **Setup Panel**, select **Modbus** from the I/O Interface dropdown.
+1. In the **Setup Panel**, select **Modbus** from the Connection dropdown.
 2. Click **Import Register Map…**.
 3. Select a CSV, XML, or JSON register map file.
 4. Review the registers in the **Modbus Register Map Preview** dialog.
@@ -364,7 +364,7 @@ The importer produces:
 
 - **Register groups** loaded into the Modbus driver (ready to connect immediately).
 - **Project groups.** One Data Grid group per contiguous block of same-type registers, plus one workspace per group and an Overview workspace.
-- **Shared tables.** One table per block, with one variable per entry; the parser publishes values into the tables and each dataset reads its value back through a small Lua transform, so datasets never depend on parser channel order.
+- **Variables tables.** One table per block, with one variable per entry; the parser publishes values into the tables and each dataset reads its value back through a small Lua transform, so datasets never depend on parser channel order.
 - **Datasets.** One per register entry, with name, units, min/max, a plot toggle, and widget type (LED with an alarm band for booleans, gauge for temperatures/pressures, bar for percentages). Plots and gauges open on demand from the Data Grid rows instead of crowding the dashboard.
 - **Frame parser.** A commented, editable Lua parser with one declarative spec line per register. It extracts values from Modbus protocol frames, handles data types (uint16, int16, float32, ...), and applies scaling/offset. See [How Multi-Group Polling Works](#how-multi-group-polling-works) for details on how the parser handles multiple register groups.
 
@@ -468,9 +468,9 @@ The groups are always polled in the same fixed order (the order they appear in t
 
 ### Parser Side
 
-The generated Lua parser keeps a poll cursor that starts at the first register block. Each time a response frame arrives, the parser reads the Modbus function code (the second byte of the response) and matches it against the configured blocks, probing in cursor order. It decodes the matching block, publishes the extracted values into the block's shared table, then advances the cursor to the block after the one it just decoded. Because matching is keyed on the function code rather than on cursor position alone, the parser snaps to the correct block even if a response is missing or arrives out of order.
+The generated Lua parser keeps a poll cursor that starts at the first register block. Each time a response frame arrives, the parser reads the Modbus function code (the second byte of the response) and matches it against the configured blocks, probing in cursor order. It decodes the matching block, publishes the extracted values into the block's Variables table, then advances the cursor to the block after the one it just decoded. Because matching is keyed on the function code rather than on cursor position alone, the parser snaps to the correct block even if a response is missing or arrives out of order.
 
-Values are latched through the shared tables: each register block updates only its own table variables, and every dataset reads its current value back from the table inside its transform, so values from other blocks carry over between frames. A single contiguous block decodes on every frame; with multiple blocks, the cursor walks through them as their responses arrive.
+Values are latched through the Variables tables: each register block updates only its own table variables, and every dataset reads its current value back from the table inside its transform, so values from other blocks carry over between frames. A single contiguous block decodes on every frame; with multiple blocks, the cursor walks through them as their responses arrive.
 
 For two groups (e.g., holding registers at address 0 and coils at address 100), the response for the holding registers carries function code `0x03` and updates the temperature and pressure datasets, while the coils response carries function code `0x01` and updates the E-Stop and Motor Run datasets.
 
@@ -492,14 +492,14 @@ Frame with function `0x01` arrives → parser matches the coil block → extract
 
 ### Steps
 
-1. In the **Setup Panel**, select **CAN Bus** from the I/O Interface dropdown.
+1. In the **Setup Panel**, select **CAN Bus** from the Connection dropdown.
 2. Select the **CAN Driver** (backend). The Qt plugins are `socketcan` (Linux), `peakcan`, `vectorcan`, `systeccan`, `tinycan`, and `virtualcan`; Serial Studio adds its own `canable_gsusb` (CANable USB), `slcan` (Serial CAN), and `seeed_usbcan` (Seeed / Waveshare) backends.
 3. Select the **Interface** from the dropdown (e.g., `can0`, `PCAN_USBBUS1`).
 4. Set the **Bitrate** to match the CAN network exactly. Default: 500000. Common values: 125000, 250000, 500000, 1000000 bps.
 5. Optionally enable **Flexible Data-Rate** if the network uses CAN FD frames. **Listen-Only** and **Loopback** toggles are available for passive monitoring and self-test.
 6. Click **Connect**.
 
-To skip writing a project by hand, click **Import DBC File…** under **DBC Database**: the importer generates a complete project from a CAN signal database (see [Auto-Generating Projects](Auto-Generating-Projects.md)). Without a DBC, frames reach the [frame parser](JavaScript-API.md) as binary records (ID, DLC, payload); decode them with the Binary decoder and your own parse function.
+To skip writing a project by hand, click **Import DBC File…** under **DBC Database**: the importer generates a complete project from a CAN signal database (see [Auto-Generating Projects](Auto-Generating-Projects.md)). Without a DBC, frames reach the [frame parser](Frame-Parser.md) as binary records (ID, DLC, payload); decode them with the Binary decoder and your own parse function.
 
 ### Linux SocketCAN Preparation
 
@@ -533,7 +533,7 @@ Full driver reference: [CAN Bus](Drivers-CAN-Bus.md).
 
 ### Steps
 
-1. In the **Setup Panel**, select **Audio** from the I/O Interface dropdown.
+1. In the **Setup Panel**, select **Audio** from the Connection dropdown.
 2. Select the **Input Device** from the dropdown (lists all detected audio capture devices).
 3. Select the **Sample Rate**. Common: 44100 Hz, 48000 Hz. Available rates depend on the device.
 4. Leave **Normalization** ticked (the default) to get samples as floats in the -1.0 to 1.0 range; the driver then picks the sample format itself and the **Sample Format** selector is hidden.
@@ -559,7 +559,7 @@ Full driver reference: [Audio](Drivers-Audio.md).
 
 ### Steps
 
-1. In the **Setup Panel**, select **USB Device** from the I/O Interface dropdown.
+1. In the **Setup Panel**, select **USB Device** from the Connection dropdown.
 2. Pick the device from the **USB Device** dropdown. Devices are listed as `VID:PID – Manufacturer Product`.
 3. Select the **Transfer Mode**:
    - **Bulk/Interrupt Stream** (default): Standard synchronous bulk or interrupt IN/OUT. Works for most devices.
@@ -586,7 +586,7 @@ Full driver reference: [USB](Drivers-USB.md).
 
 ### Steps
 
-1. In the **Setup Panel**, select **HID Device** from the I/O Interface dropdown.
+1. In the **Setup Panel**, select **HID Device** from the Connection dropdown.
 2. Wait for device enumeration. HID devices are re-enumerated every 2 seconds automatically.
 3. Pick the device from the **HID Device** dropdown. Devices are listed as `Product Name (VID:PID)`.
 4. Click **Connect**.
@@ -607,7 +607,7 @@ Full driver reference: [HID](Drivers-HID.md).
 
 ### Steps
 
-1. In the **Setup Panel**, select **Process** from the I/O Interface dropdown.
+1. In the **Setup Panel**, select **Process** from the Connection dropdown.
 2. Set the **Mode** to **Launch Process**.
 3. Enter the **Executable** path, or click **Browse** to select it. Bare command names are resolved through the PATH.
 4. Enter **Arguments** (command-line arguments for the process), if any.
@@ -632,7 +632,7 @@ Full driver reference: [Process I/O](Drivers-Process-IO.md).
 
 ### Steps
 
-1. In the **Setup Panel**, select **Process** from the I/O Interface dropdown.
+1. In the **Setup Panel**, select **Process** from the Connection dropdown.
 2. Set the **Mode** to **Named Pipe**.
 3. Enter the **Pipe Path**, or click **Browse** to select it.
    - Linux/macOS: `/tmp/myfifo`. Serial Studio creates the FIFO automatically if it doesn't already exist.
@@ -652,9 +652,9 @@ Full driver reference: [Process I/O](Drivers-Process-IO.md).
 ## See Also
 
 - [Communication Protocols](Communication-Protocols.md): protocol overview and comparison.
-- [Data Sources](Data-Sources.md): the driver model, multi-device projects, and per-driver summaries.
+- [Devices](Devices.md): the driver model, multi-device projects, and per-driver summaries.
 - [Auto-Generating Projects](Auto-Generating-Projects.md): DBC, Modbus map, and Protobuf importers.
-- [Frame Parser Scripting](JavaScript-API.md): writing a `parse(frame)` function for custom data formats.
+- [Frame Parser Scripting](Frame-Parser.md): writing a `parse(frame)` function for custom data formats.
 - [MQTT Topics & Semantics](MQTT-Topics.md): protocol vocabulary used by both MQTT surfaces.
 - [MQTT Subscriber](Drivers-MQTT.md): in-depth subscriber-driver documentation.
 - [MQTT Publisher](MQTT-Publisher.md): project-level publisher documentation.

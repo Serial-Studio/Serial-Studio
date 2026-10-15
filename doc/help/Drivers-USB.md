@@ -134,7 +134,7 @@ Transport details are in the [API Reference](API-Reference.md); command safety t
 ## See also
 
 - [Protocol Setup Guides](Protocol-Setup-Guides.md): step-by-step Raw USB setup.
-- [Data Sources](Data-Sources.md): driver capability summary across all transports.
+- [Devices](Devices.md): driver capability summary across all transports.
 - [Communication Protocols](Communication-Protocols.md): overview of all supported transports.
 - [Use Cases](Use-Cases.md): logic analyzers, scientific instruments, and bulk-endpoint devices.
 - [Troubleshooting](Troubleshooting.md): WinUSB, udev, and permission diagnostics.

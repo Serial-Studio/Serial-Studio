@@ -22,6 +22,7 @@
 #include "Core/DataModel/FrameSupport.h"
 
 #include <algorithm>
+#include <QObject>
 
 //--------------------------------------------------------------------------------------------------
 // Commercial feature detection, appreciate your respect for this project
@@ -62,6 +63,41 @@ static bool groupNeedsCommercial(const DataModel::Group& group)
 }
 
 /**
+ * @brief Names the commercial feature one group itself needs, or an empty string.
+ */
+static QString groupCommercialLabel(const DataModel::Group& group)
+{
+  if (group.groupType == DataModel::GroupType::Output)
+    return QObject::tr("Output controls");
+
+  if (group.widget == QStringLiteral("plot3d"))
+    return QObject::tr("3D Plot");
+
+  if (group.widget == QStringLiteral("image"))
+    return QObject::tr("Image View");
+
+  if (group.widget == QStringLiteral("painter"))
+    return QObject::tr("Canvas Widget");
+
+  return QString();
+}
+
+/**
+ * @brief Names the commercial features one dataset needs; empty when it needs none.
+ */
+static QStringList datasetCommercialLabels(const DataModel::Dataset& dataset)
+{
+  QStringList labels;
+  if (dataset.waterfall)
+    labels.append(QObject::tr("Waterfall"));
+
+  if (!dataset.transformCode.isEmpty() && transformUsesNotifications(dataset.transformCode))
+    labels.append(QObject::tr("Notifications from transforms"));
+
+  return labels;
+}
+
+/**
  * @brief Checks if a project configuration (QVector form) requires commercial features.
  */
 bool SerialStudio::commercialCfg(const QVector<DataModel::Group>& g)
@@ -83,6 +119,38 @@ bool SerialStudio::commercialCfg(const std::vector<DataModel::Group>& g)
       return true;
 
   return false;
+}
+
+/**
+ * @brief Names, once each, the commercial features groupNeedsCommercial() matches in @p g, so a
+ *        notice can say which parts of the project need Pro (spec 0100 R31).
+ */
+QStringList SerialStudio::commercialFeatureLabels(const std::vector<DataModel::Group>& g)
+{
+  QStringList labels;
+  for (const auto& group : g) {
+    labels.append(groupCommercialLabel(group));
+    for (const auto& dataset : group.datasets)
+      labels.append(datasetCommercialLabels(dataset));
+  }
+
+  labels.removeAll(QString());
+  labels.removeDuplicates();
+  return labels;
+}
+
+/**
+ * @brief True when @p g's enabled datasets satisfy its group widget's dataset requirement (spec
+ *        0100 R15/R16); the one test the group editor warning and the Problem Center share.
+ */
+bool SerialStudio::groupMeetsWidgetRequirement(const DataModel::Group& g)
+{
+  QStringList roles;
+  for (const auto& dataset : g.datasets)
+    if (dataset.enabled)
+      roles.append(dataset.widget);
+
+  return groupMeetsRequirement(groupWidgetFromId(g.widget), roles);
 }
 
 //--------------------------------------------------------------------------------------------------

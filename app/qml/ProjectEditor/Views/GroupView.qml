@@ -106,9 +106,41 @@ Widgets.Pane {
         Layout.bottomMargin: 0
         Layout.fillWidth: true
         closeButtonEnabled: false
-        titleText: qsTr("Pro features detected in this project.")
+        items: Cpp_JSON_ProjectModel.commercialFeatureSummary
         activationFlag: Cpp_JSON_ProjectModel.containsCommercialFeatures
-        subtitleText: qsTr("Using fallback widgets. Buy a license to unlock full functionality.")
+      }
+
+      //
+      // Group widget requirement (spec 0100 R15): stated up front, warned while unmet
+      //
+      Rectangle {
+        Layout.fillWidth: true
+        Layout.margins: -1
+        border.width: 1
+        implicitHeight: requirementLabel.implicitHeight + 16
+        visible: Cpp_JSON_ProjectEditor.selectedGroupRequirementText.length > 0
+        color: Cpp_ThemeManager.colors["groupbox_background"]
+        border.color: Cpp_JSON_ProjectEditor.selectedGroupRequirementMet
+                      ? Cpp_ThemeManager.colors["groupbox_border"]
+                      : Cpp_ThemeManager.colors["alarm"]
+
+        Label {
+          id: requirementLabel
+
+          wrapMode: Label.WordWrap
+          anchors.margins: 8
+          anchors.left: parent.left
+          anchors.right: parent.right
+          anchors.verticalCenter: parent.verticalCenter
+          font: Cpp_Misc_CommonFonts.customUiFont(1, !Cpp_JSON_ProjectEditor.selectedGroupRequirementMet)
+          color: Cpp_JSON_ProjectEditor.selectedGroupRequirementMet
+                 ? Cpp_ThemeManager.colors["text"]
+                 : Cpp_ThemeManager.colors["alarm"]
+          text: Cpp_JSON_ProjectEditor.selectedGroupRequirementMet
+                ? Cpp_JSON_ProjectEditor.selectedGroupRequirementText
+                : qsTr("This widget shows nothing yet. %1").arg(
+                    Cpp_JSON_ProjectEditor.selectedGroupRequirementText)
+        }
       }
 
       //
@@ -188,12 +220,12 @@ Widgets.Pane {
 
             Widgets.ToolbarButton {
               iconSize: 24
+              text: qsTr("Bar")
               toolbarButton: false
-              text: qsTr("Bar/Level")
               Layout.alignment: Qt.AlignVCenter
+              ToolTip.text: qsTr("Add a bar for scaled values")
               enabled: Cpp_JSON_ProjectEditor.currentGroupIsEditable
               icon.source: Cpp_Misc_IconRegistry.icon("editor", "add-bar", 24)
-              ToolTip.text: qsTr("Add a bar or level indicator for scaled values")
               onClicked: Cpp_JSON_ProjectModel.addDataset(SerialStudio.DatasetBar)
             }
 

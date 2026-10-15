@@ -1,5 +1,9 @@
 # Sparkplug Edge Node
 
+**What you'll learn:** Sparkplug B over the MQTT driver, including birth certificates, aliases and rebirth handling, with a Lua frame parser and a Data Grid.
+
+**Prerequisites:** Serial Studio Pro, an MQTT broker, and Python 3 for the edge node simulator.
+
 ## Overview
 
 This project exercises Serial Studio's Sparkplug support with a simulated edge node, whose payloads
@@ -44,13 +48,13 @@ decoder, so no `protobuf` package is involved.
 
 ## Running the edge node
 
-The bundled `Sparkplug Edge Node.ssproj` starts the edge node for you. Its control script launches
+The bundled `Sparkplug Edge Node.ssproj` starts the edge node for you. Its Control Loop launches
 `sparkplug_edge_node.py` against `127.0.0.1:1883` the moment you press **Connect**, and Serial
 Studio stops the helper again when you disconnect, change project, or quit.
 
 The one piece that is not auto-started is the broker. Sparkplug is MQTT underneath, so a broker has
 to be listening on `127.0.0.1:1883` before you connect (see [Requirements](#requirements) for
-starting Mosquitto). The control script launches the publisher, not the broker; with no broker up
+starting Mosquitto). The Control Loop launches the publisher, not the broker; with no broker up
 the edge node has nothing to connect to.
 
 To run the edge node by hand instead:
@@ -105,7 +109,7 @@ the node having to publish a heartbeat metric.
 
 ## Enabling Sparkplug in Serial Studio
 
-1. Pick **MQTT Subscriber** as the I/O interface in the Setup panel.
+1. Pick **MQTT Subscriber** as the Connection in the Setup panel.
 2. Set **Hostname** to `127.0.0.1` and **Port** to `1883`.
 3. Tick **Sparkplug**.
 4. Set **Group ID** to `SerialStudioDemo`.

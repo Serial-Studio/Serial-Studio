@@ -244,7 +244,7 @@ static void appendExecuteAndHelpTools(QJsonArray& out)
                              stringProp(QStringLiteral("A bare page name without the .md extension "
                                                        "(e.g. \"About\", \"FAQ\", "
                                                        "\"Getting-Started\", \"API-Reference\", "
-                                                       "\"Painter-Widget\", \"Drivers-UART\"), or "
+                                                       "\"Canvas-Widget\", \"Drivers-UART\"), or "
                                                        "\"help.json\" to fetch the index (a JSON "
                                                        "array of {id, title, section, file}). "
                                                        "Multi-word names use hyphens. Full URLs on "

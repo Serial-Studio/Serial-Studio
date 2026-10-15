@@ -1,13 +1,12 @@
 Copyright (c) 2020–2026 Alex Spataru <https://github.com/alex-spataru>
+Denna programvara är fri och öppen källkod under GNU GPLv3-licensen. Du får
+använda, modifiera och distribuera den, förutsatt att härledda verk förblir
+öppen källkod under samma villkor.
 
-Denna programvara är fri och öppen källkod under GNU GPLv3-licensen.
-Du får använda, modifiera och distribuera den, förutsatt att härledda
-verk förblir öppen källkod under samma villkor.
-
-→ Licens: https://www.gnu.org/licenses/gpl-3.0.html
 → Källa:  https://github.com/serial-studio/serial-studio
 
-Gillar du detta projekt? Överväg att stödja utvecklingen med Serial Studio Pro:
+Gillar du detta projekt? Överväg att stödja utvecklingen med Serial Studio
+Pro:
 → https://store.serial-studio.com/
 
 Pro-funktioner:
@@ -17,5 +16,3 @@ Pro-funktioner:
 → Historian, Variabler och värdetransformer (JS + Lua)
 → Multikällsprojekt och anpassade arbetsytor
 → Kommersiell licens (inga GPL-åtaganden)
-
-→ Läs mer: https://serial-studio.com/

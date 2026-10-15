@@ -1,8 +1,8 @@
 # SDK Reference
 
-Every script you write inside Serial Studio (a frame parser, a dataset transform, a Control Loop, an Output widget) runs with the **Serial Studio SDK** already loaded. The SDK is a set of natural, namespaced functions that let a script reach back into the application: write to the connected device, read the latest frame, move values through the shared tables, fire actions, post notifications, reshape the dashboard, and encode wire-level protocol frames. You call these functions directly, with positional arguments, and the code editor offers them all in autocomplete.
+Every script you write inside Serial Studio (a frame parser, a dataset transform, a Control Loop, an Output widget) runs with the **Serial Studio SDK** already loaded. The SDK is a set of natural, namespaced functions that let a script reach back into the application: write to the connected device, read the latest frame, move values through the Variables tables, fire actions, post notifications, reshape the dashboard, and encode wire-level protocol frames. You call these functions directly, with positional arguments, and the code editor offers them all in autocomplete.
 
-This page is the single reference for that surface. The scripting pages ([Frame Parser Reference](JavaScript-API.md), [Dataset Value Transforms](Dataset-Transforms.md), [Control Loop](Control-Script.md), [Output Controls](Output-Controls.md)) describe *where* and *when* each script runs; this page describes *what they can call* once they are running.
+This page is the single reference for that surface. The scripting pages ([Frame Parser Reference](Frame-Parser.md), [Dataset Value Transforms](Dataset-Transforms.md), [Control Loop](Control-Loop.md), [Output Controls](Output-Controls.md)) describe *where* and *when* each script runs; this page describes *what they can call* once they are running.
 
 ## What the SDK is
 
@@ -20,7 +20,7 @@ Two consequences follow from "the SDK is the API, in-process":
 - **Anything the network API can do, a script can do**: connect a source, edit the project, start an export, query the dashboard. The full command catalog is the [API Reference](API-Reference.md); this page covers the ergonomic helpers layered on top.
 - **The same `{ ok, result, error }` discipline applies.** Every call can fail (a wrong UUID, a disconnected device, a Pro-only command on a Free build), so you check the result rather than assume success.
 
-`apiCall` runs against the full command catalog with no allow-list, rate limit, or payload cap: a project's own scripts are first-party code, so they reach the same surface the project author could use from the UI. The network API is the gated surface — a remote client over TCP still passes through the user-consent gate for device writes. See [Frame Parser Reference](JavaScript-API.md) for examples.
+`apiCall` runs against the full command catalog with no allow-list, rate limit, or payload cap: a project's own scripts are first-party code, so they reach the same surface the project author could use from the UI. The network API is the gated surface — a remote client over TCP still passes through the user-consent gate for device writes. See [Frame Parser Reference](Frame-Parser.md) for examples.
 
 ## The result envelope
 
@@ -101,9 +101,9 @@ if (reply.ok && !reply.timedOut)
   console.log("Instrument: " + reply.data);
 ```
 
-### Shared tables (`tableGet` / `tableSet`)
+### Variables tables (`tableGet` / `tableSet`)
 
-The shared tables are the cross-script blackboard (see [Variables](Data-Tables.md)): constants and computed variables that hold their value across frames. All four script kinds read and write them with the same two calls:
+The Variables tables are the cross-script blackboard (see [Variables](Variables.md)): constants and computed variables that hold their value across frames. All four script kinds read and write them with the same two calls:
 
 | Function | Returns | Notes |
 |---|---|---|
@@ -234,7 +234,7 @@ Every script kind installs the same host bridges, so `transmit()` has the identi
 
 ## See/Decide/Act helpers (Control Loop)
 
-Four helpers for closed-loop automation — read the latest data, decide in plain code, act through the SDK — available in every script kind, documented here because the Control Loop is where they matter most. Full treatment is in the [Control Loop](Control-Script.md) page; the SDK surface is:
+Four helpers for closed-loop automation — read the latest data, decide in plain code, act through the SDK — available in every script kind, documented here because the Control Loop is where they matter most. Full treatment is in the [Control Loop](Control-Loop.md) page; the SDK surface is:
 
 | Function | Returns | Purpose |
 |---|---|---|
@@ -310,7 +310,7 @@ function parse(frame) {
 
 ### 4. Dataset transform: calibrate against a live table variable
 
-A transform reads a calibration slope another script wrote into a shared table, so one place owns the constant and every channel stays in sync.
+A transform reads a calibration slope another script wrote into a Variables table, so one place owns the constant and every channel stays in sync.
 
 ```javascript
 function transform(value) {
@@ -376,11 +376,11 @@ end
 
 ## Related
 
-- [Frame Parser Reference](JavaScript-API.md): turning device bytes into dataset values; where `parse()` runs.
+- [Frame Parser Reference](Frame-Parser.md): turning device bytes into dataset values; where `parse()` runs.
 - [Dataset Value Transforms](Dataset-Transforms.md): per-dataset conditioning; where `transform()` runs.
-- [Control Loop](Control-Script.md): `setup()`/`loop()` automation and the See/Decide/Act model in depth.
+- [Control Loop](Control-Loop.md): `setup()`/`loop()` automation and the See/Decide/Act model in depth.
 - [Output Controls](Output-Controls.md): Button/Slider/Toggle/Knob widgets and their `transmit()` function.
-- [Variables](Data-Tables.md): the shared blackboard behind `tableGet`/`tableSet`.
+- [Variables](Variables.md): the shared blackboard behind `tableGet`/`tableSet`.
 - [API Reference](API-Reference.md): the full command catalog the SDK wraps, and the same surface over the network.
 - [Macros](Macros.md): the in-app terminal and script editor for running `apiCall` and the wrappers interactively, outside any project.
 - [Actions](Actions.md) and [Notifications](Notifications.md): what `actionFire()` and `notify*()` drive.

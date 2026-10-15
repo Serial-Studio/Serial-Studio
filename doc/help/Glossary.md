@@ -16,7 +16,19 @@ A labelled range of bytes in the console stream, produced by an annotation decod
 
 ## Built-In parser (Native)
 
-The no-code frame parser. You describe the frame layout with a JSON descriptor and Serial Studio parses it with parametrized C++ templates, so no Lua or JavaScript is needed. "Built-In" is the user-facing name; internal identifiers call it *Native*. See [Frame Parser Reference](JavaScript-API.md).
+The no-code frame parser. You describe the frame layout with a JSON descriptor and Serial Studio parses it with parametrized C++ templates, so no Lua or JavaScript is needed. "Built-In" is the user-facing name; internal identifiers call it *Native*. See [Frame Parser Reference](Frame-Parser.md).
+
+## Computed dataset
+
+A dataset that takes its value from its value transform instead of from the frame, so it reads no frame index. A transform that never reads `value` makes its dataset computed. Older versions called these virtual datasets. See [Deriving values](Derived-Values.md).
+
+## Concepts
+
+The chain from device to dashboard, explained step by step on one page. See [Concepts](Concepts.md).
+
+## Connection
+
+The link type a device uses (UART, Network, Bluetooth LE, or a Pro connection such as Modbus or CAN Bus), picked with the **Connection** selector in the Device Setup panel. See [Devices](Devices.md).
 
 ## Console
 
@@ -24,7 +36,7 @@ The center panel that shows raw incoming bytes before any parsing, in ASCII or h
 
 ## Control Loop
 
-The optional `setup()` / `loop()` script that runs alongside a project to drive output, automate the device, or compute derived values. See [Control Loop](Control-Script.md).
+The optional `setup()` / `loop()` script that runs alongside a project to drive output, automate the device, or compute derived values. See [Control Loop](Control-Loop.md).
 
 ## Dashboard
 
@@ -38,9 +50,13 @@ A single named channel of data, such as one temperature or one axis of an accele
 
 Two distinct identifiers for a dataset. The frame **index** says which field of the frame the value comes from; the **dataset ID** is the dataset's slot inside its group, used to address mutating API calls, and it shifts when datasets are reordered; the **unique ID** is the one identifier that survives edits. Confusing index with ID, or dataset ID with unique ID, is the most common project-editing trap. See [Dataset Identity Model](Identity-Model.md).
 
+## Device
+
+Anything Serial Studio reads data from: a board on a serial port, a network socket, a Bluetooth LE peripheral, a PLC, an MQTT broker, a process, or a file being played back. A project has one device, or several with Pro, and each device carries its own connection, frame detection, decoder and frame parser. See [Devices](Devices.md).
+
 ## Driver
 
-The component that talks to one data source (UART, TCP/UDP, Bluetooth LE, MQTT, Modbus, CAN Bus, Audio, USB, HID, Process I/O). Drivers stamp each frame with its arrival time at the source boundary. See [Data Sources](Data-Sources.md).
+The component that talks to one device (UART, TCP/UDP, Bluetooth LE, MQTT, Modbus, CAN Bus, Audio, USB, HID, Process I/O). Drivers stamp each frame with its arrival time at the source boundary. See [Devices](Devices.md).
 
 ## Extension
 
@@ -48,7 +64,7 @@ An add-on that extends Serial Studio: a theme, a frame parser, a project templat
 
 ## Folder
 
-A named, collapsible container in the Project Editor that organizes groups, shared tables, or workspaces. Folders nest to any depth, are purely organizational, and exist in every edition. A leaf group folder also collapses into one aggregated dashboard workspace. See [Organizing with folders](Project-Editor.md#organizing-with-folders).
+A named, collapsible container in the Project Editor that organizes groups, Variables tables, or workspaces. Folders nest to any depth, are purely organizational, and exist in every edition. A leaf group folder also collapses into one aggregated dashboard workspace. See [Organizing with folders](Project-Editor.md#organizing-with-folders).
 
 ## Frame
 
@@ -64,11 +80,19 @@ The 1-based position of a field within a parsed frame. A dataset reads its value
 
 ## Frame parser
 
-The logic that turns a raw frame into an ordered list of values. It can be the Built-In parser, a JavaScript `parse(frame)` function, or a Lua equivalent. See [Frame Parser Reference](JavaScript-API.md).
+The logic that turns a raw frame into an ordered list of values. It can be the Built-In parser, a JavaScript `parse(frame)` function, or a Lua equivalent. See [Frame Parser Reference](Frame-Parser.md).
 
 ## Group
 
-A container that holds related datasets and maps them onto a composite widget such as a GPS Map, 3D Plot, or Data Grid. Groups organize the project tree. See [Project Editor](Project-Editor.md).
+A container that holds related datasets and can show them together with a Group Widget. Groups organize the project tree. See [Project Editor](Project-Editor.md).
+
+## Group Widget
+
+The widget a group uses to show its datasets together, such as a Data Grid, Multi-Plot, Accelerometer, GPS Map, or 3D Plot. Some Group Widgets need datasets with specific tags: an Accelerometer needs exactly three datasets tagged X, Y and Z. Older versions called these composite widgets. See [Widget Reference](Widget-Reference.md).
+
+## Historian
+
+The Pro recording of each session into a database that can be browsed, searched and replayed. Older versions called it the Session Database. See [Historian](Historian.md).
 
 ## Macro
 
@@ -104,7 +128,11 @@ The zero-configuration mode that treats each line as a frame and each comma-sepa
 
 ## Setup panel
 
-The collapsible panel on the right where you choose the operation mode, configure the I/O interface, set frame-parsing options, and enable export.
+The collapsible panel on the right where you choose the operation mode, configure the I/O interface, pick the device's Connection and settings, and enable export. Its title is **Device Setup**.
+
+## Variables
+
+Named values grouped into Variables tables that frame parsers, value transforms and scripts read and write, used for calibration constants and values shared between datasets. A Pro feature. Older versions called these data tables or shared memory. See [Variables](Variables.md).
 
 ## Value transform
 
@@ -118,9 +146,25 @@ A visual element on the dashboard such as a Plot, Gauge, Compass, GPS Map, or Da
 
 A saved arrangement of which widgets are visible and how they are laid out on the dashboard, letting one project present different views for different tasks.
 
+## User names and API names
+
+The UI and this manual use the names on the left. Project files, the API, and scripts keep older internal names, listed on the right, so existing projects and integrations keep working.
+
+| Name in the UI and manual | Name in project files, the API and scripts |
+|---------------------------|--------------------------------------------|
+| Device | source (`sources`, `sourceId`, `project.source.*`) |
+| Built-In parser | Native (`frameParserLanguage` 2, native templates) |
+| Group Widget | group `widget` |
+| Variables, Variables table, variable | data tables, table, register (`tableGet()`, `tableSet()`) |
+| Computed dataset | virtual dataset (`virtual`) |
+| Canvas Widget | painter (`"painter"`, `project.painter.*`) |
+| Historian | sessions (`sessions.*`, the "Session Databases" folder) |
+| Control Loop | control script |
+
 ## See also
 
 - [Getting Started](Getting-Started.md) — install, connect, and read your first frame.
+- [Concepts](Concepts.md) — the chain from device to dashboard on one page.
 - [Dataset Identity Model](Identity-Model.md) — the index-versus-ID distinction in depth.
 - [Data Flow](Data-Flow.md) — the full path from raw bytes to widgets.
 - [FAQ](FAQ.md) — common questions.

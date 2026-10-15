@@ -1,4 +1,4 @@
-# AI Assistant
+# AI Assistant (Pro)
 
 A chat-based assistant that lives inside Serial Studio and edits the project for you. Open it from the main toolbar (the **Assistant** button next to *Extensions*) or from the **Project Editor** toolbar, describe what you want to build, and the assistant configures sources, groups, datasets, frame parsers, transforms, output widgets, canvas widgets, and workspaces by calling the same in-process API your scripts and the MCP server already use.
 
@@ -185,8 +185,8 @@ File an issue on the Serial Studio GitHub repo. Include the prompt, the reply, a
 - [API Reference](API-Reference.md): the command surface the assistant calls into.
 - [Project Editor](Project-Editor.md): the editor the assistant edits on your behalf.
 - [Backups & Recovery](Backup-Recovery.md): the rolling snapshots behind every restore and undo.
-- [Frame Parser Scripting](JavaScript-API.md): JavaScript and Lua frame parser API.
+- [Frame Parser Scripting](Frame-Parser.md): JavaScript and Lua frame parser API.
 - [Dataset Value Transforms](Dataset-Transforms.md): per-dataset transform scripts.
-- [Canvas Widget](Painter-Widget.md): the canvas widget API the assistant references when asked to write one.
+- [Canvas Widget](Canvas-Widget.md): the canvas widget API the assistant references when asked to write one.
 - [Output Controls](Output-Controls.md): output widget framework, including transmit-function generation.
 - [Pro vs Free Features](Pro-vs-Free.md): what's included with a Pro license.

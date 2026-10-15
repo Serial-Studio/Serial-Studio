@@ -1,5 +1,9 @@
 # Dual drone telemetry
 
+**What you'll learn:** two sources receiving data at once over separate TCP connections, with Image View camera feeds, GPS Map, Gyroscope and Canvas Widget groups, and output controls.
+
+**Prerequisites:** Serial Studio Pro and Python 3 for the drone simulator.
+
 A multi-source drone telemetry simulator that shows Serial Studio receiving and visualizing data from two independent devices at the same time, each with its own camera feed, GPS coordinates, flight dynamics, and battery monitoring.
 
 ![Dual drone telemetry screenshot](doc/screenshot.png)

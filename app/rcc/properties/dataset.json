@@ -767,7 +767,7 @@
       "section": "general",
       "widget": "IntField",
       "label": "Frame Index",
-      "description": "Frame position used for aligning datasets in time",
+      "description": "Position of this value in the parser's output (first value = 1). 0 = unassigned.",
       "placeholderHook": "datasetIndexPlaceholder",
       "enabledWhen": "notVirtual",
       "validate": "indexNonNegative",

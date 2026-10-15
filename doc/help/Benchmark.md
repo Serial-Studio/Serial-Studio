@@ -54,7 +54,7 @@ report `n/a` in the Result column.
 |---|---|---|
 | **Data pipeline** | Raw `FrameReader` extraction only: delimiter scan and dequeue, no parse. | 1024 K frames/s |
 | **Built-In parser (numeric)** | Native C++ template over numeric channels. | 1024 K frames/s |
-| **Built-In parser (mixed)** | Native template with trailing non-numeric string tokens. | 512 K frames/s |
+| **Built-In parser (mixed)** | Built-In parser with trailing non-numeric string tokens. | 512 K frames/s |
 | **Lua parser (numeric)** | `parse()` in Lua (LuaJIT 2.1, 5.1 syntax with compatibility shims) over numeric channels. | 256 K frames/s |
 | **JavaScript parser (numeric)** | `parse()` in `QJSEngine` over the same channels. | 128 K frames/s |
 | **Lua parser (mixed)** | Lua `parse()` over the mixed workload. | 128 K frames/s |
@@ -68,7 +68,7 @@ hierarchy: raw extraction is the cheapest stage, the Built-In template is faster
 scripted engines, Lua's stack-based API is faster than `QJSEngine`'s value boxing, and the
 mixed workload (with `toDouble` failures on the string tokens) is heavier than the numeric one.
 The same per-language ranking is described in
-[Frame Parser Scripting — Performance Tips](JavaScript-API.md#performance-tips).
+[Frame Parser Scripting — Performance Tips](Frame-Parser.md#performance-tips).
 
 The informational phases exist to show the cost of fanning out to consumers and to the
 dashboard, not to gate a build. Their throughput is expected to be lower than the gated phases.
@@ -142,7 +142,7 @@ available while a benchmark is running.
 - [The Acquisition Pipeline](Data-Hotpath.md): the pipeline being measured, stage by stage.
 - [Threading and Timing Guarantees](Threading-and-Timing.md): where the pipeline normally runs,
   why it's single-threaded internally, and what that guarantees.
-- [Frame Parser Scripting](JavaScript-API.md): the `parse()` API and the Lua-vs-JavaScript
+- [Frame Parser Scripting](Frame-Parser.md): the `parse()` API and the Lua-vs-JavaScript
   performance characteristics the benchmark quantifies.
 - [Command-Line Interface](Command-Line-Interface.md#acquisition-pipeline-benchmark): the headless benchmark
   used for CI and deployment gating.

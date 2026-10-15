@@ -308,7 +308,7 @@ void AI::HelpFetcher::completeIndex(const QString& callId,
                      "and a `file` -- pass the file name (without the "
                      ".md extension and with hyphens preserved) to "
                      "meta.fetchHelp on the next call. Common "
-                     "mistakes: pass 'Painter-Widget' not 'Painter', "
+                     "mistakes: pass 'Canvas-Widget' not 'Canvas', "
                      "'API-Reference' not 'API'.")
         .arg(missedUrl.toString());
     result[QStringLiteral("content")] = QString::fromUtf8(bytes);

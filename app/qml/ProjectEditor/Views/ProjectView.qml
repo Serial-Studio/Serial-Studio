@@ -80,9 +80,8 @@ Widgets.Pane {
         Layout.bottomMargin: 0
         Layout.fillWidth: true
         closeButtonEnabled: false
-        titleText: qsTr("Pro features detected in this project.")
+        items: Cpp_JSON_ProjectModel.commercialFeatureSummary
         activationFlag: Cpp_JSON_ProjectModel.containsCommercialFeatures
-        subtitleText: qsTr("Using fallback widgets. Buy a license to unlock full functionality.")
       }
 
       Rectangle {
@@ -312,10 +311,9 @@ Widgets.Pane {
 
                   ToolTip.delay: 700
                   ToolTip.visible: hovered
-                  ToolTip.text: qsTr("ISA-18.1 annunciator sequence for this project: automatic "
-                                     + "reset, manual reset, or ringback on return to normal; "
-                                     + "\"-4\" (option 4) stops a momentary alarm as soon as its "
-                                     + "condition clears instead of locking it in until acknowledged.")
+                  ToolTip.text: qsTr("How alarms latch and reset (ISA-18.1). A = automatic reset, "
+                                     + "M = manual reset, R = ringback; -4 means the alarm does "
+                                     + "not stay latched after it clears.")
                 }
 
                 Label {
@@ -398,8 +396,8 @@ Widgets.Pane {
               {
                 icon:     Cpp_Misc_IconRegistry.icon("editor", "device", 48),
                 value:    Cpp_JSON_ProjectModel.sourceCount,
-                singular: qsTr("Source"),
-                plural:   qsTr("Sources")
+                singular: qsTr("Device"),
+                plural:   qsTr("Devices")
               },
               {
                 icon:     Cpp_Misc_IconRegistry.icon("editor", "group", 48),
@@ -506,7 +504,7 @@ Widgets.Pane {
           color: Cpp_ThemeManager.colors["text"]
           font: Cpp_Misc_CommonFonts.uiFont
           text: qsTr("Double-click a block to edit it. Right-click anywhere "
-                     + "to add a group, dataset, action, data table, or device.")
+                     + "to add a group, dataset, action, Variables table, or device.")
 
           anchors {
             leftMargin: 12

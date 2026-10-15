@@ -1,16 +1,13 @@
 Copyright (c) 2020–2026 Alex Spataru <https://github.com/alex-spataru>
+Dit is de gratis versie van Serial Studio Pro: alle kernfuncties zijn gratis
+te gebruiken, zonder tijdslimiet. De Pro-functies hieronder worden ontgrendeld
+zodra u er een uitprobeert, met een gratis proefperiode van 14 dagen. Er is
+geen account of betaling nodig om te beginnen.
 
-Dit is de gratis versie van Serial Studio Pro: alle kernfuncties
-zijn gratis te gebruiken, zonder tijdslimiet. De Pro-functies hieronder
-worden ontgrendeld zodra u er een uitprobeert, met een gratis proefperiode
-van 14 dagen. Er is geen account of betaling nodig om te beginnen.
-
-Gratis voor persoonlijk, educatief en open-sourcegebruik; voor
-commercieel gebruik is een Pro-licentie vereist.
+Gratis voor persoonlijk, educatief en open-sourcegebruik; voor commercieel
+gebruik is een Pro-licentie vereist.
 
 → Ondersteuning: alex@serial-studio.com
-→ Plan een gesprek: https://calendly.com/serial-studio
-→ Meer informatie: https://serial-studio.com/
 
 Beschikbare Pro-functies:
 → MQTT- en 3D-visualisatie

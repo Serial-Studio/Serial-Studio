@@ -84,7 +84,7 @@ they close the See -> Decide -> Act loop:
   point to plot-enabled datasets). **It updates the dashboard ONLY: exports
   (CSV/MDF4/Historian/MQTT/gRPC) are fed exclusively by frames the frame
   parser publishes, and the parser publishes a frame only when `parse()`
-  returns a non-empty result.** If the dashboard is driven from shared tables and
+  returns a non-empty result.** If the dashboard is driven from Variables tables and
   the parser would otherwise have nothing to return, make `parse()` return
   dummy data (e.g. `return [0];`) so a frame still flows to the export
   fan-out. A parser that returns `[]` keeps the dashboard alive via
@@ -331,7 +331,7 @@ function parse(frame) {
 }
 ```
 
-For the full help page, fetch `Control-Script`.
+For the full help page, fetch `Control-Loop`.
 
 ## When this skill does not match what the user sees
 

@@ -1,0 +1,30 @@
+{
+  "comment": "Spec 0100 R17/R18: one user-facing name per concept. Each rule bans a synonym in user-visible text and names the canonical term. API identifiers, JSON keys and file paths in code spans are masked before matching.",
+  "rules": [
+    { "pattern": "\\bdata sources?\\b", "flags": "i", "use": "Device" },
+    { "pattern": "\\bI/O interface\\b", "flags": "i", "use": "Device (or Connection for the bus type)" },
+    { "pattern": "\\bcomposite widgets?\\b", "flags": "i", "use": "Group Widget" },
+    { "pattern": "\\bcontrol scripts?\\b", "flags": "i", "use": "Control Loop" },
+    { "pattern": "\\bPainter( widget)?\\b", "flags": "", "use": "Canvas Widget" },
+    { "pattern": "\\bsession databases?\\b", "flags": "i", "use": "Historian" },
+    { "pattern": "\\bshared memory\\b", "flags": "i", "use": "Variables" },
+    { "pattern": "\\bvirtual datasets?\\b", "flags": "i", "use": "Computed Dataset" },
+    { "pattern": "\\bshared tables?\\b", "flags": "i", "use": "Variables Table" },
+    { "pattern": "\\bdata tables?\\b", "flags": "i", "use": "Variables (or Data Grid for the widget)" },
+    { "pattern": "\\blevel indicators?\\b", "flags": "i", "use": "Bar" },
+    { "pattern": "\\bBar/Level\\b", "flags": "", "use": "Bar" },
+    { "pattern": "\\bNative (frame )?(parser|template)s?\\b", "flags": "i", "use": "Built-In parser" },
+    { "pattern": "\\bregister access\\b", "flags": "i", "use": "Variable access" }
+  ],
+  "allow_paths": [
+    "doc/help/API-Reference.md",
+    "doc/help/Glossary.md"
+  ],
+  "allow_line_patterns": [
+    "[Ff]ormerly",
+    "Session Databases[\"'` ]* folder",
+    "Session Databases/",
+    "previously called",
+    "API (name|identifier|term)"
+  ]
+}

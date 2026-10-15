@@ -136,6 +136,15 @@ class ProjectEditor : public QObject {
   Q_PROPERTY(bool selectedGroupEnabled
              READ selectedGroupEnabled
              NOTIFY editableOptionsChanged)
+  Q_PROPERTY(bool selectedDatasetComputed
+             READ selectedDatasetComputed
+             NOTIFY editableOptionsChanged)
+  Q_PROPERTY(bool selectedGroupRequirementMet
+             READ selectedGroupRequirementMet
+             NOTIFY editableOptionsChanged)
+  Q_PROPERTY(QString selectedGroupRequirementText
+             READ selectedGroupRequirementText
+             NOTIFY editableOptionsChanged)
   Q_PROPERTY(bool selectedDatasetEnabled
              READ selectedDatasetEnabled
              NOTIFY editableOptionsChanged)
@@ -381,6 +390,22 @@ public:
   [[nodiscard]] bool datasetAlarmBandsApplicable(const DataModel::Dataset& dataset) const;
   [[nodiscard]] QVector<DataModel::Dataset> alarmBandSelection() const;
   [[nodiscard]] bool selectedGroupEnabled() const;
+
+  [[nodiscard]] bool selectedDatasetComputed() const
+  {
+    return m_selection.selectedDatasetComputed();
+  }
+
+  [[nodiscard]] bool selectedGroupRequirementMet() const
+  {
+    return m_selection.selectedGroupRequirementMet();
+  }
+
+  [[nodiscard]] QString selectedGroupRequirementText() const
+  {
+    return m_selection.selectedGroupRequirementText();
+  }
+
   [[nodiscard]] bool selectedDatasetEnabled() const;
   [[nodiscard]] bool currentGroupIsOutputPanel() const;
   [[nodiscard]] int outputWidgetType() const noexcept;

@@ -202,21 +202,24 @@ Widgets.Pane {
       spacing: 4
 
       //
-      // Comm mode selector
+      // Operation mode selector
       //
       Label {
-        text: qsTr("Frame Parsing") + ":"
+        text: qsTr("Operation Mode") + ":"
         font: Cpp_Misc_CommonFonts.customUiFont(0.8, true)
         color: Cpp_ThemeManager.colors["pane_section_label"]
         Component.onCompleted: font.capitalization = Font.AllUppercase
       } Widgets.Radio {
+        ToolTip.delay: 500
         Layout.leftMargin: -6
         enabled: app.ioEnabled
         Layout.maximumHeight: 18
+        ToolTip.visible: hovered
         opacity: enabled ? 1 : 0.5
         Layout.maximumWidth: root.maxItemWidth
         text: qsTr("Console Only (No Parsing)")
         checked: Cpp_AppState.operationMode === SerialStudio.ConsoleOnly
+        ToolTip.text: qsTr("Shows incoming data as text or hex. Nothing is parsed or plotted.")
         onCheckedChanged: {
           const shouldChange = Cpp_AppState.operationMode !== SerialStudio.ConsoleOnly
           if (checked && shouldChange)
@@ -226,9 +229,13 @@ Widgets.Pane {
         Layout.leftMargin: -6
         enabled: app.ioEnabled
         Layout.maximumHeight: 18
+        text: qsTr("Quick Plot (Comma Separated Values)")
+        ToolTip.delay: 500
+        ToolTip.visible: hovered
+        ToolTip.text: qsTr("Plots one line per sample with values separated by commas, "
+                           + "for example 12.5,30.1,0.98 followed by a newline.")
         opacity: enabled ? 1 : 0.5
         Layout.maximumWidth: root.maxItemWidth
-        text: qsTr("Quick Plot (Comma Separated Values)")
         checked: Cpp_AppState.operationMode === SerialStudio.QuickPlot
         onCheckedChanged: {
           const shouldChange = Cpp_AppState.operationMode !== SerialStudio.QuickPlot
@@ -236,16 +243,16 @@ Widgets.Pane {
             Cpp_AppState.operationMode = SerialStudio.QuickPlot
         }
       } Widgets.Radio {
+        ToolTip.delay: 500
         Layout.leftMargin: -6
+        enabled: app.ioEnabled
         Layout.maximumHeight: 18
+        ToolTip.visible: hovered
         opacity: enabled ? 1 : 0.5
         text: qsTr("Parse via Project File")
         Layout.maximumWidth: root.maxItemWidth
         checked: Cpp_AppState.operationMode === SerialStudio.ProjectFile
-        enabled: !Cpp_IO_Manager.isConnected
-                 && !Cpp_CSV_Player.isOpen
-                 && !Cpp_MDF4_Player.isOpen
-                 && (!Cpp_CommercialBuild || !Cpp_Sessions_Player.isOpen)
+        ToolTip.text: qsTr("Builds the dashboard from a project made in the Project Editor.")
         onCheckedChanged: {
           const shouldChange = Cpp_AppState.operationMode !== SerialStudio.ProjectFile
           if (checked && shouldChange)
@@ -396,20 +403,13 @@ Widgets.Pane {
         ColumnLayout {
           spacing: 4
 
-          Label {
-            text: qsTr("Device Setup") + ":"
-            font: Cpp_Misc_CommonFonts.customUiFont(0.8, true)
-            color: Cpp_ThemeManager.colors["pane_section_label"]
-            Component.onCompleted: font.capitalization = Font.AllUppercase
-          }
-
           Widgets.Combo {
             Layout.fillWidth: true
             enabled: app.ioEnabled
             opacity: enabled ? 1 : 0.5
             model: Cpp_IO_Manager.availableBuses
             currentIndex: Cpp_IO_Manager.busType
-            displayText: qsTr("I/O Interface: %1").arg(currentText)
+            displayText: qsTr("Connection: %1").arg(currentText)
 
             onActivated: (index) => {
               if (Cpp_IO_Manager.busType !== index)
@@ -504,7 +504,7 @@ Widgets.Pane {
                   horizontalAlignment: Text.AlignHCenter
                   color: Cpp_ThemeManager.colors["pane_section_label"]
                   font: Cpp_Misc_CommonFonts.customUiFont(0.85, false)
-                  text: qsTr("Each device has its own connection settings. Configure them in the Project Editor under the Sources tab.")
+                  text: qsTr("Each device has its own connection settings. Configure them in the Project Editor under Devices.")
                 }
 
                 Item {

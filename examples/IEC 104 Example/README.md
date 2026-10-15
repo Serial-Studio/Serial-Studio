@@ -1,5 +1,9 @@
 # IEC 60870-5-104 station simulator
 
+**What you'll learn:** an IEC 60870-5-104 client source with interrogation-driven point discovery, a Lua frame parser, and a generated Data Grid dashboard.
+
+**Prerequisites:** Serial Studio Pro and Python 3 for the station simulator.
+
 ## Overview
 
 This project exercises Serial Studio's IEC 60870-5-104 client against a simulated controlled
@@ -20,7 +24,7 @@ Python 3 standard library only.
 
 ## Running the simulator
 
-The bundled `IEC 104 Station.ssproj` starts the simulator for you. Its control script launches
+The bundled `IEC 104 Station.ssproj` starts the simulator for you. Its Control Loop launches
 `iec104_server.py` on `127.0.0.1:2404` the moment you press **Connect**, and Serial Studio stops
 the helper again when you disconnect, change project, or quit. Open the project and connect; there
 is nothing to run by hand.
@@ -107,7 +111,7 @@ persisted, which is what keeps a saved project's dataset indices meaningful acro
 ## Create Project from Points
 
 1. Start the simulator.
-2. Pick **IEC 60870-5-104** as the I/O interface and set the host, port and common address.
+2. Pick **IEC 60870-5-104** as the Connection and set the host, port and common address.
 3. Press **Connect** and wait for the pane to report the discovered points (one interrogation
    round, well under a second locally).
 4. Press **Create Project from Points**. The Project Editor opens with a **Measurements** group

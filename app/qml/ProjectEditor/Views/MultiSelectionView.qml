@@ -211,8 +211,8 @@ Widgets.Pane {
 
             Widgets.ToolbarButton {
               iconSize: 24
+              text: qsTr("Bar")
               toolbarButton: false
-              text: qsTr("Bar/Level")
               Layout.alignment: Qt.AlignVCenter
               icon.source: Cpp_Misc_IconRegistry.icon("editor", "bar", 24)
               ToolTip.text: qsTr("Set bar/level for every selected dataset")

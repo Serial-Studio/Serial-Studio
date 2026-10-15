@@ -589,7 +589,7 @@ Widgets.Pane {
 
         Label {
           Layout.alignment: Qt.AlignVCenter
-          text: qsTr("Register access code copied")
+          text: qsTr("Variable access code copied")
           font: Cpp_Misc_CommonFonts.uiFont
           color: Cpp_ThemeManager.colors["highlighted_text"]
         }

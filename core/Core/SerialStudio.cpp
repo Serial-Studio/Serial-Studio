@@ -21,6 +21,7 @@
 
 #include "Core/SerialStudio.h"
 
+#include <algorithm>
 #include <QCoreApplication>
 #include <QHash>
 
@@ -417,6 +418,109 @@ SerialStudio::GroupWidget SerialStudio::groupWidgetFromId(const QString& id)
 #endif
 
   return NoGroupWidget;
+}
+
+/**
+ * @brief The dataset requirement of @p widget, mirroring what its dashboard code binds: the
+ *        accelerometer and gyroscope read exactly three tagged datasets, the 3D plot needs x, y and
+ *        z, the map needs lat and lon (alt optional), and list widgets need at least one dataset.
+ */
+SerialStudio::GroupWidgetRequirement SerialStudio::groupWidgetRequirement(const GroupWidget widget)
+{
+  const QStringList x{QStringLiteral("x")};
+  const QStringList y{QStringLiteral("y")};
+  const QStringList z{QStringLiteral("z")};
+
+  switch (widget) {
+    case Accelerometer:
+      return {
+        3, 3, {x, y, z}
+      };
+    case Gyroscope:
+      return {
+        3,
+        3,
+        {{QStringLiteral("x"), QStringLiteral("pitch")},
+          {QStringLiteral("y"), QStringLiteral("roll")},
+          {QStringLiteral("z"), QStringLiteral("yaw")}}
+      };
+    case Plot3D:
+      return {
+        3, -1, {x, y, z}
+      };
+    case GPS:
+      return {
+        2, -1, {{QStringLiteral("lat")}, {QStringLiteral("lon")}}
+      };
+    case DataGrid:
+    case MultiPlot:
+    case BarPanel:
+      return {1, -1, {}};
+    case NoGroupWidget:
+    case ImageView:
+    case Painter:
+    case WebView:
+      return {0, -1, {}};
+  }
+
+  return {0, -1, {}};
+}
+
+/**
+ * @brief True when @p datasetRoles (each dataset's role tag, in any case) satisfy the count range
+ *        and carry every role @p widget requires.
+ */
+bool SerialStudio::groupMeetsRequirement(const GroupWidget widget, const QStringList& datasetRoles)
+{
+  const auto req   = groupWidgetRequirement(widget);
+  const auto count = static_cast<int>(datasetRoles.size());
+  if (count < req.minCount || (req.maxCount >= 0 && count > req.maxCount))
+    return false;
+
+  QStringList tags;
+  tags.reserve(count);
+  for (const auto& role : datasetRoles)
+    tags.append(role.trimmed().toLower());
+
+  return std::all_of(req.roles.cbegin(), req.roles.cend(), [&tags](const QStringList& accepted) {
+    return std::any_of(accepted.cbegin(), accepted.cend(), [&tags](const QString& tag) {
+      return tags.contains(tag);
+    });
+  });
+}
+
+/**
+ * @brief One plain sentence stating @p widget's dataset requirement for the group editor and the
+ *        Problem Center; empty for widgets that impose none.
+ */
+QString SerialStudio::groupWidgetRequirementText(const GroupWidget widget)
+{
+  switch (widget) {
+    case Accelerometer:
+      return QCoreApplication::translate("SerialStudio",
+                                         "Needs exactly 3 datasets tagged X, Y and Z, one each.");
+    case Gyroscope:
+      return QCoreApplication::translate("SerialStudio",
+                                         "Needs exactly 3 datasets tagged X, Y and Z (or pitch, "
+                                         "roll and yaw), one each.");
+    case Plot3D:
+      return QCoreApplication::translate("SerialStudio",
+                                         "Needs datasets tagged X, Y and Z, one each.");
+    case GPS:
+      return QCoreApplication::translate("SerialStudio",
+                                         "Needs datasets tagged lat and lon; alt is optional.");
+    case DataGrid:
+    case MultiPlot:
+    case BarPanel:
+      return QCoreApplication::translate("SerialStudio", "Needs at least one dataset.");
+    case NoGroupWidget:
+    case ImageView:
+    case Painter:
+    case WebView:
+      return QString();
+  }
+
+  return QString();
 }
 
 /**

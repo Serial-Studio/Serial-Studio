@@ -1,5 +1,9 @@
 # Vibration test rig
 
+**What you'll learn:** a Waterfall widget in Campbell mode and two Canvas Widget groups, all driven by one UDP stream with a Lua frame parser.
+
+**Prerequisites:** Serial Studio Pro and Python 3 for the simulator.
+
 A Python script that simulates a small electric motor on a test bench: a single accelerometer channel sees rotational imbalance, misalignment, a non-integer bearing-defect harmonic, and broadband noise; a stereo microphone in the enclosure picks up the airborne sound. The script sweeps the motor's RPM up and down so the **Waterfall** widget renders an order-tracking spectrogram, and two **Canvas** widgets draw an audio VU meter and a live system schematic, all from the same UDP stream.
 
 ## Overview

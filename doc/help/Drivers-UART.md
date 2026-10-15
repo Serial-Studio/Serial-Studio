@@ -74,7 +74,7 @@ The UART driver wraps Qt's `QSerialPort`. Settings exposed in the Setup Panel ma
 
 | Setting | Controls | Default |
 |---------|----------|---------|
-| **COM Port** | Which OS-level serial device to open (COM3, `/dev/ttyACM0`, etc.) | none selected |
+| **Serial Port** (**COM Port** on Windows) | Which OS-level serial device to open (COM3, `/dev/ttyACM0`, etc.) | none selected |
 | **Baud Rate** | Bits per second; presets from 110 to 921600, and the field accepts any positive rate typed in | 9600 |
 | **Data Bits** | 5 / 6 / 7 / 8 | 8 |
 | **Parity** | None / Even / Odd / Space / Mark | None |
@@ -83,7 +83,7 @@ The UART driver wraps Qt's `QSerialPort`. Settings exposed in the Setup Panel ma
 | **Auto Reconnect** | Rescans ports once per second and reconnects when the last-used device re-enumerates | off |
 | **Send DTR Signal** | Asserts the DTR line on connect (some boards reset on DTR toggle, e.g. Arduino) | on |
 
-On Linux and macOS the **COM Port** field is editable: type a device path missing from the list (for example `/dev/ttyAMA0`) and press Enter to register it. On macOS each adapter is listed once, as its `cu.*` device; the `tty.*` duplicates are hidden.
+On Linux and macOS the **Serial Port** field is editable: type a device path missing from the list (for example `/dev/ttyAMA0`) and press Enter to register it. On macOS each adapter is listed once, as its `cu.*` device; the `tty.*` duplicates are hidden.
 
 `QSerialPort` uses Qt's event loop for non-blocking reads; incoming bytes are handed off to the acquisition pipeline thread, where the FrameReader assembles them into frames. See [Threading and Timing Guarantees](Threading-and-Timing.md) for the rationale.
 
@@ -110,7 +110,7 @@ For step-by-step setup, see the [Protocol Setup Guides, Serial/UART section](Pro
 ## See also
 
 - [Protocol Setup Guides](Protocol-Setup-Guides.md): step-by-step UART setup in the Setup Panel.
-- [Data Sources](Data-Sources.md): driver capability summary across all transports.
+- [Devices](Devices.md): driver capability summary across all transports.
 - [Communication Protocols](Communication-Protocols.md): overview of all supported transports.
 - [Operation Modes](Operation-Modes.md): Quick Plot vs Project File vs Console-only.
 - [Use Cases](Use-Cases.md): real-world examples built around UART-connected microcontrollers.

@@ -60,6 +60,7 @@ QtObject {
     "app.fileTransmission": root.cmdAppFileTransmission,
     "app.ai": root.cmdAppAi,
     "dashboard.freeze": root.cmdDashboardFreeze,
+    "quickplot.saveAsProject": root.cmdQuickPlotSaveAsProject,
     "dashboard.reset": root.cmdDashboardReset,
     "io.pause": root.cmdIoPause,
     "io.disconnect": root.cmdIoDisconnect,
@@ -165,6 +166,17 @@ QtObject {
   // Freeze/reset/pause/disconnect (StartMenu.qml); the freeze license gate
   // lives in C++ (ProjectModel::setFrozen raises the Pro intent, spec 0092).
   //
+  //
+  // Quick Plot to project conversion (spec 0100 R8): the structure exists once frames arrive, so
+  // the action lives on the dashboard, not in the setup pane.
+  //
+  readonly property QtObject cmdQuickPlotSaveAsProject: QtObject {
+    readonly property bool visible: Cpp_AppState.operationMode === SerialStudio.QuickPlot
+        && !app.runtimeMode
+    readonly property bool enabled: Cpp_IO_Manager.isConnected
+    function run() { Cpp_JSON_ProjectModel.saveQuickPlotAsProject() }
+  }
+
   readonly property QtObject cmdDashboardFreeze: QtObject {
     readonly property bool checked: Cpp_UI_Dashboard.frozen
     readonly property bool visible: Cpp_AppState.operationMode === SerialStudio.ProjectFile

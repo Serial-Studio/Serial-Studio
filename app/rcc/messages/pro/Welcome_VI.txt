@@ -1,8 +1,7 @@
 Copyright (c) 2020–2026 Alex Spataru <https://github.com/alex-spataru>
-
-Cảm ơn bạn đã sử dụng Serial Studio Pro và hỗ trợ phát triển mã nguồn mở!
-Giấy phép của bạn đang hoạt động và được chấp thuận cho sử dụng thương mại và
-sở hữu độc quyền.
+Cảm ơn bạn đã sử dụng Serial Studio Pro và hỗ trợ phát triển mã nguồn mở! Giấy
+phép của bạn đang hoạt động và được chấp thuận cho sử dụng thương mại và sở
+hữu độc quyền.
 
 → Hỗ trợ: alex@serial-studio.com
 → Lên lịch cuộc gọi: https://calendly.com/serial-studio

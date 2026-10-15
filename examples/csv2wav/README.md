@@ -1,5 +1,9 @@
 # Serial Studio audio pipeline validator
 
+**What you'll learn:** how to check the acquisition pipeline end to end by recording audio through the Audio driver and converting the exported CSV back into a playable WAV file.
+
+**Prerequisites:** Serial Studio Pro, Python 3 with `numpy`, and a microphone or other audio source.
+
 ## Overview
 
 This project is a utility for converting audio data recorded via Serial Studio's Audio driver into playable WAV files. It's for developers testing Serial Studio's data pipeline integrity using audio signals like voice, tones, or music. If the reconstructed `.wav` file sounds like the original, the I/O pipeline works.

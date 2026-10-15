@@ -1,5 +1,9 @@
 # EM wave simulator
 
+**What you'll learn:** a Plot 3D group and a MultiPlot group that visualize a propagating electromagnetic wave packet streamed over UDP.
+
+**Prerequisites:** Serial Studio Pro and Python 3 for the simulator script.
+
 A Python script that simulates a propagating electromagnetic plane wave (photon wave packet) and streams the field data over UDP for real-time 3D visualization in Serial Studio.
 
 ![EM wave simulator](doc/screenshot.png)

@@ -72,7 +72,7 @@ void DataModel::ProjectSources::addSource()
   if (!m_model.m_sources.empty()) {
     if (!m_model.m_suppressMessageBoxes)
       Core::Prompt::showMessageBox(
-        ProjectModel::tr("Multiple data sources require a Pro license"),
+        ProjectModel::tr("Multiple devices require a Pro license"),
         ProjectModel::tr("Serial Studio Pro allows connecting to multiple devices simultaneously. "
                          "Please upgrade to unlock this feature."),
         Core::Prompt::Information);
@@ -125,8 +125,8 @@ void DataModel::ProjectSources::deleteSource(int sourceId, bool confirm)
 
   if (confirm && !m_model.m_suppressMessageBoxes) {
     const auto ret = Core::Prompt::showMessageBox(
-      ProjectModel::tr("Do you want to delete data source \"%1\"?").arg(sources[sourceId].title),
-      ProjectModel::tr("Groups using this source will move to the default source. "
+      ProjectModel::tr("Do you want to delete device \"%1\"?").arg(sources[sourceId].title),
+      ProjectModel::tr("Groups using this device will move to the first device. "
                        "This action cannot be undone."),
       Core::Prompt::Question,
       APP_NAME,
@@ -291,7 +291,7 @@ void DataModel::ProjectSources::promptRenameSource(int sourceId)
   bool ok          = false;
   const auto old   = src->title;
   const auto fresh = QInputDialog::getText(nullptr,
-                                           ProjectModel::tr("Rename Data Source"),
+                                           ProjectModel::tr("Rename Device"),
                                            ProjectModel::tr("Name:"),
                                            QLineEdit::Normal,
                                            old,

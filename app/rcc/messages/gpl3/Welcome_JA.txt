@@ -1,10 +1,8 @@
 Copyright (c) 2020–2026 Alex Spataru <https://github.com/alex-spataru>
-
 このソフトウェアはGNU GPLv3ライセンスの下で無料かつオープンソースです。
 派生作品が同じ条件でオープンソースのままである限り、使用、変更、
 再配布が可能です。
 
-→ License: https://www.gnu.org/licenses/gpl-3.0.html
 → Source:  https://github.com/serial-studio/serial-studio
 
 このプロジェクトが気に入りましたか？Serial Studio Proでの開発支援を
@@ -18,5 +16,3 @@ Proの機能：
 → ヒストリアン、変数、値変換（JS + Lua）
 → マルチソースプロジェクトとカスタムワークスペース
 → 商用ライセンス（GPL義務なし）
-
-→ 詳細はこちら: https://serial-studio.com/

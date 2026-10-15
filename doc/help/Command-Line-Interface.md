@@ -27,7 +27,7 @@ Options marked **(Pro)** are available only in commercial builds.
 | `--exit-after` | `seconds` | Quit gracefully after the given number of seconds (CI runs, PGO training). |
 | `--simd` | `level` | Pin the vector kernels to `auto`, `scalar`, `sse4`, `avx2` or `neon` for this run only. The value is not saved, and an unknown or unsupported level falls back to `auto` and says so in the application log. See [the acquisition pipeline](Data-Hotpath.md#simd-instruction-set). |
 
-## Data Sources
+## Devices
 
 | Option | Argument | Description |
 |--------|----------|-------------|

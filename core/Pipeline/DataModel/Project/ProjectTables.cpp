@@ -121,7 +121,7 @@ QString DataModel::ProjectTables::addTable(const QString& name, int parentFolder
 
   QString base = name.simplified().remove(QLatin1Char('/'));
   if (base.isEmpty())
-    base = ProjectModel::tr("Shared Table");
+    base = ProjectModel::tr("Variables Table");
 
   QString unique     = base;
   int suffix         = 2;
@@ -389,10 +389,10 @@ void DataModel::ProjectTables::promptAddTable()
 
   bool ok            = false;
   const QString name = QInputDialog::getText(nullptr,
-                                             ProjectModel::tr("New Shared Table"),
+                                             ProjectModel::tr("New Variables Table"),
                                              ProjectModel::tr("Name:"),
                                              QLineEdit::Normal,
-                                             ProjectModel::tr("Shared Table"),
+                                             ProjectModel::tr("Variables Table"),
                                              &ok);
 
   if (!ok || name.trimmed().isEmpty())

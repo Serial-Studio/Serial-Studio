@@ -113,7 +113,7 @@ Widgets.Pane {
       }
 
       //
-      // Secondary toolbar: Add Sub-folder, Add Shared Table, Rename, Delete
+      // Secondary toolbar: Add Sub-folder, Add Variables Table, Rename, Delete
       //
       Rectangle {
         id: toolbar
@@ -156,9 +156,9 @@ Widgets.Pane {
           Widgets.ToolbarButton {
             iconSize: 24
             toolbarButton: false
-            text: qsTr("Add Shared Table")
+            text: qsTr("Add Variables Table")
             Layout.alignment: Qt.AlignVCenter
-            ToolTip.text: qsTr("Add a shared table inside this folder")
+            ToolTip.text: qsTr("Add a Variables table inside this folder")
             onClicked: Cpp_JSON_ProjectModel.promptAddTableInFolder(root.folderId)
             icon.source: Cpp_Misc_IconRegistry.icon("editor", "add-table", 24)
           }

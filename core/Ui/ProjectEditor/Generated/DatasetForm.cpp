@@ -265,8 +265,8 @@ void DataModel::ProjectEditor::addGeneralSection(CustomModel* model, const Datas
   const auto ph_index = PropertyHooks::datasetIndexPlaceholder(dataset, m_projectModelRef);
   item_index->setData(ph_index, PlaceholderValue);
   item_index->setData(tr("Frame Index"), ParameterName);
-  item_index->setData(tr("Frame position used for aligning datasets in time"),
-                      ParameterDescription);
+  item_index->setData(tr("Position of this value in the parser's output (first value = 1). 0 = "
+                         "unassigned."), ParameterDescription);
   model->appendRow(item_index);
 
   auto* item_units = new QStandardItem();

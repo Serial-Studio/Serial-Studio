@@ -1,5 +1,9 @@
 # TinyGPS + Serial Studio example
 
+**What you'll learn:** a GPS Map group fed by latitude, longitude and altitude from an Arduino.
+
+**Prerequisites:** an Arduino, a GY-NEO6MV2 GPS module, the TinyGPS library, and the Arduino IDE. Serial Studio's free features are enough.
+
 ## Overview
 
 This project shows how to use Serial Studio to visualize GPS location data from a GPS module (GY-NEO6MV2) connected to an Arduino. The Arduino reads GPS data (latitude, longitude, altitude) and sends it to Serial Studio over serial for display on a map.

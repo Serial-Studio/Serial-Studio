@@ -114,7 +114,7 @@ void Sessions::DatabaseWorker::openDatabase(const QString& filePath)
   }
 
   if (!looksLikeSqlite(filePath)) {
-    Q_EMIT openFailed(filePath, tr("This file is not a Serial Studio session database."));
+    Q_EMIT openFailed(filePath, tr("This file is not a Serial Studio Historian database."));
     return;
   }
 

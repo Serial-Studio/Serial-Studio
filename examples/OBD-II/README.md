@@ -1,5 +1,9 @@
 # OBD-II Vehicle Telemetry
 
+**What you'll learn:** a request and response protocol on a UART source, where a Control Loop polls an ELM327 adapter and computed datasets feed Gauge, Meter and Bar widgets.
+
+**Prerequisites:** an ELM327-compatible OBD-II adapter and a vehicle. Some features need a paid license.
+
 ## Overview
 
 This project reads live engine data from any OBD-II compliant vehicle and shows it on a Serial Studio dashboard. A built-in control loop polls an ELM327-compatible adapter (such as the OBDLink EX) over a serial connection, so there is no companion program to run. Engine RPM, vehicle speed, coolant temperature, calculated load, intake air temperature, throttle position and adapter battery voltage appear on Gauge, Meter and Bar widgets: RPM and load use Gauge, speed and voltage use Meter, coolant, intake air temperature and throttle position use Bar.
@@ -38,7 +42,7 @@ All requests are plain ASCII (the hex PID digits, or the letters `AT` for adapte
 This example shows the request/response pattern that OBD-II needs, which differs from a normal telemetry stream where the device pushes data on its own. Three Serial Studio features carry it:
 
 - **`deviceWriteAndWait(data, timeout, until, source?)`** sends a command and blocks the control-loop worker (never the UI) until the adapter's `>` prompt arrives or the timeout elapses, then returns the reply. This turns the fire-and-forget serial link into a clean request/response call. It mirrors `deviceWrite`'s data-first shape; `source` is optional and defaults to 0.
-- **The `OBD` shared table** holds the decoded values. The control loop writes it with `tableSet("OBD", "rpm", value)` after each reply; the variables are declared as `computed` so they are writable.
+- **The `OBD` Variables table** holds the decoded values. The control loop writes it with `tableSet("OBD", "rpm", value)` after each reply; the variables are declared as `computed` so they are writable.
 - **Computed datasets** drive the gauges. Each gauge is a computed dataset whose transform reads its table variable (`tableGet("OBD", "rpm")`) and returns the value, so nothing needs a frame parser.
 
 After writing the table, the script calls **`dashboardTick()`**, which forces the dashboard to re-run the dataset transforms and render the fresh values, even though the adapter only speaks when polled. The project's frame parser is a stub that returns an empty frame.
@@ -59,7 +63,7 @@ After writing the table, the script calls **`dashboardTick()`**, which forces th
 
 ## Files
 
-- `OBD-II.ssproj`: the Serial Studio project; it embeds the source, data table, gauges, the OBD-II poller control loop, and a stub frame parser.
+- `OBD-II.ssproj`: the Serial Studio project; it embeds the device, Variables table, gauges, the OBD-II poller control loop, and a stub frame parser.
 - `doc/screenshot.png`: dashboard screenshot.
 
 ## Reference

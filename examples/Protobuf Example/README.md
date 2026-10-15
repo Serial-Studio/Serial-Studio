@@ -1,5 +1,9 @@
 # Protobuf Example for Serial Studio
 
+**What you'll learn:** importing a Protocol Buffers schema, which generates a Lua frame parser and one dashboard group per message, with Data Grid and MultiPlot groups.
+
+**Prerequisites:** Python 3 for the sensor simulator. Works with the free and Pro builds.
+
 This example shows how to ingest a Protocol Buffers (`.proto`) schema into
 Serial Studio. The Project Editor reads the file and produces:
 

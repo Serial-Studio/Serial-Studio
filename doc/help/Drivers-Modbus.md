@@ -140,7 +140,7 @@ Setup is a hierarchy:
 
 On each poll tick, Serial Studio reads the groups sequentially: it sends the request for the first group, waits for the reply, then moves to the next. Each reply is published to the frame parser as its own binary frame in RTU layout, `[slave address, function code, byte count, data...]`, with no CRC appended; the same layout is used on TCP connections. Register data arrives big-endian (high byte first); coil and discrete-input data arrives as packed bits, least-significant bit first. A reply that reports an error produces no frame. If a reply is still outstanding when the timer fires again, that cycle is skipped, so a slow slave lowers the effective poll rate instead of queueing requests. Requests time out after 1000 ms with 3 retries.
 
-The frame parser extracts named datasets from those bytes through its `parse(frame)` entry point, where `frame` is the byte array above (use the **Binary** decoder and no frame delimiters). Because the groups arrive as separate frames, a hand-written parser must track which group each frame belongs to; the auto-generated Lua parser counts frames through the cycle. See [Frame Parser Scripting](JavaScript-API.md).
+The frame parser extracts named datasets from those bytes through its `parse(frame)` entry point, where `frame` is the byte array above (use the **Binary** decoder and no frame delimiters). Because the groups arrive as separate frames, a hand-written parser must track which group each frame belongs to; the auto-generated Lua parser counts frames through the cycle. See [Frame Parser Scripting](Frame-Parser.md).
 
 ### Auto-generation
 
@@ -186,7 +186,7 @@ For step-by-step setup, see the [Protocol Setup Guides, Modbus section](Protocol
 
 - [Auto-Generating Projects](Auto-Generating-Projects.md): Modbus register-map import (CSV/XML/JSON).
 - [Protocol Setup Guides](Protocol-Setup-Guides.md): step-by-step Modbus setup.
-- [Data Sources](Data-Sources.md): driver capability summary across all transports.
+- [Devices](Devices.md): driver capability summary across all transports.
 - [Communication Protocols](Communication-Protocols.md): overview of all supported transports.
 - [Use Cases](Use-Cases.md): industrial monitoring and PLC integration examples.
 - [Troubleshooting](Troubleshooting.md): wiring, addressing, and CRC-error diagnostics.

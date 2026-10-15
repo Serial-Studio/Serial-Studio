@@ -1,5 +1,9 @@
 # Graphical ping
 
+**What you'll learn:** a Control Loop that launches a companion script when you connect, a live plot of round-trip time, and a Data Grid with latency statistics over UDP.
+
+**Prerequisites:** Python 3.6 or later and a `ping` command on the PATH. Serial Studio's free features are enough.
+
 ## Overview
 
 This project plots the network latency to a host in real time, the way the [gping](https://github.com/orf/gping) terminal tool does. A Python helper runs the operating system's `ping` command five times per second, parses the round-trip time from each reply, and streams it over UDP together with running statistics.

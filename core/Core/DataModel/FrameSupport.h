@@ -22,6 +22,7 @@
 #pragma once
 
 #include <QMap>
+#include <QStringList>
 #include <QVector>
 #include <vector>
 
@@ -46,6 +47,8 @@ struct ProContentSummary {
 
 [[nodiscard]] bool commercialCfg(const QVector<DataModel::Group>& g);
 [[nodiscard]] bool commercialCfg(const std::vector<DataModel::Group>& g);
+[[nodiscard]] QStringList commercialFeatureLabels(const std::vector<DataModel::Group>& g);
+[[nodiscard]] bool groupMeetsWidgetRequirement(const DataModel::Group& g);
 [[nodiscard]] ProContentSummary proContentSummary(const std::vector<DataModel::Group>& g,
                                                   int tableCount);
 [[nodiscard]] bool authorsTransform(const DataModel::Dataset& before,

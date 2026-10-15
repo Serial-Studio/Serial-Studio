@@ -89,8 +89,23 @@ Widgets.SmartDialog {
   //
   // Tree of results: Frame -> Decoder + Rows -> Row -> cells
   //
+  function readerLabel(readers, index) {
+    const titles = readers[String(index)]
+    return titles ? "[" + index + "] " + titles.join(", ") : "[" + index + "]"
+  }
+
+  function missingIndices(readers, length) {
+    const missing = []
+    for (const key in readers)
+      if (parseInt(key) > length)
+        missing.push(parseInt(key))
+
+    return missing.sort((a, b) => a - b)
+  }
+
   function rebuildTree() {
     const nodes = []
+    const readers = tester.datasetIndexMap()
     for (let i = 0; i < root.previewFrames.length; ++i) {
       const f = root.previewFrames[i]
       nodes.push({depth: 0, stage: qsTr("Frame %1").arg(i + 1),
@@ -102,13 +117,24 @@ Widgets.SmartDialog {
 
       for (let r = 0; r < f.rows.length; ++r) {
         const key = i + ":" + r
+        const missing = root.missingIndices(readers, f.rows[r].length)
+        const summary = missing.length > 0
+            ? f.rows[r].join(", ") + "  |  "
+              + qsTr("%n dataset(s) not in this frame", "", missing.length)
+            : f.rows[r].join(", ")
         nodes.push({depth: 2, stage: qsTr("Row %1").arg(r + 1),
-                    value: f.rows[r].join(", "), expandable: true, key: key})
+                    value: summary, expandable: true, key: key})
 
-        if (root.expandedRows[key] === true)
-          for (let c = 0; c < f.rows[r].length; ++c)
-            nodes.push({depth: 3, stage: "[" + (c + 1) + "]",
-                        value: f.rows[r][c], expandable: false, key: ""})
+        if (root.expandedRows[key] !== true)
+          continue
+
+        for (let c = 0; c < f.rows[r].length; ++c)
+          nodes.push({depth: 3, stage: root.readerLabel(readers, c + 1),
+                      value: f.rows[r][c], expandable: false, key: ""})
+
+        for (let m = 0; m < missing.length; ++m)
+          nodes.push({depth: 3, stage: root.readerLabel(readers, missing[m]),
+                      value: qsTr("not in this frame"), expandable: false, key: ""})
       }
     }
 

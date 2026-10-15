@@ -1,9 +1,8 @@
 Copyright (c) 2020–2026 Alex Spataru <https://github.com/alex-spataru>
-
-Bạn đang sử dụng phiên bản dùng thử của Serial Studio Pro. Phiên bản này
-hoạt động đầy đủ cho mục đích đánh giá và sử dụng cá nhân, phi thương mại
-chỉ. Để tiếp tục sau khi dùng thử, nâng cấp lên gói trả phí hoặc tự biên
-dịch mã nguồn GPLv3.
+Bạn đang sử dụng phiên bản dùng thử của Serial Studio Pro. Phiên bản này hoạt
+động đầy đủ cho mục đích đánh giá và sử dụng cá nhân, phi thương mại chỉ. Để
+tiếp tục sau khi dùng thử, nâng cấp lên gói trả phí hoặc tự biên dịch mã nguồn
+GPLv3.
 
 → Hỗ trợ: alex@serial-studio.com
 → Đặt lịch cuộc gọi: https://calendly.com/serial-studio

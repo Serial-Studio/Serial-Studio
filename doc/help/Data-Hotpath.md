@@ -97,10 +97,10 @@ object. That `Frame` is a reused per-source staging buffer, not the object publi
 1. The selected **decoder** (Plain Text (UTF8), Hexadecimal, Base64, or Binary (Direct))
    converts the raw bytes into the form `parse()` expects.
 2. The **frame parser** (`parse(frame)` in Lua or JavaScript) returns an array of values. See
-   [Frame Parser Scripting](JavaScript-API.md) for the full API.
+   [Frame Parser Scripting](Frame-Parser.md) for the full API.
 3. Per-dataset **transforms** (`transform(value)`) are called in group then dataset order. A
    transform can read raw values from any dataset and final values from datasets earlier in
-   the order, plus shared variables from [Variables](Data-Tables.md). See
+   the order, plus shared variables from [Variables](Variables.md). See
    [Dataset Value Transforms](Dataset-Transforms.md).
 
 In Quick Plot mode, steps 1 and 2 are replaced by a built-in line splitter that treats commas
@@ -267,7 +267,7 @@ A few things to keep in mind:
 - Transforms can read raw values from any dataset and final values from datasets that come
   earlier in group / dataset order; reading a later dataset's final value returns the
   previous frame's result. They can also publish to computed variables in the
-  project's [shared tables](Data-Tables.md), which other transforms can then read, in the
+  project's [Variables tables](Variables.md), which other transforms can then read, in the
   same frame or in any later frame, since computed variables persist.
 - Computed variables hold their last written value indefinitely. For per-dataset state
   isolated from other datasets, transform-local upvalues (top-level `local` in Lua,
@@ -275,7 +275,7 @@ A few things to keep in mind:
 - A transform can return a string for label-style datasets. Non-finite numbers (`NaN`,
   `Infinity`) and errors fall back to the raw value silently.
 
-For the full parser and transform API, see [Frame Parser Scripting](JavaScript-API.md) and
+For the full parser and transform API, see [Frame Parser Scripting](Frame-Parser.md) and
 [Dataset Value Transforms](Dataset-Transforms.md).
 
 ## Debugging the pipeline
@@ -309,10 +309,10 @@ and `BluetoothLE.cpp` as the canonical reference) and keep these invariants inta
 ## See also
 
 - [Data Flow](Data-Flow.md): the user-facing version of this pipeline, with troubleshooting tips.
-- [Frame Parser Scripting](JavaScript-API.md): full Lua and JavaScript `parse()` reference.
+- [Frame Parser Scripting](Frame-Parser.md): full Lua and JavaScript `parse()` reference.
 - [Dataset Value Transforms](Dataset-Transforms.md): per-dataset calibration, filtering, and
   unit conversion.
-- [Variables](Data-Tables.md): shared constants and computed variables used by transforms.
+- [Variables](Variables.md): shared constants and computed variables used by transforms.
 - [Operation Modes](Operation-Modes.md): how Project File, Quick Plot, and Console-Only modes
   shape the pipeline.
 - [Benchmark Dialog](Benchmark.md): the interactive tool that drives this exact pipeline and

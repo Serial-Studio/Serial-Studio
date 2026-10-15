@@ -1,5 +1,9 @@
 # IMU batched data simulator
 
+**What you'll learn:** multi-frame parsing, where a JavaScript frame parser expands one batched packet into many frames, shown on a MultiPlot group.
+
+**Prerequisites:** Python 3 for the simulator script. Serial Studio's free features are enough.
+
 This example shows off Serial Studio's **multi-frame parsing** feature, which automatically expands batched sensor data into individual frames for smooth visualization.
 
 ![IMU batched data simulator](doc/screenshot.png)
@@ -92,7 +96,7 @@ python3 imu_simulator.py --sample-rate 240 --packet-rate 2.0
 
 ### 2. Configure Serial Studio
 
-1. **I/O Interface:** Network Socket.
+1. **Connection:** Network Socket.
 2. **Socket Type:** UDP.
 3. **Local Port:** 9000.
 4. **Project:** load `imu_batched.ssproj`.

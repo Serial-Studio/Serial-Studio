@@ -96,11 +96,11 @@ The BLE driver wraps Qt's `QLowEnergyController` and `QLowEnergyService`. The Se
 3. **Select service.** Once discovery finishes, pick the GATT service that holds the telemetry data from the **Service** dropdown. Most devices expose several services; choose the one containing the characteristic you need.
 4. **Select characteristic.** Pick the characteristic to subscribe to from the **Characteristic** dropdown. Serial Studio enables notifications on it by writing `0x0001` to the CCCD.
 
-From that point on, every notification's payload bytes enter the incoming stream exactly as if they had arrived over UART, and the configured frame detection splits them into frames. Quick Plot mode frames on line endings; in a project, set the source's frame detection to **No Delimiters** to map one notification to one frame, and decode packed binary payloads in a [frame parser](JavaScript-API.md).
+From that point on, every notification's payload bytes enter the incoming stream exactly as if they had arrived over UART, and the configured frame detection splits them into frames. Quick Plot mode frames on line endings; in a project, set the source's frame detection to **No Delimiters** to map one notification to one frame, and decode packed binary payloads in a [frame parser](Frame-Parser.md).
 
 Writes use the same selection in reverse: data sent through the console or an [action](Actions.md) is written to the selected characteristic, using Write Without Response when the characteristic supports it and Write With Response otherwise. Devices that split RX and TX across two characteristics (the Nordic UART Service pattern) take writes through `io.ble.writeCharacteristic`, which resolves any characteristic in the selected service by UUID and applies the same rule.
 
-The device, service, and notify characteristic are saved with the project (the device by name/address, the service and characteristic by UUID, so they survive a firmware update that reorders the GATT table). On the next connection Serial Studio reselects them automatically after discovery, and only then reports the source as connected, so anything that runs on connect (a [Control Loop](Control-Script.md), an auto-execute action) sees a fully wired GATT. A control loop should therefore handle only the write handshake, not service or characteristic selection.
+The device, service, and notify characteristic are saved with the project (the device by name/address, the service and characteristic by UUID, so they survive a firmware update that reorders the GATT table). On the next connection Serial Studio reselects them automatically after discovery, and only then reports the source as connected, so anything that runs on connect (a [Control Loop](Control-Loop.md), an auto-execute action) sees a fully wired GATT. A control loop should therefore handle only the write handshake, not service or characteristic selection.
 
 If a project knows only the notify characteristic (the saved service UUID is empty, as in projects saved by older versions), Serial Studio probes the discovered services one by one until it finds the one containing that characteristic, then wires it exactly as if the service had been saved. The connection is reported only after the probe finishes, so connect-time automation still sees a ready GATT.
 
@@ -146,7 +146,7 @@ For step-by-step setup, see the [Protocol Setup Guides, Bluetooth LE section](Pr
 
 - [Protocol Setup Guides](Protocol-Setup-Guides.md): step-by-step BLE setup in the Setup Panel.
 - [API Reference](API-Reference.md): the `io.ble.*` command set for scripted control.
-- [Data Sources](Data-Sources.md): driver capability summary across all transports.
+- [Devices](Devices.md): driver capability summary across all transports.
 - [Communication Protocols](Communication-Protocols.md): overview of all supported transports.
 - [Use Cases](Use-Cases.md): wireless sensor patterns and BLE prototyping setups.
 - [Troubleshooting](Troubleshooting.md): pairing, permission, and adapter-detection diagnostics.

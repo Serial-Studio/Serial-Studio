@@ -268,7 +268,7 @@ Real-world applications of Serial Studio across industries, education, and hobby
 - **Yaw knob** (-180° to +180°) for heading adjustment
 - **Camera toggle** (ON/OFF) to start/stop recording on each aircraft
 - **RTH button** (Return to Home) for emergency recall
-- Each drone's controls live in a separate Output Panel group assigned to that drone's data source (Input Device), so a single dashboard commands both aircraft independently
+- Each drone's controls live in a separate Output Panel group assigned to that drone's device (Input Device), so a single dashboard commands both aircraft independently
 
 **Hardware:** Two flight controllers + radio modems/Wi-Fi modules
 **Pro Feature Used:** Multi-device projects, output controls, MDF4 export
@@ -646,7 +646,7 @@ template
 
 ## Getting Started with Your Use Case
 
-### Step 1: Identify Your Data Sources
+### Step 1: Identify Your Devices
 - What sensors/devices do you have?
 - What communication protocol (UART, BLE, MQTT, TCP/UDP)?
 - What data rate (1 Hz? 100 Hz? 1 kHz)?

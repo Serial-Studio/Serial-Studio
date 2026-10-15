@@ -260,35 +260,57 @@ Rectangle {
     }
 
     //
-    // Connect/Disconnect button
+    // Connect/Disconnect button, wrapped so the tooltip still explains a disabled state
     //
-    Widgets.ToolbarButton {
-      id: _connectButton
+    Item {
+      id: _connectSlot
 
-      clickSound: false
-      readonly property bool connecting: Cpp_IO_Manager.isConnecting
       readonly property var entry: _tbModel.binding("io.toggleConnection")
 
       Layout.alignment: Qt.AlignVCenter
-      implicitWidth: metrics.width + 16
-      font: Cpp_Misc_CommonFonts.boldUiFont
-      Layout.minimumWidth: metrics.width + 16
-      Layout.maximumWidth: metrics.width + 16
-      checked: entry !== null && entry.checked === true
-      ToolTip.text: qsTr("Connect or disconnect from the configured device")
-      text: connecting ? qsTr("Connecting…") : (checked ? qsTr("Disconnect") : qsTr("Connect"))
-      icon.source: Cpp_Misc_IconRegistry.iconById(checked ? "commands/connect" : "commands/disconnect", 32)
-
-      enabled: entry !== null && entry.enabled !== false
+      implicitWidth: _connectButton.implicitWidth
+      implicitHeight: _connectButton.implicitHeight
+      Layout.minimumWidth: _connectButton.implicitWidth
+      Layout.maximumWidth: _connectButton.implicitWidth
       visible: !Cpp_API_Mirror.attached && entry !== null && entry.visible !== false
 
-      onClicked: entry.run()
+      HoverHandler {
+        id: _connectHover
 
-      TextMetrics {
-        id: metrics
+        enabled: !_connectButton.enabled
+      }
 
-        text: " " + qsTr("Disconnect") + " "
+      ToolTip {
+        delay: 700
+        text: _connectButton.ToolTip.text
+        visible: _connectHover.hovered && text !== ""
+      }
+
+      Widgets.ToolbarButton {
+        id: _connectButton
+
+        clickSound: false
+        readonly property var entry: _connectSlot.entry
+        readonly property bool connecting: Cpp_IO_Manager.isConnecting
+
+        anchors.fill: parent
+        implicitWidth: metrics.width + 16
         font: Cpp_Misc_CommonFonts.boldUiFont
+        checked: entry !== null && entry.checked === true
+        ToolTip.text: entry !== null && entry.tooltip !== undefined ? entry.tooltip : ""
+        text: connecting ? qsTr("Connecting…") : (checked ? qsTr("Disconnect") : qsTr("Connect"))
+        icon.source: Cpp_Misc_IconRegistry.iconById(checked ? "commands/connect" : "commands/disconnect", 32)
+
+        enabled: entry !== null && entry.enabled !== false
+
+        onClicked: entry.run()
+
+        TextMetrics {
+          id: metrics
+
+          text: " " + qsTr("Disconnect") + " "
+          font: Cpp_Misc_CommonFonts.boldUiFont
+        }
       }
     }
 

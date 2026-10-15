@@ -1,7 +1,7 @@
 # Canvas Widget API (JavaScript)
 
 The Canvas widget (Pro) provides a Canvas-style 2D drawing surface. Each
-group with `widgetType: 8` (GroupWidget::Painter) gets its own canvas
+group with `widgetType: 8` (a Canvas Widget, `GroupWidget::Painter`) gets its own canvas
 script. Bind by calling `project.painter.setCode {groupId, code}`.
 
 A canvas group can be **empty** (zero datasets). It will then draw using
@@ -260,7 +260,7 @@ should not own them.
 
 ## Tables and variables (the central data bus)
 
-Shared tables let multiple scripts (transforms, canvas scripts) share state.
+Variables tables let multiple scripts (transforms, canvas scripts) share state.
 Two variable types:
 
 - **Constant**: holds a single immutable value across the whole session.

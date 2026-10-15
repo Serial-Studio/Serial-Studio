@@ -1,10 +1,8 @@
 Copyright (c) 2020–2026 Alex Spataru <https://github.com/alex-spataru>
+To oprogramowanie jest darmowe i otwarte na licencji GNU GPLv3. Możesz go
+używać, modyfikować i rozpowszechniać, pod warunkiem, że prace pochodne
+pozostaną otwarte na tych samych warunkach.
 
-To oprogramowanie jest darmowe i otwarte na licencji GNU GPLv3.
-Możesz go używać, modyfikować i rozpowszechniać, pod warunkiem, że
-prace pochodne pozostaną otwarte na tych samych warunkach.
-
-→ Licencja: https://www.gnu.org/licenses/gpl-3.0.html
 → Źródło:   https://github.com/serial-studio/serial-studio
 
 Podoba Ci się ten projekt? Rozważ wsparcie rozwoju z Serial Studio Pro:
@@ -17,5 +15,3 @@ Funkcje Pro:
 → Historian, Zmienne i transformacje wartości (JS + Lua)
 → Projekty wieloźródłowe i niestandardowe przestrzenie robocze
 → Licencja komercyjna (bez zobowiązań GPL)
-
-→ Dowiedz się więcej: https://serial-studio.com/

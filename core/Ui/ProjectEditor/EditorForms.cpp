@@ -445,10 +445,9 @@ void EditorForms::buildGroupModel(const DataModel::Group& group)
     widgetItem->setData(m_editor.m_groupWidgets.values(), ComboBoxData);
     widgetItem->setData(index, EditableValue);
     widgetItem->setData(kGroupView_Widget, ParameterType);
-    widgetItem->setData(tr("Composite Widget"), ParameterName);
-    widgetItem->setData(
-      tr("Select how &m_editor group of datasets should be visualized (optional)"),
-      ParameterDescription);
+    widgetItem->setData(tr("Group Widget"), ParameterName);
+    widgetItem->setData(tr("Select how this group of datasets should be visualized (optional)"),
+                        ParameterDescription);
     m_editor.m_groupModel->appendRow(widgetItem);
   }
 
@@ -617,7 +616,8 @@ void EditorForms::buildSourcePayloadRows(const DataModel::Source& source)
   decoderItem->setData(source.decoderMethod, EditableValue);
   decoderItem->setData(kSourceView_FrameDecoder, ParameterType);
   decoderItem->setData(tr("Data Conversion Method"), ParameterName);
-  decoderItem->setData(tr("Select how incoming binary data is decoded before parsing"),
+  decoderItem->setData(tr("How incoming bytes become text before parsing: plain text, "
+                          "hexadecimal, Base64, or raw binary for binary parsers"),
                        ParameterDescription);
   m_editor.m_sourceModel->appendRow(decoderItem);
 

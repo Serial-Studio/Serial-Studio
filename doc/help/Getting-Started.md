@@ -2,17 +2,19 @@
 
 ## Overview
 
-Serial Studio is a cross-platform telemetry dashboard for visualizing real-time data from embedded devices, sensors, and other data sources. It runs on Windows, macOS, and Linux.
+Serial Studio is a cross-platform telemetry dashboard for visualizing real-time data from embedded devices, sensors, and other devices. It runs on Windows, macOS, and Linux.
 
 **Core capabilities:**
 
-- **Data sources.** Serial/UART, TCP/UDP, and Bluetooth LE are included in the free edition. MQTT, Modbus, CAN Bus, Audio input, raw USB, HID, and Process I/O are available in Pro.
+- **Devices.** Serial/UART, TCP/UDP, and Bluetooth LE are included in the free edition. MQTT, Modbus, CAN Bus, Audio input, raw USB, HID, and Process I/O are available in Pro.
 - **15+ widget types.** Plot, Multi-Plot, FFT Plot, Bar, Gauge, Compass, Meter, Gyroscope, Accelerometer, GPS Map, Data Grid, LED Panel, Terminal, 3D Plot (Pro), Image View (Pro), plus Clock and Stopwatch utility widgets. The Plot widget can take its X axis from another dataset for XY/scatter plots. Bar, Gauge, Meter, and Compass each ship as a two-page swipe view (analog face + large digital readout) so the same tile shows both a quick-glance summary and the exact numeric value.
-- **Export.** Save sessions to CSV or MDF4 (Pro) for offline analysis.
+- **Export.** Save sessions to CSV, or to MDF4 and the Historian (both Pro), for offline analysis.
 - **Performance.** Built with Qt 6 and C++20, aimed at 256 kHz+ data rates.
 - **Three operation modes.** Console Only for inspecting the raw stream, Quick Plot for instant CSV visualization, and Project File for fully customized dashboards.
 
 It handles the visualization layer for a range of cases: reading temperature from an Arduino, monitoring a CAN Bus in a vehicle, or building a ground station for a rocket.
+
+If a term on this page is new to you, [Concepts](Concepts.md) explains the chain from device to dashboard on one page, and the [Glossary](Glossary.md) defines every term.
 
 ## First connection workflow
 
@@ -30,15 +32,7 @@ flowchart LR
 
 ### Windows
 
-1. Download the installer from the [releases page](https://github.com/Serial-Studio/Serial-Studio/releases/latest).
-2. Double-click the installer.
-
-**Unknown developer warning.** Windows may show a warning because the installer isn't digitally signed. Click **More Info**, then **Run Anyway**.
-
-**Visual C++ Redistributable.** On a fresh Windows install, Serial Studio may fail to launch. If that happens, install the [Microsoft Visual C++ Redistributable (64-bit)](https://aka.ms/vs/17/release/vc_redist.x64.exe) and try again.
-
-The portable ZIP and the Microsoft Store edition, plus details on each package, are covered
-in [Windows Installation](Windows-Installation.md).
+Download the installer from the [releases page](https://github.com/Serial-Studio/Serial-Studio/releases/latest) and run it. [Windows Installation](Windows-Installation.md) covers the unsigned-installer warning, the Visual C++ Redistributable, the portable ZIP, and the Microsoft Store edition.
 
 ### macOS
 
@@ -55,32 +49,7 @@ The Homebrew cask isn't officially maintained by the Serial Studio team. Use the
 
 ### Linux
 
-A few install options are available.
-
-**AppImage (recommended):**
-
-```bash
-chmod +x Serial-Studio-Pro-*.AppImage
-./Serial-Studio-Pro-*.AppImage
-```
-
-**Flatpak (Flathub):**
-
-```bash
-flatpak install flathub com.serial_studio.Serial-Studio
-```
-
-DEB and RPM packages are also on the releases page. Distribution-specific install steps and
-package signature verification (GPG key import for RPM) are covered in
-[Linux Installation](Linux-Installation.md).
-
-**Serial port permissions on Linux.** If your serial device doesn't show up, add your user to the `dialout` group:
-
-```bash
-sudo usermod -a -G dialout $USER
-```
-
-Log out and back in for it to take effect.
+Download the AppImage, DEB, or RPM from the [releases page](https://github.com/Serial-Studio/Serial-Studio/releases/latest), or install from Flathub (`com.serial_studio.Serial-Studio`). [Linux Installation](Linux-Installation.md) covers each package, signature verification, and the [serial port permissions](Linux-Installation.md#serial-port-permissions) a serial device needs.
 
 ### Building from source (GPL)
 
@@ -106,7 +75,7 @@ When you launch Serial Studio, the main window splits into four areas.
 The toolbar runs along the top of the window:
 
 - **Project controls.** Open and edit project files. The **Project Editor** button opens the [Project Editor](Project-Editor.md).
-- **I/O interface selector.** Choose between UART, Network, Bluetooth, and in Pro: Modbus, CAN Bus, Audio, USB, HID, or Process.
+- **Problem Center.** Lists what is stopping data from reaching the dashboard, with a cause and a fix for each finding.
 - **Connect/Disconnect button.** Starts or stops the data connection.
 - **Examples browser.** Load example projects, downloaded from GitHub on first open (internet required), to see working configurations.
 - **CSV / MDF4 (Pro) playback.** Replay previously recorded sessions.
@@ -115,22 +84,23 @@ For a button-by-button map of the toolbar, the Setup panel, the dashboard taskba
 
 ### 2. Console (center, default view)
 
-When you first connect, the console panel shows raw incoming data from your device. You can switch between Text and Hex display. The console is handy for confirming that your device is sending data before you configure a dashboard.
+Before you connect, the console shows the edition details and a one-line hint on how to start. Once connected, it shows raw incoming data from your device, in Text or Hex. The console is handy for confirming that your device is sending data before you configure a dashboard. If a connection stays silent for 10 seconds in Quick Plot or Project File mode, the console prints a hint naming the likely cause.
 
 ### 3. Dashboard (center, replaces the console)
 
 Once Serial Studio parses at least one valid frame, the view switches from the Console to the Dashboard. The Dashboard shows real-time widgets (plots, gauges, maps, grids, and so on) arranged according to your configuration. You can show, focus, or restore individual widgets from the taskbar's window buttons at the bottom of the dashboard.
 
-### 4. Setup panel (right side, collapsible)
+### 4. Device Setup panel (right side, collapsible)
 
-The Setup panel is where you configure the connection:
+The Device Setup panel is where you configure the connection:
 
-- **Operation mode.** Console Only, Quick Plot, or Project File.
-- **I/O interface settings.** Port, baud rate, IP address, and so on, depending on the interface.
-- **Frame parsing options.** Delimiters, data conversion, and other protocol settings.
-- **Export options.** Turn on CSV or MDF4 (Pro) logging.
+- **Operation Mode.** Console Only, Quick Plot, or Project File, each with a tooltip describing what it expects.
+- **Data Export.** CSV, MDF4 (Pro), the Historian (Pro), and the console log.
+- **Connection and its settings.** The link type (UART, Network, Bluetooth LE, and the Pro connections), then the port, baud rate, IP address, and so on.
 
-You can resize the Setup panel by dragging its left edge to give the Dashboard more space.
+Frame delimiters, the decoder, and the frame parser belong to a project and are set in the [Project Editor](Project-Editor.md).
+
+You can resize the Device Setup panel by dragging its left edge to give the Dashboard more space.
 
 ## Your first connection: Quick Plot mode
 
@@ -164,9 +134,9 @@ The only requirement is that your device sends comma-separated numeric values te
 ### Step 2: configure Serial Studio
 
 1. Open Serial Studio.
-2. In the Setup panel on the right, set the operation mode to **Quick Plot (Comma Separated Values)**.
-3. Set the I/O interface to **UART**.
-4. Pick your device's COM port (for example `COM3` on Windows, `/dev/ttyUSB0` on Linux, `/dev/cu.usbmodem*` on macOS).
+2. In the Device Setup panel on the right, set **Operation Mode** to **Quick Plot (Comma Separated Values)**.
+3. Set **Connection** to **UART**.
+4. Pick your device's port in **COM Port** on Windows or **Serial Port** elsewhere (for example `COM3` on Windows, `/dev/ttyUSB0` on Linux, `/dev/cu.usbmodem*` on macOS).
 5. Set the baud rate to `115200` (it has to match the value in your Arduino sketch).
 
 ### Step 3: connect
@@ -183,101 +153,50 @@ That's all. No project file, no JSON, just connect and visualize.
 
 - Use the taskbar's window buttons at the bottom of the dashboard to show, focus, or restore individual widgets (see [Toolbar & Button Reference](Toolbar-Reference.md#dashboard-taskbar)).
 - Hover over plots to inspect values.
-- Enable CSV export in the Setup panel to record the session for later playback.
+- Enable CSV export in the Device Setup panel to record the session for later playback.
+
+### Step 5: keep it as a project
+
+When the plot looks right, open the dashboard's start menu and choose **Save as Project**, then pick where to save it. Serial Studio disconnects, switches to Project File mode, and opens the saved project: one device with the current connection settings and Quick Plot's framing, one dataset per channel, and automatic workspaces. The Project Editor opens on the new project. Serial Studio does not reconnect; click **Connect** when you are ready. From there you can rename channels, set units, and pick widgets in the Project Editor. The saved project splits frames on `\n`, which covers `\n` and `\r\n` line endings; a device that ends lines with a bare `\r` needs its end delimiter changed in the Project Editor.
 
 ## Your first connection: Project File mode
 
-Project File mode provides full control over how Serial Studio interprets your data and what widgets show up on the dashboard. You create a `.ssproj` project file in the built-in Project Editor, and Serial Studio uses it to parse incoming data and build the dashboard. It's the recommended mode for most real-world projects.
+Project File mode gives full control over how Serial Studio interprets your data and which widgets appear. A `.ssproj` project file, built in the Project Editor, defines the device, its frame delimiters and decoder, the frame parser, and the datasets, groups, and widgets. It is the recommended mode for most real-world projects.
 
-### Step 1: open the Project Editor
+The [Project File tutorial](Project-File-Tutorial.md) builds a complete project from a sample sketch, step by step, and ends with the exact dashboard you should see. In short:
 
-Click the **Project Editor** button in the toolbar. That opens a separate editor window.
-
-### Step 2: create a project
-
-1. Click **New**.
-2. Give the project a title (for example "My Sensor Dashboard").
-3. Configure frame detection: choose a frame-detection method (End Delimiter Only, Start
-   Delimiter Only, Start + End Delimiter, or No Delimiters) depending on how your device
-   frames its data. For line-based data, use a newline as the end delimiter.
-
-### Step 3: add groups and datasets
-
-1. Click **Add Group** in the tree view on the left.
-2. Name the group (for example "Temperature Sensors") and pick a widget type (Data Grid, Multiple Plot, GPS Map).
-3. Inside the group, click **Add Dataset** for each data field.
-4. For each dataset, set its title, frame index (which CSV field it maps to, starting at 1), units, and any min/max bounds.
-
-### Step 4: save and load
-
-1. Save the project file (a `.ssproj`).
-2. Back in the main window, set the operation mode to **Parse via Project File**.
-3. Load your project file through the file selector in the Setup panel.
-
-### Step 5: connect
-
-Configure your I/O interface and click **Connect**. Serial Studio uses your project file to parse incoming frames and draw the widgets you configured.
+1. Click **Project Editor** in the toolbar. While disconnected, opening the editor switches Serial Studio to Project File mode.
+2. On the device page, set the frame detection and delimiters to match what your device sends.
+3. On the frame parser page, pick the parser. The Built-In **Delimited text** template splits on commas and needs no code; **Test With Sample Data** shows which dataset reads each value.
+4. Add a group and its datasets. Each dataset reads one frame index, the 1-based position of its value in the parser's output.
+5. Save the project, pick the device's connection in the Device Setup panel, and click **Connect**.
 
 ## Your first connection: Console Only mode
 
-Console Only is a diagnostic mode. Serial Studio doesn't try to parse anything; raw bytes from the data source go straight to the terminal. Use it when you want to verify that a device is alive, check the baud rate and framing, or send commands interactively.
+Console Only is a diagnostic mode. Serial Studio doesn't try to parse anything; raw bytes from the device go straight to the terminal. Use it when you want to verify that a device is alive, check the baud rate and framing, or send commands interactively.
 
 ### Steps
 
-1. In the Setup panel, set the operation mode to **Console Only (No Parsing)**.
-2. Pick your I/O interface and configure the connection (port, baud rate, IP, and so on).
+1. In the Device Setup panel, set **Operation Mode** to **Console Only (No Parsing)**.
+2. Pick the **Connection** and configure it (port, baud rate, IP, and so on).
 3. Click **Connect**.
 4. Raw bytes appear in the terminal. Toggle between Text and Hex display from the console toolbar.
 5. Use the input box at the bottom of the console to send bytes back to the device.
 
 No dashboard, no CSV export, no parsing. Once the stream looks correct, switch to Quick Plot or Project File to visualize the data.
 
-## Operation modes
+## Choosing an operation mode
 
-Serial Studio has three operation modes. The right one depends on how much control you need and how your device formats its output.
-
-### Console Only
-
-| Aspect               | Detail |
-|----------------------|--------|
-| Configuration needed | None |
-| Data format          | Any (bytes are never parsed) |
-| Dashboard generated  | None; raw bytes go to the terminal |
-| Best for             | Probing an unknown device, debugging baud/wiring, AT commands |
-
-Console Only turns Serial Studio into a bidirectional terminal. No frame detection, no dashboard, no parsing. Switch to it whenever you want to see exactly what bytes are coming out of your device.
-
-### Quick Plot
-
-| Aspect               | Detail |
-|----------------------|--------|
-| Configuration needed | None |
-| Data format          | Comma-separated numeric values |
-| Line terminator      | `\n`, `\r`, or `\r\n` |
-| Dashboard generated  | Automatic (Data Grid + Multi-Plot) |
-| Best for             | Prototyping, quick debugging, simple sensors |
-
-Quick Plot treats each line as a frame and each comma-separated field as a dataset. It auto-creates one plot per field. It's the fastest way to get data on screen, but you don't get to pick widget types, labels, or units.
-
-### Project File
-
-| Aspect               | Detail |
-|----------------------|--------|
-| Configuration needed | `.ssproj` project file (created in the Project Editor) |
-| Data format          | Configurable (CSV with custom delimiters, binary with a Lua/JS parser) |
-| Dashboard generated  | From the project file |
-| Best for             | Production telemetry, complex protocols, multi-sensor systems |
-
-This mode provides full control: define frame delimiters, map data fields to datasets, pick widget types, set units and ranges, configure alarms, add FFT analysis, write frame parser scripts (Lua or JavaScript) for binary protocols, and add per-dataset value transforms for calibration and filtering. Project File mode also supports multiple data sources for multi-device setups (Pro). It's the recommended mode for most real-world projects.
+Start with Quick Plot if your device prints comma-separated lines, move to Project File when you want your own widgets, labels, and units, and use Console Only to inspect a stream you do not understand yet. [Operation Modes](Operation-Modes.md) compares the three in detail.
 
 ## Common first-time issues
 
-The [Problem Center](Problem-Center.md) (**Ctrl+K**, then `Problem Center`) diagnoses most of these for you: **Connection Diagnostics** checks port permissions, drivers, and Bluetooth state, and the link checkers say whether bytes, frames, or values are the stage where data stops.
+The [Problem Center](Problem-Center.md) (the **Problem Center** button in the toolbar, or **Ctrl+K**, then `Problem Center`) diagnoses most of these for you: **Connection Diagnostics** checks port permissions, drivers, and Bluetooth state, and the link checkers say whether bytes, frames, or values are the stage where data stops.
 
 ### Serial port not showing up in the dropdown
 
 - **Windows:** Open Device Manager and check under "Ports (COM & LPT)". You may need a USB-to-serial driver: [CH340](http://www.wch-ic.com/downloads/CH341SER_EXE.html), [FTDI](https://ftdichip.com/drivers/vcp-drivers/), or [CP210x](https://www.silabs.com/developers/usb-to-uart-bridge-vcp-drivers).
-- **Linux:** Run `sudo usermod -a -G dialout $USER`, then log out and back in. Check the device shows up with `ls /dev/ttyUSB*` or `ls /dev/ttyACM*`.
+- **Linux:** Your user needs access to serial devices; see [serial port permissions](Linux-Installation.md#serial-port-permissions). Check the device shows up with `ls /dev/ttyUSB*` or `ls /dev/ttyACM*`.
 - **macOS:** Try a different USB port. Check System Settings for security prompts blocking the device. Your device usually appears as `/dev/cu.usbmodem*` or `/dev/cu.usbserial*`.
 
 ### No data showing in the console
@@ -293,6 +212,10 @@ The [Problem Center](Problem-Center.md) (**Ctrl+K**, then `Problem Center`) diag
 - In Project File mode, check that your frame delimiters match what the device sends. Switch to Console Only mode to inspect the raw stream, then come back once you know the framing.
 - If nothing parses, try Console Only first. If the raw bytes look wrong there, it's a connection/baud/wiring problem, not a parsing problem.
 
+### Some widgets stop updating while others move
+
+The parser returns fewer values than a dataset's frame index expects, so that dataset keeps its last value. The Problem Center names the affected datasets in a `short-frames` finding. See [Parser returns the wrong number of values](Troubleshooting.md#parser-returns-the-wrong-number-of-values).
+
 ### Garbled or corrupted data in the console
 
 - Almost always a baud rate mismatch. Double-check both the device firmware and the Serial Studio setting.
@@ -304,9 +227,11 @@ Now that you've made your first connection, here are the recommended paths from 
 
 ### Fundamentals
 
+- **[Concepts](Concepts.md):** the chain from device to dashboard on one page.
+- **[Project File tutorial](Project-File-Tutorial.md):** build a complete project step by step.
 - **[Operation Modes](Operation-Modes.md):** detailed comparison of all three modes, with examples.
 - **[Dataset Identity Model](Identity-Model.md):** how frame index, dataset IDs, and unique IDs relate. The index-versus-ID distinction is the most common beginner trap when editing projects.
-- **[Data Sources](Data-Sources.md):** configure Serial, Network (TCP/UDP), Bluetooth LE, and Pro-edition drivers.
+- **[Devices](Devices.md):** configure Serial, Network (TCP/UDP), Bluetooth LE, and Pro-edition drivers.
 - **[Communication Protocols](Communication-Protocols.md):** compare all supported protocols and pick the right one.
 - **[Data Flow](Data-Flow.md):** how Serial Studio processes data from raw bytes to dashboard widgets.
 
@@ -314,8 +239,9 @@ Now that you've made your first connection, here are the recommended paths from 
 
 - **[Project Editor](Project-Editor.md):** create and edit project files with custom groups, datasets, and widget configurations.
 - **[Widget Reference](Widget-Reference.md):** all 15+ widget types, with configuration details and use-case guidance.
-- **[Frame Parser Scripting](JavaScript-API.md):** custom frame parsers in Lua or JavaScript for binary or non-standard formats.
-- **[Dataset Value Transforms](Dataset-Transforms.md):** per-dataset calibration, filtering, and unit conversion.
+- **[Frame Parser Reference](Frame-Parser.md):** custom frame parsers in Lua or JavaScript for binary or non-standard formats.
+- **[Dataset Value Transforms](Dataset-Transforms.md) (Pro):** per-dataset calibration, filtering, and unit conversion.
+- **[Deriving values](Derived-Values.md):** which mechanism to use for a value the device does not send directly.
 
 ### Advanced features
 

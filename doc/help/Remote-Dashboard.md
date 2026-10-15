@@ -82,14 +82,14 @@ A viewer only displays. It never runs the publisher's logic, so a publisher that
 spoofed can make a viewer show wrong values but cannot make it run anything:
 
 - **Viewers never run publisher logic.** Before the viewer loads the remote project it removes
-  the frame parsers, dataset transforms and transform libraries, the control script, the output
+  the frame parsers, dataset transforms and transform libraries, the Control Loop, the output
   widgets' transmit functions, every source's connection settings, and the MQTT publisher and
   InfluxDB blocks. Nothing in them runs on the viewer: it parses nothing, transforms nothing,
   writes to no device, and opens no connection of its own.
 - **Canvas code on a viewer can only draw.** Canvas widgets the publisher defines still draw on
   the viewer, but their script runs on a draw-only surface. It cannot call the API or reach
   devices, files, or processes; those calls answer `{ ok: false, error: "dryRun" }`. Every widget
-  that renders from data renders as it does on the publisher. See [Canvas widget](Painter-Widget.md#canvas-code-on-a-remote-dashboard).
+  that renders from data renders as it does on the publisher. See [Canvas widget](Canvas-Widget.md#canvas-code-on-a-remote-dashboard).
 
 The link itself has these limits to understand before opening it up:
 

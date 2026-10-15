@@ -76,7 +76,7 @@ DropArea {
 
     // Process JSON files
     else if (lowerCase.endsWith(".json") || lowerCase.endsWith(".ssproj")) {
-      Cpp_AppState.operationMode = SerialStudio.ProjectFile
+      Cpp_AppState.requestOperationMode(SerialStudio.ProjectFile)
       Cpp_JSON_ProjectModel.openJsonFile(cleanPath)
     }
 

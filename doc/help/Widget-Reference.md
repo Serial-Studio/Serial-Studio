@@ -140,7 +140,7 @@ flowchart TD
 - The script reads the group's datasets through a `datasets` global and dashboard tick metadata through `frame.number` / `frame.timestampMs`.
 - Best for visualizations not covered by any built-in widget: instrument mimics, project-specific layouts, lab-equipment-style readouts.
 - Repaints at the dashboard refresh rate (60 Hz by default, configurable 1-240 Hz). A 250 ms watchdog terminates the script if a single call does not return.
-- See the [Canvas Widget](Painter-Widget.md) reference for the full API.
+- See the [Canvas Widget](Canvas-Widget.md) reference for the full API.
 - Pro feature (license or free trial).
 
 ### Web View
@@ -197,7 +197,7 @@ flowchart TD
 - Horizontal bar gauge with min/max range.
 - Color-banded alarm zones with per-band severity (Info / OK / Warning / Critical).
 - Shows current value and units.
-- Best for: level indicators, resource usage, bounded values.
+- Best for: bars, resource usage, bounded values.
 - Configuration fields (project-file keys): `widgetMin` (default 0), `widgetMax` (default 0), `alarmBands` (array; see [Alarm bands](#alarm-bands)). The `widgetMin`/`widgetMax` keys map to the C++ fields `wgtMin`/`wgtMax`.
 - **Two-page swipe view.** Page 0 is the analog bar; page 1 is a large monospace digital readout. Swipe horizontally (or use the page indicator dots at the bottom) to flip. The active page is saved per-widget in the project file, so each Bar tile remembers its own preference.
 
@@ -345,7 +345,7 @@ Every dataset in a project file supports these visualization-related fields:
 - Right-click the canvas for a context menu: tile windows, set wallpaper.
 - Widget positions and sizes are saved per project via `widgetSettings` and persist between sessions.
 - The Actions panel (if the project defines actions) shows up as a horizontal bar above the widgets.
-- Dashboard render order follows the `DashboardWidget` enum: Terminal, DataGrid, MultiPlot, Accelerometer, Gyroscope, GPS, Plot3D, FFT, LED, Plot, Bar, Gauge, Compass, Meter, Clock, Stopwatch, Web View, ImageView, OutputPanel, NotificationLog, Waterfall, Painter.
+- Dashboard render order follows the `DashboardWidget` enum: Terminal, DataGrid, MultiPlot, Accelerometer, Gyroscope, GPS, Plot3D, FFT, LED, Plot, Bar, Gauge, Compass, Meter, Clock, Stopwatch, Web View, ImageView, OutputPanel, NotificationLog, Waterfall, and `Painter` (the Canvas Widget).
 
 Most widgets carry a small toolbar of icon buttons along their top edge that appears once the widget is large enough to fit it. Every button on every widget toolbar is listed in the [Toolbar & Button Reference](Toolbar-Reference.md#dashboard-widget-toolbars).
 

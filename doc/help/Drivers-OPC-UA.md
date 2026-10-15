@@ -104,7 +104,7 @@ The Socket API exposes the driver under `io.opcua.*`: `getConfig`, `setEndpointU
 The `OPC UA PLC Simulator` example ships a Python server (`pip install asyncua`) modelling a bottling line: typed tags, a six-element float array, string status tags and a sensor that reports a Bad status for five seconds out of every ten. Flags reproduce the situations this page describes: `--user/--password` for authentication, `--no-subscriptions` to force the polling fallback, `--drop-after N` to stop publishing without closing the socket (the watchdog case), `--secure-only` to advertise only a secured endpoint. The address space mixes string and numeric node ids, engineering units and ranges, a struct-shaped Variable with child Variables, and a sensor cycling Good, Bad and Uncertain. The driver's integration tests run against it.
 
 1. Start the simulator: `python "examples/OPC UA PLC Simulator/opcua_plc_simulator.py"`.
-2. Select the **OPC UA** data source, keep `opc.tcp://127.0.0.1:4840`, press **Discover**.
+2. Select the **OPC UA** device, keep `opc.tcp://127.0.0.1:4840`, press **Discover**.
 3. **Browse Tags...**, tick the `Plant` folder, press **OK**, then **Generate Project**.
 4. Connect. `FaultySensor` holds its last good value while the simulator reports the fault.
 
@@ -158,5 +158,5 @@ The four causes are reported separately, because they have four different fixes:
 - [Auto-Generating Projects](Auto-Generating-Projects.md): the other driver-side project generators.
 - [Drivers: Modbus](Drivers-Modbus.md): the register-oriented industrial protocol.
 - [Drivers: MQTT](Drivers-MQTT.md): broker-based telemetry; many gateways bridge OPC UA to MQTT.
-- [Data Sources](Data-Sources.md): driver capability summary across all transports.
+- [Devices](Devices.md): driver capability summary across all transports.
 - [Communication Protocols](Communication-Protocols.md): overview of all supported transports.

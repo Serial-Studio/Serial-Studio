@@ -1,5 +1,9 @@
 # Model Context Protocol (MCP) Example
 
+**What you'll learn:** how an AI assistant such as Claude reads telemetry and controls Serial Studio through the Model Context Protocol, using the API server and a Python client.
+
+**Prerequisites:** Python 3, the API server enabled in Serial Studio's preferences, and optionally Claude Desktop for the bridge script.
+
 This example demonstrates how to use the **Model Context Protocol (MCP)** with Serial Studio, enabling AI models like Claude to interact with telemetry data and control Serial Studio remotely.
 
 ![Model Context Protocol Diagram](doc/diagram.jpg)
@@ -53,7 +57,7 @@ python3 client.py
 
 ## What is MCP?
 
-**Model Context Protocol (MCP)** is Anthropic's open standard for connecting AI models to external tools and data sources. Serial Studio implements MCP to allow AI assistants like Claude to:
+**Model Context Protocol (MCP)** is Anthropic's open standard for connecting AI models to external tools and information. Serial Studio implements MCP to allow AI assistants like Claude to:
 
 - **Execute commands** - Control Serial Studio (connect devices, start exports, etc.)
 - **Read telemetry data** - Access the current real-time sensor frame

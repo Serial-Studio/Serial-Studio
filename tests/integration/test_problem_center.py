@@ -479,3 +479,98 @@ def test_problems_run_refreshes_list(api_client, clean_state):
     windowed = _list(api_client, limit=1)
     assert len(windowed["findings"]) <= 1
     assert windowed["matchCount"] >= len(windowed["findings"])
+
+
+# ---------------------------------------------------------------------------
+# Spec 0100 -- narrowed duplicates, group widget requirements, short frames
+# ---------------------------------------------------------------------------
+
+
+@pytest.mark.project
+def test_shared_index_across_group_widgets_is_not_flagged(api_client, clean_state):
+    """One value shown in a data grid and a multi-plot is supported, not a duplicate (R13)."""
+    grid = api_client.add_group("Grid", widget_type=0)
+    plot = api_client.add_group("Plot", widget_type=4)
+    api_client.add_dataset(grid)
+    api_client.add_dataset(plot)
+
+    for ds in api_client.list_datasets():
+        api_client.update_dataset(
+            ds["groupId"], ds["datasetId"], title="Shared", index=1
+        )
+
+    time.sleep(0.3)
+    assert "duplicate-frame-index" not in _codes(_run(api_client))
+
+
+@pytest.mark.project
+def test_group_widget_requirement_reported_and_cleared(api_client, clean_state):
+    """An accelerometer missing an axis reports a group finding that clears when fixed (R16)."""
+    gid = api_client.add_group("IMU", widget_type=1)
+    datasets = [d for d in api_client.list_datasets() if d["groupId"] == gid]
+    if len(datasets) != 3:
+        for _ in range(3 - len(datasets)):
+            api_client.add_dataset(gid)
+
+        for ds, tag in zip(
+            [d for d in api_client.list_datasets() if d["groupId"] == gid],
+            ("x", "y", "z"),
+        ):
+            api_client.update_dataset(ds["groupId"], ds["datasetId"], widget=tag)
+
+    time.sleep(0.3)
+    assert "group-widget-requirement" not in _codes(_run(api_client))
+
+    last = [d for d in api_client.list_datasets() if d["groupId"] == gid][-1]
+    api_client.delete_dataset(last["groupId"], last["datasetId"])
+    time.sleep(0.3)
+
+    result = _run(api_client)
+    finding = _one(result, "group-widget-requirement")
+    assert finding["severity"] == "warning"
+    assert finding["checkerId"] == "project.group-widget"
+    assert finding["jump"] == "group"
+    assert finding["remedy"]
+
+    api_client.add_dataset(gid)
+    readded = [d for d in api_client.list_datasets() if d["groupId"] == gid][-1]
+    api_client.update_dataset(
+        readded["groupId"], readded["datasetId"], widget=last["widget"]
+    )
+    time.sleep(0.3)
+    assert "group-widget-requirement" not in _codes(_run(api_client))
+
+
+@pytest.mark.network
+@pytest.mark.slow
+def test_short_frames_finding_jumps_to_starved_dataset(
+    api_client, device_simulator, clean_state
+):
+    """Frames with fewer values than the highest index name the starved dataset (R12)."""
+    _configure_csv_project(api_client, dataset_count=3)
+    starved = [d for d in api_client.list_datasets() if d["index"] == 3]
+    assert starved, "Expected a dataset on frame index 3"
+
+    api_client.configure_network(host="127.0.0.1", port=9000, socket_type="tcp")
+    api_client.connect_device()
+    assert device_simulator.wait_for_connection(timeout=5.0), "Device did not connect"
+
+    short = [
+        DataGenerator.wrap_frame(
+            DataGenerator.generate_csv_frame(values=[1.0 + i, 2.0 + i]),
+            start_delimiter="/*",
+            end_delimiter="*/",
+            mode="project",
+        )
+        for i in range(10)
+    ]
+    result = _stream_rounds(
+        api_client, device_simulator, short, rounds=8, code="short-frames"
+    )
+
+    finding = _one(result, "short-frames")
+    assert finding["checkerId"] == "link.statistics"
+    assert finding["jump"] == "dataset"
+    assert finding["entityUniqueId"] == starved[0]["uniqueId"]
+
+    api_client.disconnect_device()

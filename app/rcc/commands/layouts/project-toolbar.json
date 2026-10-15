@@ -194,7 +194,7 @@
             {
               "type": "command",
               "id": "editor.addBar",
-              "title": "Level Indicator"
+              "title": "Bar"
             },
             {
               "type": "command",

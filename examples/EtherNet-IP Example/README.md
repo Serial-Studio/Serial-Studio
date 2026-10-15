@@ -1,5 +1,9 @@
 # EtherNet/IP Logix tags
 
+**What you'll learn:** an EtherNet/IP source that polls Logix tags from two scopes, uses a Lua frame parser, and generates a Data Grid dashboard from the tag list.
+
+**Prerequisites:** Serial Studio Pro and an Allen-Bradley Logix controller or an EtherNet/IP emulator; this example ships no simulator.
+
 ## Overview
 
 This example configures Serial Studio's EtherNet/IP client against an Allen-Bradley Logix
@@ -20,7 +24,7 @@ or at a real emulator instead of pretending.
 
 Any CompactLogix or ControlLogix on the network will do. In Serial Studio:
 
-1. Pick **EtherNet/IP** as the I/O interface.
+1. Pick **EtherNet/IP** as the Connection.
 2. Set **Gateway** to the controller's or the Ethernet module's IP address.
 3. Set **CIP Path** ([The CIP path](#the-cip-path)).
 4. Pick the **Controller** family.

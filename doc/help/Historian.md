@@ -46,7 +46,7 @@ Each session captures three per-sample streams, keyed by session ID and nanoseco
 |------------------|--------------------|----------|
 | Dataset values   | `blocks`           | Per-dataset final and pre-transform values for every published block, numeric and text |
 | Raw bytes        | `raw_bytes`        | Every byte that arrived on the driver, exactly as received |
-| Shared tables    | `table_snapshots`  | Variables of user shared tables, captured on change at a 1 Hz poll |
+| Variables tables    | `table_snapshots`  | Variables of the user's Variables tables, captured on change at a 1 Hz poll |
 | Session metadata | `sessions`         | Project title, start time, end time, embedded project JSON, notes |
 | Column layout    | `columns`          | Dataset title, group, units, widget type, virtual flag |
 
@@ -186,5 +186,5 @@ CSV and MDF4 produce one file per session. The Historian produces one file per p
 - [MDF4 Export & Playback](MDF4.md): binary logging with per-channel sample rates and channel metadata (Pro).
 - [Data Flow](Data-Flow.md): where session recording sits in the overall pipeline.
 - [Dataset Value Transforms](Dataset-Transforms.md): transforms contribute to the recorded final values.
-- [Variables](Data-Tables.md): recorded in `table_snapshots` alongside frames.
+- [Variables](Variables.md): recorded in `table_snapshots` alongside frames.
 - [Pro vs Free Features](Pro-vs-Free.md): full list of Pro-only features.

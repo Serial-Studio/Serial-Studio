@@ -115,7 +115,7 @@ Widgets.Pane {
             toolbarButton: false
             text: qsTr("Duplicate")
             Layout.alignment: Qt.AlignVCenter
-            ToolTip.text: qsTr("Create a copy of this data source")
+            ToolTip.text: qsTr("Create a copy of this device")
             icon.source: Cpp_Misc_IconRegistry.icon("editor", "duplicate", 24)
             onClicked: Cpp_JSON_ProjectModel.duplicateSource(
                          Cpp_JSON_ProjectEditor.selectedSourceId)
@@ -132,8 +132,8 @@ Widgets.Pane {
             enabled: Cpp_JSON_ProjectEditor.selectedSourceId > 0
             icon.source: Cpp_Misc_IconRegistry.icon("editor", "delete", 24)
             ToolTip.text: Cpp_JSON_ProjectEditor.selectedSourceId > 0
-                          ? qsTr("Remove this data source")
-                          : qsTr("The primary data source cannot be removed")
+                          ? qsTr("Remove this device")
+                          : qsTr("The primary device cannot be removed")
             onClicked: Cpp_JSON_ProjectModel.deleteSource(
                          Cpp_JSON_ProjectEditor.selectedSourceId)
           }

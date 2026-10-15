@@ -31,6 +31,7 @@
 #include <QTimer>
 
 #include "Core/Checksum.h"
+#include "Core/DataModel/FrameSupport.h"
 #include "Core/SerialStudio.h"
 #include "Core/SSAssert.h"
 #include "DataModel/FrameBuilder.h"
@@ -771,3 +772,55 @@ void EditorSelection::displayFrameParserView(int sourceId)
 }
 
 }  // namespace DataModel
+
+//--------------------------------------------------------------------------------------------------
+// Group widget requirement
+//--------------------------------------------------------------------------------------------------
+
+/**
+ * @brief Whether the selected group's live datasets satisfy its widget's requirement (spec 0100
+ *        R15); true when no group is selected so the editor shows no warning.
+ */
+bool DataModel::EditorSelection::selectedGroupRequirementMet() const
+{
+  const auto& groups = m_model.groups();
+  const auto groupId = m_editor.m_selectedGroup.groupId;
+  if (groupId < 0 || static_cast<size_t>(groupId) >= groups.size())
+    return true;
+
+  return SerialStudio::groupMeetsWidgetRequirement(groups[groupId]);
+}
+
+/**
+ * @brief The selected group's widget requirement sentence, or empty when it imposes none.
+ */
+QString DataModel::EditorSelection::selectedGroupRequirementText() const
+{
+  const auto& groups = m_model.groups();
+  const auto groupId = m_editor.m_selectedGroup.groupId;
+  if (groupId < 0 || static_cast<size_t>(groupId) >= groups.size())
+    return QString();
+
+  return SerialStudio::groupWidgetRequirementText(
+    SerialStudio::groupWidgetFromId(groups[groupId].widget));
+}
+
+/**
+ * @brief Whether the selected dataset is computed (virtual): it takes its value from its transform
+ *        rather than from a frame position, so the editor explains the greyed index (spec 0100
+ * R14).
+ */
+bool DataModel::EditorSelection::selectedDatasetComputed() const
+{
+  const auto& groups   = m_model.groups();
+  const auto groupId   = m_editor.m_selectedDataset.groupId;
+  const auto datasetId = m_editor.m_selectedDataset.datasetId;
+  if (groupId < 0 || static_cast<size_t>(groupId) >= groups.size())
+    return false;
+
+  const auto& datasets = groups[groupId].datasets;
+  if (datasetId < 0 || static_cast<size_t>(datasetId) >= datasets.size())
+    return false;
+
+  return datasets[datasetId].virtual_;
+}

@@ -1,10 +1,7 @@
 Copyright (c) 2020–2026 Alex Spataru <https://github.com/alex-spataru>
-
 该软件是免费和开源的，遵循GNU GPLv3许可证。
-您可以使用、修改和重新分发它，前提是衍生作品
-在相同条款下保持开源。
+您可以使用、修改和重新分发它，前提是衍生作品 在相同条款下保持开源。
 
-→ License: https://www.gnu.org/licenses/gpl-3.0.html
 → Source:  https://github.com/serial-studio/serial-studio
 
 喜欢这个项目？考虑通过Serial Studio Pro支持开发：
@@ -17,5 +14,3 @@ Copyright (c) 2020–2026 Alex Spataru <https://github.com/alex-spataru>
 → 历史数据库、变量和数值转换 (JS + Lua)
 → 多源项目和自定义仪表盘工作区
 → 商业许可证（无GPL义务）
-
-→ 了解更多: https://serial-studio.com/

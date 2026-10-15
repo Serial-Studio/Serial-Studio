@@ -618,6 +618,10 @@ Popup {
       commandId: "dashboard.freeze"
     }
 
+    StartMenuCommand {
+      commandId: "quickplot.saveAsProject"
+    }
+
     Rectangle {
       opacity: 0.5
       implicitHeight: 1

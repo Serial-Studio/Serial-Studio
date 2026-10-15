@@ -1,5 +1,9 @@
 # ANSI Color & VT-100 Test Suite
 
+**What you'll learn:** how the Console renders ANSI color and VT-100 escape sequences (4-bit, 8-bit and 24-bit color, text attributes) sent by a test script.
+
+**Prerequisites:** Python 3.6 or later. Serial Studio's free features are enough.
+
 This example exercises Serial Studio's ANSI color and VT-100 terminal emulation support.
 
 ![Serial Studio ANSI Color Test](doc/screenshot.png)

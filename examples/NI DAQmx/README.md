@@ -1,5 +1,9 @@
 # DAQBridge: NI DAQmx data acquisition to UDP
 
+**What you'll learn:** how a Python bridge streams NI DAQ voltage and current readings to Serial Studio as CSV over UDP, which you can view in Quick Plot.
+
+**Prerequisites:** an NI DAQmx-compatible device with its drivers, and Python 3.8 or later with `numpy` and `nidaqmx`. Serial Studio's free features are enough.
+
 A Python bridge that streams real-time data from NI DAQ devices to Serial Studio (or any UDP listener) in CSV format. Works with any NI DAQ hardware that supports analog input.
 
 ![DAQBridge with Serial Studio](doc/screenshot.png)
@@ -27,8 +31,8 @@ pip install numpy nidaqmx
 ## Serial Studio setup
 
 1. **Configure the connection:**
-   - In the **Setup** pane, under **Frame Parsing**, select **Quick Plot (Comma Separated Values)**.
-   - Go to **Setup** → **I/O Interface** → **Network Socket**.
+   - In the **Setup** pane, under **Operation Mode**, select **Quick Plot (Comma Separated Values)**.
+   - Go to **Setup** → **Connection** → **Network Socket**.
    - Set **Socket Type** to `UDP`.
    - Set **Local Port** to `9000`.
 2. **Connect** and run DAQBridge:

@@ -7,6 +7,7 @@
     { "type": "separator" },
     { "type": "command", "id": "dashboard.autoLayout" },
     { "type": "command", "id": "dashboard.freeze" },
+    { "type": "command", "id": "quickplot.saveAsProject" },
     { "type": "separator" },
     { "type": "command", "id": "app.fullScreen" },
     { "type": "command", "id": "window.external" },

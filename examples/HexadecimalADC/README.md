@@ -1,5 +1,9 @@
 # Command-based ADC sampling with timers, actions, and CRC integrity
 
+**What you'll learn:** a binary frame parser with CRC-16 checking, a custom action that polls the device on a timer, and a MultiPlot group with FFT analysis.
+
+**Prerequisites:** an Arduino board with analog inputs, and the Arduino IDE to upload the sketch. Serial Studio's free features are enough.
+
 ## Overview
 
 This project shows how to combine binary data parsing, custom serial actions, timed execution, and checksum validation in a Serial Studio workflow with Arduino. It's a full example of a command-driven interface for sensor data acquisition, ready for real-time plotting and FFT analysis.

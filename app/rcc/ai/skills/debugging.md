@@ -118,7 +118,7 @@ through whole files hunting for a symbol. Folders:
 
 | Question about | Scope |
 |---|---|
-| Frame detection, checksums, parsers (JS, Lua, Built-In), transforms, control scripts | `source/core/Pipeline` |
+| Frame detection, checksums, parsers (JS, Lua, Built-In), transforms, Control Loops | `source/core/Pipeline` |
 | A driver: UART, network, BLE, MQTT, CAN, Modbus, OPC UA, S7, EtherNet/IP, IEC 104 | `source/core/Devices` |
 | Recording, CSV/MDF4 export, Historian, InfluxDB | `source/core/Storage` |
 | The TCP/gRPC API and its command handlers | `source/core/Api` |
@@ -139,6 +139,38 @@ the exact source of the running build, not the development branch.
    to switch workspaces and back. Could be a Qt caching issue.
 4. If no samples: parser may be silently rejecting frames. Read the
    parser, eyeball it against a sample frame, dryRun.
+
+### "One widget is frozen while the others move"
+
+The parser returns fewer values than that dataset's frame index (1-based:
+the first parser value is index 1), so the dataset keeps its last value
+instead of going blank.
+
+1. `problems.run{}`: look for a `short-frames` finding (checker
+   `link.statistics`). It names the device, the number of values its
+   frames carry, the highest index the project maps, and the starved
+   datasets; `entityUniqueId` is the first starved dataset.
+2. Confirm with `dashboard.tailFrames` and the parser dryRun on one real
+   frame: count the returned values against the datasets' `index`.
+3. Fix the parser or separator, or set the starved datasets' `index` to
+   the position of their value in the frame. Two datasets reading the same
+   index is fine; `duplicate-frame-index` only fires when both also use
+   the same group widget and dataset widget.
+
+### "The accelerometer / gyroscope / GPS / 3D plot shows nothing"
+
+These group widgets bind datasets by their `widget` tag, not by order.
+`problems.run{}` reports `group-widget-requirement` (checker
+`project.group-widget`) when the tags or count are wrong:
+
+- Accelerometer: exactly 3 datasets tagged `x`, `y`, `z`.
+- Gyroscope: exactly 3, tagged `x`/`y`/`z` or `pitch`/`roll`/`yaw`.
+- 3D Plot: datasets tagged `x`, `y`, `z` (extras are ignored).
+- GPS Map: `lat` and `lon`; `alt` is optional.
+- Data Grid, Multi-Plot, Bar Panel: at least one enabled dataset.
+
+Recreating the group from its template gives the right tags; otherwise
+set each dataset's `widget` field.
 
 ### "Values look off"
 

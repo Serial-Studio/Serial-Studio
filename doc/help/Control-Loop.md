@@ -4,7 +4,7 @@
 
 The Control Loop automates a connected device the way an Arduino sketch does. You write two functions, `setup()` and `loop()`, and Serial Studio calls them over the life of the connection: `setup()` once when the device connects, `loop()` repeatedly while it stays connected (paced by `delay()`, as the loop() pacing section explains). Both functions can drive the connection through Serial Studio's I/O API, so the loop can send wake-up handshakes, poll registers, issue keep-alives, or step a state machine without any firmware changes on the device.
 
-The Control Loop automates a device you have **already set up and connected**. It is not where you create or connect a data source: choose the bus, device, and connection in the I/O panel first, then write the loop to drive that open connection. This matters most for Bluetooth LE, where scanning, selecting the device, and connecting are interactive steps best done by hand; once the BLE device is connected, the loop can select its service and notify characteristic by UUID and write commands (see the BLE example below).
+The Control Loop automates a device you have **already set up and connected**. It is not where you create or connect a device: choose the Connection, the device, and its settings in the Device Setup pane first, then write the loop to drive that open connection. This matters most for Bluetooth LE, where scanning, selecting the device, and connecting are interactive steps best done by hand; once the BLE device is connected, the loop can select its service and notify characteristic by UUID and write commands (see the BLE example below).
 
 This is a per-project loop, not a per-source one. A project has exactly one Control Loop; if you run several devices in one project, the loop branches on the device itself.
 
@@ -117,7 +117,7 @@ A control loop can launch a helper program and let Serial Studio manage its life
 
 Serial Studio stops every process it launched when the device disconnects, when the project changes, and when the app quits, so a helper never lingers after you are done with it.
 
-The first time a project's script asks to run a program, Serial Studio shows a prompt naming the program and its arguments and asks whether this project's scripts may launch programs. Until you answer, `system.exec` returns `ok: false` with `errorCode: "CONSENT_REQUIRED"`; on **Yes** the control script restarts so `setup()` runs again with the permission in place, and the answer is remembered for that project file. A launch from `onConnect()` needs one more **Connect** after you allowed it. **No** holds until you restart Serial Studio. A project that has not been saved to a file is asked once per session. Open projects you do not trust with this in mind: a control script runs with your user account's privileges. Headless runs cannot show the prompt; `SERIAL_STUDIO_API_AUTO_CONSENT=1` grants it for that process.
+The first time a project's script asks to run a program, Serial Studio shows a prompt naming the program and its arguments and asks whether this project's scripts may launch programs. Until you answer, `system.exec` returns `ok: false` with `errorCode: "CONSENT_REQUIRED"`; on **Yes** the Control Loop restarts so `setup()` runs again with the permission in place, and the answer is remembered for that project file. A launch from `onConnect()` needs one more **Connect** after you allowed it. **No** holds until you restart Serial Studio. A project that has not been saved to a file is asked once per session. Open projects you do not trust with this in mind: a Control Loop runs with your user account's privileges. Headless runs cannot show the prompt; `SERIAL_STUDIO_API_AUTO_CONSENT=1` grants it for that process.
 
 The program name is resolved cross-platform: a bare `"python3"` or `"python"` is looked up on the system `PATH` plus the usual install locations a GUI app does not otherwise see (Homebrew, pyenv, and user-local directories), so the interpreter that has your installed packages is the one that runs. The launched program's standard output and standard error are captured and written to Serial Studio's console, tagged with the process id, so you can see what the helper prints.
 
@@ -152,7 +152,7 @@ A control loop is not limited to sending commands: it can also read what the dev
 
 Before the first frame of a connection arrives, `newFrame()` returns `null`; check for that before reading `values`. Pace any polling loop with `delay()`; 50-250 ms is plenty for channel detection.
 
-### Shared tables: tableGet() / tableSet()
+### Variables tables: tableGet() / tableSet()
 
 Control loops can read and write the same table variables the frame parser and dataset transforms use. `tableGet(table, variable)` returns the live runtime value (or `undefined` when the table or variable does not exist, so `tableGet(t, r) || fallback` works), and `tableSet(table, variable, value)` writes one. Both are marshalled to the GUI thread, so each call costs a thread round-trip: read what you need once per `loop()` pass, not in a tight inner loop.
 
@@ -165,7 +165,7 @@ One caveat: dataset transforms only re-run when a frame arrives. If your script 
 
 ### Staleness watchdog
 
-`ageMs` makes a communication-loss watchdog short: no clock mixing, no timestamp bookkeeping in the parser. Mark the failure state in the shared tables, then `refreshDashboard()` renders it without waiting for a frame:
+`ageMs` makes a communication-loss watchdog short: no clock mixing, no timestamp bookkeeping in the parser. Mark the failure state in the Variables tables, then `refreshDashboard()` renders it without waiting for a frame:
 
 ```javascript
 var commLost = false;
@@ -227,7 +227,7 @@ function setup() {
 }
 ```
 
-The characteristic UUID is a plain string and the payload a hex string with `SerialStudio.Hex`; do not wrap the arguments in an object and do not hand-encode base64. Configure the service and notify characteristic on the source (they are saved in the project) rather than selecting them from the script. For a binary BLE device, set the source's decoder to **Binary (raw bytes)** with **No delimiters (whole chunk)** so the frame parser receives each notification as an array of byte values; see [Frame Parser Reference](JavaScript-API.md) for reading bytes and decoding floats.
+The characteristic UUID is a plain string and the payload a hex string with `SerialStudio.Hex`; do not wrap the arguments in an object and do not hand-encode base64. Configure the service and notify characteristic on the source (they are saved in the project) rather than selecting them from the script. For a binary BLE device, set the source's decoder to **Binary (raw bytes)** with **No delimiters (whole chunk)** so the frame parser receives each notification as an array of byte values; see [Frame Parser Reference](Frame-Parser.md) for reading bytes and decoding floats.
 
 ### 2. Periodic keep-alive
 
@@ -303,12 +303,12 @@ The script is saved inside the project file, so it travels with the project. Edi
 
 Every connection starts a fresh script engine: all top-level variables reset and `setup()` runs again on each reconnect, exactly like an Arduino reset. Do not design around state surviving a connect/disconnect cycle. The latest-frame store also clears on each connection edge, so `io.getLatestFrame()` reports no data until the first frame of the current connection arrives; a watchdog built on `ageMs` can never trip from a previous connection's frame.
 
-Tools and scripts can manage the control loop through the API: `controlScript.get`/`controlScript.getCode` read the source, `controlScript.dryRun` compile-checks source without installing or running it (syntax errors come back with line numbers), `controlScript.set`/`controlScript.setCode` install it, and `controlScript.getStatus` reports whether it is running. Each one is listed under [Control Script Commands](API-Reference.md#control-script-commands-6).
+Tools and scripts can manage the control loop through the API: `controlScript.get`/`controlScript.getCode` read the source, `controlScript.dryRun` compile-checks source without installing or running it (syntax errors come back with line numbers), `controlScript.set`/`controlScript.setCode` install it, and `controlScript.getStatus` reports whether it is running. Each one is listed under [Control Loop Commands](API-Reference.md#control-script-commands-6).
 
 ## Related
 
 - [SDK Reference](SerialStudio-SDK.md) for the full call surface a control loop drives: `io.*`, `tableGet`/`tableSet`, `deviceWriteAndWait`, dashboard control, notifications, and the See/Decide/Act helpers.
 - [Bluetooth Low Energy](Drivers-Bluetooth-LE.md) for selecting the device, service, and notify characteristic the script writes alongside.
-- [Frame Parser Reference](JavaScript-API.md) for turning the bytes a device streams into dataset values.
+- [Frame Parser Reference](Frame-Parser.md) for turning the bytes a device streams into dataset values.
 - [Actions](Actions.md) for user-triggered one-shot commands, the manual counterpart to an automated Control Loop.
 - [API Reference](API-Reference.md#system-commands-4) for `system.exec` and the helper-process commands a control loop may launch.

@@ -37,12 +37,13 @@ Checkers run on three triggers. Project checkers run whenever the project is loa
 
 | Checker | Reports |
 |---------|---------|
-| `project.frame-index` | A dataset whose frame index is zero or negative, so it can never read a value (error), and two datasets of the same source that read the same frame index (warning). |
+| `project.frame-index` | A dataset whose frame index is zero or negative, so it can never read a value (error), and two datasets of the same source that read the same frame index with the same group widget and the same dataset widget, so one repeats the other exactly (warning). Reading one value twice to show it two ways, for example in a Data Grid and a Multi-Plot, is supported and not reported. |
 | `project.empty-group` | A group with no datasets and no output widgets (warning). |
+| `project.group-widget` | A group whose widget cannot use its datasets: an Accelerometer or Gyroscope without exactly three datasets tagged X, Y and Z, a 3D Plot missing one of X, Y or Z, a GPS Map without lat and lon, or a Data Grid, Multi-Plot or Bar Panel whose datasets are all disabled. Widgets bind datasets by tag, not by order (warning). |
 | `project.reference` | A plot X-axis, waterfall axis, workspace tile, action, or output widget that points at a dataset or source that no longer exists (error for axes, actions and outputs; warning for a tile). |
 | `project.numeric-range` | A plot, widget, or FFT range whose minimum is above its maximum, an LED threshold outside the dataset's range, and an inverted alarm band (warnings). |
 | `project.alias` | Two datasets sharing one alias, so scripts and the API can reach only one of them by name (warning). |
-| `project.licensing` | A data source that needs Serial Studio Pro in a session without a license or trial, so it cannot connect (warning). |
+| `project.licensing` | A device that needs Serial Studio Pro in a session without a license or trial, so it cannot connect (warning). |
 
 ### Link checkers
 
@@ -52,6 +53,7 @@ Checkers run on three triggers. Project checkers run whenever the project is loa
 |---------|----------|-----------|
 | `bytes-without-frames` | Error | Bytes arrive but no frame is detected, sustained for 3 consecutive samples. The delimiters or the frame detection mode do not match the stream. |
 | `frames-without-values` | Error | Frames are detected but the parser produces no values, sustained for 3 consecutive samples. |
+| `short-frames` | Warning | Frames carry fewer values than the highest frame index the project maps for that source, sustained for 3 consecutive samples. The datasets above the received count keep their last value and look frozen. One finding per affected source; **Go To** opens the first starved dataset. |
 | `checksum-failures` | Warning | At least 20 checksummed frames have been seen and 5% or more failed. |
 | `dropped-frames` | Warning | The frame queue overflowed and frames were discarded. |
 | `parse-thinning` | Warning | Data arrives faster than the scripts can process it and the fair-share governor is decimating a source. |

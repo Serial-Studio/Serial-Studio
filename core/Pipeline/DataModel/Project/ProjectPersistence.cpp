@@ -285,21 +285,22 @@ bool DataModel::ProjectPersistence::askSave()
   static auto& appState = AppState::instance();
 
   const auto opMode = appState.operationMode();
-  if (opMode != SerialStudio::ProjectFile && m_model.m_filePath.isEmpty())
+  if (appState.targetOperationMode() != SerialStudio::ProjectFile && m_model.m_filePath.isEmpty())
     return true;
 
   if (m_model.m_suppressMessageBoxes) {
     qWarning() << "[ProjectModel] Discarding unsaved changes (API mode)";
-    if (m_model.jsonFilePath().isEmpty())
+    if (m_model.jsonFilePath().isEmpty()) {
       m_model.newJsonFile();
-    else {
+      appState.requestOperationMode(opMode);
+    } else {
       const auto path        = m_model.m_filePath;
       m_model.m_silentReload = true;
       m_model.m_filePath.clear();
       m_model.openJsonFile(path);
       m_model.m_silentReload = false;
       if (opMode != SerialStudio::ProjectFile)
-        appState.setOperationMode(opMode);
+        appState.requestOperationMode(opMode);
     }
 
     return true;
@@ -316,16 +317,17 @@ bool DataModel::ProjectPersistence::askSave()
     return false;
 
   if (ret == Core::Prompt::Discard) {
-    if (m_model.jsonFilePath().isEmpty())
+    if (m_model.jsonFilePath().isEmpty()) {
       m_model.newJsonFile();
-    else {
+      appState.requestOperationMode(opMode);
+    } else {
       const auto path        = m_model.m_filePath;
       m_model.m_silentReload = true;
       m_model.m_filePath.clear();
       m_model.openJsonFile(path);
       m_model.m_silentReload = false;
       if (opMode != SerialStudio::ProjectFile)
-        appState.setOperationMode(opMode);
+        appState.requestOperationMode(opMode);
     }
 
     return true;
@@ -445,7 +447,7 @@ bool DataModel::ProjectPersistence::finalizeProjectSave()
   }
 
   static auto& appState = AppState::instance();
-  appState.setOperationMode(SerialStudio::ProjectFile);
+  appState.requestOperationMode(SerialStudio::ProjectFile);
   m_model.setModified(false);
   m_model.m_history.markSaved();
   Q_EMIT m_model.jsonFileChanged();

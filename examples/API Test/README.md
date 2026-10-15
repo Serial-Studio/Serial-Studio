@@ -1,5 +1,9 @@
 # Serial Studio API Client
 
+**What you'll learn:** how an external program drives Serial Studio through the TCP API server on port 7777, using a Python REPL, a command-line client, and automated tests.
+
+**Prerequisites:** Python 3.8 or later with no extra packages, and the API server enabled in Serial Studio's preferences.
+
 **Difficulty:** 🟡 Intermediate | **Time:** ~10 minutes | **License:** GPL / Pro
 
 A Python client for the Serial Studio API that lets external programs control and configure Serial Studio over a TCP connection. It provides an interactive REPL, a command-line interface, and automated testing.
@@ -70,7 +74,7 @@ python test_api.py monitor --compact
 
 The live monitor shows:
 - **Connection Status**: Real-time connection state with visual indicators
-- **Bus Configuration**: Current I/O interface and settings
+- **Bus Configuration**: Current Connection and settings
 - **Driver Details**: Port, baud rate, IP address, etc. (based on active driver)
 - **Export Status**: CSV/MDF4 export activity
 - **Change Notifications**: Alerts when connection or pause state changes

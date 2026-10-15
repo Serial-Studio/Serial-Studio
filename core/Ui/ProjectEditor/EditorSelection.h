@@ -61,6 +61,10 @@ public:
   void selectOutputWidget(int groupId, int widgetId);
   void onCurrentSelectionChanged(const QModelIndex& current, const QModelIndex& previous);
 
+  [[nodiscard]] bool selectedDatasetComputed() const;
+  [[nodiscard]] bool selectedGroupRequirementMet() const;
+  [[nodiscard]] QString selectedGroupRequirementText() const;
+
 private:
   using NavEntry = ProjectNavHistory::Entry;
 

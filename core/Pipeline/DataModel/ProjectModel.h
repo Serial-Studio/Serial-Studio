@@ -97,6 +97,9 @@ class ProjectModel : public QObject {
   Q_PROPERTY(bool containsCommercialFeatures
              READ containsCommercialFeatures
              NOTIFY groupsChanged)
+  Q_PROPERTY(QStringList commercialFeatureSummary
+             READ commercialFeatureSummary
+             NOTIFY groupsChanged)
   Q_PROPERTY(int sourceCount
              READ sourceCount
              NOTIFY sourcesChanged)
@@ -233,6 +236,7 @@ signals:
   void soundsChanged();
   void diagramCollapseChanged();
   void saveDialogCompleted(bool accepted);
+  void quickPlotProjectSaved();
   void importCompleted(bool accepted, const QString& savedPath);
   void projectHistoryChanged();
   void historySnapshotApplied();
@@ -367,6 +371,11 @@ public:
   [[nodiscard]] bool containsCommercialFeatures() const
   {
     return SerialStudio::commercialCfg(m_groups);
+  }
+
+  [[nodiscard]] QStringList commercialFeatureSummary() const
+  {
+    return SerialStudio::commercialFeatureLabels(m_groups);
   }
 
   [[nodiscard]] int pointCount() const noexcept { return m_pointCount; }
@@ -606,6 +615,7 @@ public:
 public slots:
   bool undo();
   bool redo();
+  bool saveQuickPlotAsProject();
 
   void setNextUndoHint(const QString& label, const QString& coalesceKey)
   {
@@ -1332,6 +1342,7 @@ public:
 private:
   void clearTransientState();
   void scheduleWorkspaceRegen();
+  void adoptQuickPlotProject(const QJsonObject& generated, const QString& path);
   void flushWorkspaceRegen();
   void emitSinkConfigResets(bool hadMqttPublisher, bool hadInfluxSink, bool hadSounds);
   void wireStructureSnapshot();

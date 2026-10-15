@@ -176,8 +176,8 @@ Toggle an LED on or off with each click:
 ## See also
 
 - [Output Controls](Output-Controls.md): interactive dashboard controls (button, slider, toggle, text field, knob) with custom JavaScript transmit functions; the richer, Pro-only alternative to an Action.
-- [Control Loop (setup / loop)](Control-Script.md): automates a connected device with `setup()`/`loop()` scripts; the automated counterpart to a manual Action.
+- [Control Loop (setup / loop)](Control-Loop.md): automates a connected device with `setup()`/`loop()` scripts; the automated counterpart to a manual Action.
 - [Project Editor](Project-Editor.md): full guide to creating and configuring projects.
 - [Widget Reference](Widget-Reference.md): all dashboard widget types.
-- [Data Sources](Data-Sources.md): configuring device connections.
+- [Devices](Devices.md): configuring device connections.
 - [Communication Protocols](Communication-Protocols.md): protocol-specific setup and considerations.

@@ -29,6 +29,7 @@
 #include <QRect>
 #include <QTimer>
 
+#include "Console/SilentLinkWatch.h"
 #include "Core/Bus/Subscription.h"
 #include "UI/Widgets/Terminal/AnsiPalette.h"
 #include "UI/Widgets/Terminal/AnsiStateMachine.h"
@@ -285,6 +286,7 @@ private:
   IO::ConnectionManager& m_connectionManager;
   Misc::Translator& m_translator;
   Misc::TimerEvents& m_timerEvents;
+  Console::SilentLinkWatch m_silentLinkWatch;
   Core::Bus::Subscription m_licenseWatch;
 
   QPalette m_palette;

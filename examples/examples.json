@@ -1,5 +1,16 @@
 [
   {
+    "id": "Project Tutorial",
+    "title": "Project File Tutorial",
+    "description": "The companion example of the Project File tutorial: a $-delimited frame parsed by the Built-In comma parser into a data grid and an accelerometer. Runs on any Arduino or with the included Python simulator.",
+    "category": "Getting Started",
+    "difficulty": "Beginner",
+    "hasProjectFile": true,
+    "projectFileName": "tutorial.ssproj",
+    "hasScreenshot": false,
+    "requiresPro": false
+  },
+  {
     "id": "ANSI Color Test",
     "title": "ANSI Color & VT-100 Test Suite",
     "description": "Demonstrates Serial Studio's comprehensive ANSI color and VT-100 terminal emulation support for 4-bit, 8-bit, and 24-bit RGB colors.",

@@ -1,10 +1,8 @@
 Copyright (c) 2020–2026 Alex Spataru <https://github.com/alex-spataru>
+Phần mềm này là miễn phí và mã nguồn mở theo giấy phép GNU GPLv3. Bạn có thể
+sử dụng, sửa đổi và phân phối lại nó, với điều kiện các tác phẩm phái sinh vẫn
+giữ mã nguồn mở theo các điều khoản tương tự.
 
-Phần mềm này là miễn phí và mã nguồn mở theo giấy phép GNU GPLv3.
-Bạn có thể sử dụng, sửa đổi và phân phối lại nó, với điều kiện các
-tác phẩm phái sinh vẫn giữ mã nguồn mở theo các điều khoản tương tự.
-
-→ License: https://www.gnu.org/licenses/gpl-3.0.html
 → Source:  https://github.com/serial-studio/serial-studio
 
 Thích dự án này? Hãy cân nhắc hỗ trợ phát triển với Serial Studio Pro:
@@ -17,5 +15,3 @@ Tính năng Pro:
 → Historian, Biến và biến đổi giá trị (JS + Lua)
 → Dự án đa nguồn và không gian làm việc bảng điều khiển tùy chỉnh
 → Giấy phép thương mại (không có nghĩa vụ GPL)
-
-→ Tìm hiểu thêm: https://serial-studio.com/

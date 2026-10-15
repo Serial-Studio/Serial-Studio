@@ -1,5 +1,4 @@
 Copyright (c) 2020–2026 Alex Spataru <https://github.com/alex-spataru>
-
 Thank you for using Serial Studio Pro and supporting open source development!
 Your license is active and approved for commercial and proprietary use.
 

@@ -140,9 +140,9 @@ Transport details are in the [API Reference](API-Reference.md); command safety t
 ## See also
 
 - [Protocol Setup Guides](Protocol-Setup-Guides.md): step-by-step HID setup.
-- [Data Sources](Data-Sources.md): driver capability summary across all transports.
+- [Devices](Devices.md): driver capability summary across all transports.
 - [Communication Protocols](Communication-Protocols.md): overview of all supported transports.
 - [Use Cases](Use-Cases.md): gamepads, custom HID firmware, and HID-class sensors.
-- [Frame Parser Scripting](JavaScript-API.md): decoding custom HID report layouts into datasets.
+- [Frame Parser Scripting](Frame-Parser.md): decoding custom HID report layouts into datasets.
 - [Drivers: USB](Drivers-USB.md): for vendor-specific (non-HID) USB devices.
 - [Drivers: UART](Drivers-UART.md): for USB-CDC virtual serial ports.

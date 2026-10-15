@@ -1,5 +1,9 @@
 # Siemens S7 PLC simulator
 
+**What you'll learn:** an S7comm source that reads a data block by absolute address, a Lua frame parser, and a generated Data Grid dashboard.
+
+**Prerequisites:** Serial Studio Pro and Python 3 for the simulator.
+
 ## Overview
 
 This project exercises Serial Studio's Siemens S7 client against a simulated CPU. The companion
@@ -19,7 +23,7 @@ Python 3 standard library only. No `snap7`, no vendor DLL.
 
 ## Running the simulator
 
-The bundled `S7 PLC Simulator.ssproj` starts the simulator for you. Its control script launches
+The bundled `S7 PLC Simulator.ssproj` starts the simulator for you. Its Control Loop launches
 `s7_plc_simulator.py` on `127.0.0.1` the moment you press **Connect**, and Serial Studio stops the
 helper again when you disconnect, change project, or quit. Open the project and connect; there is
 nothing to run by hand.
@@ -127,7 +131,7 @@ non-optimized, and PUT/GET is allowed by default.
 ## Create Project from Variables
 
 1. Start the simulator.
-2. Pick **Siemens S7** as the I/O interface.
+2. Pick **Siemens S7** as the Connection.
 3. Set **Host** to `127.0.0.1`, **Rack** to `0`, **Slot** to `1`.
 4. Press **Configure Variables…** and add:
 

@@ -163,5 +163,5 @@ A few specific guarantees fall out of this:
 - [Data Flow](Data-Flow.md): the high-level user view of how data moves from device to dashboard.
 - [The Acquisition Pipeline](Data-Hotpath.md): the technical deep dive into FrameReader, FrameBuilder, and the lock-free queues.
 - [Benchmark Dialog](Benchmark.md): measures the pipeline's throughput on your hardware by temporarily relocating it onto the GUI thread; the UI freeze it warns about is that relocation in action.
-- [Data Sources](Data-Sources.md): per-driver capability summary, including where each driver sits in the threading model.
+- [Devices](Devices.md): per-driver capability summary, including where each driver sits in the threading model.
 - [Drivers — Audio Input](Drivers-Audio.md): the canonical proof-of-concept for the high-throughput pipeline.

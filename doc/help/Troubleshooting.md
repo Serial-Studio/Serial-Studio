@@ -74,24 +74,7 @@ Extract the AppImage and run the contents directly:
 
 **Problem:** Serial Studio can't access serial ports (permission denied error).
 
-**Solution:**
-1. Add your user to the `dialout` group:
-   ```bash
-   sudo usermod -a -G dialout $USER
-   ```
-
-2. **Important:** Log out and log back in for changes to take effect
-
-3. Verify you're in the group:
-   ```bash
-   groups $USER
-   ```
-   You should see `dialout` in the list
-
-**Alternative (temporary, not recommended):**
-```bash
-sudo chmod 666 /dev/ttyUSB0  # Replace with your port
-```
+**Solution:** your user needs membership in the group that owns serial devices (`dialout` on most distributions, `uucp` on Arch-based systems). [Serial port permissions](Linux-Installation.md#serial-port-permissions) has the command. Log out and back in afterwards.
 
 ## Connection Issues
 
@@ -420,6 +403,19 @@ While connected, the [Problem Center](Problem-Center.md) tells the two failure s
      - `\r` (CR) - Old Mac
    - Try different delimiter combinations
 
+### Parser returns the wrong number of values
+
+**Problem:** some widgets stop updating while others keep moving, or a widget never shows a value, although frames arrive.
+
+**Cause:** each dataset reads one frame index, the 1-based position of its value in the parser's output. When the parser returns fewer values than a dataset's index, that dataset receives nothing and keeps its last value, so it looks frozen rather than empty. The usual reasons are a device that sends fewer fields than the project expects, a separator that does not match, or frame indices that are off by one (the first value is index 1, not 0).
+
+**How to find it:**
+
+1. Open the [Problem Center](Problem-Center.md). A `short-frames` warning names each affected device, the number of values its frames carry, the highest frame index the project maps, and the datasets that receive nothing. **Go To** opens the first of them.
+2. In the Project Editor, open the device's frame parser page and click **Test With Sample Data**. Paste one real frame. Expand a row: each value is labelled with its frame index and the dataset that reads it, and datasets whose index the frame does not reach are listed as not in this frame.
+
+**Fix:** make the device send every expected value, correct the parser or its separator, or set the affected datasets' frame index to the position of their value in the frame.
+
 ### Parser function not working
 
 **Problem:** JavaScript parser returns errors or wrong data.
@@ -514,7 +510,7 @@ was written for a string input.
 
 3. **Or switch the decoder** to Plain Text/Hexadecimal in the Project Editor if the device
    sends text — the decoder and the parser must agree on the frame type. See the decoder
-   table in [Frame Parser Scripting](JavaScript-API.md).
+   table in [Frame Parser Scripting](Frame-Parser.md).
 
 ### Dataset transform not working
 
@@ -855,9 +851,9 @@ All gauges show "NaN"
 ## See Also
 
 - [Getting Started](Getting-Started.md) - First-time setup guide
-- [Data Sources](Data-Sources.md) - Connection configuration
+- [Devices](Devices.md) - Connection configuration
 - [Data Flow](Data-Flow.md) - Understanding how parsing works
-- [Frame Parser Scripting](JavaScript-API.md) - Lua and JavaScript parser reference
+- [Frame Parser Reference](Frame-Parser.md) - Built-In, Lua and JavaScript parser reference
 - [Widget Reference](Widget-Reference.md) - Widget requirements and usage
 - [FAQ](FAQ.md) - Frequently asked questions
 

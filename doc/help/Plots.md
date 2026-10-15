@@ -41,7 +41,7 @@ When a plot is large enough to show its toolbar, these controls appear left to r
 | **Area** | <img src="icon:commands/area" alt="area" width="16" height="16"> | Fills the region under the curve. Available with line interpolation. Plot only. |
 | **X / Y label** | <img src="icon:commands/x" alt="x" width="16" height="16"> <img src="icon:commands/y" alt="y" width="16" height="16"> | Shows or hides each axis label. |
 | **Crosshair** | <img src="icon:commands/crosshair" alt="crosshair" width="16" height="16"> | Shows a tracking crosshair that follows the cursor. |
-| **Pause / Resume** | <img src="icon:commands/pause" alt="pause" width="16" height="16"> <img src="icon:commands/resume" alt="resume" width="16" height="16"> | Stops this widget from ingesting new samples into its own buffer; samples that arrive while paused are dropped, not shown after Resume. Other widgets and the data source are unaffected. |
+| **Pause / Resume** | <img src="icon:commands/pause" alt="pause" width="16" height="16"> <img src="icon:commands/resume" alt="resume" width="16" height="16"> | Stops this widget from ingesting new samples into its own buffer; samples that arrive while paused are dropped, not shown after Resume. Other widgets and the device are unaffected. |
 | **Sweep / Trigger Mode** | <img src="icon:commands/sweep" alt="sweep" width="16" height="16"> | Turns Sweep / Trigger mode on or off (Pro). |
 | **Trigger Settings** | <img src="icon:commands/trigger" alt="trigger" width="16" height="16"> | Opens the trigger settings (Pro). Enabled only while Sweep is on. |
 | **Reset View** | <img src="icon:commands/return" alt="return" width="16" height="16"> | Returns pan and zoom to the default view. |
@@ -85,7 +85,7 @@ While the Trigger Settings dialog is open, a horizontal line marks the trigger l
 
 ## Performance
 
-Plots draw from a decimating ring buffer sized to the time range, so a plot stays responsive whether it holds a few hundred points or millions. Rendering happens on the UI thread at a fixed refresh rate. **Pause** stops the widget from pushing new samples into that buffer, so data received while paused is dropped for that widget; the rest of the application, including other widgets, exports, and the underlying data source, keeps running.
+Plots draw from a decimating ring buffer sized to the time range, so a plot stays responsive whether it holds a few hundred points or millions. Rendering happens on the UI thread at a fixed refresh rate. **Pause** stops the widget from pushing new samples into that buffer, so data received while paused is dropped for that widget; the rest of the application, including other widgets, exports, and the underlying device, keeps running.
 
 ## Choosing a plot
 

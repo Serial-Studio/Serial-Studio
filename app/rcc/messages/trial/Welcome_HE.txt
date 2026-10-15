@@ -1,17 +1,13 @@
 Copyright (c) 2020–2026 Alex Spataru <https://github.com/alex-spataru>
+אתה משתמש בגרסת ניסיון של Serial Studio Pro. גרסה זו פועלת במלואה להערכה
+ולשימוש אישי ולא מסחרי בלבד. כדי להמשיך לאחר תקופת הניסיון, שדרג לתוכנית
+בתשלום או הדר את קוד המקור של GPLv3 בעצמך.
 
-אתה משתמש בגרסת ניסיון של Serial Studio Pro. גרסה זו
-פועלת במלואה להערכה ולשימוש אישי ולא מסחרי בלבד.
-כדי להמשיך לאחר תקופת הניסיון, שדרג לתוכנית בתשלום או
-הדר את קוד המקור של GPLv3 בעצמך.
-
-← תמיכה: alex@serial-studio.com
-← קבע שיחה: https://calendly.com/serial-studio
+← תמיכה: alex@serial-studio.com ← קבע שיחה: https://calendly.com/serial-studio
 ← למד עוד: https://serial-studio.com/
 
 תכונות Pro זמינות:
-← MQTT והדמיה ב-3D
-← מנהלי התקנים לאודיו, CAN Bus, Modbus, USB, HID, ו-Process I/O
-← ווידג'טים לפלט, ייצוא MDF4, והעברות XMODEM/YMODEM/ZMODEM
-← Historian, משתנים ושינויי ערכים (JS + Lua)
-← פרויקטים מרובי מקורות ומרחבי עבודה מותאמים אישית
+← MQTT והדמיה ב-3D ← מנהלי התקנים לאודיו, CAN Bus, Modbus, USB, HID, ו-Process
+I/O ← ווידג'טים לפלט, ייצוא MDF4, והעברות XMODEM/YMODEM/ZMODEM ← Historian,
+משתנים ושינויי ערכים (JS + Lua) ← פרויקטים מרובי מקורות ומרחבי עבודה מותאמים
+אישית

@@ -546,6 +546,33 @@ void DataModel::FrameParserModel::dryRun(const QString& input, bool hex)
 }
 
 /**
+ * @brief Maps each frame index this source's enabled, parsed datasets read to their titles, keyed
+ *        by the index as text, so the tester can label each value with its reader (spec 0100
+ *        R11) and flag readers whose index a short frame never reaches.
+ */
+QVariantMap DataModel::FrameParserModel::datasetIndexMap() const
+{
+  QVariantMap map;
+  for (const auto& group : m_projectModel.groups()) {
+    if (group.sourceId != m_sourceId || !group.enabled)
+      continue;
+
+    for (const auto& dataset : group.datasets) {
+      if (!dataset.enabled || dataset.virtual_ || dataset.index <= 0)
+        continue;
+
+      const auto key = QString::number(dataset.index);
+      auto titles    = map.value(key).toStringList();
+      titles.append(dataset.title.isEmpty() ? tr("Dataset %1").arg(dataset.uniqueId)
+                                            : dataset.title);
+      map.insert(key, titles);
+    }
+  }
+
+  return map;
+}
+
+/**
  * @brief Serializes a pipeline result into the previewReady payload.
  */
 void DataModel::FrameParserModel::emitPreview(const PipelineResult& result, int decoderMethod)

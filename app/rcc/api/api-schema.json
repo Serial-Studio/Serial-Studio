@@ -158,6 +158,10 @@
         "description": "Run several project mutations atomically with respect to autosave. Identical contract to project.batch (max 1024 ops, stopOnError default false, NOT a database transaction) but pre-validates that no op tries to nest another batch. Pass dryRun:true at the top level to preview every op without committing -- forwarded to project.batch which rejects the dryRun when any op is not in the dryRun-aware command set.",
         "name": "assistant.project.bulkApply",
         "properties": {
+            "dryRun": {
+                "description": "Preview every op without committing; forwarded to project.batch.",
+                "type": "boolean"
+            },
             "ops": {
                 "description": "Array of {command, params} ops. Max 1024. Nested project.batch / assistant.project.bulkApply rejected.",
                 "items": {
@@ -178,6 +182,10 @@
                     "type": "object"
                 },
                 "type": "array"
+            },
+            "stopOnError": {
+                "description": "Abort the batch on the first failure (default false).",
+                "type": "boolean"
             }
         },
         "required": [
@@ -3499,6 +3507,10 @@
         "description": "Run several project mutations atomically WITH RESPECT TO AUTOSAVE -- all ops execute sequentially under one suspended-autosave window, and a single save is flushed at the end. Use this whenever you would otherwise issue more than ~5 sequential mutations (renames, retypes, reindexes), since N round-trips cost N times the latency and N times the autosave/tree-rebuild churn.\nEach op is {command: '<registered command name>', params: {...}}; results are returned in the same order with per-op success/error fields. Set stopOnError:true to abort the batch on the first failure (default false: best-effort, all ops attempted).\nPass dryRun:true at the top level to preview every op without committing. Each op's per-result still carries the affected-entity payload as if it had run. Rejected when any op is not in the dryRun-aware command set -- mixing previewable and non-previewable ops would leave a partial mutation, which is worse than no preview at all.\nNote: NOT transactional. Already-applied ops are NOT rolled back on later failures -- this is a save-suspend wrapper, not a database transaction. Nested project.batch calls are rejected. Hard cap of 1024 ops per call.\nExample: rename 40 datasets in one round-trip:\n  ops: [\n    {command:'project.dataset.update', params:{groupId:0, datasetId:0, title:'LED 1', index:1}},\n    {command:'project.dataset.update', params:{groupId:0, datasetId:1, title:'LED 2', index:2}},\n    ...\n  ]",
         "name": "project.batch",
         "properties": {
+            "dryRun": {
+                "description": "Preview every op without committing; each op's result still carries its affected-entity payload.",
+                "type": "boolean"
+            },
             "ops": {
                 "description": "Array of {command, params} ops to execute sequentially. Max 1024.",
                 "items": {
@@ -3519,6 +3531,10 @@
                     "type": "object"
                 },
                 "type": "array"
+            },
+            "stopOnError": {
+                "description": "Abort the batch on the first failure (default false: all ops attempted).",
+                "type": "boolean"
             }
         },
         "required": [
@@ -4451,7 +4467,7 @@
                 "type": "boolean"
             },
             "index": {
-                "description": "Frame position used for aligning datasets in time",
+                "description": "Position of this value in the parser's output (first value = 1). 0 = unassigned.",
                 "type": "integer"
             },
             "led": {

@@ -2052,6 +2052,13 @@ jobs:
       run: python3 scripts/documentation-verify.py --quiet
 
     #
+    # One user-facing name per concept (spec 0100): banned synonyms across UI strings, command
+    # manifests, the manual, example READMEs and the assistant corpus
+    #
+    - name: '🔬 Verify user-facing terminology'
+      run: python3 scripts/term-verify.py --summary
+
+    #
     # The .code-report cleanup checklist, uploaded even on success so the baseline debt stays
     # visible
     #

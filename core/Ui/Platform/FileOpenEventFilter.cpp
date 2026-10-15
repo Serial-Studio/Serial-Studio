@@ -52,7 +52,7 @@ static void openProjectFile(const QString& path)
 {
   auto& appState     = DataModel::pipelineModules().appState;
   auto& projectModel = DataModel::pipelineModules().projectModel;
-  appState.setOperationMode(SerialStudio::ProjectFile);
+  appState.requestOperationMode(SerialStudio::ProjectFile);
   projectModel.openJsonFile(path);
 }
 

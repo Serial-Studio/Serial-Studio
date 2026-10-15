@@ -32,7 +32,7 @@ The Arduino Serial Plotter is the built-in tool in the Arduino IDE for plotting 
 
 **Use Serial Studio instead when:**
 
-- You have data sources beyond serial (BLE, MQTT, TCP/UDP).
+- You have connections beyond serial (BLE, MQTT, TCP/UDP).
 - You need gauges, maps, FFT, or specialized widgets.
 - You want to save and reuse dashboard configurations.
 - You need CSV export for analysis.
@@ -66,7 +66,7 @@ Processing is a creative coding environment popular for interactive art and visu
 
 - You don't want to write code. Build dashboards in the GUI.
 - You need standard telemetry widgets (gauges, plots, maps).
-- You want multiple data sources without hand-rolling protocol handlers.
+- You want to connect several devices without hand-rolling protocol handlers.
 - You need a fast turnaround (minutes, not hours).
 - Your team includes non-programmers who need dashboard access.
 
@@ -204,7 +204,7 @@ TeraTerm and PuTTY are terminal emulators for text-based communication (SSH, Tel
 **Use Serial Studio instead when:**
 
 - You need to visualize sensor data as plots, gauges, maps, FFT, or accelerometer widgets, not just text.
-- You need data sources beyond serial, or custom frame parsing in JavaScript or Lua.
+- You need connections beyond serial, or custom frame parsing in JavaScript or Lua.
 - You want CSV data logging and project-based dashboard configurations instead of a raw terminal.
 - You need multiple simultaneous data streams.
 - You need file transfers (XMODEM, YMODEM, ZMODEM) alongside telemetry. Pro includes all three; see [File Transmission](File-Transmission.md).
@@ -323,7 +323,7 @@ Rows marked "Pro" require the commercial edition; see [Pro vs Free](Pro-vs-Free.
 
 1. Keep your existing Arduino code (comma-separated output).
 2. In Serial Studio, pick the serial port and baud rate.
-3. Under Frame Parsing, select "Quick Plot (Comma Separated Values)".
+3. Under Operation Mode, select "Quick Plot".
 4. Done. Your data is plotted with better scaling and controls.
 
 Optional next step: create a project file for a custom dashboard in the Project Editor.

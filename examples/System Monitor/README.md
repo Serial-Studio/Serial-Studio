@@ -1,5 +1,9 @@
 # System monitor
 
+**What you'll learn:** the Process I/O driver, which launches a script and reads its output as frames, shown on plots, MultiPlot, Bar and Data Grid widgets.
+
+**Prerequisites:** Serial Studio Pro and Python 3.
+
 This example turns Serial Studio into a live system dashboard, like a minimal htop, using the **Process I/O driver** (Pro) to launch a Python script and read its `stdout` directly as a telemetry stream.
 
 ![Screenshot](doc/screenshot.png)
@@ -67,7 +71,7 @@ The platform launchers (`system-monitor.sh` / `system-monitor.bat`) auto-install
 ### Step 2: configure Serial Studio
 
 1. Open Serial Studio and load `system-monitor.ssproj`.
-2. In the Setup panel, set the **I/O Interface** to **Process**.
+2. In the Setup panel, set the **Connection** to **Process**.
 3. Set **Mode** to **Launch Process**.
 4. Set **Executable** to one of:
    - **macOS/Linux:** full path to `system-monitor.sh`.

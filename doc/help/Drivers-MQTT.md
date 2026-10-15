@@ -1,4 +1,4 @@
-# MQTT Driver (Subscriber, Pro)
+# MQTT Subscriber Driver (Pro)
 
 The MQTT driver lets a project subscribe to one or more broker topics and feed each received message into the regular frame pipeline as if the bytes had arrived over a serial port or TCP socket. It is the right transport when the data already lives on an MQTT broker, or when several Serial Studio instances need to consume the same telemetry without each one talking to the device directly.
 
@@ -160,7 +160,7 @@ The TLS configuration is per-source, so two MQTT subscribers in the same project
 - [MQTT Publisher](MQTT-Publisher.md): the project-level outbound side, when Serial Studio is the producer, and where the edge-node fields of [Sparkplug](#sparkplug) are configured.
 - [Protocol Setup Guides](Protocol-Setup-Guides.md): step-by-step MQTT setup in the project editor.
 - [Drivers: Network](Drivers-Network.md): raw TCP/UDP, when you do not need a broker.
-- [Data Sources](Data-Sources.md): driver capability summary across all transports.
+- [Devices](Devices.md): driver capability summary across all transports.
 - [Communication Protocols](Communication-Protocols.md): overview of all supported transports.
 - [Pro vs Free Features](Pro-vs-Free.md): MQTT is a Pro feature.
 - [Troubleshooting](Troubleshooting.md): general troubleshooting guide.

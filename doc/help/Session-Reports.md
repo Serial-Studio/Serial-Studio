@@ -1,6 +1,6 @@
 # Session Reports (Pro)
 
-Serial Studio Pro can export any recorded session as a **self-contained HTML report** or a **PDF**. The report includes a cover page, session metadata, per-parameter summary statistics, and one interactive Chart.js plot per numeric dataset. It's a share-ready artifact for teammates, customers, or a lab notebook, generated from the same SQLite database used by the [Historian](Session-Database.md).
+Serial Studio Pro can export any recorded session as a **self-contained HTML report** or a **PDF**. The report includes a cover page, session metadata, per-parameter summary statistics, and one interactive Chart.js plot per numeric dataset. It's a share-ready artifact for teammates, customers, or a lab notebook, generated from the same SQLite database used by the [Historian](Historian.md).
 
 ## Generating a report
 
@@ -89,6 +89,6 @@ Tick labels use scientific notation for values with magnitude below 10⁻³ or a
 
 ## See also
 
-- [Historian](Session-Database.md): where sessions are recorded and browsed.
+- [Historian](Historian.md): where sessions are recorded and browsed.
 - [CSV Export & Playback](CSV-Export-Playback.md): for full-resolution tabular exports.
 - [Pro vs Free Features](Pro-vs-Free.md): full list of Pro-only features.

@@ -115,6 +115,8 @@ message AssistantMemoryProposeRequest {
 message AssistantProjectBulkApplyRequest {
   string id = 1;
   google.protobuf.ListValue ops = 2;
+  bool dryRun = 3;
+  bool stopOnError = 4;
 }
 
 message AssistantRestoreRequest {
@@ -1397,6 +1399,8 @@ message ProjectActivateRequest {
 message ProjectBatchRequest {
   string id = 1;
   google.protobuf.ListValue ops = 2;
+  bool dryRun = 3;
+  bool stopOnError = 4;
 }
 
 message ProjectDashboardGetTimeRangeRequest {

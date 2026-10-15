@@ -1,5 +1,9 @@
 # BLE Battery Level Monitor
 
+**What you'll learn:** a Bluetooth Low Energy source that reads the standard Battery Level characteristic and shows it on a gauge, with no delimiters or framing.
+
+**Prerequisites:** a BLE device that exposes the Battery Service (a phone works) and a Bluetooth adapter on the computer. Serial Studio's free features are enough.
+
 This [Serial Studio](https://github.com/Serial-Studio/Serial-Studio) project visualizes the battery level from BLE devices (like iPhones) over [Bluetooth Low Energy](https://en.wikipedia.org/wiki/Bluetooth_Low_Energy).
 
 ![Screenshot](doc/screenshot.png)

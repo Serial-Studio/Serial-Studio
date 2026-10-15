@@ -416,9 +416,8 @@ Item {
     }
 
     z: 2
-    titleText: qsTr("Pro features detected in this project.")
+    items: Cpp_JSON_ProjectModel.commercialFeatureSummary
     activationFlag: Cpp_UI_Dashboard.containsCommercialFeatures
-    subtitleText: qsTr("Fallback widgets are active. Purchase a license for full functionality.")
   }
 
   //

@@ -378,6 +378,27 @@ ss_add_unit_test(tst_project_merge
 )
 
 #
+# Save as Project (spec 0100 R8/R9): the Quick Plot structure to project conversion keeps Quick
+# Plot's framing, uses the free Built-In comma parser, and produces no Pro content.
+#
+ss_add_unit_test(tst_quickplot_project
+  SOURCES tst_quickplot_project.cpp
+          ${SS_CORE_SRC}/Pipeline/DataModel/Project/QuickPlotProject.cpp
+  LIBS    Qt6::Core
+          SerialStudio::Core
+)
+
+#
+# Group widget requirements (spec 0100 R15/R16): the one rule the group editor warning and the
+# Problem Center finding share, matched to the tags the dashboard widgets bind by.
+#
+ss_add_unit_test(tst_group_widget_requirement
+  SOURCES tst_group_widget_requirement.cpp
+  LIBS    Qt6::Core
+          SerialStudio::Core
+)
+
+#
 # The sealed strip (spec 0096): the one function that decides what a sealed copy of a project
 # omits, pinned field by field so a new script-bearing key cannot slip into mirrors or recordings.
 #

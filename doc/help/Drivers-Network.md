@@ -47,7 +47,7 @@ Once the handshake completes, both sides see a virtual full-duplex pipe: write b
 
 The most important thing about TCP is that it is a stream of bytes, not a stream of messages. If a device writes 100 bytes followed by 100 bytes, the receiver may see one read of 200 bytes, or two of 100, or 200 of 1. The boundaries are not preserved.
 
-This matters for Serial Studio because frame parsing has to operate on the stream. With a delimiter (newline, custom byte sequence) the FrameReader finds frames regardless of how the OS chunked the stream. With fixed-length frames it counts bytes. Either approach works; do not assume "one TCP packet = one frame". Each extracted frame is then handed to the project's [frame parser](JavaScript-API.md) as a single `parse(frame)` call.
+This matters for Serial Studio because frame parsing has to operate on the stream. With a delimiter (newline, custom byte sequence) the FrameReader finds frames regardless of how the OS chunked the stream. With fixed-length frames it counts bytes. Either approach works; do not assume "one TCP packet = one frame". Each extracted frame is then handed to the project's [frame parser](Frame-Parser.md) as a single `parse(frame)` call.
 
 ### Ports
 
@@ -95,7 +95,7 @@ Receivers join a group by sending an **IGMP** (Internet Group Management Protoco
 In Serial Studio, multicast is useful when:
 
 - Multiple dashboards on a LAN need to receive the same telemetry without each opening a separate TCP connection to the source.
-- The data source is a CAN-to-UDP gateway that publishes a multicast group per CAN bus.
+- The device is a CAN-to-UDP gateway that publishes a multicast group per CAN bus.
 - You are integrating with industrial multicast publishers (some PLCs, OPC UA Pub/Sub, audio-over-IP systems).
 
 ## WebSocket basics
@@ -252,7 +252,7 @@ For step-by-step setup, see the [Protocol Setup Guides, Network section](Protoco
 ## See also
 
 - [Protocol Setup Guides](Protocol-Setup-Guides.md): step-by-step Network setup in the Setup Panel.
-- [Data Sources](Data-Sources.md): driver capability summary across all transports.
+- [Devices](Devices.md): driver capability summary across all transports.
 - [Communication Protocols](Communication-Protocols.md): overview of all supported transports.
 - [MQTT Subscriber](Drivers-MQTT.md): when you need pub/sub semantics on top of TCP.
 - [MQTT Topics & Semantics](MQTT-Topics.md): the protocol vocabulary that MQTT layers on top of TCP.

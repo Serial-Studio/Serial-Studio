@@ -117,8 +117,13 @@ The dashboard has three operation modes (`AppState::operationMode`):
   one-shot prototyping.
 
 Mode is sticky (persisted to QSettings). Switch with
-`dashboard.setOperationMode{mode}`. `project.open` auto-switches to
-ProjectFile.
+`dashboard.setOperationMode{mode}`, which applies at once. Loading,
+saving or generating a project (`project.open`, a save, an importer's
+generated project) also requests ProjectFile, but only applies it at
+once while disconnected: while a device is connected or connecting the
+switch waits until the link drops, so the running session keeps its
+mode. Check `dashboard.getStatus` for the current mode, and call
+`dashboard.setOperationMode{mode: 0}` when the switch must happen now.
 
 ## The checkpoint loop
 
@@ -394,7 +399,7 @@ See the `frame_parsers` skill for the full pipeline picture and the
 `project.frameParser.dryRun` shape that lets you exercise extraction
 + decoder + parser end-to-end before pushing code.
 
-### Constant vs Computed variables (shared tables)
+### Constant vs Computed variables (Variables tables)
 
 | Kind       | Lifetime       | Writable at runtime?                      | Use for                                                |
 |------------|----------------|-------------------------------------------|--------------------------------------------------------|

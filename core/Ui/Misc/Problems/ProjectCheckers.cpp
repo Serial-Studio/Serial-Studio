@@ -29,6 +29,7 @@
 
 #include "AppState.h"
 #include "Core/DataModel/Frame.h"
+#include "Core/DataModel/FrameSupport.h"
 #include "Core/License.h"
 #include "Core/SerialStudio.h"
 #include "DataModel/PipelineModules.h"
@@ -166,13 +167,14 @@ static void capFindings(QList<Finding>& out)
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Flags a dataset whose frame position can never be filled, or that collides with an
- *        earlier dataset in the same source; indices are only unique per source, so the key
- *        carries the source id.
+ * @brief Flags a dataset whose frame position can never be filled, or that repeats an earlier
+ *        dataset of the same source exactly: same index, same group widget, same dataset widget.
+ *        Reading one value twice to show it two ways is supported (spec 0100 R13), so only an
+ *        identical presentation counts as a likely mistake.
  */
 static void inspectDatasetIndex(const DataModel::Group& group,
                                 const DataModel::Dataset& dataset,
-                                QHash<quint64, QString>& seen,
+                                QHash<QString, QString>& seen,
                                 QList<Finding>& out)
 {
   if (!datasetReadsFrame(group, dataset))
@@ -193,9 +195,10 @@ static void inspectDatasetIndex(const DataModel::Group& group,
     return;
   }
 
-  const auto source = static_cast<quint64>(static_cast<quint32>(group.sourceId));
-  const auto index  = static_cast<quint64>(static_cast<quint32>(dataset.index));
-  const quint64 key = (source << 32) | index;
+  const QString key = QStringLiteral("%1|%2|%3|%4")
+                        .arg(group.sourceId)
+                        .arg(dataset.index)
+                        .arg(group.widget, dataset.widget);
 
   const auto it = seen.constFind(key);
   if (it == seen.constEnd()) {
@@ -205,9 +208,9 @@ static void inspectDatasetIndex(const DataModel::Group& group,
 
   out.append(makeFinding(Misc::ProblemCenter::Warning,
                          "duplicate-frame-index",
-                         trProblem("Two datasets share a frame index"),
-                         trProblem("\"%1\" and \"%2\" both read frame index %3 of the same source, "
-                                   "so they will always show the same value.")
+                         trProblem("Two datasets show the same value the same way"),
+                         trProblem("\"%1\" and \"%2\" both read frame index %3 of the same source "
+                                   "with the same widget, so one repeats the other exactly.")
                            .arg(it.value(), datasetLabel(dataset))
                            .arg(dataset.index),
                          trProblem("Give one of them the frame index of its own value, or delete "
@@ -226,11 +229,50 @@ static void checkFrameIndices(QList<Finding>& out)
 
   auto& project = projectModel();
 
-  QHash<quint64, QString> seen;
+  QHash<QString, QString> seen;
   const auto& groups = project.groups();
   for (const auto& group : groups)
     for (const auto& dataset : group.datasets)
       inspectDatasetIndex(group, dataset, seen, out);
+
+  capFindings(out);
+}
+
+//--------------------------------------------------------------------------------------------------
+// Group widget requirement check
+//--------------------------------------------------------------------------------------------------
+
+/**
+ * @brief Flags groups whose widget cannot bind its datasets (spec 0100 R16): a wrong dataset count
+ *        or a missing role tag leaves an accelerometer, gyroscope, 3D plot or map silently still.
+ *        Groups with no datasets at all are the empty-group checker's finding, not this one.
+ */
+static void checkGroupWidgetRequirements(QList<Finding>& out)
+{
+  if (!projectAvailable())
+    return;
+
+  const auto& groups = projectModel().groups();
+  for (const auto& group : groups) {
+    if (!group.enabled || group.datasets.empty())
+      continue;
+
+    if (SerialStudio::groupMeetsWidgetRequirement(group))
+      continue;
+
+    const auto widget = SerialStudio::groupWidgetFromId(group.widget);
+    out.append(makeFinding(
+      Misc::ProblemCenter::Warning,
+      "group-widget-requirement",
+      trProblem("Group widget cannot use its datasets"),
+      trProblem("\"%1\": %2 Its enabled datasets do not match, so the widget shows nothing.")
+        .arg(groupLabel(group), SerialStudio::groupWidgetRequirementText(widget)),
+      trProblem("Recreate the group from its template so each dataset gets "
+                "its tag, or adjust the datasets so every required tag is "
+                "present once."),
+      group.uniqueId,
+      kJumpGroup));
+  }
 
   capFindings(out);
 }
@@ -704,8 +746,8 @@ static void checkUnlicensedSources(QList<Finding>& out)
     const auto label = src.title.isEmpty() ? trProblem("Source %1").arg(src.sourceId) : src.title;
     out.append(makeFinding(Misc::ProblemCenter::Warning,
                            "unlicensed-source",
-                           trProblem("Data source requires Serial Studio Pro"),
-                           trProblem("\"%1\" uses a data source that needs a license or an "
+                           trProblem("Device requires Serial Studio Pro"),
+                           trProblem("\"%1\" uses a device that needs a license or an "
                                      "active trial, so it cannot connect in this session.")
                              .arg(label),
                            trProblem("Activate Serial Studio Pro or start the free trial, then "
@@ -732,6 +774,8 @@ void Misc::ProjectCheckers::registerAll()
 
   center.registerChecker(QStringLiteral("project.frame-index"), triggers, checkFrameIndices);
   center.registerChecker(QStringLiteral("project.empty-group"), triggers, checkEmptyGroups);
+  center.registerChecker(
+    QStringLiteral("project.group-widget"), triggers, checkGroupWidgetRequirements);
   center.registerChecker(QStringLiteral("project.reference"), triggers, checkDanglingReferences);
   center.registerChecker(QStringLiteral("project.numeric-range"), triggers, checkNumericRanges);
   center.registerChecker(QStringLiteral("project.alias"), triggers, checkDuplicateAliases);

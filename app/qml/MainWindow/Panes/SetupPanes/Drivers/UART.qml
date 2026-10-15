@@ -50,7 +50,7 @@ Item {
     Label {
       enabled: app.ioEnabled
       opacity: enabled ? 1 : 0.5
-      text: qsTr("COM Port") + ":"
+      text: (Qt.platform.os === "windows" ? qsTr("COM Port") : qsTr("Serial Port")) + ":"
     } ComboBox {
       id: _portCombo
 
@@ -298,6 +298,10 @@ Item {
       Layout.leftMargin: -8
       Layout.maximumHeight: 18
       checked: Cpp_IO_Serial.dtrEnabled
+      ToolTip.delay: 700
+      ToolTip.visible: hovered
+      ToolTip.text: qsTr("Raises the DTR line when the port opens. Many boards (for example "
+                         + "Arduino) reset when DTR changes; turn it off to connect without a reset.")
       Layout.alignment: Qt.AlignLeft | Qt.AlignVCenter
       onCheckedChanged: {
         if (Cpp_IO_Serial.dtrEnabled !== checked)

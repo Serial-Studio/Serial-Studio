@@ -26,7 +26,7 @@ The **Free** column in the tables below applies to both: the official binary wit
 - Advanced protocols: MQTT, Modbus, CAN Bus, OPC UA, Audio Input, raw USB, HID, Process I/O.
 - Pro widgets: 3D Plot, Waterfall (spectrogram), Image View (live camera feed), Canvas (user-scripted Canvas2D widget).
 - Output (control) widgets: buttons, toggles, sliders, knobs, text fields, and the Output Panel.
-- Multi-device projects (several data sources in one dashboard).
+- Multi-device projects (several devices in one dashboard).
 - MDF4 file export and playback.
 - Historian recording, browsing, and PDF reports.
 - InfluxDB 2.x export of live samples to a time-series bucket.
@@ -39,7 +39,7 @@ The **Free** column in the tables below applies to both: the official binary wit
 
 | Category | Feature | Free | Pro |
 |----------|---------|------|-----|
-| **Data Sources** | | | |
+| **Devices** | | | |
 | | Serial/UART (USB, RS-232) | ✅ | ✅ |
 | | TCP/UDP Network | ✅ | ✅ |
 | | Bluetooth Low Energy (BLE) | ✅ | ✅ |
@@ -64,7 +64,7 @@ The **Free** column in the tables below applies to both: the official binary wit
 | | Frame Parsers (JavaScript, Lua, Built-In templates) | ✅ | ✅ |
 | | Checksum Validation | ✅ | ✅ |
 | | Dataset Value Transforms (JavaScript, Lua) | ❌ | ✅ |
-| | Variables (shared tables) | ❌ | ✅ |
+| | Variables (user tables) | ❌ | ✅ |
 | **Visualization Widgets** | | | |
 | | Plot (time-series) | ✅ | ✅ |
 | | Multiple Plots | ✅ | ✅ |
@@ -296,7 +296,7 @@ signal debugging.
 - Domain-specific instruments (radar PPI, polar plots, vector fields, attitude indicators)
 - One-off visualizations during prototyping
 
-**Learn more:** [Canvas Widget](Painter-Widget.md)
+**Learn more:** [Canvas Widget](Canvas-Widget.md)
 
 ### Raw USB
 
@@ -313,7 +313,7 @@ signal debugging.
 - High-speed logic analyzers or oscilloscopes with raw USB access
 - Industrial sensors with USB bulk transfer interfaces
 
-**Learn more:** [Data Sources - Raw USB](Data-Sources.md#raw-usb)
+**Learn more:** [Devices - Raw USB](Devices.md#raw-usb)
 
 ### HID Devices
 
@@ -329,11 +329,11 @@ signal debugging.
 - Custom USB HID firmware (Arduino HID library, STM32 USB HID)
 - Sensors and measurement devices with HID USB class
 
-**Learn more:** [Data Sources - HID Devices](Data-Sources.md#hid-device)
+**Learn more:** [Devices - HID Devices](Devices.md#hid-device)
 
 ### Process I/O
 
-**What it is:** Spawn a child process and read its stdout as a data source, or connect to a named pipe/FIFO from an external process.
+**What it is:** Spawn a child process and read its stdout, or connect to a named pipe/FIFO from an external process.
 
 **Used for:**
 - Feed data from Python, Node.js, or any script directly into Serial Studio dashboards
@@ -345,7 +345,7 @@ signal debugging.
 - Physics simulations outputting telemetry to stdout
 - Named pipe bridges from long-running data acquisition software
 
-**Learn more:** [Data Sources - Process I/O](Data-Sources.md#process-io)
+**Learn more:** [Devices - Process I/O](Devices.md#process-io)
 
 ### Image View Widget
 
@@ -402,15 +402,15 @@ signal debugging.
 
 ### Multi-Device Projects
 
-**What it is:** Several data sources in one project file, each with its own bus type, connection settings, frame detection, and parser.
+**What it is:** Several devices in one project file, each with its own bus type, connection settings, frame detection, and parser.
 
 **How it works:** All configured devices connect at the same time, each source's data routes to its own groups and widgets, and CSV/MDF4 export captures every source in one file. Sources are configured in the Project Editor under the Sources section.
 
-**Learn more:** [Data Sources - Multi-device mode](Data-Sources.md#multi-device-mode)
+**Learn more:** [Devices - Multi-device mode](Devices.md#multi-device-mode)
 
 ### Dataset Transforms, Variables, and Custom Workspaces
 
-**What they are:** Three authoring features of the Project Editor. A [dataset transform](Dataset-Transforms.md) is a per-dataset JavaScript or Lua function that converts the raw parsed value before it reaches the dashboard. [Variables](Data-Tables.md) are shared tables that transforms read and write. Custom workspaces replace the automatic dashboard tabs with ones the project defines.
+**What they are:** Three authoring features of the Project Editor. A [dataset transform](Dataset-Transforms.md) is a per-dataset JavaScript or Lua function that converts the raw parsed value before it reaches the dashboard. [Variables](Variables.md) are named values, grouped in tables, that transforms read and write. Custom workspaces replace the automatic dashboard tabs with ones the project defines.
 
 **What the gate covers:** Opening the transform editor, creating, duplicating, or importing a table, adding a variable, and switching a project to custom workspaces each need a license or an active trial.
 
@@ -426,7 +426,7 @@ signal debugging.
 
 **How it works:** The Historian browses, tags, and exports stored sessions. The SQLite Player replays a recorded session through the live pipeline, so dashboards behave identically on recorded data. Session Reports turn the same database into a styled PDF with charts.
 
-**Learn more:** [Historian](Session-Database.md) | [Session Reports](Session-Reports.md)
+**Learn more:** [Historian](Historian.md) | [Session Reports](Session-Reports.md)
 
 ### InfluxDB export
 

@@ -30,6 +30,8 @@
 #include "Core/Runtime.h"
 #include "Core/SSAssert.h"
 #include "DataModel/FrameBuilder.h"
+#include "DataModel/NotificationCenter.h"
+#include "DataModel/PipelineModules.h"
 #include "DataModel/ProjectModel.h"
 
 AppState* AppState::s_instance = nullptr;
@@ -47,6 +49,8 @@ AppState::AppState(Core::Bus::MessageBus& bus)
   , m_operationMode(SerialStudio::QuickPlot)
   , m_projectModel(DataModel::ProjectModel::instance())
   , m_frameBuilder(nullptr)
+  , m_hasPendingMode(false)
+  , m_pendingMode(SerialStudio::QuickPlot)
 {
   const int saved   = m_settings.value("operation_mode", SerialStudio::QuickPlot).toInt();
   const int clamped = (saved >= SerialStudio::ProjectFile && saved <= SerialStudio::QuickPlot)
@@ -55,6 +59,12 @@ AppState::AppState(Core::Bus::MessageBus& bus)
   m_operationMode   = static_cast<SerialStudio::OperationMode>(clamped);
   m_frameConfig     = deriveFrameConfig();
   publishState();
+
+  m_linkState = m_bus.subscribe<Core::Bus::ConnectionStateChanged>(
+    this, [this](const std::shared_ptr<const Core::Bus::ConnectionStateChanged>& link) {
+      if (!link->connected && !link->connecting)
+        applyPendingMode();
+    });
 }
 
 /**
@@ -96,6 +106,15 @@ const QString& AppState::projectFilePath() const noexcept
 SerialStudio::OperationMode AppState::operationMode() const noexcept
 {
   return m_operationMode;
+}
+
+/**
+ * @brief Returns the mode the app is heading to: the deferred mode while one waits for a
+ *        disconnect, otherwise the current mode.
+ */
+SerialStudio::OperationMode AppState::targetOperationMode() const noexcept
+{
+  return m_hasPendingMode ? m_pendingMode : m_operationMode;
 }
 
 /**
@@ -165,10 +184,12 @@ void AppState::setEphemeralSession(bool ephemeral)
 
 /**
  * @brief Sets the operation mode, persists it, and announces the derived config: the retained
- *        topics go out first, mode before framing, then the Qt signals in the same order.
+ *        topics go out first, mode before framing, then the Qt signals in the same order. An
+ *        explicit choice supersedes any implicit switch still waiting for a disconnect.
  */
 void AppState::setOperationMode(SerialStudio::OperationMode mode)
 {
+  m_hasPendingMode = false;
   if (m_operationMode == mode)
     return;
 
@@ -181,6 +202,37 @@ void AppState::setOperationMode(SerialStudio::OperationMode mode)
 
   Q_EMIT operationModeChanged();
   Q_EMIT frameConfigChanged(m_frameConfig);
+}
+
+/**
+ * @brief Requests an implicit mode switch (spec 0100 R7): a project load, save or generation asks
+ *        for Project File mode. Applied at once while disconnected; while a link is live it waits
+ *        for the disconnect, is persisted so a quit keeps it, and the user is told. Explicit mode
+ *        choices keep calling setOperationMode().
+ */
+void AppState::requestOperationMode(SerialStudio::OperationMode mode)
+{
+  const auto link = m_bus.latest<Core::Bus::ConnectionStateChanged>();
+  const bool live = link && (link->connected || link->connecting);
+  if (!live) {
+    m_hasPendingMode = false;
+    setOperationMode(mode);
+    return;
+  }
+
+  m_pendingMode    = mode;
+  m_hasPendingMode = (mode != m_operationMode);
+  if (!m_ephemeralSession)
+    m_settings.setValue("operation_mode", static_cast<int>(targetOperationMode()));
+
+  if (!m_hasPendingMode)
+    return;
+
+  DataModel::pipelineModules().notifications.postInfo(
+    QStringLiteral("OperationMode"),
+    tr("Mode changes after you disconnect"),
+    tr("The project is ready. Serial Studio switches to Project File mode when the current "
+       "connection ends, so the session in progress is not interrupted."));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -213,6 +265,17 @@ void AppState::onProjectLoaded()
 //--------------------------------------------------------------------------------------------------
 // Private helpers
 //--------------------------------------------------------------------------------------------------
+
+/**
+ * @brief Applies the mode a live session deferred, once the link is down.
+ */
+void AppState::applyPendingMode()
+{
+  if (!m_hasPendingMode)
+    return;
+
+  setOperationMode(m_pendingMode);
+}
 
 /**
  * @brief Retains the mode and its framing on the bus, mode first, so a subscriber replaying the

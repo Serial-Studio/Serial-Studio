@@ -1006,10 +1006,10 @@ void DataModel::ProjectFolders::promptAddTableInFolder(int parentFolderId)
 
   bool ok            = false;
   const QString name = QInputDialog::getText(nullptr,
-                                             ProjectModel::tr("New Shared Table"),
+                                             ProjectModel::tr("New Variables Table"),
                                              ProjectModel::tr("Name:"),
                                              QLineEdit::Normal,
-                                             ProjectModel::tr("Shared Table"),
+                                             ProjectModel::tr("Variables Table"),
                                              &ok);
 
   if (!ok || name.trimmed().isEmpty())

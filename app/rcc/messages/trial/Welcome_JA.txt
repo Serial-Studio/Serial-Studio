@@ -1,5 +1,4 @@
 Copyright (c) 2020–2026 Alex Spataru <https://github.com/alex-spataru>
-
 あなたはSerial Studio Proの試用版を使用しています。このバージョンは、
 評価および個人の非商業的使用のみで完全に機能します。
 試用期間後も続けるには、有料プランにアップグレードするか、

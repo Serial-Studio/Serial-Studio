@@ -1,4 +1,4 @@
-# Dataset value transforms
+# Dataset value transforms (Pro)
 
 Per-dataset scripting for calibration, unit conversion, filtering, and signal conditioning. Each dataset can optionally define a `transform(value)` function that converts the raw parsed value into an engineering value before it reaches the dashboard.
 
@@ -25,7 +25,7 @@ Transforms are useful when:
 
 Transforms are optional. Datasets without one display the raw parsed value unchanged.
 
-A transform can also read and write **shared tables** of variables: constants defined at project time, and computed variables that hold their value across frames. That's how you pass a calibration value into several channels, have one transform compute a value that another consumes, or keep state for an integrator, filter, or latch. See [Variables](Data-Tables.md) for the full reference.
+A transform can also read and write [Variables](Variables.md) tables: constants defined at project time, and computed variables that hold their value across frames. That's how you pass a calibration value into several channels, have one transform compute a value that another consumes, or keep state for an integrator, filter, or latch. See [Variables](Variables.md) for the full reference.
 
 ## The `transform()` function
 
@@ -105,7 +105,7 @@ v - sample(shunt_current, 1)
 
 The name is bare or braced, never quoted.
 
-### Shared tables
+### Variables tables
 
 Expressions read table variables with `table(name, variable)`, the same constants and computed variables `tableGet` reaches from Lua and JavaScript:
 
@@ -310,7 +310,7 @@ With `transformParams` set to `{"scale": 0.1, "offset": -40, "r0": 100}` on one 
 
 ## Table API
 
-Lua and JavaScript transforms have four built-in functions for reading and writing the project's shared tables. An Expression transform reads variables with `table(name, variable)` instead, and cannot write. Tables are covered in full in [Variables](Data-Tables.md). This section documents the API surface from the transform's point of view.
+Lua and JavaScript transforms have four built-in functions for reading and writing the project's Variables tables. An Expression transform reads variables with `table(name, variable)` instead, and cannot write. Tables are covered in full in [Variables](Variables.md). This section documents the API surface from the transform's point of view.
 
 | Function                       | Returns                        | Purpose |
 |--------------------------------|--------------------------------|---------|
@@ -553,7 +553,7 @@ function transform(value)
 end
 ```
 
-Full reference, including argument types and longer examples (GPS fix reset, mode-driven workspace switching, focus mode): see [Controlling the dashboard](JavaScript-API.md#controlling-the-dashboard-clearplots-and-friends) in the Frame Parser Scripting Reference.
+Full reference, including argument types and longer examples (GPS fix reset, mode-driven workspace switching, focus mode): see [Controlling the dashboard](Frame-Parser.md#controlling-the-dashboard-clearplots-and-friends) in the Frame Parser Scripting Reference.
 
 ## Using the transform dialog
 
@@ -586,7 +586,7 @@ The Transform Editor includes 34 ready-to-use templates. Pick one from the Templ
 | Polynomial (2nd order)  | `y = a×x² + b×x + c`. Non-linear response curves. |
 | Map Range               | Rescale from `[inMin, inMax]` to `[outMin, outMax]`. |
 | ADC to Voltage          | 10-bit ADC count to voltage (3.3 V reference). |
-| Calibration from Data Table | Read slope/offset from a table variable and apply it. |
+| Calibration from a Variables table | Read slope/offset from a table variable and apply it. |
 
 ### Smoothing filters
 
@@ -748,8 +748,8 @@ end
 ## See also
 
 - [SDK Reference](SerialStudio-SDK.md): the full helper surface a transform can call (`tableGet`/`tableSet`, `deviceWrite`, `actionFire`, notifications, protocol encoders).
-- [Frame Parser Scripting](JavaScript-API.md): the `parse(frame)` function that feeds values to transforms.
-- [Variables](Data-Tables.md): shared constants and computed variables available to every transform.
+- [Frame Parser Scripting](Frame-Parser.md): the `parse(frame)` function that feeds values to transforms.
+- [Variables](Variables.md): shared constants and computed variables available to every transform.
 - [Data Flow](Data-Flow.md): how data moves from device through parsing, transforms, and into the dashboard.
 - [Project Editor](Project-Editor.md): where you configure datasets, transforms, and tables.
 - [Widget Reference](Widget-Reference.md): dashboard widgets that display transformed values.

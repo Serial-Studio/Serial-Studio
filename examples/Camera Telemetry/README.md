@@ -1,5 +1,9 @@
 # Camera telemetry
 
+**What you'll learn:** an Image View group fed by JPEG autodetection over UDP, alongside a Data Grid with FPS and frame count.
+
+**Prerequisites:** Serial Studio Pro and Python 3 with `opencv-python`. A webcam is optional because the script has a synthetic test pattern.
+
 ## Overview
 
 Streams live camera video to Serial Studio over UDP at a target frame rate (30 FPS by default). Only FPS and frame count are sent alongside the image.
@@ -78,7 +82,7 @@ python3 camera_telemetry.py --quality 60         # smaller packets
 ### Step 3: configure Serial Studio
 
 1. Open Serial Studio and load `Camera Telemetry.ssproj`.
-2. In the **Setup** panel, set **I/O Interface** → **Network Socket**, **Socket Type** → **UDP**.
+2. In the **Setup** panel, set **Connection** → **Network Socket**, **Socket Type** → **UDP**.
 3. Set **Local Port** to `9000` (or whatever `--port` you used).
 4. Click **Connect**.
 

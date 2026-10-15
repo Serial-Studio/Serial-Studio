@@ -44,6 +44,10 @@ Findings are grouped by `kind`:
     style-dash-substitute  -- ` -- ` as a sentence dash (rewrite, don't swap glyphs)
     style-emdash-density   -- > 8 em-dashes per file (rhythm tic)
     style-hr-separator     -- `---` / `***` / `___` horizontal rule used as section divider
+    help-unregistered      -- a doc/help page help.json does not list (rename stubs excepted)
+    help-link-broken       -- a relative .md link that resolves to no file
+    help-stub-orphan       -- a rename stub whose target page is not registered
+    help-link-to-stub      -- a link to a rename stub instead of the renamed page
 
 Wrap a region with `<!-- doc-verify off -->` / `<!-- doc-verify on -->`
 to disable scanning between the markers.
@@ -52,6 +56,7 @@ to disable scanning between the markers.
 from __future__ import annotations
 
 import argparse
+import json
 import os
 import re
 import sys
@@ -864,6 +869,107 @@ def write_report(report_path: Path, findings: list[Finding]) -> None:
 
 
 # ---------------------------------------------------------------------------
+# Help index integrity (spec 0100)
+# ---------------------------------------------------------------------------
+
+_MD_LINK_RE = re.compile(r"\]\(([^)\s#]+\.md)(?:#[^)]*)?\)")
+_STUB_MARKER = "This page moved to ["
+
+
+def _is_stub(text: str) -> bool:
+    """A rename stub: a heading plus one pointer line to the page's new name."""
+    lines = [line for line in text.splitlines() if line.strip()]
+    return len(lines) <= 3 and _STUB_MARKER in text
+
+
+def check_help_index(repo_root: Path, files: list[Path]) -> list[Finding]:
+    """Flags doc/help pages missing from help.json, relative .md links that resolve to no file,
+    and rename stubs whose target is not a registered page (spec 0100 AC13). Runs only when the
+    scan includes doc/help."""
+    help_dir = (repo_root / "doc" / "help").resolve()
+    help_files = [p for p in files if p.resolve().parent == help_dir]
+    if not help_files:
+        return []
+
+    try:
+        index = json.loads((help_dir / "help.json").read_text(encoding="utf-8"))
+    except (OSError, ValueError) as error:
+        return [
+            Finding(
+                help_dir / "help.json", 1, 1, "help-index", f"unreadable: {error}", ""
+            )
+        ]
+
+    registered = {entry.get("file", "") for entry in index}
+    findings: list[Finding] = []
+    for path in help_files:
+        text = path.read_text(encoding="utf-8")
+        stub = _is_stub(text)
+        if not stub and path.name not in registered:
+            findings.append(
+                Finding(
+                    path,
+                    1,
+                    1,
+                    "help-unregistered",
+                    "page is not listed in help.json",
+                    "",
+                )
+            )
+
+        for number, line in enumerate(text.splitlines(), 1):
+            for match in _MD_LINK_RE.finditer(line):
+                target = match.group(1)
+                if "://" in target:
+                    continue
+
+                resolved = (path.parent / target).resolve()
+                if not resolved.exists():
+                    findings.append(
+                        Finding(
+                            path,
+                            number,
+                            match.start() + 1,
+                            "help-link-broken",
+                            f"link target '{target}' does not exist",
+                            line.strip()[:120],
+                        )
+                    )
+                elif (
+                    stub
+                    and resolved.parent == help_dir
+                    and resolved.name not in registered
+                ):
+                    findings.append(
+                        Finding(
+                            path,
+                            number,
+                            match.start() + 1,
+                            "help-stub-orphan",
+                            f"stub points to '{target}', which help.json does not list",
+                            line.strip()[:120],
+                        )
+                    )
+                elif (
+                    not stub
+                    and resolved.parent == help_dir
+                    and _is_stub(resolved.read_text(encoding="utf-8"))
+                ):
+                    findings.append(
+                        Finding(
+                            path,
+                            number,
+                            match.start() + 1,
+                            "help-link-to-stub",
+                            f"'{target}' is a rename stub; link to the page it points to",
+                            line.strip()[:120],
+                        )
+                    )
+
+    return findings
+
+
+# ---------------------------------------------------------------------------
 # Main
 # ---------------------------------------------------------------------------
 
@@ -909,6 +1015,8 @@ def main(argv: list[str]) -> int:
     findings: list[Finding] = []
     for path in files:
         findings.extend(scan_file(path))
+
+    findings.extend(check_help_index(repo_root, files))
 
     if not args.quiet:
         for f in findings:

@@ -1,4 +1,4 @@
-# Variables
+# Variables (Pro)
 
 *Formerly called Data Tables. The feature and the `RegisterDef`/`registers` project JSON keys are unchanged — only the name shown in the UI and docs changed.*
 
@@ -8,11 +8,11 @@ Variables are a **Pro feature**: creating, duplicating, or importing a table, an
 
 ## Overview
 
-A **shared table** is a named collection of **variables**. Each variable has a name, a type, and a default value, and it stores either a number or a string. Tables are defined once in the Project Editor and saved with the project file. At runtime, every transform can read and write them through a small four-function API.
+A **Variables table** is a named collection of **variables**. Each variable has a name, a type, and a default value, and it stores either a number or a string. Tables are defined once in the Project Editor and saved with the project file. At runtime, every transform can read and write them through a small four-function API.
 
 ```mermaid
 flowchart LR
-    A["Dataset 1<br/>transform()"] -->|tableSet| C["Shared Table"]
+    A["Dataset 1<br/>transform()"] -->|tableSet| C["Variables table"]
     C -->|tableGet| B["Dataset 2<br/>transform()"]
     D["Project File"] -->|defaults| C
 ```
@@ -122,7 +122,7 @@ If dataset B depends on dataset A's final value, make sure A is listed before B 
 
 1. Open the project in the Project Editor.
 2. Select the **Variables** node in the tree.
-3. Click **Add Shared Table** and give it a name (for example `calibration` or `runtime`).
+3. Click **Add Variables Table** and give it a name (for example `calibration` or `runtime`).
 4. Add variables with **Add Variable**. For each variable, set:
    - **Variable Name.** Unique within the table.
    - **Permissions.** **Read-Only** (a Constant variable) or **Read/Write** (a Computed variable).
@@ -130,7 +130,7 @@ If dataset B depends on dataset A's final value, make sure A is listed before B 
 
 Tables are saved with the project file. When the project is shared, anyone opening it gets the same table definitions and defaults.
 
-The same edits are scriptable: the `project.dataTable.*` commands add, rename and delete tables and their variables, and read or write a variable's live runtime value from outside a transform. See [Data Table Commands](API-Reference.md#data-table-commands-13).
+The same edits are scriptable: the `project.dataTable.*` commands add, rename and delete tables and their variables, and read or write a variable's live runtime value from outside a transform. See the Variables commands in the [API Reference](API-Reference.md#data-table-commands-13).
 
 ### Naming rules
 
@@ -138,7 +138,7 @@ Table and variable names are free-form strings, but keep them short and descript
 
 ## Common use cases
 
-Here's a tour of patterns that come up repeatedly in real projects. Each one is a small recipe you can adapt rather than a fully finished template. The shipped **Calibration from Data Table** transform template covers the first pattern; open the transform editor's template picker and use it as a starting point.
+Here's a tour of patterns that come up repeatedly in real projects. Each one is a small recipe you can adapt rather than a fully finished template. The shipped calibration transform template, which reads its slope and offset from a Variables table, covers the first pattern; open the transform editor's template picker and use it as a starting point.
 
 ### Sensor calibration constants
 
@@ -326,7 +326,7 @@ end
 ### What *not* to do
 
 - **Don't put arrays in a variable.** Variables are scalars. Use multiple variables or multiple datasets.
-- **Don't use a shared table as a configuration dialog.** Tables persist with the project file, so editing a Constant variable always means saving the project. For UI knobs that change at runtime, use an Output widget instead.
+- **Don't use a Variables table as a configuration dialog.** Tables persist with the project file, so editing a Constant variable always means saving the project. For UI knobs that change at runtime, use an Output widget instead.
 - **Don't assume "first frame" gives sentinel zeros.** Computed variables start at their declared default at project load and then hold whatever transforms write. If your transform depends on detecting the very first sample, branch on `info.frameNumber == 1` rather than on a variable being "still zero".
 
 ## Computed datasets
@@ -337,7 +337,7 @@ See [Computed Datasets](Dataset-Transforms.md#computed-datasets) in the Dataset 
 
 ## Multi-source projects
 
-Shared tables span all sources in a project. A transform on source A can read a computed variable written by a transform on source B, as long as both transforms run within the same frame cycle. In practice, per-source frames are processed independently, so cross-source table communication is rarely useful. Prefer keeping each source's tables self-contained unless you specifically need to fuse values across sources.
+Variables tables span all sources in a project. A transform on source A can read a computed variable written by a transform on source B, as long as both transforms run within the same frame cycle. In practice, per-source frames are processed independently, so cross-source table communication is rarely useful. Prefer keeping each source's tables self-contained unless you specifically need to fuse values across sources.
 
 ## Rules and limitations
 
@@ -353,5 +353,5 @@ Shared tables span all sources in a project. A transform on source A can read a 
 - [Dataset Value Transforms](Dataset-Transforms.md): how to write the `transform(value)` function and call the table API.
 - [Project Editor](Project-Editor.md): where tables are defined.
 - [Data Flow](Data-Flow.md): where transforms and tables sit in the overall pipeline.
-- [Frame Parser Scripting](JavaScript-API.md): `parse(frame)` produces the raw values that transforms consume.
+- [Frame Parser Scripting](Frame-Parser.md): `parse(frame)` produces the raw values that transforms consume.
 - [API Reference](API-Reference.md#data-table-commands-13): the `project.dataTable.*` commands.

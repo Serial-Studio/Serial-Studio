@@ -22,6 +22,7 @@
 #include "Console/WelcomeText.h"
 
 #include <QFile>
+#include <QKeySequence>
 #include <QObject>
 
 #include "Core/LanguageTable.h"
@@ -83,12 +84,66 @@ QString Console::welcomeConsoleText(const Misc::Translator::Language language)
 {
   const auto lang = Misc::LanguageTable::welcomeCode(language);
 
-  QString text = QObject::tr("Failed to load welcome text :(");
+  QString text = QObject::tr("Failed to load welcome text :(") + QStringLiteral("\n");
   QFile file(welcomeTextPath(lang));
   if (file.open(QFile::ReadOnly)) {
     text = QString::fromUtf8(file.readAll());
     file.close();
   }
 
-  return text + "\n" + licenseStatusLine();
+  return text + licenseStatusLine();
+}
+
+/**
+ * @brief Returns the ASCII-art Serial Studio banner that opens the console welcome guide.
+ */
+QString Console::welcomeLogo()
+{
+  // clang-format off
+  // code-verify off
+  static const QString logo = \
+    "▒█▀▀▀█ ▒█▀▀▀ ▒█▀▀█ ▀█▀ ▒█▀▀█ ▒█░░░   ▒█▀▀▀█ ▀▀█▀▀ ▒█░▒█ ▒█▀▀▄ ▀█▀ ▒█▀▀▀█\n" \
+    "░▀▀▀▄▄ ▒█▀▀▀ ▒█▄▄▀ ▒█░ ▒█▄▄█ ▒█░░░   ░▀▀▀▄▄ ░▒█░░ ▒█░▒█ ▒█░▒█ ▒█░ ▒█░░▒█\n" \
+    "▒█▄▄▄█ ▒█▄▄▄ ▒█░▒█ ▄█▄ ▒█░▒█ ▒█▄▄█   ▒█▄▄▄█ ░▒█░░ ░▀▄▄▀ ▒█▄▄▀ ▄█▄ ▒█▄▄▄█\n\n";
+  // code-verify on
+  // clang-format on
+
+  return logo;
+}
+
+/**
+ * @brief Returns the one-line start hint that closes the welcome guide (spec 0100 R1), spelling
+ *        the palette shortcut the way this platform shows it; one line keeps the guide in 80x24.
+ */
+QString Console::commandPaletteTip()
+{
+  auto key = QKeySequence(QStringLiteral("Ctrl+K")).toString(QKeySequence::NativeText);
+#ifdef Q_OS_MAC
+  // code-verify off (glyph must match the command symbol NativeText emits)
+  key = key.replace("⌘", "⌘+");
+  // code-verify on
+#endif
+
+  return QStringLiteral("\n")
+       + QObject::tr("Tip: pick a device in Device Setup, then press Connect. %1 opens commands.")
+           .arg(key)
+       + QStringLiteral("\n");
+}
+
+/**
+ * @brief Returns the silent-connection hint (spec 0100 R5); @p bytesReceived picks between the
+ *        "nothing arrives" and the "bytes arrive but never form a frame" diagnosis.
+ */
+QString Console::noDataHint(const bool bytesReceived)
+{
+  if (!bytesReceived)
+    return QObject::tr("No data received yet. Check that the device is sending, and that the "
+                       "port and baud rate match it. Problem Center lists connection "
+                       "checks.")
+         + QStringLiteral("\n");
+
+  return QObject::tr("Data is arriving, but no complete frame was detected. Check the line "
+                     "ending or frame delimiters and the Operation Mode. Problem Center shows "
+                     "what the link reports.")
+       + QStringLiteral("\n");
 }

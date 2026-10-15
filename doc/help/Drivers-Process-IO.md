@@ -5,7 +5,7 @@ Process I/O is a Serial Studio Pro feature that lets Serial Studio ingest data f
 - **Launch mode.** Serial Studio spawns a child process and reads its standard output. The child can be a shell script, a Python program, `socat`, `nc`, or anything else that writes bytes to stdout.
 - **Named pipe mode.** Serial Studio reads from a named pipe (a FIFO on Linux/macOS, a Windows named pipe on Windows), creating it when it does not already exist. The producer is whatever process opens the same pipe for writing.
 
-This is the catch-all transport. When no built-in driver fits a data source but a script can emit bytes for it, the Process I/O driver bridges the gap.
+This is the catch-all transport. When no built-in driver fits a device but a script can emit bytes for it, the Process I/O driver bridges the gap.
 
 ## Process I/O basics
 
@@ -55,7 +55,7 @@ Practically anything that produces bytes:
 - A gRPC client converting protobuf messages to JSON lines.
 - A simulation script generating synthetic telemetry for development.
 
-Process I/O is the right driver when the data source's transport is exotic but the data itself is text or binary that Serial Studio's frame parser can handle.
+Process I/O is the right driver when the device's transport is exotic but the data itself is text or binary that Serial Studio's frame parser can handle.
 
 ## How Serial Studio uses it
 
@@ -74,7 +74,7 @@ On connect, Serial Studio spawns the child process and reads its output until th
 
 ### Launch consent
 
-Launch mode runs a program with your account's privileges, so it asks before it starts one. The first time a project starts its Process I/O program, Serial Studio asks **Allow this project to launch programs?** and names the program. This is the same per-project consent a control script's `system.exec` needs. It applies whatever chose the program or triggered the start: the Connect button, an API connect, a reconnect, a project load, or a program set through the API.
+Launch mode runs a program with your account's privileges, so it asks before it starts one. The first time a project starts its Process I/O program, Serial Studio asks **Allow this project to launch programs?** and names the program. This is the same per-project consent a Control Loop's `system.exec` needs. It applies whatever chose the program or triggered the start: the Connect button, an API connect, a reconnect, a project load, or a program set through the API.
 
 - **Yes** starts the program, and the connect that was refused while the prompt was open is retried once. Later connects of that project do not ask again; the answer is remembered per project file.
 - **No** blocks the start. It holds until the project is reopened or Serial Studio restarts.
@@ -164,9 +164,9 @@ Transport details are in the [API Reference](API-Reference.md); command safety t
 ## See also
 
 - [Protocol Setup Guides](Protocol-Setup-Guides.md): step-by-step Process I/O setup, with both Launch and Named pipe examples.
-- [Data Sources](Data-Sources.md): driver capability summary across all transports.
+- [Devices](Devices.md): driver capability summary across all transports.
 - [Communication Protocols](Communication-Protocols.md): overview of all supported transports.
 - [Operation Modes](Operation-Modes.md): Quick Plot is the easiest way to visualize ad-hoc CSV from a script.
 - [Use Cases](Use-Cases.md): bridging exotic transports through helper processes.
 - [Drivers: Network](Drivers-Network.md): for higher-rate streaming when a pipe isn't enough.
-- [Frame Parser Scripting](JavaScript-API.md): for parsing whatever your producer emits.
+- [Frame Parser Scripting](Frame-Parser.md): for parsing whatever your producer emits.

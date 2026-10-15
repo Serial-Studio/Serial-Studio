@@ -1,6 +1,6 @@
 # InfluxDB export (Pro)
 
-The InfluxDB sink writes the datasets Serial Studio is already parsing into an InfluxDB 2.x bucket, one point per sample, over the database's HTTP write API. Where [CSV Export](CSV-Export-Playback.md), [MDF4](MDF4.md) and the [Historian](Session-Database.md) record to a local file or database, this sink pushes the same samples to a time-series server that Grafana, Chronograf or a downstream alerting rule can query while the capture is still running.
+The InfluxDB sink writes the datasets Serial Studio is already parsing into an InfluxDB 2.x bucket, one point per sample, over the database's HTTP write API. Where [CSV Export](CSV-Export-Playback.md), [MDF4](MDF4.md) and the [Historian](Historian.md) record to a local file or database, this sink pushes the same samples to a time-series server that Grafana, Chronograf or a downstream alerting rule can query while the capture is still running.
 
 The sink is a per-project singleton: one Serial Studio instance has exactly one InfluxDB sink, and what it writes depends on the project's dataset layout rather than on which bus the data arrived on. Every active source is written into the same measurement and separated by a `source` tag.
 
@@ -20,7 +20,7 @@ An active trial is a valid licence for this purpose: the trial installs a commer
 
 ## Where to configure it
 
-The sink has its own node in the Project Editor's left tree, a top-level item alongside **Control Loop**, **MQTT Publisher**, each action and each data source.
+The sink has its own node in the Project Editor's left tree, a top-level item alongside **Control Loop**, **MQTT Publisher**, each action and each device.
 
 ```
 Project
@@ -113,7 +113,7 @@ Three [API](API-Reference.md) commands cover the sink:
 ## See also
 
 - [MQTT Publisher](MQTT-Publisher.md): the other live outbound sink, including a line-protocol template for reaching InfluxDB through Telegraf instead of directly.
-- [CSV Export & Playback](CSV-Export-Playback.md), [MDF4 Export & Playback](MDF4.md), [Historian](Session-Database.md): the local recording sinks.
+- [CSV Export & Playback](CSV-Export-Playback.md), [MDF4 Export & Playback](MDF4.md), [Historian](Historian.md): the local recording sinks.
 - [API Reference](API-Reference.md): the `influx.*` commands.
 - [Project Editor](Project-Editor.md): the tree the sink node lives in.
 - [Pro vs Free Features](Pro-vs-Free.md): InfluxDB export is a Pro feature.

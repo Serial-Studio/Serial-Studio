@@ -22,7 +22,9 @@
 #include "DataModel/ProjectModel.h"
 
 #include <algorithm>
+#include <QApplication>
 #include <QDebug>
+#include <QFileDialog>
 #include <QFileInfo>
 #include <QInputDialog>
 #include <QJsonDocument>
@@ -37,6 +39,9 @@
 #include "Core/Services.h"
 #include "Core/SSAssert.h"
 #include "Core/WorkspaceManager.h"
+#include "DataModel/FrameBuilder.h"
+#include "DataModel/PipelineModules.h"
+#include "DataModel/Project/QuickPlotProject.h"
 #include "DataModel/Scripting/ControlScript.h"
 #include "Misc/PasswordHash.h"
 
@@ -405,6 +410,84 @@ bool DataModel::ProjectModel::redo()
   setModified(!m_history.isAtSavePoint());
   Q_EMIT projectHistoryChanged();
   return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+// Quick Plot conversion
+//--------------------------------------------------------------------------------------------------
+
+/**
+ * @brief Saves the running Quick Plot session as a project (spec 0100 R8). The live structure is
+ *        copied off the pipeline thread in one command-rate blocking hop and paired with the
+ *        active device's retained settings while the link is still up; the user then picks
+ *        where to save, and only an accepted path disconnects and adopts the project.
+ */
+bool DataModel::ProjectModel::saveQuickPlotAsProject()
+{
+  auto& modules = DataModel::pipelineModules();
+  if (modules.appState.operationMode() != SerialStudio::QuickPlot || !m_persistence.askSave())
+    return false;
+
+  std::vector<Group> groups;
+  auto& frameBuilder = modules.frameBuilder;
+  frameBuilder.invokeOnBuilderThreadBlocking(
+    [&] { groups = frameBuilder.quickPlotFrame().groups; });
+  if (groups.empty())
+    return false;
+
+  const auto driver = m_bus.latest<Core::Bus::ActiveUiDriverSettings>();
+  const int busType = driver ? driver->busType : static_cast<int>(SerialStudio::BusType::UART);
+
+  const auto project =
+    QuickPlotProject::build(groups, busType, driver ? driver->settings : QJsonObject());
+  if (project.isEmpty())
+    return false;
+
+  auto* dialog = new QFileDialog(qApp->activeWindow(),
+                                 tr("Save Quick Plot as Project"),
+                                 jsonProjectsPath() + "/" + tr("Quick Plot Project") + ".ssproj",
+                                 tr("Serial Studio Project Files (*.ssproj)"));
+  dialog->setAcceptMode(QFileDialog::AcceptSave);
+  dialog->setFileMode(QFileDialog::AnyFile);
+  dialog->setAttribute(Qt::WA_DeleteOnClose);
+  connect(dialog, &QFileDialog::fileSelected, this, [this, project](const QString& path) {
+    if (path.isEmpty())
+      return;
+
+    QMetaObject::invokeMethod(
+      this, [this, project, path] { adoptQuickPlotProject(project, path); }, Qt::QueuedConnection);
+  });
+
+  dialog->open();
+  return true;
+}
+
+/**
+ * @brief Finishes Save as Project once a path is chosen: drops the live link (the bus request is
+ *        delivered directly, so the link is down on return), switches to Project File mode, then
+ *        loads the generated project so workspaces and framing derive in that mode, and writes it
+ *        through the normal save path. Nothing reconnects; the user connects when ready.
+ */
+void DataModel::ProjectModel::adoptQuickPlotProject(const QJsonObject& generated,
+                                                    const QString& path)
+{
+  QJsonObject project = generated;
+  QString finalPath   = path;
+  if (!finalPath.endsWith(QStringLiteral(".ssproj"), Qt::CaseInsensitive))
+    finalPath += QStringLiteral(".ssproj");
+
+  const auto title = QFileInfo(finalPath).completeBaseName();
+  if (!title.isEmpty())
+    project[Keys::Title] = title;
+
+  m_bus.publish<Core::Bus::DisconnectRequested>(0);
+  DataModel::pipelineModules().appState.setOperationMode(SerialStudio::ProjectFile);
+  if (!m_loader.loadGeneratedProject(QJsonDocument(project)))
+    return;
+
+  m_filePath = finalPath;
+  if (m_persistence.finalizeProjectSave())
+    Q_EMIT quickPlotProjectSaved();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -967,7 +1050,7 @@ void DataModel::ProjectModel::setControlScriptCode(const QString& code)
     return;
 
   const ProjectUndoScope undo_scope{
-    *this, tr("Edit Control Script"), QStringLiteral("control-script")};
+    *this, tr("Edit Control Loop"), QStringLiteral("control-script")};
 
   m_controlScriptCode        = code;
   static auto& controlScript = DataModel::ControlScript::instance();
@@ -1115,7 +1198,7 @@ void DataModel::ProjectModel::requestLuaFastMode(const bool enabled)
     tr("Enable Fast Lua Execution?"),
     tr("Fast mode runs Lua parsers and transforms through the JIT compiler (up to ~40x "
        "faster), but the runaway-script watchdog and the Safe-mode memory budget cannot "
-       "operate: a script stuck in an infinite loop will stall its data source until you "
+       "operate: a script stuck in an infinite loop will stall its device until you "
        "disconnect, and one that keeps allocating will grow without limit.\n\n"
        "Enable it only for scripts you trust and have tested in Safe mode first."),
     Core::Prompt::Warning,

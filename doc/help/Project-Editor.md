@@ -55,9 +55,9 @@ File actions sit on the left; the rest of the toolbar is "add" buttons grouped b
 - **Protobuf.** Generate a project from a Protocol Buffers (`.proto`) schema. Available in all builds; only the Pro widgets it can generate need a license or the free trial. See [Auto-Generating Projects](Auto-Generating-Projects.md).
 - **Restore.** Restore a recent automatic snapshot. See [Backups & Recovery](Backup-Recovery.md).
 - **Lock.** Set a password and lock the editor. See [Project Lock](Project-Lock.md).
-- **Add Device** (Pro). Add another data source for multi-device projects.
+- **Add Device** (Pro). Add another device for multi-device projects.
 - **Output / Action / Slider / Toggle / Knob / Text Field / Button.** Add an [output control](Output-Controls.md) panel or an [action](Actions.md).
-- **Dataset / Plot / FFT Plot / Gauge / Level Indicator / Compass / LED Indicator.** Add a dataset to the selected group, pre-configured for that widget.
+- **Dataset / Plot / FFT Plot / Gauge / Bar / Compass / LED Indicator.** Add a dataset to the selected group, pre-configured for that widget.
 - **Group / Image / Web View / Canvas / Table / Multi-Plot / 3D Plot / Accelerometer / Gyroscope / GPS Map.** Add a group with the matching group widget (Image, Canvas, and 3D Plot are Pro).
 
 Every button, with its icon, is listed in the [Toolbar & Button Reference](Toolbar-Reference.md#project-editor-toolbar).
@@ -109,12 +109,12 @@ Shows a form for the selected tree item. Every change takes effect immediately i
 
 Select the project root in the tree and the right panel switches to the **Project Overview** (also called the Summary). It is a read-only diagram of the entire project configuration, laid out left-to-right in four columns:
 
-1. **Sources** (devices). One card per data source, with its bus type, frame detection, and decoder.
+1. **Sources** (devices). One card per device, with its bus type, frame detection, and decoder.
 2. **Frame parsers and actions**. The parser script attached to each source, plus any global action buttons.
 3. **Groups**. The dataset containers and group-level widgets (Multi-Plot, GPS, Accelerometer, etc.).
 4. **Datasets**. Per-dataset pills, with their transform block (if any) drawn between the group and the dataset pill.
 
-Shared tables, output widgets, and workspaces are drawn alongside as their own cards. Arrows show how parsed bytes flow into datasets and how transforms feed downstream consumers.
+Variables tables, output widgets, and workspaces are drawn alongside as their own cards. Arrows show how parsed bytes flow into datasets and how transforms feed downstream consumers.
 
 The diagram is interactive:
 
@@ -131,7 +131,7 @@ Once a project grows past a handful of groups, the flat tree gets long. Folders 
 Three independent folder trees exist, one per branch:
 
 - **Group folders** organize groups.
-- **Table folders** organize [shared tables](Data-Tables.md).
+- **Table folders** organize [Variables tables](Variables.md).
 - **Workspace folders** organize [workspaces](Toolbar-Reference.md#a-note-on-workspaces).
 
 A folder in one branch cannot hold an item from another (a group folder holds groups, not tables). Items left outside any folder stay at the top level of their branch.
@@ -151,7 +151,7 @@ Groups
 - **Add a folder.** Select the branch root (Groups, Variables, or Workspaces); the property panel shows an **Add Folder** button in its own toolbar, or right-click the branch and choose **New Folder**.
 - **Nest a folder.** Select an existing folder and click **Add Sub-folder**, or right-click it and choose **New Sub-Folder**. Folders nest to any depth.
 - **Move an item in.** Right-click a group, table, workspace, or folder and use the **Move to Folder** submenu. It mirrors the folder tree, so you can drop the item into any folder at any depth, or back to the top level.
-- **Add items directly into a folder.** With a folder selected, the matching add button (**Add Group**, **Add Shared Table**, **Add Workspace**) creates the new item already filed inside it.
+- **Add items directly into a folder.** With a folder selected, the matching add button (**Add Group**, **Add Variables Table**, **Add Workspace**) creates the new item already filed inside it.
 
 ### Workspace profiles
 
@@ -254,7 +254,7 @@ The **parser** turns a decoded frame into an array of values, one per dataset fr
 | Lua | A `parse(frame)` function (recommended scripting language). | Custom logic the templates do not cover, with the lowest scripting overhead. |
 | JavaScript | A `parse(frame)` function. | Custom logic when you prefer JavaScript or need `JSON.parse`-style ergonomics. |
 
-For Built-In, the parameter form is per template. For example, *Delimited text* exposes a separator, an optional quote character, and trim/skip-empty toggles, while *Modbus frames* exposes a channel count, register offset, and a signed-registers toggle. The full template catalog and its parameters live in [Frame Parser Scripting](JavaScript-API.md).
+For Built-In, the parameter form is per template. For example, *Delimited text* exposes a separator, an optional quote character, and trim/skip-empty toggles, while *Modbus frames* exposes a channel count, register offset, and a signed-registers toggle. The full template catalog and its parameters live in [Frame Parser Scripting](Frame-Parser.md).
 
 Writing a Lua or JavaScript `parse()` function is covered in Step 7 below. The Built-In templates need no script: the parameter form *is* the configuration, so you can skip straight to Step 3.
 
@@ -265,7 +265,7 @@ Groups organize related datasets and determine which group-level widget is used 
 1. Click one of the group buttons in the toolbar (**Group** for a plain container, or **Table**, **Multi-Plot**, **Accelerometer**, **Gyroscope**, **GPS Map**, and so on for a pre-configured one).
 2. Select the new group in the tree to configure it.
 3. Set the **Group Title** (for example "Environmental Sensors").
-4. Set the **Composite Widget** (the group's widget-type selector):
+4. Set the **Group Widget** (the group's widget-type selector):
 
 | Widget          | Description                        | Dataset requirements |
 |-----------------|------------------------------------|----------------------|
@@ -286,7 +286,7 @@ Groups organize related datasets and determine which group-level widget is used 
 Datasets map to individual data fields in your device's output.
 
 1. Select a group in the tree.
-2. Click **Dataset** in the toolbar (or one of the dataset widget buttons next to it: **Plot**, **FFT Plot**, **Gauge**, **Level Indicator**, **Compass**, **LED Indicator**).
+2. Click **Dataset** in the toolbar (or one of the dataset widget buttons next to it: **Plot**, **FFT Plot**, **Gauge**, **Bar**, **Compass**, **LED Indicator**).
 3. Configure the dataset properties:
 
 **General**
@@ -367,7 +367,7 @@ Sources define where data comes from. Single-device projects have one implicit s
    - **Bus Type.** Serial Port, Network Socket, Bluetooth LE, or (Pro) Audio Input, Modbus, CAN Bus, Raw USB, HID Device, Process, MQTT Subscriber.
    - **Frame Detection / Delimiters.** Same fields described in Step 2, configured independently per source.
    - **Data Conversion / Checksum.** Same fields described in Step 2, configured independently per source.
-   - **Connection Settings.** Bus-specific parameters (COM port, baud rate, IP address, and so on) saved with the project.
+   - **Connection Settings.** Bus-specific parameters (serial port, baud rate, IP address, and so on) saved with the project.
 
 Each source has its own Frame Parser tab for a per-source parser script.
 
@@ -553,7 +553,7 @@ Reloading replaces the in-memory project. The **Restore** dialog still lists the
 ## See also
 
 - [Widget Reference](Widget-Reference.md): full guide to all widget types.
-- [Frame Parser Scripting](JavaScript-API.md): full Lua and JavaScript parser reference.
+- [Frame Parser Scripting](Frame-Parser.md): full Lua and JavaScript parser reference.
 - [Dataset Value Transforms](Dataset-Transforms.md): per-dataset calibration, filtering, and unit conversion.
 - [Data Flow](Data-Flow.md): how data moves through Serial Studio.
 - [Operation Modes](Operation-Modes.md): Console Only, Quick Plot, and Project File modes.

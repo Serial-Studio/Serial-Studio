@@ -1,8 +1,8 @@
-# Data sources
+# Devices
 
 ## Overview
 
-Serial Studio connects to hardware and software data sources through ten driver types. Three ship in the free GPL edition; seven more need a Pro license. Each driver feeds raw bytes into the frame-parsing pipeline. You pick the active driver in the Setup panel, or (for multi-device projects) in the Project Editor.
+Serial Studio connects to hardware and software devices through ten driver types. Three ship in the free GPL edition; seven more need a Pro license. Each driver feeds raw bytes into the frame-parsing pipeline. You pick the active driver in the Setup panel, or (for multi-device projects) in the Project Editor.
 
 For protocol theory, wire framing, and educational primers on each driver, see the dedicated **Drivers** section: [UART](Drivers-UART.md), [Network](Drivers-Network.md), [Bluetooth LE](Drivers-Bluetooth-LE.md), [Modbus](Drivers-Modbus.md), [CAN Bus](Drivers-CAN-Bus.md), [Audio](Drivers-Audio.md), [Raw USB](Drivers-USB.md), [HID](Drivers-HID.md), [Process I/O](Drivers-Process-IO.md), and [MQTT Subscriber](Drivers-MQTT.md). The protocol vocabulary that the MQTT driver assumes (topics, wildcards, QoS, retained messages) lives in [MQTT Topics & Semantics](MQTT-Topics.md) under **Connectivity**; the outbound side is the per-project [MQTT Publisher](MQTT-Publisher.md).
 
@@ -32,7 +32,7 @@ Talks to physical or virtual serial ports. A good fit for Arduino, ESP32, STM32,
 
 | Parameter        | Options / range                                    | Default   |
 |------------------|----------------------------------------------------|-----------|
-| COM port         | Auto-detected list of available ports              | —         |
+| Serial Port      | Auto-detected list of available ports (COM Port on Windows) | — |
 | Baud rate        | 110 to 1,000,000+ (custom values accepted)         | 9600      |
 | Data bits        | 5, 6, 7, 8                                         | 8         |
 | Parity           | None, Even, Odd, Space, Mark                       | None      |
@@ -45,7 +45,7 @@ Talks to physical or virtual serial ports. A good fit for Arduino, ESP32, STM32,
 
 **Quick start:**
 
-1. Select your COM port from the dropdown.
+1. Select your port from the dropdown (Serial Port, or COM Port on Windows).
 2. Set the baud rate to match your device firmware.
 3. Adjust data bits, parity, stop bits, and flow control if your device needs non-default values.
 4. Turn on DTR if your board needs it for reset (common on some Arduino variants).
@@ -132,7 +132,7 @@ Captures audio samples from system input devices through the miniaudio library. 
 
 **Quick start:**
 
-1. Select Audio Input as the data source.
+1. Select Audio Input as the Connection.
 2. Choose an input device and sample rate.
 3. Set the sample format and channel configuration.
 4. Click **Connect**. Audio samples flow into the frame pipeline as CSV rows.
@@ -196,7 +196,7 @@ Receives and transmits CAN frames through platform-specific CAN interface plugin
 **Quick start:**
 
 1. Connect your CAN adapter and install its drivers.
-2. Select CAN Bus as the data source.
+2. Select CAN Bus as the Connection.
 3. Pick the plugin that matches your hardware and select the interface.
 4. Set the bitrate to match your CAN network exactly. Mismatched bitrates cause bus errors.
 5. Turn on CAN FD if your network uses it.
@@ -227,7 +227,7 @@ Direct USB access via libusb, bypassing OS serial and HID abstractions. Supports
 **Quick start:**
 
 1. Plug in your USB device.
-2. Select Raw USB as the data source.
+2. Select Raw USB as the Connection.
 3. Pick your device from the enumerated list.
 4. Select Bulk/Interrupt Stream as the transfer mode (unless your device specifically needs something else).
 5. Select the IN and OUT endpoints that match your device firmware.
@@ -258,7 +258,7 @@ Connects to Human Interface Devices (gamepads, joysticks, custom HID sensors) th
 **Quick start:**
 
 1. Plug in your HID device.
-2. Select HID Device as the data source.
+2. Select HID Device as the Connection.
 3. Pick your device from the list (check Usage Page and Usage to confirm the right interface on multi-interface devices).
 4. Click **Connect**.
 
@@ -294,7 +294,7 @@ Reads data from a child process's stdout or from a named pipe/FIFO. Any script o
 
 **Quick start (Launch mode):**
 
-1. Select Process I/O as the data source.
+1. Select Process I/O as the Connection.
 2. Pick Launch mode.
 3. Enter the path to your script or executable.
 4. Add command-line arguments if needed.
@@ -358,9 +358,9 @@ When a project file defines multiple sources, Serial Studio runs in multi-device
 - Driver toolbar buttons are disabled while a multi-device project is active.
 - Multi-device mode needs a Pro license.
 
-## Picking a data source
+## Picking a device
 
-**Single-device mode.** Use the Setup panel's "I/O Interface" dropdown or the driver buttons in the toolbar to pick a data source type.
+**Single-device mode.** Use the Setup panel's "Connection" dropdown or the driver buttons in the toolbar to pick a device type.
 
 **Multi-device mode.** Each source is configured individually in the Project Editor. The Setup panel shows the active project but doesn't allow per-source driver selection.
 
@@ -368,7 +368,7 @@ When a project file defines multiple sources, Serial Studio runs in multi-device
 
 | Driver        | Common issues                                                                  |
 |---------------|--------------------------------------------------------------------------------|
-| Serial port   | Wrong COM port or baud rate mismatch. Check that settings match device firmware. |
+| Serial port   | Wrong port or baud rate mismatch. Check that settings match device firmware. |
 | Network       | Firewall blocking the port. Check that IP address and port are reachable.      |
 | BLE           | Device out of range or not advertising. Check the Bluetooth adapter is enabled.|
 | Audio input   | Input device muted or permissions denied. Check OS audio and privacy settings. |

@@ -62,6 +62,7 @@ QtObject {
     "app.quit": root.cmdAppQuit,
     "license.activate": root.cmdLicenseActivate,
     "mode.quickPlot": root.cmdModeQuickPlot,
+    "quickplot.saveAsProject": root.cmdQuickPlotSaveAsProject,
     "mode.consoleOnly": root.cmdModeConsoleOnly,
     "mode.projectFile": root.cmdModeProjectFile,
     "io.toggleConnection": root.cmdIoToggleConnection,
@@ -107,7 +108,7 @@ QtObject {
     readonly property bool visible: !app.runtimeMode
     readonly property bool enabled: !Cpp_IO_Manager.isConnected
     function run() {
-      Cpp_AppState.operationMode = SerialStudio.ProjectFile
+      Cpp_AppState.requestOperationMode(SerialStudio.ProjectFile)
       Cpp_JSON_ProjectModel.openJsonFile()
     }
   }
@@ -191,6 +192,25 @@ QtObject {
     function run() { Cpp_AppState.operationMode = SerialStudio.QuickPlot }
   }
 
+  //
+  // Quick Plot to project conversion (spec 0100 R8); needs a live Quick Plot structure.
+  //
+  readonly property QtObject cmdQuickPlotSaveAsProject: QtObject {
+    readonly property bool visible: !app.runtimeMode
+    readonly property bool enabled: Cpp_AppState.operationMode === SerialStudio.QuickPlot
+        && Cpp_IO_Manager.isConnected
+    readonly property string tooltip: {
+      if (Cpp_AppState.operationMode !== SerialStudio.QuickPlot)
+        return qsTr("Available in Quick Plot mode")
+
+      if (!Cpp_IO_Manager.isConnected)
+        return qsTr("Connect and receive at least one line of data first")
+
+      return qsTr("Turn the running Quick Plot session into a project you can edit")
+    }
+    function run() { Cpp_JSON_ProjectModel.saveQuickPlotAsProject() }
+  }
+
   readonly property QtObject cmdModeConsoleOnly: QtObject {
     readonly property bool enabled: !Cpp_IO_Manager.isConnected
     readonly property bool checked: Cpp_AppState.operationMode === SerialStudio.ConsoleOnly
@@ -211,6 +231,18 @@ QtObject {
     readonly property bool enabled: (Cpp_IO_Manager.isConnected || Cpp_IO_Manager.configurationOk)
         && !Cpp_CSV_Player.isOpen && !Cpp_MDF4_Player.isOpen && !app.sessionPlayerOpen
         && !Cpp_API_Mirror.attached
+    readonly property string tooltip: {
+      if (Cpp_API_Mirror.attached)
+        return qsTr("A remote dashboard is attached. Detach it to connect a device.")
+
+      if (Cpp_CSV_Player.isOpen || Cpp_MDF4_Player.isOpen || app.sessionPlayerOpen)
+        return qsTr("A file is being played back. Close it to connect a device.")
+
+      if (!Cpp_IO_Manager.isConnected && !Cpp_IO_Manager.configurationOk)
+        return qsTr("Select a device in Device Setup and complete its settings to connect.")
+
+      return qsTr("Connect or disconnect from the configured device")
+    }
     function run() {
       if (typeof mainWindow !== "undefined" && mainWindow.userToggleConnection)
         mainWindow.userToggleConnection()

@@ -1,17 +1,14 @@
 Copyright (c) 2020–2026 Alex Spataru <https://github.com/alex-spataru>
+شكرًا لاستخدامك Serial Studio Pro ودعمك لتطوير المصادر المفتوحة! رخصتك نشطة
+ومعتمدة للاستخدام التجاري والملكي.
 
-شكرًا لاستخدامك Serial Studio Pro ودعمك لتطوير المصادر المفتوحة!
-رخصتك نشطة ومعتمدة للاستخدام التجاري والملكي.
-
-← الدعم: alex@serial-studio.com
-← جدولة مكالمة: https://calendly.com/serial-studio
-← بوابة العملاء: https://store.serial-studio.com/billing
-← معرفة المزيد: https://serial-studio.com/
+← الدعم: alex@serial-studio.com ← جدولة مكالمة:
+https://calendly.com/serial-studio ← بوابة العملاء:
+https://store.serial-studio.com/billing ← معرفة المزيد:
+https://serial-studio.com/
 
 ميزات النسخة الاحترافية:
-← التصور باستخدام MQTT و3D
-← برامج تشغيل الصوت، CAN Bus، Modbus، USB، HID، وProcess I/O
-← عناصر واجهة المستخدم، تصدير MDF4، ونقل XMODEM/YMODEM/ZMODEM
-← Historian، المتغيرات، وتحويل القيم (JS + Lua)
-← مشاريع متعددة المصادر ومساحات عمل لوحة تحكم مخصصة
-← دعم ذو أولوية
+← التصور باستخدام MQTT و3D ← برامج تشغيل الصوت، CAN Bus، Modbus، USB، HID،
+وProcess I/O ← عناصر واجهة المستخدم، تصدير MDF4، ونقل XMODEM/YMODEM/ZMODEM ←
+Historian، المتغيرات، وتحويل القيم (JS + Lua) ← مشاريع متعددة المصادر ومساحات
+عمل لوحة تحكم مخصصة ← دعم ذو أولوية

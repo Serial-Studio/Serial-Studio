@@ -689,7 +689,7 @@ void DataModel::ProjectEntities::addDataset(const SerialStudio::DatasetOption op
       dataset.fft = true;
       break;
     case SerialStudio::DatasetBar:
-      title          = ProjectModel::tr("New Level Indicator");
+      title          = ProjectModel::tr("New Bar");
       dataset.widget = QStringLiteral("bar");
       break;
     case SerialStudio::DatasetGauge:

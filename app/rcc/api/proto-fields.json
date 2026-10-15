@@ -89,10 +89,12 @@
     },
     "assistant.project.bulkApply": {
       "fields": {
-        "ops": 2
+        "dryRun": 3,
+        "ops": 2,
+        "stopOnError": 4
       },
       "reserved": [],
-      "next": 3
+      "next": 5
     },
     "assistant.restore": {
       "fields": {
@@ -1797,10 +1799,12 @@
     },
     "project.batch": {
       "fields": {
-        "ops": 2
+        "dryRun": 3,
+        "ops": 2,
+        "stopOnError": 4
       },
       "reserved": [],
-      "next": 3
+      "next": 5
     },
     "project.dashboard.getTimeRange": {
       "fields": {},

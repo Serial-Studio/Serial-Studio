@@ -1,5 +1,9 @@
 # ISS Tracker
 
+**What you'll learn:** a Control Loop that polls a public HTTP API over TCP, a JavaScript frame parser, a GPS Map group, and an embedded web view.
+
+**Prerequisites:** an internet connection and no extra hardware. The web view needs a Serial Studio build with Qt WebEngine, and some features need a paid license.
+
 ## Overview
 
 This project visualizes the real-time position of the International Space Station (ISS) in Serial Studio. A built-in control loop polls a public API directly over TCP, so there is no companion program to run and no extra hardware. Serial Studio parses the response and shows the station on an interactive map alongside an embedded 3D model viewer.

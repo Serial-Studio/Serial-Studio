@@ -52,7 +52,7 @@ How to pick `path`:
 - **Confident plain-English name → fetch direct.** Standard doc names
   are safe to try as paths: `About`, `FAQ`, `Getting-Started`,
   `Troubleshooting`, `API-Reference`, `Pro-vs-Free`, `License-Agreement`,
-  `Operation-Modes`, `Data-Flow`, `Data-Sources`, `Widget-Reference`,
+  `Operation-Modes`, `Data-Flow`, `Devices`, `Widget-Reference`,
   `Project-Editor`, `Use-Cases`, `Comparison`, `Notifications`,
   `Extensions`. If you can name the page in plain English with high
   confidence, just try it; the 404 redirect catches you if you're wrong.

@@ -1,5 +1,9 @@
 # RC plane telemetry simulator
 
+**What you'll learn:** a JavaScript-parsed UDP stream that drives Accelerometer, Gyroscope and GPS Map groups from a simulated flight profile.
+
+**Prerequisites:** Python 3.6 or later with no extra packages.
+
 A Python script that simulates a small RC plane flying a full flight profile, generating realistic telemetry data for Serial Studio widgets.
 
 ![RC plane telemetry simulator](doc/screenshot.png)
@@ -10,7 +14,7 @@ This example validates and demos Serial Studio widgets using a realistic RC plan
 
 ## Widgets exercised
 
-| Widget type    | Data source                              |
+| Widget type    | Data                                     |
 |----------------|------------------------------------------|
 | Gyroscope      | Pitch, Roll, Yaw rates (°/s)             |
 | Accelerometer  | X, Y, Z body-frame acceleration (m/s²)   |

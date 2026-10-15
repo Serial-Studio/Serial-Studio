@@ -50,7 +50,7 @@ against Lua 5.1/5.2 conventions still work:
 - Top-level `local` declarations stay scoped to your script (each source
   has its own Lua state).
 
-## Shared tables
+## Variables tables
 
 The shared-table API is injected into the parser too: `tableGet(table, reg)` /
 `tableSet(table, reg, v)` by name, plus the handle fast path `tableHandle(table, reg)` /

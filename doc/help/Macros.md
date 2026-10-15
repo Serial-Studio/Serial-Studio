@@ -169,5 +169,5 @@ A macro can do exactly what a local API client can do: every registered command,
 
 - [SDK Reference](SerialStudio-SDK.md): the `apiCall` envelope, the generated wrappers, and the helper groups.
 - [API Reference](API-Reference.md): every command, its parameters, and the reply shapes the Terminal tab prints.
-- [Control Loop](Control-Script.md): the project-scoped script that runs for the life of a connection, the counterpart to an ad-hoc macro.
+- [Control Loop](Control-Loop.md): the project-scoped script that runs for the life of a connection, the counterpart to an ad-hoc macro.
 - [Command Palette](Command-Palette.md): the **Ctrl+K** palette that opens the Macros window.

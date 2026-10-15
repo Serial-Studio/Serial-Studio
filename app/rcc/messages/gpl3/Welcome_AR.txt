@@ -1,21 +1,14 @@
 Copyright (c) 2020–2026 Alex Spataru <https://github.com/alex-spataru>
+هذا البرنامج مجاني ومفتوح المصدر بموجب رخصة GNU GPLv3. يمكنك استخدامه وتعديله
+وإعادة توزيعه، بشرط أن تظل الأعمال المشتقة مفتوحة المصدر بموجب نفس الشروط.
 
-هذا البرنامج مجاني ومفتوح المصدر بموجب رخصة GNU GPLv3.
-يمكنك استخدامه وتعديله وإعادة توزيعه، بشرط أن تظل الأعمال المشتقة
-مفتوحة المصدر بموجب نفس الشروط.
-
-← الرخصة: https://www.gnu.org/licenses/gpl-3.0.html
-← المصدر:  https://github.com/serial-studio/serial-studio
+https://github.com/serial-studio/serial-studio
 
 هل أعجبك هذا المشروع؟ فكر في دعم التطوير مع Serial Studio Pro:
 ← https://store.serial-studio.com/
 
 ميزات النسخة الاحترافية:
-← التصور باستخدام MQTT و3D
-← برامج تشغيل الصوت، CAN Bus، Modbus، USB، HID، وProcess I/O
-← أدوات الإخراج، تصدير MDF4، ونقل XMODEM/YMODEM/ZMODEM
-← Historian، المتغيرات، وتحويل القيم (JS + Lua)
-← مشاريع متعددة المصادر ومساحات عمل لوحة التحكم المخصصة
-← رخصة تجارية (بدون التزامات GPL)
-
-← تعرف على المزيد: https://serial-studio.com/
+← التصور باستخدام MQTT و3D ← برامج تشغيل الصوت، CAN Bus، Modbus، USB، HID،
+وProcess I/O ← أدوات الإخراج، تصدير MDF4، ونقل XMODEM/YMODEM/ZMODEM ←
+Historian، المتغيرات، وتحويل القيم (JS + Lua) ← مشاريع متعددة المصادر ومساحات
+عمل لوحة التحكم المخصصة ← رخصة تجارية (بدون التزامات GPL)
