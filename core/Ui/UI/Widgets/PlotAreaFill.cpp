@@ -85,11 +85,11 @@ static void setFillVertexColor(QSGGeometry::ColoredPoint2D& vertex,
 Widgets::PlotAreaFill::PlotAreaFill(QQuickItem* parent)
   : QQuickItem(parent)
   , m_baseline(0)
+  , m_hdrMaterial(false)
   , m_xMin(0)
   , m_xMax(1)
   , m_yMin(0)
   , m_yMax(1)
-  , m_hdrMaterial(false)
 {
   setFlag(ItemHasContents, true);
 }

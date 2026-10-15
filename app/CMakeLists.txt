@@ -450,6 +450,7 @@ set(QML_SOURCES
   qml/Widgets/PlotWidget/PlotRulerMenu.qml
   qml/Widgets/PlotWidget/PlotMarkerPopup.qml
   qml/Widgets/PlotWidget/PlotCursor.qml
+  qml/Widgets/PlotWidget/PlotDecimatedChip.qml
   qml/Widgets/PlotWidget/PlotTriggerLine.qml
   qml/Widgets/PopupEnter.qml
   qml/Widgets/PopupExit.qml

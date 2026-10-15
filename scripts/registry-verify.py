@@ -1637,6 +1637,7 @@ def check_mirror_wire(errors: list[str], accept: bool) -> None:
         MIRROR_BASELINE.write_text(
             json.dumps({"wireVersion": version, "digest": digest}, indent=2) + "\n",
             encoding="utf-8",
+            newline="\n",
         )
         print(
             f"registry-verify: mirror wire baseline re-seeded (v{version}, {digest[:12]})"

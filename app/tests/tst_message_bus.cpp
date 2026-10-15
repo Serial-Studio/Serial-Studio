@@ -321,7 +321,8 @@ void MessageBusTests::everyVocabularyTopicComposesByBracedInit()
   bus.publishState<Core::Bus::ConnectionStateChanged>(0, true, false, false, 0);
   bus.publish<Core::Bus::NotificationRaised>(
     Core::Bus::kSeverityWarning, QString(), QString(), QString(), QString());
-  bus.publish<Core::Bus::NotificationPosted>(qint64(0), 0, QString(), QString(), QString());
+  bus.publish<Core::Bus::NotificationPosted>(
+    qint64(0), 0, QString(), QString(), QString(), Core::Bus::kNotificationOriginUser);
   bus.publishState<Core::Bus::DashboardStructureChanged>(1);
   bus.publish<Core::Bus::DashboardUpdated>(0);
   bus.publish<Core::Bus::DashboardDataReset>(0);

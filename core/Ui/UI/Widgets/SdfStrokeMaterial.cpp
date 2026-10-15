@@ -32,6 +32,7 @@
 //--------------------------------------------------------------------------------------------------
 
 // std140 layout of app/shaders/stroke_sdf.{vert,frag}: mat4, vec4 color, then four floats
+namespace Widgets::SdfStrokeDetail {
 static constexpr int kMatrixBytes     = 64;
 static constexpr int kColorOffset     = 64;
 static constexpr int kOpacityOffset   = 80;
@@ -43,7 +44,6 @@ static constexpr int kUniformBytes    = 96;
 static constexpr char kVertexShader[]   = ":/serial-studio.com/shaders/stroke_sdf.vert.qsb";
 static constexpr char kFragmentShader[] = ":/serial-studio.com/shaders/stroke_sdf.frag.qsb";
 
-namespace Widgets::SdfStrokeDetail {
 /**
  * @brief Shader half of SdfStrokeMaterial: binds the vendored stages and fills the uniform
  *        block the two stages share.

@@ -27,6 +27,7 @@
 
 #include "Core/SSAssert.h"
 
+namespace Widgets::StrokeHdrDetail {
 static constexpr int kMatrixBytes     = 64;
 static constexpr int kOpacityOffset   = 64;
 static constexpr int kIntensityOffset = 68;
@@ -35,7 +36,6 @@ static constexpr int kUniformBytes    = 72;
 static constexpr char kVertexShader[]   = ":/serial-studio.com/shaders/stroke_hdr.vert.qsb";
 static constexpr char kFragmentShader[] = ":/serial-studio.com/shaders/stroke_hdr.frag.qsb";
 
-namespace Widgets::StrokeHdrDetail {
 /**
  * @brief Shader half of StrokeHdrMaterial: ordinary premultiplied vertex-color drawing with
  *        the per-material intensity forwarded into the vendored fragment stage's boost.

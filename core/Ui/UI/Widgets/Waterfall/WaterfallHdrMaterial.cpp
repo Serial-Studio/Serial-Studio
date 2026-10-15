@@ -29,6 +29,7 @@
 
 #include "Core/SSAssert.h"
 
+namespace Widgets::WaterfallHdrDetail {
 static constexpr int kMatrixBytes   = 64;
 static constexpr int kOpacityOffset = 64;
 static constexpr int kBoostOffset   = 68;
@@ -39,7 +40,6 @@ static constexpr int kLutBinding    = 2;
 static constexpr char kVertexShader[]   = ":/serial-studio.com/shaders/waterfall_hdr.vert.qsb";
 static constexpr char kFragmentShader[] = ":/serial-studio.com/shaders/waterfall_hdr.frag.qsb";
 
-namespace Widgets::WaterfallHdrDetail {
 /**
  * @brief Shader half: matrix/opacity/boost uniforms plus the ring and LUT samplers. The ring's
  *        staged scanlines are committed here, on the render thread's prepare step, which keeps

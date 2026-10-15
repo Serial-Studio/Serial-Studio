@@ -29,10 +29,10 @@
 
 #include "Core/SSAssert.h"
 
+namespace Widgets::Plot3DEyeDetail {
 static constexpr int kMatrixBytes  = 64;
 static constexpr int kUniformBytes = 68;
 
-namespace Widgets::Plot3DEyeDetail {
 /**
  * @brief Shader half of EyeMaterial: ordinary premultiplied vertex-color drawing, with the
  *        pipeline's color-write mask narrowed to the channels the eye owns. The shaders are

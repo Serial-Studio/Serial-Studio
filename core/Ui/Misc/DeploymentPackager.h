@@ -99,15 +99,15 @@ private:
    * @brief One credential or private key the author may include.
    */
   struct Secret {
-    bool isKey      = false;
-    bool included   = false;
-    int sourceIndex = -1;
-    QString label;
-    QString value;
-    QString target;
-    QString jsonKey;
-    QString keyFile;
-    QString property;
+    bool isKey       = false;
+    bool included    = false;
+    int sourceIndex  = -1;
+    QString label    = {};
+    QString value    = {};
+    QString target   = {};
+    QString jsonKey  = {};
+    QString keyFile  = {};
+    QString property = {};
   };
 
   void collectSounds();
