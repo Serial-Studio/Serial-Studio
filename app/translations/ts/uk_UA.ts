@@ -622,7 +622,7 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
 <context>
     <name>About</name>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="45"/>
+        <location filename="../../qml/Dialogs/About.qml" line="46"/>
         <source>About</source>
         <translation>Про Програму</translation>
     </message>
@@ -631,32 +631,32 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
         <translation type="vanished">Версія %1</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="37"/>
+        <location filename="../../qml/Dialogs/About.qml" line="38"/>
         <source>local build</source>
         <translation>локальна збірка</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="105"/>
+        <location filename="../../qml/Dialogs/About.qml" line="106"/>
         <source>Version %1 (%2)</source>
         <translation>Версія %1 (%2)</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="109"/>
+        <location filename="../../qml/Dialogs/About.qml" line="110"/>
         <source>Click to copy build identity</source>
         <translation>Клацніть, щоб скопіювати ідентифікатор збірки</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="127"/>
+        <location filename="../../qml/Dialogs/About.qml" line="128"/>
         <source>Copyright © %1 %2</source>
         <translation>Авторське Право © %1 %2</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="133"/>
+        <location filename="../../qml/Dialogs/About.qml" line="134"/>
         <source>All Rights Reserved</source>
         <translation>Усі Права Захищено</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="148"/>
+        <location filename="../../qml/Dialogs/About.qml" line="149"/>
         <source>%1 is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 3 of the License, or (at your option) any later version.
 
 %1 is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.</source>
@@ -665,32 +665,32 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
 %1 поширюється в надії, що буде корисним, але БЕЗ БУДЬ-ЯКИХ ГАРАНТІЙ; навіть без неявної гарантії ПРИДАТНОСТІ ДЛЯ ПРОДАЖУ або ПРИДАТНОСТІ ДЛЯ ПЕВНОЇ МЕТИ. Докладніше див. GNU General Public License.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="167"/>
+        <location filename="../../qml/Dialogs/About.qml" line="168"/>
         <source>This configuration is licensed for commercial and proprietary use. It may be used in closed-source and commercial applications, subject to the terms of the commercial license.</source>
         <translation>Ця конфігурація ліцензована для комерційного та власницького використання. Може використовуватися в закритих та комерційних застосунках відповідно до умов комерційної ліцензії.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="181"/>
+        <location filename="../../qml/Dialogs/About.qml" line="182"/>
         <source>This configuration is for personal and evaluation purposes only. Commercial use is prohibited unless a valid commercial license is activated.</source>
         <translation>Ця конфігурація призначена лише для особистого використання та оцінювання. Комерційне використання заборонено, якщо не активовано дійсну комерційну ліцензію.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="195"/>
+        <location filename="../../qml/Dialogs/About.qml" line="196"/>
         <source>This software is provided 'as is' without warranty of any kind, express or implied, including but not limited to the warranties of merchantability or fitness for a particular purpose. In no event shall the author be liable for any damages arising from the use of this software.</source>
         <translation>Це програмне забезпечення надається «як є» без будь-яких гарантій, явних чи неявних, включаючи, але не обмежуючись гарантіями придатності для продажу або придатності для певної мети. Автор не несе відповідальності за будь-які збитки, що виникають внаслідок використання цього програмного забезпечення.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="216"/>
+        <location filename="../../qml/Dialogs/About.qml" line="217"/>
         <source>Manage License</source>
         <translation>Керування Ліцензією</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="225"/>
+        <location filename="../../qml/Dialogs/About.qml" line="226"/>
         <source>Donate</source>
         <translation>Підтримати Проєкт</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="236"/>
+        <location filename="../../qml/Dialogs/About.qml" line="237"/>
         <source>Check for Updates</source>
         <translation>Перевірити оновлення</translation>
     </message>
@@ -707,32 +707,32 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
         <translation type="vanished">Поради та Хитрощі</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="245"/>
+        <location filename="../../qml/Dialogs/About.qml" line="246"/>
         <source>License Agreement</source>
         <translation>Ліцензійна Угода</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="254"/>
+        <location filename="../../qml/Dialogs/About.qml" line="255"/>
         <source>Report Bug</source>
         <translation>Повідомити Про Помилку</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="264"/>
+        <location filename="../../qml/Dialogs/About.qml" line="266"/>
         <source>Acknowledgements</source>
         <translation>Подяки</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="273"/>
+        <location filename="../../qml/Dialogs/About.qml" line="275"/>
         <source>Benchmark</source>
         <translation>Тестування</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="282"/>
+        <location filename="../../qml/Dialogs/About.qml" line="285"/>
         <source>Website</source>
         <translation>Веб-сайт</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="298"/>
+        <location filename="../../qml/Dialogs/About.qml" line="301"/>
         <source>Close</source>
         <translation>Закрити</translation>
     </message>
@@ -9636,63 +9636,73 @@ Add %4 dataset(s) using the template's defaults?</source>
 <context>
     <name>DataModel::ProjectModel</name>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="280"/>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="289"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="282"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="291"/>
         <source>Lock Project</source>
         <translation>Заблокувати Проєкт</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="281"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="283"/>
         <source>Choose a password to lock the project:</source>
         <translation>Виберіть пароль для блокування проєкту:</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="289"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="291"/>
         <source>Confirm the password:</source>
         <translation>Підтвердіть пароль:</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="294"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="296"/>
         <source>Passwords do not match</source>
         <translation>Паролі не збігаються</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="295"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="297"/>
         <source>The two passwords you entered do not match. The project was not locked.</source>
         <translation>Введені паролі не збігаються. Проєкт не заблоковано.</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="332"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="334"/>
         <source>Unlock Project</source>
         <translation>Розблокувати Проєкт</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="333"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="335"/>
         <source>Enter the project password:</source>
         <translation>Введіть пароль проєкту:</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="343"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="345"/>
         <source>Incorrect password</source>
         <translation>Неправильний пароль</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="344"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="346"/>
         <source>The password you entered does not match the one stored in the project file.</source>
         <translation>Введений пароль не збігається з паролем, збереженим у файлі проєкту.</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="459"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="447"/>
+        <source>Save Quick Plot as Project</source>
+        <translation>Зберегти Швидкий Графік як Проєкт</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="448"/>
+        <source>Quick Plot Project</source>
+        <translation>Проект Швидкого Графіка</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="505"/>
         <source>New Project</source>
         <translation>Новий Проєкт</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1007"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1053"/>
         <source>Edit Control Loop</source>
         <translation>Редагувати Цикл Керування</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1153"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1199"/>
         <source>Fast mode runs Lua parsers and transforms through the JIT compiler (up to ~40x faster), but the runaway-script watchdog and the Safe-mode memory budget cannot operate: a script stuck in an infinite loop will stall its device until you disconnect, and one that keeps allocating will grow without limit.
 
 Enable it only for scripts you trust and have tested in Safe mode first.</source>
@@ -9705,12 +9715,12 @@ Enable it only for scripts you trust and have tested in Safe mode first.</source
         <translation type="vanished">Зразки</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="601"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="647"/>
         <source>Change MQTT Publisher</source>
         <translation>Змінити Видавця MQTT</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="617"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="663"/>
         <source>Change InfluxDB Sink</source>
         <translation>Змінити Приймач Influxdb</translation>
     </message>
@@ -9723,12 +9733,12 @@ Enable it only for scripts you trust and have tested in Safe mode first.</source
         <translation type="vanished">Назва для відображення (порожнє відновлює оригінальну):</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="633"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="679"/>
         <source>Change Alarm Sounds</source>
         <translation>Змінити Звуки Тривог</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="991"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1037"/>
         <source>Change Project Title</source>
         <translation>Змінити Назву Проєкту</translation>
     </message>
@@ -9737,42 +9747,42 @@ Enable it only for scripts you trust and have tested in Safe mode first.</source
         <translation type="vanished">Редагувати Скрипт Керування</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1026"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1072"/>
         <source>Edit Shared Library</source>
         <translation>Редагувати Спільну Бібліотеку</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1043"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1089"/>
         <source>Edit JavaScript Library</source>
         <translation>Редагувати Бібліотеку Javascript</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1059"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1105"/>
         <source>Change Point Count</source>
         <translation>Змінити Кількість Точок</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1077"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1123"/>
         <source>Change Plot Time Range</source>
         <translation>Змінити Діапазон Часу Графіка</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1099"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1145"/>
         <source>Toggle Freeze</source>
         <translation>Перемкнути Заморожування</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1114"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1160"/>
         <source>Toggle Change-Driven Transforms</source>
         <translation>Перемкнути Перетворення За Зміною</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1131"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1177"/>
         <source>Toggle Fast Lua Execution</source>
         <translation>Перемкнути Швидке Виконання Lua</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1152"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1198"/>
         <source>Enable Fast Lua Execution?</source>
         <translation>Увімкнути швидке виконання Lua?</translation>
     </message>
@@ -9793,37 +9803,37 @@ Enable it only for scripts you trust and have tested in Safe mode first.</source
 Вмикайте його лише для скриптів, яким ви довіряєте і які перевірили в безпечному режимі.</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1159"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1205"/>
         <source>Fast Lua Execution</source>
         <translation>Швидке Виконання Lua</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1188"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1234"/>
         <source>Change Frame Start Sequence</source>
         <translation>Змінити Послідовність Початку Кадру</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1207"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1253"/>
         <source>Change Frame End Sequence</source>
         <translation>Змінити Послідовність Кінця Кадру</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1226"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1272"/>
         <source>Change Checksum</source>
         <translation>Змінити Контрольну Суму</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1245"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1291"/>
         <source>Change Frame Detection</source>
         <translation>Змінити Виявлення Кадрів</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1264"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1310"/>
         <source>Change Decoder</source>
         <translation>Змінити Декодер</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1283"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1329"/>
         <source>Toggle Hex Delimiters</source>
         <translation>Перемкнути Hex Роздільники</translation>
     </message>
@@ -9896,54 +9906,54 @@ Enable it only for scripts you trust and have tested in Safe mode first.</source
         <translation type="vanished">У цьому проєкті є незбережені зміни!</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="174"/>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="183"/>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="197"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="176"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="185"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="199"/>
         <source>Project error</source>
         <translation>Помилка проєкту</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="174"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="176"/>
         <source>Project title cannot be empty!</source>
         <translation>Назва проєкту не може бути порожньою!</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="183"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="185"/>
         <source>You need to add at least one group!</source>
         <translation>Необхідно додати принаймні одну групу!</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="197"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="199"/>
         <source>You need to add at least one dataset!</source>
         <translation>Необхідно додати принаймні один набір даних!</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="237"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="239"/>
         <source>Your project needs a title</source>
         <translation>Проєкту потрібна назва</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="239"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="241"/>
         <source>Add a group to get started</source>
         <translation>Додайте групу, щоб почати</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="241"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="243"/>
         <source>Add a dataset to a group</source>
         <translation>Додайте набір даних до групи</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="255"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="257"/>
         <source>Open the Project view at the top of the tree and enter a name. You can rename the project at any time.</source>
         <translation>Відкрийте вигляд Проєкту у верхній частині дерева та введіть назву. Проєкт можна перейменувати в будь-який час.</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="258"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="260"/>
         <source>Groups organize datasets into dashboard widgets. Use the Group button in the toolbar above to create one, then add datasets to it.</source>
         <translation>Групи організовують набори даних у віджети панелі. Використайте кнопку Група на панелі інструментів вище, щоб створити групу, а потім додайте до неї набори даних.</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="262"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="264"/>
         <source>Datasets are the values that appear on the dashboard. Select a group in the tree and use the Dataset button in the toolbar to add one.</source>
         <translation>Набори даних — це значення, які відображаються на панелі приладів. Виберіть групу в дереві та використайте кнопку «Набір даних» на панелі інструментів, щоб додати його.</translation>
     </message>
@@ -9964,16 +9974,17 @@ Enable it only for scripts you trust and have tested in Safe mode first.</source
         <translation type="vanished">Зберегти Проєкт Serial Studio</translation>
     </message>
     <message>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="449"/>
         <source>Serial Studio Project Files (*.ssproj)</source>
-        <translation type="vanished">Файли Проєктів Serial Studio (*.ssproj)</translation>
+        <translation>Файли Проєктів Serial Studio (*.ssproj)</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="818"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="864"/>
         <source>Untitled Project</source>
         <translation>Проєкт Без Назви</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="836"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="882"/>
         <source>Device A</source>
         <translation>Пристрій A</translation>
     </message>

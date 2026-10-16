@@ -622,7 +622,7 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
 <context>
     <name>About</name>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="45"/>
+        <location filename="../../qml/Dialogs/About.qml" line="46"/>
         <source>About</source>
         <translation>정보</translation>
     </message>
@@ -631,32 +631,32 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
         <translation type="vanished">버전 %1</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="37"/>
+        <location filename="../../qml/Dialogs/About.qml" line="38"/>
         <source>local build</source>
         <translation>로컬 빌드</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="105"/>
+        <location filename="../../qml/Dialogs/About.qml" line="106"/>
         <source>Version %1 (%2)</source>
         <translation>버전 %1 (%2)</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="109"/>
+        <location filename="../../qml/Dialogs/About.qml" line="110"/>
         <source>Click to copy build identity</source>
         <translation>클릭하여 빌드 식별자 복사</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="127"/>
+        <location filename="../../qml/Dialogs/About.qml" line="128"/>
         <source>Copyright © %1 %2</source>
         <translation>Copyright © %1 %2</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="133"/>
+        <location filename="../../qml/Dialogs/About.qml" line="134"/>
         <source>All Rights Reserved</source>
         <translation>All Rights Reserved</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="148"/>
+        <location filename="../../qml/Dialogs/About.qml" line="149"/>
         <source>%1 is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 3 of the License, or (at your option) any later version.
 
 %1 is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.</source>
@@ -665,32 +665,32 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
 %1은(는) 유용하게 사용되기를 바라며 배포되지만, 상품성 또는 특정 목적에의 적합성에 대한 묵시적 보증을 포함한 어떠한 보증도 제공하지 않습니다. 자세한 내용은 GNU General Public License를 참조하십시오.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="167"/>
+        <location filename="../../qml/Dialogs/About.qml" line="168"/>
         <source>This configuration is licensed for commercial and proprietary use. It may be used in closed-source and commercial applications, subject to the terms of the commercial license.</source>
         <translation>이 구성은 상업적 및 독점적 사용을 위해 라이선스가 부여되었습니다. 상업 라이선스 조건에 따라 비공개 소스 및 상업용 애플리케이션에서 사용할 수 있습니다.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="181"/>
+        <location filename="../../qml/Dialogs/About.qml" line="182"/>
         <source>This configuration is for personal and evaluation purposes only. Commercial use is prohibited unless a valid commercial license is activated.</source>
         <translation>이 구성은 개인 및 평가 목적으로만 사용할 수 있습니다. 유효한 상업 라이선스가 활성화되지 않은 경우 상업적 사용은 금지됩니다.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="195"/>
+        <location filename="../../qml/Dialogs/About.qml" line="196"/>
         <source>This software is provided 'as is' without warranty of any kind, express or implied, including but not limited to the warranties of merchantability or fitness for a particular purpose. In no event shall the author be liable for any damages arising from the use of this software.</source>
         <translation>이 소프트웨어는 상품성 또는 특정 목적에의 적합성에 대한 보증을 포함하되 이에 국한되지 않는 명시적 또는 묵시적 보증 없이 '있는 그대로' 제공됩니다. 저작자는 이 소프트웨어의 사용으로 인해 발생하는 어떠한 손해에 대해서도 책임을 지지 않습니다.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="216"/>
+        <location filename="../../qml/Dialogs/About.qml" line="217"/>
         <source>Manage License</source>
         <translation>라이선스 관리</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="225"/>
+        <location filename="../../qml/Dialogs/About.qml" line="226"/>
         <source>Donate</source>
         <translation>기부</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="236"/>
+        <location filename="../../qml/Dialogs/About.qml" line="237"/>
         <source>Check for Updates</source>
         <translation>업데이트 확인</translation>
     </message>
@@ -707,32 +707,32 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
         <translation type="vanished">팁 &amp;&amp; 트릭</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="245"/>
+        <location filename="../../qml/Dialogs/About.qml" line="246"/>
         <source>License Agreement</source>
         <translation>라이선스 계약</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="254"/>
+        <location filename="../../qml/Dialogs/About.qml" line="255"/>
         <source>Report Bug</source>
         <translation>버그 신고</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="264"/>
+        <location filename="../../qml/Dialogs/About.qml" line="266"/>
         <source>Acknowledgements</source>
         <translation>감사의 글</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="273"/>
+        <location filename="../../qml/Dialogs/About.qml" line="275"/>
         <source>Benchmark</source>
         <translation>벤치마크</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="282"/>
+        <location filename="../../qml/Dialogs/About.qml" line="285"/>
         <source>Website</source>
         <translation>웹사이트</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="298"/>
+        <location filename="../../qml/Dialogs/About.qml" line="301"/>
         <source>Close</source>
         <translation>닫기</translation>
     </message>
@@ -9636,63 +9636,73 @@ Add %4 dataset(s) using the template's defaults?</source>
 <context>
     <name>DataModel::ProjectModel</name>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="280"/>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="289"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="282"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="291"/>
         <source>Lock Project</source>
         <translation>프로젝트 잠금</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="281"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="283"/>
         <source>Choose a password to lock the project:</source>
         <translation>프로젝트를 잠글 비밀번호를 선택하세요:</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="289"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="291"/>
         <source>Confirm the password:</source>
         <translation>비밀번호 확인:</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="294"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="296"/>
         <source>Passwords do not match</source>
         <translation>비밀번호 불일치</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="295"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="297"/>
         <source>The two passwords you entered do not match. The project was not locked.</source>
         <translation>입력한 두 비밀번호가 일치하지 않습니다. 프로젝트가 잠기지 않았습니다.</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="332"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="334"/>
         <source>Unlock Project</source>
         <translation>프로젝트 잠금 해제</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="333"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="335"/>
         <source>Enter the project password:</source>
         <translation>프로젝트 비밀번호를 입력하세요:</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="343"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="345"/>
         <source>Incorrect password</source>
         <translation>잘못된 비밀번호</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="344"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="346"/>
         <source>The password you entered does not match the one stored in the project file.</source>
         <translation>입력한 비밀번호가 프로젝트 파일에 저장된 비밀번호와 일치하지 않습니다.</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="459"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="447"/>
+        <source>Save Quick Plot as Project</source>
+        <translation>빠른 플롯을 프로젝트로 저장</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="448"/>
+        <source>Quick Plot Project</source>
+        <translation>Quick Plot 프로젝트</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="505"/>
         <source>New Project</source>
         <translation>새 프로젝트</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1007"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1053"/>
         <source>Edit Control Loop</source>
         <translation>제어 루프 편집</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1153"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1199"/>
         <source>Fast mode runs Lua parsers and transforms through the JIT compiler (up to ~40x faster), but the runaway-script watchdog and the Safe-mode memory budget cannot operate: a script stuck in an infinite loop will stall its device until you disconnect, and one that keeps allocating will grow without limit.
 
 Enable it only for scripts you trust and have tested in Safe mode first.</source>
@@ -9705,12 +9715,12 @@ Enable it only for scripts you trust and have tested in Safe mode first.</source
         <translation type="vanished">샘플</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="601"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="647"/>
         <source>Change MQTT Publisher</source>
         <translation>MQTT 발행자 변경</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="617"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="663"/>
         <source>Change InfluxDB Sink</source>
         <translation>InfluxDB Sink 변경</translation>
     </message>
@@ -9723,12 +9733,12 @@ Enable it only for scripts you trust and have tested in Safe mode first.</source
         <translation type="vanished">표시 제목 (비워두면 원래대로 복원됨):</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="633"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="679"/>
         <source>Change Alarm Sounds</source>
         <translation>알람 소리 변경</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="991"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1037"/>
         <source>Change Project Title</source>
         <translation>프로젝트 제목 변경</translation>
     </message>
@@ -9737,42 +9747,42 @@ Enable it only for scripts you trust and have tested in Safe mode first.</source
         <translation type="vanished">제어 스크립트 편집</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1026"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1072"/>
         <source>Edit Shared Library</source>
         <translation>공유 라이브러리 편집</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1043"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1089"/>
         <source>Edit JavaScript Library</source>
         <translation>JavaScript 라이브러리 편집</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1059"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1105"/>
         <source>Change Point Count</source>
         <translation>포인트 개수 변경</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1077"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1123"/>
         <source>Change Plot Time Range</source>
         <translation>플롯 시간 범위 변경</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1099"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1145"/>
         <source>Toggle Freeze</source>
         <translation>고정 전환</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1114"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1160"/>
         <source>Toggle Change-Driven Transforms</source>
         <translation>변경 기반 변환 전환</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1131"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1177"/>
         <source>Toggle Fast Lua Execution</source>
         <translation>고속 Lua 실행 전환</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1152"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1198"/>
         <source>Enable Fast Lua Execution?</source>
         <translation>고속 Lua 실행을 활성화하시겠습니까?</translation>
     </message>
@@ -9793,37 +9803,37 @@ Enable it only for scripts you trust and have tested in Safe mode first.</source
 안전 모드에서 먼저 테스트하고 신뢰할 수 있는 스크립트에만 활성화하십시오.</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1159"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1205"/>
         <source>Fast Lua Execution</source>
         <translation>고속 Lua 실행</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1188"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1234"/>
         <source>Change Frame Start Sequence</source>
         <translation>프레임 시작 시퀀스 변경</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1207"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1253"/>
         <source>Change Frame End Sequence</source>
         <translation>프레임 종료 시퀀스 변경</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1226"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1272"/>
         <source>Change Checksum</source>
         <translation>체크섬 변경</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1245"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1291"/>
         <source>Change Frame Detection</source>
         <translation>프레임 감지 변경</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1264"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1310"/>
         <source>Change Decoder</source>
         <translation>디코더 변경</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1283"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1329"/>
         <source>Toggle Hex Delimiters</source>
         <translation>16진수 구분자 전환</translation>
     </message>
@@ -9896,54 +9906,54 @@ Enable it only for scripts you trust and have tested in Safe mode first.</source
         <translation type="vanished">이 프로젝트에 저장되지 않은 수정 사항이 있습니다!</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="174"/>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="183"/>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="197"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="176"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="185"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="199"/>
         <source>Project error</source>
         <translation>프로젝트 오류</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="174"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="176"/>
         <source>Project title cannot be empty!</source>
         <translation>프로젝트 제목은 비워둘 수 없습니다!</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="183"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="185"/>
         <source>You need to add at least one group!</source>
         <translation>최소 하나의 그룹을 추가해야 합니다!</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="197"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="199"/>
         <source>You need to add at least one dataset!</source>
         <translation>최소 하나의 데이터셋을 추가해야 합니다!</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="237"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="239"/>
         <source>Your project needs a title</source>
         <translation>프로젝트에 제목이 필요합니다</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="239"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="241"/>
         <source>Add a group to get started</source>
         <translation>시작하려면 그룹을 추가하세요</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="241"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="243"/>
         <source>Add a dataset to a group</source>
         <translation>그룹에 데이터셋을 추가하세요</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="255"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="257"/>
         <source>Open the Project view at the top of the tree and enter a name. You can rename the project at any time.</source>
         <translation>트리 상단의 프로젝트 보기를 열고 이름을 입력하세요. 프로젝트는 언제든지 이름을 변경할 수 있습니다.</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="258"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="260"/>
         <source>Groups organize datasets into dashboard widgets. Use the Group button in the toolbar above to create one, then add datasets to it.</source>
         <translation>그룹은 데이터셋을 대시보드 위젯으로 구성합니다. 위 도구 모음의 그룹 버튼을 사용하여 그룹을 생성한 다음 데이터셋을 추가하세요.</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="262"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="264"/>
         <source>Datasets are the values that appear on the dashboard. Select a group in the tree and use the Dataset button in the toolbar to add one.</source>
         <translation>데이터셋은 대시보드에 표시되는 값입니다. 트리에서 그룹을 선택하고 툴바의 데이터셋 버튼을 사용하여 추가하세요.</translation>
     </message>
@@ -9964,16 +9974,17 @@ Enable it only for scripts you trust and have tested in Safe mode first.</source
         <translation type="vanished">Serial Studio 프로젝트 저장</translation>
     </message>
     <message>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="449"/>
         <source>Serial Studio Project Files (*.ssproj)</source>
-        <translation type="vanished">Serial Studio 프로젝트 파일 (*.ssproj)</translation>
+        <translation>Serial Studio 프로젝트 파일 (*.ssproj)</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="818"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="864"/>
         <source>Untitled Project</source>
         <translation>제목 없는 프로젝트</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="836"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="882"/>
         <source>Device A</source>
         <translation>장치 A</translation>
     </message>

@@ -622,7 +622,7 @@ Habilita esto solo en redes confiables. Clientes no confiables pueden leer datos
 <context>
     <name>About</name>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="45"/>
+        <location filename="../../qml/Dialogs/About.qml" line="46"/>
         <source>About</source>
         <translation>Acerca De</translation>
     </message>
@@ -631,32 +631,32 @@ Habilita esto solo en redes confiables. Clientes no confiables pueden leer datos
         <translation type="vanished">Versión %1</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="37"/>
+        <location filename="../../qml/Dialogs/About.qml" line="38"/>
         <source>local build</source>
         <translation>compilación local</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="105"/>
+        <location filename="../../qml/Dialogs/About.qml" line="106"/>
         <source>Version %1 (%2)</source>
         <translation>Versión %1 (%2)</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="109"/>
+        <location filename="../../qml/Dialogs/About.qml" line="110"/>
         <source>Click to copy build identity</source>
         <translation>Clic para copiar identidad de compilación</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="127"/>
+        <location filename="../../qml/Dialogs/About.qml" line="128"/>
         <source>Copyright © %1 %2</source>
         <translation>Copyright © %1 %2</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="133"/>
+        <location filename="../../qml/Dialogs/About.qml" line="134"/>
         <source>All Rights Reserved</source>
         <translation>Todos los Derechos Reservados</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="148"/>
+        <location filename="../../qml/Dialogs/About.qml" line="149"/>
         <source>%1 is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 3 of the License, or (at your option) any later version.
 
 %1 is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.</source>
@@ -665,32 +665,32 @@ Habilita esto solo en redes confiables. Clientes no confiables pueden leer datos
 %1 se distribuye con la esperanza de que sea útil, pero SIN NINGUNA GARANTÍA; sin siquiera la garantía implícita de COMERCIABILIDAD o IDONEIDAD PARA UN PROPÓSITO PARTICULAR. Consulte la Licencia Pública General de GNU para más detalles.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="167"/>
+        <location filename="../../qml/Dialogs/About.qml" line="168"/>
         <source>This configuration is licensed for commercial and proprietary use. It may be used in closed-source and commercial applications, subject to the terms of the commercial license.</source>
         <translation>Esta configuración está licenciada para uso comercial y propietario. Puede utilizarse en aplicaciones de código cerrado y comerciales, sujeto a los términos de la licencia comercial.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="181"/>
+        <location filename="../../qml/Dialogs/About.qml" line="182"/>
         <source>This configuration is for personal and evaluation purposes only. Commercial use is prohibited unless a valid commercial license is activated.</source>
         <translation>Esta configuración es solo para fines personales y de evaluación. El uso comercial está prohibido a menos que se active una licencia comercial válida.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="195"/>
+        <location filename="../../qml/Dialogs/About.qml" line="196"/>
         <source>This software is provided 'as is' without warranty of any kind, express or implied, including but not limited to the warranties of merchantability or fitness for a particular purpose. In no event shall the author be liable for any damages arising from the use of this software.</source>
         <translation>Este software se proporciona 'tal cual' sin garantía de ningún tipo, expresa o implícita, incluyendo pero no limitado a las garantías de comerciabilidad o idoneidad para un propósito particular. En ningún caso el autor será responsable de daños derivados del uso de este software.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="216"/>
+        <location filename="../../qml/Dialogs/About.qml" line="217"/>
         <source>Manage License</source>
         <translation>Administrar Licencia</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="225"/>
+        <location filename="../../qml/Dialogs/About.qml" line="226"/>
         <source>Donate</source>
         <translation>Donar</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="236"/>
+        <location filename="../../qml/Dialogs/About.qml" line="237"/>
         <source>Check for Updates</source>
         <translation>Buscar Actualizaciones</translation>
     </message>
@@ -707,32 +707,32 @@ Habilita esto solo en redes confiables. Clientes no confiables pueden leer datos
         <translation type="vanished">Consejos y Trucos</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="245"/>
+        <location filename="../../qml/Dialogs/About.qml" line="246"/>
         <source>License Agreement</source>
         <translation>Acuerdo de Licencia</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="254"/>
+        <location filename="../../qml/Dialogs/About.qml" line="255"/>
         <source>Report Bug</source>
         <translation>Reportar Error</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="264"/>
+        <location filename="../../qml/Dialogs/About.qml" line="266"/>
         <source>Acknowledgements</source>
         <translation>Agradecimientos</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="273"/>
+        <location filename="../../qml/Dialogs/About.qml" line="275"/>
         <source>Benchmark</source>
         <translation>Benchmark</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="282"/>
+        <location filename="../../qml/Dialogs/About.qml" line="285"/>
         <source>Website</source>
         <translation>Sitio Web</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="298"/>
+        <location filename="../../qml/Dialogs/About.qml" line="301"/>
         <source>Close</source>
         <translation>Cerrar</translation>
     </message>
@@ -9636,63 +9636,73 @@ Add %4 dataset(s) using the template's defaults?</source>
 <context>
     <name>DataModel::ProjectModel</name>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="280"/>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="289"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="282"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="291"/>
         <source>Lock Project</source>
         <translation>Bloquear Proyecto</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="281"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="283"/>
         <source>Choose a password to lock the project:</source>
         <translation>Elegir una contraseña para bloquear el proyecto:</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="289"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="291"/>
         <source>Confirm the password:</source>
         <translation>Confirmar la contraseña:</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="294"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="296"/>
         <source>Passwords do not match</source>
         <translation>Las contraseñas no coinciden</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="295"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="297"/>
         <source>The two passwords you entered do not match. The project was not locked.</source>
         <translation>Las dos contraseñas ingresadas no coinciden. El proyecto no fue bloqueado.</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="332"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="334"/>
         <source>Unlock Project</source>
         <translation>Desbloquear Proyecto</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="333"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="335"/>
         <source>Enter the project password:</source>
         <translation>Ingresar la contraseña del proyecto:</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="343"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="345"/>
         <source>Incorrect password</source>
         <translation>Contraseña incorrecta</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="344"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="346"/>
         <source>The password you entered does not match the one stored in the project file.</source>
         <translation>La contraseña ingresada no coincide con la almacenada en el archivo del proyecto.</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="459"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="447"/>
+        <source>Save Quick Plot as Project</source>
+        <translation>Guardar Gráfica Rápida como Proyecto</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="448"/>
+        <source>Quick Plot Project</source>
+        <translation>Proyecto de Gráfica Rápida</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="505"/>
         <source>New Project</source>
         <translation>Proyecto Nuevo</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1007"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1053"/>
         <source>Edit Control Loop</source>
         <translation>Editar Bucle de Control</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1153"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1199"/>
         <source>Fast mode runs Lua parsers and transforms through the JIT compiler (up to ~40x faster), but the runaway-script watchdog and the Safe-mode memory budget cannot operate: a script stuck in an infinite loop will stall its device until you disconnect, and one that keeps allocating will grow without limit.
 
 Enable it only for scripts you trust and have tested in Safe mode first.</source>
@@ -9705,12 +9715,12 @@ Actívalo solo para scripts en los que confíes y que hayas probado primero en m
         <translation type="vanished">Muestras</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="601"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="647"/>
         <source>Change MQTT Publisher</source>
         <translation>Cambiar Publicador MQTT</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="617"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="663"/>
         <source>Change InfluxDB Sink</source>
         <translation>Cambiar Destino Influxdb</translation>
     </message>
@@ -9723,12 +9733,12 @@ Actívalo solo para scripts en los que confíes y que hayas probado primero en m
         <translation type="vanished">Título a mostrar (vacío restaura el original):</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="633"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="679"/>
         <source>Change Alarm Sounds</source>
         <translation>Cambiar Sonidos de Alarma</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="991"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1037"/>
         <source>Change Project Title</source>
         <translation>Cambiar Título del Proyecto</translation>
     </message>
@@ -9737,42 +9747,42 @@ Actívalo solo para scripts en los que confíes y que hayas probado primero en m
         <translation type="vanished">Editar Script de Control</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1026"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1072"/>
         <source>Edit Shared Library</source>
         <translation>Editar Biblioteca Compartida</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1043"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1089"/>
         <source>Edit JavaScript Library</source>
         <translation>Editar Biblioteca Javascript</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1059"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1105"/>
         <source>Change Point Count</source>
         <translation>Cambiar Cantidad de Puntos</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1077"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1123"/>
         <source>Change Plot Time Range</source>
         <translation>Cambiar Rango de Tiempo del Gráfico</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1099"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1145"/>
         <source>Toggle Freeze</source>
         <translation>Alternar Congelación</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1114"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1160"/>
         <source>Toggle Change-Driven Transforms</source>
         <translation>Alternar Transformaciones Dirigidas por Cambios</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1131"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1177"/>
         <source>Toggle Fast Lua Execution</source>
         <translation>Alternar Ejecución Rápida de Lua</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1152"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1198"/>
         <source>Enable Fast Lua Execution?</source>
         <translation>¿Habilitar Ejecución Rápida de Lua?</translation>
     </message>
@@ -9793,37 +9803,37 @@ Enable it only for scripts you trust and have tested in Safe mode first.</source
 Habilítalo solo para scripts en los que confíes y que hayas probado primero en modo Seguro.</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1159"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1205"/>
         <source>Fast Lua Execution</source>
         <translation>Ejecución Rápida de Lua</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1188"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1234"/>
         <source>Change Frame Start Sequence</source>
         <translation>Cambiar Secuencia de Inicio de Trama</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1207"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1253"/>
         <source>Change Frame End Sequence</source>
         <translation>Cambiar Secuencia de Fin de Trama</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1226"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1272"/>
         <source>Change Checksum</source>
         <translation>Cambiar Checksum</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1245"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1291"/>
         <source>Change Frame Detection</source>
         <translation>Cambiar Detección de Tramas</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1264"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1310"/>
         <source>Change Decoder</source>
         <translation>Cambiar Decodificador</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1283"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1329"/>
         <source>Toggle Hex Delimiters</source>
         <translation>Alternar Delimitadores Hex</translation>
     </message>
@@ -9896,54 +9906,54 @@ Habilítalo solo para scripts en los que confíes y que hayas probado primero en
         <translation type="vanished">Hay modificaciones sin guardar en este proyecto.</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="174"/>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="183"/>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="197"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="176"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="185"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="199"/>
         <source>Project error</source>
         <translation>Error de proyecto</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="174"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="176"/>
         <source>Project title cannot be empty!</source>
         <translation>El título del proyecto no puede estar vacío.</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="183"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="185"/>
         <source>You need to add at least one group!</source>
         <translation>Se necesita agregar al menos un grupo.</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="197"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="199"/>
         <source>You need to add at least one dataset!</source>
         <translation>Se necesita agregar al menos un conjunto de datos.</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="237"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="239"/>
         <source>Your project needs a title</source>
         <translation>El proyecto necesita un título</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="239"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="241"/>
         <source>Add a group to get started</source>
         <translation>Agregar un grupo para comenzar</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="241"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="243"/>
         <source>Add a dataset to a group</source>
         <translation>Agregar un conjunto de datos a un grupo</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="255"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="257"/>
         <source>Open the Project view at the top of the tree and enter a name. You can rename the project at any time.</source>
         <translation>Abrir la vista Proyecto en la parte superior del árbol e ingresar un nombre. Se puede renombrar el proyecto en cualquier momento.</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="258"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="260"/>
         <source>Groups organize datasets into dashboard widgets. Use the Group button in the toolbar above to create one, then add datasets to it.</source>
         <translation>Los grupos organizan conjuntos de datos en widgets del tablero. Usar el botón Grupo en la barra de herramientas superior para crear uno, luego agregar conjuntos de datos.</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="262"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="264"/>
         <source>Datasets are the values that appear on the dashboard. Select a group in the tree and use the Dataset button in the toolbar to add one.</source>
         <translation>Los conjuntos de datos son los valores que aparecen en el tablero. Selecciona un grupo en el árbol y usa el botón Conjunto de Datos en la barra de herramientas para agregar uno.</translation>
     </message>
@@ -9964,16 +9974,17 @@ Habilítalo solo para scripts en los que confíes y que hayas probado primero en
         <translation type="vanished">Guardar Proyecto de Serial Studio</translation>
     </message>
     <message>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="449"/>
         <source>Serial Studio Project Files (*.ssproj)</source>
-        <translation type="vanished">Archivos de Proyecto de Serial Studio (*.ssproj)</translation>
+        <translation>Archivos de Proyecto de Serial Studio (*.ssproj)</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="818"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="864"/>
         <source>Untitled Project</source>
         <translation>Proyecto sin Título</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="836"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="882"/>
         <source>Device A</source>
         <translation>Dispositivo A</translation>
     </message>

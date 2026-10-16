@@ -57,6 +57,12 @@
 		<color type="primary" scheme_preference="dark">#244263</color>
 	</branding>
 	<releases>
+    <release version="4.2.0" date="2026-10-16">
+      <url>https://github.com/Serial-Studio/Serial-Studio/releases/tag/v4.2.0</url>
+		  <description>
+			  <p>Feature update: sealed deployment packages, aural alarms with alarm bands, HDR dashboards, a console command library with cyclic send, transmit scripts for output widgets, runtime SIMD dispatch, a guided first run and a Pro trial.</p>
+		  </description>
+		</release>
     <release version="4.1.0" date="2026-08-30">
       <url>https://github.com/Serial-Studio/Serial-Studio/releases/tag/v4.1.0</url>
 		  <description>

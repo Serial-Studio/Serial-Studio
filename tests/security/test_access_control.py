@@ -18,6 +18,7 @@ SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial
 """
 
 import json
+import os
 import socket
 import uuid
 import sys
@@ -202,16 +203,23 @@ def test_data_injection(tester):
             response = sock.recv(4096)
             sock.close()
 
-            # The server rejects the unknown "raw" message type, but its error
-            # response still carries "success": false — a substring match on
-            # b"success" therefore false-positives. Parse the reply and treat
-            # only a genuine success/bytesWritten as an accepted injection.
+            # "raw" is a supported message type behind the device-write consent
+            # gate, which an AUTO_CONSENT instance (the CI default) grants. Only
+            # an instance started without it must refuse, and the verdict is
+            # checked before the link, so that run is deterministic.
             try:
                 parsed = json.loads(response.decode())
             except (ValueError, UnicodeDecodeError):
                 parsed = {}
 
-            if parsed.get("success") is True or "bytesWritten" in parsed:
+            accepted = parsed.get("success") is True or "bytesWritten" in parsed
+            if accepted and os.environ.get("SS_TEST_HEADLESS_NO_CONSENT") != "1":
+                print(
+                    "    Raw write accepted: device-write consent granted on this instance"
+                )
+                return
+
+            if accepted:
                 tester.log_weakness(
                     "HIGH",
                     "Data Injection",

@@ -48,6 +48,8 @@ LUA = 1
 LANGUAGE_NAMES = {JS: "js", LUA: "lua"}
 
 SETTLE_SECONDS = 0.6
+MARKER_QUIET_SECONDS = 1.5
+MARKER_SETTLE_MAX_SECONDS = 6.0
 REGISTER_WAIT_SECONDS = 3.0
 TABLE_NAME = "InertTable"
 REGISTER_NAME = "level"
@@ -196,14 +198,25 @@ class Sandbox:
         self.control_before = ""
         self.marker_before = 0
         self.table_before = None
+        self.notifications_before = 0
         self.has_table = False
 
     # -- lifecycle ----------------------------------------------------------
 
     def start(self) -> None:
+        self._drop_leftover_link()
         self.client.command("project.new")
         self.has_table = self._create_table()
         self.baseline()
+
+    def _drop_leftover_link(self) -> None:
+        """A link left open by an earlier test freezes the live table layout (a live session
+        never re-lays the store), so the table this sandbox adds would never become readable.
+        """
+        try:
+            self.client.command("io.disconnect")
+        except (APIError, ConnectionError, TimeoutError):
+            pass
 
     def finish(self) -> None:
         try:
@@ -212,14 +225,32 @@ class Sandbox:
             pass
 
     def adopt_loaded_project(self) -> None:
-        """Re-baseline after a project load; the table (if any) came with the project."""
+        """Re-baseline after a project load; the table (if any) came with the project. The load
+        compiles the parser in the LIVE engine, where a consented launch really runs, so the
+        marker is let settle first or that launch's late write is blamed on what follows.
+        """
         self.has_table = self._wait_for_register()
+        self._wait_for_marker_to_settle()
         self.baseline()
+
+    def _wait_for_marker_to_settle(self) -> None:
+        deadline = time.monotonic() + MARKER_SETTLE_MAX_SECONDS
+        size = self._marker_size()
+        stable_since = time.monotonic()
+        while time.monotonic() < deadline:
+            time.sleep(0.1)
+            current = self._marker_size()
+            if current != size:
+                size = current
+                stable_since = time.monotonic()
+            elif time.monotonic() - stable_since >= MARKER_QUIET_SECONDS:
+                return
 
     def baseline(self) -> None:
         self.control_before = self._control_code()
         self.marker_before = self._marker_size()
         self.table_before = self._read_register() if self.has_table else None
+        self.notifications_before = self._notification_count()
 
     # -- observations -------------------------------------------------------
 
@@ -267,13 +298,15 @@ class Sandbox:
 
         return self._wait_for_register()
 
-    def _notification_seen(self) -> bool:
+    def _notification_count(self) -> int:
+        """Times the token appears in the log; a count, since a project load's live parser may
+        already have posted it before the baseline."""
         try:
             listing = self.client.command("notifications.list")
         except APIError:
-            return False
+            return 0
 
-        return self.token in json.dumps(listing)
+        return json.dumps(listing).count(self.token)
 
     def assert_inert(self, what: str) -> None:
         """Nothing the hostile code attempted may have happened."""
@@ -293,7 +326,7 @@ class Sandbox:
             ), f"{what}: caller code changed the live data-table variable"
 
         assert (
-            not self._notification_seen()
+            self._notification_count() == self.notifications_before
         ), f"{what}: caller code posted a notification"
 
     # -- code builders ------------------------------------------------------

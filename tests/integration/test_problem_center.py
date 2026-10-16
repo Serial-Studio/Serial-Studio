@@ -522,7 +522,7 @@ def test_group_widget_requirement_reported_and_cleared(api_client, clean_state):
     assert "group-widget-requirement" not in _codes(_run(api_client))
 
     last = [d for d in api_client.list_datasets() if d["groupId"] == gid][-1]
-    api_client.delete_dataset(last["groupId"], last["datasetId"])
+    api_client.update_dataset(last["groupId"], last["datasetId"], widget="")
     time.sleep(0.3)
 
     result = _run(api_client)
@@ -532,11 +532,7 @@ def test_group_widget_requirement_reported_and_cleared(api_client, clean_state):
     assert finding["jump"] == "group"
     assert finding["remedy"]
 
-    api_client.add_dataset(gid)
-    readded = [d for d in api_client.list_datasets() if d["groupId"] == gid][-1]
-    api_client.update_dataset(
-        readded["groupId"], readded["datasetId"], widget=last["widget"]
-    )
+    api_client.update_dataset(last["groupId"], last["datasetId"], widget=last["widget"])
     time.sleep(0.3)
     assert "group-widget-requirement" not in _codes(_run(api_client))
 
