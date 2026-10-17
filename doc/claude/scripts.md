@@ -30,7 +30,7 @@ Suppression: wrap a region in `// code-verify off` / `// code-verify on` (C++ an
 something that was deleted. Suppressions are a code-review trigger — fix root cause when
 possible.
 
-Four gates ratchet growth against a checked-in baseline instead of capping absolute size,
+Six gates ratchet growth against a checked-in baseline instead of capping absolute size,
 and each re-seeds with `--accept`: `code-verify.py --singleton-census`
 (`scripts/singleton-census.json`; since spec 0077 it also resolves every `X::instance()` inside
 `core/` to the library declaring `X` and fails on any cross-library reach, listing them per
@@ -39,8 +39,12 @@ edge), `code-verify.py --tu-census`
 file, so a split that lowers every piece passes even though it raises the file count),
 `code-verify.py --dup-census` (`scripts/dup-census.json`; the gated number is the summed count
 of shared 10-line normalized windows over every first-party file pair above 40 -- clone families
-are invisible to a per-file linter because each file passes on its own) and `claim-verify.py`
-(`scripts/claim-baseline.json`). The tu-census and dup-census trees now walk `core/` too
+are invisible to a per-file linter because each file passes on its own) `claim-verify.py`
+(`scripts/claim-baseline.json`), `code-verify.py --clock-census` (`scripts/clock-census.json`;
+per-file clock reads in the `core/Storage/` export and recording workers, because the source
+owns time and a worker that re-stamps a frame is the spec-0101 defect class) and
+`claim-verify.py --context-budget` (`scripts/context-budget.json`; the word count of CLAUDE.md,
+which every turn pays for, with the one-hop sub-doc total as an advisory). The tu-census and dup-census trees now walk `core/` too
 (spec 0076), alongside `layer-verify.py`'s own core-unowned/upward-include gate. A fifth mode,
 `code-verify.py --bus-census` (`scripts/bus-census.json`, spec 0077), is a structural gate rather
 than a ratchet: every `Core::Bus` topic in `Messages.h` must have a publisher and a subscriber,
@@ -57,3 +61,29 @@ upstream tree. The measurements behind that are in the script's module docstring
 
 `.code-report`, `.doc-report`, `.claim-report`, `.osv-report` and `.tidy-report` are the cleanup checklists. If a rule appears as advisory,
 that means the existing codebase has baseline debt — new code should still clear it.
+
+## Creditable verification forms
+
+The done-claim hook (`.claude/hooks/claim-check.py`) credits a verification run only when the
+command is in a plain form it can read without guessing. A run in any other shape is not
+credited, so the claim that it passed is treated as unverified.
+
+Accepted forms:
+
+- `python3 scripts/<verifier>.py ...`, where `code-verify.py` must carry `--check`.
+- `pytest ...` and `python3 -m pytest ...`.
+- `ctest ...`.
+- `<binary> --selftest` and `<binary> --benchmark-hotpath`.
+- Optional `NAME=value` prefixes and a leading `cd <path> &&`.
+- The redirects `2>&1` and `>/dev/null`.
+
+Refused outright: any `;`, `|`, `||`, `&`, `#`, backtick, `$`, `!`, `exit` or `trap`, a
+multi-line command, and an unquoted `*`, `?` or `[`. Also refused are the no-run flags
+`--collect-only`, `--co`, `--setup-only` and `--setup-plan`, `ctest -N` and `--show-only`, and
+`code-verify.py` with `--fix` or `--accept`, since none of those verifies anything.
+
+The idiom is `cmd 2>&1`, never `| tail`: a pipe hides the exit status of the verifier behind the
+status of the filter.
+
+The verifier scripts the hook recognizes, in the order the hook lists them:
+code-verify.py, claim-verify.py, sanitize-commit.py, documentation-verify.py, layer-verify.py, registry-verify.py

@@ -43,20 +43,19 @@ from memory:
 
 `canary: qt 6.11.2 | cpp20 | hotpath 256k (native 1024k, js 64k) | queue 65536 | api 7777 | style 100/2`
 
-It is a context-health probe in plain ASCII. Each value is a fact the repo's rules
-depend on, so a wrong or missing value shows *which* fact was lost — and retyping the
-line re-anchors those constants every turn (see the J-Space discipline below). Keep it
-unobtrusive: one plain-text line at the very end, nothing else on the line.
+It is a context-health probe in plain ASCII. This file is in context every turn, so the
+line is reproduced from the prompt, not recalled: the probe measures whether the
+always-present instruction still steers. Compaction or attention drift shows as a mutated
+or missing value, and which value drifted names the rule that lost its hold. Retyping it
+also re-anchors the constants (J-Space, below). One plain-text line at the very end.
 
-- **From memory only.** Never Read/Grep this file or anything else to reconstruct the
-  line — a looked-up canary defeats the measurement. If you cannot reproduce it
+- **From the prompt only.** Never Read/Grep this file or anything else to reconstruct the
+  line — a looked-up canary defeats the attention measurement. If you cannot reproduce it
   confidently, write `canary: lost` instead of guessing: that is the signal firing.
 - **Verbatim.** Same values, same order, every turn. Do not paraphrase, reformat,
   extend, or "improve" it.
-- **For the developer:** any mutated value, missing segment, or vanished canary means
-  the context window is degraded and the session is about to spiral — treat recent
-  output as suspect, checkpoint the current step, and `/compact` or restart before
-  continuing non-trivial work.
+- **For the developer:** a mutated, partial, or vanished canary means a degraded context:
+  treat recent output as suspect, checkpoint, `/compact` or restart.
 
 ## Trust Contract
 
@@ -151,6 +150,8 @@ lives in [tests/README.md](tests/README.md); read it before writing a test. What
 - **`tests/scripts/` is the exception you *can* run** — pure JS frame-parser unit tests, fresh
   Node.js subprocess per case, no Qt, no app. `pip install -r tests/requirements.txt` once;
   `pytest.ini` registers all markers and a 30 s per-test timeout.
+- **`scripts/tests/` is the tooling tier**, also yours: linter fixtures, census gates, the CI
+  shape, the hooks on fixture transcripts.
 - **C++ units under `app/tests/`** (spec 0032) run via `ctest` (no CMake presets — the repo
   uses hand-written `cmake -B ... -D...` configures; CI inlines the unit-tier flags) — the
   maintainer builds; you may run `ctest` against an existing build dir (never configure or
@@ -209,9 +210,8 @@ the graph, and `code-verify.py --singleton-census` fails on any cross-library re
 
 ## Sub-Documentation
 
-Deep subsystem detail and the silent-breakage lookup live in `doc/claude/`. Read the
-relevant doc **in full** before working in that area — the inline blocks above and below are
-pointers, not substitutes.
+Deep subsystem detail and the silent-breakage lookup live in `doc/claude/`; read the
+section a pointer names before working there. The inline blocks are pointers, not substitutes.
 
 | Document | When to read it |
 |----------|-----------------|
@@ -270,11 +270,11 @@ including the spec-0055 block caps, the time-ring/plot-clock rules, and the kern
   routed lambda.** Any new GUI-callable script API follows the same rule — see
   [doc/claude/architecture/scripting.md](doc/claude/architecture/scripting.md) "Data Tables".
 - **`FrameReader` and `CircularBuffer` are pipeline-thread / SPSC. Never add mutexes.** Recreate
-  via `resetFrameReader()` / `reconfigure()`. Debt: no lint yet (common-mistakes.md "Unenforced
-  invariants").
+  via `resetFrameReader()` / `reconfigure()`. Enforced: code-verify:spsc-lock.
 - **In-pipeline signal hops must be `Qt::DirectConnection`.** Queued between two
   pipeline-thread objects fills the 65536-slot queue at 10+ kHz and drops frames. GUI↔pipeline
-  traffic is chunk/command/tick rate only — never a per-frame queued emission. Debt: no lint yet.
+  traffic is chunk/command/tick rate only — never a per-frame queued emission. Enforced:
+  code-verify:pipeline-queued-hop.
 - **No allocation on the publish path.** Blocks come from a pool (`use_count()==1` probe,
   aliasing shared_ptr) with columns sized once at bind — `DataModel::BlockStager` owns it on the
   frame lane, `StreamProcessor::claimBlockSlot()` on the stream lane. The one copy is
@@ -301,14 +301,14 @@ including the spec-0055 block caps, the time-ring/plot-clock rules, and the kern
   to the per-curve ceiling or the 512 MB rail, and display storage is never pinned. Enforced:
   compile:DSP::RingCapacity, compile:UI::PlotClockState, ctest:tst_time_ring_sizing,
   ctest:tst_ring_exactness, code-verify:lock-memory-scope. Rules + the 2026-08 incidents:
-  [dashboard.md](doc/claude/architecture/dashboard.md) "Time-Ring Sizing".
+  [dashboard.md](doc/claude/architecture/dashboard.md) "Time-Ring Sizing & the Plot Clocks".
 - **Native + PlainText parses through the span fast lane** (`trySpanLane` → `parseUtf8Spans` →
   `applyDatasetValuesSpans`), zero steady-state allocation. Hotpath flags are `DataModel::Cached<T>`
   re-derived at 1 Hz (spec 0095); a new input wires its change signal to the cache refresh, a new
   cache is never a plain `bool`. Enforced: ctest:tst_cached_flags, anchor:cached-hotpath-flags.
   Read dataflow.md "Cached Hotpath Flags" before touching any.
 - **Source owns time.** Stamp at the driver boundary; never re-stamp in export/report
-  workers (use `monotonicFrameNs(...)` as the safety net only). Debt: no lint yet.
+  workers (use `monotonicFrameNs(...)` as the safety net only). Enforced: code-verify:--clock-census.
 - **Driver opens are synchronous calls; most drivers dial asynchronously behind them.** An async
   dial's verdict has ONE owner, `HAL_Driver::openFinished(ok, reason)`, emitted exactly once per
   attempt; a driver that reports only success wedges the connect button. Doctrine:
@@ -318,7 +318,8 @@ including the spec-0055 block caps, the time-ring/plot-clock rules, and the kern
   recreated `FrameReader` zeroes them, so consumers work on deltas. Detail: dataflow.md
   "Diagnostic Counters" (the polled-PLC atomic deviation: io.md).
 - **JS scripts**: always `JsScriptEngine::guardedCall()`, never `parseFunction.call()`.
-  `setInterrupted(true)` only in `JsWatchdogThread.cpp`. Debt: no lint yet.
+  `setInterrupted(true)` only in `JsWatchdogThread.cpp`. Enforced: code-verify:js-raw-call,
+  code-verify:js-interrupt-site.
 - **256 kHz is a CI gate, not a slogan.** `--benchmark-hotpath` runs nine gates tiered off
   `--min-fps` (default 256000) as a hard gate in `ci.yml`; don't regress it. Enforced:
   anchor:hotpath-min-fps. Tier table and the ~70-80% `datasets+publish` share: `ss-hotpath` skill.
@@ -357,22 +358,22 @@ Full contract, including the ctor-edge proof and the licensing consumer inventor
 
 ## Subsystem Contracts — Read Before Touching
 
-Each row is a trigger, not a summary: read the linked doc **in full** before editing that
-area. The hazard column names what breaks silently — the doc holds the rule.
+Each row is a trigger, not a summary: read the named section before editing that area.
+The hazard column names what breaks silently; the doc holds the rule.
 
 | Touching | Read | Hazard |
 |----------|------|--------|
 | Any `ProjectModel` mutator, undo/redo (spec 0031) | [project.md](doc/claude/architecture/project.md) "Undo History" | Mementos are two-phase: `ProjectUndoScope` stages, the first `setModified(true)` commits — omit it and nothing is recorded. Enforced: code-verify:undo-scope-missing. |
-| A dataset property or any API-surface generator (specs 0036, 0037) | [project.md](doc/claude/architecture/project.md) | `app/rcc/properties/dataset.json` generates six checked-in artifacts — **never hand-edit a generated file**. gRPC field numbers are append-only; a moved one fails CI. |
-| A toolbar button, palette entry, context menu, shortcut, or fixed icon (specs 0028/0063) | [commands-icons.md](doc/claude/architecture/commands-icons.md) | Icons resolve ONLY via `Misc::IconRegistry` — never hardcode `qrc:/icons/...`. New command = one manifest entry + one bindings entry; Enforced: script:scripts/registry-verify.py. Project Editor context menus are registry-driven too (`editor-menus.json` + `ProjectEditorMenuBindings.qml` + `CommandMenu.qml`) — never hand-write a `Menu` there. |
-| Installable widgets, `UI::WidgetExtensions` (spec 0038) | [dashboard.md](doc/claude/architecture/dashboard.md) | Packages resolve to `DashboardExtension = 100`, persist as `"ext:<id>"`; `readsStringValues` is what registers one in `string_targets`. Trust model is consent, not containment — never call an extension sandboxed. |
+| A dataset property or any API-surface generator (specs 0036, 0037) | [project.md](doc/claude/architecture/project.md) "Dataset Property Registry", `project.md` "Generated API Surfaces" | `app/rcc/properties/dataset.json` generates six checked-in artifacts — **never hand-edit a generated file**. gRPC field numbers are append-only; a moved one fails CI. |
+| A toolbar button, palette entry, context menu, shortcut, or fixed icon (specs 0028/0063) | [commands-icons.md](doc/claude/architecture/commands-icons.md) "Icons", `commands-icons.md` "Commands" | Icons resolve ONLY via `Misc::IconRegistry` — never hardcode `qrc:/icons/...`. New command = one manifest entry + one bindings entry; Enforced: script:scripts/registry-verify.py. Project Editor context menus are registry-driven too (`editor-menus.json` + `ProjectEditorMenuBindings.qml` + `CommandMenu.qml`) — never hand-write a `Menu` there. |
+| Installable widgets, `UI::WidgetExtensions` (spec 0038) | [dashboard.md](doc/claude/architecture/dashboard.md) "Widget Extensions" | Packages resolve to `DashboardExtension = 100`, persist as `"ext:<id>"`; `readsStringValues` is what registers one in `string_targets`. Trust model is consent, not containment — never call an extension sandboxed. |
 | Alarm bands: `UI::AlarmMonitor` trackers, the annunciator's band points, the Project Editor's Alarm Bands buttons, the `suppressAlarms` option (spec 0093) | [dashboard.md](doc/claude/architecture/dashboard.md) "Alarm Bands" | Whether a dataset's bands are drawn has ONE home, `SerialStudio::datasetRendersAlarmBands` (Bar, Gauge, Meter, LED, or any member of a Bar Panel group; a hidden dataset only in a Bar Panel); whether they alarm is `datasetRaisesBandAlarms` beside it (drawn, non-empty, `suppressAlarms` off). A second copy of either lets a band drawn nowhere sound while the editor refuses to open it. Bands on other datasets are kept and ignored, never cleared. |
 | `core/Ui/Console/Annotations.*`, `ConsoleAnnotations.qml` (spec 0059) | [dashboard.md](doc/claude/architecture/dashboard.md) "Frame annotation layer" | `annotate()` stages, `commitPending()` publishes per tick — reading `count()` right after needs a commit. `reset()` clears the model *before* re-reading the offset. |
-| `core/Api/API/Mirror/`, `streamAvailable()` (spec 0040) | [mirror.md](doc/claude/architecture/mirror.md) | Dataset ordering or `wireUniqueId` changes are wire breaks: bump `kWireVersion`, regenerate `tests/fixtures/mirror/`. Viewer frames never reach the export fan-out. |
+| `core/Api/API/Mirror/`, `streamAvailable()` (spec 0040) | [mirror.md](doc/claude/architecture/mirror.md) "Wire protocol" | Dataset ordering or `wireUniqueId` changes are wire breaks: bump `kWireVersion`, regenerate `tests/fixtures/mirror/`. Viewer frames never reach the export fan-out. |
 | Chrome motion: a popup, menu, dialog or button animation in `app/qml` | [PopupEnter.qml](app/qml/Widgets/PopupEnter.qml), [PopupExit.qml](app/qml/Widgets/PopupExit.qml) | Popups take the two shared transitions plus a `transformOrigin`, never an ad-hoc `Transition`. Anything that scales, slides or bounces gates on `Cpp_Misc_GraphicsBackend.reduceMotion` (fades stay). Animate `opacity`/`scale`/`Translate` only — never `width`/`height` of a laid-out item, never inside `Widgets/Dashboard/` or a recycled `TreeView`/`ListView` delegate. |
 | HDR output: `HdrSurface`/`HdrBoost`, `Misc::HdrOutput`, an emissive material, a shader under `app/shaders/`, or any `MultiEffect`/`layer` near an emissive element (spec 0089) | [dashboard.md](doc/claude/architecture/dashboard.md) "HDR Output" | The whole UI composites SDR inside a per-window FP16 layer; only the output transform converts. An emissive element behind a `MultiEffect` or default-format layer silently clamps to SDR ("slightly dim" is a defect). The transfer math lives in `Misc/HdrTransfer.h` and every shader copies it verbatim (`tst_hdr_transfer` pins it); `_qt_sg_hdr_format` is private Qt API — re-verify per Qt bump. |
 | An embedded code editor's render cadence | [scripting.md](doc/claude/architecture/scripting.md) "Embedded Code Editors" | Never give a main-window-embedded editor an unconditional per-tick `grab()` — cost 13% of the GUI thread (2026-08-17). |
-| The AI assistant: a tool tier, the checkpoint timer, a provider, the tool surface, the sandbox roots | [ai.md](doc/claude/architecture/ai.md) | A mutating tool call takes a **checkpoint**, never a save — the API descriptions and `app/rcc/ai/skills/` say so to the model, so a disk-contract change is incomplete until those strings change too. Every command sits in exactly one tier of `command_safety.json`; an unlisted name silently falls through to `Confirm`. The bundled source behind the `source/` prefix (spec 0078) is read-only and joins a search ONLY through the `path` scope — never add it to the default walk. |
+| The AI assistant: a tool tier, the checkpoint timer, a provider, the tool surface, the sandbox roots | [ai.md](doc/claude/architecture/ai.md) "The Tier Model", `ai.md` "Checkpoint Semantics" | A mutating tool call takes a **checkpoint**, never a save — the API descriptions and `app/rcc/ai/skills/` say so to the model, so a disk-contract change is incomplete until those strings change too. Every command sits in exactly one tier of `command_safety.json`; an unlisted name silently falls through to `Confirm`. The bundled source behind the `source/` prefix (spec 0078) is read-only and joins a search ONLY through the `path` scope — never add it to the default walk. |
 | Locating a god object's concerns (`ProjectModel`, `ProjectHandler`, `FrameBuilder`, `Dashboard`) | [directory-map.md](doc/claude/directory-map.md) | Spec 0070 re-formed the god objects into facades owning real sub-object classes (one class = one .h/.cpp, in a sibling dir named after the facade). Never split one class across TUs: decompose into member sub-objects instead. |
 | The connect gate, a dataset transform or user-table mutator, or any new way to author either (spec 0094) | [io.md](doc/claude/architecture/io.md) "Opening a Link" | A project with transforms or user tables refuses to CONNECT unlicensed (`IO::EntitlementGate`, rule in `SerialStudio::proContentSummary`), and a live unlicensed session ends when its content grows past what its connect admitted; it never runs with the math switched off, because uncalibrated values on a dashboard are worse than a refusal. A new authoring path (API command, importer, generator) needs the license refusal too, and removal paths stay ungated on purpose. Playback is not gated: replay never runs a transform. |
 | Anything that switches the operation mode: a project load, save or generation, a file drop, an example download, the Project Editor opening (spec 0100) | [AppState.h](core/Pipeline/AppState.h) | An *implicit* switch goes through `AppState::requestOperationMode()`, which defers while a link is live and applies on disconnect; only explicit mode choices (radios, `mode.*`, CLI, the API mode command) call `setOperationMode()`. A direct `setOperationMode` from a load path rebuilds devices under a live connection. |

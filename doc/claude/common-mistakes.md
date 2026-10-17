@@ -35,7 +35,7 @@
 | Mistake | Fix |
 |---------|-----|
 | `QMetaObject::invokeMethod(...)` forwarding received data without capturing time | Capture `SteadyClock::now()` in the callback, pass to `publishReceivedData(data, timestamp)`. |
-| Export/report worker calling `steady_clock::now()` to stamp a frame | Use `monotonicFrameNs(frame->timestamp, baseline)` on the shared `TimestampedFramePtr`. |
+| Export/report worker calling `steady_clock::now()` to stamp a frame | Use `monotonicFrameNs(frame->timestamp, baseline)` on the shared `TimestampedFramePtr`. Codified: code-verify:--clock-census. |
 
 ## Dashboard & Widgets
 
@@ -79,7 +79,7 @@
 | `Per-dataset transformCode` with a leftover placeholder | `DatasetTransformEditor::onApply` discards code that doesn't define `transform()`. |
 | Driving `setInterrupted(true)` from a `QTimer` on the thread that runs `QJSValue::call()` | The event loop is blocked during the call, so the timer never fires — the original watchdog no-op. Arm a `DataModel::JsWatchdog`; only `JsWatchdogThread` flips the flag (off-thread). `code-verify.py:js-interrupt-off-thread` blocks `setInterrupted(true)` outside `JsWatchdogThread.cpp`. |
 | Touching the QML-embedded code editors (`JsCodeEditor` & siblings) without preserving the hidden-widget plumbing | Three invariants (position sync, `ShortcutOverride` forwarding, completer-popup rerouting) hold the embedded editor together — read [architecture/scripting.md](architecture/scripting.md) "Embedded Code Editors" in full before editing. |
-| Writing string-based byte access (`string.byte`, `string.unpack`, `charCodeAt`, `split`) in a Lua/JS parser that runs under the **Binary decoder** — including the importer-generated Lua templates | Binary frames arrive as a 1-indexed byte table (Lua) / byte `Array` (JS), **not a string** — every frame errors out. Index directly, or convert once at the top of `parse()`. Full semantics + reference patterns in [architecture/scripting.md](architecture/scripting.md) "Binary-decoder scripts". Both importers shipped this bug in 2026-06. |
+| Writing string-based byte access (`string.byte`, `string.unpack`, `charCodeAt`, `split`) in a Lua/JS parser that runs under the **Binary decoder** — including the importer-generated Lua templates | Binary frames arrive as a 1-indexed byte table (Lua) / byte `Array` (JS), **not a string** — every frame errors out. Index directly, or convert once at the top of `parse()`. Full semantics + reference patterns in [architecture/scripting.md](architecture/scripting.md) "Binary-decoder scripts get byte tables, not strings". Both importers shipped this bug in 2026-06. |
 
 ## Export & Sessions
 
@@ -155,18 +155,9 @@ data loss first. Each stays prose until its `Debt:` turns into an `Enforced:` ma
 2. **The player-open mask's upstream hop.** `FrameBuilder::m_playerOpen` is audited against the
    bus-fed `m_playerOpenMask`, but nothing compares the mask with the players' real state.
    Debt: a GUI-side audit entry once the players expose a pollable open state.
-3. **A queued hop between two pipeline-thread objects** (CLAUDE.md "In-pipeline signal hops must be
-   `Qt::DirectConnection`"). Debt: a code-verify rule on `connect()` calls whose sender and receiver
-   are both pipeline-affine.
-4. **A mutex in `FrameReader` / `CircularBuffer`.** Debt: a code-verify rule banning lock types in
-   those TUs.
-5. **Re-stamping time in an export or report worker** (source owns time). Debt: a lint on clock
-   reads in `core/Storage/**` workers.
-6. **`parseFunction.call()` instead of `JsScriptEngine::guardedCall()`, or `setInterrupted(true)`
-   outside `JsWatchdogThread.cpp`.** Debt: a grep-class code-verify rule.
-7. **Inline SIMD intrinsics outside `DSPSimd.h` / `DSPSimdAvx2.h`.** Debt: a code-verify rule on
+3. **Inline SIMD intrinsics outside `DSPSimd.h` / `DSPSimdAvx2.h`.** Debt: a code-verify rule on
    intrinsic headers.
-8. **A hand-edited generated file.** `sanitize-commit.py` regenerates and so masks the edit locally.
+4. **A hand-edited generated file.** `sanitize-commit.py` regenerates and so masks the edit locally.
    Debt: a CI check that regeneration leaves the tree unchanged.
-9. **An assistant command missing from `command_safety.json`** (falls through to Confirm). Debt: a
+5. **An assistant command missing from `command_safety.json`** (falls through to Confirm). Debt: a
    test that every registered command sits in exactly one tier.

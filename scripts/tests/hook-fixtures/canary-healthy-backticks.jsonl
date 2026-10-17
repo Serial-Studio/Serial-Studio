@@ -1,0 +1,2 @@
+{"type": "user", "message": {"role": "user", "content": "hi"}}
+{"type": "assistant", "sessionId": "s1", "message": {"content": [{"type": "text", "text": "All set.\n`canary: qt 6.11.2 | cpp20 | hotpath 256k (native 1024k, js 64k) | queue 65536 | api 7777 | style 100/2`"}]}}

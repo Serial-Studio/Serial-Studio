@@ -2031,6 +2031,12 @@ jobs:
       run: python3 scripts/code-verify.py --bus-census --check
 
     #
+    # Clock-source census: where the pipeline reads time must not grow unnoticed
+    #
+    - name: '🔒 Verify clock sources'
+      run: python3 scripts/code-verify.py --clock-census --check
+
+    #
     # The tooling's own tests: 8000+ lines of source-rewriting Python and a 3600-line workflow
     # had zero coverage until spec 0075, so a rule regression rewrote files silently and CI
     # drift was invisible
@@ -2044,6 +2050,12 @@ jobs:
     #
     - name: '🔬 Verify AI documentation claims'
       run: python3 scripts/claim-verify.py --quiet
+
+    #
+    # Context budget of the AI-facing docs
+    #
+    - name: '🔬 Verify AI context budget'
+      run: python3 scripts/claim-verify.py --context-budget --check
 
     #
     # Markdown AI-narration scan over the user-facing docs

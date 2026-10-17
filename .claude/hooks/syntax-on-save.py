@@ -10,9 +10,13 @@ developer's next build. Sanctioned 2026-10-04: every AI batch-edit failure of
 
 Mirrors verify-on-save.py's contract: never blocks, never raises; a clean
 result (or a missing database) stays silent.
+
+Design choices specific to this repo:
+  - The repo root honors CLAUDE_PROJECT_DIR for tests, falling back to the file location.
 """
 
 import json
+import os
 import subprocess
 import sys
 from pathlib import Path
@@ -20,6 +24,14 @@ from pathlib import Path
 CXX_SUFFIXES = {".cpp", ".cc", ".cxx", ".c++", ".h", ".hpp", ".hh", ".hxx"}
 CHECK_TIMEOUT_S = 120
 MAX_CONTEXT_CHARS = 6000
+
+
+def repo_root() -> Path:
+    """Resolve the repository root: CLAUDE_PROJECT_DIR when set, else this file's location."""
+    override = os.environ.get("CLAUDE_PROJECT_DIR", "")
+    if override:
+        return Path(override).resolve()
+    return Path(__file__).resolve().parents[2]
 
 
 def emit_and_exit(context: str) -> None:
@@ -49,8 +61,8 @@ def main() -> None:
     if edited.suffix.lower() not in CXX_SUFFIXES:
         sys.exit(0)
 
-    repo_root = Path(__file__).resolve().parents[2]
-    checker = repo_root / "scripts" / "syntax-check.py"
+    root = repo_root()
+    checker = root / "scripts" / "syntax-check.py"
     if not checker.is_file() or not edited.is_file():
         sys.exit(0)
 
@@ -60,7 +72,7 @@ def main() -> None:
             capture_output=True,
             text=True,
             timeout=CHECK_TIMEOUT_S,
-            cwd=str(repo_root),
+            cwd=str(root),
         )
     except Exception:
         sys.exit(0)

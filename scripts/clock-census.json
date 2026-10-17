@@ -1,0 +1,13 @@
+{
+  "total": 16,
+  "per_file": {
+    "core/Storage/CSV/Export.cpp": 1,
+    "core/Storage/InfluxDB/Export.cpp": 2,
+    "core/Storage/MDF4/Export.cpp": 2,
+    "core/Storage/MQTT/PublisherWorker.cpp": 3,
+    "core/Storage/Sessions/DatabaseWorker.cpp": 2,
+    "core/Storage/Sessions/Export.cpp": 4,
+    "core/Storage/Sessions/HtmlReport.cpp": 1,
+    "core/Storage/Sessions/Verifier.cpp": 1
+  }
+}

@@ -282,6 +282,17 @@
           "must_contain": "Dashboard `m_streamAvailable`"
         }
       ]
+    },
+    {
+      "name": "claim-check-verifiers",
+      "source": ".claude/hooks/claim-check.py",
+      "source_pattern": "VERIFIER_SCRIPTS = \\(\\s*\"code-verify\\.py\",\\s*\"claim-verify\\.py\",\\s*\"sanitize-commit\\.py\",\\s*\"documentation-verify\\.py\",\\s*\"layer-verify\\.py\",\\s*\"registry-verify\\.py\",\\s*\\)",
+      "docs": [
+        {
+          "path": "doc/claude/scripts.md",
+          "must_contain": "code-verify.py, claim-verify.py, sanitize-commit.py, documentation-verify.py, layer-verify.py, registry-verify.py"
+        }
+      ]
     }
   ]
 }

@@ -20,6 +20,12 @@ context, not a mutation. Outcomes:
                      drifted tells you which fact fell out of the workspace).
   missing entirely - loud systemMessage: instruction no longer steering.
 
+What the probe measures: CLAUDE.md is in context every turn, so the line is
+reproduced from the system prompt, not recalled. A mutated or missing line
+means the always-present instruction stopped steering (heavy compaction, a
+truncated prompt, attention drift), not that one fact was forgotten on its
+own; which value drifted still says which rule lost its hold.
+
 Design choices specific to this repo:
   - Retry before warning: the Stop event can fire before the final assistant
     message is flushed to the transcript (observed on macOS, 2026-07-14 - the
@@ -39,10 +45,20 @@ Design choices specific to this repo:
 """
 
 import json
+import os
 import sys
 import time
 
-RETRY_ATTEMPTS = 8
+
+def _retry_attempts(default: int) -> int:
+    """Retry count from SS_HOOK_RETRIES (tests set 1); a bad value keeps the default."""
+    try:
+        return max(1, int(os.environ.get("SS_HOOK_RETRIES", default)))
+    except ValueError:
+        return default
+
+
+RETRY_ATTEMPTS = _retry_attempts(8)
 RETRY_DELAY_S = 0.4
 
 EXPECTED_CANARY = (

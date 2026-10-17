@@ -1,0 +1,2 @@
+{"type": "user", "isSidechain": false, "sessionId": "s1", "message": {"role": "user", "content": "fix it"}}
+{"type": "assistant", "sessionId": "s1", "message": {"content": [{"type": "text", "text": "Done. All tests pass."}]}}

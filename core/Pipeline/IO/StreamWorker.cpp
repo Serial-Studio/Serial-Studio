@@ -786,8 +786,12 @@ bool IO::StreamProcessor::runJsBlockTransform(ChannelState& state, quint64 block
   info.setProperty(QStringLiteral("count"), static_cast<double>(count));
   info.setProperty(QStringLiteral("firstSampleIndex"), static_cast<double>(state.firstSampleIndex));
 
+  // code-verify off
+  // Without a watchdog there is no interrupt source, so the raw call is the only way to run the
+  // block transform; the watchdog arm is taken whenever one exists.
   const QJSValue result = m_jsWatchdog ? m_jsWatchdog->call(state.jsBlockFn, {samples, info})
                                        : state.jsBlockFn.call({samples, info});
+  // code-verify on
   if (m_jsWatchdog && m_jsWatchdog->lastCallTimedOut()) [[unlikely]] {
     m_jsTimedOut = true;
     return false;
@@ -852,9 +856,13 @@ void IO::StreamProcessor::runSampleTransform(ChannelState& state)
   if (m_jsWatchdog)
     m_jsWatchdog->arm();
 
+  // code-verify off
+  // The watchdog is armed once above this per-sample loop and isInterrupted() is checked after
+  // every call; a guardedCall per sample would re-arm the timer at sample rate.
   SS_NO_UNROLL
   for (std::size_t i = 0; i < count; ++i) {
     const QJSValue result = state.jsFn.call({QJSValue(m_scratch[i])});
+    // code-verify on
     if (m_js && m_js->isInterrupted()) [[unlikely]] {
       m_jsTimedOut = true;
       m_js->setInterrupted(false);

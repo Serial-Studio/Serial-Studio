@@ -22,6 +22,7 @@ Design choices specific to this repo:
     Write would clobber); untracked directories match by path prefix.
   - State lives in the OS temp dir keyed by session_id, so the guard itself
     never dirties the repo tree or git status.
+  - The repo root honors CLAUDE_PROJECT_DIR for tests, falling back to the file location.
 """
 
 import json
@@ -38,7 +39,10 @@ STATE_DIR = Path(tempfile.gettempdir()) / "claude-ss-dirty-guard"
 
 
 def repo_root() -> Path:
-    """Resolve the repository root from this file's location (.claude/hooks/)."""
+    """Resolve the repository root: CLAUDE_PROJECT_DIR when set, else this file's location."""
+    override = os.environ.get("CLAUDE_PROJECT_DIR", "")
+    if override:
+        return Path(override).resolve()
     return Path(__file__).resolve().parents[2]
 
 

@@ -1,0 +1,6 @@
+{"type": "user", "isSidechain": false, "sessionId": "s1", "message": {"role": "user", "content": "fix it"}}
+{"type": "assistant", "sessionId": "s1", "message": {"content": [{"type": "tool_use", "id": "e1", "name": "Edit", "input": {"file_path": "a.py"}}]}}
+{"type": "user", "sessionId": "s1", "message": {"content": [{"type": "tool_result", "tool_use_id": "e1", "is_error": false, "content": "ok"}]}}
+{"type": "assistant", "sessionId": "s1", "message": {"content": [{"type": "tool_use", "id": "p1", "name": "Bash", "input": {"command": "pytest tests -q 2>&1 | tail -5"}}]}}
+{"type": "user", "sessionId": "s1", "message": {"content": [{"type": "tool_result", "tool_use_id": "p1", "is_error": false, "content": "ok"}]}, "toolUseResult": {"stdout": "ok"}}
+{"type": "assistant", "sessionId": "s1", "message": {"content": [{"type": "text", "text": "Done. All tests pass."}]}}

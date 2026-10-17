@@ -1,5 +1,7 @@
 # Directory Map
 
+## `core/`
+
 Seven statically linked CamelCase libraries live under `core/`; `app/src` holds only the
 composition root (spec 0076). Two include conventions: `Core`/`Protocols` are reached by
 layer name (`#include "Core/…"`, `#include "Protocols/…"`, root = `core/`) and are STRICT —

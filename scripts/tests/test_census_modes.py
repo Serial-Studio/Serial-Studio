@@ -134,3 +134,67 @@ def test_the_repository_has_no_cross_library_reach():
         pytest.skip("tree-sitter is needed to classify the reaches")
     census = CV._collect_singleton_census(REPO)
     assert census["cross_library_total"] == 0, census["cross_library"][:20]
+
+
+def _clock_tree(tmp_path: Path, counts: dict[str, int]) -> Path:
+    for rel, count in counts.items():
+        path = tmp_path / rel
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text(
+            "".join(
+                "auto t%d = std::chrono::steady_clock::now();\n" % i
+                for i in range(count)
+            ),
+            encoding="utf-8",
+        )
+    return tmp_path
+
+
+def _clock_baseline(monkeypatch, tmp_path: Path, root: Path) -> None:
+    monkeypatch.setattr(CV, "_CLOCK_CENSUS_BASELINE", tmp_path / "clock-census.json")
+    assert CV._run_clock_census(root, check=False, accept=True) == 0
+
+
+def test_clock_census_counts_sinks_and_skips_replay(tmp_path):
+    root = _clock_tree(
+        tmp_path,
+        {
+            "core/Storage/CSV/Export.cpp": 2,
+            "core/Storage/Sessions/Player.cpp": 5,
+            "core/Storage/Sessions/ReplayClock.cpp": 5,
+            "core/Ui/Other.cpp": 5,
+        },
+    )
+    census = CV._collect_clock_census(root)
+    assert census["per_file"] == {"core/Storage/CSV/Export.cpp": 2}
+    assert census["total"] == 2
+
+
+def test_clock_census_growth_fails_and_names_the_grower(tmp_path, monkeypatch, capsys):
+    root = _clock_tree(tmp_path, {"core/Storage/CSV/Export.cpp": 1})
+    _clock_baseline(monkeypatch, tmp_path, root)
+    _clock_tree(tmp_path, {"core/Storage/CSV/Export.cpp": 2})
+    assert CV._run_clock_census(root, check=True, accept=False) == 1
+    err = capsys.readouterr().err
+    assert "Export.cpp: 1 -> 2" in err
+    assert "monotonicFrameNs" in err
+
+
+def test_clock_census_shrink_passes_with_a_rebaseline_hint(
+    tmp_path, monkeypatch, capsys
+):
+    root = _clock_tree(tmp_path, {"core/Storage/CSV/Export.cpp": 2})
+    _clock_baseline(monkeypatch, tmp_path, root)
+    _clock_tree(tmp_path, {"core/Storage/CSV/Export.cpp": 1})
+    assert CV._run_clock_census(root, check=True, accept=False) == 0
+    assert "shrank" in capsys.readouterr().out
+
+
+def test_clock_census_accept_reseeds_and_missing_baseline_exits_two(
+    tmp_path, monkeypatch
+):
+    root = _clock_tree(tmp_path, {"core/Storage/CSV/Export.cpp": 1})
+    monkeypatch.setattr(CV, "_CLOCK_CENSUS_BASELINE", tmp_path / "clock-census.json")
+    assert CV._run_clock_census(root, check=True, accept=False) == 2
+    assert CV._run_clock_census(root, check=False, accept=True) == 0
+    assert CV._run_clock_census(root, check=True, accept=False) == 0

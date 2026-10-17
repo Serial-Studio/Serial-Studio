@@ -17,9 +17,11 @@ Design choices specific to this repo:
     absence means a clean tree, not a tree sanitize never saw.
   - Fail-open on any internal error, silent for non-commit commands: only a
     genuinely stale commit attempt is ever blocked.
+  - The repo root honors CLAUDE_PROJECT_DIR for tests, falling back to the file location.
 """
 
 import json
+import os
 import re
 import subprocess
 import sys
@@ -32,7 +34,10 @@ SOURCE_SUFFIXES = {".c", ".cpp", ".cc", ".cxx", ".c++", ".h", ".hpp", ".hh", ".h
 
 
 def repo_root() -> Path:
-    """Resolve the repository root from this file's location (.claude/hooks/)."""
+    """Resolve the repository root: CLAUDE_PROJECT_DIR when set, else this file's location."""
+    override = os.environ.get("CLAUDE_PROJECT_DIR", "")
+    if override:
+        return Path(override).resolve()
     return Path(__file__).resolve().parents[2]
 
 

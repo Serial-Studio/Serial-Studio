@@ -28,6 +28,8 @@ ground truth in the tree:
                          ctest, anchor, script, hook or symbol that does not
                          exist (spec 0095 M5): a rule that claims a mechanism
                          must point at a real one
+    section-missing      a `<name>.md` "<Heading>" or [text](path.md) "<Heading>"
+                         reference whose target file has no such heading
 
 `doc/claude/specs/**` is deliberately out of scope: a spec is a dated record of
 what was decided, not a live claim about the tree, and files legitimately move
@@ -41,6 +43,7 @@ Usage:
     python3 scripts/claim-verify.py                 # scan the AI-facing tier
     python3 scripts/claim-verify.py CLAUDE.md       # explicit file or dir
     python3 scripts/claim-verify.py --no-report     # don't write .claim-report
+    python3 scripts/claim-verify.py --context-budget [--check|--accept]
 
 Exit codes:
     0 - clean (advisories alone don't fail)
@@ -60,6 +63,7 @@ REPO_ROOT = Path(__file__).resolve().parent.parent
 ANCHORS_PATH = Path(__file__).with_name("doc-anchors.json")
 REPORT_PATH = REPO_ROOT / ".claim-report"
 BASELINE_PATH = Path(__file__).with_name("claim-baseline.json")
+CONTEXT_BUDGET_PATH = Path(__file__).with_name("context-budget.json")
 
 # The always-loaded tier. `doc/claude/specs/**` is excluded on purpose (see the
 # module docstring); so is any build output that wanders into the tree.
@@ -495,6 +499,104 @@ def check_symbols(
     return out
 
 
+SECTION_BACKTICK_RE = re.compile(r"`([\w./-]+\.md)`\s+\"([^\"\n]+)\"")
+SECTION_LINK_RE = re.compile(
+    r"\[[^\]]*\]\(([^)\s#]+\.md)(?:#[^)\s]*)?\)\s+\"([^\"\n]+)\""
+)
+HEADING_RE = re.compile(r"^\s{0,3}#{1,6}\s+(.*?)\s*#*\s*$")
+SECTION_DOC_ROOT = "doc/claude"
+_DOC_NAME_INDEX: dict[str, list[Path]] | None = None
+
+
+HEADING_SEP_RE = re.compile(r" — | – | - |: ")
+HEADING_PAREN_RE = re.compile(r"\s*\([^()]*\)\s*$")
+BOLD_LABEL_RE = re.compile(r"^\s{0,3}(?:[-*]\s+)?\*\*(.+?)\*\*")
+
+
+def _heading_keys(text: str) -> set[str]:
+    """A heading's text, before its first title separator, and without a trailing parenthetical."""
+    keys: set[str] = set()
+    for form in (text, HEADING_SEP_RE.split(text, maxsplit=1)[0]):
+        base = _norm_heading(form)
+        keys.add(base)
+        keys.add(_norm_heading(HEADING_PAREN_RE.sub("", base)))
+    return keys
+
+
+def _norm_heading(text: str) -> str:
+    """Heading text as compared: backticks removed, trimmed, trailing punctuation dropped."""
+    return text.replace("`", "").strip().rstrip(".,;:!?").strip()
+
+
+def _doc_name_index() -> dict[str, list[Path]]:
+    """Every Markdown file under doc/claude, grouped by file name."""
+    global _DOC_NAME_INDEX
+    if _DOC_NAME_INDEX is None:
+        index: dict[str, list[Path]] = {}
+        base = REPO_ROOT / SECTION_DOC_ROOT
+        for found in sorted(base.rglob("*.md")) if base.is_dir() else []:
+            index.setdefault(found.name, []).append(found)
+        _DOC_NAME_INDEX = index
+    return _DOC_NAME_INDEX
+
+
+def _section_target(doc: Path, ref: str, linked: bool) -> Path | None:
+    """The .md file a reference names, or None when it cannot be resolved safely."""
+    if linked:
+        target = doc.parent / ref
+        return target if target.is_file() else None
+    if "/" in ref:
+        target = REPO_ROOT / ref
+        return target if target.is_file() else None
+    matches = _doc_name_index().get(ref, [])
+    return matches[0] if len(matches) == 1 else None
+
+
+def _headings_of(path: Path) -> set[str]:
+    """Normalised ATX heading and bold run-in label texts of a Markdown file, fences skipped."""
+    lines = path.read_text(encoding="utf-8", errors="replace").splitlines()
+    in_fence = False
+    found: set[str] = set()
+    for raw in lines:
+        if FENCE_RE.match(raw):
+            in_fence = not in_fence
+            continue
+        match = (
+            None if in_fence else (HEADING_RE.match(raw) or BOLD_LABEL_RE.match(raw))
+        )
+        if match is not None:
+            found.update(_heading_keys(match.group(1)))
+    return found
+
+
+def check_sections(path: Path, lines: list[str], visible: list[bool]) -> list[Finding]:
+    """Every `file.md` "Heading" reference must find that heading in the file."""
+    out: list[Finding] = []
+    cache: dict[Path, set[str]] = {}
+    for i, raw in enumerate(lines):
+        if not visible[i]:
+            continue
+        refs = [(m, False) for m in SECTION_BACKTICK_RE.findall(raw)]
+        refs += [(m, True) for m in SECTION_LINK_RE.findall(raw)]
+        for (ref, heading), linked in refs:
+            target = _section_target(path, ref, linked)
+            if target is None:
+                continue
+            if target not in cache:
+                cache[target] = _headings_of(target)
+            if _norm_heading(heading) not in cache[target]:
+                out.append(
+                    Finding(
+                        path,
+                        i + 1,
+                        "section-missing",
+                        f'`{ref}` has no heading "{heading}"',
+                        True,
+                    )
+                )
+    return out
+
+
 ENFORCER_MARKER_RE = re.compile(r"\b(?:Enforced|Codified):\s*(.*)")
 ENFORCER_ITEM_RE = re.compile(
     r"\b(code-verify|ctest|anchor|script|hook|compile):([^\s,;`)]+)"
@@ -891,6 +993,86 @@ def write_report(findings: list[Finding]) -> None:
     )
 
 
+def _words(path: Path) -> int:
+    """Whitespace-separated word count of a file."""
+    return len(path.read_text(encoding="utf-8", errors="replace").split())
+
+
+def _collect_context_budget(repo_root: Path) -> dict:
+    """Word counts of CLAUDE.md and of every doc/claude page it links (specs/ excluded)."""
+    claude = repo_root / "CLAUDE.md"
+    text = claude.read_text(encoding="utf-8", errors="replace")
+    linked: set[Path] = set()
+    for target in LINK_RE.findall(text):
+        clean = target.split("#", 1)[0]
+        if not clean.endswith(".md"):
+            continue
+        found = (claude.parent / clean).resolve()
+        try:
+            rel = found.relative_to((repo_root / SECTION_DOC_ROOT).resolve())
+        except ValueError:
+            continue
+        if found.is_file() and "specs" not in rel.parts:
+            linked.add(found)
+    return {
+        "claude_md_words": _words(claude),
+        "one_hop_words": sum(_words(p) for p in sorted(linked)),
+    }
+
+
+def _run_context_budget(
+    repo_root: Path, check: bool, accept: bool, baseline_path: Path
+) -> int:
+    """Report CLAUDE.md's always-loaded word budget, gate its growth, or re-baseline.
+
+    Only CLAUDE.md itself is gated: the one-hop total is context a session may pull in, so
+    its delta is advisory."""
+    budget = _collect_context_budget(repo_root)
+
+    if accept:
+        baseline_path.write_text(
+            json.dumps(budget, indent=2, sort_keys=True) + "\n",
+            encoding="utf-8",
+            newline="\n",
+        )
+        print(f"baseline written to {baseline_path}: {budget}")
+        return 0
+
+    if not check:
+        print(f"CLAUDE.md: {budget['claude_md_words']} words")
+        print(f"one-hop doc/claude links: {budget['one_hop_words']} words")
+        return 0
+
+    if not baseline_path.is_file():
+        print(
+            f"no baseline at {baseline_path}; seed it with --context-budget --accept",
+            file=sys.stderr,
+        )
+        return 2
+
+    base = json.loads(baseline_path.read_text(encoding="utf-8"))
+    old, new = base.get("claude_md_words", 0), budget["claude_md_words"]
+    hop_delta = budget["one_hop_words"] - base.get("one_hop_words", 0)
+    print(
+        f"advisory: one-hop words {budget['one_hop_words']} ({hop_delta:+d} vs baseline)"
+    )
+
+    if new > old:
+        print(
+            f"CLAUDE.md grew: {old} -> {new} words; extract to a doc/claude sub-doc "
+            "instead of appending",
+            file=sys.stderr,
+        )
+        return 1
+
+    print(f"CLAUDE.md: {new} words (baseline {old})")
+    if new < old:
+        print(
+            "it shrank; re-baseline with python scripts/claim-verify.py --context-budget --accept"
+        )
+    return 0
+
+
 def main(argv: list[str]) -> int:
     parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     parser.add_argument("--quiet", action="store_true", help="print the summary only")
@@ -898,6 +1080,16 @@ def main(argv: list[str]) -> int:
         "--accept",
         action="store_true",
         help="re-baseline scripts/claim-baseline.json to today's errors",
+    )
+    parser.add_argument(
+        "--context-budget",
+        action="store_true",
+        help="count CLAUDE.md and its one-hop doc words; with --check/--accept gate it",
+    )
+    parser.add_argument(
+        "--check",
+        action="store_true",
+        help="with --context-budget: fail if CLAUDE.md grew over the baseline",
     )
     parser.add_argument(
         "--no-report", action="store_true", help="skip writing .claim-report"
@@ -909,6 +1101,11 @@ def main(argv: list[str]) -> int:
         help="files or directories (default: the AI tier)",
     )
     args = parser.parse_args(argv)
+
+    if args.context_budget:
+        return _run_context_budget(
+            REPO_ROOT, args.check, args.accept, CONTEXT_BUDGET_PATH
+        )
 
     if args.paths:
         targets = [p if p.is_absolute() else REPO_ROOT / p for p in args.paths]
@@ -936,6 +1133,7 @@ def main(argv: list[str]) -> int:
         findings.extend(check_links(doc, lines, visible))
         findings.extend(check_symbols(doc, lines, visible, index))
         findings.extend(check_enforcers(doc, lines, visible, enforcers))
+        findings.extend(check_sections(doc, lines, visible))
 
     findings.extend(check_anchors())
     findings.sort(key=lambda f: (f.path.as_posix(), f.line, f.kind))

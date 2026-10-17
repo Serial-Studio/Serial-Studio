@@ -1,0 +1,2 @@
+{"type": "user", "message": {"role": "user", "content": "hi"}}
+{"type": "assistant", "sessionId": "s1", "message": {"content": [{"type": "text", "text": "Hello, nothing at the end."}]}}

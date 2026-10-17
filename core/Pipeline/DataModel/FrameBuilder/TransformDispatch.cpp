@@ -272,7 +272,11 @@ QVariant DataModel::TransformDispatch::applyJs(DataModel::TransformEngine& engin
     args << jsInfo;
   }
 
+  // code-verify off
+  // The engine's JsWatchdog is armed by the owner for the whole frame and isInterrupted() is
+  // checked right below; a guardedCall per dataset would re-arm the timer at frame rate.
   auto result = refIt->second.fn.call(args);
+  // code-verify on
 
   if (engine.jsEngine->isInterrupted()) [[unlikely]] {
     engine.jsEngine->setInterrupted(false);

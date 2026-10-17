@@ -513,3 +513,9 @@ def test_the_library_job_does_not_gate_publication(ci):
 def test_the_lint_job_runs_the_bus_census(ci):
     runs = " ".join(str(step.get("run", "")) for step in _steps(ci["lint"]))
     assert "--bus-census --check" in runs
+
+
+def test_the_lint_job_runs_the_clock_census_and_the_context_budget(ci):
+    runs = " ".join(str(step.get("run", "")) for step in _steps(ci["lint"]))
+    assert "python3 scripts/code-verify.py --clock-census --check" in runs
+    assert "python3 scripts/claim-verify.py --context-budget --check" in runs

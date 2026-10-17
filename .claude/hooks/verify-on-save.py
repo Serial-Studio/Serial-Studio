@@ -15,9 +15,11 @@ Design choices specific to this repo:
     developer may be reading.
   - The hook never blocks and never raises: any internal failure exits 0
     silently so routine editing is never disrupted.
+  - The repo root honors CLAUDE_PROJECT_DIR for tests, falling back to the file location.
 """
 
 import json
+import os
 import subprocess
 import sys
 from pathlib import Path
@@ -25,6 +27,14 @@ from pathlib import Path
 SOURCE_SUFFIXES = {".cpp", ".cc", ".cxx", ".c++", ".h", ".hpp", ".hh", ".hxx", ".qml"}
 VERIFY_TIMEOUT_S = 45
 MAX_CONTEXT_CHARS = 6000
+
+
+def repo_root() -> Path:
+    """Resolve the repository root: CLAUDE_PROJECT_DIR when set, else this file's location."""
+    override = os.environ.get("CLAUDE_PROJECT_DIR", "")
+    if override:
+        return Path(override).resolve()
+    return Path(__file__).resolve().parents[2]
 
 
 def emit_and_exit(context: str) -> None:
@@ -54,8 +64,8 @@ def main() -> None:
     if edited.suffix.lower() not in SOURCE_SUFFIXES:
         sys.exit(0)
 
-    repo_root = Path(__file__).resolve().parents[2]
-    verify = repo_root / "scripts" / "code-verify.py"
+    root = repo_root()
+    verify = root / "scripts" / "code-verify.py"
     if not verify.is_file() or not edited.is_file():
         sys.exit(0)
 
@@ -65,7 +75,7 @@ def main() -> None:
             capture_output=True,
             text=True,
             timeout=VERIFY_TIMEOUT_S,
-            cwd=str(repo_root),
+            cwd=str(root),
         )
     except Exception:
         sys.exit(0)

@@ -52,6 +52,7 @@ Usage:
     python3 scripts/code-verify.py --check app/qml/Foo.qml  # single file
     python3 scripts/code-verify.py --fix --diff app/qml     # show changes
     python3 scripts/code-verify.py --tu-census --check      # TU-size ratchet
+    python3 scripts/code-verify.py --clock-census --check   # clock-read ratchet
 
 Called with no arguments the script defaults to --fix on the entire
 <repo>/app/qml and <repo>/app/src trees.
@@ -2078,6 +2079,205 @@ def find_bus_on_hotpath_violations(
     return violations
 
 
+_SPSC_LOCK_RE = re.compile(
+    r"\b(?:QMutex|QRecursiveMutex|QReadWriteLock|QMutexLocker|QReadLocker|QWriteLocker"
+    r"|QSemaphore|QWaitCondition"
+    r"|std::(?:mutex|shared_mutex|recursive_mutex|lock_guard|scoped_lock|unique_lock"
+    r"|condition_variable))\b"
+)
+_SPSC_ATOMIC_RE = re.compile(r"\bstd::atomic\b")
+_SPSC_FILES = (
+    "core/Pipeline/IO/FrameReader.h",
+    "core/Pipeline/IO/FrameReader.cpp",
+    "core/Pipeline/DataModel/FrameBuilder/BlockStager.h",
+    "core/Pipeline/DataModel/FrameBuilder/BlockStager.cpp",
+    "core/Pipeline/DataModel/FrameBuilder/BlockPublisher.h",
+    "core/Pipeline/DataModel/FrameBuilder/BlockPublisher.cpp",
+    "core/Core/CircularBuffer.h",
+)
+_SPSC_ATOMIC_EXEMPT = "core/Core/CircularBuffer.h"
+
+
+def find_spsc_lock_violations(
+    raw_lines: list[str], path: Path, fence_mask: list[bool]
+) -> list[Violation]:
+    """Flag locks (and atomics outside CircularBuffer.h) in the pipeline-thread SPSC pieces."""
+    posix = path.as_posix()
+    if not any(posix.endswith(scoped) for scoped in _SPSC_FILES):
+        return []
+
+    allow_atomic = posix.endswith(_SPSC_ATOMIC_EXEMPT)
+    violations: list[Violation] = []
+    for i, line in enumerate(raw_lines):
+        if i < len(fence_mask) and fence_mask[i]:
+            continue
+        hit = _SPSC_LOCK_RE.search(line)
+        if hit is None and not allow_atomic:
+            hit = _SPSC_ATOMIC_RE.search(line)
+        if hit is None:
+            continue
+        violations.append(
+            Violation(
+                path,
+                i + 1,
+                "spsc-lock",
+                f"`{hit.group(0)}` in a pipeline-thread SPSC piece: it has exactly one "
+                "producer and one consumer by design, so a lock or atomic is a design "
+                "error, not a fix. Recreate via resetFrameReader() / reconfigure(), "
+                "never lock.",
+            )
+        )
+    return violations
+
+
+_PIPELINE_HOP_FILES = (
+    "core/Pipeline/IO/PipelineHost.cpp",
+    "core/Pipeline/DataModel/FrameBuilder.cpp",
+    "core/Pipeline/DataModel/FrameParser.cpp",
+)
+_PIPELINE_HOP_DIR = "core/Pipeline/DataModel/FrameBuilder/"
+_PIPELINE_SELF_FILES = ("FrameBuilder.cpp", "FrameParser.cpp", "FrameReader.cpp")
+_PIPELINE_IDENTS = (
+    "FrameReader|m_frameReader|reader|m_frameParser|frameParser|m_frameBuilder"
+    "|frameBuilder|m_stager|m_publisher|BlockStager|BlockPublisher"
+)
+_PIPELINE_RESIDENT_RE = re.compile(rf"\b(?:{_PIPELINE_IDENTS})\b")
+_PIPELINE_RESIDENT_THIS_RE = re.compile(rf"\b(?:{_PIPELINE_IDENTS}|this)\b")
+_CONNECT_CALL_RE = re.compile(r"(?<![\w])connect\s*\(")
+_CONNECT_TYPE_RE = re.compile(r"Qt::\w*Connection\b")
+
+
+def _split_connect_args(text: str, open_idx: int) -> tuple[list[str], int] | None:
+    """Split the call opened at text[open_idx] into top-level arguments; None if unbalanced."""
+    depth = 0
+    args: list[str] = []
+    start = open_idx + 1
+    for pos in range(open_idx, len(text)):
+        ch = text[pos]
+        if ch in "([{":
+            depth += 1
+        elif ch in ")]}":
+            depth -= 1
+            if depth == 0:
+                args.append(text[start:pos])
+                return args, pos
+        elif ch == "," and depth == 1:
+            args.append(text[start:pos])
+            start = pos + 1
+    return None
+
+
+def find_pipeline_queued_hop_violations(
+    raw_lines: list[str], path: Path, fence_mask: list[bool]
+) -> list[Violation]:
+    """Flag a connect() between two pipeline-thread objects that is queued or untyped."""
+    posix = path.as_posix()
+    in_dir = _PIPELINE_HOP_DIR in posix and posix.endswith(".cpp")
+    if not in_dir and not any(posix.endswith(scoped) for scoped in _PIPELINE_HOP_FILES):
+        return []
+
+    self_resident = in_dir or posix.endswith(_PIPELINE_SELF_FILES)
+    resident_re = _PIPELINE_RESIDENT_THIS_RE if self_resident else _PIPELINE_RESIDENT_RE
+    text = "\n".join(raw_lines)
+    violations: list[Violation] = []
+    for match in _CONNECT_CALL_RE.finditer(text):
+        line_idx = text.count("\n", 0, match.start())
+        if line_idx < len(fence_mask) and fence_mask[line_idx]:
+            continue
+        parsed = _split_connect_args(text, match.end() - 1)
+        if parsed is None or len(parsed[0]) < 4:
+            continue
+        args = parsed[0]
+        if args[2].lstrip().startswith("["):
+            continue
+        if not (resident_re.search(args[0]) and resident_re.search(args[2])):
+            continue
+        statement = ",".join(args)
+        kinds = _CONNECT_TYPE_RE.findall(statement)
+        if kinds and "Qt::QueuedConnection" not in kinds:
+            continue
+        violations.append(
+            Violation(
+                path,
+                line_idx + 1,
+                "pipeline-queued-hop",
+                "A queued hop between two pipeline-thread objects fills the 65536-slot "
+                "queue at 10+ kHz and drops frames; connect them with "
+                "Qt::DirectConnection.",
+            )
+        )
+    return violations
+
+
+_JS_ENGINE_RE = re.compile(r"\bQJS(?:Value|Engine)\b")
+_JS_RAW_CALL_RE = re.compile(r"\.call\(")
+_JS_CALL_RECEIVER_OK = ("m_watchdog", "watchdog", "session")
+_JS_CALL_SKIP_FILES = ("JsWatchdog.cpp", "JsScriptEngine.cpp", "InertScriptSurface.cpp")
+_JS_INTERRUPT_RE = re.compile(r"\bsetInterrupted\s*\(\s*true\s*\)")
+_JS_INTERRUPT_OWNER = "JsWatchdogThread.cpp"
+
+
+def _js_scope_applies(raw_lines: list[str], path: Path) -> bool:
+    """True for a .cpp/.h under core/ or app/src whose text names QJSValue or QJSEngine."""
+    posix = path.as_posix()
+    if path.suffix not in (".cpp", ".h"):
+        return False
+    if "core/" not in posix and "app/src/" not in posix:
+        return False
+    return any(_JS_ENGINE_RE.search(line) for line in raw_lines)
+
+
+def find_js_raw_call_violations(
+    raw_lines: list[str], path: Path, fence_mask: list[bool]
+) -> list[Violation]:
+    """Flag a bare QJSValue::call outside the watchdog wrappers (error)."""
+    if path.name in _JS_CALL_SKIP_FILES or not _js_scope_applies(raw_lines, path):
+        return []
+
+    violations: list[Violation] = []
+    for i, line in enumerate(raw_lines):
+        if i < len(fence_mask) and fence_mask[i]:
+            continue
+        for hit in _JS_RAW_CALL_RE.finditer(line):
+            if line[: hit.start()].rstrip().endswith(_JS_CALL_RECEIVER_OK):
+                continue
+            violations.append(
+                Violation(
+                    path,
+                    i + 1,
+                    "js-raw-call",
+                    "Call JS through JsScriptEngine::guardedCall() or the watchdog, never "
+                    "QJSValue::call directly: an unguarded script can hang the pipeline.",
+                )
+            )
+            break
+    return violations
+
+
+def find_js_interrupt_site_violations(
+    raw_lines: list[str], path: Path, fence_mask: list[bool]
+) -> list[Violation]:
+    """Flag setInterrupted(true) outside JsWatchdogThread.cpp (error)."""
+    if path.name == _JS_INTERRUPT_OWNER or not _js_scope_applies(raw_lines, path):
+        return []
+
+    violations: list[Violation] = []
+    for i, line in enumerate(raw_lines):
+        if i < len(fence_mask) and fence_mask[i]:
+            continue
+        if _JS_INTERRUPT_RE.search(line):
+            violations.append(
+                Violation(
+                    path,
+                    i + 1,
+                    "js-interrupt-site",
+                    "`setInterrupted(true)` belongs to JsWatchdogThread.cpp only; "
+                    "arm the watchdog instead of interrupting the engine by hand.",
+                )
+            )
+    return violations
+
+
 # Trial parity: an active trial installs a valid CommercialToken, so every Pro
 # feature gate must count trial users as entitled -- SerialStudio::activated()
 # in C++, or the paid probe paired with Cpp_Licensing_Trial state in QML.
@@ -2261,6 +2461,10 @@ def process_file(path: Path, fix: bool) -> tuple[list[Violation], str | None]:
             find_hotpath_assert_scope_violations(raw_lines, path, fence_mask)
             + find_bus_on_hotpath_violations(raw_lines, path, fence_mask)
             + find_lock_memory_scope_violations(raw_lines, path, fence_mask)
+            + find_spsc_lock_violations(raw_lines, path, fence_mask)
+            + find_pipeline_queued_hop_violations(raw_lines, path, fence_mask)
+            + find_js_raw_call_violations(raw_lines, path, fence_mask)
+            + find_js_interrupt_site_violations(raw_lines, path, fence_mask)
         )
         violations.extend(find_undo_scope_violations(raw_lines, path, fence_mask))
         violations.extend(
@@ -4149,6 +4353,117 @@ def _run_tu_census(repo_root: Path, check: bool, accept: bool) -> int:
 
 
 # ---------------------------------------------------------------------------
+# Clock-read census (spec 0101): the source owns time
+# ---------------------------------------------------------------------------
+
+_CLOCK_CENSUS_BASELINE = Path(__file__).with_name("clock-census.json")
+_CLOCK_CENSUS_TREES = ("core/Storage",)
+_CLOCK_CENSUS_EXCLUDES = ("/Player", "ReplayClock.cpp")
+_CLOCK_CENSUS_RE = re.compile(
+    r"steady_clock::now|system_clock::now|currentMSecsSinceEpoch|currentSecsSinceEpoch"
+    r"|QDateTime::currentDateTime(?:Utc)?|QElapsedTimer"
+)
+_CLOCK_CENSUS_HINT = (
+    "stamp from the frame: monotonicFrameNs / monotonicSourceNs (source owns time)"
+)
+
+
+def _collect_clock_census(repo_root: Path) -> dict:
+    """Count wall/monotonic clock reads per file in the recording sinks."""
+    candidates = [repo_root / tree for tree in _CLOCK_CENSUS_TREES]
+    paths = list(iter_source_files([t for t in candidates if t.exists()]))
+
+    per_file: dict[str, int] = {}
+    for path in sorted(set(paths)):
+        if path.suffix not in (".cpp", ".h"):
+            continue
+        rel = path.resolve().relative_to(repo_root).as_posix()
+        if any(token in rel for token in _CLOCK_CENSUS_EXCLUDES):
+            continue
+        try:
+            text = path.read_text(encoding="utf-8", errors="replace")
+        except OSError:
+            continue
+        count = len(_CLOCK_CENSUS_RE.findall(text))
+        if count:
+            per_file[rel] = count
+
+    return {
+        "total": sum(per_file.values()),
+        "per_file": dict(sorted(per_file.items())),
+    }
+
+
+def _print_clock_census(census: dict) -> None:
+    """Print the clock-read total and the per-file counts."""
+    print(
+        f"clock census: {census['total']} clock reads in {len(census['per_file'])} files"
+    )
+    for rel, count in census["per_file"].items():
+        print(f"  {count:>3}  {rel}")
+
+
+def _run_clock_census(repo_root: Path, check: bool, accept: bool) -> int:
+    """Report, gate (growth fails, shrink passes) or re-seed the clock-read census."""
+    census = _collect_clock_census(repo_root)
+
+    if accept:
+        _CLOCK_CENSUS_BASELINE.write_text(
+            json.dumps(census, indent=2, ensure_ascii=False) + "\n",
+            encoding="utf-8",
+            newline="\n",
+        )
+        _print_clock_census(census)
+        print(f"\nbaseline written to {_CLOCK_CENSUS_BASELINE}")
+        return 0
+
+    if not check:
+        _print_clock_census(census)
+        return 0
+
+    if not _CLOCK_CENSUS_BASELINE.is_file():
+        print(
+            f"no baseline at {_CLOCK_CENSUS_BASELINE}; seed it with "
+            "--clock-census --accept",
+            file=sys.stderr,
+        )
+        return 2
+
+    base = json.loads(_CLOCK_CENSUS_BASELINE.read_text(encoding="utf-8"))
+    base_files = base.get("per_file", {})
+    grown = [
+        (rel, count, base_files.get(rel, 0))
+        for rel, count in census["per_file"].items()
+        if count > base_files.get(rel, 0)
+    ]
+    total_delta = census["total"] - base.get("total", 0)
+
+    if total_delta > 0 or grown:
+        print(
+            f"clock census grew: total {base.get('total', 0)} -> {census['total']}",
+            file=sys.stderr,
+        )
+        for rel, now, before in sorted(grown, key=lambda row: -(row[1] - row[2])):
+            print(f"  {rel}: {before} -> {now}", file=sys.stderr)
+        print(
+            f"\n{_CLOCK_CENSUS_HINT}. If the read is deliberate, re-baseline with "
+            "python scripts/code-verify.py --clock-census --accept",
+            file=sys.stderr,
+        )
+        return 1
+
+    print(f"clock census: {census['total']} reads (baseline {base.get('total', 0)})")
+    if total_delta < 0 or any(
+        census["per_file"].get(rel, 0) < n for rel, n in base_files.items()
+    ):
+        print(
+            "the surface shrank; re-baseline with "
+            "python scripts/code-verify.py --clock-census --accept"
+        )
+    return 0
+
+
+# ---------------------------------------------------------------------------
 # Duplicate-window census (spec 0075, finding L8 / the clone families in R12)
 # ---------------------------------------------------------------------------
 #
@@ -4354,6 +4669,11 @@ def main(argv: list[str]) -> int:
         help="measure first-party translation units over the size threshold",
     )
     parser.add_argument(
+        "--clock-census",
+        action="store_true",
+        help="count clock reads in the recording sinks (source owns time, spec 0101)",
+    )
+    parser.add_argument(
         "--dup-census",
         action="store_true",
         help="measure duplicated 10-line windows across first-party file pairs",
@@ -4367,7 +4687,7 @@ def main(argv: list[str]) -> int:
         "--accept",
         action="store_true",
         help="re-baseline the census JSON (with --singleton-census / --tu-census / "
-        "--dup-census / --bus-census)",
+        "--dup-census / --bus-census / --clock-census)",
     )
     parser.add_argument(
         "paths",
@@ -4385,6 +4705,10 @@ def main(argv: list[str]) -> int:
     if args.tu_census:
         root = Path(__file__).resolve().parent.parent
         return _run_tu_census(root, check=args.check, accept=args.accept)
+
+    if args.clock_census:
+        root = Path(__file__).resolve().parent.parent
+        return _run_clock_census(root, check=args.check, accept=args.accept)
 
     if args.dup_census:
         root = Path(__file__).resolve().parent.parent
