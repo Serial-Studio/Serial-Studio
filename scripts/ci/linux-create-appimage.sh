@@ -125,10 +125,20 @@ if [ -z "$ALSA_PLUGINS" ]; then
   exit 1
 fi
 
+# miniaudio's PulseAudio backend (tried before ALSA on Linux, so PipeWire hosts are reached
+# through pipewire-pulse) dlopens libpulse.so.0 by name: no NEEDED entry, so the ldd walk only
+# ever saw it as a dependency of the ALSA pulse plugin. Bundle it explicitly.
+PULSE_LIBS=$(find /usr/lib/x86_64-linux-gnu /usr/lib/aarch64-linux-gnu /usr/lib64 \
+  -maxdepth 1 -name 'libpulse.so.0*' 2>/dev/null || true)
+if [ -z "$PULSE_LIBS" ]; then
+  echo "::error::libpulse.so.0 not found on build host"
+  exit 1
+fi
+
 LD_LIBRARY_PATH="$PWD/AppDir-compat/usr/lib" \
   ./sharun-aio lib4bin --dst-dir AppDir-compat/usr --with-sharun --hard-links --with-hooks \
   "$BIN_SRC"/* $DLOPEN_LIBS $TLS_LIBS $GL_VENDOR_LIBS "$DRI_DIR"/*.so $GBM_LIBS \
-  $ALSA_PLUGINS
+  $ALSA_PLUGINS $PULSE_LIBS
 
 mkdir -p AppDir-compat/usr/shared/lib/alsa-lib
 for f in $ALSA_PLUGINS; do
@@ -149,6 +159,10 @@ fi
 
 if ! find AppDir-compat/usr/shared/lib -name 'libssl.so.3*' | grep -q .; then
   echo "::error::libssl.so.3 missing from compat bundle; TLS would fail on legacy hosts"
+  exit 1
+fi
+if ! find AppDir-compat/usr/shared/lib -name 'libpulse.so.0*' | grep -q .; then
+  echo "::error::libpulse.so.0 missing from compat bundle; audio would fall back to raw ALSA"
   exit 1
 fi
 

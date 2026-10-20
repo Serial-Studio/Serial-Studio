@@ -32,6 +32,7 @@
 #include "Core/SSAssert.h"
 #include "Core/TimerEvents.h"
 #include "Core/Translator.h"
+#include "IO/Audio/AudioContext.h"
 #include "IO/ConnectionManager.h"
 #include "IO/Drivers/Audio/AudioDeviceCatalog.h"
 #include "IO/Drivers/Audio/AudioPcm.h"
@@ -79,18 +80,8 @@ IO::Drivers::Audio::Audio()
   , m_rtCaptureChannels(0)
   , m_rtPlaybackChannels(0)
 {
-#if defined(Q_OS_WIN)
-  ma_backend backend[] = {ma_backend_wasapi};
-#elif defined(Q_OS_APPLE)
-  ma_backend backend[] = {ma_backend_coreaudio};
-#elif defined(Q_OS_LINUX)
-  ma_backend backend[] = {ma_backend_alsa};
-#else
-#  error "Unsupported platform"
-#endif
-
   m_config = ma_device_config_init(ma_device_type_duplex);
-  m_init   = ma_context_init(backend, 1, nullptr, &m_context) == MA_SUCCESS;
+  m_init   = IO::Audio::initContext(m_context);
   if (!m_init)
     qWarning("Failed to initialize miniaudio context");
 

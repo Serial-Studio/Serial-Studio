@@ -25,6 +25,7 @@
 #include <cstring>
 
 #include "Core/SSAssert.h"
+#include "IO/Audio/AudioContext.h"
 
 //--------------------------------------------------------------------------------------------------
 // Constructor & destructor
@@ -47,16 +48,6 @@ IO::Audio::SoundPlayer::SoundPlayer()
   , m_generation(0)
   , m_bank(kSampleRate, m_generation)
 {
-#if defined(Q_OS_WIN)
-  ma_backend backend[] = {ma_backend_wasapi};
-#elif defined(Q_OS_APPLE)
-  ma_backend backend[] = {ma_backend_coreaudio};
-#elif defined(Q_OS_LINUX)
-  ma_backend backend[] = {ma_backend_alsa};
-#else
-#  error "Unsupported platform"
-#endif
-
   std::memset(&m_device, 0, sizeof(m_device));
   std::memset(&m_deviceId, 0, sizeof(m_deviceId));
   for (auto& lane : m_lanes)
@@ -65,7 +56,7 @@ IO::Audio::SoundPlayer::SoundPlayer()
   for (auto& active : m_laneActive)
     active.store(false, std::memory_order_relaxed);
 
-  m_contextReady = ma_context_init(backend, 1, nullptr, &m_context) == MA_SUCCESS;
+  m_contextReady = IO::Audio::initContext(m_context);
 }
 
 /**

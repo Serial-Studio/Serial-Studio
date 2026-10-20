@@ -80,8 +80,10 @@ endif()
 #   MA_NO_CUSTOM           - Disable custom backend support
 #   MA_NO_NULL             - Disable null audio backend
 #
-# Platform backends: Linux links libasound (ALSA, in core/Devices); Windows uses WASAPI and macOS
-# CoreAudio, both built in. SIMD support (SSE2 on x86-64, NEON on ARM64) is what the header
+# Platform backends: Linux tries PulseAudio first (dlopen of libpulse.so.0 at runtime, which is how
+# PipeWire hosts are reached through pipewire-pulse) and falls back to ALSA (libasound, linked in
+# core/Devices); Windows uses WASAPI and macOS CoreAudio, both built in. SIMD support (SSE2 on
+# x86-64, NEON on ARM64) is what the header
 # detects from the compiler's own macros; MA_SUPPORT_* are its internal results, and defining one
 # on the command line only redefines it. Dropping the unused features saves ~200KB of binary and a
 # good share of the compile time.

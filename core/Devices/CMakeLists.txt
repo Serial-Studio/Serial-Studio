@@ -247,6 +247,7 @@ target_sources(
 
   IO/Audio/WavDecoder.h
   IO/Audio/SoundBank.h
+  IO/Audio/AudioContext.h
   IO/Audio/SoundPlayer.h
   ThirdParty/miniaudio.h
   IO/Audio/WavDecoder.cpp

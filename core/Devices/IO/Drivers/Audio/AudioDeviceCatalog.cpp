@@ -28,7 +28,7 @@
 
 #include "Core/SSAssert.h"
 
-// Format preference under normalization, cheapest decode first (f32 is a straight passthrough)
+// Format preference under normalization and for an unresolved selection, cheapest decode first
 static constexpr ma_format kNormalizedFormats[] = {
   ma_format_f32, ma_format_s16, ma_format_s32, ma_format_s24, ma_format_u8};
 
@@ -80,6 +80,17 @@ static int deviceIndexByName(const QVector<ma_device_info>& list, const QString&
 }
 
 /**
+ * @brief True for a backend that is a sound server converting any requested format, rate or
+ *        channel count itself: it reports ONE native spec per device (the source's current one),
+ *        so taking that report literally would leave the pickers a single entry each.
+ */
+static bool backendConvertsAnySpec(const ma_context* context)
+{
+  SS_ASSERT(context != nullptr, return false);
+  return context->backend == ma_backend_pulseaudio;
+}
+
+/**
  * @brief Extracts audio device capabilities using MiniAudio's backend context.
  */
 static IO::Drivers::AudioDeviceCatalog::AudioDeviceInfo extractCapabilities(
@@ -97,25 +108,30 @@ static IO::Drivers::AudioDeviceCatalog::AudioDeviceInfo extractCapabilities(
   if (r != MA_SUCCESS)
     fullInfo = info;
 
+  const bool serverConverts = backendConvertsAnySpec(context);
+
   QSet<int> sampleRates;
   QSet<ma_format> formats;
   QSet<int> channelCounts = {1};
   for (ma_uint32 i = 0; i < fullInfo.nativeDataFormatCount; ++i) {
     const auto& f = fullInfo.nativeDataFormats[i];
 
-    if (f.format == ma_format_unknown)
+    if (f.format == ma_format_unknown || serverConverts)
       formats.unite(defaultFormats);
-    else
+
+    if (f.format != ma_format_unknown)
       formats.insert(f.format);
 
-    if (f.channels == 0)
+    if (f.channels == 0 || serverConverts)
       channelCounts.unite(defaultChannels);
-    else
+
+    if (f.channels != 0)
       channelCounts.insert(static_cast<int>(f.channels));
 
-    if (f.sampleRate == 0)
+    if (f.sampleRate == 0 || serverConverts)
       sampleRates.unite(defaultSampleRates);
-    else
+
+    if (f.sampleRate != 0)
       sampleRates.insert(static_cast<int>(f.sampleRate));
   }
 
@@ -650,7 +666,9 @@ QStringList IO::Drivers::AudioDeviceCatalog::channelLabels(const AudioDeviceInfo
 
 /**
  * @brief Re-derives the input selection indices from the parameters the device was configured
- *        with, falling back to the platform's default rate when the device cannot honour it.
+ *        with, falling back to the platform's default rate when the device cannot honour it and
+ *        to float32 (the format most capture stacks produce natively, and the one a driver that
+ *        misreports its integer formats still delivers correctly) when the format is unknown.
  */
 void IO::Drivers::AudioDeviceCatalog::syncInputSelection(const int sampleRate,
                                                          const ma_format format,
@@ -673,7 +691,7 @@ void IO::Drivers::AudioDeviceCatalog::syncInputSelection(const int sampleRate,
 
   m_selectedInputSampleFormat = caps.supportedFormats.indexOf(format);
   if (m_selectedInputSampleFormat < 0)
-    m_selectedInputSampleFormat = 0;
+    m_selectedInputSampleFormat = bestNormalizedFormatIndex(caps.supportedFormats);
 
   m_selectedInputChannelConfiguration = caps.supportedChannelCounts.indexOf(channels);
   if (m_selectedInputChannelConfiguration < 0)
@@ -694,7 +712,7 @@ void IO::Drivers::AudioDeviceCatalog::syncOutputSelection(const ma_format format
 
   m_selectedOutputSampleFormat = caps.supportedFormats.indexOf(format);
   if (m_selectedOutputSampleFormat < 0)
-    m_selectedOutputSampleFormat = 0;
+    m_selectedOutputSampleFormat = bestNormalizedFormatIndex(caps.supportedFormats);
 
   m_selectedOutputChannelConfiguration = caps.supportedChannelCounts.indexOf(channels);
   if (m_selectedOutputChannelConfiguration < 0)
@@ -912,7 +930,7 @@ bool IO::Drivers::AudioDeviceCatalog::applySavedSelection(const QJsonObject& set
     fmtIndex = savedFmtIndex;
 
   if (fmtIndex < 0)
-    fmtIndex = 0;
+    fmtIndex = bestNormalizedFormatIndex(caps.supportedFormats);
 
   if (normalization)
     fmtIndex = bestNormalizedFormatIndex(caps.supportedFormats);

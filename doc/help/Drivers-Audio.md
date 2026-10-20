@@ -58,7 +58,7 @@ The audio driver is built on **miniaudio**, a single-header cross-platform audio
 
 - **WASAPI** on Windows
 - **Core Audio** on macOS
-- **ALSA** on Linux
+- **PulseAudio** on Linux, which is also how PipeWire systems are reached (through `pipewire-pulse`); **ALSA** is the fallback when no sound server is running
 
 This avoids the overhead of QtMultimedia and gives the driver direct access to low-latency callback-based capture.
 
@@ -130,7 +130,7 @@ For step-by-step setup, see the [Protocol Setup Guides, Audio Input section](Pro
 
 ## Common pitfalls
 
-- **No audio detected.** Verify the input device in the OS audio settings first. On macOS, grant Serial Studio Microphone permission in **System Settings → Privacy & Security → Microphone**. On Linux, check `arecord -l` (ALSA) or PulseAudio's `pavucontrol` to confirm the device exists and is not muted.
+- **No audio detected.** Verify the input device in the OS audio settings first. On macOS, grant Serial Studio Microphone permission in **System Settings → Privacy & Security → Microphone**. On Linux, check `pactl list sources short` (PulseAudio or PipeWire) or `arecord -l` (ALSA fallback) to confirm the device exists and is not muted. Raw `hw:` devices only appear when no sound server is running; they bypass the system's processing chain, so prefer the server's source when both are available.
 - **Distorted signal at high amplitude.** The input is clipping. Reduce the input gain in the OS or on the hardware preamp. PCM saturation produces hard distortion that looks like sharp peaks pinned to the bit-depth maximum.
 - **High noise floor.** Microphone inputs are noisier than line inputs because they expect a millivolt-range source. Driving a low-impedance signal into a microphone input amplifies the noise as well; use a line input where possible.
 - **Required sample rate is not listed.** The hardware reports its supported sample rates and Serial Studio only offers those. If a rate is unsupported, the driver cannot fake it; use a different audio interface.
