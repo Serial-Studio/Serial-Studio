@@ -28,6 +28,8 @@ import "../" as Widgets
 Widgets.SmartDialog {
   id: root
 
+  objectName: "extensionWidgetSettings"
+
   //
   // Window properties
   //

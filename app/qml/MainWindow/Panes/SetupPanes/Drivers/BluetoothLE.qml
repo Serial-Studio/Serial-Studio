@@ -62,6 +62,8 @@ Item {
       Widgets.Combo {
         id: _deviceCombo
 
+        objectName: "setup.ble.deviceIndex"
+
         Layout.fillWidth: true
         enabled: app.ioEnabled
         opacity: enabled ? 1 : 0.5
@@ -88,6 +90,8 @@ Item {
       }
 
       Widgets.IconButton {
+        objectName: "setup.ble.scan"
+
         iconSize: 16
         implicitWidth: 24
         implicitHeight: 24
@@ -117,6 +121,8 @@ Item {
 
       Widgets.Combo {
         id: serviceNames
+
+        objectName: "setup.ble.service"
 
         Layout.fillWidth: true
         model: Cpp_IO_Bluetooth_LE.serviceNames
@@ -153,6 +159,8 @@ Item {
 
       Widgets.Combo {
         id: characteristicNames
+
+        objectName: "setup.ble.characteristicIndex"
 
         Layout.fillWidth: true
         model: Cpp_IO_Bluetooth_LE.characteristicNames

@@ -58,6 +58,8 @@ Item {
       Widgets.LineField {
         id: _urlField
 
+        objectName: "setup.opcua.endpointUrl"
+
         Layout.fillWidth: true
         enabled: app.ioEnabled
         opacity: enabled ? 1 : 0.5
@@ -70,6 +72,8 @@ Item {
       }
 
       Widgets.PushButton {
+        objectName: "setup.opcua.discover"
+
         text: qsTr("Discover")
         enabled: app.ioEnabled && !Cpp_IO_OpcUa.discovering
         onClicked: {
@@ -89,6 +93,8 @@ Item {
       opacity: enabled ? 1 : 0.5
       text: qsTr("Poll Interval (ms)") + ":"
     } Widgets.LineField {
+      objectName: "setup.opcua.publishingInterval"
+
       Layout.fillWidth: true
       enabled: app.ioEnabled
       opacity: enabled ? 1 : 0.5
@@ -112,6 +118,8 @@ Item {
       visible: Cpp_IO_OpcUa.endpointList.length > 0
     } ComboBox {
       id: _endpointCombo
+
+      objectName: "setup.opcua.endpointIndex"
 
       Layout.fillWidth: true
       enabled: app.ioEnabled
@@ -161,6 +169,8 @@ Item {
       text: qsTr("Policy") + ":"
       opacity: enabled ? 1 : 0.5
     } Widgets.Combo {
+      objectName: "setup.opcua.securityPolicyIndex"
+
       Layout.fillWidth: true
       enabled: app.ioEnabled
       opacity: enabled ? 1 : 0.5
@@ -178,6 +188,8 @@ Item {
       opacity: enabled ? 1 : 0.5
       visible: Cpp_IO_OpcUa.securityPolicyIndex > 0
     } Widgets.Combo {
+      objectName: "setup.opcua.securityMode"
+
       Layout.fillWidth: true
       opacity: enabled ? 1 : 0.5
       model: [qsTr("Sign"), qsTr("Sign and Encrypt")]
@@ -211,6 +223,8 @@ Item {
       opacity: enabled ? 1 : 0.5
       text: qsTr("Authentication") + ":"
     } Widgets.Combo {
+      objectName: "setup.opcua.authMode"
+
       Layout.fillWidth: true
       enabled: app.ioEnabled
       opacity: enabled ? 1 : 0.5
@@ -228,6 +242,8 @@ Item {
       text: qsTr("Username") + ":"
       visible: Cpp_IO_OpcUa.authMode === 1
     } Widgets.LineField {
+      objectName: "setup.opcua.username"
+
       Layout.fillWidth: true
       enabled: app.ioEnabled
       opacity: enabled ? 1 : 0.5
@@ -245,6 +261,8 @@ Item {
       text: qsTr("Password") + ":"
       visible: Cpp_IO_OpcUa.authMode === 1
     } Widgets.LineField {
+      objectName: "setup.opcua.password"
+
       Layout.fillWidth: true
       enabled: app.ioEnabled
       opacity: enabled ? 1 : 0.5
@@ -268,6 +286,8 @@ Item {
       visible: Cpp_IO_OpcUa.authMode === 2
 
       Widgets.LineField {
+        objectName: "setup.opcua.userCertificatePath"
+
         readOnly: true
         enabled: app.ioEnabled
         Layout.fillWidth: true
@@ -276,6 +296,8 @@ Item {
       }
 
       Widgets.PushButton {
+        objectName: "setup.opcua.userCertificateBrowse"
+
         text: qsTr("Browse…")
         enabled: app.ioEnabled
         onClicked: _userCertDialog.open()
@@ -293,6 +315,8 @@ Item {
       visible: Cpp_IO_OpcUa.authMode === 2
 
       Widgets.LineField {
+        objectName: "setup.opcua.userKeyPath"
+
         readOnly: true
         enabled: app.ioEnabled
         Layout.fillWidth: true
@@ -301,6 +325,8 @@ Item {
       }
 
       Widgets.PushButton {
+        objectName: "setup.opcua.userKeyBrowse"
+
         text: qsTr("Browse…")
         enabled: app.ioEnabled
         onClicked: _userKeyDialog.open()
@@ -326,6 +352,8 @@ Item {
     Item {
       visible: Cpp_IO_OpcUa.credentialsExposed
     } CheckBox {
+      objectName: "setup.opcua.allowPlaintextPassword"
+
       Layout.fillWidth: true
       enabled: app.ioEnabled
       visible: Cpp_IO_OpcUa.credentialsExposed
@@ -363,12 +391,16 @@ Item {
         Layout.fillWidth: true
 
         Widgets.PushButton {
+          objectName: "setup.opcua.exportCertificate"
+
           text: qsTr("Export…")
           enabled: app.ioEnabled && Cpp_IO_OpcUa.clientCertificate.valid === true
           onClicked: _exportDialog.open()
         }
 
         Widgets.PushButton {
+          objectName: "setup.opcua.regenerateCertificate"
+
           text: qsTr("Replace")
           enabled: app.ioEnabled
           onClicked: Cpp_IO_OpcUa.regenerateCertificate()
@@ -392,6 +424,8 @@ Item {
       Widgets.PushButton {
         id: _browseButton
 
+        objectName: "setup.opcua.browse"
+
         enabled: app.ioEnabled
         anchors.top: parent.top
         anchors.left: parent.left
@@ -402,6 +436,8 @@ Item {
 
       Widgets.PushButton {
         id: _generateButton
+
+        objectName: "setup.opcua.generateProject"
 
         anchors.topMargin: 4
         anchors.left: parent.left

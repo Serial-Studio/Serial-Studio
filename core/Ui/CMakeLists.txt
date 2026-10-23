@@ -76,6 +76,7 @@ qt_add_library(
   Misc/BackupManager.cpp
   ApiHandlers/UiHandlers.cpp
   ApiHandlers/AssistantHandler.cpp
+  ApiHandlers/AutomationHandler.cpp
   ApiHandlers/ConsoleHandler.cpp
   ApiHandlers/DashboardHandler.cpp
   ApiHandlers/DiagnosticsHandler.cpp
@@ -104,6 +105,10 @@ qt_add_library(
   UI/Alarms/AnnunciatorSequence.cpp
   UI/Alarms/AppEventSounds.cpp
   UI/Alarms/SoundTheme.cpp
+  UI/Automation/ElementCatalog.cpp
+  UI/Automation/InputSynthesizer.cpp
+  UI/Automation/WindowCapture.cpp
+  UI/Automation/WindowInventory.cpp
   UI/Taskbar.cpp
   UI/Taskbar/TaskbarModel.cpp
   UI/Taskbar/TaskbarWindowMap.cpp
@@ -193,6 +198,7 @@ qt_add_library(
   Misc/BackupManager.h
   ApiHandlers/UiHandlers.h
   ApiHandlers/AssistantHandler.h
+  ApiHandlers/AutomationHandler.h
   ApiHandlers/ConsoleHandler.h
   ApiHandlers/DashboardHandler.h
   ApiHandlers/DiagnosticsHandler.h
@@ -221,6 +227,10 @@ qt_add_library(
   UI/Alarms/AnnunciatorSequence.h
   UI/Alarms/AppEventSounds.h
   UI/Alarms/SoundTheme.h
+  UI/Automation/ElementCatalog.h
+  UI/Automation/InputSynthesizer.h
+  UI/Automation/WindowCapture.h
+  UI/Automation/WindowInventory.h
   UI/Taskbar.h
   UI/Taskbar/TaskbarModel.h
   UI/Taskbar/TaskbarWindowMap.h

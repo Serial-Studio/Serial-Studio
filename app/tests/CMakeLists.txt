@@ -2706,6 +2706,24 @@ ss_add_unit_test(tst_waterfall_ring_texture
 )
 
 #
+# The automation surface's Qt-facing classes (spec 0101) against an offscreen QQuickView fixture:
+# the window inventory, catalog ids, roles and geometry, the `_QMLTYPE_` component-name parsing,
+# modal popup detection, synchronous click and key delivery through the QPA interface, the window
+# grab with its element crop and scale, and the inverse HDR transfer on a synthetic FP16 image.
+# Software scene graph so every CI leg renders alike; the fixture loads from the source tree.
+#
+ss_add_unit_test(tst_ui_automation
+  SOURCES tst_ui_automation.cpp
+          ${SS_CORE_SRC}/Ui/UI/Automation/ElementCatalog.cpp
+          ${SS_CORE_SRC}/Ui/UI/Automation/InputSynthesizer.cpp
+          ${SS_CORE_SRC}/Ui/UI/Automation/WindowCapture.cpp
+          ${SS_CORE_SRC}/Ui/UI/Automation/WindowInventory.cpp
+  LIBS    Qt6::Core Qt6::Gui Qt6::GuiPrivate Qt6::Quick Qt6::QuickControls2 SerialStudio::Core
+)
+target_compile_definitions(tst_ui_automation PRIVATE
+  SS_AUTOMATION_FIXTURE="${CMAKE_CURRENT_SOURCE_DIR}/support/automation/Fixture.qml")
+
+#
 # The MMCSS registration guard (spec 0075, N2): per thread, never process-wide. The Windows API
 # behind it is unreachable headless, but the latch that decides WHICH thread gets the real-time
 # band is recorded on every platform, so the regression is pinned everywhere.

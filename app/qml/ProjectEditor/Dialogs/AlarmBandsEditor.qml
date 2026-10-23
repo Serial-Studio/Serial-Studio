@@ -31,6 +31,8 @@ import "../../Widgets" as Widgets
 Widgets.SmartDialog {
   id: root
 
+  objectName: "alarmBandsEditor"
+
   fixedSize: false
   title: qsTr("Alarm Bands")
   preferredWidth: layout.implicitWidth

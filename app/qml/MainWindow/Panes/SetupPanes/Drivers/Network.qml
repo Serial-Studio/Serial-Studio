@@ -108,6 +108,8 @@ Item {
       } Widgets.Combo {
         id: _typeCombo
 
+        objectName: "setup.network.socketTypeIndex"
+
         Layout.fillWidth: true
         enabled: app.ioEnabled
         opacity: enabled ? 1 : 0.5
@@ -129,6 +131,8 @@ Item {
         text: qsTr("Local Port") + ":"
       } Widgets.LineField {
         id: _udpLocalPort
+
+        objectName: "setup.network.udpLocalPort"
 
         Layout.fillWidth: true
         placeholderText: qsTr("Type 0 for automatic port")
@@ -167,6 +171,8 @@ Item {
       } Widgets.LineField {
         id: _address
 
+        objectName: "setup.network.remoteAddress"
+
         Layout.fillWidth: true
         enabled: app.ioEnabled
         opacity: enabled ? 1 : 0.5
@@ -196,6 +202,8 @@ Item {
         text: qsTr("Remote Port") + ":"
       } Widgets.LineField {
         id: _tcpPort
+
+        objectName: "setup.network.tcpPort"
 
         Layout.fillWidth: true
         enabled: app.ioEnabled
@@ -235,6 +243,8 @@ Item {
       } Widgets.LineField {
         id: _udpRemotePort
 
+        objectName: "setup.network.udpRemotePort"
+
         Layout.fillWidth: true
         enabled: app.ioEnabled
         opacity: enabled ? 1 : 0.5
@@ -271,6 +281,8 @@ Item {
       } CheckBox {
         id: _udpMulticast
 
+        objectName: "setup.network.udpMulticast"
+
         visible: root.isUdp
         Layout.leftMargin: -8
         opacity: enabled ? 1 : 0.5
@@ -294,6 +306,8 @@ Item {
         opacity: enabled ? 1 : 0.5
       } Widgets.LineField {
         id: _wsUrl
+
+        objectName: "setup.network.webSocketUrl"
 
         Layout.fillWidth: true
         enabled: app.ioEnabled
@@ -324,6 +338,8 @@ Item {
       } Widgets.Combo {
         id: _wsFormat
 
+        objectName: "setup.network.webSocketFormatIndex"
+
         Layout.fillWidth: true
         enabled: app.ioEnabled
         visible: root.isWebSocket
@@ -346,6 +362,8 @@ Item {
         opacity: enabled ? 1 : 0.5
       } Widgets.LineField {
         id: _httpUrl
+
+        objectName: "setup.network.httpUrl"
 
         visible: root.isHttp
         Layout.fillWidth: true
@@ -376,6 +394,8 @@ Item {
       } Widgets.Combo {
         id: _httpMethod
 
+        objectName: "setup.network.httpMethodIndex"
+
         visible: root.isHttp
         Layout.fillWidth: true
         enabled: app.ioEnabled
@@ -398,6 +418,8 @@ Item {
         text: qsTr("Poll Interval") + ":"
       } Widgets.LineField {
         id: _httpInterval
+
+        objectName: "setup.network.httpInterval"
 
         visible: root.isHttp
         Layout.fillWidth: true
@@ -431,6 +453,8 @@ Item {
         text: qsTr("Request Body") + ":"
       } Widgets.LineField {
         id: _httpBody
+
+        objectName: "setup.network.httpBody"
 
         visible: root.isHttp
         Layout.fillWidth: true
@@ -473,6 +497,8 @@ Item {
           TextArea {
             id: _httpHeaders
 
+            objectName: "setup.network.httpHeaders"
+
             selectByMouse: true
             enabled: app.ioEnabled
             wrapMode: TextArea.WrapAnywhere
@@ -496,6 +522,8 @@ Item {
         text: qsTr("Ignore TLS Errors") + ":"
       } CheckBox {
         id: _ignoreTls
+
+        objectName: "setup.network.ignoreTlsErrors"
 
         Layout.leftMargin: -8
         opacity: enabled ? 1 : 0.5

@@ -29,6 +29,8 @@ import "../Widgets" as Widgets
 Widgets.SmartDialog {
   id: root
 
+  objectName: "settings"
+
   //
   // Window options
   //
@@ -60,54 +62,72 @@ Widgets.SmartDialog {
       onCurrentIndexChanged: Cpp_UI_Alarms.playEvent("button")
 
       TabButton {
+        objectName: "settings.page.general"
+
         text: qsTr("General")
         height: _tab.height + 3
         width: implicitWidth + 2 * 8
       }
 
       TabButton {
+        objectName: "settings.page.startup"
+
         text: qsTr("Startup")
         height: _tab.height + 3
         width: implicitWidth + 2 * 8
       }
 
       TabButton {
+        objectName: "settings.page.plotting"
+
         text: qsTr("Plotting")
         height: _tab.height + 3
         width: implicitWidth + 2 * 8
       }
 
       TabButton {
+        objectName: "settings.page.layout"
+
         text: qsTr("Layout")
         height: _tab.height + 3
         width: implicitWidth + 2 * 8
       }
 
       TabButton {
+        objectName: "settings.page.taskbar"
+
         text: qsTr("Taskbar")
         height: _tab.height + 3
         width: implicitWidth + 2 * 8
       }
 
       TabButton {
+        objectName: "settings.page.console"
+
         text: qsTr("Console")
         height: _tab.height + 3
         width: implicitWidth + 2 * 8
       }
 
       TabButton {
+        objectName: "settings.page.export"
+
         text: qsTr("Export")
         height: _tab.height + 3
         width: implicitWidth + 2 * 8
       }
 
       TabButton {
+        objectName: "settings.page.sounds"
+
         text: qsTr("Sounds")
         height: _tab.height + 3
         width: implicitWidth + 2 * 8
       }
 
       TabButton {
+        objectName: "settings.page.notifications"
+
         height: _tab.height + 3
         text: qsTr("Notifications")
         visible: Cpp_CommercialBuild
@@ -183,6 +203,8 @@ Widgets.SmartDialog {
       Layout.fillWidth: true
 
       Widgets.IconButton {
+        objectName: "settings.reset"
+
         text: qsTr("Reset")
         horizontalPadding: 8
         opacity: enabled ? 1 : 0.5
@@ -243,6 +265,8 @@ Widgets.SmartDialog {
       }
 
       Widgets.IconButton {
+        objectName: "settings.close"
+
         text: qsTr("Close")
         horizontalPadding: 8
         onClicked: root.close()
@@ -251,6 +275,8 @@ Widgets.SmartDialog {
       }
 
       Widgets.IconButton {
+        objectName: "settings.apply"
+
         text: qsTr("Apply")
         horizontalPadding: 8
         onClicked: root.close()

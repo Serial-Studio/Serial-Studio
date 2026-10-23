@@ -74,6 +74,8 @@ Item {
     } ComboBox {
       id: _csvIntervalCombo
 
+      objectName: "settings.export.exportInterval"
+
       editable: true
       Layout.fillWidth: true
 
@@ -166,6 +168,8 @@ Item {
       color: Cpp_ThemeManager.colors["text"]
     } Widgets.Toggle {
       id: _saveImages
+
+      objectName: "settings.export.exportEnabled"
 
       Layout.rightMargin: -8
       visible: Cpp_CommercialBuild

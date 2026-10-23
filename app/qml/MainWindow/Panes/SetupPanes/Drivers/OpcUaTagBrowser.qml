@@ -32,6 +32,8 @@ import "../../../../Widgets" as Widgets
 Window {
   id: root
 
+  objectName: "opcUaTagBrowser"
+
   Widgets.WindowMirror {}
 
   //
@@ -215,6 +217,8 @@ Window {
       Widgets.SearchField {
         id: _search
 
+        objectName: "setup.opcua.browser.search"
+
         Layout.fillWidth: true
         placeholderText: qsTr("Filter by name…")
 
@@ -358,6 +362,8 @@ Window {
               }
 
               CheckBox {
+                objectName: "setup.opcua.browser.node." + model.nodeId + ".check"
+
                 padding: 0
                 enabled: _row.canTick
                 tristate: _row.isFolder
@@ -437,6 +443,8 @@ Window {
         }
 
         Widgets.IconButton {
+          objectName: "setup.opcua.browser.selectAllReadable"
+
           leftPadding: 8
           text: qsTr("Select All Readable")
           icon.source: "qrc:/icons/buttons/select-all.svg"
@@ -444,6 +452,8 @@ Window {
         }
 
         Widgets.IconButton {
+          objectName: "setup.opcua.browser.cancel"
+
           leftPadding: 8
           text: qsTr("Cancel")
           icon.source: "qrc:/icons/buttons/close.svg"
@@ -451,6 +461,8 @@ Window {
         }
 
         Widgets.IconButton {
+          objectName: "setup.opcua.browser.ok"
+
           leftPadding: 8
           text: qsTr("OK")
           icon.source: "qrc:/icons/buttons/apply.svg"

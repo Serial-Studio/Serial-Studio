@@ -287,6 +287,8 @@ DriverTagPickerDialog {
         }
 
         Widgets.IconButton {
+          objectName: "setup.modbus.preview.cancel"
+
           text: qsTr("Cancel")
           horizontalPadding: 8
           icon.source: "qrc:/icons/buttons/close.svg"
@@ -297,6 +299,8 @@ DriverTagPickerDialog {
         }
 
         Widgets.IconButton {
+          objectName: "setup.modbus.preview.add"
+
           horizontalPadding: 8
           text: qsTr("Add to Project")
           icon.source: "qrc:/icons/buttons/plus.svg"
@@ -312,6 +316,8 @@ DriverTagPickerDialog {
         }
 
         Widgets.IconButton {
+          objectName: "setup.modbus.preview.create"
+
           highlighted: true
           horizontalPadding: 8
           text: qsTr("Create Project")

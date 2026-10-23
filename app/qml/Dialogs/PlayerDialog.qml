@@ -28,6 +28,8 @@ import "../Widgets" as Widgets
 Widgets.SmartDialog {
   id: root
 
+  objectName: "playerDialog"
+
   //
   // Player backend interface: subclasses bind the backend object plus the
   // optional busy/indexing/loading knobs their backend supports

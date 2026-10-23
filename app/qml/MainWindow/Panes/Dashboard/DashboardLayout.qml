@@ -388,6 +388,8 @@ Widgets.Pane {
           delegate: Widgets.ToolbarButton {
             required property var model
 
+            objectName: "dashboard.action." + model["id"]
+
             iconSize: 24
             implicitHeight: 32
             text: model["text"]

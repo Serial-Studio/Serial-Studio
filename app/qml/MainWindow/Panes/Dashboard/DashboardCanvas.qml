@@ -828,6 +828,8 @@ Item {
         }
 
         Widgets.IconButton {
+          objectName: "dashboard.searchWidgets"
+
           iconSize: 16
           topPadding: 8
           leftPadding: 16

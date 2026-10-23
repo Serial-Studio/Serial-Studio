@@ -32,6 +32,8 @@ import "../../Widgets" as Widgets
 Widgets.SmartDialog {
   id: root
 
+  objectName: "channelSoundsEditor"
+
   fixedSize: false
   preferredWidth: layout.implicitWidth
   preferredHeight: layout.implicitHeight

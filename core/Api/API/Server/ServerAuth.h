@@ -36,9 +36,9 @@ namespace API {
 
 /**
  * @brief Credential and consent half of the API server: the token external (non-loopback)
- *        clients must present, and the one-time consents gating API-originated device writes and
- *        script installs. Takes the server's QSettings by injection so both persist into one
- *        store; holds no socket state -- the reception machine asks it, it never answers a client.
+ *        clients must present, and the one-time consents gating API-originated device writes,
+ *        script installs and interface driving. Takes the server's QSettings by injection for
+ *        the token; holds no socket state -- the reception machine asks it, never a client.
  */
 class ServerAuth : public QObject {
   // clang-format off
@@ -74,6 +74,7 @@ private:
   QString m_authToken;
   ConsentGate m_deviceWrite;
   ConsentGate m_scriptInstall;
+  ConsentGate m_uiDrive;
 };
 
 }  // namespace API

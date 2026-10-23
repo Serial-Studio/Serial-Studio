@@ -145,6 +145,30 @@ def test_widget_display_commands_are_tiered_and_documented():
         assert name in docs
 
 
+UI_AUTOMATION_TIERS = {
+    "ui.automation.listWindows": "safe",
+    "ui.automation.listElements": "safe",
+    "ui.automation.setReduceMotion": "safe",
+    "ui.automation.screenshot": "confirm",
+    "ui.automation.click": "deviceGated",
+    "ui.automation.key": "deviceGated",
+}
+
+
+def test_ui_automation_commands_sit_in_exactly_one_tier():
+    """Spec 0101 R8: the read-only automation commands are safe, the screenshot asks once,
+    and the two driving commands ride the device-control toggle; an unlisted name would fall
+    through to Confirm silently, so every one of the six is pinned to its tier here."""
+    safety = json.loads(read_text("app/rcc/ai/command_safety.json"))
+    tiers = ["safe", "confirm", "blocked", "deviceGated", "alwaysConfirm"]
+    handler = read_text("core/Ui/ApiHandlers/AutomationHandler.cpp")
+
+    for name, expected in UI_AUTOMATION_TIERS.items():
+        homes = [tier for tier in tiers if name in set(safety[tier])]
+        assert homes == [expected], f"{name} is in {homes}, expected [{expected}]"
+        assert f'QStringLiteral("{name}")' in handler
+
+
 def test_incomplete_result_notices_are_distinct():
     conversation = read_text("core/Ui/AI/Conversation.cpp")
 

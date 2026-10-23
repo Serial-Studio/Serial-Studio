@@ -19,6 +19,8 @@ import "../Widgets" as Widgets
 Widgets.SmartDialog {
   id: root
 
+  objectName: "macros"
+
   //
   // Window geometry & title
   //

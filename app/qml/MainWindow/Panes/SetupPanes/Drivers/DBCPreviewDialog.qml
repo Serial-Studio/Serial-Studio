@@ -267,6 +267,8 @@ DriverTagPickerDialog {
         }
 
         Widgets.IconButton {
+          objectName: "setup.canbus.preview.cancel"
+
           horizontalPadding: 8
           text: qsTr("Cancel")
           icon.source: "qrc:/icons/buttons/close.svg"
@@ -277,6 +279,8 @@ DriverTagPickerDialog {
         }
 
         Widgets.IconButton {
+          objectName: "setup.canbus.preview.add"
+
           horizontalPadding: 8
           text: qsTr("Add to Project")
           icon.source: "qrc:/icons/buttons/plus.svg"
@@ -292,6 +296,8 @@ DriverTagPickerDialog {
         }
 
         Widgets.IconButton {
+          objectName: "setup.canbus.preview.create"
+
           highlighted: true
           horizontalPadding: 8
           text: qsTr("Create Project")

@@ -284,7 +284,7 @@ netstat -an | grep 7777
 
 ### Consent Prompts
 
-Three actions need a one-time "yes" from the person at the screen. Each is refused with
+Four actions need a one-time "yes" from the person at the screen. Each is refused with
 `CONSENT_REQUIRED` while its prompt is open; the client retries once the prompt is answered. A
 "no" holds until Serial Studio restarts and is never saved; a "no" to the launch prompt also ends
 when the project is reopened.
@@ -293,6 +293,7 @@ when the project is reopened.
 |--------|-----------------|--------|------------|
 | **Allow API device control?** | Remote API/MCP/gRPC clients | `io.writeData`, `io.ble.writeCharacteristic`, `console.send`, raw-mode bytes, and `project.action.update` / `project.action.duplicate` when the call changes an action's payload, target or arming | Per session |
 | **Allow API clients to modify project scripts?** | Remote API/MCP/gRPC clients | `controlScript.set`/`setCode`, `project.frameParser.setCode`, `project.source.setFrameParserCode`, `project.dataset.setTransformCode`, `project.transformLibrary.set`, `project.painter.setCode`, `extensions.install`, `extensions.addRepository`, every command that loads a project (`project.loadJson`, `project.open`, `project.template.apply`, `assistant.restore`, `sessions.regress`, `sessions.verify`, `sessions.replay`), and `project.dataset.update` / `project.group.update` / `project.outputWidget.update` when the call carries `transformCode` / `painterCode` / `transmitFunction` | Per session |
+| **Allow API clients to drive the user interface?** | Remote API/MCP/gRPC clients | `ui.automation.click` and `ui.automation.key`, which press controls and type into the window as the person would, so they can do anything the person can (connect, save, delete). The read-only `ui.automation.*` commands need no prompt | Per session |
 | **Allow this project to launch programs?** | Any script calling `system.exec`, including the project's own control script, and any Process I/O source starting its program, whoever chose the program | `system.exec`, and the Launch-mode start of a Process I/O source | Per project file; session-only for a project without a file |
 
 Project scripts run with the application's full privileges: a script installed over the API
@@ -338,6 +339,7 @@ script-changes prompt only when the call carries `transformCode`.
 | Installs script code | `project.frameParser.setCode`, `controlScript.set`, `project.dataset.setTransformCode`, `extensions.install`, `extensions.addRepository` | Script-changes prompt |
 | Loads a project | `project.open`, `project.loadJson`, `project.template.apply`, `assistant.restore`, `sessions.regress`, `sessions.verify`, `sessions.replay` | Script-changes prompt |
 | Writes to a device | `io.writeData`, `console.send`, `io.ble.writeCharacteristic` | Device-control prompt |
+| Drives the user interface | `ui.automation.click`, `ui.automation.key` | Interface-driving prompt; the device-control prompt does not cover it, and consents never combine |
 | Chooses the program a source starts | `io.process.setExecutable`, `io.process.setArguments`, `io.process.setWorkingDir`, `io.process.setMode`, `io.setBusType` switching to Process, `project.source.setProperty` with a program key | No prompt at the call; the first such change in a session clears the project's launch consent, so the next start asks |
 | Starts a program | `io.connect` on a Process I/O source in Launch mode | Launch prompt, at the start |
 | Control script only | `system.exec`, `system.kill`, `system.runningProcesses` | Refused to every remote client |
@@ -345,7 +347,7 @@ script-changes prompt only when the call carries `transformCode`.
 | Runs other commands | `project.batch`, `assistant.project.bulkApply`, `assistant.script.apply`, `assistant.workspace.addTile` | Each inner command is checked as if it were called directly |
 
 Headless runs cannot show a prompt, so a remote-triggered action is denied and a warning names
-the override: set `SERIAL_STUDIO_API_AUTO_CONSENT=1` to grant all three consents for that
+the override: set `SERIAL_STUDIO_API_AUTO_CONSENT=1` to grant all four consents for that
 process (used by CI). The grant is in memory only and is not saved. The one launch grant that
 needs no override is the project named on the command line of a `--headless` run: the operator
 who started the process chose it, so it may launch its programs for that run.
@@ -776,7 +778,7 @@ A client that issues commands on a long-lived socket while a device is streaming
 
 ## Complete Command Reference
 
-The API provides **437 commands** across the modules listed below; enumerate the live surface
+The API provides **443 commands** across the modules listed below; enumerate the live surface
 with `api.getCommands`, which is always the source of truth for the build you are running.
 
 Every command in this reference carries the badge of the build that registers it: 🟢 in every
@@ -786,7 +788,7 @@ those carry the 🔵 badge inside the section.
 
 When a command is invoked through the AI Assistant rather than a raw TCP/JSON client, it is additionally gated by a five-tier safety system (Safe, Confirm, Always confirm, Device-gated, Blocked); see [The safety tiers](AI-Assistant.md#the-safety-tiers). A batch (`project.batch`, `assistant.project.bulkApply`) takes the strictest tier among its operations: a blocked operation refuses the whole batch before anything runs, an always-confirm operation needs a click even with auto-approve on, a batch inside a batch is refused, and the approval card lists every operation.
 
-**GPL Build (267 commands):**
+**GPL Build (273 commands):**
 - API introspection: 1 command
 - I/O Manager: 8 commands
 - UART Driver: 12 commands
@@ -798,6 +800,7 @@ When a command is invoked through the AI Assistant rather than a raw TCP/JSON cl
 - Console Export: 3 commands
 - Dashboard Configuration: 14 commands
 - Dashboard Window: 14 commands
+- UI Automation: 6 commands
 - Project Management: 75 commands
 - Workspace Management: 20 commands
 - Source: 9 commands
@@ -5017,6 +5020,95 @@ Set one widget setting.
 - `widgetId` (string): Widget identifier
 - `key` (string): Setting name
 - `value` (any): New value
+
+### UI Automation Commands (6)
+
+The interface as a command surface: list the visible windows, catalogue their controls, click
+and type as the person would, capture a window, and switch reduced motion. Every control is
+addressed by a stable identifier, never by its translated text: manifest-driven controls carry
+their command id (`io.toggleConnection`, `app.preferences`), hand-built controls a lowercase
+dotted literal (`console.send`, `setup.uart.baudRate`, `settings.general.language`), repeated
+delegates fold in the identity of what they show (`dashboard.tile.3.close`,
+`taskbar.window.7`), and windows are named after their file (`main`, `settings`,
+`projectEditor`, `external.<widgetIndex>`). Roles follow the accessibility vocabulary:
+`button`, `checkbox`, `radiobutton`, `switch`, `pagetab`, `menuitem`, `combobox`,
+`editabletext`, `spinbox`, `slider`, `tile`, and `item` for a named control of no other kind.
+Geometry is in window coordinates; multiply by the window's `scale` for pixels. A headless run
+has no window: `listWindows` answers an empty list and the others an `EXECUTION_ERROR`.
+
+Through the AI Assistant, the two driving commands are device-gated and the screenshot is
+Confirm-tier; see [The safety tiers](AI-Assistant.md#the-safety-tiers).
+
+#### 🟢 `ui.automation.listWindows`
+List the visible windows as `[{id, title, x, y, width, height, scale, active, modal, focusedId}]`.
+`modal` is true while a modal popup is open in that window; `focusedId` names the control that
+holds keyboard focus.
+
+**Parameters:** None
+
+#### 🟢 `ui.automation.listElements`
+List the interactive controls of a window as `[{id, role, label, text, x, y, width, height,
+enabled, checked, focused}]`, in drawing order. `text` is present for editable fields, combos,
+spin boxes and sliders; `checked` for controls that have the property. A masked field (a password
+or key with a non-normal echo mode) reports no text and no label taken from its contents.
+
+**Parameters:**
+- `window` (string, optional): Window id, default `main`
+- `id` (string, optional): Case-insensitive substring of the identifier
+- `label` (string, optional): Case-insensitive substring of the label
+
+#### 🟢 `ui.automation.click`
+Click a control by id, or a point in window coordinates, as the person would. A control that
+is hidden, disabled or has no size is refused with `EXECUTION_ERROR`; a point outside the
+window with `INVALID_PARAM`. The reply is `{hit, id, x, y, delivered}`: `hit` says a control
+lies under the point after delivery, `id` names it, and `delivered` confirms the events were
+dispatched. Needs the interface-driving consent from a remote client. A control that opens a
+native file dialog blocks the application until a person dismisses the dialog, so drive the
+path-taking commands instead of such buttons. The same holds for any control whose handler
+opens a modal message box: the command is parked in that dialog's event loop until a person
+answers, and commands served meanwhile run as nested dispatches, which take no pre-mutation
+checkpoint. A command id can sit on more than one control
+(the ribbon button, a menu item, a start-menu entry); the click goes to the first in drawing
+order, the ribbon button unless a menu is open, and `listElements` with the `id` filter lists
+every carrier.
+
+**Parameters:**
+- `window` (string, optional): Window id, default `main`
+- `id` (string, optional): Element id to click; alternatively give `x` and `y`
+- `x` (number, optional): X in window coordinates
+- `y` (number, optional): Y in window coordinates
+- `button` (string, optional): `left` (default), `right` or `middle`
+- `modifiers` (array of string, optional): Held modifiers among `ctrl`, `shift`, `alt`, `meta`
+- `double` (boolean, optional): Double-click instead of a single click
+
+#### 🟢 `ui.automation.key`
+Type `text` one character at a time and press `keys`, a key sequence in `QKeySequence` notation
+(`Ctrl+S`, `Down`, `Backspace`), after focusing the optional `target`. The reply is
+`{delivered, focusedId}`. Needs the interface-driving consent from a remote client.
+
+**Parameters:**
+- `window` (string, optional): Window id, default `main`
+- `target` (string, optional): Element id to focus first
+- `text` (string, optional): Text to type (up to 4096 characters)
+- `keys` (string, optional): Key sequence to press
+
+#### 🟢 `ui.automation.screenshot`
+Capture a window, or one control of it, as a base64 PNG: `{png, width, height, scale}`. With
+HDR output active the capture is converted back to standard dynamic range. The scale halves
+until the reply fits 4 MiB, and the scale applied is returned.
+
+**Parameters:**
+- `window` (string, optional): Window id, default `main`
+- `id` (string, optional): Element id to crop to
+- `scale` (number, optional): Downscale factor from 0.1 to 1, default 1
+
+#### 🟢 `ui.automation.setReduceMotion`
+Switch the reduced-motion preference, the same setting as the Preferences toggle, and return
+`{enabled, previous}` so a client can restore it. With it on, popups and menus appear without
+their entrance animation, which keeps a screenshot taken right after a click deterministic.
+
+**Parameters:**
+- `enabled` (boolean): Whether chrome motion is reduced
 
 ### Assistant Rail Commands (12)
 

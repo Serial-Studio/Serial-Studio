@@ -52,6 +52,8 @@ Item {
     } Widgets.LineField {
       id: _hostField
 
+      objectName: "setup.eip.host"
+
       Layout.fillWidth: true
       enabled: app.ioEnabled
       opacity: enabled ? 1 : 0.5
@@ -77,6 +79,8 @@ Item {
       text: qsTr("CIP Path") + ":"
     } Widgets.LineField {
       id: _pathField
+
+      objectName: "setup.eip.cipPath"
 
       Layout.fillWidth: true
       enabled: app.ioEnabled
@@ -104,6 +108,8 @@ Item {
     } Widgets.Combo {
       id: _familyCombo
 
+      objectName: "setup.eip.plcTypeIndex"
+
       Layout.fillWidth: true
       enabled: app.ioEnabled
       opacity: enabled ? 1 : 0.5
@@ -122,6 +128,8 @@ Item {
       text: qsTr("Poll Interval (ms)") + ":"
     } Widgets.LineField {
       id: _intervalField
+
+      objectName: "setup.eip.pollInterval"
 
       Layout.fillWidth: true
       placeholderText: qsTr("Polling interval")
@@ -152,6 +160,8 @@ Item {
       Widgets.PushButton {
         id: _tagsButton
 
+        objectName: "setup.eip.configureTags"
+
         anchors.top: parent.top
         anchors.left: parent.left
         anchors.right: parent.right
@@ -161,6 +171,8 @@ Item {
 
       Widgets.PushButton {
         id: _projectButton
+
+        objectName: "setup.eip.generateProject"
 
         anchors.topMargin: 4
         anchors.left: parent.left

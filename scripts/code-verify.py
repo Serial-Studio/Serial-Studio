@@ -1536,6 +1536,182 @@ def find_qml_inline_comment_violations(
     return violations
 
 
+# Identifier sweep (spec 0101): the automation surface addresses controls by objectName, so the
+# expression bound to one must survive a language or theme switch, and every interactive
+# control in the swept directories must carry one.
+_QML_OBJECTNAME_LINE = re.compile(r'^\s*(?:objectName\s*:|"objectName"\s*:)\s*(.*)$')
+_QML_OBJECTNAME_FORBIDDEN = re.compile(
+    r"qsTr(?:anslate|Id)?\s*\(|Cpp_ThemeManager|Cpp_Misc_Translator"
+    r"|\.(?:title|text|label|tooltip|toolTip|displayText|currentText|placeholderText)\b"
+)
+_QML_CONTROL_TYPES = (
+    "PushButton",
+    "IconButton",
+    "ToolbarButton",
+    "Toggle",
+    "Radio",
+    "Combo",
+    "LineField",
+    "BoundField",
+    "SearchField",
+    "SpinBox",
+    "SegmentedControl",
+    "MenuButton",
+    "BigButton",
+    "TaskbarButton",
+    "SubMenuCombo",
+    "Button",
+    "CheckBox",
+    "Switch",
+    "RadioButton",
+    "TextField",
+    "TextArea",
+    "ComboBox",
+    "Slider",
+    "ToolButton",
+    "TabButton",
+)
+# An indented instance (a root declaration at column 0 is the widget's own definition), an
+# inline delegate, or the repository's `} ComboBox {` same-line idiom.
+_QML_CONTROL_START = re.compile(
+    r"^(?:\s+(?:delegate\s*:\s*|sourceComponent\s*:\s*)?|\s*\}\s+)(?:Widgets\.)?("
+    + "|".join(_QML_CONTROL_TYPES)
+    + r")\s*\{\s*$"
+)
+_QML_CONTROL_BLOCKING_SCOPE = re.compile(
+    r"(?:^|/)app/qml/(?:MainWindow/|Dialogs/Settings(?:/|\.qml$)|Widgets/Command[^/]*\.qml$)"
+)
+_QML_STRING_LITERAL = re.compile(r'"(?:[^"\\]|\\.)*"' + r"|'(?:[^'\\]|\\.)*'")
+_QML_BLOCK_SCAN_LIMIT = 2000
+_QML_EXPRESSION_TAILS = ("?", ":", "+", "(", "||", "&&")
+
+
+def _qml_code_text(line: str) -> str:
+    """The line without a trailing `//` comment, string literals kept intact (the shared
+    stripper blanks them, which would turn `"a." + b` into a dangling operator)."""
+    quote = ""
+    for i, ch in enumerate(line):
+        if quote:
+            if ch == quote and (i == 0 or line[i - 1] != "\\"):
+                quote = ""
+        elif ch in ("'", '"', "`"):
+            quote = ch
+        elif ch == "/" and line[i : i + 2] == "//":
+            return line[:i]
+    return line
+
+
+def _qml_expression_continues(expr: str, lines: list[str], index: int) -> bool:
+    """Whether the binding that ends in `expr` carries on at `lines[index]`."""
+    if index >= len(lines):
+        return False
+    nxt = _qml_code_text(lines[index]).strip()
+    if not nxt or nxt.startswith("//"):
+        return False
+    if expr.rstrip().endswith(_QML_EXPRESSION_TAILS):
+        return True
+    return nxt.startswith(("?", ":", "+", "||", "&&"))
+
+
+def find_qml_objectname_literal_violations(
+    lines: list[str], path: Path, fence_mask: list[bool]
+) -> list[Violation]:
+    """Flag an `objectName` bound to anything that changes with the language or the theme:
+    `qsTr(`, a translator or theme read, or a `.title` / `.text` / `.label` style property.
+    The automation surface (spec 0101) resolves controls by this name, so it must be a string
+    literal, a command id (`node.id`, `modelData.id`), or a literal joined with an identity
+    property such as `widgetIndex`. Multi-line ternaries are read as one expression."""
+    if path.suffix != ".qml":
+        return []
+
+    violations: list[Violation] = []
+    n = len(lines)
+    i = 0
+    while i < n:
+        if fence_mask[i]:
+            i += 1
+            continue
+
+        match = _QML_OBJECTNAME_LINE.match(_qml_code_text(lines[i]))
+        if match is None:
+            i += 1
+            continue
+
+        expr = match.group(1).strip()
+        j = i
+        while j + 1 < n and _qml_expression_continues(expr, lines, j + 1):
+            j += 1
+            expr += " " + _qml_code_text(lines[j]).strip()
+
+        hit = _QML_OBJECTNAME_FORBIDDEN.search(_QML_STRING_LITERAL.sub('""', expr))
+        if hit is not None:
+            violations.append(
+                Violation(
+                    path,
+                    i + 1,
+                    "qml-objectname-literal",
+                    f"objectName binds `{hit.group(0)}`, which changes with the language or "
+                    "theme -- use a string literal, a command id (`node.id`, `modelData.id`), "
+                    "or a literal joined with an identity property (`widgetIndex`)",
+                )
+            )
+
+        i = j + 1
+
+    return violations
+
+
+def _qml_block_has_objectname(lines: list[str], start: int) -> bool:
+    """Whether the object body opened at `lines[start]` binds `objectName` at its top level."""
+    depth = 1
+    for j in range(start + 1, min(len(lines), start + _QML_BLOCK_SCAN_LIMIT)):
+        stripped = _strip_eol_comment(lines[j]).strip()
+        if stripped.startswith("//"):
+            continue
+        if depth == 1 and _QML_OBJECTNAME_LINE.match(stripped) is not None:
+            return True
+        depth += stripped.count("{") - stripped.count("}")
+        if depth <= 0:
+            return False
+    return False
+
+
+def find_qml_control_unnamed_violations(
+    lines: list[str], path: Path, fence_mask: list[bool]
+) -> list[Violation]:
+    """Flag a shared interactive widget or raw Qt Quick control instance whose body binds no
+    `objectName`. Blocking under the directories the spec-0101 sweep covers (`Command*.qml`,
+    `MainWindow/**`, `Dialogs/Settings/**`); advisory elsewhere until a later part widens the
+    sweep. A declaration at column 0 is the widget's own definition and is not an instance.
+    """
+    if path.suffix != ".qml":
+        return []
+
+    blocking = _QML_CONTROL_BLOCKING_SCOPE.search(path.as_posix()) is not None
+    violations: list[Violation] = []
+    for i, line in enumerate(lines):
+        if fence_mask[i]:
+            continue
+
+        match = _QML_CONTROL_START.match(_strip_eol_comment(line))
+        if match is None or _qml_block_has_objectname(lines, i):
+            continue
+
+        message = (
+            f"`{match.group(1)}` instance without an `objectName` -- the automation surface "
+            '(spec 0101) addresses controls by identifier; add `objectName: "<area>.<control>"` '
+            "(the command id for a manifest-driven delegate)"
+        )
+        if blocking:
+            violations.append(Violation(path, i + 1, "qml-control-unnamed", message))
+        else:
+            violations.append(
+                Violation(path, i + 1, "qml-control-unnamed-advisory", message)
+            )
+
+    return violations
+
+
 # Matches QML property declarations:
 #   property bool foo: ...
 #   readonly property int bar: ...
@@ -2454,6 +2630,12 @@ def process_file(path: Path, fix: bool) -> tuple[list[Violation], str | None]:
         violations.extend(
             find_qml_underscore_property_violations(raw_lines, path, fence_mask)
         )
+        violations.extend(
+            find_qml_objectname_literal_violations(raw_lines, path, fence_mask)
+        )
+        violations.extend(
+            find_qml_control_unnamed_violations(raw_lines, path, fence_mask)
+        )
         violations.extend(find_interrupt_guard_violations(raw_lines, path, fence_mask))
         violations.extend(find_todouble_violations(raw_lines, path, fence_mask))
         violations.extend(find_qassert_violations(raw_lines, path, fence_mask))
@@ -2736,6 +2918,9 @@ _ADVISORY_KINDS = frozenset(
         "comment-dash-substitute",
         "multi-line-comment",
         "qml-inline-comment",
+        # A control without an objectName outside the directories the spec-0101 identifier
+        # sweep covers; inside them the same finding is the blocking qml-control-unnamed.
+        "qml-control-unnamed-advisory",
         # `id:` not the first content line in a QML object body. The rule's walk stopped at the
         # first content line, so this half never fired at all (spec 0075, coordinator item 8);
         # fixing the walk surfaced ~150 existing sites, which are the cleanup checklist.

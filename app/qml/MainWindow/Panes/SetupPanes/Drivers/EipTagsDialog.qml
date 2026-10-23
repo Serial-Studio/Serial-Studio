@@ -124,6 +124,8 @@ DriverTagPickerDialog {
           Widgets.LineField {
             id: _nameField
 
+            objectName: "setup.eip.tags.name"
+
             Layout.fillWidth: true
             placeholderText: qsTr("Channel name")
           }
@@ -135,6 +137,8 @@ DriverTagPickerDialog {
 
           Widgets.LineField {
             id: _tagField
+
+            objectName: "setup.eip.tags.tag"
 
             Layout.fillWidth: true
             placeholderText: qsTr("Controller tag name")
@@ -152,6 +156,8 @@ DriverTagPickerDialog {
             Widgets.Combo {
               id: _typeCombo
 
+              objectName: "setup.eip.tags.type"
+
               currentIndex: 9
               Layout.fillWidth: true
               model: Cpp_IO_Eip.tagTypeList
@@ -160,12 +166,16 @@ DriverTagPickerDialog {
             Widgets.LineField {
               id: _elementField
 
+              objectName: "setup.eip.tags.element"
+
               Layout.preferredWidth: 90
               placeholderText: qsTr("Element")
               validator: IntValidator { bottom: 0; top: 65535 }
             }
 
             Widgets.PushButton {
+              objectName: "setup.eip.tags.add"
+
               text: qsTr("Add Tag")
               enabled: _tagField.text.length > 0
               onClicked: {
@@ -285,6 +295,8 @@ DriverTagPickerDialog {
                 }
 
                 Widgets.PushButton {
+                  objectName: "setup.eip.tags.row." + index + ".remove"
+
                   implicitHeight: 28
                   text: qsTr("Remove")
                   Layout.preferredWidth: 90
@@ -321,18 +333,24 @@ DriverTagPickerDialog {
         }
 
         Widgets.PushButton {
+          objectName: "setup.eip.tags.generate"
+
           text: qsTr("Generate Project")
           visible: Cpp_IO_Eip.tagCount > 0
           onClicked: Cpp_IO_Eip.generateProject()
         }
 
         Widgets.PushButton {
+          objectName: "setup.eip.tags.clear"
+
           text: qsTr("Clear All")
           visible: Cpp_IO_Eip.tagCount > 0
           onClicked: Cpp_IO_Eip.clearTags()
         }
 
         Widgets.PushButton {
+          objectName: "setup.eip.tags.close"
+
           text: qsTr("Close")
           onClicked: root.close()
         }

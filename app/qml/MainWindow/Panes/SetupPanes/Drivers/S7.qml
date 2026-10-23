@@ -52,6 +52,8 @@ Item {
     } Widgets.LineField {
       id: _hostField
 
+      objectName: "setup.s7.host"
+
       Layout.fillWidth: true
       enabled: app.ioEnabled
       opacity: enabled ? 1 : 0.5
@@ -77,6 +79,8 @@ Item {
       opacity: enabled ? 1 : 0.5
     } Widgets.LineField {
       id: _rackField
+
+      objectName: "setup.s7.rack"
 
       Layout.fillWidth: true
       enabled: app.ioEnabled
@@ -107,6 +111,8 @@ Item {
     } Widgets.LineField {
       id: _slotField
 
+      objectName: "setup.s7.slot"
+
       Layout.fillWidth: true
       enabled: app.ioEnabled
       opacity: enabled ? 1 : 0.5
@@ -133,6 +139,8 @@ Item {
       text: qsTr("Poll Interval (ms)") + ":"
     } Widgets.LineField {
       id: _intervalField
+
+      objectName: "setup.s7.pollInterval"
 
       Layout.fillWidth: true
       placeholderText: qsTr("Polling interval")
@@ -164,6 +172,8 @@ Item {
       Widgets.PushButton {
         id: _variablesButton
 
+        objectName: "setup.s7.configureVariables"
+
         anchors.top: parent.top
         anchors.left: parent.left
         anchors.right: parent.right
@@ -173,6 +183,8 @@ Item {
 
       Widgets.PushButton {
         id: _projectButton
+
+        objectName: "setup.s7.generateProject"
 
         anchors.topMargin: 4
         anchors.left: parent.left

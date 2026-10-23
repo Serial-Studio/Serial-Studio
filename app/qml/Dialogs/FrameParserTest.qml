@@ -29,6 +29,8 @@ import "../Widgets" as Widgets
 Widgets.SmartDialog {
   id: root
 
+  objectName: "frameParserTest"
+
   //
   // Window setup: resizable, always on top (it accompanies the project editor)
   //

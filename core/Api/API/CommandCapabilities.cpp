@@ -85,6 +85,8 @@ static constexpr Entry kCapable[] = {
   {QLatin1StringView("system.exec"), ControlScriptOnly, NoCapability},
   {QLatin1StringView("system.kill"), ControlScriptOnly, NoCapability},
   {QLatin1StringView("system.runningProcesses"), ControlScriptOnly, NoCapability},
+  {QLatin1StringView("ui.automation.click"), DrivesUi, NoCapability},
+  {QLatin1StringView("ui.automation.key"), DrivesUi, NoCapability},
 };
 
 static constexpr QLatin1StringView kPlain[] = {
@@ -470,6 +472,10 @@ static constexpr QLatin1StringView kPlain[] = {
   QLatin1StringView("stream.getInfo"),
   QLatin1StringView("stream.getSources"),
   QLatin1StringView("system.projectDir"),
+  QLatin1StringView("ui.automation.listElements"),
+  QLatin1StringView("ui.automation.listWindows"),
+  QLatin1StringView("ui.automation.screenshot"),
+  QLatin1StringView("ui.automation.setReduceMotion"),
   QLatin1StringView("ui.window.getLayout"),
   QLatin1StringView("ui.window.getStatus"),
   QLatin1StringView("ui.window.getWidgetSettings"),

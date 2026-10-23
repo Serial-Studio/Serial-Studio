@@ -52,6 +52,8 @@ pytest tests/integration/test_csv_export.py::test_csv_export_basic -v
 
 Each test connects to Serial Studio over TCP, configures it through the API, streams simulated telemetry, and asserts on the result.
 
+The `gui` tier (`test_ui_automation.py`) drives the live window through the `ui.automation.*` commands: it needs the GUI app up on a desk with the API server enabled, never a headless or offscreen instance, and CI deselects it (`-m "not gui"`). Launch the app normally and answer the one interface-driving consent prompt the first click shows, or start it with `SERIAL_STUDIO_API_AUTO_CONSENT=1` and set `SS_TEST_AUTO_CONSENT=1` for the tests.
+
 | File                                 | What it covers |
 |--------------------------------------|----------------|
 | `test_frame_parsing.py`              | All 8 checksum types, JSON/CSV parsing, custom delimiters, high-frequency frames |
@@ -99,6 +101,7 @@ Each test connects to Serial Studio over TCP, configures it through the API, str
 | `test_cli_licensing.py`              | Fast non-zero exit on a bad key, clean no-op deactivate, `--reset` (needs `SS_BINARY`) |
 | `test_api_ipv6.py`                   | `::1` is served, whatever `localhost` resolves to is served, IPv4 still works |
 | `test_grpc_lifecycle.py`             | gRPC port follows the API state, garbage is survivable, churn does not wedge the JSON API (skips without a gRPC build) |
+| `test_ui_automation.py`              | **`gui` marker, desk only.** Spec 0101 AC1 to AC4: window inventory, the element catalog of the real main window (ids by command id, stable across a language switch driven through Preferences), connect by clicking the toolbar button, typing into the console field, a disabled control refused, screenshot size and crop; skips when `listWindows` is empty |
 
 ```bash
 # Run all integration tests
@@ -133,6 +136,7 @@ Boundary tests against the TCP API server. They do not reset state between runs,
 | `test_http_on_api_socket.py`   | Every HTTP verb closes the connection with no readable answer, the body never runs as a command, the raw lane stays gated, normal clients unaffected |
 | `test_path_policy_all_commands.py` | The 12 guarded command/parameter pairs answer `PATH_NOT_ALLOWED`; `openDatabase` creates no `-wal`/`-shm` sibling; an allowed temp file reaches the handler |
 | `test_write_backlog.py`        | The pending-write cap is **16 MiB per socket**: over it, a broadcast is skipped and counted (producer-paced, self-healing) but a command **response** disconnects the client, because skipping an answer it asked for wedges it forever. A healthy peer keeps working |
+| `test_ui_automation_consent.py` | Spec 0101 AC5: a remote `ui.automation.click` is refused with `CONSENT_REQUIRED` until the interface-driving consent is granted (the maintainer answers one prompt), the device-write consent alone never unlocks it, and `SS_TEST_AUTO_CONSENT=1` grants it; skips when no window is listed |
 
 ```bash
 # Run all security tests
@@ -460,6 +464,7 @@ pytest -m "destructive"              # Tests that may crash or hang the server
 | `critical`    | Critical severity security checks |
 | `high`        | High severity security checks |
 | `probe`     | Active probing attempts |
+| `gui`         | Drives the live user interface (spec 0101); desk only, CI deselects it (`-m "not gui"`) |
 
 ## Directory structure
 

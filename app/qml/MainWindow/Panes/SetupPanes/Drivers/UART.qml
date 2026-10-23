@@ -54,6 +54,8 @@ Item {
     } ComboBox {
       id: _portCombo
 
+      objectName: "setup.uart.portIndex"
+
       Layout.fillWidth: true
       enabled: app.ioEnabled
       opacity: enabled ? 1 : 0.5
@@ -98,6 +100,8 @@ Item {
       text: qsTr("Baud Rate") + ":"
     } ComboBox {
       id: _baudCombo
+
+      objectName: "setup.uart.baudRate"
 
       editable: true
       Layout.fillWidth: true
@@ -184,6 +188,8 @@ Item {
     } Widgets.Combo {
       id: _dataCombo
 
+      objectName: "setup.uart.dataBitsIndex"
+
       Layout.fillWidth: true
       enabled: app.ioEnabled
       opacity: enabled ? 1 : 0.5
@@ -204,6 +210,8 @@ Item {
       opacity: enabled ? 1 : 0.5
     } Widgets.Combo {
       id: _parityCombo
+
+      objectName: "setup.uart.parityIndex"
 
       Layout.fillWidth: true
       enabled: app.ioEnabled
@@ -226,6 +234,8 @@ Item {
     } Widgets.Combo {
       id: _stopBitsCombo
 
+      objectName: "setup.uart.stopBitsIndex"
+
       Layout.fillWidth: true
       enabled: app.ioEnabled
       opacity: enabled ? 1 : 0.5
@@ -246,6 +256,8 @@ Item {
       text: qsTr("Flow Control") + ":"
     } Widgets.Combo {
       id: _flowCombo
+
+      objectName: "setup.uart.flowControlIndex"
 
       Layout.fillWidth: true
       enabled: app.ioEnabled
@@ -277,6 +289,8 @@ Item {
     } CheckBox {
       id: _autoreconnect
 
+      objectName: "setup.uart.autoReconnect"
+
       Layout.leftMargin: -8
       Layout.maximumHeight: 18
       checked: Cpp_IO_Serial.autoReconnect
@@ -294,6 +308,8 @@ Item {
       text: qsTr("Send DTR Signal") + ":"
     } CheckBox {
       id: _dtr
+
+      objectName: "setup.uart.dtrEnabled"
 
       Layout.leftMargin: -8
       Layout.maximumHeight: 18

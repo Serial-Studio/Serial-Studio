@@ -96,6 +96,8 @@ Item {
     Widgets.Toggle {
       id: slotSwitch
 
+      objectName: "settings.sounds.row." + slotRow.slotName + ".enabled"
+
       visible: slotRow.switchable
       checked: Cpp_UI_Alarms.slotEnabled(slotRow.slotName)
       onToggled: Cpp_UI_Alarms.setSlotEnabled(slotRow.slotName, checked)
@@ -119,6 +121,8 @@ Item {
     Widgets.LineField {
       id: fileField
 
+      objectName: "settings.sounds.row." + slotRow.slotName + ".file"
+
       Layout.fillWidth: true
       font: Cpp_Misc_CommonFonts.uiFont
       placeholderText: qsTr("Bundled sound")
@@ -138,6 +142,8 @@ Item {
     }
 
     Widgets.IconButton {
+      objectName: "settings.sounds.row." + slotRow.slotName + ".browse"
+
       iconSize: 16
       ToolTip.delay: 700
       ToolTip.visible: hovered
@@ -150,6 +156,8 @@ Item {
     }
 
     Widgets.IconButton {
+      objectName: "settings.sounds.row." + slotRow.slotName + ".play"
+
       iconSize: 16
       ToolTip.delay: 700
       ToolTip.visible: hovered
@@ -159,6 +167,8 @@ Item {
     }
 
     Widgets.IconButton {
+      objectName: "settings.sounds.row." + slotRow.slotName + ".clear"
+
       iconSize: 16
       ToolTip.delay: 700
       ToolTip.visible: hovered
@@ -235,6 +245,8 @@ Item {
           Widgets.Toggle {
             id: enableToggle
 
+            objectName: "settings.sounds.enabled"
+
             anchors.rightMargin: -8
             anchors.right: parent.right
             checked: Cpp_UI_Alarms.enabled
@@ -261,6 +273,8 @@ Item {
           text: qsTr("Volume")
           color: Cpp_ThemeManager.colors["text"]
         } Widgets.SpinBox {
+          objectName: "settings.sounds.volume"
+
           from: 0
           to: 100
           stepSize: 5
@@ -274,6 +288,8 @@ Item {
           text: qsTr("Output Device")
           color: Cpp_ThemeManager.colors["text"]
         } Widgets.Combo {
+          objectName: "settings.sounds.outputDevice"
+
           Layout.fillWidth: true
           model: Cpp_UI_Alarms.outputDevices
           currentIndex: Cpp_UI_Alarms.outputDeviceIndex
@@ -297,6 +313,8 @@ Item {
           text: qsTr("Sequence (ISA-18.1)")
           color: Cpp_ThemeManager.colors["text"]
         } Widgets.Combo {
+          objectName: "settings.sounds.sequence"
+
           Layout.fillWidth: true
           model: [qsTr("A-4 - Automatic reset, no lock-in"),
                   qsTr("A - Automatic reset, lock-in until acknowledged"),
@@ -320,6 +338,8 @@ Item {
           text: qsTr("Warning Repeat (ms)")
           color: Cpp_ThemeManager.colors["text"]
         } Widgets.SpinBox {
+          objectName: "settings.sounds.warningIntervalMs"
+
           to: 15000
           from: 2500
           stepSize: 500
@@ -333,6 +353,8 @@ Item {
           text: qsTr("Caution Repeat (ms)")
           color: Cpp_ThemeManager.colors["text"]
         } Widgets.SpinBox {
+          objectName: "settings.sounds.cautionIntervalMs"
+
           to: 30000
           from: 2500
           stepSize: 500
@@ -371,6 +393,8 @@ Item {
           Layout.columnSpan: 2
 
           Widgets.IconButton {
+            objectName: "settings.sounds.test"
+
             iconSize: 16
             text: qsTr("Test")
             enabled: !Cpp_UI_Alarms.testing
@@ -379,6 +403,8 @@ Item {
           }
 
           Widgets.IconButton {
+            objectName: "settings.sounds.reset"
+
             iconSize: 16
             text: qsTr("Reset to Bundled Sounds")
             icon.source: "qrc:/icons/buttons/refresh.svg"

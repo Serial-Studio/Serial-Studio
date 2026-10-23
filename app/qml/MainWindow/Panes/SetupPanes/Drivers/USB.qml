@@ -52,6 +52,8 @@ Item {
     } Widgets.Combo {
       id: deviceCombo
 
+      objectName: "setup.usb.deviceIndex"
+
       Layout.fillWidth: true
       enabled: app.ioEnabled
       opacity: enabled ? 1 : 0.5
@@ -81,6 +83,8 @@ Item {
       enabled: deviceCombo.currentIndex > 0 && app.ioEnabled
     } Widgets.Combo {
       id: modeCombo
+
+      objectName: "setup.usb.transferMode"
 
       Layout.fillWidth: true
       opacity: enabled ? 1 : 0.5
@@ -130,6 +134,8 @@ Item {
     } Widgets.Combo {
       id: inEndpointCombo
 
+      objectName: "setup.usb.inEndpointIndex"
+
       Layout.fillWidth: true
       opacity: enabled ? 1 : 0.5
       model: Cpp_IO_USB.inEndpointList
@@ -166,6 +172,8 @@ Item {
     } Widgets.Combo {
       id: outEndpointCombo
 
+      objectName: "setup.usb.outEndpointIndex"
+
       Layout.fillWidth: true
       opacity: enabled ? 1 : 0.5
       model: Cpp_IO_USB.outEndpointList
@@ -201,6 +209,8 @@ Item {
       visible: Cpp_IO_USB.isoModeEnabled && deviceCombo.currentIndex > 0
     } Widgets.SpinBox {
       id: isoPacketSpin
+
+      objectName: "setup.usb.isoPacketSize"
 
       from: 1
       to: 49152

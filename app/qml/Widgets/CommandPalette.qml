@@ -340,6 +340,13 @@ FocusScope {
 
       required property var modelData
 
+      objectName: modelData.isAdd ? "palette.workspace.add"
+                  : modelData.id === undefined ? ""
+                  : modelData.isWidget ? "palette.window." + modelData.id
+                  : modelData.isFolder ? "palette.folder." + modelData.id
+                  : modelData.isTool ? "palette.tool." + modelData.id
+                  : "palette.workspace." + modelData.id
+
       readonly property bool hovered: _cellMouse.containsMouse
       readonly property bool itemEnabled: _cell.modelData.enabled !== false
       readonly property bool highlighted: _cell.modelData._idx === root.currentIndex
@@ -439,6 +446,13 @@ FocusScope {
       width: parent ? parent.width : 0
 
       required property var modelData
+
+      objectName: modelData.isAdd ? "palette.workspace.add"
+                  : modelData.id === undefined ? ""
+                  : modelData.isWidget ? "palette.window." + modelData.id
+                  : modelData.isFolder ? "palette.folder." + modelData.id
+                  : modelData.isTool ? "palette.tool." + modelData.id
+                  : "palette.workspace." + modelData.id
 
       readonly property bool hovered: _rowMouse.containsMouse
       readonly property bool itemEnabled: _row.modelData.enabled !== false
@@ -617,6 +631,8 @@ FocusScope {
         Widgets.SearchField {
           id: _search
 
+          objectName: "palette.search"
+
           anchors.centerIn: parent
           onAccepted: root.activateCurrent()
           onTextChanged: root.recompute()
@@ -630,6 +646,8 @@ FocusScope {
         }
 
         Widgets.IconButton {
+          objectName: "palette.close"
+
           flat: true
           iconSize: 18
           implicitWidth: 28
@@ -679,6 +697,8 @@ FocusScope {
           anchors.rightMargin: 12
 
           Widgets.IconButton {
+            objectName: "palette.back"
+
             flat: true
             iconSize: 16
             implicitWidth: 24

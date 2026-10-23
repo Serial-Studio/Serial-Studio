@@ -78,6 +78,8 @@ ColumnLayout {
     } Widgets.LineField {
       id: typeField
 
+      objectName: "setup.usb.composer.type"
+
       text: "0x41"
       Layout.fillWidth: true
       placeholderText: "0x41"
@@ -89,6 +91,8 @@ ColumnLayout {
     } Widgets.LineField {
       id: requestField
 
+      objectName: "setup.usb.composer.request"
+
       Layout.fillWidth: true
       placeholderText: "0x00"
       font: Cpp_Misc_CommonFonts.customMonoFont(1, false)
@@ -98,6 +102,8 @@ ColumnLayout {
       text: qsTr("wValue") + ":"
     } Widgets.LineField {
       id: valueField
+
+      objectName: "setup.usb.composer.value"
 
       text: "0x0000"
       Layout.fillWidth: true
@@ -109,6 +115,8 @@ ColumnLayout {
       text: qsTr("wIndex") + ":"
     } Widgets.LineField {
       id: indexField
+
+      objectName: "setup.usb.composer.index"
 
       text: "0x0000"
       Layout.fillWidth: true
@@ -130,6 +138,8 @@ ColumnLayout {
     } Widgets.LineField {
       id: payloadField
 
+      objectName: "setup.usb.composer.payload"
+
       visible: !root.isIn
       Layout.fillWidth: true
       placeholderText: "EF BE 00 00"
@@ -141,6 +151,8 @@ ColumnLayout {
       text: qsTr("Read Length") + ":"
     } Widgets.SpinBox {
       id: lengthSpin
+
+      objectName: "setup.usb.composer.length"
 
       from: 0
       to: 4096
@@ -155,6 +167,8 @@ ColumnLayout {
   // Send button
   //
   Widgets.PushButton {
+    objectName: "setup.usb.composer.send"
+
     text: qsTr("Send Control Transfer")
     Layout.alignment: Qt.AlignRight
     enabled: !root.pending && typeField.text.length > 0 && requestField.text.length > 0
@@ -184,6 +198,8 @@ ColumnLayout {
 
       TextArea {
         id: responseArea
+
+        objectName: "setup.usb.composer.response"
 
         readOnly: true
         selectByMouse: true

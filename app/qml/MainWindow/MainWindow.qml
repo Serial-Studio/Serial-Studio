@@ -34,6 +34,8 @@ import "../Commands" as Commands
 Widgets.SmartWindow {
   id: root
 
+  objectName: "main"
+
   title: documentTitle
   category: "MainWindow"
   minimumWidth: app.runtimeMode ? 640 : layout.implicitWidth

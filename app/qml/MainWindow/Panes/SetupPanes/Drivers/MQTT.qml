@@ -102,6 +102,8 @@ Item {
         opacity: enabled ? 1 : 0.5
         text: qsTr("Hostname") + ":"
       } Widgets.BoundField {
+        objectName: "setup.mqtt.hostname"
+
         Layout.fillWidth: true
         enabled: app.ioEnabled
         opacity: enabled ? 1 : 0.5
@@ -118,6 +120,8 @@ Item {
         text: qsTr("Port") + ":"
         opacity: enabled ? 1 : 0.5
       } Widgets.BoundField {
+        objectName: "setup.mqtt.port"
+
         Layout.fillWidth: true
         enabled: app.ioEnabled
         opacity: enabled ? 1 : 0.5
@@ -138,6 +142,8 @@ Item {
         opacity: enabled ? 1 : 0.5
         text: qsTr("Topic Filter") + ":"
       } Widgets.BoundField {
+        objectName: "setup.mqtt.topicFilter"
+
         Layout.fillWidth: true
         enabled: app.ioEnabled
         opacity: enabled ? 1 : 0.5
@@ -158,6 +164,8 @@ Item {
         Layout.fillWidth: true
 
         Widgets.BoundField {
+          objectName: "setup.mqtt.clientId"
+
           Layout.fillWidth: true
           enabled: app.ioEnabled
           opacity: enabled ? 1 : 0.5
@@ -166,6 +174,8 @@ Item {
         }
 
         Widgets.PushButton {
+          objectName: "setup.mqtt.regenerateClientId"
+
           enabled: app.ioEnabled
           text: qsTr("Regenerate")
           opacity: enabled ? 1 : 0.5
@@ -181,6 +191,8 @@ Item {
         opacity: enabled ? 1 : 0.5
         text: qsTr("Username") + ":"
       } Widgets.BoundField {
+        objectName: "setup.mqtt.username"
+
         Layout.fillWidth: true
         enabled: app.ioEnabled
         opacity: enabled ? 1 : 0.5
@@ -196,6 +208,8 @@ Item {
         opacity: enabled ? 1 : 0.5
         text: qsTr("Password") + ":"
       } Widgets.BoundField {
+        objectName: "setup.mqtt.password"
+
         Layout.fillWidth: true
         enabled: app.ioEnabled
         opacity: enabled ? 1 : 0.5
@@ -213,6 +227,8 @@ Item {
         text: qsTr("Version") + ":"
       } Widgets.Combo {
         id: _version
+
+        objectName: "setup.mqtt.mqttVersion"
 
         Layout.fillWidth: true
         enabled: app.ioEnabled
@@ -238,6 +254,8 @@ Item {
         opacity: enabled ? 1 : 0.5
         text: qsTr("Keep Alive (s)") + ":"
       } Widgets.BoundField {
+        objectName: "setup.mqtt.keepAlive"
+
         Layout.fillWidth: true
         enabled: app.ioEnabled
         opacity: enabled ? 1 : 0.5
@@ -258,6 +276,8 @@ Item {
         opacity: _clean.enabled ? 1 : 0.5
       } CheckBox {
         id: _clean
+
+        objectName: "setup.mqtt.cleanSession"
 
         Layout.leftMargin: -8
         enabled: app.ioEnabled
@@ -285,6 +305,8 @@ Item {
       } CheckBox {
         id: _sparkplug
 
+        objectName: "setup.mqtt.sparkplugEnabled"
+
         Layout.leftMargin: -8
         enabled: app.ioEnabled
         opacity: enabled ? 1 : 0.5
@@ -310,6 +332,8 @@ Item {
         visible: Cpp_IO_Mqtt.sparkplugEnabled
         enabled: app.ioEnabled && Cpp_IO_Mqtt.sparkplugEnabled
       } Widgets.BoundField {
+        objectName: "setup.mqtt.sparkplugGroupId"
+
         Layout.fillWidth: true
         opacity: enabled ? 1 : 0.5
         placeholderText: qsTr("All groups")
@@ -330,6 +354,8 @@ Item {
       } Widgets.PushButton {
         id: _generate
 
+        objectName: "setup.mqtt.generateProject"
+
         Layout.fillWidth: true
         opacity: enabled ? 1 : 0.5
         visible: Cpp_IO_Mqtt.sparkplugEnabled
@@ -347,6 +373,8 @@ Item {
         opacity: _ssl.enabled ? 1 : 0.5
       } CheckBox {
         id: _ssl
+
+        objectName: "setup.mqtt.sslEnabled"
 
         Layout.leftMargin: -8
         enabled: app.ioEnabled
@@ -374,6 +402,8 @@ Item {
         enabled: app.ioEnabled && Cpp_IO_Mqtt.sslEnabled
       } Widgets.Combo {
         id: _sslProtocol
+
+        objectName: "setup.mqtt.sslProtocol"
 
         Layout.fillWidth: true
         opacity: enabled ? 1 : 0.5
@@ -406,6 +436,8 @@ Item {
       } Widgets.Combo {
         id: _peerVerifyMode
 
+        objectName: "setup.mqtt.peerVerifyMode"
+
         Layout.fillWidth: true
         opacity: enabled ? 1 : 0.5
         visible: Cpp_IO_Mqtt.sslEnabled
@@ -435,6 +467,8 @@ Item {
         text: qsTr("Verify Depth") + ":"
         enabled: app.ioEnabled && Cpp_IO_Mqtt.sslEnabled
       } Widgets.BoundField {
+        objectName: "setup.mqtt.peerVerifyDepth"
+
         Layout.fillWidth: true
         visible: Cpp_IO_Mqtt.sslEnabled
         enabled: app.ioEnabled && Cpp_IO_Mqtt.sslEnabled
@@ -456,6 +490,8 @@ Item {
         text: qsTr("CA Certificates") + ":"
         enabled: app.ioEnabled && Cpp_IO_Mqtt.sslEnabled
       } Widgets.PushButton {
+        objectName: "setup.mqtt.addCaCertificates"
+
         Layout.fillWidth: true
         opacity: enabled ? 1 : 0.5
         visible: Cpp_IO_Mqtt.sslEnabled
@@ -478,6 +514,8 @@ Item {
         visible: Cpp_IO_Mqtt.sslEnabled
 
         Widgets.BoundField {
+          objectName: "setup.mqtt.clientCertificatePath"
+
           Layout.fillWidth: true
           opacity: enabled ? 1 : 0.5
           placeholderText: qsTr("Optional (mutual TLS)")
@@ -487,6 +525,8 @@ Item {
         }
 
         Widgets.PushButton {
+          objectName: "setup.mqtt.selectClientCertificate"
+
           text: qsTr("Browse…")
           opacity: enabled ? 1 : 0.5
           enabled: app.ioEnabled && Cpp_IO_Mqtt.sslEnabled
@@ -508,6 +548,8 @@ Item {
         visible: Cpp_IO_Mqtt.sslEnabled
 
         Widgets.BoundField {
+          objectName: "setup.mqtt.privateKeyPath"
+
           Layout.fillWidth: true
           opacity: enabled ? 1 : 0.5
           externalValue: Cpp_IO_Mqtt.privateKeyPath
@@ -517,6 +559,8 @@ Item {
         }
 
         Widgets.PushButton {
+          objectName: "setup.mqtt.selectPrivateKey"
+
           text: qsTr("Browse…")
           opacity: enabled ? 1 : 0.5
           enabled: app.ioEnabled && Cpp_IO_Mqtt.sslEnabled
@@ -533,6 +577,8 @@ Item {
         text: qsTr("Key Passphrase") + ":"
         enabled: app.ioEnabled && Cpp_IO_Mqtt.sslEnabled
       } Widgets.BoundField {
+        objectName: "setup.mqtt.keyPassphrase"
+
         Layout.fillWidth: true
         opacity: enabled ? 1 : 0.5
         echoMode: TextInput.Password
@@ -552,6 +598,8 @@ Item {
         enabled: app.ioEnabled && Cpp_IO_Mqtt.sslEnabled
       } CheckBox {
         id: _alpn
+
+        objectName: "setup.mqtt.alpnEnabled"
 
         Layout.leftMargin: -8
         opacity: enabled ? 1 : 0.5
@@ -579,6 +627,8 @@ Item {
         visible: Cpp_IO_Mqtt.sslEnabled && Cpp_IO_Mqtt.alpnEnabled
         enabled: app.ioEnabled && Cpp_IO_Mqtt.sslEnabled && Cpp_IO_Mqtt.alpnEnabled
       } Widgets.BoundField {
+        objectName: "setup.mqtt.alpnProtocol"
+
         Layout.fillWidth: true
         opacity: enabled ? 1 : 0.5
         placeholderText: "x-amzn-mqtt-ca"

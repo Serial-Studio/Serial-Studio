@@ -129,6 +129,8 @@ Item {
     } Widgets.Combo {
       id: _inDev
 
+      objectName: "setup.audio.selectedInputDevice"
+
       visible: count > 0
       Layout.fillWidth: true
       model: Cpp_IO_Audio.inputDeviceList
@@ -147,6 +149,8 @@ Item {
       text: qsTr("Channels") + ":"
     } Widgets.Combo {
       id: _inChan
+
+      objectName: "setup.audio.selectedInputChannelConfiguration"
 
       Layout.fillWidth: true
       visible: count > 0 && _inDev.visible
@@ -167,6 +171,8 @@ Item {
     } Widgets.Combo {
       id: _rate
 
+      objectName: "setup.audio.selectedSampleRate"
+
       Layout.fillWidth: true
       model: Cpp_IO_Audio.sampleRates
       visible: count > 0 && _inDev.visible
@@ -186,6 +192,8 @@ Item {
     } Widgets.Combo {
       id: _inFmt
 
+      objectName: "setup.audio.selectedInputSampleFormat"
+
       Layout.fillWidth: true
       model: Cpp_IO_Audio.inputSampleFormats
       currentIndex: Cpp_IO_Audio.selectedInputSampleFormat
@@ -204,6 +212,8 @@ Item {
       text: qsTr("Normalization") + ":"
     } CheckBox {
       id: _norm
+
+      objectName: "setup.audio.normalization"
 
       Layout.leftMargin: -8
       visible: _inDev.visible
@@ -236,6 +246,8 @@ Item {
     } Widgets.Combo {
       id: _outDev
 
+      objectName: "setup.audio.selectedOutputDevice"
+
       visible: count > 0
       Layout.fillWidth: true
       model: Cpp_IO_Audio.outputDeviceList
@@ -255,6 +267,8 @@ Item {
     } Widgets.Combo {
       id: _outChan
 
+      objectName: "setup.audio.selectedOutputChannelConfiguration"
+
       Layout.fillWidth: true
       visible: count > 0 && _outDev.visible
       model: Cpp_IO_Audio.outputChannelConfigurations
@@ -273,6 +287,8 @@ Item {
       text: qsTr("Sample Format") + ":"
     } Widgets.Combo {
       id: _outFmt
+
+      objectName: "setup.audio.selectedOutputSampleFormat"
 
       Layout.fillWidth: true
       model: Cpp_IO_Audio.outputSampleFormats

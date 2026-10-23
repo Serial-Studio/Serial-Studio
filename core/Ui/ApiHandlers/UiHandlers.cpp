@@ -23,6 +23,7 @@
 
 #include "ApiHandlers/AlarmsHandler.h"
 #include "ApiHandlers/AssistantHandler.h"
+#include "ApiHandlers/AutomationHandler.h"
 #include "ApiHandlers/ConsoleHandler.h"
 #include "ApiHandlers/DashboardHandler.h"
 #include "ApiHandlers/DiagnosticsHandler.h"
@@ -46,6 +47,7 @@ void UI::ApiHandlers::registerAll(const std::unique_ptr<UI::Alarms::AlarmAnnunci
   API::Handlers::ConsoleHandler::registerCommands();
   API::Handlers::DashboardHandler::registerCommands();
   API::Handlers::WindowHandler::registerCommands();
+  API::Handlers::AutomationHandler::registerCommands();
   API::Handlers::ExtensionHandler::registerCommands();
   API::Handlers::WorkspacesHandler::registerCommands();
   API::Handlers::AssistantHandler::registerCommands();

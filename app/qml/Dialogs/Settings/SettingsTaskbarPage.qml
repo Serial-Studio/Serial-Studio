@@ -77,6 +77,8 @@ Item {
       } Widgets.Toggle {
         id: _showTaskbarButtons
 
+        objectName: "settings.taskbar.showTaskbarButtons"
+
         Layout.rightMargin: -8
         Layout.alignment: Qt.AlignRight
         checked: Cpp_UI_TaskbarSettings.showTaskbarButtons
@@ -101,6 +103,8 @@ Item {
       } Widgets.Toggle {
         id: _searchEnabled
 
+        objectName: "settings.taskbar.searchEnabled"
+
         Layout.rightMargin: -8
         Layout.alignment: Qt.AlignRight
         checked: Cpp_UI_TaskbarSettings.searchEnabled
@@ -124,6 +128,8 @@ Item {
         color: Cpp_ThemeManager.colors["text"]
       } Widgets.Toggle {
         id: _taskbarAutohide
+
+        objectName: "settings.taskbar.autohide"
 
         Layout.rightMargin: -8
         Layout.alignment: Qt.AlignRight
@@ -151,6 +157,8 @@ Item {
         color: Cpp_ThemeManager.colors["text"]
       } Widgets.SpinBox {
         id: _autohideDelay
+
+        objectName: "settings.taskbar.autohideDelayMs"
 
         from: 200
         to: 10000
@@ -294,6 +302,8 @@ Item {
           anchors.rightMargin: 6
 
           CheckBox {
+            objectName: "settings.taskbar.pinned." + pinRow_.modelData.id
+
             Layout.alignment: Qt.AlignVCenter
             checked: pinRow_.modelData.pinned
             onToggled: {

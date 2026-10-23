@@ -28,6 +28,8 @@ import "../Widgets" as Widgets
 Widgets.SmartDialog {
   id: root
 
+  objectName: "crashRecovery"
+
   title: qsTr("Recovery Options")
   preferredWidth: layout.implicitWidth
   preferredHeight: layout.implicitHeight

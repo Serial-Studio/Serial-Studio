@@ -52,6 +52,8 @@ Item {
     } Widgets.Combo {
       id: deviceCombo
 
+      objectName: "setup.hid.deviceIndex"
+
       Layout.fillWidth: true
       enabled: app.ioEnabled
       opacity: enabled ? 1 : 0.5
@@ -80,6 +82,8 @@ Item {
       text: qsTr("Usage Page") + ":"
       visible: Cpp_IO_Manager.isConnected
     } Widgets.LineField {
+      objectName: "setup.hid.usagePage"
+
       opacity: 0.8
       readOnly: true
       Layout.fillWidth: true
@@ -96,6 +100,8 @@ Item {
       text: qsTr("Usage") + ":"
       visible: Cpp_IO_Manager.isConnected
     } Widgets.LineField {
+      objectName: "setup.hid.usage"
+
       opacity: 0.8
       readOnly: true
       Layout.fillWidth: true

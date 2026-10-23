@@ -59,6 +59,8 @@ Item {
 
     required property var node
     readonly property var behavior: root.model.binding(node.id)
+
+    objectName: node.id
     readonly property var hints: node.hints !== undefined ? node.hints : ({})
 
     readonly property bool isChecked: node.kind === "toggle" && behavior !== null

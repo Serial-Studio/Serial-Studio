@@ -30,6 +30,8 @@ import "../Widgets" as Widgets
 Widgets.SmartDialog {
   id: root
 
+  objectName: "fileTransmission"
+
   title: qsTr("File Transmission")
 
   //

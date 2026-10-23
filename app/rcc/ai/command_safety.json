@@ -152,6 +152,9 @@
     "sessions.listTags",
     "system.projectDir",
     "system.runningProcesses",
+    "ui.automation.listElements",
+    "ui.automation.listWindows",
+    "ui.automation.setReduceMotion",
     "ui.window.getLayout",
     "ui.window.getStatus",
     "ui.window.getWidgetSettings",
@@ -261,6 +264,7 @@
     "sessions.replay",
     "sessions.setExportEnabled",
     "sessions.setNotes",
+    "ui.automation.screenshot",
     "ui.window.loadLayout",
     "ui.window.saveLayout",
     "ui.window.setActiveGroup",
@@ -364,7 +368,9 @@
     "io.usb.setInEndpointIndex",
     "io.usb.setIsoPacketSize",
     "io.usb.setOutEndpointIndex",
-    "io.usb.setTransferMode"
+    "io.usb.setTransferMode",
+    "ui.automation.click",
+    "ui.automation.key"
   ],
   "alwaysConfirm": [
     "assistant.restore",

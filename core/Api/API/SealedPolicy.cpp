@@ -492,6 +492,14 @@ static constexpr QLatin1StringView kDenied[] = {
   QLatin1StringView("dashboard.setOperationMode"),
   QLatin1StringView("mirror.getStructure"),
   QLatin1StringView("ui.window.saveLayout"),
+
+  // Reading or driving the interface, whose windows show the package content to any client
+  QLatin1StringView("ui.automation.click"),
+  QLatin1StringView("ui.automation.key"),
+  QLatin1StringView("ui.automation.listElements"),
+  QLatin1StringView("ui.automation.listWindows"),
+  QLatin1StringView("ui.automation.screenshot"),
+  QLatin1StringView("ui.automation.setReduceMotion"),
 };
 // clang-format on
 

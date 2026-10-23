@@ -32,6 +32,8 @@ import "../../../Widgets" as Widgets
 Widgets.MiniWindow {
   id: root
 
+  objectName: "dashboard.tile." + widgetIndex
+
   state: "normal"
   width: minimumWidth
   height: minimumHeight
@@ -82,7 +84,7 @@ Widgets.MiniWindow {
                                               && root.freezeShowsBar
                                               && root.title.length > 0
   readonly property real frozenHeaderHeight: frozenHeaderVisible
-      ? Math.max(32, frozenHeaderMetrics.height + 14) : 0
+      ? Math.max(28, frozenHeaderMetrics.height + 10) : 0
 
   function refreshFreezeTitleMode() {
     if (entityWidgetType >= 0 && entityUniqueId >= 0)
@@ -163,6 +165,8 @@ Widgets.MiniWindow {
     MenuItem {
       id: renameItem
 
+      objectName: "dashboard.tile." + root.widgetIndex + ".rename"
+
       icon.width: 16
       icon.height: 16
       text: qsTr("Rename Widget…")
@@ -183,6 +187,8 @@ Widgets.MiniWindow {
       icon.source: "qrc:/icons/buttons/freeze.svg"
 
       MenuItem {
+        objectName: "dashboard.tile." + root.widgetIndex + ".freezeTitleBar"
+
         checkable: true
         text: qsTr("Title Bar")
         checked: root.freezeShowsBar
@@ -191,6 +197,8 @@ Widgets.MiniWindow {
       }
 
       MenuItem {
+        objectName: "dashboard.tile." + root.widgetIndex + ".freezePaintedTitle"
+
         checkable: true
         text: qsTr("Painted Title")
         visible: root.paintsOwnTitle
@@ -201,6 +209,8 @@ Widgets.MiniWindow {
       }
 
       MenuItem {
+        objectName: "dashboard.tile." + root.widgetIndex + ".freezeHidden"
+
         checkable: true
         text: qsTr("Hidden")
         enabled: root.displayEditable
@@ -211,6 +221,8 @@ Widgets.MiniWindow {
 
     MenuItem {
       id: extensionSettingsItem
+
+      objectName: "dashboard.tile." + root.widgetIndex + ".settings"
 
       icon.width: 16
       icon.height: 16
@@ -227,6 +239,8 @@ Widgets.MiniWindow {
     }
 
     MenuItem {
+      objectName: "dashboard.tile." + root.widgetIndex + ".external"
+
       icon.width: 16
       icon.height: 16
       text: qsTr("Open in External Window")

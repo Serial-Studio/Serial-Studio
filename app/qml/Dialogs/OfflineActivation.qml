@@ -31,6 +31,8 @@ import "../Widgets" as Widgets
 Widgets.SmartDialog {
   id: root
 
+  objectName: "offlineActivation"
+
   //
   // Window options
   //

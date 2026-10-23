@@ -16,6 +16,8 @@ import "../Widgets" as Widgets
 Widgets.SmartDialog {
   id: root
 
+  objectName: "reportProgressDialog"
+
   staysOnTop: true
   title: qsTr("Generating Report")
 

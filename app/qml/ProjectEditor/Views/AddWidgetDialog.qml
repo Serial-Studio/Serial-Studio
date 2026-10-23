@@ -32,6 +32,8 @@ import "../../Widgets" as Widgets
 Window {
   id: root
 
+  objectName: "addWidgetDialog"
+
   Widgets.WindowMirror {}
 
   //

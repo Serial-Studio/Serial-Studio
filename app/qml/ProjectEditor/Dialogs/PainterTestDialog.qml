@@ -17,6 +17,8 @@ import "../../Widgets" as Widgets
 Window {
   id: root
 
+  objectName: "painterTestDialog"
+
   Widgets.WindowMirror {}
 
   width: 960

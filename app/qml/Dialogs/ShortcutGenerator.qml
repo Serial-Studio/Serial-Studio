@@ -19,6 +19,9 @@ import "../Widgets" as Widgets
 
 Widgets.SmartDialog {
   id: root
+
+  objectName: "shortcutGenerator"
+
   title: qsTr("New Deployment")
 
   //

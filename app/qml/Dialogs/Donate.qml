@@ -29,6 +29,8 @@ import "../Widgets" as Widgets
 Widgets.SmartDialog {
   id: root
 
+  objectName: "donate"
+
   //
   // Window options
   //

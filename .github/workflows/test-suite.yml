@@ -327,7 +327,7 @@ jobs:
       run: |
         pytest tests/ \
           --deselect tests/integration/test_licensing.py::test_rapid_status_queries_no_crash \
-          -m "${{ inputs.marker_expr }}" \
+          -m "${{ inputs.marker_expr }} and not gui" \
           --timeout-method=${{ inputs.timeout_method }} \
           -q --tb=line --timeout=60 --junit-xml=test-results.xml
 

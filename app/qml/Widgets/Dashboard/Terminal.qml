@@ -247,6 +247,8 @@ Item {
           Widgets.IconButton {
             id: clearButton
 
+            objectName: "console.clear"
+
             flat: true
             leftPadding: 8
             rightPadding: 8
@@ -262,6 +264,8 @@ Item {
 
           Widgets.IconButton {
             id: searchButton
+
+            objectName: "console.search"
 
             flat: true
             leftPadding: 8
@@ -307,6 +311,8 @@ Item {
           Widgets.IconButton {
             id: annotationsButton
 
+            objectName: "console.annotations"
+
             flat: true
             leftPadding: 8
             rightPadding: 8
@@ -331,6 +337,8 @@ Item {
 
           Widgets.IconButton {
             id: pauseButton
+
+            objectName: "console.pause"
 
             flat: true
             leftPadding: 8
@@ -371,6 +379,8 @@ Item {
           collapsedIcon: Cpp_Misc_IconRegistry.icon("console", "plain-text", 16)
 
           Widgets.IconButton {
+            objectName: "console.displayText"
+
             flat: true
             leftPadding: 8
             rightPadding: 8
@@ -386,6 +396,8 @@ Item {
           }
 
           Widgets.IconButton {
+            objectName: "console.displayHex"
+
             flat: true
             leftPadding: 8
             rightPadding: 8
@@ -409,6 +421,8 @@ Item {
 
           Widgets.IconButton {
             id: settingsButton
+
+            objectName: "console.settings"
 
             flat: true
             leftPadding: 8
@@ -444,6 +458,8 @@ Item {
                 CheckBox {
                   id: timestampCheck
 
+                  objectName: "console.showTimestamp"
+
                   onCheckedChanged: {
                     if (Cpp_Console_Handler.showTimestamp !== checked)
                       Cpp_Console_Handler.showTimestamp = checked
@@ -456,6 +472,8 @@ Item {
                 CheckBox {
                   id: echoCheck
 
+                  objectName: "console.echo"
+
                   text: qsTr("Echo")
                   onCheckedChanged: {
                     if (Cpp_Console_Handler.echo !== checked)
@@ -467,6 +485,8 @@ Item {
 
                 CheckBox {
                   id: vt100Check
+
+                  objectName: "console.vt100"
 
                   onCheckedChanged: {
                     if (Cpp_Console_Handler.vt100Emulation !== checked)
@@ -481,6 +501,8 @@ Item {
 
                 CheckBox {
                   id: ansiColorsCheck
+
+                  objectName: "console.ansiColors"
 
                   onCheckedChanged: {
                     if (enabled && Cpp_Console_Handler.ansiColors !== checked)
@@ -503,6 +525,8 @@ Item {
 
                   Widgets.SpinBox {
                     id: scrollbackSpin
+
+                    objectName: "console.scrollback"
 
                     from: 100
                     to: 100000
@@ -531,6 +555,8 @@ Item {
 
                   Widgets.SpinBox {
                     id: cyclicIntervalSpin
+
+                    objectName: "console.cyclicInterval"
 
                     from: 1
                     to: 3600000
@@ -620,6 +646,8 @@ Item {
           Widgets.LineField {
             id: searchField
 
+            objectName: "console.searchField"
+
             implicitWidth: 164
             implicitHeight: 24
             placeholderText: qsTr("Find in console") + "..."
@@ -666,6 +694,8 @@ Item {
           Widgets.PushButton {
             id: caseButton
 
+            objectName: "console.searchCase"
+
             text: "Aa"
             checkable: true
             implicitWidth: 32
@@ -683,6 +713,8 @@ Item {
           }
 
           Widgets.IconButton {
+            objectName: "console.searchPrevious"
+
             iconSize: 16
             implicitHeight: 24
             Layout.maximumWidth: 24
@@ -694,6 +726,8 @@ Item {
           }
 
           Widgets.IconButton {
+            objectName: "console.searchNext"
+
             iconSize: 16
             implicitHeight: 24
             Layout.maximumWidth: 24
@@ -705,6 +739,8 @@ Item {
           }
 
           Widgets.IconButton {
+            objectName: "console.searchClose"
+
             iconSize: 16
             implicitHeight: 24
             Layout.maximumWidth: 24
@@ -746,6 +782,8 @@ Item {
       Widgets.IconButton {
         id: ftButton
 
+        objectName: "console.fileTransfer"
+
         iconSize: 16
         implicitHeight: 24
         Layout.maximumWidth: 24
@@ -760,6 +798,8 @@ Item {
 
       Widgets.Combo {
         id: deviceCombo
+
+        objectName: "console.device"
 
         Layout.maximumWidth: 144
         Layout.preferredWidth: 144
@@ -789,6 +829,8 @@ Item {
       Widgets.IconButton {
         id: libraryButton
 
+        objectName: "console.sendLibrary"
+
         iconSize: 16
         implicitHeight: 24
         Layout.maximumWidth: 24
@@ -810,6 +852,8 @@ Item {
 
       Widgets.LineField {
         id: send
+
+        objectName: "console.send"
 
         implicitWidth: 64
         implicitHeight: 24
@@ -927,6 +971,8 @@ Item {
       CheckBox {
         id: hexCheckbox
 
+        objectName: "console.sendHex"
+
         text: qsTr("Hex")
         onCheckedChanged: {
           const newValue = checked ? 1 : 0
@@ -942,6 +988,8 @@ Item {
 
       Widgets.Combo {
         id: lineEndingCombo
+
+        objectName: "console.lineEnding"
 
         Layout.minimumWidth: 96
         opacity: enabled ? 1 : 0.5
@@ -959,6 +1007,8 @@ Item {
       Widgets.Combo {
         id: checkumCombo
 
+        objectName: "console.checksum"
+
         Layout.minimumWidth: 96
         opacity: enabled ? 1 : 0.5
         enabled: Cpp_IO_Manager.readWrite
@@ -974,6 +1024,8 @@ Item {
 
       Widgets.IconButton {
         id: cyclicBt
+
+        objectName: "console.cyclic"
 
         readonly property var lib: Cpp_Console_Handler.sendLibrary
 
@@ -1003,6 +1055,8 @@ Item {
 
       Widgets.IconButton {
         id: sendBt
+
+        objectName: "console.sendButton"
 
         iconSize: 16
         implicitHeight: 24

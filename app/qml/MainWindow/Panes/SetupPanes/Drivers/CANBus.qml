@@ -98,6 +98,8 @@ Item {
       } Widgets.Combo {
         id: _pluginCombo
 
+        objectName: "setup.canbus.pluginIndex"
+
         textRole: "display"
         Layout.fillWidth: true
         Component.onCompleted: _pluginCombo.updatePluginModel()
@@ -142,6 +144,8 @@ Item {
       } Widgets.Combo {
         id: _interfaceCombo
 
+        objectName: "setup.canbus.interfaceIndex"
+
         Layout.fillWidth: true
         model: Cpp_IO_CANBus.interfaceList
         visible: Cpp_IO_CANBus.interfaceList.length > 0
@@ -170,6 +174,8 @@ Item {
         visible: Cpp_IO_CANBus.interfaceList.length > 0
       } ComboBox {
         id: _bitrateCombo
+
+        objectName: "setup.canbus.bitrate"
 
         editable: true
         Layout.fillWidth: true
@@ -226,6 +232,8 @@ Item {
       } CheckBox {
         id: _canFDCheck
 
+        objectName: "setup.canbus.canFD"
+
         Layout.leftMargin: -8
         Layout.maximumHeight: 18
         checked: Cpp_IO_CANBus.canFD
@@ -250,6 +258,8 @@ Item {
         visible: _dataBitrateCombo.visible
       } ComboBox {
         id: _dataBitrateCombo
+
+        objectName: "setup.canbus.dataBitrate"
 
         editable: true
         Layout.fillWidth: true
@@ -306,6 +316,8 @@ Item {
       } CheckBox {
         id: _loopbackCheck
 
+        objectName: "setup.canbus.loopback"
+
         Layout.leftMargin: -8
         Layout.maximumHeight: 18
         checked: Cpp_IO_CANBus.loopback
@@ -326,6 +338,8 @@ Item {
       } CheckBox {
         id: _listenOnlyCheck
 
+        objectName: "setup.canbus.listenOnly"
+
         Layout.leftMargin: -8
         Layout.maximumHeight: 18
         checked: Cpp_IO_CANBus.listenOnly
@@ -345,6 +359,8 @@ Item {
         visible: Cpp_IO_CANBus.interfaceList.length > 0
       } CheckBox {
         id: _tpReassemblyCheck
+
+        objectName: "setup.canbus.tpReassembly"
 
         Layout.leftMargin: -8
         Layout.maximumHeight: 18
@@ -368,6 +384,8 @@ Item {
         text: qsTr("DBC Database") + ":"
         visible: Cpp_IO_CANBus.interfaceList.length > 0
       } Widgets.PushButton {
+        objectName: "setup.canbus.importDbc"
+
         Layout.fillWidth: true
         text: qsTr("Import DBC File…")
         visible: Cpp_IO_CANBus.interfaceList.length > 0

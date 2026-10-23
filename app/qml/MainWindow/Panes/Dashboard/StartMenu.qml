@@ -206,6 +206,8 @@ Popup {
 
     property bool closesMenu: true
     required property string commandId
+
+    objectName: commandId
     readonly property var entry: {
       void _menuModel.revision
       return _menuModel.entryFor(commandId)
@@ -237,6 +239,8 @@ Popup {
     icon.source: entry !== null ? Cpp_Misc_IconRegistry.iconById(entry.iconId, 32) : ""
 
     required property string commandId
+
+    objectName: commandId
     readonly property var entry: {
       void _menuModel.revision
       return _menuModel.entryFor(commandId)
@@ -332,6 +336,8 @@ Popup {
 
     Widgets.MenuButton {
       id: _groups
+
+      objectName: "startMenu.workspaces"
 
       expandable: true
       Layout.fillWidth: true
@@ -472,6 +478,8 @@ Popup {
     Widgets.MenuButton {
       id: _actions
 
+      objectName: "startMenu.actions"
+
       expandable: true
       text: qsTr("Actions")
       Layout.fillWidth: true
@@ -525,6 +533,8 @@ Popup {
 
     Widgets.MenuButton {
       id: _plugins
+
+      objectName: "startMenu.plugins"
 
       expandable: true
       text: qsTr("Plugins")
@@ -649,6 +659,8 @@ Popup {
     Widgets.MenuButton {
       id: _export
 
+      objectName: "startMenu.export"
+
       expandable: true
       Layout.fillWidth: true
       reveal: root.rowReveal(_export.y)
@@ -722,6 +734,8 @@ Popup {
 
     Widgets.MenuButton {
       id: _tools
+
+      objectName: "startMenu.tools"
 
       expandable: true
       Layout.fillWidth: true

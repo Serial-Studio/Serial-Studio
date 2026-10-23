@@ -164,6 +164,7 @@ Menu {
       label = behavior.title
 
     const item = _itemComponent.createObject(menu.contentItem, {
+                                               "objectName": node.id,
                                                "text": label,
                                                "behavior": behavior,
                                                "checkable": node.kind === "toggle",

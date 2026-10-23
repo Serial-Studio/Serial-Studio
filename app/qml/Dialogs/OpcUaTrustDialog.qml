@@ -33,6 +33,8 @@ import "../Widgets" as Widgets
 Widgets.SmartDialog {
   id: root
 
+  objectName: "opcUaTrustDialog"
+
   property string reason: ""
   property var certificate: ({})
 

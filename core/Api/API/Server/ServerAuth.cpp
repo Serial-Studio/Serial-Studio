@@ -47,12 +47,20 @@ API::ServerAuth::ServerAuth(QSettings& settings)
                        "scripts. Scripts run with the application's full privileges, including "
                        "launching programs. Allow API clients to modify project scripts?"),
                     this)
+  , m_uiDrive(settings,
+              QString(),
+              tr("Allow API clients to drive the user interface?"),
+              tr("A program using Serial Studio's local API wants to click controls and type into "
+                 "this window as you would. That can connect, save, delete or change anything "
+                 "you can. Allow API clients to drive the user interface?"),
+              this)
 {
   m_authToken = m_settings.value("API/AuthToken").toString();
 
   if (qEnvironmentVariableIntValue("SERIAL_STUDIO_API_AUTO_CONSENT") != 0) {
     m_deviceWrite.grant();
     m_scriptInstall.grant();
+    m_uiDrive.grant();
   }
 }
 
@@ -189,6 +197,13 @@ std::optional<API::CommandResponse> API::ServerAuth::authorizeRemoteCommand(
   if (capabilities->testFlag(Caps::WritesDevice)) {
     auto refused =
       refusalFor(m_deviceWrite.authorize(command), id, QStringLiteral("Device writes"));
+    if (refused.has_value())
+      return refused;
+  }
+
+  if (capabilities->testFlag(Caps::DrivesUi)) {
+    auto refused =
+      refusalFor(m_uiDrive.authorize(command), id, QStringLiteral("Interface actions"));
     if (refused.has_value())
       return refused;
   }

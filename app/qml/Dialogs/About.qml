@@ -28,6 +28,8 @@ import "../Widgets" as Widgets
 Widgets.SmartDialog {
   id: root
 
+  objectName: "about"
+
   //
   // Custom properties
   //

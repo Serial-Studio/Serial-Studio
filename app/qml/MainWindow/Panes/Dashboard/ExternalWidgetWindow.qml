@@ -29,13 +29,14 @@ import "../../../Widgets" as Widgets
 Widgets.SmartWindow {
   id: window
 
+  objectName: "external." + widgetIndex
+
   visible: true
   minimumWidth: 356
   minimumHeight: 320
   width: minimumWidth
   height: minimumHeight
   transientParent: null
-  objectName: "ExternalWindow"
   category: "ExternalWidget_" + stableType + "_" + stableIndex
 
   //

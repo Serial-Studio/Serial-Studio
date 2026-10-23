@@ -71,6 +71,8 @@ Item {
     } Widgets.Combo {
       id: modeCombo
 
+      objectName: "setup.process.mode"
+
       Layout.fillWidth: true
       opacity: enabled ? 1 : 0.5
       enabled: app.ioEnabled
@@ -109,6 +111,8 @@ Item {
       Widgets.LineField {
         id: execField
 
+        objectName: "setup.process.executable"
+
         Layout.fillWidth: true
         enabled: app.ioEnabled
         opacity: enabled ? 1 : 0.5
@@ -134,6 +138,8 @@ Item {
       }
 
       Widgets.PushButton {
+        objectName: "setup.process.browseExecutable"
+
         text: qsTr("Browse")
         enabled: app.ioEnabled
         opacity: enabled ? 1 : 0.5
@@ -151,6 +157,8 @@ Item {
       visible: modeCombo.currentIndex === 0
     } Widgets.LineField {
       id: argsField
+
+      objectName: "setup.process.arguments"
 
       Layout.fillWidth: true
       enabled: app.ioEnabled
@@ -193,6 +201,8 @@ Item {
       Widgets.LineField {
         id: workDirField
 
+        objectName: "setup.process.workingDir"
+
         Layout.fillWidth: true
         enabled: app.ioEnabled
         opacity: enabled ? 1 : 0.5
@@ -218,6 +228,8 @@ Item {
       }
 
       Widgets.PushButton {
+        objectName: "setup.process.browseWorkingDir"
+
         text: qsTr("Browse")
         enabled: app.ioEnabled
         opacity: enabled ? 1 : 0.5
@@ -242,6 +254,8 @@ Item {
 
       Widgets.LineField {
         id: pipeField
+
+        objectName: "setup.process.pipePath"
 
         Layout.fillWidth: true
         opacity: enabled ? 1 : 0.5
@@ -270,6 +284,8 @@ Item {
       }
 
       Widgets.PushButton {
+        objectName: "setup.process.browsePipePath"
+
         text: qsTr("Browse")
         enabled: app.ioEnabled
         opacity: enabled ? 1 : 0.5
@@ -283,6 +299,8 @@ Item {
     Item {
       visible: modeCombo.currentIndex === 1
     } Widgets.PushButton {
+      objectName: "setup.process.pickProcess"
+
       Layout.fillWidth: true
       enabled: app.ioEnabled
       opacity: enabled ? 1 : 0.5

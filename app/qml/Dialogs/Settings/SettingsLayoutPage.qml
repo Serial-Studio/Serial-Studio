@@ -75,6 +75,8 @@ Item {
     } Widgets.Combo {
       id: _widgetFontFamily
 
+      objectName: "settings.layout.widgetFontFamily"
+
       Layout.fillWidth: true
       model: Cpp_Misc_CommonFonts.availableFonts
       currentIndex: Cpp_Misc_CommonFonts.widgetFontIndex
@@ -100,6 +102,8 @@ Item {
 
       Widgets.Combo {
         id: _widgetSizePreset
+
+        objectName: "settings.layout.widgetFontSize"
 
         Layout.fillWidth: true
         model: [qsTr("Small"), qsTr("Normal"), qsTr("Large"), qsTr("Extra Large"), qsTr("Custom")]
@@ -134,6 +138,8 @@ Item {
 
       Widgets.SpinBox {
         id: _widgetFontCustom
+
+        objectName: "settings.layout.widgetFontScale"
 
         to: 300
         from: 50
@@ -183,6 +189,8 @@ Item {
     } Widgets.SpinBox {
       id: _layoutMargin
 
+      objectName: "settings.layout.layoutMargin"
+
       from: 0
       stepSize: 1
       editable: true
@@ -207,6 +215,8 @@ Item {
       color: Cpp_ThemeManager.colors["text"]
     } Widgets.SpinBox {
       id: _layoutSpacing
+
+      objectName: "settings.layout.layoutSpacing"
 
       from: -1
       stepSize: 1
@@ -233,6 +243,8 @@ Item {
     } Widgets.Toggle {
       id: _actionsPanel
 
+      objectName: "settings.layout.showActionPanel"
+
       Layout.rightMargin: -8
       Layout.alignment: Qt.AlignRight
       checked: Cpp_UI_Dashboard.showActionPanel
@@ -248,6 +260,8 @@ Item {
       color: Cpp_ThemeManager.colors["text"]
     } Widgets.Toggle {
       id: _autoHideToolbar
+
+      objectName: "settings.layout.autoHideToolbar"
 
       Layout.rightMargin: -8
       Layout.alignment: Qt.AlignRight
@@ -271,6 +285,8 @@ Item {
       color: Cpp_ThemeManager.colors["text"]
     } Widgets.Toggle {
       id: _showAlignmentGuides
+
+      objectName: "settings.layout.showAlignmentGuides"
 
       Layout.rightMargin: -8
       Layout.alignment: Qt.AlignRight

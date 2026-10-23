@@ -220,11 +220,15 @@ DriverTagPickerDialog {
         Widgets.LineField {
           id: filterField
 
+          objectName: "setup.process.picker.filter"
+
           Layout.fillWidth: true
           placeholderText: qsTr("Type to filter by name…")
         }
 
         Widgets.PushButton {
+          objectName: "setup.process.picker.refresh"
+
           text: qsTr("Refresh")
           onClicked: Cpp_IO_Process.refreshProcessList()
         }
@@ -394,12 +398,16 @@ DriverTagPickerDialog {
         }
 
         Widgets.PushButton {
+          objectName: "setup.process.picker.select"
+
           text: qsTr("Select")
           onClicked: root.confirmSelection()
           enabled: processList.currentIndex >= 0
         }
 
         Widgets.PushButton {
+          objectName: "setup.process.picker.close"
+
           text: qsTr("Close")
           onClicked: root.close()
         }

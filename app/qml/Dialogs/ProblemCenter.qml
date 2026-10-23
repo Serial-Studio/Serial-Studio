@@ -29,6 +29,8 @@ import "../Widgets" as Widgets
 Widgets.SmartWindow {
   id: root
 
+  objectName: "problemCenter"
+
   //
   // Window geometry & title
   //

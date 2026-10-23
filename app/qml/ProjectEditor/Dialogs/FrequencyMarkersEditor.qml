@@ -31,6 +31,8 @@ import "../../Widgets" as Widgets
 Widgets.SmartDialog {
   id: root
 
+  objectName: "frequencyMarkersEditor"
+
   fixedSize: false
   title: qsTr("Frequency Markers")
   preferredWidth: layout.implicitWidth

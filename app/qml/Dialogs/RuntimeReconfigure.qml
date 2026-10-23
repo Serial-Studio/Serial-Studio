@@ -20,6 +20,8 @@ import "../MainWindow/Panes/SetupPanes" as SetupPanes
 Widgets.SmartDialog {
   id: root
 
+  objectName: "runtimeReconfigure"
+
   staysOnTop: true
 
   //

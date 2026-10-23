@@ -20,6 +20,8 @@ import "../Widgets" as Widgets
 Widgets.SmartDialog {
   id: root
 
+  objectName: "driftReportDialog"
+
   //
   // Window options
   //

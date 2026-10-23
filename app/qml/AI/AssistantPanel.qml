@@ -25,6 +25,8 @@ import "AssistantPanel" as AssistantPanel
 Widgets.SmartDialog {
   id: root
 
+  objectName: "assistantPanel"
+
   //
   // Window options
   //

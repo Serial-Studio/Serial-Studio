@@ -270,6 +270,8 @@ Popup {
       }
 
       Widgets.SegmentedControl {
+        objectName: "dashboard.layoutPattern.ratio"
+
         implicitHeight: 26
         currentIndex: root.windowManager.layoutRatioStops().indexOf(root.activeRatio)
         model: root.windowManager.layoutRatioStops().map(

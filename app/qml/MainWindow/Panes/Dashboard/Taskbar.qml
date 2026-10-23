@@ -217,6 +217,8 @@ Item {
     Widgets.TaskbarButton {
       id: start
 
+      objectName: "taskbar.start"
+
       iconSize: 16
       startMenu: true
       text: qsTr("Menu")
@@ -247,6 +249,8 @@ Item {
 
       Widgets.LineField {
         id: searchField
+
+        objectName: "taskbar.search"
 
         readonly property bool rtl: Cpp_Misc_Translator.rtl
 
@@ -328,6 +332,8 @@ Item {
         }
 
         Widgets.IconButton {
+          objectName: "taskbar.searchIcon"
+
           enabled: false
           iconSize: 14
           background: Item {}
@@ -562,6 +568,8 @@ Item {
           property real dragOffset: 0
           property bool isDragging: false
 
+          objectName: "taskbar.pin." + modelData
+
           height: 24
           forceVisible: true
           z: isDragging ? 10 : 0
@@ -736,6 +744,7 @@ Item {
 
             required property var model
 
+            objectName: "taskbar.window." + model.windowId
             text: model.widgetName
             forceHidden: Cpp_UI_Dashboard.frozen
             icon.source: SerialStudioHelpers.dashboardWidgetIcon(model.widgetType)
@@ -1103,6 +1112,8 @@ Item {
               }
 
               Widgets.PushButton {
+                objectName: "taskbar.mqttSettings"
+
                 Layout.fillWidth: true
                 text: qsTr("Open MQTT Settings")
                 font: Cpp_Misc_CommonFonts.uiFont

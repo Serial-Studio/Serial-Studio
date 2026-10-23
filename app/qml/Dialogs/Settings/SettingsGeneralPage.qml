@@ -75,6 +75,8 @@ Item {
       enabled: !Cpp_IO_Manager.isConnected
       color: Cpp_ThemeManager.colors["text"]
     } Widgets.Combo {
+      objectName: "settings.general.language"
+
       Layout.fillWidth: true
       opacity: enabled ? 1 : 0.5
       enabled: !Cpp_IO_Manager.isConnected
@@ -90,6 +92,8 @@ Item {
       color: Cpp_ThemeManager.colors["text"]
     } Widgets.Combo {
       id: _themeCombo
+
+      objectName: "settings.general.theme"
 
       Layout.fillWidth: true
       currentIndex: Cpp_ThemeManager.theme
@@ -135,6 +139,8 @@ Item {
       text: qsTr("Custom Window Decorations")
       color: Cpp_ThemeManager.colors["text"]
     } Widgets.Toggle {
+      objectName: "settings.general.csdEnabled"
+
       Layout.rightMargin: -8
       Layout.alignment: Qt.AlignRight
       visible: Cpp_NativeWindow.csdAvailable
@@ -189,6 +195,8 @@ Item {
       enabled: !Cpp_IO_Manager.isConnected
 
       Widgets.LineField {
+        objectName: "settings.general.workspacePath"
+
         readOnly: true
         Layout.fillWidth: true
         Layout.alignment: Qt.AlignVCenter
@@ -196,6 +204,8 @@ Item {
       }
 
       Widgets.IconButton {
+        objectName: "settings.general.browseWorkspace"
+
         Layout.fillWidth: false
         Layout.maximumWidth: 24
         Layout.maximumHeight: 24
@@ -231,6 +241,8 @@ Item {
     } Widgets.Toggle {
       id: _apiServer
 
+      objectName: "settings.general.apiServerEnabled"
+
       Layout.rightMargin: -8
       Layout.alignment: Qt.AlignRight
       checked: Cpp_API_Server.enabled
@@ -256,6 +268,8 @@ Item {
     } Widgets.SpinBox {
       id: _apiPort
 
+      objectName: "settings.general.apiServerPort"
+
       to: 65535
       from: 1024
       editable: true
@@ -280,6 +294,8 @@ Item {
       text: qsTr("Allow External API Connections")
     } Widgets.Toggle {
       id: _apiExternal
+
+      objectName: "settings.general.apiServerExternalConnections"
 
       Layout.rightMargin: -8
       opacity: enabled ? 1 : 0.5
@@ -311,6 +327,8 @@ Item {
       enabled: _apiServer.checked && Cpp_API_Server.externalConnections
 
       Widgets.LineField {
+        objectName: "settings.general.authToken"
+
         readOnly: true
         Layout.fillWidth: true
         text: Cpp_API_Server.authToken
@@ -318,6 +336,8 @@ Item {
       }
 
       Widgets.IconButton {
+        objectName: "settings.general.regenerateAuthToken"
+
         Layout.fillWidth: false
         Layout.maximumWidth: 24
         Layout.maximumHeight: 24
@@ -334,6 +354,8 @@ Item {
       color: Cpp_ThemeManager.colors["text"]
       text: qsTr("Export Protobuf File")
     } Widgets.PushButton {
+      objectName: "settings.general.exportProto"
+
       text: qsTr("Export…")
       visible: Cpp_GrpcAvailable
       opacity: enabled ? 1 : 0.5

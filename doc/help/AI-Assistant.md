@@ -10,7 +10,7 @@ It is **bring-your-own-key**. You pick a provider (Anthropic, OpenAI, Google Gem
 
 The assistant talks to Serial Studio through the same command surface as the MCP/JSON-RPC API (see the [API Reference](API-Reference.md) for the full list). The short version: anything you can do in the Project Editor, the assistant can do for you, with two important caveats:
 
-- **It does not connect, disconnect, or change driver settings by default.** Anything that pokes the running connection (open/close port, change baud rate, change Modbus slave, write bytes to the device) is blocked from the AI surface unless you opt in by ticking **Allow device control** in the top bar. With that toggle on, those commands become Always-confirm (you approve each call, even when Auto-approve edits is on); with it off they are refused outright so a wrong answer cannot knock you offline.
+- **It does not connect, disconnect, or change driver settings by default.** Anything that pokes the running connection (open/close port, change baud rate, change Modbus slave, write bytes to the device), and clicking or typing into the window itself (`ui.automation.click`, `ui.automation.key`), is blocked from the AI surface unless you opt in by ticking **Allow device control** in the top bar. With that toggle on, those commands become Always-confirm (you approve each call, even when Auto-approve edits is on); with it off they are refused outright so a wrong answer cannot knock you offline.
 - **It can read documentation.** When you ask about a feature it doesn't already know, it pulls the relevant page from `doc/help/` directly off the Serial Studio repo so its answer matches the version you are running.
 
 Typical things people ask it to do:
@@ -84,10 +84,10 @@ Every command is tagged at startup. There are five tiers:
 
 | Tier | Behavior | Examples |
 |---|---|---|
-| **Safe** | Auto-runs. No prompt. Read-only inspection. | `project.group.list`, `dashboard.getStatus`, `io.uart.listPorts`, every `get*` and `*.list` |
-| **Confirm** | Card with **Approve** / **Deny** buttons. Anything that mutates the project counts. | `project.group.add`, `project.dataset.update`, `project.workspace.add`, `project.template.apply` |
+| **Safe** | Auto-runs. No prompt. Read-only inspection. | `project.group.list`, `dashboard.getStatus`, `io.uart.listPorts`, `ui.automation.listWindows`, `ui.automation.listElements`, every `get*` and `*.list` |
+| **Confirm** | Card with **Approve** / **Deny** buttons. Anything that mutates the project counts. | `project.group.add`, `project.dataset.update`, `project.workspace.add`, `project.template.apply`, `ui.automation.screenshot` (a capture of the window, approved per call) |
 | **Always confirm** | Like Confirm, but still asks **even when Auto-approve edits is on**. Destructive or sensitive families: delete / clear / new / open-replace / install / uninstall, plus MQTT credential + TLS config and control-loop installs. | `project.new`, `project.group.delete`, `project.workspace.clearAll`, `fs.delete`, `sessions.delete`, `controlScript.setCode`, `project.mqtt.publisher.setConfig` |
-| **Device-gated** | Blocked by default; becomes **Always confirm** only when **Allow device control** is ticked. Driver settings, connection state, and anything that writes bytes to the device. | `io.connect`, `io.disconnect`, `io.setPaused`, `io.writeData`, `console.send`, every driver `set*` |
+| **Device-gated** | Blocked by default; becomes **Always confirm** only when **Allow device control** is ticked. Driver settings, connection state, and anything that writes bytes to the device. | `io.connect`, `io.disconnect`, `io.setPaused`, `io.writeData`, `console.send`, every driver `set*`, and the interface-driving `ui.automation.click` / `ui.automation.key`, which act on the window as you would |
 | **Blocked** | Refused outright; never unblockable from the UI. The model is told it isn't available. | `licensing.activate`, `licensing.deactivate`, `licensing.setLicense`, and the other `licensing.*` mutations |
 
 Destructive actions the assistant takes are backed by automatic snapshots; see [Backups & Recovery](Backup-Recovery.md) to restore one, or ask the assistant to undo the change directly.

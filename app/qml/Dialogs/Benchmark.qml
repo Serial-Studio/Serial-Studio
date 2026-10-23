@@ -29,6 +29,8 @@ import "../Widgets" as Widgets
 Widgets.SmartDialog {
   id: root
 
+  objectName: "benchmark"
+
   title: qsTr("Benchmark")
   preferredWidth: layout.implicitWidth
   preferredHeight: layout.implicitHeight

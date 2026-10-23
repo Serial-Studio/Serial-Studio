@@ -21,6 +21,8 @@ import "../../Widgets/Dashboard/Output" as OutputControls
 Window {
   id: root
 
+  objectName: "transmitCodeDialog"
+
   //
   // Same accent rule as the dashboard panel: the widget's own color, else the dataset accent,
   // so the preview shows the control the way it will look on the dashboard.

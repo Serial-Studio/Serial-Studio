@@ -124,6 +124,8 @@ DriverTagPickerDialog {
           Widgets.Combo {
             id: _typeCombo
 
+            objectName: "setup.modbus.groups.type"
+
             Layout.fillWidth: true
             model: Cpp_IO_Modbus.registerTypeList
           }
@@ -135,6 +137,8 @@ DriverTagPickerDialog {
 
           Widgets.LineField {
             id: _startField
+
+            objectName: "setup.modbus.groups.start"
 
             Layout.fillWidth: true
             placeholderText: qsTr("0-65535")
@@ -148,6 +152,8 @@ DriverTagPickerDialog {
 
           Widgets.LineField {
             id: _countField
+
+            objectName: "setup.modbus.groups.count"
 
             Layout.fillWidth: true
             placeholderText: qsTr("1-125")
@@ -166,12 +172,16 @@ DriverTagPickerDialog {
             Widgets.LineField {
               id: _slaveField
 
+              objectName: "setup.modbus.groups.slave"
+
               Layout.fillWidth: true
               placeholderText: qsTr("Leave empty to use the device address")
               validator: IntValidator { bottom: 1; top: 247 }
             }
 
             Widgets.PushButton {
+              objectName: "setup.modbus.groups.add"
+
               text: qsTr("Add Group")
               enabled: _startField.text.length > 0 && _countField.text.length > 0
               onClicked: {
@@ -334,6 +344,8 @@ DriverTagPickerDialog {
                 }
 
                 Widgets.PushButton {
+                  objectName: "setup.modbus.groups.row." + index + ".remove"
+
                   implicitHeight: 28
                   text: qsTr("Remove")
                   onClicked: Cpp_IO_Modbus.removeRegisterGroup(index)
@@ -369,18 +381,24 @@ DriverTagPickerDialog {
         }
 
         Widgets.PushButton {
+          objectName: "setup.modbus.groups.generate"
+
           text: qsTr("Generate Project")
           visible: Cpp_IO_Modbus.registerGroupCount > 0
           onClicked: Cpp_IO_Modbus.generateProject()
         }
 
         Widgets.PushButton {
+          objectName: "setup.modbus.groups.clear"
+
           text: qsTr("Clear All")
           visible: Cpp_IO_Modbus.registerGroupCount > 0
           onClicked: Cpp_IO_Modbus.clearRegisterGroups()
         }
 
         Widgets.PushButton {
+          objectName: "setup.modbus.groups.close"
+
           text: qsTr("Close")
           onClicked: root.close()
         }

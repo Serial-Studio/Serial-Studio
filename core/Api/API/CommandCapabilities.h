@@ -48,6 +48,7 @@ enum Capability : quint16 {
   StartsProgram     = 0x0020,
   RunsInertCode     = 0x0040,
   Dispatches        = 0x0080,
+  DrivesUi          = 0x0100,
 };
 Q_DECLARE_FLAGS(Capabilities, Capability)
 Q_DECLARE_OPERATORS_FOR_FLAGS(Capabilities)

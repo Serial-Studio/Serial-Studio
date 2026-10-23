@@ -28,6 +28,8 @@ import "../Widgets" as Widgets
 Widgets.SmartDialog {
   id: root
 
+  objectName: "onlineIconPicker"
+
   //
   // Custom signals and properties
   //

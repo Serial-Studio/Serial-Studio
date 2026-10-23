@@ -30,6 +30,8 @@ import "../../Widgets" as Widgets
 Window {
   id: root
 
+  objectName: "protoPreviewDialog"
+
   Widgets.WindowMirror {}
 
   property int titlebarHeight: 0

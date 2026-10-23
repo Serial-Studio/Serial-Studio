@@ -75,6 +75,8 @@ Item {
     } Widgets.Combo {
       id: _displayMode
 
+      objectName: "settings.console.displayMode"
+
       Layout.fillWidth: true
       model: Cpp_Console_Handler.displayModes
       currentIndex: Cpp_Console_Handler.displayMode
@@ -97,6 +99,8 @@ Item {
     } Widgets.Combo {
       id: _consoleFontFamily
 
+      objectName: "settings.console.fontFamily"
+
       Layout.fillWidth: true
       model: Cpp_Console_Handler.availableFonts
       currentIndex: Cpp_Console_Handler.fontFamilyIndex
@@ -118,6 +122,8 @@ Item {
       color: Cpp_ThemeManager.colors["text"]
     } Widgets.SpinBox {
       id: _consoleFontSize
+
+      objectName: "settings.console.fontSize"
 
       to: 72
       from: 6
@@ -143,6 +149,8 @@ Item {
     } Widgets.SpinBox {
       id: _scrollbackLines
 
+      objectName: "settings.console.scrollbackLines"
+
       from: 100
       to: 100000
       stepSize: 100
@@ -167,6 +175,8 @@ Item {
       color: Cpp_ThemeManager.colors["text"]
     } Widgets.Toggle {
       id: _showTimestamp
+
+      objectName: "settings.console.showTimestamp"
 
       Layout.rightMargin: -8
       Layout.alignment: Qt.AlignRight
@@ -211,6 +221,8 @@ Item {
     } Widgets.Combo {
       id: _lineEnding
 
+      objectName: "settings.console.lineEnding"
+
       Layout.fillWidth: true
       model: Cpp_Console_Handler.lineEndings
       currentIndex: Cpp_Console_Handler.lineEnding
@@ -232,6 +244,8 @@ Item {
       color: Cpp_ThemeManager.colors["text"]
     } Widgets.Combo {
       id: _dataMode
+
+      objectName: "settings.console.dataMode"
 
       Layout.fillWidth: true
       model: Cpp_Console_Handler.dataModes
@@ -255,6 +269,8 @@ Item {
     } Widgets.Combo {
       id: _encoding
 
+      objectName: "settings.console.encoding"
+
       Layout.fillWidth: true
       model: Cpp_Console_Handler.textEncodings
       currentIndex: Cpp_Console_Handler.encoding
@@ -277,6 +293,8 @@ Item {
     } Widgets.Combo {
       id: _checksumMethod
 
+      objectName: "settings.console.checksumMethod"
+
       Layout.fillWidth: true
       model: Cpp_Console_Handler.checksumMethods
       currentIndex: Cpp_Console_Handler.checksumMethod
@@ -298,6 +316,8 @@ Item {
       color: Cpp_ThemeManager.colors["text"]
     } Widgets.Toggle {
       id: _echo
+
+      objectName: "settings.console.echo"
 
       Layout.rightMargin: -8
       Layout.alignment: Qt.AlignRight
@@ -343,6 +363,8 @@ Item {
     } Widgets.Toggle {
       id: _vt100Emulation
 
+      objectName: "settings.console.vt100Emulation"
+
       Layout.rightMargin: -8
       Layout.alignment: Qt.AlignRight
       checked: Cpp_Console_Handler.vt100Emulation
@@ -369,6 +391,8 @@ Item {
       opacity: Cpp_Console_Handler.imageWidgetActive ? 0.8 : (enabled ? 1 : 0.5)
     } Widgets.Toggle {
       id: _ansiColors
+
+      objectName: "settings.console.ansiColors"
 
       Layout.rightMargin: -8
       Layout.alignment: Qt.AlignRight

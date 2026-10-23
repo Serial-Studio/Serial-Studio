@@ -52,6 +52,8 @@ Item {
     } Widgets.Combo {
       id: _protocolCombo
 
+      objectName: "setup.modbus.protocolIndex"
+
       Layout.fillWidth: true
       enabled: app.ioEnabled
       opacity: enabled ? 1 : 0.5
@@ -73,6 +75,8 @@ Item {
       visible: Cpp_IO_Modbus.protocolIndex === 0
     } Widgets.Combo {
       id: _serialPortCombo
+
+      objectName: "setup.modbus.serialPortIndex"
 
       Layout.fillWidth: true
       enabled: app.ioEnabled
@@ -96,6 +100,8 @@ Item {
       visible: Cpp_IO_Modbus.protocolIndex === 0
     } ComboBox {
       id: _baudRateCombo
+
+      objectName: "setup.modbus.baudRate"
 
       editable: true
       Layout.fillWidth: true
@@ -186,6 +192,8 @@ Item {
       opacity: enabled ? 1 : 0.5
       visible: Cpp_IO_Modbus.protocolIndex === 0
     } Widgets.Combo {
+      objectName: "setup.modbus.parityIndex"
+
       Layout.fillWidth: true
       enabled: app.ioEnabled
       opacity: enabled ? 1 : 0.5
@@ -207,6 +215,8 @@ Item {
       text: qsTr("Data Bits") + ":"
       visible: Cpp_IO_Modbus.protocolIndex === 0
     } Widgets.Combo {
+      objectName: "setup.modbus.dataBitsIndex"
+
       Layout.fillWidth: true
       enabled: app.ioEnabled
       opacity: enabled ? 1 : 0.5
@@ -228,6 +238,8 @@ Item {
       text: qsTr("Stop Bits") + ":"
       visible: Cpp_IO_Modbus.protocolIndex === 0
     } Widgets.Combo {
+      objectName: "setup.modbus.stopBitsIndex"
+
       Layout.fillWidth: true
       enabled: app.ioEnabled
       opacity: enabled ? 1 : 0.5
@@ -250,6 +262,8 @@ Item {
       visible: Cpp_IO_Modbus.protocolIndex === 1
     } Widgets.LineField {
       id: _hostField
+
+      objectName: "setup.modbus.host"
 
       Layout.fillWidth: true
       enabled: app.ioEnabled
@@ -278,6 +292,8 @@ Item {
       visible: Cpp_IO_Modbus.protocolIndex === 1
     } Widgets.LineField {
       id: _portField
+
+      objectName: "setup.modbus.port"
 
       Layout.fillWidth: true
       opacity: enabled ? 1 : 0.5
@@ -318,6 +334,8 @@ Item {
     } Widgets.LineField {
       id: _slaveField
 
+      objectName: "setup.modbus.slaveAddress"
+
       Layout.fillWidth: true
       placeholderText: qsTr("1-247")
       validator: IntValidator { bottom: 1; top: 247 }
@@ -342,6 +360,8 @@ Item {
       text: qsTr("Poll Interval (ms)") + ":"
     } Widgets.LineField {
       id: _intervalField
+
+      objectName: "setup.modbus.pollInterval"
 
       Layout.fillWidth: true
       placeholderText: qsTr("Polling interval")
@@ -373,6 +393,8 @@ Item {
       Widgets.PushButton {
         id: _groupButton
 
+        objectName: "setup.modbus.configureGroups"
+
         anchors.top: parent.top
         anchors.left: parent.left
         anchors.right: parent.right
@@ -382,6 +404,8 @@ Item {
 
       Widgets.PushButton {
         id: _importButton
+
+        objectName: "setup.modbus.importRegisterMap"
 
         anchors.topMargin: 4
         anchors.left: parent.left

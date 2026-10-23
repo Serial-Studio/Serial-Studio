@@ -23,6 +23,8 @@ import "../Commands" as Commands
 Widgets.SmartWindow {
   id: root
 
+  objectName: "databaseExplorer"
+
   //
   // Window geometry & title. The width floor tracks the detail pane's own
   // minimum so the action buttons can never be resized out of view.

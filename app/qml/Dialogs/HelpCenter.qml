@@ -28,6 +28,8 @@ import "../Widgets" as Widgets
 Widgets.SmartDialog {
   id: root
 
+  objectName: "helpCenter"
+
   fixedSize: false
   title: qsTr("Help Center")
 

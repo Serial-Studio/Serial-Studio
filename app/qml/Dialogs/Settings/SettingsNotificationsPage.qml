@@ -75,6 +75,8 @@ Item {
       text: qsTr("System Notifications")
       color: Cpp_ThemeManager.colors["text"]
     } Widgets.Toggle {
+      objectName: "settings.notifications.systemNotificationsEnabled"
+
       Layout.rightMargin: -8
       Layout.alignment: Qt.AlignRight
       checked: Cpp_Notifications.systemNotificationsEnabled
@@ -121,6 +123,8 @@ Item {
       text: qsTr("Route Warnings to Notifications")
       color: Cpp_ThemeManager.colors["text"]
     } Widgets.Toggle {
+      objectName: "settings.notifications.routeWarningsToNotifications"
+
       Layout.rightMargin: -8
       Layout.alignment: Qt.AlignRight
       checked: Cpp_Notifications.routeWarningsToNotifications

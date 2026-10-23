@@ -253,6 +253,7 @@ Rectangle {
 
       onClicked: entry.run()
       text: qsTr("Remote Dashboard")
+      objectName: "app.remoteAttach"
       visible: Cpp_API_Mirror.attached
       Layout.alignment: Qt.AlignVCenter
       ToolTip.text: qsTr("Manage the remote dashboard connection")
@@ -290,6 +291,7 @@ Rectangle {
         id: _connectButton
 
         clickSound: false
+        objectName: "io.toggleConnection"
         readonly property var entry: _connectSlot.entry
         readonly property bool connecting: Cpp_IO_Manager.isConnecting
 

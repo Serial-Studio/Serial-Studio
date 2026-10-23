@@ -210,6 +210,8 @@ Widgets.Pane {
         color: Cpp_ThemeManager.colors["pane_section_label"]
         Component.onCompleted: font.capitalization = Font.AllUppercase
       } Widgets.Radio {
+        objectName: "setup.operationMode.consoleOnly"
+
         ToolTip.delay: 500
         Layout.leftMargin: -6
         enabled: app.ioEnabled
@@ -226,6 +228,8 @@ Widgets.Pane {
             Cpp_AppState.operationMode = SerialStudio.ConsoleOnly
         }
       } Widgets.Radio {
+        objectName: "setup.operationMode.quickPlot"
+
         Layout.leftMargin: -6
         enabled: app.ioEnabled
         Layout.maximumHeight: 18
@@ -243,6 +247,8 @@ Widgets.Pane {
             Cpp_AppState.operationMode = SerialStudio.QuickPlot
         }
       } Widgets.Radio {
+        objectName: "setup.operationMode.projectFile"
+
         ToolTip.delay: 500
         Layout.leftMargin: -6
         enabled: app.ioEnabled
@@ -264,6 +270,8 @@ Widgets.Pane {
       // Map file selector button
       //
       Widgets.PushButton {
+        objectName: "setup.openProject"
+
         Layout.fillWidth: true
         opacity: enabled ? 1 : 0.5
         Layout.maximumWidth: root.maxItemWidth
@@ -304,6 +312,8 @@ Widgets.Pane {
         Widgets.Toggle {
           id: csvLogging
 
+          objectName: "setup.csv.exportEnabled"
+
           Layout.leftMargin: -6
           Layout.maximumHeight: 18
           palette.accent: "#1f6b3a"
@@ -321,6 +331,8 @@ Widgets.Pane {
         }
 
         Widgets.Toggle {
+          objectName: "setup.sessions.exportEnabled"
+
           Layout.leftMargin: -6
           Layout.maximumHeight: 18
           palette.accent: "#1f4f8a"
@@ -344,6 +356,8 @@ Widgets.Pane {
         }
 
         Widgets.Toggle {
+          objectName: "setup.mdf4.exportEnabled"
+
           Layout.leftMargin: -6
           Layout.maximumHeight: 18
           palette.accent: "#8a1a1a"
@@ -361,6 +375,8 @@ Widgets.Pane {
         }
 
         Widgets.Toggle {
+          objectName: "setup.console.exportEnabled"
+
           Layout.leftMargin: -6
           Layout.maximumHeight: 18
           palette.accent: "#4a5663"
@@ -404,6 +420,8 @@ Widgets.Pane {
           spacing: 4
 
           Widgets.Combo {
+            objectName: "setup.busType"
+
             Layout.fillWidth: true
             enabled: app.ioEnabled
             opacity: enabled ? 1 : 0.5
@@ -522,6 +540,8 @@ Widgets.Pane {
                 }
 
                 Widgets.IconButton {
+                  objectName: "setup.openProjectEditor"
+
                   Layout.alignment: Qt.AlignHCenter
                   text: qsTr("Open Project Editor")
                   onClicked: app.showProjectEditor()

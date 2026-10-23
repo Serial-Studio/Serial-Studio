@@ -124,6 +124,8 @@ DriverTagPickerDialog {
           Widgets.LineField {
             id: _nameField
 
+            objectName: "setup.s7.variables.name"
+
             Layout.fillWidth: true
             enabled: !Cpp_IO_S7.variablesLocked
             placeholderText: qsTr("Channel name")
@@ -141,12 +143,16 @@ DriverTagPickerDialog {
             Widgets.LineField {
               id: _addressField
 
+              objectName: "setup.s7.variables.address"
+
               Layout.fillWidth: true
               enabled: !Cpp_IO_S7.variablesLocked
               placeholderText: qsTr("DB5.DBD20:REAL")
             }
 
             Widgets.PushButton {
+              objectName: "setup.s7.variables.add"
+
               text: qsTr("Add Variable")
               enabled: !Cpp_IO_S7.variablesLocked && _addressField.text.length > 0
                        && _addressError.text.length === 0
@@ -277,6 +283,8 @@ DriverTagPickerDialog {
                 }
 
                 Widgets.PushButton {
+                  objectName: "setup.s7.variables.row." + index + ".remove"
+
                   implicitHeight: 28
                   text: qsTr("Remove")
                   Layout.preferredWidth: 90
@@ -314,12 +322,16 @@ DriverTagPickerDialog {
         }
 
         Widgets.PushButton {
+          objectName: "setup.s7.variables.generate"
+
           text: qsTr("Generate Project")
           visible: Cpp_IO_S7.variableCount > 0
           onClicked: Cpp_IO_S7.generateProject()
         }
 
         Widgets.PushButton {
+          objectName: "setup.s7.variables.clear"
+
           text: qsTr("Clear All")
           enabled: !Cpp_IO_S7.variablesLocked
           visible: Cpp_IO_S7.variableCount > 0
@@ -327,6 +339,8 @@ DriverTagPickerDialog {
         }
 
         Widgets.PushButton {
+          objectName: "setup.s7.variables.close"
+
           text: qsTr("Close")
           onClicked: root.close()
         }

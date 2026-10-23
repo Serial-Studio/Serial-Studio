@@ -92,6 +92,8 @@ Item {
   Widgets.IconButton {
     id: _bell
 
+    objectName: "alarms.bell"
+
     padding: 4
     iconSize: 16
     anchors.centerIn: parent

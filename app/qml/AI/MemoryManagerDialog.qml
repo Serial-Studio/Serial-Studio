@@ -15,6 +15,8 @@ import "../Widgets" as Widgets
 Widgets.SmartDialog {
   id: root
 
+  objectName: "memoryManagerDialog"
+
   //
   // Window options
   //

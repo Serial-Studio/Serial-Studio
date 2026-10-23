@@ -32,6 +32,8 @@ import "../../Widgets" as Widgets
 Window {
   id: root
 
+  objectName: "constantsLibraryDialog"
+
   Widgets.WindowMirror {}
 
   //

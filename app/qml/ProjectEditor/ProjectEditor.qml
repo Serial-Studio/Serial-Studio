@@ -37,6 +37,8 @@ import "../Commands" as Commands
 Widgets.SmartWindow {
   id: root
 
+  objectName: "projectEditor"
+
   category: "ProjectEditor"
   minimumWidth: layout.implicitWidth + 32
   minimumHeight: layout.implicitHeight + 32

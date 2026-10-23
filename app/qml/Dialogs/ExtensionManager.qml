@@ -29,6 +29,8 @@ import "ExtensionManager" as ExtensionPages
 Widgets.SmartDialog {
   id: root
 
+  objectName: "extensionManager"
+
   title: qsTr("Extension Manager")
 
   //

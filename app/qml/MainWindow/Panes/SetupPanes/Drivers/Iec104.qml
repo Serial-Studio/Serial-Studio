@@ -52,6 +52,8 @@ Item {
     } Widgets.LineField {
       id: _hostField
 
+      objectName: "setup.iec104.host"
+
       Layout.fillWidth: true
       enabled: app.ioEnabled
       opacity: enabled ? 1 : 0.5
@@ -77,6 +79,8 @@ Item {
       opacity: enabled ? 1 : 0.5
     } Widgets.LineField {
       id: _portField
+
+      objectName: "setup.iec104.port"
 
       Layout.fillWidth: true
       enabled: app.ioEnabled
@@ -107,6 +111,8 @@ Item {
     } Widgets.LineField {
       id: _addressField
 
+      objectName: "setup.iec104.commonAddress"
+
       Layout.fillWidth: true
       enabled: app.ioEnabled
       opacity: enabled ? 1 : 0.5
@@ -134,6 +140,8 @@ Item {
     } Widgets.LineField {
       id: _windowKField
 
+      objectName: "setup.iec104.windowK"
+
       Layout.fillWidth: true
       placeholderText: qsTr("12")
       validator: IntValidator { bottom: 1; top: 32767 }
@@ -155,6 +163,8 @@ Item {
       text: qsTr("Ack Window (w)") + ":"
     } Widgets.LineField {
       id: _windowWField
+
+      objectName: "setup.iec104.windowW"
 
       Layout.fillWidth: true
       placeholderText: qsTr("8")
@@ -178,6 +188,8 @@ Item {
     } Widgets.LineField {
       id: _t1Field
 
+      objectName: "setup.iec104.timeoutT1"
+
       Layout.fillWidth: true
       placeholderText: qsTr("15000")
       validator: IntValidator { bottom: 1000; top: 255000 }
@@ -200,6 +212,8 @@ Item {
     } Widgets.LineField {
       id: _t2Field
 
+      objectName: "setup.iec104.timeoutT2"
+
       Layout.fillWidth: true
       placeholderText: qsTr("10000")
       validator: IntValidator { bottom: 1000; top: 255000 }
@@ -221,6 +235,8 @@ Item {
       text: qsTr("Timeout t3 (ms)") + ":"
     } Widgets.LineField {
       id: _t3Field
+
+      objectName: "setup.iec104.timeoutT3"
 
       Layout.fillWidth: true
       placeholderText: qsTr("20000")
@@ -247,6 +263,8 @@ Item {
 
       Widgets.PushButton {
         id: _projectButton
+
+        objectName: "setup.iec104.generateProject"
 
         anchors.top: parent.top
         anchors.left: parent.left

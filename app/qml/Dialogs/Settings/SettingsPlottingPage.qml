@@ -75,6 +75,8 @@ Item {
     } Widgets.SpinBox {
       id: _timeRange
 
+      objectName: "settings.plotting.plotTimeRange"
+
       readonly property var presets: [0.001, 0.002, 0.005, 0.01, 0.02, 0.05,
                                       0.1, 0.2, 0.5, 1, 2, 5, 10, 20, 30, 60, 120, 300]
 
@@ -127,6 +129,8 @@ Item {
     } Widgets.SpinBox {
       id: _pointCount
 
+      objectName: "settings.plotting.points"
+
       from: 10
       to: 100000
       stepSize: 10
@@ -151,6 +155,8 @@ Item {
       color: Cpp_ThemeManager.colors["text"]
     } Widgets.SpinBox {
       id: _refreshRate
+
+      objectName: "settings.plotting.fps"
 
       from: 1
       to: 240

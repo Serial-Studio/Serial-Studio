@@ -32,6 +32,8 @@
 #include "API/Server/AuthPrimitives.h"
 #include "API/Server/ClientReception.h"
 #include "API/Server/ServerAuth.h"
+#include "Core/Prompt/IUserPrompter.h"
+#include "Core/Prompt/UserPrompt.h"
 
 // Mirrors the caps ClientReception.cpp keeps file-private; restating them here is the point of a
 // KAT: a silent widening of a limit has to break this suite.
@@ -134,6 +136,68 @@ public:
 };
 
 /**
+ * @brief A prompter that says yes to one consent title and no to every other, so a case can grant
+ *        a single gate the way a user would and watch whether another gate rides on it.
+ */
+class OneConsentPrompter : public Core::Prompt::IUserPrompter {
+public:
+  explicit OneConsentPrompter(const QString& yesTitle) : m_yesTitle(yesTitle) {}
+
+  int promptMessage(const QString& text,
+                    const QString& informativeText,
+                    Core::Prompt::Icon icon,
+                    const QString& windowTitle,
+                    Core::Prompt::Buttons buttons,
+                    Core::Prompt::Button defaultButton,
+                    const Core::Prompt::ButtonLabels& buttonLabels) override
+  {
+    Q_UNUSED(informativeText);
+    Q_UNUSED(icon);
+    Q_UNUSED(windowTitle);
+    Q_UNUSED(buttons);
+    Q_UNUSED(defaultButton);
+    Q_UNUSED(buttonLabels);
+    titles.append(text);
+    return text == m_yesTitle ? Core::Prompt::Yes : Core::Prompt::No;
+  }
+
+  void promptDirectory(const QString& title,
+                       const QString& initialPath,
+                       DirectoryHandler onSelected) override
+  {
+    Q_UNUSED(title);
+    Q_UNUSED(initialPath);
+    Q_UNUSED(onSelected);
+  }
+
+  void revealInFileManager(const QString& path) override { Q_UNUSED(path); }
+
+  QStringList titles;
+
+private:
+  QString m_yesTitle;
+};
+
+/**
+ * @brief Binds a prompter for the scope of one case and unbinds it on every exit path, so an
+ *        early QVERIFY return never leaves a dangling stack prompter behind.
+ */
+class PrompterScope {
+public:
+  explicit PrompterScope(Core::Prompt::IUserPrompter* prompter)
+  {
+    Core::Prompt::setPrompter(prompter);
+  }
+
+  ~PrompterScope() { Core::Prompt::setPrompter(nullptr); }
+
+  PrompterScope(PrompterScope&&)                 = delete;
+  PrompterScope(const PrompterScope&)            = delete;
+  PrompterScope& operator=(PrompterScope&&)      = delete;
+  PrompterScope& operator=(const PrompterScope&) = delete;
+};
+
+/**
  * @brief Auth primitives and the API socket's reception guards, both driven without a server.
  */
 class TstServerAuth : public QObject {
@@ -158,6 +222,9 @@ private slots:
 
   void remoteCommandPolicy();
   void remoteCommandPolicyHeadlessGrant();
+
+  void uiDriveConsentDoesNotCompose();
+  void uiDriveHeadlessGrant();
 
   void authHandshakeRejectsBadToken();
   void authHandshakeAcceptsAndReplaysPipeline();
@@ -332,6 +399,9 @@ void TstServerAuth::commandClassification_data()
   QTest::newRow("console.send") << QStringLiteral("console.send") << false << true;
   QTest::newRow("project.new") << QStringLiteral("project.new") << false << false;
   QTest::newRow("io.connect") << QStringLiteral("io.connect") << false << false;
+  QTest::newRow("ui.automation.click") << QStringLiteral("ui.automation.click") << false << false;
+  QTest::newRow("ui.automation.listWindows")
+    << QStringLiteral("ui.automation.listWindows") << false << false;
   QTest::newRow("unknown command") << QStringLiteral("nope.nope") << false << false;
   QTest::newRow("case sensitive") << QStringLiteral("IO.writeData") << false << false;
 }
@@ -524,6 +594,82 @@ void TstServerAuth::remoteCommandPolicyHeadlessGrant()
   QCOMPARE(changes.count(), 1);
   QVERIFY(!settings.contains(QStringLiteral("API/ScriptInstallConsent")));
   QVERIFY(!settings.contains(QStringLiteral("API/DeviceWriteConsent")));
+}
+
+//--------------------------------------------------------------------------------------------------
+// Interface-driving consent
+//--------------------------------------------------------------------------------------------------
+
+/**
+ * @brief Consents do not compose (spec 0101 R8): a user who granted device writes has not granted
+ *        interface driving, so a click stays behind its own prompt and a "no" there holds for the
+ *        session while device writes stay allowed. The read-only automation commands need neither.
+ */
+void TstServerAuth::uiDriveConsentDoesNotCompose()
+{
+  qunsetenv("SERIAL_STUDIO_API_AUTO_CONSENT");
+  QSettings settings;
+  settings.clear();
+  API::ServerAuth auth(settings);
+  OneConsentPrompter prompter(QStringLiteral("Allow API device control?"));
+  const PrompterScope bound(&prompter);
+  const QString id    = QStringLiteral("9");
+  const QString click = QStringLiteral("ui.automation.click");
+  const QString key   = QStringLiteral("ui.automation.key");
+
+  namespace Caps = API::CommandCapabilities;
+  QVERIFY(hasCapability(click, QJsonObject(), Caps::DrivesUi));
+  QVERIFY(hasCapability(key, QJsonObject(), Caps::DrivesUi));
+  QVERIFY(!hasCapability(click, QJsonObject(), Caps::WritesDevice));
+
+  const auto write = auth.authorizeRemoteCommand(id, QStringLiteral("io.writeData"), {});
+  QVERIFY(write.has_value());
+  QCOMPARE(write->errorCode, QString::fromLatin1(API::ErrorCode::ConsentRequired));
+  QCoreApplication::processEvents();
+  QCOMPARE(auth.authorizeDeviceWrite(), API::DeviceWriteVerdict::Allowed);
+  QVERIFY(!auth.authorizeRemoteCommand(id, QStringLiteral("io.writeData"), {}).has_value());
+  QCOMPARE(prompter.titles.size(), qsizetype(1));
+
+  const auto pending = auth.authorizeRemoteCommand(id, click, {});
+  QVERIFY(pending.has_value());
+  QCOMPARE(pending->errorCode, QString::fromLatin1(API::ErrorCode::ConsentRequired));
+  QCoreApplication::processEvents();
+  QCOMPARE(prompter.titles.size(), qsizetype(2));
+  QCOMPARE(prompter.titles.last(),
+           QStringLiteral("Allow API clients to drive the user interface?"));
+
+  const auto denied = auth.authorizeRemoteCommand(id, key, {});
+  QVERIFY(denied.has_value());
+  QCOMPARE(denied->errorCode, QString::fromLatin1(API::ErrorCode::ExecutionError));
+  QVERIFY(denied->errorMessage.contains(QStringLiteral("denied by the user")));
+  QCOMPARE(auth.authorizeDeviceWrite(), API::DeviceWriteVerdict::Allowed);
+
+  const QString list = QStringLiteral("ui.automation.listWindows");
+  const QString shot = QStringLiteral("ui.automation.screenshot");
+  QVERIFY(!auth.authorizeRemoteCommand(id, list, {}).has_value());
+  QVERIFY(!auth.authorizeRemoteCommand(id, shot, {}).has_value());
+  QCOMPARE(prompter.titles.size(), qsizetype(2));
+  QVERIFY(settings.allKeys().filter(QStringLiteral("Consent")).isEmpty());
+}
+
+/**
+ * @brief The headless override grants interface driving beside the other two consents, in memory
+ *        only; a driving command announces no program change, because it chose none.
+ */
+void TstServerAuth::uiDriveHeadlessGrant()
+{
+  qputenv("SERIAL_STUDIO_API_AUTO_CONSENT", QByteArrayLiteral("1"));
+  QSettings settings;
+  settings.clear();
+  API::ServerAuth auth(settings);
+  qunsetenv("SERIAL_STUDIO_API_AUTO_CONSENT");
+  QSignalSpy changes(&auth, &API::ServerAuth::remoteProgramChanged);
+  const QString id = QStringLiteral("10");
+
+  QVERIFY(!auth.authorizeRemoteCommand(id, QStringLiteral("ui.automation.click"), {}).has_value());
+  QVERIFY(!auth.authorizeRemoteCommand(id, QStringLiteral("ui.automation.key"), {}).has_value());
+  QCOMPARE(changes.count(), 0);
+  QVERIFY(settings.allKeys().filter(QStringLiteral("Consent")).isEmpty());
 }
 
 //--------------------------------------------------------------------------------------------------

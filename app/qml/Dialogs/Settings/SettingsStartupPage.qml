@@ -83,6 +83,8 @@ Item {
     } Widgets.Combo {
       id: _rhiBackend
 
+      objectName: "settings.startup.graphicsBackend"
+
       Layout.fillWidth: true
       visible: Cpp_Misc_GraphicsBackend.configurable
       model: Cpp_Misc_GraphicsBackend.availableBackends.map(e => e.label)
@@ -115,6 +117,8 @@ Item {
       color: Cpp_ThemeManager.colors["text"]
     } Widgets.Combo {
       id: _hidpiScaling
+
+      objectName: "settings.startup.highDpiMode"
 
       Layout.fillWidth: true
       visible: Cpp_Misc_HighDpiScaling.configurable
@@ -150,6 +154,8 @@ Item {
     } Widgets.SpinBox {
       id: _hidpiPercent
 
+      objectName: "settings.startup.highDpiCustomPercent"
+
       from: Cpp_Misc_HighDpiScaling.minimumPercent
       to: Cpp_Misc_HighDpiScaling.maximumPercent
       stepSize: 25
@@ -180,6 +186,8 @@ Item {
       color: Cpp_ThemeManager.colors["text"]
     } Widgets.Toggle {
       id: _hdrOutput
+
+      objectName: "settings.startup.hdrEnabled"
 
       Layout.rightMargin: -8
       Layout.alignment: Qt.AlignRight
@@ -227,6 +235,8 @@ Item {
     } Widgets.Combo {
       id: _simdLevel
 
+      objectName: "settings.startup.simdLevel"
+
       Layout.fillWidth: true
       model: Cpp_Misc_SimdSettings.availableLevels.map(e => e.label)
       currentIndex: {
@@ -257,6 +267,8 @@ Item {
     } Widgets.Toggle {
       id: _reduceMotion
 
+      objectName: "settings.startup.reduceMotion"
+
       Layout.rightMargin: -8
       Layout.alignment: Qt.AlignRight
       checked: Cpp_Misc_GraphicsBackend.reduceMotion
@@ -280,6 +292,8 @@ Item {
     } Widgets.Toggle {
       id: _performanceMode
 
+      objectName: "settings.startup.performanceMode"
+
       Layout.rightMargin: -8
       Layout.alignment: Qt.AlignRight
       checked: Cpp_Misc_ModuleManager.performanceMode
@@ -302,6 +316,8 @@ Item {
       text: qsTr("Keep Display Awake")
     } Widgets.Toggle {
       id: _inhibitIdleSleep
+
+      objectName: "settings.startup.inhibitIdleSleep"
 
       Layout.rightMargin: -8
       Layout.alignment: Qt.AlignRight
@@ -359,6 +375,8 @@ Item {
     } Widgets.Toggle {
       id: _automaticUpdates
 
+      objectName: "settings.startup.automaticUpdates"
+
       Layout.rightMargin: -8
       Layout.alignment: Qt.AlignRight
       checked: Cpp_Misc_ModuleManager.automaticUpdates
@@ -381,6 +399,8 @@ Item {
       text: qsTr("Check for Extension Updates")
     } Widgets.Toggle {
       id: _extensionUpdateCheck
+
+      objectName: "settings.startup.extensionUpdateCheck"
 
       Layout.rightMargin: -8
       Layout.alignment: Qt.AlignRight
@@ -405,6 +425,8 @@ Item {
       text: qsTr("Install Extension Updates Automatically")
     } Widgets.Toggle {
       id: _extensionAutoUpdate
+
+      objectName: "settings.startup.extensionAutomaticUpdates"
 
       Layout.rightMargin: -8
       Layout.alignment: Qt.AlignRight
