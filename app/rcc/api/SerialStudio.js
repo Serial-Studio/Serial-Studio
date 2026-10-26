@@ -448,6 +448,7 @@ var sessions = (typeof sessions !== 'undefined') ? sessions : {};
 var stream = (typeof stream !== 'undefined') ? stream : {};
 var system = (typeof system !== 'undefined') ? system : {};
 var ui = (typeof ui !== 'undefined') ? ui : {};
+ui.automation = ui.automation || {};
 ui.window = ui.window || {};
 
 alarms.acknowledge = function() {
@@ -3004,6 +3005,42 @@ system.projectDir = function() {
 system.runningProcesses = function() {
   var p = {};
   return apiCall('system.runningProcesses', p);
+};
+
+// options.button: "left" | "right" | "middle"
+ui.automation.click = function(options) {
+  var p = {};
+  if (options) for (var k in options) p[k] = options[k];
+  return apiCall('ui.automation.click', p);
+};
+
+ui.automation.key = function(options) {
+  var p = {};
+  if (options) for (var k in options) p[k] = options[k];
+  return apiCall('ui.automation.key', p);
+};
+
+ui.automation.listElements = function(options) {
+  var p = {};
+  if (options) for (var k in options) p[k] = options[k];
+  return apiCall('ui.automation.listElements', p);
+};
+
+ui.automation.listWindows = function() {
+  var p = {};
+  return apiCall('ui.automation.listWindows', p);
+};
+
+ui.automation.screenshot = function(options) {
+  var p = {};
+  if (options) for (var k in options) p[k] = options[k];
+  return apiCall('ui.automation.screenshot', p);
+};
+
+ui.automation.setReduceMotion = function(enabled) {
+  var p = {};
+  p['enabled'] = enabled;
+  return apiCall('ui.automation.setReduceMotion', p);
 };
 
 ui.window.getLayout = function() {

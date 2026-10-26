@@ -25,6 +25,7 @@
 #include <QImage>
 #include <QKeySequence>
 #include <QQuickItem>
+#include <QQuickStyle>
 #include <QQuickView>
 #include <QQuickWindow>
 #include <QTest>
@@ -77,11 +78,14 @@ private:
 //--------------------------------------------------------------------------------------------------
 
 /**
- * @brief Loads the fixture into a software-rendered view so every CI leg renders the same, shows
- *        it and makes it the active window, which key delivery needs.
+ * @brief Loads the fixture into a software-rendered view under the Fusion style the application
+ *        runs, so every CI leg renders the same and the platform default style never decides a
+ *        control's meta-object, then shows it and makes it the active window, which key delivery
+ *        needs.
  */
 void TstUiAutomation::initTestCase()
 {
+  QQuickStyle::setStyle(QStringLiteral("Fusion"));
   QQuickWindow::setGraphicsApi(QSGRendererInterface::Software);
   m_view = new QQuickView;
   m_view->setObjectName(QStringLiteral("fixture"));
@@ -233,7 +237,8 @@ void TstUiAutomation::catalogFilters()
 /**
  * @brief A QML component with declared properties gets a dynamic meta-object named after its
  *        file plus the `_QMLTYPE_` marker (Qt internal, pinned here), and the catalog reads the
- *        component name back; a bare Qt control keeps its C++ class name.
+ *        component name back; a Qt control under Fusion, whose Button.qml declares no members,
+ *        keeps its C++ class name (a style that does, FluentWinUI3 or Material, renames it).
  */
 void TstUiAutomation::componentNameParsing()
 {

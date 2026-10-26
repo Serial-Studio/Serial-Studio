@@ -6431,6 +6431,139 @@
         ]
     },
     {
+        "description": "Click a control by id or a point in window coordinates, as the user would; the reply is {hit, id, x, y, delivered}. Needs the interface-driving consent from a remote client. A control that opens a native file dialog blocks until a person dismisses it (params: window, id or x and y, button, modifiers [ctrl, shift, alt, meta], double)",
+        "name": "ui.automation.click",
+        "properties": {
+            "button": {
+                "default": "left",
+                "description": "Mouse button (default left)",
+                "enum": [
+                    "left",
+                    "right",
+                    "middle"
+                ],
+                "type": "string"
+            },
+            "double": {
+                "description": "Double-click instead of a single click",
+                "type": "boolean"
+            },
+            "id": {
+                "description": "Element id to click",
+                "type": "string"
+            },
+            "modifiers": {
+                "description": "Held modifiers: ctrl, shift, alt, meta",
+                "items": {
+                    "type": "string"
+                },
+                "type": "array"
+            },
+            "window": {
+                "description": "Window id (default: main)",
+                "type": "string"
+            },
+            "x": {
+                "description": "X in window coordinates",
+                "type": "number"
+            },
+            "y": {
+                "description": "Y in window coordinates",
+                "type": "number"
+            }
+        },
+        "required": [
+        ]
+    },
+    {
+        "description": "Type text or press a key sequence (QKeySequence notation such as Ctrl+S) in a window, after focusing the optional target id; the reply is {delivered, focusedId}. Needs the interface-driving consent from a remote client (params: window, target, text, keys)",
+        "name": "ui.automation.key",
+        "properties": {
+            "keys": {
+                "description": "Key sequence to press",
+                "type": "string"
+            },
+            "target": {
+                "description": "Element id to focus",
+                "type": "string"
+            },
+            "text": {
+                "description": "Text to type",
+                "type": "string"
+            },
+            "window": {
+                "description": "Window id (default: main)",
+                "type": "string"
+            }
+        },
+        "required": [
+        ]
+    },
+    {
+        "description": "List the interactive controls of a window: [{id, role, label, text, x, y, width, height, enabled, checked, focused}] in window coordinates. Roles: button, checkbox, radiobutton, switch, pagetab, menuitem, combobox, editabletext, spinbox, slider, tile (params: window, id substring, label substring)",
+        "name": "ui.automation.listElements",
+        "properties": {
+            "id": {
+                "description": "Substring of the id",
+                "type": "string"
+            },
+            "label": {
+                "description": "Substring of the label",
+                "type": "string"
+            },
+            "window": {
+                "description": "Window id (default: main)",
+                "type": "string"
+            }
+        },
+        "required": [
+        ]
+    },
+    {
+        "description": "List the visible windows: [{id, title, x, y, width, height, scale, active, modal, focusedId}]. Empty in a headless run.",
+        "name": "ui.automation.listWindows",
+        "properties": {
+        },
+        "required": [
+        ]
+    },
+    {
+        "description": "Capture a window (or one element of it) as base64 PNG: {png, width, height, scale}. The scale halves until the reply fits 4 MiB (params: window, id, scale)",
+        "name": "ui.automation.screenshot",
+        "properties": {
+            "id": {
+                "description": "Element id to crop to",
+                "type": "string"
+            },
+            "scale": {
+                "default": 1,
+                "description": "Downscale factor from 0.1 to 1 (default 1)",
+                "maximum": 1,
+                "minimum": 0.1,
+                "type": "number"
+            },
+            "window": {
+                "description": "Window id (default: main)",
+                "type": "string"
+            }
+        },
+        "required": [
+        ]
+    },
+    {
+        "description": "Switch the reduced-motion preference and return the previous value: {enabled, previous}. A preference, persisted like the Preferences toggle (params: enabled)",
+        "name": "ui.automation.setReduceMotion",
+        "properties": {
+            "enabled": {
+                "description": "Whether chrome motion is reduced",
+                "type": "boolean"
+            }
+        },
+        "required": [
+            "enabled"
+        ]
+    },
+    {
         "description": "Get serialized layout JSON from WindowManager",
         "name": "ui.window.getLayout",
         "properties": {

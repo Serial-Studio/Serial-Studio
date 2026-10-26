@@ -2333,6 +2333,48 @@ message SystemRunningProcessesRequest {
   string id = 1;
 }
 
+message UiAutomationClickRequest {
+  string id = 1;
+  string button = 2;  // enum: "left", "right", "middle"
+  bool double = 3;
+  string id_param = 4;  // JSON name: id
+  google.protobuf.ListValue modifiers = 5;
+  string window = 6;
+  double x = 7;
+  double y = 8;
+}
+
+message UiAutomationKeyRequest {
+  string id = 1;
+  string keys = 2;
+  string target = 3;
+  string text = 4;
+  string window = 5;
+}
+
+message UiAutomationListElementsRequest {
+  string id = 1;
+  string id_param = 2;  // JSON name: id
+  string label = 3;
+  string window = 4;
+}
+
+message UiAutomationListWindowsRequest {
+  string id = 1;
+}
+
+message UiAutomationScreenshotRequest {
+  string id = 1;
+  string id_param = 2;  // JSON name: id
+  double scale = 3;
+  string window = 4;
+}
+
+message UiAutomationSetReduceMotionRequest {
+  string id = 1;
+  bool enabled = 2;
+}
+
 message UiWindowGetLayoutRequest {
   string id = 1;
 }
@@ -3754,6 +3796,24 @@ service SerialStudioTypedAPI {
 
   // List the helper processes currently managed by system.exec. Control script only.
   rpc SystemRunningProcesses(SystemRunningProcessesRequest) returns (CommandResponse);
+
+  // Click a control by id or a point in window coordinates, as the user would; the reply is {hit, id, x, y, delivered}. Needs the interface-driving consent from a remote client. A control that opens a native file dialog blocks until a person dismisses it (params: window, id or x and y, button, modifiers [ctrl, shift, alt, meta], double)
+  rpc UiAutomationClick(UiAutomationClickRequest) returns (CommandResponse);
+
+  // Type text or press a key sequence (QKeySequence notation such as Ctrl+S) in a window, after focusing the optional target id; the reply is {delivered, focusedId}. Needs the interface-driving consent from a remote client (params: window, target, text, keys)
+  rpc UiAutomationKey(UiAutomationKeyRequest) returns (CommandResponse);
+
+  // List the interactive controls of a window: [{id, role, label, text, x, y, width, height, enabled, checked, focused}] in window coordinates. Roles: button, checkbox, radiobutton, switch, pagetab, menuitem, combobox, editabletext, spinbox, slider, tile (params: window, id substring, label substring)
+  rpc UiAutomationListElements(UiAutomationListElementsRequest) returns (CommandResponse);
+
+  // List the visible windows: [{id, title, x, y, width, height, scale, active, modal, focusedId}]. Empty in a headless run.
+  rpc UiAutomationListWindows(UiAutomationListWindowsRequest) returns (CommandResponse);
+
+  // Capture a window (or one element of it) as base64 PNG: {png, width, height, scale}. The scale halves until the reply fits 4 MiB (params: window, id, scale)
+  rpc UiAutomationScreenshot(UiAutomationScreenshotRequest) returns (CommandResponse);
+
+  // Switch the reduced-motion preference and return the previous value: {enabled, previous}. A preference, persisted like the Preferences toggle (params: enabled)
+  rpc UiAutomationSetReduceMotion(UiAutomationSetReduceMotionRequest) returns (CommandResponse);
 
   // Get serialized layout JSON from WindowManager
   rpc UiWindowGetLayout(UiWindowGetLayoutRequest) returns (CommandResponse);

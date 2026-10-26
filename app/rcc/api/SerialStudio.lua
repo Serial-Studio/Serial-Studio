@@ -125,6 +125,7 @@ sessions = sessions or {}
 stream = stream or {}
 system = system or {}
 ui = ui or {}
+ui.automation = ui.automation or {}
 ui.window = ui.window or {}
 
 function alarms.acknowledge()
@@ -2681,6 +2682,42 @@ end
 function system.runningProcesses()
   local p = {}
   return apiCall('system.runningProcesses', p)
+end
+
+-- options.button: "left" | "right" | "middle"
+function ui.automation.click(options)
+  local p = {}
+  if options then for k, v in pairs(options) do p[k] = v end end
+  return apiCall('ui.automation.click', p)
+end
+
+function ui.automation.key(options)
+  local p = {}
+  if options then for k, v in pairs(options) do p[k] = v end end
+  return apiCall('ui.automation.key', p)
+end
+
+function ui.automation.listElements(options)
+  local p = {}
+  if options then for k, v in pairs(options) do p[k] = v end end
+  return apiCall('ui.automation.listElements', p)
+end
+
+function ui.automation.listWindows()
+  local p = {}
+  return apiCall('ui.automation.listWindows', p)
+end
+
+function ui.automation.screenshot(options)
+  local p = {}
+  if options then for k, v in pairs(options) do p[k] = v end end
+  return apiCall('ui.automation.screenshot', p)
+end
+
+function ui.automation.setReduceMotion(enabled)
+  local p = {}
+  p['enabled'] = enabled
+  return apiCall('ui.automation.setReduceMotion', p)
 end
 
 function ui.window.getLayout()

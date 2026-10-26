@@ -39,7 +39,7 @@ using namespace UI::Automation;
 // are Qt or QML implementation names pinned by tst_ui_automation; re-verify per Qt bump.
 //--------------------------------------------------------------------------------------------------
 
-namespace UI::Automation::detail {
+namespace detail {
 struct RoleEntry {
   QLatin1StringView name;
   QLatin1StringView role;
@@ -49,10 +49,10 @@ struct WalkFrame {
   QQuickItem* item;
   int depth;
 };
-}  // namespace UI::Automation::detail
+}  // namespace detail
 
-using UI::Automation::detail::RoleEntry;
-using UI::Automation::detail::WalkFrame;
+using detail::RoleEntry;
+using detail::WalkFrame;
 
 // clang-format off
 static constexpr RoleEntry kQtRoles[] = {

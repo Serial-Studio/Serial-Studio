@@ -3007,6 +3007,59 @@
       "reserved": [],
       "next": 2
     },
+    "ui.automation.click": {
+      "fields": {
+        "button": 2,
+        "double": 3,
+        "id": 4,
+        "modifiers": 5,
+        "window": 6,
+        "x": 7,
+        "y": 8
+      },
+      "reserved": [],
+      "next": 9
+    },
+    "ui.automation.key": {
+      "fields": {
+        "keys": 2,
+        "target": 3,
+        "text": 4,
+        "window": 5
+      },
+      "reserved": [],
+      "next": 6
+    },
+    "ui.automation.listElements": {
+      "fields": {
+        "id": 2,
+        "label": 3,
+        "window": 4
+      },
+      "reserved": [],
+      "next": 5
+    },
+    "ui.automation.listWindows": {
+      "fields": {},
+      "reserved": [],
+      "next": 2
+    },
+    "ui.automation.screenshot": {
+      "fields": {
+        "id": 2,
+        "scale": 3,
+        "window": 4
+      },
+      "reserved": [],
+      "next": 5
+    },
+    "ui.automation.setReduceMotion": {
+      "fields": {
+        "enabled": 2
+      },
+      "reserved": [],
+      "next": 3
+    },
     "ui.window.getLayout": {
       "fields": {},
       "reserved": [],

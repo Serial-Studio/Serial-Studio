@@ -40,7 +40,7 @@ static ulong s_mouseTimestamp = 0;
 // Synthetic clock and modifier table
 //--------------------------------------------------------------------------------------------------
 
-namespace UI::Automation::detail {
+namespace detail {
 struct ModifierKey {
   Qt::KeyboardModifier flag;
   Qt::Key key;
@@ -50,10 +50,10 @@ enum class ModifierPhase : quint8 {
   Press,
   Release,
 };
-}  // namespace UI::Automation::detail
+}  // namespace detail
 
-using UI::Automation::detail::ModifierKey;
-using UI::Automation::detail::ModifierPhase;
+using detail::ModifierKey;
+using detail::ModifierPhase;
 
 static constexpr ModifierKey kModifierKeys[] = {
   {  Qt::ShiftModifier,   Qt::Key_Shift},
