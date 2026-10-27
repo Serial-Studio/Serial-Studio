@@ -19,7 +19,7 @@ echo "WARNING: These tests will stress the Serial Studio API."
 echo "Only run against a test instance!"
 echo ""
 echo "Press Ctrl+C to cancel, or Enter to continue..."
-read
+read -r
 
 # Check if Serial Studio is running
 echo ""

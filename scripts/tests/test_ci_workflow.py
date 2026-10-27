@@ -340,6 +340,40 @@ def test_every_build_job_runs_the_throughput_gate_as_a_hard_step(ci, job):
         assert "continue-on-error" not in step
 
 
+def test_the_x86_64_slice_is_deployed_before_the_merge(ci):
+    """
+    lipo merges each slice's load commands untouched, so a slice lifted straight out of the
+    build tree ships naming the runner's Qt directory in its rpath. Issue #392: every 4.x
+    universal DMG aborted in dyld on Intel Macs while the arm64 half, the signature, the
+    notarization and the arm64 test job all passed.
+    """
+    runs = [str(step.get("run", "")) for step in _steps(ci["build-macos-intel"])]
+    deploy = [i for i, run in enumerate(runs) if "cmake --install build" in run]
+    assert deploy, "build-macos-intel never deploys its bundle"
+    lift = [
+        i for i, run in enumerate(runs) if run.startswith("cp ") and "-x86_64" in run
+    ]
+    assert lift, "build-macos-intel never lifts the x86_64 slice"
+    assert deploy[0] < lift[0], "the slice is lifted before the bundle is deployed"
+    assert "build/app/" not in runs[lift[0]], "the slice is lifted from the build tree"
+
+
+def test_the_universal_bundle_verifies_every_slice_before_signing(ci):
+    """The static walk is the only gate that reads the x86_64 slice: the test job runs arm64."""
+    steps = _steps(ci["build-macos"])
+    ids = [step.get("id") for step in steps]
+    assert (
+        "verify-slice-load-commands" in ids
+    ), "build-macos never checks the merged slices"
+    verify = ids.index("verify-slice-load-commands")
+    lipo = [i for i, s in enumerate(steps) if "lipo -create" in str(s.get("run", ""))]
+    sign = [i for i, s in enumerate(steps) if "codesign" in str(s.get("run", ""))]
+    assert lipo and sign
+    assert (
+        max(lipo) < verify < min(sign)
+    ), "the slice check must follow lipo and precede codesign"
+
+
 # --------------------------------------------------------------------------------------------
 # Hardening (L1)
 # --------------------------------------------------------------------------------------------

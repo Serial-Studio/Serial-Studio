@@ -38,7 +38,7 @@ configured key plus the item list.
 S7comm over ISO-TSAP to S7-300/400/1200/1500. The TCP port is 102 and
 is not configurable.
 
-### Configuration order
+### S7 configuration order
 
 1. `io.s7.setProperty{key: "host", value: "192.168.0.1"}`.
 2. `rack` (0-7) and `slot` (0-31). Defaults are rack 0, slot 1, which
@@ -87,7 +87,7 @@ healthy while `readsFailed` and `itemErrors` climb and
 CIP symbolic tag reads from Allen-Bradley ControlLogix/CompactLogix,
 MicroLogix, SLC, PLC-5 and Omron NJ/NX controllers.
 
-### Configuration order
+### EtherNet/IP configuration order
 
 1. `host` -- the gateway IP the CIP session dials.
 2. `cipPath` -- the route from the gateway to the CPU, default `1,0`
@@ -119,7 +119,7 @@ Telecontrol stations, monitor direction only (the driver never sends
 commands). **The point list is discovered, not configured**: the
 station's answer to the interrogation is what defines it.
 
-### Configuration order
+### IEC 104 configuration order
 
 1. `host` and `port` (2404, the port the specification assigns).
 2. `commonAddress` -- the station's ASDU common address, default 1,

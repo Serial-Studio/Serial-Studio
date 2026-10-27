@@ -1182,10 +1182,21 @@ jobs:
       run: cmake --build build --config Release
 
     #
-    # Lifts the slice out of the bundle; the upload itself is the next step
+    # The deploy script runs macdeployqt on the x86_64 bundle: it rewrites the executable's Qt
+    # references from @rpath to @executable_path/../Frameworks and drops the runner's Qt
+    # directory from its rpaths. lipo merges load commands untouched, so a slice lifted straight
+    # out of the build tree ships naming /Users/runner/... and every Intel Mac aborts in dyld
+    # before main (issue #392). The frameworks staged here are discarded: the arm64 bundle
+    # supplies the universal ones
+    #
+    - name: '📦 Deploy Qt into the x86_64 bundle'
+      run: cmake --install build --prefix "${{github.workspace}}/x86_64-stage"
+
+    #
+    # Lifts the deployed slice out of the staged bundle; the upload itself is the next step
     #
     - name: '📤 Upload artifact: x86_64 executable'
-      run: cp "build/app/${{env.EXECUTABLE}}.app/Contents/MacOS/${{env.EXECUTABLE}}" "${{env.EXECUTABLE}}-x86_64"
+      run: cp "${{github.workspace}}/x86_64-stage/${{env.EXECUTABLE}}.app/Contents/MacOS/${{env.EXECUTABLE}}" "${{env.EXECUTABLE}}-x86_64"
 
     #
     # retention-days: 1, an intermediate consumed by the universal merge job
@@ -1305,6 +1316,18 @@ jobs:
           lipo -info "$LIB" | grep -q "arm64"
           lipo -info "$LIB" | grep -q "x86_64"
         done
+
+    #
+    # Each slice of a fat Mach-O keeps its own load commands and rpaths, and lipo merges them
+    # untouched: the x86_64 half can name the runner's Qt directory while the arm64 half loads
+    # fine, and the build, the signature, the notarisation and the arm64 test job all pass
+    # (issue #392: every Intel Mac aborted in dyld before main). The script walks every Mach-O
+    # in the bundle slice by slice and resolves each library reference against the bundle or
+    # the system
+    #
+    - name: '🔎 Verify every slice resolves its libraries inside the bundle'
+      id: verify-slice-load-commands
+      run: python3 scripts/ci/macos-verify-bundle.py "${{env.APPLICATION}}.app"
 
     #
     # The stamp goes in before codesign: any edit to the bundle afterwards invalidates the

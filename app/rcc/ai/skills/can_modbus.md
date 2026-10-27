@@ -10,7 +10,7 @@ a custom parser.
 CAN is message-oriented: each message has an ID and 0–8 data bytes. The
 driver expects you to decode IDs into named signals.
 
-### Configuration order
+### CAN Bus configuration order
 
 1. `io.canbus.listPlugins{}` returns Qt's CAN plugin list (peakcan,
    socketcan, vectorcan, ixxatcan, tinycan, virtualcan...). Most
@@ -62,7 +62,7 @@ to 11/13 bytes; parse with `decoderMethod: 3` (Binary).
 Modbus is request/response: the dashboard polls registers from one or
 more slave devices on a fixed interval.
 
-### Configuration order
+### Modbus configuration order
 
 1. `io.modbus.setProtocolIndex{index}` — `io.modbus.listProtocols{}`
    returns the choices: 0 = Modbus RTU (over serial), 1 = Modbus TCP.

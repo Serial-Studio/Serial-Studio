@@ -27,10 +27,10 @@
 #
 set -eo pipefail
 cd "${SS_WORKSPACE}/build/app"
-wget https://github.com/linuxdeploy/linuxdeploy/releases/download/1-alpha-20240109-1/linuxdeploy-${MACHINE_ARCH}.AppImage
-wget https://github.com/linuxdeploy/linuxdeploy-plugin-qt/releases/download/1-alpha-20250213-1/linuxdeploy-plugin-qt-${MACHINE_ARCH}.AppImage
-chmod +x linuxdeploy-${MACHINE_ARCH}.AppImage
-chmod +x linuxdeploy-plugin-qt-${MACHINE_ARCH}.AppImage
+wget https://github.com/linuxdeploy/linuxdeploy/releases/download/1-alpha-20240109-1/linuxdeploy-"${MACHINE_ARCH}".AppImage
+wget https://github.com/linuxdeploy/linuxdeploy-plugin-qt/releases/download/1-alpha-20250213-1/linuxdeploy-plugin-qt-"${MACHINE_ARCH}".AppImage
+chmod +x linuxdeploy-"${MACHINE_ARCH}".AppImage
+chmod +x linuxdeploy-plugin-qt-"${MACHINE_ARCH}".AppImage
 
 export QML_SOURCES_PATHS="${QML_DIR}"
 export EXTRA_PLATFORM_PLUGINS="libqwayland.so"
@@ -38,7 +38,7 @@ export EXTRA_PLATFORM_PLUGINS="libqwayland.so"
 rm -f "$QT_PLUGINS_PATH/imageformats/libqtiff.so"
 find "$QT_PLUGINS_PATH/sqldrivers" -name 'libqsql*.so' ! -name 'libqsqlite.so' -delete
 
-./linuxdeploy-${MACHINE_ARCH}.AppImage --appdir AppDir -e ${UNIXNAME} -i ../../app/deploy/linux/${UNIXNAME}.svg -d ../../app/deploy/linux/${UNIXNAME}.desktop --plugin qt
+./linuxdeploy-"${MACHINE_ARCH}".AppImage --appdir AppDir -e "${UNIXNAME}" -i "../../app/deploy/linux/${UNIXNAME}.svg" -d "../../app/deploy/linux/${UNIXNAME}.desktop" --plugin qt
 mkdir -p AppDir/usr/share/mime/packages
 cp ../../app/deploy/linux/serial-studio-ssproj.xml AppDir/usr/share/mime/packages/
 if [ "${UNIXNAME}" = "serial-studio-pro" ]; then
@@ -91,5 +91,5 @@ if [ "$have_softokn" = 0 ]; then
   exit 1
 fi
 
-rm linuxdeploy-${MACHINE_ARCH}.AppImage
-rm linuxdeploy-plugin-qt-${MACHINE_ARCH}.AppImage
+rm linuxdeploy-"${MACHINE_ARCH}".AppImage
+rm linuxdeploy-plugin-qt-"${MACHINE_ARCH}".AppImage

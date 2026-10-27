@@ -135,6 +135,8 @@ if [ -z "$PULSE_LIBS" ]; then
   exit 1
 fi
 
+# The *_LIBS and ALSA_PLUGINS values are whitespace-separated file lists; the split is the point.
+# shellcheck disable=SC2086
 LD_LIBRARY_PATH="$PWD/AppDir-compat/usr/lib" \
   ./sharun-aio lib4bin --dst-dir AppDir-compat/usr --with-sharun --hard-links --with-hooks \
   "$BIN_SRC"/* $DLOPEN_LIBS $TLS_LIBS $GL_VENDOR_LIBS "$DRI_DIR"/*.so $GBM_LIBS \
@@ -154,7 +156,7 @@ for f in $ALSA_PLUGINS; do
   fi
 done
 if ! grep -q '^ALSA_PLUGIN_DIR=' AppDir-compat/usr/.env 2>/dev/null; then
-  echo 'ALSA_PLUGIN_DIR=${SHARUN_DIR}/shared/lib/alsa-lib' >> AppDir-compat/usr/.env
+  echo "ALSA_PLUGIN_DIR=\${SHARUN_DIR}/shared/lib/alsa-lib" >> AppDir-compat/usr/.env
 fi
 
 if ! find AppDir-compat/usr/shared/lib -name 'libssl.so.3*' | grep -q .; then
