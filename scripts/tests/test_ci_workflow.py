@@ -358,6 +358,37 @@ def test_the_x86_64_slice_is_deployed_before_the_merge(ci):
     assert "build/app/" not in runs[lift[0]], "the slice is lifted from the build tree"
 
 
+def test_the_offscreen_plugin_gets_the_bundle_rpath(ci):
+    """
+    libqoffscreen.dylib is copied raw from the Qt install for the headless tests, so its rpath
+    still named the install's lib/ and the slice verifier refused both slices on its first real
+    run (40511998448). The copy step must retarget it at Contents/Frameworks.
+    """
+    runs = [str(step.get("run", "")) for step in _steps(ci["build-macos-arm64"])]
+    copy = [run for run in runs if "libqoffscreen.dylib" in run]
+    assert copy, "build-macos-arm64 never bundles the offscreen plugin"
+    assert (
+        "install_name_tool -rpath" in copy[0]
+    ), "the raw copy keeps the Qt install rpath"
+    assert "@loader_path/../../Frameworks" in copy[0]
+
+
+def test_unused_sql_driver_plugins_are_pruned_before_the_merge(ci):
+    """
+    macdeployqt ships every sqldrivers plugin; libqsqlmimer links /usr/local/lib/libmimerapi,
+    which exists on no user's machine, and the app only opens SQLite.
+    """
+    steps = _steps(ci["build-macos-arm64"])
+    runs = [str(step.get("run", "")) for step in steps]
+    prune = [
+        i for i, run in enumerate(runs) if "sqldrivers" in run and "-delete" in run
+    ]
+    assert prune, "build-macos-arm64 never prunes the SQL driver plugins"
+    assert "libqsqlite.dylib" in runs[prune[0]], "the prune must keep the SQLite driver"
+    archive = [i for i, run in enumerate(runs) if "COPYFILE_DISABLE" in run]
+    assert archive and prune[0] < archive[0], "the prune must precede the bundle upload"
+
+
 def test_the_universal_bundle_verifies_every_slice_before_signing(ci):
     """The static walk is the only gate that reads the x86_64 slice: the test job runs arm64."""
     steps = _steps(ci["build-macos"])

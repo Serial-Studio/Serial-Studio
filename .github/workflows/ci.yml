@@ -1063,8 +1063,26 @@ jobs:
         hdiutil detach "$VOLUME"
 
     #
+    # macdeployqt ships every sqldrivers plugin behind QtSql. libqsqlmimer links
+    # /usr/local/lib/libmimerapi.dylib, a path that exists on no user's machine, and the app only
+    # ever opens SQLite (the Historian), so everything but libqsqlite is dead weight to sign,
+    # notarize and verify; the same set LINUXDEPLOY_EXCLUDED_LIBRARIES drops from the AppImage
+    # (run 40511998448)
+    #
+    - name: '🧹 Prune SQL driver plugins the app never loads'
+      run: |
+        SQL="${{env.APPLICATION}}.app/Contents/PlugIns/sqldrivers"
+        if [ -d "$SQL" ]; then
+          find "$SQL" -type f ! -name 'libqsqlite.dylib' -print -delete
+          ls -l "$SQL"
+        fi
+
+    #
     # The deploy tools bundle only the native platform plugin; the integration tests run with
-    # QT_QPA_PLATFORM=offscreen
+    # QT_QPA_PLATFORM=offscreen. The raw copy keeps the Qt install's rpath
+    # (@loader_path/../../lib), which resolves nowhere inside the bundle: dyld only found QtGui
+    # through the executable's own rpath, and the slice verifier rightly refuses that. Point it
+    # at Contents/Frameworks the way macdeployqt does for the plugins it deploys
     #
     - name: '🧩 Bundle offscreen platform plugin (headless CI tests)'
       run: |
@@ -1073,6 +1091,7 @@ jobs:
         mkdir -p "$DEST"
         if [ -f "$QT_PLUGINS_PATH/platforms/libqoffscreen.dylib" ]; then
           cp "$QT_PLUGINS_PATH/platforms/libqoffscreen.dylib" "$DEST/"
+          install_name_tool -rpath "@loader_path/../../lib" "@loader_path/../../Frameworks" "$DEST/libqoffscreen.dylib"
         else
           echo "Warning: offscreen platform plugin not found at $QT_PLUGINS_PATH/platforms"
         fi
