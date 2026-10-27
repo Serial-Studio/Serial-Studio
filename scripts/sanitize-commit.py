@@ -17,6 +17,7 @@
 #  - black                    -> format Python under app/, examples/, tests/, scripts/
 #  - documentation-verify.py  -> Markdown AI-narration scan
 #  - claim-verify.py          -> AI-facing doc claims vs the tree (blocking)
+#  - ledger-verify.py         -> mistakes-ledger open-row ratchet (blocking)
 #  - generate-sdk.py          -> regenerate SerialStudio.js / .lua from api-schema.json
 #  - generate-property-registry.py -> spec-0036 dataset registry + spec-0037 gRPC field-number
 #                                     ledger and typed proto (all six generated artifacts)
@@ -415,6 +416,13 @@ def main(argv: list[str] | None = None) -> int:
         "Checking AI documentation claims",
         root / "scripts" / "claim-verify.py",
         "--quiet",
+    ):
+        return 1
+
+    if not run_gate_step(
+        "Checking the mistakes-ledger ratchet",
+        root / "scripts" / "ledger-verify.py",
+        "--check",
     ):
         return 1
 

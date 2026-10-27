@@ -30,7 +30,7 @@ The workflow just sequences them.
 
 | Phase | Skill | Produces | Gate |
 |-------|-------|----------|------|
-| 1. Specify | `/ss-spec` | `spec.md` — WHAT & WHY: problem, goals, non-goals, numbered requirements, acceptance criteria, constraints | Maintainer marks spec `approved` |
+| 1. Specify | `/ss-spec` | `spec.md` — WHAT & WHY: problem, goals, non-goals, numbered requirements, acceptance criteria, constraints, and the premise check (the one measurement that would kill the spec, run) | Maintainer marks spec `approved` |
 | 2. Plan | `/ss-plan` | `plan.md` — HOW: affected files, data flow, hotpath/threading impact, data model, API/QML, tradeoffs, risks, test plan | Maintainer approves the design |
 | 3. Tasks | `/ss-tasks` | `tasks.md` — ordered, individually-verifiable checklist + Definition of Done | Maintainer approves the breakdown |
 | 4. Implement | `/ss-implement` | code, task by task; `tasks.md` kept current | Definition of Done met; self-review; sanitize |
@@ -44,9 +44,12 @@ the skills copy from are in `doc/claude/specs/templates/`.
 Before `/ss-spec`, throwaway prototyping is sanctioned: scratchpad sims (Node/Python), API
 experiments against a running app (`localhost:7777`), quick sketches of shapes that will be
 rejected. No artifact, no gate, no approval — the output is understanding, and anything worth
-keeping is restated inside `spec.md`. Nothing from phase 0 lands in the repo. The point is
-abductive: form the hypothesis by poking reality before writing it down, instead of speccing
-from armchair reasoning.
+keeping is restated inside `spec.md`. Nothing from phase 0 lands in the repo except the
+premise check: the one measurement that would have killed the spec, with its number, in the
+spec's own section. The point is abductive: form the hypothesis by poking reality before
+writing it down, instead of speccing from armchair reasoning. Spec 0069 (TU decomposition)
+was retired after five failed builds for want of a coupling figure, and spec 0090 (BOLT) was
+reverted after eleven commits for want of one local benchmark; both numbers took an hour.
 
 ## Gate discipline
 
@@ -60,6 +63,19 @@ Each phase reads the previous artifact as its source of truth. If a later phase 
 earlier one was wrong (planning exposes a bad requirement, implementation exposes a missing
 task), **go back, amend the earlier document, and re-confirm** — do not silently diverge. The
 artifacts must stay true; a stale spec is worse than none.
+
+## Landing — the spec is born before the code
+
+The spec and plan land in their own commit (`docs(spec): NNNN <slug>`) before any
+implementation commit, so `git log` shows the order the gate requires. This is mechanical:
+`scripts/commit-shape.py`, which `.claude/hooks/commit-shape-gate.py` runs on every commit
+Claude issues, refuses a commit that creates a `spec.md` or `plan.md` alongside anything
+outside that spec directory. Later edits to the three files (ticking `tasks.md`, setting
+`status: done`) ride with the implementation as before. The same gate keeps a
+security-sensitive surface in a commit of its own and caps unexplained commits at 60 paths,
+because both 2026 user-facing failures were a change inside a package too large to read. The
+archive still cannot prove a plan was *approved* before the code; the review conversation
+does that, so never cite the archive as proof of gating.
 
 ## When to use it — and when to skip
 

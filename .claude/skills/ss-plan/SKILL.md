@@ -19,6 +19,10 @@ discipline.
 
 - `doc/claude/specs/NNNN-slug/spec.md` exists and its `status:` is `approved`. If it is still
   `draft`, stop — the spec must be approved first (`/ss-spec`).
+- Its **Premise Check** section holds a measured number, or an explicit one-sentence
+  "unmeasurable" verdict the maintainer accepted. If it still holds the template text, stop and
+  send the spec back to `/ss-spec`: a plan built on an unmeasured premise is how spec 0069 and
+  spec 0090 were lost.
 
 ## Procedure
 

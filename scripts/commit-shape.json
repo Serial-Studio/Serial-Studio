@@ -1,0 +1,41 @@
+{
+  "max_files": 60,
+  "mechanical_trailer": "Mechanical",
+  "isolated": [
+    {
+      "name": "licensing",
+      "paths": ["app/src/Licensing/", "core/Core/Licensing/"],
+      "companions": ["app/tests/", "tests/", "scripts/tests/", "doc/", "CLAUDE.md"]
+    },
+    {
+      "name": "api-auth",
+      "paths": [
+        "core/Api/API/Server/ServerAuth.cpp",
+        "core/Api/API/Server/ServerAuth.h",
+        "core/Api/API/Server/AuthPrimitives.cpp",
+        "core/Api/API/Server/AuthPrimitives.h",
+        "core/Api/API/Server/ConsentGate.cpp",
+        "core/Api/API/Server/ConsentGate.h",
+        "core/Api/API/Server/ConsentVerdict.h",
+        "core/Api/API/LaunchConsent.cpp",
+        "core/Api/API/LaunchConsent.h",
+        "core/Api/API/SealedPolicy.cpp",
+        "core/Api/API/SealedPolicy.h",
+        "core/Api/API/CommandCapabilities.cpp",
+        "core/Api/API/CommandCapabilities.h",
+        "core/Core/IO/LaunchAuthorizer.cpp",
+        "core/Core/IO/LaunchAuthorizer.h"
+      ],
+      "companions": ["app/tests/", "tests/", "scripts/tests/", "doc/", "CLAUDE.md"]
+    },
+    {
+      "name": "workflows",
+      "paths": [".github/workflows/"],
+      "companions": ["scripts/ci/", "scripts/tests/test_ci_workflow.py", "doc/", "CLAUDE.md"]
+    }
+  ],
+  "spec_dir": "doc/claude/specs/",
+  "spec_born_files": ["spec.md", "plan.md"],
+  "ci_fix_subject": "^fix\\(ci\\)",
+  "run_url": "github\\.com/\\S+/actions/runs/\\d+"
+}

@@ -61,6 +61,17 @@ Pull the deciding constraint out here, up front.>
 
 -
 
+## Premise Check
+
+<The one measurement that would kill this spec, run before planning: the question, the
+number, the verdict. Spec 0069 had no coupling figure and was retired after five failed builds;
+spec 0090 had no local benchmark and was reverted after eleven commits. Time-box it to about an
+hour. If the premise cannot be measured, say so in one sentence and let the maintainer decide.>
+
+- **Question:**
+- **Measured:**
+- **Verdict:**
+
 ## Open Questions
 
 <Anything that blocks a confident plan. Resolve these with the maintainer before `/ss-plan`

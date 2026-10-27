@@ -54,7 +54,9 @@ the `/log-mistake` command and defect ledger in PrimeFoldTools/andon (MIT).
    `Codified: not yet` and is updated when the check ships. Bundling the countermeasure into
    the same diff as whatever was being fixed is scope creep (trust contract, "stay in your
    lane"). If no tier fits, say why in one clause and leave `not yet`: an honest `not yet` is
-   the queue the next hook comes from.
+   the queue the next hook comes from. `scripts/ledger-verify.py --check` (sanitize and CI)
+   refuses a tree whose open-row count grew, so a `not yet` row lands only by closing another
+   row with a real check, or by `--accept` after the maintainer's deliberate decision.
 
 6. **Handoff.** Quote the finished row in chat. Nothing else in the file changes.
 

@@ -34,7 +34,13 @@ on. Capability without predictability gets disabled.
   execution is the contract — a summary after is not. Operationalized as
   spec-driven development: non-trivial or multi-file work MUST start with
   `/ss-spec`; no implementation lands before an approved `plan.md`. Trivial
-  one-liners exempt. See [spec-driven.md](spec-driven.md).
+  one-liners exempt. See [spec-driven.md](spec-driven.md). The spec and
+  plan land in their own commit before the implementation, and a change to
+  a security-sensitive surface lands alone with its tests and docs:
+  `scripts/commit-shape.py` refuses the other shapes, because the
+  2026-09-03 licensing inversion rode into master inside an 815-file
+  commit nobody read, and the 2026-06-01 CI rewrite shipped an undeployed
+  macOS slice in every 4.x DMG for four and a half months.
 - **Self-review before handoff.** Before declaring a non-trivial change
   done, re-read the diff: is this *what was asked, and only that*? If you
   can't answer yes, say so before claiming completion.

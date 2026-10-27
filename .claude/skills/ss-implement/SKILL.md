@@ -56,9 +56,14 @@ When every task is done, run the Definition of Done in `tasks.md`:
    (`doc/claude/j-space.md`, counterfactual self-check). If either answer is weak, say so
    before claiming completion.
 4. **Sanitize:** run `python scripts/sanitize-commit.py` (it sanitizes only — never commits).
-5. **Identify the `pytest` targets** from `plan.md` for the maintainer to run (the app must be
+5. **Land the spec first.** When the maintainer asks for a commit, `spec.md`/`plan.md`/`tasks.md`
+   go in their own `docs(spec): NNNN <slug>` commit before any implementation commit.
+   `scripts/commit-shape.py`, run by the commit hook, refuses a commit that creates a spec
+   alongside code, a security-sensitive surface staged with other paths, more than 60 paths
+   without a `Mechanical:` trailer, or a `fix(ci)` without the failing run's URL.
+6. **Identify the `pytest` targets** from `plan.md` for the maintainer to run (the app must be
    up with the API server enabled).
-6. Set `spec.md` `status: done`.
+7. Set `spec.md` `status: done`.
 
 ## Rules
 

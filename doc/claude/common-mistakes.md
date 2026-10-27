@@ -12,6 +12,9 @@
 > exist (spec 0095), or `not yet`; older rows carry no tag. `not yet` is open debt, written down
 > but still repeatable; the class-level debt list is "Unenforced invariants" at the end. Add rows with
 > `/ss-log-mistake`, which asks the mechanical question before the row lands.
+> `scripts/ledger-verify.py --check` (sanitize and CI) ratchets the open count, `not yet` plus
+> untagged, against `scripts/ledger-baseline.json`: a prose-only row lands only by closing
+> another, or by `--accept` after a deliberate decision.
 
 ## Hotpath & Frame Pool
 
@@ -127,6 +130,7 @@
 | Treating a subagent's report as ground truth — writing docs, edits, or follow-up agent prompts on top of its claims without checking | Spot-check before you build: open 2-3 of the cited files/symbols (or grep for them) yourself before propagating anything a subagent reported. Agent reports are leads, not facts — the 2026 AI-docs audits repeatedly traced shipped wrong claims back to unverified agent output. Same discipline for cached workflow results: an empty result is a finding to verify, not proof of absence. |
 | Auditing a cross-cutting obligation (license gates, consent prompts, undo coverage) by enumerating the EXISTING check sites and tracing each one, then declaring the sweep complete | Enumerate from the obligation's authoritative source toward the code and treat "no check found" as the finding. For license gates there are two such sources, both maintained for other reasons and therefore always current: the advertised Pro feature list (`app/rcc/messages/pro/Welcome_EN.txt`) and the `if(BUILD_COMMERCIAL)` file lists in `app/CMakeLists.txt` + `core/*/CMakeLists.txt` — the build system IS the Pro-surface inventory. Silent because a grep for check symbols cannot return a hit for a check that does not exist: the spec-0092 sweep shipped with the AI assistant, the Historian window, and file transfers fully ungated; the maintainer's ten-minute first-run test found all three, and the maintainer named the CMake lists the audit never consulted (2026-10-04). Codified: not yet. |
 | Verifying a batch/pattern edit with the linter alone and handing it off as done — the 2026-10-03/04 failures (missing include, `return;` in an `int` function, half-cut multi-line QML binding) were all compiler-class and lint-invisible | Run `scripts/syntax-check.py` on every edited C++ file before claiming the edit compiles; treat a SKIP (stale database) as "unverified" and say so. Silent because lint checks shape while only the compiler checks truth, and the editor cannot see types across an anchor boundary. Codified: script:scripts/syntax-check.py, hook:syntax-on-save.py (PostToolUse), CLAUDE.md "Never build — but always syntax-check", 2026-10-04. |
+| Landing a change to a security-sensitive surface (Licensing, `MachineID`, the API auth/consent files, a CI workflow) inside a bulk or agent package, or a spec's first commit mixed with its implementation | Commit the surface alone with its tests and docs, and the spec before the code. Silent because an 815-file "review remediation" commit is read by nobody: the 2026-09-03 stored-fingerprint inversion shipped a seat-cloning hole into master for 32 days that way (f19edc092, reverted a2ed01a72), and the 2026-06-01 CI rewrite lifted an undeployed macOS slice into every 4.x DMG (a32fbe573, #392). Codified: hook:commit-shape-gate.py, script:scripts/commit-shape.py, script:scripts/tests/test_commit_shape.py, 2026-10-27. |
 
 ## Diagnosing a GUI Stall — Sample, Don't Theorize
 

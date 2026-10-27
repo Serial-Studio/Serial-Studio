@@ -75,10 +75,10 @@ text and the incidents behind each rule:
 - **Show the why, not the what.** Comment/reply/commit message explains *why*, and only when
   the choice was non-obvious. One sentence.
 - **State the plan before non-trivial work** — visible *before* execution, not a summary
-  after. Operationalized as `/ss-spec`. What enforces it is the review conversation, not the
-  git record: spec, plan and implementation land squashed in one commit, so history can
-  neither confirm nor refute that the plan came first. Never cite the archive as proof of
-  gating, and don't assume a spec dir is complete — some carry a plan or findings only.
+  after. Operationalized as `/ss-spec`, whose premise check measures the one number that
+  would kill the spec. Spec and plan land in their own commit before the code;
+  `scripts/commit-shape.py` refuses that mix, a protected surface staged with other code, and
+  bulk without a `Mechanical:` trailer. Never cite the archive as proof of gating.
 - **Self-review before handoff.** Re-read the diff: is this *what was asked, and only that*?
 - **Security-sensitive surfaces are decision-visible.** `app/src/Licensing/`,
   `core/Core/Licensing/`, `MachineID`, and the API Server auth/consent files: any
@@ -129,12 +129,13 @@ checklists; advisories are baseline debt, new code still clears them.
 strings, command manifests, the manual and the assistant corpus, banned synonyms in
 `scripts/term-rules.json`; internal identifiers keep their old names on purpose.
 
-Three gates ratchet *growth* against a checked-in baseline instead of capping absolute size,
+Four gates ratchet *growth* against a checked-in baseline instead of capping absolute size,
 and `--accept` re-seeds each: `code-verify.py --singleton-census`, `code-verify.py
---tu-census` (excess over 1500 lines), and `claim-verify.py`, which resolves every path,
+--tu-census` (excess over 1500 lines), `claim-verify.py`, which resolves every path,
 symbol and pinned constant in the AI-facing docs — the canary's values included — against the
-tree; `layer-verify.py` gates the `core/` layering the same way. Baselines, fences and anchor
-mechanics: [doc/claude/scripts.md](doc/claude/scripts.md).
+tree, and `ledger-verify.py` (uncodified ledger rows); `layer-verify.py` gates the `core/`
+layering the same way. Baselines, fences and anchor mechanics:
+[doc/claude/scripts.md](doc/claude/scripts.md).
 
 ## Tests
 

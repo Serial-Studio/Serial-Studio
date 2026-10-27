@@ -49,7 +49,14 @@ for the full workflow and the gate discipline.
    (numbered + testable), Acceptance Criteria (tied to a real check), Constraints & Invariants,
    Open Questions.
 
-5. **Resolve ambiguity before finishing.** Where a requirement is genuinely the maintainer's
+5. **Run the premise check.** Name the one measurement that would kill the spec (the coupling
+   figure that retired spec 0069, the local benchmark that would have stopped spec 0090 before
+   eleven commits), run it time-boxed to about an hour in the scratchpad or against the running
+   app, and record the question, the number and the verdict in the spec's **Premise Check**
+   section. If the premise cannot be measured, say so there in one sentence; the maintainer
+   decides whether to proceed on reasoning alone.
+
+6. **Resolve ambiguity before finishing.** Where a requirement is genuinely the maintainer's
    call (scope, tier gating, UX shape), use `AskUserQuestion` with a recommendation — do not
    guess and bury the assumption. Unresolved items stay in Open Questions.
 
@@ -65,3 +72,7 @@ is measured against; an unreviewed spec poisons the plan and the build.
 - Acceptance criteria must be verifiable — prefer ones that map to `pytest`, `tests/scripts/`,
   `--benchmark-hotpath`, or a concrete in-app observation.
 - This file is the only thing you create. No code, no plan, no scaffolding yet.
+- The Premise Check section never keeps its template text: `/ss-plan` refuses a spec without a
+  recorded measurement or an explicit one-sentence "unmeasurable" verdict.
+- When the maintainer asks for a commit, the spec directory goes in its own `docs(spec):` commit
+  before any implementation; `scripts/commit-shape.py` refuses the mix.

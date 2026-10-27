@@ -1,7 +1,7 @@
 # SPDX-FileCopyrightText: 2020-2025 Alex Spataru
 # SPDX-License-Identifier: GPL-3.0-or-later OR LicenseRef-SerialStudio-Commercial
 """
-Behavior tests for the six Claude Code hooks under .claude/hooks (spec 0101).
+Behavior tests for the seven Claude Code hooks under .claude/hooks (spec 0101).
 
 Each hook runs as a real subprocess with the event JSON on stdin, against a throwaway git
 project (CLAUDE_PROJECT_DIR, TMPDIR and cwd all point into pytest's tmp_path) so nothing
@@ -26,6 +26,7 @@ ALL_HOOKS = [
     "canary-check.py",
     "claim-check.py",
     "commit-sanitize-gate.py",
+    "commit-shape-gate.py",
     "protect-dirty-files.py",
     "syntax-on-save.py",
     "verify-on-save.py",
@@ -272,6 +273,76 @@ def test_commit_gate_non_commit_silent(run_hook, project):
         "commit-sanitize-gate.py", {"tool_input": {"command": "ls"}}
     )
     assert (code, out, err) == (0, "", "")
+
+
+SHAPE_ENGINE = ("commit-shape.py", "commit-shape.json")
+COAUTHORED = {
+    "tool_input": {
+        "command": 'git commit -m "feat: x" -m "Co-Authored-By: Claude <noreply@anthropic.com>"'
+    }
+}
+
+
+def _install_shape_engine(project):
+    """Copy the real engine and rule table beside the stub linters."""
+    for name in SHAPE_ENGINE:
+        (project / "scripts" / name).write_bytes((REPO / "scripts" / name).read_bytes())
+
+
+def _stage_paths(project, *rels):
+    """Stage throwaway files at the given repo-relative paths."""
+    for rel in rels:
+        path = project / rel
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text("x\n", encoding="utf-8")
+        _git(project, "add", rel)
+
+
+def test_shape_gate_blocks_a_commit_without_the_trailer(run_hook, project):
+    """Every commit the hook sees is Claude's, so the co-author trailer is mandatory."""
+    _install_shape_engine(project)
+    _stage_paths(project, "core/Ui/A.cpp")
+    code, _, err = run_hook("commit-shape-gate.py", COMMIT)
+    assert code == 2
+    assert "coauthor" in err
+
+
+def test_shape_gate_passes_a_small_coauthored_commit(run_hook, project):
+    _install_shape_engine(project)
+    _stage_paths(project, "core/Ui/A.cpp")
+    assert run_hook("commit-shape-gate.py", COAUTHORED) == (0, "", "")
+
+
+def test_shape_gate_blocks_a_mixed_licensing_commit(run_hook, project):
+    """The 2026-09-03 shape: a licensing change inside a package of other files."""
+    _install_shape_engine(project)
+    _stage_paths(project, "app/src/Licensing/MachineID.cpp", "core/Ui/A.cpp")
+    code, _, err = run_hook("commit-shape-gate.py", COAUTHORED)
+    assert code == 2
+    assert "isolation" in err
+    assert "commit-shape.py" in err
+
+
+def test_shape_gate_blocks_staging_in_the_commit_command(run_hook, project):
+    """A `git add && git commit` chain hides the real index from a PreToolUse hook."""
+    _install_shape_engine(project)
+    event = {"tool_input": {"command": 'git add a.cpp && git commit -m "feat: x"'}}
+    code, _, err = run_hook("commit-shape-gate.py", event)
+    assert code == 2
+    assert "staging" in err
+
+
+def test_shape_gate_fails_open_without_the_engine(run_hook, project):
+    """A project without scripts/commit-shape.py is not this repo; stay silent."""
+    _stage_paths(project, "app/src/Licensing/MachineID.cpp", "core/Ui/A.cpp")
+    assert run_hook("commit-shape-gate.py", COMMIT) == (0, "", "")
+
+
+def test_shape_gate_non_commit_silent(run_hook, project):
+    _install_shape_engine(project)
+    _stage_paths(project, "app/src/Licensing/MachineID.cpp", "core/Ui/A.cpp")
+    event = {"tool_input": {"command": "git status"}}
+    assert run_hook("commit-shape-gate.py", event) == (0, "", "")
 
 
 def _save_event(path):
