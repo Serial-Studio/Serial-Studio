@@ -591,6 +591,16 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
         <translation>Программа, использующая локальный API Serial Studio, хочет изменить скрипты этого проекта. Скрипты выполняются с полными привилегиями приложения, включая запуск программ. Разрешить API-клиентам изменять скрипты проекта?</translation>
     </message>
     <message>
+        <location filename="../../../core/Api/API/Server/ServerAuth.cpp" line="52"/>
+        <source>Allow API clients to drive the user interface?</source>
+        <translation>Разрешить API-клиентам управлять пользовательским интерфейсом?</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Api/API/Server/ServerAuth.cpp" line="53"/>
+        <source>A program using Serial Studio's local API wants to click controls and type into this window as you would. That can connect, save, delete or change anything you can. Allow API clients to drive the user interface?</source>
+        <translation>Программа, использующая локальный API Serial Studio, хочет управлять элементами управления и вводить данные в это окно, как это делаете вы. Это может подключаться, сохранять, удалять или изменять всё, что можете вы. Разрешить API-клиентам управлять пользовательским интерфейсом?</translation>
+    </message>
+    <message>
         <source>Serial Studio</source>
         <translation type="vanished">Serial Studio</translation>
     </message>
@@ -622,7 +632,7 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
 <context>
     <name>About</name>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="46"/>
+        <location filename="../../qml/Dialogs/About.qml" line="48"/>
         <source>About</source>
         <translation>О Программе</translation>
     </message>
@@ -631,32 +641,32 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
         <translation type="vanished">Версия %1</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="38"/>
+        <location filename="../../qml/Dialogs/About.qml" line="40"/>
         <source>local build</source>
         <translation>локальная сборка</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="106"/>
+        <location filename="../../qml/Dialogs/About.qml" line="108"/>
         <source>Version %1 (%2)</source>
         <translation>Версия %1 (%2)</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="110"/>
+        <location filename="../../qml/Dialogs/About.qml" line="112"/>
         <source>Click to copy build identity</source>
         <translation>Нажмите, чтобы скопировать идентификатор сборки</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="128"/>
+        <location filename="../../qml/Dialogs/About.qml" line="130"/>
         <source>Copyright © %1 %2</source>
         <translation>Copyright © %1 %2</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="134"/>
+        <location filename="../../qml/Dialogs/About.qml" line="136"/>
         <source>All Rights Reserved</source>
         <translation>Все Права Защищены</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="149"/>
+        <location filename="../../qml/Dialogs/About.qml" line="151"/>
         <source>%1 is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 3 of the License, or (at your option) any later version.
 
 %1 is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.</source>
@@ -665,32 +675,32 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
 %1 распространяется в надежде, что будет полезным, но БЕЗ КАКИХ-ЛИБО ГАРАНТИЙ; даже без подразумеваемой гарантии ТОВАРНОЙ ПРИГОДНОСТИ или ПРИГОДНОСТИ ДЛЯ ОПРЕДЕЛЁННОЙ ЦЕЛИ. Подробности см. в GNU General Public License.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="168"/>
+        <location filename="../../qml/Dialogs/About.qml" line="170"/>
         <source>This configuration is licensed for commercial and proprietary use. It may be used in closed-source and commercial applications, subject to the terms of the commercial license.</source>
         <translation>Данная конфигурация лицензирована для коммерческого и проприетарного использования. Может применяться в закрытых и коммерческих приложениях в соответствии с условиями коммерческой лицензии.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="182"/>
+        <location filename="../../qml/Dialogs/About.qml" line="184"/>
         <source>This configuration is for personal and evaluation purposes only. Commercial use is prohibited unless a valid commercial license is activated.</source>
         <translation>Данная конфигурация предназначена только для личного использования и оценки. Коммерческое использование запрещено без активации действующей коммерческой лицензии.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="196"/>
+        <location filename="../../qml/Dialogs/About.qml" line="198"/>
         <source>This software is provided 'as is' without warranty of any kind, express or implied, including but not limited to the warranties of merchantability or fitness for a particular purpose. In no event shall the author be liable for any damages arising from the use of this software.</source>
         <translation>Данное программное обеспечение предоставляется «как есть» без каких-либо гарантий, явных или подразумеваемых, включая, помимо прочего, гарантии товарной пригодности или пригодности для определённой цели. Ни при каких обстоятельствах автор не несёт ответственности за любой ущерб, возникший в результате использования данного программного обеспечения.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="217"/>
+        <location filename="../../qml/Dialogs/About.qml" line="219"/>
         <source>Manage License</source>
         <translation>Управление Лицензией</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="226"/>
+        <location filename="../../qml/Dialogs/About.qml" line="228"/>
         <source>Donate</source>
         <translation>Поддержать Проект</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="237"/>
+        <location filename="../../qml/Dialogs/About.qml" line="239"/>
         <source>Check for Updates</source>
         <translation>Проверить Обновления</translation>
     </message>
@@ -707,32 +717,32 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
         <translation type="vanished">Советы и Хитрости</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="246"/>
+        <location filename="../../qml/Dialogs/About.qml" line="248"/>
         <source>License Agreement</source>
         <translation>Лицензионное Соглашение</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="255"/>
+        <location filename="../../qml/Dialogs/About.qml" line="257"/>
         <source>Report Bug</source>
         <translation>Сообщить об Ошибке</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="266"/>
+        <location filename="../../qml/Dialogs/About.qml" line="268"/>
         <source>Acknowledgements</source>
         <translation>Благодарности</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="275"/>
+        <location filename="../../qml/Dialogs/About.qml" line="277"/>
         <source>Benchmark</source>
         <translation>Тест Производительности</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="285"/>
+        <location filename="../../qml/Dialogs/About.qml" line="287"/>
         <source>Website</source>
         <translation>Веб-сайт</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="301"/>
+        <location filename="../../qml/Dialogs/About.qml" line="303"/>
         <source>Close</source>
         <translation>Закрыть</translation>
     </message>
@@ -774,42 +784,42 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
 <context>
     <name>AccelerometerConfigDialog</name>
     <message>
-        <location filename="../../qml/Dialogs/AccelerometerConfigDialog.qml" line="35"/>
+        <location filename="../../qml/Dialogs/AccelerometerConfigDialog.qml" line="37"/>
         <source>Accelerometer Configuration</source>
         <translation>Конфигурация Акселерометра</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/AccelerometerConfigDialog.qml" line="110"/>
+        <location filename="../../qml/Dialogs/AccelerometerConfigDialog.qml" line="112"/>
         <source>Configure the accelerometer display range and input units.</source>
         <translation>Настройка диапазона отображения и единиц измерения акселерометра.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/AccelerometerConfigDialog.qml" line="124"/>
+        <location filename="../../qml/Dialogs/AccelerometerConfigDialog.qml" line="126"/>
         <source>Display Range</source>
         <translation>Диапазон Отображения</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/AccelerometerConfigDialog.qml" line="145"/>
+        <location filename="../../qml/Dialogs/AccelerometerConfigDialog.qml" line="147"/>
         <source>Max G:</source>
         <translation>Макс. G:</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/AccelerometerConfigDialog.qml" line="159"/>
+        <location filename="../../qml/Dialogs/AccelerometerConfigDialog.qml" line="161"/>
         <source>Enter max G value</source>
         <translation>Введите максимальное значение G</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/AccelerometerConfigDialog.qml" line="179"/>
+        <location filename="../../qml/Dialogs/AccelerometerConfigDialog.qml" line="181"/>
         <source>Input Configuration</source>
         <translation>Конфигурация Входа</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/AccelerometerConfigDialog.qml" line="199"/>
+        <location filename="../../qml/Dialogs/AccelerometerConfigDialog.qml" line="201"/>
         <source>Input already in G</source>
         <translation>Вход уже в G</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/AccelerometerConfigDialog.qml" line="233"/>
+        <location filename="../../qml/Dialogs/AccelerometerConfigDialog.qml" line="235"/>
         <source>Close</source>
         <translation>Закрыть</translation>
     </message>
@@ -817,17 +827,17 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
 <context>
     <name>Acknowledgements</name>
     <message>
-        <location filename="../../qml/Dialogs/Acknowledgements.qml" line="34"/>
+        <location filename="../../qml/Dialogs/Acknowledgements.qml" line="36"/>
         <source>Acknowledgements</source>
         <translation>Благодарности</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Acknowledgements.qml" line="75"/>
+        <location filename="../../qml/Dialogs/Acknowledgements.qml" line="77"/>
         <source>Close</source>
         <translation>Закрыть</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Acknowledgements.qml" line="86"/>
+        <location filename="../../qml/Dialogs/Acknowledgements.qml" line="88"/>
         <source>About Qt…</source>
         <translation>О QT…</translation>
     </message>
@@ -868,17 +878,17 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
 <context>
     <name>AddWidgetDialog</name>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="46"/>
+        <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="48"/>
         <source>Add Widget</source>
         <translation>Добавить Виджет</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="222"/>
+        <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="224"/>
         <source>Available Widgets</source>
         <translation>Доступные Виджеты</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="231"/>
+        <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="233"/>
         <source>Click a row to add it to the workspace.</source>
         <translation>Нажмите на строку, чтобы добавить её в рабочее пространство.</translation>
     </message>
@@ -887,62 +897,62 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
         <translation type="vanished">Поиск</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="239"/>
+        <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="241"/>
         <source>Search…</source>
         <translation>Поиск…</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="258"/>
+        <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="260"/>
         <source>Widget</source>
         <translation>Виджет</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="259"/>
+        <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="261"/>
         <source>Group</source>
         <translation>Группа</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="260"/>
+        <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="262"/>
         <source>Name</source>
         <translation>Название</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="327"/>
+        <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="329"/>
         <source>(entire group)</source>
         <translation>(вся группа)</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="362"/>
+        <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="364"/>
         <source>Already in workspace</source>
         <translation>Уже в рабочем пространстве</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="363"/>
+        <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="365"/>
         <source>Add to workspace</source>
         <translation>Добавить в рабочее пространство</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="393"/>
+        <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="395"/>
         <source>No widgets available.</source>
         <translation>Нет доступных виджетов.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="394"/>
+        <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="396"/>
         <source>No widgets match.</source>
         <translation>Нет совпадающих виджетов.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="411"/>
+        <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="413"/>
         <source>%1 widgets</source>
         <translation>Виджетов: %1</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="412"/>
+        <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="414"/>
         <source>%1 of %2 widgets</source>
         <translation>%1 из %2 виджетов</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="416"/>
+        <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="418"/>
         <source>Close</source>
         <translation>Закрыть</translation>
     </message>
@@ -981,304 +991,304 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
 <context>
     <name>AlarmBandsEditor</name>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="35"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="37"/>
         <source>Alarm Bands</source>
         <translation>Диапазоны Сигнализации</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="72"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="74"/>
         <source>Info</source>
         <translation>Информация</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="73"/>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="131"/>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="153"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="75"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="133"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="155"/>
         <source>OK</source>
         <translation>ОК</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="74"/>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="154"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="76"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="156"/>
         <source>Warning</source>
         <translation>Предупреждение</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="75"/>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="155"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="77"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="157"/>
         <source>Critical</source>
         <translation>Критическая</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="84"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="86"/>
         <source>Tachometer</source>
         <translation>Тахометр</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="86"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="88"/>
         <source>Idle</source>
         <translation>Холостой Ход</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="87"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="89"/>
         <source>Operating</source>
         <translation>Рабочий</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="88"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="90"/>
         <source>Caution</source>
         <translation>Осторожно</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="89"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="91"/>
         <source>Redline</source>
         <translation>Красная Зона</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="93"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="95"/>
         <source>Speedometer</source>
         <translation>Спидометр</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="95"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="97"/>
         <source>Cruise</source>
         <translation>Круиз</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="96"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="98"/>
         <source>Fast</source>
         <translation>Быстро</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="97"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="99"/>
         <source>Top Speed</source>
         <translation>Максимальная Скорость</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="101"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="103"/>
         <source>Engine Temperature</source>
         <translation>Температура Двигателя</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="103"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="105"/>
         <source>Cold</source>
         <translation>Холодно</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="104"/>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="113"/>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="145"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="106"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="115"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="147"/>
         <source>Normal</source>
         <translation>Обычный</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="105"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="107"/>
         <source>Warm</source>
         <translation>Тепло</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="106"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="108"/>
         <source>Overheat</source>
         <translation>Перегрев</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="110"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="112"/>
         <source>Pressure</source>
         <translation>Давление</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="112"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="114"/>
         <source>Vacuum</source>
         <translation>Вакуум</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="114"/>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="123"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="116"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="125"/>
         <source>High</source>
         <translation>Высокий</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="115"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="117"/>
         <source>Burst</source>
         <translation>Всплеск</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="119"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="121"/>
         <source>Battery Voltage</source>
         <translation>Напряжение Батареи</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="121"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="123"/>
         <source>Low</source>
         <translation>Низкий</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="122"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="124"/>
         <source>Nominal</source>
         <translation>Номинальный</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="127"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="129"/>
         <source>Fuel Level</source>
         <translation>Уровень Топлива</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="129"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="131"/>
         <source>Empty</source>
         <translation>Пусто</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="130"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="132"/>
         <source>Reserve</source>
         <translation>Резерв</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="135"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="137"/>
         <source>Signal Strength</source>
         <translation>Уровень Сигнала</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="137"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="139"/>
         <source>No Signal</source>
         <translation>Нет Сигнала</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="138"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="140"/>
         <source>Weak</source>
         <translation>Слабый</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="139"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="141"/>
         <source>Good</source>
         <translation>Хороший</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="143"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="145"/>
         <source>CPU / System Load</source>
         <translation>Загрузка CPU / Системы</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="146"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="148"/>
         <source>Busy</source>
         <translation>Занят</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="147"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="149"/>
         <source>Overload</source>
         <translation>Перегрузка</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="151"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="153"/>
         <source>OK / Warning / Critical</source>
         <translation>OK / Предупреждение / Критическая</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="159"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="161"/>
         <source>Indicator (On / Off)</source>
         <translation>Индикатор (Вкл / Выкл)</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="161"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="163"/>
         <source>On</source>
         <translation>Вкл</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="165"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="167"/>
         <source>Fault Indicator</source>
         <translation>Индикатор Неисправности</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="167"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="169"/>
         <source>Fault</source>
         <translation>Неисправность</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="283"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="285"/>
         <source>Select Alarm Sound</source>
         <translation>Выбрать Звук Тревоги</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="285"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="287"/>
         <source>WAV audio (*.wav)</source>
         <translation>Аудио WAV (*.WAV)</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="285"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="287"/>
         <source>All files (*)</source>
         <translation>Все файлы (*)</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="320"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="322"/>
         <source>Choose Band Color</source>
         <translation>Выбрать Цвет Диапазона</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="347"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="349"/>
         <source>Presets</source>
         <translation>Пресеты</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="370"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="372"/>
         <source>Preset</source>
         <translation>Пресет</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="385"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="387"/>
         <source>Choose preset…</source>
         <translation>Выбрать пресет…</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="496"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="498"/>
         <source>Blink</source>
         <translation>Мигание</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="503"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="505"/>
         <source>Sound</source>
         <translation>Звук</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="624"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="626"/>
         <source>Reset to severity default</source>
         <translation>Сбросить до значения по умолчанию для уровня</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="638"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="640"/>
         <source>Click to choose a color. Right-click to reset to severity default.</source>
         <translation>Нажмите, чтобы выбрать цвет. Щелкните правой кнопкой, чтобы сбросить до значения по умолчанию для уровня.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="639"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="641"/>
         <source>Click to choose a custom color.</source>
         <translation>Нажмите, чтобы выбрать пользовательский цвет.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="670"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="672"/>
         <source>Flash the LED while the value sits in this band.</source>
         <translation>Мигать LED, пока значение находится в этом диапазоне.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="698"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="700"/>
         <source>Pick a WAV file to play for this band.</source>
         <translation>Выберите WAV-файл для воспроизведения для этого диапазона.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="714"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="716"/>
         <source>Use the priority's default sound.</source>
         <translation>Использовать звук приоритета по умолчанию.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="787"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="789"/>
         <source>No bands defined. Pick a preset above or add a band to get started.</source>
         <translation>Полосы не определены. Выберите пресет выше или добавьте полосу для начала работы.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="911"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="913"/>
         <source>Apply</source>
         <translation>Применить</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="914"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="916"/>
         <source>Apply changes to the dataset.</source>
         <translation>Применить изменения к набору данных.</translation>
     </message>
@@ -1291,47 +1301,47 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
         <translation type="vanished">Заменить текущие полосы выбранным пресетом, масштабированным под диапазон этого набора данных.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="397"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="399"/>
         <source>Range</source>
         <translation>Диапазон</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="425"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="427"/>
         <source>Bands</source>
         <translation>Полосы</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="436"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="438"/>
         <source>Add Band</source>
         <translation>Добавить Полосу</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="440"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="442"/>
         <source>Add a new band continuing from the last one.</source>
         <translation>Добавить новую полосу, продолжающую последнюю.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="471"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="473"/>
         <source>Min</source>
         <translation>Мин.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="477"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="479"/>
         <source>Max</source>
         <translation>Макс.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="483"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="485"/>
         <source>Severity</source>
         <translation>Серьёзность</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="489"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="491"/>
         <source>Color</source>
         <translation>Цвет</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="510"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="512"/>
         <source>Label</source>
         <translation>Метка</translation>
     </message>
@@ -1344,22 +1354,22 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
         <translation type="vanished">авто</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="724"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="726"/>
         <source>(optional)</source>
         <translation>(необязательно)</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="741"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="743"/>
         <source>Move up.</source>
         <translation>Переместить вверх.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="760"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="762"/>
         <source>Move down.</source>
         <translation>Переместить вниз.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="773"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="775"/>
         <source>Remove this band.</source>
         <translation>Удалить эту полосу.</translation>
     </message>
@@ -1368,17 +1378,17 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
         <translation type="vanished">Полосы не определены. Примените пресет или добавьте полосу для начала работы.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="804"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="806"/>
         <source>Preview</source>
         <translation>Предварительный Просмотр</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="900"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="902"/>
         <source>Cancel</source>
         <translation>Отмена</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="902"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="904"/>
         <source>Discard changes.</source>
         <translation>Отменить изменения.</translation>
     </message>
@@ -1651,7 +1661,7 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
 <context>
     <name>AssistantPanel</name>
     <message>
-        <location filename="../../qml/AI/AssistantPanel.qml" line="32"/>
+        <location filename="../../qml/AI/AssistantPanel.qml" line="34"/>
         <source>Assistant</source>
         <translation>Ассистент</translation>
     </message>
@@ -1856,32 +1866,32 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
         <translation type="vanished">Память ассистента обновлена</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/AssistantPanel.qml" line="143"/>
+        <location filename="../../qml/AI/AssistantPanel.qml" line="145"/>
         <source>Context may be degraded</source>
         <translation>Контекст может быть ухудшен</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/AssistantPanel.qml" line="159"/>
+        <location filename="../../qml/AI/AssistantPanel.qml" line="161"/>
         <source>Start fresh chat</source>
         <translation>Начать новый чат</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/AssistantPanel.qml" line="210"/>
+        <location filename="../../qml/AI/AssistantPanel.qml" line="212"/>
         <source>Remember (%1)?</source>
         <translation>Запомнить (%1)?</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/AssistantPanel.qml" line="215"/>
+        <location filename="../../qml/AI/AssistantPanel.qml" line="217"/>
         <source>Remember</source>
         <translation>Запомнить</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/AssistantPanel.qml" line="224"/>
+        <location filename="../../qml/AI/AssistantPanel.qml" line="226"/>
         <source>Dismiss</source>
         <translation>Отклонить</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/AssistantPanel.qml" line="256"/>
+        <location filename="../../qml/AI/AssistantPanel.qml" line="258"/>
         <source>Continuing from your previous chat. Its recent context was carried over.</source>
         <translation>Продолжение предыдущего чата. Его недавний контекст был перенесён.</translation>
     </message>
@@ -2042,29 +2052,29 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
         <translation>Устройство Ввода</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="166"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="170"/>
         <source>Sample Rate</source>
         <translation>Частота Дискретизации</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="204"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="212"/>
         <source>Normalization</source>
         <translation>Нормализация</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="185"/>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="273"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="191"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="287"/>
         <source>Sample Format</source>
         <translation>Формат Выборки</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="147"/>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="254"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="149"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="266"/>
         <source>Channels</source>
         <translation>Каналы</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="235"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="245"/>
         <source>Output Device</source>
         <translation>Устройство Вывода</translation>
     </message>
@@ -2091,56 +2101,56 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
 <context>
     <name>AxisRangeDialog</name>
     <message>
-        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="84"/>
+        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="86"/>
         <source>Axis Range Configuration</source>
         <translation>Настройка Диапазона Осей</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="204"/>
+        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="206"/>
         <source>Configure the visible range for the plot axes. Values update in real-time as you type.</source>
         <translation>Настройте видимый диапазон для осей графика. Значения обновляются в реальном времени при вводе.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="212"/>
+        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="214"/>
         <source>X Axis</source>
         <translation>Ось X</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="237"/>
-        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="308"/>
+        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="239"/>
+        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="310"/>
         <source>Minimum:</source>
         <translation>Минимум:</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="249"/>
-        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="320"/>
+        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="251"/>
+        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="322"/>
         <source>Enter min value</source>
         <translation>Введите минимальное значение</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="258"/>
-        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="329"/>
+        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="260"/>
+        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="331"/>
         <source>Maximum:</source>
         <translation>Максимум:</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="270"/>
-        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="341"/>
+        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="272"/>
+        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="343"/>
         <source>Enter max value</source>
         <translation>Введите максимальное значение</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="285"/>
+        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="287"/>
         <source>Y Axis</source>
         <translation>Ось Y</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="360"/>
+        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="362"/>
         <source>Reset</source>
         <translation>Сбросить</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="370"/>
+        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="372"/>
         <source>Close</source>
         <translation>Закрыть</translation>
     </message>
@@ -2148,178 +2158,178 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
 <context>
     <name>BackupRecovery</name>
     <message>
-        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="31"/>
+        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="33"/>
         <source>Recover Backup</source>
         <translation>Восстановить Резервную Копию</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="94"/>
-        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="165"/>
-        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="166"/>
+        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="96"/>
+        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="167"/>
+        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="168"/>
         <source>Untitled</source>
         <translation>Без Названия</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="97"/>
+        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="99"/>
         <source>Project Loaded</source>
         <translation>Проект Загружен</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="98"/>
+        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="100"/>
         <source>Auto-save</source>
         <translation>Автосохранение</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="99"/>
-        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="119"/>
+        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="101"/>
+        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="121"/>
         <source>Before Restore</source>
         <translation>Перед Восстановлением</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="100"/>
-        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="106"/>
+        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="102"/>
+        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="108"/>
         <source>Before Delete Dataset</source>
         <translation>Перед Удалением Набора Данных</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="101"/>
-        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="107"/>
+        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="103"/>
+        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="109"/>
         <source>Before Delete Group</source>
         <translation>Перед Удалением Группы</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="102"/>
+        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="104"/>
         <source>Before New Project</source>
         <translation>Перед Созданием Проекта</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="103"/>
+        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="105"/>
         <source>Before Open Project</source>
         <translation>Перед Открытием Проекта</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="104"/>
+        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="106"/>
         <source>Before Load JSON</source>
         <translation>Перед Загрузкой JSON</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="105"/>
+        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="107"/>
         <source>Before Apply Template</source>
         <translation>Перед Применением Шаблона</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="108"/>
+        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="110"/>
         <source>Before Delete Action</source>
         <translation>Перед Удалением Действия</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="109"/>
+        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="111"/>
         <source>Before Delete Output Widget</source>
         <translation>Перед Удалением Виджета Вывода</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="110"/>
+        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="112"/>
         <source>Before Move Dataset</source>
         <translation>Перед Перемещением Набора Данных</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="111"/>
+        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="113"/>
         <source>Before Move Group</source>
         <translation>Перед Перемещением Группы</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="112"/>
+        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="114"/>
         <source>Before Delete Workspace</source>
         <translation>Перед Удалением Рабочего Пространства</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="113"/>
+        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="115"/>
         <source>Before Clear All Workspaces</source>
         <translation>Перед Очисткой Всех Рабочих Пространств</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="114"/>
+        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="116"/>
         <source>Before Remove Widget</source>
         <translation>Перед Удалением Виджета</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="115"/>
+        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="117"/>
         <source>Before Reorder Workspaces</source>
         <translation>Перед Изменением Порядка Рабочих Пространств</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="116"/>
-        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="117"/>
+        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="118"/>
+        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="119"/>
         <source>Before Batch Operation</source>
         <translation>Перед Пакетной Операцией</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="118"/>
+        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="120"/>
         <source>Before Add Tile</source>
         <translation>Перед Добавлением Плитки</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="142"/>
+        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="144"/>
         <source>%1 (and %2 more)</source>
         <translation>%1 (и ещё %2)</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="159"/>
+        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="161"/>
         <source> The frame parser code also differs and will be replaced.</source>
         <translation>Код парсера кадров также отличается и будет заменён.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="164"/>
+        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="166"/>
         <source>Title changes from “%1” to “%2”. Group structure unchanged.</source>
         <translation>Заголовок изменяется с "%1" на "%2". Структура группы не изменена.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="169"/>
+        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="171"/>
         <source>Same groups and datasets, but the frame parser code differs — restoring will replace it.</source>
         <translation>Те же группы и наборы данных, но код парсера кадров отличается — восстановление заменит его.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="171"/>
+        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="173"/>
         <source>Same groups and datasets as your current project. Restoring may still revert field-level edits.</source>
         <translation>Те же группы и наборы данных, что и в текущем проекте. Восстановление может отменить изменения на уровне полей.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="178"/>
+        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="180"/>
         <source>Restoring removes %1 and brings back %2.</source>
         <translation>Восстановление удаляет %1 и возвращает %2.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="181"/>
+        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="183"/>
         <source>Restoring removes %1.</source>
         <translation>Восстановление удаляет %1.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="183"/>
+        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="185"/>
         <source>Restoring brings back %1.</source>
         <translation>Восстановление возвращает %1.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="209"/>
+        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="211"/>
         <source>Pick a backup to restore. The current project is saved automatically first, so the restore is reversible.</source>
         <translation>Выберите резервную копию для восстановления. Текущий проект сохраняется автоматически, поэтому восстановление обратимо.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="292"/>
+        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="294"/>
         <source>No backups for this project yet. Edit or save the project to start the rolling backup.</source>
         <translation>Резервных копий для этого проекта пока нет. Отредактируйте или сохраните проект, чтобы начать циклическое резервное копирование.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="320"/>
+        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="322"/>
         <source>Open Folder</source>
         <translation>Открыть Папку</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="328"/>
+        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="330"/>
         <source>Cancel</source>
         <translation>Отмена</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="334"/>
+        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="336"/>
         <source>Restore</source>
         <translation>Восстановить</translation>
     </message>
@@ -2327,157 +2337,157 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
 <context>
     <name>Benchmark</name>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="32"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="34"/>
         <source>Benchmark</source>
         <translation>Тест Производительности</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="81"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="83"/>
         <source>%1 frames/s</source>
         <translation>%1 кадров/с</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="85"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="87"/>
         <source>%1 s</source>
         <translation>%1 с</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="90"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="92"/>
         <source>n/a</source>
         <translation>н/д</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="92"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="94"/>
         <source>Pass</source>
         <translation>Успешно</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="92"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="94"/>
         <source>Fail</source>
         <translation>Неудачно</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="113"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="115"/>
         <source>Hotpath Benchmark</source>
         <translation>Тест Производительности Критического Пути</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="124"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="126"/>
         <source>Measures how fast this computer can extract, parse, and visualize frames through Serial Studio's data pipeline.</source>
         <translation>Измеряет скорость извлечения, разбора и визуализации кадров через конвейер данных Serial Studio на этом компьютере.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="170"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="172"/>
         <source>The interface will freeze while running</source>
         <translation>Интерфейс зависнет во время выполнения</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="181"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="183"/>
         <source>Each phase runs flat-out on the main thread, so the window stops responding until it finishes. Your current project is reloaded automatically when the benchmark ends.</source>
         <translation>Каждая фаза выполняется в основном потоке, поэтому окно перестаёт отвечать до её завершения. Текущий проект автоматически перезагружается по окончании теста производительности.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="238"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="240"/>
         <source>Frames per phase:</source>
         <translation>Кадров на фазу:</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="255"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="257"/>
         <source>Minimum duration:</source>
         <translation>Минимальная длительность:</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="287"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="289"/>
         <source>Stages</source>
         <translation>Этапы</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="295"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="297"/>
         <source>Parsers</source>
         <translation>Парсеры</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="307"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="309"/>
         <source>Data export</source>
         <translation>Экспорт данных</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="318"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="320"/>
         <source>Dashboard</source>
         <translation>Панель Управления</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="333"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="335"/>
         <source>Data</source>
         <translation>Данные</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="343"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="345"/>
         <source>Numeric only</source>
         <translation>Только числовые</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="354"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="356"/>
         <source>Mixed (numeric + text)</source>
         <translation>Смешанный (числовой + текст)</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="374"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="376"/>
         <source>Select at least one stage and one data type to run a benchmark.</source>
         <translation>Выберите хотя бы один этап и один тип данных для запуска теста производительности.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="212"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="214"/>
         <source>Running %1...</source>
         <translation>Выполняется %1...</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="213"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="215"/>
         <source>Preparing...</source>
         <translation>Подготовка...</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="389"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="391"/>
         <source>Disconnect the active device before running a benchmark.</source>
         <translation>Отключите активное устройство перед запуском теста производительности.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="390"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="392"/>
         <source>Close the open recording before running a benchmark.</source>
         <translation>Закройте открытую запись перед запуском теста производительности.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="422"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="424"/>
         <source>Pipeline</source>
         <translation>Конвейер</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="434"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="436"/>
         <source>Throughput</source>
         <translation>Пропускная Способность</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="446"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="448"/>
         <source>Time</source>
         <translation>Время</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="458"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="460"/>
         <source>Result</source>
         <translation>Результат</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="559"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="561"/>
         <source>Run a test to see results</source>
         <translation>Запустите тест для просмотра результатов</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="576"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="578"/>
         <source>Peak memory: %1</source>
         <translation>Пиковая память: %1</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="590"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="592"/>
         <source>Pass/Fail applies to the data-pipeline and parser stages (data pipeline and Built-in numeric 1024 K frames/s; Built-in mixed 512 K; Lua numeric 256 K; JavaScript numeric and Lua mixed 128 K; JavaScript mixed 64 K). The export and dashboard stages are informational.</source>
         <translation>Успех/неудача применяется только к этапам конвейера данных и парсера (конвейер данных и встроенный числовой — 1024 тыс. кадров/с; встроенный смешанный — 512 тыс.; Lua числовой — 256 тыс.; JavaScript числовой и Lua смешанный — 128 тыс.; JavaScript смешанный — 64 тыс.). Этапы экспорта и панели мониторинга носят информационный характер.</translation>
     </message>
@@ -2490,7 +2500,7 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
         <translation type="vanished">Проход/Провал применяется к фазам конвейера данных и парсера (конвейер данных и нативный числовой 1024 K кадров/с; нативный смешанный 512 K; Lua числовой 256 K; JavaScript числовой и Lua смешанный 128 K; JavaScript смешанный 64 K). Фазы экспорта и панели управления носят информационный характер.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="605"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="607"/>
         <source>Copy</source>
         <translation>Копировать</translation>
     </message>
@@ -2503,22 +2513,22 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
         <translation type="vanished">Успех/неудача применяется только к фазам парсера (целевое значение Lua — 256 тыс. кадров/с, JavaScript — 128 тыс.). Фазы экспорта и панели мониторинга носят информационный характер.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="612"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="614"/>
         <source>Clear</source>
         <translation>Очистить</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="621"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="623"/>
         <source>Close</source>
         <translation>Закрыть</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="630"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="632"/>
         <source>Running...</source>
         <translation>Выполняется...</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="630"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="632"/>
         <source>Run Benchmark</source>
         <translation>Запустить Тест</translation>
     </message>
@@ -2798,37 +2808,37 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
         <translation>Устройство</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="112"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="116"/>
         <source>Service</source>
         <translation>Служба</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="148"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="154"/>
         <source>Characteristic</source>
         <translation>Характеристика</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="206"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="214"/>
         <source>Scanning…</source>
         <translation>Сканирование…</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="242"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="250"/>
         <source>No Bluetooth Adapter Detected</source>
         <translation>Адаптер Bluetooth Не Обнаружен</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="253"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="261"/>
         <source>Connect a Bluetooth adapter or check your system settings</source>
         <translation>Подключите адаптер Bluetooth или проверьте системные настройки</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="280"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="288"/>
         <source>This OS is not Supported Yet.</source>
         <translation>Данная ОС Пока не Поддерживается.</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="291"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="299"/>
         <source>We'll update Serial Studio to work with this operating system as soon as Qt officially supports it</source>
         <translation>Serial Studio будет обновлён для работы с этой операционной системой, как только QT официально её поддержит</translation>
     </message>
@@ -2851,62 +2861,62 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
         <translation>Драйвер CAN</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="140"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="142"/>
         <source>Interface</source>
         <translation>Интерфейс</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="169"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="173"/>
         <source>Bitrate</source>
         <translation>Битрейт</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="223"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="229"/>
         <source>Flexible Data-Rate</source>
         <translation>Гибкая Скорость Передачи Данных</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="242"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="250"/>
         <source>The selected adapter does not support CAN FD</source>
         <translation>Выбранный адаптер не поддерживает CAN FD</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="249"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="257"/>
         <source>Data Bitrate</source>
         <translation>Битрейт Данных</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="304"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="314"/>
         <source>Loopback</source>
         <translation>Loopback</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="324"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="336"/>
         <source>Listen-Only</source>
         <translation>Только Прослушивание</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="344"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="358"/>
         <source>Multi-Frame Reassembly</source>
         <translation>Сборка Многокадровых Сообщений</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="361"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="377"/>
         <source>Reassemble J1939 transport-protocol and ISO-TP multi-frame messages</source>
         <translation>Собирать многокадровые сообщения транспортного протокола J1939 и ISO-TP</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="368"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="384"/>
         <source>DBC Database</source>
         <translation>База Данных DBC</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="372"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="390"/>
         <source>Import DBC File…</source>
         <translation>Импортировать Файл DBC…</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="405"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="423"/>
         <source>No CAN Interfaces Found</source>
         <translation>Интерфейсы CAN Не Найдены</translation>
     </message>
@@ -3059,77 +3069,77 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
 <context>
     <name>ChannelSoundsEditor</name>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="38"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="40"/>
         <source>Notification Channel Sounds</source>
         <translation>Звуки Канала Уведомлений</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="97"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="99"/>
         <source>Select Sound File</source>
         <translation>Выбрать Звуковой Файл</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="99"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="101"/>
         <source>WAV audio (*.wav)</source>
         <translation>Аудио WAV (*.WAV)</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="99"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="101"/>
         <source>All files (*)</source>
         <translation>Все файлы (*)</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="125"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="127"/>
         <source>(app default)</source>
         <translation>(по умолчанию)</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="154"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="156"/>
         <source>A Critical notification on a channel plays its Warning file, a Warning notification its Caution file, an Info notification its Advisory file. Empty cells use the sounds from Preferences.</source>
         <translation>Уведомление Critical на канале воспроизводит файл Warning, уведомление Warning — файл Caution, уведомление Info — файл Advisory. Пустые ячейки используют звуки из Настроек.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="165"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="167"/>
         <source>Channel</source>
         <translation>Канал</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="171"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="173"/>
         <source>Warning</source>
         <translation>Предупреждение</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="177"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="179"/>
         <source>Caution</source>
         <translation>Осторожно</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="183"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="185"/>
         <source>Advisory</source>
         <translation>Advisory</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="228"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="230"/>
         <source>Channel name</source>
         <translation>Название канала</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="244"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="246"/>
         <source>Remove this channel.</source>
         <translation>Удалить этот канал.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="258"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="260"/>
         <source>Add Channel</source>
         <translation>Добавить Канал</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="267"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="269"/>
         <source>Cancel</source>
         <translation>Отмена</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="275"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="277"/>
         <source>Apply</source>
         <translation>Применить</translation>
     </message>
@@ -3302,7 +3312,7 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
 <context>
     <name>CommandPalette</name>
     <message>
-        <location filename="../../qml/Widgets/CommandPalette.qml" line="404"/>
+        <location filename="../../qml/Widgets/CommandPalette.qml" line="411"/>
         <source>Folder</source>
         <translation>Папка</translation>
     </message>
@@ -3316,27 +3326,27 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
         <translation>Команды</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/CommandPalette.qml" line="623"/>
+        <location filename="../../qml/Widgets/CommandPalette.qml" line="639"/>
         <source>Search…</source>
         <translation>Поиск…</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/CommandPalette.qml" line="639"/>
+        <location filename="../../qml/Widgets/CommandPalette.qml" line="657"/>
         <source>Close</source>
         <translation>Закрыть</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/CommandPalette.qml" line="687"/>
+        <location filename="../../qml/Widgets/CommandPalette.qml" line="707"/>
         <source>Back</source>
         <translation>Назад</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/CommandPalette.qml" line="748"/>
+        <location filename="../../qml/Widgets/CommandPalette.qml" line="768"/>
         <source>Type to search, Enter to open, Esc to close</source>
         <translation>Введите для поиска, Enter для открытия, Esc для закрытия</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/CommandPalette.qml" line="848"/>
+        <location filename="../../qml/Widgets/CommandPalette.qml" line="868"/>
         <source>No results found</source>
         <translation>Результаты не найдены</translation>
     </message>
@@ -5742,200 +5752,200 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
 <context>
     <name>ConstantsLibraryDialog</name>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="46"/>
+        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="48"/>
         <source>Insert Constant</source>
         <translation>Вставить Константу</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="128"/>
-        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="129"/>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="130"/>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="131"/>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="132"/>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="133"/>
+        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="134"/>
+        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="135"/>
         <source>Fundamental</source>
         <translation>Фундаментальные</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="128"/>
+        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="130"/>
         <source>Speed of light in vacuum</source>
         <translation>Скорость света в вакууме</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="129"/>
+        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="131"/>
         <source>Planck constant</source>
         <translation>Постоянная Планка</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="130"/>
+        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="132"/>
         <source>Elementary charge</source>
         <translation>Элементарный заряд</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="131"/>
+        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="133"/>
         <source>Avogadro constant</source>
         <translation>Постоянная Авогадро</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="132"/>
+        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="134"/>
         <source>Boltzmann constant</source>
         <translation>Постоянная Больцмана</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="133"/>
+        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="135"/>
         <source>Stefan-Boltzmann constant</source>
         <translation>Постоянная Стефана — Больцмана</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="135"/>
-        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="136"/>
+        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="137"/>
+        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="138"/>
         <source>Mechanics</source>
         <translation>Механика</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="135"/>
+        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="137"/>
         <source>Standard gravity</source>
         <translation>Стандартное ускорение свободного падения</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="136"/>
+        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="138"/>
         <source>Gravitational constant</source>
         <translation>Гравитационная постоянная</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="138"/>
-        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="139"/>
+        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="140"/>
+        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="141"/>
         <source>Pressure</source>
         <translation>Давление</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="138"/>
+        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="140"/>
         <source>Standard atmosphere</source>
         <translation>Стандартная атмосфера</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="139"/>
+        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="141"/>
         <source>Sea-level barometric pressure</source>
         <translation>Барометрическое давление на уровне моря</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="141"/>
-        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="142"/>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="143"/>
+        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="144"/>
+        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="145"/>
         <source>Temperature</source>
         <translation>Температура</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="141"/>
+        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="143"/>
         <source>Absolute zero (Celsius)</source>
         <translation>Абсолютный ноль (Цельсий)</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="142"/>
+        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="144"/>
         <source>Water freezing point</source>
         <translation>Точка замерзания воды</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="143"/>
+        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="145"/>
         <source>Water boiling point (1 atm)</source>
         <translation>Точка кипения воды (1 атм)</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="145"/>
-        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="146"/>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="147"/>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="148"/>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="149"/>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="150"/>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="151"/>
+        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="152"/>
+        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="153"/>
         <source>Gases &amp; Fluids</source>
         <translation>Газы и Жидкости</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="145"/>
+        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="147"/>
         <source>Universal gas constant</source>
         <translation>Универсальная газовая постоянная</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="146"/>
+        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="148"/>
         <source>Specific gas constant (dry air)</source>
         <translation>Удельная газовая постоянная (сухой воздух)</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="147"/>
+        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="149"/>
         <source>Specific gas constant (water vapor)</source>
         <translation>Удельная газовая постоянная (водяной пар)</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="148"/>
+        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="150"/>
         <source>Air density (sea level, 15°C)</source>
         <translation>Плотность воздуха (уровень моря, 15°C)</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="149"/>
+        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="151"/>
         <source>Water density (4°C)</source>
         <translation>Плотность воды (4°C)</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="150"/>
+        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="152"/>
         <source>Speed of sound in air (20°C)</source>
         <translation>Скорость звука в воздухе (20°C)</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="151"/>
+        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="153"/>
         <source>Heat capacity ratio (dry air)</source>
         <translation>Показатель адиабаты (сухой воздух)</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="153"/>
-        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="154"/>
+        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="155"/>
+        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="156"/>
         <source>Electromagnetism</source>
         <translation>Электромагнетизм</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="153"/>
+        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="155"/>
         <source>Vacuum permittivity</source>
         <translation>Электрическая постоянная вакуума</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="154"/>
+        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="156"/>
         <source>Vacuum permeability</source>
         <translation>Магнитная постоянная вакуума</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="156"/>
-        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="157"/>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="158"/>
+        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="159"/>
+        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="160"/>
         <source>Math</source>
         <translation>Математика</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="156"/>
+        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="158"/>
         <source>Pi</source>
         <translation>Пи</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="157"/>
+        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="159"/>
         <source>Euler's number</source>
         <translation>Число Эйлера</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="158"/>
+        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="160"/>
         <source>Golden ratio</source>
         <translation>Золотое сечение</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="214"/>
+        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="216"/>
         <source>Physics Constants</source>
         <translation>Физические Константы</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="223"/>
+        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="225"/>
         <source>SI-unit preset values. Click a row to insert it into %1.</source>
         <translation>Предустановленные значения в единицах СИ. Нажмите на строку, чтобы вставить её в %1.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="233"/>
+        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="235"/>
         <source>Search…</source>
         <translation>Поиск…</translation>
     </message>
@@ -5944,42 +5954,42 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
         <translation type="vanished">Поиск</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="252"/>
+        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="254"/>
         <source>Symbol</source>
         <translation>Символ</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="253"/>
+        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="255"/>
         <source>Name</source>
         <translation>Название</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="254"/>
+        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="256"/>
         <source>Value</source>
         <translation>Значение</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="255"/>
+        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="257"/>
         <source>Category</source>
         <translation>Категория</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="364"/>
+        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="366"/>
         <source>No constants match.</source>
         <translation>Нет совпадающих констант.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="385"/>
+        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="387"/>
         <source>%1 constants</source>
         <translation>Константы: %1</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="386"/>
+        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="388"/>
         <source>%1 of %2 constants</source>
         <translation>%1 из %2 констант</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="390"/>
+        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="392"/>
         <source>Close</source>
         <translation>Закрыть</translation>
     </message>
@@ -6099,52 +6109,52 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
 <context>
     <name>CrashRecovery</name>
     <message>
-        <location filename="../../qml/Dialogs/CrashRecovery.qml" line="31"/>
+        <location filename="../../qml/Dialogs/CrashRecovery.qml" line="33"/>
         <source>Recovery Options</source>
         <translation>Параметры Восстановления</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/CrashRecovery.qml" line="57"/>
+        <location filename="../../qml/Dialogs/CrashRecovery.qml" line="59"/>
         <source>Serial Studio has closed unexpectedly several times in a row.</source>
         <translation>Serial Studio неожиданно завершил работу несколько раз подряд.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/CrashRecovery.qml" line="82"/>
+        <location filename="../../qml/Dialogs/CrashRecovery.qml" line="84"/>
         <source>Consecutive crashes: %1</source>
         <translation>Последовательные сбои: %1</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/CrashRecovery.qml" line="90"/>
+        <location filename="../../qml/Dialogs/CrashRecovery.qml" line="92"/>
         <source>Last reported stage: %1</source>
         <translation>Последний зафиксированный этап: %1</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/CrashRecovery.qml" line="98"/>
+        <location filename="../../qml/Dialogs/CrashRecovery.qml" line="100"/>
         <source>Detected at: %1</source>
         <translation>Обнаружено в: %1</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/CrashRecovery.qml" line="113"/>
+        <location filename="../../qml/Dialogs/CrashRecovery.qml" line="115"/>
         <source>Pick a recovery action. Serial Studio will quit after applying it so the next launch starts clean.</source>
         <translation>Выберите действие для восстановления. После применения Serial Studio завершит работу, чтобы следующий запуск был чистым.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/CrashRecovery.qml" line="127"/>
+        <location filename="../../qml/Dialogs/CrashRecovery.qml" line="129"/>
         <source>Reset Rendering Backend to Default</source>
         <translation>Сбросить Рендеринг на Значение По Умолчанию</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/CrashRecovery.qml" line="135"/>
+        <location filename="../../qml/Dialogs/CrashRecovery.qml" line="137"/>
         <source>Skip Restoring the Last Opened Project</source>
         <translation>Пропустить Восстановление Последнего Открытого Проекта</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/CrashRecovery.qml" line="142"/>
+        <location filename="../../qml/Dialogs/CrashRecovery.qml" line="144"/>
         <source>Reset all Preferences</source>
         <translation>Сбросить все настройки</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/CrashRecovery.qml" line="160"/>
+        <location filename="../../qml/Dialogs/CrashRecovery.qml" line="162"/>
         <source>Continue Anyway</source>
         <translation>Продолжить в Любом Случае</translation>
     </message>
@@ -6210,22 +6220,22 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
         <translation>Всего: %1 сообщений, %2 сигналов</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="271"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="273"/>
         <source>Cancel</source>
         <translation>Отмена</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="281"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="285"/>
         <source>Add to Project</source>
         <translation>Добавить в Проект</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="286"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="290"/>
         <source>Add the generated source, groups, tables and workspaces to the project that is open, instead of creating a new file</source>
         <translation>Добавить сгенерированный источник, группы, таблицы и рабочие пространства в открытый проект вместо создания нового файла</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="297"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="303"/>
         <source>Create Project</source>
         <translation>Создать Проект</translation>
     </message>
@@ -6317,7 +6327,7 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
         <translation>Используйте строку поиска для поиска и добавления виджетов или щёлкните правой кнопкой мыши по виджету в другом рабочем пространстве, чтобы добавить его сюда.</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="836"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="838"/>
         <source>Search Widgets</source>
         <translation>Поиск Виджетов</translation>
     </message>
@@ -6360,7 +6370,7 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
         <translation>API-Сервер Выключен</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardLayout.qml" line="675"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardLayout.qml" line="677"/>
         <source>Command Palette</source>
         <translation>Палитра Команд</translation>
     </message>
@@ -11136,17 +11146,17 @@ Valid format: 01 A2 FF 3C</source>
         <translation type="vanished">Восстановить файл проекта из этого файла сессии</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/DatabaseExplorer.qml" line="38"/>
+        <location filename="../../qml/DatabaseExplorer/DatabaseExplorer.qml" line="40"/>
         <source>Historian</source>
         <translation>Историк</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/DatabaseExplorer.qml" line="298"/>
+        <location filename="../../qml/DatabaseExplorer/DatabaseExplorer.qml" line="300"/>
         <source>Loading session…</source>
         <translation>Загрузка сеанса…</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/DatabaseExplorer.qml" line="299"/>
+        <location filename="../../qml/DatabaseExplorer/DatabaseExplorer.qml" line="301"/>
         <source>Working…</source>
         <translation>Обработка…</translation>
     </message>
@@ -11508,37 +11518,37 @@ Valid format: 01 A2 FF 3C</source>
 <context>
     <name>Donate</name>
     <message>
-        <location filename="../../qml/Dialogs/Donate.qml" line="36"/>
+        <location filename="../../qml/Dialogs/Donate.qml" line="38"/>
         <source>Support Serial Studio</source>
         <translation>Поддержать Serial Studio</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Donate.qml" line="91"/>
+        <location filename="../../qml/Dialogs/Donate.qml" line="93"/>
         <source>Support the development of %1!</source>
         <translation>Поддержите разработку %1!</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Donate.qml" line="102"/>
+        <location filename="../../qml/Dialogs/Donate.qml" line="104"/>
         <source>Serial Studio is free &amp; open-source software supported by volunteers. Consider donating or obtaining a Pro license to support development efforts :)</source>
         <translation>Serial Studio — это свободное программное обеспечение с открытым исходным кодом, поддерживаемое волонтёрами. Рассмотрите возможность пожертвования или приобретения лицензии Pro для поддержки разработки :)</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Donate.qml" line="115"/>
+        <location filename="../../qml/Dialogs/Donate.qml" line="117"/>
         <source>You can also support this project by sharing it, reporting bugs and proposing new features!</source>
         <translation>Вы также можете поддержать этот проект, делясь им, сообщая об ошибках и предлагая новые функции!</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Donate.qml" line="129"/>
+        <location filename="../../qml/Dialogs/Donate.qml" line="131"/>
         <source>Close</source>
         <translation>Закрыть</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Donate.qml" line="140"/>
+        <location filename="../../qml/Dialogs/Donate.qml" line="142"/>
         <source>Donate</source>
         <translation>Поддержать Проект</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Donate.qml" line="155"/>
+        <location filename="../../qml/Dialogs/Donate.qml" line="157"/>
         <source>Get Serial Studio Pro</source>
         <translation>Получить Serial Studio Pro</translation>
     </message>
@@ -11707,92 +11717,92 @@ Valid format: 01 A2 FF 3C</source>
 <context>
     <name>DriftReportDialog</name>
     <message>
-        <location filename="../../qml/DatabaseExplorer/DriftReportDialog.qml" line="29"/>
+        <location filename="../../qml/DatabaseExplorer/DriftReportDialog.qml" line="31"/>
         <source>Comparison Report</source>
         <translation>Отчёт о Сравнении</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/DriftReportDialog.qml" line="48"/>
+        <location filename="../../qml/DatabaseExplorer/DriftReportDialog.qml" line="50"/>
         <source>The current project decodes this session exactly like the recorded one.</source>
         <translation>Текущий проект декодирует эту сессию точно так же, как записанная.</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/DriftReportDialog.qml" line="51"/>
+        <location filename="../../qml/DatabaseExplorer/DriftReportDialog.qml" line="53"/>
         <source>The current project produces different values from the same recording.</source>
         <translation>Текущий проект выдаёт другие значения из той же записи.</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/DriftReportDialog.qml" line="54"/>
+        <location filename="../../qml/DatabaseExplorer/DriftReportDialog.qml" line="56"/>
         <source>The current project finds a different number of readings in the recording.</source>
         <translation>Текущий проект находит другое количество показаний в записи.</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/DriftReportDialog.qml" line="57"/>
+        <location filename="../../qml/DatabaseExplorer/DriftReportDialog.qml" line="59"/>
         <source>The current project has a different set of datasets than the recording.</source>
         <translation>Текущий проект имеет другой набор датасетов, чем запись.</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/DriftReportDialog.qml" line="60"/>
+        <location filename="../../qml/DatabaseExplorer/DriftReportDialog.qml" line="62"/>
         <source>This session cannot be compared mechanically.</source>
         <translation>Эта сессия не может быть сравнена механически.</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/DriftReportDialog.qml" line="62"/>
+        <location filename="../../qml/DatabaseExplorer/DriftReportDialog.qml" line="64"/>
         <source>The comparison could not be completed.</source>
         <translation>Сравнение не удалось завершить.</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/DriftReportDialog.qml" line="115"/>
+        <location filename="../../qml/DatabaseExplorer/DriftReportDialog.qml" line="117"/>
         <source>Compared against: %1</source>
         <translation>Сравнение с: %1</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/DriftReportDialog.qml" line="116"/>
+        <location filename="../../qml/DatabaseExplorer/DriftReportDialog.qml" line="118"/>
         <source>current project</source>
         <translation>текущий проект</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/DriftReportDialog.qml" line="155"/>
+        <location filename="../../qml/DatabaseExplorer/DriftReportDialog.qml" line="157"/>
         <source>No differences to show.</source>
         <translation>Нет различий для отображения.</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/DriftReportDialog.qml" line="196"/>
+        <location filename="../../qml/DatabaseExplorer/DriftReportDialog.qml" line="198"/>
         <source>Only exists in the current project.</source>
         <translation>Существует только в текущем проекте.</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/DriftReportDialog.qml" line="199"/>
+        <location filename="../../qml/DatabaseExplorer/DriftReportDialog.qml" line="201"/>
         <source>Only exists in the recorded project.</source>
         <translation>Существует только в записанном проекте.</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/DriftReportDialog.qml" line="201"/>
+        <location filename="../../qml/DatabaseExplorer/DriftReportDialog.qml" line="203"/>
         <source>%1 of %2 values changed, %3 missing, %4 extra.</source>
         <translation>%1 из %2 значений изменено, %3 отсутствует, %4 добавлено.</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/DriftReportDialog.qml" line="219"/>
+        <location filename="../../qml/DatabaseExplorer/DriftReportDialog.qml" line="221"/>
         <source>Time</source>
         <translation>Время</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/DriftReportDialog.qml" line="226"/>
+        <location filename="../../qml/DatabaseExplorer/DriftReportDialog.qml" line="228"/>
         <source>Recorded project</source>
         <translation>Записанный проект</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/DriftReportDialog.qml" line="233"/>
+        <location filename="../../qml/DatabaseExplorer/DriftReportDialog.qml" line="235"/>
         <source>Current project</source>
         <translation>Текущий проект</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/DriftReportDialog.qml" line="270"/>
+        <location filename="../../qml/DatabaseExplorer/DriftReportDialog.qml" line="272"/>
         <source>...and %1 more changed values.</source>
         <translation>...и ещё %1 изменённых значений.</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/DriftReportDialog.qml" line="287"/>
+        <location filename="../../qml/DatabaseExplorer/DriftReportDialog.qml" line="289"/>
         <source>Close</source>
         <translation>Закрыть</translation>
     </message>
@@ -13139,84 +13149,84 @@ Valid format: 01 A2 FF 3C</source>
         <translation>Название:</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EipTagsDialog.qml" line="128"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EipTagsDialog.qml" line="130"/>
         <source>Channel name</source>
         <translation>Название канала</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EipTagsDialog.qml" line="132"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EipTagsDialog.qml" line="134"/>
         <source>Tag:</source>
         <translation>Тег:</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EipTagsDialog.qml" line="140"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EipTagsDialog.qml" line="144"/>
         <source>Controller tag name</source>
         <translation>Название тега контроллера</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EipTagsDialog.qml" line="145"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EipTagsDialog.qml" line="149"/>
         <source>Type:</source>
         <translation>Тип:</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EipTagsDialog.qml" line="164"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EipTagsDialog.qml" line="172"/>
         <source>Element</source>
         <translation>Элемент</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EipTagsDialog.qml" line="169"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EipTagsDialog.qml" line="179"/>
         <source>Add Tag</source>
         <translation>Добавить Тег</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EipTagsDialog.qml" line="193"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EipTagsDialog.qml" line="203"/>
         <source>Configured Tags</source>
         <translation>Настроенные Теги</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EipTagsDialog.qml" line="227"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EipTagsDialog.qml" line="237"/>
         <source>#</source>
         <translation>#</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EipTagsDialog.qml" line="234"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EipTagsDialog.qml" line="244"/>
         <source>Tag</source>
         <translation>Тег</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EipTagsDialog.qml" line="242"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EipTagsDialog.qml" line="252"/>
         <source>Action</source>
         <translation>Действие</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EipTagsDialog.qml" line="289"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EipTagsDialog.qml" line="301"/>
         <source>Remove</source>
         <translation>Удалить</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EipTagsDialog.qml" line="302"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EipTagsDialog.qml" line="314"/>
         <source>No tags configured.
 Add controller tags above to poll them.</source>
         <translation>Теги не настроены.
 Добавьте теги контроллера выше для их опроса.</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EipTagsDialog.qml" line="320"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EipTagsDialog.qml" line="332"/>
         <source>Total tags: %1</source>
         <translation>Всего тегов: %1</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EipTagsDialog.qml" line="324"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EipTagsDialog.qml" line="338"/>
         <source>Generate Project</source>
         <translation>Создать Проект</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EipTagsDialog.qml" line="330"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EipTagsDialog.qml" line="346"/>
         <source>Clear All</source>
         <translation>Очистить Всё</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EipTagsDialog.qml" line="336"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EipTagsDialog.qml" line="354"/>
         <source>Close</source>
         <translation>Закрыть</translation>
     </message>
@@ -13229,52 +13239,52 @@ Add controller tags above to poll them.</source>
         <translation>Шлюз</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EthernetIp.qml" line="58"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EthernetIp.qml" line="60"/>
         <source>IP Address</source>
         <translation>IP-адрес</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EthernetIp.qml" line="77"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EthernetIp.qml" line="79"/>
         <source>CIP Path</source>
         <translation>Путь CIP</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EthernetIp.qml" line="84"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EthernetIp.qml" line="88"/>
         <source>1,0</source>
         <translation>1,0</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EthernetIp.qml" line="103"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EthernetIp.qml" line="107"/>
         <source>Controller</source>
         <translation>Контроллер</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EthernetIp.qml" line="122"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EthernetIp.qml" line="128"/>
         <source>Poll Interval (ms)</source>
         <translation>Интервал Опроса (мс)</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EthernetIp.qml" line="127"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EthernetIp.qml" line="135"/>
         <source>Polling interval</source>
         <translation>Интервал опроса</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EthernetIp.qml" line="159"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EthernetIp.qml" line="169"/>
         <source>Configure Tags…</source>
         <translation>Настроить Теги…</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EthernetIp.qml" line="170"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EthernetIp.qml" line="182"/>
         <source>Create Project from Tags</source>
         <translation>Создать Проект из Тегов</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EthernetIp.qml" line="185"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EthernetIp.qml" line="197"/>
         <source>%1 tag(s) configured</source>
         <translation>Настроено тегов: %1</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EthernetIp.qml" line="186"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EthernetIp.qml" line="198"/>
         <source>No tags configured</source>
         <translation>Теги не настроены</translation>
     </message>
@@ -13292,102 +13302,102 @@ Add controller tags above to poll them.</source>
 <context>
     <name>ExamplesBrowser</name>
     <message>
-        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="33"/>
+        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="35"/>
         <source>Examples Browser</source>
         <translation>Обозреватель Примеров</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="119"/>
+        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="121"/>
         <source>Back</source>
         <translation>Назад</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="151"/>
+        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="153"/>
         <source>Pro</source>
         <translation>Pro</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="172"/>
+        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="174"/>
         <source>Download &amp;&amp; Open</source>
         <translation>Загрузить и Открыть</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="187"/>
+        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="189"/>
         <source>View on GitHub</source>
         <translation>Просмотреть на GitHub</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="90"/>
+        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="92"/>
         <source>Search in Examples…</source>
         <translation>Поиск в Примерах…</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="244"/>
+        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="246"/>
         <source>Fetching examples…</source>
         <translation>Получение примеров…</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="567"/>
+        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="569"/>
         <source>Loading...</source>
         <translation>Загрузка...</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="568"/>
+        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="570"/>
         <source>No README available.</source>
         <translation>README недоступен.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="608"/>
+        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="610"/>
         <source>Copied to Clipboard</source>
         <translation>Скопировано в Буфер Обмена</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="671"/>
+        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="673"/>
         <source>No screenshot available</source>
         <translation>Снимок экрана недоступен</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="703"/>
+        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="705"/>
         <source>Details</source>
         <translation>Подробности</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="732"/>
+        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="734"/>
         <source>Info</source>
         <translation>Информация</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="755"/>
+        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="757"/>
         <source>Category:</source>
         <translation>Категория:</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="768"/>
+        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="770"/>
         <source>Difficulty:</source>
         <translation>Сложность:</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="786"/>
+        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="788"/>
         <source>Project:</source>
         <translation>Проект:</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="828"/>
+        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="830"/>
         <source>No Results Found</source>
         <translation>Результаты Не Найдены</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="839"/>
+        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="841"/>
         <source>Check the spelling or try a different search term.</source>
         <translation>Проверьте правописание или попробуйте другой поисковый запрос.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="854"/>
+        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="856"/>
         <source>%1 examples</source>
         <translation>Примеров: %1</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="863"/>
+        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="865"/>
         <source>Close</source>
         <translation>Закрыть</translation>
     </message>
@@ -13395,52 +13405,52 @@ Add controller tags above to poll them.</source>
 <context>
     <name>ExtensionConsent</name>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionConsent.qml" line="37"/>
+        <location filename="../../qml/Dialogs/ExtensionConsent.qml" line="39"/>
         <source>Allow Widget Extension?</source>
         <translation>Разрешить Расширение Виджета?</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionConsent.qml" line="164"/>
+        <location filename="../../qml/Dialogs/ExtensionConsent.qml" line="166"/>
         <source>Identifier</source>
         <translation>Идентификатор</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionConsent.qml" line="165"/>
+        <location filename="../../qml/Dialogs/ExtensionConsent.qml" line="167"/>
         <source>Author</source>
         <translation>Автор</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionConsent.qml" line="166"/>
+        <location filename="../../qml/Dialogs/ExtensionConsent.qml" line="168"/>
         <source>Version</source>
         <translation>Версия</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionConsent.qml" line="167"/>
+        <location filename="../../qml/Dialogs/ExtensionConsent.qml" line="169"/>
         <source>License</source>
         <translation>Лицензия</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionConsent.qml" line="168"/>
+        <location filename="../../qml/Dialogs/ExtensionConsent.qml" line="170"/>
         <source>Installed in</source>
         <translation>Установлено в</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionConsent.qml" line="212"/>
+        <location filename="../../qml/Dialogs/ExtensionConsent.qml" line="214"/>
         <source>This widget runs inside Serial Studio with the same privileges as the application itself. It can read and change files on this computer, use the network, and do anything Serial Studio can do. Serial Studio does not restrict what it does, and cannot undo what it does.</source>
         <translation>Этот виджет выполняется внутри Serial Studio с теми же привилегиями, что и само приложение. Он может читать и изменять файлы на этом компьютере, использовать сеть и делать всё, что может Serial Studio. Serial Studio не ограничивает его действия и не может отменить то, что он делает.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionConsent.qml" line="224"/>
+        <location filename="../../qml/Dialogs/ExtensionConsent.qml" line="226"/>
         <source>Allow it only if you trust its author. Your answer is remembered for this version of the package; a later update asks again.</source>
         <translation>Разрешайте только в том случае, если доверяете автору. Ваш ответ запоминается для этой версии пакета; при следующем обновлении запрос повторится.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionConsent.qml" line="242"/>
+        <location filename="../../qml/Dialogs/ExtensionConsent.qml" line="244"/>
         <source>Don't Allow</source>
         <translation>Не Разрешать</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionConsent.qml" line="250"/>
+        <location filename="../../qml/Dialogs/ExtensionConsent.qml" line="252"/>
         <source>Allow</source>
         <translation>Разрешить</translation>
     </message>
@@ -13448,62 +13458,62 @@ Add controller tags above to poll them.</source>
 <context>
     <name>ExtensionManager</name>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="32"/>
+        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="34"/>
         <source>Extension Manager</source>
         <translation>Менеджер Расширений</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="119"/>
+        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="121"/>
         <source>Refresh</source>
         <translation>Обновить</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="133"/>
+        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="135"/>
         <source>Repos</source>
         <translation>Репозитории</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="163"/>
+        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="165"/>
         <source>Repository Settings</source>
         <translation>Настройки Репозитория</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="175"/>
+        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="177"/>
         <source>Back</source>
         <translation>Назад</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="216"/>
+        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="218"/>
         <source>Install</source>
         <translation>Установить</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="233"/>
+        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="235"/>
         <source>Uninstall</source>
         <translation>Удалить</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="260"/>
+        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="262"/>
         <source>Run</source>
         <translation>Запустить</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="284"/>
+        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="286"/>
         <source>Stop</source>
         <translation>Остановить</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="318"/>
+        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="320"/>
         <source>Reset</source>
         <translation>Сбросить</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="78"/>
+        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="80"/>
         <source>Search extensions…</source>
         <translation>Поиск расширений…</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="368"/>
+        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="370"/>
         <source>Fetching extensions…</source>
         <translation>Получение расширений…</translation>
     </message>
@@ -13588,32 +13598,32 @@ Add controller tags above to poll them.</source>
         <translation type="vanished">Добавить</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="424"/>
+        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="426"/>
         <source>No Results Found</source>
         <translation>Результаты Не Найдены</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="435"/>
+        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="437"/>
         <source>Check the spelling or try a different search term.</source>
         <translation>Проверьте правильность написания или попробуйте другой поисковый запрос.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="459"/>
+        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="461"/>
         <source>No Extensions Available</source>
         <translation>Расширения Недоступны</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="470"/>
+        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="472"/>
         <source>Add a repository URL or local path in the Repos settings, then refresh.</source>
         <translation>Добавьте URL репозитория или локальный путь в настройках репозиториев, затем обновите.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="485"/>
+        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="487"/>
         <source>%1 extensions</source>
         <translation>Расширений: %1</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="494"/>
+        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="496"/>
         <source>Close</source>
         <translation>Закрыть</translation>
     </message>
@@ -13649,32 +13659,32 @@ Add controller tags above to poll them.</source>
 <context>
     <name>ExtensionWidgetSettings</name>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ExtensionWidgetSettings.qml" line="35"/>
+        <location filename="../../qml/Widgets/Dashboard/ExtensionWidgetSettings.qml" line="37"/>
         <source>Widget Settings</source>
         <translation>Настройки Виджета</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ExtensionWidgetSettings.qml" line="57"/>
+        <location filename="../../qml/Widgets/Dashboard/ExtensionWidgetSettings.qml" line="59"/>
         <source>%1 Settings</source>
         <translation>Настройки %1</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ExtensionWidgetSettings.qml" line="194"/>
+        <location filename="../../qml/Widgets/Dashboard/ExtensionWidgetSettings.qml" line="196"/>
         <source>These settings are declared by the widget package and stored in the project.</source>
         <translation>Эти настройки объявлены пакетом виджета и хранятся в проекте.</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ExtensionWidgetSettings.qml" line="195"/>
+        <location filename="../../qml/Widgets/Dashboard/ExtensionWidgetSettings.qml" line="197"/>
         <source>This widget declares no settings.</source>
         <translation>Этот виджет не объявляет настроек.</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ExtensionWidgetSettings.qml" line="265"/>
+        <location filename="../../qml/Widgets/Dashboard/ExtensionWidgetSettings.qml" line="267"/>
         <source>Restore Defaults</source>
         <translation>Восстановить по Умолчанию</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ExtensionWidgetSettings.qml" line="277"/>
+        <location filename="../../qml/Widgets/Dashboard/ExtensionWidgetSettings.qml" line="279"/>
         <source>Close</source>
         <translation>Закрыть</translation>
     </message>
@@ -13682,7 +13692,7 @@ Add controller tags above to poll them.</source>
 <context>
     <name>ExternalWidgetWindow</name>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/ExternalWidgetWindow.qml" line="252"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/ExternalWidgetWindow.qml" line="253"/>
         <source>The widget could not be created.</source>
         <translation>Не удалось создать виджет.</translation>
     </message>
@@ -13796,98 +13806,98 @@ Add controller tags above to poll them.</source>
 <context>
     <name>FileTransmission</name>
     <message>
-        <location filename="../../qml/Dialogs/FileTransmission.qml" line="33"/>
+        <location filename="../../qml/Dialogs/FileTransmission.qml" line="35"/>
         <source>File Transmission</source>
         <translation>Передача Файла</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FileTransmission.qml" line="101"/>
+        <location filename="../../qml/Dialogs/FileTransmission.qml" line="103"/>
         <source>Transfer Protocol:</source>
         <translation>Протокол Передачи:</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FileTransmission.qml" line="134"/>
+        <location filename="../../qml/Dialogs/FileTransmission.qml" line="136"/>
         <source>File Selection:</source>
         <translation>Выбор Файла:</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FileTransmission.qml" line="151"/>
+        <location filename="../../qml/Dialogs/FileTransmission.qml" line="153"/>
         <source>Select File…</source>
         <translation>Выбрать Файл…</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FileTransmission.qml" line="169"/>
+        <location filename="../../qml/Dialogs/FileTransmission.qml" line="171"/>
         <source>Transmission Interval:</source>
         <translation>Интервал Передачи:</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FileTransmission.qml" line="195"/>
-        <location filename="../../qml/Dialogs/FileTransmission.qml" line="271"/>
+        <location filename="../../qml/Dialogs/FileTransmission.qml" line="197"/>
+        <location filename="../../qml/Dialogs/FileTransmission.qml" line="273"/>
         <source>msecs</source>
         <translation>мс</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FileTransmission.qml" line="205"/>
+        <location filename="../../qml/Dialogs/FileTransmission.qml" line="207"/>
         <source>Block Size:</source>
         <translation>Размер Блока:</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FileTransmission.qml" line="233"/>
+        <location filename="../../qml/Dialogs/FileTransmission.qml" line="235"/>
         <source>bytes</source>
         <translation>байт</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FileTransmission.qml" line="243"/>
+        <location filename="../../qml/Dialogs/FileTransmission.qml" line="245"/>
         <source>Timeout:</source>
         <translation>Тайм-аут:</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FileTransmission.qml" line="281"/>
+        <location filename="../../qml/Dialogs/FileTransmission.qml" line="283"/>
         <source>Max Retries:</source>
         <translation>Макс. Попыток:</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FileTransmission.qml" line="339"/>
+        <location filename="../../qml/Dialogs/FileTransmission.qml" line="341"/>
         <source>Progress: %1%</source>
         <translation>Прогресс: %1%</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FileTransmission.qml" line="372"/>
+        <location filename="../../qml/Dialogs/FileTransmission.qml" line="374"/>
         <source>%1 / %2 bytes</source>
         <translation>%1 / %2 байт</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FileTransmission.qml" line="380"/>
+        <location filename="../../qml/Dialogs/FileTransmission.qml" line="382"/>
         <source>Errors: %1</source>
         <translation>Ошибок: %1</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FileTransmission.qml" line="460"/>
+        <location filename="../../qml/Dialogs/FileTransmission.qml" line="462"/>
         <source>Activity Log</source>
         <translation>Журнал Активности</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FileTransmission.qml" line="464"/>
+        <location filename="../../qml/Dialogs/FileTransmission.qml" line="466"/>
         <source>Clear</source>
         <translation>Очистить</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FileTransmission.qml" line="418"/>
+        <location filename="../../qml/Dialogs/FileTransmission.qml" line="420"/>
         <source>Pause Transmission</source>
         <translation>Приостановить Передачу</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FileTransmission.qml" line="419"/>
+        <location filename="../../qml/Dialogs/FileTransmission.qml" line="421"/>
         <source>Resume Transmission</source>
         <translation>Возобновить Передачу</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FileTransmission.qml" line="422"/>
+        <location filename="../../qml/Dialogs/FileTransmission.qml" line="424"/>
         <source>Stop Transmission</source>
         <translation>Остановить Передачу</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FileTransmission.qml" line="423"/>
+        <location filename="../../qml/Dialogs/FileTransmission.qml" line="425"/>
         <source>Begin Transmission</source>
         <translation>Начать Передачу</translation>
     </message>
@@ -14142,33 +14152,33 @@ Add controller tags above to poll them.</source>
 <context>
     <name>FrameParserTest</name>
     <message>
-        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="39"/>
+        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="41"/>
         <source>Test Frame Parser</source>
         <translation>Тестирование Парсера Фрейма</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="111"/>
+        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="113"/>
         <source>Frame %1</source>
         <translation>Кадр %1</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="113"/>
-        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="235"/>
+        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="115"/>
+        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="237"/>
         <source>Decoder</source>
         <translation>Декодер</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="115"/>
+        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="117"/>
         <source>Rows</source>
         <translation>Строки</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="116"/>
+        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="118"/>
         <source>%1 row(s)</source>
         <translation>%1 строк(и)</translation>
     </message>
     <message numerus="yes">
-        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="123"/>
+        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="125"/>
         <source>%n dataset(s) not in this frame</source>
         <translation>
             <numerusform>%n набор(ов) данных не в этом кадре</numerusform>
@@ -14177,62 +14187,62 @@ Add controller tags above to poll them.</source>
         </translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="125"/>
+        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="127"/>
         <source>Row %1</source>
         <translation>Строка %1</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="137"/>
+        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="139"/>
         <source>not in this frame</source>
         <translation>не в этом кадре</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="190"/>
+        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="192"/>
         <source>Pipeline Configuration</source>
         <translation>Конфигурация Конвейера</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="212"/>
+        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="214"/>
         <source>Detection</source>
         <translation>Обнаружение</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="258"/>
+        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="260"/>
         <source>Start</source>
         <translation>Начало</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="279"/>
+        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="281"/>
         <source>End</source>
         <translation>Конец</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="300"/>
+        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="302"/>
         <source>Checksum</source>
         <translation>Контрольная Сумма</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="325"/>
+        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="327"/>
         <source>Hex Delimiters</source>
         <translation>Шестнадцатеричные Разделители</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="342"/>
+        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="344"/>
         <source>Frame Data Input</source>
         <translation>Ввод Данных Кадра</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="369"/>
+        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="371"/>
         <source>Enter hex bytes (e.g. 01 A2 FF)</source>
         <translation>Введите шестнадцатеричные байты (например, 01 A2 FF)</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="370"/>
+        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="372"/>
         <source>Enter raw stream bytes here...</source>
         <translation>Введите необработанные байты потока здесь...</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="389"/>
+        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="391"/>
         <source>Hex</source>
         <translation>Хекс</translation>
     </message>
@@ -14241,49 +14251,49 @@ Add controller tags above to poll them.</source>
         <translation type="vanished">HEX</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="415"/>
+        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="417"/>
         <source>The sample does not contain the configured frame delimiters, so no frame will be extracted. Type them into the sample (e.g. 
  for a newline) or adjust the detection mode.</source>
         <translation>Образец не содержит настроенные разделители кадров, поэтому кадр не будет извлечён. Введите их в образец (например, 
  для новой строки) или измените режим обнаружения.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="435"/>
+        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="437"/>
         <source>Pipeline Results</source>
         <translation>Результаты Конвейера</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="508"/>
+        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="510"/>
         <source>Stage</source>
         <translation>Подготовить</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="515"/>
+        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="517"/>
         <source>Value</source>
         <translation>Значение</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="558"/>
+        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="560"/>
         <source>Extraction did not produce a complete frame. Check the start / end delimiters and the detection mode.</source>
         <translation>Извлечение не сформировало полный фрейм. Проверьте начальные/конечные разделители и режим обнаружения.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="560"/>
+        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="562"/>
         <source>Enter sample data above and press Evaluate to preview the parsed output</source>
         <translation>Введите образец данных выше и нажмите «Вычислить» для предварительного просмотра результата разбора</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="642"/>
+        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="644"/>
         <source>Clear</source>
         <translation>Очистить</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="653"/>
+        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="655"/>
         <source>Close</source>
         <translation>Закрыть</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="660"/>
+        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="662"/>
         <source>Evaluate</source>
         <translation>Вычислить</translation>
     </message>
@@ -14386,251 +14396,251 @@ Add controller tags above to poll them.</source>
 <context>
     <name>FrequencyMarkersEditor</name>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="35"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="37"/>
         <source>Frequency Markers</source>
         <translation>Маркеры Частот</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="71"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="73"/>
         <source>Mains Hum (50 Hz + harmonics)</source>
         <translation>Сетевая Наводка (50 Гц + гармоники)</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="73"/>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="81"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="75"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="83"/>
         <source>Mains</source>
         <translation>Сеть</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="74"/>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="82"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="76"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="84"/>
         <source>Mains 2x</source>
         <translation>Сеть 2x</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="75"/>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="83"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="77"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="85"/>
         <source>Mains 3x</source>
         <translation>Сеть 3x</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="79"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="81"/>
         <source>Mains Hum (60 Hz + harmonics)</source>
         <translation>Сетевой Гул (60 Гц + гармоники)</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="87"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="89"/>
         <source>Octave Bands (31.5 Hz - 16 kHz)</source>
         <translation>Октавные Полосы (31,5 Гц - 16 кГц)</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="89"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="91"/>
         <source>31.5 Hz</source>
         <translation>31,5 Гц</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="90"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="92"/>
         <source>63 Hz</source>
         <translation>63 Гц</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="91"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="93"/>
         <source>125 Hz</source>
         <translation>125 Гц</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="92"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="94"/>
         <source>250 Hz</source>
         <translation>250 Гц</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="93"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="95"/>
         <source>500 Hz</source>
         <translation>500 Гц</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="94"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="96"/>
         <source>1 kHz</source>
         <translation>1 кГц</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="95"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="97"/>
         <source>2 kHz</source>
         <translation>2 кГц</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="96"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="98"/>
         <source>4 kHz</source>
         <translation>4 кГц</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="97"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="99"/>
         <source>8 kHz</source>
         <translation>8 кГц</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="98"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="100"/>
         <source>16 kHz</source>
         <translation>16 кГц</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="246"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="248"/>
         <source>Choose Marker Color</source>
         <translation>Выбрать Цвет Маркера</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="273"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="275"/>
         <source>Presets</source>
         <translation>Пресеты</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="296"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="298"/>
         <source>Preset</source>
         <translation>Пресет</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="311"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="313"/>
         <source>Choose preset…</source>
         <translation>Выбрать пресет…</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="323"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="325"/>
         <source>Frequency range</source>
         <translation>Частотный диапазон</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="329"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="331"/>
         <source>0 - %1 Hz</source>
         <translation>0 - %1 Гц</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="351"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="353"/>
         <source>Markers</source>
         <translation>Маркеры</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="362"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="364"/>
         <source>Add Marker</source>
         <translation>Добавить Маркер</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="366"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="368"/>
         <source>Add a new point marker; set an end frequency to turn it into a band.</source>
         <translation>Добавить новый точечный маркер; установите конечную частоту, чтобы превратить его в полосу.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="397"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="399"/>
         <source>Start (Hz)</source>
         <translation>Начало (Гц)</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="403"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="405"/>
         <source>End (Hz)</source>
         <translation>Конец (Гц)</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="409"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="411"/>
         <source>Warn (dB)</source>
         <translation>Предупреждение (дБ)</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="415"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="417"/>
         <source>Alarm (dB)</source>
         <translation>Тревога (дБ)</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="421"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="423"/>
         <source>Color</source>
         <translation>Цвет</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="428"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="430"/>
         <source>Label</source>
         <translation>Метка</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="500"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="502"/>
         <source>(point)</source>
         <translation>(точка)</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="517"/>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="531"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="519"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="533"/>
         <source>(off)</source>
         <translation>(выкл)</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="565"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="567"/>
         <source>Reset to automatic color</source>
         <translation>Сбросить на автоматический цвет</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="579"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="581"/>
         <source>Click to choose a color. Right-click to reset to automatic.</source>
         <translation>Нажмите, чтобы выбрать цвет. Щелкните правой кнопкой мыши, чтобы сбросить на автоматический.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="580"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="582"/>
         <source>Click to choose a custom color.</source>
         <translation>Нажмите, чтобы выбрать пользовательский цвет.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="601"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="603"/>
         <source>(optional)</source>
         <translation>(необязательно)</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="618"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="620"/>
         <source>Move up.</source>
         <translation>Переместить вверх.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="637"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="639"/>
         <source>Move down.</source>
         <translation>Переместить вниз.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="650"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="652"/>
         <source>Remove this marker.</source>
         <translation>Удалить этот маркер.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="664"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="666"/>
         <source>No markers defined. Pick a preset above or add a marker to get started.</source>
         <translation>Маркеры не определены. Выберите предустановку выше или добавьте маркер для начала работы.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="681"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="683"/>
         <source>Preview</source>
         <translation>Предварительный Просмотр</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="757"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="759"/>
         <source>0 Hz</source>
         <translation>0 Гц</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="763"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="765"/>
         <source>%1 Hz</source>
         <translation>%1 Гц</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="785"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="787"/>
         <source>Cancel</source>
         <translation>Отмена</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="787"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="789"/>
         <source>Discard changes.</source>
         <translation>Отменить изменения.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="796"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="798"/>
         <source>Apply</source>
         <translation>Применить</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="799"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="801"/>
         <source>Apply changes to the dataset.</source>
         <translation>Применить изменения к набору данных.</translation>
     </message>
@@ -15103,22 +15113,22 @@ Add controller tags above to poll them.</source>
         <translation>Устройство HID</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/HID.qml" line="80"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/HID.qml" line="82"/>
         <source>Usage Page</source>
         <translation>Страница Использования</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/HID.qml" line="96"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/HID.qml" line="100"/>
         <source>Usage</source>
         <translation>Использование</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/HID.qml" line="137"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/HID.qml" line="143"/>
         <source>Connect gamepads, joysticks, steering wheels, flight controllers, and other HID-class USB devices.</source>
         <translation>Подключение геймпадов, джойстиков, рулевых колёс, контроллеров полёта и других USB-устройств класса HID.</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/HID.qml" line="145"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/HID.qml" line="151"/>
         <source>HID Usage Tables (USB.org)</source>
         <translation>Таблицы Использования HID (USB.org)</translation>
     </message>
@@ -15126,47 +15136,47 @@ Add controller tags above to poll them.</source>
 <context>
     <name>HelpCenter</name>
     <message>
-        <location filename="../../qml/Dialogs/HelpCenter.qml" line="32"/>
+        <location filename="../../qml/Dialogs/HelpCenter.qml" line="34"/>
         <source>Help Center</source>
         <translation>Центр Справки</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/HelpCenter.qml" line="95"/>
+        <location filename="../../qml/Dialogs/HelpCenter.qml" line="97"/>
         <source>Fetching help pages…</source>
         <translation>Загрузка страниц справки…</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/HelpCenter.qml" line="187"/>
+        <location filename="../../qml/Dialogs/HelpCenter.qml" line="189"/>
         <source>Search…</source>
         <translation>Поиск…</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/HelpCenter.qml" line="305"/>
+        <location filename="../../qml/Dialogs/HelpCenter.qml" line="307"/>
         <source>Loading…</source>
         <translation>Загрузка…</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/HelpCenter.qml" line="349"/>
+        <location filename="../../qml/Dialogs/HelpCenter.qml" line="351"/>
         <source>Select a page from the sidebar</source>
         <translation>Выберите страницу на боковой панели</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/HelpCenter.qml" line="379"/>
+        <location filename="../../qml/Dialogs/HelpCenter.qml" line="381"/>
         <source>Copied to Clipboard</source>
         <translation>Скопировано в буфер обмена</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/HelpCenter.qml" line="411"/>
+        <location filename="../../qml/Dialogs/HelpCenter.qml" line="413"/>
         <source>View Online</source>
         <translation>Просмотреть Онлайн</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/HelpCenter.qml" line="423"/>
+        <location filename="../../qml/Dialogs/HelpCenter.qml" line="425"/>
         <source>%1 pages</source>
         <translation>Страниц: %1</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/HelpCenter.qml" line="432"/>
+        <location filename="../../qml/Dialogs/HelpCenter.qml" line="434"/>
         <source>Close</source>
         <translation>Закрыть</translation>
     </message>
@@ -15322,123 +15332,123 @@ Add controller tags above to poll them.</source>
 <context>
     <name>IO::Drivers::Audio</name>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="421"/>
+        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="412"/>
         <source>Audio Device Stopped</source>
         <translation>Аудиоустройство Остановлено</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="422"/>
+        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="413"/>
         <source>The audio backend stopped the stream. The device may have been unplugged or claimed by another application.</source>
         <translation>Аудиобэкенд остановил поток. Устройство могло быть отключено или занято другим приложением.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="854"/>
+        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="845"/>
         <source>channels</source>
         <translation>каналов</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="854"/>
+        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="845"/>
         <source> channels</source>
         <translation>каналов</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="837"/>
+        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="828"/>
         <source>Unsigned 8-bit</source>
         <translation>Беззнаковый 8-бит</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="246"/>
+        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="237"/>
         <source>Audio output unavailable</source>
         <translation>Аудиовыход Недоступен</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="247"/>
+        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="238"/>
         <source>No output device is configured for this session.</source>
         <translation>Для этой сессии не настроено устройство вывода.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="274"/>
+        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="265"/>
         <source>Audio channel mismatch</source>
         <translation>Несоответствие Аудиоканалов</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="275"/>
+        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="266"/>
         <source>Expected %1 value(s) per frame, got %2.</source>
         <translation>Ожидалось %1 значение(й) на кадр, получено %2.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="350"/>
-        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="356"/>
+        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="341"/>
+        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="347"/>
         <source>Audio device error</source>
         <translation>Ошибка аудиоустройства</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="351"/>
+        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="342"/>
         <source>The selected audio device could not be initialized.</source>
         <translation>Не удалось инициализировать выбранное аудиоустройство.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="356"/>
+        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="347"/>
         <source>The selected audio device could not be started.</source>
         <translation>Не удалось запустить выбранное аудиоустройство.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="838"/>
+        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="829"/>
         <source>Signed 16-bit</source>
         <translation>Знаковый 16-бит</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="839"/>
+        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="830"/>
         <source>Signed 24-bit</source>
         <translation>Знаковый 24-бит</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="840"/>
+        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="831"/>
         <source>Signed 32-bit</source>
         <translation>Знаковый 32-бит</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="841"/>
+        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="832"/>
         <source>Float 32-bit</source>
         <translation>С Плавающей Точкой 32-бит</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="844"/>
+        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="835"/>
         <source>Mono</source>
         <translation>Моно</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="845"/>
+        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="836"/>
         <source>Stereo</source>
         <translation>Стерео</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="1379"/>
+        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="1370"/>
         <source>Input Device</source>
         <translation>Устройство Ввода</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="1387"/>
+        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="1378"/>
         <source>Sample Rate</source>
         <translation>Частота Дискретизации</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="1395"/>
+        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="1386"/>
         <source>Normalization</source>
         <translation>Нормализация</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="1396"/>
+        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="1387"/>
         <source>Publish samples as floats in the -1.0 to 1.0 range</source>
         <translation>Публиковать образцы как числа с плавающей точкой в диапазоне от -1.0 до 1.0</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="1404"/>
+        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="1395"/>
         <source>Sample Format</source>
         <translation>Формат Выборки</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="1413"/>
+        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="1404"/>
         <source>Channels</source>
         <translation>Каналы</translation>
     </message>
@@ -18955,22 +18965,22 @@ The device may not expose data endpoints in its active configuration, or it may 
 <context>
     <name>IconPicker</name>
     <message>
-        <location filename="../../qml/Dialogs/IconPicker.qml" line="41"/>
+        <location filename="../../qml/Dialogs/IconPicker.qml" line="43"/>
         <source>Select Icon</source>
         <translation>Выбрать Значок</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/IconPicker.qml" line="118"/>
+        <location filename="../../qml/Dialogs/IconPicker.qml" line="120"/>
         <source>Search Online…</source>
         <translation>Поиск Онлайн…</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/IconPicker.qml" line="131"/>
+        <location filename="../../qml/Dialogs/IconPicker.qml" line="133"/>
         <source>OK</source>
         <translation>OK</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/IconPicker.qml" line="143"/>
+        <location filename="../../qml/Dialogs/IconPicker.qml" line="145"/>
         <source>Cancel</source>
         <translation>Отмена</translation>
     </message>
@@ -18983,92 +18993,92 @@ The device may not expose data endpoints in its active configuration, or it may 
         <translation>Хост</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Iec104.qml" line="58"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Iec104.qml" line="60"/>
         <source>IP Address</source>
         <translation>IP-адрес</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Iec104.qml" line="76"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Iec104.qml" line="78"/>
         <source>Port</source>
         <translation>Порт</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Iec104.qml" line="84"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Iec104.qml" line="88"/>
         <source>2404</source>
         <translation>2404</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Iec104.qml" line="106"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Iec104.qml" line="110"/>
         <source>Common Address</source>
         <translation>Общий Адрес</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Iec104.qml" line="113"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Iec104.qml" line="119"/>
         <source>0-65535</source>
         <translation>0-65535</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Iec104.qml" line="133"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Iec104.qml" line="139"/>
         <source>Send Window (k)</source>
         <translation>Окно отправки (k)</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Iec104.qml" line="138"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Iec104.qml" line="146"/>
         <source>12</source>
         <translation>12</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Iec104.qml" line="155"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Iec104.qml" line="163"/>
         <source>Ack Window (w)</source>
         <translation>Окно подтверждения (w)</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Iec104.qml" line="160"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Iec104.qml" line="170"/>
         <source>8</source>
         <translation>8</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Iec104.qml" line="177"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Iec104.qml" line="187"/>
         <source>Timeout t1 (ms)</source>
         <translation>Тайм-аут t1 (мс)</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Iec104.qml" line="182"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Iec104.qml" line="194"/>
         <source>15000</source>
         <translation>15000</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Iec104.qml" line="199"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Iec104.qml" line="211"/>
         <source>Timeout t2 (ms)</source>
         <translation>Тайм-аут t2 (мс)</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Iec104.qml" line="204"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Iec104.qml" line="218"/>
         <source>10000</source>
         <translation>10000</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Iec104.qml" line="221"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Iec104.qml" line="235"/>
         <source>Timeout t3 (ms)</source>
         <translation>Тайм-аут t3 (мс)</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Iec104.qml" line="226"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Iec104.qml" line="242"/>
         <source>20000</source>
         <translation>20000</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Iec104.qml" line="255"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Iec104.qml" line="273"/>
         <source>Create Project from Points</source>
         <translation>Создать Проект из Точек</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Iec104.qml" line="270"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Iec104.qml" line="288"/>
         <source>%1 point(s) discovered</source>
         <translation>Обнаружено точек: %1</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Iec104.qml" line="271"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Iec104.qml" line="289"/>
         <source>Connect to discover the station's points</source>
         <translation>Подключитесь для обнаружения точек станции</translation>
     </message>
@@ -19254,12 +19264,12 @@ The device may not expose data endpoints in its active configuration, or it may 
 <context>
     <name>KeyManagerDialog</name>
     <message>
-        <location filename="../../qml/AI/KeyManagerDialog.qml" line="23"/>
+        <location filename="../../qml/AI/KeyManagerDialog.qml" line="25"/>
         <source>API Keys</source>
         <translation>Ключи API</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/KeyManagerDialog.qml" line="47"/>
+        <location filename="../../qml/AI/KeyManagerDialog.qml" line="49"/>
         <source>Anthropic Claude. The default is Claude Haiku 4.5 ($1 input / $5 output per million tokens). Sonnet 4.6 and Opus 4.7 are also available. Supports streaming, tool use, extended thinking, and prompt caching.</source>
         <translation>Anthropic Claude. По умолчанию используется Claude Haiku 4.5 ($1 ввод / $5 вывод на миллион токенов). Также доступны Sonnet 4.6 и OPUS 4.7. Поддерживает потоковую передачу, использование инструментов, расширенное мышление и кэширование промптов.</translation>
     </message>
@@ -19268,7 +19278,7 @@ The device may not expose data endpoints in its active configuration, or it may 
         <translation type="vanished">OpenAI Chat Completions. По умолчанию используется GPT-4o mini ($0.15 ввод / $0.60 вывод на миллион токенов). Также доступны GPT-4o, GPT-4 Turbo и o1-mini.</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/KeyManagerDialog.qml" line="57"/>
+        <location filename="../../qml/AI/KeyManagerDialog.qml" line="59"/>
         <source>Google Gemini. The default is Gemini 2.0 Flash, which has a generous free tier (subject to rate limits). Gemini 1.5 Pro and Gemini 1.5 Flash are also available.</source>
         <translation>Google Gemini. По умолчанию используется Gemini 2.0 Flash с щедрым бесплатным уровнем (с ограничениями по частоте запросов). Также доступны Gemini 1.5 Pro и Gemini 1.5 Flash.</translation>
     </message>
@@ -19277,12 +19287,12 @@ The device may not expose data endpoints in its active configuration, or it may 
         <translation type="vanished">Используйте собственные ключи API. Они шифруются в хранилище с помощью ключа устройства и никогда не покидают компьютер, кроме связи с выбранным провайдером.</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/KeyManagerDialog.qml" line="166"/>
+        <location filename="../../qml/AI/KeyManagerDialog.qml" line="168"/>
         <source>Key set</source>
         <translation>Ключ установлен</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/KeyManagerDialog.qml" line="167"/>
+        <location filename="../../qml/AI/KeyManagerDialog.qml" line="169"/>
         <source>No key</source>
         <translation>Нет ключа</translation>
     </message>
@@ -19291,117 +19301,117 @@ The device may not expose data endpoints in its active configuration, or it may 
         <translation type="vanished">Ключ сохранён — вставьте новый для замены</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/KeyManagerDialog.qml" line="52"/>
+        <location filename="../../qml/AI/KeyManagerDialog.qml" line="54"/>
         <source>OpenAI Chat Completions. The default is GPT-5 mini for fast, cost-conscious agentic work. GPT-5.2 is the stronger general-purpose option, and GPT-5.2 Chat tracks the model currently used in ChatGPT.</source>
         <translation>OpenAI Chat Completions. По умолчанию используется GPT-5 mini для быстрой и экономичной агентной работы. GPT-5.2 — более мощный универсальный вариант, а GPT-5.2 Chat соответствует модели, используемой в ChatGPT.</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/KeyManagerDialog.qml" line="61"/>
+        <location filename="../../qml/AI/KeyManagerDialog.qml" line="63"/>
         <source>DeepSeek. OpenAI-compatible API. The default is deepseek-chat (V3). deepseek-reasoner (R1) is also available. Often the cheapest cloud option for tool use.</source>
         <translation>DeepSeek. API, совместимый с OpenAI. По умолчанию используется deepseek-chat (V3). Также доступен deepseek-reasoner (R1). Часто самый дешёвый облачный вариант для работы с инструментами.</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/KeyManagerDialog.qml" line="65"/>
+        <location filename="../../qml/AI/KeyManagerDialog.qml" line="67"/>
         <source>OpenRouter. One key, ~200 models from Anthropic, OpenAI, Google, Meta, Mistral, DeepSeek, Qwen, and others. Free-tier models (suffixed :free) are rate-limited but require no additional billing. Pay-as-you-go for the rest.</source>
         <translation>OpenRouter. Один ключ, ~200 моделей от Anthropic, OpenAI, Google, Meta, Mistral, DeepSeek, Qwen и других. Модели бесплатного уровня (с суффиксом :free) имеют ограничения по частоте запросов, но не требуют дополнительной оплаты. Остальные — с оплатой по факту использования.</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/KeyManagerDialog.qml" line="70"/>
+        <location filename="../../qml/AI/KeyManagerDialog.qml" line="72"/>
         <source>Groq. Hardware-accelerated inference (LPUs) for very fast Llama, Mixtral, Gemma, DeepSeek-R1 distill, and Qwen models. Generous free tier with daily token limits.</source>
         <translation>Groq. Аппаратно-ускоренный вывод (LPU) для очень быстрых моделей Llama, Mixtral, Gemma, DeepSeek-R1 distill и Qwen. Щедрый бесплатный уровень с ежедневными лимитами токенов.</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/KeyManagerDialog.qml" line="74"/>
+        <location filename="../../qml/AI/KeyManagerDialog.qml" line="76"/>
         <source>Mistral. The default is Mistral Large. Codestral targets code completion, Pixtral handles vision, and the Ministral models are tuned for edge / low-latency use.</source>
         <translation>Mistral. По умолчанию используется Mistral Large. Codestral предназначен для автодополнения кода, Pixtral обрабатывает изображения, а модели Ministral настроены для граничных вычислений и использования с низкой задержкой.</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/KeyManagerDialog.qml" line="78"/>
+        <location filename="../../qml/AI/KeyManagerDialog.qml" line="80"/>
         <source>Local model server. Works with any OpenAI-compatible endpoint -- Ollama, llama.cpp's llama-server, LM Studio, or vLLM. Nothing leaves your machine. The model list is queried live from the server.</source>
         <translation>Локальный сервер моделей. Работает с любой конечной точкой, совместимой с OpenAI — Ollama, llama-server из llama.cpp, LM Studio или vLLM. Данные не покидают компьютер. Список моделей запрашивается с сервера в реальном времени.</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/KeyManagerDialog.qml" line="100"/>
+        <location filename="../../qml/AI/KeyManagerDialog.qml" line="102"/>
         <source>Bring your own API keys. They are stored obfuscated in this machine's settings and never leave your computer except to communicate with the provider you select.</source>
         <translation>Используйте собственные ключи API. Они хранятся в обфусцированном виде в настройках этого компьютера и никогда не покидают его, кроме как для связи с выбранным вами провайдером.</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/KeyManagerDialog.qml" line="204"/>
+        <location filename="../../qml/AI/KeyManagerDialog.qml" line="206"/>
         <source>A key is on file -- paste a new one to replace it</source>
         <translation>Ключ сохранён — вставьте новый для замены</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/KeyManagerDialog.qml" line="205"/>
+        <location filename="../../qml/AI/KeyManagerDialog.qml" line="207"/>
         <source>Paste your API key here</source>
         <translation>Вставьте ваш ключ API здесь</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/KeyManagerDialog.qml" line="212"/>
+        <location filename="../../qml/AI/KeyManagerDialog.qml" line="214"/>
         <source>Hide key</source>
         <translation>Скрыть ключ</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/KeyManagerDialog.qml" line="213"/>
+        <location filename="../../qml/AI/KeyManagerDialog.qml" line="215"/>
         <source>Show key while typing</source>
         <translation>Показывать ключ при вводе</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/KeyManagerDialog.qml" line="224"/>
+        <location filename="../../qml/AI/KeyManagerDialog.qml" line="226"/>
         <source>Get key</source>
         <translation>Получить ключ</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/KeyManagerDialog.qml" line="225"/>
+        <location filename="../../qml/AI/KeyManagerDialog.qml" line="227"/>
         <source>Open the provider's console to create a new key</source>
         <translation>Откройте консоль провайдера для создания нового ключа</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/KeyManagerDialog.qml" line="236"/>
+        <location filename="../../qml/AI/KeyManagerDialog.qml" line="238"/>
         <source>Save</source>
         <translation>Сохранить</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/KeyManagerDialog.qml" line="254"/>
+        <location filename="../../qml/AI/KeyManagerDialog.qml" line="256"/>
         <source>Remove the stored key for %1</source>
         <translation>Удалить сохранённый ключ для %1</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/KeyManagerDialog.qml" line="278"/>
+        <location filename="../../qml/AI/KeyManagerDialog.qml" line="280"/>
         <source>http://localhost:11434/v1</source>
         <translation>http://localhost:11434/v1</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/KeyManagerDialog.qml" line="282"/>
+        <location filename="../../qml/AI/KeyManagerDialog.qml" line="284"/>
         <source>Install Ollama</source>
         <translation>Установить Ollama</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/KeyManagerDialog.qml" line="283"/>
+        <location filename="../../qml/AI/KeyManagerDialog.qml" line="285"/>
         <source>Open the Ollama download page</source>
         <translation>Открыть страницу загрузки Ollama</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/KeyManagerDialog.qml" line="294"/>
+        <location filename="../../qml/AI/KeyManagerDialog.qml" line="296"/>
         <source>Apply</source>
         <translation>Применить</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/KeyManagerDialog.qml" line="309"/>
+        <location filename="../../qml/AI/KeyManagerDialog.qml" line="311"/>
         <source>Re-query the model list</source>
         <translation>Повторно запросить список моделей</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/KeyManagerDialog.qml" line="330"/>
+        <location filename="../../qml/AI/KeyManagerDialog.qml" line="332"/>
         <source>Context window</source>
         <translation>Контекстное окно</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/KeyManagerDialog.qml" line="339"/>
+        <location filename="../../qml/AI/KeyManagerDialog.qml" line="341"/>
         <source>Tokens the model accepts, e.g. 8192</source>
         <translation>Токены, принимаемые моделью, например 8192</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/KeyManagerDialog.qml" line="387"/>
+        <location filename="../../qml/AI/KeyManagerDialog.qml" line="389"/>
         <source>No API keys configured yet. Add a key to get started.</source>
         <translation>Ключи API ещё не настроены. Добавьте ключ для начала работы.</translation>
     </message>
@@ -19410,12 +19420,12 @@ The device may not expose data endpoints in its active configuration, or it may 
         <translation type="vanished">Ключи API ещё не настроены. Добавьте хотя бы один выше для начала работы.</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/KeyManagerDialog.qml" line="390"/>
+        <location filename="../../qml/AI/KeyManagerDialog.qml" line="392"/>
         <source>One provider is ready.</source>
         <translation>Один провайдер готов.</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/KeyManagerDialog.qml" line="392"/>
+        <location filename="../../qml/AI/KeyManagerDialog.qml" line="394"/>
         <source>%1 providers are ready.</source>
         <translation>Провайдеров готово: %1.</translation>
     </message>
@@ -19463,7 +19473,7 @@ The device may not expose data endpoints in its active configuration, or it may 
         <translation>Разделение</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/LayoutPatternPicker.qml" line="329"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/LayoutPatternPicker.qml" line="331"/>
         <source>Manual placement</source>
         <translation>Ручное Размещение</translation>
     </message>
@@ -19471,22 +19481,22 @@ The device may not expose data endpoints in its active configuration, or it may 
 <context>
     <name>LicenseManagement</name>
     <message>
-        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="37"/>
+        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="39"/>
         <source>Licensing</source>
         <translation>Лицензирование</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="84"/>
+        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="86"/>
         <source>Please wait…</source>
         <translation>Подождите…</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="124"/>
+        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="126"/>
         <source>Activate Serial Studio Pro</source>
         <translation>Активировать Serial Studio Pro</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="131"/>
+        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="133"/>
         <source>Paste your license key below to unlock Pro features like MQTT, 3D plotting, and more.</source>
         <translation>Вставьте ваш лицензионный ключ ниже, чтобы разблокировать функции Pro, такие как MQTT, 3D-графики и другие.</translation>
     </message>
@@ -19503,123 +19513,123 @@ Yearly is the best value; Monthly and Lifetime plans are also available.</source
 Годовой план — лучшее предложение; также доступны Месячный и Пожизненный планы.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="138"/>
+        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="140"/>
         <source>Yearly is the best value; Monthly and Lifetime plans are also available.</source>
         <translation>Годовая подписка — лучшее предложение; также доступны месячная и пожизненная.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="150"/>
+        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="152"/>
         <source>Paste your license key here…</source>
         <translation>Вставьте ваш лицензионный ключ здесь…</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="177"/>
-        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="340"/>
-        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="389"/>
+        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="179"/>
+        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="342"/>
+        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="391"/>
         <source>Copy</source>
         <translation>Копировать</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="183"/>
+        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="185"/>
         <source>Paste</source>
         <translation>Вставить</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="189"/>
-        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="346"/>
-        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="395"/>
+        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="191"/>
+        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="348"/>
+        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="397"/>
         <source>Select All</source>
         <translation>Выбрать Всё</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="242"/>
-        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="433"/>
+        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="244"/>
+        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="435"/>
         <source>Product</source>
         <translation>Продукт</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="249"/>
+        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="251"/>
         <source>Serial Studio %1</source>
         <translation>Serial Studio %1</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="260"/>
+        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="262"/>
         <source>Licensee</source>
         <translation>Лицензиат</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="279"/>
+        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="281"/>
         <source>Licensee E-Mail</source>
         <translation>E-mail Лицензиата</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="296"/>
+        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="298"/>
         <source>Device Usage</source>
         <translation>Использование Устройств</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="304"/>
+        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="306"/>
         <source>%1 devices in use (Unlimited plan)</source>
         <translation>%1 устройств используется (безлимитный план)</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="305"/>
+        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="307"/>
         <source>%1 of %2 devices used</source>
         <translation>Использовано %1 из %2 устройств</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="315"/>
-        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="450"/>
+        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="317"/>
+        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="452"/>
         <source>Device ID</source>
         <translation>ID Устройства</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="362"/>
+        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="364"/>
         <source>License Key</source>
         <translation>Ключ Лицензии</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="440"/>
+        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="442"/>
         <source>Serial Studio %1 (Offline)</source>
         <translation>Serial Studio %1 (Офлайн)</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="467"/>
+        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="469"/>
         <source>Expires</source>
         <translation>Истекает</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="474"/>
+        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="476"/>
         <source>%1 (%2 days left)</source>
         <translation>%1 (осталось дней: %2)</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="487"/>
+        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="489"/>
         <source>Your offline license expires soon. Request a new certificate to stay activated.</source>
         <translation>Срок действия вашей офлайн-лицензии истекает. Запросите новый сертификат для сохранения активации.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="504"/>
+        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="506"/>
         <source>Customer Portal</source>
         <translation>Портал Клиента</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="515"/>
+        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="517"/>
         <source>Buy License</source>
         <translation>Купить Лицензию</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="522"/>
+        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="524"/>
         <source>Activate</source>
         <translation>Активировать</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="533"/>
+        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="535"/>
         <source>Activate Offline…</source>
         <translation>Активировать Офлайн…</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="542"/>
+        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="544"/>
         <source>Deactivate</source>
         <translation>Деактивировать</translation>
     </message>
@@ -20028,153 +20038,153 @@ To reuse this seat on another device, email alex@serial-studio.com with your dev
         <translation>Имя Хоста</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="109"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="111"/>
         <source>e.g. broker.hivemq.com</source>
         <translation>напр. broker.hivemq.com</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="118"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="120"/>
         <source>Port</source>
         <translation>Порт</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="139"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="143"/>
         <source>Topic Filter</source>
         <translation>Фильтр Топиков</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="145"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="151"/>
         <source>e.g. sensors/#</source>
         <translation>напр. sensors/#</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="155"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="161"/>
         <source>Client ID</source>
         <translation>ID Клиента</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="170"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="180"/>
         <source>Regenerate</source>
         <translation>Сгенерировать Заново</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="182"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="192"/>
         <source>Username</source>
         <translation>Имя Пользователя</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="197"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="209"/>
         <source>Password</source>
         <translation>Пароль</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="213"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="227"/>
         <source>Version</source>
         <translation>Версия</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="239"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="255"/>
         <source>Keep Alive (s)</source>
         <translation>Keep Alive (с)</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="257"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="275"/>
         <source>Clean Session</source>
         <translation>Чистая Сессия</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="283"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="303"/>
         <source>Sparkplug</source>
         <translation>Sparkplug</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="309"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="331"/>
         <source>Group ID</source>
         <translation>ID Группы</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="315"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="339"/>
         <source>All groups</source>
         <translation>Все группы</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="327"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="351"/>
         <source>Sparkplug Project</source>
         <translation>Проект Sparkplug</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="336"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="362"/>
         <source>Create Project from Births</source>
         <translation>Создать Проект из Birth-сообщений</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="346"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="372"/>
         <source>Use SSL/TLS</source>
         <translation>Использовать SSL/TLS</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="373"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="401"/>
         <source>SSL Protocol</source>
         <translation>Протокол SSL</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="403"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="433"/>
         <source>Peer Verify</source>
         <translation>Проверка Узла</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="435"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="467"/>
         <source>Verify Depth</source>
         <translation>Глубина Проверки</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="456"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="490"/>
         <source>CA Certificates</source>
         <translation>Сертификаты CA</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="462"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="498"/>
         <source>Load From Folder…</source>
         <translation>Загрузить Из Папки…</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="473"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="509"/>
         <source>Client Certificate</source>
         <translation>Сертификат Клиента</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="483"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="521"/>
         <source>Optional (mutual TLS)</source>
         <translation>Опционально (взаимный TLS)</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="490"/>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="520"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="530"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="564"/>
         <source>Browse…</source>
         <translation>Обзор…</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="502"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="542"/>
         <source>Private Key</source>
         <translation>Приватный Ключ</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="516"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="558"/>
         <source>Defaults to the certificate file</source>
         <translation>По умолчанию используется файл сертификата</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="533"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="577"/>
         <source>Key Passphrase</source>
         <translation>Парольная Фраза Ключа</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="549"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="595"/>
         <source>ALPN</source>
         <translation>ALPN</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="578"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="626"/>
         <source>ALPN Protocol</source>
         <translation>Протокол ALPN</translation>
     </message>
@@ -20947,97 +20957,97 @@ Please provide the necessary credentials.</source>
 <context>
     <name>Macros</name>
     <message>
-        <location filename="../../qml/Dialogs/Macros.qml" line="29"/>
+        <location filename="../../qml/Dialogs/Macros.qml" line="31"/>
         <source>Macros</source>
         <translation>Макросы</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Macros.qml" line="193"/>
+        <location filename="../../qml/Dialogs/Macros.qml" line="195"/>
         <source>[macro] finished</source>
         <translation>[макрос] завершён</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Macros.qml" line="194"/>
+        <location filename="../../qml/Dialogs/Macros.qml" line="196"/>
         <source>[macro] %1</source>
         <translation>[макрос] %1</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Macros.qml" line="197"/>
+        <location filename="../../qml/Dialogs/Macros.qml" line="199"/>
         <source>[macro] saved %1</source>
         <translation>[макрос] сохранён %1</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Macros.qml" line="202"/>
+        <location filename="../../qml/Dialogs/Macros.qml" line="204"/>
         <source>[macro] loaded %1</source>
         <translation>[макрос] загружен %1</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Macros.qml" line="313"/>
+        <location filename="../../qml/Dialogs/Macros.qml" line="315"/>
         <source>Search commands...</source>
         <translation>Поиск команд...</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Macros.qml" line="448"/>
+        <location filename="../../qml/Dialogs/Macros.qml" line="450"/>
         <source>Parameters</source>
         <translation>Параметры</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Macros.qml" line="449"/>
+        <location filename="../../qml/Dialogs/Macros.qml" line="451"/>
         <source>No parameters</source>
         <translation>Нет параметров</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Macros.qml" line="510"/>
+        <location filename="../../qml/Dialogs/Macros.qml" line="512"/>
         <source>Terminal</source>
         <translation>Терминал</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Macros.qml" line="516"/>
+        <location filename="../../qml/Dialogs/Macros.qml" line="518"/>
         <source>Script</source>
         <translation>Скрипт</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Macros.qml" line="607"/>
+        <location filename="../../qml/Dialogs/Macros.qml" line="609"/>
         <source>Type a command below to get started</source>
         <translation>Введите команду ниже для начала работы</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Macros.qml" line="632"/>
+        <location filename="../../qml/Dialogs/Macros.qml" line="634"/>
         <source>Copy</source>
         <translation>Копировать</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Macros.qml" line="638"/>
+        <location filename="../../qml/Dialogs/Macros.qml" line="640"/>
         <source>Select All</source>
         <translation>Выделить Всё</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Macros.qml" line="644"/>
+        <location filename="../../qml/Dialogs/Macros.qml" line="646"/>
         <source>Clear</source>
         <translation>Очистить</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Macros.qml" line="685"/>
+        <location filename="../../qml/Dialogs/Macros.qml" line="687"/>
         <source>command.name { "parameter": value }</source>
         <translation>имя_команды { "параметр": значение }</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Macros.qml" line="838"/>
+        <location filename="../../qml/Dialogs/Macros.qml" line="840"/>
         <source>Run command</source>
         <translation>Выполнить команду</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Macros.qml" line="853"/>
+        <location filename="../../qml/Dialogs/Macros.qml" line="855"/>
         <source>Clear output</source>
         <translation>Очистить вывод</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Macros.qml" line="886"/>
+        <location filename="../../qml/Dialogs/Macros.qml" line="888"/>
         <source>[macro] verify: no syntax errors</source>
         <translation>[макрос] проверка: синтаксических ошибок нет</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Macros.qml" line="888"/>
+        <location filename="../../qml/Dialogs/Macros.qml" line="890"/>
         <source>[macro] verify failed: %1</source>
         <translation>[макрос] проверка не удалась: %1</translation>
     </message>
@@ -21050,42 +21060,42 @@ Please provide the necessary credentials.</source>
         <translation type="vanished">В редакторе макросов есть несохранённые изменения.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Macros.qml" line="927"/>
+        <location filename="../../qml/Dialogs/Macros.qml" line="929"/>
         <source>JavaScript</source>
         <translation>Javascript</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Macros.qml" line="927"/>
+        <location filename="../../qml/Dialogs/Macros.qml" line="929"/>
         <source>Lua</source>
         <translation>Lua</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Macros.qml" line="945"/>
+        <location filename="../../qml/Dialogs/Macros.qml" line="947"/>
         <source>Load macro</source>
         <translation>Загрузить макрос</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Macros.qml" line="958"/>
+        <location filename="../../qml/Dialogs/Macros.qml" line="960"/>
         <source>Save macro</source>
         <translation>Сохранить макрос</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Macros.qml" line="969"/>
+        <location filename="../../qml/Dialogs/Macros.qml" line="971"/>
         <source>Verify macro</source>
         <translation>Проверить макрос</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Macros.qml" line="980"/>
+        <location filename="../../qml/Dialogs/Macros.qml" line="982"/>
         <source>Run macro</source>
         <translation>Запустить макрос</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Macros.qml" line="993"/>
+        <location filename="../../qml/Dialogs/Macros.qml" line="995"/>
         <source>Stop macro</source>
         <translation>Остановить макрос</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Macros.qml" line="1003"/>
+        <location filename="../../qml/Dialogs/Macros.qml" line="1005"/>
         <source>Clear editor</source>
         <translation>Очистить редактор</translation>
     </message>
@@ -21093,32 +21103,32 @@ Please provide the necessary credentials.</source>
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="../../qml/MainWindow/MainWindow.qml" line="216"/>
+        <location filename="../../qml/MainWindow/MainWindow.qml" line="218"/>
         <source>Console Only Mode</source>
         <translation>Режим Только Консоль</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/MainWindow.qml" line="219"/>
+        <location filename="../../qml/MainWindow/MainWindow.qml" line="221"/>
         <source>Quick Plot Mode</source>
         <translation>Режим Быстрых Графиков</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/MainWindow.qml" line="226"/>
+        <location filename="../../qml/MainWindow/MainWindow.qml" line="228"/>
         <source>Empty Project</source>
         <translation>Пустой Проект</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/MainWindow.qml" line="741"/>
+        <location filename="../../qml/MainWindow/MainWindow.qml" line="743"/>
         <source>Serial Studio</source>
         <translation>Serial Studio</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/MainWindow.qml" line="749"/>
+        <location filename="../../qml/MainWindow/MainWindow.qml" line="751"/>
         <source>Waiting for data…</source>
         <translation>Ожидание данных…</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/MainWindow.qml" line="750"/>
+        <location filename="../../qml/MainWindow/MainWindow.qml" line="752"/>
         <source>Connecting to device…</source>
         <translation>Подключение к устройству…</translation>
     </message>
@@ -21127,7 +21137,7 @@ Please provide the necessary credentials.</source>
         <translation type="vanished">Приложение</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/MainWindow.qml" line="783"/>
+        <location filename="../../qml/MainWindow/MainWindow.qml" line="785"/>
         <source>Command Palette</source>
         <translation>Палитра Команд</translation>
     </message>
@@ -21207,87 +21217,87 @@ Please provide the necessary credentials.</source>
 <context>
     <name>MasterAnnunciator</name>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/MasterAnnunciator.qml" line="131"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/MasterAnnunciator.qml" line="133"/>
         <source>Aural alerts are disabled, but this project defines alarms. Enable them in Preferences &gt; Sounds.</source>
         <translation>Звуковые оповещения отключены, но в этом проекте определены тревоги. Включите их в Параметры &gt; Звуки.</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/MasterAnnunciator.qml" line="134"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/MasterAnnunciator.qml" line="136"/>
         <source>Alarm sounds are muted. Click to open the alarm panel.</source>
         <translation>Звуки сигнализации отключены. Нажмите, чтобы открыть панель сигнализации.</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/MasterAnnunciator.qml" line="136"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/MasterAnnunciator.qml" line="138"/>
         <source>%1 unacknowledged alarm(s). Click for the alarm panel, right-click to acknowledge.</source>
         <translation>Неподтверждённых сигналов тревоги: %1. Нажмите для панели сигнализации, правый клик для подтверждения.</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/MasterAnnunciator.qml" line="138"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/MasterAnnunciator.qml" line="140"/>
         <source>No active alarms. Click for the alarm panel.</source>
         <translation>Нет активных сигналов тревоги. Нажмите для панели сигнализации.</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/MasterAnnunciator.qml" line="217"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/MasterAnnunciator.qml" line="219"/>
         <source>Alarms</source>
         <translation>Сигнализация</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/MasterAnnunciator.qml" line="226"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/MasterAnnunciator.qml" line="228"/>
         <source>Acknowledge all</source>
         <translation>Подтвердить все</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/MasterAnnunciator.qml" line="235"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/MasterAnnunciator.qml" line="237"/>
         <source>Silence</source>
         <translation>Отключить Звук</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/MasterAnnunciator.qml" line="244"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/MasterAnnunciator.qml" line="246"/>
         <source>Reset</source>
         <translation>Сбросить</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/MasterAnnunciator.qml" line="255"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/MasterAnnunciator.qml" line="257"/>
         <source>Clear every alarm from the list</source>
         <translation>Очистить все сигналы тревоги из списка</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/MasterAnnunciator.qml" line="263"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/MasterAnnunciator.qml" line="265"/>
         <source>Test sounds</source>
         <translation>Проверить звуки</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/MasterAnnunciator.qml" line="272"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/MasterAnnunciator.qml" line="274"/>
         <source>Unmute sounds</source>
         <translation>Включить звук</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/MasterAnnunciator.qml" line="272"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/MasterAnnunciator.qml" line="274"/>
         <source>Mute sounds</source>
         <translation>Отключить звук</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/MasterAnnunciator.qml" line="407"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/MasterAnnunciator.qml" line="409"/>
         <source>Unacknowledged</source>
         <translation>Неподтверждённая</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/MasterAnnunciator.qml" line="408"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/MasterAnnunciator.qml" line="410"/>
         <source>Acknowledged</source>
         <translation>Подтверждённая</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/MasterAnnunciator.qml" line="409"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/MasterAnnunciator.qml" line="411"/>
         <source>Returned to normal, awaiting reset</source>
         <translation>Возврат к норме, ожидание сброса</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/MasterAnnunciator.qml" line="410"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/MasterAnnunciator.qml" line="412"/>
         <source>click to show the widget</source>
         <translation>нажмите для отображения виджета</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/MasterAnnunciator.qml" line="421"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/MasterAnnunciator.qml" line="423"/>
         <source>No active alarms</source>
         <translation>Нет активных тревог</translation>
     </message>
@@ -21303,52 +21313,52 @@ Please provide the necessary credentials.</source>
 <context>
     <name>MemoryManagerDialog</name>
     <message>
-        <location filename="../../qml/AI/MemoryManagerDialog.qml" line="23"/>
+        <location filename="../../qml/AI/MemoryManagerDialog.qml" line="25"/>
         <source>Assistant Memory</source>
         <translation>Память Ассистента</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/MemoryManagerDialog.qml" line="50"/>
+        <location filename="../../qml/AI/MemoryManagerDialog.qml" line="52"/>
         <source>Facts the assistant carries into every chat. Stored only on this computer. Delete anything you no longer want it to know.</source>
         <translation>Факты, которые ассистент использует в каждом чате. Хранятся только на этом компьютере. Удалите всё, что больше не должно быть известно.</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/MemoryManagerDialog.qml" line="65"/>
+        <location filename="../../qml/AI/MemoryManagerDialog.qml" line="67"/>
         <source>user</source>
         <translation>пользователь</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/MemoryManagerDialog.qml" line="65"/>
+        <location filename="../../qml/AI/MemoryManagerDialog.qml" line="67"/>
         <source>feedback</source>
         <translation>обратная связь</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/MemoryManagerDialog.qml" line="65"/>
+        <location filename="../../qml/AI/MemoryManagerDialog.qml" line="67"/>
         <source>project</source>
         <translation>проект</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/MemoryManagerDialog.qml" line="65"/>
+        <location filename="../../qml/AI/MemoryManagerDialog.qml" line="67"/>
         <source>reference</source>
         <translation>справочная информация</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/MemoryManagerDialog.qml" line="74"/>
+        <location filename="../../qml/AI/MemoryManagerDialog.qml" line="76"/>
         <source>Something the assistant should remember…</source>
         <translation>Что-то, что ассистент должен запомнить…</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/MemoryManagerDialog.qml" line="78"/>
+        <location filename="../../qml/AI/MemoryManagerDialog.qml" line="80"/>
         <source>Remember</source>
         <translation>Запомнить</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/MemoryManagerDialog.qml" line="147"/>
+        <location filename="../../qml/AI/MemoryManagerDialog.qml" line="149"/>
         <source>Forget this fact</source>
         <translation>Забыть этот факт</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/MemoryManagerDialog.qml" line="163"/>
+        <location filename="../../qml/AI/MemoryManagerDialog.qml" line="165"/>
         <source>Nothing remembered yet. Add a fact above, or approve one when the assistant proposes it in chat.</source>
         <translation>Пока ничего не запомнено. Добавьте факт выше или подтвердите предложенный ассистентом в чате.</translation>
     </message>
@@ -22249,87 +22259,87 @@ Would you like to open the download page?</source>
         <translation>Протокол</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="72"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="74"/>
         <source>Serial Port</source>
         <translation>Последовательный Порт</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="95"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="99"/>
         <source>Baud Rate</source>
         <translation>Скорость Передачи</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="185"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="191"/>
         <source>Parity</source>
         <translation>Четность</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="207"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="215"/>
         <source>Data Bits</source>
         <translation>Биты Данных</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="228"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="238"/>
         <source>Stop Bits</source>
         <translation>Стоповые Биты</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="248"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="260"/>
         <source>Host</source>
         <translation>Хост</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="257"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="271"/>
         <source>IP Address</source>
         <translation>IP-Адрес</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="276"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="290"/>
         <source>Port</source>
         <translation>Порт</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="284"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="300"/>
         <source>TCP Port</source>
         <translation>TCP-Порт</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="317"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="333"/>
         <source>Slave Address</source>
         <translation>Адрес Устройства</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="322"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="340"/>
         <source>1-247</source>
         <translation>1-247</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="380"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="402"/>
         <source>Configure Register Groups…</source>
         <translation>Настроить Группы Регистров…</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="390"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="414"/>
         <source>Import Register Map…</source>
         <translation>Импортировать Карту Регистров…</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="405"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="429"/>
         <source>%1 group(s) configured</source>
         <translation>Настроено групп: %1</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="406"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="430"/>
         <source>No groups configured</source>
         <translation>Группы не настроены</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="342"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="360"/>
         <source>Poll Interval (ms)</source>
         <translation>Интервал Опроса (мс)</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="347"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="367"/>
         <source>Polling interval</source>
         <translation>Интервал опроса</translation>
     </message>
@@ -22357,99 +22367,99 @@ Would you like to open the download page?</source>
         <translation>Тип Регистра:</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="133"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="135"/>
         <source>Start Address:</source>
         <translation>Начальный Адрес:</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="140"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="144"/>
         <source>0-65535</source>
         <translation>0-65535</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="146"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="150"/>
         <source>Register Count:</source>
         <translation>Количество Регистров:</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="153"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="159"/>
         <source>1-125</source>
         <translation>1-125</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="159"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="165"/>
         <source>Slave Address:</source>
         <translation>Адрес Устройства:</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="170"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="178"/>
         <source>Leave empty to use the device address</source>
         <translation>Оставьте пустым для использования адреса устройства</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="175"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="185"/>
         <source>Add Group</source>
         <translation>Добавить Группу</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="200"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="210"/>
         <source>Configured Groups</source>
         <translation>Настроенные Группы</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="234"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="244"/>
         <source>#</source>
         <translation>№</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="241"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="251"/>
         <source>Type</source>
         <translation>Тип</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="249"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="259"/>
         <source>Start</source>
         <translation>Начало</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="256"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="266"/>
         <source>Count</source>
         <translation>Количество</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="263"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="273"/>
         <source>Action</source>
         <translation>Действие</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="338"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="350"/>
         <source>Remove</source>
         <translation>Удалить</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="350"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="362"/>
         <source>No groups configured.
 Add groups above to poll multiple register types.</source>
         <translation>Группы не настроены.
 Добавьте группы выше для опроса нескольких типов регистров.</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="368"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="380"/>
         <source>Total groups: %1</source>
         <translation>Всего групп: %1</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="372"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="386"/>
         <source>Generate Project</source>
         <translation>Создать Проект</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="378"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="394"/>
         <source>Clear All</source>
         <translation>Очистить Всё</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="384"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="402"/>
         <source>Close</source>
         <translation>Закрыть</translation>
     </message>
@@ -22517,22 +22527,22 @@ Add groups above to poll multiple register types.</source>
         <translation>Всего: %1 регистров в %2 группах</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusPreviewDialog.qml" line="290"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusPreviewDialog.qml" line="292"/>
         <source>Cancel</source>
         <translation>Отмена</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusPreviewDialog.qml" line="301"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusPreviewDialog.qml" line="305"/>
         <source>Add to Project</source>
         <translation>Добавить в Проект</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusPreviewDialog.qml" line="306"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusPreviewDialog.qml" line="310"/>
         <source>Add the generated source, groups, tables and workspaces to the project that is open, instead of creating a new file</source>
         <translation>Добавить сгенерированный источник, группы, таблицы и рабочие пространства в открытый проект вместо создания нового файла</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusPreviewDialog.qml" line="317"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusPreviewDialog.qml" line="323"/>
         <source>Create Project</source>
         <translation>Создать Проект</translation>
     </message>
@@ -23221,79 +23231,79 @@ Add groups above to poll multiple register types.</source>
         <translation>Тип Сокета</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="166"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="170"/>
         <source>Remote Address</source>
         <translation>Удалённый Адрес</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="129"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="131"/>
         <source>Local Port</source>
         <translation>Локальный Порт</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="134"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="138"/>
         <source>Type 0 for automatic port</source>
         <translation>Введите 0 для автоматического порта</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="196"/>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="233"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="202"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="241"/>
         <source>Remote Port</source>
         <translation>Удалённый Порт</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="269"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="279"/>
         <source>Multicast</source>
         <translation>Multicast</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="292"/>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="345"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="304"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="361"/>
         <source>URL</source>
         <translation>URL</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="323"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="337"/>
         <source>Send Format</source>
         <translation>Формат Отправки</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="375"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="393"/>
         <source>Method</source>
         <translation>Метод</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="398"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="418"/>
         <source>Poll Interval</source>
         <translation>Интервал Опроса</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="407"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="429"/>
         <source>Milliseconds; 0 sends only on write</source>
         <translation>Миллисекунды; 0 отправляет только при записи</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="431"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="453"/>
         <source>Request Body</source>
         <translation>Тело Запроса</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="439"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="463"/>
         <source>Optional</source>
         <translation>Необязательно</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="459"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="483"/>
         <source>Request Headers</source>
         <translation>Заголовки Запроса</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="480"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="506"/>
         <source>One %1 pair per line</source>
         <translation>Одна пара %1 на строку</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="496"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="522"/>
         <source>Ignore TLS Errors</source>
         <translation>Игнорировать Ошибки TLS</translation>
     </message>
@@ -23336,82 +23346,82 @@ Add groups above to poll multiple register types.</source>
 <context>
     <name>OfflineActivation</name>
     <message>
-        <location filename="../../qml/Dialogs/OfflineActivation.qml" line="37"/>
+        <location filename="../../qml/Dialogs/OfflineActivation.qml" line="39"/>
         <source>Activate Offline</source>
         <translation>Активировать Офлайн</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/OfflineActivation.qml" line="55"/>
+        <location filename="../../qml/Dialogs/OfflineActivation.qml" line="57"/>
         <source>Activate Serial Studio Pro on a machine with no internet access. No account or connection is needed on this computer.</source>
         <translation>Активировать Serial Studio Pro на компьютере без доступа к интернету. Учётная запись и подключение на этом компьютере не требуются.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/OfflineActivation.qml" line="86"/>
+        <location filename="../../qml/Dialogs/OfflineActivation.qml" line="88"/>
         <source>Save your device file</source>
         <translation>Сохранить файл устройства</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/OfflineActivation.qml" line="95"/>
+        <location filename="../../qml/Dialogs/OfflineActivation.qml" line="97"/>
         <source>Save this computer's device file. It identifies this machine and contains no personal information.</source>
         <translation>Сохраните файл устройства этого компьютера. Он идентифицирует эту машину и не содержит личной информации.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/OfflineActivation.qml" line="102"/>
+        <location filename="../../qml/Dialogs/OfflineActivation.qml" line="104"/>
         <source>Save Device File…</source>
         <translation>Сохранить Файл Устройства…</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/OfflineActivation.qml" line="136"/>
+        <location filename="../../qml/Dialogs/OfflineActivation.qml" line="138"/>
         <source>Get your license file</source>
         <translation>Получить файл лицензии</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/OfflineActivation.qml" line="145"/>
+        <location filename="../../qml/Dialogs/OfflineActivation.qml" line="147"/>
         <source>On another computer with internet access, go to the address below, upload the device file, and enter your email and license key.</source>
         <translation>На другом компьютере с доступом к интернету перейдите по адресу ниже, загрузите файл устройства и введите адрес электронной почты и лицензионный ключ.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/OfflineActivation.qml" line="157"/>
+        <location filename="../../qml/Dialogs/OfflineActivation.qml" line="159"/>
         <source>Open in Browser</source>
         <translation>Открыть в Браузере</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/OfflineActivation.qml" line="193"/>
+        <location filename="../../qml/Dialogs/OfflineActivation.qml" line="195"/>
         <source>Import your license</source>
         <translation>Импортировать лицензию</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/OfflineActivation.qml" line="202"/>
+        <location filename="../../qml/Dialogs/OfflineActivation.qml" line="204"/>
         <source>Copy the license file to this computer and import it. Pro features unlock immediately.</source>
         <translation>Скопируйте файл лицензии на этот компьютер и импортируйте его. Функции Pro разблокируются немедленно.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/OfflineActivation.qml" line="209"/>
+        <location filename="../../qml/Dialogs/OfflineActivation.qml" line="211"/>
         <source>Import License File…</source>
         <translation>Импортировать Файл Лицензии…</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/OfflineActivation.qml" line="224"/>
+        <location filename="../../qml/Dialogs/OfflineActivation.qml" line="226"/>
         <source>Save Device File</source>
         <translation>Сохранить Файл Устройства</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/OfflineActivation.qml" line="226"/>
+        <location filename="../../qml/Dialogs/OfflineActivation.qml" line="228"/>
         <source>Serial Studio device file (*.ssmachine)</source>
         <translation>Файл устройства Serial Studio (*.ssmachine)</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/OfflineActivation.qml" line="235"/>
+        <location filename="../../qml/Dialogs/OfflineActivation.qml" line="237"/>
         <source>Import License File</source>
         <translation>Импортировать Файл Лицензии</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/OfflineActivation.qml" line="236"/>
+        <location filename="../../qml/Dialogs/OfflineActivation.qml" line="238"/>
         <source>Serial Studio license (*.sslic)</source>
         <translation>Лицензия Serial Studio (*.sslic)</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/OfflineActivation.qml" line="236"/>
+        <location filename="../../qml/Dialogs/OfflineActivation.qml" line="238"/>
         <source>All files (*)</source>
         <translation>Все файлы (*)</translation>
     </message>
@@ -23452,22 +23462,22 @@ Add groups above to poll multiple register types.</source>
 <context>
     <name>OnlineIconPicker</name>
     <message>
-        <location filename="../../qml/Dialogs/OnlineIconPicker.qml" line="41"/>
+        <location filename="../../qml/Dialogs/OnlineIconPicker.qml" line="43"/>
         <source>Search Online Icons</source>
         <translation>Поиск Онлайн Иконок</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/OnlineIconPicker.qml" line="81"/>
+        <location filename="../../qml/Dialogs/OnlineIconPicker.qml" line="83"/>
         <source>Download failed: %1</source>
         <translation>Ошибка загрузки: %1</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/OnlineIconPicker.qml" line="111"/>
+        <location filename="../../qml/Dialogs/OnlineIconPicker.qml" line="113"/>
         <source>Search icons (e.g. temperature, arrow, play)…</source>
         <translation>Поиск иконок (например, temperature, arrow, play)…</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/OnlineIconPicker.qml" line="124"/>
+        <location filename="../../qml/Dialogs/OnlineIconPicker.qml" line="126"/>
         <source>Search…</source>
         <translation>Поиск…</translation>
     </message>
@@ -23476,17 +23486,17 @@ Add groups above to poll multiple register types.</source>
         <translation type="vanished">Поиск</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/OnlineIconPicker.qml" line="162"/>
+        <location filename="../../qml/Dialogs/OnlineIconPicker.qml" line="164"/>
         <source>Search for icons above to get started</source>
         <translation>Найдите иконки выше, чтобы начать</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/OnlineIconPicker.qml" line="280"/>
+        <location filename="../../qml/Dialogs/OnlineIconPicker.qml" line="282"/>
         <source>OK</source>
         <translation>ОК</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/OnlineIconPicker.qml" line="290"/>
+        <location filename="../../qml/Dialogs/OnlineIconPicker.qml" line="292"/>
         <source>Cancel</source>
         <translation>Отмена</translation>
     </message>
@@ -23499,42 +23509,42 @@ Add groups above to poll multiple register types.</source>
         <translation>Конечная Точка</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="73"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="77"/>
         <source>Discover</source>
         <translation>Обнаружить</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="90"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="94"/>
         <source>Poll Interval (ms)</source>
         <translation>Интервал Опроса (мс)</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="95"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="101"/>
         <source>10-60000</source>
         <translation>10-60000</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="111"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="117"/>
         <source>Security</source>
         <translation>Безопасность</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="152"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="160"/>
         <source>This endpoint offers no user identity token the selected authentication mode can present</source>
         <translation>Эта конечная точка не предоставляет токен идентификации пользователя, который может представить выбранный режим аутентификации</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="161"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="169"/>
         <source>Policy</source>
         <translation>Политика</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="177"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="187"/>
         <source>Mode</source>
         <translation>Режим</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="183"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="195"/>
         <source>Sign</source>
         <translation>Подпись</translation>
     </message>
@@ -23543,33 +23553,33 @@ Add groups above to poll multiple register types.</source>
         <translation type="vanished">Подпись и Шифрование</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="203"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="215"/>
         <source>This policy is deprecated by the OPC Foundation (SHA-1 / RSA-1.5). Use it only for controllers that support nothing better.</source>
         <translation>Эта политика устарела по решению OPC Foundation (SHA-1 / RSA-1.5). Используйте её только для контроллеров, которые не поддерживают ничего лучшего.</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="263"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="281"/>
         <source>Certificate</source>
         <translation>Сертификат</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="275"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="295"/>
         <source>No certificate selected</source>
         <translation>Сертификат не выбран</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="279"/>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="304"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="301"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="330"/>
         <source>Browse…</source>
         <translation>Обзор…</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="288"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="310"/>
         <source>Private Key</source>
         <translation>Закрытый Ключ</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="300"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="324"/>
         <source>No private key selected</source>
         <translation>Закрытый ключ не выбран</translation>
     </message>
@@ -23578,74 +23588,74 @@ Add groups above to poll multiple register types.</source>
         <translation type="vanished">Учётные данные передаются в открытом виде по этому каналу. Выберите политику, отличную от None, с Sign &amp; Encrypt для их защиты.</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="183"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="195"/>
         <source>Sign and Encrypt</source>
         <translation>Подпись и Шифрование</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="320"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="346"/>
         <source>Credentials travel in the clear on this channel. Choose a policy other than None with Sign and Encrypt to protect them.</source>
         <translation>Учётные данные передаются в открытом виде по этому каналу. Выберите политику, отличную от None, с Подпись и Шифрование для их защиты.</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="334"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="362"/>
         <source>Send the password anyway on this unencrypted channel</source>
         <translation>Всё равно отправить пароль по этому незашифрованному каналу</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="343"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="371"/>
         <source>Identity</source>
         <translation>Идентификация</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="358"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="386"/>
         <source>Generated on the first secure connection</source>
         <translation>Генерируется при первом защищённом подключении</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="366"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="396"/>
         <source>Export…</source>
         <translation>Экспорт…</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="372"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="404"/>
         <source>Replace</source>
         <translation>Заменить</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="453"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="489"/>
         <source>Export Client Certificate</source>
         <translation>Экспорт Сертификата Клиента</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="454"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="490"/>
         <source>Certificate (*.der)</source>
         <translation>Сертификат (*.der)</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="454"/>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="462"/>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="470"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="490"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="498"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="506"/>
         <source>All files (*)</source>
         <translation>Все файлы (*)</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="461"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="497"/>
         <source>Select User Certificate</source>
         <translation>Выбрать Сертификат Пользователя</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="462"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="498"/>
         <source>Certificate (*.der *.pem *.crt)</source>
         <translation>Сертификат (*.der *.pem *.crt)</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="469"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="505"/>
         <source>Select Private Key</source>
         <translation>Выбрать Приватный Ключ</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="470"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="506"/>
         <source>Private key (*.der *.pem *.key)</source>
         <translation>Приватный ключ (*.der *.pem *.key)</translation>
     </message>
@@ -23654,17 +23664,17 @@ Add groups above to poll multiple register types.</source>
         <translation type="vanished">Защищённые каналы не поддерживаются в этой версии</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="212"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="224"/>
         <source>Authentication</source>
         <translation>Аутентификация</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="228"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="242"/>
         <source>Username</source>
         <translation>Имя Пользователя</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="245"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="261"/>
         <source>Password</source>
         <translation>Пароль</translation>
     </message>
@@ -23673,22 +23683,22 @@ Add groups above to poll multiple register types.</source>
         <translation type="vanished">Учётные данные передаются незашифрованными: эта версия открывает только каналы с политикой None.</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="398"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="432"/>
         <source>Browse Tags…</source>
         <translation>Обзор Тегов…</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="409"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="445"/>
         <source>Generate Project</source>
         <translation>Создать Проект</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="427"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="463"/>
         <source>%1 tag(s) selected</source>
         <translation>Выбрано тегов: %1</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="428"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="464"/>
         <source>No tags selected</source>
         <translation>Теги не выбраны</translation>
     </message>
@@ -23696,47 +23706,47 @@ Add groups above to poll multiple register types.</source>
 <context>
     <name>OpcUaTagBrowser</name>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUaTagBrowser.qml" line="45"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUaTagBrowser.qml" line="47"/>
         <source>OPC UA Tag Browser</source>
         <translation>Обозреватель Тегов OPC UA</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUaTagBrowser.qml" line="184"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUaTagBrowser.qml" line="186"/>
         <source>Expand folders to browse the server. Tick the variables to subscribe to; ticking a folder selects every readable variable beneath it.</source>
         <translation>Разверните папки для просмотра сервера. Отметьте переменные для подписки; отметка папки выбирает все доступные для чтения переменные внутри неё.</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUaTagBrowser.qml" line="203"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUaTagBrowser.qml" line="205"/>
         <source>More than 512 channels selected; very wide frames slow the dashboard.</source>
         <translation>Выбрано более 512 каналов; очень широкие кадры замедляют панель управления.</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUaTagBrowser.qml" line="211"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUaTagBrowser.qml" line="213"/>
         <source>Reading the address space...</source>
         <translation>Чтение адресного пространства...</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUaTagBrowser.qml" line="219"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUaTagBrowser.qml" line="223"/>
         <source>Filter by name…</source>
         <translation>Фильтр по имени…</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUaTagBrowser.qml" line="434"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUaTagBrowser.qml" line="440"/>
         <source>%1 tag(s), %2 channel(s) selected</source>
         <translation>Выбрано тегов: %1, каналов: %2</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUaTagBrowser.qml" line="441"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUaTagBrowser.qml" line="449"/>
         <source>Select All Readable</source>
         <translation>Выбрать Все Читаемые</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUaTagBrowser.qml" line="448"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUaTagBrowser.qml" line="458"/>
         <source>Cancel</source>
         <translation>Отмена</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUaTagBrowser.qml" line="455"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUaTagBrowser.qml" line="467"/>
         <source>OK</source>
         <translation>ОК</translation>
     </message>
@@ -23744,52 +23754,52 @@ Add groups above to poll multiple register types.</source>
 <context>
     <name>OpcUaTrustDialog</name>
     <message>
-        <location filename="../../qml/Dialogs/OpcUaTrustDialog.qml" line="42"/>
+        <location filename="../../qml/Dialogs/OpcUaTrustDialog.qml" line="44"/>
         <source>Untrusted OPC UA Server</source>
         <translation>Недоверенный Сервер OPC UA</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/OpcUaTrustDialog.qml" line="84"/>
+        <location filename="../../qml/Dialogs/OpcUaTrustDialog.qml" line="86"/>
         <source>Check the fingerprint against the one the server operator gave you before accepting. Accepting records the decision for this installation; it does not reconnect, so press Connect again afterwards.</source>
         <translation>Проверьте отпечаток с тем, который предоставил оператор сервера, перед принятием. Принятие сохраняет решение для этой установки; оно не переподключает, поэтому нажмите Подключить снова после этого.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/OpcUaTrustDialog.qml" line="108"/>
+        <location filename="../../qml/Dialogs/OpcUaTrustDialog.qml" line="110"/>
         <source>Subject:</source>
         <translation>Субъект:</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/OpcUaTrustDialog.qml" line="119"/>
+        <location filename="../../qml/Dialogs/OpcUaTrustDialog.qml" line="121"/>
         <source>Issuer:</source>
         <translation>Издатель:</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/OpcUaTrustDialog.qml" line="130"/>
+        <location filename="../../qml/Dialogs/OpcUaTrustDialog.qml" line="132"/>
         <source>Application URI:</source>
         <translation>URI Приложения:</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/OpcUaTrustDialog.qml" line="141"/>
+        <location filename="../../qml/Dialogs/OpcUaTrustDialog.qml" line="143"/>
         <source>Fingerprint:</source>
         <translation>Отпечаток:</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/OpcUaTrustDialog.qml" line="152"/>
+        <location filename="../../qml/Dialogs/OpcUaTrustDialog.qml" line="154"/>
         <source>Valid From:</source>
         <translation>Действителен С:</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/OpcUaTrustDialog.qml" line="162"/>
+        <location filename="../../qml/Dialogs/OpcUaTrustDialog.qml" line="164"/>
         <source>Valid Until:</source>
         <translation>Действителен До:</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/OpcUaTrustDialog.qml" line="188"/>
+        <location filename="../../qml/Dialogs/OpcUaTrustDialog.qml" line="190"/>
         <source>Reject</source>
         <translation>Отклонить</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/OpcUaTrustDialog.qml" line="193"/>
+        <location filename="../../qml/Dialogs/OpcUaTrustDialog.qml" line="195"/>
         <source>Trust This Server</source>
         <translation>Доверять Этому Серверу</translation>
     </message>
@@ -23966,12 +23976,12 @@ Add groups above to poll multiple register types.</source>
         <translation type="vanished">Редактор Кода Виджета Рисования</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="77"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="79"/>
         <source>paint(ctx, w, h)</source>
         <translation>paint(ctx, w, h)</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="87"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="89"/>
         <source>Import</source>
         <translation>Импортировать</translation>
     </message>
@@ -23980,7 +23990,7 @@ Add groups above to poll multiple register types.</source>
         <translation type="vanished">Импортировать код рисования из файла .js</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="100"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="102"/>
         <source>Template</source>
         <translation>Шаблон</translation>
     </message>
@@ -23989,7 +23999,7 @@ Add groups above to poll multiple register types.</source>
         <translation type="vanished">Выбрать встроенный шаблон отрисовки</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="109"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="111"/>
         <source>Format</source>
         <translation>Форматировать</translation>
     </message>
@@ -23998,42 +24008,42 @@ Add groups above to poll multiple register types.</source>
         <translation type="vanished">Переформатировать код отрисовки</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="31"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="33"/>
         <source>Canvas Widget Code Editor</source>
         <translation>Редактор Кода Виджета Холста</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="92"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="94"/>
         <source>Import canvas code from a .js file</source>
         <translation>Импортировать код холста из файла .js</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="103"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="105"/>
         <source>Select a built-in canvas template</source>
         <translation>Выбрать встроенный шаблон холста</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="114"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="116"/>
         <source>Reformat the canvas code</source>
         <translation>Переформатировать код холста</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="120"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="122"/>
         <source>Test</source>
         <translation>Проверить</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="125"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="127"/>
         <source>Open a live preview with simulated dataset values</source>
         <translation>Открыть предпросмотр с симулированными значениями набора данных</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="128"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="130"/>
         <source>Preview</source>
         <translation>Предпросмотр</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="183"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="185"/>
         <source>Close</source>
         <translation>Закрыть</translation>
     </message>
@@ -24077,43 +24087,43 @@ Add groups above to poll multiple register types.</source>
         <translation type="vanished">Предварительный Просмотр Painter</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/PainterTestDialog.qml" line="28"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/PainterTestDialog.qml" line="30"/>
         <source>Canvas Live Preview</source>
         <translation>Предпросмотр Холста в Реальном Времени</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/PainterTestDialog.qml" line="32"/>
-        <location filename="../../qml/ProjectEditor/Dialogs/PainterTestDialog.qml" line="37"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/PainterTestDialog.qml" line="34"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/PainterTestDialog.qml" line="39"/>
         <source>Preview</source>
         <translation>Предварительный Просмотр</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/PainterTestDialog.qml" line="113"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/PainterTestDialog.qml" line="115"/>
         <source>Simulated datasets</source>
         <translation>Симулированные наборы данных</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/PainterTestDialog.qml" line="180"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/PainterTestDialog.qml" line="182"/>
         <source>Runtime OK</source>
         <translation>Выполнение OK</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/PainterTestDialog.qml" line="181"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/PainterTestDialog.qml" line="183"/>
         <source>Awaiting first frame...</source>
         <translation>Ожидание первого кадра...</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/PainterTestDialog.qml" line="194"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/PainterTestDialog.qml" line="196"/>
         <source>Console</source>
         <translation>Консоль</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/PainterTestDialog.qml" line="236"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/PainterTestDialog.qml" line="238"/>
         <source>Clear console</source>
         <translation>Очистить консоль</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/PainterTestDialog.qml" line="245"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/PainterTestDialog.qml" line="247"/>
         <source>Close</source>
         <translation>Закрыть</translation>
     </message>
@@ -24613,82 +24623,82 @@ Add groups above to poll multiple register types.</source>
 <context>
     <name>ProblemCenter</name>
     <message>
-        <location filename="../../qml/Dialogs/ProblemCenter.qml" line="40"/>
+        <location filename="../../qml/Dialogs/ProblemCenter.qml" line="42"/>
         <source>Problem Center</source>
         <translation>Центр Проблем</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ProblemCenter.qml" line="119"/>
+        <location filename="../../qml/Dialogs/ProblemCenter.qml" line="121"/>
         <source>Error</source>
         <translation>Ошибка</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ProblemCenter.qml" line="120"/>
+        <location filename="../../qml/Dialogs/ProblemCenter.qml" line="122"/>
         <source>Warning</source>
         <translation>Предупреждение</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ProblemCenter.qml" line="121"/>
+        <location filename="../../qml/Dialogs/ProblemCenter.qml" line="123"/>
         <source>Information</source>
         <translation>Информация</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ProblemCenter.qml" line="212"/>
+        <location filename="../../qml/Dialogs/ProblemCenter.qml" line="214"/>
         <source>%1 errors, %2 warnings, %3 notices</source>
         <translation>Ошибок: %1, предупреждений: %2, уведомлений: %3</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ProblemCenter.qml" line="228"/>
+        <location filename="../../qml/Dialogs/ProblemCenter.qml" line="230"/>
         <source>All Severities</source>
         <translation>Все Уровни Серьёзности</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ProblemCenter.qml" line="249"/>
+        <location filename="../../qml/Dialogs/ProblemCenter.qml" line="251"/>
         <source>Running Diagnostics</source>
         <translation>Выполняется Диагностика</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ProblemCenter.qml" line="250"/>
+        <location filename="../../qml/Dialogs/ProblemCenter.qml" line="252"/>
         <source>Run Diagnostics</source>
         <translation>Запустить Диагностику</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ProblemCenter.qml" line="256"/>
+        <location filename="../../qml/Dialogs/ProblemCenter.qml" line="258"/>
         <source>Refresh</source>
         <translation>Обновить</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ProblemCenter.qml" line="263"/>
+        <location filename="../../qml/Dialogs/ProblemCenter.qml" line="265"/>
         <source>Clear</source>
         <translation>Очистить</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ProblemCenter.qml" line="386"/>
+        <location filename="../../qml/Dialogs/ProblemCenter.qml" line="388"/>
         <source>Go To</source>
         <translation>Перейти</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ProblemCenter.qml" line="424"/>
+        <location filename="../../qml/Dialogs/ProblemCenter.qml" line="426"/>
         <source>No problems match the current filter</source>
         <translation>Нет проблем, соответствующих текущему фильтру.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ProblemCenter.qml" line="425"/>
+        <location filename="../../qml/Dialogs/ProblemCenter.qml" line="427"/>
         <source>No problems detected</source>
         <translation>Проблем не обнаружено</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ProblemCenter.qml" line="434"/>
+        <location filename="../../qml/Dialogs/ProblemCenter.qml" line="436"/>
         <source>Project, link and script checks run automatically.</source>
         <translation>Проверки проекта, ссылок и скриптов выполняются автоматически.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ProblemCenter.qml" line="450"/>
+        <location filename="../../qml/Dialogs/ProblemCenter.qml" line="452"/>
         <source>Last checked at %1</source>
         <translation>Последняя проверка в %1</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ProblemCenter.qml" line="459"/>
+        <location filename="../../qml/Dialogs/ProblemCenter.qml" line="461"/>
         <source>Close</source>
         <translation>Закрыть</translation>
     </message>
@@ -24701,69 +24711,69 @@ Add groups above to poll multiple register types.</source>
         <translation>Режим</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="77"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="79"/>
         <source>Launch Process</source>
         <translation>Запустить Процесс</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="77"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="79"/>
         <source>Named Pipe</source>
         <translation>Именованный Канал</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="102"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="104"/>
         <source>Executable</source>
         <translation>Исполняемый Файл</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="116"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="120"/>
         <source>/path/to/executable</source>
         <translation>/путь/к/исполняемому/файлу</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="137"/>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="221"/>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="273"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="143"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="233"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="289"/>
         <source>Browse</source>
         <translation>Обзор</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="150"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="156"/>
         <source>Arguments</source>
         <translation>Аргументы</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="160"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="168"/>
         <source>--arg1 value1 --arg2 value2</source>
         <translation>--арг1 значение1 --арг2 значение2</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="186"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="194"/>
         <source>Working Dir</source>
         <translation>Рабочий Каталог</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="200"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="210"/>
         <source>(optional) /working/directory</source>
         <translation>(необязательно) /рабочий/каталог</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="236"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="248"/>
         <source>Pipe Path</source>
         <translation>Путь к Каналу</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="289"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="307"/>
         <source>Pick Running Process…</source>
         <translation>Выбрать Запущенный Процесс…</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="327"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="345"/>
         <source>Launch a child process and capture its stdout, or connect to a named pipe written by an existing process.</source>
         <translation>Запустить дочерний процесс и захватить его stdout, или подключиться к именованному каналу, созданному существующим процессом.</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="335"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="353"/>
         <source>Learn about named pipes</source>
         <translation>Узнать об именованных каналах</translation>
     </message>
@@ -24786,54 +24796,54 @@ Add groups above to poll multiple register types.</source>
         <translation>Фильтр Процессов</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="224"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="226"/>
         <source>Type to filter by name…</source>
         <translation>Введите для фильтрации по названию…</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="228"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="232"/>
         <source>Refresh</source>
         <translation>Обновить</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="236"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="240"/>
         <source>Running Processes</source>
         <translation>Выполняющиеся Процессы</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="274"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="278"/>
         <source>Process</source>
         <translation>Процесс</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="281"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="285"/>
         <source>PID</source>
         <translation>PID</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="376"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="380"/>
         <source>No processes match the filter.</source>
         <translation>Нет процессов, соответствующих фильтру.</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="377"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="381"/>
         <source>No running processes found.
 Click Refresh to update the list.</source>
         <translation>Запущенные процессы не найдены.
 Нажмите «Обновить» для обновления списка.</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="393"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="397"/>
         <source>%1 process(es)</source>
         <translation>Процессов: %1</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="397"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="403"/>
         <source>Select</source>
         <translation>Выбрать</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="403"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="411"/>
         <source>Close</source>
         <translation>Закрыть</translation>
     </message>
@@ -24841,7 +24851,7 @@ Click Refresh to update the list.</source>
 <context>
     <name>ProjectEditor</name>
     <message>
-        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="45"/>
+        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="47"/>
         <source>modified</source>
         <translation>изменён</translation>
     </message>
@@ -24854,7 +24864,7 @@ Click Refresh to update the list.</source>
         <translation type="vanished">Команды</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="453"/>
+        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="455"/>
         <source>This project is password protected</source>
         <translation>Этот проект защищён паролем</translation>
     </message>
@@ -24863,7 +24873,7 @@ Click Refresh to update the list.</source>
         <translation type="vanished">Редактирование доступно в режиме проекта</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="470"/>
+        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="472"/>
         <source>Enter the password to make changes, or open a different project.</source>
         <translation>Введите пароль для внесения изменений или откройте другой проект.</translation>
     </message>
@@ -24872,7 +24882,7 @@ Click Refresh to update the list.</source>
         <translation type="vanished">Переключитесь в режим проекта для загрузки и редактирования проекта.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="495"/>
+        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="497"/>
         <source>Unlock</source>
         <translation>Разблокировать</translation>
     </message>
@@ -24881,47 +24891,47 @@ Click Refresh to update the list.</source>
         <translation type="vanished">Переключиться в Режим Проекта</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="91"/>
+        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="93"/>
         <source>Switched to Project File mode</source>
         <translation>Переключено на режим Файла Проекта</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="92"/>
+        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="94"/>
         <source>The Project Editor works on project files. To go back, choose another Operation Mode in Device Setup.</source>
         <translation>Редактор Проекта работает с файлами проектов. Для возврата выберите другой режим операции в Настройке Устройства.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="456"/>
+        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="458"/>
         <source>Disconnect to edit the project</source>
         <translation>Отключитесь для редактирования проекта</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="458"/>
+        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="460"/>
         <source>Close the playback to edit the project</source>
         <translation>Закройте воспроизведение для редактирования проекта</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="471"/>
+        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="473"/>
         <source>The Project Editor needs Project File mode, which starts when the current session ends. The session keeps running until then.</source>
         <translation>Редактор Проекта требует режима Файла Проекта, который начинается по окончании текущей сессии. Сессия продолжает работать до тех пор.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="496"/>
+        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="498"/>
         <source>Disconnect and Edit</source>
         <translation>Отключиться и Редактировать</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="515"/>
+        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="517"/>
         <source>Open Other Project</source>
         <translation>Открыть Другой Проект</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="516"/>
+        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="518"/>
         <source>Close</source>
         <translation>Закрыть</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="532"/>
+        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="534"/>
         <source>Create New Project</source>
         <translation>Создать Новый Проект</translation>
     </message>
@@ -26972,72 +26982,72 @@ Reload it?</source>
 <context>
     <name>ProtoPreviewDialog</name>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/ProtoPreviewDialog.qml" line="41"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/ProtoPreviewDialog.qml" line="43"/>
         <source>Protocol Buffers File Preview</source>
         <translation>Предварительный Просмотр Файла Protocol Buffers</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/ProtoPreviewDialog.qml" line="165"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/ProtoPreviewDialog.qml" line="167"/>
         <source>Proto File: %1</source>
         <translation>Proto-файл: %1</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/ProtoPreviewDialog.qml" line="173"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/ProtoPreviewDialog.qml" line="175"/>
         <source>Browse the messages below, then create the project. Every message becomes a dashboard group; matching-type channel blocks get a MultiPlot and mixed-type messages get a DataGrid.</source>
         <translation>Просмотрите сообщения ниже, затем создайте проект. Каждое сообщение становится группой панели; блоки каналов совпадающих типов получают MultiPlot, а сообщения смешанных типов получают DataGrid.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/ProtoPreviewDialog.qml" line="183"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/ProtoPreviewDialog.qml" line="185"/>
         <source>Show fields for</source>
         <translation>Показать поля для</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/ProtoPreviewDialog.qml" line="209"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/ProtoPreviewDialog.qml" line="211"/>
         <source>Fields</source>
         <translation>Поля</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/ProtoPreviewDialog.qml" line="243"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/ProtoPreviewDialog.qml" line="245"/>
         <source>Tag</source>
         <translation>Тег</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/ProtoPreviewDialog.qml" line="253"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/ProtoPreviewDialog.qml" line="255"/>
         <source>Field Name</source>
         <translation>Название Поля</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/ProtoPreviewDialog.qml" line="258"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/ProtoPreviewDialog.qml" line="260"/>
         <source>Type</source>
         <translation>Тип</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/ProtoPreviewDialog.qml" line="345"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/ProtoPreviewDialog.qml" line="347"/>
         <source>No fields in the selected message.</source>
         <translation>Нет полей в выбранном сообщении.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/ProtoPreviewDialog.qml" line="363"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/ProtoPreviewDialog.qml" line="365"/>
         <source>Total: %1 messages, %2 fields</source>
         <translation>Всего: %1 сообщений, %2 полей</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/ProtoPreviewDialog.qml" line="370"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/ProtoPreviewDialog.qml" line="372"/>
         <source>Cancel</source>
         <translation>Отмена</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/ProtoPreviewDialog.qml" line="380"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/ProtoPreviewDialog.qml" line="382"/>
         <source>Add to Project</source>
         <translation>Добавить в Проект</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/ProtoPreviewDialog.qml" line="385"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/ProtoPreviewDialog.qml" line="387"/>
         <source>Add the generated source, groups, tables and workspaces to the project that is open, instead of creating a new file</source>
         <translation>Добавить сгенерированный источник, группы, таблицы и рабочие пространства в открытый проект вместо создания нового файла</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/ProtoPreviewDialog.qml" line="396"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/ProtoPreviewDialog.qml" line="398"/>
         <source>Create Project</source>
         <translation>Создать Проект</translation>
     </message>
@@ -28192,67 +28202,67 @@ function parse(%1) { ... }
 <context>
     <name>RemoteAttach</name>
     <message>
-        <location filename="../../qml/Dialogs/RemoteAttach.qml" line="37"/>
+        <location filename="../../qml/Dialogs/RemoteAttach.qml" line="39"/>
         <source>Attach to Remote Dashboard</source>
         <translation>Подключиться к Удалённой Панели</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/RemoteAttach.qml" line="67"/>
+        <location filename="../../qml/Dialogs/RemoteAttach.qml" line="69"/>
         <source>Disconnect the local device or close the open recording first.</source>
         <translation>Сначала отключите локальное устройство или закройте открытую запись.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/RemoteAttach.qml" line="80"/>
+        <location filename="../../qml/Dialogs/RemoteAttach.qml" line="82"/>
         <source>Not attached.</source>
         <translation>Не подключено.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/RemoteAttach.qml" line="83"/>
+        <location filename="../../qml/Dialogs/RemoteAttach.qml" line="85"/>
         <source>Attached to %1 - no response, the link may be down.</source>
         <translation>Подключено к %1 — нет ответа, связь может быть недоступна.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/RemoteAttach.qml" line="87"/>
+        <location filename="../../qml/Dialogs/RemoteAttach.qml" line="89"/>
         <source>Attached to %1 - connected, the remote is not producing data.</source>
         <translation>Подключено к %1 — соединение установлено, удалённый источник не передаёт данные.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/RemoteAttach.qml" line="90"/>
+        <location filename="../../qml/Dialogs/RemoteAttach.qml" line="92"/>
         <source>Attached to %1 - live, %2 datasets at %3 Hz.</source>
         <translation>Подключено к %1 — активно, %2 наборов данных на %3 Гц.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/RemoteAttach.qml" line="133"/>
+        <location filename="../../qml/Dialogs/RemoteAttach.qml" line="135"/>
         <source>Watch another Serial Studio instance's dashboard over the network. The view is read-only: nothing you do here reaches the remote device.</source>
         <translation>Наблюдать за панелью другого экземпляра Serial Studio по сети. Режим только для чтения: ваши действия не передаются на удалённое устройство.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/RemoteAttach.qml" line="147"/>
+        <location filename="../../qml/Dialogs/RemoteAttach.qml" line="149"/>
         <source>Recent</source>
         <translation>Недавние</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/RemoteAttach.qml" line="170"/>
+        <location filename="../../qml/Dialogs/RemoteAttach.qml" line="172"/>
         <source>Host</source>
         <translation>Хост</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/RemoteAttach.qml" line="180"/>
+        <location filename="../../qml/Dialogs/RemoteAttach.qml" line="182"/>
         <source>Host name or IP address</source>
         <translation>Имя хоста или IP-адрес</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/RemoteAttach.qml" line="184"/>
+        <location filename="../../qml/Dialogs/RemoteAttach.qml" line="186"/>
         <source>Port</source>
         <translation>Порт</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/RemoteAttach.qml" line="200"/>
+        <location filename="../../qml/Dialogs/RemoteAttach.qml" line="202"/>
         <source>Token</source>
         <translation>Токен</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/RemoteAttach.qml" line="211"/>
+        <location filename="../../qml/Dialogs/RemoteAttach.qml" line="213"/>
         <source>Required only for connections from another machine</source>
         <translation>Требуется только для подключений с другого компьютера</translation>
     </message>
@@ -28265,22 +28275,22 @@ function parse(%1) { ... }
         <translation type="vanished">%1 Гц</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/RemoteAttach.qml" line="263"/>
+        <location filename="../../qml/Dialogs/RemoteAttach.qml" line="265"/>
         <source>The link is not encrypted. The token authorizes the connection but does not protect what travels over it, so use this on a trusted network or through a tunnel.</source>
         <translation>Соединение не зашифровано. Токен авторизует подключение, но не защищает передаваемые данные, поэтому используйте только в доверенной сети или через туннель.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/RemoteAttach.qml" line="281"/>
+        <location filename="../../qml/Dialogs/RemoteAttach.qml" line="283"/>
         <source>Close</source>
         <translation>Закрыть</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/RemoteAttach.qml" line="290"/>
+        <location filename="../../qml/Dialogs/RemoteAttach.qml" line="292"/>
         <source>Detach</source>
         <translation>Отключить</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/RemoteAttach.qml" line="300"/>
+        <location filename="../../qml/Dialogs/RemoteAttach.qml" line="302"/>
         <source>Attach</source>
         <translation>Подключить</translation>
     </message>
@@ -28288,288 +28298,288 @@ function parse(%1) { ... }
 <context>
     <name>ReportOptionsDialog</name>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="27"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="29"/>
         <source>Generate PDF Report</source>
         <translation>Создать PDF-Отчёт</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="27"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="29"/>
         <source>Generate Report</source>
         <translation>Создать Отчёт</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="73"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="75"/>
         <source>Solid</source>
         <translation>Сплошная</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="74"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="76"/>
         <source>Dashed</source>
         <translation>Штриховая</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="75"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="77"/>
         <source>Dotted</source>
         <translation>Пунктирная</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="97"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="99"/>
         <source>A4 (210 × 297 mm)</source>
         <translation>A4 (210 × 297 мм)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="98"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="100"/>
         <source>A3 (297 × 420 mm)</source>
         <translation>A3 (297 × 420 мм)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="99"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="101"/>
         <source>A2 (420 × 594 mm)</source>
         <translation>A2 (420 × 594 мм)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="100"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="102"/>
         <source>A1 (594 × 841 mm)</source>
         <translation>A1 (594 × 841 мм)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="101"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="103"/>
         <source>A0 (841 × 1189 mm)</source>
         <translation>A0 (841 × 1189 мм)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="102"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="104"/>
         <source>A5 (148 × 210 mm)</source>
         <translation>A5 (148 × 210 мм)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="103"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="105"/>
         <source>A6 (105 × 148 mm)</source>
         <translation>A6 (105 × 148 мм)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="104"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="106"/>
         <source>B4 (250 × 353 mm)</source>
         <translation>B4 (250 × 353 мм)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="105"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="107"/>
         <source>B5 (176 × 250 mm)</source>
         <translation>B5 (176 × 250 мм)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="106"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="108"/>
         <source>Letter (8.5 × 11 in)</source>
         <translation>Letter (8,5 × 11 дюймов)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="107"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="109"/>
         <source>Legal (8.5 × 14 in)</source>
         <translation>Legal (8,5 × 14 дюймов)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="108"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="110"/>
         <source>Executive (7.25 × 10.5 in)</source>
         <translation>Executive (7,25 × 10,5 дюймов)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="109"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="111"/>
         <source>Tabloid (11 × 17 in)</source>
         <translation>Tabloid (11 × 17 дюймов)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="110"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="112"/>
         <source>Ledger (17 × 11 in)</source>
         <translation>Ledger (17 × 11 дюймов)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="124"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="126"/>
         <source>%1 — Session Report</source>
         <translation>%1 — Отчёт Сессии</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="126"/>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="321"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="128"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="323"/>
         <source>Session Report</source>
         <translation>Отчёт Сессии</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="223"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="225"/>
         <source>Branding</source>
         <translation>Брендинг</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="229"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="231"/>
         <source>Page</source>
         <translation>Страница</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="235"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="237"/>
         <source>Sections</source>
         <translation>Разделы</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="241"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="243"/>
         <source>Datasets</source>
         <translation>Наборы Данных</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="289"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="291"/>
         <source>Identity</source>
         <translation>Идентификация</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="303"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="305"/>
         <source>Company</source>
         <translation>Компания</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="310"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="312"/>
         <source>e.g. Acme Test Systems</source>
         <translation>напр. Acme Test Systems</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="314"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="316"/>
         <source>Document title</source>
         <translation>Название Документа</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="325"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="327"/>
         <source>Author</source>
         <translation>Автор</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="332"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="334"/>
         <source>Prepared by (optional)</source>
         <translation>Подготовил (необязательно)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="341"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="343"/>
         <source>Logo</source>
         <translation>Логотип</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="354"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="356"/>
         <source>File</source>
         <translation>Файл</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="365"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="367"/>
         <source>PNG, JPG or SVG (optional)</source>
         <translation>PNG, JPG или SVG (необязательно)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="367"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="369"/>
         <source>Browse…</source>
         <translation>Обзор…</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="370"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="372"/>
         <source>Clear</source>
         <translation>Очистить</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="411"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="413"/>
         <source>Paper</source>
         <translation>Бумага</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="423"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="425"/>
         <source>Page size</source>
         <translation>Размер страницы</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="561"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="563"/>
         <source>Annotate min, max, and mean values on plots</source>
         <translation>Аннотировать минимальные, максимальные и средние значения на графиках</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="598"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="600"/>
         <source>Include datasets</source>
         <translation>Включить наборы данных</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="612"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="614"/>
         <source>Expand All</source>
         <translation>Развернуть Всё</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="621"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="623"/>
         <source>Collapse All</source>
         <translation>Свернуть Всё</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="633"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="635"/>
         <source>Search datasets</source>
         <translation>Поиск наборов данных</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="761"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="763"/>
         <source>Loading datasets...</source>
         <translation>Загрузка наборов данных...</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="762"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="764"/>
         <source>No datasets match your search.</source>
         <translation>Ни один набор данных не соответствует вашему запросу.</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="782"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="784"/>
         <source>Select at least one dataset to include.</source>
         <translation>Выберите хотя бы один набор данных для включения.</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="799"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="801"/>
         <source>Export HTML</source>
         <translation>Экспортировать HTML</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="541"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="543"/>
         <source>Cover page (logo, document title, test subtitle)</source>
         <translation>Титульная страница (логотип, название документа, подзаголовок теста)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="546"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="548"/>
         <source>Test information (project, timestamps, classification and notes)</source>
         <translation>Информация о тесте (проект, временные метки, классификация и примечания)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="551"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="553"/>
         <source>Measurement summary (min, max, mean, std. deviation per parameter)</source>
         <translation>Сводка измерений (мин., макс., среднее, стандартное отклонение по параметру)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="556"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="558"/>
         <source>Parameter trends (time-series chart per numeric parameter)</source>
         <translation>Тренды параметров (график временных рядов по числовому параметру)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="439"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="441"/>
         <source>Plot appearance</source>
         <translation>Внешний вид графика</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="453"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="455"/>
         <source>Line width</source>
         <translation>Толщина линии</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="485"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="487"/>
         <source>Line style</source>
         <translation>Стиль линии</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="526"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="528"/>
         <source>Include</source>
         <translation>Включить</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="791"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="793"/>
         <source>Cancel</source>
         <translation>Отмена</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="799"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="801"/>
         <source>Export PDF</source>
         <translation>Экспорт PDF</translation>
     </message>
@@ -28577,17 +28587,17 @@ function parse(%1) { ... }
 <context>
     <name>ReportProgressDialog</name>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportProgressDialog.qml" line="20"/>
+        <location filename="../../qml/DatabaseExplorer/ReportProgressDialog.qml" line="22"/>
         <source>Generating Report</source>
         <translation>Создание Отчёта</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportProgressDialog.qml" line="69"/>
+        <location filename="../../qml/DatabaseExplorer/ReportProgressDialog.qml" line="71"/>
         <source>Working…</source>
         <translation>Обработка…</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportProgressDialog.qml" line="86"/>
+        <location filename="../../qml/DatabaseExplorer/ReportProgressDialog.qml" line="88"/>
         <source>This can take a few seconds for sessions with many parameters. The window closes automatically when the report is ready.</source>
         <translation>Это может занять несколько секунд для сессий с большим количеством параметров. Окно закроется автоматически, когда отчёт будет готов.</translation>
     </message>
@@ -28628,48 +28638,48 @@ function parse(%1) { ... }
 <context>
     <name>RuntimeReconfigure</name>
     <message>
-        <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="40"/>
+        <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="42"/>
         <source>Connection Lost</source>
         <translation>Соединение Потеряно</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="41"/>
+        <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="43"/>
         <source>Device Unavailable</source>
         <translation>Устройство Недоступно</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="95"/>
+        <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="97"/>
         <source>The connection to your device was lost.</source>
         <translation>Соединение с устройством было потеряно.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="96"/>
+        <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="98"/>
         <source>Serial Studio couldn't reach your device.</source>
         <translation>Serial Studio не удалось подключиться к устройству.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="105"/>
+        <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="107"/>
         <source>Check the cable, power, and that no other application has taken over the device. You can try reconnecting, switch to a different device, or quit.</source>
         <translation>Проверьте кабель, питание и что никакое другое приложение не захватило устройство. Можно попробовать переподключиться, переключиться на другое устройство или выйти.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="108"/>
+        <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="110"/>
         <source>Make sure it's plugged in, powered on, and not already in use by another app. You can try again, pick a different device, or quit.</source>
         <translation>Убедитесь, что оно подключено, включено и не используется другим приложением. Можно повторить попытку, выбрать другое устройство или выйти.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="120"/>
-        <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="189"/>
+        <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="122"/>
+        <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="191"/>
         <source>Quit</source>
         <translation>Выход</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="130"/>
+        <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="132"/>
         <source>Pick Different Device</source>
         <translation>Выбрать Другое Устройство</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="166"/>
+        <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="168"/>
         <source>Connection: %1</source>
         <translation>Подключение: %1</translation>
     </message>
@@ -28678,17 +28688,17 @@ function parse(%1) { ... }
         <translation type="vanished">Переконфигурировать</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="141"/>
+        <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="143"/>
         <source>Try Again</source>
         <translation>Повторить</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="141"/>
+        <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="143"/>
         <source>Reconnect</source>
         <translation>Переподключиться</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="157"/>
+        <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="159"/>
         <source>Pick the correct device, then press Connect.</source>
         <translation>Выберите правильное устройство, затем нажмите Подключиться.</translation>
     </message>
@@ -28697,7 +28707,7 @@ function parse(%1) { ... }
         <translation type="vanished">Интерфейс Ввода-вывода: %1</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="199"/>
+        <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="201"/>
         <source>Connect</source>
         <translation>Подключиться</translation>
     </message>
@@ -28710,57 +28720,57 @@ function parse(%1) { ... }
         <translation>Хост</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/S7.qml" line="58"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/S7.qml" line="60"/>
         <source>IP Address</source>
         <translation>IP-адрес</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/S7.qml" line="76"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/S7.qml" line="78"/>
         <source>Rack</source>
         <translation>Стойка</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/S7.qml" line="84"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/S7.qml" line="88"/>
         <source>0-7</source>
         <translation>0-7</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/S7.qml" line="105"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/S7.qml" line="109"/>
         <source>Slot</source>
         <translation>Слот</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/S7.qml" line="113"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/S7.qml" line="119"/>
         <source>0-31</source>
         <translation>0-31</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/S7.qml" line="133"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/S7.qml" line="139"/>
         <source>Poll Interval (ms)</source>
         <translation>Интервал Опроса (мс)</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/S7.qml" line="138"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/S7.qml" line="146"/>
         <source>Polling interval</source>
         <translation>Интервал опроса</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/S7.qml" line="171"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/S7.qml" line="181"/>
         <source>Configure Variables…</source>
         <translation>Настроить Переменные…</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/S7.qml" line="182"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/S7.qml" line="194"/>
         <source>Create Project from Variables</source>
         <translation>Создать Проект из Переменных</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/S7.qml" line="197"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/S7.qml" line="209"/>
         <source>%1 variable(s) configured</source>
         <translation>Настроено переменных: %1</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/S7.qml" line="198"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/S7.qml" line="210"/>
         <source>No variables configured</source>
         <translation>Переменные не настроены</translation>
     </message>
@@ -28788,74 +28798,74 @@ function parse(%1) { ... }
         <translation>Название:</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/S7VariablesDialog.qml" line="129"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/S7VariablesDialog.qml" line="131"/>
         <source>Channel name</source>
         <translation>Название канала</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/S7VariablesDialog.qml" line="134"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/S7VariablesDialog.qml" line="136"/>
         <source>Address:</source>
         <translation>Адрес:</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/S7VariablesDialog.qml" line="146"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/S7VariablesDialog.qml" line="150"/>
         <source>DB5.DBD20:REAL</source>
         <translation>DB5.DBD20:REAL</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/S7VariablesDialog.qml" line="150"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/S7VariablesDialog.qml" line="156"/>
         <source>Add Variable</source>
         <translation>Добавить Переменную</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/S7VariablesDialog.qml" line="185"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/S7VariablesDialog.qml" line="191"/>
         <source>Configured Variables</source>
         <translation>Настроенные Переменные</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/S7VariablesDialog.qml" line="219"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/S7VariablesDialog.qml" line="225"/>
         <source>#</source>
         <translation>#</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/S7VariablesDialog.qml" line="227"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/S7VariablesDialog.qml" line="233"/>
         <source>Variable</source>
         <translation>Переменная</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/S7VariablesDialog.qml" line="234"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/S7VariablesDialog.qml" line="240"/>
         <source>Action</source>
         <translation>Действие</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/S7VariablesDialog.qml" line="281"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/S7VariablesDialog.qml" line="289"/>
         <source>Remove</source>
         <translation>Удалить</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/S7VariablesDialog.qml" line="295"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/S7VariablesDialog.qml" line="303"/>
         <source>No variables configured.
 Add absolute addresses above to poll the controller.</source>
         <translation>Переменные не настроены.
 Добавьте абсолютные адреса выше для опроса контроллера.</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/S7VariablesDialog.qml" line="313"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/S7VariablesDialog.qml" line="321"/>
         <source>Total variables: %1</source>
         <translation>Всего переменных: %1</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/S7VariablesDialog.qml" line="317"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/S7VariablesDialog.qml" line="327"/>
         <source>Generate Project</source>
         <translation>Создать Проект</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/S7VariablesDialog.qml" line="323"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/S7VariablesDialog.qml" line="335"/>
         <source>Clear All</source>
         <translation>Очистить Всё</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/S7VariablesDialog.qml" line="330"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/S7VariablesDialog.qml" line="344"/>
         <source>Close</source>
         <translation>Закрыть</translation>
     </message>
@@ -30091,22 +30101,22 @@ Add absolute addresses above to poll the controller.</source>
 <context>
     <name>Settings</name>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="35"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="37"/>
         <source>Preferences</source>
         <translation>Настройки</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="63"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="67"/>
         <source>General</source>
         <translation>Общие</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="99"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="115"/>
         <source>Export</source>
         <translation>Экспорт</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="105"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="123"/>
         <source>Sounds</source>
         <translation>Звуки</translation>
     </message>
@@ -30167,7 +30177,7 @@ Add absolute addresses above to poll the controller.</source>
         <translation type="vanished">Включить API-Сервер (Порт 7777)</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="93"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="107"/>
         <source>Console</source>
         <translation>Консоль</translation>
     </message>
@@ -30192,7 +30202,7 @@ Add absolute addresses above to poll the controller.</source>
         <translation type="vanished">Автоматически Скрывать Панель Инструментов</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="87"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="99"/>
         <source>Taskbar</source>
         <translation>Панель Задач</translation>
     </message>
@@ -30205,7 +30215,7 @@ Add absolute addresses above to poll the controller.</source>
         <translation type="vanished">Токен Доступа API</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="69"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="75"/>
         <source>Startup</source>
         <translation>Запуск</translation>
     </message>
@@ -30294,7 +30304,7 @@ Add absolute addresses above to poll the controller.</source>
         <translation type="vanished">Пользовательский</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="81"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="91"/>
         <source>Layout</source>
         <translation>Макет</translation>
     </message>
@@ -30327,7 +30337,7 @@ Add absolute addresses above to poll the controller.</source>
         <translation type="vanished">Поведение</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="75"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="83"/>
         <source>Plotting</source>
         <translation>Построение Графиков</translation>
     </message>
@@ -30404,7 +30414,7 @@ Add absolute addresses above to poll the controller.</source>
         <translation type="vanished">Семейство Шрифта</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="112"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="132"/>
         <source>Notifications</source>
         <translation>Уведомления</translation>
     </message>
@@ -30505,17 +30515,17 @@ Add absolute addresses above to poll the controller.</source>
         <translation type="vanished">Отключено по умолчанию — QT и QML часто выдают предупреждения, и включение этого параметра может заглушить реальные сигналы тревоги. Критические сообщения всегда маршрутизируются независимо от этой настройки.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="186"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="208"/>
         <source>Reset</source>
         <translation>Сбросить</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="246"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="270"/>
         <source>Close</source>
         <translation>Закрыть</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="254"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="280"/>
         <source>Apply</source>
         <translation>Применить</translation>
     </message>
@@ -30533,67 +30543,67 @@ Add absolute addresses above to poll the controller.</source>
         <translation>Режим Отображения</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsConsolePage.qml" line="95"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsConsolePage.qml" line="97"/>
         <source>Font Family</source>
         <translation>Семейство Шрифта</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsConsolePage.qml" line="117"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsConsolePage.qml" line="121"/>
         <source>Font Size</source>
         <translation>Размер Шрифта</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsConsolePage.qml" line="141"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsConsolePage.qml" line="147"/>
         <source>Scrollback Lines</source>
         <translation>Строки Прокрутки</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsConsolePage.qml" line="166"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsConsolePage.qml" line="174"/>
         <source>Show Timestamps</source>
         <translation>Показывать Временные Метки</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsConsolePage.qml" line="194"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsConsolePage.qml" line="204"/>
         <source>Data Transmission</source>
         <translation>Передача Данных</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsConsolePage.qml" line="209"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsConsolePage.qml" line="219"/>
         <source>Line Ending</source>
         <translation>Окончание Строки</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsConsolePage.qml" line="231"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsConsolePage.qml" line="243"/>
         <source>Input Mode</source>
         <translation>Режим Входа</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsConsolePage.qml" line="253"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsConsolePage.qml" line="267"/>
         <source>Text Encoding</source>
         <translation>Кодировка Текста</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsConsolePage.qml" line="275"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsConsolePage.qml" line="291"/>
         <source>Checksum</source>
         <translation>Контрольная Сумма</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsConsolePage.qml" line="297"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsConsolePage.qml" line="315"/>
         <source>Echo Sent Data</source>
         <translation>Эхо Отправленных Данных</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsConsolePage.qml" line="325"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsConsolePage.qml" line="345"/>
         <source>Escape Codes</source>
         <translation>Управляющие Последовательности</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsConsolePage.qml" line="340"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsConsolePage.qml" line="360"/>
         <source>VT100 Emulation</source>
         <translation>Эмуляция VT100</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsConsolePage.qml" line="366"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsConsolePage.qml" line="388"/>
         <source>ANSI Colors</source>
         <translation>Цвета ANSI</translation>
     </message>
@@ -30611,17 +30621,17 @@ Add absolute addresses above to poll the controller.</source>
         <translation>Интервал Строк (мс)</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsExportPage.qml" line="134"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsExportPage.qml" line="136"/>
         <source>0 writes one row per received frame. A positive value logs one snapshot row of every channel at that interval, which keeps file size bounded for multi-source or high-rate projects.</source>
         <translation>0 записывает одну строку на каждый полученный фрейм. Положительное значение записывает одну строку снимка всех каналов с указанным интервалом, что ограничивает размер файла для проектов с несколькими источниками или высокой частотой данных.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsExportPage.qml" line="147"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsExportPage.qml" line="149"/>
         <source>Video Export</source>
         <translation>Экспорт Видео</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsExportPage.qml" line="165"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsExportPage.qml" line="167"/>
         <source>Save Videos by Default</source>
         <translation>Сохранять Видео по Умолчанию</translation>
     </message>
@@ -30639,47 +30649,47 @@ Add absolute addresses above to poll the controller.</source>
         <translation>Язык</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsGeneralPage.qml" line="89"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsGeneralPage.qml" line="91"/>
         <source>Theme</source>
         <translation>Тема</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsGeneralPage.qml" line="116"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsGeneralPage.qml" line="120"/>
         <source>Window</source>
         <translation>Окно</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsGeneralPage.qml" line="135"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsGeneralPage.qml" line="139"/>
         <source>Custom Window Decorations</source>
         <translation>Пользовательское Оформление Окон</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsGeneralPage.qml" line="158"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsGeneralPage.qml" line="164"/>
         <source>Window decoration changes apply after restarting %1.</source>
         <translation>Изменения оформления окон применяются после перезапуска %1.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsGeneralPage.qml" line="167"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsGeneralPage.qml" line="173"/>
         <source>Files</source>
         <translation>Файлы</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsGeneralPage.qml" line="183"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsGeneralPage.qml" line="189"/>
         <source>Workspace Folder</source>
         <translation>Папка Рабочего Пространства</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsGeneralPage.qml" line="214"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsGeneralPage.qml" line="224"/>
         <source>API &amp; Plugins</source>
         <translation>API и Плагины</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsGeneralPage.qml" line="230"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsGeneralPage.qml" line="240"/>
         <source>Enable API Server</source>
         <translation>Включить API-Сервер</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsGeneralPage.qml" line="255"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsGeneralPage.qml" line="267"/>
         <source>API Server Port</source>
         <translation>Порт API-Сервера</translation>
     </message>
@@ -30688,22 +30698,22 @@ Add absolute addresses above to poll the controller.</source>
         <translation type="vanished">Включить API-Сервер (Порт 7777)</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsGeneralPage.qml" line="280"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsGeneralPage.qml" line="294"/>
         <source>Allow External API Connections</source>
         <translation>Разрешить Внешние Подключения к API</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsGeneralPage.qml" line="305"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsGeneralPage.qml" line="321"/>
         <source>API Access Token</source>
         <translation>Токен Доступа API</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsGeneralPage.qml" line="335"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsGeneralPage.qml" line="355"/>
         <source>Export Protobuf File</source>
         <translation>Экспорт Файла Protobuf</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsGeneralPage.qml" line="337"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsGeneralPage.qml" line="359"/>
         <source>Export…</source>
         <translation>Экспорт…</translation>
     </message>
@@ -30721,62 +30731,62 @@ Add absolute addresses above to poll the controller.</source>
         <translation>Семейство Шрифта</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsLayoutPage.qml" line="95"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsLayoutPage.qml" line="97"/>
         <source>Font Size</source>
         <translation>Размер Шрифта</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsLayoutPage.qml" line="105"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsLayoutPage.qml" line="109"/>
         <source>Small</source>
         <translation>Маленький</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsLayoutPage.qml" line="105"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsLayoutPage.qml" line="109"/>
         <source>Normal</source>
         <translation>Обычный</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsLayoutPage.qml" line="105"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsLayoutPage.qml" line="109"/>
         <source>Large</source>
         <translation>Большой</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsLayoutPage.qml" line="105"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsLayoutPage.qml" line="109"/>
         <source>Extra Large</source>
         <translation>Очень Большой</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsLayoutPage.qml" line="105"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsLayoutPage.qml" line="109"/>
         <source>Custom</source>
         <translation>Пользовательский</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsLayoutPage.qml" line="166"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsLayoutPage.qml" line="172"/>
         <source>Layout</source>
         <translation>Макет</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsLayoutPage.qml" line="181"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsLayoutPage.qml" line="187"/>
         <source>Layout Margin</source>
         <translation>Отступ Макета</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsLayoutPage.qml" line="206"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsLayoutPage.qml" line="214"/>
         <source>Layout Spacing</source>
         <translation>Интервал Макета</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsLayoutPage.qml" line="231"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsLayoutPage.qml" line="241"/>
         <source>Show Actions Panel</source>
         <translation>Показывать Панель Действий</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsLayoutPage.qml" line="247"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsLayoutPage.qml" line="259"/>
         <source>Auto-Hide Toolbar</source>
         <translation>Автоматически Скрывать Панель Инструментов</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsLayoutPage.qml" line="270"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsLayoutPage.qml" line="284"/>
         <source>Show Alignment Guides</source>
         <translation>Показывать Направляющие Выравнивания</translation>
     </message>
@@ -30794,22 +30804,22 @@ Add absolute addresses above to poll the controller.</source>
         <translation>Системные Уведомления</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsNotificationsPage.qml" line="96"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsNotificationsPage.qml" line="98"/>
         <source>Show Warning/Critical events as OS desktop notifications when Serial Studio is not the foreground window.</source>
         <translation>Показывать предупреждения и критические события как системные уведомления, когда Serial Studio не является активным окном.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsNotificationsPage.qml" line="106"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsNotificationsPage.qml" line="108"/>
         <source>Application Logs</source>
         <translation>Журналы Приложения</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsNotificationsPage.qml" line="121"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsNotificationsPage.qml" line="123"/>
         <source>Route Warnings to Notifications</source>
         <translation>Направлять Предупреждения в Уведомления</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsNotificationsPage.qml" line="142"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsNotificationsPage.qml" line="146"/>
         <source>Off by default — Qt and QML emit warnings frequently and enabling this can drown out real alarms. Critical messages are always routed regardless of this setting.</source>
         <translation>Отключено по умолчанию — QT и QML часто выдают предупреждения, и включение этого параметра может заглушить реальные сигналы тревоги. Критические сообщения всегда маршрутизируются независимо от этой настройки.</translation>
     </message>
@@ -30827,12 +30837,12 @@ Add absolute addresses above to poll the controller.</source>
         <translation>Диапазон Времени</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsPlottingPage.qml" line="125"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsPlottingPage.qml" line="127"/>
         <source>Point Count</source>
         <translation>Количество Точек</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsPlottingPage.qml" line="150"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsPlottingPage.qml" line="154"/>
         <source>UI Refresh Rate (Hz)</source>
         <translation>Частота Обновления UI (Гц)</translation>
     </message>
@@ -30925,87 +30935,87 @@ Add absolute addresses above to poll the controller.</source>
         <translation>Все файлы (*)</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsSoundsPage.qml" line="124"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsSoundsPage.qml" line="128"/>
         <source>Bundled sound</source>
         <translation>Встроенный звук</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsSoundsPage.qml" line="145"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsSoundsPage.qml" line="151"/>
         <source>Browse for a WAV file</source>
         <translation>Выбрать файл WAV</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsSoundsPage.qml" line="156"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsSoundsPage.qml" line="164"/>
         <source>Play this sound</source>
         <translation>Воспроизвести этот звук</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsSoundsPage.qml" line="165"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsSoundsPage.qml" line="175"/>
         <source>Use the bundled sound</source>
         <translation>Использовать встроенный звук</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsSoundsPage.qml" line="225"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsSoundsPage.qml" line="235"/>
         <source>Output</source>
         <translation>Выход</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsSoundsPage.qml" line="229"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsSoundsPage.qml" line="239"/>
         <source>Enable Sounds</source>
         <translation>Включить Звуки</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsSoundsPage.qml" line="261"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsSoundsPage.qml" line="273"/>
         <source>Volume</source>
         <translation>Громкость</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsSoundsPage.qml" line="274"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsSoundsPage.qml" line="288"/>
         <source>Output Device</source>
         <translation>Устройство Вывода</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsSoundsPage.qml" line="290"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsSoundsPage.qml" line="306"/>
         <source>The selected device is not available; sounds play on the system default.</source>
         <translation>Выбранное устройство недоступно; звуки воспроизводятся через системное устройство по умолчанию.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsSoundsPage.qml" line="293"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsSoundsPage.qml" line="309"/>
         <source>Alarms</source>
         <translation>Сигнализация</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsSoundsPage.qml" line="297"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsSoundsPage.qml" line="313"/>
         <source>Sequence (ISA-18.1)</source>
         <translation>Последовательность (ISA-18.1)</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsSoundsPage.qml" line="301"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsSoundsPage.qml" line="319"/>
         <source>A-4 - Automatic reset, no lock-in</source>
         <translation>A-4 — Автоматический сброс, без блокировки</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsSoundsPage.qml" line="302"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsSoundsPage.qml" line="320"/>
         <source>A - Automatic reset, lock-in until acknowledged</source>
         <translation>A — Автоматический сброс, блокировка до подтверждения</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsSoundsPage.qml" line="303"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsSoundsPage.qml" line="321"/>
         <source>M-4 - Manual reset, no lock-in</source>
         <translation>M-4 — Ручной сброс, без блокировки</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsSoundsPage.qml" line="304"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsSoundsPage.qml" line="322"/>
         <source>M - Manual reset, lock-in until acknowledged</source>
         <translation>M — Ручной сброс, блокировка до подтверждения</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsSoundsPage.qml" line="305"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsSoundsPage.qml" line="323"/>
         <source>R-4 - Ringback, no lock-in</source>
         <translation>R-4 — Обратный вызов, без блокировки</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsSoundsPage.qml" line="306"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsSoundsPage.qml" line="324"/>
         <source>R - Ringback, lock-in until acknowledged</source>
         <translation>R — Обратный вызов, блокировка до подтверждения</translation>
     </message>
@@ -31022,27 +31032,27 @@ Add absolute addresses above to poll the controller.</source>
         <translation type="vanished">R - Обратный Вызов</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsSoundsPage.qml" line="320"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsSoundsPage.qml" line="338"/>
         <source>Warning Repeat (ms)</source>
         <translation>Повтор Предупреждения (мс)</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsSoundsPage.qml" line="333"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsSoundsPage.qml" line="353"/>
         <source>Caution Repeat (ms)</source>
         <translation>Повтор Осторожно (мс)</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsSoundsPage.qml" line="345"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsSoundsPage.qml" line="367"/>
         <source>Events</source>
         <translation>События</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsSoundsPage.qml" line="375"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsSoundsPage.qml" line="399"/>
         <source>Test</source>
         <translation>Проверить</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsSoundsPage.qml" line="383"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsSoundsPage.qml" line="409"/>
         <source>Reset to Bundled Sounds</source>
         <translation>Сбросить на Встроенные Звуки</translation>
     </message>
@@ -31060,72 +31070,72 @@ Add absolute addresses above to poll the controller.</source>
         <translation>Графический Движок</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="113"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="115"/>
         <source>Display Scaling</source>
         <translation>Масштабирование Экрана</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="146"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="150"/>
         <source>Custom Scale (%)</source>
         <translation>Пользовательский Масштаб (%)</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="178"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="184"/>
         <source>HDR Output</source>
         <translation>Выход HDR</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="210"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="218"/>
         <source>System</source>
         <translation>Системная</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="225"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="233"/>
         <source>SIMD Instruction Set</source>
         <translation>Набор Инструкций SIMD</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="255"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="265"/>
         <source>Reduce Motion</source>
         <translation>Уменьшить Анимацию</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="279"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="291"/>
         <source>Apply Performance Hints</source>
         <translation>Применить Рекомендации по Производительности</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="302"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="316"/>
         <source>Keep Display Awake</source>
         <translation>Не Допускать Отключения Дисплея</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="331"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="347"/>
         <source>Performance hints raise process priority and opt out of OS power throttling. Changes take effect the next time Serial Studio starts.</source>
         <translation>Рекомендации по производительности повышают приоритет процесса и отключают регулирование энергопотребления ОС. Изменения вступят в силу при следующем запуске Serial Studio.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="342"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="358"/>
         <source>Updates &amp; News</source>
         <translation>Обновления и Новости</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="358"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="374"/>
         <source>Automatically Check for Updates</source>
         <translation>Автоматически Проверять Обновления</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="381"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="399"/>
         <source>Check for Extension Updates</source>
         <translation>Проверить Обновления Расширений</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="405"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="425"/>
         <source>Install Extension Updates Automatically</source>
         <translation>Автоматически Устанавливать Обновления Расширений</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="435"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="457"/>
         <source>Installed extensions and themes are checked when Serial Studio starts, together with application updates. Serial Studio asks before installing them unless automatic installation is enabled.</source>
         <translation>Установленные расширения и темы проверяются при запуске Serial Studio вместе с обновлениями приложения. Serial Studio запрашивает подтверждение перед их установкой, если не включена автоматическая установка.</translation>
     </message>
@@ -31143,67 +31153,67 @@ Add absolute addresses above to poll the controller.</source>
         <translation>Всегда Показывать Кнопки на Панели Задач</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsTaskbarPage.qml" line="99"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsTaskbarPage.qml" line="101"/>
         <source>Show Search Field</source>
         <translation>Показывать Поле Поиска</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsTaskbarPage.qml" line="123"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsTaskbarPage.qml" line="127"/>
         <source>Auto-hide Taskbar</source>
         <translation>Автоматически Скрывать Панель Задач</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsTaskbarPage.qml" line="150"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsTaskbarPage.qml" line="156"/>
         <source>Hide Delay (ms)</source>
         <translation>Задержка Скрытия (мс)</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsTaskbarPage.qml" line="183"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsTaskbarPage.qml" line="191"/>
         <source>Pinned Buttons</source>
         <translation>Закреплённые Кнопки</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsTaskbarPage.qml" line="201"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsTaskbarPage.qml" line="209"/>
         <source>Drag a pinned button on the taskbar to reorder it.</source>
         <translation>Перетащите закреплённую кнопку на панели задач для изменения порядка.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsTaskbarPage.qml" line="222"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsTaskbarPage.qml" line="230"/>
         <source>Settings</source>
         <translation>Настройки</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsTaskbarPage.qml" line="223"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsTaskbarPage.qml" line="231"/>
         <source>Console</source>
         <translation>Консоль</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsTaskbarPage.qml" line="224"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsTaskbarPage.qml" line="232"/>
         <source>Notifications</source>
         <translation>Уведомления</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsTaskbarPage.qml" line="225"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsTaskbarPage.qml" line="233"/>
         <source>Clock</source>
         <translation>Часы</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsTaskbarPage.qml" line="226"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsTaskbarPage.qml" line="234"/>
         <source>Stopwatch</source>
         <translation>Секундомер</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsTaskbarPage.qml" line="227"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsTaskbarPage.qml" line="235"/>
         <source>Pause / Resume</source>
         <translation>Пауза / Возобновить</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsTaskbarPage.qml" line="228"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsTaskbarPage.qml" line="236"/>
         <source>File Transmission</source>
         <translation>Передача Файла</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsTaskbarPage.qml" line="229"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsTaskbarPage.qml" line="237"/>
         <source>AI Assistant</source>
         <translation>AI Ассистент</translation>
     </message>
@@ -31255,67 +31265,67 @@ Add absolute addresses above to poll the controller.</source>
         <translation>Режим Работы</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="220"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="222"/>
         <source>Console Only (No Parsing)</source>
         <translation>Только Консоль (Без Разбора)</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="222"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="224"/>
         <source>Shows incoming data as text or hex. Nothing is parsed or plotted.</source>
         <translation>Показывает входящие данные как текст или шестнадцатеричный код. Ничего не анализируется и не отображается на графиках.</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="232"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="236"/>
         <source>Quick Plot (Comma Separated Values)</source>
         <translation>Быстрый График (Значения, Разделённые Запятыми)</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="235"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="239"/>
         <source>Plots one line per sample with values separated by commas, for example 12.5,30.1,0.98 followed by a newline.</source>
         <translation>Строит график с одной линией на выборку со значениями, разделёнными запятыми, например 12.5,30.1,0.98, за которыми следует новая строка.</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="252"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="258"/>
         <source>Parse via Project File</source>
         <translation>Разбор через Файл Проекта</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="255"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="261"/>
         <source>Builds the dashboard from a project made in the Project Editor.</source>
         <translation>Строит панель управления из проекта, созданного в Редакторе Проектов.</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="272"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="280"/>
         <source>Change Project File (%1)</source>
         <translation>Изменить Файл Проекта (%1)</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="273"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="281"/>
         <source>Select Project File</source>
         <translation>Выберите Файл Проекта</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="288"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="296"/>
         <source>Data Export</source>
         <translation>Экспорт Данных</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="312"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="322"/>
         <source>CSV Spreadsheet</source>
         <translation>Таблица CSV</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="332"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="344"/>
         <source>Historian Database</source>
         <translation>База Данных Историка</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="412"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="430"/>
         <source>Connection: %1</source>
         <translation>Подключение: %1</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="507"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="525"/>
         <source>Each device has its own connection settings. Configure them in the Project Editor under Devices.</source>
         <translation>Каждое устройство имеет собственные настройки подключения. Настройте их в Редакторе Проектов на вкладке Устройства.</translation>
     </message>
@@ -31328,12 +31338,12 @@ Add absolute addresses above to poll the controller.</source>
         <translation type="vanished">Запись Сеанса</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="351"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="365"/>
         <source>MDF4 Recording</source>
         <translation>Запись MDF4</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="367"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="383"/>
         <source>Console Log</source>
         <translation>Журнал Консоли</translation>
     </message>
@@ -31374,12 +31384,12 @@ Add absolute addresses above to poll the controller.</source>
         <translation type="vanished">Интерфейс Ввода-вывода: %1</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="481"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="499"/>
         <source>Multi-Device Project</source>
         <translation>Многоустройственный Проект</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="494"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="512"/>
         <source>This project streams data from %1 independent devices.</source>
         <translation>Этот проект передаёт данные от %1 независимых устройств.</translation>
     </message>
@@ -31388,7 +31398,7 @@ Add absolute addresses above to poll the controller.</source>
         <translation type="vanished">Каждое устройство имеет собственные настройки подключения. Настройте их в Редакторе Проектов на вкладке Источники.</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="526"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="546"/>
         <source>Open Project Editor</source>
         <translation>Открыть Редактор Проектов</translation>
     </message>
@@ -31400,7 +31410,7 @@ Add absolute addresses above to poll the controller.</source>
         <translation type="vanished">Новый Ярлык</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="224"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="227"/>
         <source>Choose an Icon</source>
         <translation>Выбрать Значок</translation>
     </message>
@@ -31409,193 +31419,193 @@ Add absolute addresses above to poll the controller.</source>
         <translation type="vanished">Сохранить Ярлык</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="22"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="25"/>
         <source>New Deployment</source>
         <translation>Новое Развёртывание</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="58"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="61"/>
         <source>%1 B</source>
         <translation>%1 Б</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="61"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="64"/>
         <source>%1 KB</source>
         <translation>%1 КБ</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="63"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="66"/>
         <source>%1 MB</source>
         <translation>%1 МБ</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="175"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="178"/>
         <source>Save Deployment Package</source>
         <translation>Сохранить Пакет Развёртывания</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="179"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="182"/>
         <source>Serial Studio Deployment Package (*.ssdeploy)</source>
         <translation>Пакет Развёртывания Serial Studio (*.ssdeploy)</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="192"/>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="240"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="195"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="243"/>
         <source>Save Deployment</source>
         <translation>Сохранить Развёртывание</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="210"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="213"/>
         <source>Add Files</source>
         <translation>Добавить Файлы</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="213"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="216"/>
         <source>Images (*.png *.jpg *.jpeg *.bmp *.gif *.svg *.webp)</source>
         <translation>Изображения (*.png *.jpg *.jpeg *.bmp *.gif *.svg *.webp)</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="214"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="217"/>
         <source>All files (*)</source>
         <translation>Все файлы (*)</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="327"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="330"/>
         <source>General</source>
         <translation>Общие</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="333"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="336"/>
         <source>Taskbar</source>
         <translation>Панель Задач</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="339"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="342"/>
         <source>Logging</source>
         <translation>Журналирование</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="345"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="348"/>
         <source>Contents</source>
         <translation>Содержимое</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="404"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="407"/>
         <source>Output</source>
         <translation>Выход</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="419"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="422"/>
         <source>Format</source>
         <translation>Форматировать</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="428"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="431"/>
         <source>Deployment package (.ssdeploy)</source>
         <translation>Пакет развёртывания (.ssdeploy)</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="429"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="432"/>
         <source>Shortcut to the project file</source>
         <translation>Ярлык к файлу проекта</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="466"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="469"/>
         <source>Desktop Shortcut</source>
         <translation>Ярлык Рабочего Стола</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="486"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="489"/>
         <source>Identity</source>
         <translation>Идентификация</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="501"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="504"/>
         <source>Name</source>
         <translation>Название</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="513"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="516"/>
         <source>Icon</source>
         <translation>Значок</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="549"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="552"/>
         <source>Click to choose an icon</source>
         <translation>Нажмите, чтобы выбрать значок</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="651"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="654"/>
         <source>Opens straight to the live dashboard, with no toolbar, no setup pane, and no way to view or export the project. Serial Studio quits when the device disconnects.</source>
         <translation>Открывает прямо на живую панель управления без панели инструментов, панели настройки и возможности просмотра или экспорта проекта. Serial Studio завершает работу при отключении устройства.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="654"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="657"/>
         <source>Opens the project straight to the live dashboard, with no toolbar or setup pane. Serial Studio quits when the device disconnects.</source>
         <translation>Открывает проект прямо на живую панель управления без панели инструментов или панели настройки. Serial Studio завершает работу при отключении устройства.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1024"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1027"/>
         <source>Carried Files</source>
         <translation>Встроенные Файлы</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1033"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1036"/>
         <source>%1 in total</source>
         <translation>%1 итого</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1067"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1070"/>
         <source>Remove</source>
         <translation>Удалить</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1088"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1091"/>
         <source>Add images a Canvas script loads at run time.</source>
         <translation>Добавить изображения, загружаемые скриптом Canvas во время выполнения.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1092"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1095"/>
         <source>Add Files…</source>
         <translation>Добавить Файлы…</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1104"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1107"/>
         <source>Missing Files</source>
         <translation>Отсутствующие Файлы</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1141"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1144"/>
         <source>Export is blocked until these files exist.</source>
         <translation>Экспорт заблокирован до тех пор, пока эти файлы не будут созданы.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1149"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1152"/>
         <source>External Dependencies</source>
         <translation>Внешние Зависимости</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1186"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1189"/>
         <source>The target machine must provide these.</source>
         <translation>Целевая машина должна предоставить эти компоненты.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1195"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1198"/>
         <source>Credentials and Private Keys</source>
         <translation>Учетные Данные и Приватные Ключи</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1226"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1229"/>
         <source>Packages are encoded, not encrypted. Anyone with the file can recover the items you include.</source>
         <translation>Пакеты закодированы, но не зашифрованы. Любой, у кого есть файл, может восстановить включенные элементы.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1260"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1263"/>
         <source>Saved %1</source>
         <translation>Сохранено %1</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1270"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1273"/>
         <source>Open Package</source>
         <translation>Открыть Пакет</translation>
     </message>
@@ -31604,28 +31614,28 @@ Add absolute addresses above to poll the controller.</source>
         <translation type="vanished">Название:</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="508"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="511"/>
         <source>Deployment Name</source>
         <translation>Название Развёртывания</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="590"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="593"/>
         <source>Theme</source>
         <translation>Тема</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="598"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="601"/>
         <source>Same as Serial Studio</source>
         <translation>Как в Serial Studio</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="621"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="624"/>
         <source>Actions Panel</source>
         <translation>Панель Действий</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="633"/>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="863"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="636"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="866"/>
         <source>File Transmission</source>
         <translation>Передача Файла</translation>
     </message>
@@ -31634,87 +31644,87 @@ Add absolute addresses above to poll the controller.</source>
         <translation type="vanished">Двойной щелчок по этому развёртыванию открывает панель данных проекта напрямую. Нет панели инструментов или настроек, только данные, и Serial Studio завершает работу при отключении устройства.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="698"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="701"/>
         <source>Visibility</source>
         <translation>Видимость</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="713"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="716"/>
         <source>Mode</source>
         <translation>Режим</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="720"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="723"/>
         <source>Always shown</source>
         <translation>Всегда Показана</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="721"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="724"/>
         <source>Auto-hide</source>
         <translation>Автоматическое Скрытие</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="722"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="725"/>
         <source>Hidden</source>
         <translation>Скрыта</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="730"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="733"/>
         <source>Search Bar</source>
         <translation>Строка Поиска</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="752"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="755"/>
         <source>Hiding the taskbar removes window minimize/maximize/close buttons and forces auto-layout, so the dashboard always fills the available area.</source>
         <translation>Скрытие панели задач удаляет кнопки сворачивания/разворачивания/закрытия окна и включает автоматическую компоновку, поэтому панель управления всегда заполняет доступную область.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="756"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="759"/>
         <source>The taskbar slides in when the user moves the cursor near the bottom edge.</source>
         <translation>Панель задач выдвигается, когда курсор приближается к нижнему краю.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="758"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="761"/>
         <source>The taskbar is permanently visible at the bottom of the dashboard.</source>
         <translation>Панель задач постоянно видна в нижней части панели управления.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="771"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="774"/>
         <source>Pinned Buttons</source>
         <translation>Закреплённые Кнопки</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="788"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="791"/>
         <source>Console</source>
         <translation>Консоль</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="803"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="806"/>
         <source>Notifications</source>
         <translation>Уведомления</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="818"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="821"/>
         <source>Clock</source>
         <translation>Часы</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="833"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="836"/>
         <source>Stopwatch</source>
         <translation>Секундомер</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="848"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="851"/>
         <source>Pause</source>
         <translation>Пауза</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="951"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="954"/>
         <source>Historian</source>
         <translation>Историк</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="979"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="982"/>
         <source>Recordings are saved in the Serial Studio workspace folder</source>
         <translation>Записи сохраняются в папке рабочей области Serial Studio</translation>
     </message>
@@ -31723,27 +31733,27 @@ Add absolute addresses above to poll the controller.</source>
         <translation type="vanished">Название Ярлыка</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="555"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="558"/>
         <source>Change Icon…</source>
         <translation>Изменить Значок…</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="436"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="439"/>
         <source>Project</source>
         <translation>Проект</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="446"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="449"/>
         <source>Choose a project file to begin</source>
         <translation>Выберите файл проекта для начала</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="575"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="578"/>
         <source>Behavior</source>
         <translation>Поведение</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="610"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="613"/>
         <source>Fullscreen</source>
         <translation>Полноэкранный Режим</translation>
     </message>
@@ -31764,17 +31774,17 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
 Включите Встроить Проект, чтобы внедрить проект в ярлык — он будет работать, даже если исходный файл перемещён или удалён.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="914"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="917"/>
         <source>Recorders</source>
         <translation>Регистраторы</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="929"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="932"/>
         <source>CSV File</source>
         <translation>Файл CSV</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="940"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="943"/>
         <source>MDF4 File</source>
         <translation>Файл MDF4</translation>
     </message>
@@ -31783,7 +31793,7 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
         <translation type="vanished">База Данных Сеансов</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="962"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="965"/>
         <source>Console Log</source>
         <translation>Журнал Консоли</translation>
     </message>
@@ -31792,17 +31802,17 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
         <translation type="vanished">Записи сохраняются в расположение по умолчанию для каждого модуля.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1282"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1285"/>
         <source>Cancel</source>
         <translation>Отмена</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1282"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1285"/>
         <source>Close</source>
         <translation>Закрыть</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1287"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1290"/>
         <source>Save</source>
         <translation>Сохранить</translation>
     </message>
@@ -32007,27 +32017,27 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
 <context>
     <name>StartMenu</name>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="338"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="344"/>
         <source>Workspaces</source>
         <translation>Рабочие Пространства</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="476"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="484"/>
         <source>Actions</source>
         <translation>Действия</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="500"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="508"/>
         <source>No Actions Available</source>
         <translation>Нет Доступных Действий</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="530"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="540"/>
         <source>Plugins</source>
         <translation>Плагины</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="579"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="589"/>
         <source>No Plugins Installed</source>
         <translation>Нет Установленных Плагинов</translation>
     </message>
@@ -32052,7 +32062,7 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
         <translation type="vanished">Инструменты</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="773"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="787"/>
         <source>No Tools Available</source>
         <translation>Нет Доступных Инструментов</translation>
     </message>
@@ -32065,17 +32075,17 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
         <translation type="vanished">Выход</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="874"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="888"/>
         <source>Delete</source>
         <translation>Удалить</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="875"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="889"/>
         <source>Hide</source>
         <translation>Скрыть</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="427"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="433"/>
         <source>New Workspace…</source>
         <translation>Новое Рабочее Пространство…</translation>
     </message>
@@ -32100,22 +32110,22 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
         <translation type="vanished">Ассистент Ии</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="413"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="419"/>
         <source>Show "%1"</source>
         <translation>Показать "%1"</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="418"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="424"/>
         <source>Show All Hidden Workspaces</source>
         <translation>Показать Все Скрытые Рабочие Пространства</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="441"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="447"/>
         <source>No Workspaces Available</source>
         <translation>Нет Доступных Рабочих Пространств</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="569"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="579"/>
         <source>Manage Plugins…</source>
         <translation>Управление Плагинами…</translation>
     </message>
@@ -32144,7 +32154,7 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
         <translation type="vanished">База Данных Сеансов</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="697"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="709"/>
         <source>No Export Formats Available</source>
         <translation>Форматы Экспорта Недоступны</translation>
     </message>
@@ -32161,7 +32171,7 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
         <translation type="vanished">Настройки</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="863"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="877"/>
         <source>Edit…</source>
         <translation>Изменить…</translation>
     </message>
@@ -32440,7 +32450,7 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
         <translation type="vanished">Главное Меню</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="222"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="224"/>
         <source>Menu</source>
         <translation>Меню</translation>
     </message>
@@ -32449,42 +32459,42 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
         <translation type="vanished">Поиск…</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="585"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="593"/>
         <source>Settings</source>
         <translation>Настройки</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="586"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="594"/>
         <source>Console</source>
         <translation>Консоль</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="587"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="595"/>
         <source>Notifications</source>
         <translation>Уведомления</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="588"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="596"/>
         <source>Clock</source>
         <translation>Часы</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="589"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="597"/>
         <source>Stopwatch</source>
         <translation>Секундомер</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="591"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="599"/>
         <source>AI Assistant</source>
         <translation>Ассистент Ии</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="592"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="600"/>
         <source>Resume</source>
         <translation>Возобновить</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="592"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="600"/>
         <source>Pause</source>
         <translation>Пауза</translation>
     </message>
@@ -32497,77 +32507,77 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
         <translation type="vanished">Нет Доступных Рабочих Пространств</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="260"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="264"/>
         <source>Search… (%1)</source>
         <translation>Поиск… (%1)</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="943"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="952"/>
         <source>Data is arriving faster than scripts can process it; some frames are being thinned. See the problem center for details.</source>
         <translation>Данные поступают быстрее, чем скрипты могут их обработать; некоторые кадры пропускаются. Подробности см. в центре проблем.</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="967"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="976"/>
         <source>Unfreeze Dashboard</source>
         <translation>Разморозить Панель</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="968"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="977"/>
         <source>Freeze Dashboard</source>
         <translation>Заморозить Панель</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1012"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1021"/>
         <source>MQTT: Connected to %1</source>
         <translation>MQTT: Подключено к %1</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1013"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1022"/>
         <source>MQTT: Not connected</source>
         <translation>MQTT: Не подключено</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1041"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1050"/>
         <source>MQTT Publisher</source>
         <translation>Издатель MQTT</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1051"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1060"/>
         <source>Status:</source>
         <translation>Статус:</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1059"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1068"/>
         <source>Connected</source>
         <translation>Подключено</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1060"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1069"/>
         <source>Disconnected</source>
         <translation>Отключено</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1067"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1076"/>
         <source>Broker:</source>
         <translation>Брокер:</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1080"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1089"/>
         <source>Mode:</source>
         <translation>Режим:</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1093"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1102"/>
         <source>Messages sent:</source>
         <translation>Отправлено сообщений:</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1107"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1118"/>
         <source>Open MQTT Settings</source>
         <translation>Открыть Настройки MQTT</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="590"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="598"/>
         <source>File Transmission</source>
         <translation>Передача Файла</translation>
     </message>
@@ -32576,7 +32586,7 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
         <translation type="vanished">Поиск виджетов…</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1171"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1182"/>
         <source>Remove from Workspace</source>
         <translation>Удалить из Рабочего Пространства</translation>
     </message>
@@ -32595,17 +32605,17 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="192"/>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="254"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="256"/>
         <source>Clear</source>
         <translation>Очистить</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="269"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="273"/>
         <source>Find</source>
         <translation>Найти</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="297"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="301"/>
         <source>Collapse</source>
         <translation>Свернуть</translation>
     </message>
@@ -32618,57 +32628,57 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
         <translation type="vanished">Записать вывод консоли в файл</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="417"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="431"/>
         <source>Settings</source>
         <translation>Настройки</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="420"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="434"/>
         <source>Console settings</source>
         <translation>Настройки консоли</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="625"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="653"/>
         <source>Find in console</source>
         <translation>Найти в консоли</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="662"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="690"/>
         <source>%1 of %2</source>
         <translation>%1 из %2</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="663"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="691"/>
         <source>No results</source>
         <translation>Нет результатов</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="675"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="705"/>
         <source>Match case</source>
         <translation>Учитывать регистр</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="690"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="722"/>
         <source>Previous match</source>
         <translation>Предыдущее совпадение</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="701"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="735"/>
         <source>Next match</source>
         <translation>Следующее совпадение</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="711"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="747"/>
         <source>Close search</source>
         <translation>Закрыть поиск</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="758"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="796"/>
         <source>Send a file to the connected device</source>
         <translation>Отправить файл на подключённое устройство</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="274"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="278"/>
         <source>Search console output</source>
         <translation>Поиск в выводе консоли</translation>
     </message>
@@ -32678,118 +32688,118 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
         <translation>Утилиты</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="301"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="305"/>
         <source>Collapse repeated lines into a single entry</source>
         <translation>Свернуть повторяющиеся строки в одну запись</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="314"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="320"/>
         <source>Annotations</source>
         <translation>Аннотации</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="321"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="327"/>
         <source>Label the incoming bytes with a decoder and inspect them</source>
         <translation>Разметьте входящие байты декодером и проверьте их</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="344"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="352"/>
         <source>Resume</source>
         <translation>Возобновить</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="344"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="352"/>
         <source>Pause</source>
         <translation>Пауза</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="349"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="357"/>
         <source>Resume console updates</source>
         <translation>Возобновить обновления консоли</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="350"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="358"/>
         <source>Freeze the console display (data keeps logging)</source>
         <translation>Заморозить отображение консоли (данные продолжают записываться)</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="369"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="377"/>
         <source>Format</source>
         <translation>Форматировать</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="377"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="387"/>
         <source>Text</source>
         <translation>Текст</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="381"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="391"/>
         <source>Plain text display mode</source>
         <translation>Режим отображения простого текста</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="392"/>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="930"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="404"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="976"/>
         <source>Hex</source>
         <translation>Хекс</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="396"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="408"/>
         <source>Hex display mode</source>
         <translation>Режим отображения Hex</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="500"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="522"/>
         <source>Scrollback Lines</source>
         <translation>Строки Прокрутки</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="529"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="553"/>
         <source>Cyclic Send Interval (ms)</source>
         <translation>Интервал циклической отправки (мс)</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="799"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="841"/>
         <source>Command library (history, pins and actions)</source>
         <translation>Библиотека команд (история, выводы и действия)</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="823"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="867"/>
         <source>Send Data to Device</source>
         <translation>Отправить Данные на Устройство</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="991"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="1043"/>
         <source>Stop cyclic send</source>
         <translation>Остановить циклическую отправку</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="992"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="1044"/>
         <source>Repeat the current command every %1 ms</source>
         <translation>Повторять текущую команду каждые %1 мс</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="1013"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="1067"/>
         <source>Send data to the device</source>
         <translation>Отправить данные на устройство</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="451"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="467"/>
         <source>Show Timestamp</source>
         <translation>Показать Метку Времени</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="459"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="477"/>
         <source>Echo</source>
         <translation>Эхо</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="476"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="496"/>
         <source>Emulate VT-100</source>
         <translation>Эмулировать VT-100</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="489"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="511"/>
         <source>ANSI Colors</source>
         <translation>Цвета ANSI</translation>
     </message>
@@ -32798,7 +32808,7 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
         <translation type="vanished">Отображение: %1</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="258"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="260"/>
         <source>Clear console output</source>
         <translation>Очистить вывод консоли</translation>
     </message>
@@ -33293,23 +33303,23 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
         <translation>Удалённая Панель</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="258"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="259"/>
         <source>Manage the remote dashboard connection</source>
         <translation>Управление подключением к удалённой панели</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="301"/>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="311"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="303"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="313"/>
         <source>Disconnect</source>
         <translation>Отключиться</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="301"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="303"/>
         <source>Connect</source>
         <translation>Подключиться</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="301"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="303"/>
         <source>Connecting…</source>
         <translation>Подключение…</translation>
     </message>
@@ -33419,72 +33429,72 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
 <context>
     <name>TransmitCodeDialog</name>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/TransmitCodeDialog.qml" line="41"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/TransmitCodeDialog.qml" line="43"/>
         <source>Transmit Function Editor</source>
         <translation>Редактор Функции Передачи</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/TransmitCodeDialog.qml" line="159"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/TransmitCodeDialog.qml" line="161"/>
         <source>Select Template</source>
         <translation>Выбрать Шаблон</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/TransmitCodeDialog.qml" line="171"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/TransmitCodeDialog.qml" line="173"/>
         <source>Import</source>
         <translation>Импортировать</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/TransmitCodeDialog.qml" line="177"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/TransmitCodeDialog.qml" line="179"/>
         <source>Import a transmit function from a .js file</source>
         <translation>Импортировать функцию передачи из файла .js</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/TransmitCodeDialog.qml" line="183"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/TransmitCodeDialog.qml" line="185"/>
         <source>Validate</source>
         <translation>Проверить</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/TransmitCodeDialog.qml" line="188"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/TransmitCodeDialog.qml" line="190"/>
         <source>Verify that the script compiles and defines transmit(value)</source>
         <translation>Убедиться, что скрипт компилируется и определяет transmit(value)</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/TransmitCodeDialog.qml" line="226"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/TransmitCodeDialog.qml" line="228"/>
         <source>Produced Bytes</source>
         <translation>Сгенерированные Байты</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/TransmitCodeDialog.qml" line="248"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/TransmitCodeDialog.qml" line="250"/>
         <source>Interact with the control to see its output</source>
         <translation>Взаимодействуйте с элементом управления, чтобы увидеть его вывод</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/TransmitCodeDialog.qml" line="276"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/TransmitCodeDialog.qml" line="278"/>
         <source>%1 bytes, from the last version that compiled</source>
         <translation>%1 байт из последней скомпилированной версии</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/TransmitCodeDialog.qml" line="277"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/TransmitCodeDialog.qml" line="279"/>
         <source>%1 bytes</source>
         <translation>%1 байт</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/TransmitCodeDialog.qml" line="299"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/TransmitCodeDialog.qml" line="301"/>
         <source>Save</source>
         <translation>Сохранить</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/TransmitCodeDialog.qml" line="302"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/TransmitCodeDialog.qml" line="304"/>
         <source>Validate and store the transmit function</source>
         <translation>Проверить и сохранить функцию передачи</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/TransmitCodeDialog.qml" line="311"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/TransmitCodeDialog.qml" line="313"/>
         <source>Close</source>
         <translation>Закрыть</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/TransmitCodeDialog.qml" line="314"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/TransmitCodeDialog.qml" line="316"/>
         <source>Close without storing this edit</source>
         <translation>Закрыть без сохранения изменений</translation>
     </message>
@@ -33492,7 +33502,7 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
 <context>
     <name>TriggerDialog</name>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="50"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="52"/>
         <source>Trigger Settings</source>
         <translation>Настройки Триггера</translation>
     </message>
@@ -33505,7 +33515,7 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
         <translation type="vanished">Фиксирует повторяющийся сигнал на месте, как кнопка Auto на осциллографе. Каждая развёртка начинается в одной и той же точке формы волны, поэтому она остаётся неподвижной вместо прокрутки.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="188"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="190"/>
         <source>Trigger</source>
         <translation>Триггер</translation>
     </message>
@@ -33514,57 +33524,57 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
         <translation type="vanished">Режим:</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="125"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="127"/>
         <source>Mode</source>
         <translation>Режим</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="150"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="152"/>
         <source>Auto</source>
         <translation>Авто</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="150"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="152"/>
         <source>Normal</source>
         <translation>Обычный</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="150"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="152"/>
         <source>Single</source>
         <translation>Одиночный</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="173"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="175"/>
         <source>Auto free-runs when nothing crosses the level.</source>
         <translation>Auto работает свободно, когда ничто не пересекает уровень.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="174"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="176"/>
         <source>Normal waits for a crossing.</source>
         <translation>Normal ожидает пересечения.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="175"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="177"/>
         <source>Single captures one sweep, then stops.</source>
         <translation>Single захватывает одну развёртку, затем останавливается.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="258"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="260"/>
         <source>Slope:</source>
         <translation>Наклон:</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="290"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="292"/>
         <source>Trigger on a downward crossing</source>
         <translation>Триггер по нисходящему пересечению</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="336"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="338"/>
         <source>Timebase:</source>
         <translation>Временная База:</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="407"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="409"/>
         <source>Leave timebase empty to use the plot's time range; lower it to zoom in on a fast signal. Holdoff ignores new triggers for a moment after each.</source>
         <translation>Оставьте временную базу пустой для использования диапазона времени графика; уменьшите для увеличения быстрого сигнала. Holdoff игнорирует новые триггеры на мгновение после каждого.</translation>
     </message>
@@ -33573,7 +33583,7 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
         <translation type="vanished">Сигнал:</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="246"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="248"/>
         <source>Value to cross</source>
         <translation>Пересекаемое Значение</translation>
     </message>
@@ -33582,17 +33592,17 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
         <translation type="vanished">Фронт:</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="271"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="273"/>
         <source>Rising</source>
         <translation>Нарастающий</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="275"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="277"/>
         <source>Trigger on an upward crossing</source>
         <translation>Триггер по восходящему пересечению</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="286"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="288"/>
         <source>Falling</source>
         <translation>Спадающий</translation>
     </message>
@@ -33601,7 +33611,7 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
         <translation type="vanished">Новая развёртка начинается каждый раз, когда сигнал пересекает уровень в выбранном направлении. Auto также работает в свободном режиме, когда пересечение не обнаружено.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="309"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="311"/>
         <source>Timing</source>
         <translation>Временные Параметры</translation>
     </message>
@@ -33610,23 +33620,23 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
         <translation type="vanished">Временная База (мс):</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="349"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="351"/>
         <source>Match time range</source>
         <translation>Совместить с Диапазоном Времени</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="363"/>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="394"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="365"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="396"/>
         <source>ms</source>
         <translation>мс</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="369"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="371"/>
         <source>Holdoff:</source>
         <translation>Holdoff:</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="382"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="384"/>
         <source>0</source>
         <translation>0</translation>
     </message>
@@ -33635,17 +33645,17 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
         <translation type="vanished">Временная база задаёт, сколько времени показывает одна развёртка; оставьте пустым для использования диапазона времени графика. Уменьшите для увеличения быстрого сигнала. Holdoff игнорирует новые триггеры на мгновение после каждого срабатывания.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="422"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="424"/>
         <source>Capture Next</source>
         <translation>Захватить Следующий</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="424"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="426"/>
         <source>Arm for one more single-shot capture</source>
         <translation>Перевзвести для ещё одного одиночного захвата</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="233"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="235"/>
         <source>Level:</source>
         <translation>Уровень:</translation>
     </message>
@@ -33662,7 +33672,7 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
         <translation type="vanished">Время задержки</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="212"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="214"/>
         <source>Source:</source>
         <translation>Источник:</translation>
     </message>
@@ -33671,7 +33681,7 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
         <translation type="vanished">Перевзвести</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="437"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="439"/>
         <source>Close</source>
         <translation>Закрыть</translation>
     </message>
@@ -33689,42 +33699,42 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
         <translation>Последовательный Порт</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="98"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="100"/>
         <source>Baud Rate</source>
         <translation>Скорость Передачи</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="183"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="187"/>
         <source>Data Bits</source>
         <translation>Биты Данных</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="203"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="209"/>
         <source>Parity</source>
         <translation>Четность</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="225"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="233"/>
         <source>Stop Bits</source>
         <translation>Стоповые Биты</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="246"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="256"/>
         <source>Flow Control</source>
         <translation>Управление Потоком</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="276"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="288"/>
         <source>Auto Reconnect</source>
         <translation>Автоматическое Переподключение</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="294"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="308"/>
         <source>Send DTR Signal</source>
         <translation>Отправить Сигнал DTR</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="303"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="319"/>
         <source>Raises the DTR line when the port opens. Many boards (for example Arduino) reset when DTR changes; turn it off to connect without a reset.</source>
         <translation>Поднимает линию DTR при открытии порта. Многие платы (например Arduino) выполняют сброс при изменении DTR; отключите эту опцию для подключения без сброса.</translation>
     </message>
@@ -33922,7 +33932,7 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
         <translation>Устройство USB</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="80"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="82"/>
         <source>Transfer Mode</source>
         <translation>Режим Передачи</translation>
     </message>
@@ -33931,32 +33941,32 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
         <translation type="vanished">Массовый Поток</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="90"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="94"/>
         <source>Advanced (Bulk + Control)</source>
         <translation>Расширенный (Массовый + Управление)</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="91"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="95"/>
         <source>Isochronous</source>
         <translation>Изохронный</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="266"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="276"/>
         <source>Connect to USB devices using bulk, control, or isochronous transfers. Suitable for data loggers, custom firmware devices, and USB instruments.</source>
         <translation>Подключение к USB-устройствам с использованием массовых, управляющих или изохронных передач. Подходит для регистраторов данных, устройств с пользовательской прошивкой и USB-инструментов.</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="275"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="285"/>
         <source>USB specifications (USB.org)</source>
         <translation>Спецификации USB (USB.org)</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="127"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="131"/>
         <source>IN Endpoint</source>
         <translation>Конечная Точка IN</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="89"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="93"/>
         <source>Bulk/Interrupt Stream</source>
         <translation>Массовый/прерывающий Поток</translation>
     </message>
@@ -33969,37 +33979,37 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
         <translation type="vanished">Это включает управляющие передачи в дополнение к массовым передачам. Отправка неправильных управляющих запросов может привести к сбою или повреждению подключенного оборудования. Включайте только если знаете, что делаете.</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="163"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="169"/>
         <source>OUT Endpoint</source>
         <translation>Конечная Точка OUT</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="199"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="207"/>
         <source>Max Packet Size</source>
         <translation>Максимальный Размер Пакета</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="309"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="319"/>
         <source>No compatible data endpoints were found for this transfer mode. Try another transfer mode. Devices that speak a dedicated protocol (e.g. CAN or Modbus adapters) should be connected through their own driver instead.</source>
         <translation>Совместимые конечные точки данных для этого режима передачи не найдены. Попробуйте другой режим передачи. Устройства, использующие выделенный протокол (например, адаптеры CAN или Modbus), следует подключать через собственный драйвер.</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="350"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="360"/>
         <source>Control Transfers Enabled</source>
         <translation>Управляющие Передачи Включены</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="359"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="369"/>
         <source>Sending incorrect control requests may crash or damage connected hardware. Use with caution.</source>
         <translation>Отправка неправильных управляющих запросов может привести к сбою или повреждению подключенного оборудования. Используйте с осторожностью.</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="366"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="376"/>
         <source>Learn about USB control transfers</source>
         <translation>Узнать об управляющих передачах USB</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="400"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="410"/>
         <source>Packet size should match the maximum transfer size reported by the endpoint. Typical values: 192 B (FS audio), 1024 B (HS).</source>
         <translation>Размер пакета должен соответствовать максимальному размеру передачи, сообщаемому конечной точкой. Типичные значения: 192 Б (FS аудио), 1024 Б (HS).</translation>
     </message>
@@ -34050,57 +34060,57 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
         <translation>Тип Запроса</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UsbControlComposer.qml" line="88"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UsbControlComposer.qml" line="90"/>
         <source>Request</source>
         <translation>Запрос</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UsbControlComposer.qml" line="98"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UsbControlComposer.qml" line="102"/>
         <source>wValue</source>
         <translation>wValue</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UsbControlComposer.qml" line="109"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UsbControlComposer.qml" line="115"/>
         <source>wIndex</source>
         <translation>wIndex</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UsbControlComposer.qml" line="120"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UsbControlComposer.qml" line="128"/>
         <source>Direction</source>
         <translation>Направление</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UsbControlComposer.qml" line="124"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UsbControlComposer.qml" line="132"/>
         <source>IN · device → host</source>
         <translation>IN · устройство → хост</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UsbControlComposer.qml" line="124"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UsbControlComposer.qml" line="132"/>
         <source>OUT · host → device</source>
         <translation>OUT · хост → устройство</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UsbControlComposer.qml" line="129"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UsbControlComposer.qml" line="137"/>
         <source>Data</source>
         <translation>Данные</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UsbControlComposer.qml" line="141"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UsbControlComposer.qml" line="151"/>
         <source>Read Length</source>
         <translation>Длина Чтения</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UsbControlComposer.qml" line="158"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UsbControlComposer.qml" line="172"/>
         <source>Send Control Transfer</source>
         <translation>Отправить Управляющую Передачу</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UsbControlComposer.qml" line="165"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UsbControlComposer.qml" line="179"/>
         <source>Sending…</source>
         <translation>Отправка…</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UsbControlComposer.qml" line="193"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UsbControlComposer.qml" line="209"/>
         <source>Transfer result appears here.</source>
         <translation>Результат передачи появится здесь.</translation>
     </message>
@@ -34587,47 +34597,47 @@ I understand that when it ends, I'll need to buy a license or build the GPLv3 ve
         <translation type="vanished">Удалить из Рабочего Пространства</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/WidgetDelegate.qml" line="168"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/WidgetDelegate.qml" line="172"/>
         <source>Rename Widget…</source>
         <translation>Переименовать Виджет…</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/WidgetDelegate.qml" line="181"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/WidgetDelegate.qml" line="185"/>
         <source>Freeze Title</source>
         <translation>Зафиксировать Заголовок</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/WidgetDelegate.qml" line="187"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/WidgetDelegate.qml" line="193"/>
         <source>Title Bar</source>
         <translation>Строка Заголовка</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/WidgetDelegate.qml" line="195"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/WidgetDelegate.qml" line="203"/>
         <source>Painted Title</source>
         <translation>Отрисованный Заголовок</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/WidgetDelegate.qml" line="205"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/WidgetDelegate.qml" line="215"/>
         <source>Hidden</source>
         <translation>Скрыта</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/WidgetDelegate.qml" line="217"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/WidgetDelegate.qml" line="229"/>
         <source>Widget Settings…</source>
         <translation>Настройки Виджета…</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/WidgetDelegate.qml" line="232"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/WidgetDelegate.qml" line="246"/>
         <source>Open in External Window</source>
         <translation>Открыть в Отдельном Окне</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/WidgetDelegate.qml" line="437"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/WidgetDelegate.qml" line="451"/>
         <source>The widget could not be created.</source>
         <translation>Не удалось создать виджет.</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/WidgetDelegate.qml" line="720"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/WidgetDelegate.qml" line="734"/>
         <source>Device Disconnected</source>
         <translation>Устройство Отключено</translation>
     </message>
@@ -34921,42 +34931,42 @@ I understand that when it ends, I'll need to buy a license or build the GPLv3 ve
 <context>
     <name>WorkspaceDialog</name>
     <message>
-        <location filename="../../qml/Dialogs/WorkspaceDialog.qml" line="51"/>
+        <location filename="../../qml/Dialogs/WorkspaceDialog.qml" line="53"/>
         <source>Edit Workspace</source>
         <translation>Изменить Рабочее Пространство</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/WorkspaceDialog.qml" line="52"/>
+        <location filename="../../qml/Dialogs/WorkspaceDialog.qml" line="54"/>
         <source>New Workspace</source>
         <translation>Новое Рабочее Пространство</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/WorkspaceDialog.qml" line="176"/>
+        <location filename="../../qml/Dialogs/WorkspaceDialog.qml" line="178"/>
         <source>Name:</source>
         <translation>Название:</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/WorkspaceDialog.qml" line="185"/>
+        <location filename="../../qml/Dialogs/WorkspaceDialog.qml" line="187"/>
         <source>My Workspace</source>
         <translation>Моё Рабочее Пространство</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/WorkspaceDialog.qml" line="200"/>
+        <location filename="../../qml/Dialogs/WorkspaceDialog.qml" line="202"/>
         <source>Select widgets to include:</source>
         <translation>Выберите виджеты для включения:</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/WorkspaceDialog.qml" line="208"/>
+        <location filename="../../qml/Dialogs/WorkspaceDialog.qml" line="210"/>
         <source>Filter widgets…</source>
         <translation>Фильтр виджетов…</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/WorkspaceDialog.qml" line="318"/>
+        <location filename="../../qml/Dialogs/WorkspaceDialog.qml" line="320"/>
         <source>Cancel</source>
         <translation>Отмена</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/WorkspaceDialog.qml" line="325"/>
+        <location filename="../../qml/Dialogs/WorkspaceDialog.qml" line="327"/>
         <source>OK</source>
         <translation>OK</translation>
     </message>
@@ -35384,6 +35394,48 @@ I understand that when it ends, I'll need to buy a license or build the GPLv3 ve
     <message>
         <source>No workspaces.</source>
         <translation type="vanished">Нет рабочих пространств.</translation>
+    </message>
+</context>
+<context>
+    <name>bad</name>
+    <message>
+        <location filename="../../../scripts/tests/fixtures/qml-control-unnamed/bad.qml" line="8"/>
+        <source>Baud Rate</source>
+        <translation>Скорость Передачи</translation>
+    </message>
+    <message>
+        <location filename="../../../scripts/tests/fixtures/qml-control-unnamed-advisory/bad.qml" line="8"/>
+        <source>Apply</source>
+        <translation>Применить</translation>
+    </message>
+    <message>
+        <location filename="../../../scripts/tests/fixtures/qml-objectname-literal/bad.qml" line="8"/>
+        <location filename="../../../scripts/tests/fixtures/qml-objectname-literal/bad.qml" line="9"/>
+        <source>Connect</source>
+        <translation>Подключиться</translation>
+    </message>
+</context>
+<context>
+    <name>good</name>
+    <message>
+        <location filename="../../../scripts/tests/fixtures/qml-control-unnamed/good.qml" line="8"/>
+        <source>Baud Rate</source>
+        <translation>Скорость Передачи</translation>
+    </message>
+    <message>
+        <location filename="../../../scripts/tests/fixtures/qml-control-unnamed-advisory/good.qml" line="9"/>
+        <source>Apply</source>
+        <translation>Применить</translation>
+    </message>
+    <message>
+        <location filename="../../../scripts/tests/fixtures/qml-objectname-literal/good.qml" line="11"/>
+        <source>Connect</source>
+        <translation>Подключиться</translation>
+    </message>
+    <message>
+        <location filename="../../../scripts/tests/fixtures/qml-objectname-literal/good.qml" line="16"/>
+        <source>Close</source>
+        <translation>Закрыть</translation>
     </message>
 </context>
 </TS>

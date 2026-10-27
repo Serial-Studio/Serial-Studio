@@ -591,6 +591,16 @@ Habilita esto solo en redes confiables. Clientes no confiables pueden leer datos
         <translation>Un programa que usa la API local de Serial Studio quiere cambiar los scripts de este proyecto. Los scripts se ejecutan con todos los privilegios de la aplicación, incluyendo ejecutar programas. ¿Permitir que clientes API modifiquen los scripts del proyecto?</translation>
     </message>
     <message>
+        <location filename="../../../core/Api/API/Server/ServerAuth.cpp" line="52"/>
+        <source>Allow API clients to drive the user interface?</source>
+        <translation>¿Permitir que clientes API controlen la interfaz de usuario?</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Api/API/Server/ServerAuth.cpp" line="53"/>
+        <source>A program using Serial Studio's local API wants to click controls and type into this window as you would. That can connect, save, delete or change anything you can. Allow API clients to drive the user interface?</source>
+        <translation>Un programa que usa la API local de Serial Studio quiere hacer clic en controles y escribir en esta ventana como lo haría usted. Puede conectar, guardar, borrar o cambiar cualquier cosa que usted pueda. ¿Permitir que clientes API controlen la interfaz de usuario?</translation>
+    </message>
+    <message>
         <source>Serial Studio</source>
         <translation type="vanished">Serial Studio</translation>
     </message>
@@ -622,7 +632,7 @@ Habilita esto solo en redes confiables. Clientes no confiables pueden leer datos
 <context>
     <name>About</name>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="46"/>
+        <location filename="../../qml/Dialogs/About.qml" line="48"/>
         <source>About</source>
         <translation>Acerca De</translation>
     </message>
@@ -631,32 +641,32 @@ Habilita esto solo en redes confiables. Clientes no confiables pueden leer datos
         <translation type="vanished">Versión %1</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="38"/>
+        <location filename="../../qml/Dialogs/About.qml" line="40"/>
         <source>local build</source>
         <translation>compilación local</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="106"/>
+        <location filename="../../qml/Dialogs/About.qml" line="108"/>
         <source>Version %1 (%2)</source>
         <translation>Versión %1 (%2)</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="110"/>
+        <location filename="../../qml/Dialogs/About.qml" line="112"/>
         <source>Click to copy build identity</source>
         <translation>Clic para copiar identidad de compilación</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="128"/>
+        <location filename="../../qml/Dialogs/About.qml" line="130"/>
         <source>Copyright © %1 %2</source>
         <translation>Copyright © %1 %2</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="134"/>
+        <location filename="../../qml/Dialogs/About.qml" line="136"/>
         <source>All Rights Reserved</source>
         <translation>Todos los Derechos Reservados</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="149"/>
+        <location filename="../../qml/Dialogs/About.qml" line="151"/>
         <source>%1 is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 3 of the License, or (at your option) any later version.
 
 %1 is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.</source>
@@ -665,32 +675,32 @@ Habilita esto solo en redes confiables. Clientes no confiables pueden leer datos
 %1 se distribuye con la esperanza de que sea útil, pero SIN NINGUNA GARANTÍA; sin siquiera la garantía implícita de COMERCIABILIDAD o IDONEIDAD PARA UN PROPÓSITO PARTICULAR. Consulte la Licencia Pública General de GNU para más detalles.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="168"/>
+        <location filename="../../qml/Dialogs/About.qml" line="170"/>
         <source>This configuration is licensed for commercial and proprietary use. It may be used in closed-source and commercial applications, subject to the terms of the commercial license.</source>
         <translation>Esta configuración está licenciada para uso comercial y propietario. Puede utilizarse en aplicaciones de código cerrado y comerciales, sujeto a los términos de la licencia comercial.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="182"/>
+        <location filename="../../qml/Dialogs/About.qml" line="184"/>
         <source>This configuration is for personal and evaluation purposes only. Commercial use is prohibited unless a valid commercial license is activated.</source>
         <translation>Esta configuración es solo para fines personales y de evaluación. El uso comercial está prohibido a menos que se active una licencia comercial válida.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="196"/>
+        <location filename="../../qml/Dialogs/About.qml" line="198"/>
         <source>This software is provided 'as is' without warranty of any kind, express or implied, including but not limited to the warranties of merchantability or fitness for a particular purpose. In no event shall the author be liable for any damages arising from the use of this software.</source>
         <translation>Este software se proporciona 'tal cual' sin garantía de ningún tipo, expresa o implícita, incluyendo pero no limitado a las garantías de comerciabilidad o idoneidad para un propósito particular. En ningún caso el autor será responsable de daños derivados del uso de este software.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="217"/>
+        <location filename="../../qml/Dialogs/About.qml" line="219"/>
         <source>Manage License</source>
         <translation>Administrar Licencia</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="226"/>
+        <location filename="../../qml/Dialogs/About.qml" line="228"/>
         <source>Donate</source>
         <translation>Donar</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="237"/>
+        <location filename="../../qml/Dialogs/About.qml" line="239"/>
         <source>Check for Updates</source>
         <translation>Buscar Actualizaciones</translation>
     </message>
@@ -707,32 +717,32 @@ Habilita esto solo en redes confiables. Clientes no confiables pueden leer datos
         <translation type="vanished">Consejos y Trucos</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="246"/>
+        <location filename="../../qml/Dialogs/About.qml" line="248"/>
         <source>License Agreement</source>
         <translation>Acuerdo de Licencia</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="255"/>
+        <location filename="../../qml/Dialogs/About.qml" line="257"/>
         <source>Report Bug</source>
         <translation>Reportar Error</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="266"/>
+        <location filename="../../qml/Dialogs/About.qml" line="268"/>
         <source>Acknowledgements</source>
         <translation>Agradecimientos</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="275"/>
+        <location filename="../../qml/Dialogs/About.qml" line="277"/>
         <source>Benchmark</source>
         <translation>Benchmark</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="285"/>
+        <location filename="../../qml/Dialogs/About.qml" line="287"/>
         <source>Website</source>
         <translation>Sitio Web</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="301"/>
+        <location filename="../../qml/Dialogs/About.qml" line="303"/>
         <source>Close</source>
         <translation>Cerrar</translation>
     </message>
@@ -774,42 +784,42 @@ Habilita esto solo en redes confiables. Clientes no confiables pueden leer datos
 <context>
     <name>AccelerometerConfigDialog</name>
     <message>
-        <location filename="../../qml/Dialogs/AccelerometerConfigDialog.qml" line="35"/>
+        <location filename="../../qml/Dialogs/AccelerometerConfigDialog.qml" line="37"/>
         <source>Accelerometer Configuration</source>
         <translation>Configuración del Acelerómetro</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/AccelerometerConfigDialog.qml" line="110"/>
+        <location filename="../../qml/Dialogs/AccelerometerConfigDialog.qml" line="112"/>
         <source>Configure the accelerometer display range and input units.</source>
         <translation>Configurar el rango de visualización y las unidades de entrada del acelerómetro.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/AccelerometerConfigDialog.qml" line="124"/>
+        <location filename="../../qml/Dialogs/AccelerometerConfigDialog.qml" line="126"/>
         <source>Display Range</source>
         <translation>Rango de Visualización</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/AccelerometerConfigDialog.qml" line="145"/>
+        <location filename="../../qml/Dialogs/AccelerometerConfigDialog.qml" line="147"/>
         <source>Max G:</source>
         <translation>G Máx.:</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/AccelerometerConfigDialog.qml" line="159"/>
+        <location filename="../../qml/Dialogs/AccelerometerConfigDialog.qml" line="161"/>
         <source>Enter max G value</source>
         <translation>Ingresar valor G máximo</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/AccelerometerConfigDialog.qml" line="179"/>
+        <location filename="../../qml/Dialogs/AccelerometerConfigDialog.qml" line="181"/>
         <source>Input Configuration</source>
         <translation>Configuración de Entrada</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/AccelerometerConfigDialog.qml" line="199"/>
+        <location filename="../../qml/Dialogs/AccelerometerConfigDialog.qml" line="201"/>
         <source>Input already in G</source>
         <translation>Entrada ya en G</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/AccelerometerConfigDialog.qml" line="233"/>
+        <location filename="../../qml/Dialogs/AccelerometerConfigDialog.qml" line="235"/>
         <source>Close</source>
         <translation>Cerrar</translation>
     </message>
@@ -817,17 +827,17 @@ Habilita esto solo en redes confiables. Clientes no confiables pueden leer datos
 <context>
     <name>Acknowledgements</name>
     <message>
-        <location filename="../../qml/Dialogs/Acknowledgements.qml" line="34"/>
+        <location filename="../../qml/Dialogs/Acknowledgements.qml" line="36"/>
         <source>Acknowledgements</source>
         <translation>Reconocimientos</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Acknowledgements.qml" line="75"/>
+        <location filename="../../qml/Dialogs/Acknowledgements.qml" line="77"/>
         <source>Close</source>
         <translation>Cerrar</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Acknowledgements.qml" line="86"/>
+        <location filename="../../qml/Dialogs/Acknowledgements.qml" line="88"/>
         <source>About Qt…</source>
         <translation>Acerca de QT…</translation>
     </message>
@@ -868,17 +878,17 @@ Habilita esto solo en redes confiables. Clientes no confiables pueden leer datos
 <context>
     <name>AddWidgetDialog</name>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="46"/>
+        <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="48"/>
         <source>Add Widget</source>
         <translation>Agregar Widget</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="222"/>
+        <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="224"/>
         <source>Available Widgets</source>
         <translation>Widgets Disponibles</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="231"/>
+        <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="233"/>
         <source>Click a row to add it to the workspace.</source>
         <translation>Haz clic en una fila para agregarla al espacio de trabajo.</translation>
     </message>
@@ -887,62 +897,62 @@ Habilita esto solo en redes confiables. Clientes no confiables pueden leer datos
         <translation type="vanished">Buscar</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="239"/>
+        <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="241"/>
         <source>Search…</source>
         <translation>Buscar…</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="258"/>
+        <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="260"/>
         <source>Widget</source>
         <translation>Widget</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="259"/>
+        <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="261"/>
         <source>Group</source>
         <translation>Grupo</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="260"/>
+        <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="262"/>
         <source>Name</source>
         <translation>Nombre</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="327"/>
+        <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="329"/>
         <source>(entire group)</source>
         <translation>(grupo completo)</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="362"/>
+        <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="364"/>
         <source>Already in workspace</source>
         <translation>Ya está en el espacio de trabajo</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="363"/>
+        <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="365"/>
         <source>Add to workspace</source>
         <translation>Agregar al espacio de trabajo</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="393"/>
+        <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="395"/>
         <source>No widgets available.</source>
         <translation>No hay widgets disponibles.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="394"/>
+        <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="396"/>
         <source>No widgets match.</source>
         <translation>No hay widgets coincidentes.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="411"/>
+        <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="413"/>
         <source>%1 widgets</source>
         <translation>%1 widgets</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="412"/>
+        <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="414"/>
         <source>%1 of %2 widgets</source>
         <translation>%1 de %2 widgets</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="416"/>
+        <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="418"/>
         <source>Close</source>
         <translation>Cerrar</translation>
     </message>
@@ -981,304 +991,304 @@ Habilita esto solo en redes confiables. Clientes no confiables pueden leer datos
 <context>
     <name>AlarmBandsEditor</name>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="35"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="37"/>
         <source>Alarm Bands</source>
         <translation>Bandas de Alarma</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="72"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="74"/>
         <source>Info</source>
         <translation>Información</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="73"/>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="131"/>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="153"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="75"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="133"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="155"/>
         <source>OK</source>
         <translation>OK</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="74"/>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="154"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="76"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="156"/>
         <source>Warning</source>
         <translation>Advertencia</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="75"/>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="155"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="77"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="157"/>
         <source>Critical</source>
         <translation>Crítico</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="84"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="86"/>
         <source>Tachometer</source>
         <translation>Tacómetro</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="86"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="88"/>
         <source>Idle</source>
         <translation>Ralentí</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="87"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="89"/>
         <source>Operating</source>
         <translation>Operación</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="88"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="90"/>
         <source>Caution</source>
         <translation>Precaución</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="89"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="91"/>
         <source>Redline</source>
         <translation>Zona Roja</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="93"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="95"/>
         <source>Speedometer</source>
         <translation>Velocímetro</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="95"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="97"/>
         <source>Cruise</source>
         <translation>Crucero</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="96"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="98"/>
         <source>Fast</source>
         <translation>Rápido</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="97"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="99"/>
         <source>Top Speed</source>
         <translation>Velocidad Máxima</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="101"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="103"/>
         <source>Engine Temperature</source>
         <translation>Temperatura del Motor</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="103"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="105"/>
         <source>Cold</source>
         <translation>Frío</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="104"/>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="113"/>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="145"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="106"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="115"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="147"/>
         <source>Normal</source>
         <translation>Normal</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="105"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="107"/>
         <source>Warm</source>
         <translation>Caliente</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="106"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="108"/>
         <source>Overheat</source>
         <translation>Sobrecalentamiento</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="110"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="112"/>
         <source>Pressure</source>
         <translation>Presión</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="112"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="114"/>
         <source>Vacuum</source>
         <translation>Vacío</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="114"/>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="123"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="116"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="125"/>
         <source>High</source>
         <translation>Alto</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="115"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="117"/>
         <source>Burst</source>
         <translation>Ráfaga</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="119"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="121"/>
         <source>Battery Voltage</source>
         <translation>Voltaje de Batería</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="121"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="123"/>
         <source>Low</source>
         <translation>Bajo</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="122"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="124"/>
         <source>Nominal</source>
         <translation>Nominal</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="127"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="129"/>
         <source>Fuel Level</source>
         <translation>Nivel de Combustible</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="129"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="131"/>
         <source>Empty</source>
         <translation>Vacío</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="130"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="132"/>
         <source>Reserve</source>
         <translation>Reserva</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="135"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="137"/>
         <source>Signal Strength</source>
         <translation>Intensidad de Señal</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="137"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="139"/>
         <source>No Signal</source>
         <translation>Sin Señal</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="138"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="140"/>
         <source>Weak</source>
         <translation>Débil</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="139"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="141"/>
         <source>Good</source>
         <translation>Buena</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="143"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="145"/>
         <source>CPU / System Load</source>
         <translation>Carga de CPU / Sistema</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="146"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="148"/>
         <source>Busy</source>
         <translation>Ocupado</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="147"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="149"/>
         <source>Overload</source>
         <translation>Sobrecarga</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="151"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="153"/>
         <source>OK / Warning / Critical</source>
         <translation>OK / Advertencia / Crítico</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="159"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="161"/>
         <source>Indicator (On / Off)</source>
         <translation>Indicador (Encendido / Apagado)</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="161"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="163"/>
         <source>On</source>
         <translation>Encendido</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="165"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="167"/>
         <source>Fault Indicator</source>
         <translation>Indicador de Falla</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="167"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="169"/>
         <source>Fault</source>
         <translation>Falla</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="283"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="285"/>
         <source>Select Alarm Sound</source>
         <translation>Seleccionar Sonido de Alarma</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="285"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="287"/>
         <source>WAV audio (*.wav)</source>
         <translation>Audio WAV (*.WAV)</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="285"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="287"/>
         <source>All files (*)</source>
         <translation>Todos los Archivos (*)</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="320"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="322"/>
         <source>Choose Band Color</source>
         <translation>Elegir Color de Banda</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="347"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="349"/>
         <source>Presets</source>
         <translation>Preajustes</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="370"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="372"/>
         <source>Preset</source>
         <translation>Preajuste</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="385"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="387"/>
         <source>Choose preset…</source>
         <translation>Elegir ajuste preestablecido…</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="496"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="498"/>
         <source>Blink</source>
         <translation>Parpadear</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="503"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="505"/>
         <source>Sound</source>
         <translation>Sonido</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="624"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="626"/>
         <source>Reset to severity default</source>
         <translation>Restablecer al predeterminado de severidad</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="638"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="640"/>
         <source>Click to choose a color. Right-click to reset to severity default.</source>
         <translation>Clic para elegir un color. Clic derecho para restablecer al predeterminado de severidad.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="639"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="641"/>
         <source>Click to choose a custom color.</source>
         <translation>Clic para elegir un color personalizado.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="670"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="672"/>
         <source>Flash the LED while the value sits in this band.</source>
         <translation>Hace parpadear el LED mientras el valor se encuentra en esta banda.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="698"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="700"/>
         <source>Pick a WAV file to play for this band.</source>
         <translation>Selecciona un archivo WAV para reproducir en esta banda.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="714"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="716"/>
         <source>Use the priority's default sound.</source>
         <translation>Usar el sonido predeterminado de la prioridad.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="787"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="789"/>
         <source>No bands defined. Pick a preset above or add a band to get started.</source>
         <translation>No hay bandas definidas. Elegir un ajuste preestablecido arriba o agregar una banda para comenzar.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="911"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="913"/>
         <source>Apply</source>
         <translation>Aplicar</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="914"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="916"/>
         <source>Apply changes to the dataset.</source>
         <translation>Aplicar cambios al conjunto de datos.</translation>
     </message>
@@ -1291,47 +1301,47 @@ Habilita esto solo en redes confiables. Clientes no confiables pueden leer datos
         <translation type="vanished">Reemplazar las bandas actuales con el preajuste seleccionado, escalado al rango de este conjunto de datos.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="397"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="399"/>
         <source>Range</source>
         <translation>Rango</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="425"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="427"/>
         <source>Bands</source>
         <translation>Bandas</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="436"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="438"/>
         <source>Add Band</source>
         <translation>Agregar Banda</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="440"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="442"/>
         <source>Add a new band continuing from the last one.</source>
         <translation>Agregar una nueva banda continuando desde la última.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="471"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="473"/>
         <source>Min</source>
         <translation>Mín</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="477"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="479"/>
         <source>Max</source>
         <translation>Máx</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="483"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="485"/>
         <source>Severity</source>
         <translation>Severidad</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="489"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="491"/>
         <source>Color</source>
         <translation>Color</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="510"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="512"/>
         <source>Label</source>
         <translation>Etiqueta</translation>
     </message>
@@ -1344,22 +1354,22 @@ Habilita esto solo en redes confiables. Clientes no confiables pueden leer datos
         <translation type="vanished">automático</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="724"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="726"/>
         <source>(optional)</source>
         <translation>(opcional)</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="741"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="743"/>
         <source>Move up.</source>
         <translation>Mover arriba.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="760"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="762"/>
         <source>Move down.</source>
         <translation>Mover abajo.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="773"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="775"/>
         <source>Remove this band.</source>
         <translation>Eliminar esta banda.</translation>
     </message>
@@ -1368,17 +1378,17 @@ Habilita esto solo en redes confiables. Clientes no confiables pueden leer datos
         <translation type="vanished">No hay bandas definidas. Aplicar un ajuste preestablecido o agregar una banda para comenzar.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="804"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="806"/>
         <source>Preview</source>
         <translation>Vista Previa</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="900"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="902"/>
         <source>Cancel</source>
         <translation>Cancelar</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="902"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="904"/>
         <source>Discard changes.</source>
         <translation>Descartar cambios.</translation>
     </message>
@@ -1651,7 +1661,7 @@ Habilita esto solo en redes confiables. Clientes no confiables pueden leer datos
 <context>
     <name>AssistantPanel</name>
     <message>
-        <location filename="../../qml/AI/AssistantPanel.qml" line="32"/>
+        <location filename="../../qml/AI/AssistantPanel.qml" line="34"/>
         <source>Assistant</source>
         <translation>Asistente</translation>
     </message>
@@ -1856,32 +1866,32 @@ Habilita esto solo en redes confiables. Clientes no confiables pueden leer datos
         <translation type="vanished">Memoria del Asistente Actualizada</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/AssistantPanel.qml" line="143"/>
+        <location filename="../../qml/AI/AssistantPanel.qml" line="145"/>
         <source>Context may be degraded</source>
         <translation>El contexto puede estar degradado</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/AssistantPanel.qml" line="159"/>
+        <location filename="../../qml/AI/AssistantPanel.qml" line="161"/>
         <source>Start fresh chat</source>
         <translation>Iniciar chat nuevo</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/AssistantPanel.qml" line="210"/>
+        <location filename="../../qml/AI/AssistantPanel.qml" line="212"/>
         <source>Remember (%1)?</source>
         <translation>¿Recordar (%1)?</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/AssistantPanel.qml" line="215"/>
+        <location filename="../../qml/AI/AssistantPanel.qml" line="217"/>
         <source>Remember</source>
         <translation>Recordar</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/AssistantPanel.qml" line="224"/>
+        <location filename="../../qml/AI/AssistantPanel.qml" line="226"/>
         <source>Dismiss</source>
         <translation>Descartar</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/AssistantPanel.qml" line="256"/>
+        <location filename="../../qml/AI/AssistantPanel.qml" line="258"/>
         <source>Continuing from your previous chat. Its recent context was carried over.</source>
         <translation>Continuando desde el chat anterior. Su contexto reciente se transfirió.</translation>
     </message>
@@ -2042,29 +2052,29 @@ Habilita esto solo en redes confiables. Clientes no confiables pueden leer datos
         <translation>Dispositivo de Entrada</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="166"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="170"/>
         <source>Sample Rate</source>
         <translation>Frecuencia de Muestreo</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="204"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="212"/>
         <source>Normalization</source>
         <translation>Normalización</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="185"/>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="273"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="191"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="287"/>
         <source>Sample Format</source>
         <translation>Formato de Muestra</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="147"/>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="254"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="149"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="266"/>
         <source>Channels</source>
         <translation>Canales</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="235"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="245"/>
         <source>Output Device</source>
         <translation>Dispositivo de Salida</translation>
     </message>
@@ -2091,56 +2101,56 @@ Habilita esto solo en redes confiables. Clientes no confiables pueden leer datos
 <context>
     <name>AxisRangeDialog</name>
     <message>
-        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="84"/>
+        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="86"/>
         <source>Axis Range Configuration</source>
         <translation>Configuración de Rango de Ejes</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="204"/>
+        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="206"/>
         <source>Configure the visible range for the plot axes. Values update in real-time as you type.</source>
         <translation>Configura el rango visible para los ejes del gráfico. Los valores se actualizan en tiempo real mientras escribes.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="212"/>
+        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="214"/>
         <source>X Axis</source>
         <translation>Eje X</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="237"/>
-        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="308"/>
+        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="239"/>
+        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="310"/>
         <source>Minimum:</source>
         <translation>Mínimo:</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="249"/>
-        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="320"/>
+        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="251"/>
+        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="322"/>
         <source>Enter min value</source>
         <translation>Ingresar valor mínimo</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="258"/>
-        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="329"/>
+        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="260"/>
+        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="331"/>
         <source>Maximum:</source>
         <translation>Máximo:</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="270"/>
-        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="341"/>
+        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="272"/>
+        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="343"/>
         <source>Enter max value</source>
         <translation>Ingresar valor máximo</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="285"/>
+        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="287"/>
         <source>Y Axis</source>
         <translation>Eje Y</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="360"/>
+        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="362"/>
         <source>Reset</source>
         <translation>Restablecer</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="370"/>
+        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="372"/>
         <source>Close</source>
         <translation>Cerrar</translation>
     </message>
@@ -2148,178 +2158,178 @@ Habilita esto solo en redes confiables. Clientes no confiables pueden leer datos
 <context>
     <name>BackupRecovery</name>
     <message>
-        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="31"/>
+        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="33"/>
         <source>Recover Backup</source>
         <translation>Recuperar Respaldo</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="94"/>
-        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="165"/>
-        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="166"/>
+        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="96"/>
+        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="167"/>
+        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="168"/>
         <source>Untitled</source>
         <translation>Sin Título</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="97"/>
+        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="99"/>
         <source>Project Loaded</source>
         <translation>Proyecto Cargado</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="98"/>
+        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="100"/>
         <source>Auto-save</source>
         <translation>Guardado Automático</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="99"/>
-        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="119"/>
+        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="101"/>
+        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="121"/>
         <source>Before Restore</source>
         <translation>Antes de Restaurar</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="100"/>
-        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="106"/>
+        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="102"/>
+        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="108"/>
         <source>Before Delete Dataset</source>
         <translation>Antes de Eliminar Conjunto de Datos</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="101"/>
-        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="107"/>
+        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="103"/>
+        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="109"/>
         <source>Before Delete Group</source>
         <translation>Antes de Eliminar Grupo</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="102"/>
+        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="104"/>
         <source>Before New Project</source>
         <translation>Antes de Proyecto Nuevo</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="103"/>
+        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="105"/>
         <source>Before Open Project</source>
         <translation>Antes de Abrir Proyecto</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="104"/>
+        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="106"/>
         <source>Before Load JSON</source>
         <translation>Antes de Cargar JSON</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="105"/>
+        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="107"/>
         <source>Before Apply Template</source>
         <translation>Antes de Aplicar Plantilla</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="108"/>
+        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="110"/>
         <source>Before Delete Action</source>
         <translation>Antes de Eliminar Acción</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="109"/>
+        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="111"/>
         <source>Before Delete Output Widget</source>
         <translation>Antes de Eliminar Widget de Salida</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="110"/>
+        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="112"/>
         <source>Before Move Dataset</source>
         <translation>Antes de Mover Conjunto de Datos</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="111"/>
+        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="113"/>
         <source>Before Move Group</source>
         <translation>Antes de Mover Grupo</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="112"/>
+        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="114"/>
         <source>Before Delete Workspace</source>
         <translation>Antes de Eliminar Espacio de Trabajo</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="113"/>
+        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="115"/>
         <source>Before Clear All Workspaces</source>
         <translation>Antes de Limpiar Todos los Espacios de Trabajo</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="114"/>
+        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="116"/>
         <source>Before Remove Widget</source>
         <translation>Antes de Eliminar Widget</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="115"/>
+        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="117"/>
         <source>Before Reorder Workspaces</source>
         <translation>Antes de Reordenar Espacios de Trabajo</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="116"/>
-        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="117"/>
+        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="118"/>
+        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="119"/>
         <source>Before Batch Operation</source>
         <translation>Antes de Operación por Lotes</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="118"/>
+        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="120"/>
         <source>Before Add Tile</source>
         <translation>Antes de Agregar Mosaico</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="142"/>
+        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="144"/>
         <source>%1 (and %2 more)</source>
         <translation>%1 (y %2 más)</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="159"/>
+        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="161"/>
         <source> The frame parser code also differs and will be replaced.</source>
         <translation>El código del analizador de tramas también difiere y será reemplazado.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="164"/>
+        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="166"/>
         <source>Title changes from “%1” to “%2”. Group structure unchanged.</source>
         <translation>El título cambia de "%1" a "%2". La estructura del grupo permanece sin cambios.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="169"/>
+        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="171"/>
         <source>Same groups and datasets, but the frame parser code differs — restoring will replace it.</source>
         <translation>Mismos grupos y conjuntos de datos, pero el código del analizador de tramas difiere — restaurar lo reemplazará.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="171"/>
+        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="173"/>
         <source>Same groups and datasets as your current project. Restoring may still revert field-level edits.</source>
         <translation>Mismos grupos y conjuntos de datos que tu proyecto actual. Restaurar puede revertir ediciones a nivel de campo.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="178"/>
+        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="180"/>
         <source>Restoring removes %1 and brings back %2.</source>
         <translation>Restaurar elimina %1 y recupera %2.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="181"/>
+        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="183"/>
         <source>Restoring removes %1.</source>
         <translation>Restaurar elimina %1.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="183"/>
+        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="185"/>
         <source>Restoring brings back %1.</source>
         <translation>Restaurar recupera %1.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="209"/>
+        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="211"/>
         <source>Pick a backup to restore. The current project is saved automatically first, so the restore is reversible.</source>
         <translation>Elige un respaldo para restaurar. El proyecto actual se guarda automáticamente primero, por lo que la restauración es reversible.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="292"/>
+        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="294"/>
         <source>No backups for this project yet. Edit or save the project to start the rolling backup.</source>
         <translation>Aún no hay respaldos para este proyecto. Edita o guarda el proyecto para iniciar el respaldo rotativo.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="320"/>
+        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="322"/>
         <source>Open Folder</source>
         <translation>Abrir Carpeta</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="328"/>
+        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="330"/>
         <source>Cancel</source>
         <translation>Cancelar</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="334"/>
+        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="336"/>
         <source>Restore</source>
         <translation>Restaurar</translation>
     </message>
@@ -2327,157 +2337,157 @@ Habilita esto solo en redes confiables. Clientes no confiables pueden leer datos
 <context>
     <name>Benchmark</name>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="32"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="34"/>
         <source>Benchmark</source>
         <translation>Benchmark</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="81"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="83"/>
         <source>%1 frames/s</source>
         <translation>%1 tramas/s</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="85"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="87"/>
         <source>%1 s</source>
         <translation>%1 s</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="90"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="92"/>
         <source>n/a</source>
         <translation>n/d</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="92"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="94"/>
         <source>Pass</source>
         <translation>Aprobado</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="92"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="94"/>
         <source>Fail</source>
         <translation>Reprobado</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="113"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="115"/>
         <source>Hotpath Benchmark</source>
         <translation>Benchmark de Ruta Crítica</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="124"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="126"/>
         <source>Measures how fast this computer can extract, parse, and visualize frames through Serial Studio's data pipeline.</source>
         <translation>Mide qué tan rápido esta computadora puede extraer, analizar y visualizar tramas a través del pipeline de datos de Serial Studio.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="170"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="172"/>
         <source>The interface will freeze while running</source>
         <translation>La interfaz se congelará durante la ejecución</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="181"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="183"/>
         <source>Each phase runs flat-out on the main thread, so the window stops responding until it finishes. Your current project is reloaded automatically when the benchmark ends.</source>
         <translation>Cada fase se ejecuta a máxima velocidad en el hilo principal, por lo que la ventana deja de responder hasta que finaliza. El proyecto actual se recarga automáticamente cuando termina la prueba de rendimiento.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="238"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="240"/>
         <source>Frames per phase:</source>
         <translation>Tramas por fase:</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="255"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="257"/>
         <source>Minimum duration:</source>
         <translation>Duración mínima:</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="287"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="289"/>
         <source>Stages</source>
         <translation>Etapas</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="295"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="297"/>
         <source>Parsers</source>
         <translation>Analizadores</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="307"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="309"/>
         <source>Data export</source>
         <translation>Exportación de datos</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="318"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="320"/>
         <source>Dashboard</source>
         <translation>Tablero</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="333"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="335"/>
         <source>Data</source>
         <translation>Datos</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="343"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="345"/>
         <source>Numeric only</source>
         <translation>Solo numéricos</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="354"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="356"/>
         <source>Mixed (numeric + text)</source>
         <translation>Mixto (numérico + texto)</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="374"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="376"/>
         <source>Select at least one stage and one data type to run a benchmark.</source>
         <translation>Selecciona al menos una etapa y un tipo de datos para ejecutar una prueba de rendimiento.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="212"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="214"/>
         <source>Running %1...</source>
         <translation>Ejecutando %1...</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="213"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="215"/>
         <source>Preparing...</source>
         <translation>Preparando...</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="389"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="391"/>
         <source>Disconnect the active device before running a benchmark.</source>
         <translation>Desconecta el dispositivo activo antes de ejecutar una prueba de rendimiento.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="390"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="392"/>
         <source>Close the open recording before running a benchmark.</source>
         <translation>Cierra la grabación abierta antes de ejecutar una prueba de rendimiento.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="422"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="424"/>
         <source>Pipeline</source>
         <translation>Pipeline</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="434"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="436"/>
         <source>Throughput</source>
         <translation>Rendimiento</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="446"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="448"/>
         <source>Time</source>
         <translation>Tiempo</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="458"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="460"/>
         <source>Result</source>
         <translation>Resultado</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="559"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="561"/>
         <source>Run a test to see results</source>
         <translation>Ejecuta una prueba para ver resultados</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="576"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="578"/>
         <source>Peak memory: %1</source>
         <translation>Memoria pico: %1</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="590"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="592"/>
         <source>Pass/Fail applies to the data-pipeline and parser stages (data pipeline and Built-in numeric 1024 K frames/s; Built-in mixed 512 K; Lua numeric 256 K; JavaScript numeric and Lua mixed 128 K; JavaScript mixed 64 K). The export and dashboard stages are informational.</source>
         <translation>Aprobado/Reprobado aplica a las etapas de canalización de datos y analizador (canalización de datos y analizador integrado numérico 1024 K tramas/s; integrado mixto 512 K; Lua numérico 256 K; JavaScript numérico y Lua mixto 128 K; JavaScript mixto 64 K). Las etapas de exportación y tablero son informativas.</translation>
     </message>
@@ -2490,7 +2500,7 @@ Habilita esto solo en redes confiables. Clientes no confiables pueden leer datos
         <translation type="vanished">Aprobado/Reprobado aplica a las fases de pipeline de datos y analizador (pipeline de datos y tramas numéricas nativas 1024 K tramas/s; mixtas nativas 512 K; numéricas Lua 256 K; numéricas JavaScript y mixtas Lua 128 K; mixtas JavaScript 64 K). Las fases de exportación y tablero son informativas.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="605"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="607"/>
         <source>Copy</source>
         <translation>Copiar</translation>
     </message>
@@ -2503,22 +2513,22 @@ Habilita esto solo en redes confiables. Clientes no confiables pueden leer datos
         <translation type="vanished">Aprobado/Reprobado aplica únicamente a las fases del analizador (objetivo Lua 256 K tramas/s, JavaScript 128 K). Las fases de exportación y tablero son informativas.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="612"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="614"/>
         <source>Clear</source>
         <translation>Limpiar</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="621"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="623"/>
         <source>Close</source>
         <translation>Cerrar</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="630"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="632"/>
         <source>Running...</source>
         <translation>Ejecutando...</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="630"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="632"/>
         <source>Run Benchmark</source>
         <translation>Ejecutar Benchmark</translation>
     </message>
@@ -2798,37 +2808,37 @@ Habilita esto solo en redes confiables. Clientes no confiables pueden leer datos
         <translation>Dispositivo</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="112"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="116"/>
         <source>Service</source>
         <translation>Servicio</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="148"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="154"/>
         <source>Characteristic</source>
         <translation>Característica</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="206"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="214"/>
         <source>Scanning…</source>
         <translation>Escaneando…</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="242"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="250"/>
         <source>No Bluetooth Adapter Detected</source>
         <translation>No Se Detectó Adaptador Bluetooth</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="253"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="261"/>
         <source>Connect a Bluetooth adapter or check your system settings</source>
         <translation>Conecta un adaptador Bluetooth o verifica la configuración del sistema</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="280"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="288"/>
         <source>This OS is not Supported Yet.</source>
         <translation>Este SO aún no es Compatible.</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="291"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="299"/>
         <source>We'll update Serial Studio to work with this operating system as soon as Qt officially supports it</source>
         <translation>Actualizaremos Serial Studio para funcionar con este sistema operativo tan pronto como QT lo soporte oficialmente</translation>
     </message>
@@ -2851,62 +2861,62 @@ Habilita esto solo en redes confiables. Clientes no confiables pueden leer datos
         <translation>Controlador CAN</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="140"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="142"/>
         <source>Interface</source>
         <translation>Interfaz</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="169"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="173"/>
         <source>Bitrate</source>
         <translation>Tasa de Bits</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="223"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="229"/>
         <source>Flexible Data-Rate</source>
         <translation>Velocidad de Datos Flexible</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="242"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="250"/>
         <source>The selected adapter does not support CAN FD</source>
         <translation>El adaptador seleccionado no soporta CAN FD</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="249"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="257"/>
         <source>Data Bitrate</source>
         <translation>Tasa de Bits de Datos</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="304"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="314"/>
         <source>Loopback</source>
         <translation>Loopback</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="324"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="336"/>
         <source>Listen-Only</source>
         <translation>Solo Escucha</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="344"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="358"/>
         <source>Multi-Frame Reassembly</source>
         <translation>Reensamblado de Tramas Múltiples</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="361"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="377"/>
         <source>Reassemble J1939 transport-protocol and ISO-TP multi-frame messages</source>
         <translation>Reensamblar mensajes de tramas múltiples del protocolo de transporte J1939 e ISO-TP</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="368"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="384"/>
         <source>DBC Database</source>
         <translation>Base de Datos DBC</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="372"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="390"/>
         <source>Import DBC File…</source>
         <translation>Importar Archivo DBC…</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="405"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="423"/>
         <source>No CAN Interfaces Found</source>
         <translation>No Se Encontraron Interfaces CAN</translation>
     </message>
@@ -3059,77 +3069,77 @@ Habilita esto solo en redes confiables. Clientes no confiables pueden leer datos
 <context>
     <name>ChannelSoundsEditor</name>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="38"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="40"/>
         <source>Notification Channel Sounds</source>
         <translation>Sonidos de Canal de Notificación</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="97"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="99"/>
         <source>Select Sound File</source>
         <translation>Seleccionar Archivo de Sonido</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="99"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="101"/>
         <source>WAV audio (*.wav)</source>
         <translation>Audio WAV (*.WAV)</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="99"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="101"/>
         <source>All files (*)</source>
         <translation>Todos los Archivos (*)</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="125"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="127"/>
         <source>(app default)</source>
         <translation>(predeterminado de la app)</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="154"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="156"/>
         <source>A Critical notification on a channel plays its Warning file, a Warning notification its Caution file, an Info notification its Advisory file. Empty cells use the sounds from Preferences.</source>
         <translation>Una notificación Crítica en un canal reproduce su archivo de Advertencia, una notificación de Advertencia su archivo de Precaución, una notificación de Información su archivo de Aviso. Las celdas vacías usan los sonidos de Preferencias.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="165"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="167"/>
         <source>Channel</source>
         <translation>Canal</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="171"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="173"/>
         <source>Warning</source>
         <translation>Advertencia</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="177"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="179"/>
         <source>Caution</source>
         <translation>Precaución</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="183"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="185"/>
         <source>Advisory</source>
         <translation>Aviso</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="228"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="230"/>
         <source>Channel name</source>
         <translation>Nombre del canal</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="244"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="246"/>
         <source>Remove this channel.</source>
         <translation>Eliminar este canal.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="258"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="260"/>
         <source>Add Channel</source>
         <translation>Agregar Canal</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="267"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="269"/>
         <source>Cancel</source>
         <translation>Cancelar</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="275"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="277"/>
         <source>Apply</source>
         <translation>Aplicar</translation>
     </message>
@@ -3302,7 +3312,7 @@ Habilita esto solo en redes confiables. Clientes no confiables pueden leer datos
 <context>
     <name>CommandPalette</name>
     <message>
-        <location filename="../../qml/Widgets/CommandPalette.qml" line="404"/>
+        <location filename="../../qml/Widgets/CommandPalette.qml" line="411"/>
         <source>Folder</source>
         <translation>Carpeta</translation>
     </message>
@@ -3316,27 +3326,27 @@ Habilita esto solo en redes confiables. Clientes no confiables pueden leer datos
         <translation>Comandos</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/CommandPalette.qml" line="623"/>
+        <location filename="../../qml/Widgets/CommandPalette.qml" line="639"/>
         <source>Search…</source>
         <translation>Buscar…</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/CommandPalette.qml" line="639"/>
+        <location filename="../../qml/Widgets/CommandPalette.qml" line="657"/>
         <source>Close</source>
         <translation>Cerrar</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/CommandPalette.qml" line="687"/>
+        <location filename="../../qml/Widgets/CommandPalette.qml" line="707"/>
         <source>Back</source>
         <translation>Atrás</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/CommandPalette.qml" line="748"/>
+        <location filename="../../qml/Widgets/CommandPalette.qml" line="768"/>
         <source>Type to search, Enter to open, Esc to close</source>
         <translation>Escribe para buscar, Enter para abrir, Esc para cerrar</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/CommandPalette.qml" line="848"/>
+        <location filename="../../qml/Widgets/CommandPalette.qml" line="868"/>
         <source>No results found</source>
         <translation>No se encontraron resultados</translation>
     </message>
@@ -5742,200 +5752,200 @@ Habilita esto solo en redes confiables. Clientes no confiables pueden leer datos
 <context>
     <name>ConstantsLibraryDialog</name>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="46"/>
+        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="48"/>
         <source>Insert Constant</source>
         <translation>Insertar Constante</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="128"/>
-        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="129"/>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="130"/>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="131"/>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="132"/>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="133"/>
+        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="134"/>
+        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="135"/>
         <source>Fundamental</source>
         <translation>Fundamental</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="128"/>
+        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="130"/>
         <source>Speed of light in vacuum</source>
         <translation>Velocidad de la luz en el vacío</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="129"/>
+        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="131"/>
         <source>Planck constant</source>
         <translation>Constante de Planck</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="130"/>
+        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="132"/>
         <source>Elementary charge</source>
         <translation>Carga elemental</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="131"/>
+        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="133"/>
         <source>Avogadro constant</source>
         <translation>Constante de Avogadro</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="132"/>
+        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="134"/>
         <source>Boltzmann constant</source>
         <translation>Constante de Boltzmann</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="133"/>
+        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="135"/>
         <source>Stefan-Boltzmann constant</source>
         <translation>Constante de Stefan-Boltzmann</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="135"/>
-        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="136"/>
+        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="137"/>
+        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="138"/>
         <source>Mechanics</source>
         <translation>Mecánica</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="135"/>
+        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="137"/>
         <source>Standard gravity</source>
         <translation>Gravedad estándar</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="136"/>
+        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="138"/>
         <source>Gravitational constant</source>
         <translation>Constante gravitacional</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="138"/>
-        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="139"/>
+        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="140"/>
+        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="141"/>
         <source>Pressure</source>
         <translation>Presión</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="138"/>
+        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="140"/>
         <source>Standard atmosphere</source>
         <translation>Atmósfera estándar</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="139"/>
+        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="141"/>
         <source>Sea-level barometric pressure</source>
         <translation>Presión barométrica al nivel del mar</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="141"/>
-        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="142"/>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="143"/>
+        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="144"/>
+        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="145"/>
         <source>Temperature</source>
         <translation>Temperatura</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="141"/>
+        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="143"/>
         <source>Absolute zero (Celsius)</source>
         <translation>Cero absoluto (Celsius)</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="142"/>
+        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="144"/>
         <source>Water freezing point</source>
         <translation>Punto de congelación del agua</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="143"/>
+        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="145"/>
         <source>Water boiling point (1 atm)</source>
         <translation>Punto de ebullición del agua (1 atm)</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="145"/>
-        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="146"/>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="147"/>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="148"/>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="149"/>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="150"/>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="151"/>
+        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="152"/>
+        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="153"/>
         <source>Gases &amp; Fluids</source>
         <translation>Gases y Fluidos</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="145"/>
+        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="147"/>
         <source>Universal gas constant</source>
         <translation>Constante universal de los gases</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="146"/>
+        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="148"/>
         <source>Specific gas constant (dry air)</source>
         <translation>Constante específica de gas (aire seco)</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="147"/>
+        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="149"/>
         <source>Specific gas constant (water vapor)</source>
         <translation>Constante específica de gas (vapor de agua)</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="148"/>
+        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="150"/>
         <source>Air density (sea level, 15°C)</source>
         <translation>Densidad del aire (nivel del mar, 15°C)</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="149"/>
+        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="151"/>
         <source>Water density (4°C)</source>
         <translation>Densidad del agua (4°C)</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="150"/>
+        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="152"/>
         <source>Speed of sound in air (20°C)</source>
         <translation>Velocidad del sonido en aire (20°C)</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="151"/>
+        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="153"/>
         <source>Heat capacity ratio (dry air)</source>
         <translation>Relación de capacidad calorífica (aire seco)</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="153"/>
-        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="154"/>
+        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="155"/>
+        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="156"/>
         <source>Electromagnetism</source>
         <translation>Electromagnetismo</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="153"/>
+        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="155"/>
         <source>Vacuum permittivity</source>
         <translation>Permitividad del vacío</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="154"/>
+        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="156"/>
         <source>Vacuum permeability</source>
         <translation>Permeabilidad del vacío</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="156"/>
-        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="157"/>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="158"/>
+        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="159"/>
+        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="160"/>
         <source>Math</source>
         <translation>Matemáticas</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="156"/>
+        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="158"/>
         <source>Pi</source>
         <translation>Pi</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="157"/>
+        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="159"/>
         <source>Euler's number</source>
         <translation>Número de Euler</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="158"/>
+        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="160"/>
         <source>Golden ratio</source>
         <translation>Razón áurea</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="214"/>
+        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="216"/>
         <source>Physics Constants</source>
         <translation>Constantes de Física</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="223"/>
+        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="225"/>
         <source>SI-unit preset values. Click a row to insert it into %1.</source>
         <translation>Valores predefinidos en unidades SI. Haz clic en una fila para insertarla en %1.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="233"/>
+        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="235"/>
         <source>Search…</source>
         <translation>Buscar…</translation>
     </message>
@@ -5944,42 +5954,42 @@ Habilita esto solo en redes confiables. Clientes no confiables pueden leer datos
         <translation type="vanished">Buscar</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="252"/>
+        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="254"/>
         <source>Symbol</source>
         <translation>Símbolo</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="253"/>
+        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="255"/>
         <source>Name</source>
         <translation>Nombre</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="254"/>
+        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="256"/>
         <source>Value</source>
         <translation>Valor</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="255"/>
+        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="257"/>
         <source>Category</source>
         <translation>Categoría</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="364"/>
+        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="366"/>
         <source>No constants match.</source>
         <translation>No hay constantes coincidentes.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="385"/>
+        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="387"/>
         <source>%1 constants</source>
         <translation>%1 constantes</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="386"/>
+        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="388"/>
         <source>%1 of %2 constants</source>
         <translation>%1 de %2 constantes</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="390"/>
+        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="392"/>
         <source>Close</source>
         <translation>Cerrar</translation>
     </message>
@@ -6099,52 +6109,52 @@ Habilita esto solo en redes confiables. Clientes no confiables pueden leer datos
 <context>
     <name>CrashRecovery</name>
     <message>
-        <location filename="../../qml/Dialogs/CrashRecovery.qml" line="31"/>
+        <location filename="../../qml/Dialogs/CrashRecovery.qml" line="33"/>
         <source>Recovery Options</source>
         <translation>Opciones de Recuperación</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/CrashRecovery.qml" line="57"/>
+        <location filename="../../qml/Dialogs/CrashRecovery.qml" line="59"/>
         <source>Serial Studio has closed unexpectedly several times in a row.</source>
         <translation>Serial Studio se ha cerrado inesperadamente varias veces seguidas.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/CrashRecovery.qml" line="82"/>
+        <location filename="../../qml/Dialogs/CrashRecovery.qml" line="84"/>
         <source>Consecutive crashes: %1</source>
         <translation>Bloqueos consecutivos: %1</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/CrashRecovery.qml" line="90"/>
+        <location filename="../../qml/Dialogs/CrashRecovery.qml" line="92"/>
         <source>Last reported stage: %1</source>
         <translation>Última etapa reportada: %1</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/CrashRecovery.qml" line="98"/>
+        <location filename="../../qml/Dialogs/CrashRecovery.qml" line="100"/>
         <source>Detected at: %1</source>
         <translation>Detectado en: %1</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/CrashRecovery.qml" line="113"/>
+        <location filename="../../qml/Dialogs/CrashRecovery.qml" line="115"/>
         <source>Pick a recovery action. Serial Studio will quit after applying it so the next launch starts clean.</source>
         <translation>Elige una acción de recuperación. Serial Studio se cerrará después de aplicarla para que el próximo inicio sea limpio.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/CrashRecovery.qml" line="127"/>
+        <location filename="../../qml/Dialogs/CrashRecovery.qml" line="129"/>
         <source>Reset Rendering Backend to Default</source>
         <translation>Restablecer el Motor de Renderizado a Predeterminado</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/CrashRecovery.qml" line="135"/>
+        <location filename="../../qml/Dialogs/CrashRecovery.qml" line="137"/>
         <source>Skip Restoring the Last Opened Project</source>
         <translation>Omitir Restaurar el Último Proyecto Abierto</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/CrashRecovery.qml" line="142"/>
+        <location filename="../../qml/Dialogs/CrashRecovery.qml" line="144"/>
         <source>Reset all Preferences</source>
         <translation>Restablecer todas las preferencias</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/CrashRecovery.qml" line="160"/>
+        <location filename="../../qml/Dialogs/CrashRecovery.qml" line="162"/>
         <source>Continue Anyway</source>
         <translation>Continuar de Todos Modos</translation>
     </message>
@@ -6210,22 +6220,22 @@ Habilita esto solo en redes confiables. Clientes no confiables pueden leer datos
         <translation>Total: %1 mensajes, %2 señales</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="271"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="273"/>
         <source>Cancel</source>
         <translation>Cancelar</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="281"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="285"/>
         <source>Add to Project</source>
         <translation>Agregar al Proyecto</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="286"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="290"/>
         <source>Add the generated source, groups, tables and workspaces to the project that is open, instead of creating a new file</source>
         <translation>Agregar el código fuente, grupos, tablas y espacios de trabajo generados al proyecto abierto, en lugar de crear un archivo nuevo</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="297"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="303"/>
         <source>Create Project</source>
         <translation>Crear Proyecto</translation>
     </message>
@@ -6317,7 +6327,7 @@ Habilita esto solo en redes confiables. Clientes no confiables pueden leer datos
         <translation>Usa la barra de búsqueda para encontrar y agregar widgets, o haz clic derecho en un widget de otro espacio de trabajo para agregarlo aquí.</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="836"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="838"/>
         <source>Search Widgets</source>
         <translation>Buscar Widgets</translation>
     </message>
@@ -6360,7 +6370,7 @@ Habilita esto solo en redes confiables. Clientes no confiables pueden leer datos
         <translation>Servidor API Apagado</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardLayout.qml" line="675"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardLayout.qml" line="677"/>
         <source>Command Palette</source>
         <translation>Paleta de Comandos</translation>
     </message>
@@ -11136,17 +11146,17 @@ Formato válido: 01 A2 FF 3C</translation>
         <translation type="vanished">Restaurar el archivo de proyecto desde este archivo de sesión</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/DatabaseExplorer.qml" line="38"/>
+        <location filename="../../qml/DatabaseExplorer/DatabaseExplorer.qml" line="40"/>
         <source>Historian</source>
         <translation>Historial</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/DatabaseExplorer.qml" line="298"/>
+        <location filename="../../qml/DatabaseExplorer/DatabaseExplorer.qml" line="300"/>
         <source>Loading session…</source>
         <translation>Cargando sesión…</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/DatabaseExplorer.qml" line="299"/>
+        <location filename="../../qml/DatabaseExplorer/DatabaseExplorer.qml" line="301"/>
         <source>Working…</source>
         <translation>Trabajando…</translation>
     </message>
@@ -11508,37 +11518,37 @@ Formato válido: 01 A2 FF 3C</translation>
 <context>
     <name>Donate</name>
     <message>
-        <location filename="../../qml/Dialogs/Donate.qml" line="36"/>
+        <location filename="../../qml/Dialogs/Donate.qml" line="38"/>
         <source>Support Serial Studio</source>
         <translation>Apoyar Serial Studio</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Donate.qml" line="91"/>
+        <location filename="../../qml/Dialogs/Donate.qml" line="93"/>
         <source>Support the development of %1!</source>
         <translation>¡Apoya el desarrollo de %1!</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Donate.qml" line="102"/>
+        <location filename="../../qml/Dialogs/Donate.qml" line="104"/>
         <source>Serial Studio is free &amp; open-source software supported by volunteers. Consider donating or obtaining a Pro license to support development efforts :)</source>
         <translation>Serial Studio es software libre y de código abierto mantenido por voluntarios. Considera hacer una donación u obtener una licencia Pro para apoyar los esfuerzos de desarrollo :)</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Donate.qml" line="115"/>
+        <location filename="../../qml/Dialogs/Donate.qml" line="117"/>
         <source>You can also support this project by sharing it, reporting bugs and proposing new features!</source>
         <translation>También puedes apoyar este proyecto compartiéndolo, reportando errores y proponiendo nuevas funcionalidades</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Donate.qml" line="129"/>
+        <location filename="../../qml/Dialogs/Donate.qml" line="131"/>
         <source>Close</source>
         <translation>Cerrar</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Donate.qml" line="140"/>
+        <location filename="../../qml/Dialogs/Donate.qml" line="142"/>
         <source>Donate</source>
         <translation>Donar</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Donate.qml" line="155"/>
+        <location filename="../../qml/Dialogs/Donate.qml" line="157"/>
         <source>Get Serial Studio Pro</source>
         <translation>Obtener Serial Studio Pro</translation>
     </message>
@@ -11707,92 +11717,92 @@ Formato válido: 01 A2 FF 3C</translation>
 <context>
     <name>DriftReportDialog</name>
     <message>
-        <location filename="../../qml/DatabaseExplorer/DriftReportDialog.qml" line="29"/>
+        <location filename="../../qml/DatabaseExplorer/DriftReportDialog.qml" line="31"/>
         <source>Comparison Report</source>
         <translation>Reporte de Comparación</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/DriftReportDialog.qml" line="48"/>
+        <location filename="../../qml/DatabaseExplorer/DriftReportDialog.qml" line="50"/>
         <source>The current project decodes this session exactly like the recorded one.</source>
         <translation>El proyecto actual decodifica esta sesión exactamente igual que la grabada.</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/DriftReportDialog.qml" line="51"/>
+        <location filename="../../qml/DatabaseExplorer/DriftReportDialog.qml" line="53"/>
         <source>The current project produces different values from the same recording.</source>
         <translation>El proyecto actual produce valores diferentes de la misma grabación.</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/DriftReportDialog.qml" line="54"/>
+        <location filename="../../qml/DatabaseExplorer/DriftReportDialog.qml" line="56"/>
         <source>The current project finds a different number of readings in the recording.</source>
         <translation>El proyecto actual encuentra un número diferente de lecturas en la grabación.</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/DriftReportDialog.qml" line="57"/>
+        <location filename="../../qml/DatabaseExplorer/DriftReportDialog.qml" line="59"/>
         <source>The current project has a different set of datasets than the recording.</source>
         <translation>El proyecto actual tiene un conjunto de datasets diferente al de la grabación.</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/DriftReportDialog.qml" line="60"/>
+        <location filename="../../qml/DatabaseExplorer/DriftReportDialog.qml" line="62"/>
         <source>This session cannot be compared mechanically.</source>
         <translation>Esta sesión no puede compararse mecánicamente.</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/DriftReportDialog.qml" line="62"/>
+        <location filename="../../qml/DatabaseExplorer/DriftReportDialog.qml" line="64"/>
         <source>The comparison could not be completed.</source>
         <translation>No se pudo completar la comparación.</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/DriftReportDialog.qml" line="115"/>
+        <location filename="../../qml/DatabaseExplorer/DriftReportDialog.qml" line="117"/>
         <source>Compared against: %1</source>
         <translation>Comparado contra: %1</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/DriftReportDialog.qml" line="116"/>
+        <location filename="../../qml/DatabaseExplorer/DriftReportDialog.qml" line="118"/>
         <source>current project</source>
         <translation>proyecto actual</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/DriftReportDialog.qml" line="155"/>
+        <location filename="../../qml/DatabaseExplorer/DriftReportDialog.qml" line="157"/>
         <source>No differences to show.</source>
         <translation>No hay diferencias para mostrar.</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/DriftReportDialog.qml" line="196"/>
+        <location filename="../../qml/DatabaseExplorer/DriftReportDialog.qml" line="198"/>
         <source>Only exists in the current project.</source>
         <translation>Solo existe en el proyecto actual.</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/DriftReportDialog.qml" line="199"/>
+        <location filename="../../qml/DatabaseExplorer/DriftReportDialog.qml" line="201"/>
         <source>Only exists in the recorded project.</source>
         <translation>Solo existe en el proyecto grabado.</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/DriftReportDialog.qml" line="201"/>
+        <location filename="../../qml/DatabaseExplorer/DriftReportDialog.qml" line="203"/>
         <source>%1 of %2 values changed, %3 missing, %4 extra.</source>
         <translation>%1 de %2 valores cambiaron, %3 faltantes, %4 adicionales.</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/DriftReportDialog.qml" line="219"/>
+        <location filename="../../qml/DatabaseExplorer/DriftReportDialog.qml" line="221"/>
         <source>Time</source>
         <translation>Tiempo</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/DriftReportDialog.qml" line="226"/>
+        <location filename="../../qml/DatabaseExplorer/DriftReportDialog.qml" line="228"/>
         <source>Recorded project</source>
         <translation>Proyecto grabado</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/DriftReportDialog.qml" line="233"/>
+        <location filename="../../qml/DatabaseExplorer/DriftReportDialog.qml" line="235"/>
         <source>Current project</source>
         <translation>Proyecto actual</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/DriftReportDialog.qml" line="270"/>
+        <location filename="../../qml/DatabaseExplorer/DriftReportDialog.qml" line="272"/>
         <source>...and %1 more changed values.</source>
         <translation>...y %1 valores cambiados más.</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/DriftReportDialog.qml" line="287"/>
+        <location filename="../../qml/DatabaseExplorer/DriftReportDialog.qml" line="289"/>
         <source>Close</source>
         <translation>Cerrar</translation>
     </message>
@@ -13139,84 +13149,84 @@ Formato válido: 01 A2 FF 3C</translation>
         <translation>Nombre:</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EipTagsDialog.qml" line="128"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EipTagsDialog.qml" line="130"/>
         <source>Channel name</source>
         <translation>Nombre del canal</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EipTagsDialog.qml" line="132"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EipTagsDialog.qml" line="134"/>
         <source>Tag:</source>
         <translation>Etiqueta:</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EipTagsDialog.qml" line="140"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EipTagsDialog.qml" line="144"/>
         <source>Controller tag name</source>
         <translation>Nombre de etiqueta del controlador</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EipTagsDialog.qml" line="145"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EipTagsDialog.qml" line="149"/>
         <source>Type:</source>
         <translation>Tipo:</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EipTagsDialog.qml" line="164"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EipTagsDialog.qml" line="172"/>
         <source>Element</source>
         <translation>Elemento</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EipTagsDialog.qml" line="169"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EipTagsDialog.qml" line="179"/>
         <source>Add Tag</source>
         <translation>Agregar Etiqueta</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EipTagsDialog.qml" line="193"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EipTagsDialog.qml" line="203"/>
         <source>Configured Tags</source>
         <translation>Etiquetas Configuradas</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EipTagsDialog.qml" line="227"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EipTagsDialog.qml" line="237"/>
         <source>#</source>
         <translation>#</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EipTagsDialog.qml" line="234"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EipTagsDialog.qml" line="244"/>
         <source>Tag</source>
         <translation>Etiqueta</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EipTagsDialog.qml" line="242"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EipTagsDialog.qml" line="252"/>
         <source>Action</source>
         <translation>Acción</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EipTagsDialog.qml" line="289"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EipTagsDialog.qml" line="301"/>
         <source>Remove</source>
         <translation>Eliminar</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EipTagsDialog.qml" line="302"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EipTagsDialog.qml" line="314"/>
         <source>No tags configured.
 Add controller tags above to poll them.</source>
         <translation>No hay etiquetas configuradas.
 Agrega etiquetas del controlador arriba para consultarlas.</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EipTagsDialog.qml" line="320"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EipTagsDialog.qml" line="332"/>
         <source>Total tags: %1</source>
         <translation>Total de etiquetas: %1</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EipTagsDialog.qml" line="324"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EipTagsDialog.qml" line="338"/>
         <source>Generate Project</source>
         <translation>Generar Proyecto</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EipTagsDialog.qml" line="330"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EipTagsDialog.qml" line="346"/>
         <source>Clear All</source>
         <translation>Limpiar Todo</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EipTagsDialog.qml" line="336"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EipTagsDialog.qml" line="354"/>
         <source>Close</source>
         <translation>Cerrar</translation>
     </message>
@@ -13229,52 +13239,52 @@ Agrega etiquetas del controlador arriba para consultarlas.</translation>
         <translation>Gateway</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EthernetIp.qml" line="58"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EthernetIp.qml" line="60"/>
         <source>IP Address</source>
         <translation>Dirección IP</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EthernetIp.qml" line="77"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EthernetIp.qml" line="79"/>
         <source>CIP Path</source>
         <translation>Ruta CIP</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EthernetIp.qml" line="84"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EthernetIp.qml" line="88"/>
         <source>1,0</source>
         <translation>1,0</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EthernetIp.qml" line="103"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EthernetIp.qml" line="107"/>
         <source>Controller</source>
         <translation>Controlador</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EthernetIp.qml" line="122"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EthernetIp.qml" line="128"/>
         <source>Poll Interval (ms)</source>
         <translation>Intervalo de Sondeo (ms)</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EthernetIp.qml" line="127"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EthernetIp.qml" line="135"/>
         <source>Polling interval</source>
         <translation>Intervalo de sondeo</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EthernetIp.qml" line="159"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EthernetIp.qml" line="169"/>
         <source>Configure Tags…</source>
         <translation>Configurar Etiquetas…</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EthernetIp.qml" line="170"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EthernetIp.qml" line="182"/>
         <source>Create Project from Tags</source>
         <translation>Crear Proyecto desde Etiquetas</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EthernetIp.qml" line="185"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EthernetIp.qml" line="197"/>
         <source>%1 tag(s) configured</source>
         <translation>%1 etiqueta(s) configurada(s)</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EthernetIp.qml" line="186"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EthernetIp.qml" line="198"/>
         <source>No tags configured</source>
         <translation>Sin etiquetas configuradas</translation>
     </message>
@@ -13292,102 +13302,102 @@ Agrega etiquetas del controlador arriba para consultarlas.</translation>
 <context>
     <name>ExamplesBrowser</name>
     <message>
-        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="33"/>
+        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="35"/>
         <source>Examples Browser</source>
         <translation>Explorador de Ejemplos</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="119"/>
+        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="121"/>
         <source>Back</source>
         <translation>Atrás</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="151"/>
+        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="153"/>
         <source>Pro</source>
         <translation>Pro</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="172"/>
+        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="174"/>
         <source>Download &amp;&amp; Open</source>
         <translation>Descargar y Abrir</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="187"/>
+        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="189"/>
         <source>View on GitHub</source>
         <translation>Ver en GitHub</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="90"/>
+        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="92"/>
         <source>Search in Examples…</source>
         <translation>Buscar en Ejemplos…</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="244"/>
+        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="246"/>
         <source>Fetching examples…</source>
         <translation>Obteniendo ejemplos…</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="567"/>
+        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="569"/>
         <source>Loading...</source>
         <translation>Cargando...</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="568"/>
+        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="570"/>
         <source>No README available.</source>
         <translation>No hay README disponible.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="608"/>
+        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="610"/>
         <source>Copied to Clipboard</source>
         <translation>Copiado al Portapapeles</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="671"/>
+        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="673"/>
         <source>No screenshot available</source>
         <translation>No hay captura de pantalla disponible</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="703"/>
+        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="705"/>
         <source>Details</source>
         <translation>Detalles</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="732"/>
+        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="734"/>
         <source>Info</source>
         <translation>Información</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="755"/>
+        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="757"/>
         <source>Category:</source>
         <translation>Categoría:</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="768"/>
+        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="770"/>
         <source>Difficulty:</source>
         <translation>Dificultad:</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="786"/>
+        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="788"/>
         <source>Project:</source>
         <translation>Proyecto:</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="828"/>
+        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="830"/>
         <source>No Results Found</source>
         <translation>No Se Encontraron Resultados</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="839"/>
+        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="841"/>
         <source>Check the spelling or try a different search term.</source>
         <translation>Verifica la ortografía o intenta un término de búsqueda diferente.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="854"/>
+        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="856"/>
         <source>%1 examples</source>
         <translation>%1 ejemplos</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="863"/>
+        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="865"/>
         <source>Close</source>
         <translation>Cerrar</translation>
     </message>
@@ -13395,52 +13405,52 @@ Agrega etiquetas del controlador arriba para consultarlas.</translation>
 <context>
     <name>ExtensionConsent</name>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionConsent.qml" line="37"/>
+        <location filename="../../qml/Dialogs/ExtensionConsent.qml" line="39"/>
         <source>Allow Widget Extension?</source>
         <translation>¿Permitir Extensión de Widget?</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionConsent.qml" line="164"/>
+        <location filename="../../qml/Dialogs/ExtensionConsent.qml" line="166"/>
         <source>Identifier</source>
         <translation>Identificador</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionConsent.qml" line="165"/>
+        <location filename="../../qml/Dialogs/ExtensionConsent.qml" line="167"/>
         <source>Author</source>
         <translation>Autor</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionConsent.qml" line="166"/>
+        <location filename="../../qml/Dialogs/ExtensionConsent.qml" line="168"/>
         <source>Version</source>
         <translation>Versión</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionConsent.qml" line="167"/>
+        <location filename="../../qml/Dialogs/ExtensionConsent.qml" line="169"/>
         <source>License</source>
         <translation>Licencia</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionConsent.qml" line="168"/>
+        <location filename="../../qml/Dialogs/ExtensionConsent.qml" line="170"/>
         <source>Installed in</source>
         <translation>Instalado en</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionConsent.qml" line="212"/>
+        <location filename="../../qml/Dialogs/ExtensionConsent.qml" line="214"/>
         <source>This widget runs inside Serial Studio with the same privileges as the application itself. It can read and change files on this computer, use the network, and do anything Serial Studio can do. Serial Studio does not restrict what it does, and cannot undo what it does.</source>
         <translation>Este widget se ejecuta dentro de Serial Studio con los mismos privilegios que la aplicación. Puede leer y modificar archivos en esta computadora, usar la red y hacer cualquier cosa que Serial Studio pueda hacer. Serial Studio no restringe lo que hace y no puede deshacer lo que hace.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionConsent.qml" line="224"/>
+        <location filename="../../qml/Dialogs/ExtensionConsent.qml" line="226"/>
         <source>Allow it only if you trust its author. Your answer is remembered for this version of the package; a later update asks again.</source>
         <translation>Permitir solo si confías en su autor. Tu respuesta se recuerda para esta versión del paquete; una actualización posterior preguntará de nuevo.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionConsent.qml" line="242"/>
+        <location filename="../../qml/Dialogs/ExtensionConsent.qml" line="244"/>
         <source>Don't Allow</source>
         <translation>No Permitir</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionConsent.qml" line="250"/>
+        <location filename="../../qml/Dialogs/ExtensionConsent.qml" line="252"/>
         <source>Allow</source>
         <translation>Permitir</translation>
     </message>
@@ -13448,62 +13458,62 @@ Agrega etiquetas del controlador arriba para consultarlas.</translation>
 <context>
     <name>ExtensionManager</name>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="32"/>
+        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="34"/>
         <source>Extension Manager</source>
         <translation>Administrador de Extensiones</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="119"/>
+        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="121"/>
         <source>Refresh</source>
         <translation>Actualizar</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="133"/>
+        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="135"/>
         <source>Repos</source>
         <translation>Repositorios</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="163"/>
+        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="165"/>
         <source>Repository Settings</source>
         <translation>Configuración de Repositorio</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="175"/>
+        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="177"/>
         <source>Back</source>
         <translation>Atrás</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="216"/>
+        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="218"/>
         <source>Install</source>
         <translation>Instalar</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="233"/>
+        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="235"/>
         <source>Uninstall</source>
         <translation>Desinstalar</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="260"/>
+        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="262"/>
         <source>Run</source>
         <translation>Ejecutar</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="284"/>
+        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="286"/>
         <source>Stop</source>
         <translation>Detener</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="318"/>
+        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="320"/>
         <source>Reset</source>
         <translation>Restablecer</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="78"/>
+        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="80"/>
         <source>Search extensions…</source>
         <translation>Buscar extensiones…</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="368"/>
+        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="370"/>
         <source>Fetching extensions…</source>
         <translation>Obteniendo extensiones…</translation>
     </message>
@@ -13588,32 +13598,32 @@ Agrega etiquetas del controlador arriba para consultarlas.</translation>
         <translation type="vanished">Agregar</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="424"/>
+        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="426"/>
         <source>No Results Found</source>
         <translation>No Se Encontraron Resultados</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="435"/>
+        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="437"/>
         <source>Check the spelling or try a different search term.</source>
         <translation>Verifica la ortografía o intenta un término de búsqueda diferente.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="459"/>
+        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="461"/>
         <source>No Extensions Available</source>
         <translation>No Hay Extensiones Disponibles</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="470"/>
+        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="472"/>
         <source>Add a repository URL or local path in the Repos settings, then refresh.</source>
         <translation>Agrega una URL de repositorio o ruta local en la configuración de Repos, luego actualiza.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="485"/>
+        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="487"/>
         <source>%1 extensions</source>
         <translation>%1 extensiones</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="494"/>
+        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="496"/>
         <source>Close</source>
         <translation>Cerrar</translation>
     </message>
@@ -13649,32 +13659,32 @@ Agrega etiquetas del controlador arriba para consultarlas.</translation>
 <context>
     <name>ExtensionWidgetSettings</name>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ExtensionWidgetSettings.qml" line="35"/>
+        <location filename="../../qml/Widgets/Dashboard/ExtensionWidgetSettings.qml" line="37"/>
         <source>Widget Settings</source>
         <translation>Configuración del Widget</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ExtensionWidgetSettings.qml" line="57"/>
+        <location filename="../../qml/Widgets/Dashboard/ExtensionWidgetSettings.qml" line="59"/>
         <source>%1 Settings</source>
         <translation>Configuración De %1</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ExtensionWidgetSettings.qml" line="194"/>
+        <location filename="../../qml/Widgets/Dashboard/ExtensionWidgetSettings.qml" line="196"/>
         <source>These settings are declared by the widget package and stored in the project.</source>
         <translation>Esta configuración es declarada por el paquete del widget y se almacena en el proyecto.</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ExtensionWidgetSettings.qml" line="195"/>
+        <location filename="../../qml/Widgets/Dashboard/ExtensionWidgetSettings.qml" line="197"/>
         <source>This widget declares no settings.</source>
         <translation>Este widget no declara configuración.</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ExtensionWidgetSettings.qml" line="265"/>
+        <location filename="../../qml/Widgets/Dashboard/ExtensionWidgetSettings.qml" line="267"/>
         <source>Restore Defaults</source>
         <translation>Restaurar Valores Predeterminados</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ExtensionWidgetSettings.qml" line="277"/>
+        <location filename="../../qml/Widgets/Dashboard/ExtensionWidgetSettings.qml" line="279"/>
         <source>Close</source>
         <translation>Cerrar</translation>
     </message>
@@ -13682,7 +13692,7 @@ Agrega etiquetas del controlador arriba para consultarlas.</translation>
 <context>
     <name>ExternalWidgetWindow</name>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/ExternalWidgetWindow.qml" line="252"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/ExternalWidgetWindow.qml" line="253"/>
         <source>The widget could not be created.</source>
         <translation>No se pudo crear el widget.</translation>
     </message>
@@ -13796,98 +13806,98 @@ Agrega etiquetas del controlador arriba para consultarlas.</translation>
 <context>
     <name>FileTransmission</name>
     <message>
-        <location filename="../../qml/Dialogs/FileTransmission.qml" line="33"/>
+        <location filename="../../qml/Dialogs/FileTransmission.qml" line="35"/>
         <source>File Transmission</source>
         <translation>Transmisión de Archivos</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FileTransmission.qml" line="101"/>
+        <location filename="../../qml/Dialogs/FileTransmission.qml" line="103"/>
         <source>Transfer Protocol:</source>
         <translation>Protocolo de Transferencia:</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FileTransmission.qml" line="134"/>
+        <location filename="../../qml/Dialogs/FileTransmission.qml" line="136"/>
         <source>File Selection:</source>
         <translation>Selección de Archivo:</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FileTransmission.qml" line="151"/>
+        <location filename="../../qml/Dialogs/FileTransmission.qml" line="153"/>
         <source>Select File…</source>
         <translation>Seleccionar Archivo…</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FileTransmission.qml" line="169"/>
+        <location filename="../../qml/Dialogs/FileTransmission.qml" line="171"/>
         <source>Transmission Interval:</source>
         <translation>Intervalo de Transmisión:</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FileTransmission.qml" line="195"/>
-        <location filename="../../qml/Dialogs/FileTransmission.qml" line="271"/>
+        <location filename="../../qml/Dialogs/FileTransmission.qml" line="197"/>
+        <location filename="../../qml/Dialogs/FileTransmission.qml" line="273"/>
         <source>msecs</source>
         <translation>ms</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FileTransmission.qml" line="205"/>
+        <location filename="../../qml/Dialogs/FileTransmission.qml" line="207"/>
         <source>Block Size:</source>
         <translation>Tamaño de Bloque:</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FileTransmission.qml" line="233"/>
+        <location filename="../../qml/Dialogs/FileTransmission.qml" line="235"/>
         <source>bytes</source>
         <translation>bytes</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FileTransmission.qml" line="243"/>
+        <location filename="../../qml/Dialogs/FileTransmission.qml" line="245"/>
         <source>Timeout:</source>
         <translation>Tiempo de Espera:</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FileTransmission.qml" line="281"/>
+        <location filename="../../qml/Dialogs/FileTransmission.qml" line="283"/>
         <source>Max Retries:</source>
         <translation>Reintentos Máximos:</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FileTransmission.qml" line="339"/>
+        <location filename="../../qml/Dialogs/FileTransmission.qml" line="341"/>
         <source>Progress: %1%</source>
         <translation>Progreso: %1%</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FileTransmission.qml" line="372"/>
+        <location filename="../../qml/Dialogs/FileTransmission.qml" line="374"/>
         <source>%1 / %2 bytes</source>
         <translation>%1 / %2 bytes</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FileTransmission.qml" line="380"/>
+        <location filename="../../qml/Dialogs/FileTransmission.qml" line="382"/>
         <source>Errors: %1</source>
         <translation>Errores: %1</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FileTransmission.qml" line="460"/>
+        <location filename="../../qml/Dialogs/FileTransmission.qml" line="462"/>
         <source>Activity Log</source>
         <translation>Registro de Actividad</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FileTransmission.qml" line="464"/>
+        <location filename="../../qml/Dialogs/FileTransmission.qml" line="466"/>
         <source>Clear</source>
         <translation>Limpiar</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FileTransmission.qml" line="418"/>
+        <location filename="../../qml/Dialogs/FileTransmission.qml" line="420"/>
         <source>Pause Transmission</source>
         <translation>Pausar Transmisión</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FileTransmission.qml" line="419"/>
+        <location filename="../../qml/Dialogs/FileTransmission.qml" line="421"/>
         <source>Resume Transmission</source>
         <translation>Reanudar Transmisión</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FileTransmission.qml" line="422"/>
+        <location filename="../../qml/Dialogs/FileTransmission.qml" line="424"/>
         <source>Stop Transmission</source>
         <translation>Detener Transmisión</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FileTransmission.qml" line="423"/>
+        <location filename="../../qml/Dialogs/FileTransmission.qml" line="425"/>
         <source>Begin Transmission</source>
         <translation>Iniciar Transmisión</translation>
     </message>
@@ -14142,33 +14152,33 @@ Agrega etiquetas del controlador arriba para consultarlas.</translation>
 <context>
     <name>FrameParserTest</name>
     <message>
-        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="39"/>
+        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="41"/>
         <source>Test Frame Parser</source>
         <translation>Probar Analizador de Tramas</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="111"/>
+        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="113"/>
         <source>Frame %1</source>
         <translation>Trama %1</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="113"/>
-        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="235"/>
+        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="115"/>
+        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="237"/>
         <source>Decoder</source>
         <translation>Decodificador</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="115"/>
+        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="117"/>
         <source>Rows</source>
         <translation>Filas</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="116"/>
+        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="118"/>
         <source>%1 row(s)</source>
         <translation>%1 fila(s)</translation>
     </message>
     <message numerus="yes">
-        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="123"/>
+        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="125"/>
         <source>%n dataset(s) not in this frame</source>
         <translation>
             <numerusform>%n conjunto(s) de datos no en esta trama</numerusform>
@@ -14176,62 +14186,62 @@ Agrega etiquetas del controlador arriba para consultarlas.</translation>
         </translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="125"/>
+        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="127"/>
         <source>Row %1</source>
         <translation>Fila %1</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="137"/>
+        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="139"/>
         <source>not in this frame</source>
         <translation>no en esta trama</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="190"/>
+        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="192"/>
         <source>Pipeline Configuration</source>
         <translation>Configuración de Pipeline</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="212"/>
+        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="214"/>
         <source>Detection</source>
         <translation>Detección</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="258"/>
+        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="260"/>
         <source>Start</source>
         <translation>Inicio</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="279"/>
+        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="281"/>
         <source>End</source>
         <translation>Fin</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="300"/>
+        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="302"/>
         <source>Checksum</source>
         <translation>Suma de Verificación</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="325"/>
+        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="327"/>
         <source>Hex Delimiters</source>
         <translation>Delimitadores Hex</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="342"/>
+        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="344"/>
         <source>Frame Data Input</source>
         <translation>Entrada de Datos de Trama</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="369"/>
+        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="371"/>
         <source>Enter hex bytes (e.g. 01 A2 FF)</source>
         <translation>Ingresa bytes hex (ej. 01 A2 FF)</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="370"/>
+        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="372"/>
         <source>Enter raw stream bytes here...</source>
         <translation>Ingresa los bytes del flujo sin procesar aquí...</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="389"/>
+        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="391"/>
         <source>Hex</source>
         <translation>Hex</translation>
     </message>
@@ -14240,49 +14250,49 @@ Agrega etiquetas del controlador arriba para consultarlas.</translation>
         <translation type="vanished">HEX</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="415"/>
+        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="417"/>
         <source>The sample does not contain the configured frame delimiters, so no frame will be extracted. Type them into the sample (e.g. 
  for a newline) or adjust the detection mode.</source>
         <translation>La muestra no contiene los delimitadores de trama configurados, por lo que no se extraerá ninguna trama. Escríbelos en la muestra (ej. 
  para nueva línea) o ajusta el modo de detección.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="435"/>
+        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="437"/>
         <source>Pipeline Results</source>
         <translation>Resultados del Pipeline</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="508"/>
+        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="510"/>
         <source>Stage</source>
         <translation>Preparar</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="515"/>
+        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="517"/>
         <source>Value</source>
         <translation>Valor</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="558"/>
+        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="560"/>
         <source>Extraction did not produce a complete frame. Check the start / end delimiters and the detection mode.</source>
         <translation>La extracción no produjo una trama completa. Verifica los delimitadores de inicio/fin y el modo de detección.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="560"/>
+        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="562"/>
         <source>Enter sample data above and press Evaluate to preview the parsed output</source>
         <translation>Ingresa datos de muestra arriba y presiona Evaluar para previsualizar la salida procesada</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="642"/>
+        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="644"/>
         <source>Clear</source>
         <translation>Limpiar</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="653"/>
+        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="655"/>
         <source>Close</source>
         <translation>Cerrar</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="660"/>
+        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="662"/>
         <source>Evaluate</source>
         <translation>Evaluar</translation>
     </message>
@@ -14385,251 +14395,251 @@ Agrega etiquetas del controlador arriba para consultarlas.</translation>
 <context>
     <name>FrequencyMarkersEditor</name>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="35"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="37"/>
         <source>Frequency Markers</source>
         <translation>Marcadores de Frecuencia</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="71"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="73"/>
         <source>Mains Hum (50 Hz + harmonics)</source>
         <translation>Zumbido de Red (50 Hz + armónicos)</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="73"/>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="81"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="75"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="83"/>
         <source>Mains</source>
         <translation>Red</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="74"/>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="82"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="76"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="84"/>
         <source>Mains 2x</source>
         <translation>Red 2x</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="75"/>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="83"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="77"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="85"/>
         <source>Mains 3x</source>
         <translation>Red 3x</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="79"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="81"/>
         <source>Mains Hum (60 Hz + harmonics)</source>
         <translation>Zumbido de Red (60 Hz + armónicos)</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="87"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="89"/>
         <source>Octave Bands (31.5 Hz - 16 kHz)</source>
         <translation>Bandas de Octava (31.5 Hz - 16 kHz)</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="89"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="91"/>
         <source>31.5 Hz</source>
         <translation>31.5 Hz</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="90"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="92"/>
         <source>63 Hz</source>
         <translation>63 Hz</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="91"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="93"/>
         <source>125 Hz</source>
         <translation>125 Hz</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="92"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="94"/>
         <source>250 Hz</source>
         <translation>250 Hz</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="93"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="95"/>
         <source>500 Hz</source>
         <translation>500 Hz</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="94"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="96"/>
         <source>1 kHz</source>
         <translation>1 kHz</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="95"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="97"/>
         <source>2 kHz</source>
         <translation>2 kHz</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="96"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="98"/>
         <source>4 kHz</source>
         <translation>4 kHz</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="97"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="99"/>
         <source>8 kHz</source>
         <translation>8 kHz</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="98"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="100"/>
         <source>16 kHz</source>
         <translation>16 kHz</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="246"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="248"/>
         <source>Choose Marker Color</source>
         <translation>Elegir Color de Marcador</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="273"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="275"/>
         <source>Presets</source>
         <translation>Preajustes</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="296"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="298"/>
         <source>Preset</source>
         <translation>Preajuste</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="311"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="313"/>
         <source>Choose preset…</source>
         <translation>Elegir ajuste preestablecido…</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="323"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="325"/>
         <source>Frequency range</source>
         <translation>Rango de frecuencia</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="329"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="331"/>
         <source>0 - %1 Hz</source>
         <translation>0 - %1 Hz</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="351"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="353"/>
         <source>Markers</source>
         <translation>Marcadores</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="362"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="364"/>
         <source>Add Marker</source>
         <translation>Agregar Marcador</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="366"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="368"/>
         <source>Add a new point marker; set an end frequency to turn it into a band.</source>
         <translation>Agregar un nuevo marcador de punto; establecer una frecuencia final para convertirlo en una banda.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="397"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="399"/>
         <source>Start (Hz)</source>
         <translation>Inicio (Hz)</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="403"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="405"/>
         <source>End (Hz)</source>
         <translation>Fin (Hz)</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="409"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="411"/>
         <source>Warn (dB)</source>
         <translation>Advertencia (dB)</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="415"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="417"/>
         <source>Alarm (dB)</source>
         <translation>Alarma (dB)</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="421"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="423"/>
         <source>Color</source>
         <translation>Color</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="428"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="430"/>
         <source>Label</source>
         <translation>Etiqueta</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="500"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="502"/>
         <source>(point)</source>
         <translation>(punto)</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="517"/>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="531"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="519"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="533"/>
         <source>(off)</source>
         <translation>(apagado)</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="565"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="567"/>
         <source>Reset to automatic color</source>
         <translation>Restablecer a color automático</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="579"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="581"/>
         <source>Click to choose a color. Right-click to reset to automatic.</source>
         <translation>Clic para elegir un color. Clic derecho para restablecer a automático.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="580"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="582"/>
         <source>Click to choose a custom color.</source>
         <translation>Clic para elegir un color personalizado.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="601"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="603"/>
         <source>(optional)</source>
         <translation>(opcional)</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="618"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="620"/>
         <source>Move up.</source>
         <translation>Mover arriba.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="637"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="639"/>
         <source>Move down.</source>
         <translation>Mover abajo.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="650"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="652"/>
         <source>Remove this marker.</source>
         <translation>Eliminar este marcador.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="664"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="666"/>
         <source>No markers defined. Pick a preset above or add a marker to get started.</source>
         <translation>No hay marcadores definidos. Selecciona un preajuste arriba o agrega un marcador para comenzar.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="681"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="683"/>
         <source>Preview</source>
         <translation>Vista Previa</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="757"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="759"/>
         <source>0 Hz</source>
         <translation>0 Hz</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="763"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="765"/>
         <source>%1 Hz</source>
         <translation>%1 Hz</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="785"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="787"/>
         <source>Cancel</source>
         <translation>Cancelar</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="787"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="789"/>
         <source>Discard changes.</source>
         <translation>Descartar cambios.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="796"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="798"/>
         <source>Apply</source>
         <translation>Aplicar</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="799"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="801"/>
         <source>Apply changes to the dataset.</source>
         <translation>Aplicar cambios al conjunto de datos.</translation>
     </message>
@@ -15102,22 +15112,22 @@ Agrega etiquetas del controlador arriba para consultarlas.</translation>
         <translation>Dispositivo HID</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/HID.qml" line="80"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/HID.qml" line="82"/>
         <source>Usage Page</source>
         <translation>Página de Uso</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/HID.qml" line="96"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/HID.qml" line="100"/>
         <source>Usage</source>
         <translation>Uso</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/HID.qml" line="137"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/HID.qml" line="143"/>
         <source>Connect gamepads, joysticks, steering wheels, flight controllers, and other HID-class USB devices.</source>
         <translation>Conecta gamepads, joysticks, volantes, controladores de vuelo y otros dispositivos USB clase HID.</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/HID.qml" line="145"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/HID.qml" line="151"/>
         <source>HID Usage Tables (USB.org)</source>
         <translation>Tablas de Uso HID (USB.org)</translation>
     </message>
@@ -15125,47 +15135,47 @@ Agrega etiquetas del controlador arriba para consultarlas.</translation>
 <context>
     <name>HelpCenter</name>
     <message>
-        <location filename="../../qml/Dialogs/HelpCenter.qml" line="32"/>
+        <location filename="../../qml/Dialogs/HelpCenter.qml" line="34"/>
         <source>Help Center</source>
         <translation>Centro de Ayuda</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/HelpCenter.qml" line="95"/>
+        <location filename="../../qml/Dialogs/HelpCenter.qml" line="97"/>
         <source>Fetching help pages…</source>
         <translation>Obteniendo páginas de ayuda…</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/HelpCenter.qml" line="187"/>
+        <location filename="../../qml/Dialogs/HelpCenter.qml" line="189"/>
         <source>Search…</source>
         <translation>Buscar…</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/HelpCenter.qml" line="305"/>
+        <location filename="../../qml/Dialogs/HelpCenter.qml" line="307"/>
         <source>Loading…</source>
         <translation>Cargando…</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/HelpCenter.qml" line="349"/>
+        <location filename="../../qml/Dialogs/HelpCenter.qml" line="351"/>
         <source>Select a page from the sidebar</source>
         <translation>Selecciona una página de la barra lateral</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/HelpCenter.qml" line="379"/>
+        <location filename="../../qml/Dialogs/HelpCenter.qml" line="381"/>
         <source>Copied to Clipboard</source>
         <translation>Copiado al Portapapeles</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/HelpCenter.qml" line="411"/>
+        <location filename="../../qml/Dialogs/HelpCenter.qml" line="413"/>
         <source>View Online</source>
         <translation>Ver en Línea</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/HelpCenter.qml" line="423"/>
+        <location filename="../../qml/Dialogs/HelpCenter.qml" line="425"/>
         <source>%1 pages</source>
         <translation>%1 páginas</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/HelpCenter.qml" line="432"/>
+        <location filename="../../qml/Dialogs/HelpCenter.qml" line="434"/>
         <source>Close</source>
         <translation>Cerrar</translation>
     </message>
@@ -15321,123 +15331,123 @@ Agrega etiquetas del controlador arriba para consultarlas.</translation>
 <context>
     <name>IO::Drivers::Audio</name>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="421"/>
+        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="412"/>
         <source>Audio Device Stopped</source>
         <translation>Dispositivo de Audio Detenido</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="422"/>
+        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="413"/>
         <source>The audio backend stopped the stream. The device may have been unplugged or claimed by another application.</source>
         <translation>El backend de audio detuvo el flujo. El dispositivo pudo haberse desconectado o estar siendo usado por otra aplicación.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="854"/>
+        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="845"/>
         <source>channels</source>
         <translation>canales</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="854"/>
+        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="845"/>
         <source> channels</source>
         <translation>canales</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="837"/>
+        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="828"/>
         <source>Unsigned 8-bit</source>
         <translation>Sin Signo de 8 bits</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="246"/>
+        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="237"/>
         <source>Audio output unavailable</source>
         <translation>Salida de audio no disponible</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="247"/>
+        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="238"/>
         <source>No output device is configured for this session.</source>
         <translation>No hay dispositivo de salida configurado para esta sesión.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="274"/>
+        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="265"/>
         <source>Audio channel mismatch</source>
         <translation>Desajuste de canal de audio</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="275"/>
+        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="266"/>
         <source>Expected %1 value(s) per frame, got %2.</source>
         <translation>Se esperaban %1 valor(es) por trama, se obtuvieron %2.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="350"/>
-        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="356"/>
+        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="341"/>
+        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="347"/>
         <source>Audio device error</source>
         <translation>Error de dispositivo de audio</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="351"/>
+        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="342"/>
         <source>The selected audio device could not be initialized.</source>
         <translation>No se pudo inicializar el dispositivo de audio seleccionado.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="356"/>
+        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="347"/>
         <source>The selected audio device could not be started.</source>
         <translation>No se pudo iniciar el dispositivo de audio seleccionado.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="838"/>
+        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="829"/>
         <source>Signed 16-bit</source>
         <translation>Con Signo de 16 bits</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="839"/>
+        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="830"/>
         <source>Signed 24-bit</source>
         <translation>Con Signo de 24 bits</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="840"/>
+        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="831"/>
         <source>Signed 32-bit</source>
         <translation>Con Signo de 32 bits</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="841"/>
+        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="832"/>
         <source>Float 32-bit</source>
         <translation>Flotante de 32 bits</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="844"/>
+        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="835"/>
         <source>Mono</source>
         <translation>Mono</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="845"/>
+        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="836"/>
         <source>Stereo</source>
         <translation>Estéreo</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="1379"/>
+        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="1370"/>
         <source>Input Device</source>
         <translation>Dispositivo de Entrada</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="1387"/>
+        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="1378"/>
         <source>Sample Rate</source>
         <translation>Frecuencia de Muestreo</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="1395"/>
+        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="1386"/>
         <source>Normalization</source>
         <translation>Normalización</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="1396"/>
+        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="1387"/>
         <source>Publish samples as floats in the -1.0 to 1.0 range</source>
         <translation>Publicar muestras como flotantes en el rango de -1.0 a 1.0</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="1404"/>
+        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="1395"/>
         <source>Sample Format</source>
         <translation>Formato de Muestra</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="1413"/>
+        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="1404"/>
         <source>Channels</source>
         <translation>Canales</translation>
     </message>
@@ -18954,22 +18964,22 @@ El dispositivo puede no exponer endpoints de datos en su configuración activa, 
 <context>
     <name>IconPicker</name>
     <message>
-        <location filename="../../qml/Dialogs/IconPicker.qml" line="41"/>
+        <location filename="../../qml/Dialogs/IconPicker.qml" line="43"/>
         <source>Select Icon</source>
         <translation>Seleccionar Ícono</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/IconPicker.qml" line="118"/>
+        <location filename="../../qml/Dialogs/IconPicker.qml" line="120"/>
         <source>Search Online…</source>
         <translation>Buscar en Línea…</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/IconPicker.qml" line="131"/>
+        <location filename="../../qml/Dialogs/IconPicker.qml" line="133"/>
         <source>OK</source>
         <translation>ACEPTAR</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/IconPicker.qml" line="143"/>
+        <location filename="../../qml/Dialogs/IconPicker.qml" line="145"/>
         <source>Cancel</source>
         <translation>Cancelar</translation>
     </message>
@@ -18982,92 +18992,92 @@ El dispositivo puede no exponer endpoints de datos en su configuración activa, 
         <translation>Host</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Iec104.qml" line="58"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Iec104.qml" line="60"/>
         <source>IP Address</source>
         <translation>Dirección IP</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Iec104.qml" line="76"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Iec104.qml" line="78"/>
         <source>Port</source>
         <translation>Puerto</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Iec104.qml" line="84"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Iec104.qml" line="88"/>
         <source>2404</source>
         <translation>2404</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Iec104.qml" line="106"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Iec104.qml" line="110"/>
         <source>Common Address</source>
         <translation>Dirección Común</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Iec104.qml" line="113"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Iec104.qml" line="119"/>
         <source>0-65535</source>
         <translation>0-65535</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Iec104.qml" line="133"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Iec104.qml" line="139"/>
         <source>Send Window (k)</source>
         <translation>Ventana de Envío (k)</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Iec104.qml" line="138"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Iec104.qml" line="146"/>
         <source>12</source>
         <translation>12</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Iec104.qml" line="155"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Iec104.qml" line="163"/>
         <source>Ack Window (w)</source>
         <translation>Ventana de Confirmación (w)</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Iec104.qml" line="160"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Iec104.qml" line="170"/>
         <source>8</source>
         <translation>8</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Iec104.qml" line="177"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Iec104.qml" line="187"/>
         <source>Timeout t1 (ms)</source>
         <translation>Tiempo de Espera t1 (ms)</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Iec104.qml" line="182"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Iec104.qml" line="194"/>
         <source>15000</source>
         <translation>15000</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Iec104.qml" line="199"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Iec104.qml" line="211"/>
         <source>Timeout t2 (ms)</source>
         <translation>Tiempo de Espera t2 (ms)</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Iec104.qml" line="204"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Iec104.qml" line="218"/>
         <source>10000</source>
         <translation>10000</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Iec104.qml" line="221"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Iec104.qml" line="235"/>
         <source>Timeout t3 (ms)</source>
         <translation>Tiempo de Espera t3 (ms)</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Iec104.qml" line="226"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Iec104.qml" line="242"/>
         <source>20000</source>
         <translation>20000</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Iec104.qml" line="255"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Iec104.qml" line="273"/>
         <source>Create Project from Points</source>
         <translation>Crear Proyecto desde Puntos</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Iec104.qml" line="270"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Iec104.qml" line="288"/>
         <source>%1 point(s) discovered</source>
         <translation>%1 punto(s) descubierto(s)</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Iec104.qml" line="271"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Iec104.qml" line="289"/>
         <source>Connect to discover the station's points</source>
         <translation>Conectar para descubrir los puntos de la estación</translation>
     </message>
@@ -19253,12 +19263,12 @@ El dispositivo puede no exponer endpoints de datos en su configuración activa, 
 <context>
     <name>KeyManagerDialog</name>
     <message>
-        <location filename="../../qml/AI/KeyManagerDialog.qml" line="23"/>
+        <location filename="../../qml/AI/KeyManagerDialog.qml" line="25"/>
         <source>API Keys</source>
         <translation>Claves de API</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/KeyManagerDialog.qml" line="47"/>
+        <location filename="../../qml/AI/KeyManagerDialog.qml" line="49"/>
         <source>Anthropic Claude. The default is Claude Haiku 4.5 ($1 input / $5 output per million tokens). Sonnet 4.6 and Opus 4.7 are also available. Supports streaming, tool use, extended thinking, and prompt caching.</source>
         <translation>Anthropic Claude. El predeterminado es Claude Haiku 4.5 ($1 entrada / $5 salida por millón de tokens). Sonnet 4.6 y OPUS 4.7 también están disponibles. Soporta streaming, uso de herramientas, pensamiento extendido y caché de prompts.</translation>
     </message>
@@ -19267,7 +19277,7 @@ El dispositivo puede no exponer endpoints de datos en su configuración activa, 
         <translation type="vanished">OpenAI Chat Completions. El predeterminado es GPT-4o mini ($0.15 entrada / $0.60 salida por millón de tokens). GPT-4o, GPT-4 Turbo y o1-mini también están disponibles.</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/KeyManagerDialog.qml" line="57"/>
+        <location filename="../../qml/AI/KeyManagerDialog.qml" line="59"/>
         <source>Google Gemini. The default is Gemini 2.0 Flash, which has a generous free tier (subject to rate limits). Gemini 1.5 Pro and Gemini 1.5 Flash are also available.</source>
         <translation>Google Gemini. El predeterminado es Gemini 2.0 Flash, que tiene un nivel gratuito generoso (sujeto a límites de tasa). Gemini 1.5 Pro y Gemini 1.5 Flash también están disponibles.</translation>
     </message>
@@ -19276,12 +19286,12 @@ El dispositivo puede no exponer endpoints de datos en su configuración activa, 
         <translation type="vanished">Trae tus propias claves de API. Se cifran en reposo con una clave por máquina y nunca salen de tu computadora excepto para comunicarse con el proveedor que selecciones.</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/KeyManagerDialog.qml" line="166"/>
+        <location filename="../../qml/AI/KeyManagerDialog.qml" line="168"/>
         <source>Key set</source>
         <translation>Clave establecida</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/KeyManagerDialog.qml" line="167"/>
+        <location filename="../../qml/AI/KeyManagerDialog.qml" line="169"/>
         <source>No key</source>
         <translation>Sin clave</translation>
     </message>
@@ -19290,117 +19300,117 @@ El dispositivo puede no exponer endpoints de datos en su configuración activa, 
         <translation type="vanished">Hay una clave registrada — pega una nueva para reemplazarla</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/KeyManagerDialog.qml" line="52"/>
+        <location filename="../../qml/AI/KeyManagerDialog.qml" line="54"/>
         <source>OpenAI Chat Completions. The default is GPT-5 mini for fast, cost-conscious agentic work. GPT-5.2 is the stronger general-purpose option, and GPT-5.2 Chat tracks the model currently used in ChatGPT.</source>
         <translation>OpenAI Chat Completions. El predeterminado es GPT-5 mini para trabajo agéntico rápido y económico. GPT-5.2 es la opción de propósito general más potente, y GPT-5.2 Chat rastrea el modelo actualmente usado en ChatGPT.</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/KeyManagerDialog.qml" line="61"/>
+        <location filename="../../qml/AI/KeyManagerDialog.qml" line="63"/>
         <source>DeepSeek. OpenAI-compatible API. The default is deepseek-chat (V3). deepseek-reasoner (R1) is also available. Often the cheapest cloud option for tool use.</source>
         <translation>DeepSeek. API compatible con OpenAI. El predeterminado es deepseek-chat (V3). deepseek-reasoner (R1) también está disponible. A menudo es la opción en la nube más económica para uso de herramientas.</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/KeyManagerDialog.qml" line="65"/>
+        <location filename="../../qml/AI/KeyManagerDialog.qml" line="67"/>
         <source>OpenRouter. One key, ~200 models from Anthropic, OpenAI, Google, Meta, Mistral, DeepSeek, Qwen, and others. Free-tier models (suffixed :free) are rate-limited but require no additional billing. Pay-as-you-go for the rest.</source>
         <translation>OpenRouter. Una clave, ~200 modelos de Anthropic, OpenAI, Google, Meta, Mistral, DeepSeek, Qwen y otros. Los modelos de nivel gratuito (con sufijo :free) tienen límite de velocidad pero no requieren facturación adicional. Pago por uso para el resto.</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/KeyManagerDialog.qml" line="70"/>
+        <location filename="../../qml/AI/KeyManagerDialog.qml" line="72"/>
         <source>Groq. Hardware-accelerated inference (LPUs) for very fast Llama, Mixtral, Gemma, DeepSeek-R1 distill, and Qwen models. Generous free tier with daily token limits.</source>
         <translation>Groq. Inferencia acelerada por hardware (LPUs) para modelos Llama, Mixtral, Gemma, DeepSeek-R1 distill y Qwen muy rápidos. Nivel gratuito generoso con límites diarios de tokens.</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/KeyManagerDialog.qml" line="74"/>
+        <location filename="../../qml/AI/KeyManagerDialog.qml" line="76"/>
         <source>Mistral. The default is Mistral Large. Codestral targets code completion, Pixtral handles vision, and the Ministral models are tuned for edge / low-latency use.</source>
         <translation>Mistral. El predeterminado es Mistral Large. Codestral está orientado a completado de código, Pixtral maneja visión, y los modelos Ministral están optimizados para uso en edge / baja latencia.</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/KeyManagerDialog.qml" line="78"/>
+        <location filename="../../qml/AI/KeyManagerDialog.qml" line="80"/>
         <source>Local model server. Works with any OpenAI-compatible endpoint -- Ollama, llama.cpp's llama-server, LM Studio, or vLLM. Nothing leaves your machine. The model list is queried live from the server.</source>
         <translation>Servidor de modelo local. Funciona con cualquier endpoint compatible con OpenAI -- Ollama, llama-server de llama.cpp, LM Studio o vLLM. Nada sale de tu máquina. La lista de modelos se consulta en vivo desde el servidor.</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/KeyManagerDialog.qml" line="100"/>
+        <location filename="../../qml/AI/KeyManagerDialog.qml" line="102"/>
         <source>Bring your own API keys. They are stored obfuscated in this machine's settings and never leave your computer except to communicate with the provider you select.</source>
         <translation>Trae tus propias claves de API. Se almacenan ofuscadas en la configuración de esta máquina y nunca salen de tu computadora excepto para comunicarse con el proveedor que selecciones.</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/KeyManagerDialog.qml" line="204"/>
+        <location filename="../../qml/AI/KeyManagerDialog.qml" line="206"/>
         <source>A key is on file -- paste a new one to replace it</source>
         <translation>Hay una clave registrada -- pega una nueva para reemplazarla</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/KeyManagerDialog.qml" line="205"/>
+        <location filename="../../qml/AI/KeyManagerDialog.qml" line="207"/>
         <source>Paste your API key here</source>
         <translation>Pega tu clave de API aquí</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/KeyManagerDialog.qml" line="212"/>
+        <location filename="../../qml/AI/KeyManagerDialog.qml" line="214"/>
         <source>Hide key</source>
         <translation>Ocultar clave</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/KeyManagerDialog.qml" line="213"/>
+        <location filename="../../qml/AI/KeyManagerDialog.qml" line="215"/>
         <source>Show key while typing</source>
         <translation>Mostrar clave al escribir</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/KeyManagerDialog.qml" line="224"/>
+        <location filename="../../qml/AI/KeyManagerDialog.qml" line="226"/>
         <source>Get key</source>
         <translation>Obtener clave</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/KeyManagerDialog.qml" line="225"/>
+        <location filename="../../qml/AI/KeyManagerDialog.qml" line="227"/>
         <source>Open the provider's console to create a new key</source>
         <translation>Abrir la consola del proveedor para crear una nueva clave</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/KeyManagerDialog.qml" line="236"/>
+        <location filename="../../qml/AI/KeyManagerDialog.qml" line="238"/>
         <source>Save</source>
         <translation>Guardar</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/KeyManagerDialog.qml" line="254"/>
+        <location filename="../../qml/AI/KeyManagerDialog.qml" line="256"/>
         <source>Remove the stored key for %1</source>
         <translation>Eliminar la clave almacenada para %1</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/KeyManagerDialog.qml" line="278"/>
+        <location filename="../../qml/AI/KeyManagerDialog.qml" line="280"/>
         <source>http://localhost:11434/v1</source>
         <translation>http://localhost:11434/v1</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/KeyManagerDialog.qml" line="282"/>
+        <location filename="../../qml/AI/KeyManagerDialog.qml" line="284"/>
         <source>Install Ollama</source>
         <translation>Instalar Ollama</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/KeyManagerDialog.qml" line="283"/>
+        <location filename="../../qml/AI/KeyManagerDialog.qml" line="285"/>
         <source>Open the Ollama download page</source>
         <translation>Abrir la página de descarga de Ollama</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/KeyManagerDialog.qml" line="294"/>
+        <location filename="../../qml/AI/KeyManagerDialog.qml" line="296"/>
         <source>Apply</source>
         <translation>Aplicar</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/KeyManagerDialog.qml" line="309"/>
+        <location filename="../../qml/AI/KeyManagerDialog.qml" line="311"/>
         <source>Re-query the model list</source>
         <translation>Volver a Consultar la Lista de Modelos</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/KeyManagerDialog.qml" line="330"/>
+        <location filename="../../qml/AI/KeyManagerDialog.qml" line="332"/>
         <source>Context window</source>
         <translation>Ventana de contexto</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/KeyManagerDialog.qml" line="339"/>
+        <location filename="../../qml/AI/KeyManagerDialog.qml" line="341"/>
         <source>Tokens the model accepts, e.g. 8192</source>
         <translation>Tokens que acepta el modelo, p. ej. 8192</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/KeyManagerDialog.qml" line="387"/>
+        <location filename="../../qml/AI/KeyManagerDialog.qml" line="389"/>
         <source>No API keys configured yet. Add a key to get started.</source>
         <translation>Aún no se han configurado claves API. Agrega una clave para comenzar.</translation>
     </message>
@@ -19409,12 +19419,12 @@ El dispositivo puede no exponer endpoints de datos en su configuración activa, 
         <translation type="vanished">Aún no se han configurado claves API. Agrega al menos una arriba para comenzar.</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/KeyManagerDialog.qml" line="390"/>
+        <location filename="../../qml/AI/KeyManagerDialog.qml" line="392"/>
         <source>One provider is ready.</source>
         <translation>Un proveedor está listo.</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/KeyManagerDialog.qml" line="392"/>
+        <location filename="../../qml/AI/KeyManagerDialog.qml" line="394"/>
         <source>%1 providers are ready.</source>
         <translation>%1 proveedores están listos.</translation>
     </message>
@@ -19462,7 +19472,7 @@ El dispositivo puede no exponer endpoints de datos en su configuración activa, 
         <translation>Dividir</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/LayoutPatternPicker.qml" line="329"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/LayoutPatternPicker.qml" line="331"/>
         <source>Manual placement</source>
         <translation>Colocación Manual</translation>
     </message>
@@ -19470,22 +19480,22 @@ El dispositivo puede no exponer endpoints de datos en su configuración activa, 
 <context>
     <name>LicenseManagement</name>
     <message>
-        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="37"/>
+        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="39"/>
         <source>Licensing</source>
         <translation>Licenciamiento</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="84"/>
+        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="86"/>
         <source>Please wait…</source>
         <translation>Espera…</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="124"/>
+        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="126"/>
         <source>Activate Serial Studio Pro</source>
         <translation>Activar Serial Studio Pro</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="131"/>
+        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="133"/>
         <source>Paste your license key below to unlock Pro features like MQTT, 3D plotting, and more.</source>
         <translation>Pega tu clave de licencia abajo para desbloquear funciones Pro como MQTT, gráficos 3D y más.</translation>
     </message>
@@ -19502,123 +19512,123 @@ Yearly is the best value; Monthly and Lifetime plans are also available.</source
 Anual es la mejor opción; también hay planes Mensual y de por Vida disponibles.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="138"/>
+        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="140"/>
         <source>Yearly is the best value; Monthly and Lifetime plans are also available.</source>
         <translation>Anual es la mejor opción; también están disponibles los planes Mensual y Vitalicio.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="150"/>
+        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="152"/>
         <source>Paste your license key here…</source>
         <translation>Pega tu clave de licencia aquí…</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="177"/>
-        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="340"/>
-        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="389"/>
+        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="179"/>
+        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="342"/>
+        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="391"/>
         <source>Copy</source>
         <translation>Copiar</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="183"/>
+        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="185"/>
         <source>Paste</source>
         <translation>Pegar</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="189"/>
-        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="346"/>
-        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="395"/>
+        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="191"/>
+        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="348"/>
+        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="397"/>
         <source>Select All</source>
         <translation>Seleccionar Todo</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="242"/>
-        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="433"/>
+        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="244"/>
+        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="435"/>
         <source>Product</source>
         <translation>Producto</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="249"/>
+        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="251"/>
         <source>Serial Studio %1</source>
         <translation>Serial Studio %1</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="260"/>
+        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="262"/>
         <source>Licensee</source>
         <translation>Licenciatario</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="279"/>
+        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="281"/>
         <source>Licensee E-Mail</source>
         <translation>Correo Electrónico del Licenciatario</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="296"/>
+        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="298"/>
         <source>Device Usage</source>
         <translation>Uso de Dispositivos</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="304"/>
+        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="306"/>
         <source>%1 devices in use (Unlimited plan)</source>
         <translation>%1 dispositivos en uso (plan Ilimitado)</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="305"/>
+        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="307"/>
         <source>%1 of %2 devices used</source>
         <translation>%1 de %2 dispositivos usados</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="315"/>
-        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="450"/>
+        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="317"/>
+        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="452"/>
         <source>Device ID</source>
         <translation>ID de Dispositivo</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="362"/>
+        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="364"/>
         <source>License Key</source>
         <translation>Clave de Licencia</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="440"/>
+        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="442"/>
         <source>Serial Studio %1 (Offline)</source>
         <translation>Serial Studio %1 (Sin Conexión)</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="467"/>
+        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="469"/>
         <source>Expires</source>
         <translation>Vence</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="474"/>
+        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="476"/>
         <source>%1 (%2 days left)</source>
         <translation>%1 (%2 días restantes)</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="487"/>
+        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="489"/>
         <source>Your offline license expires soon. Request a new certificate to stay activated.</source>
         <translation>Tu licencia sin conexión expira pronto. Solicita un nuevo certificado para mantener la activación.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="504"/>
+        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="506"/>
         <source>Customer Portal</source>
         <translation>Portal del Cliente</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="515"/>
+        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="517"/>
         <source>Buy License</source>
         <translation>Comprar Licencia</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="522"/>
+        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="524"/>
         <source>Activate</source>
         <translation>Activar</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="533"/>
+        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="535"/>
         <source>Activate Offline…</source>
         <translation>Activar sin Conexión…</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="542"/>
+        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="544"/>
         <source>Deactivate</source>
         <translation>Desactivar</translation>
     </message>
@@ -20027,153 +20037,153 @@ Para reutilizar este asiento en otro dispositivo, envía un correo a alex@serial
         <translation>Nombre de Host</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="109"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="111"/>
         <source>e.g. broker.hivemq.com</source>
         <translation>ej. broker.hivemq.com</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="118"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="120"/>
         <source>Port</source>
         <translation>Puerto</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="139"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="143"/>
         <source>Topic Filter</source>
         <translation>Filtro de Tema</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="145"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="151"/>
         <source>e.g. sensors/#</source>
         <translation>ej. sensors/#</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="155"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="161"/>
         <source>Client ID</source>
         <translation>ID de Cliente</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="170"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="180"/>
         <source>Regenerate</source>
         <translation>Regenerar</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="182"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="192"/>
         <source>Username</source>
         <translation>Nombre de Usuario</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="197"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="209"/>
         <source>Password</source>
         <translation>Contraseña</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="213"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="227"/>
         <source>Version</source>
         <translation>Versión</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="239"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="255"/>
         <source>Keep Alive (s)</source>
         <translation>Keep Alive (s)</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="257"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="275"/>
         <source>Clean Session</source>
         <translation>Sesión Limpia</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="283"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="303"/>
         <source>Sparkplug</source>
         <translation>Sparkplug</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="309"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="331"/>
         <source>Group ID</source>
         <translation>ID de Grupo</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="315"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="339"/>
         <source>All groups</source>
         <translation>Todos los grupos</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="327"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="351"/>
         <source>Sparkplug Project</source>
         <translation>Proyecto Sparkplug</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="336"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="362"/>
         <source>Create Project from Births</source>
         <translation>Crear Proyecto desde Births</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="346"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="372"/>
         <source>Use SSL/TLS</source>
         <translation>Usar SSL/TLS</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="373"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="401"/>
         <source>SSL Protocol</source>
         <translation>Protocolo SSL</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="403"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="433"/>
         <source>Peer Verify</source>
         <translation>Verificar Par</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="435"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="467"/>
         <source>Verify Depth</source>
         <translation>Profundidad de Verificación</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="456"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="490"/>
         <source>CA Certificates</source>
         <translation>Certificados CA</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="462"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="498"/>
         <source>Load From Folder…</source>
         <translation>Cargar desde Carpeta…</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="473"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="509"/>
         <source>Client Certificate</source>
         <translation>Certificado de Cliente</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="483"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="521"/>
         <source>Optional (mutual TLS)</source>
         <translation>Opcional (TLS mutuo)</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="490"/>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="520"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="530"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="564"/>
         <source>Browse…</source>
         <translation>Explorar…</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="502"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="542"/>
         <source>Private Key</source>
         <translation>Clave Privada</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="516"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="558"/>
         <source>Defaults to the certificate file</source>
         <translation>Predeterminado al archivo de certificado</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="533"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="577"/>
         <source>Key Passphrase</source>
         <translation>Frase de Contraseña de Clave</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="549"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="595"/>
         <source>ALPN</source>
         <translation>ALPN</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="578"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="626"/>
         <source>ALPN Protocol</source>
         <translation>Protocolo ALPN</translation>
     </message>
@@ -20946,97 +20956,97 @@ Proporcione las credenciales necesarias.</translation>
 <context>
     <name>Macros</name>
     <message>
-        <location filename="../../qml/Dialogs/Macros.qml" line="29"/>
+        <location filename="../../qml/Dialogs/Macros.qml" line="31"/>
         <source>Macros</source>
         <translation>Macros</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Macros.qml" line="193"/>
+        <location filename="../../qml/Dialogs/Macros.qml" line="195"/>
         <source>[macro] finished</source>
         <translation>[macro] finalizado</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Macros.qml" line="194"/>
+        <location filename="../../qml/Dialogs/Macros.qml" line="196"/>
         <source>[macro] %1</source>
         <translation>[macro] %1</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Macros.qml" line="197"/>
+        <location filename="../../qml/Dialogs/Macros.qml" line="199"/>
         <source>[macro] saved %1</source>
         <translation>[macro] guardado %1</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Macros.qml" line="202"/>
+        <location filename="../../qml/Dialogs/Macros.qml" line="204"/>
         <source>[macro] loaded %1</source>
         <translation>[macro] cargado %1</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Macros.qml" line="313"/>
+        <location filename="../../qml/Dialogs/Macros.qml" line="315"/>
         <source>Search commands...</source>
         <translation>Buscar comandos...</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Macros.qml" line="448"/>
+        <location filename="../../qml/Dialogs/Macros.qml" line="450"/>
         <source>Parameters</source>
         <translation>Parámetros</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Macros.qml" line="449"/>
+        <location filename="../../qml/Dialogs/Macros.qml" line="451"/>
         <source>No parameters</source>
         <translation>Sin parámetros</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Macros.qml" line="510"/>
+        <location filename="../../qml/Dialogs/Macros.qml" line="512"/>
         <source>Terminal</source>
         <translation>Terminal</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Macros.qml" line="516"/>
+        <location filename="../../qml/Dialogs/Macros.qml" line="518"/>
         <source>Script</source>
         <translation>Script</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Macros.qml" line="607"/>
+        <location filename="../../qml/Dialogs/Macros.qml" line="609"/>
         <source>Type a command below to get started</source>
         <translation>Escribe un comando abajo para comenzar</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Macros.qml" line="632"/>
+        <location filename="../../qml/Dialogs/Macros.qml" line="634"/>
         <source>Copy</source>
         <translation>Copiar</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Macros.qml" line="638"/>
+        <location filename="../../qml/Dialogs/Macros.qml" line="640"/>
         <source>Select All</source>
         <translation>Seleccionar Todo</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Macros.qml" line="644"/>
+        <location filename="../../qml/Dialogs/Macros.qml" line="646"/>
         <source>Clear</source>
         <translation>Limpiar</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Macros.qml" line="685"/>
+        <location filename="../../qml/Dialogs/Macros.qml" line="687"/>
         <source>command.name { "parameter": value }</source>
         <translation>comando.nombre { "parámetro": valor }</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Macros.qml" line="838"/>
+        <location filename="../../qml/Dialogs/Macros.qml" line="840"/>
         <source>Run command</source>
         <translation>Ejecutar comando</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Macros.qml" line="853"/>
+        <location filename="../../qml/Dialogs/Macros.qml" line="855"/>
         <source>Clear output</source>
         <translation>Limpiar salida</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Macros.qml" line="886"/>
+        <location filename="../../qml/Dialogs/Macros.qml" line="888"/>
         <source>[macro] verify: no syntax errors</source>
         <translation>[macro] verificación: sin errores de sintaxis</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Macros.qml" line="888"/>
+        <location filename="../../qml/Dialogs/Macros.qml" line="890"/>
         <source>[macro] verify failed: %1</source>
         <translation>[macro] falló la verificación: %1</translation>
     </message>
@@ -21049,42 +21059,42 @@ Proporcione las credenciales necesarias.</translation>
         <translation type="vanished">El editor de macros tiene cambios sin guardar.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Macros.qml" line="927"/>
+        <location filename="../../qml/Dialogs/Macros.qml" line="929"/>
         <source>JavaScript</source>
         <translation>Javascript</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Macros.qml" line="927"/>
+        <location filename="../../qml/Dialogs/Macros.qml" line="929"/>
         <source>Lua</source>
         <translation>Lua</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Macros.qml" line="945"/>
+        <location filename="../../qml/Dialogs/Macros.qml" line="947"/>
         <source>Load macro</source>
         <translation>Cargar macro</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Macros.qml" line="958"/>
+        <location filename="../../qml/Dialogs/Macros.qml" line="960"/>
         <source>Save macro</source>
         <translation>Guardar macro</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Macros.qml" line="969"/>
+        <location filename="../../qml/Dialogs/Macros.qml" line="971"/>
         <source>Verify macro</source>
         <translation>Verificar Macro</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Macros.qml" line="980"/>
+        <location filename="../../qml/Dialogs/Macros.qml" line="982"/>
         <source>Run macro</source>
         <translation>Ejecutar Macro</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Macros.qml" line="993"/>
+        <location filename="../../qml/Dialogs/Macros.qml" line="995"/>
         <source>Stop macro</source>
         <translation>Detener Macro</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Macros.qml" line="1003"/>
+        <location filename="../../qml/Dialogs/Macros.qml" line="1005"/>
         <source>Clear editor</source>
         <translation>Limpiar Editor</translation>
     </message>
@@ -21092,32 +21102,32 @@ Proporcione las credenciales necesarias.</translation>
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="../../qml/MainWindow/MainWindow.qml" line="216"/>
+        <location filename="../../qml/MainWindow/MainWindow.qml" line="218"/>
         <source>Console Only Mode</source>
         <translation>Modo Solo Consola</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/MainWindow.qml" line="219"/>
+        <location filename="../../qml/MainWindow/MainWindow.qml" line="221"/>
         <source>Quick Plot Mode</source>
         <translation>Modo Gráfica Rápida</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/MainWindow.qml" line="226"/>
+        <location filename="../../qml/MainWindow/MainWindow.qml" line="228"/>
         <source>Empty Project</source>
         <translation>Proyecto Vacío</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/MainWindow.qml" line="741"/>
+        <location filename="../../qml/MainWindow/MainWindow.qml" line="743"/>
         <source>Serial Studio</source>
         <translation>Serial Studio</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/MainWindow.qml" line="749"/>
+        <location filename="../../qml/MainWindow/MainWindow.qml" line="751"/>
         <source>Waiting for data…</source>
         <translation>Esperando datos…</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/MainWindow.qml" line="750"/>
+        <location filename="../../qml/MainWindow/MainWindow.qml" line="752"/>
         <source>Connecting to device…</source>
         <translation>Conectando al dispositivo…</translation>
     </message>
@@ -21126,7 +21136,7 @@ Proporcione las credenciales necesarias.</translation>
         <translation type="vanished">Aplicación</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/MainWindow.qml" line="783"/>
+        <location filename="../../qml/MainWindow/MainWindow.qml" line="785"/>
         <source>Command Palette</source>
         <translation>Paleta de Comandos</translation>
     </message>
@@ -21206,87 +21216,87 @@ Proporcione las credenciales necesarias.</translation>
 <context>
     <name>MasterAnnunciator</name>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/MasterAnnunciator.qml" line="131"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/MasterAnnunciator.qml" line="133"/>
         <source>Aural alerts are disabled, but this project defines alarms. Enable them in Preferences &gt; Sounds.</source>
         <translation>Las alertas de audio están deshabilitadas, pero este proyecto define alarmas. Actívalas en Preferencias &gt; Sonidos.</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/MasterAnnunciator.qml" line="134"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/MasterAnnunciator.qml" line="136"/>
         <source>Alarm sounds are muted. Click to open the alarm panel.</source>
         <translation>Los sonidos de alarma están silenciados. Clic para abrir el panel de alarmas.</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/MasterAnnunciator.qml" line="136"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/MasterAnnunciator.qml" line="138"/>
         <source>%1 unacknowledged alarm(s). Click for the alarm panel, right-click to acknowledge.</source>
         <translation>%1 alarma(s) sin reconocer. Clic para el panel de alarmas, clic derecho para reconocer.</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/MasterAnnunciator.qml" line="138"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/MasterAnnunciator.qml" line="140"/>
         <source>No active alarms. Click for the alarm panel.</source>
         <translation>Sin alarmas activas. Clic para el panel de alarmas.</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/MasterAnnunciator.qml" line="217"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/MasterAnnunciator.qml" line="219"/>
         <source>Alarms</source>
         <translation>Alarmas</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/MasterAnnunciator.qml" line="226"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/MasterAnnunciator.qml" line="228"/>
         <source>Acknowledge all</source>
         <translation>Reconocer todas</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/MasterAnnunciator.qml" line="235"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/MasterAnnunciator.qml" line="237"/>
         <source>Silence</source>
         <translation>Silenciar</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/MasterAnnunciator.qml" line="244"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/MasterAnnunciator.qml" line="246"/>
         <source>Reset</source>
         <translation>Restablecer</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/MasterAnnunciator.qml" line="255"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/MasterAnnunciator.qml" line="257"/>
         <source>Clear every alarm from the list</source>
         <translation>Borrar todas las alarmas de la lista</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/MasterAnnunciator.qml" line="263"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/MasterAnnunciator.qml" line="265"/>
         <source>Test sounds</source>
         <translation>Probar sonidos</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/MasterAnnunciator.qml" line="272"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/MasterAnnunciator.qml" line="274"/>
         <source>Unmute sounds</source>
         <translation>Activar sonidos</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/MasterAnnunciator.qml" line="272"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/MasterAnnunciator.qml" line="274"/>
         <source>Mute sounds</source>
         <translation>Silenciar sonidos</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/MasterAnnunciator.qml" line="407"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/MasterAnnunciator.qml" line="409"/>
         <source>Unacknowledged</source>
         <translation>Sin Reconocer</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/MasterAnnunciator.qml" line="408"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/MasterAnnunciator.qml" line="410"/>
         <source>Acknowledged</source>
         <translation>Reconocido</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/MasterAnnunciator.qml" line="409"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/MasterAnnunciator.qml" line="411"/>
         <source>Returned to normal, awaiting reset</source>
         <translation>Regresó a normal, esperando restablecimiento</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/MasterAnnunciator.qml" line="410"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/MasterAnnunciator.qml" line="412"/>
         <source>click to show the widget</source>
         <translation>clic para mostrar el widget</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/MasterAnnunciator.qml" line="421"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/MasterAnnunciator.qml" line="423"/>
         <source>No active alarms</source>
         <translation>Sin alarmas activas</translation>
     </message>
@@ -21302,52 +21312,52 @@ Proporcione las credenciales necesarias.</translation>
 <context>
     <name>MemoryManagerDialog</name>
     <message>
-        <location filename="../../qml/AI/MemoryManagerDialog.qml" line="23"/>
+        <location filename="../../qml/AI/MemoryManagerDialog.qml" line="25"/>
         <source>Assistant Memory</source>
         <translation>Memoria del Asistente</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/MemoryManagerDialog.qml" line="50"/>
+        <location filename="../../qml/AI/MemoryManagerDialog.qml" line="52"/>
         <source>Facts the assistant carries into every chat. Stored only on this computer. Delete anything you no longer want it to know.</source>
         <translation>Datos que el asistente conserva en cada chat. Almacenados solo en esta computadora. Elimina cualquier cosa que ya no quieras que sepa.</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/MemoryManagerDialog.qml" line="65"/>
+        <location filename="../../qml/AI/MemoryManagerDialog.qml" line="67"/>
         <source>user</source>
         <translation>usuario</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/MemoryManagerDialog.qml" line="65"/>
+        <location filename="../../qml/AI/MemoryManagerDialog.qml" line="67"/>
         <source>feedback</source>
         <translation>retroalimentación</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/MemoryManagerDialog.qml" line="65"/>
+        <location filename="../../qml/AI/MemoryManagerDialog.qml" line="67"/>
         <source>project</source>
         <translation>proyecto</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/MemoryManagerDialog.qml" line="65"/>
+        <location filename="../../qml/AI/MemoryManagerDialog.qml" line="67"/>
         <source>reference</source>
         <translation>referencia</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/MemoryManagerDialog.qml" line="74"/>
+        <location filename="../../qml/AI/MemoryManagerDialog.qml" line="76"/>
         <source>Something the assistant should remember…</source>
         <translation>Algo que el asistente debe recordar…</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/MemoryManagerDialog.qml" line="78"/>
+        <location filename="../../qml/AI/MemoryManagerDialog.qml" line="80"/>
         <source>Remember</source>
         <translation>Recordar</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/MemoryManagerDialog.qml" line="147"/>
+        <location filename="../../qml/AI/MemoryManagerDialog.qml" line="149"/>
         <source>Forget this fact</source>
         <translation>Olvidar este dato</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/MemoryManagerDialog.qml" line="163"/>
+        <location filename="../../qml/AI/MemoryManagerDialog.qml" line="165"/>
         <source>Nothing remembered yet. Add a fact above, or approve one when the assistant proposes it in chat.</source>
         <translation>Nada recordado aún. Agrega un dato arriba, o aprueba uno cuando el asistente lo proponga en el chat.</translation>
     </message>
@@ -22248,87 +22258,87 @@ Would you like to open the download page?</source>
         <translation>Protocolo</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="72"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="74"/>
         <source>Serial Port</source>
         <translation>Puerto Serial</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="95"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="99"/>
         <source>Baud Rate</source>
         <translation>Velocidad en Baudios</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="185"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="191"/>
         <source>Parity</source>
         <translation>Paridad</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="207"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="215"/>
         <source>Data Bits</source>
         <translation>Bits de Datos</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="228"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="238"/>
         <source>Stop Bits</source>
         <translation>Bits de Parada</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="248"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="260"/>
         <source>Host</source>
         <translation>Host</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="257"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="271"/>
         <source>IP Address</source>
         <translation>Dirección IP</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="276"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="290"/>
         <source>Port</source>
         <translation>Puerto</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="284"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="300"/>
         <source>TCP Port</source>
         <translation>Puerto TCP</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="317"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="333"/>
         <source>Slave Address</source>
         <translation>Dirección de Esclavo</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="322"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="340"/>
         <source>1-247</source>
         <translation>1-247</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="380"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="402"/>
         <source>Configure Register Groups…</source>
         <translation>Configurar Grupos de Registros…</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="390"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="414"/>
         <source>Import Register Map…</source>
         <translation>Importar Mapa de Registros…</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="405"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="429"/>
         <source>%1 group(s) configured</source>
         <translation>%1 grupo(s) configurado(s)</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="406"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="430"/>
         <source>No groups configured</source>
         <translation>No hay grupos configurados</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="342"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="360"/>
         <source>Poll Interval (ms)</source>
         <translation>Intervalo de Sondeo (ms)</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="347"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="367"/>
         <source>Polling interval</source>
         <translation>Intervalo de sondeo</translation>
     </message>
@@ -22356,99 +22366,99 @@ Would you like to open the download page?</source>
         <translation>Tipo de Registro:</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="133"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="135"/>
         <source>Start Address:</source>
         <translation>Dirección Inicial:</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="140"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="144"/>
         <source>0-65535</source>
         <translation>0-65535</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="146"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="150"/>
         <source>Register Count:</source>
         <translation>Cantidad de Registros:</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="153"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="159"/>
         <source>1-125</source>
         <translation>1-125</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="159"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="165"/>
         <source>Slave Address:</source>
         <translation>Dirección de Esclavo:</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="170"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="178"/>
         <source>Leave empty to use the device address</source>
         <translation>Dejar vacío para usar la dirección del dispositivo</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="175"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="185"/>
         <source>Add Group</source>
         <translation>Agregar Grupo</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="200"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="210"/>
         <source>Configured Groups</source>
         <translation>Grupos Configurados</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="234"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="244"/>
         <source>#</source>
         <translation>#</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="241"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="251"/>
         <source>Type</source>
         <translation>Tipo</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="249"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="259"/>
         <source>Start</source>
         <translation>Inicio</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="256"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="266"/>
         <source>Count</source>
         <translation>Conteo</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="263"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="273"/>
         <source>Action</source>
         <translation>Acción</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="338"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="350"/>
         <source>Remove</source>
         <translation>Eliminar</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="350"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="362"/>
         <source>No groups configured.
 Add groups above to poll multiple register types.</source>
         <translation>No hay grupos configurados.
 Agregue grupos arriba para sondear múltiples tipos de registros.</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="368"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="380"/>
         <source>Total groups: %1</source>
         <translation>Total de grupos: %1</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="372"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="386"/>
         <source>Generate Project</source>
         <translation>Generar Proyecto</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="378"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="394"/>
         <source>Clear All</source>
         <translation>Limpiar Todo</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="384"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="402"/>
         <source>Close</source>
         <translation>Cerrar</translation>
     </message>
@@ -22516,22 +22526,22 @@ Agregue grupos arriba para sondear múltiples tipos de registros.</translation>
         <translation>Total: %1 registros en %2 grupos</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusPreviewDialog.qml" line="290"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusPreviewDialog.qml" line="292"/>
         <source>Cancel</source>
         <translation>Cancelar</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusPreviewDialog.qml" line="301"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusPreviewDialog.qml" line="305"/>
         <source>Add to Project</source>
         <translation>Agregar al Proyecto</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusPreviewDialog.qml" line="306"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusPreviewDialog.qml" line="310"/>
         <source>Add the generated source, groups, tables and workspaces to the project that is open, instead of creating a new file</source>
         <translation>Agregar el código fuente, grupos, tablas y espacios de trabajo generados al proyecto abierto, en lugar de crear un archivo nuevo</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusPreviewDialog.qml" line="317"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusPreviewDialog.qml" line="323"/>
         <source>Create Project</source>
         <translation>Crear Proyecto</translation>
     </message>
@@ -23220,79 +23230,79 @@ Agregue grupos arriba para sondear múltiples tipos de registros.</translation>
         <translation>Tipo de Socket</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="166"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="170"/>
         <source>Remote Address</source>
         <translation>Dirección Remota</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="129"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="131"/>
         <source>Local Port</source>
         <translation>Puerto Local</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="134"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="138"/>
         <source>Type 0 for automatic port</source>
         <translation>Escribir 0 para puerto automático</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="196"/>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="233"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="202"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="241"/>
         <source>Remote Port</source>
         <translation>Puerto Remoto</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="269"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="279"/>
         <source>Multicast</source>
         <translation>Multidifusión</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="292"/>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="345"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="304"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="361"/>
         <source>URL</source>
         <translation>URL</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="323"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="337"/>
         <source>Send Format</source>
         <translation>Formato de Envío</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="375"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="393"/>
         <source>Method</source>
         <translation>Método</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="398"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="418"/>
         <source>Poll Interval</source>
         <translation>Intervalo de Sondeo</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="407"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="429"/>
         <source>Milliseconds; 0 sends only on write</source>
         <translation>Milisegundos; 0 envía solo al escribir</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="431"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="453"/>
         <source>Request Body</source>
         <translation>Cuerpo de Solicitud</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="439"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="463"/>
         <source>Optional</source>
         <translation>Opcional</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="459"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="483"/>
         <source>Request Headers</source>
         <translation>Encabezados de Solicitud</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="480"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="506"/>
         <source>One %1 pair per line</source>
         <translation>Un par %1 por línea</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="496"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="522"/>
         <source>Ignore TLS Errors</source>
         <translation>Ignorar Errores TLS</translation>
     </message>
@@ -23335,82 +23345,82 @@ Agregue grupos arriba para sondear múltiples tipos de registros.</translation>
 <context>
     <name>OfflineActivation</name>
     <message>
-        <location filename="../../qml/Dialogs/OfflineActivation.qml" line="37"/>
+        <location filename="../../qml/Dialogs/OfflineActivation.qml" line="39"/>
         <source>Activate Offline</source>
         <translation>Activar sin Conexión</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/OfflineActivation.qml" line="55"/>
+        <location filename="../../qml/Dialogs/OfflineActivation.qml" line="57"/>
         <source>Activate Serial Studio Pro on a machine with no internet access. No account or connection is needed on this computer.</source>
         <translation>Activar Serial Studio Pro en una máquina sin acceso a internet. No se necesita cuenta ni conexión en esta computadora.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/OfflineActivation.qml" line="86"/>
+        <location filename="../../qml/Dialogs/OfflineActivation.qml" line="88"/>
         <source>Save your device file</source>
         <translation>Guardar el archivo de dispositivo</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/OfflineActivation.qml" line="95"/>
+        <location filename="../../qml/Dialogs/OfflineActivation.qml" line="97"/>
         <source>Save this computer's device file. It identifies this machine and contains no personal information.</source>
         <translation>Guardar el archivo de dispositivo de esta computadora. Identifica esta máquina y no contiene información personal.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/OfflineActivation.qml" line="102"/>
+        <location filename="../../qml/Dialogs/OfflineActivation.qml" line="104"/>
         <source>Save Device File…</source>
         <translation>Guardar Archivo de Dispositivo…</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/OfflineActivation.qml" line="136"/>
+        <location filename="../../qml/Dialogs/OfflineActivation.qml" line="138"/>
         <source>Get your license file</source>
         <translation>Obtener el archivo de licencia</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/OfflineActivation.qml" line="145"/>
+        <location filename="../../qml/Dialogs/OfflineActivation.qml" line="147"/>
         <source>On another computer with internet access, go to the address below, upload the device file, and enter your email and license key.</source>
         <translation>En otra computadora con acceso a internet, ir a la dirección de abajo, subir el archivo de dispositivo e ingresar el correo electrónico y la clave de licencia.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/OfflineActivation.qml" line="157"/>
+        <location filename="../../qml/Dialogs/OfflineActivation.qml" line="159"/>
         <source>Open in Browser</source>
         <translation>Abrir en Navegador</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/OfflineActivation.qml" line="193"/>
+        <location filename="../../qml/Dialogs/OfflineActivation.qml" line="195"/>
         <source>Import your license</source>
         <translation>Importar la licencia</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/OfflineActivation.qml" line="202"/>
+        <location filename="../../qml/Dialogs/OfflineActivation.qml" line="204"/>
         <source>Copy the license file to this computer and import it. Pro features unlock immediately.</source>
         <translation>Copiar el archivo de licencia a esta computadora e importarlo. Las funciones Pro se desbloquean inmediatamente.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/OfflineActivation.qml" line="209"/>
+        <location filename="../../qml/Dialogs/OfflineActivation.qml" line="211"/>
         <source>Import License File…</source>
         <translation>Importar Archivo de Licencia…</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/OfflineActivation.qml" line="224"/>
+        <location filename="../../qml/Dialogs/OfflineActivation.qml" line="226"/>
         <source>Save Device File</source>
         <translation>Guardar Archivo de Dispositivo</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/OfflineActivation.qml" line="226"/>
+        <location filename="../../qml/Dialogs/OfflineActivation.qml" line="228"/>
         <source>Serial Studio device file (*.ssmachine)</source>
         <translation>Archivo de dispositivo de Serial Studio (*.ssmachine)</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/OfflineActivation.qml" line="235"/>
+        <location filename="../../qml/Dialogs/OfflineActivation.qml" line="237"/>
         <source>Import License File</source>
         <translation>Importar Archivo de Licencia</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/OfflineActivation.qml" line="236"/>
+        <location filename="../../qml/Dialogs/OfflineActivation.qml" line="238"/>
         <source>Serial Studio license (*.sslic)</source>
         <translation>Licencia de Serial Studio (*.sslic)</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/OfflineActivation.qml" line="236"/>
+        <location filename="../../qml/Dialogs/OfflineActivation.qml" line="238"/>
         <source>All files (*)</source>
         <translation>Todos los Archivos (*)</translation>
     </message>
@@ -23451,22 +23461,22 @@ Agregue grupos arriba para sondear múltiples tipos de registros.</translation>
 <context>
     <name>OnlineIconPicker</name>
     <message>
-        <location filename="../../qml/Dialogs/OnlineIconPicker.qml" line="41"/>
+        <location filename="../../qml/Dialogs/OnlineIconPicker.qml" line="43"/>
         <source>Search Online Icons</source>
         <translation>Buscar Iconos en Línea</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/OnlineIconPicker.qml" line="81"/>
+        <location filename="../../qml/Dialogs/OnlineIconPicker.qml" line="83"/>
         <source>Download failed: %1</source>
         <translation>Error en la descarga: %1</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/OnlineIconPicker.qml" line="111"/>
+        <location filename="../../qml/Dialogs/OnlineIconPicker.qml" line="113"/>
         <source>Search icons (e.g. temperature, arrow, play)…</source>
         <translation>Buscar iconos (ej. temperatura, flecha, reproducir)…</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/OnlineIconPicker.qml" line="124"/>
+        <location filename="../../qml/Dialogs/OnlineIconPicker.qml" line="126"/>
         <source>Search…</source>
         <translation>Buscar…</translation>
     </message>
@@ -23475,17 +23485,17 @@ Agregue grupos arriba para sondear múltiples tipos de registros.</translation>
         <translation type="vanished">Buscar</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/OnlineIconPicker.qml" line="162"/>
+        <location filename="../../qml/Dialogs/OnlineIconPicker.qml" line="164"/>
         <source>Search for icons above to get started</source>
         <translation>Busca íconos arriba para comenzar</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/OnlineIconPicker.qml" line="280"/>
+        <location filename="../../qml/Dialogs/OnlineIconPicker.qml" line="282"/>
         <source>OK</source>
         <translation>ACEPTAR</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/OnlineIconPicker.qml" line="290"/>
+        <location filename="../../qml/Dialogs/OnlineIconPicker.qml" line="292"/>
         <source>Cancel</source>
         <translation>Cancelar</translation>
     </message>
@@ -23498,42 +23508,42 @@ Agregue grupos arriba para sondear múltiples tipos de registros.</translation>
         <translation>Endpoint</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="73"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="77"/>
         <source>Discover</source>
         <translation>Descubrir</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="90"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="94"/>
         <source>Poll Interval (ms)</source>
         <translation>Intervalo de Sondeo (ms)</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="95"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="101"/>
         <source>10-60000</source>
         <translation>10-60000</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="111"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="117"/>
         <source>Security</source>
         <translation>Seguridad</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="152"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="160"/>
         <source>This endpoint offers no user identity token the selected authentication mode can present</source>
         <translation>Este endpoint no ofrece ningún token de identidad de usuario que el modo de autenticación seleccionado pueda presentar</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="161"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="169"/>
         <source>Policy</source>
         <translation>Política</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="177"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="187"/>
         <source>Mode</source>
         <translation>Modo</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="183"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="195"/>
         <source>Sign</source>
         <translation>Firmar</translation>
     </message>
@@ -23542,33 +23552,33 @@ Agregue grupos arriba para sondear múltiples tipos de registros.</translation>
         <translation type="vanished">Firmar y Cifrar</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="203"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="215"/>
         <source>This policy is deprecated by the OPC Foundation (SHA-1 / RSA-1.5). Use it only for controllers that support nothing better.</source>
         <translation>Esta política está obsoleta según la OPC Foundation (SHA-1 / RSA-1.5). Úsela solo para controladores que no soporten nada mejor.</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="263"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="281"/>
         <source>Certificate</source>
         <translation>Certificado</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="275"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="295"/>
         <source>No certificate selected</source>
         <translation>Ningún certificado seleccionado</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="279"/>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="304"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="301"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="330"/>
         <source>Browse…</source>
         <translation>Explorar…</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="288"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="310"/>
         <source>Private Key</source>
         <translation>Clave Privada</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="300"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="324"/>
         <source>No private key selected</source>
         <translation>No se ha seleccionado clave privada</translation>
     </message>
@@ -23577,74 +23587,74 @@ Agregue grupos arriba para sondear múltiples tipos de registros.</translation>
         <translation type="vanished">Las credenciales viajan sin cifrar en este canal. Elija una política distinta a None con Sign &amp; Encrypt para protegerlas.</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="183"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="195"/>
         <source>Sign and Encrypt</source>
         <translation>Firmar y Cifrar</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="320"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="346"/>
         <source>Credentials travel in the clear on this channel. Choose a policy other than None with Sign and Encrypt to protect them.</source>
         <translation>Las credenciales viajan sin cifrar en este canal. Elija una política distinta a None con Firmar y Cifrar para protegerlas.</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="334"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="362"/>
         <source>Send the password anyway on this unencrypted channel</source>
         <translation>Enviar la contraseña de todos modos en este canal sin cifrar</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="343"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="371"/>
         <source>Identity</source>
         <translation>Identidad</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="358"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="386"/>
         <source>Generated on the first secure connection</source>
         <translation>Generado en la primera conexión segura</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="366"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="396"/>
         <source>Export…</source>
         <translation>Exportar…</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="372"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="404"/>
         <source>Replace</source>
         <translation>Reemplazar</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="453"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="489"/>
         <source>Export Client Certificate</source>
         <translation>Exportar Certificado de Cliente</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="454"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="490"/>
         <source>Certificate (*.der)</source>
         <translation>Certificado (*.der)</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="454"/>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="462"/>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="470"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="490"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="498"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="506"/>
         <source>All files (*)</source>
         <translation>Todos los Archivos (*)</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="461"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="497"/>
         <source>Select User Certificate</source>
         <translation>Seleccionar Certificado de Usuario</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="462"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="498"/>
         <source>Certificate (*.der *.pem *.crt)</source>
         <translation>Certificado (*.der *.pem *.crt)</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="469"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="505"/>
         <source>Select Private Key</source>
         <translation>Seleccionar Clave Privada</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="470"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="506"/>
         <source>Private key (*.der *.pem *.key)</source>
         <translation>Clave privada (*.der *.pem *.key)</translation>
     </message>
@@ -23653,17 +23663,17 @@ Agregue grupos arriba para sondear múltiples tipos de registros.</translation>
         <translation type="vanished">Los canales seguros no están soportados en esta versión</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="212"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="224"/>
         <source>Authentication</source>
         <translation>Autenticación</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="228"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="242"/>
         <source>Username</source>
         <translation>Nombre de Usuario</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="245"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="261"/>
         <source>Password</source>
         <translation>Contraseña</translation>
     </message>
@@ -23672,22 +23682,22 @@ Agregue grupos arriba para sondear múltiples tipos de registros.</translation>
         <translation type="vanished">Las credenciales se envían sin cifrar: esta versión solo abre canales con política None.</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="398"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="432"/>
         <source>Browse Tags…</source>
         <translation>Explorar Etiquetas…</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="409"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="445"/>
         <source>Generate Project</source>
         <translation>Generar Proyecto</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="427"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="463"/>
         <source>%1 tag(s) selected</source>
         <translation>%1 etiqueta(s) seleccionada(s)</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="428"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="464"/>
         <source>No tags selected</source>
         <translation>No hay etiquetas seleccionadas</translation>
     </message>
@@ -23695,47 +23705,47 @@ Agregue grupos arriba para sondear múltiples tipos de registros.</translation>
 <context>
     <name>OpcUaTagBrowser</name>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUaTagBrowser.qml" line="45"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUaTagBrowser.qml" line="47"/>
         <source>OPC UA Tag Browser</source>
         <translation>Explorador de Etiquetas OPC UA</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUaTagBrowser.qml" line="184"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUaTagBrowser.qml" line="186"/>
         <source>Expand folders to browse the server. Tick the variables to subscribe to; ticking a folder selects every readable variable beneath it.</source>
         <translation>Expande las carpetas para explorar el servidor. Marca las variables para suscribirte; marcar una carpeta selecciona todas las variables legibles que contiene.</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUaTagBrowser.qml" line="203"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUaTagBrowser.qml" line="205"/>
         <source>More than 512 channels selected; very wide frames slow the dashboard.</source>
         <translation>Más de 512 canales seleccionados; las tramas muy anchas ralentizan el tablero.</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUaTagBrowser.qml" line="211"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUaTagBrowser.qml" line="213"/>
         <source>Reading the address space...</source>
         <translation>Leyendo el espacio de direcciones...</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUaTagBrowser.qml" line="219"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUaTagBrowser.qml" line="223"/>
         <source>Filter by name…</source>
         <translation>Filtrar por nombre…</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUaTagBrowser.qml" line="434"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUaTagBrowser.qml" line="440"/>
         <source>%1 tag(s), %2 channel(s) selected</source>
         <translation>%1 etiqueta(s), %2 canal(es) seleccionado(s)</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUaTagBrowser.qml" line="441"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUaTagBrowser.qml" line="449"/>
         <source>Select All Readable</source>
         <translation>Seleccionar Todos los Legibles</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUaTagBrowser.qml" line="448"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUaTagBrowser.qml" line="458"/>
         <source>Cancel</source>
         <translation>Cancelar</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUaTagBrowser.qml" line="455"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUaTagBrowser.qml" line="467"/>
         <source>OK</source>
         <translation>ACEPTAR</translation>
     </message>
@@ -23743,52 +23753,52 @@ Agregue grupos arriba para sondear múltiples tipos de registros.</translation>
 <context>
     <name>OpcUaTrustDialog</name>
     <message>
-        <location filename="../../qml/Dialogs/OpcUaTrustDialog.qml" line="42"/>
+        <location filename="../../qml/Dialogs/OpcUaTrustDialog.qml" line="44"/>
         <source>Untrusted OPC UA Server</source>
         <translation>Servidor OPC UA No Confiable</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/OpcUaTrustDialog.qml" line="84"/>
+        <location filename="../../qml/Dialogs/OpcUaTrustDialog.qml" line="86"/>
         <source>Check the fingerprint against the one the server operator gave you before accepting. Accepting records the decision for this installation; it does not reconnect, so press Connect again afterwards.</source>
         <translation>Verificar la huella digital contra la que proporcionó el operador del servidor antes de aceptar. Aceptar registra la decisión para esta instalación; no reconecta, así que presionar Conectar nuevamente después.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/OpcUaTrustDialog.qml" line="108"/>
+        <location filename="../../qml/Dialogs/OpcUaTrustDialog.qml" line="110"/>
         <source>Subject:</source>
         <translation>Asunto:</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/OpcUaTrustDialog.qml" line="119"/>
+        <location filename="../../qml/Dialogs/OpcUaTrustDialog.qml" line="121"/>
         <source>Issuer:</source>
         <translation>Emisor:</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/OpcUaTrustDialog.qml" line="130"/>
+        <location filename="../../qml/Dialogs/OpcUaTrustDialog.qml" line="132"/>
         <source>Application URI:</source>
         <translation>URI de Aplicación:</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/OpcUaTrustDialog.qml" line="141"/>
+        <location filename="../../qml/Dialogs/OpcUaTrustDialog.qml" line="143"/>
         <source>Fingerprint:</source>
         <translation>Huella Digital:</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/OpcUaTrustDialog.qml" line="152"/>
+        <location filename="../../qml/Dialogs/OpcUaTrustDialog.qml" line="154"/>
         <source>Valid From:</source>
         <translation>Válido Desde:</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/OpcUaTrustDialog.qml" line="162"/>
+        <location filename="../../qml/Dialogs/OpcUaTrustDialog.qml" line="164"/>
         <source>Valid Until:</source>
         <translation>Válido Hasta:</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/OpcUaTrustDialog.qml" line="188"/>
+        <location filename="../../qml/Dialogs/OpcUaTrustDialog.qml" line="190"/>
         <source>Reject</source>
         <translation>Rechazar</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/OpcUaTrustDialog.qml" line="193"/>
+        <location filename="../../qml/Dialogs/OpcUaTrustDialog.qml" line="195"/>
         <source>Trust This Server</source>
         <translation>Confiar en Este Servidor</translation>
     </message>
@@ -23965,12 +23975,12 @@ Agregue grupos arriba para sondear múltiples tipos de registros.</translation>
         <translation type="vanished">Editor de Código del Widget de Pintor</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="77"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="79"/>
         <source>paint(ctx, w, h)</source>
         <translation>paint(ctx, w, h)</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="87"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="89"/>
         <source>Import</source>
         <translation>Importar</translation>
     </message>
@@ -23979,7 +23989,7 @@ Agregue grupos arriba para sondear múltiples tipos de registros.</translation>
         <translation type="vanished">Importar código de pintor desde un archivo .js</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="100"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="102"/>
         <source>Template</source>
         <translation>Plantilla</translation>
     </message>
@@ -23988,7 +23998,7 @@ Agregue grupos arriba para sondear múltiples tipos de registros.</translation>
         <translation type="vanished">Seleccionar una plantilla de pintor integrada</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="109"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="111"/>
         <source>Format</source>
         <translation>Formatear</translation>
     </message>
@@ -23997,42 +24007,42 @@ Agregue grupos arriba para sondear múltiples tipos de registros.</translation>
         <translation type="vanished">Reformatear el código del pintor</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="31"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="33"/>
         <source>Canvas Widget Code Editor</source>
         <translation>Editor de Código del Widget de Lienzo</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="92"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="94"/>
         <source>Import canvas code from a .js file</source>
         <translation>Importar código de lienzo desde un archivo .js</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="103"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="105"/>
         <source>Select a built-in canvas template</source>
         <translation>Seleccionar una plantilla de lienzo integrada</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="114"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="116"/>
         <source>Reformat the canvas code</source>
         <translation>Reformatear el código de lienzo</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="120"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="122"/>
         <source>Test</source>
         <translation>Probar</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="125"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="127"/>
         <source>Open a live preview with simulated dataset values</source>
         <translation>Abrir una vista previa en vivo con valores de conjunto de datos simulados</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="128"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="130"/>
         <source>Preview</source>
         <translation>Vista Previa</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="183"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="185"/>
         <source>Close</source>
         <translation>Cerrar</translation>
     </message>
@@ -24076,43 +24086,43 @@ Agregue grupos arriba para sondear múltiples tipos de registros.</translation>
         <translation type="vanished">Vista Previa en Vivo del Painter</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/PainterTestDialog.qml" line="28"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/PainterTestDialog.qml" line="30"/>
         <source>Canvas Live Preview</source>
         <translation>Vista Previa en Vivo del Lienzo</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/PainterTestDialog.qml" line="32"/>
-        <location filename="../../qml/ProjectEditor/Dialogs/PainterTestDialog.qml" line="37"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/PainterTestDialog.qml" line="34"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/PainterTestDialog.qml" line="39"/>
         <source>Preview</source>
         <translation>Vista Previa</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/PainterTestDialog.qml" line="113"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/PainterTestDialog.qml" line="115"/>
         <source>Simulated datasets</source>
         <translation>Conjuntos de datos simulados</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/PainterTestDialog.qml" line="180"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/PainterTestDialog.qml" line="182"/>
         <source>Runtime OK</source>
         <translation>Runtime OK</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/PainterTestDialog.qml" line="181"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/PainterTestDialog.qml" line="183"/>
         <source>Awaiting first frame...</source>
         <translation>Esperando primera trama...</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/PainterTestDialog.qml" line="194"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/PainterTestDialog.qml" line="196"/>
         <source>Console</source>
         <translation>Consola</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/PainterTestDialog.qml" line="236"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/PainterTestDialog.qml" line="238"/>
         <source>Clear console</source>
         <translation>Limpiar consola</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/PainterTestDialog.qml" line="245"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/PainterTestDialog.qml" line="247"/>
         <source>Close</source>
         <translation>Cerrar</translation>
     </message>
@@ -24612,82 +24622,82 @@ Agregue grupos arriba para sondear múltiples tipos de registros.</translation>
 <context>
     <name>ProblemCenter</name>
     <message>
-        <location filename="../../qml/Dialogs/ProblemCenter.qml" line="40"/>
+        <location filename="../../qml/Dialogs/ProblemCenter.qml" line="42"/>
         <source>Problem Center</source>
         <translation>Centro de Problemas</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ProblemCenter.qml" line="119"/>
+        <location filename="../../qml/Dialogs/ProblemCenter.qml" line="121"/>
         <source>Error</source>
         <translation>Error</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ProblemCenter.qml" line="120"/>
+        <location filename="../../qml/Dialogs/ProblemCenter.qml" line="122"/>
         <source>Warning</source>
         <translation>Advertencia</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ProblemCenter.qml" line="121"/>
+        <location filename="../../qml/Dialogs/ProblemCenter.qml" line="123"/>
         <source>Information</source>
         <translation>Información</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ProblemCenter.qml" line="212"/>
+        <location filename="../../qml/Dialogs/ProblemCenter.qml" line="214"/>
         <source>%1 errors, %2 warnings, %3 notices</source>
         <translation>%1 errores, %2 advertencias, %3 avisos</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ProblemCenter.qml" line="228"/>
+        <location filename="../../qml/Dialogs/ProblemCenter.qml" line="230"/>
         <source>All Severities</source>
         <translation>Todas las Severidades</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ProblemCenter.qml" line="249"/>
+        <location filename="../../qml/Dialogs/ProblemCenter.qml" line="251"/>
         <source>Running Diagnostics</source>
         <translation>Ejecutando Diagnósticos</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ProblemCenter.qml" line="250"/>
+        <location filename="../../qml/Dialogs/ProblemCenter.qml" line="252"/>
         <source>Run Diagnostics</source>
         <translation>Ejecutar Diagnósticos</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ProblemCenter.qml" line="256"/>
+        <location filename="../../qml/Dialogs/ProblemCenter.qml" line="258"/>
         <source>Refresh</source>
         <translation>Actualizar</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ProblemCenter.qml" line="263"/>
+        <location filename="../../qml/Dialogs/ProblemCenter.qml" line="265"/>
         <source>Clear</source>
         <translation>Limpiar</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ProblemCenter.qml" line="386"/>
+        <location filename="../../qml/Dialogs/ProblemCenter.qml" line="388"/>
         <source>Go To</source>
         <translation>Ir A</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ProblemCenter.qml" line="424"/>
+        <location filename="../../qml/Dialogs/ProblemCenter.qml" line="426"/>
         <source>No problems match the current filter</source>
         <translation>Ningún problema coincide con el filtro actual</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ProblemCenter.qml" line="425"/>
+        <location filename="../../qml/Dialogs/ProblemCenter.qml" line="427"/>
         <source>No problems detected</source>
         <translation>No se detectaron problemas</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ProblemCenter.qml" line="434"/>
+        <location filename="../../qml/Dialogs/ProblemCenter.qml" line="436"/>
         <source>Project, link and script checks run automatically.</source>
         <translation>Las verificaciones de proyecto, enlace y script se ejecutan automáticamente.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ProblemCenter.qml" line="450"/>
+        <location filename="../../qml/Dialogs/ProblemCenter.qml" line="452"/>
         <source>Last checked at %1</source>
         <translation>Última verificación a las %1</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ProblemCenter.qml" line="459"/>
+        <location filename="../../qml/Dialogs/ProblemCenter.qml" line="461"/>
         <source>Close</source>
         <translation>Cerrar</translation>
     </message>
@@ -24700,69 +24710,69 @@ Agregue grupos arriba para sondear múltiples tipos de registros.</translation>
         <translation>Modo</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="77"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="79"/>
         <source>Launch Process</source>
         <translation>Iniciar Proceso</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="77"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="79"/>
         <source>Named Pipe</source>
         <translation>Tubería con Nombre</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="102"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="104"/>
         <source>Executable</source>
         <translation>Ejecutable</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="116"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="120"/>
         <source>/path/to/executable</source>
         <translation>/ruta/al/ejecutable</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="137"/>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="221"/>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="273"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="143"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="233"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="289"/>
         <source>Browse</source>
         <translation>Explorar</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="150"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="156"/>
         <source>Arguments</source>
         <translation>Argumentos</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="160"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="168"/>
         <source>--arg1 value1 --arg2 value2</source>
         <translation>--arg1 valor1 --arg2 valor2</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="186"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="194"/>
         <source>Working Dir</source>
         <translation>Dir de Trabajo</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="200"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="210"/>
         <source>(optional) /working/directory</source>
         <translation>(opcional) /directorio/de/trabajo</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="236"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="248"/>
         <source>Pipe Path</source>
         <translation>Ruta de Tubería</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="289"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="307"/>
         <source>Pick Running Process…</source>
         <translation>Seleccionar Proceso en Ejecución…</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="327"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="345"/>
         <source>Launch a child process and capture its stdout, or connect to a named pipe written by an existing process.</source>
         <translation>Lanza un proceso hijo y captura su stdout, o conéctate a una tubería con nombre escrita por un proceso existente.</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="335"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="353"/>
         <source>Learn about named pipes</source>
         <translation>Aprende sobre tuberías con nombre</translation>
     </message>
@@ -24785,54 +24795,54 @@ Agregue grupos arriba para sondear múltiples tipos de registros.</translation>
         <translation>Filtrar Procesos</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="224"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="226"/>
         <source>Type to filter by name…</source>
         <translation>Escribe para filtrar por nombre…</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="228"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="232"/>
         <source>Refresh</source>
         <translation>Actualizar</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="236"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="240"/>
         <source>Running Processes</source>
         <translation>Procesos en Ejecución</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="274"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="278"/>
         <source>Process</source>
         <translation>Proceso</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="281"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="285"/>
         <source>PID</source>
         <translation>PID</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="376"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="380"/>
         <source>No processes match the filter.</source>
         <translation>Ningún proceso coincide con el filtro.</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="377"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="381"/>
         <source>No running processes found.
 Click Refresh to update the list.</source>
         <translation>No se encontraron procesos en ejecución.
 Haz clic en Actualizar para actualizar la lista.</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="393"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="397"/>
         <source>%1 process(es)</source>
         <translation>%1 proceso(s)</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="397"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="403"/>
         <source>Select</source>
         <translation>Seleccionar</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="403"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="411"/>
         <source>Close</source>
         <translation>Cerrar</translation>
     </message>
@@ -24840,7 +24850,7 @@ Haz clic en Actualizar para actualizar la lista.</translation>
 <context>
     <name>ProjectEditor</name>
     <message>
-        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="45"/>
+        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="47"/>
         <source>modified</source>
         <translation>modificado</translation>
     </message>
@@ -24853,7 +24863,7 @@ Haz clic en Actualizar para actualizar la lista.</translation>
         <translation type="vanished">Comandos</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="453"/>
+        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="455"/>
         <source>This project is password protected</source>
         <translation>Este proyecto está protegido con contraseña</translation>
     </message>
@@ -24862,7 +24872,7 @@ Haz clic en Actualizar para actualizar la lista.</translation>
         <translation type="vanished">La edición está disponible en modo Proyecto</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="470"/>
+        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="472"/>
         <source>Enter the password to make changes, or open a different project.</source>
         <translation>Ingresa la contraseña para realizar cambios o abre un proyecto diferente.</translation>
     </message>
@@ -24871,7 +24881,7 @@ Haz clic en Actualizar para actualizar la lista.</translation>
         <translation type="vanished">Cambia al modo Proyecto para cargar y editar un proyecto.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="495"/>
+        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="497"/>
         <source>Unlock</source>
         <translation>Desbloquear</translation>
     </message>
@@ -24880,47 +24890,47 @@ Haz clic en Actualizar para actualizar la lista.</translation>
         <translation type="vanished">Cambiar a Modo Proyecto</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="91"/>
+        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="93"/>
         <source>Switched to Project File mode</source>
         <translation>Cambiado a Modo de Archivo de Proyecto</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="92"/>
+        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="94"/>
         <source>The Project Editor works on project files. To go back, choose another Operation Mode in Device Setup.</source>
         <translation>El Editor de Proyectos funciona con archivos de proyecto. Para volver, elige otro Modo de Operación en Configuración de Dispositivo.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="456"/>
+        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="458"/>
         <source>Disconnect to edit the project</source>
         <translation>Desconecta para editar el proyecto</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="458"/>
+        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="460"/>
         <source>Close the playback to edit the project</source>
         <translation>Cierra la reproducción para editar el proyecto</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="471"/>
+        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="473"/>
         <source>The Project Editor needs Project File mode, which starts when the current session ends. The session keeps running until then.</source>
         <translation>El Editor de Proyectos requiere modo Archivo de Proyecto, que se inicia cuando termina la sesión actual. La sesión seguirá ejecutándose hasta entonces.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="496"/>
+        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="498"/>
         <source>Disconnect and Edit</source>
         <translation>Desconectar y Editar</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="515"/>
+        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="517"/>
         <source>Open Other Project</source>
         <translation>Abrir Otro Proyecto</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="516"/>
+        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="518"/>
         <source>Close</source>
         <translation>Cerrar</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="532"/>
+        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="534"/>
         <source>Create New Project</source>
         <translation>Crear Proyecto Nuevo</translation>
     </message>
@@ -26971,72 +26981,72 @@ Reload it?</source>
 <context>
     <name>ProtoPreviewDialog</name>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/ProtoPreviewDialog.qml" line="41"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/ProtoPreviewDialog.qml" line="43"/>
         <source>Protocol Buffers File Preview</source>
         <translation>Vista Previa de Archivo Protocol Buffers</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/ProtoPreviewDialog.qml" line="165"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/ProtoPreviewDialog.qml" line="167"/>
         <source>Proto File: %1</source>
         <translation>Archivo Proto: %1</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/ProtoPreviewDialog.qml" line="173"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/ProtoPreviewDialog.qml" line="175"/>
         <source>Browse the messages below, then create the project. Every message becomes a dashboard group; matching-type channel blocks get a MultiPlot and mixed-type messages get a DataGrid.</source>
         <translation>Explora los mensajes a continuación y luego crea el proyecto. Cada mensaje se convierte en un grupo del tablero; los bloques de canal de tipo coincidente obtienen un MultiPlot y los mensajes de tipo mixto obtienen un DataGrid.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/ProtoPreviewDialog.qml" line="183"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/ProtoPreviewDialog.qml" line="185"/>
         <source>Show fields for</source>
         <translation>Mostrar campos para</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/ProtoPreviewDialog.qml" line="209"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/ProtoPreviewDialog.qml" line="211"/>
         <source>Fields</source>
         <translation>Campos</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/ProtoPreviewDialog.qml" line="243"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/ProtoPreviewDialog.qml" line="245"/>
         <source>Tag</source>
         <translation>Etiqueta</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/ProtoPreviewDialog.qml" line="253"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/ProtoPreviewDialog.qml" line="255"/>
         <source>Field Name</source>
         <translation>Nombre del Campo</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/ProtoPreviewDialog.qml" line="258"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/ProtoPreviewDialog.qml" line="260"/>
         <source>Type</source>
         <translation>Tipo</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/ProtoPreviewDialog.qml" line="345"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/ProtoPreviewDialog.qml" line="347"/>
         <source>No fields in the selected message.</source>
         <translation>No hay campos en el mensaje seleccionado.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/ProtoPreviewDialog.qml" line="363"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/ProtoPreviewDialog.qml" line="365"/>
         <source>Total: %1 messages, %2 fields</source>
         <translation>Total: %1 mensajes, %2 campos</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/ProtoPreviewDialog.qml" line="370"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/ProtoPreviewDialog.qml" line="372"/>
         <source>Cancel</source>
         <translation>Cancelar</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/ProtoPreviewDialog.qml" line="380"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/ProtoPreviewDialog.qml" line="382"/>
         <source>Add to Project</source>
         <translation>Agregar al Proyecto</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/ProtoPreviewDialog.qml" line="385"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/ProtoPreviewDialog.qml" line="387"/>
         <source>Add the generated source, groups, tables and workspaces to the project that is open, instead of creating a new file</source>
         <translation>Agregar el código fuente generado, grupos, tablas y espacios de trabajo al proyecto abierto, en lugar de crear un archivo nuevo</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/ProtoPreviewDialog.qml" line="396"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/ProtoPreviewDialog.qml" line="398"/>
         <source>Create Project</source>
         <translation>Crear Proyecto</translation>
     </message>
@@ -28188,67 +28198,67 @@ El parámetro separador ya no es necesario.</translation>
 <context>
     <name>RemoteAttach</name>
     <message>
-        <location filename="../../qml/Dialogs/RemoteAttach.qml" line="37"/>
+        <location filename="../../qml/Dialogs/RemoteAttach.qml" line="39"/>
         <source>Attach to Remote Dashboard</source>
         <translation>Adjuntar a Tablero Remoto</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/RemoteAttach.qml" line="67"/>
+        <location filename="../../qml/Dialogs/RemoteAttach.qml" line="69"/>
         <source>Disconnect the local device or close the open recording first.</source>
         <translation>Desconecta el dispositivo local o cierra la grabación abierta primero.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/RemoteAttach.qml" line="80"/>
+        <location filename="../../qml/Dialogs/RemoteAttach.qml" line="82"/>
         <source>Not attached.</source>
         <translation>No conectado.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/RemoteAttach.qml" line="83"/>
+        <location filename="../../qml/Dialogs/RemoteAttach.qml" line="85"/>
         <source>Attached to %1 - no response, the link may be down.</source>
         <translation>Conectado a %1 - sin respuesta, el enlace puede estar caído.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/RemoteAttach.qml" line="87"/>
+        <location filename="../../qml/Dialogs/RemoteAttach.qml" line="89"/>
         <source>Attached to %1 - connected, the remote is not producing data.</source>
         <translation>Conectado a %1 - conectado, el remoto no está produciendo datos.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/RemoteAttach.qml" line="90"/>
+        <location filename="../../qml/Dialogs/RemoteAttach.qml" line="92"/>
         <source>Attached to %1 - live, %2 datasets at %3 Hz.</source>
         <translation>Conectado a %1 - en vivo, %2 conjuntos de datos a %3 Hz.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/RemoteAttach.qml" line="133"/>
+        <location filename="../../qml/Dialogs/RemoteAttach.qml" line="135"/>
         <source>Watch another Serial Studio instance's dashboard over the network. The view is read-only: nothing you do here reaches the remote device.</source>
         <translation>Observa el tablero de otra instancia de Serial Studio a través de la red. La vista es de solo lectura: nada de lo que hagas aquí llega al dispositivo remoto.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/RemoteAttach.qml" line="147"/>
+        <location filename="../../qml/Dialogs/RemoteAttach.qml" line="149"/>
         <source>Recent</source>
         <translation>Reciente</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/RemoteAttach.qml" line="170"/>
+        <location filename="../../qml/Dialogs/RemoteAttach.qml" line="172"/>
         <source>Host</source>
         <translation>Host</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/RemoteAttach.qml" line="180"/>
+        <location filename="../../qml/Dialogs/RemoteAttach.qml" line="182"/>
         <source>Host name or IP address</source>
         <translation>Nombre de host o dirección IP</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/RemoteAttach.qml" line="184"/>
+        <location filename="../../qml/Dialogs/RemoteAttach.qml" line="186"/>
         <source>Port</source>
         <translation>Puerto</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/RemoteAttach.qml" line="200"/>
+        <location filename="../../qml/Dialogs/RemoteAttach.qml" line="202"/>
         <source>Token</source>
         <translation>Token</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/RemoteAttach.qml" line="211"/>
+        <location filename="../../qml/Dialogs/RemoteAttach.qml" line="213"/>
         <source>Required only for connections from another machine</source>
         <translation>Requerido solo para conexiones desde otra máquina</translation>
     </message>
@@ -28261,22 +28271,22 @@ El parámetro separador ya no es necesario.</translation>
         <translation type="vanished">%1 Hz</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/RemoteAttach.qml" line="263"/>
+        <location filename="../../qml/Dialogs/RemoteAttach.qml" line="265"/>
         <source>The link is not encrypted. The token authorizes the connection but does not protect what travels over it, so use this on a trusted network or through a tunnel.</source>
         <translation>El enlace no está cifrado. El token autoriza la conexión pero no protege lo que viaja a través de ella, así que úsalo en una red confiable o a través de un túnel.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/RemoteAttach.qml" line="281"/>
+        <location filename="../../qml/Dialogs/RemoteAttach.qml" line="283"/>
         <source>Close</source>
         <translation>Cerrar</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/RemoteAttach.qml" line="290"/>
+        <location filename="../../qml/Dialogs/RemoteAttach.qml" line="292"/>
         <source>Detach</source>
         <translation>Desconectar</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/RemoteAttach.qml" line="300"/>
+        <location filename="../../qml/Dialogs/RemoteAttach.qml" line="302"/>
         <source>Attach</source>
         <translation>Conectar</translation>
     </message>
@@ -28284,288 +28294,288 @@ El parámetro separador ya no es necesario.</translation>
 <context>
     <name>ReportOptionsDialog</name>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="27"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="29"/>
         <source>Generate PDF Report</source>
         <translation>Generar Reporte PDF</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="27"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="29"/>
         <source>Generate Report</source>
         <translation>Generar Reporte</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="73"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="75"/>
         <source>Solid</source>
         <translation>Sólido</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="74"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="76"/>
         <source>Dashed</source>
         <translation>Discontinuo</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="75"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="77"/>
         <source>Dotted</source>
         <translation>Punteado</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="97"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="99"/>
         <source>A4 (210 × 297 mm)</source>
         <translation>A4 (210 × 297 mm)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="98"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="100"/>
         <source>A3 (297 × 420 mm)</source>
         <translation>A3 (297 × 420 mm)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="99"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="101"/>
         <source>A2 (420 × 594 mm)</source>
         <translation>A2 (420 × 594 mm)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="100"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="102"/>
         <source>A1 (594 × 841 mm)</source>
         <translation>A1 (594 × 841 mm)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="101"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="103"/>
         <source>A0 (841 × 1189 mm)</source>
         <translation>A0 (841 × 1189 mm)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="102"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="104"/>
         <source>A5 (148 × 210 mm)</source>
         <translation>A5 (148 × 210 mm)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="103"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="105"/>
         <source>A6 (105 × 148 mm)</source>
         <translation>A6 (105 × 148 mm)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="104"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="106"/>
         <source>B4 (250 × 353 mm)</source>
         <translation>B4 (250 × 353 mm)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="105"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="107"/>
         <source>B5 (176 × 250 mm)</source>
         <translation>B5 (176 × 250 mm)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="106"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="108"/>
         <source>Letter (8.5 × 11 in)</source>
         <translation>Carta (8.5 × 11 in)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="107"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="109"/>
         <source>Legal (8.5 × 14 in)</source>
         <translation>Oficio (8.5 × 14 in)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="108"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="110"/>
         <source>Executive (7.25 × 10.5 in)</source>
         <translation>Ejecutivo (7.25 × 10.5 in)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="109"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="111"/>
         <source>Tabloid (11 × 17 in)</source>
         <translation>Tabloide (11 × 17 in)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="110"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="112"/>
         <source>Ledger (17 × 11 in)</source>
         <translation>Ledger (17 × 11 in)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="124"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="126"/>
         <source>%1 — Session Report</source>
         <translation>%1 — Reporte de Sesión</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="126"/>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="321"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="128"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="323"/>
         <source>Session Report</source>
         <translation>Reporte de Sesión</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="223"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="225"/>
         <source>Branding</source>
         <translation>Marca</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="229"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="231"/>
         <source>Page</source>
         <translation>Página</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="235"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="237"/>
         <source>Sections</source>
         <translation>Secciones</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="241"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="243"/>
         <source>Datasets</source>
         <translation>Conjuntos de Datos</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="289"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="291"/>
         <source>Identity</source>
         <translation>Identidad</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="303"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="305"/>
         <source>Company</source>
         <translation>Empresa</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="310"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="312"/>
         <source>e.g. Acme Test Systems</source>
         <translation>ej. Acme Test Systems</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="314"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="316"/>
         <source>Document title</source>
         <translation>Título del Documento</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="325"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="327"/>
         <source>Author</source>
         <translation>Autor</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="332"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="334"/>
         <source>Prepared by (optional)</source>
         <translation>Preparado por (opcional)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="341"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="343"/>
         <source>Logo</source>
         <translation>Logotipo</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="354"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="356"/>
         <source>File</source>
         <translation>Archivo</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="365"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="367"/>
         <source>PNG, JPG or SVG (optional)</source>
         <translation>PNG, JPG o SVG (opcional)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="367"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="369"/>
         <source>Browse…</source>
         <translation>Explorar…</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="370"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="372"/>
         <source>Clear</source>
         <translation>Limpiar</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="411"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="413"/>
         <source>Paper</source>
         <translation>Papel</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="423"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="425"/>
         <source>Page size</source>
         <translation>Tamaño de página</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="561"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="563"/>
         <source>Annotate min, max, and mean values on plots</source>
         <translation>Anotar valores mínimos, máximos y promedio en gráficas</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="598"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="600"/>
         <source>Include datasets</source>
         <translation>Incluir conjuntos de datos</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="612"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="614"/>
         <source>Expand All</source>
         <translation>Expandir Todo</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="621"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="623"/>
         <source>Collapse All</source>
         <translation>Contraer Todo</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="633"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="635"/>
         <source>Search datasets</source>
         <translation>Buscar conjuntos de datos</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="761"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="763"/>
         <source>Loading datasets...</source>
         <translation>Cargando conjuntos de datos...</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="762"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="764"/>
         <source>No datasets match your search.</source>
         <translation>No hay conjuntos de datos que coincidan con tu búsqueda.</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="782"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="784"/>
         <source>Select at least one dataset to include.</source>
         <translation>Selecciona al menos un conjunto de datos para incluir.</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="799"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="801"/>
         <source>Export HTML</source>
         <translation>Exportar HTML</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="541"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="543"/>
         <source>Cover page (logo, document title, test subtitle)</source>
         <translation>Portada (logotipo, título del documento, subtítulo de prueba)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="546"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="548"/>
         <source>Test information (project, timestamps, classification and notes)</source>
         <translation>Información de prueba (proyecto, marcas de tiempo, clasificación y notas)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="551"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="553"/>
         <source>Measurement summary (min, max, mean, std. deviation per parameter)</source>
         <translation>Resumen de mediciones (mín, máx, media, desv. estándar por parámetro)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="556"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="558"/>
         <source>Parameter trends (time-series chart per numeric parameter)</source>
         <translation>Tendencias de parámetros (gráfica de series de tiempo por parámetro numérico)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="439"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="441"/>
         <source>Plot appearance</source>
         <translation>Apariencia de Gráfica</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="453"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="455"/>
         <source>Line width</source>
         <translation>Ancho de Línea</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="485"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="487"/>
         <source>Line style</source>
         <translation>Estilo de Línea</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="526"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="528"/>
         <source>Include</source>
         <translation>Incluir</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="791"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="793"/>
         <source>Cancel</source>
         <translation>Cancelar</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="799"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="801"/>
         <source>Export PDF</source>
         <translation>Exportar PDF</translation>
     </message>
@@ -28573,17 +28583,17 @@ El parámetro separador ya no es necesario.</translation>
 <context>
     <name>ReportProgressDialog</name>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportProgressDialog.qml" line="20"/>
+        <location filename="../../qml/DatabaseExplorer/ReportProgressDialog.qml" line="22"/>
         <source>Generating Report</source>
         <translation>Generando Reporte</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportProgressDialog.qml" line="69"/>
+        <location filename="../../qml/DatabaseExplorer/ReportProgressDialog.qml" line="71"/>
         <source>Working…</source>
         <translation>Trabajando…</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportProgressDialog.qml" line="86"/>
+        <location filename="../../qml/DatabaseExplorer/ReportProgressDialog.qml" line="88"/>
         <source>This can take a few seconds for sessions with many parameters. The window closes automatically when the report is ready.</source>
         <translation>Esto puede tomar unos segundos para sesiones con muchos parámetros. La ventana se cierra automáticamente cuando el reporte esté listo.</translation>
     </message>
@@ -28624,48 +28634,48 @@ El parámetro separador ya no es necesario.</translation>
 <context>
     <name>RuntimeReconfigure</name>
     <message>
-        <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="40"/>
+        <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="42"/>
         <source>Connection Lost</source>
         <translation>Conexión Perdida</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="41"/>
+        <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="43"/>
         <source>Device Unavailable</source>
         <translation>Dispositivo No Disponible</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="95"/>
+        <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="97"/>
         <source>The connection to your device was lost.</source>
         <translation>Se perdió la conexión con el dispositivo.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="96"/>
+        <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="98"/>
         <source>Serial Studio couldn't reach your device.</source>
         <translation>Serial Studio no pudo comunicarse con el dispositivo.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="105"/>
+        <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="107"/>
         <source>Check the cable, power, and that no other application has taken over the device. You can try reconnecting, switch to a different device, or quit.</source>
         <translation>Verifica el cable, la alimentación y que ninguna otra aplicación haya tomado el dispositivo. Puedes intentar reconectar, cambiar a un dispositivo diferente o salir.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="108"/>
+        <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="110"/>
         <source>Make sure it's plugged in, powered on, and not already in use by another app. You can try again, pick a different device, or quit.</source>
         <translation>Verifica que esté conectado, encendido y que no esté en uso por otra aplicación. Puedes reintentar, elegir otro dispositivo o salir.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="120"/>
-        <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="189"/>
+        <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="122"/>
+        <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="191"/>
         <source>Quit</source>
         <translation>Salir</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="130"/>
+        <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="132"/>
         <source>Pick Different Device</source>
         <translation>Elegir Dispositivo Diferente</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="166"/>
+        <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="168"/>
         <source>Connection: %1</source>
         <translation>Conexión: %1</translation>
     </message>
@@ -28674,17 +28684,17 @@ El parámetro separador ya no es necesario.</translation>
         <translation type="vanished">Reconfigurar</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="141"/>
+        <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="143"/>
         <source>Try Again</source>
         <translation>Reintentar</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="141"/>
+        <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="143"/>
         <source>Reconnect</source>
         <translation>Reconectar</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="157"/>
+        <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="159"/>
         <source>Pick the correct device, then press Connect.</source>
         <translation>Selecciona el dispositivo correcto y presiona Conectar.</translation>
     </message>
@@ -28693,7 +28703,7 @@ El parámetro separador ya no es necesario.</translation>
         <translation type="vanished">Interfaz de E/S: %1</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="199"/>
+        <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="201"/>
         <source>Connect</source>
         <translation>Conectar</translation>
     </message>
@@ -28706,57 +28716,57 @@ El parámetro separador ya no es necesario.</translation>
         <translation>Host</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/S7.qml" line="58"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/S7.qml" line="60"/>
         <source>IP Address</source>
         <translation>Dirección IP</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/S7.qml" line="76"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/S7.qml" line="78"/>
         <source>Rack</source>
         <translation>Rack</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/S7.qml" line="84"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/S7.qml" line="88"/>
         <source>0-7</source>
         <translation>0-7</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/S7.qml" line="105"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/S7.qml" line="109"/>
         <source>Slot</source>
         <translation>Slot</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/S7.qml" line="113"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/S7.qml" line="119"/>
         <source>0-31</source>
         <translation>0-31</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/S7.qml" line="133"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/S7.qml" line="139"/>
         <source>Poll Interval (ms)</source>
         <translation>Intervalo de Sondeo (ms)</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/S7.qml" line="138"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/S7.qml" line="146"/>
         <source>Polling interval</source>
         <translation>Intervalo de sondeo</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/S7.qml" line="171"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/S7.qml" line="181"/>
         <source>Configure Variables…</source>
         <translation>Configurar Variables…</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/S7.qml" line="182"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/S7.qml" line="194"/>
         <source>Create Project from Variables</source>
         <translation>Crear Proyecto desde Variables</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/S7.qml" line="197"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/S7.qml" line="209"/>
         <source>%1 variable(s) configured</source>
         <translation>%1 variable(s) configurada(s)</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/S7.qml" line="198"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/S7.qml" line="210"/>
         <source>No variables configured</source>
         <translation>No hay variables configuradas</translation>
     </message>
@@ -28784,74 +28794,74 @@ El parámetro separador ya no es necesario.</translation>
         <translation>Nombre:</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/S7VariablesDialog.qml" line="129"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/S7VariablesDialog.qml" line="131"/>
         <source>Channel name</source>
         <translation>Nombre del canal</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/S7VariablesDialog.qml" line="134"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/S7VariablesDialog.qml" line="136"/>
         <source>Address:</source>
         <translation>Dirección:</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/S7VariablesDialog.qml" line="146"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/S7VariablesDialog.qml" line="150"/>
         <source>DB5.DBD20:REAL</source>
         <translation>DB5.DBD20:REAL</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/S7VariablesDialog.qml" line="150"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/S7VariablesDialog.qml" line="156"/>
         <source>Add Variable</source>
         <translation>Agregar Variable</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/S7VariablesDialog.qml" line="185"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/S7VariablesDialog.qml" line="191"/>
         <source>Configured Variables</source>
         <translation>Variables Configuradas</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/S7VariablesDialog.qml" line="219"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/S7VariablesDialog.qml" line="225"/>
         <source>#</source>
         <translation>#</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/S7VariablesDialog.qml" line="227"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/S7VariablesDialog.qml" line="233"/>
         <source>Variable</source>
         <translation>Variable</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/S7VariablesDialog.qml" line="234"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/S7VariablesDialog.qml" line="240"/>
         <source>Action</source>
         <translation>Acción</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/S7VariablesDialog.qml" line="281"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/S7VariablesDialog.qml" line="289"/>
         <source>Remove</source>
         <translation>Eliminar</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/S7VariablesDialog.qml" line="295"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/S7VariablesDialog.qml" line="303"/>
         <source>No variables configured.
 Add absolute addresses above to poll the controller.</source>
         <translation>No hay variables configuradas.
 Agrega direcciones absolutas arriba para consultar el controlador.</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/S7VariablesDialog.qml" line="313"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/S7VariablesDialog.qml" line="321"/>
         <source>Total variables: %1</source>
         <translation>Total de variables: %1</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/S7VariablesDialog.qml" line="317"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/S7VariablesDialog.qml" line="327"/>
         <source>Generate Project</source>
         <translation>Generar Proyecto</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/S7VariablesDialog.qml" line="323"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/S7VariablesDialog.qml" line="335"/>
         <source>Clear All</source>
         <translation>Limpiar Todo</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/S7VariablesDialog.qml" line="330"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/S7VariablesDialog.qml" line="344"/>
         <source>Close</source>
         <translation>Cerrar</translation>
     </message>
@@ -30087,22 +30097,22 @@ Agrega direcciones absolutas arriba para consultar el controlador.</translation>
 <context>
     <name>Settings</name>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="35"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="37"/>
         <source>Preferences</source>
         <translation>Preferencias</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="63"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="67"/>
         <source>General</source>
         <translation>General</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="99"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="115"/>
         <source>Export</source>
         <translation>Exportar</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="105"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="123"/>
         <source>Sounds</source>
         <translation>Sonidos</translation>
     </message>
@@ -30163,7 +30173,7 @@ Agrega direcciones absolutas arriba para consultar el controlador.</translation>
         <translation type="vanished">Habilitar Servidor API (Puerto 7777)</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="93"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="107"/>
         <source>Console</source>
         <translation>Consola</translation>
     </message>
@@ -30188,7 +30198,7 @@ Agrega direcciones absolutas arriba para consultar el controlador.</translation>
         <translation type="vanished">Ocultar Automáticamente la Barra de Herramientas</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="87"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="99"/>
         <source>Taskbar</source>
         <translation>Barra de Tareas</translation>
     </message>
@@ -30201,7 +30211,7 @@ Agrega direcciones absolutas arriba para consultar el controlador.</translation>
         <translation type="vanished">Token de Acceso de la API</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="69"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="75"/>
         <source>Startup</source>
         <translation>Inicio</translation>
     </message>
@@ -30290,7 +30300,7 @@ Agrega direcciones absolutas arriba para consultar el controlador.</translation>
         <translation type="vanished">Personalizado</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="81"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="91"/>
         <source>Layout</source>
         <translation>Diseño</translation>
     </message>
@@ -30323,7 +30333,7 @@ Agrega direcciones absolutas arriba para consultar el controlador.</translation>
         <translation type="vanished">Comportamiento</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="75"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="83"/>
         <source>Plotting</source>
         <translation>Graficación</translation>
     </message>
@@ -30400,7 +30410,7 @@ Agrega direcciones absolutas arriba para consultar el controlador.</translation>
         <translation type="vanished">Familia de Fuente</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="112"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="132"/>
         <source>Notifications</source>
         <translation>Notificaciones</translation>
     </message>
@@ -30501,17 +30511,17 @@ Agrega direcciones absolutas arriba para consultar el controlador.</translation>
         <translation type="vanished">Desactivado por defecto — QT y QML emiten advertencias frecuentemente y habilitar esto puede ocultar alarmas reales. Los mensajes críticos siempre se enrutan independientemente de esta configuración.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="186"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="208"/>
         <source>Reset</source>
         <translation>Restablecer</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="246"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="270"/>
         <source>Close</source>
         <translation>Cerrar</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="254"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="280"/>
         <source>Apply</source>
         <translation>Aplicar</translation>
     </message>
@@ -30529,67 +30539,67 @@ Agrega direcciones absolutas arriba para consultar el controlador.</translation>
         <translation>Modo de Visualización</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsConsolePage.qml" line="95"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsConsolePage.qml" line="97"/>
         <source>Font Family</source>
         <translation>Familia de Fuente</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsConsolePage.qml" line="117"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsConsolePage.qml" line="121"/>
         <source>Font Size</source>
         <translation>Tamaño de Fuente</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsConsolePage.qml" line="141"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsConsolePage.qml" line="147"/>
         <source>Scrollback Lines</source>
         <translation>Líneas de Desplazamiento</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsConsolePage.qml" line="166"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsConsolePage.qml" line="174"/>
         <source>Show Timestamps</source>
         <translation>Mostrar Marcas de Tiempo</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsConsolePage.qml" line="194"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsConsolePage.qml" line="204"/>
         <source>Data Transmission</source>
         <translation>Transmisión de Datos</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsConsolePage.qml" line="209"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsConsolePage.qml" line="219"/>
         <source>Line Ending</source>
         <translation>Final de Línea</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsConsolePage.qml" line="231"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsConsolePage.qml" line="243"/>
         <source>Input Mode</source>
         <translation>Modo de Entrada</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsConsolePage.qml" line="253"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsConsolePage.qml" line="267"/>
         <source>Text Encoding</source>
         <translation>Codificación de Texto</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsConsolePage.qml" line="275"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsConsolePage.qml" line="291"/>
         <source>Checksum</source>
         <translation>Suma de Verificación</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsConsolePage.qml" line="297"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsConsolePage.qml" line="315"/>
         <source>Echo Sent Data</source>
         <translation>Repetir Datos Enviados</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsConsolePage.qml" line="325"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsConsolePage.qml" line="345"/>
         <source>Escape Codes</source>
         <translation>Códigos de Escape</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsConsolePage.qml" line="340"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsConsolePage.qml" line="360"/>
         <source>VT100 Emulation</source>
         <translation>Emulación VT100</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsConsolePage.qml" line="366"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsConsolePage.qml" line="388"/>
         <source>ANSI Colors</source>
         <translation>Colores ANSI</translation>
     </message>
@@ -30607,17 +30617,17 @@ Agrega direcciones absolutas arriba para consultar el controlador.</translation>
         <translation>Intervalo de Filas (ms)</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsExportPage.qml" line="134"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsExportPage.qml" line="136"/>
         <source>0 writes one row per received frame. A positive value logs one snapshot row of every channel at that interval, which keeps file size bounded for multi-source or high-rate projects.</source>
         <translation>0 escribe una fila por trama recibida. Un valor positivo registra una fila de instantánea de cada canal en ese intervalo, lo que mantiene el tamaño del archivo limitado para proyectos de múltiples fuentes o alta velocidad.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsExportPage.qml" line="147"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsExportPage.qml" line="149"/>
         <source>Video Export</source>
         <translation>Exportación de Video</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsExportPage.qml" line="165"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsExportPage.qml" line="167"/>
         <source>Save Videos by Default</source>
         <translation>Guardar Videos de Forma Predeterminada</translation>
     </message>
@@ -30635,47 +30645,47 @@ Agrega direcciones absolutas arriba para consultar el controlador.</translation>
         <translation>Lenguaje</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsGeneralPage.qml" line="89"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsGeneralPage.qml" line="91"/>
         <source>Theme</source>
         <translation>Tema</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsGeneralPage.qml" line="116"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsGeneralPage.qml" line="120"/>
         <source>Window</source>
         <translation>Ventana</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsGeneralPage.qml" line="135"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsGeneralPage.qml" line="139"/>
         <source>Custom Window Decorations</source>
         <translation>Decoraciones de Ventana Personalizadas</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsGeneralPage.qml" line="158"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsGeneralPage.qml" line="164"/>
         <source>Window decoration changes apply after restarting %1.</source>
         <translation>Los cambios en la decoración de ventana se aplican después de reiniciar %1.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsGeneralPage.qml" line="167"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsGeneralPage.qml" line="173"/>
         <source>Files</source>
         <translation>Archivos</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsGeneralPage.qml" line="183"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsGeneralPage.qml" line="189"/>
         <source>Workspace Folder</source>
         <translation>Carpeta del Espacio de Trabajo</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsGeneralPage.qml" line="214"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsGeneralPage.qml" line="224"/>
         <source>API &amp; Plugins</source>
         <translation>API y Plugins</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsGeneralPage.qml" line="230"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsGeneralPage.qml" line="240"/>
         <source>Enable API Server</source>
         <translation>Habilitar Servidor de la API</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsGeneralPage.qml" line="255"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsGeneralPage.qml" line="267"/>
         <source>API Server Port</source>
         <translation>Puerto del Servidor API</translation>
     </message>
@@ -30684,22 +30694,22 @@ Agrega direcciones absolutas arriba para consultar el controlador.</translation>
         <translation type="vanished">Habilitar Servidor API (Puerto 7777)</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsGeneralPage.qml" line="280"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsGeneralPage.qml" line="294"/>
         <source>Allow External API Connections</source>
         <translation>Permitir Conexiones Externas a la API</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsGeneralPage.qml" line="305"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsGeneralPage.qml" line="321"/>
         <source>API Access Token</source>
         <translation>Token de Acceso de la API</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsGeneralPage.qml" line="335"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsGeneralPage.qml" line="355"/>
         <source>Export Protobuf File</source>
         <translation>Exportar Archivo Protobuf</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsGeneralPage.qml" line="337"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsGeneralPage.qml" line="359"/>
         <source>Export…</source>
         <translation>Exportar…</translation>
     </message>
@@ -30717,62 +30727,62 @@ Agrega direcciones absolutas arriba para consultar el controlador.</translation>
         <translation>Familia de Fuente</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsLayoutPage.qml" line="95"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsLayoutPage.qml" line="97"/>
         <source>Font Size</source>
         <translation>Tamaño de Fuente</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsLayoutPage.qml" line="105"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsLayoutPage.qml" line="109"/>
         <source>Small</source>
         <translation>Pequeño</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsLayoutPage.qml" line="105"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsLayoutPage.qml" line="109"/>
         <source>Normal</source>
         <translation>Normal</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsLayoutPage.qml" line="105"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsLayoutPage.qml" line="109"/>
         <source>Large</source>
         <translation>Grande</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsLayoutPage.qml" line="105"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsLayoutPage.qml" line="109"/>
         <source>Extra Large</source>
         <translation>Extra Grande</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsLayoutPage.qml" line="105"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsLayoutPage.qml" line="109"/>
         <source>Custom</source>
         <translation>Personalizado</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsLayoutPage.qml" line="166"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsLayoutPage.qml" line="172"/>
         <source>Layout</source>
         <translation>Diseño</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsLayoutPage.qml" line="181"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsLayoutPage.qml" line="187"/>
         <source>Layout Margin</source>
         <translation>Margen de Diseño</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsLayoutPage.qml" line="206"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsLayoutPage.qml" line="214"/>
         <source>Layout Spacing</source>
         <translation>Espaciado de Diseño</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsLayoutPage.qml" line="231"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsLayoutPage.qml" line="241"/>
         <source>Show Actions Panel</source>
         <translation>Mostrar Panel de Acciones</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsLayoutPage.qml" line="247"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsLayoutPage.qml" line="259"/>
         <source>Auto-Hide Toolbar</source>
         <translation>Ocultar Automáticamente la Barra de Herramientas</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsLayoutPage.qml" line="270"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsLayoutPage.qml" line="284"/>
         <source>Show Alignment Guides</source>
         <translation>Mostrar Guías de Alineación</translation>
     </message>
@@ -30790,22 +30800,22 @@ Agrega direcciones absolutas arriba para consultar el controlador.</translation>
         <translation>Notificaciones del Sistema</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsNotificationsPage.qml" line="96"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsNotificationsPage.qml" line="98"/>
         <source>Show Warning/Critical events as OS desktop notifications when Serial Studio is not the foreground window.</source>
         <translation>Mostrar eventos de Advertencia/Críticos como notificaciones de escritorio del SO cuando Serial Studio no sea la ventana en primer plano.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsNotificationsPage.qml" line="106"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsNotificationsPage.qml" line="108"/>
         <source>Application Logs</source>
         <translation>Registros de la Aplicación</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsNotificationsPage.qml" line="121"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsNotificationsPage.qml" line="123"/>
         <source>Route Warnings to Notifications</source>
         <translation>Redirigir Advertencias a Notificaciones</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsNotificationsPage.qml" line="142"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsNotificationsPage.qml" line="146"/>
         <source>Off by default — Qt and QML emit warnings frequently and enabling this can drown out real alarms. Critical messages are always routed regardless of this setting.</source>
         <translation>Desactivado por defecto — QT y QML emiten advertencias frecuentemente y habilitar esto puede ocultar alarmas reales. Los mensajes críticos siempre se enrutan independientemente de esta configuración.</translation>
     </message>
@@ -30823,12 +30833,12 @@ Agrega direcciones absolutas arriba para consultar el controlador.</translation>
         <translation>Rango de Tiempo</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsPlottingPage.qml" line="125"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsPlottingPage.qml" line="127"/>
         <source>Point Count</source>
         <translation>Cantidad de Puntos</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsPlottingPage.qml" line="150"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsPlottingPage.qml" line="154"/>
         <source>UI Refresh Rate (Hz)</source>
         <translation>Frecuencia de Actualización de la Interfaz (Hz)</translation>
     </message>
@@ -30921,87 +30931,87 @@ Agrega direcciones absolutas arriba para consultar el controlador.</translation>
         <translation>Todos los Archivos (*)</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsSoundsPage.qml" line="124"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsSoundsPage.qml" line="128"/>
         <source>Bundled sound</source>
         <translation>Sonido incluido</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsSoundsPage.qml" line="145"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsSoundsPage.qml" line="151"/>
         <source>Browse for a WAV file</source>
         <translation>Buscar un archivo WAV</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsSoundsPage.qml" line="156"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsSoundsPage.qml" line="164"/>
         <source>Play this sound</source>
         <translation>Reproducir este sonido</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsSoundsPage.qml" line="165"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsSoundsPage.qml" line="175"/>
         <source>Use the bundled sound</source>
         <translation>Usar el sonido incluido</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsSoundsPage.qml" line="225"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsSoundsPage.qml" line="235"/>
         <source>Output</source>
         <translation>Salida</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsSoundsPage.qml" line="229"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsSoundsPage.qml" line="239"/>
         <source>Enable Sounds</source>
         <translation>Habilitar Sonidos</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsSoundsPage.qml" line="261"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsSoundsPage.qml" line="273"/>
         <source>Volume</source>
         <translation>Volumen</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsSoundsPage.qml" line="274"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsSoundsPage.qml" line="288"/>
         <source>Output Device</source>
         <translation>Dispositivo de Salida</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsSoundsPage.qml" line="290"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsSoundsPage.qml" line="306"/>
         <source>The selected device is not available; sounds play on the system default.</source>
         <translation>El dispositivo seleccionado no está disponible; los sonidos se reproducen en el dispositivo predeterminado del sistema.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsSoundsPage.qml" line="293"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsSoundsPage.qml" line="309"/>
         <source>Alarms</source>
         <translation>Alarmas</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsSoundsPage.qml" line="297"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsSoundsPage.qml" line="313"/>
         <source>Sequence (ISA-18.1)</source>
         <translation>Secuencia (ISA-18.1)</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsSoundsPage.qml" line="301"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsSoundsPage.qml" line="319"/>
         <source>A-4 - Automatic reset, no lock-in</source>
         <translation>A-4 - Restablecimiento automático, sin bloqueo</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsSoundsPage.qml" line="302"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsSoundsPage.qml" line="320"/>
         <source>A - Automatic reset, lock-in until acknowledged</source>
         <translation>A - Restablecimiento automático, bloqueado hasta reconocimiento</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsSoundsPage.qml" line="303"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsSoundsPage.qml" line="321"/>
         <source>M-4 - Manual reset, no lock-in</source>
         <translation>M-4 - Restablecimiento manual, sin bloqueo</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsSoundsPage.qml" line="304"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsSoundsPage.qml" line="322"/>
         <source>M - Manual reset, lock-in until acknowledged</source>
         <translation>M - Restablecimiento manual, bloqueo hasta confirmación</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsSoundsPage.qml" line="305"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsSoundsPage.qml" line="323"/>
         <source>R-4 - Ringback, no lock-in</source>
         <translation>R-4 - Tono de Retorno, sin bloqueo</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsSoundsPage.qml" line="306"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsSoundsPage.qml" line="324"/>
         <source>R - Ringback, lock-in until acknowledged</source>
         <translation>R - Tono de Retorno, bloqueo hasta confirmación</translation>
     </message>
@@ -31018,27 +31028,27 @@ Agrega direcciones absolutas arriba para consultar el controlador.</translation>
         <translation type="vanished">R - Tono de Retorno</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsSoundsPage.qml" line="320"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsSoundsPage.qml" line="338"/>
         <source>Warning Repeat (ms)</source>
         <translation>Repetición de Advertencia (ms)</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsSoundsPage.qml" line="333"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsSoundsPage.qml" line="353"/>
         <source>Caution Repeat (ms)</source>
         <translation>Repetición de Precaución (ms)</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsSoundsPage.qml" line="345"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsSoundsPage.qml" line="367"/>
         <source>Events</source>
         <translation>Eventos</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsSoundsPage.qml" line="375"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsSoundsPage.qml" line="399"/>
         <source>Test</source>
         <translation>Probar</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsSoundsPage.qml" line="383"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsSoundsPage.qml" line="409"/>
         <source>Reset to Bundled Sounds</source>
         <translation>Restablecer a Sonidos Incluidos</translation>
     </message>
@@ -31056,72 +31066,72 @@ Agrega direcciones absolutas arriba para consultar el controlador.</translation>
         <translation>Backend de Renderizado</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="113"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="115"/>
         <source>Display Scaling</source>
         <translation>Escalado de Visualización</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="146"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="150"/>
         <source>Custom Scale (%)</source>
         <translation>Escala Personalizada (%)</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="178"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="184"/>
         <source>HDR Output</source>
         <translation>Salida HDR</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="210"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="218"/>
         <source>System</source>
         <translation>Sistema</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="225"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="233"/>
         <source>SIMD Instruction Set</source>
         <translation>Conjunto de Instrucciones SIMD</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="255"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="265"/>
         <source>Reduce Motion</source>
         <translation>Reducir Movimiento</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="279"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="291"/>
         <source>Apply Performance Hints</source>
         <translation>Aplicar Sugerencias de Rendimiento</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="302"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="316"/>
         <source>Keep Display Awake</source>
         <translation>Mantener Pantalla Activa</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="331"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="347"/>
         <source>Performance hints raise process priority and opt out of OS power throttling. Changes take effect the next time Serial Studio starts.</source>
         <translation>Las sugerencias de rendimiento elevan la prioridad del proceso y excluyen la limitación de energía del sistema operativo. Los cambios surten efecto la próxima vez que Serial Studio inicie.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="342"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="358"/>
         <source>Updates &amp; News</source>
         <translation>Actualizaciones y Noticias</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="358"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="374"/>
         <source>Automatically Check for Updates</source>
         <translation>Buscar Actualizaciones Automáticamente</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="381"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="399"/>
         <source>Check for Extension Updates</source>
         <translation>Buscar Actualizaciones de Extensiones</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="405"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="425"/>
         <source>Install Extension Updates Automatically</source>
         <translation>Instalar Actualizaciones de Extensiones Automáticamente</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="435"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="457"/>
         <source>Installed extensions and themes are checked when Serial Studio starts, together with application updates. Serial Studio asks before installing them unless automatic installation is enabled.</source>
         <translation>Las extensiones y temas instalados se verifican cuando Serial Studio inicia, junto con las actualizaciones de la aplicación. Serial Studio pregunta antes de instalarlos a menos que la instalación automática esté habilitada.</translation>
     </message>
@@ -31139,67 +31149,67 @@ Agrega direcciones absolutas arriba para consultar el controlador.</translation>
         <translation>Mostrar Siempre los Botones de la Barra de Tareas</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsTaskbarPage.qml" line="99"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsTaskbarPage.qml" line="101"/>
         <source>Show Search Field</source>
         <translation>Mostrar Campo de Búsqueda</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsTaskbarPage.qml" line="123"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsTaskbarPage.qml" line="127"/>
         <source>Auto-hide Taskbar</source>
         <translation>Ocultar Automáticamente la Barra de Tareas</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsTaskbarPage.qml" line="150"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsTaskbarPage.qml" line="156"/>
         <source>Hide Delay (ms)</source>
         <translation>Retraso de Ocultación (ms)</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsTaskbarPage.qml" line="183"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsTaskbarPage.qml" line="191"/>
         <source>Pinned Buttons</source>
         <translation>Botones Anclados</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsTaskbarPage.qml" line="201"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsTaskbarPage.qml" line="209"/>
         <source>Drag a pinned button on the taskbar to reorder it.</source>
         <translation>Arrastra un botón anclado en la barra de tareas para reordenarlo.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsTaskbarPage.qml" line="222"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsTaskbarPage.qml" line="230"/>
         <source>Settings</source>
         <translation>Configuración</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsTaskbarPage.qml" line="223"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsTaskbarPage.qml" line="231"/>
         <source>Console</source>
         <translation>Consola</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsTaskbarPage.qml" line="224"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsTaskbarPage.qml" line="232"/>
         <source>Notifications</source>
         <translation>Notificaciones</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsTaskbarPage.qml" line="225"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsTaskbarPage.qml" line="233"/>
         <source>Clock</source>
         <translation>Reloj</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsTaskbarPage.qml" line="226"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsTaskbarPage.qml" line="234"/>
         <source>Stopwatch</source>
         <translation>Cronómetro</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsTaskbarPage.qml" line="227"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsTaskbarPage.qml" line="235"/>
         <source>Pause / Resume</source>
         <translation>Pausar / Reanudar</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsTaskbarPage.qml" line="228"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsTaskbarPage.qml" line="236"/>
         <source>File Transmission</source>
         <translation>Transmisión de Archivos</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsTaskbarPage.qml" line="229"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsTaskbarPage.qml" line="237"/>
         <source>AI Assistant</source>
         <translation>Asistente de IA</translation>
     </message>
@@ -31251,67 +31261,67 @@ Agrega direcciones absolutas arriba para consultar el controlador.</translation>
         <translation>Modo de Operación</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="220"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="222"/>
         <source>Console Only (No Parsing)</source>
         <translation>Solo Consola (Sin Análisis)</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="222"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="224"/>
         <source>Shows incoming data as text or hex. Nothing is parsed or plotted.</source>
         <translation>Muestra datos entrantes como texto o hex. Nada se analiza ni se grafica.</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="232"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="236"/>
         <source>Quick Plot (Comma Separated Values)</source>
         <translation>Gráfica Rápida (Valores Separados por Comas)</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="235"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="239"/>
         <source>Plots one line per sample with values separated by commas, for example 12.5,30.1,0.98 followed by a newline.</source>
         <translation>Traza una línea por muestra con valores separados por comas, por ejemplo 12.5,30.1,0.98 seguida de una nueva línea.</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="252"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="258"/>
         <source>Parse via Project File</source>
         <translation>Analizar mediante Archivo de Proyecto</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="255"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="261"/>
         <source>Builds the dashboard from a project made in the Project Editor.</source>
         <translation>Construye el tablero a partir de un proyecto creado en el Editor de Proyectos.</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="272"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="280"/>
         <source>Change Project File (%1)</source>
         <translation>Cambiar Archivo de Proyecto (%1)</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="273"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="281"/>
         <source>Select Project File</source>
         <translation>Seleccionar Archivo de Proyecto</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="288"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="296"/>
         <source>Data Export</source>
         <translation>Exportación de Datos</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="312"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="322"/>
         <source>CSV Spreadsheet</source>
         <translation>Hoja de Cálculo CSV</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="332"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="344"/>
         <source>Historian Database</source>
         <translation>Base de Datos del Historiador</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="412"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="430"/>
         <source>Connection: %1</source>
         <translation>Conexión: %1</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="507"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="525"/>
         <source>Each device has its own connection settings. Configure them in the Project Editor under Devices.</source>
         <translation>Cada dispositivo tiene su propia configuración de conexión. Configúrelos en el Editor de Proyectos bajo Dispositivos.</translation>
     </message>
@@ -31324,12 +31334,12 @@ Agrega direcciones absolutas arriba para consultar el controlador.</translation>
         <translation type="vanished">Grabación de Sesión</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="351"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="365"/>
         <source>MDF4 Recording</source>
         <translation>Grabación MDF4</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="367"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="383"/>
         <source>Console Log</source>
         <translation>Registro de Consola</translation>
     </message>
@@ -31370,12 +31380,12 @@ Agrega direcciones absolutas arriba para consultar el controlador.</translation>
         <translation type="vanished">Interfaz de E/S: %1</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="481"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="499"/>
         <source>Multi-Device Project</source>
         <translation>Proyecto Multi-dispositivo</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="494"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="512"/>
         <source>This project streams data from %1 independent devices.</source>
         <translation>Este proyecto transmite datos de %1 dispositivos independientes.</translation>
     </message>
@@ -31384,7 +31394,7 @@ Agrega direcciones absolutas arriba para consultar el controlador.</translation>
         <translation type="vanished">Cada dispositivo tiene su propia configuración de conexión. Configúrelos en el Editor de Proyectos bajo la pestaña Fuentes.</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="526"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="546"/>
         <source>Open Project Editor</source>
         <translation>Abrir Editor de Proyectos</translation>
     </message>
@@ -31396,7 +31406,7 @@ Agrega direcciones absolutas arriba para consultar el controlador.</translation>
         <translation type="vanished">Nuevo Acceso Directo</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="224"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="227"/>
         <source>Choose an Icon</source>
         <translation>Elegir un Ícono</translation>
     </message>
@@ -31405,193 +31415,193 @@ Agrega direcciones absolutas arriba para consultar el controlador.</translation>
         <translation type="vanished">Guardar Acceso Directo</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="22"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="25"/>
         <source>New Deployment</source>
         <translation>Nuevo Despliegue</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="58"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="61"/>
         <source>%1 B</source>
         <translation>%1 B</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="61"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="64"/>
         <source>%1 KB</source>
         <translation>%1 KB</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="63"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="66"/>
         <source>%1 MB</source>
         <translation>%1 MB</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="175"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="178"/>
         <source>Save Deployment Package</source>
         <translation>Guardar Paquete de Despliegue</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="179"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="182"/>
         <source>Serial Studio Deployment Package (*.ssdeploy)</source>
         <translation>Paquete de Despliegue de Serial Studio (*.ssdeploy)</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="192"/>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="240"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="195"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="243"/>
         <source>Save Deployment</source>
         <translation>Guardar Despliegue</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="210"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="213"/>
         <source>Add Files</source>
         <translation>Agregar Archivos</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="213"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="216"/>
         <source>Images (*.png *.jpg *.jpeg *.bmp *.gif *.svg *.webp)</source>
         <translation>Imágenes (*.png *.jpg *.jpeg *.bmp *.gif *.svg *.webp)</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="214"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="217"/>
         <source>All files (*)</source>
         <translation>Todos los Archivos (*)</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="327"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="330"/>
         <source>General</source>
         <translation>General</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="333"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="336"/>
         <source>Taskbar</source>
         <translation>Barra de Tareas</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="339"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="342"/>
         <source>Logging</source>
         <translation>Registro</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="345"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="348"/>
         <source>Contents</source>
         <translation>Contenidos</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="404"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="407"/>
         <source>Output</source>
         <translation>Salida</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="419"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="422"/>
         <source>Format</source>
         <translation>Formatear</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="428"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="431"/>
         <source>Deployment package (.ssdeploy)</source>
         <translation>Paquete de despliegue (.ssdeploy)</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="429"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="432"/>
         <source>Shortcut to the project file</source>
         <translation>Acceso directo al archivo del proyecto</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="466"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="469"/>
         <source>Desktop Shortcut</source>
         <translation>Acceso Directo del Escritorio</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="486"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="489"/>
         <source>Identity</source>
         <translation>Identidad</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="501"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="504"/>
         <source>Name</source>
         <translation>Nombre</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="513"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="516"/>
         <source>Icon</source>
         <translation>Ícono</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="549"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="552"/>
         <source>Click to choose an icon</source>
         <translation>Haz clic para elegir un ícono</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="651"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="654"/>
         <source>Opens straight to the live dashboard, with no toolbar, no setup pane, and no way to view or export the project. Serial Studio quits when the device disconnects.</source>
         <translation>Abre directamente al tablero en vivo, sin barra de herramientas, sin panel de configuración, y sin forma de ver o exportar el proyecto. Serial Studio se cierra cuando el dispositivo se desconecta.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="654"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="657"/>
         <source>Opens the project straight to the live dashboard, with no toolbar or setup pane. Serial Studio quits when the device disconnects.</source>
         <translation>Abre el proyecto directamente al tablero en vivo, sin barra de herramientas ni panel de configuración. Serial Studio se cierra cuando el dispositivo se desconecta.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1024"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1027"/>
         <source>Carried Files</source>
         <translation>Archivos Incluidos</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1033"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1036"/>
         <source>%1 in total</source>
         <translation>%1 en total</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1067"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1070"/>
         <source>Remove</source>
         <translation>Eliminar</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1088"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1091"/>
         <source>Add images a Canvas script loads at run time.</source>
         <translation>Agregar imágenes que un script de Canvas carga en tiempo de ejecución.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1092"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1095"/>
         <source>Add Files…</source>
         <translation>Agregar Archivos…</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1104"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1107"/>
         <source>Missing Files</source>
         <translation>Archivos Faltantes</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1141"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1144"/>
         <source>Export is blocked until these files exist.</source>
         <translation>La exportación está bloqueada hasta que estos archivos existan.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1149"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1152"/>
         <source>External Dependencies</source>
         <translation>Dependencias Externas</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1186"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1189"/>
         <source>The target machine must provide these.</source>
         <translation>La máquina de destino debe proporcionar estos.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1195"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1198"/>
         <source>Credentials and Private Keys</source>
         <translation>Credenciales y Claves Privadas</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1226"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1229"/>
         <source>Packages are encoded, not encrypted. Anyone with the file can recover the items you include.</source>
         <translation>Los paquetes están codificados, no cifrados. Cualquiera con el archivo puede recuperar los elementos que incluya.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1260"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1263"/>
         <source>Saved %1</source>
         <translation>Guardado %1</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1270"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1273"/>
         <source>Open Package</source>
         <translation>Abrir Paquete</translation>
     </message>
@@ -31600,28 +31610,28 @@ Agrega direcciones absolutas arriba para consultar el controlador.</translation>
         <translation type="vanished">Nombre:</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="508"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="511"/>
         <source>Deployment Name</source>
         <translation>Nombre del Despliegue</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="590"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="593"/>
         <source>Theme</source>
         <translation>Tema</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="598"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="601"/>
         <source>Same as Serial Studio</source>
         <translation>Igual que Serial Studio</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="621"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="624"/>
         <source>Actions Panel</source>
         <translation>Panel de Acciones</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="633"/>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="863"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="636"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="866"/>
         <source>File Transmission</source>
         <translation>Transmisión de Archivos</translation>
     </message>
@@ -31630,87 +31640,87 @@ Agrega direcciones absolutas arriba para consultar el controlador.</translation>
         <translation type="vanished">Al hacer doble clic en este despliegue se accede directamente al tablero en vivo de este proyecto. No hay barra de herramientas ni panel de configuración, solo los datos, y Serial Studio se cierra en cuanto el dispositivo se desconecta.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="698"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="701"/>
         <source>Visibility</source>
         <translation>Visibilidad</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="713"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="716"/>
         <source>Mode</source>
         <translation>Modo</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="720"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="723"/>
         <source>Always shown</source>
         <translation>Siempre Visible</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="721"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="724"/>
         <source>Auto-hide</source>
         <translation>Ocultar Automáticamente</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="722"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="725"/>
         <source>Hidden</source>
         <translation>Oculto</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="730"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="733"/>
         <source>Search Bar</source>
         <translation>Barra de Búsqueda</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="752"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="755"/>
         <source>Hiding the taskbar removes window minimize/maximize/close buttons and forces auto-layout, so the dashboard always fills the available area.</source>
         <translation>Ocultar la barra de tareas elimina los botones de minimizar/maximizar/cerrar de la ventana y fuerza el diseño automático, por lo que el tablero siempre llena el área disponible.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="756"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="759"/>
         <source>The taskbar slides in when the user moves the cursor near the bottom edge.</source>
         <translation>La barra de tareas se desliza cuando el usuario mueve el cursor cerca del borde inferior.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="758"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="761"/>
         <source>The taskbar is permanently visible at the bottom of the dashboard.</source>
         <translation>La barra de tareas es permanentemente visible en la parte inferior del tablero.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="771"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="774"/>
         <source>Pinned Buttons</source>
         <translation>Botones Anclados</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="788"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="791"/>
         <source>Console</source>
         <translation>Consola</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="803"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="806"/>
         <source>Notifications</source>
         <translation>Notificaciones</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="818"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="821"/>
         <source>Clock</source>
         <translation>Reloj</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="833"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="836"/>
         <source>Stopwatch</source>
         <translation>Cronómetro</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="848"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="851"/>
         <source>Pause</source>
         <translation>Pausar</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="951"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="954"/>
         <source>Historian</source>
         <translation>Historiador</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="979"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="982"/>
         <source>Recordings are saved in the Serial Studio workspace folder</source>
         <translation>Las grabaciones se guardan en la carpeta del espacio de trabajo de Serial Studio</translation>
     </message>
@@ -31719,27 +31729,27 @@ Agrega direcciones absolutas arriba para consultar el controlador.</translation>
         <translation type="vanished">Nombre del Acceso Directo</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="555"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="558"/>
         <source>Change Icon…</source>
         <translation>Cambiar Ícono…</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="436"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="439"/>
         <source>Project</source>
         <translation>Proyecto</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="446"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="449"/>
         <source>Choose a project file to begin</source>
         <translation>Elige un archivo de proyecto para comenzar</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="575"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="578"/>
         <source>Behavior</source>
         <translation>Comportamiento</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="610"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="613"/>
         <source>Fullscreen</source>
         <translation>Pantalla Completa</translation>
     </message>
@@ -31760,17 +31770,17 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
 Activa Incrustar Proyecto para integrar el proyecto en el acceso directo, de modo que siga funcionando incluso si el archivo original se mueve o elimina.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="914"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="917"/>
         <source>Recorders</source>
         <translation>Grabadoras</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="929"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="932"/>
         <source>CSV File</source>
         <translation>Archivo CSV</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="940"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="943"/>
         <source>MDF4 File</source>
         <translation>Archivo MDF4</translation>
     </message>
@@ -31779,7 +31789,7 @@ Activa Incrustar Proyecto para integrar el proyecto en el acceso directo, de mod
         <translation type="vanished">Base de Datos de Sesión</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="962"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="965"/>
         <source>Console Log</source>
         <translation>Registro de Consola</translation>
     </message>
@@ -31788,17 +31798,17 @@ Activa Incrustar Proyecto para integrar el proyecto en el acceso directo, de mod
         <translation type="vanished">Las grabaciones se guardan en la ubicación predeterminada de cada módulo.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1282"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1285"/>
         <source>Cancel</source>
         <translation>Cancelar</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1282"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1285"/>
         <source>Close</source>
         <translation>Cerrar</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1287"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1290"/>
         <source>Save</source>
         <translation>Guardar</translation>
     </message>
@@ -32003,27 +32013,27 @@ Activa Incrustar Proyecto para integrar el proyecto en el acceso directo, de mod
 <context>
     <name>StartMenu</name>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="338"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="344"/>
         <source>Workspaces</source>
         <translation>Espacios de Trabajo</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="476"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="484"/>
         <source>Actions</source>
         <translation>Acciones</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="500"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="508"/>
         <source>No Actions Available</source>
         <translation>No Hay Acciones Disponibles</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="530"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="540"/>
         <source>Plugins</source>
         <translation>Plugins</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="579"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="589"/>
         <source>No Plugins Installed</source>
         <translation>No Hay Plugins Instalados</translation>
     </message>
@@ -32048,7 +32058,7 @@ Activa Incrustar Proyecto para integrar el proyecto en el acceso directo, de mod
         <translation type="vanished">Herramientas</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="773"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="787"/>
         <source>No Tools Available</source>
         <translation>No Hay Herramientas Disponibles</translation>
     </message>
@@ -32061,17 +32071,17 @@ Activa Incrustar Proyecto para integrar el proyecto en el acceso directo, de mod
         <translation type="vanished">Salir</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="874"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="888"/>
         <source>Delete</source>
         <translation>Eliminar</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="875"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="889"/>
         <source>Hide</source>
         <translation>Ocultar</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="427"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="433"/>
         <source>New Workspace…</source>
         <translation>Nuevo Espacio de Trabajo…</translation>
     </message>
@@ -32096,22 +32106,22 @@ Activa Incrustar Proyecto para integrar el proyecto en el acceso directo, de mod
         <translation type="vanished">Asistente de IA</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="413"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="419"/>
         <source>Show "%1"</source>
         <translation>Mostrar "%1"</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="418"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="424"/>
         <source>Show All Hidden Workspaces</source>
         <translation>Mostrar Todos los Espacios de Trabajo Ocultos</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="441"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="447"/>
         <source>No Workspaces Available</source>
         <translation>No Hay Espacios de Trabajo Disponibles</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="569"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="579"/>
         <source>Manage Plugins…</source>
         <translation>Administrar Plugins…</translation>
     </message>
@@ -32140,7 +32150,7 @@ Activa Incrustar Proyecto para integrar el proyecto en el acceso directo, de mod
         <translation type="vanished">Base de Datos de Sesión</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="697"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="709"/>
         <source>No Export Formats Available</source>
         <translation>No Hay Formatos de Exportación Disponibles</translation>
     </message>
@@ -32157,7 +32167,7 @@ Activa Incrustar Proyecto para integrar el proyecto en el acceso directo, de mod
         <translation type="vanished">Preferencias</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="863"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="877"/>
         <source>Edit…</source>
         <translation>Editar…</translation>
     </message>
@@ -32436,7 +32446,7 @@ Activa Incrustar Proyecto para integrar el proyecto en el acceso directo, de mod
         <translation type="vanished">Menú de Inicio</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="222"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="224"/>
         <source>Menu</source>
         <translation>Menú</translation>
     </message>
@@ -32445,42 +32455,42 @@ Activa Incrustar Proyecto para integrar el proyecto en el acceso directo, de mod
         <translation type="vanished">Buscar…</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="585"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="593"/>
         <source>Settings</source>
         <translation>Configuración</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="586"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="594"/>
         <source>Console</source>
         <translation>Consola</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="587"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="595"/>
         <source>Notifications</source>
         <translation>Notificaciones</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="588"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="596"/>
         <source>Clock</source>
         <translation>Reloj</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="589"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="597"/>
         <source>Stopwatch</source>
         <translation>Cronómetro</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="591"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="599"/>
         <source>AI Assistant</source>
         <translation>Asistente de IA</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="592"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="600"/>
         <source>Resume</source>
         <translation>Reanudar</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="592"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="600"/>
         <source>Pause</source>
         <translation>Pausar</translation>
     </message>
@@ -32493,72 +32503,72 @@ Activa Incrustar Proyecto para integrar el proyecto en el acceso directo, de mod
         <translation type="vanished">No Hay Espacios de Trabajo Disponibles</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="260"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="264"/>
         <source>Search… (%1)</source>
         <translation>Buscar… (%1)</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="943"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="952"/>
         <source>Data is arriving faster than scripts can process it; some frames are being thinned. See the problem center for details.</source>
         <translation>Los datos llegan más rápido de lo que los scripts pueden procesarlos; algunas tramas se están reduciendo. Consulte el centro de problemas para más detalles.</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="967"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="976"/>
         <source>Unfreeze Dashboard</source>
         <translation>Descongelar Tablero</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="968"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="977"/>
         <source>Freeze Dashboard</source>
         <translation>Congelar Tablero</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1012"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1021"/>
         <source>MQTT: Connected to %1</source>
         <translation>MQTT: Conectado a %1</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1013"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1022"/>
         <source>MQTT: Not connected</source>
         <translation>MQTT: No conectado</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1041"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1050"/>
         <source>MQTT Publisher</source>
         <translation>Publicador MQTT</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1051"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1060"/>
         <source>Status:</source>
         <translation>Estado:</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1059"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1068"/>
         <source>Connected</source>
         <translation>Conectado</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1060"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1069"/>
         <source>Disconnected</source>
         <translation>Desconectado</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1067"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1076"/>
         <source>Broker:</source>
         <translation>Broker:</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1080"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1089"/>
         <source>Mode:</source>
         <translation>Modo:</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1093"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1102"/>
         <source>Messages sent:</source>
         <translation>Mensajes enviados:</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1107"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1118"/>
         <source>Open MQTT Settings</source>
         <translation>Abrir Configuración MQTT</translation>
     </message>
@@ -32591,7 +32601,7 @@ Activa Incrustar Proyecto para integrar el proyecto en el acceso directo, de mod
         <translation type="vanished">Abrir Centro de Problemas</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="590"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="598"/>
         <source>File Transmission</source>
         <translation>Transmisión de Archivos</translation>
     </message>
@@ -32600,7 +32610,7 @@ Activa Incrustar Proyecto para integrar el proyecto en el acceso directo, de mod
         <translation type="vanished">Buscar widgets…</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1171"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1182"/>
         <source>Remove from Workspace</source>
         <translation>Eliminar del Espacio de Trabajo</translation>
     </message>
@@ -32619,17 +32629,17 @@ Activa Incrustar Proyecto para integrar el proyecto en el acceso directo, de mod
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="192"/>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="254"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="256"/>
         <source>Clear</source>
         <translation>Limpiar</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="269"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="273"/>
         <source>Find</source>
         <translation>Buscar</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="297"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="301"/>
         <source>Collapse</source>
         <translation>Contraer</translation>
     </message>
@@ -32642,57 +32652,57 @@ Activa Incrustar Proyecto para integrar el proyecto en el acceso directo, de mod
         <translation type="vanished">Registrar salida de consola a un archivo</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="417"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="431"/>
         <source>Settings</source>
         <translation>Configuración</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="420"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="434"/>
         <source>Console settings</source>
         <translation>Configuración de consola</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="625"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="653"/>
         <source>Find in console</source>
         <translation>Buscar en consola</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="662"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="690"/>
         <source>%1 of %2</source>
         <translation>%1 de %2</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="663"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="691"/>
         <source>No results</source>
         <translation>Sin resultados</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="675"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="705"/>
         <source>Match case</source>
         <translation>Coincidir mayúsculas</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="690"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="722"/>
         <source>Previous match</source>
         <translation>Coincidencia anterior</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="701"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="735"/>
         <source>Next match</source>
         <translation>Coincidencia siguiente</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="711"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="747"/>
         <source>Close search</source>
         <translation>Cerrar búsqueda</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="758"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="796"/>
         <source>Send a file to the connected device</source>
         <translation>Enviar un archivo al dispositivo conectado</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="274"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="278"/>
         <source>Search console output</source>
         <translation>Buscar salida de consola</translation>
     </message>
@@ -32702,118 +32712,118 @@ Activa Incrustar Proyecto para integrar el proyecto en el acceso directo, de mod
         <translation>Utilidades</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="301"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="305"/>
         <source>Collapse repeated lines into a single entry</source>
         <translation>Contraer líneas repetidas en una sola entrada</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="314"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="320"/>
         <source>Annotations</source>
         <translation>Anotaciones</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="321"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="327"/>
         <source>Label the incoming bytes with a decoder and inspect them</source>
         <translation>Etiqueta los bytes entrantes con un decodificador e inspecciónalos</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="344"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="352"/>
         <source>Resume</source>
         <translation>Reanudar</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="344"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="352"/>
         <source>Pause</source>
         <translation>Pausar</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="349"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="357"/>
         <source>Resume console updates</source>
         <translation>Reanudar Actualizaciones de Consola</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="350"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="358"/>
         <source>Freeze the console display (data keeps logging)</source>
         <translation>Congelar la visualización de la consola (los datos siguen registrándose)</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="369"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="377"/>
         <source>Format</source>
         <translation>Formatear</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="377"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="387"/>
         <source>Text</source>
         <translation>Texto</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="381"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="391"/>
         <source>Plain text display mode</source>
         <translation>Modo de visualización de texto plano</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="392"/>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="930"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="404"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="976"/>
         <source>Hex</source>
         <translation>Hex</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="396"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="408"/>
         <source>Hex display mode</source>
         <translation>Modo de visualización Hex</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="500"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="522"/>
         <source>Scrollback Lines</source>
         <translation>Líneas de Desplazamiento</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="529"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="553"/>
         <source>Cyclic Send Interval (ms)</source>
         <translation>Intervalo de Envío Cíclico (ms)</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="799"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="841"/>
         <source>Command library (history, pins and actions)</source>
         <translation>Biblioteca de comandos (historial, pines y acciones)</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="823"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="867"/>
         <source>Send Data to Device</source>
         <translation>Enviar Datos al Dispositivo</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="991"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="1043"/>
         <source>Stop cyclic send</source>
         <translation>Detener envío cíclico</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="992"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="1044"/>
         <source>Repeat the current command every %1 ms</source>
         <translation>Repetir el comando actual cada %1 ms</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="1013"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="1067"/>
         <source>Send data to the device</source>
         <translation>Enviar datos al dispositivo</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="451"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="467"/>
         <source>Show Timestamp</source>
         <translation>Mostrar Marca de Tiempo</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="459"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="477"/>
         <source>Echo</source>
         <translation>Eco</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="476"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="496"/>
         <source>Emulate VT-100</source>
         <translation>Emular VT-100</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="489"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="511"/>
         <source>ANSI Colors</source>
         <translation>Colores ANSI</translation>
     </message>
@@ -32822,7 +32832,7 @@ Activa Incrustar Proyecto para integrar el proyecto en el acceso directo, de mod
         <translation type="vanished">Visualización: %1</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="258"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="260"/>
         <source>Clear console output</source>
         <translation>Limpiar salida de consola</translation>
     </message>
@@ -33317,23 +33327,23 @@ Activa Incrustar Proyecto para integrar el proyecto en el acceso directo, de mod
         <translation>Tablero Remoto</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="258"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="259"/>
         <source>Manage the remote dashboard connection</source>
         <translation>Administrar la Conexión del Tablero Remoto</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="301"/>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="311"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="303"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="313"/>
         <source>Disconnect</source>
         <translation>Desconectar</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="301"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="303"/>
         <source>Connect</source>
         <translation>Conectar</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="301"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="303"/>
         <source>Connecting…</source>
         <translation>Conectando…</translation>
     </message>
@@ -33443,72 +33453,72 @@ Activa Incrustar Proyecto para integrar el proyecto en el acceso directo, de mod
 <context>
     <name>TransmitCodeDialog</name>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/TransmitCodeDialog.qml" line="41"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/TransmitCodeDialog.qml" line="43"/>
         <source>Transmit Function Editor</source>
         <translation>Editor de Función de Transmisión</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/TransmitCodeDialog.qml" line="159"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/TransmitCodeDialog.qml" line="161"/>
         <source>Select Template</source>
         <translation>Seleccionar Plantilla</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/TransmitCodeDialog.qml" line="171"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/TransmitCodeDialog.qml" line="173"/>
         <source>Import</source>
         <translation>Importar</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/TransmitCodeDialog.qml" line="177"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/TransmitCodeDialog.qml" line="179"/>
         <source>Import a transmit function from a .js file</source>
         <translation>Importar una función de transmisión desde un archivo .js</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/TransmitCodeDialog.qml" line="183"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/TransmitCodeDialog.qml" line="185"/>
         <source>Validate</source>
         <translation>Validar</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/TransmitCodeDialog.qml" line="188"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/TransmitCodeDialog.qml" line="190"/>
         <source>Verify that the script compiles and defines transmit(value)</source>
         <translation>Verificar que el script compile y defina transmit(value)</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/TransmitCodeDialog.qml" line="226"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/TransmitCodeDialog.qml" line="228"/>
         <source>Produced Bytes</source>
         <translation>Bytes Producidos</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/TransmitCodeDialog.qml" line="248"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/TransmitCodeDialog.qml" line="250"/>
         <source>Interact with the control to see its output</source>
         <translation>Interactuar con el control para ver su salida</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/TransmitCodeDialog.qml" line="276"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/TransmitCodeDialog.qml" line="278"/>
         <source>%1 bytes, from the last version that compiled</source>
         <translation>%1 bytes, de la última versión que compiló</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/TransmitCodeDialog.qml" line="277"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/TransmitCodeDialog.qml" line="279"/>
         <source>%1 bytes</source>
         <translation>%1 bytes</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/TransmitCodeDialog.qml" line="299"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/TransmitCodeDialog.qml" line="301"/>
         <source>Save</source>
         <translation>Guardar</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/TransmitCodeDialog.qml" line="302"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/TransmitCodeDialog.qml" line="304"/>
         <source>Validate and store the transmit function</source>
         <translation>Validar y almacenar la función de transmisión</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/TransmitCodeDialog.qml" line="311"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/TransmitCodeDialog.qml" line="313"/>
         <source>Close</source>
         <translation>Cerrar</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/TransmitCodeDialog.qml" line="314"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/TransmitCodeDialog.qml" line="316"/>
         <source>Close without storing this edit</source>
         <translation>Cerrar sin almacenar esta edición</translation>
     </message>
@@ -33516,7 +33526,7 @@ Activa Incrustar Proyecto para integrar el proyecto en el acceso directo, de mod
 <context>
     <name>TriggerDialog</name>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="50"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="52"/>
         <source>Trigger Settings</source>
         <translation>Configuración de Disparo</translation>
     </message>
@@ -33529,7 +33539,7 @@ Activa Incrustar Proyecto para integrar el proyecto en el acceso directo, de mod
         <translation type="vanished">Bloquea una señal repetitiva en su lugar, como el botón Auto de un osciloscopio. Cada barrido inicia en el mismo punto de la forma de onda, por lo que se mantiene fija en lugar de desplazarse.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="188"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="190"/>
         <source>Trigger</source>
         <translation>Disparador</translation>
     </message>
@@ -33538,57 +33548,57 @@ Activa Incrustar Proyecto para integrar el proyecto en el acceso directo, de mod
         <translation type="vanished">Modo:</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="125"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="127"/>
         <source>Mode</source>
         <translation>Modo</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="150"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="152"/>
         <source>Auto</source>
         <translation>Automático</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="150"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="152"/>
         <source>Normal</source>
         <translation>Normal</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="150"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="152"/>
         <source>Single</source>
         <translation>Único</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="173"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="175"/>
         <source>Auto free-runs when nothing crosses the level.</source>
         <translation>Auto se ejecuta libremente cuando nada cruza el nivel.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="174"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="176"/>
         <source>Normal waits for a crossing.</source>
         <translation>Normal espera un cruce.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="175"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="177"/>
         <source>Single captures one sweep, then stops.</source>
         <translation>Único captura un barrido y luego se detiene.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="258"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="260"/>
         <source>Slope:</source>
         <translation>Pendiente:</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="290"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="292"/>
         <source>Trigger on a downward crossing</source>
         <translation>Disparar en un cruce descendente</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="336"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="338"/>
         <source>Timebase:</source>
         <translation>Base de Tiempo:</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="407"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="409"/>
         <source>Leave timebase empty to use the plot's time range; lower it to zoom in on a fast signal. Holdoff ignores new triggers for a moment after each.</source>
         <translation>Deja la base de tiempo vacía para usar el rango de tiempo del gráfico; redúcela para acercar una señal rápida. Holdoff ignora nuevos disparadores por un momento después de cada uno.</translation>
     </message>
@@ -33597,7 +33607,7 @@ Activa Incrustar Proyecto para integrar el proyecto en el acceso directo, de mod
         <translation type="vanished">Señal:</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="246"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="248"/>
         <source>Value to cross</source>
         <translation>Valor a Cruzar</translation>
     </message>
@@ -33606,17 +33616,17 @@ Activa Incrustar Proyecto para integrar el proyecto en el acceso directo, de mod
         <translation type="vanished">Flanco:</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="271"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="273"/>
         <source>Rising</source>
         <translation>Ascendente</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="275"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="277"/>
         <source>Trigger on an upward crossing</source>
         <translation>Disparar en un cruce ascendente</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="286"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="288"/>
         <source>Falling</source>
         <translation>Descendente</translation>
     </message>
@@ -33625,7 +33635,7 @@ Activa Incrustar Proyecto para integrar el proyecto en el acceso directo, de mod
         <translation type="vanished">Un nuevo barrido inicia cada vez que la señal cruza el nivel en la dirección elegida. Auto también ejecuta libremente cuando no se encuentra un cruce.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="309"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="311"/>
         <source>Timing</source>
         <translation>Temporización</translation>
     </message>
@@ -33634,23 +33644,23 @@ Activa Incrustar Proyecto para integrar el proyecto en el acceso directo, de mod
         <translation type="vanished">Base de Tiempo (ms):</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="349"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="351"/>
         <source>Match time range</source>
         <translation>Coincidir con Rango de Tiempo</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="363"/>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="394"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="365"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="396"/>
         <source>ms</source>
         <translation>ms</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="369"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="371"/>
         <source>Holdoff:</source>
         <translation>Retención:</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="382"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="384"/>
         <source>0</source>
         <translation>0</translation>
     </message>
@@ -33659,17 +33669,17 @@ Activa Incrustar Proyecto para integrar el proyecto en el acceso directo, de mod
         <translation type="vanished">La base de tiempo establece cuánto tiempo muestra un barrido; déjala vacía para usar el rango de tiempo del gráfico. Redúcela para acercar una señal rápida. Holdoff ignora nuevos disparadores por un momento después de cada uno.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="422"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="424"/>
         <source>Capture Next</source>
         <translation>Capturar Siguiente</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="424"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="426"/>
         <source>Arm for one more single-shot capture</source>
         <translation>Rearmar para una Captura Única Adicional</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="233"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="235"/>
         <source>Level:</source>
         <translation>Nivel:</translation>
     </message>
@@ -33686,7 +33696,7 @@ Activa Incrustar Proyecto para integrar el proyecto en el acceso directo, de mod
         <translation type="vanished">Tiempo de retención</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="212"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="214"/>
         <source>Source:</source>
         <translation>Fuente:</translation>
     </message>
@@ -33695,7 +33705,7 @@ Activa Incrustar Proyecto para integrar el proyecto en el acceso directo, de mod
         <translation type="vanished">Rearmar</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="437"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="439"/>
         <source>Close</source>
         <translation>Cerrar</translation>
     </message>
@@ -33713,42 +33723,42 @@ Activa Incrustar Proyecto para integrar el proyecto en el acceso directo, de mod
         <translation>Puerto Serial</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="98"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="100"/>
         <source>Baud Rate</source>
         <translation>Velocidad en Baudios</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="183"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="187"/>
         <source>Data Bits</source>
         <translation>Bits de Datos</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="203"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="209"/>
         <source>Parity</source>
         <translation>Paridad</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="225"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="233"/>
         <source>Stop Bits</source>
         <translation>Bits de Parada</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="246"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="256"/>
         <source>Flow Control</source>
         <translation>Control de Flujo</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="276"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="288"/>
         <source>Auto Reconnect</source>
         <translation>Reconexión Automática</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="294"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="308"/>
         <source>Send DTR Signal</source>
         <translation>Enviar Señal DTR</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="303"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="319"/>
         <source>Raises the DTR line when the port opens. Many boards (for example Arduino) reset when DTR changes; turn it off to connect without a reset.</source>
         <translation>Eleva la línea DTR cuando se abre el puerto. Muchas tarjetas (por ejemplo Arduino) se reinician cuando DTR cambia; desactívalo para conectar sin reinicio.</translation>
     </message>
@@ -33946,7 +33956,7 @@ Activa Incrustar Proyecto para integrar el proyecto en el acceso directo, de mod
         <translation>Dispositivo USB</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="80"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="82"/>
         <source>Transfer Mode</source>
         <translation>Modo de Transferencia</translation>
     </message>
@@ -33955,32 +33965,32 @@ Activa Incrustar Proyecto para integrar el proyecto en el acceso directo, de mod
         <translation type="vanished">Flujo Masivo</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="90"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="94"/>
         <source>Advanced (Bulk + Control)</source>
         <translation>Avanzado (Masivo + Control)</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="91"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="95"/>
         <source>Isochronous</source>
         <translation>Isócrono</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="266"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="276"/>
         <source>Connect to USB devices using bulk, control, or isochronous transfers. Suitable for data loggers, custom firmware devices, and USB instruments.</source>
         <translation>Conecta a dispositivos USB usando transferencias masivas, de control o isócronas. Adecuado para registradores de datos, dispositivos con firmware personalizado e instrumentos USB.</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="275"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="285"/>
         <source>USB specifications (USB.org)</source>
         <translation>Especificaciones USB (USB.org)</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="127"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="131"/>
         <source>IN Endpoint</source>
         <translation>Endpoint de Entrada</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="89"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="93"/>
         <source>Bulk/Interrupt Stream</source>
         <translation>Flujo Masivo/de Interrupción</translation>
     </message>
@@ -33993,37 +34003,37 @@ Activa Incrustar Proyecto para integrar el proyecto en el acceso directo, de mod
         <translation type="vanished">Esto habilita transferencias de control además de transferencias masivas. Enviar solicitudes de control incorrectas puede bloquear o dañar el hardware conectado. Solo habilitar si sabes lo que estás haciendo.</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="163"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="169"/>
         <source>OUT Endpoint</source>
         <translation>Endpoint de Salida</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="199"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="207"/>
         <source>Max Packet Size</source>
         <translation>Tamaño Máximo de Paquete</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="309"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="319"/>
         <source>No compatible data endpoints were found for this transfer mode. Try another transfer mode. Devices that speak a dedicated protocol (e.g. CAN or Modbus adapters) should be connected through their own driver instead.</source>
         <translation>No se encontraron puntos de conexión de datos compatibles para este modo de transferencia. Intente otro modo de transferencia. Los dispositivos que utilizan un protocolo dedicado (p. ej., adaptadores CAN o Modbus) deben conectarse a través de su propio controlador.</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="350"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="360"/>
         <source>Control Transfers Enabled</source>
         <translation>Transferencias de Control Habilitadas</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="359"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="369"/>
         <source>Sending incorrect control requests may crash or damage connected hardware. Use with caution.</source>
         <translation>Enviar solicitudes de control incorrectas puede dañar o bloquear el hardware conectado. Usar con precaución.</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="366"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="376"/>
         <source>Learn about USB control transfers</source>
         <translation>Aprender sobre transferencias de control USB</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="400"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="410"/>
         <source>Packet size should match the maximum transfer size reported by the endpoint. Typical values: 192 B (FS audio), 1024 B (HS).</source>
         <translation>El tamaño del paquete debe coincidir con el tamaño máximo de transferencia reportado por el endpoint. Valores típicos: 192 B (audio FS), 1024 B (HS).</translation>
     </message>
@@ -34074,57 +34084,57 @@ Activa Incrustar Proyecto para integrar el proyecto en el acceso directo, de mod
         <translation>Tipo de Solicitud</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UsbControlComposer.qml" line="88"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UsbControlComposer.qml" line="90"/>
         <source>Request</source>
         <translation>Solicitud</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UsbControlComposer.qml" line="98"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UsbControlComposer.qml" line="102"/>
         <source>wValue</source>
         <translation>wValue</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UsbControlComposer.qml" line="109"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UsbControlComposer.qml" line="115"/>
         <source>wIndex</source>
         <translation>wIndex</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UsbControlComposer.qml" line="120"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UsbControlComposer.qml" line="128"/>
         <source>Direction</source>
         <translation>Dirección</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UsbControlComposer.qml" line="124"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UsbControlComposer.qml" line="132"/>
         <source>IN · device → host</source>
         <translation>IN · dispositivo → host</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UsbControlComposer.qml" line="124"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UsbControlComposer.qml" line="132"/>
         <source>OUT · host → device</source>
         <translation>OUT · host → dispositivo</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UsbControlComposer.qml" line="129"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UsbControlComposer.qml" line="137"/>
         <source>Data</source>
         <translation>Datos</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UsbControlComposer.qml" line="141"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UsbControlComposer.qml" line="151"/>
         <source>Read Length</source>
         <translation>Longitud de Lectura</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UsbControlComposer.qml" line="158"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UsbControlComposer.qml" line="172"/>
         <source>Send Control Transfer</source>
         <translation>Enviar Transferencia de Control</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UsbControlComposer.qml" line="165"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UsbControlComposer.qml" line="179"/>
         <source>Sending…</source>
         <translation>Enviando…</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UsbControlComposer.qml" line="193"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UsbControlComposer.qml" line="209"/>
         <source>Transfer result appears here.</source>
         <translation>El resultado de la transferencia aparece aquí.</translation>
     </message>
@@ -34611,47 +34621,47 @@ Entiendo que cuando termine, necesitaré comprar una licencia o compilar la vers
         <translation type="vanished">Quitar del Espacio de Trabajo</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/WidgetDelegate.qml" line="168"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/WidgetDelegate.qml" line="172"/>
         <source>Rename Widget…</source>
         <translation>Renombrar Widget…</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/WidgetDelegate.qml" line="181"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/WidgetDelegate.qml" line="185"/>
         <source>Freeze Title</source>
         <translation>Congelar Título</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/WidgetDelegate.qml" line="187"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/WidgetDelegate.qml" line="193"/>
         <source>Title Bar</source>
         <translation>Barra de Título</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/WidgetDelegate.qml" line="195"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/WidgetDelegate.qml" line="203"/>
         <source>Painted Title</source>
         <translation>Título Pintado</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/WidgetDelegate.qml" line="205"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/WidgetDelegate.qml" line="215"/>
         <source>Hidden</source>
         <translation>Oculto</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/WidgetDelegate.qml" line="217"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/WidgetDelegate.qml" line="229"/>
         <source>Widget Settings…</source>
         <translation>Configuración de Widget…</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/WidgetDelegate.qml" line="232"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/WidgetDelegate.qml" line="246"/>
         <source>Open in External Window</source>
         <translation>Abrir en Ventana Externa</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/WidgetDelegate.qml" line="437"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/WidgetDelegate.qml" line="451"/>
         <source>The widget could not be created.</source>
         <translation>No se pudo crear el widget.</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/WidgetDelegate.qml" line="720"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/WidgetDelegate.qml" line="734"/>
         <source>Device Disconnected</source>
         <translation>Dispositivo Desconectado</translation>
     </message>
@@ -34945,42 +34955,42 @@ Entiendo que cuando termine, necesitaré comprar una licencia o compilar la vers
 <context>
     <name>WorkspaceDialog</name>
     <message>
-        <location filename="../../qml/Dialogs/WorkspaceDialog.qml" line="51"/>
+        <location filename="../../qml/Dialogs/WorkspaceDialog.qml" line="53"/>
         <source>Edit Workspace</source>
         <translation>Editar Espacio de Trabajo</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/WorkspaceDialog.qml" line="52"/>
+        <location filename="../../qml/Dialogs/WorkspaceDialog.qml" line="54"/>
         <source>New Workspace</source>
         <translation>Nuevo Espacio de Trabajo</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/WorkspaceDialog.qml" line="176"/>
+        <location filename="../../qml/Dialogs/WorkspaceDialog.qml" line="178"/>
         <source>Name:</source>
         <translation>Nombre:</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/WorkspaceDialog.qml" line="185"/>
+        <location filename="../../qml/Dialogs/WorkspaceDialog.qml" line="187"/>
         <source>My Workspace</source>
         <translation>Mi Espacio de Trabajo</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/WorkspaceDialog.qml" line="200"/>
+        <location filename="../../qml/Dialogs/WorkspaceDialog.qml" line="202"/>
         <source>Select widgets to include:</source>
         <translation>Seleccionar widgets a incluir:</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/WorkspaceDialog.qml" line="208"/>
+        <location filename="../../qml/Dialogs/WorkspaceDialog.qml" line="210"/>
         <source>Filter widgets…</source>
         <translation>Filtrar widgets…</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/WorkspaceDialog.qml" line="318"/>
+        <location filename="../../qml/Dialogs/WorkspaceDialog.qml" line="320"/>
         <source>Cancel</source>
         <translation>Cancelar</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/WorkspaceDialog.qml" line="325"/>
+        <location filename="../../qml/Dialogs/WorkspaceDialog.qml" line="327"/>
         <source>OK</source>
         <translation>ACEPTAR</translation>
     </message>
@@ -35408,6 +35418,48 @@ Entiendo que cuando termine, necesitaré comprar una licencia o compilar la vers
     <message>
         <source>No workspaces.</source>
         <translation type="vanished">No hay espacios de trabajo.</translation>
+    </message>
+</context>
+<context>
+    <name>bad</name>
+    <message>
+        <location filename="../../../scripts/tests/fixtures/qml-control-unnamed/bad.qml" line="8"/>
+        <source>Baud Rate</source>
+        <translation>Velocidad en Baudios</translation>
+    </message>
+    <message>
+        <location filename="../../../scripts/tests/fixtures/qml-control-unnamed-advisory/bad.qml" line="8"/>
+        <source>Apply</source>
+        <translation>Aplicar</translation>
+    </message>
+    <message>
+        <location filename="../../../scripts/tests/fixtures/qml-objectname-literal/bad.qml" line="8"/>
+        <location filename="../../../scripts/tests/fixtures/qml-objectname-literal/bad.qml" line="9"/>
+        <source>Connect</source>
+        <translation>Conectar</translation>
+    </message>
+</context>
+<context>
+    <name>good</name>
+    <message>
+        <location filename="../../../scripts/tests/fixtures/qml-control-unnamed/good.qml" line="8"/>
+        <source>Baud Rate</source>
+        <translation>Velocidad en Baudios</translation>
+    </message>
+    <message>
+        <location filename="../../../scripts/tests/fixtures/qml-control-unnamed-advisory/good.qml" line="9"/>
+        <source>Apply</source>
+        <translation>Aplicar</translation>
+    </message>
+    <message>
+        <location filename="../../../scripts/tests/fixtures/qml-objectname-literal/good.qml" line="11"/>
+        <source>Connect</source>
+        <translation>Conectar</translation>
+    </message>
+    <message>
+        <location filename="../../../scripts/tests/fixtures/qml-objectname-literal/good.qml" line="16"/>
+        <source>Close</source>
+        <translation>Cerrar</translation>
     </message>
 </context>
 </TS>

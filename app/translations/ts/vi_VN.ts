@@ -587,6 +587,16 @@ Chỉ bật tính năng này trên các mạng đáng tin cậy. Các máy khác
         <translation>Một chương trình sử dụng API cục bộ của Serial Studio muốn thay đổi script của dự án này. Script chạy với đầy đủ quyền của ứng dụng, bao gồm khởi chạy chương trình. Cho phép API client sửa đổi script dự án?</translation>
     </message>
     <message>
+        <location filename="../../../core/Api/API/Server/ServerAuth.cpp" line="52"/>
+        <source>Allow API clients to drive the user interface?</source>
+        <translation>Cho phép API client điều khiển giao diện người dùng?</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Api/API/Server/ServerAuth.cpp" line="53"/>
+        <source>A program using Serial Studio's local API wants to click controls and type into this window as you would. That can connect, save, delete or change anything you can. Allow API clients to drive the user interface?</source>
+        <translation>Một chương trình sử dụng API cục bộ của Serial Studio muốn nhấp vào các điều khiển và nhập vào cửa sổ này như bạn sẽ làm. Điều đó có thể kết nối, lưu, xóa hoặc thay đổi bất cứ điều gì bạn có thể. Cho phép API client điều khiển giao diện người dùng?</translation>
+    </message>
+    <message>
         <source>Serial Studio</source>
         <translation type="vanished">Serial Studio</translation>
     </message>
@@ -618,7 +628,7 @@ Chỉ bật tính năng này trên các mạng đáng tin cậy. Các máy khác
 <context>
     <name>About</name>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="46"/>
+        <location filename="../../qml/Dialogs/About.qml" line="48"/>
         <source>About</source>
         <translation>Giới Thiệu</translation>
     </message>
@@ -627,32 +637,32 @@ Chỉ bật tính năng này trên các mạng đáng tin cậy. Các máy khác
         <translation type="vanished">Phiên Bản %1</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="38"/>
+        <location filename="../../qml/Dialogs/About.qml" line="40"/>
         <source>local build</source>
         <translation>bản dựng cục bộ</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="106"/>
+        <location filename="../../qml/Dialogs/About.qml" line="108"/>
         <source>Version %1 (%2)</source>
         <translation>Phiên Bản %1 (%2)</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="110"/>
+        <location filename="../../qml/Dialogs/About.qml" line="112"/>
         <source>Click to copy build identity</source>
         <translation>Nhấp để sao chép định danh bản dựng</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="128"/>
+        <location filename="../../qml/Dialogs/About.qml" line="130"/>
         <source>Copyright © %1 %2</source>
         <translation>Bản Quyền © %1 %2</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="134"/>
+        <location filename="../../qml/Dialogs/About.qml" line="136"/>
         <source>All Rights Reserved</source>
         <translation>Bảo Lưu Mọi Quyền</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="149"/>
+        <location filename="../../qml/Dialogs/About.qml" line="151"/>
         <source>%1 is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 3 of the License, or (at your option) any later version.
 
 %1 is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.</source>
@@ -661,32 +671,32 @@ Chỉ bật tính năng này trên các mạng đáng tin cậy. Các máy khác
 %1 được phân phối với hy vọng sẽ hữu ích, nhưng KHÔNG CÓ BẢO HÀNH NÀO; kể cả bảo hành ngụ ý về KHẢ NĂNG THƯƠNG MẠI hoặc PHÙ HỢP CHO MỤC ĐÍCH CỤ THỂ. Xem Giấy Phép Công Cộng GNU để biết thêm chi tiết.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="168"/>
+        <location filename="../../qml/Dialogs/About.qml" line="170"/>
         <source>This configuration is licensed for commercial and proprietary use. It may be used in closed-source and commercial applications, subject to the terms of the commercial license.</source>
         <translation>Cấu hình này được cấp phép cho mục đích thương mại và sở hữu độc quyền. Có thể sử dụng trong các ứng dụng mã nguồn đóng và thương mại, tuân theo các điều khoản của giấy phép thương mại.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="182"/>
+        <location filename="../../qml/Dialogs/About.qml" line="184"/>
         <source>This configuration is for personal and evaluation purposes only. Commercial use is prohibited unless a valid commercial license is activated.</source>
         <translation>Cấu hình này chỉ dành cho mục đích cá nhân và đánh giá. Nghiêm cấm sử dụng thương mại trừ khi đã kích hoạt giấy phép thương mại hợp lệ.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="196"/>
+        <location filename="../../qml/Dialogs/About.qml" line="198"/>
         <source>This software is provided 'as is' without warranty of any kind, express or implied, including but not limited to the warranties of merchantability or fitness for a particular purpose. In no event shall the author be liable for any damages arising from the use of this software.</source>
         <translation>Phần mềm này được cung cấp 'nguyên trạng' không có bảo hành dưới bất kỳ hình thức nào, rõ ràng hay ngụ ý, bao gồm nhưng không giới hạn ở các bảo hành về khả năng thương mại hoặc sự phù hợp cho mục đích cụ thể. Trong mọi trường hợp, tác giả sẽ không chịu trách nhiệm về bất kỳ thiệt hại nào phát sinh từ việc sử dụng phần mềm này.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="217"/>
+        <location filename="../../qml/Dialogs/About.qml" line="219"/>
         <source>Manage License</source>
         <translation>Quản Lý Giấy Phép</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="226"/>
+        <location filename="../../qml/Dialogs/About.qml" line="228"/>
         <source>Donate</source>
         <translation>Quyên Góp</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="237"/>
+        <location filename="../../qml/Dialogs/About.qml" line="239"/>
         <source>Check for Updates</source>
         <translation>Kiểm Tra Cập Nhật</translation>
     </message>
@@ -703,32 +713,32 @@ Chỉ bật tính năng này trên các mạng đáng tin cậy. Các máy khác
         <translation type="vanished">Mẹo &amp; Thủ Thuật</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="246"/>
+        <location filename="../../qml/Dialogs/About.qml" line="248"/>
         <source>License Agreement</source>
         <translation>Thỏa Thuận Giấy Phép</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="255"/>
+        <location filename="../../qml/Dialogs/About.qml" line="257"/>
         <source>Report Bug</source>
         <translation>Báo Cáo Lỗi</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="266"/>
+        <location filename="../../qml/Dialogs/About.qml" line="268"/>
         <source>Acknowledgements</source>
         <translation>Lời Cảm Ơn</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="275"/>
+        <location filename="../../qml/Dialogs/About.qml" line="277"/>
         <source>Benchmark</source>
         <translation>Đánh Giá Hiệu Năng</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="285"/>
+        <location filename="../../qml/Dialogs/About.qml" line="287"/>
         <source>Website</source>
         <translation>Trang Web</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="301"/>
+        <location filename="../../qml/Dialogs/About.qml" line="303"/>
         <source>Close</source>
         <translation>Đóng</translation>
     </message>
@@ -770,42 +780,42 @@ Chỉ bật tính năng này trên các mạng đáng tin cậy. Các máy khác
 <context>
     <name>AccelerometerConfigDialog</name>
     <message>
-        <location filename="../../qml/Dialogs/AccelerometerConfigDialog.qml" line="35"/>
+        <location filename="../../qml/Dialogs/AccelerometerConfigDialog.qml" line="37"/>
         <source>Accelerometer Configuration</source>
         <translation>Cấu Hình Gia Tốc Kế</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/AccelerometerConfigDialog.qml" line="110"/>
+        <location filename="../../qml/Dialogs/AccelerometerConfigDialog.qml" line="112"/>
         <source>Configure the accelerometer display range and input units.</source>
         <translation>Cấu hình phạm vi hiển thị và đơn vị đầu vào của gia tốc kế.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/AccelerometerConfigDialog.qml" line="124"/>
+        <location filename="../../qml/Dialogs/AccelerometerConfigDialog.qml" line="126"/>
         <source>Display Range</source>
         <translation>Phạm Vi Hiển Thị</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/AccelerometerConfigDialog.qml" line="145"/>
+        <location filename="../../qml/Dialogs/AccelerometerConfigDialog.qml" line="147"/>
         <source>Max G:</source>
         <translation>G Tối Đa:</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/AccelerometerConfigDialog.qml" line="159"/>
+        <location filename="../../qml/Dialogs/AccelerometerConfigDialog.qml" line="161"/>
         <source>Enter max G value</source>
         <translation>Nhập giá trị G tối đa</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/AccelerometerConfigDialog.qml" line="179"/>
+        <location filename="../../qml/Dialogs/AccelerometerConfigDialog.qml" line="181"/>
         <source>Input Configuration</source>
         <translation>Cấu Hình Đầu Vào</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/AccelerometerConfigDialog.qml" line="199"/>
+        <location filename="../../qml/Dialogs/AccelerometerConfigDialog.qml" line="201"/>
         <source>Input already in G</source>
         <translation>Đầu vào đã ở dạng G</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/AccelerometerConfigDialog.qml" line="233"/>
+        <location filename="../../qml/Dialogs/AccelerometerConfigDialog.qml" line="235"/>
         <source>Close</source>
         <translation>Đóng</translation>
     </message>
@@ -813,17 +823,17 @@ Chỉ bật tính năng này trên các mạng đáng tin cậy. Các máy khác
 <context>
     <name>Acknowledgements</name>
     <message>
-        <location filename="../../qml/Dialogs/Acknowledgements.qml" line="34"/>
+        <location filename="../../qml/Dialogs/Acknowledgements.qml" line="36"/>
         <source>Acknowledgements</source>
         <translation>Ghi Nhận</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Acknowledgements.qml" line="75"/>
+        <location filename="../../qml/Dialogs/Acknowledgements.qml" line="77"/>
         <source>Close</source>
         <translation>Đóng</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Acknowledgements.qml" line="86"/>
+        <location filename="../../qml/Dialogs/Acknowledgements.qml" line="88"/>
         <source>About Qt…</source>
         <translation>Giới Thiệu QT…</translation>
     </message>
@@ -864,17 +874,17 @@ Chỉ bật tính năng này trên các mạng đáng tin cậy. Các máy khác
 <context>
     <name>AddWidgetDialog</name>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="46"/>
+        <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="48"/>
         <source>Add Widget</source>
         <translation>Thêm Widget</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="222"/>
+        <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="224"/>
         <source>Available Widgets</source>
         <translation>Widget Khả Dụng</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="231"/>
+        <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="233"/>
         <source>Click a row to add it to the workspace.</source>
         <translation>Nhấp vào một hàng để thêm vào không gian làm việc.</translation>
     </message>
@@ -883,62 +893,62 @@ Chỉ bật tính năng này trên các mạng đáng tin cậy. Các máy khác
         <translation type="vanished">Tìm Kiếm</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="239"/>
+        <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="241"/>
         <source>Search…</source>
         <translation>Tìm Kiếm…</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="258"/>
+        <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="260"/>
         <source>Widget</source>
         <translation>Widget</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="259"/>
+        <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="261"/>
         <source>Group</source>
         <translation>Nhóm</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="260"/>
+        <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="262"/>
         <source>Name</source>
         <translation>Tên</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="327"/>
+        <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="329"/>
         <source>(entire group)</source>
         <translation>(toàn bộ nhóm)</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="362"/>
+        <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="364"/>
         <source>Already in workspace</source>
         <translation>Đã có trong không gian làm việc</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="363"/>
+        <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="365"/>
         <source>Add to workspace</source>
         <translation>Thêm vào không gian làm việc</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="393"/>
+        <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="395"/>
         <source>No widgets available.</source>
         <translation>Không có widget khả dụng.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="394"/>
+        <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="396"/>
         <source>No widgets match.</source>
         <translation>Không có widget phù hợp.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="411"/>
+        <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="413"/>
         <source>%1 widgets</source>
         <translation>%1 widget</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="412"/>
+        <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="414"/>
         <source>%1 of %2 widgets</source>
         <translation>%1 trong số %2 widget</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="416"/>
+        <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="418"/>
         <source>Close</source>
         <translation>Đóng</translation>
     </message>
@@ -977,304 +987,304 @@ Chỉ bật tính năng này trên các mạng đáng tin cậy. Các máy khác
 <context>
     <name>AlarmBandsEditor</name>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="35"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="37"/>
         <source>Alarm Bands</source>
         <translation>Dải Cảnh Báo</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="72"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="74"/>
         <source>Info</source>
         <translation>Thông Tin</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="73"/>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="131"/>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="153"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="75"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="133"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="155"/>
         <source>OK</source>
         <translation>OK</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="74"/>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="154"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="76"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="156"/>
         <source>Warning</source>
         <translation>Cảnh Báo</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="75"/>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="155"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="77"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="157"/>
         <source>Critical</source>
         <translation>Nghiêm Trọng</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="84"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="86"/>
         <source>Tachometer</source>
         <translation>Máy Đo Tốc Độ</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="86"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="88"/>
         <source>Idle</source>
         <translation>Không Hoạt Động</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="87"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="89"/>
         <source>Operating</source>
         <translation>Hoạt Động</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="88"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="90"/>
         <source>Caution</source>
         <translation>Thận Trọng</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="89"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="91"/>
         <source>Redline</source>
         <translation>Vùng Đỏ</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="93"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="95"/>
         <source>Speedometer</source>
         <translation>Đồng Hồ Tốc Độ</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="95"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="97"/>
         <source>Cruise</source>
         <translation>Hành Trình</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="96"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="98"/>
         <source>Fast</source>
         <translation>Nhanh</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="97"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="99"/>
         <source>Top Speed</source>
         <translation>Tốc Độ Tối Đa</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="101"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="103"/>
         <source>Engine Temperature</source>
         <translation>Nhiệt Độ Engine</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="103"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="105"/>
         <source>Cold</source>
         <translation>Lạnh</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="104"/>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="113"/>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="145"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="106"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="115"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="147"/>
         <source>Normal</source>
         <translation>Bình Thường</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="105"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="107"/>
         <source>Warm</source>
         <translation>Ấm</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="106"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="108"/>
         <source>Overheat</source>
         <translation>Quá Nhiệt</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="110"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="112"/>
         <source>Pressure</source>
         <translation>Áp Suất</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="112"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="114"/>
         <source>Vacuum</source>
         <translation>Chân Không</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="114"/>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="123"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="116"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="125"/>
         <source>High</source>
         <translation>Cao</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="115"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="117"/>
         <source>Burst</source>
         <translation>Vượt Ngưỡng</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="119"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="121"/>
         <source>Battery Voltage</source>
         <translation>Điện Áp Pin</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="121"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="123"/>
         <source>Low</source>
         <translation>Thấp</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="122"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="124"/>
         <source>Nominal</source>
         <translation>Danh Định</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="127"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="129"/>
         <source>Fuel Level</source>
         <translation>Mức Nhiên Liệu</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="129"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="131"/>
         <source>Empty</source>
         <translation>Trống</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="130"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="132"/>
         <source>Reserve</source>
         <translation>Dự Trữ</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="135"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="137"/>
         <source>Signal Strength</source>
         <translation>Cường Độ Tín Hiệu</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="137"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="139"/>
         <source>No Signal</source>
         <translation>Không Có Tín Hiệu</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="138"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="140"/>
         <source>Weak</source>
         <translation>Yếu</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="139"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="141"/>
         <source>Good</source>
         <translation>Tốt</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="143"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="145"/>
         <source>CPU / System Load</source>
         <translation>Tải CPU / Hệ Thống</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="146"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="148"/>
         <source>Busy</source>
         <translation>Bận</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="147"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="149"/>
         <source>Overload</source>
         <translation>Quá Tải</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="151"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="153"/>
         <source>OK / Warning / Critical</source>
         <translation>OK / Cảnh Báo / Nghiêm Trọng</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="159"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="161"/>
         <source>Indicator (On / Off)</source>
         <translation>Chỉ Báo (Bật / Tắt)</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="161"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="163"/>
         <source>On</source>
         <translation>Bật</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="165"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="167"/>
         <source>Fault Indicator</source>
         <translation>Chỉ Báo Lỗi</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="167"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="169"/>
         <source>Fault</source>
         <translation>Lỗi</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="283"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="285"/>
         <source>Select Alarm Sound</source>
         <translation>Chọn Âm Thanh Cảnh Báo</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="285"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="287"/>
         <source>WAV audio (*.wav)</source>
         <translation>Âm thanh WAV (*.WAV)</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="285"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="287"/>
         <source>All files (*)</source>
         <translation>Tất cả tệp (*)</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="320"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="322"/>
         <source>Choose Band Color</source>
         <translation>Chọn Màu Dải</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="347"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="349"/>
         <source>Presets</source>
         <translation>Cài Đặt Sẵn</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="370"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="372"/>
         <source>Preset</source>
         <translation>Cài Đặt Sẵn</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="385"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="387"/>
         <source>Choose preset…</source>
         <translation>Chọn cài đặt sẵn…</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="496"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="498"/>
         <source>Blink</source>
         <translation>Nhấp Nháy</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="503"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="505"/>
         <source>Sound</source>
         <translation>Âm Thanh</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="624"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="626"/>
         <source>Reset to severity default</source>
         <translation>Đặt lại về mặc định mức độ nghiêm trọng</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="638"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="640"/>
         <source>Click to choose a color. Right-click to reset to severity default.</source>
         <translation>Nhấp để chọn màu. Nhấp chuột phải để đặt lại về mặc định mức độ nghiêm trọng.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="639"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="641"/>
         <source>Click to choose a custom color.</source>
         <translation>Nhấp để chọn màu tùy chỉnh.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="670"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="672"/>
         <source>Flash the LED while the value sits in this band.</source>
         <translation>Nhấp nháy LED khi giá trị nằm trong dải này.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="698"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="700"/>
         <source>Pick a WAV file to play for this band.</source>
         <translation>Chọn tệp WAV để phát cho dải này.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="714"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="716"/>
         <source>Use the priority's default sound.</source>
         <translation>Sử dụng âm thanh mặc định của mức ưu tiên.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="787"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="789"/>
         <source>No bands defined. Pick a preset above or add a band to get started.</source>
         <translation>Chưa định nghĩa dải nào. Chọn cài đặt sẵn ở trên hoặc thêm dải để bắt đầu.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="911"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="913"/>
         <source>Apply</source>
         <translation>Áp Dụng</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="914"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="916"/>
         <source>Apply changes to the dataset.</source>
         <translation>Áp dụng các thay đổi vào tập dữ liệu.</translation>
     </message>
@@ -1287,47 +1297,47 @@ Chỉ bật tính năng này trên các mạng đáng tin cậy. Các máy khác
         <translation type="vanished">Thay thế các dải hiện tại bằng cài đặt sẵn đã chọn, được điều chỉnh theo phạm vi của tập dữ liệu này.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="397"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="399"/>
         <source>Range</source>
         <translation>Phạm Vi</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="425"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="427"/>
         <source>Bands</source>
         <translation>Các Dải</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="436"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="438"/>
         <source>Add Band</source>
         <translation>Thêm Dải</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="440"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="442"/>
         <source>Add a new band continuing from the last one.</source>
         <translation>Thêm một dải mới tiếp nối từ dải cuối cùng.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="471"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="473"/>
         <source>Min</source>
         <translation>Tối Thiểu</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="477"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="479"/>
         <source>Max</source>
         <translation>Tối Đa</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="483"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="485"/>
         <source>Severity</source>
         <translation>Mức Độ Nghiêm Trọng</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="489"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="491"/>
         <source>Color</source>
         <translation>Màu Sắc</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="510"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="512"/>
         <source>Label</source>
         <translation>Nhãn</translation>
     </message>
@@ -1340,22 +1350,22 @@ Chỉ bật tính năng này trên các mạng đáng tin cậy. Các máy khác
         <translation type="vanished">tự động</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="724"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="726"/>
         <source>(optional)</source>
         <translation>(tùy chọn)</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="741"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="743"/>
         <source>Move up.</source>
         <translation>Di chuyển lên.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="760"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="762"/>
         <source>Move down.</source>
         <translation>Di chuyển xuống.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="773"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="775"/>
         <source>Remove this band.</source>
         <translation>Xóa dải này.</translation>
     </message>
@@ -1364,17 +1374,17 @@ Chỉ bật tính năng này trên các mạng đáng tin cậy. Các máy khác
         <translation type="vanished">Chưa định nghĩa dải nào. Áp dụng cài đặt sẵn hoặc thêm dải để bắt đầu.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="804"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="806"/>
         <source>Preview</source>
         <translation>Xem Trước</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="900"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="902"/>
         <source>Cancel</source>
         <translation>Hủy</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="902"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="904"/>
         <source>Discard changes.</source>
         <translation>Hủy các thay đổi.</translation>
     </message>
@@ -1647,7 +1657,7 @@ Chỉ bật tính năng này trên các mạng đáng tin cậy. Các máy khác
 <context>
     <name>AssistantPanel</name>
     <message>
-        <location filename="../../qml/AI/AssistantPanel.qml" line="32"/>
+        <location filename="../../qml/AI/AssistantPanel.qml" line="34"/>
         <source>Assistant</source>
         <translation>Trợ Lý</translation>
     </message>
@@ -1844,32 +1854,32 @@ Chỉ bật tính năng này trên các mạng đáng tin cậy. Các máy khác
         <translation type="vanished">Đã Cập Nhật Bộ Nhớ Trợ Lý</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/AssistantPanel.qml" line="143"/>
+        <location filename="../../qml/AI/AssistantPanel.qml" line="145"/>
         <source>Context may be degraded</source>
         <translation>Ngữ cảnh có thể bị giảm chất lượng</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/AssistantPanel.qml" line="159"/>
+        <location filename="../../qml/AI/AssistantPanel.qml" line="161"/>
         <source>Start fresh chat</source>
         <translation>Bắt đầu trò chuyện mới</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/AssistantPanel.qml" line="210"/>
+        <location filename="../../qml/AI/AssistantPanel.qml" line="212"/>
         <source>Remember (%1)?</source>
         <translation>Ghi Nhớ (%1)?</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/AssistantPanel.qml" line="215"/>
+        <location filename="../../qml/AI/AssistantPanel.qml" line="217"/>
         <source>Remember</source>
         <translation>Ghi Nhớ</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/AssistantPanel.qml" line="224"/>
+        <location filename="../../qml/AI/AssistantPanel.qml" line="226"/>
         <source>Dismiss</source>
         <translation>Bỏ Qua</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/AssistantPanel.qml" line="256"/>
+        <location filename="../../qml/AI/AssistantPanel.qml" line="258"/>
         <source>Continuing from your previous chat. Its recent context was carried over.</source>
         <translation>Tiếp tục từ cuộc trò chuyện trước đó của bạn. Ngữ cảnh gần đây đã được chuyển tiếp.</translation>
     </message>
@@ -2030,29 +2040,29 @@ Chỉ bật tính năng này trên các mạng đáng tin cậy. Các máy khác
         <translation>Thiết Bị Đầu Vào</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="166"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="170"/>
         <source>Sample Rate</source>
         <translation>Tốc Độ Lấy Mẫu</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="204"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="212"/>
         <source>Normalization</source>
         <translation>Chuẩn Hóa</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="185"/>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="273"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="191"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="287"/>
         <source>Sample Format</source>
         <translation>Định Dạng Mẫu</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="147"/>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="254"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="149"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="266"/>
         <source>Channels</source>
         <translation>Kênh</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="235"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="245"/>
         <source>Output Device</source>
         <translation>Thiết Bị Đầu Ra</translation>
     </message>
@@ -2079,56 +2089,56 @@ Chỉ bật tính năng này trên các mạng đáng tin cậy. Các máy khác
 <context>
     <name>AxisRangeDialog</name>
     <message>
-        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="84"/>
+        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="86"/>
         <source>Axis Range Configuration</source>
         <translation>Cấu Hình Phạm Vi Trục</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="204"/>
+        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="206"/>
         <source>Configure the visible range for the plot axes. Values update in real-time as you type.</source>
         <translation>Cấu hình phạm vi hiển thị cho các trục biểu đồ. Giá trị cập nhật theo thời gian thực khi nhập.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="212"/>
+        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="214"/>
         <source>X Axis</source>
         <translation>Trục X</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="237"/>
-        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="308"/>
+        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="239"/>
+        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="310"/>
         <source>Minimum:</source>
         <translation>Tối Thiểu:</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="249"/>
-        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="320"/>
+        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="251"/>
+        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="322"/>
         <source>Enter min value</source>
         <translation>Nhập giá trị tối thiểu</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="258"/>
-        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="329"/>
+        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="260"/>
+        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="331"/>
         <source>Maximum:</source>
         <translation>Tối Đa:</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="270"/>
-        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="341"/>
+        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="272"/>
+        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="343"/>
         <source>Enter max value</source>
         <translation>Nhập giá trị tối đa</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="285"/>
+        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="287"/>
         <source>Y Axis</source>
         <translation>Trục Y</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="360"/>
+        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="362"/>
         <source>Reset</source>
         <translation>Đặt Lại</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="370"/>
+        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="372"/>
         <source>Close</source>
         <translation>Đóng</translation>
     </message>
@@ -2136,178 +2146,178 @@ Chỉ bật tính năng này trên các mạng đáng tin cậy. Các máy khác
 <context>
     <name>BackupRecovery</name>
     <message>
-        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="31"/>
+        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="33"/>
         <source>Recover Backup</source>
         <translation>Khôi Phục Bản Sao Lưu</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="94"/>
-        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="165"/>
-        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="166"/>
+        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="96"/>
+        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="167"/>
+        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="168"/>
         <source>Untitled</source>
         <translation>Chưa Đặt Tên</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="97"/>
+        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="99"/>
         <source>Project Loaded</source>
         <translation>Dự Án Đã Tải</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="98"/>
+        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="100"/>
         <source>Auto-save</source>
         <translation>Tự Động Lưu</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="99"/>
-        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="119"/>
+        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="101"/>
+        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="121"/>
         <source>Before Restore</source>
         <translation>Trước Khi Khôi Phục</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="100"/>
-        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="106"/>
+        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="102"/>
+        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="108"/>
         <source>Before Delete Dataset</source>
         <translation>Trước Khi Xóa Dataset</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="101"/>
-        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="107"/>
+        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="103"/>
+        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="109"/>
         <source>Before Delete Group</source>
         <translation>Trước Khi Xóa Group</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="102"/>
+        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="104"/>
         <source>Before New Project</source>
         <translation>Trước Khi Tạo Dự Án Mới</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="103"/>
+        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="105"/>
         <source>Before Open Project</source>
         <translation>Trước Khi Mở Dự Án</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="104"/>
+        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="106"/>
         <source>Before Load JSON</source>
         <translation>Trước Khi Tải JSON</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="105"/>
+        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="107"/>
         <source>Before Apply Template</source>
         <translation>Trước Khi Áp Dụng Template</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="108"/>
+        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="110"/>
         <source>Before Delete Action</source>
         <translation>Trước Khi Xóa Action</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="109"/>
+        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="111"/>
         <source>Before Delete Output Widget</source>
         <translation>Trước Khi Xóa Widget Đầu Ra</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="110"/>
+        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="112"/>
         <source>Before Move Dataset</source>
         <translation>Trước Khi Di Chuyển Dataset</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="111"/>
+        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="113"/>
         <source>Before Move Group</source>
         <translation>Trước Khi Di Chuyển Nhóm</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="112"/>
+        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="114"/>
         <source>Before Delete Workspace</source>
         <translation>Trước Khi Xóa Không Gian Làm Việc</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="113"/>
+        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="115"/>
         <source>Before Clear All Workspaces</source>
         <translation>Trước Khi Xóa Tất Cả Không Gian Làm Việc</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="114"/>
+        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="116"/>
         <source>Before Remove Widget</source>
         <translation>Trước Khi Xóa Widget</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="115"/>
+        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="117"/>
         <source>Before Reorder Workspaces</source>
         <translation>Trước Khi Sắp Xếp Lại Không Gian Làm Việc</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="116"/>
-        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="117"/>
+        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="118"/>
+        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="119"/>
         <source>Before Batch Operation</source>
         <translation>Trước Khi Thực Hiện Hàng Loạt</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="118"/>
+        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="120"/>
         <source>Before Add Tile</source>
         <translation>Trước Khi Thêm Ô</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="142"/>
+        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="144"/>
         <source>%1 (and %2 more)</source>
         <translation>%1 (và %2 nữa)</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="159"/>
+        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="161"/>
         <source> The frame parser code also differs and will be replaced.</source>
         <translation>Mã bộ phân tích frame cũng khác và sẽ được thay thế.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="164"/>
+        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="166"/>
         <source>Title changes from “%1” to “%2”. Group structure unchanged.</source>
         <translation>Tiêu đề thay đổi từ "%1" thành "%2". Cấu trúc nhóm không thay đổi.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="169"/>
+        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="171"/>
         <source>Same groups and datasets, but the frame parser code differs — restoring will replace it.</source>
         <translation>Cùng nhóm và dataset, nhưng mã bộ phân tích frame khác — khôi phục sẽ thay thế nó.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="171"/>
+        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="173"/>
         <source>Same groups and datasets as your current project. Restoring may still revert field-level edits.</source>
         <translation>Cùng nhóm và bộ dữ liệu với dự án hiện tại. Khôi phục vẫn có thể hoàn tác các chỉnh sửa cấp trường.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="178"/>
+        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="180"/>
         <source>Restoring removes %1 and brings back %2.</source>
         <translation>Khôi phục sẽ xóa %1 và khôi phục lại %2.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="181"/>
+        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="183"/>
         <source>Restoring removes %1.</source>
         <translation>Khôi phục sẽ xóa %1.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="183"/>
+        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="185"/>
         <source>Restoring brings back %1.</source>
         <translation>Khôi phục sẽ khôi phục lại %1.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="209"/>
+        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="211"/>
         <source>Pick a backup to restore. The current project is saved automatically first, so the restore is reversible.</source>
         <translation>Chọn bản sao lưu để khôi phục. Dự án hiện tại được lưu tự động trước, nên có thể hoàn tác khôi phục.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="292"/>
+        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="294"/>
         <source>No backups for this project yet. Edit or save the project to start the rolling backup.</source>
         <translation>Chưa có bản sao lưu cho dự án này. Chỉnh sửa hoặc lưu dự án để bắt đầu sao lưu luân phiên.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="320"/>
+        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="322"/>
         <source>Open Folder</source>
         <translation>Mở Thư Mục</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="328"/>
+        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="330"/>
         <source>Cancel</source>
         <translation>Hủy</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="334"/>
+        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="336"/>
         <source>Restore</source>
         <translation>Khôi Phục</translation>
     </message>
@@ -2315,157 +2325,157 @@ Chỉ bật tính năng này trên các mạng đáng tin cậy. Các máy khác
 <context>
     <name>Benchmark</name>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="32"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="34"/>
         <source>Benchmark</source>
         <translation>Đánh Giá Hiệu Năng</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="81"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="83"/>
         <source>%1 frames/s</source>
         <translation>%1 frame/s</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="85"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="87"/>
         <source>%1 s</source>
         <translation>%1 s</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="90"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="92"/>
         <source>n/a</source>
         <translation>n/a</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="92"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="94"/>
         <source>Pass</source>
         <translation>Đạt</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="92"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="94"/>
         <source>Fail</source>
         <translation>Không Đạt</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="113"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="115"/>
         <source>Hotpath Benchmark</source>
         <translation>Đánh Giá Hiệu Năng Hotpath</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="124"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="126"/>
         <source>Measures how fast this computer can extract, parse, and visualize frames through Serial Studio's data pipeline.</source>
         <translation>Đo tốc độ máy tính này có thể trích xuất, phân tích và hiển thị frame qua pipeline dữ liệu của Serial Studio.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="170"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="172"/>
         <source>The interface will freeze while running</source>
         <translation>Giao diện sẽ đóng băng trong khi chạy</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="181"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="183"/>
         <source>Each phase runs flat-out on the main thread, so the window stops responding until it finishes. Your current project is reloaded automatically when the benchmark ends.</source>
         <translation>Mỗi giai đoạn chạy liên tục trên luồng chính, do đó cửa sổ ngừng phản hồi cho đến khi hoàn tất. Dự án hiện tại của bạn sẽ được tải lại tự động khi benchmark kết thúc.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="238"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="240"/>
         <source>Frames per phase:</source>
         <translation>Số frame mỗi giai đoạn:</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="255"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="257"/>
         <source>Minimum duration:</source>
         <translation>Thời lượng tối thiểu:</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="287"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="289"/>
         <source>Stages</source>
         <translation>Giai Đoạn</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="295"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="297"/>
         <source>Parsers</source>
         <translation>Bộ Phân Tích</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="307"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="309"/>
         <source>Data export</source>
         <translation>Xuất dữ liệu</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="318"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="320"/>
         <source>Dashboard</source>
         <translation>Bảng Điều Khiển</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="333"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="335"/>
         <source>Data</source>
         <translation>Dữ Liệu</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="343"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="345"/>
         <source>Numeric only</source>
         <translation>Chỉ giá trị số</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="354"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="356"/>
         <source>Mixed (numeric + text)</source>
         <translation>Hỗn hợp (số + văn bản)</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="374"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="376"/>
         <source>Select at least one stage and one data type to run a benchmark.</source>
         <translation>Chọn ít nhất một giai đoạn và một loại dữ liệu để chạy benchmark.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="212"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="214"/>
         <source>Running %1...</source>
         <translation>Đang Chạy %1...</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="213"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="215"/>
         <source>Preparing...</source>
         <translation>Đang Chuẩn Bị...</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="389"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="391"/>
         <source>Disconnect the active device before running a benchmark.</source>
         <translation>Ngắt kết nối thiết bị đang hoạt động trước khi chạy benchmark.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="390"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="392"/>
         <source>Close the open recording before running a benchmark.</source>
         <translation>Đóng bản ghi đang mở trước khi chạy benchmark.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="422"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="424"/>
         <source>Pipeline</source>
         <translation>Pipeline</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="434"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="436"/>
         <source>Throughput</source>
         <translation>Thông Lượng</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="446"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="448"/>
         <source>Time</source>
         <translation>Thời Gian</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="458"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="460"/>
         <source>Result</source>
         <translation>Kết Quả</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="559"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="561"/>
         <source>Run a test to see results</source>
         <translation>Chạy thử nghiệm để xem kết quả</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="576"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="578"/>
         <source>Peak memory: %1</source>
         <translation>Bộ nhớ đỉnh: %1</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="590"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="592"/>
         <source>Pass/Fail applies to the data-pipeline and parser stages (data pipeline and Built-in numeric 1024 K frames/s; Built-in mixed 512 K; Lua numeric 256 K; JavaScript numeric and Lua mixed 128 K; JavaScript mixed 64 K). The export and dashboard stages are informational.</source>
         <translation>Đạt/Không Đạt áp dụng cho các giai đoạn data-pipeline và parser (data pipeline và Built-in số 1024 K frames/s; Built-in hỗn hợp 512 K; Lua số 256 K; JavaScript số và Lua hỗn hợp 128 K; JavaScript hỗn hợp 64 K). Các giai đoạn export và dashboard chỉ mang tính thông tin.</translation>
     </message>
@@ -2478,7 +2488,7 @@ Chỉ bật tính năng này trên các mạng đáng tin cậy. Các máy khác
         <translation type="vanished">Đạt/Không Đạt áp dụng cho các giai đoạn pipeline dữ liệu và phân tích cú pháp (pipeline dữ liệu và Native số 1024 K khung/s; Native hỗn hợp 512 K; Lua số 256 K; JavaScript số và Lua hỗn hợp 128 K; JavaScript hỗn hợp 64 K). Các giai đoạn xuất và bảng điều khiển chỉ mang tính thông tin.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="605"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="607"/>
         <source>Copy</source>
         <translation>Sao Chép</translation>
     </message>
@@ -2491,22 +2501,22 @@ Chỉ bật tính năng này trên các mạng đáng tin cậy. Các máy khác
         <translation type="vanished">Đạt/Không Đạt chỉ áp dụng cho các giai đoạn parser (Lua mục tiêu 256 K frames/s, JavaScript 128 K). Các giai đoạn export và dashboard chỉ mang tính thông tin.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="612"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="614"/>
         <source>Clear</source>
         <translation>Xóa</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="621"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="623"/>
         <source>Close</source>
         <translation>Đóng</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="630"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="632"/>
         <source>Running...</source>
         <translation>Đang Chạy...</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="630"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="632"/>
         <source>Run Benchmark</source>
         <translation>Chạy Benchmark</translation>
     </message>
@@ -2786,37 +2796,37 @@ Chỉ bật tính năng này trên các mạng đáng tin cậy. Các máy khác
         <translation>Thiết Bị</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="112"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="116"/>
         <source>Service</source>
         <translation>Dịch Vụ</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="148"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="154"/>
         <source>Characteristic</source>
         <translation>Đặc Tính</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="206"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="214"/>
         <source>Scanning…</source>
         <translation>Đang Quét…</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="242"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="250"/>
         <source>No Bluetooth Adapter Detected</source>
         <translation>Không Phát Hiện Bộ Chuyển Đổi Bluetooth</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="253"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="261"/>
         <source>Connect a Bluetooth adapter or check your system settings</source>
         <translation>Kết nối bộ chuyển đổi Bluetooth hoặc kiểm tra cài đặt hệ thống</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="280"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="288"/>
         <source>This OS is not Supported Yet.</source>
         <translation>Hệ Điều Hành Này Chưa Được Hỗ Trợ.</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="291"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="299"/>
         <source>We'll update Serial Studio to work with this operating system as soon as Qt officially supports it</source>
         <translation>Serial Studio sẽ được cập nhật để hoạt động với hệ điều hành này ngay khi QT chính thức hỗ trợ</translation>
     </message>
@@ -2839,62 +2849,62 @@ Chỉ bật tính năng này trên các mạng đáng tin cậy. Các máy khác
         <translation>Trình Điều Khiển CAN</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="140"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="142"/>
         <source>Interface</source>
         <translation>Giao Diện</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="169"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="173"/>
         <source>Bitrate</source>
         <translation>Tốc Độ Bit</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="223"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="229"/>
         <source>Flexible Data-Rate</source>
         <translation>Tốc Độ Dữ Liệu Linh Hoạt</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="242"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="250"/>
         <source>The selected adapter does not support CAN FD</source>
         <translation>Bộ chuyển đổi đã chọn không hỗ trợ CAN FD</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="249"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="257"/>
         <source>Data Bitrate</source>
         <translation>Tốc Độ Bit Dữ Liệu</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="304"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="314"/>
         <source>Loopback</source>
         <translation>Loopback</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="324"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="336"/>
         <source>Listen-Only</source>
         <translation>Chỉ Lắng Nghe</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="344"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="358"/>
         <source>Multi-Frame Reassembly</source>
         <translation>Ghép Nối Lại Đa Khung</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="361"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="377"/>
         <source>Reassemble J1939 transport-protocol and ISO-TP multi-frame messages</source>
         <translation>Ghép nối lại các thông điệp đa khung theo giao thức vận chuyển J1939 và ISO-TP</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="368"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="384"/>
         <source>DBC Database</source>
         <translation>Cơ Sở Dữ Liệu DBC</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="372"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="390"/>
         <source>Import DBC File…</source>
         <translation>Nhập Tệp DBC…</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="405"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="423"/>
         <source>No CAN Interfaces Found</source>
         <translation>Không Tìm Thấy Giao Diện CAN</translation>
     </message>
@@ -3047,77 +3057,77 @@ Chỉ bật tính năng này trên các mạng đáng tin cậy. Các máy khác
 <context>
     <name>ChannelSoundsEditor</name>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="38"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="40"/>
         <source>Notification Channel Sounds</source>
         <translation>Âm Thanh Kênh Thông Báo</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="97"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="99"/>
         <source>Select Sound File</source>
         <translation>Chọn Tệp Âm Thanh</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="99"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="101"/>
         <source>WAV audio (*.wav)</source>
         <translation>Âm thanh WAV (*.WAV)</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="99"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="101"/>
         <source>All files (*)</source>
         <translation>Tất cả tệp (*)</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="125"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="127"/>
         <source>(app default)</source>
         <translation>(mặc định ứng dụng)</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="154"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="156"/>
         <source>A Critical notification on a channel plays its Warning file, a Warning notification its Caution file, an Info notification its Advisory file. Empty cells use the sounds from Preferences.</source>
         <translation>Thông báo Critical trên kênh phát tệp Warning, thông báo Warning phát tệp Caution, thông báo Info phát tệp Advisory. Ô trống sử dụng âm thanh từ Tùy Chọn.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="165"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="167"/>
         <source>Channel</source>
         <translation>Kênh</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="171"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="173"/>
         <source>Warning</source>
         <translation>Cảnh Báo</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="177"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="179"/>
         <source>Caution</source>
         <translation>Thận Trọng</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="183"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="185"/>
         <source>Advisory</source>
         <translation>Advisory</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="228"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="230"/>
         <source>Channel name</source>
         <translation>Tên kênh</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="244"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="246"/>
         <source>Remove this channel.</source>
         <translation>Xóa kênh này.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="258"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="260"/>
         <source>Add Channel</source>
         <translation>Thêm Kênh</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="267"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="269"/>
         <source>Cancel</source>
         <translation>Hủy</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="275"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="277"/>
         <source>Apply</source>
         <translation>Áp Dụng</translation>
     </message>
@@ -3290,7 +3300,7 @@ Chỉ bật tính năng này trên các mạng đáng tin cậy. Các máy khác
 <context>
     <name>CommandPalette</name>
     <message>
-        <location filename="../../qml/Widgets/CommandPalette.qml" line="404"/>
+        <location filename="../../qml/Widgets/CommandPalette.qml" line="411"/>
         <source>Folder</source>
         <translation>Thư Mục</translation>
     </message>
@@ -3304,27 +3314,27 @@ Chỉ bật tính năng này trên các mạng đáng tin cậy. Các máy khác
         <translation>Lệnh</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/CommandPalette.qml" line="623"/>
+        <location filename="../../qml/Widgets/CommandPalette.qml" line="639"/>
         <source>Search…</source>
         <translation>Tìm Kiếm…</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/CommandPalette.qml" line="639"/>
+        <location filename="../../qml/Widgets/CommandPalette.qml" line="657"/>
         <source>Close</source>
         <translation>Đóng</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/CommandPalette.qml" line="687"/>
+        <location filename="../../qml/Widgets/CommandPalette.qml" line="707"/>
         <source>Back</source>
         <translation>Quay Lại</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/CommandPalette.qml" line="748"/>
+        <location filename="../../qml/Widgets/CommandPalette.qml" line="768"/>
         <source>Type to search, Enter to open, Esc to close</source>
         <translation>Nhập để tìm kiếm, Enter để mở, Esc để đóng</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/CommandPalette.qml" line="848"/>
+        <location filename="../../qml/Widgets/CommandPalette.qml" line="868"/>
         <source>No results found</source>
         <translation>Không tìm thấy kết quả</translation>
     </message>
@@ -5730,200 +5740,200 @@ Chỉ bật tính năng này trên các mạng đáng tin cậy. Các máy khác
 <context>
     <name>ConstantsLibraryDialog</name>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="46"/>
+        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="48"/>
         <source>Insert Constant</source>
         <translation>Chèn Hằng Số</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="128"/>
-        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="129"/>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="130"/>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="131"/>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="132"/>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="133"/>
+        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="134"/>
+        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="135"/>
         <source>Fundamental</source>
         <translation>Cơ Bản</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="128"/>
+        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="130"/>
         <source>Speed of light in vacuum</source>
         <translation>Tốc độ ánh sáng trong chân không</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="129"/>
+        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="131"/>
         <source>Planck constant</source>
         <translation>Hằng số Planck</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="130"/>
+        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="132"/>
         <source>Elementary charge</source>
         <translation>Điện tích nguyên tố</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="131"/>
+        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="133"/>
         <source>Avogadro constant</source>
         <translation>Hằng số Avogadro</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="132"/>
+        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="134"/>
         <source>Boltzmann constant</source>
         <translation>Hằng số Boltzmann</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="133"/>
+        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="135"/>
         <source>Stefan-Boltzmann constant</source>
         <translation>Hằng số Stefan-Boltzmann</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="135"/>
-        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="136"/>
+        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="137"/>
+        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="138"/>
         <source>Mechanics</source>
         <translation>Cơ Học</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="135"/>
+        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="137"/>
         <source>Standard gravity</source>
         <translation>Gia tốc trọng trường chuẩn</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="136"/>
+        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="138"/>
         <source>Gravitational constant</source>
         <translation>Hằng số hấp dẫn</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="138"/>
-        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="139"/>
+        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="140"/>
+        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="141"/>
         <source>Pressure</source>
         <translation>Áp Suất</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="138"/>
+        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="140"/>
         <source>Standard atmosphere</source>
         <translation>Áp suất khí quyển chuẩn</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="139"/>
+        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="141"/>
         <source>Sea-level barometric pressure</source>
         <translation>Áp suất khí quyển mực nước biển</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="141"/>
-        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="142"/>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="143"/>
+        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="144"/>
+        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="145"/>
         <source>Temperature</source>
         <translation>Nhiệt Độ</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="141"/>
+        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="143"/>
         <source>Absolute zero (Celsius)</source>
         <translation>Độ không tuyệt đối (Celsius)</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="142"/>
+        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="144"/>
         <source>Water freezing point</source>
         <translation>Điểm đóng băng của nước</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="143"/>
+        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="145"/>
         <source>Water boiling point (1 atm)</source>
         <translation>Điểm sôi của nước (1 atm)</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="145"/>
-        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="146"/>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="147"/>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="148"/>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="149"/>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="150"/>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="151"/>
+        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="152"/>
+        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="153"/>
         <source>Gases &amp; Fluids</source>
         <translation>Khí &amp; Chất Lỏng</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="145"/>
+        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="147"/>
         <source>Universal gas constant</source>
         <translation>Hằng số khí lý tưởng</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="146"/>
+        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="148"/>
         <source>Specific gas constant (dry air)</source>
         <translation>Hằng số khí riêng (không khí khô)</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="147"/>
+        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="149"/>
         <source>Specific gas constant (water vapor)</source>
         <translation>Hằng số khí riêng (hơi nước)</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="148"/>
+        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="150"/>
         <source>Air density (sea level, 15°C)</source>
         <translation>Khối lượng riêng không khí (mực nước biển, 15°C)</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="149"/>
+        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="151"/>
         <source>Water density (4°C)</source>
         <translation>Khối lượng riêng nước (4°C)</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="150"/>
+        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="152"/>
         <source>Speed of sound in air (20°C)</source>
         <translation>Tốc độ âm thanh trong không khí (20°C)</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="151"/>
+        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="153"/>
         <source>Heat capacity ratio (dry air)</source>
         <translation>Tỷ số nhiệt dung (không khí khô)</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="153"/>
-        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="154"/>
+        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="155"/>
+        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="156"/>
         <source>Electromagnetism</source>
         <translation>Điện Từ</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="153"/>
+        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="155"/>
         <source>Vacuum permittivity</source>
         <translation>Hằng số điện môi chân không</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="154"/>
+        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="156"/>
         <source>Vacuum permeability</source>
         <translation>Độ từ th투chân không</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="156"/>
-        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="157"/>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="158"/>
+        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="159"/>
+        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="160"/>
         <source>Math</source>
         <translation>Toán Học</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="156"/>
+        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="158"/>
         <source>Pi</source>
         <translation>Pi</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="157"/>
+        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="159"/>
         <source>Euler's number</source>
         <translation>Số Euler</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="158"/>
+        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="160"/>
         <source>Golden ratio</source>
         <translation>Tỷ lệ vàng</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="214"/>
+        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="216"/>
         <source>Physics Constants</source>
         <translation>Hằng Số Vật Lý</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="223"/>
+        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="225"/>
         <source>SI-unit preset values. Click a row to insert it into %1.</source>
         <translation>Giá trị đơn vị SI định sẵn. Nhấp vào một hàng để chèn vào %1.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="233"/>
+        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="235"/>
         <source>Search…</source>
         <translation>Tìm Kiếm…</translation>
     </message>
@@ -5932,42 +5942,42 @@ Chỉ bật tính năng này trên các mạng đáng tin cậy. Các máy khác
         <translation type="vanished">Tìm Kiếm</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="252"/>
+        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="254"/>
         <source>Symbol</source>
         <translation>Ký Hiệu</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="253"/>
+        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="255"/>
         <source>Name</source>
         <translation>Tên</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="254"/>
+        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="256"/>
         <source>Value</source>
         <translation>Giá Trị</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="255"/>
+        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="257"/>
         <source>Category</source>
         <translation>Danh Mục</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="364"/>
+        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="366"/>
         <source>No constants match.</source>
         <translation>Không có hằng số nào khớp.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="385"/>
+        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="387"/>
         <source>%1 constants</source>
         <translation>%1 hằng số</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="386"/>
+        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="388"/>
         <source>%1 of %2 constants</source>
         <translation>%1 trong số %2 hằng số</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="390"/>
+        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="392"/>
         <source>Close</source>
         <translation>Đóng</translation>
     </message>
@@ -6087,52 +6097,52 @@ Chỉ bật tính năng này trên các mạng đáng tin cậy. Các máy khác
 <context>
     <name>CrashRecovery</name>
     <message>
-        <location filename="../../qml/Dialogs/CrashRecovery.qml" line="31"/>
+        <location filename="../../qml/Dialogs/CrashRecovery.qml" line="33"/>
         <source>Recovery Options</source>
         <translation>Tùy Chọn Khôi Phục</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/CrashRecovery.qml" line="57"/>
+        <location filename="../../qml/Dialogs/CrashRecovery.qml" line="59"/>
         <source>Serial Studio has closed unexpectedly several times in a row.</source>
         <translation>Serial Studio đã đóng bất ngờ nhiều lần liên tiếp.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/CrashRecovery.qml" line="82"/>
+        <location filename="../../qml/Dialogs/CrashRecovery.qml" line="84"/>
         <source>Consecutive crashes: %1</source>
         <translation>Số lần sự cố liên tiếp: %1</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/CrashRecovery.qml" line="90"/>
+        <location filename="../../qml/Dialogs/CrashRecovery.qml" line="92"/>
         <source>Last reported stage: %1</source>
         <translation>Giai đoạn báo cáo cuối cùng: %1</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/CrashRecovery.qml" line="98"/>
+        <location filename="../../qml/Dialogs/CrashRecovery.qml" line="100"/>
         <source>Detected at: %1</source>
         <translation>Phát hiện tại: %1</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/CrashRecovery.qml" line="113"/>
+        <location filename="../../qml/Dialogs/CrashRecovery.qml" line="115"/>
         <source>Pick a recovery action. Serial Studio will quit after applying it so the next launch starts clean.</source>
         <translation>Chọn một hành động khôi phục. Serial Studio sẽ thoát sau khi áp dụng để lần khởi động tiếp theo bắt đầu sạch.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/CrashRecovery.qml" line="127"/>
+        <location filename="../../qml/Dialogs/CrashRecovery.qml" line="129"/>
         <source>Reset Rendering Backend to Default</source>
         <translation>Đặt Lại Backend Kết Xuất Về Mặc Định</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/CrashRecovery.qml" line="135"/>
+        <location filename="../../qml/Dialogs/CrashRecovery.qml" line="137"/>
         <source>Skip Restoring the Last Opened Project</source>
         <translation>Bỏ Qua Khôi Phục Dự Án Đã Mở Gần Nhất</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/CrashRecovery.qml" line="142"/>
+        <location filename="../../qml/Dialogs/CrashRecovery.qml" line="144"/>
         <source>Reset all Preferences</source>
         <translation>Đặt Lại Tất Cả Tùy Chọn</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/CrashRecovery.qml" line="160"/>
+        <location filename="../../qml/Dialogs/CrashRecovery.qml" line="162"/>
         <source>Continue Anyway</source>
         <translation>Tiếp Tục Dù Sao</translation>
     </message>
@@ -6198,22 +6208,22 @@ Chỉ bật tính năng này trên các mạng đáng tin cậy. Các máy khác
         <translation>Tổng: %1 tin nhắn, %2 tín hiệu</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="271"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="273"/>
         <source>Cancel</source>
         <translation>Hủy</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="281"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="285"/>
         <source>Add to Project</source>
         <translation>Thêm vào Dự Án</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="286"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="290"/>
         <source>Add the generated source, groups, tables and workspaces to the project that is open, instead of creating a new file</source>
         <translation>Thêm nguồn, nhóm, bảng và không gian làm việc đã tạo vào dự án đang mở, thay vì tạo tệp mới</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="297"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="303"/>
         <source>Create Project</source>
         <translation>Tạo Dự Án</translation>
     </message>
@@ -6305,7 +6315,7 @@ Chỉ bật tính năng này trên các mạng đáng tin cậy. Các máy khác
         <translation>Sử dụng thanh tìm kiếm để tìm và thêm widget, hoặc nhấp chuột phải vào widget trong không gian làm việc khác để thêm vào đây.</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="836"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="838"/>
         <source>Search Widgets</source>
         <translation>Tìm Kiếm Widget</translation>
     </message>
@@ -6348,7 +6358,7 @@ Chỉ bật tính năng này trên các mạng đáng tin cậy. Các máy khác
         <translation>Máy Chủ API Tắt</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardLayout.qml" line="675"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardLayout.qml" line="677"/>
         <source>Command Palette</source>
         <translation>Bảng Lệnh</translation>
     </message>
@@ -11040,17 +11050,17 @@ Valid format: 01 A2 FF 3C</source>
         <translation type="vanished">Khôi phục tệp dự án từ tệp phiên này</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/DatabaseExplorer.qml" line="38"/>
+        <location filename="../../qml/DatabaseExplorer/DatabaseExplorer.qml" line="40"/>
         <source>Historian</source>
         <translation>Lịch Sử Dữ Liệu</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/DatabaseExplorer.qml" line="298"/>
+        <location filename="../../qml/DatabaseExplorer/DatabaseExplorer.qml" line="300"/>
         <source>Loading session…</source>
         <translation>Đang tải phiên…</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/DatabaseExplorer.qml" line="299"/>
+        <location filename="../../qml/DatabaseExplorer/DatabaseExplorer.qml" line="301"/>
         <source>Working…</source>
         <translation>Đang Xử Lý…</translation>
     </message>
@@ -11412,37 +11422,37 @@ Valid format: 01 A2 FF 3C</source>
 <context>
     <name>Donate</name>
     <message>
-        <location filename="../../qml/Dialogs/Donate.qml" line="36"/>
+        <location filename="../../qml/Dialogs/Donate.qml" line="38"/>
         <source>Support Serial Studio</source>
         <translation>Hỗ Trợ Serial Studio</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Donate.qml" line="91"/>
+        <location filename="../../qml/Dialogs/Donate.qml" line="93"/>
         <source>Support the development of %1!</source>
         <translation>Hỗ trợ phát triển %1!</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Donate.qml" line="102"/>
+        <location filename="../../qml/Dialogs/Donate.qml" line="104"/>
         <source>Serial Studio is free &amp; open-source software supported by volunteers. Consider donating or obtaining a Pro license to support development efforts :)</source>
         <translation>Serial Studio là phần mềm mã nguồn mở &amp; miễn phí được hỗ trợ bởi tình nguyện viên. Hãy cân nhắc quyên góp hoặc mua giấy phép Pro để hỗ trợ nỗ lực phát triển :)</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Donate.qml" line="115"/>
+        <location filename="../../qml/Dialogs/Donate.qml" line="117"/>
         <source>You can also support this project by sharing it, reporting bugs and proposing new features!</source>
         <translation>Bạn cũng có thể hỗ trợ dự án này bằng cách chia sẻ, báo cáo lỗi và đề xuất tính năng mới!</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Donate.qml" line="129"/>
+        <location filename="../../qml/Dialogs/Donate.qml" line="131"/>
         <source>Close</source>
         <translation>Đóng</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Donate.qml" line="140"/>
+        <location filename="../../qml/Dialogs/Donate.qml" line="142"/>
         <source>Donate</source>
         <translation>Quyên Góp</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Donate.qml" line="155"/>
+        <location filename="../../qml/Dialogs/Donate.qml" line="157"/>
         <source>Get Serial Studio Pro</source>
         <translation>Mua Serial Studio Pro</translation>
     </message>
@@ -11611,92 +11621,92 @@ Valid format: 01 A2 FF 3C</source>
 <context>
     <name>DriftReportDialog</name>
     <message>
-        <location filename="../../qml/DatabaseExplorer/DriftReportDialog.qml" line="29"/>
+        <location filename="../../qml/DatabaseExplorer/DriftReportDialog.qml" line="31"/>
         <source>Comparison Report</source>
         <translation>Báo Cáo So Sánh</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/DriftReportDialog.qml" line="48"/>
+        <location filename="../../qml/DatabaseExplorer/DriftReportDialog.qml" line="50"/>
         <source>The current project decodes this session exactly like the recorded one.</source>
         <translation>Dự án hiện tại giải mã phiên này giống hệt như bản ghi.</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/DriftReportDialog.qml" line="51"/>
+        <location filename="../../qml/DatabaseExplorer/DriftReportDialog.qml" line="53"/>
         <source>The current project produces different values from the same recording.</source>
         <translation>Dự án hiện tại tạo ra các giá trị khác từ cùng bản ghi.</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/DriftReportDialog.qml" line="54"/>
+        <location filename="../../qml/DatabaseExplorer/DriftReportDialog.qml" line="56"/>
         <source>The current project finds a different number of readings in the recording.</source>
         <translation>Dự án hiện tại tìm thấy số lượng số đọc khác trong bản ghi.</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/DriftReportDialog.qml" line="57"/>
+        <location filename="../../qml/DatabaseExplorer/DriftReportDialog.qml" line="59"/>
         <source>The current project has a different set of datasets than the recording.</source>
         <translation>Dự án hiện tại có tập hợp dataset khác với bản ghi.</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/DriftReportDialog.qml" line="60"/>
+        <location filename="../../qml/DatabaseExplorer/DriftReportDialog.qml" line="62"/>
         <source>This session cannot be compared mechanically.</source>
         <translation>Phiên này không thể so sánh tự động.</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/DriftReportDialog.qml" line="62"/>
+        <location filename="../../qml/DatabaseExplorer/DriftReportDialog.qml" line="64"/>
         <source>The comparison could not be completed.</source>
         <translation>Không thể hoàn thành so sánh.</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/DriftReportDialog.qml" line="115"/>
+        <location filename="../../qml/DatabaseExplorer/DriftReportDialog.qml" line="117"/>
         <source>Compared against: %1</source>
         <translation>So sánh với: %1</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/DriftReportDialog.qml" line="116"/>
+        <location filename="../../qml/DatabaseExplorer/DriftReportDialog.qml" line="118"/>
         <source>current project</source>
         <translation>dự án hiện tại</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/DriftReportDialog.qml" line="155"/>
+        <location filename="../../qml/DatabaseExplorer/DriftReportDialog.qml" line="157"/>
         <source>No differences to show.</source>
         <translation>Không có sự khác biệt để hiển thị.</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/DriftReportDialog.qml" line="196"/>
+        <location filename="../../qml/DatabaseExplorer/DriftReportDialog.qml" line="198"/>
         <source>Only exists in the current project.</source>
         <translation>Chỉ tồn tại trong dự án hiện tại.</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/DriftReportDialog.qml" line="199"/>
+        <location filename="../../qml/DatabaseExplorer/DriftReportDialog.qml" line="201"/>
         <source>Only exists in the recorded project.</source>
         <translation>Chỉ tồn tại trong dự án đã ghi.</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/DriftReportDialog.qml" line="201"/>
+        <location filename="../../qml/DatabaseExplorer/DriftReportDialog.qml" line="203"/>
         <source>%1 of %2 values changed, %3 missing, %4 extra.</source>
         <translation>%1 trong %2 giá trị đã thay đổi, %3 thiếu, %4 thêm.</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/DriftReportDialog.qml" line="219"/>
+        <location filename="../../qml/DatabaseExplorer/DriftReportDialog.qml" line="221"/>
         <source>Time</source>
         <translation>Thời Gian</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/DriftReportDialog.qml" line="226"/>
+        <location filename="../../qml/DatabaseExplorer/DriftReportDialog.qml" line="228"/>
         <source>Recorded project</source>
         <translation>Dự án đã ghi</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/DriftReportDialog.qml" line="233"/>
+        <location filename="../../qml/DatabaseExplorer/DriftReportDialog.qml" line="235"/>
         <source>Current project</source>
         <translation>Dự án hiện tại</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/DriftReportDialog.qml" line="270"/>
+        <location filename="../../qml/DatabaseExplorer/DriftReportDialog.qml" line="272"/>
         <source>...and %1 more changed values.</source>
         <translation>...và %1 giá trị đã thay đổi khác.</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/DriftReportDialog.qml" line="287"/>
+        <location filename="../../qml/DatabaseExplorer/DriftReportDialog.qml" line="289"/>
         <source>Close</source>
         <translation>Đóng</translation>
     </message>
@@ -13043,84 +13053,84 @@ Valid format: 01 A2 FF 3C</source>
         <translation>Tên:</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EipTagsDialog.qml" line="128"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EipTagsDialog.qml" line="130"/>
         <source>Channel name</source>
         <translation>Tên kênh</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EipTagsDialog.qml" line="132"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EipTagsDialog.qml" line="134"/>
         <source>Tag:</source>
         <translation>Tag:</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EipTagsDialog.qml" line="140"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EipTagsDialog.qml" line="144"/>
         <source>Controller tag name</source>
         <translation>Tên tag của bộ điều khiển</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EipTagsDialog.qml" line="145"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EipTagsDialog.qml" line="149"/>
         <source>Type:</source>
         <translation>Loại:</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EipTagsDialog.qml" line="164"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EipTagsDialog.qml" line="172"/>
         <source>Element</source>
         <translation>Phần Tử</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EipTagsDialog.qml" line="169"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EipTagsDialog.qml" line="179"/>
         <source>Add Tag</source>
         <translation>Thêm Tag</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EipTagsDialog.qml" line="193"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EipTagsDialog.qml" line="203"/>
         <source>Configured Tags</source>
         <translation>Các Tag Đã Cấu Hình</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EipTagsDialog.qml" line="227"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EipTagsDialog.qml" line="237"/>
         <source>#</source>
         <translation>#</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EipTagsDialog.qml" line="234"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EipTagsDialog.qml" line="244"/>
         <source>Tag</source>
         <translation>Thẻ</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EipTagsDialog.qml" line="242"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EipTagsDialog.qml" line="252"/>
         <source>Action</source>
         <translation>Hành Động</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EipTagsDialog.qml" line="289"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EipTagsDialog.qml" line="301"/>
         <source>Remove</source>
         <translation>Xóa</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EipTagsDialog.qml" line="302"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EipTagsDialog.qml" line="314"/>
         <source>No tags configured.
 Add controller tags above to poll them.</source>
         <translation>Chưa cấu hình thẻ nào.
 Thêm thẻ bộ điều khiển ở trên để thăm dò chúng.</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EipTagsDialog.qml" line="320"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EipTagsDialog.qml" line="332"/>
         <source>Total tags: %1</source>
         <translation>Tổng số thẻ: %1</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EipTagsDialog.qml" line="324"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EipTagsDialog.qml" line="338"/>
         <source>Generate Project</source>
         <translation>Tạo Dự Án</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EipTagsDialog.qml" line="330"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EipTagsDialog.qml" line="346"/>
         <source>Clear All</source>
         <translation>Xóa Tất Cả</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EipTagsDialog.qml" line="336"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EipTagsDialog.qml" line="354"/>
         <source>Close</source>
         <translation>Đóng</translation>
     </message>
@@ -13133,52 +13143,52 @@ Thêm thẻ bộ điều khiển ở trên để thăm dò chúng.</translation>
         <translation>Gateway</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EthernetIp.qml" line="58"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EthernetIp.qml" line="60"/>
         <source>IP Address</source>
         <translation>Địa Chỉ IP</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EthernetIp.qml" line="77"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EthernetIp.qml" line="79"/>
         <source>CIP Path</source>
         <translation>Đường Dẫn CIP</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EthernetIp.qml" line="84"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EthernetIp.qml" line="88"/>
         <source>1,0</source>
         <translation>1,0</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EthernetIp.qml" line="103"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EthernetIp.qml" line="107"/>
         <source>Controller</source>
         <translation>Bộ Điều Khiển</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EthernetIp.qml" line="122"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EthernetIp.qml" line="128"/>
         <source>Poll Interval (ms)</source>
         <translation>Chu Kỳ Truy Vấn (ms)</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EthernetIp.qml" line="127"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EthernetIp.qml" line="135"/>
         <source>Polling interval</source>
         <translation>Chu kỳ truy vấn</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EthernetIp.qml" line="159"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EthernetIp.qml" line="169"/>
         <source>Configure Tags…</source>
         <translation>Cấu Hình Thẻ…</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EthernetIp.qml" line="170"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EthernetIp.qml" line="182"/>
         <source>Create Project from Tags</source>
         <translation>Tạo Dự Án từ Thẻ</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EthernetIp.qml" line="185"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EthernetIp.qml" line="197"/>
         <source>%1 tag(s) configured</source>
         <translation>Đã cấu hình %1 thẻ</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EthernetIp.qml" line="186"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EthernetIp.qml" line="198"/>
         <source>No tags configured</source>
         <translation>Chưa cấu hình thẻ nào</translation>
     </message>
@@ -13196,102 +13206,102 @@ Thêm thẻ bộ điều khiển ở trên để thăm dò chúng.</translation>
 <context>
     <name>ExamplesBrowser</name>
     <message>
-        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="33"/>
+        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="35"/>
         <source>Examples Browser</source>
         <translation>Trình Duyệt Ví Dụ</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="90"/>
+        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="92"/>
         <source>Search in Examples…</source>
         <translation>Tìm Kiếm trong Ví Dụ…</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="119"/>
+        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="121"/>
         <source>Back</source>
         <translation>Quay Lại</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="151"/>
+        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="153"/>
         <source>Pro</source>
         <translation>Pro</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="172"/>
+        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="174"/>
         <source>Download &amp;&amp; Open</source>
         <translation>Tải Xuống &amp;&amp; Mở</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="187"/>
+        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="189"/>
         <source>View on GitHub</source>
         <translation>Xem trên GitHub</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="244"/>
+        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="246"/>
         <source>Fetching examples…</source>
         <translation>Đang tải ví dụ…</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="567"/>
+        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="569"/>
         <source>Loading...</source>
         <translation>Đang Tải...</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="568"/>
+        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="570"/>
         <source>No README available.</source>
         <translation>Không có README.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="608"/>
+        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="610"/>
         <source>Copied to Clipboard</source>
         <translation>Đã Sao Chép vào Clipboard</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="671"/>
+        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="673"/>
         <source>No screenshot available</source>
         <translation>Không có ảnh chụp màn hình</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="703"/>
+        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="705"/>
         <source>Details</source>
         <translation>Chi Tiết</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="732"/>
+        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="734"/>
         <source>Info</source>
         <translation>Thông Tin</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="755"/>
+        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="757"/>
         <source>Category:</source>
         <translation>Danh Mục:</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="768"/>
+        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="770"/>
         <source>Difficulty:</source>
         <translation>Độ Khó:</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="786"/>
+        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="788"/>
         <source>Project:</source>
         <translation>Dự Án:</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="828"/>
+        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="830"/>
         <source>No Results Found</source>
         <translation>Không Tìm Thấy Kết Quả</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="839"/>
+        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="841"/>
         <source>Check the spelling or try a different search term.</source>
         <translation>Kiểm tra chính tả hoặc thử từ khóa tìm kiếm khác.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="854"/>
+        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="856"/>
         <source>%1 examples</source>
         <translation>%1 ví dụ</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="863"/>
+        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="865"/>
         <source>Close</source>
         <translation>Đóng</translation>
     </message>
@@ -13299,52 +13309,52 @@ Thêm thẻ bộ điều khiển ở trên để thăm dò chúng.</translation>
 <context>
     <name>ExtensionConsent</name>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionConsent.qml" line="37"/>
+        <location filename="../../qml/Dialogs/ExtensionConsent.qml" line="39"/>
         <source>Allow Widget Extension?</source>
         <translation>Cho Phép Tiện Ích Mở Rộng Widget?</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionConsent.qml" line="164"/>
+        <location filename="../../qml/Dialogs/ExtensionConsent.qml" line="166"/>
         <source>Identifier</source>
         <translation>Mã Định Danh</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionConsent.qml" line="165"/>
+        <location filename="../../qml/Dialogs/ExtensionConsent.qml" line="167"/>
         <source>Author</source>
         <translation>Tác Giả</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionConsent.qml" line="166"/>
+        <location filename="../../qml/Dialogs/ExtensionConsent.qml" line="168"/>
         <source>Version</source>
         <translation>Phiên Bản</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionConsent.qml" line="167"/>
+        <location filename="../../qml/Dialogs/ExtensionConsent.qml" line="169"/>
         <source>License</source>
         <translation>Giấy Phép</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionConsent.qml" line="168"/>
+        <location filename="../../qml/Dialogs/ExtensionConsent.qml" line="170"/>
         <source>Installed in</source>
         <translation>Đã Cài Đặt Trong</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionConsent.qml" line="212"/>
+        <location filename="../../qml/Dialogs/ExtensionConsent.qml" line="214"/>
         <source>This widget runs inside Serial Studio with the same privileges as the application itself. It can read and change files on this computer, use the network, and do anything Serial Studio can do. Serial Studio does not restrict what it does, and cannot undo what it does.</source>
         <translation>Widget này chạy bên trong Serial Studio với các đặc quyền tương tự như chính ứng dụng. Nó có thể đọc và thay đổi tệp trên máy tính này, sử dụng mạng và thực hiện bất kỳ điều gì Serial Studio có thể làm. Serial Studio không hạn chế những gì nó làm và không thể hoàn tác những gì nó đã làm.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionConsent.qml" line="224"/>
+        <location filename="../../qml/Dialogs/ExtensionConsent.qml" line="226"/>
         <source>Allow it only if you trust its author. Your answer is remembered for this version of the package; a later update asks again.</source>
         <translation>Chỉ cho phép nếu bạn tin tưởng tác giả của nó. Câu trả lời của bạn được ghi nhớ cho phiên bản này của gói; bản cập nhật sau sẽ hỏi lại.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionConsent.qml" line="242"/>
+        <location filename="../../qml/Dialogs/ExtensionConsent.qml" line="244"/>
         <source>Don't Allow</source>
         <translation>Không cho Phép</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionConsent.qml" line="250"/>
+        <location filename="../../qml/Dialogs/ExtensionConsent.qml" line="252"/>
         <source>Allow</source>
         <translation>Cho Phép</translation>
     </message>
@@ -13352,62 +13362,62 @@ Thêm thẻ bộ điều khiển ở trên để thăm dò chúng.</translation>
 <context>
     <name>ExtensionManager</name>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="32"/>
+        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="34"/>
         <source>Extension Manager</source>
         <translation>Trình Quản Lý Tiện Ích Mở Rộng</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="78"/>
+        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="80"/>
         <source>Search extensions…</source>
         <translation>Tìm kiếm tiện ích mở rộng…</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="119"/>
+        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="121"/>
         <source>Refresh</source>
         <translation>Làm Mới</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="133"/>
+        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="135"/>
         <source>Repos</source>
         <translation>Kho</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="163"/>
+        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="165"/>
         <source>Repository Settings</source>
         <translation>Cài Đặt Kho Lưu Trữ</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="175"/>
+        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="177"/>
         <source>Back</source>
         <translation>Quay Lại</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="216"/>
+        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="218"/>
         <source>Install</source>
         <translation>Cài Đặt</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="233"/>
+        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="235"/>
         <source>Uninstall</source>
         <translation>Gỡ Cài Đặt</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="260"/>
+        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="262"/>
         <source>Run</source>
         <translation>Chạy</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="284"/>
+        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="286"/>
         <source>Stop</source>
         <translation>Dừng</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="318"/>
+        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="320"/>
         <source>Reset</source>
         <translation>Đặt Lại</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="368"/>
+        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="370"/>
         <source>Fetching extensions…</source>
         <translation>Đang tải tiện ích…</translation>
     </message>
@@ -13492,32 +13502,32 @@ Thêm thẻ bộ điều khiển ở trên để thăm dò chúng.</translation>
         <translation type="vanished">Duyệt…</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="424"/>
+        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="426"/>
         <source>No Results Found</source>
         <translation>Không Tìm Thấy Kết Quả</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="435"/>
+        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="437"/>
         <source>Check the spelling or try a different search term.</source>
         <translation>Kiểm tra chính tả hoặc thử từ khóa tìm kiếm khác.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="459"/>
+        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="461"/>
         <source>No Extensions Available</source>
         <translation>Không Có Tiện Ích Mở Rộng</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="470"/>
+        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="472"/>
         <source>Add a repository URL or local path in the Repos settings, then refresh.</source>
         <translation>Thêm URL kho lưu trữ hoặc đường dẫn cục bộ trong cài đặt Repos, sau đó làm mới.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="485"/>
+        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="487"/>
         <source>%1 extensions</source>
         <translation>%1 tiện ích mở rộng</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="494"/>
+        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="496"/>
         <source>Close</source>
         <translation>Đóng</translation>
     </message>
@@ -13553,32 +13563,32 @@ Thêm thẻ bộ điều khiển ở trên để thăm dò chúng.</translation>
 <context>
     <name>ExtensionWidgetSettings</name>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ExtensionWidgetSettings.qml" line="35"/>
+        <location filename="../../qml/Widgets/Dashboard/ExtensionWidgetSettings.qml" line="37"/>
         <source>Widget Settings</source>
         <translation>Cài Đặt Widget</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ExtensionWidgetSettings.qml" line="57"/>
+        <location filename="../../qml/Widgets/Dashboard/ExtensionWidgetSettings.qml" line="59"/>
         <source>%1 Settings</source>
         <translation>Cài Đặt %1</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ExtensionWidgetSettings.qml" line="194"/>
+        <location filename="../../qml/Widgets/Dashboard/ExtensionWidgetSettings.qml" line="196"/>
         <source>These settings are declared by the widget package and stored in the project.</source>
         <translation>Các cài đặt này được khai báo bởi gói widget và lưu trữ trong dự án.</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ExtensionWidgetSettings.qml" line="195"/>
+        <location filename="../../qml/Widgets/Dashboard/ExtensionWidgetSettings.qml" line="197"/>
         <source>This widget declares no settings.</source>
         <translation>Widget này không khai báo cài đặt nào.</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ExtensionWidgetSettings.qml" line="265"/>
+        <location filename="../../qml/Widgets/Dashboard/ExtensionWidgetSettings.qml" line="267"/>
         <source>Restore Defaults</source>
         <translation>Khôi Phục Mặc Định</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ExtensionWidgetSettings.qml" line="277"/>
+        <location filename="../../qml/Widgets/Dashboard/ExtensionWidgetSettings.qml" line="279"/>
         <source>Close</source>
         <translation>Đóng</translation>
     </message>
@@ -13586,7 +13596,7 @@ Thêm thẻ bộ điều khiển ở trên để thăm dò chúng.</translation>
 <context>
     <name>ExternalWidgetWindow</name>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/ExternalWidgetWindow.qml" line="252"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/ExternalWidgetWindow.qml" line="253"/>
         <source>The widget could not be created.</source>
         <translation>Không thể tạo widget.</translation>
     </message>
@@ -13700,98 +13710,98 @@ Thêm thẻ bộ điều khiển ở trên để thăm dò chúng.</translation>
 <context>
     <name>FileTransmission</name>
     <message>
-        <location filename="../../qml/Dialogs/FileTransmission.qml" line="33"/>
+        <location filename="../../qml/Dialogs/FileTransmission.qml" line="35"/>
         <source>File Transmission</source>
         <translation>Truyền Tệp</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FileTransmission.qml" line="101"/>
+        <location filename="../../qml/Dialogs/FileTransmission.qml" line="103"/>
         <source>Transfer Protocol:</source>
         <translation>Giao Thức Truyền:</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FileTransmission.qml" line="134"/>
+        <location filename="../../qml/Dialogs/FileTransmission.qml" line="136"/>
         <source>File Selection:</source>
         <translation>Chọn Tệp:</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FileTransmission.qml" line="151"/>
+        <location filename="../../qml/Dialogs/FileTransmission.qml" line="153"/>
         <source>Select File…</source>
         <translation>Chọn Tệp…</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FileTransmission.qml" line="169"/>
+        <location filename="../../qml/Dialogs/FileTransmission.qml" line="171"/>
         <source>Transmission Interval:</source>
         <translation>Khoảng Cách Truyền:</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FileTransmission.qml" line="195"/>
-        <location filename="../../qml/Dialogs/FileTransmission.qml" line="271"/>
+        <location filename="../../qml/Dialogs/FileTransmission.qml" line="197"/>
+        <location filename="../../qml/Dialogs/FileTransmission.qml" line="273"/>
         <source>msecs</source>
         <translation>ms</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FileTransmission.qml" line="205"/>
+        <location filename="../../qml/Dialogs/FileTransmission.qml" line="207"/>
         <source>Block Size:</source>
         <translation>Kích Thước Khối:</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FileTransmission.qml" line="233"/>
+        <location filename="../../qml/Dialogs/FileTransmission.qml" line="235"/>
         <source>bytes</source>
         <translation>byte</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FileTransmission.qml" line="243"/>
+        <location filename="../../qml/Dialogs/FileTransmission.qml" line="245"/>
         <source>Timeout:</source>
         <translation>Thời Gian Chờ:</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FileTransmission.qml" line="281"/>
+        <location filename="../../qml/Dialogs/FileTransmission.qml" line="283"/>
         <source>Max Retries:</source>
         <translation>Số Lần Thử Lại Tối Đa:</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FileTransmission.qml" line="339"/>
+        <location filename="../../qml/Dialogs/FileTransmission.qml" line="341"/>
         <source>Progress: %1%</source>
         <translation>Tiến Độ: %1%</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FileTransmission.qml" line="372"/>
+        <location filename="../../qml/Dialogs/FileTransmission.qml" line="374"/>
         <source>%1 / %2 bytes</source>
         <translation>%1 / %2 byte</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FileTransmission.qml" line="380"/>
+        <location filename="../../qml/Dialogs/FileTransmission.qml" line="382"/>
         <source>Errors: %1</source>
         <translation>Lỗi: %1</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FileTransmission.qml" line="418"/>
+        <location filename="../../qml/Dialogs/FileTransmission.qml" line="420"/>
         <source>Pause Transmission</source>
         <translation>Tạm Dừng Truyền</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FileTransmission.qml" line="419"/>
+        <location filename="../../qml/Dialogs/FileTransmission.qml" line="421"/>
         <source>Resume Transmission</source>
         <translation>Tiếp Tục Truyền</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FileTransmission.qml" line="422"/>
+        <location filename="../../qml/Dialogs/FileTransmission.qml" line="424"/>
         <source>Stop Transmission</source>
         <translation>Dừng Truyền</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FileTransmission.qml" line="423"/>
+        <location filename="../../qml/Dialogs/FileTransmission.qml" line="425"/>
         <source>Begin Transmission</source>
         <translation>Bắt Đầu Truyền</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FileTransmission.qml" line="460"/>
+        <location filename="../../qml/Dialogs/FileTransmission.qml" line="462"/>
         <source>Activity Log</source>
         <translation>Nhật Ký Hoạt Động</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FileTransmission.qml" line="464"/>
+        <location filename="../../qml/Dialogs/FileTransmission.qml" line="466"/>
         <source>Clear</source>
         <translation>Xóa</translation>
     </message>
@@ -14042,95 +14052,95 @@ Thêm thẻ bộ điều khiển ở trên để thăm dò chúng.</translation>
 <context>
     <name>FrameParserTest</name>
     <message>
-        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="39"/>
+        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="41"/>
         <source>Test Frame Parser</source>
         <translation>Kiểm Tra Trình Phân Tích Frame</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="111"/>
+        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="113"/>
         <source>Frame %1</source>
         <translation>Khung %1</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="113"/>
-        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="235"/>
+        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="115"/>
+        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="237"/>
         <source>Decoder</source>
         <translation>Bộ Giải Mã</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="115"/>
+        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="117"/>
         <source>Rows</source>
         <translation>Hàng</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="116"/>
+        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="118"/>
         <source>%1 row(s)</source>
         <translation>%1 hàng</translation>
     </message>
     <message numerus="yes">
-        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="123"/>
+        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="125"/>
         <source>%n dataset(s) not in this frame</source>
         <translation>
             <numerusform>%n tập dữ liệu không có trong frame này</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="125"/>
+        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="127"/>
         <source>Row %1</source>
         <translation>Hàng %1</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="137"/>
+        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="139"/>
         <source>not in this frame</source>
         <translation>không có trong frame này</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="190"/>
+        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="192"/>
         <source>Pipeline Configuration</source>
         <translation>Cấu Hình Pipeline</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="212"/>
+        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="214"/>
         <source>Detection</source>
         <translation>Phát Hiện</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="258"/>
+        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="260"/>
         <source>Start</source>
         <translation>Bắt Đầu</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="279"/>
+        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="281"/>
         <source>End</source>
         <translation>Kết Thúc</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="300"/>
+        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="302"/>
         <source>Checksum</source>
         <translation>Checksum</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="325"/>
+        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="327"/>
         <source>Hex Delimiters</source>
         <translation>Dấu Phân Cách Hex</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="342"/>
+        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="344"/>
         <source>Frame Data Input</source>
         <translation>Đầu Vào Dữ Liệu Frame</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="369"/>
+        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="371"/>
         <source>Enter hex bytes (e.g. 01 A2 FF)</source>
         <translation>Nhập byte hex (ví dụ: 01 A2 FF)</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="370"/>
+        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="372"/>
         <source>Enter raw stream bytes here...</source>
         <translation>Nhập byte luồng thô tại đây...</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="389"/>
+        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="391"/>
         <source>Hex</source>
         <translation>Hex</translation>
     </message>
@@ -14139,49 +14149,49 @@ Thêm thẻ bộ điều khiển ở trên để thăm dò chúng.</translation>
         <translation type="vanished">HEX</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="415"/>
+        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="417"/>
         <source>The sample does not contain the configured frame delimiters, so no frame will be extracted. Type them into the sample (e.g. 
  for a newline) or adjust the detection mode.</source>
         <translation>Mẫu không chứa dấu phân cách frame đã cấu hình nên không thể trích xuất frame. Nhập chúng vào mẫu (ví dụ: 
  cho xuống dòng) hoặc điều chỉnh chế độ phát hiện.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="435"/>
+        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="437"/>
         <source>Pipeline Results</source>
         <translation>Kết Quả Pipeline</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="508"/>
+        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="510"/>
         <source>Stage</source>
         <translation>Chuẩn Bị</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="515"/>
+        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="517"/>
         <source>Value</source>
         <translation>Giá Trị</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="558"/>
+        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="560"/>
         <source>Extraction did not produce a complete frame. Check the start / end delimiters and the detection mode.</source>
         <translation>Quá trình trích xuất không tạo ra frame hoàn chỉnh. Kiểm tra dấu phân cách bắt đầu / kết thúc và chế độ phát hiện.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="560"/>
+        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="562"/>
         <source>Enter sample data above and press Evaluate to preview the parsed output</source>
         <translation>Nhập dữ liệu mẫu ở trên và nhấn Đánh Giá để xem trước kết quả phân tích</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="642"/>
+        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="644"/>
         <source>Clear</source>
         <translation>Xóa</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="653"/>
+        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="655"/>
         <source>Close</source>
         <translation>Đóng</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="660"/>
+        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="662"/>
         <source>Evaluate</source>
         <translation>Đánh Giá</translation>
     </message>
@@ -14284,251 +14294,251 @@ Thêm thẻ bộ điều khiển ở trên để thăm dò chúng.</translation>
 <context>
     <name>FrequencyMarkersEditor</name>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="35"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="37"/>
         <source>Frequency Markers</source>
         <translation>Điểm Đánh Dấu Tần Số</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="71"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="73"/>
         <source>Mains Hum (50 Hz + harmonics)</source>
         <translation>Tiếng Ồn Lưới Điện (50 Hz + hài)</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="73"/>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="81"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="75"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="83"/>
         <source>Mains</source>
         <translation>Lưới Điện</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="74"/>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="82"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="76"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="84"/>
         <source>Mains 2x</source>
         <translation>Lưới Điện 2x</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="75"/>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="83"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="77"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="85"/>
         <source>Mains 3x</source>
         <translation>Điện Lưới 3x</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="79"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="81"/>
         <source>Mains Hum (60 Hz + harmonics)</source>
         <translation>Nhiễu Điện Lưới (60 Hz + Hài)</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="87"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="89"/>
         <source>Octave Bands (31.5 Hz - 16 kHz)</source>
         <translation>Dải Octave (31.5 Hz - 16 kHz)</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="89"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="91"/>
         <source>31.5 Hz</source>
         <translation>31.5 Hz</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="90"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="92"/>
         <source>63 Hz</source>
         <translation>63 Hz</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="91"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="93"/>
         <source>125 Hz</source>
         <translation>125 Hz</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="92"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="94"/>
         <source>250 Hz</source>
         <translation>250 Hz</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="93"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="95"/>
         <source>500 Hz</source>
         <translation>500 Hz</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="94"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="96"/>
         <source>1 kHz</source>
         <translation>1 kHz</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="95"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="97"/>
         <source>2 kHz</source>
         <translation>2 kHz</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="96"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="98"/>
         <source>4 kHz</source>
         <translation>4 kHz</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="97"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="99"/>
         <source>8 kHz</source>
         <translation>8 kHz</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="98"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="100"/>
         <source>16 kHz</source>
         <translation>16 kHz</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="246"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="248"/>
         <source>Choose Marker Color</source>
         <translation>Chọn Màu Điểm Đánh Dấu</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="273"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="275"/>
         <source>Presets</source>
         <translation>Cài Đặt Sẵn</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="296"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="298"/>
         <source>Preset</source>
         <translation>Cài Đặt Sẵn</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="311"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="313"/>
         <source>Choose preset…</source>
         <translation>Chọn cài đặt sẵn…</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="323"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="325"/>
         <source>Frequency range</source>
         <translation>Phạm vi tần số</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="329"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="331"/>
         <source>0 - %1 Hz</source>
         <translation>0 - %1 Hz</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="351"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="353"/>
         <source>Markers</source>
         <translation>Điểm Đánh Dấu</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="362"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="364"/>
         <source>Add Marker</source>
         <translation>Thêm Điểm Đánh Dấu</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="366"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="368"/>
         <source>Add a new point marker; set an end frequency to turn it into a band.</source>
         <translation>Thêm một điểm đánh dấu mới; đặt tần số kết thúc để chuyển thành dải tần.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="397"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="399"/>
         <source>Start (Hz)</source>
         <translation>Bắt Đầu (Hz)</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="403"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="405"/>
         <source>End (Hz)</source>
         <translation>Kết Thúc (Hz)</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="409"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="411"/>
         <source>Warn (dB)</source>
         <translation>Cảnh Báo (dB)</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="415"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="417"/>
         <source>Alarm (dB)</source>
         <translation>Báo Động (dB)</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="421"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="423"/>
         <source>Color</source>
         <translation>Màu Sắc</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="428"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="430"/>
         <source>Label</source>
         <translation>Nhãn</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="500"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="502"/>
         <source>(point)</source>
         <translation>(điểm)</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="517"/>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="531"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="519"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="533"/>
         <source>(off)</source>
         <translation>(tắt)</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="565"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="567"/>
         <source>Reset to automatic color</source>
         <translation>Đặt lại về màu tự động</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="579"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="581"/>
         <source>Click to choose a color. Right-click to reset to automatic.</source>
         <translation>Nhấp để chọn màu. Nhấp chuột phải để đặt lại về tự động.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="580"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="582"/>
         <source>Click to choose a custom color.</source>
         <translation>Nhấp để chọn màu tùy chỉnh.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="601"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="603"/>
         <source>(optional)</source>
         <translation>(tùy chọn)</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="618"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="620"/>
         <source>Move up.</source>
         <translation>Di chuyển lên.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="637"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="639"/>
         <source>Move down.</source>
         <translation>Di chuyển xuống.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="650"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="652"/>
         <source>Remove this marker.</source>
         <translation>Xóa điểm đánh dấu này.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="664"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="666"/>
         <source>No markers defined. Pick a preset above or add a marker to get started.</source>
         <translation>Chưa có điểm đánh dấu nào. Chọn một mẫu có sẵn ở trên hoặc thêm điểm đánh dấu để bắt đầu.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="681"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="683"/>
         <source>Preview</source>
         <translation>Xem Trước</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="757"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="759"/>
         <source>0 Hz</source>
         <translation>0 Hz</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="763"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="765"/>
         <source>%1 Hz</source>
         <translation>%1 Hz</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="785"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="787"/>
         <source>Cancel</source>
         <translation>Hủy</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="787"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="789"/>
         <source>Discard changes.</source>
         <translation>Hủy các thay đổi.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="796"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="798"/>
         <source>Apply</source>
         <translation>Áp Dụng</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="799"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="801"/>
         <source>Apply changes to the dataset.</source>
         <translation>Áp dụng các thay đổi vào tập dữ liệu.</translation>
     </message>
@@ -15001,22 +15011,22 @@ Thêm thẻ bộ điều khiển ở trên để thăm dò chúng.</translation>
         <translation>Thiết Bị HID</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/HID.qml" line="80"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/HID.qml" line="82"/>
         <source>Usage Page</source>
         <translation>Trang Sử Dụng</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/HID.qml" line="96"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/HID.qml" line="100"/>
         <source>Usage</source>
         <translation>Sử Dụng</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/HID.qml" line="137"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/HID.qml" line="143"/>
         <source>Connect gamepads, joysticks, steering wheels, flight controllers, and other HID-class USB devices.</source>
         <translation>Kết nối gamepad, joystick, vô lăng, bộ điều khiển bay và các thiết bị USB lớp HID khác.</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/HID.qml" line="145"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/HID.qml" line="151"/>
         <source>HID Usage Tables (USB.org)</source>
         <translation>Bảng Sử Dụng HID (USB.org)</translation>
     </message>
@@ -15024,47 +15034,47 @@ Thêm thẻ bộ điều khiển ở trên để thăm dò chúng.</translation>
 <context>
     <name>HelpCenter</name>
     <message>
-        <location filename="../../qml/Dialogs/HelpCenter.qml" line="32"/>
+        <location filename="../../qml/Dialogs/HelpCenter.qml" line="34"/>
         <source>Help Center</source>
         <translation>Trung Tâm Trợ Giúp</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/HelpCenter.qml" line="95"/>
+        <location filename="../../qml/Dialogs/HelpCenter.qml" line="97"/>
         <source>Fetching help pages…</source>
         <translation>Đang tải trang trợ giúp…</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/HelpCenter.qml" line="187"/>
+        <location filename="../../qml/Dialogs/HelpCenter.qml" line="189"/>
         <source>Search…</source>
         <translation>Tìm Kiếm…</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/HelpCenter.qml" line="305"/>
+        <location filename="../../qml/Dialogs/HelpCenter.qml" line="307"/>
         <source>Loading…</source>
         <translation>Đang Tải…</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/HelpCenter.qml" line="349"/>
+        <location filename="../../qml/Dialogs/HelpCenter.qml" line="351"/>
         <source>Select a page from the sidebar</source>
         <translation>Chọn một trang từ thanh bên</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/HelpCenter.qml" line="379"/>
+        <location filename="../../qml/Dialogs/HelpCenter.qml" line="381"/>
         <source>Copied to Clipboard</source>
         <translation>Đã sao chép vào bộ nhớ tạm</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/HelpCenter.qml" line="411"/>
+        <location filename="../../qml/Dialogs/HelpCenter.qml" line="413"/>
         <source>View Online</source>
         <translation>Xem trực Tuyến</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/HelpCenter.qml" line="423"/>
+        <location filename="../../qml/Dialogs/HelpCenter.qml" line="425"/>
         <source>%1 pages</source>
         <translation>%1 trang</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/HelpCenter.qml" line="432"/>
+        <location filename="../../qml/Dialogs/HelpCenter.qml" line="434"/>
         <source>Close</source>
         <translation>Đóng</translation>
     </message>
@@ -15220,123 +15230,123 @@ Thêm thẻ bộ điều khiển ở trên để thăm dò chúng.</translation>
 <context>
     <name>IO::Drivers::Audio</name>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="421"/>
+        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="412"/>
         <source>Audio Device Stopped</source>
         <translation>Thiết Bị Âm Thanh Đã Dừng</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="422"/>
+        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="413"/>
         <source>The audio backend stopped the stream. The device may have been unplugged or claimed by another application.</source>
         <translation>Backend âm thanh đã dừng luồng. Thiết bị có thể đã bị rút hoặc bị ứng dụng khác chiếm dụng.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="854"/>
+        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="845"/>
         <source>channels</source>
         <translation>kênh</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="854"/>
+        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="845"/>
         <source> channels</source>
         <translation>kênh</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="837"/>
+        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="828"/>
         <source>Unsigned 8-bit</source>
         <translation>Unsigned 8-bit</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="246"/>
+        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="237"/>
         <source>Audio output unavailable</source>
         <translation>Đầu ra âm thanh không khả dụng</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="247"/>
+        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="238"/>
         <source>No output device is configured for this session.</source>
         <translation>Không có thiết bị đầu ra nào được cấu hình cho phiên này.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="274"/>
+        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="265"/>
         <source>Audio channel mismatch</source>
         <translation>Kênh âm thanh không khớp</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="275"/>
+        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="266"/>
         <source>Expected %1 value(s) per frame, got %2.</source>
         <translation>Mong đợi %1 giá trị mỗi khung, nhận được %2.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="350"/>
-        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="356"/>
+        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="341"/>
+        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="347"/>
         <source>Audio device error</source>
         <translation>Lỗi thiết bị âm thanh</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="351"/>
+        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="342"/>
         <source>The selected audio device could not be initialized.</source>
         <translation>Không thể khởi tạo thiết bị âm thanh đã chọn.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="356"/>
+        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="347"/>
         <source>The selected audio device could not be started.</source>
         <translation>Không thể khởi động thiết bị âm thanh đã chọn.</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="838"/>
+        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="829"/>
         <source>Signed 16-bit</source>
         <translation>Signed 16-bit</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="839"/>
+        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="830"/>
         <source>Signed 24-bit</source>
         <translation>Signed 24-bit</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="840"/>
+        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="831"/>
         <source>Signed 32-bit</source>
         <translation>Signed 32-bit</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="841"/>
+        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="832"/>
         <source>Float 32-bit</source>
         <translation>Float 32-bit</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="844"/>
+        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="835"/>
         <source>Mono</source>
         <translation>Mono</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="845"/>
+        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="836"/>
         <source>Stereo</source>
         <translation>Stereo</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="1379"/>
+        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="1370"/>
         <source>Input Device</source>
         <translation>Thiết Bị Đầu Vào</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="1387"/>
+        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="1378"/>
         <source>Sample Rate</source>
         <translation>Tốc Độ Lấy Mẫu</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="1395"/>
+        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="1386"/>
         <source>Normalization</source>
         <translation>Chuẩn Hóa</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="1396"/>
+        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="1387"/>
         <source>Publish samples as floats in the -1.0 to 1.0 range</source>
         <translation>Xuất bản mẫu dưới dạng số thực trong phạm vi -1.0 đến 1.0</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="1404"/>
+        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="1395"/>
         <source>Sample Format</source>
         <translation>Định Dạng Mẫu</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="1413"/>
+        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="1404"/>
         <source>Channels</source>
         <translation>Kênh</translation>
     </message>
@@ -18845,22 +18855,22 @@ Thiết bị có thể không hiển thị các điểm cuối dữ liệu trong
 <context>
     <name>IconPicker</name>
     <message>
-        <location filename="../../qml/Dialogs/IconPicker.qml" line="41"/>
+        <location filename="../../qml/Dialogs/IconPicker.qml" line="43"/>
         <source>Select Icon</source>
         <translation>Chọn Biểu Tượng</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/IconPicker.qml" line="118"/>
+        <location filename="../../qml/Dialogs/IconPicker.qml" line="120"/>
         <source>Search Online…</source>
         <translation>Tìm Kiếm Trực Tuyến…</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/IconPicker.qml" line="131"/>
+        <location filename="../../qml/Dialogs/IconPicker.qml" line="133"/>
         <source>OK</source>
         <translation>OK</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/IconPicker.qml" line="143"/>
+        <location filename="../../qml/Dialogs/IconPicker.qml" line="145"/>
         <source>Cancel</source>
         <translation>Hủy</translation>
     </message>
@@ -18873,92 +18883,92 @@ Thiết bị có thể không hiển thị các điểm cuối dữ liệu trong
         <translation>Máy Chủ</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Iec104.qml" line="58"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Iec104.qml" line="60"/>
         <source>IP Address</source>
         <translation>Địa Chỉ IP</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Iec104.qml" line="76"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Iec104.qml" line="78"/>
         <source>Port</source>
         <translation>Cổng</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Iec104.qml" line="84"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Iec104.qml" line="88"/>
         <source>2404</source>
         <translation>2404</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Iec104.qml" line="106"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Iec104.qml" line="110"/>
         <source>Common Address</source>
         <translation>Địa Chỉ Chung</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Iec104.qml" line="113"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Iec104.qml" line="119"/>
         <source>0-65535</source>
         <translation>0-65535</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Iec104.qml" line="133"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Iec104.qml" line="139"/>
         <source>Send Window (k)</source>
         <translation>Cửa Sổ Gửi (k)</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Iec104.qml" line="138"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Iec104.qml" line="146"/>
         <source>12</source>
         <translation>12</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Iec104.qml" line="155"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Iec104.qml" line="163"/>
         <source>Ack Window (w)</source>
         <translation>Cửa Sổ Xác Nhận (w)</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Iec104.qml" line="160"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Iec104.qml" line="170"/>
         <source>8</source>
         <translation>8</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Iec104.qml" line="177"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Iec104.qml" line="187"/>
         <source>Timeout t1 (ms)</source>
         <translation>Thời Gian Chờ t1 (ms)</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Iec104.qml" line="182"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Iec104.qml" line="194"/>
         <source>15000</source>
         <translation>15000</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Iec104.qml" line="199"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Iec104.qml" line="211"/>
         <source>Timeout t2 (ms)</source>
         <translation>Thời Gian Chờ t2 (ms)</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Iec104.qml" line="204"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Iec104.qml" line="218"/>
         <source>10000</source>
         <translation>10000</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Iec104.qml" line="221"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Iec104.qml" line="235"/>
         <source>Timeout t3 (ms)</source>
         <translation>Thời Gian Chờ t3 (ms)</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Iec104.qml" line="226"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Iec104.qml" line="242"/>
         <source>20000</source>
         <translation>20000</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Iec104.qml" line="255"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Iec104.qml" line="273"/>
         <source>Create Project from Points</source>
         <translation>Tạo Dự Án từ Điểm</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Iec104.qml" line="270"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Iec104.qml" line="288"/>
         <source>%1 point(s) discovered</source>
         <translation>Đã phát hiện %1 điểm</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Iec104.qml" line="271"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Iec104.qml" line="289"/>
         <source>Connect to discover the station's points</source>
         <translation>Kết nối để phát hiện các điểm của trạm</translation>
     </message>
@@ -19144,47 +19154,47 @@ Thiết bị có thể không hiển thị các điểm cuối dữ liệu trong
 <context>
     <name>KeyManagerDialog</name>
     <message>
-        <location filename="../../qml/AI/KeyManagerDialog.qml" line="23"/>
+        <location filename="../../qml/AI/KeyManagerDialog.qml" line="25"/>
         <source>API Keys</source>
         <translation>Khóa API</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/KeyManagerDialog.qml" line="47"/>
+        <location filename="../../qml/AI/KeyManagerDialog.qml" line="49"/>
         <source>Anthropic Claude. The default is Claude Haiku 4.5 ($1 input / $5 output per million tokens). Sonnet 4.6 and Opus 4.7 are also available. Supports streaming, tool use, extended thinking, and prompt caching.</source>
         <translation>Anthropic Claude. Mặc định là Claude Haiku 4.5 ($1 đầu vào / $5 đầu ra trên triệu token). Sonnet 4.6 và OPUS 4.7 cũng khả dụng. Hỗ trợ streaming, sử dụng công cụ, suy nghĩ mở rộng và bộ nhớ đệm prompt.</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/KeyManagerDialog.qml" line="52"/>
+        <location filename="../../qml/AI/KeyManagerDialog.qml" line="54"/>
         <source>OpenAI Chat Completions. The default is GPT-5 mini for fast, cost-conscious agentic work. GPT-5.2 is the stronger general-purpose option, and GPT-5.2 Chat tracks the model currently used in ChatGPT.</source>
         <translation>OpenAI Chat Completions. Mặc định là GPT-5 mini cho công việc tác nhân nhanh, tiết kiệm chi phí. GPT-5.2 là tùy chọn đa năng mạnh hơn, và GPT-5.2 Chat theo dõi mô hình hiện đang được sử dụng trong ChatGPT.</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/KeyManagerDialog.qml" line="57"/>
+        <location filename="../../qml/AI/KeyManagerDialog.qml" line="59"/>
         <source>Google Gemini. The default is Gemini 2.0 Flash, which has a generous free tier (subject to rate limits). Gemini 1.5 Pro and Gemini 1.5 Flash are also available.</source>
         <translation>Google Gemini. Mặc định là Gemini 2.0 Flash, có gói miễn phí hào phóng (tuân theo giới hạn tốc độ). Gemini 1.5 Pro và Gemini 1.5 Flash cũng khả dụng.</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/KeyManagerDialog.qml" line="61"/>
+        <location filename="../../qml/AI/KeyManagerDialog.qml" line="63"/>
         <source>DeepSeek. OpenAI-compatible API. The default is deepseek-chat (V3). deepseek-reasoner (R1) is also available. Often the cheapest cloud option for tool use.</source>
         <translation>DeepSeek. API tương thích OpenAI. Mặc định là deepseek-chat (V3). deepseek-reasoner (R1) cũng khả dụng. Thường là tùy chọn đám mây rẻ nhất cho sử dụng công cụ.</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/KeyManagerDialog.qml" line="65"/>
+        <location filename="../../qml/AI/KeyManagerDialog.qml" line="67"/>
         <source>OpenRouter. One key, ~200 models from Anthropic, OpenAI, Google, Meta, Mistral, DeepSeek, Qwen, and others. Free-tier models (suffixed :free) are rate-limited but require no additional billing. Pay-as-you-go for the rest.</source>
         <translation>OpenRouter. Một khóa, ~200 mô hình từ Anthropic, OpenAI, Google, Meta, Mistral, DeepSeek, Qwen và các nhà cung cấp khác. Mô hình gói miễn phí (hậu tố :free) bị giới hạn tốc độ nhưng không yêu cầu thanh toán thêm. Trả theo mức sử dụng cho phần còn lại.</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/KeyManagerDialog.qml" line="70"/>
+        <location filename="../../qml/AI/KeyManagerDialog.qml" line="72"/>
         <source>Groq. Hardware-accelerated inference (LPUs) for very fast Llama, Mixtral, Gemma, DeepSeek-R1 distill, and Qwen models. Generous free tier with daily token limits.</source>
         <translation>Groq. Suy luận tăng tốc phần cứng (LPU) cho các mô hình Llama, Mixtral, Gemma, DeepSeek-R1 distill và Qwen rất nhanh. Gói miễn phí hào phóng với giới hạn token hàng ngày.</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/KeyManagerDialog.qml" line="74"/>
+        <location filename="../../qml/AI/KeyManagerDialog.qml" line="76"/>
         <source>Mistral. The default is Mistral Large. Codestral targets code completion, Pixtral handles vision, and the Ministral models are tuned for edge / low-latency use.</source>
         <translation>Mistral. Mặc định là Mistral Large. Codestral nhắm đến hoàn thiện mã, Pixtral xử lý hình ảnh, và các mô hình Ministral được tinh chỉnh cho sử dụng edge / độ trễ thấp.</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/KeyManagerDialog.qml" line="78"/>
+        <location filename="../../qml/AI/KeyManagerDialog.qml" line="80"/>
         <source>Local model server. Works with any OpenAI-compatible endpoint -- Ollama, llama.cpp's llama-server, LM Studio, or vLLM. Nothing leaves your machine. The model list is queried live from the server.</source>
         <translation>Máy chủ mô hình cục bộ. Hoạt động với bất kỳ điểm cuối tương thích OpenAI nào -- Ollama, llama-server của llama.cpp, LM Studio, hoặc vLLM. Không có dữ liệu nào rời khỏi máy tính của bạn. Danh sách mô hình được truy vấn trực tiếp từ máy chủ.</translation>
     </message>
@@ -19193,107 +19203,107 @@ Thiết bị có thể không hiển thị các điểm cuối dữ liệu trong
         <translation type="vanished">Sử dụng khóa API của riêng bạn. Chúng được mã hóa khi lưu trữ bằng khóa riêng cho từng máy và không bao giờ rời khỏi máy tính của bạn trừ khi giao tiếp với nhà cung cấp bạn chọn.</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/KeyManagerDialog.qml" line="100"/>
+        <location filename="../../qml/AI/KeyManagerDialog.qml" line="102"/>
         <source>Bring your own API keys. They are stored obfuscated in this machine's settings and never leave your computer except to communicate with the provider you select.</source>
         <translation>Sử dụng khóa API của riêng bạn. Chúng được lưu trữ làm rối trong cài đặt máy này và không bao giờ rời khỏi máy tính của bạn trừ khi giao tiếp với nhà cung cấp bạn chọn.</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/KeyManagerDialog.qml" line="166"/>
+        <location filename="../../qml/AI/KeyManagerDialog.qml" line="168"/>
         <source>Key set</source>
         <translation>Đã đặt khóa</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/KeyManagerDialog.qml" line="167"/>
+        <location filename="../../qml/AI/KeyManagerDialog.qml" line="169"/>
         <source>No key</source>
         <translation>Chưa có khóa</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/KeyManagerDialog.qml" line="204"/>
+        <location filename="../../qml/AI/KeyManagerDialog.qml" line="206"/>
         <source>A key is on file -- paste a new one to replace it</source>
         <translation>Đã có khóa trong hồ sơ -- dán khóa mới để thay thế</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/KeyManagerDialog.qml" line="205"/>
+        <location filename="../../qml/AI/KeyManagerDialog.qml" line="207"/>
         <source>Paste your API key here</source>
         <translation>Dán khóa API của bạn vào đây</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/KeyManagerDialog.qml" line="212"/>
+        <location filename="../../qml/AI/KeyManagerDialog.qml" line="214"/>
         <source>Hide key</source>
         <translation>Ẩn khóa</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/KeyManagerDialog.qml" line="213"/>
+        <location filename="../../qml/AI/KeyManagerDialog.qml" line="215"/>
         <source>Show key while typing</source>
         <translation>Hiển thị khóa khi nhập</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/KeyManagerDialog.qml" line="224"/>
+        <location filename="../../qml/AI/KeyManagerDialog.qml" line="226"/>
         <source>Get key</source>
         <translation>Lấy khóa</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/KeyManagerDialog.qml" line="225"/>
+        <location filename="../../qml/AI/KeyManagerDialog.qml" line="227"/>
         <source>Open the provider's console to create a new key</source>
         <translation>Mở bảng điều khiển của nhà cung cấp để tạo khóa mới</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/KeyManagerDialog.qml" line="236"/>
+        <location filename="../../qml/AI/KeyManagerDialog.qml" line="238"/>
         <source>Save</source>
         <translation>Lưu</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/KeyManagerDialog.qml" line="254"/>
+        <location filename="../../qml/AI/KeyManagerDialog.qml" line="256"/>
         <source>Remove the stored key for %1</source>
         <translation>Xóa khóa đã lưu cho %1</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/KeyManagerDialog.qml" line="278"/>
+        <location filename="../../qml/AI/KeyManagerDialog.qml" line="280"/>
         <source>http://localhost:11434/v1</source>
         <translation>http://localhost:11434/v1</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/KeyManagerDialog.qml" line="282"/>
+        <location filename="../../qml/AI/KeyManagerDialog.qml" line="284"/>
         <source>Install Ollama</source>
         <translation>Cài Đặt Ollama</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/KeyManagerDialog.qml" line="283"/>
+        <location filename="../../qml/AI/KeyManagerDialog.qml" line="285"/>
         <source>Open the Ollama download page</source>
         <translation>Mở trang tải xuống Ollama</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/KeyManagerDialog.qml" line="294"/>
+        <location filename="../../qml/AI/KeyManagerDialog.qml" line="296"/>
         <source>Apply</source>
         <translation>Áp Dụng</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/KeyManagerDialog.qml" line="309"/>
+        <location filename="../../qml/AI/KeyManagerDialog.qml" line="311"/>
         <source>Re-query the model list</source>
         <translation>Truy vấn lại danh sách mô hình</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/KeyManagerDialog.qml" line="330"/>
+        <location filename="../../qml/AI/KeyManagerDialog.qml" line="332"/>
         <source>Context window</source>
         <translation>Cửa sổ ngữ cảnh</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/KeyManagerDialog.qml" line="339"/>
+        <location filename="../../qml/AI/KeyManagerDialog.qml" line="341"/>
         <source>Tokens the model accepts, e.g. 8192</source>
         <translation>Số token mà mô hình chấp nhận, ví dụ: 8192</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/KeyManagerDialog.qml" line="387"/>
+        <location filename="../../qml/AI/KeyManagerDialog.qml" line="389"/>
         <source>No API keys configured yet. Add a key to get started.</source>
         <translation>Chưa cấu hình khóa API nào. Thêm khóa để bắt đầu.</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/KeyManagerDialog.qml" line="390"/>
+        <location filename="../../qml/AI/KeyManagerDialog.qml" line="392"/>
         <source>One provider is ready.</source>
         <translation>Một nhà cung cấp đã sẵn sàng.</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/KeyManagerDialog.qml" line="392"/>
+        <location filename="../../qml/AI/KeyManagerDialog.qml" line="394"/>
         <source>%1 providers are ready.</source>
         <translation>%1 nhà cung cấp đã sẵn sàng.</translation>
     </message>
@@ -19341,7 +19351,7 @@ Thiết bị có thể không hiển thị các điểm cuối dữ liệu trong
         <translation>Chia Tách</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/LayoutPatternPicker.qml" line="329"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/LayoutPatternPicker.qml" line="331"/>
         <source>Manual placement</source>
         <translation>Đặt Thủ Công</translation>
     </message>
@@ -19349,22 +19359,22 @@ Thiết bị có thể không hiển thị các điểm cuối dữ liệu trong
 <context>
     <name>LicenseManagement</name>
     <message>
-        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="37"/>
+        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="39"/>
         <source>Licensing</source>
         <translation>Cấp Phép</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="84"/>
+        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="86"/>
         <source>Please wait…</source>
         <translation>Vui lòng đợi…</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="124"/>
+        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="126"/>
         <source>Activate Serial Studio Pro</source>
         <translation>Kích Hoạt Serial Studio Pro</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="131"/>
+        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="133"/>
         <source>Paste your license key below to unlock Pro features like MQTT, 3D plotting, and more.</source>
         <translation>Dán khóa cấp phép của bạn bên dưới để mở khóa các tính năng Pro như MQTT, biểu đồ 3D và nhiều hơn nữa.</translation>
     </message>
@@ -19381,123 +19391,123 @@ Yearly is the best value; Monthly and Lifetime plans are also available.</source
 Gói Hàng năm có giá trị tốt nhất; các gói Hàng tháng và Trọn đời cũng có sẵn.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="138"/>
+        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="140"/>
         <source>Yearly is the best value; Monthly and Lifetime plans are also available.</source>
         <translation>Gói Hàng năm có giá trị tốt nhất; các gói Hàng tháng và Trọn đời cũng có sẵn.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="150"/>
+        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="152"/>
         <source>Paste your license key here…</source>
         <translation>Dán khóa cấp phép của bạn vào đây…</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="177"/>
-        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="340"/>
-        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="389"/>
+        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="179"/>
+        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="342"/>
+        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="391"/>
         <source>Copy</source>
         <translation>Sao Chép</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="183"/>
+        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="185"/>
         <source>Paste</source>
         <translation>Dán</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="189"/>
-        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="346"/>
-        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="395"/>
+        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="191"/>
+        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="348"/>
+        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="397"/>
         <source>Select All</source>
         <translation>Chọn Tất Cả</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="242"/>
-        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="433"/>
+        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="244"/>
+        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="435"/>
         <source>Product</source>
         <translation>Sản Phẩm</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="249"/>
+        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="251"/>
         <source>Serial Studio %1</source>
         <translation>Serial Studio %1</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="260"/>
+        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="262"/>
         <source>Licensee</source>
         <translation>Người Được Cấp Phép</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="279"/>
+        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="281"/>
         <source>Licensee E-Mail</source>
         <translation>E-mail Người Được Cấp Phép</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="296"/>
+        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="298"/>
         <source>Device Usage</source>
         <translation>Sử Dụng Thiết Bị</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="304"/>
+        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="306"/>
         <source>%1 devices in use (Unlimited plan)</source>
         <translation>%1 thiết bị đang sử dụng (Gói không giới hạn)</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="305"/>
+        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="307"/>
         <source>%1 of %2 devices used</source>
         <translation>Đã sử dụng %1 trong số %2 thiết bị</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="315"/>
-        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="450"/>
+        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="317"/>
+        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="452"/>
         <source>Device ID</source>
         <translation>ID Thiết Bị</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="362"/>
+        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="364"/>
         <source>License Key</source>
         <translation>Khóa Cấp Phép</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="440"/>
+        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="442"/>
         <source>Serial Studio %1 (Offline)</source>
         <translation>Serial Studio %1 (Ngoại Tuyến)</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="467"/>
+        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="469"/>
         <source>Expires</source>
         <translation>Hết Hạn</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="474"/>
+        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="476"/>
         <source>%1 (%2 days left)</source>
         <translation>%1 (còn %2 ngày)</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="487"/>
+        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="489"/>
         <source>Your offline license expires soon. Request a new certificate to stay activated.</source>
         <translation>Giấy phép ngoại tuyến của bạn sắp hết hạn. Yêu cầu chứng chỉ mới để duy trì kích hoạt.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="504"/>
+        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="506"/>
         <source>Customer Portal</source>
         <translation>Cổng Khách Hàng</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="515"/>
+        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="517"/>
         <source>Buy License</source>
         <translation>Mua Giấy Phép</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="522"/>
+        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="524"/>
         <source>Activate</source>
         <translation>Kích Hoạt</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="533"/>
+        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="535"/>
         <source>Activate Offline…</source>
         <translation>Kích Hoạt Ngoại Tuyến…</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="542"/>
+        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="544"/>
         <source>Deactivate</source>
         <translation>Hủy Kích Hoạt</translation>
     </message>
@@ -19906,153 +19916,153 @@ To reuse this seat on another device, email alex@serial-studio.com with your dev
         <translation>Tên Máy Chủ</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="109"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="111"/>
         <source>e.g. broker.hivemq.com</source>
         <translation>vd. broker.hivemq.com</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="118"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="120"/>
         <source>Port</source>
         <translation>Cổng</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="139"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="143"/>
         <source>Topic Filter</source>
         <translation>Bộ Lọc Topic</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="145"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="151"/>
         <source>e.g. sensors/#</source>
         <translation>ví dụ: sensors/#</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="155"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="161"/>
         <source>Client ID</source>
         <translation>ID Client</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="170"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="180"/>
         <source>Regenerate</source>
         <translation>Tạo Lại</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="182"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="192"/>
         <source>Username</source>
         <translation>Tên Đăng Nhập</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="197"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="209"/>
         <source>Password</source>
         <translation>Mật Khẩu</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="213"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="227"/>
         <source>Version</source>
         <translation>Phiên Bản</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="239"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="255"/>
         <source>Keep Alive (s)</source>
         <translation>Keep Alive (s)</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="257"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="275"/>
         <source>Clean Session</source>
         <translation>Clean Session</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="283"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="303"/>
         <source>Sparkplug</source>
         <translation>Sparkplug</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="309"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="331"/>
         <source>Group ID</source>
         <translation>ID Nhóm</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="315"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="339"/>
         <source>All groups</source>
         <translation>Tất cả nhóm</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="327"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="351"/>
         <source>Sparkplug Project</source>
         <translation>Dự Án Sparkplug</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="336"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="362"/>
         <source>Create Project from Births</source>
         <translation>Tạo Dự Án từ Birth</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="346"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="372"/>
         <source>Use SSL/TLS</source>
         <translation>Sử Dụng SSL/TLS</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="373"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="401"/>
         <source>SSL Protocol</source>
         <translation>Giao Thức SSL</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="403"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="433"/>
         <source>Peer Verify</source>
         <translation>Xác Minh Ngang Hàng</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="435"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="467"/>
         <source>Verify Depth</source>
         <translation>Độ Sâu Xác Minh</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="456"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="490"/>
         <source>CA Certificates</source>
         <translation>Chứng Chỉ CA</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="462"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="498"/>
         <source>Load From Folder…</source>
         <translation>Tải từ Thư Mục…</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="473"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="509"/>
         <source>Client Certificate</source>
         <translation>Chứng Chỉ Khách</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="483"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="521"/>
         <source>Optional (mutual TLS)</source>
         <translation>Tùy chọn (mutual TLS)</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="490"/>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="520"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="530"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="564"/>
         <source>Browse…</source>
         <translation>Duyệt…</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="502"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="542"/>
         <source>Private Key</source>
         <translation>Khóa Riêng</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="516"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="558"/>
         <source>Defaults to the certificate file</source>
         <translation>Mặc định là tệp chứng chỉ</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="533"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="577"/>
         <source>Key Passphrase</source>
         <translation>Cụm Mật Khẩu Khóa</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="549"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="595"/>
         <source>ALPN</source>
         <translation>ALPN</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="578"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="626"/>
         <source>ALPN Protocol</source>
         <translation>Giao Thức ALPN</translation>
     </message>
@@ -20447,97 +20457,97 @@ To reuse this seat on another device, email alex@serial-studio.com with your dev
 <context>
     <name>Macros</name>
     <message>
-        <location filename="../../qml/Dialogs/Macros.qml" line="29"/>
+        <location filename="../../qml/Dialogs/Macros.qml" line="31"/>
         <source>Macros</source>
         <translation>Macro</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Macros.qml" line="193"/>
+        <location filename="../../qml/Dialogs/Macros.qml" line="195"/>
         <source>[macro] finished</source>
         <translation>[macro] đã hoàn thành</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Macros.qml" line="194"/>
+        <location filename="../../qml/Dialogs/Macros.qml" line="196"/>
         <source>[macro] %1</source>
         <translation>[macro] %1</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Macros.qml" line="197"/>
+        <location filename="../../qml/Dialogs/Macros.qml" line="199"/>
         <source>[macro] saved %1</source>
         <translation>[macro] đã lưu %1</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Macros.qml" line="202"/>
+        <location filename="../../qml/Dialogs/Macros.qml" line="204"/>
         <source>[macro] loaded %1</source>
         <translation>[macro] đã tải %1</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Macros.qml" line="313"/>
+        <location filename="../../qml/Dialogs/Macros.qml" line="315"/>
         <source>Search commands...</source>
         <translation>Tìm kiếm lệnh...</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Macros.qml" line="448"/>
+        <location filename="../../qml/Dialogs/Macros.qml" line="450"/>
         <source>Parameters</source>
         <translation>Tham Số</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Macros.qml" line="449"/>
+        <location filename="../../qml/Dialogs/Macros.qml" line="451"/>
         <source>No parameters</source>
         <translation>Không có tham số</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Macros.qml" line="510"/>
+        <location filename="../../qml/Dialogs/Macros.qml" line="512"/>
         <source>Terminal</source>
         <translation>Terminal</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Macros.qml" line="516"/>
+        <location filename="../../qml/Dialogs/Macros.qml" line="518"/>
         <source>Script</source>
         <translation>Script</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Macros.qml" line="607"/>
+        <location filename="../../qml/Dialogs/Macros.qml" line="609"/>
         <source>Type a command below to get started</source>
         <translation>Nhập lệnh bên dưới để bắt đầu</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Macros.qml" line="632"/>
+        <location filename="../../qml/Dialogs/Macros.qml" line="634"/>
         <source>Copy</source>
         <translation>Sao Chép</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Macros.qml" line="638"/>
+        <location filename="../../qml/Dialogs/Macros.qml" line="640"/>
         <source>Select All</source>
         <translation>Chọn Tất Cả</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Macros.qml" line="644"/>
+        <location filename="../../qml/Dialogs/Macros.qml" line="646"/>
         <source>Clear</source>
         <translation>Xóa</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Macros.qml" line="685"/>
+        <location filename="../../qml/Dialogs/Macros.qml" line="687"/>
         <source>command.name { "parameter": value }</source>
         <translation>command.name { "parameter": value }</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Macros.qml" line="838"/>
+        <location filename="../../qml/Dialogs/Macros.qml" line="840"/>
         <source>Run command</source>
         <translation>Chạy lệnh</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Macros.qml" line="853"/>
+        <location filename="../../qml/Dialogs/Macros.qml" line="855"/>
         <source>Clear output</source>
         <translation>Xóa đầu ra</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Macros.qml" line="886"/>
+        <location filename="../../qml/Dialogs/Macros.qml" line="888"/>
         <source>[macro] verify: no syntax errors</source>
         <translation>[macro] xác minh: không có lỗi cú pháp</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Macros.qml" line="888"/>
+        <location filename="../../qml/Dialogs/Macros.qml" line="890"/>
         <source>[macro] verify failed: %1</source>
         <translation>[macro] xác minh thất bại: %1</translation>
     </message>
@@ -20550,42 +20560,42 @@ To reuse this seat on another device, email alex@serial-studio.com with your dev
         <translation type="vanished">Trình chỉnh sửa macro có các thay đổi chưa lưu.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Macros.qml" line="927"/>
+        <location filename="../../qml/Dialogs/Macros.qml" line="929"/>
         <source>JavaScript</source>
         <translation>Javascript</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Macros.qml" line="927"/>
+        <location filename="../../qml/Dialogs/Macros.qml" line="929"/>
         <source>Lua</source>
         <translation>Lua</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Macros.qml" line="945"/>
+        <location filename="../../qml/Dialogs/Macros.qml" line="947"/>
         <source>Load macro</source>
         <translation>Tải macro</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Macros.qml" line="958"/>
+        <location filename="../../qml/Dialogs/Macros.qml" line="960"/>
         <source>Save macro</source>
         <translation>Lưu macro</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Macros.qml" line="969"/>
+        <location filename="../../qml/Dialogs/Macros.qml" line="971"/>
         <source>Verify macro</source>
         <translation>Xác Minh Macro</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Macros.qml" line="980"/>
+        <location filename="../../qml/Dialogs/Macros.qml" line="982"/>
         <source>Run macro</source>
         <translation>Chạy Macro</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Macros.qml" line="993"/>
+        <location filename="../../qml/Dialogs/Macros.qml" line="995"/>
         <source>Stop macro</source>
         <translation>Dừng Macro</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Macros.qml" line="1003"/>
+        <location filename="../../qml/Dialogs/Macros.qml" line="1005"/>
         <source>Clear editor</source>
         <translation>Xóa Trình Soạn Thảo</translation>
     </message>
@@ -20593,32 +20603,32 @@ To reuse this seat on another device, email alex@serial-studio.com with your dev
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="../../qml/MainWindow/MainWindow.qml" line="216"/>
+        <location filename="../../qml/MainWindow/MainWindow.qml" line="218"/>
         <source>Console Only Mode</source>
         <translation>Chế Độ Chỉ Console</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/MainWindow.qml" line="219"/>
+        <location filename="../../qml/MainWindow/MainWindow.qml" line="221"/>
         <source>Quick Plot Mode</source>
         <translation>Chế Độ Vẽ Đồ Thị Nhanh</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/MainWindow.qml" line="226"/>
+        <location filename="../../qml/MainWindow/MainWindow.qml" line="228"/>
         <source>Empty Project</source>
         <translation>Dự Án Trống</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/MainWindow.qml" line="741"/>
+        <location filename="../../qml/MainWindow/MainWindow.qml" line="743"/>
         <source>Serial Studio</source>
         <translation>Serial Studio</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/MainWindow.qml" line="749"/>
+        <location filename="../../qml/MainWindow/MainWindow.qml" line="751"/>
         <source>Waiting for data…</source>
         <translation>Đang chờ dữ liệu…</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/MainWindow.qml" line="750"/>
+        <location filename="../../qml/MainWindow/MainWindow.qml" line="752"/>
         <source>Connecting to device…</source>
         <translation>Đang kết nối với thiết bị…</translation>
     </message>
@@ -20627,7 +20637,7 @@ To reuse this seat on another device, email alex@serial-studio.com with your dev
         <translation type="vanished">Ứng Dụng</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/MainWindow.qml" line="783"/>
+        <location filename="../../qml/MainWindow/MainWindow.qml" line="785"/>
         <source>Command Palette</source>
         <translation>Bảng Lệnh</translation>
     </message>
@@ -20707,87 +20717,87 @@ To reuse this seat on another device, email alex@serial-studio.com with your dev
 <context>
     <name>MasterAnnunciator</name>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/MasterAnnunciator.qml" line="131"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/MasterAnnunciator.qml" line="133"/>
         <source>Aural alerts are disabled, but this project defines alarms. Enable them in Preferences &gt; Sounds.</source>
         <translation>Cảnh báo âm thanh bị tắt, nhưng dự án này định nghĩa các báo động. Bật chúng trong Tùy chọn &gt; Âm thanh.</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/MasterAnnunciator.qml" line="134"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/MasterAnnunciator.qml" line="136"/>
         <source>Alarm sounds are muted. Click to open the alarm panel.</source>
         <translation>Âm thanh báo động đã tắt tiếng. Nhấp để mở bảng báo động.</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/MasterAnnunciator.qml" line="136"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/MasterAnnunciator.qml" line="138"/>
         <source>%1 unacknowledged alarm(s). Click for the alarm panel, right-click to acknowledge.</source>
         <translation>%1 báo động chưa xác nhận. Nhấp để mở bảng báo động, nhấp chuột phải để xác nhận.</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/MasterAnnunciator.qml" line="138"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/MasterAnnunciator.qml" line="140"/>
         <source>No active alarms. Click for the alarm panel.</source>
         <translation>Không có báo động hoạt động. Nhấp để mở bảng báo động.</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/MasterAnnunciator.qml" line="217"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/MasterAnnunciator.qml" line="219"/>
         <source>Alarms</source>
         <translation>Cảnh Báo</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/MasterAnnunciator.qml" line="226"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/MasterAnnunciator.qml" line="228"/>
         <source>Acknowledge all</source>
         <translation>Xác Nhận Tất Cả</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/MasterAnnunciator.qml" line="235"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/MasterAnnunciator.qml" line="237"/>
         <source>Silence</source>
         <translation>Tắt Tiếng</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/MasterAnnunciator.qml" line="244"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/MasterAnnunciator.qml" line="246"/>
         <source>Reset</source>
         <translation>Đặt Lại</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/MasterAnnunciator.qml" line="255"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/MasterAnnunciator.qml" line="257"/>
         <source>Clear every alarm from the list</source>
         <translation>Xóa mọi báo động khỏi danh sách</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/MasterAnnunciator.qml" line="263"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/MasterAnnunciator.qml" line="265"/>
         <source>Test sounds</source>
         <translation>Kiểm Tra Âm Thanh</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/MasterAnnunciator.qml" line="272"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/MasterAnnunciator.qml" line="274"/>
         <source>Unmute sounds</source>
         <translation>Bật Tiếng</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/MasterAnnunciator.qml" line="272"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/MasterAnnunciator.qml" line="274"/>
         <source>Mute sounds</source>
         <translation>Tắt Tiếng</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/MasterAnnunciator.qml" line="407"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/MasterAnnunciator.qml" line="409"/>
         <source>Unacknowledged</source>
         <translation>Chưa Xác Nhận</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/MasterAnnunciator.qml" line="408"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/MasterAnnunciator.qml" line="410"/>
         <source>Acknowledged</source>
         <translation>Đã Xác Nhận</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/MasterAnnunciator.qml" line="409"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/MasterAnnunciator.qml" line="411"/>
         <source>Returned to normal, awaiting reset</source>
         <translation>Đã trở về bình thường, chờ đặt lại</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/MasterAnnunciator.qml" line="410"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/MasterAnnunciator.qml" line="412"/>
         <source>click to show the widget</source>
         <translation>nhấp để hiển thị widget</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/MasterAnnunciator.qml" line="421"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/MasterAnnunciator.qml" line="423"/>
         <source>No active alarms</source>
         <translation>Không có cảnh báo đang hoạt động</translation>
     </message>
@@ -20803,52 +20813,52 @@ To reuse this seat on another device, email alex@serial-studio.com with your dev
 <context>
     <name>MemoryManagerDialog</name>
     <message>
-        <location filename="../../qml/AI/MemoryManagerDialog.qml" line="23"/>
+        <location filename="../../qml/AI/MemoryManagerDialog.qml" line="25"/>
         <source>Assistant Memory</source>
         <translation>Bộ Nhớ Trợ Lý</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/MemoryManagerDialog.qml" line="50"/>
+        <location filename="../../qml/AI/MemoryManagerDialog.qml" line="52"/>
         <source>Facts the assistant carries into every chat. Stored only on this computer. Delete anything you no longer want it to know.</source>
         <translation>Các thông tin mà trợ lý mang vào mọi cuộc trò chuyện. Chỉ được lưu trữ trên máy tính này. Xóa bất kỳ thông tin nào bạn không muốn trợ lý biết nữa.</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/MemoryManagerDialog.qml" line="65"/>
+        <location filename="../../qml/AI/MemoryManagerDialog.qml" line="67"/>
         <source>user</source>
         <translation>người dùng</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/MemoryManagerDialog.qml" line="65"/>
+        <location filename="../../qml/AI/MemoryManagerDialog.qml" line="67"/>
         <source>feedback</source>
         <translation>phản hồi</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/MemoryManagerDialog.qml" line="65"/>
+        <location filename="../../qml/AI/MemoryManagerDialog.qml" line="67"/>
         <source>project</source>
         <translation>dự án</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/MemoryManagerDialog.qml" line="65"/>
+        <location filename="../../qml/AI/MemoryManagerDialog.qml" line="67"/>
         <source>reference</source>
         <translation>tham chiếu</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/MemoryManagerDialog.qml" line="74"/>
+        <location filename="../../qml/AI/MemoryManagerDialog.qml" line="76"/>
         <source>Something the assistant should remember…</source>
         <translation>Điều gì đó trợ lý nên nhớ…</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/MemoryManagerDialog.qml" line="78"/>
+        <location filename="../../qml/AI/MemoryManagerDialog.qml" line="80"/>
         <source>Remember</source>
         <translation>Ghi Nhớ</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/MemoryManagerDialog.qml" line="147"/>
+        <location filename="../../qml/AI/MemoryManagerDialog.qml" line="149"/>
         <source>Forget this fact</source>
         <translation>Quên thông tin này</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/MemoryManagerDialog.qml" line="163"/>
+        <location filename="../../qml/AI/MemoryManagerDialog.qml" line="165"/>
         <source>Nothing remembered yet. Add a fact above, or approve one when the assistant proposes it in chat.</source>
         <translation>Chưa có gì được ghi nhớ. Thêm thông tin ở trên hoặc chấp nhận khi trợ lý đề xuất trong cuộc trò chuyện.</translation>
     </message>
@@ -21741,87 +21751,87 @@ Bạn có muốn mở trang tải xuống không?</translation>
         <translation>Giao Thức</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="72"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="74"/>
         <source>Serial Port</source>
         <translation>Cổng Nối Tiếp</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="95"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="99"/>
         <source>Baud Rate</source>
         <translation>Tốc Độ Baud</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="185"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="191"/>
         <source>Parity</source>
         <translation>Chẵn Lẻ</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="207"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="215"/>
         <source>Data Bits</source>
         <translation>Bit Dữ Liệu</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="228"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="238"/>
         <source>Stop Bits</source>
         <translation>Bit Dừng</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="248"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="260"/>
         <source>Host</source>
         <translation>Máy Chủ</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="257"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="271"/>
         <source>IP Address</source>
         <translation>Địa Chỉ IP</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="276"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="290"/>
         <source>Port</source>
         <translation>Cổng</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="284"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="300"/>
         <source>TCP Port</source>
         <translation>Cổng TCP</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="317"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="333"/>
         <source>Slave Address</source>
         <translation>Địa Chỉ Slave</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="322"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="340"/>
         <source>1-247</source>
         <translation>1-247</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="342"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="360"/>
         <source>Poll Interval (ms)</source>
         <translation>Chu Kỳ Truy Vấn (ms)</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="347"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="367"/>
         <source>Polling interval</source>
         <translation>Khoảng thời gian truy vấn</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="380"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="402"/>
         <source>Configure Register Groups…</source>
         <translation>Cấu Hình Nhóm Thanh Ghi…</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="390"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="414"/>
         <source>Import Register Map…</source>
         <translation>Nhập Bản Đồ Thanh Ghi…</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="405"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="429"/>
         <source>%1 group(s) configured</source>
         <translation>Đã cấu hình %1 nhóm</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="406"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="430"/>
         <source>No groups configured</source>
         <translation>Chưa cấu hình nhóm nào</translation>
     </message>
@@ -21849,99 +21859,99 @@ Bạn có muốn mở trang tải xuống không?</translation>
         <translation>Loại Thanh Ghi:</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="133"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="135"/>
         <source>Start Address:</source>
         <translation>Địa Chỉ Bắt Đầu:</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="140"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="144"/>
         <source>0-65535</source>
         <translation>0-65535</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="146"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="150"/>
         <source>Register Count:</source>
         <translation>Số Lượng Thanh Ghi:</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="153"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="159"/>
         <source>1-125</source>
         <translation>1-125</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="159"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="165"/>
         <source>Slave Address:</source>
         <translation>Địa Chỉ Slave:</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="170"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="178"/>
         <source>Leave empty to use the device address</source>
         <translation>Để trống để sử dụng địa chỉ thiết bị</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="175"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="185"/>
         <source>Add Group</source>
         <translation>Thêm Nhóm</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="200"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="210"/>
         <source>Configured Groups</source>
         <translation>Các Nhóm Đã Cấu Hình</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="234"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="244"/>
         <source>#</source>
         <translation>#</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="241"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="251"/>
         <source>Type</source>
         <translation>Loại</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="249"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="259"/>
         <source>Start</source>
         <translation>Bắt Đầu</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="256"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="266"/>
         <source>Count</source>
         <translation>Số Lượng</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="263"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="273"/>
         <source>Action</source>
         <translation>Hành Động</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="338"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="350"/>
         <source>Remove</source>
         <translation>Xóa</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="350"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="362"/>
         <source>No groups configured.
 Add groups above to poll multiple register types.</source>
         <translation>Chưa cấu hình nhóm.
 Thêm nhóm ở trên để truy vấn nhiều loại thanh ghi.</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="368"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="380"/>
         <source>Total groups: %1</source>
         <translation>Tổng số nhóm: %1</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="372"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="386"/>
         <source>Generate Project</source>
         <translation>Tạo Dự Án</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="378"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="394"/>
         <source>Clear All</source>
         <translation>Xóa Tất Cả</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="384"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="402"/>
         <source>Close</source>
         <translation>Đóng</translation>
     </message>
@@ -22009,22 +22019,22 @@ Thêm nhóm ở trên để truy vấn nhiều loại thanh ghi.</translation>
         <translation>Tổng: %1 thanh ghi trong %2 nhóm</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusPreviewDialog.qml" line="290"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusPreviewDialog.qml" line="292"/>
         <source>Cancel</source>
         <translation>Hủy</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusPreviewDialog.qml" line="301"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusPreviewDialog.qml" line="305"/>
         <source>Add to Project</source>
         <translation>Thêm vào Dự Án</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusPreviewDialog.qml" line="306"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusPreviewDialog.qml" line="310"/>
         <source>Add the generated source, groups, tables and workspaces to the project that is open, instead of creating a new file</source>
         <translation>Thêm nguồn, nhóm, bảng và không gian làm việc đã tạo vào dự án đang mở, thay vì tạo tệp mới</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusPreviewDialog.qml" line="317"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusPreviewDialog.qml" line="323"/>
         <source>Create Project</source>
         <translation>Tạo Dự Án</translation>
     </message>
@@ -22709,79 +22719,79 @@ Thêm nhóm ở trên để truy vấn nhiều loại thanh ghi.</translation>
         <translation>Loại Socket</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="129"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="131"/>
         <source>Local Port</source>
         <translation>Cổng Cục Bộ</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="134"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="138"/>
         <source>Type 0 for automatic port</source>
         <translation>Nhập 0 để tự động chọn cổng</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="166"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="170"/>
         <source>Remote Address</source>
         <translation>Địa Chỉ từ Xa</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="196"/>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="233"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="202"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="241"/>
         <source>Remote Port</source>
         <translation>Cổng từ Xa</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="269"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="279"/>
         <source>Multicast</source>
         <translation>Multicast</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="292"/>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="345"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="304"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="361"/>
         <source>URL</source>
         <translation>URL</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="323"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="337"/>
         <source>Send Format</source>
         <translation>Định Dạng Gửi</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="375"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="393"/>
         <source>Method</source>
         <translation>Phương Thức</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="398"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="418"/>
         <source>Poll Interval</source>
         <translation>Chu Kỳ Truy Vấn</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="407"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="429"/>
         <source>Milliseconds; 0 sends only on write</source>
         <translation>Mili giây; 0 chỉ gửi khi ghi</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="431"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="453"/>
         <source>Request Body</source>
         <translation>Nội Dung Yêu Cầu</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="439"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="463"/>
         <source>Optional</source>
         <translation>Tùy Chọn</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="459"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="483"/>
         <source>Request Headers</source>
         <translation>Tiêu Đề Yêu Cầu</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="480"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="506"/>
         <source>One %1 pair per line</source>
         <translation>Một cặp %1 mỗi dòng</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="496"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="522"/>
         <source>Ignore TLS Errors</source>
         <translation>Bỏ Qua Lỗi TLS</translation>
     </message>
@@ -22820,82 +22830,82 @@ Thêm nhóm ở trên để truy vấn nhiều loại thanh ghi.</translation>
 <context>
     <name>OfflineActivation</name>
     <message>
-        <location filename="../../qml/Dialogs/OfflineActivation.qml" line="37"/>
+        <location filename="../../qml/Dialogs/OfflineActivation.qml" line="39"/>
         <source>Activate Offline</source>
         <translation>Kích Hoạt Ngoại Tuyến</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/OfflineActivation.qml" line="55"/>
+        <location filename="../../qml/Dialogs/OfflineActivation.qml" line="57"/>
         <source>Activate Serial Studio Pro on a machine with no internet access. No account or connection is needed on this computer.</source>
         <translation>Kích hoạt Serial Studio Pro trên máy không có kết nối internet. Không cần tài khoản hoặc kết nối trên máy tính này.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/OfflineActivation.qml" line="86"/>
+        <location filename="../../qml/Dialogs/OfflineActivation.qml" line="88"/>
         <source>Save your device file</source>
         <translation>Lưu tệp thiết bị của bạn</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/OfflineActivation.qml" line="95"/>
+        <location filename="../../qml/Dialogs/OfflineActivation.qml" line="97"/>
         <source>Save this computer's device file. It identifies this machine and contains no personal information.</source>
         <translation>Lưu tệp thiết bị của máy tính này. Tệp này xác định máy này và không chứa thông tin cá nhân.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/OfflineActivation.qml" line="102"/>
+        <location filename="../../qml/Dialogs/OfflineActivation.qml" line="104"/>
         <source>Save Device File…</source>
         <translation>Lưu Tệp Thiết Bị…</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/OfflineActivation.qml" line="136"/>
+        <location filename="../../qml/Dialogs/OfflineActivation.qml" line="138"/>
         <source>Get your license file</source>
         <translation>Lấy tệp giấy phép của bạn</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/OfflineActivation.qml" line="145"/>
+        <location filename="../../qml/Dialogs/OfflineActivation.qml" line="147"/>
         <source>On another computer with internet access, go to the address below, upload the device file, and enter your email and license key.</source>
         <translation>Trên máy tính khác có kết nối internet, truy cập địa chỉ bên dưới, tải lên tệp thiết bị, và nhập email cùng khóa giấy phép của bạn.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/OfflineActivation.qml" line="157"/>
+        <location filename="../../qml/Dialogs/OfflineActivation.qml" line="159"/>
         <source>Open in Browser</source>
         <translation>Mở trong Trình Duyệt</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/OfflineActivation.qml" line="193"/>
+        <location filename="../../qml/Dialogs/OfflineActivation.qml" line="195"/>
         <source>Import your license</source>
         <translation>Nhập giấy phép của bạn</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/OfflineActivation.qml" line="202"/>
+        <location filename="../../qml/Dialogs/OfflineActivation.qml" line="204"/>
         <source>Copy the license file to this computer and import it. Pro features unlock immediately.</source>
         <translation>Sao chép tệp giấy phép vào máy tính này và nhập vào. Các tính năng Pro sẽ được mở khóa ngay lập tức.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/OfflineActivation.qml" line="209"/>
+        <location filename="../../qml/Dialogs/OfflineActivation.qml" line="211"/>
         <source>Import License File…</source>
         <translation>Nhập Tệp Giấy Phép…</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/OfflineActivation.qml" line="224"/>
+        <location filename="../../qml/Dialogs/OfflineActivation.qml" line="226"/>
         <source>Save Device File</source>
         <translation>Lưu Tệp Thiết Bị</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/OfflineActivation.qml" line="226"/>
+        <location filename="../../qml/Dialogs/OfflineActivation.qml" line="228"/>
         <source>Serial Studio device file (*.ssmachine)</source>
         <translation>Tệp thiết bị Serial Studio (*.ssmachine)</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/OfflineActivation.qml" line="235"/>
+        <location filename="../../qml/Dialogs/OfflineActivation.qml" line="237"/>
         <source>Import License File</source>
         <translation>Nhập Tệp Giấy Phép</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/OfflineActivation.qml" line="236"/>
+        <location filename="../../qml/Dialogs/OfflineActivation.qml" line="238"/>
         <source>Serial Studio license (*.sslic)</source>
         <translation>Giấy phép Serial Studio (*.sslic)</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/OfflineActivation.qml" line="236"/>
+        <location filename="../../qml/Dialogs/OfflineActivation.qml" line="238"/>
         <source>All files (*)</source>
         <translation>Tất cả tệp (*)</translation>
     </message>
@@ -22936,22 +22946,22 @@ Thêm nhóm ở trên để truy vấn nhiều loại thanh ghi.</translation>
 <context>
     <name>OnlineIconPicker</name>
     <message>
-        <location filename="../../qml/Dialogs/OnlineIconPicker.qml" line="41"/>
+        <location filename="../../qml/Dialogs/OnlineIconPicker.qml" line="43"/>
         <source>Search Online Icons</source>
         <translation>Tìm Biểu Tượng Trực Tuyến</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/OnlineIconPicker.qml" line="81"/>
+        <location filename="../../qml/Dialogs/OnlineIconPicker.qml" line="83"/>
         <source>Download failed: %1</source>
         <translation>Tải xuống thất bại: %1</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/OnlineIconPicker.qml" line="111"/>
+        <location filename="../../qml/Dialogs/OnlineIconPicker.qml" line="113"/>
         <source>Search icons (e.g. temperature, arrow, play)…</source>
         <translation>Tìm biểu tượng (ví dụ: nhiệt độ, mũi tên, phát)…</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/OnlineIconPicker.qml" line="124"/>
+        <location filename="../../qml/Dialogs/OnlineIconPicker.qml" line="126"/>
         <source>Search…</source>
         <translation>Tìm Kiếm…</translation>
     </message>
@@ -22960,17 +22970,17 @@ Thêm nhóm ở trên để truy vấn nhiều loại thanh ghi.</translation>
         <translation type="vanished">Tìm Kiếm</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/OnlineIconPicker.qml" line="162"/>
+        <location filename="../../qml/Dialogs/OnlineIconPicker.qml" line="164"/>
         <source>Search for icons above to get started</source>
         <translation>Tìm kiếm biểu tượng ở trên để bắt đầu</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/OnlineIconPicker.qml" line="280"/>
+        <location filename="../../qml/Dialogs/OnlineIconPicker.qml" line="282"/>
         <source>OK</source>
         <translation>OK</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/OnlineIconPicker.qml" line="290"/>
+        <location filename="../../qml/Dialogs/OnlineIconPicker.qml" line="292"/>
         <source>Cancel</source>
         <translation>Hủy</translation>
     </message>
@@ -22983,42 +22993,42 @@ Thêm nhóm ở trên để truy vấn nhiều loại thanh ghi.</translation>
         <translation>Điểm Cuối</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="73"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="77"/>
         <source>Discover</source>
         <translation>Khám Phá</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="90"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="94"/>
         <source>Poll Interval (ms)</source>
         <translation>Chu Kỳ Truy Vấn (ms)</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="95"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="101"/>
         <source>10-60000</source>
         <translation>10-60000</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="111"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="117"/>
         <source>Security</source>
         <translation>Bảo Mật</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="152"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="160"/>
         <source>This endpoint offers no user identity token the selected authentication mode can present</source>
         <translation>Điểm cuối này không cung cấp token nhận dạng người dùng mà chế độ xác thực đã chọn có thể trình bày</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="161"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="169"/>
         <source>Policy</source>
         <translation>Chính Sách</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="177"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="187"/>
         <source>Mode</source>
         <translation>Chế Độ</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="183"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="195"/>
         <source>Sign</source>
         <translation>Ký</translation>
     </message>
@@ -23027,33 +23037,33 @@ Thêm nhóm ở trên để truy vấn nhiều loại thanh ghi.</translation>
         <translation type="vanished">Ký &amp; Mã Hóa</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="203"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="215"/>
         <source>This policy is deprecated by the OPC Foundation (SHA-1 / RSA-1.5). Use it only for controllers that support nothing better.</source>
         <translation>Chính sách này đã bị OPC Foundation ngừng sử dụng (SHA-1 / RSA-1.5). Chỉ sử dụng cho các bộ điều khiển không hỗ trợ gì tốt hơn.</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="263"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="281"/>
         <source>Certificate</source>
         <translation>Chứng Chỉ</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="275"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="295"/>
         <source>No certificate selected</source>
         <translation>Chưa chọn chứng chỉ</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="279"/>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="304"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="301"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="330"/>
         <source>Browse…</source>
         <translation>Duyệt…</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="288"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="310"/>
         <source>Private Key</source>
         <translation>Khóa Riêng Tư</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="300"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="324"/>
         <source>No private key selected</source>
         <translation>Chưa chọn khóa riêng tư</translation>
     </message>
@@ -23062,74 +23072,74 @@ Thêm nhóm ở trên để truy vấn nhiều loại thanh ghi.</translation>
         <translation type="vanished">Thông tin xác thực được truyền dưới dạng văn bản rõ trên kênh này. Chọn chính sách khác None với Sign &amp; Encrypt để bảo vệ chúng.</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="183"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="195"/>
         <source>Sign and Encrypt</source>
         <translation>Ký và Mã Hóa</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="320"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="346"/>
         <source>Credentials travel in the clear on this channel. Choose a policy other than None with Sign and Encrypt to protect them.</source>
         <translation>Thông tin xác thực được truyền dưới dạng văn bản rõ trên kênh này. Chọn chính sách khác None với Ký và Mã Hóa để bảo vệ chúng.</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="334"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="362"/>
         <source>Send the password anyway on this unencrypted channel</source>
         <translation>Vẫn gửi mật khẩu trên kênh không mã hóa này</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="343"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="371"/>
         <source>Identity</source>
         <translation>Danh Tính</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="358"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="386"/>
         <source>Generated on the first secure connection</source>
         <translation>Được tạo khi kết nối bảo mật đầu tiên</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="366"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="396"/>
         <source>Export…</source>
         <translation>Xuất…</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="372"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="404"/>
         <source>Replace</source>
         <translation>Thay Thế</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="453"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="489"/>
         <source>Export Client Certificate</source>
         <translation>Xuất Chứng Chỉ Client</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="454"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="490"/>
         <source>Certificate (*.der)</source>
         <translation>Chứng Chỉ (*.der)</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="454"/>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="462"/>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="470"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="490"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="498"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="506"/>
         <source>All files (*)</source>
         <translation>Tất cả tệp (*)</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="461"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="497"/>
         <source>Select User Certificate</source>
         <translation>Chọn Chứng Chỉ Người Dùng</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="462"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="498"/>
         <source>Certificate (*.der *.pem *.crt)</source>
         <translation>Chứng Chỉ (*.der *.pem *.crt)</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="469"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="505"/>
         <source>Select Private Key</source>
         <translation>Chọn Khóa Riêng Tư</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="470"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="506"/>
         <source>Private key (*.der *.pem *.key)</source>
         <translation>Khóa riêng tư (*.der *.pem *.key)</translation>
     </message>
@@ -23138,17 +23148,17 @@ Thêm nhóm ở trên để truy vấn nhiều loại thanh ghi.</translation>
         <translation type="vanished">Kênh bảo mật không được hỗ trợ trong phiên bản này</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="212"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="224"/>
         <source>Authentication</source>
         <translation>Xác Thực</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="228"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="242"/>
         <source>Username</source>
         <translation>Tên Đăng Nhập</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="245"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="261"/>
         <source>Password</source>
         <translation>Mật Khẩu</translation>
     </message>
@@ -23157,22 +23167,22 @@ Thêm nhóm ở trên để truy vấn nhiều loại thanh ghi.</translation>
         <translation type="vanished">Thông tin xác thực được gửi không mã hóa: phiên bản này chỉ mở các kênh chính sách None.</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="398"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="432"/>
         <source>Browse Tags…</source>
         <translation>Duyệt Thẻ…</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="409"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="445"/>
         <source>Generate Project</source>
         <translation>Tạo Dự Án</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="427"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="463"/>
         <source>%1 tag(s) selected</source>
         <translation>Đã chọn %1 thẻ</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="428"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="464"/>
         <source>No tags selected</source>
         <translation>Chưa chọn thẻ nào</translation>
     </message>
@@ -23180,47 +23190,47 @@ Thêm nhóm ở trên để truy vấn nhiều loại thanh ghi.</translation>
 <context>
     <name>OpcUaTagBrowser</name>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUaTagBrowser.qml" line="45"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUaTagBrowser.qml" line="47"/>
         <source>OPC UA Tag Browser</source>
         <translation>Trình Duyệt Thẻ OPC UA</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUaTagBrowser.qml" line="184"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUaTagBrowser.qml" line="186"/>
         <source>Expand folders to browse the server. Tick the variables to subscribe to; ticking a folder selects every readable variable beneath it.</source>
         <translation>Mở rộng các thư mục để duyệt máy chủ. Đánh dấu các biến để đăng ký; đánh dấu một thư mục sẽ chọn mọi biến có thể đọc bên trong nó.</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUaTagBrowser.qml" line="203"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUaTagBrowser.qml" line="205"/>
         <source>More than 512 channels selected; very wide frames slow the dashboard.</source>
         <translation>Đã chọn hơn 512 kênh; các khung rất rộng làm chậm bảng điều khiển.</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUaTagBrowser.qml" line="211"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUaTagBrowser.qml" line="213"/>
         <source>Reading the address space...</source>
         <translation>Đang đọc không gian địa chỉ...</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUaTagBrowser.qml" line="219"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUaTagBrowser.qml" line="223"/>
         <source>Filter by name…</source>
         <translation>Lọc theo tên…</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUaTagBrowser.qml" line="434"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUaTagBrowser.qml" line="440"/>
         <source>%1 tag(s), %2 channel(s) selected</source>
         <translation>Đã chọn %1 thẻ, %2 kênh</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUaTagBrowser.qml" line="441"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUaTagBrowser.qml" line="449"/>
         <source>Select All Readable</source>
         <translation>Chọn Tất Cả Có Thể Đọc</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUaTagBrowser.qml" line="448"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUaTagBrowser.qml" line="458"/>
         <source>Cancel</source>
         <translation>Hủy</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUaTagBrowser.qml" line="455"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUaTagBrowser.qml" line="467"/>
         <source>OK</source>
         <translation>OK</translation>
     </message>
@@ -23228,52 +23238,52 @@ Thêm nhóm ở trên để truy vấn nhiều loại thanh ghi.</translation>
 <context>
     <name>OpcUaTrustDialog</name>
     <message>
-        <location filename="../../qml/Dialogs/OpcUaTrustDialog.qml" line="42"/>
+        <location filename="../../qml/Dialogs/OpcUaTrustDialog.qml" line="44"/>
         <source>Untrusted OPC UA Server</source>
         <translation>Máy Chủ OPC UA Không Tin Cậy</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/OpcUaTrustDialog.qml" line="84"/>
+        <location filename="../../qml/Dialogs/OpcUaTrustDialog.qml" line="86"/>
         <source>Check the fingerprint against the one the server operator gave you before accepting. Accepting records the decision for this installation; it does not reconnect, so press Connect again afterwards.</source>
         <translation>Kiểm tra dấu vân tay với dấu vân tay mà người vận hành máy chủ đã cung cấp trước khi chấp nhận. Việc chấp nhận sẽ ghi lại quyết định cho lần cài đặt này; nó không tự động kết nối lại, vì vậy hãy nhấn Kết Nối lại sau đó.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/OpcUaTrustDialog.qml" line="108"/>
+        <location filename="../../qml/Dialogs/OpcUaTrustDialog.qml" line="110"/>
         <source>Subject:</source>
         <translation>Chủ Thể:</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/OpcUaTrustDialog.qml" line="119"/>
+        <location filename="../../qml/Dialogs/OpcUaTrustDialog.qml" line="121"/>
         <source>Issuer:</source>
         <translation>Nhà Phát Hành:</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/OpcUaTrustDialog.qml" line="130"/>
+        <location filename="../../qml/Dialogs/OpcUaTrustDialog.qml" line="132"/>
         <source>Application URI:</source>
         <translation>URI Ứng Dụng:</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/OpcUaTrustDialog.qml" line="141"/>
+        <location filename="../../qml/Dialogs/OpcUaTrustDialog.qml" line="143"/>
         <source>Fingerprint:</source>
         <translation>Dấu Vân Tay:</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/OpcUaTrustDialog.qml" line="152"/>
+        <location filename="../../qml/Dialogs/OpcUaTrustDialog.qml" line="154"/>
         <source>Valid From:</source>
         <translation>Có Hiệu Lực Từ:</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/OpcUaTrustDialog.qml" line="162"/>
+        <location filename="../../qml/Dialogs/OpcUaTrustDialog.qml" line="164"/>
         <source>Valid Until:</source>
         <translation>Có Hiệu Lực Đến:</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/OpcUaTrustDialog.qml" line="188"/>
+        <location filename="../../qml/Dialogs/OpcUaTrustDialog.qml" line="190"/>
         <source>Reject</source>
         <translation>Từ Chối</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/OpcUaTrustDialog.qml" line="193"/>
+        <location filename="../../qml/Dialogs/OpcUaTrustDialog.qml" line="195"/>
         <source>Trust This Server</source>
         <translation>Tin Cậy Máy Chủ Này</translation>
     </message>
@@ -23450,12 +23460,12 @@ Thêm nhóm ở trên để truy vấn nhiều loại thanh ghi.</translation>
         <translation type="vanished">Trình Soạn Mã Widget Vẽ</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="77"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="79"/>
         <source>paint(ctx, w, h)</source>
         <translation>paint(ctx, w, h)</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="87"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="89"/>
         <source>Import</source>
         <translation>Nhập</translation>
     </message>
@@ -23464,7 +23474,7 @@ Thêm nhóm ở trên để truy vấn nhiều loại thanh ghi.</translation>
         <translation type="vanished">Nhập mã vẽ từ tệp .js</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="100"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="102"/>
         <source>Template</source>
         <translation>Mẫu</translation>
     </message>
@@ -23473,7 +23483,7 @@ Thêm nhóm ở trên để truy vấn nhiều loại thanh ghi.</translation>
         <translation type="vanished">Chọn mẫu vẽ tích hợp sẵn</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="109"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="111"/>
         <source>Format</source>
         <translation>Định Dạng</translation>
     </message>
@@ -23482,42 +23492,42 @@ Thêm nhóm ở trên để truy vấn nhiều loại thanh ghi.</translation>
         <translation type="vanished">Định dạng lại mã vẽ</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="31"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="33"/>
         <source>Canvas Widget Code Editor</source>
         <translation>Trình Soạn Mã Widget Canvas</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="92"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="94"/>
         <source>Import canvas code from a .js file</source>
         <translation>Nhập mã canvas từ tệp .js</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="103"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="105"/>
         <source>Select a built-in canvas template</source>
         <translation>Chọn mẫu canvas tích hợp sẵn</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="114"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="116"/>
         <source>Reformat the canvas code</source>
         <translation>Định dạng lại mã canvas</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="120"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="122"/>
         <source>Test</source>
         <translation>Kiểm Tra</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="125"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="127"/>
         <source>Open a live preview with simulated dataset values</source>
         <translation>Mở bản xem trước trực tiếp với giá trị tập dữ liệu mô phỏng</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="128"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="130"/>
         <source>Preview</source>
         <translation>Xem Trước</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="183"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="185"/>
         <source>Close</source>
         <translation>Đóng</translation>
     </message>
@@ -23561,43 +23571,43 @@ Thêm nhóm ở trên để truy vấn nhiều loại thanh ghi.</translation>
         <translation type="vanished">Xem Trước Trực Tiếp Painter</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/PainterTestDialog.qml" line="28"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/PainterTestDialog.qml" line="30"/>
         <source>Canvas Live Preview</source>
         <translation>Xem Trước Trực Tiếp Canvas</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/PainterTestDialog.qml" line="32"/>
-        <location filename="../../qml/ProjectEditor/Dialogs/PainterTestDialog.qml" line="37"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/PainterTestDialog.qml" line="34"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/PainterTestDialog.qml" line="39"/>
         <source>Preview</source>
         <translation>Xem Trước</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/PainterTestDialog.qml" line="113"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/PainterTestDialog.qml" line="115"/>
         <source>Simulated datasets</source>
         <translation>Tập dữ liệu mô phỏng</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/PainterTestDialog.qml" line="180"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/PainterTestDialog.qml" line="182"/>
         <source>Runtime OK</source>
         <translation>Runtime OK</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/PainterTestDialog.qml" line="181"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/PainterTestDialog.qml" line="183"/>
         <source>Awaiting first frame...</source>
         <translation>Đang chờ frame đầu tiên...</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/PainterTestDialog.qml" line="194"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/PainterTestDialog.qml" line="196"/>
         <source>Console</source>
         <translation>Console</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/PainterTestDialog.qml" line="236"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/PainterTestDialog.qml" line="238"/>
         <source>Clear console</source>
         <translation>Xóa console</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/PainterTestDialog.qml" line="245"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/PainterTestDialog.qml" line="247"/>
         <source>Close</source>
         <translation>Đóng</translation>
     </message>
@@ -24093,82 +24103,82 @@ Thêm nhóm ở trên để truy vấn nhiều loại thanh ghi.</translation>
 <context>
     <name>ProblemCenter</name>
     <message>
-        <location filename="../../qml/Dialogs/ProblemCenter.qml" line="40"/>
+        <location filename="../../qml/Dialogs/ProblemCenter.qml" line="42"/>
         <source>Problem Center</source>
         <translation>Trung Tâm Vấn Đề</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ProblemCenter.qml" line="119"/>
+        <location filename="../../qml/Dialogs/ProblemCenter.qml" line="121"/>
         <source>Error</source>
         <translation>Lỗi</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ProblemCenter.qml" line="120"/>
+        <location filename="../../qml/Dialogs/ProblemCenter.qml" line="122"/>
         <source>Warning</source>
         <translation>Cảnh Báo</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ProblemCenter.qml" line="121"/>
+        <location filename="../../qml/Dialogs/ProblemCenter.qml" line="123"/>
         <source>Information</source>
         <translation>Thông Tin</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ProblemCenter.qml" line="212"/>
+        <location filename="../../qml/Dialogs/ProblemCenter.qml" line="214"/>
         <source>%1 errors, %2 warnings, %3 notices</source>
         <translation>%1 lỗi, %2 cảnh báo, %3 thông báo</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ProblemCenter.qml" line="228"/>
+        <location filename="../../qml/Dialogs/ProblemCenter.qml" line="230"/>
         <source>All Severities</source>
         <translation>Tất Cả Mức Độ</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ProblemCenter.qml" line="249"/>
+        <location filename="../../qml/Dialogs/ProblemCenter.qml" line="251"/>
         <source>Running Diagnostics</source>
         <translation>Đang Chạy Chẩn Đoán</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ProblemCenter.qml" line="250"/>
+        <location filename="../../qml/Dialogs/ProblemCenter.qml" line="252"/>
         <source>Run Diagnostics</source>
         <translation>Chạy Chẩn Đoán</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ProblemCenter.qml" line="256"/>
+        <location filename="../../qml/Dialogs/ProblemCenter.qml" line="258"/>
         <source>Refresh</source>
         <translation>Làm Mới</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ProblemCenter.qml" line="263"/>
+        <location filename="../../qml/Dialogs/ProblemCenter.qml" line="265"/>
         <source>Clear</source>
         <translation>Xóa</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ProblemCenter.qml" line="386"/>
+        <location filename="../../qml/Dialogs/ProblemCenter.qml" line="388"/>
         <source>Go To</source>
         <translation>Đi Tới</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ProblemCenter.qml" line="424"/>
+        <location filename="../../qml/Dialogs/ProblemCenter.qml" line="426"/>
         <source>No problems match the current filter</source>
         <translation>Không có vấn đề nào khớp với bộ lọc hiện tại</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ProblemCenter.qml" line="425"/>
+        <location filename="../../qml/Dialogs/ProblemCenter.qml" line="427"/>
         <source>No problems detected</source>
         <translation>Không phát hiện vấn đề</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ProblemCenter.qml" line="434"/>
+        <location filename="../../qml/Dialogs/ProblemCenter.qml" line="436"/>
         <source>Project, link and script checks run automatically.</source>
         <translation>Kiểm tra dự án, liên kết và script chạy tự động.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ProblemCenter.qml" line="450"/>
+        <location filename="../../qml/Dialogs/ProblemCenter.qml" line="452"/>
         <source>Last checked at %1</source>
         <translation>Kiểm tra lần cuối lúc %1</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ProblemCenter.qml" line="459"/>
+        <location filename="../../qml/Dialogs/ProblemCenter.qml" line="461"/>
         <source>Close</source>
         <translation>Đóng</translation>
     </message>
@@ -24181,69 +24191,69 @@ Thêm nhóm ở trên để truy vấn nhiều loại thanh ghi.</translation>
         <translation>Chế Độ</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="77"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="79"/>
         <source>Launch Process</source>
         <translation>Khởi Chạy Tiến Trình</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="77"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="79"/>
         <source>Named Pipe</source>
         <translation>Named Pipe</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="102"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="104"/>
         <source>Executable</source>
         <translation>Tệp Thực Thi</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="116"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="120"/>
         <source>/path/to/executable</source>
         <translation>/đường/dẫn/đến/tệp/thực/thi</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="137"/>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="221"/>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="273"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="143"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="233"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="289"/>
         <source>Browse</source>
         <translation>Duyệt</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="150"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="156"/>
         <source>Arguments</source>
         <translation>Tham Số</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="160"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="168"/>
         <source>--arg1 value1 --arg2 value2</source>
         <translation>--arg1 giá_trị1 --arg2 giá_trị2</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="186"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="194"/>
         <source>Working Dir</source>
         <translation>Thư Mục Làm Việc</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="200"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="210"/>
         <source>(optional) /working/directory</source>
         <translation>(tùy chọn) /thư/mục/làm/việc</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="236"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="248"/>
         <source>Pipe Path</source>
         <translation>Đường Dẫn Pipe</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="289"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="307"/>
         <source>Pick Running Process…</source>
         <translation>Chọn Tiến Trình Đang Chạy…</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="327"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="345"/>
         <source>Launch a child process and capture its stdout, or connect to a named pipe written by an existing process.</source>
         <translation>Khởi chạy tiến trình con và bắt stdout của nó, hoặc kết nối với named pipe được ghi bởi tiến trình đang tồn tại.</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="335"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="353"/>
         <source>Learn about named pipes</source>
         <translation>Tìm hiểu về named pipe</translation>
     </message>
@@ -24266,54 +24276,54 @@ Thêm nhóm ở trên để truy vấn nhiều loại thanh ghi.</translation>
         <translation>Lọc Tiến Trình</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="224"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="226"/>
         <source>Type to filter by name…</source>
         <translation>Nhập để lọc theo tên…</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="228"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="232"/>
         <source>Refresh</source>
         <translation>Làm Mới</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="236"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="240"/>
         <source>Running Processes</source>
         <translation>Các Tiến Trình Đang Chạy</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="274"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="278"/>
         <source>Process</source>
         <translation>Tiến Trình</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="281"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="285"/>
         <source>PID</source>
         <translation>PID</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="376"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="380"/>
         <source>No processes match the filter.</source>
         <translation>Không có tiến trình nào khớp với bộ lọc.</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="377"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="381"/>
         <source>No running processes found.
 Click Refresh to update the list.</source>
         <translation>Không tìm thấy tiến trình đang chạy.
 Nhấn Làm Mới để cập nhật danh sách.</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="393"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="397"/>
         <source>%1 process(es)</source>
         <translation>%1 tiến trình</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="397"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="403"/>
         <source>Select</source>
         <translation>Chọn</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="403"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="411"/>
         <source>Close</source>
         <translation>Đóng</translation>
     </message>
@@ -24321,7 +24331,7 @@ Nhấn Làm Mới để cập nhật danh sách.</translation>
 <context>
     <name>ProjectEditor</name>
     <message>
-        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="45"/>
+        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="47"/>
         <source>modified</source>
         <translation>đã chỉnh sửa</translation>
     </message>
@@ -24334,7 +24344,7 @@ Nhấn Làm Mới để cập nhật danh sách.</translation>
         <translation type="vanished">Lệnh</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="453"/>
+        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="455"/>
         <source>This project is password protected</source>
         <translation>Dự án này được bảo vệ bằng mật khẩu</translation>
     </message>
@@ -24343,7 +24353,7 @@ Nhấn Làm Mới để cập nhật danh sách.</translation>
         <translation type="vanished">Chỉnh sửa khả dụng trong chế độ Dự án</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="470"/>
+        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="472"/>
         <source>Enter the password to make changes, or open a different project.</source>
         <translation>Nhập mật khẩu để thực hiện thay đổi hoặc mở dự án khác.</translation>
     </message>
@@ -24352,7 +24362,7 @@ Nhấn Làm Mới để cập nhật danh sách.</translation>
         <translation type="vanished">Chuyển sang chế độ Dự án để tải và chỉnh sửa dự án.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="495"/>
+        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="497"/>
         <source>Unlock</source>
         <translation>Mở Khóa</translation>
     </message>
@@ -24361,47 +24371,47 @@ Nhấn Làm Mới để cập nhật danh sách.</translation>
         <translation type="vanished">Chuyển sang Chế Độ Dự Án</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="91"/>
+        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="93"/>
         <source>Switched to Project File mode</source>
         <translation>Chuyển sang chế độ Tệp Dự Án</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="92"/>
+        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="94"/>
         <source>The Project Editor works on project files. To go back, choose another Operation Mode in Device Setup.</source>
         <translation>Trình Chỉnh Sửa Dự Án hoạt động trên các tệp dự án. Để quay lại, chọn Chế Độ Hoạt Động khác trong Thiết Lập Thiết Bị.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="456"/>
+        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="458"/>
         <source>Disconnect to edit the project</source>
         <translation>Ngắt kết nối để chỉnh sửa dự án</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="458"/>
+        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="460"/>
         <source>Close the playback to edit the project</source>
         <translation>Đóng phát lại để chỉnh sửa dự án</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="471"/>
+        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="473"/>
         <source>The Project Editor needs Project File mode, which starts when the current session ends. The session keeps running until then.</source>
         <translation>Trình Chỉnh Sửa Dự Án cần chế độ Tệp Dự Án, bắt đầu khi phiên hiện tại kết thúc. Phiên sẽ tiếp tục chạy cho đến lúc đó.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="496"/>
+        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="498"/>
         <source>Disconnect and Edit</source>
         <translation>Ngắt Kết Nối và Chỉnh Sửa</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="515"/>
+        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="517"/>
         <source>Open Other Project</source>
         <translation>Mở Dự Án Khác</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="516"/>
+        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="518"/>
         <source>Close</source>
         <translation>Đóng</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="532"/>
+        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="534"/>
         <source>Create New Project</source>
         <translation>Tạo Dự Án Mới</translation>
     </message>
@@ -26444,72 +26454,72 @@ Tải lại tệp?</translation>
 <context>
     <name>ProtoPreviewDialog</name>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/ProtoPreviewDialog.qml" line="41"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/ProtoPreviewDialog.qml" line="43"/>
         <source>Protocol Buffers File Preview</source>
         <translation>Xem Trước Tệp Protocol Buffers</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/ProtoPreviewDialog.qml" line="165"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/ProtoPreviewDialog.qml" line="167"/>
         <source>Proto File: %1</source>
         <translation>Tệp Proto: %1</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/ProtoPreviewDialog.qml" line="173"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/ProtoPreviewDialog.qml" line="175"/>
         <source>Browse the messages below, then create the project. Every message becomes a dashboard group; matching-type channel blocks get a MultiPlot and mixed-type messages get a DataGrid.</source>
         <translation>Duyệt qua các tin nhắn bên dưới, sau đó tạo dự án. Mỗi tin nhắn trở thành một nhóm bảng điều khiển; các khối kênh cùng loại sẽ có MultiPlot và tin nhắn hỗn hợp loại sẽ có DataGrid.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/ProtoPreviewDialog.qml" line="183"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/ProtoPreviewDialog.qml" line="185"/>
         <source>Show fields for</source>
         <translation>Hiển thị trường cho</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/ProtoPreviewDialog.qml" line="209"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/ProtoPreviewDialog.qml" line="211"/>
         <source>Fields</source>
         <translation>Trường</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/ProtoPreviewDialog.qml" line="243"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/ProtoPreviewDialog.qml" line="245"/>
         <source>Tag</source>
         <translation>Thẻ</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/ProtoPreviewDialog.qml" line="253"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/ProtoPreviewDialog.qml" line="255"/>
         <source>Field Name</source>
         <translation>Tên Trường</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/ProtoPreviewDialog.qml" line="258"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/ProtoPreviewDialog.qml" line="260"/>
         <source>Type</source>
         <translation>Loại</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/ProtoPreviewDialog.qml" line="345"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/ProtoPreviewDialog.qml" line="347"/>
         <source>No fields in the selected message.</source>
         <translation>Không có trường nào trong tin nhắn đã chọn.</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/ProtoPreviewDialog.qml" line="363"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/ProtoPreviewDialog.qml" line="365"/>
         <source>Total: %1 messages, %2 fields</source>
         <translation>Tổng: %1 tin nhắn, %2 trường</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/ProtoPreviewDialog.qml" line="370"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/ProtoPreviewDialog.qml" line="372"/>
         <source>Cancel</source>
         <translation>Hủy</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/ProtoPreviewDialog.qml" line="380"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/ProtoPreviewDialog.qml" line="382"/>
         <source>Add to Project</source>
         <translation>Thêm vào Dự Án</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/ProtoPreviewDialog.qml" line="385"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/ProtoPreviewDialog.qml" line="387"/>
         <source>Add the generated source, groups, tables and workspaces to the project that is open, instead of creating a new file</source>
         <translation>Thêm mã nguồn, nhóm, bảng và không gian làm việc đã tạo vào dự án đang mở, thay vì tạo tệp mới</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/ProtoPreviewDialog.qml" line="396"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/ProtoPreviewDialog.qml" line="398"/>
         <source>Create Project</source>
         <translation>Tạo Dự Án</translation>
     </message>
@@ -27658,67 +27668,67 @@ Không còn cần tham số phân tách nữa.</translation>
 <context>
     <name>RemoteAttach</name>
     <message>
-        <location filename="../../qml/Dialogs/RemoteAttach.qml" line="37"/>
+        <location filename="../../qml/Dialogs/RemoteAttach.qml" line="39"/>
         <source>Attach to Remote Dashboard</source>
         <translation>Kết Nối với Bảng Điều Khiển Từ Xa</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/RemoteAttach.qml" line="67"/>
+        <location filename="../../qml/Dialogs/RemoteAttach.qml" line="69"/>
         <source>Disconnect the local device or close the open recording first.</source>
         <translation>Ngắt kết nối thiết bị cục bộ hoặc đóng bản ghi đang mở trước.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/RemoteAttach.qml" line="80"/>
+        <location filename="../../qml/Dialogs/RemoteAttach.qml" line="82"/>
         <source>Not attached.</source>
         <translation>Chưa kết nối.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/RemoteAttach.qml" line="83"/>
+        <location filename="../../qml/Dialogs/RemoteAttach.qml" line="85"/>
         <source>Attached to %1 - no response, the link may be down.</source>
         <translation>Đã kết nối với %1 - không có phản hồi, liên kết có thể bị gián đoạn.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/RemoteAttach.qml" line="87"/>
+        <location filename="../../qml/Dialogs/RemoteAttach.qml" line="89"/>
         <source>Attached to %1 - connected, the remote is not producing data.</source>
         <translation>Đã kết nối với %1 - đã kết nối, máy từ xa không tạo dữ liệu.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/RemoteAttach.qml" line="90"/>
+        <location filename="../../qml/Dialogs/RemoteAttach.qml" line="92"/>
         <source>Attached to %1 - live, %2 datasets at %3 Hz.</source>
         <translation>Đã kết nối với %1 - trực tiếp, %2 tập dữ liệu ở %3 Hz.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/RemoteAttach.qml" line="133"/>
+        <location filename="../../qml/Dialogs/RemoteAttach.qml" line="135"/>
         <source>Watch another Serial Studio instance's dashboard over the network. The view is read-only: nothing you do here reaches the remote device.</source>
         <translation>Theo dõi bảng điều khiển của một phiên bản Serial Studio khác qua mạng. Chế độ xem chỉ đọc: mọi thao tác tại đây không ảnh hưởng đến thiết bị từ xa.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/RemoteAttach.qml" line="147"/>
+        <location filename="../../qml/Dialogs/RemoteAttach.qml" line="149"/>
         <source>Recent</source>
         <translation>Gần Đây</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/RemoteAttach.qml" line="170"/>
+        <location filename="../../qml/Dialogs/RemoteAttach.qml" line="172"/>
         <source>Host</source>
         <translation>Máy Chủ</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/RemoteAttach.qml" line="180"/>
+        <location filename="../../qml/Dialogs/RemoteAttach.qml" line="182"/>
         <source>Host name or IP address</source>
         <translation>Tên máy chủ hoặc địa chỉ IP</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/RemoteAttach.qml" line="184"/>
+        <location filename="../../qml/Dialogs/RemoteAttach.qml" line="186"/>
         <source>Port</source>
         <translation>Cổng</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/RemoteAttach.qml" line="200"/>
+        <location filename="../../qml/Dialogs/RemoteAttach.qml" line="202"/>
         <source>Token</source>
         <translation>Token</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/RemoteAttach.qml" line="211"/>
+        <location filename="../../qml/Dialogs/RemoteAttach.qml" line="213"/>
         <source>Required only for connections from another machine</source>
         <translation>Chỉ yêu cầu cho kết nối từ máy khác</translation>
     </message>
@@ -27731,22 +27741,22 @@ Không còn cần tham số phân tách nữa.</translation>
         <translation type="vanished">%1 Hz</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/RemoteAttach.qml" line="263"/>
+        <location filename="../../qml/Dialogs/RemoteAttach.qml" line="265"/>
         <source>The link is not encrypted. The token authorizes the connection but does not protect what travels over it, so use this on a trusted network or through a tunnel.</source>
         <translation>Liên kết không được mã hóa. Token cho phép kết nối nhưng không bảo vệ dữ liệu truyền qua, vì vậy chỉ sử dụng trên mạng đáng tin cậy hoặc qua đường hầm.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/RemoteAttach.qml" line="281"/>
+        <location filename="../../qml/Dialogs/RemoteAttach.qml" line="283"/>
         <source>Close</source>
         <translation>Đóng</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/RemoteAttach.qml" line="290"/>
+        <location filename="../../qml/Dialogs/RemoteAttach.qml" line="292"/>
         <source>Detach</source>
         <translation>Tách</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/RemoteAttach.qml" line="300"/>
+        <location filename="../../qml/Dialogs/RemoteAttach.qml" line="302"/>
         <source>Attach</source>
         <translation>Gắn</translation>
     </message>
@@ -27754,288 +27764,288 @@ Không còn cần tham số phân tách nữa.</translation>
 <context>
     <name>ReportOptionsDialog</name>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="27"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="29"/>
         <source>Generate PDF Report</source>
         <translation>Tạo Báo Cáo PDF</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="27"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="29"/>
         <source>Generate Report</source>
         <translation>Tạo Báo Cáo</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="73"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="75"/>
         <source>Solid</source>
         <translation>Liền Nét</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="74"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="76"/>
         <source>Dashed</source>
         <translation>Gạch Đứt</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="75"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="77"/>
         <source>Dotted</source>
         <translation>Chấm</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="97"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="99"/>
         <source>A4 (210 × 297 mm)</source>
         <translation>A4 (210 × 297 mm)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="98"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="100"/>
         <source>A3 (297 × 420 mm)</source>
         <translation>A3 (297 × 420 mm)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="99"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="101"/>
         <source>A2 (420 × 594 mm)</source>
         <translation>A2 (420 × 594 mm)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="100"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="102"/>
         <source>A1 (594 × 841 mm)</source>
         <translation>A1 (594 × 841 mm)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="101"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="103"/>
         <source>A0 (841 × 1189 mm)</source>
         <translation>A0 (841 × 1189 mm)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="102"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="104"/>
         <source>A5 (148 × 210 mm)</source>
         <translation>A5 (148 × 210 mm)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="103"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="105"/>
         <source>A6 (105 × 148 mm)</source>
         <translation>A6 (105 × 148 mm)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="104"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="106"/>
         <source>B4 (250 × 353 mm)</source>
         <translation>B4 (250 × 353 mm)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="105"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="107"/>
         <source>B5 (176 × 250 mm)</source>
         <translation>B5 (176 × 250 mm)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="106"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="108"/>
         <source>Letter (8.5 × 11 in)</source>
         <translation>Letter (8.5 × 11 in)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="107"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="109"/>
         <source>Legal (8.5 × 14 in)</source>
         <translation>Legal (8.5 × 14 in)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="108"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="110"/>
         <source>Executive (7.25 × 10.5 in)</source>
         <translation>Executive (7.25 × 10.5 in)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="109"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="111"/>
         <source>Tabloid (11 × 17 in)</source>
         <translation>Tabloid (11 × 17 in)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="110"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="112"/>
         <source>Ledger (17 × 11 in)</source>
         <translation>Ledger (17 × 11 in)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="124"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="126"/>
         <source>%1 — Session Report</source>
         <translation>%1 — Báo Cáo Phiên</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="126"/>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="321"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="128"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="323"/>
         <source>Session Report</source>
         <translation>Báo Cáo Phiên</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="223"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="225"/>
         <source>Branding</source>
         <translation>Thương Hiệu</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="229"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="231"/>
         <source>Page</source>
         <translation>Trang</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="235"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="237"/>
         <source>Sections</source>
         <translation>Các Phần</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="241"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="243"/>
         <source>Datasets</source>
         <translation>Tập Dữ Liệu</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="289"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="291"/>
         <source>Identity</source>
         <translation>Danh Tính</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="303"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="305"/>
         <source>Company</source>
         <translation>Công Ty</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="310"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="312"/>
         <source>e.g. Acme Test Systems</source>
         <translation>ví dụ: Hệ Thống Kiểm Tra Acme</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="314"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="316"/>
         <source>Document title</source>
         <translation>Tiêu đề tài liệu</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="325"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="327"/>
         <source>Author</source>
         <translation>Tác Giả</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="332"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="334"/>
         <source>Prepared by (optional)</source>
         <translation>Người chuẩn bị (tùy chọn)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="341"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="343"/>
         <source>Logo</source>
         <translation>Logo</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="354"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="356"/>
         <source>File</source>
         <translation>Tệp</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="365"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="367"/>
         <source>PNG, JPG or SVG (optional)</source>
         <translation>PNG, JPG hoặc SVG (tùy chọn)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="367"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="369"/>
         <source>Browse…</source>
         <translation>Duyệt…</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="370"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="372"/>
         <source>Clear</source>
         <translation>Xóa</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="411"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="413"/>
         <source>Paper</source>
         <translation>Giấy</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="423"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="425"/>
         <source>Page size</source>
         <translation>Kích thước trang</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="439"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="441"/>
         <source>Plot appearance</source>
         <translation>Giao diện biểu đồ</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="453"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="455"/>
         <source>Line width</source>
         <translation>Độ rộng đường</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="485"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="487"/>
         <source>Line style</source>
         <translation>Kiểu đường</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="526"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="528"/>
         <source>Include</source>
         <translation>Bao Gồm</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="541"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="543"/>
         <source>Cover page (logo, document title, test subtitle)</source>
         <translation>Trang bìa (logo, tiêu đề tài liệu, phụ đề kiểm tra)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="546"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="548"/>
         <source>Test information (project, timestamps, classification and notes)</source>
         <translation>Thông tin kiểm tra (dự án, dấu thời gian, phân loại và ghi chú)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="551"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="553"/>
         <source>Measurement summary (min, max, mean, std. deviation per parameter)</source>
         <translation>Tóm tắt đo lường (min, max, trung bình, độ lệch chuẩn cho mỗi tham số)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="556"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="558"/>
         <source>Parameter trends (time-series chart per numeric parameter)</source>
         <translation>Xu hướng tham số (biểu đồ chuỗi thời gian cho mỗi tham số số)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="561"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="563"/>
         <source>Annotate min, max, and mean values on plots</source>
         <translation>Chú thích giá trị min, max và trung bình trên biểu đồ</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="598"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="600"/>
         <source>Include datasets</source>
         <translation>Bao gồm tập dữ liệu</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="612"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="614"/>
         <source>Expand All</source>
         <translation>Mở Rộng Tất Cả</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="621"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="623"/>
         <source>Collapse All</source>
         <translation>Thu Gọn Tất Cả</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="633"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="635"/>
         <source>Search datasets</source>
         <translation>Tìm kiếm tập dữ liệu</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="761"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="763"/>
         <source>Loading datasets...</source>
         <translation>Đang tải tập dữ liệu...</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="762"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="764"/>
         <source>No datasets match your search.</source>
         <translation>Không có tập dữ liệu nào khớp với tìm kiếm của bạn.</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="782"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="784"/>
         <source>Select at least one dataset to include.</source>
         <translation>Chọn ít nhất một tập dữ liệu để bao gồm.</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="791"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="793"/>
         <source>Cancel</source>
         <translation>Hủy</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="799"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="801"/>
         <source>Export PDF</source>
         <translation>Xuất PDF</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="799"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="801"/>
         <source>Export HTML</source>
         <translation>Xuất HTML</translation>
     </message>
@@ -28043,17 +28053,17 @@ Không còn cần tham số phân tách nữa.</translation>
 <context>
     <name>ReportProgressDialog</name>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportProgressDialog.qml" line="20"/>
+        <location filename="../../qml/DatabaseExplorer/ReportProgressDialog.qml" line="22"/>
         <source>Generating Report</source>
         <translation>Đang Tạo Báo Cáo</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportProgressDialog.qml" line="69"/>
+        <location filename="../../qml/DatabaseExplorer/ReportProgressDialog.qml" line="71"/>
         <source>Working…</source>
         <translation>Đang Xử Lý…</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportProgressDialog.qml" line="86"/>
+        <location filename="../../qml/DatabaseExplorer/ReportProgressDialog.qml" line="88"/>
         <source>This can take a few seconds for sessions with many parameters. The window closes automatically when the report is ready.</source>
         <translation>Quá trình này có thể mất vài giây đối với phiên có nhiều tham số. Cửa sổ sẽ tự động đóng khi báo cáo hoàn tất.</translation>
     </message>
@@ -28094,63 +28104,63 @@ Không còn cần tham số phân tách nữa.</translation>
 <context>
     <name>RuntimeReconfigure</name>
     <message>
-        <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="40"/>
+        <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="42"/>
         <source>Connection Lost</source>
         <translation>Mất Kết Nối</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="41"/>
+        <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="43"/>
         <source>Device Unavailable</source>
         <translation>Thiết Bị Không Khả Dụng</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="95"/>
+        <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="97"/>
         <source>The connection to your device was lost.</source>
         <translation>Kết nối đến thiết bị đã bị mất.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="96"/>
+        <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="98"/>
         <source>Serial Studio couldn't reach your device.</source>
         <translation>Serial Studio không thể kết nối đến thiết bị.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="105"/>
+        <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="107"/>
         <source>Check the cable, power, and that no other application has taken over the device. You can try reconnecting, switch to a different device, or quit.</source>
         <translation>Kiểm tra cáp, nguồn điện và đảm bảo không có ứng dụng nào khác đang chiếm dụng thiết bị. Có thể thử kết nối lại, chuyển sang thiết bị khác hoặc thoát.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="108"/>
+        <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="110"/>
         <source>Make sure it's plugged in, powered on, and not already in use by another app. You can try again, pick a different device, or quit.</source>
         <translation>Đảm bảo thiết bị đã được cắm, bật nguồn và không bị ứng dụng khác sử dụng. Có thể thử lại, chọn thiết bị khác hoặc thoát.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="120"/>
-        <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="189"/>
+        <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="122"/>
+        <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="191"/>
         <source>Quit</source>
         <translation>Thoát</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="130"/>
+        <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="132"/>
         <source>Pick Different Device</source>
         <translation>Chọn Thiết Bị Khác</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="141"/>
+        <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="143"/>
         <source>Reconnect</source>
         <translation>Kết Nối Lại</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="141"/>
+        <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="143"/>
         <source>Try Again</source>
         <translation>Thử Lại</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="157"/>
+        <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="159"/>
         <source>Pick the correct device, then press Connect.</source>
         <translation>Chọn thiết bị đúng, sau đó nhấn Kết Nối.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="166"/>
+        <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="168"/>
         <source>Connection: %1</source>
         <translation>Kết Nối: %1</translation>
     </message>
@@ -28159,7 +28169,7 @@ Không còn cần tham số phân tách nữa.</translation>
         <translation type="vanished">Giao Diện I/O: %1</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="199"/>
+        <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="201"/>
         <source>Connect</source>
         <translation>Kết Nối</translation>
     </message>
@@ -28172,57 +28182,57 @@ Không còn cần tham số phân tách nữa.</translation>
         <translation>Máy Chủ</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/S7.qml" line="58"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/S7.qml" line="60"/>
         <source>IP Address</source>
         <translation>Địa Chỉ IP</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/S7.qml" line="76"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/S7.qml" line="78"/>
         <source>Rack</source>
         <translation>Rack</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/S7.qml" line="84"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/S7.qml" line="88"/>
         <source>0-7</source>
         <translation>0-7</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/S7.qml" line="105"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/S7.qml" line="109"/>
         <source>Slot</source>
         <translation>Slot</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/S7.qml" line="113"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/S7.qml" line="119"/>
         <source>0-31</source>
         <translation>0-31</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/S7.qml" line="133"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/S7.qml" line="139"/>
         <source>Poll Interval (ms)</source>
         <translation>Chu Kỳ Truy Vấn (ms)</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/S7.qml" line="138"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/S7.qml" line="146"/>
         <source>Polling interval</source>
         <translation>Khoảng thời gian truy vấn</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/S7.qml" line="171"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/S7.qml" line="181"/>
         <source>Configure Variables…</source>
         <translation>Cấu Hình Biến…</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/S7.qml" line="182"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/S7.qml" line="194"/>
         <source>Create Project from Variables</source>
         <translation>Tạo Dự Án từ Biến</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/S7.qml" line="197"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/S7.qml" line="209"/>
         <source>%1 variable(s) configured</source>
         <translation>Đã cấu hình %1 biến</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/S7.qml" line="198"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/S7.qml" line="210"/>
         <source>No variables configured</source>
         <translation>Chưa cấu hình biến nào</translation>
     </message>
@@ -28250,74 +28260,74 @@ Không còn cần tham số phân tách nữa.</translation>
         <translation>Tên:</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/S7VariablesDialog.qml" line="129"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/S7VariablesDialog.qml" line="131"/>
         <source>Channel name</source>
         <translation>Tên kênh</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/S7VariablesDialog.qml" line="134"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/S7VariablesDialog.qml" line="136"/>
         <source>Address:</source>
         <translation>Địa Chỉ:</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/S7VariablesDialog.qml" line="146"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/S7VariablesDialog.qml" line="150"/>
         <source>DB5.DBD20:REAL</source>
         <translation>DB5.DBD20:REAL</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/S7VariablesDialog.qml" line="150"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/S7VariablesDialog.qml" line="156"/>
         <source>Add Variable</source>
         <translation>Thêm Biến</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/S7VariablesDialog.qml" line="185"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/S7VariablesDialog.qml" line="191"/>
         <source>Configured Variables</source>
         <translation>Các Biến Đã Cấu Hình</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/S7VariablesDialog.qml" line="219"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/S7VariablesDialog.qml" line="225"/>
         <source>#</source>
         <translation>#</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/S7VariablesDialog.qml" line="227"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/S7VariablesDialog.qml" line="233"/>
         <source>Variable</source>
         <translation>Biến</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/S7VariablesDialog.qml" line="234"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/S7VariablesDialog.qml" line="240"/>
         <source>Action</source>
         <translation>Hành Động</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/S7VariablesDialog.qml" line="281"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/S7VariablesDialog.qml" line="289"/>
         <source>Remove</source>
         <translation>Xóa</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/S7VariablesDialog.qml" line="295"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/S7VariablesDialog.qml" line="303"/>
         <source>No variables configured.
 Add absolute addresses above to poll the controller.</source>
         <translation>Chưa cấu hình biến.
 Thêm địa chỉ tuyệt đối ở trên để truy vấn bộ điều khiển.</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/S7VariablesDialog.qml" line="313"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/S7VariablesDialog.qml" line="321"/>
         <source>Total variables: %1</source>
         <translation>Tổng số biến: %1</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/S7VariablesDialog.qml" line="317"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/S7VariablesDialog.qml" line="327"/>
         <source>Generate Project</source>
         <translation>Tạo Dự Án</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/S7VariablesDialog.qml" line="323"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/S7VariablesDialog.qml" line="335"/>
         <source>Clear All</source>
         <translation>Xóa Tất Cả</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/S7VariablesDialog.qml" line="330"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/S7VariablesDialog.qml" line="344"/>
         <source>Close</source>
         <translation>Đóng</translation>
     </message>
@@ -29511,17 +29521,17 @@ Thêm địa chỉ tuyệt đối ở trên để truy vấn bộ điều khiể
 <context>
     <name>Settings</name>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="35"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="37"/>
         <source>Preferences</source>
         <translation>Tùy Chọn</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="63"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="67"/>
         <source>General</source>
         <translation>Chung</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="69"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="75"/>
         <source>Startup</source>
         <translation>Khởi Động</translation>
     </message>
@@ -29530,22 +29540,22 @@ Thêm địa chỉ tuyệt đối ở trên để truy vấn bộ điều khiể
         <translation type="vanished">Bảng Điều Khiển</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="87"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="99"/>
         <source>Taskbar</source>
         <translation>Thanh Tác Vụ</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="93"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="107"/>
         <source>Console</source>
         <translation>Console</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="105"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="123"/>
         <source>Sounds</source>
         <translation>Âm Thanh</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="112"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="132"/>
         <source>Notifications</source>
         <translation>Thông Báo</translation>
     </message>
@@ -29714,7 +29724,7 @@ Thêm địa chỉ tuyệt đối ở trên để truy vấn bộ điều khiể
         <translation type="vanished">Tùy Chỉnh</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="81"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="91"/>
         <source>Layout</source>
         <translation>Bố Cục</translation>
     </message>
@@ -29735,7 +29745,7 @@ Thêm địa chỉ tuyệt đối ở trên để truy vấn bộ điều khiể
         <translation type="vanished">Lề Bố Cục Tự Động</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="99"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="115"/>
         <source>Export</source>
         <translation>Xuất</translation>
     </message>
@@ -29764,7 +29774,7 @@ Thêm địa chỉ tuyệt đối ở trên để truy vấn bộ điều khiể
         <translation type="vanished">Hành Vi</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="75"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="83"/>
         <source>Plotting</source>
         <translation>Vẽ Đồ Thị</translation>
     </message>
@@ -29917,17 +29927,17 @@ Thêm địa chỉ tuyệt đối ở trên để truy vấn bộ điều khiể
         <translation type="vanished">Tắt theo mặc định — QT và QML phát ra cảnh báo thường xuyên và bật tính năng này có thể làm lu mờ các cảnh báo thực sự. Thông báo nghiêm trọng luôn được chuyển bất kể cài đặt này.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="186"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="208"/>
         <source>Reset</source>
         <translation>Đặt Lại</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="246"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="270"/>
         <source>Close</source>
         <translation>Đóng</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="254"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="280"/>
         <source>Apply</source>
         <translation>Áp Dụng</translation>
     </message>
@@ -29945,67 +29955,67 @@ Thêm địa chỉ tuyệt đối ở trên để truy vấn bộ điều khiể
         <translation>Chế Độ Hiển Thị</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsConsolePage.qml" line="95"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsConsolePage.qml" line="97"/>
         <source>Font Family</source>
         <translation>Họ Phông Chữ</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsConsolePage.qml" line="117"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsConsolePage.qml" line="121"/>
         <source>Font Size</source>
         <translation>Cỡ Phông Chữ</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsConsolePage.qml" line="141"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsConsolePage.qml" line="147"/>
         <source>Scrollback Lines</source>
         <translation>Số Dòng Cuộn Lại</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsConsolePage.qml" line="166"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsConsolePage.qml" line="174"/>
         <source>Show Timestamps</source>
         <translation>Hiển Thị Dấu Thời Gian</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsConsolePage.qml" line="194"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsConsolePage.qml" line="204"/>
         <source>Data Transmission</source>
         <translation>Truyền Dữ Liệu</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsConsolePage.qml" line="209"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsConsolePage.qml" line="219"/>
         <source>Line Ending</source>
         <translation>Kết Thúc Dòng</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsConsolePage.qml" line="231"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsConsolePage.qml" line="243"/>
         <source>Input Mode</source>
         <translation>Chế Độ Đầu Vào</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsConsolePage.qml" line="253"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsConsolePage.qml" line="267"/>
         <source>Text Encoding</source>
         <translation>Mã Hóa Văn Bản</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsConsolePage.qml" line="275"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsConsolePage.qml" line="291"/>
         <source>Checksum</source>
         <translation>Checksum</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsConsolePage.qml" line="297"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsConsolePage.qml" line="315"/>
         <source>Echo Sent Data</source>
         <translation>Phản Hồi Dữ Liệu Đã Gửi</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsConsolePage.qml" line="325"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsConsolePage.qml" line="345"/>
         <source>Escape Codes</source>
         <translation>Mã Escape</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsConsolePage.qml" line="340"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsConsolePage.qml" line="360"/>
         <source>VT100 Emulation</source>
         <translation>Mô Phỏng VT100</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsConsolePage.qml" line="366"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsConsolePage.qml" line="388"/>
         <source>ANSI Colors</source>
         <translation>Màu ANSI</translation>
     </message>
@@ -30023,17 +30033,17 @@ Thêm địa chỉ tuyệt đối ở trên để truy vấn bộ điều khiể
         <translation>Khoảng Cách Hàng (ms)</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsExportPage.qml" line="134"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsExportPage.qml" line="136"/>
         <source>0 writes one row per received frame. A positive value logs one snapshot row of every channel at that interval, which keeps file size bounded for multi-source or high-rate projects.</source>
         <translation>0 ghi một hàng cho mỗi khung nhận được. Giá trị dương ghi một hàng ảnh chụp của mọi kênh theo khoảng thời gian đó, giúp giữ kích thước tệp ổn định cho các dự án đa nguồn hoặc tốc độ cao.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsExportPage.qml" line="147"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsExportPage.qml" line="149"/>
         <source>Video Export</source>
         <translation>Xuất Video</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsExportPage.qml" line="165"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsExportPage.qml" line="167"/>
         <source>Save Videos by Default</source>
         <translation>Lưu Video Theo Mặc Định</translation>
     </message>
@@ -30051,47 +30061,47 @@ Thêm địa chỉ tuyệt đối ở trên để truy vấn bộ điều khiể
         <translation>Ngôn Ngữ</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsGeneralPage.qml" line="89"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsGeneralPage.qml" line="91"/>
         <source>Theme</source>
         <translation>Giao Diện</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsGeneralPage.qml" line="116"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsGeneralPage.qml" line="120"/>
         <source>Window</source>
         <translation>Cửa Sổ</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsGeneralPage.qml" line="135"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsGeneralPage.qml" line="139"/>
         <source>Custom Window Decorations</source>
         <translation>Trang Trí Cửa Sổ Tùy Chỉnh</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsGeneralPage.qml" line="158"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsGeneralPage.qml" line="164"/>
         <source>Window decoration changes apply after restarting %1.</source>
         <translation>Thay đổi trang trí cửa sổ có hiệu lực sau khi khởi động lại %1.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsGeneralPage.qml" line="167"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsGeneralPage.qml" line="173"/>
         <source>Files</source>
         <translation>Tệp</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsGeneralPage.qml" line="183"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsGeneralPage.qml" line="189"/>
         <source>Workspace Folder</source>
         <translation>Thư Mục Workspace</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsGeneralPage.qml" line="214"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsGeneralPage.qml" line="224"/>
         <source>API &amp; Plugins</source>
         <translation>API &amp; Plugin</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsGeneralPage.qml" line="230"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsGeneralPage.qml" line="240"/>
         <source>Enable API Server</source>
         <translation>Bật Máy Chủ API</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsGeneralPage.qml" line="255"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsGeneralPage.qml" line="267"/>
         <source>API Server Port</source>
         <translation>Cổng Máy Chủ API</translation>
     </message>
@@ -30100,22 +30110,22 @@ Thêm địa chỉ tuyệt đối ở trên để truy vấn bộ điều khiể
         <translation type="vanished">Bật Máy Chủ API (Cổng 7777)</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsGeneralPage.qml" line="280"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsGeneralPage.qml" line="294"/>
         <source>Allow External API Connections</source>
         <translation>Cho Phép Kết Nối API từ Bên Ngoài</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsGeneralPage.qml" line="305"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsGeneralPage.qml" line="321"/>
         <source>API Access Token</source>
         <translation>Mã Truy Cập API</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsGeneralPage.qml" line="335"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsGeneralPage.qml" line="355"/>
         <source>Export Protobuf File</source>
         <translation>Xuất Tệp Protobuf</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsGeneralPage.qml" line="337"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsGeneralPage.qml" line="359"/>
         <source>Export…</source>
         <translation>Xuất…</translation>
     </message>
@@ -30133,62 +30143,62 @@ Thêm địa chỉ tuyệt đối ở trên để truy vấn bộ điều khiể
         <translation>Họ Phông Chữ</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsLayoutPage.qml" line="95"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsLayoutPage.qml" line="97"/>
         <source>Font Size</source>
         <translation>Cỡ Phông Chữ</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsLayoutPage.qml" line="105"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsLayoutPage.qml" line="109"/>
         <source>Small</source>
         <translation>Nhỏ</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsLayoutPage.qml" line="105"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsLayoutPage.qml" line="109"/>
         <source>Normal</source>
         <translation>Bình Thường</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsLayoutPage.qml" line="105"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsLayoutPage.qml" line="109"/>
         <source>Large</source>
         <translation>Lớn</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsLayoutPage.qml" line="105"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsLayoutPage.qml" line="109"/>
         <source>Extra Large</source>
         <translation>Rất Lớn</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsLayoutPage.qml" line="105"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsLayoutPage.qml" line="109"/>
         <source>Custom</source>
         <translation>Tùy Chỉnh</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsLayoutPage.qml" line="166"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsLayoutPage.qml" line="172"/>
         <source>Layout</source>
         <translation>Bố Cục</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsLayoutPage.qml" line="181"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsLayoutPage.qml" line="187"/>
         <source>Layout Margin</source>
         <translation>Lề Bố Cục</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsLayoutPage.qml" line="206"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsLayoutPage.qml" line="214"/>
         <source>Layout Spacing</source>
         <translation>Khoảng Cách Bố Cục</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsLayoutPage.qml" line="231"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsLayoutPage.qml" line="241"/>
         <source>Show Actions Panel</source>
         <translation>Hiển Thị Bảng Hành Động</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsLayoutPage.qml" line="247"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsLayoutPage.qml" line="259"/>
         <source>Auto-Hide Toolbar</source>
         <translation>Tự Động Ẩn Thanh Công Cụ</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsLayoutPage.qml" line="270"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsLayoutPage.qml" line="284"/>
         <source>Show Alignment Guides</source>
         <translation>Hiển Thị Đường Dẫn Căn Chỉnh</translation>
     </message>
@@ -30206,22 +30216,22 @@ Thêm địa chỉ tuyệt đối ở trên để truy vấn bộ điều khiể
         <translation>Thông Báo Hệ Thống</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsNotificationsPage.qml" line="96"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsNotificationsPage.qml" line="98"/>
         <source>Show Warning/Critical events as OS desktop notifications when Serial Studio is not the foreground window.</source>
         <translation>Hiển thị sự kiện Cảnh báo/Nghiêm trọng dưới dạng thông báo desktop của hệ điều hành khi Serial Studio không phải là cửa sổ đang hoạt động.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsNotificationsPage.qml" line="106"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsNotificationsPage.qml" line="108"/>
         <source>Application Logs</source>
         <translation>Nhật Ký Ứng Dụng</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsNotificationsPage.qml" line="121"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsNotificationsPage.qml" line="123"/>
         <source>Route Warnings to Notifications</source>
         <translation>Chuyển Cảnh Báo sang Thông Báo</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsNotificationsPage.qml" line="142"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsNotificationsPage.qml" line="146"/>
         <source>Off by default — Qt and QML emit warnings frequently and enabling this can drown out real alarms. Critical messages are always routed regardless of this setting.</source>
         <translation>Tắt theo mặc định — QT và QML phát ra cảnh báo thường xuyên và bật tính năng này có thể làm lu mờ các cảnh báo thực sự. Thông báo nghiêm trọng luôn được chuyển bất kể cài đặt này.</translation>
     </message>
@@ -30239,12 +30249,12 @@ Thêm địa chỉ tuyệt đối ở trên để truy vấn bộ điều khiể
         <translation>Phạm Vi Thời Gian</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsPlottingPage.qml" line="125"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsPlottingPage.qml" line="127"/>
         <source>Point Count</source>
         <translation>Số Lượng Điểm</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsPlottingPage.qml" line="150"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsPlottingPage.qml" line="154"/>
         <source>UI Refresh Rate (Hz)</source>
         <translation>Tốc Độ Làm Mới Giao Diện (Hz)</translation>
     </message>
@@ -30337,87 +30347,87 @@ Thêm địa chỉ tuyệt đối ở trên để truy vấn bộ điều khiể
         <translation>Tất cả tệp (*)</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsSoundsPage.qml" line="124"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsSoundsPage.qml" line="128"/>
         <source>Bundled sound</source>
         <translation>Âm thanh tích hợp</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsSoundsPage.qml" line="145"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsSoundsPage.qml" line="151"/>
         <source>Browse for a WAV file</source>
         <translation>Duyệt tìm tệp WAV</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsSoundsPage.qml" line="156"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsSoundsPage.qml" line="164"/>
         <source>Play this sound</source>
         <translation>Phát âm thanh này</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsSoundsPage.qml" line="165"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsSoundsPage.qml" line="175"/>
         <source>Use the bundled sound</source>
         <translation>Sử dụng âm thanh tích hợp</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsSoundsPage.qml" line="225"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsSoundsPage.qml" line="235"/>
         <source>Output</source>
         <translation>Đầu Ra</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsSoundsPage.qml" line="229"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsSoundsPage.qml" line="239"/>
         <source>Enable Sounds</source>
         <translation>Bật Âm Thanh</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsSoundsPage.qml" line="261"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsSoundsPage.qml" line="273"/>
         <source>Volume</source>
         <translation>Âm Lượng</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsSoundsPage.qml" line="274"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsSoundsPage.qml" line="288"/>
         <source>Output Device</source>
         <translation>Thiết Bị Đầu Ra</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsSoundsPage.qml" line="290"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsSoundsPage.qml" line="306"/>
         <source>The selected device is not available; sounds play on the system default.</source>
         <translation>Thiết bị đã chọn không khả dụng; âm thanh phát trên thiết bị mặc định của hệ thống.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsSoundsPage.qml" line="293"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsSoundsPage.qml" line="309"/>
         <source>Alarms</source>
         <translation>Cảnh Báo</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsSoundsPage.qml" line="297"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsSoundsPage.qml" line="313"/>
         <source>Sequence (ISA-18.1)</source>
         <translation>Chuỗi (ISA-18.1)</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsSoundsPage.qml" line="301"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsSoundsPage.qml" line="319"/>
         <source>A-4 - Automatic reset, no lock-in</source>
         <translation>A-4 - Đặt lại tự động, không khóa</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsSoundsPage.qml" line="302"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsSoundsPage.qml" line="320"/>
         <source>A - Automatic reset, lock-in until acknowledged</source>
         <translation>A - Đặt lại tự động, khóa cho đến khi xác nhận</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsSoundsPage.qml" line="303"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsSoundsPage.qml" line="321"/>
         <source>M-4 - Manual reset, no lock-in</source>
         <translation>M-4 - Đặt lại thủ công, không khóa</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsSoundsPage.qml" line="304"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsSoundsPage.qml" line="322"/>
         <source>M - Manual reset, lock-in until acknowledged</source>
         <translation>M - Đặt lại thủ công, khóa cho đến khi xác nhận</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsSoundsPage.qml" line="305"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsSoundsPage.qml" line="323"/>
         <source>R-4 - Ringback, no lock-in</source>
         <translation>R-4 - Tín hiệu gọi lại, không khóa</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsSoundsPage.qml" line="306"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsSoundsPage.qml" line="324"/>
         <source>R - Ringback, lock-in until acknowledged</source>
         <translation>R - Tín hiệu gọi lại, khóa cho đến khi xác nhận</translation>
     </message>
@@ -30434,27 +30444,27 @@ Thêm địa chỉ tuyệt đối ở trên để truy vấn bộ điều khiể
         <translation type="vanished">R - Tín Hiệu Gọi Lại</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsSoundsPage.qml" line="320"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsSoundsPage.qml" line="338"/>
         <source>Warning Repeat (ms)</source>
         <translation>Lặp Lại Cảnh Báo (ms)</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsSoundsPage.qml" line="333"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsSoundsPage.qml" line="353"/>
         <source>Caution Repeat (ms)</source>
         <translation>Lặp Lại Thận Trọng (ms)</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsSoundsPage.qml" line="345"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsSoundsPage.qml" line="367"/>
         <source>Events</source>
         <translation>Sự Kiện</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsSoundsPage.qml" line="375"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsSoundsPage.qml" line="399"/>
         <source>Test</source>
         <translation>Kiểm Tra</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsSoundsPage.qml" line="383"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsSoundsPage.qml" line="409"/>
         <source>Reset to Bundled Sounds</source>
         <translation>Đặt Lại về Âm Thanh Gốc</translation>
     </message>
@@ -30472,72 +30482,72 @@ Thêm địa chỉ tuyệt đối ở trên để truy vấn bộ điều khiể
         <translation>Backend Kết Xuất</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="113"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="115"/>
         <source>Display Scaling</source>
         <translation>Tỷ Lệ Hiển Thị</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="146"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="150"/>
         <source>Custom Scale (%)</source>
         <translation>Tỷ Lệ Tùy Chỉnh (%)</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="178"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="184"/>
         <source>HDR Output</source>
         <translation>Đầu Ra HDR</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="210"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="218"/>
         <source>System</source>
         <translation>Hệ Thống</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="225"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="233"/>
         <source>SIMD Instruction Set</source>
         <translation>Bộ Lệnh SIMD</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="255"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="265"/>
         <source>Reduce Motion</source>
         <translation>Giảm Chuyển Động</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="279"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="291"/>
         <source>Apply Performance Hints</source>
         <translation>Áp Dụng Gợi Ý Hiệu Năng</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="302"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="316"/>
         <source>Keep Display Awake</source>
         <translation>Giữ Màn Hình Luôn Bật</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="331"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="347"/>
         <source>Performance hints raise process priority and opt out of OS power throttling. Changes take effect the next time Serial Studio starts.</source>
         <translation>Gợi ý hiệu năng tăng mức ưu tiên tiến trình và loại trừ điều tiết nguồn của hệ điều hành. Thay đổi có hiệu lực khi Serial Studio khởi động lần tiếp theo.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="342"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="358"/>
         <source>Updates &amp; News</source>
         <translation>Cập Nhật &amp; Tin Tức</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="358"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="374"/>
         <source>Automatically Check for Updates</source>
         <translation>Tự Động Kiểm Tra Cập Nhật</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="381"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="399"/>
         <source>Check for Extension Updates</source>
         <translation>Kiểm Tra Cập Nhật Extension</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="405"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="425"/>
         <source>Install Extension Updates Automatically</source>
         <translation>Tự Động Cài Đặt Bản Cập Nhật Tiện Ích Mở Rộng</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="435"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="457"/>
         <source>Installed extensions and themes are checked when Serial Studio starts, together with application updates. Serial Studio asks before installing them unless automatic installation is enabled.</source>
         <translation>Các tiện ích mở rộng và giao diện đã cài đặt được kiểm tra khi Serial Studio khởi động, cùng với các bản cập nhật ứng dụng. Serial Studio sẽ hỏi trước khi cài đặt chúng trừ khi đã bật tính năng tự động cài đặt.</translation>
     </message>
@@ -30555,67 +30565,67 @@ Thêm địa chỉ tuyệt đối ở trên để truy vấn bộ điều khiể
         <translation>Luôn Hiển Thị Các Nút Thanh Tác Vụ</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsTaskbarPage.qml" line="99"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsTaskbarPage.qml" line="101"/>
         <source>Show Search Field</source>
         <translation>Hiển Thị Trường Tìm Kiếm</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsTaskbarPage.qml" line="123"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsTaskbarPage.qml" line="127"/>
         <source>Auto-hide Taskbar</source>
         <translation>Tự Động Ẩn Thanh Tác Vụ</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsTaskbarPage.qml" line="150"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsTaskbarPage.qml" line="156"/>
         <source>Hide Delay (ms)</source>
         <translation>Độ Trễ Ẩn (ms)</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsTaskbarPage.qml" line="183"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsTaskbarPage.qml" line="191"/>
         <source>Pinned Buttons</source>
         <translation>Nút Ghim</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsTaskbarPage.qml" line="201"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsTaskbarPage.qml" line="209"/>
         <source>Drag a pinned button on the taskbar to reorder it.</source>
         <translation>Kéo một nút đã ghim trên thanh tác vụ để sắp xếp lại.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsTaskbarPage.qml" line="222"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsTaskbarPage.qml" line="230"/>
         <source>Settings</source>
         <translation>Cài Đặt</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsTaskbarPage.qml" line="223"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsTaskbarPage.qml" line="231"/>
         <source>Console</source>
         <translation>Console</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsTaskbarPage.qml" line="224"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsTaskbarPage.qml" line="232"/>
         <source>Notifications</source>
         <translation>Thông Báo</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsTaskbarPage.qml" line="225"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsTaskbarPage.qml" line="233"/>
         <source>Clock</source>
         <translation>Đồng Hồ</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsTaskbarPage.qml" line="226"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsTaskbarPage.qml" line="234"/>
         <source>Stopwatch</source>
         <translation>Đồng Hồ Bấm Giờ</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsTaskbarPage.qml" line="227"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsTaskbarPage.qml" line="235"/>
         <source>Pause / Resume</source>
         <translation>Tạm Dừng / Tiếp Tục</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsTaskbarPage.qml" line="228"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsTaskbarPage.qml" line="236"/>
         <source>File Transmission</source>
         <translation>Truyền Tệp</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsTaskbarPage.qml" line="229"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsTaskbarPage.qml" line="237"/>
         <source>AI Assistant</source>
         <translation>Trợ Lý AI</translation>
     </message>
@@ -30667,67 +30677,67 @@ Thêm địa chỉ tuyệt đối ở trên để truy vấn bộ điều khiể
         <translation>Chế Độ Hoạt Động</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="220"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="222"/>
         <source>Console Only (No Parsing)</source>
         <translation>Chỉ Console (Không Phân Tích)</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="222"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="224"/>
         <source>Shows incoming data as text or hex. Nothing is parsed or plotted.</source>
         <translation>Hiển thị dữ liệu đến dưới dạng văn bản hoặc hex. Không có gì được phân tích cú pháp hoặc vẽ biểu đồ.</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="232"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="236"/>
         <source>Quick Plot (Comma Separated Values)</source>
         <translation>Vẽ Đồ Thị Nhanh (Giá Trị Phân Cách bằng Dấu Phẩy)</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="235"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="239"/>
         <source>Plots one line per sample with values separated by commas, for example 12.5,30.1,0.98 followed by a newline.</source>
         <translation>Vẽ một dòng cho mỗi mẫu với các giá trị được phân tách bằng dấu phẩy, ví dụ 12.5,30.1,0.98 theo sau là một dòng mới.</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="252"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="258"/>
         <source>Parse via Project File</source>
         <translation>Phân Tích qua Tệp Dự Án</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="255"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="261"/>
         <source>Builds the dashboard from a project made in the Project Editor.</source>
         <translation>Xây dựng bảng điều khiển từ một dự án được tạo trong Trình Chỉnh Sửa Dự Án.</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="272"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="280"/>
         <source>Change Project File (%1)</source>
         <translation>Thay Đổi Tệp Dự Án (%1)</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="273"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="281"/>
         <source>Select Project File</source>
         <translation>Chọn Tệp Dự Án</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="288"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="296"/>
         <source>Data Export</source>
         <translation>Xuất Dữ Liệu</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="312"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="322"/>
         <source>CSV Spreadsheet</source>
         <translation>Bảng Tính CSV</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="332"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="344"/>
         <source>Historian Database</source>
         <translation>Cơ Sở Dữ Liệu Lịch Sử</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="412"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="430"/>
         <source>Connection: %1</source>
         <translation>Kết Nối: %1</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="507"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="525"/>
         <source>Each device has its own connection settings. Configure them in the Project Editor under Devices.</source>
         <translation>Mỗi thiết bị có cài đặt kết nối riêng. Cấu hình chúng trong Trình Chỉnh Sửa Dự Án ở tab Thiết Bị.</translation>
     </message>
@@ -30740,12 +30750,12 @@ Thêm địa chỉ tuyệt đối ở trên để truy vấn bộ điều khiể
         <translation type="vanished">Ghi Phiên</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="351"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="365"/>
         <source>MDF4 Recording</source>
         <translation>Ghi MDF4</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="367"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="383"/>
         <source>Console Log</source>
         <translation>Nhật Ký Console</translation>
     </message>
@@ -30754,12 +30764,12 @@ Thêm địa chỉ tuyệt đối ở trên để truy vấn bộ điều khiể
         <translation type="vanished">Giao Diện I/O: %1</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="481"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="499"/>
         <source>Multi-Device Project</source>
         <translation>Dự Án Đa Thiết Bị</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="494"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="512"/>
         <source>This project streams data from %1 independent devices.</source>
         <translation>Dự án này truyền dữ liệu từ %1 thiết bị độc lập.</translation>
     </message>
@@ -30768,7 +30778,7 @@ Thêm địa chỉ tuyệt đối ở trên để truy vấn bộ điều khiể
         <translation type="vanished">Mỗi thiết bị có cài đặt kết nối riêng. Cấu hình chúng trong Trình Chỉnh Sửa Dự Án ở tab Nguồn.</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="526"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="546"/>
         <source>Open Project Editor</source>
         <translation>Mở Trình Chỉnh Sửa Dự Án</translation>
     </message>
@@ -30776,43 +30786,43 @@ Thêm địa chỉ tuyệt đối ở trên để truy vấn bộ điều khiể
 <context>
     <name>ShortcutGenerator</name>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="22"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="25"/>
         <source>New Deployment</source>
         <translation>Triển Khai Mới</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="224"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="227"/>
         <source>Choose an Icon</source>
         <translation>Chọn Biểu Tượng</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="192"/>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="240"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="195"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="243"/>
         <source>Save Deployment</source>
         <translation>Lưu Triển Khai</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="327"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="330"/>
         <source>General</source>
         <translation>Chung</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="333"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="336"/>
         <source>Taskbar</source>
         <translation>Thanh Tác Vụ</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="339"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="342"/>
         <source>Logging</source>
         <translation>Ghi Nhật Ký</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="486"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="489"/>
         <source>Identity</source>
         <translation>Định Danh</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="549"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="552"/>
         <source>Click to choose an icon</source>
         <translation>Nhấp để chọn biểu tượng</translation>
     </message>
@@ -30821,143 +30831,143 @@ Thêm địa chỉ tuyệt đối ở trên để truy vấn bộ điều khiể
         <translation type="vanished">Tên:</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="508"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="511"/>
         <source>Deployment Name</source>
         <translation>Tên Triển Khai</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="555"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="558"/>
         <source>Change Icon…</source>
         <translation>Đổi Biểu Tượng…</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="436"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="439"/>
         <source>Project</source>
         <translation>Dự Án</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="58"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="61"/>
         <source>%1 B</source>
         <translation>%1 B</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="61"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="64"/>
         <source>%1 KB</source>
         <translation>%1 KB</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="63"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="66"/>
         <source>%1 MB</source>
         <translation>%1 MB</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="175"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="178"/>
         <source>Save Deployment Package</source>
         <translation>Lưu Gói Triển Khai</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="179"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="182"/>
         <source>Serial Studio Deployment Package (*.ssdeploy)</source>
         <translation>Gói Triển Khai Serial Studio (*.ssdeploy)</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="210"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="213"/>
         <source>Add Files</source>
         <translation>Thêm Tệp</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="213"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="216"/>
         <source>Images (*.png *.jpg *.jpeg *.bmp *.gif *.svg *.webp)</source>
         <translation>Hình Ảnh (*.png *.jpg *.jpeg *.bmp *.gif *.svg *.webp)</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="214"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="217"/>
         <source>All files (*)</source>
         <translation>Tất cả tệp (*)</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="345"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="348"/>
         <source>Contents</source>
         <translation>Nội Dung</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="404"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="407"/>
         <source>Output</source>
         <translation>Đầu Ra</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="419"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="422"/>
         <source>Format</source>
         <translation>Định Dạng</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="428"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="431"/>
         <source>Deployment package (.ssdeploy)</source>
         <translation>Gói triển khai (.ssdeploy)</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="429"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="432"/>
         <source>Shortcut to the project file</source>
         <translation>Phím tắt đến tệp dự án</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="446"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="449"/>
         <source>Choose a project file to begin</source>
         <translation>Chọn tệp dự án để bắt đầu</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="466"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="469"/>
         <source>Desktop Shortcut</source>
         <translation>Phím Tắt Máy Tính</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="501"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="504"/>
         <source>Name</source>
         <translation>Tên</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="513"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="516"/>
         <source>Icon</source>
         <translation>Biểu Tượng</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="575"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="578"/>
         <source>Behavior</source>
         <translation>Hành Vi</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="590"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="593"/>
         <source>Theme</source>
         <translation>Giao Diện</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="598"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="601"/>
         <source>Same as Serial Studio</source>
         <translation>Giống Serial Studio</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="610"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="613"/>
         <source>Fullscreen</source>
         <translation>Toàn Màn Hình</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="621"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="624"/>
         <source>Actions Panel</source>
         <translation>Bảng Hành Động</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="633"/>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="863"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="636"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="866"/>
         <source>File Transmission</source>
         <translation>Truyền Tệp</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="651"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="654"/>
         <source>Opens straight to the live dashboard, with no toolbar, no setup pane, and no way to view or export the project. Serial Studio quits when the device disconnects.</source>
         <translation>Mở trực tiếp đến bảng điều khiển trực tiếp, không có thanh công cụ, không có ngăn thiết lập và không có cách để xem hoặc xuất dự án. Serial Studio thoát khi thiết bị ngắt kết nối.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="654"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="657"/>
         <source>Opens the project straight to the live dashboard, with no toolbar or setup pane. Serial Studio quits when the device disconnects.</source>
         <translation>Mở dự án trực tiếp đến bảng điều khiển trực tiếp, không có thanh công cụ hoặc ngăn thiết lập. Serial Studio thoát khi thiết bị ngắt kết nối.</translation>
     </message>
@@ -30966,97 +30976,97 @@ Thêm địa chỉ tuyệt đối ở trên để truy vấn bộ điều khiể
         <translation type="vanished">Nhấp đúp vào triển khai này sẽ đưa người dùng thẳng đến dashboard trực tiếp cho dự án này. Không có thanh công cụ hay ngăn thiết lập, chỉ có dữ liệu, và Serial Studio thoát ngay khi thiết bị ngắt kết nối.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="698"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="701"/>
         <source>Visibility</source>
         <translation>Hiển Thị</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="713"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="716"/>
         <source>Mode</source>
         <translation>Chế Độ</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="720"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="723"/>
         <source>Always shown</source>
         <translation>Luôn Hiển Thị</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="721"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="724"/>
         <source>Auto-hide</source>
         <translation>Tự Động Ẩn</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="722"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="725"/>
         <source>Hidden</source>
         <translation>Đã Ẩn</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="730"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="733"/>
         <source>Search Bar</source>
         <translation>Thanh Tìm Kiếm</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="752"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="755"/>
         <source>Hiding the taskbar removes window minimize/maximize/close buttons and forces auto-layout, so the dashboard always fills the available area.</source>
         <translation>Ẩn thanh tác vụ sẽ loại bỏ các nút thu nhỏ/phóng to/đóng cửa sổ và buộc bố cục tự động, do đó dashboard luôn lấp đầy vùng khả dụng.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="756"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="759"/>
         <source>The taskbar slides in when the user moves the cursor near the bottom edge.</source>
         <translation>Thanh tác vụ trượt vào khi người dùng di chuyển con trỏ gần cạnh dưới.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="758"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="761"/>
         <source>The taskbar is permanently visible at the bottom of the dashboard.</source>
         <translation>Thanh tác vụ hiển thị cố định ở cuối dashboard.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="771"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="774"/>
         <source>Pinned Buttons</source>
         <translation>Nút Ghim</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="788"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="791"/>
         <source>Console</source>
         <translation>Console</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="803"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="806"/>
         <source>Notifications</source>
         <translation>Thông Báo</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="818"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="821"/>
         <source>Clock</source>
         <translation>Đồng Hồ</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="833"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="836"/>
         <source>Stopwatch</source>
         <translation>Đồng Hồ Bấm Giờ</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="848"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="851"/>
         <source>Pause</source>
         <translation>Tạm Dừng</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="914"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="917"/>
         <source>Recorders</source>
         <translation>Bộ Ghi</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="929"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="932"/>
         <source>CSV File</source>
         <translation>Tệp CSV</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="940"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="943"/>
         <source>MDF4 File</source>
         <translation>Tệp MDF4</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="951"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="954"/>
         <source>Historian</source>
         <translation>Lịch Sử</translation>
     </message>
@@ -31065,92 +31075,92 @@ Thêm địa chỉ tuyệt đối ở trên để truy vấn bộ điều khiể
         <translation type="vanished">Cơ Sở Dữ Liệu Phiên</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="962"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="965"/>
         <source>Console Log</source>
         <translation>Nhật Ký Console</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="979"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="982"/>
         <source>Recordings are saved in the Serial Studio workspace folder</source>
         <translation>Bản ghi được lưu trong thư mục làm việc của Serial Studio</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1024"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1027"/>
         <source>Carried Files</source>
         <translation>Tệp Đi Kèm</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1033"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1036"/>
         <source>%1 in total</source>
         <translation>%1 tổng cộng</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1067"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1070"/>
         <source>Remove</source>
         <translation>Xóa</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1088"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1091"/>
         <source>Add images a Canvas script loads at run time.</source>
         <translation>Thêm hình ảnh mà tập lệnh Canvas tải khi chạy.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1092"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1095"/>
         <source>Add Files…</source>
         <translation>Thêm Tệp…</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1104"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1107"/>
         <source>Missing Files</source>
         <translation>Tệp Bị Thiếu</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1141"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1144"/>
         <source>Export is blocked until these files exist.</source>
         <translation>Xuất bị chặn cho đến khi các tệp này tồn tại.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1149"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1152"/>
         <source>External Dependencies</source>
         <translation>Các Phụ Thuộc Bên Ngoài</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1186"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1189"/>
         <source>The target machine must provide these.</source>
         <translation>Máy đích phải cung cấp những thứ này.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1195"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1198"/>
         <source>Credentials and Private Keys</source>
         <translation>Thông Tin Xác Thực và Khóa Riêng Tư</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1226"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1229"/>
         <source>Packages are encoded, not encrypted. Anyone with the file can recover the items you include.</source>
         <translation>Các gói được mã hóa, không được mã hóa. Bất kỳ ai có tệp đều có thể khôi phục các mục bạn đưa vào.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1260"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1263"/>
         <source>Saved %1</source>
         <translation>Đã Lưu %1</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1270"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1273"/>
         <source>Open Package</source>
         <translation>Mở Gói</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1282"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1285"/>
         <source>Cancel</source>
         <translation>Hủy</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1282"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1285"/>
         <source>Close</source>
         <translation>Đóng</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1287"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1290"/>
         <source>Save</source>
         <translation>Lưu</translation>
     </message>
@@ -31403,52 +31413,52 @@ Thêm địa chỉ tuyệt đối ở trên để truy vấn bộ điều khiể
         <translation type="vanished">Trợ Lý AI</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="338"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="344"/>
         <source>Workspaces</source>
         <translation>Không Gian Làm Việc</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="413"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="419"/>
         <source>Show "%1"</source>
         <translation>Hiển Thị "%1"</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="418"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="424"/>
         <source>Show All Hidden Workspaces</source>
         <translation>Hiển Thị Tất Cả Không Gian Làm Việc Ẩn</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="427"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="433"/>
         <source>New Workspace…</source>
         <translation>Không Gian Làm Việc Mới…</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="441"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="447"/>
         <source>No Workspaces Available</source>
         <translation>Không Có Không Gian Làm Việc</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="476"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="484"/>
         <source>Actions</source>
         <translation>Hành Động</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="500"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="508"/>
         <source>No Actions Available</source>
         <translation>Không Có Hành Động</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="530"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="540"/>
         <source>Plugins</source>
         <translation>Plugin</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="569"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="579"/>
         <source>Manage Plugins…</source>
         <translation>Quản Lý Plugin…</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="579"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="589"/>
         <source>No Plugins Installed</source>
         <translation>Không Có Plugin Nào Được Cài Đặt</translation>
     </message>
@@ -31477,7 +31487,7 @@ Thêm địa chỉ tuyệt đối ở trên để truy vấn bộ điều khiể
         <translation type="vanished">Cơ Sở Dữ Liệu Phiên</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="697"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="709"/>
         <source>No Export Formats Available</source>
         <translation>Không Có Định Dạng Xuất Nào</translation>
     </message>
@@ -31486,7 +31496,7 @@ Thêm địa chỉ tuyệt đối ở trên để truy vấn bộ điều khiể
         <translation type="vanished">Công Cụ</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="773"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="787"/>
         <source>No Tools Available</source>
         <translation>Không Có Công Cụ Nào</translation>
     </message>
@@ -31511,17 +31521,17 @@ Thêm địa chỉ tuyệt đối ở trên để truy vấn bộ điều khiể
         <translation type="vanished">Ngắt Kết Nối</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="863"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="877"/>
         <source>Edit…</source>
         <translation>Chỉnh Sửa…</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="874"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="888"/>
         <source>Delete</source>
         <translation>Xóa</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="875"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="889"/>
         <source>Hide</source>
         <translation>Ẩn</translation>
     </message>
@@ -31784,7 +31794,7 @@ Thêm địa chỉ tuyệt đối ở trên để truy vấn bộ điều khiể
         <translation type="vanished">Menu Khởi Động</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="222"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="224"/>
         <source>Menu</source>
         <translation>Menu</translation>
     </message>
@@ -31793,47 +31803,47 @@ Thêm địa chỉ tuyệt đối ở trên để truy vấn bộ điều khiể
         <translation type="vanished">Tìm Kiếm…</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="585"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="593"/>
         <source>Settings</source>
         <translation>Cài Đặt</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="586"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="594"/>
         <source>Console</source>
         <translation>Console</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="587"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="595"/>
         <source>Notifications</source>
         <translation>Thông Báo</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="588"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="596"/>
         <source>Clock</source>
         <translation>Đồng Hồ</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="589"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="597"/>
         <source>Stopwatch</source>
         <translation>Đồng Hồ Bấm Giờ</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="590"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="598"/>
         <source>File Transmission</source>
         <translation>Truyền Tệp</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="591"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="599"/>
         <source>AI Assistant</source>
         <translation>Trợ Lý AI</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="592"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="600"/>
         <source>Resume</source>
         <translation>Tiếp Tục</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="592"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="600"/>
         <source>Pause</source>
         <translation>Tạm Dừng</translation>
     </message>
@@ -31846,77 +31856,77 @@ Thêm địa chỉ tuyệt đối ở trên để truy vấn bộ điều khiể
         <translation type="vanished">Không Có Không Gian Làm Việc</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="260"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="264"/>
         <source>Search… (%1)</source>
         <translation>Tìm Kiếm… (%1)</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="943"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="952"/>
         <source>Data is arriving faster than scripts can process it; some frames are being thinned. See the problem center for details.</source>
         <translation>Dữ liệu đến nhanh hơn khả năng xử lý của các script; một số khung dữ liệu đang bị giảm bớt. Xem trung tâm vấn đề để biết chi tiết.</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="967"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="976"/>
         <source>Unfreeze Dashboard</source>
         <translation>Bỏ Đóng Băng Bảng Điều Khiển</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="968"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="977"/>
         <source>Freeze Dashboard</source>
         <translation>Đóng Băng Bảng Điều Khiển</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1012"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1021"/>
         <source>MQTT: Connected to %1</source>
         <translation>MQTT: Đã kết nối tới %1</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1013"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1022"/>
         <source>MQTT: Not connected</source>
         <translation>MQTT: Chưa kết nối</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1041"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1050"/>
         <source>MQTT Publisher</source>
         <translation>MQTT Publisher</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1051"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1060"/>
         <source>Status:</source>
         <translation>Trạng Thái:</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1059"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1068"/>
         <source>Connected</source>
         <translation>Đã Kết Nối</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1060"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1069"/>
         <source>Disconnected</source>
         <translation>Đã Ngắt Kết Nối</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1067"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1076"/>
         <source>Broker:</source>
         <translation>Broker:</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1080"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1089"/>
         <source>Mode:</source>
         <translation>Chế Độ:</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1093"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1102"/>
         <source>Messages sent:</source>
         <translation>Tin nhắn đã gửi:</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1107"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1118"/>
         <source>Open MQTT Settings</source>
         <translation>Mở Cài Đặt MQTT</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1171"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1182"/>
         <source>Remove from Workspace</source>
         <translation>Xóa khỏi không gian làm việc</translation>
     </message>
@@ -31935,17 +31945,17 @@ Thêm địa chỉ tuyệt đối ở trên để truy vấn bộ điều khiể
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="192"/>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="254"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="256"/>
         <source>Clear</source>
         <translation>Xóa</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="269"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="273"/>
         <source>Find</source>
         <translation>Tìm Kiếm</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="297"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="301"/>
         <source>Collapse</source>
         <translation>Thu Gọn</translation>
     </message>
@@ -31958,57 +31968,57 @@ Thêm địa chỉ tuyệt đối ở trên để truy vấn bộ điều khiể
         <translation type="vanished">Ghi nhật ký đầu ra console vào tệp</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="417"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="431"/>
         <source>Settings</source>
         <translation>Cài Đặt</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="420"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="434"/>
         <source>Console settings</source>
         <translation>Cài đặt console</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="625"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="653"/>
         <source>Find in console</source>
         <translation>Tìm trong console</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="662"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="690"/>
         <source>%1 of %2</source>
         <translation>%1 / %2</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="663"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="691"/>
         <source>No results</source>
         <translation>Không có kết quả</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="675"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="705"/>
         <source>Match case</source>
         <translation>Phân biệt chữ hoa/thường</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="690"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="722"/>
         <source>Previous match</source>
         <translation>Kết quả trước</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="701"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="735"/>
         <source>Next match</source>
         <translation>Kết quả tiếp theo</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="711"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="747"/>
         <source>Close search</source>
         <translation>Đóng tìm kiếm</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="758"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="796"/>
         <source>Send a file to the connected device</source>
         <translation>Gửi tệp đến thiết bị đã kết nối</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="274"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="278"/>
         <source>Search console output</source>
         <translation>Tìm kiếm đầu ra console</translation>
     </message>
@@ -32018,118 +32028,118 @@ Thêm địa chỉ tuyệt đối ở trên để truy vấn bộ điều khiể
         <translation>Tiện Ích</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="301"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="305"/>
         <source>Collapse repeated lines into a single entry</source>
         <translation>Thu gọn các dòng lặp lại thành một mục duy nhất</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="314"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="320"/>
         <source>Annotations</source>
         <translation>Chú Thích</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="321"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="327"/>
         <source>Label the incoming bytes with a decoder and inspect them</source>
         <translation>Gắn nhãn các byte đến bằng bộ giải mã và kiểm tra chúng</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="344"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="352"/>
         <source>Resume</source>
         <translation>Tiếp Tục</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="344"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="352"/>
         <source>Pause</source>
         <translation>Tạm Dừng</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="349"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="357"/>
         <source>Resume console updates</source>
         <translation>Tiếp Tục Cập Nhật Console</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="350"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="358"/>
         <source>Freeze the console display (data keeps logging)</source>
         <translation>Đóng băng màn hình console (dữ liệu vẫn được ghi lại)</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="369"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="377"/>
         <source>Format</source>
         <translation>Định Dạng</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="377"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="387"/>
         <source>Text</source>
         <translation>Văn Bản</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="381"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="391"/>
         <source>Plain text display mode</source>
         <translation>Chế độ hiển thị văn bản thuần</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="392"/>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="930"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="404"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="976"/>
         <source>Hex</source>
         <translation>Hex</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="396"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="408"/>
         <source>Hex display mode</source>
         <translation>Chế Độ Hiển Thị Hex</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="500"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="522"/>
         <source>Scrollback Lines</source>
         <translation>Số Dòng Cuộn Lại</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="529"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="553"/>
         <source>Cyclic Send Interval (ms)</source>
         <translation>Khoảng thời gian gửi tuần hoàn (ms)</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="799"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="841"/>
         <source>Command library (history, pins and actions)</source>
         <translation>Thư viện lệnh (lịch sử, chân và hành động)</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="823"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="867"/>
         <source>Send Data to Device</source>
         <translation>Gửi Dữ Liệu đến Thiết Bị</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="991"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="1043"/>
         <source>Stop cyclic send</source>
         <translation>Dừng gửi tuần hoàn</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="992"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="1044"/>
         <source>Repeat the current command every %1 ms</source>
         <translation>Lặp lại lệnh hiện tại mỗi %1 ms</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="1013"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="1067"/>
         <source>Send data to the device</source>
         <translation>Gửi dữ liệu đến thiết bị</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="451"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="467"/>
         <source>Show Timestamp</source>
         <translation>Hiển Thị Dấu Thời Gian</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="459"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="477"/>
         <source>Echo</source>
         <translation>Echo</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="476"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="496"/>
         <source>Emulate VT-100</source>
         <translation>Mô Phỏng VT-100</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="489"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="511"/>
         <source>ANSI Colors</source>
         <translation>Màu ANSI</translation>
     </message>
@@ -32138,7 +32148,7 @@ Thêm địa chỉ tuyệt đối ở trên để truy vấn bộ điều khiể
         <translation type="vanished">Hiển Thị: %1</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="258"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="260"/>
         <source>Clear console output</source>
         <translation>Xóa đầu ra console</translation>
     </message>
@@ -32613,23 +32623,23 @@ Thêm địa chỉ tuyệt đối ở trên để truy vấn bộ điều khiể
         <translation>Bảng Điều Khiển từ Xa</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="258"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="259"/>
         <source>Manage the remote dashboard connection</source>
         <translation>Quản Lý Kết Nối Bảng Điều Khiển Từ Xa</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="301"/>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="311"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="303"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="313"/>
         <source>Disconnect</source>
         <translation>Ngắt Kết Nối</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="301"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="303"/>
         <source>Connect</source>
         <translation>Kết Nối</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="301"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="303"/>
         <source>Connecting…</source>
         <translation>Đang Kết Nối…</translation>
     </message>
@@ -32735,72 +32745,72 @@ Thêm địa chỉ tuyệt đối ở trên để truy vấn bộ điều khiể
 <context>
     <name>TransmitCodeDialog</name>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/TransmitCodeDialog.qml" line="41"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/TransmitCodeDialog.qml" line="43"/>
         <source>Transmit Function Editor</source>
         <translation>Trình Chỉnh Sửa Hàm Truyền</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/TransmitCodeDialog.qml" line="159"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/TransmitCodeDialog.qml" line="161"/>
         <source>Select Template</source>
         <translation>Chọn Template</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/TransmitCodeDialog.qml" line="171"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/TransmitCodeDialog.qml" line="173"/>
         <source>Import</source>
         <translation>Nhập</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/TransmitCodeDialog.qml" line="177"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/TransmitCodeDialog.qml" line="179"/>
         <source>Import a transmit function from a .js file</source>
         <translation>Nhập hàm truyền từ tệp .js</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/TransmitCodeDialog.qml" line="183"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/TransmitCodeDialog.qml" line="185"/>
         <source>Validate</source>
         <translation>Xác Thực</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/TransmitCodeDialog.qml" line="188"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/TransmitCodeDialog.qml" line="190"/>
         <source>Verify that the script compiles and defines transmit(value)</source>
         <translation>Xác minh script biên dịch và định nghĩa transmit(value)</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/TransmitCodeDialog.qml" line="226"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/TransmitCodeDialog.qml" line="228"/>
         <source>Produced Bytes</source>
         <translation>Byte Được Tạo</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/TransmitCodeDialog.qml" line="248"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/TransmitCodeDialog.qml" line="250"/>
         <source>Interact with the control to see its output</source>
         <translation>Tương tác với điều khiển để xem đầu ra</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/TransmitCodeDialog.qml" line="276"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/TransmitCodeDialog.qml" line="278"/>
         <source>%1 bytes, from the last version that compiled</source>
         <translation>%1 byte, từ phiên bản biên dịch cuối cùng</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/TransmitCodeDialog.qml" line="277"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/TransmitCodeDialog.qml" line="279"/>
         <source>%1 bytes</source>
         <translation>%1 byte</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/TransmitCodeDialog.qml" line="299"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/TransmitCodeDialog.qml" line="301"/>
         <source>Save</source>
         <translation>Lưu</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/TransmitCodeDialog.qml" line="302"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/TransmitCodeDialog.qml" line="304"/>
         <source>Validate and store the transmit function</source>
         <translation>Xác thực và lưu hàm truyền</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/TransmitCodeDialog.qml" line="311"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/TransmitCodeDialog.qml" line="313"/>
         <source>Close</source>
         <translation>Đóng</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/TransmitCodeDialog.qml" line="314"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/TransmitCodeDialog.qml" line="316"/>
         <source>Close without storing this edit</source>
         <translation>Đóng mà không lưu chỉnh sửa này</translation>
     </message>
@@ -32808,7 +32818,7 @@ Thêm địa chỉ tuyệt đối ở trên để truy vấn bộ điều khiể
 <context>
     <name>TriggerDialog</name>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="50"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="52"/>
         <source>Trigger Settings</source>
         <translation>Cài Đặt Kích Hoạt</translation>
     </message>
@@ -32821,7 +32831,7 @@ Thêm địa chỉ tuyệt đối ở trên để truy vấn bộ điều khiể
         <translation type="vanished">Khóa tín hiệu lặp lại tại chỗ, giống như nút Auto trên máy hiện sóng. Mỗi lần quét bắt đầu tại cùng một điểm trên dạng sóng, do đó nó giữ nguyên thay vì cuộn qua.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="188"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="190"/>
         <source>Trigger</source>
         <translation>Tín Hiệu Kích Hoạt</translation>
     </message>
@@ -32830,57 +32840,57 @@ Thêm địa chỉ tuyệt đối ở trên để truy vấn bộ điều khiể
         <translation type="vanished">Chế Độ:</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="125"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="127"/>
         <source>Mode</source>
         <translation>Chế Độ</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="150"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="152"/>
         <source>Auto</source>
         <translation>Tự Động</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="150"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="152"/>
         <source>Normal</source>
         <translation>Bình Thường</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="150"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="152"/>
         <source>Single</source>
         <translation>Đơn</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="173"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="175"/>
         <source>Auto free-runs when nothing crosses the level.</source>
         <translation>Auto chạy tự do khi không có gì vượt qua mức.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="174"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="176"/>
         <source>Normal waits for a crossing.</source>
         <translation>Normal chờ đợi một lần vượt qua.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="175"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="177"/>
         <source>Single captures one sweep, then stops.</source>
         <translation>Single chụp một lần quét, sau đó dừng lại.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="258"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="260"/>
         <source>Slope:</source>
         <translation>Độ Dốc:</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="290"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="292"/>
         <source>Trigger on a downward crossing</source>
         <translation>Kích hoạt khi vượt qua xuống</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="336"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="338"/>
         <source>Timebase:</source>
         <translation>Cơ Sở Thời Gian:</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="407"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="409"/>
         <source>Leave timebase empty to use the plot's time range; lower it to zoom in on a fast signal. Holdoff ignores new triggers for a moment after each.</source>
         <translation>Để trống cơ sở thời gian để sử dụng phạm vi thời gian của biểu đồ; giảm xuống để phóng to tín hiệu nhanh. Holdoff bỏ qua các tín hiệu kích hoạt mới trong một khoảnh khắc sau mỗi lần.</translation>
     </message>
@@ -32889,7 +32899,7 @@ Thêm địa chỉ tuyệt đối ở trên để truy vấn bộ điều khiể
         <translation type="vanished">Tín Hiệu:</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="246"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="248"/>
         <source>Value to cross</source>
         <translation>Giá trị cần vượt qua</translation>
     </message>
@@ -32898,17 +32908,17 @@ Thêm địa chỉ tuyệt đối ở trên để truy vấn bộ điều khiể
         <translation type="vanished">Cạnh:</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="271"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="273"/>
         <source>Rising</source>
         <translation>Lên</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="275"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="277"/>
         <source>Trigger on an upward crossing</source>
         <translation>Kích hoạt khi vượt qua lên</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="286"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="288"/>
         <source>Falling</source>
         <translation>Xuống</translation>
     </message>
@@ -32917,7 +32927,7 @@ Thêm địa chỉ tuyệt đối ở trên để truy vấn bộ điều khiể
         <translation type="vanished">Một lần quét mới bắt đầu mỗi khi tín hiệu vượt qua mức trong hướng đã chọn. Auto cũng chạy tự do khi không tìm thấy điểm vượt qua.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="309"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="311"/>
         <source>Timing</source>
         <translation>Thời Gian</translation>
     </message>
@@ -32926,23 +32936,23 @@ Thêm địa chỉ tuyệt đối ở trên để truy vấn bộ điều khiể
         <translation type="vanished">Cơ sở thời gian (ms):</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="349"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="351"/>
         <source>Match time range</source>
         <translation>Khớp phạm vi thời gian</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="363"/>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="394"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="365"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="396"/>
         <source>ms</source>
         <translation>ms</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="369"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="371"/>
         <source>Holdoff:</source>
         <translation>Holdoff:</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="382"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="384"/>
         <source>0</source>
         <translation>0</translation>
     </message>
@@ -32951,17 +32961,17 @@ Thêm địa chỉ tuyệt đối ở trên để truy vấn bộ điều khiể
         <translation type="vanished">Cơ sở thời gian đặt khoảng thời gian mà một lần quét hiển thị; để trống để sử dụng phạm vi thời gian của biểu đồ. Giảm xuống để phóng to tín hiệu nhanh. Holdoff bỏ qua các tín hiệu kích hoạt mới trong một khoảnh khắc sau mỗi lần.</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="422"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="424"/>
         <source>Capture Next</source>
         <translation>Chụp Tiếp Theo</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="424"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="426"/>
         <source>Arm for one more single-shot capture</source>
         <translation>Kích hoạt cho một lần chụp đơn tiếp theo</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="233"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="235"/>
         <source>Level:</source>
         <translation>Mức:</translation>
     </message>
@@ -32978,7 +32988,7 @@ Thêm địa chỉ tuyệt đối ở trên để truy vấn bộ điều khiể
         <translation type="vanished">Thời gian giữ</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="212"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="214"/>
         <source>Source:</source>
         <translation>Nguồn:</translation>
     </message>
@@ -32987,7 +32997,7 @@ Thêm địa chỉ tuyệt đối ở trên để truy vấn bộ điều khiể
         <translation type="vanished">Tái Kích Hoạt</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="437"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="439"/>
         <source>Close</source>
         <translation>Đóng</translation>
     </message>
@@ -33005,42 +33015,42 @@ Thêm địa chỉ tuyệt đối ở trên để truy vấn bộ điều khiể
         <translation>Cổng Nối Tiếp</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="98"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="100"/>
         <source>Baud Rate</source>
         <translation>Tốc Độ Baud</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="183"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="187"/>
         <source>Data Bits</source>
         <translation>Bit Dữ Liệu</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="203"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="209"/>
         <source>Parity</source>
         <translation>Chẵn Lẻ</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="225"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="233"/>
         <source>Stop Bits</source>
         <translation>Bit Dừng</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="246"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="256"/>
         <source>Flow Control</source>
         <translation>Điều Khiển Luồng</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="276"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="288"/>
         <source>Auto Reconnect</source>
         <translation>Kết Nối Lại Tự Động</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="294"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="308"/>
         <source>Send DTR Signal</source>
         <translation>Gửi Tín Hiệu DTR</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="303"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="319"/>
         <source>Raises the DTR line when the port opens. Many boards (for example Arduino) reset when DTR changes; turn it off to connect without a reset.</source>
         <translation>Nâng cao đường DTR khi cổng mở. Nhiều bảng mạch (ví dụ Arduino) sẽ đặt lại khi DTR thay đổi; tắt tính năng này để kết nối mà không cần đặt lại.</translation>
     </message>
@@ -33238,7 +33248,7 @@ Thêm địa chỉ tuyệt đối ở trên để truy vấn bộ điều khiể
         <translation>Thiết Bị USB</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="80"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="82"/>
         <source>Transfer Mode</source>
         <translation>Chế Độ Truyền</translation>
     </message>
@@ -33247,32 +33257,32 @@ Thêm địa chỉ tuyệt đối ở trên để truy vấn bộ điều khiể
         <translation type="vanished">Luồng Bulk</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="90"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="94"/>
         <source>Advanced (Bulk + Control)</source>
         <translation>Nâng Cao (Bulk + Control)</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="91"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="95"/>
         <source>Isochronous</source>
         <translation>Isochronous</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="266"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="276"/>
         <source>Connect to USB devices using bulk, control, or isochronous transfers. Suitable for data loggers, custom firmware devices, and USB instruments.</source>
         <translation>Kết nối với thiết bị USB sử dụng truyền bulk, control hoặc isochronous. Phù hợp cho bộ ghi dữ liệu, thiết bị firmware tùy chỉnh và thiết bị đo USB.</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="275"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="285"/>
         <source>USB specifications (USB.org)</source>
         <translation>Thông số kỹ thuật USB (USB.org)</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="127"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="131"/>
         <source>IN Endpoint</source>
         <translation>Điểm Cuối IN</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="89"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="93"/>
         <source>Bulk/Interrupt Stream</source>
         <translation>Luồng Bulk/interrupt</translation>
     </message>
@@ -33285,37 +33295,37 @@ Thêm địa chỉ tuyệt đối ở trên để truy vấn bộ điều khiể
         <translation type="vanished">Tính năng này bật truyền điều khiển bên cạnh truyền khối. Gửi yêu cầu điều khiển không đúng có thể làm hỏng hoặc gây hại cho phần cứng đã kết nối. Chỉ bật nếu bạn biết mình đang làm gì.</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="163"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="169"/>
         <source>OUT Endpoint</source>
         <translation>Điểm Cuối OUT</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="199"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="207"/>
         <source>Max Packet Size</source>
         <translation>Kích Thước Gói Tối Đa</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="309"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="319"/>
         <source>No compatible data endpoints were found for this transfer mode. Try another transfer mode. Devices that speak a dedicated protocol (e.g. CAN or Modbus adapters) should be connected through their own driver instead.</source>
         <translation>Không tìm thấy điểm cuối dữ liệu tương thích cho chế độ truyền này. Hãy thử chế độ truyền khác. Các thiết bị sử dụng giao thức chuyên dụng (ví dụ: bộ chuyển đổi CAN hoặc Modbus) nên được kết nối thông qua trình điều khiển riêng của chúng.</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="350"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="360"/>
         <source>Control Transfers Enabled</source>
         <translation>Đã Bật Truyền Điều Khiển</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="359"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="369"/>
         <source>Sending incorrect control requests may crash or damage connected hardware. Use with caution.</source>
         <translation>Gửi yêu cầu điều khiển không đúng có thể làm hỏng hoặc gây hại cho phần cứng đã kết nối. Sử dụng thận trọng.</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="366"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="376"/>
         <source>Learn about USB control transfers</source>
         <translation>Tìm hiểu về truyền điều khiển USB</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="400"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="410"/>
         <source>Packet size should match the maximum transfer size reported by the endpoint. Typical values: 192 B (FS audio), 1024 B (HS).</source>
         <translation>Kích thước gói nên khớp với kích thước truyền tối đa được báo cáo bởi endpoint. Giá trị điển hình: 192 B (FS audio), 1024 B (HS).</translation>
     </message>
@@ -33366,57 +33376,57 @@ Thêm địa chỉ tuyệt đối ở trên để truy vấn bộ điều khiể
         <translation>Loại Yêu Cầu</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UsbControlComposer.qml" line="88"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UsbControlComposer.qml" line="90"/>
         <source>Request</source>
         <translation>Yêu Cầu</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UsbControlComposer.qml" line="98"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UsbControlComposer.qml" line="102"/>
         <source>wValue</source>
         <translation>wValue</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UsbControlComposer.qml" line="109"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UsbControlComposer.qml" line="115"/>
         <source>wIndex</source>
         <translation>wIndex</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UsbControlComposer.qml" line="120"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UsbControlComposer.qml" line="128"/>
         <source>Direction</source>
         <translation>Hướng</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UsbControlComposer.qml" line="124"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UsbControlComposer.qml" line="132"/>
         <source>IN · device → host</source>
         <translation>IN · thiết bị → máy chủ</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UsbControlComposer.qml" line="124"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UsbControlComposer.qml" line="132"/>
         <source>OUT · host → device</source>
         <translation>OUT · máy chủ → thiết bị</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UsbControlComposer.qml" line="129"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UsbControlComposer.qml" line="137"/>
         <source>Data</source>
         <translation>Dữ Liệu</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UsbControlComposer.qml" line="141"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UsbControlComposer.qml" line="151"/>
         <source>Read Length</source>
         <translation>Độ Dài Đọc</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UsbControlComposer.qml" line="158"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UsbControlComposer.qml" line="172"/>
         <source>Send Control Transfer</source>
         <translation>Gửi Control Transfer</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UsbControlComposer.qml" line="165"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UsbControlComposer.qml" line="179"/>
         <source>Sending…</source>
         <translation>Đang Gửi…</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UsbControlComposer.qml" line="193"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UsbControlComposer.qml" line="209"/>
         <source>Transfer result appears here.</source>
         <translation>Kết quả truyền xuất hiện ở đây.</translation>
     </message>
@@ -33891,47 +33901,47 @@ Tôi hiểu rằng khi kết thúc, tôi cần mua bản quyền hoặc tự bi�
 <context>
     <name>WidgetDelegate</name>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/WidgetDelegate.qml" line="168"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/WidgetDelegate.qml" line="172"/>
         <source>Rename Widget…</source>
         <translation>Đổi Tên Widget…</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/WidgetDelegate.qml" line="181"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/WidgetDelegate.qml" line="185"/>
         <source>Freeze Title</source>
         <translation>Đóng Băng Tiêu Đề</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/WidgetDelegate.qml" line="187"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/WidgetDelegate.qml" line="193"/>
         <source>Title Bar</source>
         <translation>Thanh Tiêu Đề</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/WidgetDelegate.qml" line="195"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/WidgetDelegate.qml" line="203"/>
         <source>Painted Title</source>
         <translation>Tiêu Đề Được Vẽ</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/WidgetDelegate.qml" line="205"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/WidgetDelegate.qml" line="215"/>
         <source>Hidden</source>
         <translation>Đã Ẩn</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/WidgetDelegate.qml" line="217"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/WidgetDelegate.qml" line="229"/>
         <source>Widget Settings…</source>
         <translation>Cài Đặt Widget…</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/WidgetDelegate.qml" line="232"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/WidgetDelegate.qml" line="246"/>
         <source>Open in External Window</source>
         <translation>Mở trong Cửa Sổ Riêng</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/WidgetDelegate.qml" line="437"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/WidgetDelegate.qml" line="451"/>
         <source>The widget could not be created.</source>
         <translation>Không thể tạo widget.</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/WidgetDelegate.qml" line="720"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/WidgetDelegate.qml" line="734"/>
         <source>Device Disconnected</source>
         <translation>Thiết Bị Đã Ngắt Kết Nối</translation>
     </message>
@@ -34225,42 +34235,42 @@ Tôi hiểu rằng khi kết thúc, tôi cần mua bản quyền hoặc tự bi�
 <context>
     <name>WorkspaceDialog</name>
     <message>
-        <location filename="../../qml/Dialogs/WorkspaceDialog.qml" line="51"/>
+        <location filename="../../qml/Dialogs/WorkspaceDialog.qml" line="53"/>
         <source>Edit Workspace</source>
         <translation>Chỉnh Sửa Không Gian Làm Việc</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/WorkspaceDialog.qml" line="52"/>
+        <location filename="../../qml/Dialogs/WorkspaceDialog.qml" line="54"/>
         <source>New Workspace</source>
         <translation>Không Gian Làm Việc Mới</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/WorkspaceDialog.qml" line="176"/>
+        <location filename="../../qml/Dialogs/WorkspaceDialog.qml" line="178"/>
         <source>Name:</source>
         <translation>Tên:</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/WorkspaceDialog.qml" line="185"/>
+        <location filename="../../qml/Dialogs/WorkspaceDialog.qml" line="187"/>
         <source>My Workspace</source>
         <translation>Không Gian Làm Việc của Tôi</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/WorkspaceDialog.qml" line="200"/>
+        <location filename="../../qml/Dialogs/WorkspaceDialog.qml" line="202"/>
         <source>Select widgets to include:</source>
         <translation>Chọn widget để bao gồm:</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/WorkspaceDialog.qml" line="208"/>
+        <location filename="../../qml/Dialogs/WorkspaceDialog.qml" line="210"/>
         <source>Filter widgets…</source>
         <translation>Lọc widget…</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/WorkspaceDialog.qml" line="318"/>
+        <location filename="../../qml/Dialogs/WorkspaceDialog.qml" line="320"/>
         <source>Cancel</source>
         <translation>Hủy</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/WorkspaceDialog.qml" line="325"/>
+        <location filename="../../qml/Dialogs/WorkspaceDialog.qml" line="327"/>
         <source>OK</source>
         <translation>OK</translation>
     </message>
@@ -34680,6 +34690,48 @@ Tôi hiểu rằng khi kết thúc, tôi cần mua bản quyền hoặc tự bi�
         <location filename="../../qml/ProjectEditor/Views/WorkspacesView.qml" line="436"/>
         <source>Reset to Auto Layout</source>
         <translation>Đặt Lại về Bố Cục Tự Động</translation>
+    </message>
+</context>
+<context>
+    <name>bad</name>
+    <message>
+        <location filename="../../../scripts/tests/fixtures/qml-control-unnamed/bad.qml" line="8"/>
+        <source>Baud Rate</source>
+        <translation>Tốc Độ Baud</translation>
+    </message>
+    <message>
+        <location filename="../../../scripts/tests/fixtures/qml-control-unnamed-advisory/bad.qml" line="8"/>
+        <source>Apply</source>
+        <translation>Áp Dụng</translation>
+    </message>
+    <message>
+        <location filename="../../../scripts/tests/fixtures/qml-objectname-literal/bad.qml" line="8"/>
+        <location filename="../../../scripts/tests/fixtures/qml-objectname-literal/bad.qml" line="9"/>
+        <source>Connect</source>
+        <translation>Kết Nối</translation>
+    </message>
+</context>
+<context>
+    <name>good</name>
+    <message>
+        <location filename="../../../scripts/tests/fixtures/qml-control-unnamed/good.qml" line="8"/>
+        <source>Baud Rate</source>
+        <translation>Tốc Độ Baud</translation>
+    </message>
+    <message>
+        <location filename="../../../scripts/tests/fixtures/qml-control-unnamed-advisory/good.qml" line="9"/>
+        <source>Apply</source>
+        <translation>Áp Dụng</translation>
+    </message>
+    <message>
+        <location filename="../../../scripts/tests/fixtures/qml-objectname-literal/good.qml" line="11"/>
+        <source>Connect</source>
+        <translation>Kết Nối</translation>
+    </message>
+    <message>
+        <location filename="../../../scripts/tests/fixtures/qml-objectname-literal/good.qml" line="16"/>
+        <source>Close</source>
+        <translation>Đóng</translation>
     </message>
 </context>
 </TS>

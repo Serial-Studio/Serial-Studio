@@ -591,6 +591,16 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
         <translation>使用 Serial Studio 本地 API 的程序想要更改此项目的脚本。脚本以应用程序的完整权限运行,包括启动程序。允许 API 客户端修改项目脚本?</translation>
     </message>
     <message>
+        <location filename="../../../core/Api/API/Server/ServerAuth.cpp" line="52"/>
+        <source>Allow API clients to drive the user interface?</source>
+        <translation>允许 API 客户端驱动用户界面?</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Api/API/Server/ServerAuth.cpp" line="53"/>
+        <source>A program using Serial Studio's local API wants to click controls and type into this window as you would. That can connect, save, delete or change anything you can. Allow API clients to drive the user interface?</source>
+        <translation>使用 Serial Studio 本地 API 的程序想要像您一样点击控件和在此窗口中输入。这可以连接、保存、删除或更改您可以进行的任何操作。是否允许 API 客户端驱动用户界面?</translation>
+    </message>
+    <message>
         <source>Serial Studio</source>
         <translation type="vanished">Serial Studio</translation>
     </message>
@@ -622,7 +632,7 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
 <context>
     <name>About</name>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="46"/>
+        <location filename="../../qml/Dialogs/About.qml" line="48"/>
         <source>About</source>
         <translation>关于</translation>
     </message>
@@ -631,32 +641,32 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
         <translation type="vanished">版本 %1</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="38"/>
+        <location filename="../../qml/Dialogs/About.qml" line="40"/>
         <source>local build</source>
         <translation>本地构建</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="106"/>
+        <location filename="../../qml/Dialogs/About.qml" line="108"/>
         <source>Version %1 (%2)</source>
         <translation>版本 %1 (%2)</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="110"/>
+        <location filename="../../qml/Dialogs/About.qml" line="112"/>
         <source>Click to copy build identity</source>
         <translation>点击复制构建标识</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="128"/>
+        <location filename="../../qml/Dialogs/About.qml" line="130"/>
         <source>Copyright © %1 %2</source>
         <translation>版权所有 © %1 %2</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="134"/>
+        <location filename="../../qml/Dialogs/About.qml" line="136"/>
         <source>All Rights Reserved</source>
         <translation>保留所有权利</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="149"/>
+        <location filename="../../qml/Dialogs/About.qml" line="151"/>
         <source>%1 is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 3 of the License, or (at your option) any later version.
 
 %1 is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.</source>
@@ -665,32 +675,32 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
 %1 的分发希望它能有用，但不提供任何保证；甚至不提供适销性或特定用途适用性的默示保证。有关详细信息，请参阅 GNU 通用公共许可证。</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="168"/>
+        <location filename="../../qml/Dialogs/About.qml" line="170"/>
         <source>This configuration is licensed for commercial and proprietary use. It may be used in closed-source and commercial applications, subject to the terms of the commercial license.</source>
         <translation>此配置已获得商业和专有使用许可。它可以在闭源和商业应用程序中使用，但须遵守商业许可证的条款。</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="182"/>
+        <location filename="../../qml/Dialogs/About.qml" line="184"/>
         <source>This configuration is for personal and evaluation purposes only. Commercial use is prohibited unless a valid commercial license is activated.</source>
         <translation>此配置仅供个人和评估使用。除非激活有效的商业许可证，否则禁止商业使用。</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="196"/>
+        <location filename="../../qml/Dialogs/About.qml" line="198"/>
         <source>This software is provided 'as is' without warranty of any kind, express or implied, including but not limited to the warranties of merchantability or fitness for a particular purpose. In no event shall the author be liable for any damages arising from the use of this software.</source>
         <translation>本软件按"原样"提供，不提供任何明示或默示的保证，包括但不限于适销性或特定用途适用性的保证。在任何情况下，作者均不对因使用本软件而产生的任何损害承担责任。</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="217"/>
+        <location filename="../../qml/Dialogs/About.qml" line="219"/>
         <source>Manage License</source>
         <translation>管理许可证</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="226"/>
+        <location filename="../../qml/Dialogs/About.qml" line="228"/>
         <source>Donate</source>
         <translation>捐赠</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="237"/>
+        <location filename="../../qml/Dialogs/About.qml" line="239"/>
         <source>Check for Updates</source>
         <translation>检查更新</translation>
     </message>
@@ -707,32 +717,32 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
         <translation type="vanished">技巧与窍门</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="246"/>
+        <location filename="../../qml/Dialogs/About.qml" line="248"/>
         <source>License Agreement</source>
         <translation>许可协议</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="255"/>
+        <location filename="../../qml/Dialogs/About.qml" line="257"/>
         <source>Report Bug</source>
         <translation>报告错误</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="266"/>
+        <location filename="../../qml/Dialogs/About.qml" line="268"/>
         <source>Acknowledgements</source>
         <translation>致谢</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="275"/>
+        <location filename="../../qml/Dialogs/About.qml" line="277"/>
         <source>Benchmark</source>
         <translation>基准测试</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="285"/>
+        <location filename="../../qml/Dialogs/About.qml" line="287"/>
         <source>Website</source>
         <translation>网站</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/About.qml" line="301"/>
+        <location filename="../../qml/Dialogs/About.qml" line="303"/>
         <source>Close</source>
         <translation>关闭</translation>
     </message>
@@ -774,42 +784,42 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
 <context>
     <name>AccelerometerConfigDialog</name>
     <message>
-        <location filename="../../qml/Dialogs/AccelerometerConfigDialog.qml" line="35"/>
+        <location filename="../../qml/Dialogs/AccelerometerConfigDialog.qml" line="37"/>
         <source>Accelerometer Configuration</source>
         <translation>加速度计配置</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/AccelerometerConfigDialog.qml" line="110"/>
+        <location filename="../../qml/Dialogs/AccelerometerConfigDialog.qml" line="112"/>
         <source>Configure the accelerometer display range and input units.</source>
         <translation>配置加速度计显示范围和输入单位。</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/AccelerometerConfigDialog.qml" line="124"/>
+        <location filename="../../qml/Dialogs/AccelerometerConfigDialog.qml" line="126"/>
         <source>Display Range</source>
         <translation>显示范围</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/AccelerometerConfigDialog.qml" line="145"/>
+        <location filename="../../qml/Dialogs/AccelerometerConfigDialog.qml" line="147"/>
         <source>Max G:</source>
         <translation>最大 G 值：</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/AccelerometerConfigDialog.qml" line="159"/>
+        <location filename="../../qml/Dialogs/AccelerometerConfigDialog.qml" line="161"/>
         <source>Enter max G value</source>
         <translation>输入最大 G 值</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/AccelerometerConfigDialog.qml" line="179"/>
+        <location filename="../../qml/Dialogs/AccelerometerConfigDialog.qml" line="181"/>
         <source>Input Configuration</source>
         <translation>输入配置</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/AccelerometerConfigDialog.qml" line="199"/>
+        <location filename="../../qml/Dialogs/AccelerometerConfigDialog.qml" line="201"/>
         <source>Input already in G</source>
         <translation>输入已为 G 单位</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/AccelerometerConfigDialog.qml" line="233"/>
+        <location filename="../../qml/Dialogs/AccelerometerConfigDialog.qml" line="235"/>
         <source>Close</source>
         <translation>关闭</translation>
     </message>
@@ -817,17 +827,17 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
 <context>
     <name>Acknowledgements</name>
     <message>
-        <location filename="../../qml/Dialogs/Acknowledgements.qml" line="34"/>
+        <location filename="../../qml/Dialogs/Acknowledgements.qml" line="36"/>
         <source>Acknowledgements</source>
         <translation>致谢</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Acknowledgements.qml" line="75"/>
+        <location filename="../../qml/Dialogs/Acknowledgements.qml" line="77"/>
         <source>Close</source>
         <translation>关闭</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Acknowledgements.qml" line="86"/>
+        <location filename="../../qml/Dialogs/Acknowledgements.qml" line="88"/>
         <source>About Qt…</source>
         <translation>关于 QT…</translation>
     </message>
@@ -868,17 +878,17 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
 <context>
     <name>AddWidgetDialog</name>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="46"/>
+        <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="48"/>
         <source>Add Widget</source>
         <translation>添加控件</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="222"/>
+        <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="224"/>
         <source>Available Widgets</source>
         <translation>可用控件</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="231"/>
+        <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="233"/>
         <source>Click a row to add it to the workspace.</source>
         <translation>单击行以将其添加到工作区。</translation>
     </message>
@@ -887,62 +897,62 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
         <translation type="vanished">搜索</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="239"/>
+        <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="241"/>
         <source>Search…</source>
         <translation>搜索…</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="258"/>
+        <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="260"/>
         <source>Widget</source>
         <translation>控件</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="259"/>
+        <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="261"/>
         <source>Group</source>
         <translation>组</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="260"/>
+        <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="262"/>
         <source>Name</source>
         <translation>名称</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="327"/>
+        <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="329"/>
         <source>(entire group)</source>
         <translation>（整个组）</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="362"/>
+        <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="364"/>
         <source>Already in workspace</source>
         <translation>已在工作区中</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="363"/>
+        <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="365"/>
         <source>Add to workspace</source>
         <translation>添加到工作区</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="393"/>
+        <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="395"/>
         <source>No widgets available.</source>
         <translation>无可用组件。</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="394"/>
+        <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="396"/>
         <source>No widgets match.</source>
         <translation>无匹配组件。</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="411"/>
+        <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="413"/>
         <source>%1 widgets</source>
         <translation>%1 个组件</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="412"/>
+        <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="414"/>
         <source>%1 of %2 widgets</source>
         <translation>%1 / %2 个组件</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="416"/>
+        <location filename="../../qml/ProjectEditor/Views/AddWidgetDialog.qml" line="418"/>
         <source>Close</source>
         <translation>关闭</translation>
     </message>
@@ -981,304 +991,304 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
 <context>
     <name>AlarmBandsEditor</name>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="35"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="37"/>
         <source>Alarm Bands</source>
         <translation>报警区段</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="72"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="74"/>
         <source>Info</source>
         <translation>信息</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="73"/>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="131"/>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="153"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="75"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="133"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="155"/>
         <source>OK</source>
         <translation>确定</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="74"/>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="154"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="76"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="156"/>
         <source>Warning</source>
         <translation>警告</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="75"/>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="155"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="77"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="157"/>
         <source>Critical</source>
         <translation>严重</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="84"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="86"/>
         <source>Tachometer</source>
         <translation>转速表</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="86"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="88"/>
         <source>Idle</source>
         <translation>空闲</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="87"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="89"/>
         <source>Operating</source>
         <translation>运行</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="88"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="90"/>
         <source>Caution</source>
         <translation>注意</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="89"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="91"/>
         <source>Redline</source>
         <translation>红线</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="93"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="95"/>
         <source>Speedometer</source>
         <translation>速度计</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="95"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="97"/>
         <source>Cruise</source>
         <translation>巡航</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="96"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="98"/>
         <source>Fast</source>
         <translation>快速</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="97"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="99"/>
         <source>Top Speed</source>
         <translation>最高速度</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="101"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="103"/>
         <source>Engine Temperature</source>
         <translation>引擎温度</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="103"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="105"/>
         <source>Cold</source>
         <translation>冷</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="104"/>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="113"/>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="145"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="106"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="115"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="147"/>
         <source>Normal</source>
         <translation>正常</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="105"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="107"/>
         <source>Warm</source>
         <translation>温暖</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="106"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="108"/>
         <source>Overheat</source>
         <translation>过热</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="110"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="112"/>
         <source>Pressure</source>
         <translation>压强</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="112"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="114"/>
         <source>Vacuum</source>
         <translation>真空</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="114"/>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="123"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="116"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="125"/>
         <source>High</source>
         <translation>高</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="115"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="117"/>
         <source>Burst</source>
         <translation>爆发</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="119"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="121"/>
         <source>Battery Voltage</source>
         <translation>电池电压</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="121"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="123"/>
         <source>Low</source>
         <translation>低</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="122"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="124"/>
         <source>Nominal</source>
         <translation>标称</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="127"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="129"/>
         <source>Fuel Level</source>
         <translation>燃油液位</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="129"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="131"/>
         <source>Empty</source>
         <translation>空</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="130"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="132"/>
         <source>Reserve</source>
         <translation>备用</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="135"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="137"/>
         <source>Signal Strength</source>
         <translation>信号强度</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="137"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="139"/>
         <source>No Signal</source>
         <translation>无信号</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="138"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="140"/>
         <source>Weak</source>
         <translation>弱</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="139"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="141"/>
         <source>Good</source>
         <translation>良好</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="143"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="145"/>
         <source>CPU / System Load</source>
         <translation>CPU / 系统负载</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="146"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="148"/>
         <source>Busy</source>
         <translation>繁忙</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="147"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="149"/>
         <source>Overload</source>
         <translation>过载</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="151"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="153"/>
         <source>OK / Warning / Critical</source>
         <translation>正常 / 警告 / 严重</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="159"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="161"/>
         <source>Indicator (On / Off)</source>
         <translation>指示器(开/关)</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="161"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="163"/>
         <source>On</source>
         <translation>开</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="165"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="167"/>
         <source>Fault Indicator</source>
         <translation>故障指示器</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="167"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="169"/>
         <source>Fault</source>
         <translation>故障</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="283"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="285"/>
         <source>Select Alarm Sound</source>
         <translation>选择报警声音</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="285"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="287"/>
         <source>WAV audio (*.wav)</source>
         <translation>WAV 音频 (*.WAV)</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="285"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="287"/>
         <source>All files (*)</source>
         <translation>所有文件 (*)</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="320"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="322"/>
         <source>Choose Band Color</source>
         <translation>选择波段颜色</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="347"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="349"/>
         <source>Presets</source>
         <translation>预设</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="370"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="372"/>
         <source>Preset</source>
         <translation>预设</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="385"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="387"/>
         <source>Choose preset…</source>
         <translation>选择预设…</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="496"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="498"/>
         <source>Blink</source>
         <translation>闪烁</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="503"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="505"/>
         <source>Sound</source>
         <translation>声音</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="624"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="626"/>
         <source>Reset to severity default</source>
         <translation>重置为严重性默认值</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="638"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="640"/>
         <source>Click to choose a color. Right-click to reset to severity default.</source>
         <translation>单击选择颜色。右键单击重置为严重性默认值。</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="639"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="641"/>
         <source>Click to choose a custom color.</source>
         <translation>单击选择自定义颜色。</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="670"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="672"/>
         <source>Flash the LED while the value sits in this band.</source>
         <translation>当数值位于此区间时使 LED 闪烁。</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="698"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="700"/>
         <source>Pick a WAV file to play for this band.</source>
         <translation>选择要为此频段播放的 WAV 文件。</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="714"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="716"/>
         <source>Use the priority's default sound.</source>
         <translation>使用优先级的默认声音。</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="787"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="789"/>
         <source>No bands defined. Pick a preset above or add a band to get started.</source>
         <translation>未定义区段。选择上方预设或添加区段以开始。</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="911"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="913"/>
         <source>Apply</source>
         <translation>应用</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="914"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="916"/>
         <source>Apply changes to the dataset.</source>
         <translation>应用对数据集的更改。</translation>
     </message>
@@ -1291,47 +1301,47 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
         <translation type="vanished">用所选预设替换当前波段，并缩放至此数据集的范围。</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="397"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="399"/>
         <source>Range</source>
         <translation>范围</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="425"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="427"/>
         <source>Bands</source>
         <translation>波段</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="436"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="438"/>
         <source>Add Band</source>
         <translation>添加波段</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="440"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="442"/>
         <source>Add a new band continuing from the last one.</source>
         <translation>添加一个从最后一个波段延续的新波段。</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="471"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="473"/>
         <source>Min</source>
         <translation>最小值</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="477"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="479"/>
         <source>Max</source>
         <translation>最大值</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="483"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="485"/>
         <source>Severity</source>
         <translation>严重程度</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="489"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="491"/>
         <source>Color</source>
         <translation>颜色</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="510"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="512"/>
         <source>Label</source>
         <translation>标签</translation>
     </message>
@@ -1344,22 +1354,22 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
         <translation type="vanished">自动</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="724"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="726"/>
         <source>(optional)</source>
         <translation>(可选)</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="741"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="743"/>
         <source>Move up.</source>
         <translation>上移。</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="760"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="762"/>
         <source>Move down.</source>
         <translation>下移。</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="773"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="775"/>
         <source>Remove this band.</source>
         <translation>移除此区段。</translation>
     </message>
@@ -1368,17 +1378,17 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
         <translation type="vanished">未定义区段。应用预设或添加区段以开始。</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="804"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="806"/>
         <source>Preview</source>
         <translation>预览</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="900"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="902"/>
         <source>Cancel</source>
         <translation>取消</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="902"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/AlarmBandsEditor.qml" line="904"/>
         <source>Discard changes.</source>
         <translation>放弃更改。</translation>
     </message>
@@ -1651,7 +1661,7 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
 <context>
     <name>AssistantPanel</name>
     <message>
-        <location filename="../../qml/AI/AssistantPanel.qml" line="32"/>
+        <location filename="../../qml/AI/AssistantPanel.qml" line="34"/>
         <source>Assistant</source>
         <translation>助手</translation>
     </message>
@@ -1856,32 +1866,32 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
         <translation type="vanished">助手记忆已更新</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/AssistantPanel.qml" line="143"/>
+        <location filename="../../qml/AI/AssistantPanel.qml" line="145"/>
         <source>Context may be degraded</source>
         <translation>上下文可能已降级</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/AssistantPanel.qml" line="159"/>
+        <location filename="../../qml/AI/AssistantPanel.qml" line="161"/>
         <source>Start fresh chat</source>
         <translation>开始新聊天</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/AssistantPanel.qml" line="210"/>
+        <location filename="../../qml/AI/AssistantPanel.qml" line="212"/>
         <source>Remember (%1)?</source>
         <translation>记住 (%1)？</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/AssistantPanel.qml" line="215"/>
+        <location filename="../../qml/AI/AssistantPanel.qml" line="217"/>
         <source>Remember</source>
         <translation>记住</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/AssistantPanel.qml" line="224"/>
+        <location filename="../../qml/AI/AssistantPanel.qml" line="226"/>
         <source>Dismiss</source>
         <translation>忽略</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/AssistantPanel.qml" line="256"/>
+        <location filename="../../qml/AI/AssistantPanel.qml" line="258"/>
         <source>Continuing from your previous chat. Its recent context was carried over.</source>
         <translation>从上次聊天继续。已保留其最近的上下文。</translation>
     </message>
@@ -2042,29 +2052,29 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
         <translation>输入设备</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="166"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="170"/>
         <source>Sample Rate</source>
         <translation>采样率</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="204"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="212"/>
         <source>Normalization</source>
         <translation>归一化</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="185"/>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="273"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="191"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="287"/>
         <source>Sample Format</source>
         <translation>采样格式</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="147"/>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="254"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="149"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="266"/>
         <source>Channels</source>
         <translation>声道</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="235"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Audio.qml" line="245"/>
         <source>Output Device</source>
         <translation>输出设备</translation>
     </message>
@@ -2091,56 +2101,56 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
 <context>
     <name>AxisRangeDialog</name>
     <message>
-        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="84"/>
+        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="86"/>
         <source>Axis Range Configuration</source>
         <translation>坐标轴范围配置</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="204"/>
+        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="206"/>
         <source>Configure the visible range for the plot axes. Values update in real-time as you type.</source>
         <translation>配置绘图坐标轴的可见范围。输入时数值实时更新。</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="212"/>
+        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="214"/>
         <source>X Axis</source>
         <translation>X 轴</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="237"/>
-        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="308"/>
+        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="239"/>
+        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="310"/>
         <source>Minimum:</source>
         <translation>最小值：</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="249"/>
-        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="320"/>
+        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="251"/>
+        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="322"/>
         <source>Enter min value</source>
         <translation>输入最小值</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="258"/>
-        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="329"/>
+        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="260"/>
+        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="331"/>
         <source>Maximum:</source>
         <translation>最大值：</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="270"/>
-        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="341"/>
+        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="272"/>
+        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="343"/>
         <source>Enter max value</source>
         <translation>输入最大值</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="285"/>
+        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="287"/>
         <source>Y Axis</source>
         <translation>Y 轴</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="360"/>
+        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="362"/>
         <source>Reset</source>
         <translation>重置</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="370"/>
+        <location filename="../../qml/Dialogs/AxisRangeDialog.qml" line="372"/>
         <source>Close</source>
         <translation>关闭</translation>
     </message>
@@ -2148,178 +2158,178 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
 <context>
     <name>BackupRecovery</name>
     <message>
-        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="31"/>
+        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="33"/>
         <source>Recover Backup</source>
         <translation>恢复备份</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="94"/>
-        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="165"/>
-        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="166"/>
+        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="96"/>
+        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="167"/>
+        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="168"/>
         <source>Untitled</source>
         <translation>无标题</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="97"/>
+        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="99"/>
         <source>Project Loaded</source>
         <translation>项目已加载</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="98"/>
+        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="100"/>
         <source>Auto-save</source>
         <translation>自动保存</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="99"/>
-        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="119"/>
+        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="101"/>
+        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="121"/>
         <source>Before Restore</source>
         <translation>恢复前</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="100"/>
-        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="106"/>
+        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="102"/>
+        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="108"/>
         <source>Before Delete Dataset</source>
         <translation>删除数据集前</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="101"/>
-        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="107"/>
+        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="103"/>
+        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="109"/>
         <source>Before Delete Group</source>
         <translation>删除分组前</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="102"/>
+        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="104"/>
         <source>Before New Project</source>
         <translation>新建项目前</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="103"/>
+        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="105"/>
         <source>Before Open Project</source>
         <translation>打开项目前</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="104"/>
+        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="106"/>
         <source>Before Load JSON</source>
         <translation>加载 JSON 前</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="105"/>
+        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="107"/>
         <source>Before Apply Template</source>
         <translation>应用模板前</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="108"/>
+        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="110"/>
         <source>Before Delete Action</source>
         <translation>删除动作前</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="109"/>
+        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="111"/>
         <source>Before Delete Output Widget</source>
         <translation>删除输出组件前</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="110"/>
+        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="112"/>
         <source>Before Move Dataset</source>
         <translation>移动数据集之前</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="111"/>
+        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="113"/>
         <source>Before Move Group</source>
         <translation>移动组之前</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="112"/>
+        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="114"/>
         <source>Before Delete Workspace</source>
         <translation>删除工作区之前</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="113"/>
+        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="115"/>
         <source>Before Clear All Workspaces</source>
         <translation>清除所有工作区之前</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="114"/>
+        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="116"/>
         <source>Before Remove Widget</source>
         <translation>移除控件之前</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="115"/>
+        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="117"/>
         <source>Before Reorder Workspaces</source>
         <translation>重新排序工作区之前</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="116"/>
-        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="117"/>
+        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="118"/>
+        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="119"/>
         <source>Before Batch Operation</source>
         <translation>批量操作之前</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="118"/>
+        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="120"/>
         <source>Before Add Tile</source>
         <translation>添加磁贴之前</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="142"/>
+        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="144"/>
         <source>%1 (and %2 more)</source>
         <translation>%1(还有 %2 个)</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="159"/>
+        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="161"/>
         <source> The frame parser code also differs and will be replaced.</source>
         <translation>帧解析器代码也不同，将被替换。</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="164"/>
+        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="166"/>
         <source>Title changes from “%1” to “%2”. Group structure unchanged.</source>
         <translation>标题从"%1"更改为"%2"。组结构未更改。</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="169"/>
+        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="171"/>
         <source>Same groups and datasets, but the frame parser code differs — restoring will replace it.</source>
         <translation>组和数据集相同，但帧解析器代码不同 — 恢复将替换它。</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="171"/>
+        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="173"/>
         <source>Same groups and datasets as your current project. Restoring may still revert field-level edits.</source>
         <translation>与当前项目的组和数据集相同。恢复仍可能还原字段级编辑。</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="178"/>
+        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="180"/>
         <source>Restoring removes %1 and brings back %2.</source>
         <translation>恢复将移除 %1 并恢复 %2。</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="181"/>
+        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="183"/>
         <source>Restoring removes %1.</source>
         <translation>恢复将移除 %1。</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="183"/>
+        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="185"/>
         <source>Restoring brings back %1.</source>
         <translation>恢复将恢复 %1。</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="209"/>
+        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="211"/>
         <source>Pick a backup to restore. The current project is saved automatically first, so the restore is reversible.</source>
         <translation>选择要恢复的备份。当前项目会先自动保存,因此恢复操作可逆。</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="292"/>
+        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="294"/>
         <source>No backups for this project yet. Edit or save the project to start the rolling backup.</source>
         <translation>此项目尚无备份。编辑或保存项目以启动滚动备份。</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="320"/>
+        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="322"/>
         <source>Open Folder</source>
         <translation>打开文件夹</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="328"/>
+        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="330"/>
         <source>Cancel</source>
         <translation>取消</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="334"/>
+        <location filename="../../qml/Dialogs/BackupRecovery.qml" line="336"/>
         <source>Restore</source>
         <translation>恢复</translation>
     </message>
@@ -2327,157 +2337,157 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
 <context>
     <name>Benchmark</name>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="32"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="34"/>
         <source>Benchmark</source>
         <translation>基准测试</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="81"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="83"/>
         <source>%1 frames/s</source>
         <translation>%1 帧/秒</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="85"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="87"/>
         <source>%1 s</source>
         <translation>%1 秒</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="90"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="92"/>
         <source>n/a</source>
         <translation>不适用</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="92"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="94"/>
         <source>Pass</source>
         <translation>通过</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="92"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="94"/>
         <source>Fail</source>
         <translation>失败</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="113"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="115"/>
         <source>Hotpath Benchmark</source>
         <translation>热路径基准测试</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="124"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="126"/>
         <source>Measures how fast this computer can extract, parse, and visualize frames through Serial Studio's data pipeline.</source>
         <translation>测量此计算机通过 Serial Studio 数据管道提取、解析和可视化帧的速度。</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="170"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="172"/>
         <source>The interface will freeze while running</source>
         <translation>运行时界面将冻结</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="181"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="183"/>
         <source>Each phase runs flat-out on the main thread, so the window stops responding until it finishes. Your current project is reloaded automatically when the benchmark ends.</source>
         <translation>每个阶段在主线程上全速运行,因此窗口会停止响应直到完成。基准测试结束时会自动重新加载当前项目。</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="238"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="240"/>
         <source>Frames per phase:</source>
         <translation>每阶段帧数:</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="255"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="257"/>
         <source>Minimum duration:</source>
         <translation>最短持续时间:</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="287"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="289"/>
         <source>Stages</source>
         <translation>阶段</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="295"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="297"/>
         <source>Parsers</source>
         <translation>解析器</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="307"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="309"/>
         <source>Data export</source>
         <translation>数据导出</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="318"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="320"/>
         <source>Dashboard</source>
         <translation>仪表板</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="333"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="335"/>
         <source>Data</source>
         <translation>数据</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="343"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="345"/>
         <source>Numeric only</source>
         <translation>仅数值</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="354"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="356"/>
         <source>Mixed (numeric + text)</source>
         <translation>混合型(数值 + 文本)</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="374"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="376"/>
         <source>Select at least one stage and one data type to run a benchmark.</source>
         <translation>选择至少一个阶段和一种数据类型以运行基准测试。</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="212"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="214"/>
         <source>Running %1...</source>
         <translation>运行中 %1...</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="213"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="215"/>
         <source>Preparing...</source>
         <translation>准备中...</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="389"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="391"/>
         <source>Disconnect the active device before running a benchmark.</source>
         <translation>在运行基准测试之前,请断开活动设备。</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="390"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="392"/>
         <source>Close the open recording before running a benchmark.</source>
         <translation>在运行基准测试之前,请关闭已打开的录制。</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="422"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="424"/>
         <source>Pipeline</source>
         <translation>流水线</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="434"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="436"/>
         <source>Throughput</source>
         <translation>吞吐量</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="446"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="448"/>
         <source>Time</source>
         <translation>时间</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="458"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="460"/>
         <source>Result</source>
         <translation>结果</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="559"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="561"/>
         <source>Run a test to see results</source>
         <translation>运行测试以查看结果</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="576"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="578"/>
         <source>Peak memory: %1</source>
         <translation>峰值内存:%1</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="590"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="592"/>
         <source>Pass/Fail applies to the data-pipeline and parser stages (data pipeline and Built-in numeric 1024 K frames/s; Built-in mixed 512 K; Lua numeric 256 K; JavaScript numeric and Lua mixed 128 K; JavaScript mixed 64 K). The export and dashboard stages are informational.</source>
         <translation>通过/失败仅适用于数据管道和解析器阶段(数据管道和内置数值型 1024 K 帧/秒;内置混合型 512 K;Lua 数值型 256 K;JavaScript 数值型和 Lua 混合型 128 K;JavaScript 混合型 64 K)。导出和仪表板阶段仅供参考。</translation>
     </message>
@@ -2490,7 +2500,7 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
         <translation type="vanished">通过/失败适用于数据流水线和解析器阶段（数据流水线和原生数值 1024 K 帧/秒；原生混合 512 K；Lua 数值 256 K；JavaScript 数值和 Lua 混合 128 K；JavaScript 混合 64 K）。导出和仪表板阶段仅供参考。</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="605"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="607"/>
         <source>Copy</source>
         <translation>复制</translation>
     </message>
@@ -2503,22 +2513,22 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
         <translation type="vanished">通过/失败仅适用于解析器阶段(Lua 目标 256 K 帧/秒,JavaScript 128 K)。导出和仪表板阶段仅供参考。</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="612"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="614"/>
         <source>Clear</source>
         <translation>清除</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="621"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="623"/>
         <source>Close</source>
         <translation>关闭</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="630"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="632"/>
         <source>Running...</source>
         <translation>运行中…</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Benchmark.qml" line="630"/>
+        <location filename="../../qml/Dialogs/Benchmark.qml" line="632"/>
         <source>Run Benchmark</source>
         <translation>运行基准测试</translation>
     </message>
@@ -2798,37 +2808,37 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
         <translation>设备</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="112"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="116"/>
         <source>Service</source>
         <translation>服务</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="148"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="154"/>
         <source>Characteristic</source>
         <translation>特征</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="206"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="214"/>
         <source>Scanning…</source>
         <translation>正在扫描…</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="242"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="250"/>
         <source>No Bluetooth Adapter Detected</source>
         <translation>未检测到蓝牙适配器</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="253"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="261"/>
         <source>Connect a Bluetooth adapter or check your system settings</source>
         <translation>连接蓝牙适配器或检查系统设置</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="280"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="288"/>
         <source>This OS is not Supported Yet.</source>
         <translation>尚不支持此操作系统。</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="291"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/BluetoothLE.qml" line="299"/>
         <source>We'll update Serial Studio to work with this operating system as soon as Qt officially supports it</source>
         <translation>一旦 QT 正式支持此操作系统，我们将更新 Serial Studio 以支持它</translation>
     </message>
@@ -2851,62 +2861,62 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
         <translation>CAN 驱动程序</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="140"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="142"/>
         <source>Interface</source>
         <translation>接口</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="169"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="173"/>
         <source>Bitrate</source>
         <translation>比特率</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="223"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="229"/>
         <source>Flexible Data-Rate</source>
         <translation>灵活数据速率</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="242"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="250"/>
         <source>The selected adapter does not support CAN FD</source>
         <translation>所选适配器不支持 CAN FD</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="249"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="257"/>
         <source>Data Bitrate</source>
         <translation>数据比特率</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="304"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="314"/>
         <source>Loopback</source>
         <translation>环回</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="324"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="336"/>
         <source>Listen-Only</source>
         <translation>仅监听</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="344"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="358"/>
         <source>Multi-Frame Reassembly</source>
         <translation>多帧重组</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="361"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="377"/>
         <source>Reassemble J1939 transport-protocol and ISO-TP multi-frame messages</source>
         <translation>重组 J1939 传输协议和 ISO-TP 多帧消息</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="368"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="384"/>
         <source>DBC Database</source>
         <translation>DBC 数据库</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="372"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="390"/>
         <source>Import DBC File…</source>
         <translation>导入 DBC 文件…</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="405"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/CANBus.qml" line="423"/>
         <source>No CAN Interfaces Found</source>
         <translation>未找到 CAN 接口</translation>
     </message>
@@ -3059,77 +3069,77 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
 <context>
     <name>ChannelSoundsEditor</name>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="38"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="40"/>
         <source>Notification Channel Sounds</source>
         <translation>通知通道声音</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="97"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="99"/>
         <source>Select Sound File</source>
         <translation>选择声音文件</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="99"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="101"/>
         <source>WAV audio (*.wav)</source>
         <translation>WAV 音频 (*.WAV)</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="99"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="101"/>
         <source>All files (*)</source>
         <translation>所有文件 (*)</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="125"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="127"/>
         <source>(app default)</source>
         <translation>(应用默认)</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="154"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="156"/>
         <source>A Critical notification on a channel plays its Warning file, a Warning notification its Caution file, an Info notification its Advisory file. Empty cells use the sounds from Preferences.</source>
         <translation>通道上的严重通知播放其警告文件,警告通知播放其注意文件,信息通知播放其建议文件。空单元格使用偏好设置中的声音。</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="165"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="167"/>
         <source>Channel</source>
         <translation>通道</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="171"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="173"/>
         <source>Warning</source>
         <translation>警告</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="177"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="179"/>
         <source>Caution</source>
         <translation>注意</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="183"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="185"/>
         <source>Advisory</source>
         <translation>建议</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="228"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="230"/>
         <source>Channel name</source>
         <translation>通道名称</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="244"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="246"/>
         <source>Remove this channel.</source>
         <translation>移除此通道。</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="258"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="260"/>
         <source>Add Channel</source>
         <translation>添加通道</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="267"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="269"/>
         <source>Cancel</source>
         <translation>取消</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="275"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/ChannelSoundsEditor.qml" line="277"/>
         <source>Apply</source>
         <translation>应用</translation>
     </message>
@@ -3302,7 +3312,7 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
 <context>
     <name>CommandPalette</name>
     <message>
-        <location filename="../../qml/Widgets/CommandPalette.qml" line="404"/>
+        <location filename="../../qml/Widgets/CommandPalette.qml" line="411"/>
         <source>Folder</source>
         <translation>文件夹</translation>
     </message>
@@ -3316,27 +3326,27 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
         <translation>命令</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/CommandPalette.qml" line="623"/>
+        <location filename="../../qml/Widgets/CommandPalette.qml" line="639"/>
         <source>Search…</source>
         <translation>搜索…</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/CommandPalette.qml" line="639"/>
+        <location filename="../../qml/Widgets/CommandPalette.qml" line="657"/>
         <source>Close</source>
         <translation>关闭</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/CommandPalette.qml" line="687"/>
+        <location filename="../../qml/Widgets/CommandPalette.qml" line="707"/>
         <source>Back</source>
         <translation>返回</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/CommandPalette.qml" line="748"/>
+        <location filename="../../qml/Widgets/CommandPalette.qml" line="768"/>
         <source>Type to search, Enter to open, Esc to close</source>
         <translation>输入以搜索，Enter 打开，Esc 关闭</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/CommandPalette.qml" line="848"/>
+        <location filename="../../qml/Widgets/CommandPalette.qml" line="868"/>
         <source>No results found</source>
         <translation>未找到结果</translation>
     </message>
@@ -5742,200 +5752,200 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
 <context>
     <name>ConstantsLibraryDialog</name>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="46"/>
+        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="48"/>
         <source>Insert Constant</source>
         <translation>插入常量</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="128"/>
-        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="129"/>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="130"/>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="131"/>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="132"/>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="133"/>
+        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="134"/>
+        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="135"/>
         <source>Fundamental</source>
         <translation>基本常量</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="128"/>
+        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="130"/>
         <source>Speed of light in vacuum</source>
         <translation>真空光速</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="129"/>
+        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="131"/>
         <source>Planck constant</source>
         <translation>普朗克常数</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="130"/>
+        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="132"/>
         <source>Elementary charge</source>
         <translation>基本电荷</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="131"/>
+        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="133"/>
         <source>Avogadro constant</source>
         <translation>阿伏伽德罗常数</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="132"/>
+        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="134"/>
         <source>Boltzmann constant</source>
         <translation>玻尔兹曼常数</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="133"/>
+        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="135"/>
         <source>Stefan-Boltzmann constant</source>
         <translation>斯特藩-玻尔兹曼常数</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="135"/>
-        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="136"/>
+        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="137"/>
+        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="138"/>
         <source>Mechanics</source>
         <translation>力学</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="135"/>
+        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="137"/>
         <source>Standard gravity</source>
         <translation>标准重力加速度</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="136"/>
+        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="138"/>
         <source>Gravitational constant</source>
         <translation>万有引力常数</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="138"/>
-        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="139"/>
+        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="140"/>
+        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="141"/>
         <source>Pressure</source>
         <translation>压强</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="138"/>
+        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="140"/>
         <source>Standard atmosphere</source>
         <translation>标准大气压</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="139"/>
+        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="141"/>
         <source>Sea-level barometric pressure</source>
         <translation>海平面气压</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="141"/>
-        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="142"/>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="143"/>
+        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="144"/>
+        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="145"/>
         <source>Temperature</source>
         <translation>温度</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="141"/>
+        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="143"/>
         <source>Absolute zero (Celsius)</source>
         <translation>绝对零度（摄氏度）</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="142"/>
+        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="144"/>
         <source>Water freezing point</source>
         <translation>水的冰点</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="143"/>
+        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="145"/>
         <source>Water boiling point (1 atm)</source>
         <translation>水的沸点（1 atm）</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="145"/>
-        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="146"/>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="147"/>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="148"/>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="149"/>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="150"/>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="151"/>
+        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="152"/>
+        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="153"/>
         <source>Gases &amp; Fluids</source>
         <translation>气体和流体</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="145"/>
+        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="147"/>
         <source>Universal gas constant</source>
         <translation>通用气体常数</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="146"/>
+        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="148"/>
         <source>Specific gas constant (dry air)</source>
         <translation>比气体常数（干空气）</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="147"/>
+        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="149"/>
         <source>Specific gas constant (water vapor)</source>
         <translation>比气体常数（水蒸气）</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="148"/>
+        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="150"/>
         <source>Air density (sea level, 15°C)</source>
         <translation>空气密度（海平面，15°C）</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="149"/>
+        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="151"/>
         <source>Water density (4°C)</source>
         <translation>水密度 (4°C)</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="150"/>
+        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="152"/>
         <source>Speed of sound in air (20°C)</source>
         <translation>空气中的声速 (20°C)</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="151"/>
+        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="153"/>
         <source>Heat capacity ratio (dry air)</source>
         <translation>热容比 (干燥空气)</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="153"/>
-        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="154"/>
+        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="155"/>
+        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="156"/>
         <source>Electromagnetism</source>
         <translation>电磁学</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="153"/>
+        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="155"/>
         <source>Vacuum permittivity</source>
         <translation>真空介电常数</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="154"/>
+        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="156"/>
         <source>Vacuum permeability</source>
         <translation>真空磁导率</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="156"/>
-        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="157"/>
         <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="158"/>
+        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="159"/>
+        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="160"/>
         <source>Math</source>
         <translation>数学</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="156"/>
+        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="158"/>
         <source>Pi</source>
         <translation>圆周率</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="157"/>
+        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="159"/>
         <source>Euler's number</source>
         <translation>欧拉数</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="158"/>
+        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="160"/>
         <source>Golden ratio</source>
         <translation>黄金比例</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="214"/>
+        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="216"/>
         <source>Physics Constants</source>
         <translation>物理常数</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="223"/>
+        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="225"/>
         <source>SI-unit preset values. Click a row to insert it into %1.</source>
         <translation>SI 单位预设值。单击行以将其插入到 %1。</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="233"/>
+        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="235"/>
         <source>Search…</source>
         <translation>搜索…</translation>
     </message>
@@ -5944,42 +5954,42 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
         <translation type="vanished">搜索</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="252"/>
+        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="254"/>
         <source>Symbol</source>
         <translation>符号</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="253"/>
+        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="255"/>
         <source>Name</source>
         <translation>名称</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="254"/>
+        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="256"/>
         <source>Value</source>
         <translation>值</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="255"/>
+        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="257"/>
         <source>Category</source>
         <translation>类别</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="364"/>
+        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="366"/>
         <source>No constants match.</source>
         <translation>无匹配常数。</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="385"/>
+        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="387"/>
         <source>%1 constants</source>
         <translation>%1 个常数</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="386"/>
+        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="388"/>
         <source>%1 of %2 constants</source>
         <translation>%1 / %2 个常数</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="390"/>
+        <location filename="../../qml/ProjectEditor/Views/ConstantsLibraryDialog.qml" line="392"/>
         <source>Close</source>
         <translation>关闭</translation>
     </message>
@@ -6099,52 +6109,52 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
 <context>
     <name>CrashRecovery</name>
     <message>
-        <location filename="../../qml/Dialogs/CrashRecovery.qml" line="31"/>
+        <location filename="../../qml/Dialogs/CrashRecovery.qml" line="33"/>
         <source>Recovery Options</source>
         <translation>恢复选项</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/CrashRecovery.qml" line="57"/>
+        <location filename="../../qml/Dialogs/CrashRecovery.qml" line="59"/>
         <source>Serial Studio has closed unexpectedly several times in a row.</source>
         <translation>Serial Studio 已连续多次意外关闭。</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/CrashRecovery.qml" line="82"/>
+        <location filename="../../qml/Dialogs/CrashRecovery.qml" line="84"/>
         <source>Consecutive crashes: %1</source>
         <translation>连续崩溃次数：%1</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/CrashRecovery.qml" line="90"/>
+        <location filename="../../qml/Dialogs/CrashRecovery.qml" line="92"/>
         <source>Last reported stage: %1</source>
         <translation>上次报告的阶段：%1</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/CrashRecovery.qml" line="98"/>
+        <location filename="../../qml/Dialogs/CrashRecovery.qml" line="100"/>
         <source>Detected at: %1</source>
         <translation>检测时间：%1</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/CrashRecovery.qml" line="113"/>
+        <location filename="../../qml/Dialogs/CrashRecovery.qml" line="115"/>
         <source>Pick a recovery action. Serial Studio will quit after applying it so the next launch starts clean.</source>
         <translation>请选择恢复操作。应用后 Serial Studio 将退出，以便下次启动时恢复正常。</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/CrashRecovery.qml" line="127"/>
+        <location filename="../../qml/Dialogs/CrashRecovery.qml" line="129"/>
         <source>Reset Rendering Backend to Default</source>
         <translation>重置渲染后端为默认值</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/CrashRecovery.qml" line="135"/>
+        <location filename="../../qml/Dialogs/CrashRecovery.qml" line="137"/>
         <source>Skip Restoring the Last Opened Project</source>
         <translation>跳过恢复上次打开的项目</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/CrashRecovery.qml" line="142"/>
+        <location filename="../../qml/Dialogs/CrashRecovery.qml" line="144"/>
         <source>Reset all Preferences</source>
         <translation>重置所有首选项</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/CrashRecovery.qml" line="160"/>
+        <location filename="../../qml/Dialogs/CrashRecovery.qml" line="162"/>
         <source>Continue Anyway</source>
         <translation>仍然继续</translation>
     </message>
@@ -6210,22 +6220,22 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
         <translation>总计：%1 条消息，%2 个信号</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="271"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="273"/>
         <source>Cancel</source>
         <translation>取消</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="281"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="285"/>
         <source>Add to Project</source>
         <translation>添加到项目</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="286"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="290"/>
         <source>Add the generated source, groups, tables and workspaces to the project that is open, instead of creating a new file</source>
         <translation>将生成的源、组、表格和工作区添加到已打开的项目,而不是创建新文件</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="297"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/DBCPreviewDialog.qml" line="303"/>
         <source>Create Project</source>
         <translation>创建项目</translation>
     </message>
@@ -6317,7 +6327,7 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
         <translation>使用搜索栏查找并添加控件,或右键单击其他工作区中的控件以将其添加到此处。</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="836"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="838"/>
         <source>Search Widgets</source>
         <translation>搜索控件</translation>
     </message>
@@ -6360,7 +6370,7 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
         <translation>API 服务器关闭</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardLayout.qml" line="675"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardLayout.qml" line="677"/>
         <source>Command Palette</source>
         <translation>命令面板</translation>
     </message>
@@ -11136,17 +11146,17 @@ Valid format: 01 A2 FF 3C</source>
         <translation type="vanished">从此会话文件恢复项目文件</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/DatabaseExplorer.qml" line="38"/>
+        <location filename="../../qml/DatabaseExplorer/DatabaseExplorer.qml" line="40"/>
         <source>Historian</source>
         <translation>历史记录器</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/DatabaseExplorer.qml" line="298"/>
+        <location filename="../../qml/DatabaseExplorer/DatabaseExplorer.qml" line="300"/>
         <source>Loading session…</source>
         <translation>加载会话中…</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/DatabaseExplorer.qml" line="299"/>
+        <location filename="../../qml/DatabaseExplorer/DatabaseExplorer.qml" line="301"/>
         <source>Working…</source>
         <translation>处理中…</translation>
     </message>
@@ -11508,37 +11518,37 @@ Valid format: 01 A2 FF 3C</source>
 <context>
     <name>Donate</name>
     <message>
-        <location filename="../../qml/Dialogs/Donate.qml" line="36"/>
+        <location filename="../../qml/Dialogs/Donate.qml" line="38"/>
         <source>Support Serial Studio</source>
         <translation>支持 Serial Studio</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Donate.qml" line="91"/>
+        <location filename="../../qml/Dialogs/Donate.qml" line="93"/>
         <source>Support the development of %1!</source>
         <translation>支持 %1 的开发！</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Donate.qml" line="102"/>
+        <location filename="../../qml/Dialogs/Donate.qml" line="104"/>
         <source>Serial Studio is free &amp; open-source software supported by volunteers. Consider donating or obtaining a Pro license to support development efforts :)</source>
         <translation>Serial Studio 是由志愿者支持的免费开源软件。请考虑捐赠或获取 Pro 许可证以支持开发工作 :)</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Donate.qml" line="115"/>
+        <location filename="../../qml/Dialogs/Donate.qml" line="117"/>
         <source>You can also support this project by sharing it, reporting bugs and proposing new features!</source>
         <translation>您也可以通过分享、报告错误和提出新功能来支持此项目！</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Donate.qml" line="129"/>
+        <location filename="../../qml/Dialogs/Donate.qml" line="131"/>
         <source>Close</source>
         <translation>关闭</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Donate.qml" line="140"/>
+        <location filename="../../qml/Dialogs/Donate.qml" line="142"/>
         <source>Donate</source>
         <translation>捐赠</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Donate.qml" line="155"/>
+        <location filename="../../qml/Dialogs/Donate.qml" line="157"/>
         <source>Get Serial Studio Pro</source>
         <translation>获取 Serial Studio Pro</translation>
     </message>
@@ -11707,92 +11717,92 @@ Valid format: 01 A2 FF 3C</source>
 <context>
     <name>DriftReportDialog</name>
     <message>
-        <location filename="../../qml/DatabaseExplorer/DriftReportDialog.qml" line="29"/>
+        <location filename="../../qml/DatabaseExplorer/DriftReportDialog.qml" line="31"/>
         <source>Comparison Report</source>
         <translation>比对报告</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/DriftReportDialog.qml" line="48"/>
+        <location filename="../../qml/DatabaseExplorer/DriftReportDialog.qml" line="50"/>
         <source>The current project decodes this session exactly like the recorded one.</source>
         <translation>当前项目对此会话的解码结果与录制时完全一致。</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/DriftReportDialog.qml" line="51"/>
+        <location filename="../../qml/DatabaseExplorer/DriftReportDialog.qml" line="53"/>
         <source>The current project produces different values from the same recording.</source>
         <translation>当前项目从同一录制中产生了不同的值。</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/DriftReportDialog.qml" line="54"/>
+        <location filename="../../qml/DatabaseExplorer/DriftReportDialog.qml" line="56"/>
         <source>The current project finds a different number of readings in the recording.</source>
         <translation>当前项目在录制中发现的读数数量不同。</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/DriftReportDialog.qml" line="57"/>
+        <location filename="../../qml/DatabaseExplorer/DriftReportDialog.qml" line="59"/>
         <source>The current project has a different set of datasets than the recording.</source>
         <translation>当前项目的数据集与录制时不同。</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/DriftReportDialog.qml" line="60"/>
+        <location filename="../../qml/DatabaseExplorer/DriftReportDialog.qml" line="62"/>
         <source>This session cannot be compared mechanically.</source>
         <translation>此会话无法进行机械比对。</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/DriftReportDialog.qml" line="62"/>
+        <location filename="../../qml/DatabaseExplorer/DriftReportDialog.qml" line="64"/>
         <source>The comparison could not be completed.</source>
         <translation>比对未能完成。</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/DriftReportDialog.qml" line="115"/>
+        <location filename="../../qml/DatabaseExplorer/DriftReportDialog.qml" line="117"/>
         <source>Compared against: %1</source>
         <translation>比对对象：%1</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/DriftReportDialog.qml" line="116"/>
+        <location filename="../../qml/DatabaseExplorer/DriftReportDialog.qml" line="118"/>
         <source>current project</source>
         <translation>当前项目</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/DriftReportDialog.qml" line="155"/>
+        <location filename="../../qml/DatabaseExplorer/DriftReportDialog.qml" line="157"/>
         <source>No differences to show.</source>
         <translation>无差异可显示。</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/DriftReportDialog.qml" line="196"/>
+        <location filename="../../qml/DatabaseExplorer/DriftReportDialog.qml" line="198"/>
         <source>Only exists in the current project.</source>
         <translation>仅存在于当前项目中。</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/DriftReportDialog.qml" line="199"/>
+        <location filename="../../qml/DatabaseExplorer/DriftReportDialog.qml" line="201"/>
         <source>Only exists in the recorded project.</source>
         <translation>仅存在于已记录项目中。</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/DriftReportDialog.qml" line="201"/>
+        <location filename="../../qml/DatabaseExplorer/DriftReportDialog.qml" line="203"/>
         <source>%1 of %2 values changed, %3 missing, %4 extra.</source>
         <translation>%2 个值中有 %1 个已更改，%3 个缺失，%4 个额外。</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/DriftReportDialog.qml" line="219"/>
+        <location filename="../../qml/DatabaseExplorer/DriftReportDialog.qml" line="221"/>
         <source>Time</source>
         <translation>时间</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/DriftReportDialog.qml" line="226"/>
+        <location filename="../../qml/DatabaseExplorer/DriftReportDialog.qml" line="228"/>
         <source>Recorded project</source>
         <translation>已记录项目</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/DriftReportDialog.qml" line="233"/>
+        <location filename="../../qml/DatabaseExplorer/DriftReportDialog.qml" line="235"/>
         <source>Current project</source>
         <translation>当前项目</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/DriftReportDialog.qml" line="270"/>
+        <location filename="../../qml/DatabaseExplorer/DriftReportDialog.qml" line="272"/>
         <source>...and %1 more changed values.</source>
         <translation>……以及另外 %1 个已更改的值。</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/DriftReportDialog.qml" line="287"/>
+        <location filename="../../qml/DatabaseExplorer/DriftReportDialog.qml" line="289"/>
         <source>Close</source>
         <translation>关闭</translation>
     </message>
@@ -13139,84 +13149,84 @@ Valid format: 01 A2 FF 3C</source>
         <translation>名称：</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EipTagsDialog.qml" line="128"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EipTagsDialog.qml" line="130"/>
         <source>Channel name</source>
         <translation>通道名称</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EipTagsDialog.qml" line="132"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EipTagsDialog.qml" line="134"/>
         <source>Tag:</source>
         <translation>标签：</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EipTagsDialog.qml" line="140"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EipTagsDialog.qml" line="144"/>
         <source>Controller tag name</source>
         <translation>控制器标签名称</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EipTagsDialog.qml" line="145"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EipTagsDialog.qml" line="149"/>
         <source>Type:</source>
         <translation>类型：</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EipTagsDialog.qml" line="164"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EipTagsDialog.qml" line="172"/>
         <source>Element</source>
         <translation>元素</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EipTagsDialog.qml" line="169"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EipTagsDialog.qml" line="179"/>
         <source>Add Tag</source>
         <translation>添加标签</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EipTagsDialog.qml" line="193"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EipTagsDialog.qml" line="203"/>
         <source>Configured Tags</source>
         <translation>已配置标签</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EipTagsDialog.qml" line="227"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EipTagsDialog.qml" line="237"/>
         <source>#</source>
         <translation>#</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EipTagsDialog.qml" line="234"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EipTagsDialog.qml" line="244"/>
         <source>Tag</source>
         <translation>标签</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EipTagsDialog.qml" line="242"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EipTagsDialog.qml" line="252"/>
         <source>Action</source>
         <translation>动作</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EipTagsDialog.qml" line="289"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EipTagsDialog.qml" line="301"/>
         <source>Remove</source>
         <translation>移除</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EipTagsDialog.qml" line="302"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EipTagsDialog.qml" line="314"/>
         <source>No tags configured.
 Add controller tags above to poll them.</source>
         <translation>未配置标签。
 在上方添加控制器标签以轮询它们。</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EipTagsDialog.qml" line="320"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EipTagsDialog.qml" line="332"/>
         <source>Total tags: %1</source>
         <translation>标签总数：%1</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EipTagsDialog.qml" line="324"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EipTagsDialog.qml" line="338"/>
         <source>Generate Project</source>
         <translation>生成项目</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EipTagsDialog.qml" line="330"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EipTagsDialog.qml" line="346"/>
         <source>Clear All</source>
         <translation>全部清除</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EipTagsDialog.qml" line="336"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EipTagsDialog.qml" line="354"/>
         <source>Close</source>
         <translation>关闭</translation>
     </message>
@@ -13229,52 +13239,52 @@ Add controller tags above to poll them.</source>
         <translation>网关</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EthernetIp.qml" line="58"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EthernetIp.qml" line="60"/>
         <source>IP Address</source>
         <translation>IP 地址</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EthernetIp.qml" line="77"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EthernetIp.qml" line="79"/>
         <source>CIP Path</source>
         <translation>CIP 路径</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EthernetIp.qml" line="84"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EthernetIp.qml" line="88"/>
         <source>1,0</source>
         <translation>1,0</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EthernetIp.qml" line="103"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EthernetIp.qml" line="107"/>
         <source>Controller</source>
         <translation>控制器</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EthernetIp.qml" line="122"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EthernetIp.qml" line="128"/>
         <source>Poll Interval (ms)</source>
         <translation>轮询间隔 (ms)</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EthernetIp.qml" line="127"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EthernetIp.qml" line="135"/>
         <source>Polling interval</source>
         <translation>轮询间隔</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EthernetIp.qml" line="159"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EthernetIp.qml" line="169"/>
         <source>Configure Tags…</source>
         <translation>配置标签…</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EthernetIp.qml" line="170"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EthernetIp.qml" line="182"/>
         <source>Create Project from Tags</source>
         <translation>从标签创建项目</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EthernetIp.qml" line="185"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EthernetIp.qml" line="197"/>
         <source>%1 tag(s) configured</source>
         <translation>已配置 %1 个标签</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EthernetIp.qml" line="186"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/EthernetIp.qml" line="198"/>
         <source>No tags configured</source>
         <translation>未配置标签</translation>
     </message>
@@ -13292,102 +13302,102 @@ Add controller tags above to poll them.</source>
 <context>
     <name>ExamplesBrowser</name>
     <message>
-        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="33"/>
+        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="35"/>
         <source>Examples Browser</source>
         <translation>示例浏览器</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="119"/>
+        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="121"/>
         <source>Back</source>
         <translation>返回</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="151"/>
+        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="153"/>
         <source>Pro</source>
         <translation>Pro</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="172"/>
+        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="174"/>
         <source>Download &amp;&amp; Open</source>
         <translation>下载并打开</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="187"/>
+        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="189"/>
         <source>View on GitHub</source>
         <translation>在 GitHub 上查看</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="90"/>
+        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="92"/>
         <source>Search in Examples…</source>
         <translation>在示例中搜索…</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="244"/>
+        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="246"/>
         <source>Fetching examples…</source>
         <translation>正在获取示例…</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="567"/>
+        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="569"/>
         <source>Loading...</source>
         <translation>加载中...</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="568"/>
+        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="570"/>
         <source>No README available.</source>
         <translation>无可用 README。</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="608"/>
+        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="610"/>
         <source>Copied to Clipboard</source>
         <translation>已复制到剪贴板</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="671"/>
+        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="673"/>
         <source>No screenshot available</source>
         <translation>无可用截图</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="703"/>
+        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="705"/>
         <source>Details</source>
         <translation>详情</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="732"/>
+        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="734"/>
         <source>Info</source>
         <translation>信息</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="755"/>
+        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="757"/>
         <source>Category:</source>
         <translation>类别：</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="768"/>
+        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="770"/>
         <source>Difficulty:</source>
         <translation>难度：</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="786"/>
+        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="788"/>
         <source>Project:</source>
         <translation>项目：</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="828"/>
+        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="830"/>
         <source>No Results Found</source>
         <translation>未找到结果</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="839"/>
+        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="841"/>
         <source>Check the spelling or try a different search term.</source>
         <translation>请检查拼写或尝试其他搜索词。</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="854"/>
+        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="856"/>
         <source>%1 examples</source>
         <translation>%1 个示例</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="863"/>
+        <location filename="../../qml/Dialogs/ExamplesBrowser.qml" line="865"/>
         <source>Close</source>
         <translation>关闭</translation>
     </message>
@@ -13395,52 +13405,52 @@ Add controller tags above to poll them.</source>
 <context>
     <name>ExtensionConsent</name>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionConsent.qml" line="37"/>
+        <location filename="../../qml/Dialogs/ExtensionConsent.qml" line="39"/>
         <source>Allow Widget Extension?</source>
         <translation>允许部件扩展?</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionConsent.qml" line="164"/>
+        <location filename="../../qml/Dialogs/ExtensionConsent.qml" line="166"/>
         <source>Identifier</source>
         <translation>标识符</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionConsent.qml" line="165"/>
+        <location filename="../../qml/Dialogs/ExtensionConsent.qml" line="167"/>
         <source>Author</source>
         <translation>作者</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionConsent.qml" line="166"/>
+        <location filename="../../qml/Dialogs/ExtensionConsent.qml" line="168"/>
         <source>Version</source>
         <translation>版本</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionConsent.qml" line="167"/>
+        <location filename="../../qml/Dialogs/ExtensionConsent.qml" line="169"/>
         <source>License</source>
         <translation>许可证</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionConsent.qml" line="168"/>
+        <location filename="../../qml/Dialogs/ExtensionConsent.qml" line="170"/>
         <source>Installed in</source>
         <translation>安装位置</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionConsent.qml" line="212"/>
+        <location filename="../../qml/Dialogs/ExtensionConsent.qml" line="214"/>
         <source>This widget runs inside Serial Studio with the same privileges as the application itself. It can read and change files on this computer, use the network, and do anything Serial Studio can do. Serial Studio does not restrict what it does, and cannot undo what it does.</source>
         <translation>此小部件在 Serial Studio 内运行，拥有与应用程序相同的权限。它可以读取和更改此计算机上的文件、使用网络以及执行 Serial Studio 能够执行的任何操作。Serial Studio 不限制其行为，也无法撤销其操作。</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionConsent.qml" line="224"/>
+        <location filename="../../qml/Dialogs/ExtensionConsent.qml" line="226"/>
         <source>Allow it only if you trust its author. Your answer is remembered for this version of the package; a later update asks again.</source>
         <translation>仅在信任其作者时允许。您的选择将针对此版本的软件包记住；后续更新会再次询问。</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionConsent.qml" line="242"/>
+        <location filename="../../qml/Dialogs/ExtensionConsent.qml" line="244"/>
         <source>Don't Allow</source>
         <translation>不允许</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionConsent.qml" line="250"/>
+        <location filename="../../qml/Dialogs/ExtensionConsent.qml" line="252"/>
         <source>Allow</source>
         <translation>允许</translation>
     </message>
@@ -13448,62 +13458,62 @@ Add controller tags above to poll them.</source>
 <context>
     <name>ExtensionManager</name>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="32"/>
+        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="34"/>
         <source>Extension Manager</source>
         <translation>扩展管理器</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="119"/>
+        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="121"/>
         <source>Refresh</source>
         <translation>刷新</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="133"/>
+        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="135"/>
         <source>Repos</source>
         <translation>仓库</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="163"/>
+        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="165"/>
         <source>Repository Settings</source>
         <translation>仓库设置</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="175"/>
+        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="177"/>
         <source>Back</source>
         <translation>返回</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="216"/>
+        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="218"/>
         <source>Install</source>
         <translation>安装</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="233"/>
+        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="235"/>
         <source>Uninstall</source>
         <translation>卸载</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="260"/>
+        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="262"/>
         <source>Run</source>
         <translation>运行</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="284"/>
+        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="286"/>
         <source>Stop</source>
         <translation>停止</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="318"/>
+        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="320"/>
         <source>Reset</source>
         <translation>重置</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="78"/>
+        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="80"/>
         <source>Search extensions…</source>
         <translation>搜索扩展…</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="368"/>
+        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="370"/>
         <source>Fetching extensions…</source>
         <translation>正在获取扩展…</translation>
     </message>
@@ -13588,32 +13598,32 @@ Add controller tags above to poll them.</source>
         <translation type="vanished">添加</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="424"/>
+        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="426"/>
         <source>No Results Found</source>
         <translation>未找到结果</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="435"/>
+        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="437"/>
         <source>Check the spelling or try a different search term.</source>
         <translation>请检查拼写或尝试其他搜索词。</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="459"/>
+        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="461"/>
         <source>No Extensions Available</source>
         <translation>无可用扩展</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="470"/>
+        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="472"/>
         <source>Add a repository URL or local path in the Repos settings, then refresh.</source>
         <translation>在仓库设置中添加仓库 URL 或本地路径,然后刷新。</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="485"/>
+        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="487"/>
         <source>%1 extensions</source>
         <translation>%1 个扩展</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="494"/>
+        <location filename="../../qml/Dialogs/ExtensionManager.qml" line="496"/>
         <source>Close</source>
         <translation>关闭</translation>
     </message>
@@ -13649,32 +13659,32 @@ Add controller tags above to poll them.</source>
 <context>
     <name>ExtensionWidgetSettings</name>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ExtensionWidgetSettings.qml" line="35"/>
+        <location filename="../../qml/Widgets/Dashboard/ExtensionWidgetSettings.qml" line="37"/>
         <source>Widget Settings</source>
         <translation>小部件设置</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ExtensionWidgetSettings.qml" line="57"/>
+        <location filename="../../qml/Widgets/Dashboard/ExtensionWidgetSettings.qml" line="59"/>
         <source>%1 Settings</source>
         <translation>%1 设置</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ExtensionWidgetSettings.qml" line="194"/>
+        <location filename="../../qml/Widgets/Dashboard/ExtensionWidgetSettings.qml" line="196"/>
         <source>These settings are declared by the widget package and stored in the project.</source>
         <translation>这些设置由小部件包声明并存储在项目中。</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ExtensionWidgetSettings.qml" line="195"/>
+        <location filename="../../qml/Widgets/Dashboard/ExtensionWidgetSettings.qml" line="197"/>
         <source>This widget declares no settings.</source>
         <translation>此小部件未声明任何设置。</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ExtensionWidgetSettings.qml" line="265"/>
+        <location filename="../../qml/Widgets/Dashboard/ExtensionWidgetSettings.qml" line="267"/>
         <source>Restore Defaults</source>
         <translation>恢复默认值</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/ExtensionWidgetSettings.qml" line="277"/>
+        <location filename="../../qml/Widgets/Dashboard/ExtensionWidgetSettings.qml" line="279"/>
         <source>Close</source>
         <translation>关闭</translation>
     </message>
@@ -13682,7 +13692,7 @@ Add controller tags above to poll them.</source>
 <context>
     <name>ExternalWidgetWindow</name>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/ExternalWidgetWindow.qml" line="252"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/ExternalWidgetWindow.qml" line="253"/>
         <source>The widget could not be created.</source>
         <translation>无法创建控件。</translation>
     </message>
@@ -13796,98 +13806,98 @@ Add controller tags above to poll them.</source>
 <context>
     <name>FileTransmission</name>
     <message>
-        <location filename="../../qml/Dialogs/FileTransmission.qml" line="33"/>
+        <location filename="../../qml/Dialogs/FileTransmission.qml" line="35"/>
         <source>File Transmission</source>
         <translation>文件传输</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FileTransmission.qml" line="101"/>
+        <location filename="../../qml/Dialogs/FileTransmission.qml" line="103"/>
         <source>Transfer Protocol:</source>
         <translation>传输协议:</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FileTransmission.qml" line="134"/>
+        <location filename="../../qml/Dialogs/FileTransmission.qml" line="136"/>
         <source>File Selection:</source>
         <translation>文件选择:</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FileTransmission.qml" line="151"/>
+        <location filename="../../qml/Dialogs/FileTransmission.qml" line="153"/>
         <source>Select File…</source>
         <translation>选择文件…</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FileTransmission.qml" line="169"/>
+        <location filename="../../qml/Dialogs/FileTransmission.qml" line="171"/>
         <source>Transmission Interval:</source>
         <translation>传输间隔：</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FileTransmission.qml" line="195"/>
-        <location filename="../../qml/Dialogs/FileTransmission.qml" line="271"/>
+        <location filename="../../qml/Dialogs/FileTransmission.qml" line="197"/>
+        <location filename="../../qml/Dialogs/FileTransmission.qml" line="273"/>
         <source>msecs</source>
         <translation>毫秒</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FileTransmission.qml" line="205"/>
+        <location filename="../../qml/Dialogs/FileTransmission.qml" line="207"/>
         <source>Block Size:</source>
         <translation>块大小：</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FileTransmission.qml" line="233"/>
+        <location filename="../../qml/Dialogs/FileTransmission.qml" line="235"/>
         <source>bytes</source>
         <translation>字节</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FileTransmission.qml" line="243"/>
+        <location filename="../../qml/Dialogs/FileTransmission.qml" line="245"/>
         <source>Timeout:</source>
         <translation>超时：</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FileTransmission.qml" line="281"/>
+        <location filename="../../qml/Dialogs/FileTransmission.qml" line="283"/>
         <source>Max Retries:</source>
         <translation>最大重试次数：</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FileTransmission.qml" line="339"/>
+        <location filename="../../qml/Dialogs/FileTransmission.qml" line="341"/>
         <source>Progress: %1%</source>
         <translation>进度：%1%</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FileTransmission.qml" line="372"/>
+        <location filename="../../qml/Dialogs/FileTransmission.qml" line="374"/>
         <source>%1 / %2 bytes</source>
         <translation>%1 / %2 字节</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FileTransmission.qml" line="380"/>
+        <location filename="../../qml/Dialogs/FileTransmission.qml" line="382"/>
         <source>Errors: %1</source>
         <translation>错误：%1</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FileTransmission.qml" line="460"/>
+        <location filename="../../qml/Dialogs/FileTransmission.qml" line="462"/>
         <source>Activity Log</source>
         <translation>活动日志</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FileTransmission.qml" line="464"/>
+        <location filename="../../qml/Dialogs/FileTransmission.qml" line="466"/>
         <source>Clear</source>
         <translation>清除</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FileTransmission.qml" line="418"/>
+        <location filename="../../qml/Dialogs/FileTransmission.qml" line="420"/>
         <source>Pause Transmission</source>
         <translation>暂停传输</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FileTransmission.qml" line="419"/>
+        <location filename="../../qml/Dialogs/FileTransmission.qml" line="421"/>
         <source>Resume Transmission</source>
         <translation>恢复传输</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FileTransmission.qml" line="422"/>
+        <location filename="../../qml/Dialogs/FileTransmission.qml" line="424"/>
         <source>Stop Transmission</source>
         <translation>停止传输</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FileTransmission.qml" line="423"/>
+        <location filename="../../qml/Dialogs/FileTransmission.qml" line="425"/>
         <source>Begin Transmission</source>
         <translation>开始传输</translation>
     </message>
@@ -14142,95 +14152,95 @@ Add controller tags above to poll them.</source>
 <context>
     <name>FrameParserTest</name>
     <message>
-        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="39"/>
+        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="41"/>
         <source>Test Frame Parser</source>
         <translation>测试帧解析器</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="111"/>
+        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="113"/>
         <source>Frame %1</source>
         <translation>帧 %1</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="113"/>
-        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="235"/>
+        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="115"/>
+        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="237"/>
         <source>Decoder</source>
         <translation>解码器</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="115"/>
+        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="117"/>
         <source>Rows</source>
         <translation>行数</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="116"/>
+        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="118"/>
         <source>%1 row(s)</source>
         <translation>%1 行</translation>
     </message>
     <message numerus="yes">
-        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="123"/>
+        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="125"/>
         <source>%n dataset(s) not in this frame</source>
         <translation>
             <numerusform>%n 个数据集不在此帧中</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="125"/>
+        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="127"/>
         <source>Row %1</source>
         <translation>行 %1</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="137"/>
+        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="139"/>
         <source>not in this frame</source>
         <translation>不在此帧中</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="190"/>
+        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="192"/>
         <source>Pipeline Configuration</source>
         <translation>管道配置</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="212"/>
+        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="214"/>
         <source>Detection</source>
         <translation>检测</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="258"/>
+        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="260"/>
         <source>Start</source>
         <translation>起始地址</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="279"/>
+        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="281"/>
         <source>End</source>
         <translation>结束</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="300"/>
+        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="302"/>
         <source>Checksum</source>
         <translation>校验和</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="325"/>
+        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="327"/>
         <source>Hex Delimiters</source>
         <translation>十六进制定界符</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="342"/>
+        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="344"/>
         <source>Frame Data Input</source>
         <translation>帧数据输入</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="369"/>
+        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="371"/>
         <source>Enter hex bytes (e.g. 01 A2 FF)</source>
         <translation>输入十六进制字节(例如 01 A2 FF)</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="370"/>
+        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="372"/>
         <source>Enter raw stream bytes here...</source>
         <translation>在此输入原始流字节...</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="389"/>
+        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="391"/>
         <source>Hex</source>
         <translation>十六进制</translation>
     </message>
@@ -14239,49 +14249,49 @@ Add controller tags above to poll them.</source>
         <translation type="vanished">HEX</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="415"/>
+        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="417"/>
         <source>The sample does not contain the configured frame delimiters, so no frame will be extracted. Type them into the sample (e.g. 
  for a newline) or adjust the detection mode.</source>
         <translation>样本不包含已配置的帧定界符,因此无法提取帧。请在样本中输入定界符(例如 
  表示换行符)或调整检测模式。</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="435"/>
+        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="437"/>
         <source>Pipeline Results</source>
         <translation>处理流程结果</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="508"/>
+        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="510"/>
         <source>Stage</source>
         <translation>暂存</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="515"/>
+        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="517"/>
         <source>Value</source>
         <translation>值</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="558"/>
+        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="560"/>
         <source>Extraction did not produce a complete frame. Check the start / end delimiters and the detection mode.</source>
         <translation>提取未生成完整帧。请检查起始/结束分隔符和检测模式。</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="560"/>
+        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="562"/>
         <source>Enter sample data above and press Evaluate to preview the parsed output</source>
         <translation>在上方输入示例数据并按"评估"以预览解析输出</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="642"/>
+        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="644"/>
         <source>Clear</source>
         <translation>清除</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="653"/>
+        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="655"/>
         <source>Close</source>
         <translation>关闭</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="660"/>
+        <location filename="../../qml/Dialogs/FrameParserTest.qml" line="662"/>
         <source>Evaluate</source>
         <translation>评估</translation>
     </message>
@@ -14384,251 +14394,251 @@ Add controller tags above to poll them.</source>
 <context>
     <name>FrequencyMarkersEditor</name>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="35"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="37"/>
         <source>Frequency Markers</source>
         <translation>频率标记</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="71"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="73"/>
         <source>Mains Hum (50 Hz + harmonics)</source>
         <translation>电源哼声(50 Hz + 谐波)</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="73"/>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="81"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="75"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="83"/>
         <source>Mains</source>
         <translation>电源</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="74"/>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="82"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="76"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="84"/>
         <source>Mains 2x</source>
         <translation>电源 2 倍</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="75"/>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="83"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="77"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="85"/>
         <source>Mains 3x</source>
         <translation>电源 3 倍</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="79"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="81"/>
         <source>Mains Hum (60 Hz + harmonics)</source>
         <translation>工频谐波 (60 Hz + 谐波)</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="87"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="89"/>
         <source>Octave Bands (31.5 Hz - 16 kHz)</source>
         <translation>倍频程波段 (31.5 Hz - 16 kHz)</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="89"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="91"/>
         <source>31.5 Hz</source>
         <translation>31.5 Hz</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="90"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="92"/>
         <source>63 Hz</source>
         <translation>63 Hz</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="91"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="93"/>
         <source>125 Hz</source>
         <translation>125 Hz</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="92"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="94"/>
         <source>250 Hz</source>
         <translation>250 Hz</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="93"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="95"/>
         <source>500 Hz</source>
         <translation>500 Hz</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="94"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="96"/>
         <source>1 kHz</source>
         <translation>1 kHz</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="95"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="97"/>
         <source>2 kHz</source>
         <translation>2 kHz</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="96"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="98"/>
         <source>4 kHz</source>
         <translation>4 kHz</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="97"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="99"/>
         <source>8 kHz</source>
         <translation>8 kHz</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="98"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="100"/>
         <source>16 kHz</source>
         <translation>16 kHz</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="246"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="248"/>
         <source>Choose Marker Color</source>
         <translation>选择标记颜色</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="273"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="275"/>
         <source>Presets</source>
         <translation>预设</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="296"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="298"/>
         <source>Preset</source>
         <translation>预设</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="311"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="313"/>
         <source>Choose preset…</source>
         <translation>选择预设…</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="323"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="325"/>
         <source>Frequency range</source>
         <translation>频率范围</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="329"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="331"/>
         <source>0 - %1 Hz</source>
         <translation>0 - %1 Hz</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="351"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="353"/>
         <source>Markers</source>
         <translation>标记</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="362"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="364"/>
         <source>Add Marker</source>
         <translation>添加标记</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="366"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="368"/>
         <source>Add a new point marker; set an end frequency to turn it into a band.</source>
         <translation>添加新的点标记;设置结束频率可将其转换为频段。</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="397"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="399"/>
         <source>Start (Hz)</source>
         <translation>起始 (Hz)</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="403"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="405"/>
         <source>End (Hz)</source>
         <translation>结束 (Hz)</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="409"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="411"/>
         <source>Warn (dB)</source>
         <translation>警告 (dB)</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="415"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="417"/>
         <source>Alarm (dB)</source>
         <translation>报警 (dB)</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="421"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="423"/>
         <source>Color</source>
         <translation>颜色</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="428"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="430"/>
         <source>Label</source>
         <translation>标签</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="500"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="502"/>
         <source>(point)</source>
         <translation>(点)</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="517"/>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="531"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="519"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="533"/>
         <source>(off)</source>
         <translation>(关)</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="565"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="567"/>
         <source>Reset to automatic color</source>
         <translation>重置为自动颜色</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="579"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="581"/>
         <source>Click to choose a color. Right-click to reset to automatic.</source>
         <translation>单击选择颜色。右键单击可重置为自动。</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="580"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="582"/>
         <source>Click to choose a custom color.</source>
         <translation>单击选择自定义颜色。</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="601"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="603"/>
         <source>(optional)</source>
         <translation>(可选)</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="618"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="620"/>
         <source>Move up.</source>
         <translation>上移。</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="637"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="639"/>
         <source>Move down.</source>
         <translation>下移。</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="650"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="652"/>
         <source>Remove this marker.</source>
         <translation>移除此标记。</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="664"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="666"/>
         <source>No markers defined. Pick a preset above or add a marker to get started.</source>
         <translation>未定义标记。请在上方选择预设或添加标记以开始。</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="681"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="683"/>
         <source>Preview</source>
         <translation>预览</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="757"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="759"/>
         <source>0 Hz</source>
         <translation>0 Hz</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="763"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="765"/>
         <source>%1 Hz</source>
         <translation>%1 Hz</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="785"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="787"/>
         <source>Cancel</source>
         <translation>取消</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="787"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="789"/>
         <source>Discard changes.</source>
         <translation>放弃更改。</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="796"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="798"/>
         <source>Apply</source>
         <translation>应用</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="799"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/FrequencyMarkersEditor.qml" line="801"/>
         <source>Apply changes to the dataset.</source>
         <translation>应用对数据集的更改。</translation>
     </message>
@@ -15101,22 +15111,22 @@ Add controller tags above to poll them.</source>
         <translation>HID 设备</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/HID.qml" line="80"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/HID.qml" line="82"/>
         <source>Usage Page</source>
         <translation>用途页</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/HID.qml" line="96"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/HID.qml" line="100"/>
         <source>Usage</source>
         <translation>用途</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/HID.qml" line="137"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/HID.qml" line="143"/>
         <source>Connect gamepads, joysticks, steering wheels, flight controllers, and other HID-class USB devices.</source>
         <translation>连接游戏手柄、操纵杆、方向盘、飞行控制器和其他 HID 类 USB 设备。</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/HID.qml" line="145"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/HID.qml" line="151"/>
         <source>HID Usage Tables (USB.org)</source>
         <translation>HID 用途表 (USB.org)</translation>
     </message>
@@ -15124,47 +15134,47 @@ Add controller tags above to poll them.</source>
 <context>
     <name>HelpCenter</name>
     <message>
-        <location filename="../../qml/Dialogs/HelpCenter.qml" line="32"/>
+        <location filename="../../qml/Dialogs/HelpCenter.qml" line="34"/>
         <source>Help Center</source>
         <translation>帮助中心</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/HelpCenter.qml" line="95"/>
+        <location filename="../../qml/Dialogs/HelpCenter.qml" line="97"/>
         <source>Fetching help pages…</source>
         <translation>正在获取帮助页面…</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/HelpCenter.qml" line="187"/>
+        <location filename="../../qml/Dialogs/HelpCenter.qml" line="189"/>
         <source>Search…</source>
         <translation>搜索…</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/HelpCenter.qml" line="305"/>
+        <location filename="../../qml/Dialogs/HelpCenter.qml" line="307"/>
         <source>Loading…</source>
         <translation>加载中…</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/HelpCenter.qml" line="349"/>
+        <location filename="../../qml/Dialogs/HelpCenter.qml" line="351"/>
         <source>Select a page from the sidebar</source>
         <translation>从侧边栏选择页面</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/HelpCenter.qml" line="379"/>
+        <location filename="../../qml/Dialogs/HelpCenter.qml" line="381"/>
         <source>Copied to Clipboard</source>
         <translation>已复制到剪贴板</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/HelpCenter.qml" line="411"/>
+        <location filename="../../qml/Dialogs/HelpCenter.qml" line="413"/>
         <source>View Online</source>
         <translation>在线查看</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/HelpCenter.qml" line="423"/>
+        <location filename="../../qml/Dialogs/HelpCenter.qml" line="425"/>
         <source>%1 pages</source>
         <translation>%1 页</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/HelpCenter.qml" line="432"/>
+        <location filename="../../qml/Dialogs/HelpCenter.qml" line="434"/>
         <source>Close</source>
         <translation>关闭</translation>
     </message>
@@ -15320,123 +15330,123 @@ Add controller tags above to poll them.</source>
 <context>
     <name>IO::Drivers::Audio</name>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="421"/>
+        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="412"/>
         <source>Audio Device Stopped</source>
         <translation>音频设备已停止</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="422"/>
+        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="413"/>
         <source>The audio backend stopped the stream. The device may have been unplugged or claimed by another application.</source>
         <translation>音频后端已停止流。设备可能已被拔出或被其他应用程序占用。</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="854"/>
+        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="845"/>
         <source>channels</source>
         <translation>声道</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="854"/>
+        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="845"/>
         <source> channels</source>
         <translation>声道</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="837"/>
+        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="828"/>
         <source>Unsigned 8-bit</source>
         <translation>无符号 8 位</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="246"/>
+        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="237"/>
         <source>Audio output unavailable</source>
         <translation>音频输出不可用</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="247"/>
+        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="238"/>
         <source>No output device is configured for this session.</source>
         <translation>未为此会话配置输出设备。</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="274"/>
+        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="265"/>
         <source>Audio channel mismatch</source>
         <translation>音频通道不匹配</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="275"/>
+        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="266"/>
         <source>Expected %1 value(s) per frame, got %2.</source>
         <translation>预期每帧 %1 个值,实际获得 %2 个。</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="350"/>
-        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="356"/>
+        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="341"/>
+        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="347"/>
         <source>Audio device error</source>
         <translation>音频设备错误</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="351"/>
+        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="342"/>
         <source>The selected audio device could not be initialized.</source>
         <translation>无法初始化所选音频设备。</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="356"/>
+        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="347"/>
         <source>The selected audio device could not be started.</source>
         <translation>无法启动所选音频设备。</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="838"/>
+        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="829"/>
         <source>Signed 16-bit</source>
         <translation>有符号 16 位</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="839"/>
+        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="830"/>
         <source>Signed 24-bit</source>
         <translation>有符号 24 位</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="840"/>
+        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="831"/>
         <source>Signed 32-bit</source>
         <translation>有符号 32 位</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="841"/>
+        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="832"/>
         <source>Float 32-bit</source>
         <translation>浮点 32 位</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="844"/>
+        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="835"/>
         <source>Mono</source>
         <translation>单声道</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="845"/>
+        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="836"/>
         <source>Stereo</source>
         <translation>立体声</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="1379"/>
+        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="1370"/>
         <source>Input Device</source>
         <translation>输入设备</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="1387"/>
+        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="1378"/>
         <source>Sample Rate</source>
         <translation>采样率</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="1395"/>
+        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="1386"/>
         <source>Normalization</source>
         <translation>归一化</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="1396"/>
+        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="1387"/>
         <source>Publish samples as floats in the -1.0 to 1.0 range</source>
         <translation>将采样发布为 -1.0 到 1.0 范围内的浮点数</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="1404"/>
+        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="1395"/>
         <source>Sample Format</source>
         <translation>采样格式</translation>
     </message>
     <message>
-        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="1413"/>
+        <location filename="../../../core/Devices/IO/Drivers/Audio.cpp" line="1404"/>
         <source>Channels</source>
         <translation>声道</translation>
     </message>
@@ -18953,22 +18963,22 @@ The device may not expose data endpoints in its active configuration, or it may 
 <context>
     <name>IconPicker</name>
     <message>
-        <location filename="../../qml/Dialogs/IconPicker.qml" line="41"/>
+        <location filename="../../qml/Dialogs/IconPicker.qml" line="43"/>
         <source>Select Icon</source>
         <translation>选择图标</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/IconPicker.qml" line="118"/>
+        <location filename="../../qml/Dialogs/IconPicker.qml" line="120"/>
         <source>Search Online…</source>
         <translation>在线搜索…</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/IconPicker.qml" line="131"/>
+        <location filename="../../qml/Dialogs/IconPicker.qml" line="133"/>
         <source>OK</source>
         <translation>确定</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/IconPicker.qml" line="143"/>
+        <location filename="../../qml/Dialogs/IconPicker.qml" line="145"/>
         <source>Cancel</source>
         <translation>取消</translation>
     </message>
@@ -18981,92 +18991,92 @@ The device may not expose data endpoints in its active configuration, or it may 
         <translation>主机</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Iec104.qml" line="58"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Iec104.qml" line="60"/>
         <source>IP Address</source>
         <translation>IP 地址</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Iec104.qml" line="76"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Iec104.qml" line="78"/>
         <source>Port</source>
         <translation>端口</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Iec104.qml" line="84"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Iec104.qml" line="88"/>
         <source>2404</source>
         <translation>2404</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Iec104.qml" line="106"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Iec104.qml" line="110"/>
         <source>Common Address</source>
         <translation>公共地址</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Iec104.qml" line="113"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Iec104.qml" line="119"/>
         <source>0-65535</source>
         <translation>0-65535</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Iec104.qml" line="133"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Iec104.qml" line="139"/>
         <source>Send Window (k)</source>
         <translation>发送窗口 (k)</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Iec104.qml" line="138"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Iec104.qml" line="146"/>
         <source>12</source>
         <translation>12</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Iec104.qml" line="155"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Iec104.qml" line="163"/>
         <source>Ack Window (w)</source>
         <translation>确认窗口 (w)</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Iec104.qml" line="160"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Iec104.qml" line="170"/>
         <source>8</source>
         <translation>8</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Iec104.qml" line="177"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Iec104.qml" line="187"/>
         <source>Timeout t1 (ms)</source>
         <translation>超时 t1 (ms)</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Iec104.qml" line="182"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Iec104.qml" line="194"/>
         <source>15000</source>
         <translation>15000</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Iec104.qml" line="199"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Iec104.qml" line="211"/>
         <source>Timeout t2 (ms)</source>
         <translation>超时 t2 (ms)</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Iec104.qml" line="204"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Iec104.qml" line="218"/>
         <source>10000</source>
         <translation>10000</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Iec104.qml" line="221"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Iec104.qml" line="235"/>
         <source>Timeout t3 (ms)</source>
         <translation>超时 t3 (ms)</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Iec104.qml" line="226"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Iec104.qml" line="242"/>
         <source>20000</source>
         <translation>20000</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Iec104.qml" line="255"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Iec104.qml" line="273"/>
         <source>Create Project from Points</source>
         <translation>从点创建项目</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Iec104.qml" line="270"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Iec104.qml" line="288"/>
         <source>%1 point(s) discovered</source>
         <translation>已发现 %1 个点</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Iec104.qml" line="271"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Iec104.qml" line="289"/>
         <source>Connect to discover the station's points</source>
         <translation>连接以发现站点的点</translation>
     </message>
@@ -19252,12 +19262,12 @@ The device may not expose data endpoints in its active configuration, or it may 
 <context>
     <name>KeyManagerDialog</name>
     <message>
-        <location filename="../../qml/AI/KeyManagerDialog.qml" line="23"/>
+        <location filename="../../qml/AI/KeyManagerDialog.qml" line="25"/>
         <source>API Keys</source>
         <translation>API 密钥</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/KeyManagerDialog.qml" line="47"/>
+        <location filename="../../qml/AI/KeyManagerDialog.qml" line="49"/>
         <source>Anthropic Claude. The default is Claude Haiku 4.5 ($1 input / $5 output per million tokens). Sonnet 4.6 and Opus 4.7 are also available. Supports streaming, tool use, extended thinking, and prompt caching.</source>
         <translation>Anthropic Claude。默认为 Claude Haiku 4.5(每百万令牌 $1 输入 / $5 输出)。也可使用 Sonnet 4.6 和 OPUS 4.7。支持流式传输、工具使用、扩展思考和提示缓存。</translation>
     </message>
@@ -19266,7 +19276,7 @@ The device may not expose data endpoints in its active configuration, or it may 
         <translation type="vanished">OpenAI Chat Completions。默认为 GPT-4o mini(每百万令牌 $0.15 输入 / $0.60 输出)。也可使用 GPT-4o、GPT-4 Turbo 和 o1-mini。</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/KeyManagerDialog.qml" line="57"/>
+        <location filename="../../qml/AI/KeyManagerDialog.qml" line="59"/>
         <source>Google Gemini. The default is Gemini 2.0 Flash, which has a generous free tier (subject to rate limits). Gemini 1.5 Pro and Gemini 1.5 Flash are also available.</source>
         <translation>Google Gemini。默认为 Gemini 2.0 Flash,提供慷慨的免费额度(受速率限制)。也可使用 Gemini 1.5 Pro 和 Gemini 1.5 Flash。</translation>
     </message>
@@ -19275,12 +19285,12 @@ The device may not expose data endpoints in its active configuration, or it may 
         <translation type="vanished">使用您自己的 API 密钥。密钥在本地使用每台机器的密钥加密存储,除了与您选择的提供商通信外,不会离开您的计算机。</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/KeyManagerDialog.qml" line="166"/>
+        <location filename="../../qml/AI/KeyManagerDialog.qml" line="168"/>
         <source>Key set</source>
         <translation>密钥已设置</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/KeyManagerDialog.qml" line="167"/>
+        <location filename="../../qml/AI/KeyManagerDialog.qml" line="169"/>
         <source>No key</source>
         <translation>无密钥</translation>
     </message>
@@ -19289,117 +19299,117 @@ The device may not expose data endpoints in its active configuration, or it may 
         <translation type="vanished">已存储密钥 — 粘贴新密钥以替换</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/KeyManagerDialog.qml" line="52"/>
+        <location filename="../../qml/AI/KeyManagerDialog.qml" line="54"/>
         <source>OpenAI Chat Completions. The default is GPT-5 mini for fast, cost-conscious agentic work. GPT-5.2 is the stronger general-purpose option, and GPT-5.2 Chat tracks the model currently used in ChatGPT.</source>
         <translation>OpenAI Chat Completions。默认为 GPT-5 mini,适用于快速、成本敏感的代理工作。GPT-5.2 是更强大的通用选项,GPT-5.2 Chat 跟踪 ChatGPT 当前使用的模型。</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/KeyManagerDialog.qml" line="61"/>
+        <location filename="../../qml/AI/KeyManagerDialog.qml" line="63"/>
         <source>DeepSeek. OpenAI-compatible API. The default is deepseek-chat (V3). deepseek-reasoner (R1) is also available. Often the cheapest cloud option for tool use.</source>
         <translation>DeepSeek。兼容 OpenAI API。默认为 deepseek-chat (V3)。deepseek-reasoner (R1) 也可用。通常是工具调用最便宜的云选项。</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/KeyManagerDialog.qml" line="65"/>
+        <location filename="../../qml/AI/KeyManagerDialog.qml" line="67"/>
         <source>OpenRouter. One key, ~200 models from Anthropic, OpenAI, Google, Meta, Mistral, DeepSeek, Qwen, and others. Free-tier models (suffixed :free) are rate-limited but require no additional billing. Pay-as-you-go for the rest.</source>
         <translation>OpenRouter。一个密钥,约 200 个模型,来自 Anthropic、OpenAI、Google、Meta、Mistral、DeepSeek、Qwen 等。免费层模型(后缀 :free)有速率限制但无需额外付费。其余模型按使用量付费。</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/KeyManagerDialog.qml" line="70"/>
+        <location filename="../../qml/AI/KeyManagerDialog.qml" line="72"/>
         <source>Groq. Hardware-accelerated inference (LPUs) for very fast Llama, Mixtral, Gemma, DeepSeek-R1 distill, and Qwen models. Generous free tier with daily token limits.</source>
         <translation>Groq。硬件加速推理(LPU),为 Llama、Mixtral、Gemma、DeepSeek-R1 distill 和 Qwen 模型提供极快速度。慷慨的免费层,每日令牌限额。</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/KeyManagerDialog.qml" line="74"/>
+        <location filename="../../qml/AI/KeyManagerDialog.qml" line="76"/>
         <source>Mistral. The default is Mistral Large. Codestral targets code completion, Pixtral handles vision, and the Ministral models are tuned for edge / low-latency use.</source>
         <translation>Mistral。默认为 Mistral Large。Codestral 针对代码补全,Pixtral 处理视觉,Ministral 模型针对边缘/低延迟使用进行调优。</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/KeyManagerDialog.qml" line="78"/>
+        <location filename="../../qml/AI/KeyManagerDialog.qml" line="80"/>
         <source>Local model server. Works with any OpenAI-compatible endpoint -- Ollama, llama.cpp's llama-server, LM Studio, or vLLM. Nothing leaves your machine. The model list is queried live from the server.</source>
         <translation>本地模型服务器。兼容任何 OpenAI 端点 -- Ollama、llama.cpp 的 llama-server、LM Studio 或 vLLM。数据不离开本机。模型列表从服务器实时查询。</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/KeyManagerDialog.qml" line="100"/>
+        <location filename="../../qml/AI/KeyManagerDialog.qml" line="102"/>
         <source>Bring your own API keys. They are stored obfuscated in this machine's settings and never leave your computer except to communicate with the provider you select.</source>
         <translation>使用您自己的 API 密钥。密钥在本机设置中混淆存储，除了与您选择的提供商通信外，不会离开您的计算机。</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/KeyManagerDialog.qml" line="204"/>
+        <location filename="../../qml/AI/KeyManagerDialog.qml" line="206"/>
         <source>A key is on file -- paste a new one to replace it</source>
         <translation>已存储密钥 -- 粘贴新密钥以替换</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/KeyManagerDialog.qml" line="205"/>
+        <location filename="../../qml/AI/KeyManagerDialog.qml" line="207"/>
         <source>Paste your API key here</source>
         <translation>在此粘贴您的 API 密钥</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/KeyManagerDialog.qml" line="212"/>
+        <location filename="../../qml/AI/KeyManagerDialog.qml" line="214"/>
         <source>Hide key</source>
         <translation>隐藏密钥</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/KeyManagerDialog.qml" line="213"/>
+        <location filename="../../qml/AI/KeyManagerDialog.qml" line="215"/>
         <source>Show key while typing</source>
         <translation>输入时显示密钥</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/KeyManagerDialog.qml" line="224"/>
+        <location filename="../../qml/AI/KeyManagerDialog.qml" line="226"/>
         <source>Get key</source>
         <translation>获取密钥</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/KeyManagerDialog.qml" line="225"/>
+        <location filename="../../qml/AI/KeyManagerDialog.qml" line="227"/>
         <source>Open the provider's console to create a new key</source>
         <translation>打开提供商的控制台以创建新密钥</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/KeyManagerDialog.qml" line="236"/>
+        <location filename="../../qml/AI/KeyManagerDialog.qml" line="238"/>
         <source>Save</source>
         <translation>保存</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/KeyManagerDialog.qml" line="254"/>
+        <location filename="../../qml/AI/KeyManagerDialog.qml" line="256"/>
         <source>Remove the stored key for %1</source>
         <translation>移除 %1 的已存储密钥</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/KeyManagerDialog.qml" line="278"/>
+        <location filename="../../qml/AI/KeyManagerDialog.qml" line="280"/>
         <source>http://localhost:11434/v1</source>
         <translation>http://localhost:11434/v1</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/KeyManagerDialog.qml" line="282"/>
+        <location filename="../../qml/AI/KeyManagerDialog.qml" line="284"/>
         <source>Install Ollama</source>
         <translation>安装 Ollama</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/KeyManagerDialog.qml" line="283"/>
+        <location filename="../../qml/AI/KeyManagerDialog.qml" line="285"/>
         <source>Open the Ollama download page</source>
         <translation>打开 Ollama 下载页面</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/KeyManagerDialog.qml" line="294"/>
+        <location filename="../../qml/AI/KeyManagerDialog.qml" line="296"/>
         <source>Apply</source>
         <translation>应用</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/KeyManagerDialog.qml" line="309"/>
+        <location filename="../../qml/AI/KeyManagerDialog.qml" line="311"/>
         <source>Re-query the model list</source>
         <translation>重新查询模型列表</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/KeyManagerDialog.qml" line="330"/>
+        <location filename="../../qml/AI/KeyManagerDialog.qml" line="332"/>
         <source>Context window</source>
         <translation>上下文窗口</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/KeyManagerDialog.qml" line="339"/>
+        <location filename="../../qml/AI/KeyManagerDialog.qml" line="341"/>
         <source>Tokens the model accepts, e.g. 8192</source>
         <translation>模型接受的令牌数，例如 8192</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/KeyManagerDialog.qml" line="387"/>
+        <location filename="../../qml/AI/KeyManagerDialog.qml" line="389"/>
         <source>No API keys configured yet. Add a key to get started.</source>
         <translation>尚未配置 API 密钥。请添加密钥以开始使用。</translation>
     </message>
@@ -19408,12 +19418,12 @@ The device may not expose data endpoints in its active configuration, or it may 
         <translation type="vanished">尚未配置 API 密钥。请在上方至少添加一个以开始使用。</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/KeyManagerDialog.qml" line="390"/>
+        <location filename="../../qml/AI/KeyManagerDialog.qml" line="392"/>
         <source>One provider is ready.</source>
         <translation>一个提供商已就绪。</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/KeyManagerDialog.qml" line="392"/>
+        <location filename="../../qml/AI/KeyManagerDialog.qml" line="394"/>
         <source>%1 providers are ready.</source>
         <translation>%1 个提供商已就绪。</translation>
     </message>
@@ -19461,7 +19471,7 @@ The device may not expose data endpoints in its active configuration, or it may 
         <translation>分割</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/LayoutPatternPicker.qml" line="329"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/LayoutPatternPicker.qml" line="331"/>
         <source>Manual placement</source>
         <translation>手动放置</translation>
     </message>
@@ -19469,22 +19479,22 @@ The device may not expose data endpoints in its active configuration, or it may 
 <context>
     <name>LicenseManagement</name>
     <message>
-        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="37"/>
+        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="39"/>
         <source>Licensing</source>
         <translation>许可证管理</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="84"/>
+        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="86"/>
         <source>Please wait…</source>
         <translation>请稍候…</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="124"/>
+        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="126"/>
         <source>Activate Serial Studio Pro</source>
         <translation>激活 Serial Studio Pro</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="131"/>
+        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="133"/>
         <source>Paste your license key below to unlock Pro features like MQTT, 3D plotting, and more.</source>
         <translation>在下方粘贴您的许可证密钥以解锁 Pro 功能，如 MQTT、3D 绘图等。</translation>
     </message>
@@ -19501,123 +19511,123 @@ Yearly is the best value; Monthly and Lifetime plans are also available.</source
 年度计划最具价值；月度和终身计划也可选。</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="138"/>
+        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="140"/>
         <source>Yearly is the best value; Monthly and Lifetime plans are also available.</source>
         <translation>年度计划最具价值;月度和终身计划也可选。</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="150"/>
+        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="152"/>
         <source>Paste your license key here…</source>
         <translation>在此粘贴您的许可证密钥…</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="177"/>
-        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="340"/>
-        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="389"/>
+        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="179"/>
+        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="342"/>
+        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="391"/>
         <source>Copy</source>
         <translation>复制</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="183"/>
+        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="185"/>
         <source>Paste</source>
         <translation>粘贴</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="189"/>
-        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="346"/>
-        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="395"/>
+        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="191"/>
+        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="348"/>
+        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="397"/>
         <source>Select All</source>
         <translation>全选</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="242"/>
-        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="433"/>
+        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="244"/>
+        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="435"/>
         <source>Product</source>
         <translation>产品</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="249"/>
+        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="251"/>
         <source>Serial Studio %1</source>
         <translation>Serial Studio %1</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="260"/>
+        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="262"/>
         <source>Licensee</source>
         <translation>许可证持有人</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="279"/>
+        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="281"/>
         <source>Licensee E-Mail</source>
         <translation>被许可人电子邮件</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="296"/>
+        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="298"/>
         <source>Device Usage</source>
         <translation>设备使用情况</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="304"/>
+        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="306"/>
         <source>%1 devices in use (Unlimited plan)</source>
         <translation>已使用 %1 台设备（无限制计划）</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="305"/>
+        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="307"/>
         <source>%1 of %2 devices used</source>
         <translation>已使用 %1 / %2 台设备</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="315"/>
-        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="450"/>
+        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="317"/>
+        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="452"/>
         <source>Device ID</source>
         <translation>设备 ID</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="362"/>
+        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="364"/>
         <source>License Key</source>
         <translation>许可证密钥</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="440"/>
+        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="442"/>
         <source>Serial Studio %1 (Offline)</source>
         <translation>Serial Studio %1(离线)</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="467"/>
+        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="469"/>
         <source>Expires</source>
         <translation>到期时间</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="474"/>
+        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="476"/>
         <source>%1 (%2 days left)</source>
         <translation>%1(剩余 %2 天)</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="487"/>
+        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="489"/>
         <source>Your offline license expires soon. Request a new certificate to stay activated.</source>
         <translation>您的离线许可证即将过期。请申请新证书以保持激活状态。</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="504"/>
+        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="506"/>
         <source>Customer Portal</source>
         <translation>客户门户</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="515"/>
+        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="517"/>
         <source>Buy License</source>
         <translation>购买许可证</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="522"/>
+        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="524"/>
         <source>Activate</source>
         <translation>激活</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="533"/>
+        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="535"/>
         <source>Activate Offline…</source>
         <translation>离线激活…</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="542"/>
+        <location filename="../../qml/Dialogs/LicenseManagement.qml" line="544"/>
         <source>Deactivate</source>
         <translation>停用</translation>
     </message>
@@ -20026,153 +20036,153 @@ To reuse this seat on another device, email alex@serial-studio.com with your dev
         <translation>主机名</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="109"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="111"/>
         <source>e.g. broker.hivemq.com</source>
         <translation>例如 broker.hivemq.com</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="118"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="120"/>
         <source>Port</source>
         <translation>端口</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="139"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="143"/>
         <source>Topic Filter</source>
         <translation>主题过滤器</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="145"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="151"/>
         <source>e.g. sensors/#</source>
         <translation>例如 sensors/#</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="155"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="161"/>
         <source>Client ID</source>
         <translation>客户端 ID</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="170"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="180"/>
         <source>Regenerate</source>
         <translation>重新生成</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="182"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="192"/>
         <source>Username</source>
         <translation>用户名</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="197"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="209"/>
         <source>Password</source>
         <translation>密码</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="213"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="227"/>
         <source>Version</source>
         <translation>版本</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="239"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="255"/>
         <source>Keep Alive (s)</source>
         <translation>保持连接 (秒)</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="257"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="275"/>
         <source>Clean Session</source>
         <translation>清除会话</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="283"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="303"/>
         <source>Sparkplug</source>
         <translation>Sparkplug</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="309"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="331"/>
         <source>Group ID</source>
         <translation>组 ID</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="315"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="339"/>
         <source>All groups</source>
         <translation>所有组</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="327"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="351"/>
         <source>Sparkplug Project</source>
         <translation>Sparkplug 项目</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="336"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="362"/>
         <source>Create Project from Births</source>
         <translation>从 Birth 消息创建项目</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="346"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="372"/>
         <source>Use SSL/TLS</source>
         <translation>使用 SSL/TLS</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="373"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="401"/>
         <source>SSL Protocol</source>
         <translation>SSL 协议</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="403"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="433"/>
         <source>Peer Verify</source>
         <translation>对等方验证</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="435"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="467"/>
         <source>Verify Depth</source>
         <translation>验证深度</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="456"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="490"/>
         <source>CA Certificates</source>
         <translation>CA 证书</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="462"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="498"/>
         <source>Load From Folder…</source>
         <translation>从文件夹加载…</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="473"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="509"/>
         <source>Client Certificate</source>
         <translation>客户端证书</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="483"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="521"/>
         <source>Optional (mutual TLS)</source>
         <translation>可选(双向 TLS)</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="490"/>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="520"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="530"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="564"/>
         <source>Browse…</source>
         <translation>浏览…</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="502"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="542"/>
         <source>Private Key</source>
         <translation>私钥</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="516"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="558"/>
         <source>Defaults to the certificate file</source>
         <translation>默认为证书文件</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="533"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="577"/>
         <source>Key Passphrase</source>
         <translation>密钥口令</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="549"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="595"/>
         <source>ALPN</source>
         <translation>ALPN</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="578"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/MQTT.qml" line="626"/>
         <source>ALPN Protocol</source>
         <translation>ALPN 协议</translation>
     </message>
@@ -20945,97 +20955,97 @@ Please provide the necessary credentials.</source>
 <context>
     <name>Macros</name>
     <message>
-        <location filename="../../qml/Dialogs/Macros.qml" line="29"/>
+        <location filename="../../qml/Dialogs/Macros.qml" line="31"/>
         <source>Macros</source>
         <translation>宏</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Macros.qml" line="193"/>
+        <location filename="../../qml/Dialogs/Macros.qml" line="195"/>
         <source>[macro] finished</source>
         <translation>[宏] 已完成</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Macros.qml" line="194"/>
+        <location filename="../../qml/Dialogs/Macros.qml" line="196"/>
         <source>[macro] %1</source>
         <translation>[宏] %1</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Macros.qml" line="197"/>
+        <location filename="../../qml/Dialogs/Macros.qml" line="199"/>
         <source>[macro] saved %1</source>
         <translation>[宏] 已保存 %1</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Macros.qml" line="202"/>
+        <location filename="../../qml/Dialogs/Macros.qml" line="204"/>
         <source>[macro] loaded %1</source>
         <translation>[宏] 已加载 %1</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Macros.qml" line="313"/>
+        <location filename="../../qml/Dialogs/Macros.qml" line="315"/>
         <source>Search commands...</source>
         <translation>搜索命令...</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Macros.qml" line="448"/>
+        <location filename="../../qml/Dialogs/Macros.qml" line="450"/>
         <source>Parameters</source>
         <translation>参数</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Macros.qml" line="449"/>
+        <location filename="../../qml/Dialogs/Macros.qml" line="451"/>
         <source>No parameters</source>
         <translation>无参数</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Macros.qml" line="510"/>
+        <location filename="../../qml/Dialogs/Macros.qml" line="512"/>
         <source>Terminal</source>
         <translation>终端</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Macros.qml" line="516"/>
+        <location filename="../../qml/Dialogs/Macros.qml" line="518"/>
         <source>Script</source>
         <translation>脚本</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Macros.qml" line="607"/>
+        <location filename="../../qml/Dialogs/Macros.qml" line="609"/>
         <source>Type a command below to get started</source>
         <translation>在下方输入命令以开始</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Macros.qml" line="632"/>
+        <location filename="../../qml/Dialogs/Macros.qml" line="634"/>
         <source>Copy</source>
         <translation>复制</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Macros.qml" line="638"/>
+        <location filename="../../qml/Dialogs/Macros.qml" line="640"/>
         <source>Select All</source>
         <translation>全选</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Macros.qml" line="644"/>
+        <location filename="../../qml/Dialogs/Macros.qml" line="646"/>
         <source>Clear</source>
         <translation>清除</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Macros.qml" line="685"/>
+        <location filename="../../qml/Dialogs/Macros.qml" line="687"/>
         <source>command.name { "parameter": value }</source>
         <translation>command.name { "parameter": value }</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Macros.qml" line="838"/>
+        <location filename="../../qml/Dialogs/Macros.qml" line="840"/>
         <source>Run command</source>
         <translation>运行命令</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Macros.qml" line="853"/>
+        <location filename="../../qml/Dialogs/Macros.qml" line="855"/>
         <source>Clear output</source>
         <translation>清空输出</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Macros.qml" line="886"/>
+        <location filename="../../qml/Dialogs/Macros.qml" line="888"/>
         <source>[macro] verify: no syntax errors</source>
         <translation>[宏] 验证：无语法错误</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Macros.qml" line="888"/>
+        <location filename="../../qml/Dialogs/Macros.qml" line="890"/>
         <source>[macro] verify failed: %1</source>
         <translation>[宏] 验证失败：%1</translation>
     </message>
@@ -21048,42 +21058,42 @@ Please provide the necessary credentials.</source>
         <translation type="vanished">宏编辑器有未保存的更改。</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Macros.qml" line="927"/>
+        <location filename="../../qml/Dialogs/Macros.qml" line="929"/>
         <source>JavaScript</source>
         <translation>JavaScript</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Macros.qml" line="927"/>
+        <location filename="../../qml/Dialogs/Macros.qml" line="929"/>
         <source>Lua</source>
         <translation>Lua</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Macros.qml" line="945"/>
+        <location filename="../../qml/Dialogs/Macros.qml" line="947"/>
         <source>Load macro</source>
         <translation>加载宏</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Macros.qml" line="958"/>
+        <location filename="../../qml/Dialogs/Macros.qml" line="960"/>
         <source>Save macro</source>
         <translation>保存宏</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Macros.qml" line="969"/>
+        <location filename="../../qml/Dialogs/Macros.qml" line="971"/>
         <source>Verify macro</source>
         <translation>验证宏</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Macros.qml" line="980"/>
+        <location filename="../../qml/Dialogs/Macros.qml" line="982"/>
         <source>Run macro</source>
         <translation>运行宏</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Macros.qml" line="993"/>
+        <location filename="../../qml/Dialogs/Macros.qml" line="995"/>
         <source>Stop macro</source>
         <translation>停止宏</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Macros.qml" line="1003"/>
+        <location filename="../../qml/Dialogs/Macros.qml" line="1005"/>
         <source>Clear editor</source>
         <translation>清除编辑器</translation>
     </message>
@@ -21091,32 +21101,32 @@ Please provide the necessary credentials.</source>
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="../../qml/MainWindow/MainWindow.qml" line="216"/>
+        <location filename="../../qml/MainWindow/MainWindow.qml" line="218"/>
         <source>Console Only Mode</source>
         <translation>仅控制台模式</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/MainWindow.qml" line="219"/>
+        <location filename="../../qml/MainWindow/MainWindow.qml" line="221"/>
         <source>Quick Plot Mode</source>
         <translation>快速绘图模式</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/MainWindow.qml" line="226"/>
+        <location filename="../../qml/MainWindow/MainWindow.qml" line="228"/>
         <source>Empty Project</source>
         <translation>空项目</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/MainWindow.qml" line="741"/>
+        <location filename="../../qml/MainWindow/MainWindow.qml" line="743"/>
         <source>Serial Studio</source>
         <translation>Serial Studio</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/MainWindow.qml" line="749"/>
+        <location filename="../../qml/MainWindow/MainWindow.qml" line="751"/>
         <source>Waiting for data…</source>
         <translation>等待数据…</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/MainWindow.qml" line="750"/>
+        <location filename="../../qml/MainWindow/MainWindow.qml" line="752"/>
         <source>Connecting to device…</source>
         <translation>正在连接设备…</translation>
     </message>
@@ -21125,7 +21135,7 @@ Please provide the necessary credentials.</source>
         <translation type="vanished">应用程序</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/MainWindow.qml" line="783"/>
+        <location filename="../../qml/MainWindow/MainWindow.qml" line="785"/>
         <source>Command Palette</source>
         <translation>命令面板</translation>
     </message>
@@ -21205,87 +21215,87 @@ Please provide the necessary credentials.</source>
 <context>
     <name>MasterAnnunciator</name>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/MasterAnnunciator.qml" line="131"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/MasterAnnunciator.qml" line="133"/>
         <source>Aural alerts are disabled, but this project defines alarms. Enable them in Preferences &gt; Sounds.</source>
         <translation>声音警报已禁用，但此项目定义了警报。在"偏好设置"&gt;"声音"中启用它们。</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/MasterAnnunciator.qml" line="134"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/MasterAnnunciator.qml" line="136"/>
         <source>Alarm sounds are muted. Click to open the alarm panel.</source>
         <translation>报警声音已静音。点击打开报警面板。</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/MasterAnnunciator.qml" line="136"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/MasterAnnunciator.qml" line="138"/>
         <source>%1 unacknowledged alarm(s). Click for the alarm panel, right-click to acknowledge.</source>
         <translation>%1 个未确认报警。点击打开报警面板,右键点击确认。</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/MasterAnnunciator.qml" line="138"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/MasterAnnunciator.qml" line="140"/>
         <source>No active alarms. Click for the alarm panel.</source>
         <translation>无活动报警。点击打开报警面板。</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/MasterAnnunciator.qml" line="217"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/MasterAnnunciator.qml" line="219"/>
         <source>Alarms</source>
         <translation>报警</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/MasterAnnunciator.qml" line="226"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/MasterAnnunciator.qml" line="228"/>
         <source>Acknowledge all</source>
         <translation>全部确认</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/MasterAnnunciator.qml" line="235"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/MasterAnnunciator.qml" line="237"/>
         <source>Silence</source>
         <translation>静音</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/MasterAnnunciator.qml" line="244"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/MasterAnnunciator.qml" line="246"/>
         <source>Reset</source>
         <translation>重置</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/MasterAnnunciator.qml" line="255"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/MasterAnnunciator.qml" line="257"/>
         <source>Clear every alarm from the list</source>
         <translation>从列表中清除所有报警</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/MasterAnnunciator.qml" line="263"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/MasterAnnunciator.qml" line="265"/>
         <source>Test sounds</source>
         <translation>测试声音</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/MasterAnnunciator.qml" line="272"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/MasterAnnunciator.qml" line="274"/>
         <source>Unmute sounds</source>
         <translation>取消静音</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/MasterAnnunciator.qml" line="272"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/MasterAnnunciator.qml" line="274"/>
         <source>Mute sounds</source>
         <translation>静音</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/MasterAnnunciator.qml" line="407"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/MasterAnnunciator.qml" line="409"/>
         <source>Unacknowledged</source>
         <translation>未确认</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/MasterAnnunciator.qml" line="408"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/MasterAnnunciator.qml" line="410"/>
         <source>Acknowledged</source>
         <translation>已确认</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/MasterAnnunciator.qml" line="409"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/MasterAnnunciator.qml" line="411"/>
         <source>Returned to normal, awaiting reset</source>
         <translation>已恢复正常，等待重置</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/MasterAnnunciator.qml" line="410"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/MasterAnnunciator.qml" line="412"/>
         <source>click to show the widget</source>
         <translation>点击以显示部件</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/MasterAnnunciator.qml" line="421"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/MasterAnnunciator.qml" line="423"/>
         <source>No active alarms</source>
         <translation>无活动报警</translation>
     </message>
@@ -21301,52 +21311,52 @@ Please provide the necessary credentials.</source>
 <context>
     <name>MemoryManagerDialog</name>
     <message>
-        <location filename="../../qml/AI/MemoryManagerDialog.qml" line="23"/>
+        <location filename="../../qml/AI/MemoryManagerDialog.qml" line="25"/>
         <source>Assistant Memory</source>
         <translation>助手记忆</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/MemoryManagerDialog.qml" line="50"/>
+        <location filename="../../qml/AI/MemoryManagerDialog.qml" line="52"/>
         <source>Facts the assistant carries into every chat. Stored only on this computer. Delete anything you no longer want it to know.</source>
         <translation>助手在每次聊天中携带的事实。仅存储在此计算机上。删除任何您不希望它知道的内容。</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/MemoryManagerDialog.qml" line="65"/>
+        <location filename="../../qml/AI/MemoryManagerDialog.qml" line="67"/>
         <source>user</source>
         <translation>用户</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/MemoryManagerDialog.qml" line="65"/>
+        <location filename="../../qml/AI/MemoryManagerDialog.qml" line="67"/>
         <source>feedback</source>
         <translation>反馈</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/MemoryManagerDialog.qml" line="65"/>
+        <location filename="../../qml/AI/MemoryManagerDialog.qml" line="67"/>
         <source>project</source>
         <translation>项目</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/MemoryManagerDialog.qml" line="65"/>
+        <location filename="../../qml/AI/MemoryManagerDialog.qml" line="67"/>
         <source>reference</source>
         <translation>参考</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/MemoryManagerDialog.qml" line="74"/>
+        <location filename="../../qml/AI/MemoryManagerDialog.qml" line="76"/>
         <source>Something the assistant should remember…</source>
         <translation>助手应该记住的内容…</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/MemoryManagerDialog.qml" line="78"/>
+        <location filename="../../qml/AI/MemoryManagerDialog.qml" line="80"/>
         <source>Remember</source>
         <translation>记住</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/MemoryManagerDialog.qml" line="147"/>
+        <location filename="../../qml/AI/MemoryManagerDialog.qml" line="149"/>
         <source>Forget this fact</source>
         <translation>忘记此事实</translation>
     </message>
     <message>
-        <location filename="../../qml/AI/MemoryManagerDialog.qml" line="163"/>
+        <location filename="../../qml/AI/MemoryManagerDialog.qml" line="165"/>
         <source>Nothing remembered yet. Add a fact above, or approve one when the assistant proposes it in chat.</source>
         <translation>尚未记住任何内容。在上方添加事实，或在助手于聊天中提议时批准。</translation>
     </message>
@@ -22247,87 +22257,87 @@ Would you like to open the download page?</source>
         <translation>协议</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="72"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="74"/>
         <source>Serial Port</source>
         <translation>串口</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="95"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="99"/>
         <source>Baud Rate</source>
         <translation>波特率</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="185"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="191"/>
         <source>Parity</source>
         <translation>校验位</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="207"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="215"/>
         <source>Data Bits</source>
         <translation>数据位</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="228"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="238"/>
         <source>Stop Bits</source>
         <translation>停止位</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="248"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="260"/>
         <source>Host</source>
         <translation>主机</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="257"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="271"/>
         <source>IP Address</source>
         <translation>IP 地址</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="276"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="290"/>
         <source>Port</source>
         <translation>端口</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="284"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="300"/>
         <source>TCP Port</source>
         <translation>TCP 端口</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="317"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="333"/>
         <source>Slave Address</source>
         <translation>从站地址</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="322"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="340"/>
         <source>1-247</source>
         <translation>1-247</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="380"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="402"/>
         <source>Configure Register Groups…</source>
         <translation>配置寄存器组…</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="390"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="414"/>
         <source>Import Register Map…</source>
         <translation>导入寄存器映射…</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="405"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="429"/>
         <source>%1 group(s) configured</source>
         <translation>已配置 %1 个组</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="406"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="430"/>
         <source>No groups configured</source>
         <translation>未配置组</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="342"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="360"/>
         <source>Poll Interval (ms)</source>
         <translation>轮询间隔 (ms)</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="347"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Modbus.qml" line="367"/>
         <source>Polling interval</source>
         <translation>轮询间隔</translation>
     </message>
@@ -22355,99 +22365,99 @@ Would you like to open the download page?</source>
         <translation>寄存器类型：</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="133"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="135"/>
         <source>Start Address:</source>
         <translation>起始地址：</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="140"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="144"/>
         <source>0-65535</source>
         <translation>0-65535</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="146"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="150"/>
         <source>Register Count:</source>
         <translation>寄存器数量：</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="153"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="159"/>
         <source>1-125</source>
         <translation>1-125</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="159"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="165"/>
         <source>Slave Address:</source>
         <translation>从站地址：</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="170"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="178"/>
         <source>Leave empty to use the device address</source>
         <translation>留空以使用设备地址</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="175"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="185"/>
         <source>Add Group</source>
         <translation>添加组</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="200"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="210"/>
         <source>Configured Groups</source>
         <translation>已配置的组</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="234"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="244"/>
         <source>#</source>
         <translation>#</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="241"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="251"/>
         <source>Type</source>
         <translation>类型</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="249"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="259"/>
         <source>Start</source>
         <translation>起始地址</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="256"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="266"/>
         <source>Count</source>
         <translation>数量</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="263"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="273"/>
         <source>Action</source>
         <translation>操作</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="338"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="350"/>
         <source>Remove</source>
         <translation>移除</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="350"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="362"/>
         <source>No groups configured.
 Add groups above to poll multiple register types.</source>
         <translation>未配置组。
 在上方添加组以轮询多种寄存器类型。</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="368"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="380"/>
         <source>Total groups: %1</source>
         <translation>总组数：%1</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="372"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="386"/>
         <source>Generate Project</source>
         <translation>生成项目</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="378"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="394"/>
         <source>Clear All</source>
         <translation>全部清除</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="384"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusGroupsDialog.qml" line="402"/>
         <source>Close</source>
         <translation>关闭</translation>
     </message>
@@ -22515,22 +22525,22 @@ Add groups above to poll multiple register types.</source>
         <translation>总计：%2 个组中的 %1 个寄存器</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusPreviewDialog.qml" line="290"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusPreviewDialog.qml" line="292"/>
         <source>Cancel</source>
         <translation>取消</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusPreviewDialog.qml" line="301"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusPreviewDialog.qml" line="305"/>
         <source>Add to Project</source>
         <translation>添加到项目</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusPreviewDialog.qml" line="306"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusPreviewDialog.qml" line="310"/>
         <source>Add the generated source, groups, tables and workspaces to the project that is open, instead of creating a new file</source>
         <translation>将生成的源、组、表格和工作区添加到已打开的项目中,而不是创建新文件</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusPreviewDialog.qml" line="317"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ModbusPreviewDialog.qml" line="323"/>
         <source>Create Project</source>
         <translation>创建项目</translation>
     </message>
@@ -23219,79 +23229,79 @@ Add groups above to poll multiple register types.</source>
         <translation>套接字类型</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="166"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="170"/>
         <source>Remote Address</source>
         <translation>远程地址</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="129"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="131"/>
         <source>Local Port</source>
         <translation>本地端口</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="134"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="138"/>
         <source>Type 0 for automatic port</source>
         <translation>输入 0 以自动分配端口</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="196"/>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="233"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="202"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="241"/>
         <source>Remote Port</source>
         <translation>远程端口</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="269"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="279"/>
         <source>Multicast</source>
         <translation>组播</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="292"/>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="345"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="304"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="361"/>
         <source>URL</source>
         <translation>URL</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="323"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="337"/>
         <source>Send Format</source>
         <translation>发送格式</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="375"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="393"/>
         <source>Method</source>
         <translation>方法</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="398"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="418"/>
         <source>Poll Interval</source>
         <translation>轮询间隔</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="407"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="429"/>
         <source>Milliseconds; 0 sends only on write</source>
         <translation>毫秒；0 表示仅在写入时发送</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="431"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="453"/>
         <source>Request Body</source>
         <translation>请求正文</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="439"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="463"/>
         <source>Optional</source>
         <translation>可选</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="459"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="483"/>
         <source>Request Headers</source>
         <translation>请求标头</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="480"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="506"/>
         <source>One %1 pair per line</source>
         <translation>每行一个 %1 键值对</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="496"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Network.qml" line="522"/>
         <source>Ignore TLS Errors</source>
         <translation>忽略 TLS 错误</translation>
     </message>
@@ -23334,82 +23344,82 @@ Add groups above to poll multiple register types.</source>
 <context>
     <name>OfflineActivation</name>
     <message>
-        <location filename="../../qml/Dialogs/OfflineActivation.qml" line="37"/>
+        <location filename="../../qml/Dialogs/OfflineActivation.qml" line="39"/>
         <source>Activate Offline</source>
         <translation>离线激活</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/OfflineActivation.qml" line="55"/>
+        <location filename="../../qml/Dialogs/OfflineActivation.qml" line="57"/>
         <source>Activate Serial Studio Pro on a machine with no internet access. No account or connection is needed on this computer.</source>
         <translation>在无互联网访问的计算机上激活 Serial Studio Pro。此计算机无需帐户或连接。</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/OfflineActivation.qml" line="86"/>
+        <location filename="../../qml/Dialogs/OfflineActivation.qml" line="88"/>
         <source>Save your device file</source>
         <translation>保存您的设备文件</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/OfflineActivation.qml" line="95"/>
+        <location filename="../../qml/Dialogs/OfflineActivation.qml" line="97"/>
         <source>Save this computer's device file. It identifies this machine and contains no personal information.</source>
         <translation>保存此计算机的设备文件。它用于识别此计算机,不包含任何个人信息。</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/OfflineActivation.qml" line="102"/>
+        <location filename="../../qml/Dialogs/OfflineActivation.qml" line="104"/>
         <source>Save Device File…</source>
         <translation>保存设备文件…</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/OfflineActivation.qml" line="136"/>
+        <location filename="../../qml/Dialogs/OfflineActivation.qml" line="138"/>
         <source>Get your license file</source>
         <translation>获取您的许可证文件</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/OfflineActivation.qml" line="145"/>
+        <location filename="../../qml/Dialogs/OfflineActivation.qml" line="147"/>
         <source>On another computer with internet access, go to the address below, upload the device file, and enter your email and license key.</source>
         <translation>在另一台可访问互联网的计算机上,访问下方地址,上传设备文件,并输入您的电子邮件和许可证密钥。</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/OfflineActivation.qml" line="157"/>
+        <location filename="../../qml/Dialogs/OfflineActivation.qml" line="159"/>
         <source>Open in Browser</source>
         <translation>在浏览器中打开</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/OfflineActivation.qml" line="193"/>
+        <location filename="../../qml/Dialogs/OfflineActivation.qml" line="195"/>
         <source>Import your license</source>
         <translation>导入您的许可证</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/OfflineActivation.qml" line="202"/>
+        <location filename="../../qml/Dialogs/OfflineActivation.qml" line="204"/>
         <source>Copy the license file to this computer and import it. Pro features unlock immediately.</source>
         <translation>将许可证文件复制到此计算机并导入。Pro 功能将立即解锁。</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/OfflineActivation.qml" line="209"/>
+        <location filename="../../qml/Dialogs/OfflineActivation.qml" line="211"/>
         <source>Import License File…</source>
         <translation>导入许可证文件…</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/OfflineActivation.qml" line="224"/>
+        <location filename="../../qml/Dialogs/OfflineActivation.qml" line="226"/>
         <source>Save Device File</source>
         <translation>保存设备文件</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/OfflineActivation.qml" line="226"/>
+        <location filename="../../qml/Dialogs/OfflineActivation.qml" line="228"/>
         <source>Serial Studio device file (*.ssmachine)</source>
         <translation>Serial Studio 设备文件 (*.ssmachine)</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/OfflineActivation.qml" line="235"/>
+        <location filename="../../qml/Dialogs/OfflineActivation.qml" line="237"/>
         <source>Import License File</source>
         <translation>导入许可证文件</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/OfflineActivation.qml" line="236"/>
+        <location filename="../../qml/Dialogs/OfflineActivation.qml" line="238"/>
         <source>Serial Studio license (*.sslic)</source>
         <translation>Serial Studio 许可证 (*.sslic)</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/OfflineActivation.qml" line="236"/>
+        <location filename="../../qml/Dialogs/OfflineActivation.qml" line="238"/>
         <source>All files (*)</source>
         <translation>所有文件 (*)</translation>
     </message>
@@ -23450,22 +23460,22 @@ Add groups above to poll multiple register types.</source>
 <context>
     <name>OnlineIconPicker</name>
     <message>
-        <location filename="../../qml/Dialogs/OnlineIconPicker.qml" line="41"/>
+        <location filename="../../qml/Dialogs/OnlineIconPicker.qml" line="43"/>
         <source>Search Online Icons</source>
         <translation>搜索在线图标</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/OnlineIconPicker.qml" line="81"/>
+        <location filename="../../qml/Dialogs/OnlineIconPicker.qml" line="83"/>
         <source>Download failed: %1</source>
         <translation>下载失败:%1</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/OnlineIconPicker.qml" line="111"/>
+        <location filename="../../qml/Dialogs/OnlineIconPicker.qml" line="113"/>
         <source>Search icons (e.g. temperature, arrow, play)…</source>
         <translation>搜索图标(例如 temperature、arrow、play)…</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/OnlineIconPicker.qml" line="124"/>
+        <location filename="../../qml/Dialogs/OnlineIconPicker.qml" line="126"/>
         <source>Search…</source>
         <translation>搜索…</translation>
     </message>
@@ -23474,17 +23484,17 @@ Add groups above to poll multiple register types.</source>
         <translation type="vanished">搜索</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/OnlineIconPicker.qml" line="162"/>
+        <location filename="../../qml/Dialogs/OnlineIconPicker.qml" line="164"/>
         <source>Search for icons above to get started</source>
         <translation>在上方搜索图标以开始</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/OnlineIconPicker.qml" line="280"/>
+        <location filename="../../qml/Dialogs/OnlineIconPicker.qml" line="282"/>
         <source>OK</source>
         <translation>确定</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/OnlineIconPicker.qml" line="290"/>
+        <location filename="../../qml/Dialogs/OnlineIconPicker.qml" line="292"/>
         <source>Cancel</source>
         <translation>取消</translation>
     </message>
@@ -23497,42 +23507,42 @@ Add groups above to poll multiple register types.</source>
         <translation>端点</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="73"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="77"/>
         <source>Discover</source>
         <translation>发现</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="90"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="94"/>
         <source>Poll Interval (ms)</source>
         <translation>轮询间隔 (ms)</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="95"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="101"/>
         <source>10-60000</source>
         <translation>10-60000</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="111"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="117"/>
         <source>Security</source>
         <translation>安全性</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="152"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="160"/>
         <source>This endpoint offers no user identity token the selected authentication mode can present</source>
         <translation>此端点未提供所选身份验证模式可使用的用户身份令牌</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="161"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="169"/>
         <source>Policy</source>
         <translation>策略</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="177"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="187"/>
         <source>Mode</source>
         <translation>模式</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="183"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="195"/>
         <source>Sign</source>
         <translation>签名</translation>
     </message>
@@ -23541,33 +23551,33 @@ Add groups above to poll multiple register types.</source>
         <translation type="vanished">签名并加密</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="203"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="215"/>
         <source>This policy is deprecated by the OPC Foundation (SHA-1 / RSA-1.5). Use it only for controllers that support nothing better.</source>
         <translation>此策略已被 OPC 基金会弃用（SHA-1 / RSA-1.5）。仅在控制器不支持更好方案时使用。</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="263"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="281"/>
         <source>Certificate</source>
         <translation>证书</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="275"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="295"/>
         <source>No certificate selected</source>
         <translation>未选择证书</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="279"/>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="304"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="301"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="330"/>
         <source>Browse…</source>
         <translation>浏览…</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="288"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="310"/>
         <source>Private Key</source>
         <translation>私钥</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="300"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="324"/>
         <source>No private key selected</source>
         <translation>未选择私钥</translation>
     </message>
@@ -23576,74 +23586,74 @@ Add groups above to poll multiple register types.</source>
         <translation type="vanished">凭据在此通道上以明文传输。请选择 None 以外的策略并启用签名和加密以保护凭据。</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="183"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="195"/>
         <source>Sign and Encrypt</source>
         <translation>签名并加密</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="320"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="346"/>
         <source>Credentials travel in the clear on this channel. Choose a policy other than None with Sign and Encrypt to protect them.</source>
         <translation>凭据在此通道上以明文传输。请选择 None 以外的策略并启用签名并加密以保护凭据。</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="334"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="362"/>
         <source>Send the password anyway on this unencrypted channel</source>
         <translation>仍在此未加密通道上发送密码</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="343"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="371"/>
         <source>Identity</source>
         <translation>标识</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="358"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="386"/>
         <source>Generated on the first secure connection</source>
         <translation>在首次安全连接时生成</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="366"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="396"/>
         <source>Export…</source>
         <translation>导出…</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="372"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="404"/>
         <source>Replace</source>
         <translation>替换</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="453"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="489"/>
         <source>Export Client Certificate</source>
         <translation>导出客户端证书</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="454"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="490"/>
         <source>Certificate (*.der)</source>
         <translation>证书 (*.der)</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="454"/>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="462"/>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="470"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="490"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="498"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="506"/>
         <source>All files (*)</source>
         <translation>所有文件 (*)</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="461"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="497"/>
         <source>Select User Certificate</source>
         <translation>选择用户证书</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="462"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="498"/>
         <source>Certificate (*.der *.pem *.crt)</source>
         <translation>证书 (*.der *.pem *.crt)</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="469"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="505"/>
         <source>Select Private Key</source>
         <translation>选择私钥</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="470"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="506"/>
         <source>Private key (*.der *.pem *.key)</source>
         <translation>私钥 (*.der *.pem *.key)</translation>
     </message>
@@ -23652,17 +23662,17 @@ Add groups above to poll multiple register types.</source>
         <translation type="vanished">此版本不支持安全通道</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="212"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="224"/>
         <source>Authentication</source>
         <translation>身份验证</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="228"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="242"/>
         <source>Username</source>
         <translation>用户名</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="245"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="261"/>
         <source>Password</source>
         <translation>密码</translation>
     </message>
@@ -23671,22 +23681,22 @@ Add groups above to poll multiple register types.</source>
         <translation type="vanished">凭据以未加密方式发送：此版本仅打开 None 策略通道。</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="398"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="432"/>
         <source>Browse Tags…</source>
         <translation>浏览标签…</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="409"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="445"/>
         <source>Generate Project</source>
         <translation>生成项目</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="427"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="463"/>
         <source>%1 tag(s) selected</source>
         <translation>已选择 %1 个标签</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="428"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUa.qml" line="464"/>
         <source>No tags selected</source>
         <translation>未选择标签</translation>
     </message>
@@ -23694,47 +23704,47 @@ Add groups above to poll multiple register types.</source>
 <context>
     <name>OpcUaTagBrowser</name>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUaTagBrowser.qml" line="45"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUaTagBrowser.qml" line="47"/>
         <source>OPC UA Tag Browser</source>
         <translation>OPC UA 标签浏览器</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUaTagBrowser.qml" line="184"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUaTagBrowser.qml" line="186"/>
         <source>Expand folders to browse the server. Tick the variables to subscribe to; ticking a folder selects every readable variable beneath it.</source>
         <translation>展开文件夹以浏览服务器。勾选要订阅的变量；勾选文件夹将选择其下所有可读变量。</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUaTagBrowser.qml" line="203"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUaTagBrowser.qml" line="205"/>
         <source>More than 512 channels selected; very wide frames slow the dashboard.</source>
         <translation>已选择超过 512 个通道；过宽的帧会降低仪表板速度。</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUaTagBrowser.qml" line="211"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUaTagBrowser.qml" line="213"/>
         <source>Reading the address space...</source>
         <translation>正在读取地址空间...</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUaTagBrowser.qml" line="219"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUaTagBrowser.qml" line="223"/>
         <source>Filter by name…</source>
         <translation>按名称筛选…</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUaTagBrowser.qml" line="434"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUaTagBrowser.qml" line="440"/>
         <source>%1 tag(s), %2 channel(s) selected</source>
         <translation>已选择 %1 个标签、%2 个通道</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUaTagBrowser.qml" line="441"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUaTagBrowser.qml" line="449"/>
         <source>Select All Readable</source>
         <translation>全选可读项</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUaTagBrowser.qml" line="448"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUaTagBrowser.qml" line="458"/>
         <source>Cancel</source>
         <translation>取消</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUaTagBrowser.qml" line="455"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/OpcUaTagBrowser.qml" line="467"/>
         <source>OK</source>
         <translation>确定</translation>
     </message>
@@ -23742,52 +23752,52 @@ Add groups above to poll multiple register types.</source>
 <context>
     <name>OpcUaTrustDialog</name>
     <message>
-        <location filename="../../qml/Dialogs/OpcUaTrustDialog.qml" line="42"/>
+        <location filename="../../qml/Dialogs/OpcUaTrustDialog.qml" line="44"/>
         <source>Untrusted OPC UA Server</source>
         <translation>不受信任的 OPC UA 服务器</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/OpcUaTrustDialog.qml" line="84"/>
+        <location filename="../../qml/Dialogs/OpcUaTrustDialog.qml" line="86"/>
         <source>Check the fingerprint against the one the server operator gave you before accepting. Accepting records the decision for this installation; it does not reconnect, so press Connect again afterwards.</source>
         <translation>在接受之前,请根据服务器操作员提供的指纹进行核对。接受后将记录此安装的决定;但不会自动重新连接,因此之后需再次按下连接。</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/OpcUaTrustDialog.qml" line="108"/>
+        <location filename="../../qml/Dialogs/OpcUaTrustDialog.qml" line="110"/>
         <source>Subject:</source>
         <translation>主题:</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/OpcUaTrustDialog.qml" line="119"/>
+        <location filename="../../qml/Dialogs/OpcUaTrustDialog.qml" line="121"/>
         <source>Issuer:</source>
         <translation>颁发者:</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/OpcUaTrustDialog.qml" line="130"/>
+        <location filename="../../qml/Dialogs/OpcUaTrustDialog.qml" line="132"/>
         <source>Application URI:</source>
         <translation>应用程序 URI:</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/OpcUaTrustDialog.qml" line="141"/>
+        <location filename="../../qml/Dialogs/OpcUaTrustDialog.qml" line="143"/>
         <source>Fingerprint:</source>
         <translation>指纹:</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/OpcUaTrustDialog.qml" line="152"/>
+        <location filename="../../qml/Dialogs/OpcUaTrustDialog.qml" line="154"/>
         <source>Valid From:</source>
         <translation>有效起始日期：</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/OpcUaTrustDialog.qml" line="162"/>
+        <location filename="../../qml/Dialogs/OpcUaTrustDialog.qml" line="164"/>
         <source>Valid Until:</source>
         <translation>有效截止日期：</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/OpcUaTrustDialog.qml" line="188"/>
+        <location filename="../../qml/Dialogs/OpcUaTrustDialog.qml" line="190"/>
         <source>Reject</source>
         <translation>拒绝</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/OpcUaTrustDialog.qml" line="193"/>
+        <location filename="../../qml/Dialogs/OpcUaTrustDialog.qml" line="195"/>
         <source>Trust This Server</source>
         <translation>信任此服务器</translation>
     </message>
@@ -23964,12 +23974,12 @@ Add groups above to poll multiple register types.</source>
         <translation type="vanished">绘图器组件代码编辑器</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="77"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="79"/>
         <source>paint(ctx, w, h)</source>
         <translation>paint(ctx, w, h)</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="87"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="89"/>
         <source>Import</source>
         <translation>导入</translation>
     </message>
@@ -23978,7 +23988,7 @@ Add groups above to poll multiple register types.</source>
         <translation type="vanished">从 .js 文件导入绘图器代码</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="100"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="102"/>
         <source>Template</source>
         <translation>模板</translation>
     </message>
@@ -23987,7 +23997,7 @@ Add groups above to poll multiple register types.</source>
         <translation type="vanished">选择内置绘图模板</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="109"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="111"/>
         <source>Format</source>
         <translation>格式化</translation>
     </message>
@@ -23996,42 +24006,42 @@ Add groups above to poll multiple register types.</source>
         <translation type="vanished">重新格式化绘图代码</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="31"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="33"/>
         <source>Canvas Widget Code Editor</source>
         <translation>画布组件代码编辑器</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="92"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="94"/>
         <source>Import canvas code from a .js file</source>
         <translation>从 .js 文件导入画布代码</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="103"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="105"/>
         <source>Select a built-in canvas template</source>
         <translation>选择内置画布模板</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="114"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="116"/>
         <source>Reformat the canvas code</source>
         <translation>重新格式化画布代码</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="120"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="122"/>
         <source>Test</source>
         <translation>测试</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="125"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="127"/>
         <source>Open a live preview with simulated dataset values</source>
         <translation>使用模拟数据集值打开实时预览</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="128"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="130"/>
         <source>Preview</source>
         <translation>预览</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="183"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/PainterCodeDialog.qml" line="185"/>
         <source>Close</source>
         <translation>关闭</translation>
     </message>
@@ -24075,43 +24085,43 @@ Add groups above to poll multiple register types.</source>
         <translation type="vanished">绘图器实时预览</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/PainterTestDialog.qml" line="28"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/PainterTestDialog.qml" line="30"/>
         <source>Canvas Live Preview</source>
         <translation>画布实时预览</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/PainterTestDialog.qml" line="32"/>
-        <location filename="../../qml/ProjectEditor/Dialogs/PainterTestDialog.qml" line="37"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/PainterTestDialog.qml" line="34"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/PainterTestDialog.qml" line="39"/>
         <source>Preview</source>
         <translation>预览</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/PainterTestDialog.qml" line="113"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/PainterTestDialog.qml" line="115"/>
         <source>Simulated datasets</source>
         <translation>模拟数据集</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/PainterTestDialog.qml" line="180"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/PainterTestDialog.qml" line="182"/>
         <source>Runtime OK</source>
         <translation>运行时正常</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/PainterTestDialog.qml" line="181"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/PainterTestDialog.qml" line="183"/>
         <source>Awaiting first frame...</source>
         <translation>等待第一帧...</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/PainterTestDialog.qml" line="194"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/PainterTestDialog.qml" line="196"/>
         <source>Console</source>
         <translation>控制台</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/PainterTestDialog.qml" line="236"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/PainterTestDialog.qml" line="238"/>
         <source>Clear console</source>
         <translation>清空控制台</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/PainterTestDialog.qml" line="245"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/PainterTestDialog.qml" line="247"/>
         <source>Close</source>
         <translation>关闭</translation>
     </message>
@@ -24611,82 +24621,82 @@ Add groups above to poll multiple register types.</source>
 <context>
     <name>ProblemCenter</name>
     <message>
-        <location filename="../../qml/Dialogs/ProblemCenter.qml" line="40"/>
+        <location filename="../../qml/Dialogs/ProblemCenter.qml" line="42"/>
         <source>Problem Center</source>
         <translation>问题中心</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ProblemCenter.qml" line="119"/>
+        <location filename="../../qml/Dialogs/ProblemCenter.qml" line="121"/>
         <source>Error</source>
         <translation>错误</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ProblemCenter.qml" line="120"/>
+        <location filename="../../qml/Dialogs/ProblemCenter.qml" line="122"/>
         <source>Warning</source>
         <translation>警告</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ProblemCenter.qml" line="121"/>
+        <location filename="../../qml/Dialogs/ProblemCenter.qml" line="123"/>
         <source>Information</source>
         <translation>信息</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ProblemCenter.qml" line="212"/>
+        <location filename="../../qml/Dialogs/ProblemCenter.qml" line="214"/>
         <source>%1 errors, %2 warnings, %3 notices</source>
         <translation>%1 个错误，%2 个警告，%3 个通知</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ProblemCenter.qml" line="228"/>
+        <location filename="../../qml/Dialogs/ProblemCenter.qml" line="230"/>
         <source>All Severities</source>
         <translation>所有严重性级别</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ProblemCenter.qml" line="249"/>
+        <location filename="../../qml/Dialogs/ProblemCenter.qml" line="251"/>
         <source>Running Diagnostics</source>
         <translation>正在运行诊断</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ProblemCenter.qml" line="250"/>
+        <location filename="../../qml/Dialogs/ProblemCenter.qml" line="252"/>
         <source>Run Diagnostics</source>
         <translation>运行诊断</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ProblemCenter.qml" line="256"/>
+        <location filename="../../qml/Dialogs/ProblemCenter.qml" line="258"/>
         <source>Refresh</source>
         <translation>刷新</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ProblemCenter.qml" line="263"/>
+        <location filename="../../qml/Dialogs/ProblemCenter.qml" line="265"/>
         <source>Clear</source>
         <translation>清除</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ProblemCenter.qml" line="386"/>
+        <location filename="../../qml/Dialogs/ProblemCenter.qml" line="388"/>
         <source>Go To</source>
         <translation>前往</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ProblemCenter.qml" line="424"/>
+        <location filename="../../qml/Dialogs/ProblemCenter.qml" line="426"/>
         <source>No problems match the current filter</source>
         <translation>没有问题匹配当前筛选条件。</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ProblemCenter.qml" line="425"/>
+        <location filename="../../qml/Dialogs/ProblemCenter.qml" line="427"/>
         <source>No problems detected</source>
         <translation>未检测到问题</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ProblemCenter.qml" line="434"/>
+        <location filename="../../qml/Dialogs/ProblemCenter.qml" line="436"/>
         <source>Project, link and script checks run automatically.</source>
         <translation>项目、链接和脚本检查自动运行。</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ProblemCenter.qml" line="450"/>
+        <location filename="../../qml/Dialogs/ProblemCenter.qml" line="452"/>
         <source>Last checked at %1</source>
         <translation>上次检查时间：%1</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ProblemCenter.qml" line="459"/>
+        <location filename="../../qml/Dialogs/ProblemCenter.qml" line="461"/>
         <source>Close</source>
         <translation>关闭</translation>
     </message>
@@ -24699,69 +24709,69 @@ Add groups above to poll multiple register types.</source>
         <translation>模式</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="77"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="79"/>
         <source>Launch Process</source>
         <translation>启动进程</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="77"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="79"/>
         <source>Named Pipe</source>
         <translation>命名管道</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="102"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="104"/>
         <source>Executable</source>
         <translation>可执行文件</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="116"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="120"/>
         <source>/path/to/executable</source>
         <translation>/path/to/executable</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="137"/>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="221"/>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="273"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="143"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="233"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="289"/>
         <source>Browse</source>
         <translation>浏览</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="150"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="156"/>
         <source>Arguments</source>
         <translation>参数</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="160"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="168"/>
         <source>--arg1 value1 --arg2 value2</source>
         <translation>--arg1 value1 --arg2 value2</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="186"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="194"/>
         <source>Working Dir</source>
         <translation>工作目录</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="200"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="210"/>
         <source>(optional) /working/directory</source>
         <translation>(可选) /working/directory</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="236"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="248"/>
         <source>Pipe Path</source>
         <translation>管道路径</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="289"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="307"/>
         <source>Pick Running Process…</source>
         <translation>选择运行中的进程…</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="327"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="345"/>
         <source>Launch a child process and capture its stdout, or connect to a named pipe written by an existing process.</source>
         <translation>启动子进程并捕获其 stdout，或连接到现有进程写入的命名管道。</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="335"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/Process.qml" line="353"/>
         <source>Learn about named pipes</source>
         <translation>了解命名管道</translation>
     </message>
@@ -24784,54 +24794,54 @@ Add groups above to poll multiple register types.</source>
         <translation>筛选进程</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="224"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="226"/>
         <source>Type to filter by name…</source>
         <translation>按名称筛选…</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="228"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="232"/>
         <source>Refresh</source>
         <translation>刷新</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="236"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="240"/>
         <source>Running Processes</source>
         <translation>运行中的进程</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="274"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="278"/>
         <source>Process</source>
         <translation>进程</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="281"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="285"/>
         <source>PID</source>
         <translation>PID</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="376"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="380"/>
         <source>No processes match the filter.</source>
         <translation>没有进程匹配筛选条件。</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="377"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="381"/>
         <source>No running processes found.
 Click Refresh to update the list.</source>
         <translation>未找到运行中的进程。
 点击刷新以更新列表。</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="393"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="397"/>
         <source>%1 process(es)</source>
         <translation>%1 个进程</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="397"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="403"/>
         <source>Select</source>
         <translation>选择</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="403"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/ProcessPicker.qml" line="411"/>
         <source>Close</source>
         <translation>关闭</translation>
     </message>
@@ -24839,7 +24849,7 @@ Click Refresh to update the list.</source>
 <context>
     <name>ProjectEditor</name>
     <message>
-        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="45"/>
+        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="47"/>
         <source>modified</source>
         <translation>已修改</translation>
     </message>
@@ -24852,7 +24862,7 @@ Click Refresh to update the list.</source>
         <translation type="vanished">命令</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="453"/>
+        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="455"/>
         <source>This project is password protected</source>
         <translation>此项目受密码保护</translation>
     </message>
@@ -24861,7 +24871,7 @@ Click Refresh to update the list.</source>
         <translation type="vanished">项目模式下可进行编辑</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="470"/>
+        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="472"/>
         <source>Enter the password to make changes, or open a different project.</source>
         <translation>输入密码以进行更改，或打开其他项目。</translation>
     </message>
@@ -24870,7 +24880,7 @@ Click Refresh to update the list.</source>
         <translation type="vanished">切换到项目模式以加载和编辑项目。</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="495"/>
+        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="497"/>
         <source>Unlock</source>
         <translation>解锁</translation>
     </message>
@@ -24879,47 +24889,47 @@ Click Refresh to update the list.</source>
         <translation type="vanished">切换到项目模式</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="91"/>
+        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="93"/>
         <source>Switched to Project File mode</source>
         <translation>已切换到项目文件模式</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="92"/>
+        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="94"/>
         <source>The Project Editor works on project files. To go back, choose another Operation Mode in Device Setup.</source>
         <translation>项目编辑器用于处理项目文件。若要返回，请在设备设置中选择其他操作模式。</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="456"/>
+        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="458"/>
         <source>Disconnect to edit the project</source>
         <translation>断开连接以编辑项目</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="458"/>
+        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="460"/>
         <source>Close the playback to edit the project</source>
         <translation>关闭回放以编辑项目</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="471"/>
+        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="473"/>
         <source>The Project Editor needs Project File mode, which starts when the current session ends. The session keeps running until then.</source>
         <translation>项目编辑器需要项目文件模式，该模式在当前会话结束时启动。会话将持续运行直到那时。</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="496"/>
+        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="498"/>
         <source>Disconnect and Edit</source>
         <translation>断开连接并编辑</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="515"/>
+        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="517"/>
         <source>Open Other Project</source>
         <translation>打开其他项目</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="516"/>
+        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="518"/>
         <source>Close</source>
         <translation>关闭</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="532"/>
+        <location filename="../../qml/ProjectEditor/ProjectEditor.qml" line="534"/>
         <source>Create New Project</source>
         <translation>创建新项目</translation>
     </message>
@@ -26970,72 +26980,72 @@ Reload it?</source>
 <context>
     <name>ProtoPreviewDialog</name>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/ProtoPreviewDialog.qml" line="41"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/ProtoPreviewDialog.qml" line="43"/>
         <source>Protocol Buffers File Preview</source>
         <translation>Protocol Buffers 文件预览</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/ProtoPreviewDialog.qml" line="165"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/ProtoPreviewDialog.qml" line="167"/>
         <source>Proto File: %1</source>
         <translation>Proto 文件：%1</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/ProtoPreviewDialog.qml" line="173"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/ProtoPreviewDialog.qml" line="175"/>
         <source>Browse the messages below, then create the project. Every message becomes a dashboard group; matching-type channel blocks get a MultiPlot and mixed-type messages get a DataGrid.</source>
         <translation>浏览下方的消息，然后创建项目。每条消息将成为一个仪表板组；相同类型的通道块将获得多重绘图，混合类型的消息将获得数据网格。</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/ProtoPreviewDialog.qml" line="183"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/ProtoPreviewDialog.qml" line="185"/>
         <source>Show fields for</source>
         <translation>显示字段</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/ProtoPreviewDialog.qml" line="209"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/ProtoPreviewDialog.qml" line="211"/>
         <source>Fields</source>
         <translation>字段</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/ProtoPreviewDialog.qml" line="243"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/ProtoPreviewDialog.qml" line="245"/>
         <source>Tag</source>
         <translation>标签</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/ProtoPreviewDialog.qml" line="253"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/ProtoPreviewDialog.qml" line="255"/>
         <source>Field Name</source>
         <translation>字段名称</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/ProtoPreviewDialog.qml" line="258"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/ProtoPreviewDialog.qml" line="260"/>
         <source>Type</source>
         <translation>类型</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/ProtoPreviewDialog.qml" line="345"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/ProtoPreviewDialog.qml" line="347"/>
         <source>No fields in the selected message.</source>
         <translation>所选消息中没有字段。</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/ProtoPreviewDialog.qml" line="363"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/ProtoPreviewDialog.qml" line="365"/>
         <source>Total: %1 messages, %2 fields</source>
         <translation>总计：%1 条消息，%2 个字段</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/ProtoPreviewDialog.qml" line="370"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/ProtoPreviewDialog.qml" line="372"/>
         <source>Cancel</source>
         <translation>取消</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/ProtoPreviewDialog.qml" line="380"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/ProtoPreviewDialog.qml" line="382"/>
         <source>Add to Project</source>
         <translation>添加到项目</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/ProtoPreviewDialog.qml" line="385"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/ProtoPreviewDialog.qml" line="387"/>
         <source>Add the generated source, groups, tables and workspaces to the project that is open, instead of creating a new file</source>
         <translation>将生成的源代码、组、表和工作区添加到已打开的项目,而不是创建新文件</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/ProtoPreviewDialog.qml" line="396"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/ProtoPreviewDialog.qml" line="398"/>
         <source>Create Project</source>
         <translation>创建项目</translation>
     </message>
@@ -28184,67 +28194,67 @@ function parse(%1) { ... }
 <context>
     <name>RemoteAttach</name>
     <message>
-        <location filename="../../qml/Dialogs/RemoteAttach.qml" line="37"/>
+        <location filename="../../qml/Dialogs/RemoteAttach.qml" line="39"/>
         <source>Attach to Remote Dashboard</source>
         <translation>附加到远程仪表板</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/RemoteAttach.qml" line="67"/>
+        <location filename="../../qml/Dialogs/RemoteAttach.qml" line="69"/>
         <source>Disconnect the local device or close the open recording first.</source>
         <translation>请先断开本地设备或关闭已打开的录制。</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/RemoteAttach.qml" line="80"/>
+        <location filename="../../qml/Dialogs/RemoteAttach.qml" line="82"/>
         <source>Not attached.</source>
         <translation>未附加。</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/RemoteAttach.qml" line="83"/>
+        <location filename="../../qml/Dialogs/RemoteAttach.qml" line="85"/>
         <source>Attached to %1 - no response, the link may be down.</source>
         <translation>已附加到 %1 - 无响应,链路可能已断开。</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/RemoteAttach.qml" line="87"/>
+        <location filename="../../qml/Dialogs/RemoteAttach.qml" line="89"/>
         <source>Attached to %1 - connected, the remote is not producing data.</source>
         <translation>已附加到 %1 - 已连接,远程未产生数据。</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/RemoteAttach.qml" line="90"/>
+        <location filename="../../qml/Dialogs/RemoteAttach.qml" line="92"/>
         <source>Attached to %1 - live, %2 datasets at %3 Hz.</source>
         <translation>已附加到 %1 - 实时,%2 个数据集,频率 %3 Hz。</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/RemoteAttach.qml" line="133"/>
+        <location filename="../../qml/Dialogs/RemoteAttach.qml" line="135"/>
         <source>Watch another Serial Studio instance's dashboard over the network. The view is read-only: nothing you do here reaches the remote device.</source>
         <translation>通过网络观察另一个 Serial Studio 实例的仪表板。视图为只读:此处的任何操作都不会到达远程设备。</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/RemoteAttach.qml" line="147"/>
+        <location filename="../../qml/Dialogs/RemoteAttach.qml" line="149"/>
         <source>Recent</source>
         <translation>最近</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/RemoteAttach.qml" line="170"/>
+        <location filename="../../qml/Dialogs/RemoteAttach.qml" line="172"/>
         <source>Host</source>
         <translation>主机</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/RemoteAttach.qml" line="180"/>
+        <location filename="../../qml/Dialogs/RemoteAttach.qml" line="182"/>
         <source>Host name or IP address</source>
         <translation>主机名或 IP 地址</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/RemoteAttach.qml" line="184"/>
+        <location filename="../../qml/Dialogs/RemoteAttach.qml" line="186"/>
         <source>Port</source>
         <translation>端口</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/RemoteAttach.qml" line="200"/>
+        <location filename="../../qml/Dialogs/RemoteAttach.qml" line="202"/>
         <source>Token</source>
         <translation>令牌</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/RemoteAttach.qml" line="211"/>
+        <location filename="../../qml/Dialogs/RemoteAttach.qml" line="213"/>
         <source>Required only for connections from another machine</source>
         <translation>仅在从其他计算机连接时需要</translation>
     </message>
@@ -28257,22 +28267,22 @@ function parse(%1) { ... }
         <translation type="vanished">%1 Hz</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/RemoteAttach.qml" line="263"/>
+        <location filename="../../qml/Dialogs/RemoteAttach.qml" line="265"/>
         <source>The link is not encrypted. The token authorizes the connection but does not protect what travels over it, so use this on a trusted network or through a tunnel.</source>
         <translation>链接未加密。令牌授权连接但不保护传输内容,因此请在受信任的网络中使用或通过隧道连接。</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/RemoteAttach.qml" line="281"/>
+        <location filename="../../qml/Dialogs/RemoteAttach.qml" line="283"/>
         <source>Close</source>
         <translation>关闭</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/RemoteAttach.qml" line="290"/>
+        <location filename="../../qml/Dialogs/RemoteAttach.qml" line="292"/>
         <source>Detach</source>
         <translation>分离</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/RemoteAttach.qml" line="300"/>
+        <location filename="../../qml/Dialogs/RemoteAttach.qml" line="302"/>
         <source>Attach</source>
         <translation>连接</translation>
     </message>
@@ -28280,288 +28290,288 @@ function parse(%1) { ... }
 <context>
     <name>ReportOptionsDialog</name>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="27"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="29"/>
         <source>Generate PDF Report</source>
         <translation>生成 PDF 报告</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="27"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="29"/>
         <source>Generate Report</source>
         <translation>生成报告</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="73"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="75"/>
         <source>Solid</source>
         <translation>实线</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="74"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="76"/>
         <source>Dashed</source>
         <translation>虚线</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="75"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="77"/>
         <source>Dotted</source>
         <translation>点线</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="97"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="99"/>
         <source>A4 (210 × 297 mm)</source>
         <translation>A4 (210 × 297 mm)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="98"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="100"/>
         <source>A3 (297 × 420 mm)</source>
         <translation>A3 (297 × 420 mm)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="99"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="101"/>
         <source>A2 (420 × 594 mm)</source>
         <translation>A2 (420 × 594 mm)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="100"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="102"/>
         <source>A1 (594 × 841 mm)</source>
         <translation>A1 (594 × 841 mm)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="101"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="103"/>
         <source>A0 (841 × 1189 mm)</source>
         <translation>A0 (841 × 1189 mm)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="102"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="104"/>
         <source>A5 (148 × 210 mm)</source>
         <translation>A5 (148 × 210 mm)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="103"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="105"/>
         <source>A6 (105 × 148 mm)</source>
         <translation>A6 (105 × 148 mm)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="104"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="106"/>
         <source>B4 (250 × 353 mm)</source>
         <translation>B4 (250 × 353 mm)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="105"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="107"/>
         <source>B5 (176 × 250 mm)</source>
         <translation>B5 (176 × 250 mm)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="106"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="108"/>
         <source>Letter (8.5 × 11 in)</source>
         <translation>Letter (8.5 × 11 英寸)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="107"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="109"/>
         <source>Legal (8.5 × 14 in)</source>
         <translation>Legal (8.5 × 14 英寸)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="108"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="110"/>
         <source>Executive (7.25 × 10.5 in)</source>
         <translation>Executive (7.25 × 10.5 英寸)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="109"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="111"/>
         <source>Tabloid (11 × 17 in)</source>
         <translation>Tabloid (11 × 17 英寸)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="110"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="112"/>
         <source>Ledger (17 × 11 in)</source>
         <translation>Ledger (17 × 11 英寸)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="124"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="126"/>
         <source>%1 — Session Report</source>
         <translation>%1 — 会话报告</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="126"/>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="321"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="128"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="323"/>
         <source>Session Report</source>
         <translation>会话报告</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="223"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="225"/>
         <source>Branding</source>
         <translation>品牌标识</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="229"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="231"/>
         <source>Page</source>
         <translation>页面</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="235"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="237"/>
         <source>Sections</source>
         <translation>部分</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="241"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="243"/>
         <source>Datasets</source>
         <translation>数据集</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="289"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="291"/>
         <source>Identity</source>
         <translation>标识</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="303"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="305"/>
         <source>Company</source>
         <translation>公司</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="310"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="312"/>
         <source>e.g. Acme Test Systems</source>
         <translation>例如 Acme Test Systems</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="314"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="316"/>
         <source>Document title</source>
         <translation>文档标题</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="325"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="327"/>
         <source>Author</source>
         <translation>作者</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="332"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="334"/>
         <source>Prepared by (optional)</source>
         <translation>制作者（可选）</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="341"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="343"/>
         <source>Logo</source>
         <translation>徽标</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="354"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="356"/>
         <source>File</source>
         <translation>文件</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="365"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="367"/>
         <source>PNG, JPG or SVG (optional)</source>
         <translation>PNG、JPG 或 SVG（可选）</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="367"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="369"/>
         <source>Browse…</source>
         <translation>浏览…</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="370"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="372"/>
         <source>Clear</source>
         <translation>清除</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="411"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="413"/>
         <source>Paper</source>
         <translation>纸张</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="423"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="425"/>
         <source>Page size</source>
         <translation>页面大小</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="561"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="563"/>
         <source>Annotate min, max, and mean values on plots</source>
         <translation>在图表上标注最小值、最大值和平均值</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="598"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="600"/>
         <source>Include datasets</source>
         <translation>包含数据集</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="612"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="614"/>
         <source>Expand All</source>
         <translation>全部展开</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="621"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="623"/>
         <source>Collapse All</source>
         <translation>全部折叠</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="633"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="635"/>
         <source>Search datasets</source>
         <translation>搜索数据集</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="761"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="763"/>
         <source>Loading datasets...</source>
         <translation>正在加载数据集...</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="762"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="764"/>
         <source>No datasets match your search.</source>
         <translation>没有数据集匹配您的搜索。</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="782"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="784"/>
         <source>Select at least one dataset to include.</source>
         <translation>请至少选择一个要包含的数据集。</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="799"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="801"/>
         <source>Export HTML</source>
         <translation>导出 HTML</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="541"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="543"/>
         <source>Cover page (logo, document title, test subtitle)</source>
         <translation>封面页（徽标、文档标题、测试副标题）</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="546"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="548"/>
         <source>Test information (project, timestamps, classification and notes)</source>
         <translation>测试信息(项目、时间戳、分类和备注)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="551"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="553"/>
         <source>Measurement summary (min, max, mean, std. deviation per parameter)</source>
         <translation>测量摘要(每个参数的最小值、最大值、平均值、标准差)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="556"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="558"/>
         <source>Parameter trends (time-series chart per numeric parameter)</source>
         <translation>参数趋势(每个数值参数的时间序列图表)</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="439"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="441"/>
         <source>Plot appearance</source>
         <translation>绘图外观</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="453"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="455"/>
         <source>Line width</source>
         <translation>线宽</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="485"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="487"/>
         <source>Line style</source>
         <translation>线型</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="526"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="528"/>
         <source>Include</source>
         <translation>包含</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="791"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="793"/>
         <source>Cancel</source>
         <translation>取消</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="799"/>
+        <location filename="../../qml/DatabaseExplorer/ReportOptionsDialog.qml" line="801"/>
         <source>Export PDF</source>
         <translation>导出 PDF</translation>
     </message>
@@ -28569,17 +28579,17 @@ function parse(%1) { ... }
 <context>
     <name>ReportProgressDialog</name>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportProgressDialog.qml" line="20"/>
+        <location filename="../../qml/DatabaseExplorer/ReportProgressDialog.qml" line="22"/>
         <source>Generating Report</source>
         <translation>正在生成报告</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportProgressDialog.qml" line="69"/>
+        <location filename="../../qml/DatabaseExplorer/ReportProgressDialog.qml" line="71"/>
         <source>Working…</source>
         <translation>处理中…</translation>
     </message>
     <message>
-        <location filename="../../qml/DatabaseExplorer/ReportProgressDialog.qml" line="86"/>
+        <location filename="../../qml/DatabaseExplorer/ReportProgressDialog.qml" line="88"/>
         <source>This can take a few seconds for sessions with many parameters. The window closes automatically when the report is ready.</source>
         <translation>对于包含大量参数的会话,此操作可能需要几秒钟。报告准备就绪后窗口将自动关闭。</translation>
     </message>
@@ -28620,48 +28630,48 @@ function parse(%1) { ... }
 <context>
     <name>RuntimeReconfigure</name>
     <message>
-        <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="40"/>
+        <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="42"/>
         <source>Connection Lost</source>
         <translation>连接丢失</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="41"/>
+        <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="43"/>
         <source>Device Unavailable</source>
         <translation>设备不可用</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="95"/>
+        <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="97"/>
         <source>The connection to your device was lost.</source>
         <translation>与设备的连接已丢失。</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="96"/>
+        <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="98"/>
         <source>Serial Studio couldn't reach your device.</source>
         <translation>Serial Studio 无法连接到您的设备。</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="105"/>
+        <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="107"/>
         <source>Check the cable, power, and that no other application has taken over the device. You can try reconnecting, switch to a different device, or quit.</source>
         <translation>请检查线缆、电源,并确保没有其他应用程序占用该设备。您可以尝试重新连接、切换到其他设备或退出。</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="108"/>
+        <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="110"/>
         <source>Make sure it's plugged in, powered on, and not already in use by another app. You can try again, pick a different device, or quit.</source>
         <translation>请确保设备已插入、已开机且未被其他应用程序占用。您可以重试、选择其他设备或退出。</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="120"/>
-        <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="189"/>
+        <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="122"/>
+        <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="191"/>
         <source>Quit</source>
         <translation>退出</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="130"/>
+        <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="132"/>
         <source>Pick Different Device</source>
         <translation>选择其他设备</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="166"/>
+        <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="168"/>
         <source>Connection: %1</source>
         <translation>连接：%1</translation>
     </message>
@@ -28670,17 +28680,17 @@ function parse(%1) { ... }
         <translation type="vanished">重新配置</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="141"/>
+        <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="143"/>
         <source>Try Again</source>
         <translation>重试</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="141"/>
+        <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="143"/>
         <source>Reconnect</source>
         <translation>重新连接</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="157"/>
+        <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="159"/>
         <source>Pick the correct device, then press Connect.</source>
         <translation>选择正确的设备,然后按连接。</translation>
     </message>
@@ -28689,7 +28699,7 @@ function parse(%1) { ... }
         <translation type="vanished">I/O 接口:%1</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="199"/>
+        <location filename="../../qml/Dialogs/RuntimeReconfigure.qml" line="201"/>
         <source>Connect</source>
         <translation>连接</translation>
     </message>
@@ -28702,57 +28712,57 @@ function parse(%1) { ... }
         <translation>主机</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/S7.qml" line="58"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/S7.qml" line="60"/>
         <source>IP Address</source>
         <translation>IP 地址</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/S7.qml" line="76"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/S7.qml" line="78"/>
         <source>Rack</source>
         <translation>机架</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/S7.qml" line="84"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/S7.qml" line="88"/>
         <source>0-7</source>
         <translation>0-7</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/S7.qml" line="105"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/S7.qml" line="109"/>
         <source>Slot</source>
         <translation>插槽</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/S7.qml" line="113"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/S7.qml" line="119"/>
         <source>0-31</source>
         <translation>0-31</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/S7.qml" line="133"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/S7.qml" line="139"/>
         <source>Poll Interval (ms)</source>
         <translation>轮询间隔 (ms)</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/S7.qml" line="138"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/S7.qml" line="146"/>
         <source>Polling interval</source>
         <translation>轮询间隔</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/S7.qml" line="171"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/S7.qml" line="181"/>
         <source>Configure Variables…</source>
         <translation>配置变量…</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/S7.qml" line="182"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/S7.qml" line="194"/>
         <source>Create Project from Variables</source>
         <translation>从变量创建项目</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/S7.qml" line="197"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/S7.qml" line="209"/>
         <source>%1 variable(s) configured</source>
         <translation>已配置 %1 个变量</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/S7.qml" line="198"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/S7.qml" line="210"/>
         <source>No variables configured</source>
         <translation>未配置变量</translation>
     </message>
@@ -28780,74 +28790,74 @@ function parse(%1) { ... }
         <translation>名称:</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/S7VariablesDialog.qml" line="129"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/S7VariablesDialog.qml" line="131"/>
         <source>Channel name</source>
         <translation>通道名称</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/S7VariablesDialog.qml" line="134"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/S7VariablesDialog.qml" line="136"/>
         <source>Address:</source>
         <translation>地址:</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/S7VariablesDialog.qml" line="146"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/S7VariablesDialog.qml" line="150"/>
         <source>DB5.DBD20:REAL</source>
         <translation>DB5.DBD20:REAL</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/S7VariablesDialog.qml" line="150"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/S7VariablesDialog.qml" line="156"/>
         <source>Add Variable</source>
         <translation>添加变量</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/S7VariablesDialog.qml" line="185"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/S7VariablesDialog.qml" line="191"/>
         <source>Configured Variables</source>
         <translation>已配置变量</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/S7VariablesDialog.qml" line="219"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/S7VariablesDialog.qml" line="225"/>
         <source>#</source>
         <translation>#</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/S7VariablesDialog.qml" line="227"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/S7VariablesDialog.qml" line="233"/>
         <source>Variable</source>
         <translation>变量</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/S7VariablesDialog.qml" line="234"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/S7VariablesDialog.qml" line="240"/>
         <source>Action</source>
         <translation>动作</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/S7VariablesDialog.qml" line="281"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/S7VariablesDialog.qml" line="289"/>
         <source>Remove</source>
         <translation>移除</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/S7VariablesDialog.qml" line="295"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/S7VariablesDialog.qml" line="303"/>
         <source>No variables configured.
 Add absolute addresses above to poll the controller.</source>
         <translation>未配置变量。
 在上方添加绝对地址以轮询控制器。</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/S7VariablesDialog.qml" line="313"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/S7VariablesDialog.qml" line="321"/>
         <source>Total variables: %1</source>
         <translation>变量总数：%1</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/S7VariablesDialog.qml" line="317"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/S7VariablesDialog.qml" line="327"/>
         <source>Generate Project</source>
         <translation>生成项目</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/S7VariablesDialog.qml" line="323"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/S7VariablesDialog.qml" line="335"/>
         <source>Clear All</source>
         <translation>全部清除</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/S7VariablesDialog.qml" line="330"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/S7VariablesDialog.qml" line="344"/>
         <source>Close</source>
         <translation>关闭</translation>
     </message>
@@ -30083,22 +30093,22 @@ Add absolute addresses above to poll the controller.</source>
 <context>
     <name>Settings</name>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="35"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="37"/>
         <source>Preferences</source>
         <translation>偏好设置</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="63"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="67"/>
         <source>General</source>
         <translation>常规</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="99"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="115"/>
         <source>Export</source>
         <translation>导出</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="105"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="123"/>
         <source>Sounds</source>
         <translation>声音</translation>
     </message>
@@ -30159,7 +30169,7 @@ Add absolute addresses above to poll the controller.</source>
         <translation type="vanished">启用 API 服务器（端口 7777）</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="93"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="107"/>
         <source>Console</source>
         <translation>控制台</translation>
     </message>
@@ -30184,7 +30194,7 @@ Add absolute addresses above to poll the controller.</source>
         <translation type="vanished">自动隐藏工具栏</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="87"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="99"/>
         <source>Taskbar</source>
         <translation>任务栏</translation>
     </message>
@@ -30197,7 +30207,7 @@ Add absolute addresses above to poll the controller.</source>
         <translation type="vanished">API 访问令牌</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="69"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="75"/>
         <source>Startup</source>
         <translation>启动</translation>
     </message>
@@ -30286,7 +30296,7 @@ Add absolute addresses above to poll the controller.</source>
         <translation type="vanished">自定义</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="81"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="91"/>
         <source>Layout</source>
         <translation>布局</translation>
     </message>
@@ -30319,7 +30329,7 @@ Add absolute addresses above to poll the controller.</source>
         <translation type="vanished">行为</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="75"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="83"/>
         <source>Plotting</source>
         <translation>绘图</translation>
     </message>
@@ -30396,7 +30406,7 @@ Add absolute addresses above to poll the controller.</source>
         <translation type="vanished">字体系列</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="112"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="132"/>
         <source>Notifications</source>
         <translation>通知</translation>
     </message>
@@ -30497,17 +30507,17 @@ Add absolute addresses above to poll the controller.</source>
         <translation type="vanished">默认关闭 — QT 和 QML 频繁发出警告，启用此选项可能会淹没真正的警报。无论此设置如何，关键消息始终会被路由。</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="186"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="208"/>
         <source>Reset</source>
         <translation>重置</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="246"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="270"/>
         <source>Close</source>
         <translation>关闭</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings.qml" line="254"/>
+        <location filename="../../qml/Dialogs/Settings.qml" line="280"/>
         <source>Apply</source>
         <translation>应用</translation>
     </message>
@@ -30525,67 +30535,67 @@ Add absolute addresses above to poll the controller.</source>
         <translation>显示模式</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsConsolePage.qml" line="95"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsConsolePage.qml" line="97"/>
         <source>Font Family</source>
         <translation>字体系列</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsConsolePage.qml" line="117"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsConsolePage.qml" line="121"/>
         <source>Font Size</source>
         <translation>字体大小</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsConsolePage.qml" line="141"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsConsolePage.qml" line="147"/>
         <source>Scrollback Lines</source>
         <translation>回滚行数</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsConsolePage.qml" line="166"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsConsolePage.qml" line="174"/>
         <source>Show Timestamps</source>
         <translation>显示时间戳</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsConsolePage.qml" line="194"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsConsolePage.qml" line="204"/>
         <source>Data Transmission</source>
         <translation>数据传输</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsConsolePage.qml" line="209"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsConsolePage.qml" line="219"/>
         <source>Line Ending</source>
         <translation>行结束符</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsConsolePage.qml" line="231"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsConsolePage.qml" line="243"/>
         <source>Input Mode</source>
         <translation>输入模式</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsConsolePage.qml" line="253"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsConsolePage.qml" line="267"/>
         <source>Text Encoding</source>
         <translation>文本编码</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsConsolePage.qml" line="275"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsConsolePage.qml" line="291"/>
         <source>Checksum</source>
         <translation>校验和</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsConsolePage.qml" line="297"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsConsolePage.qml" line="315"/>
         <source>Echo Sent Data</source>
         <translation>回显发送数据</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsConsolePage.qml" line="325"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsConsolePage.qml" line="345"/>
         <source>Escape Codes</source>
         <translation>转义码</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsConsolePage.qml" line="340"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsConsolePage.qml" line="360"/>
         <source>VT100 Emulation</source>
         <translation>VT100 仿真</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsConsolePage.qml" line="366"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsConsolePage.qml" line="388"/>
         <source>ANSI Colors</source>
         <translation>ANSI 颜色</translation>
     </message>
@@ -30603,17 +30613,17 @@ Add absolute addresses above to poll the controller.</source>
         <translation>行间隔 (ms)</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsExportPage.qml" line="134"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsExportPage.qml" line="136"/>
         <source>0 writes one row per received frame. A positive value logs one snapshot row of every channel at that interval, which keeps file size bounded for multi-source or high-rate projects.</source>
         <translation>0 表示每接收一帧写入一行。正值表示按该间隔记录所有通道的快照行,可为多源或高速率项目限制文件大小。</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsExportPage.qml" line="147"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsExportPage.qml" line="149"/>
         <source>Video Export</source>
         <translation>视频导出</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsExportPage.qml" line="165"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsExportPage.qml" line="167"/>
         <source>Save Videos by Default</source>
         <translation>默认保存视频</translation>
     </message>
@@ -30631,47 +30641,47 @@ Add absolute addresses above to poll the controller.</source>
         <translation>语言</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsGeneralPage.qml" line="89"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsGeneralPage.qml" line="91"/>
         <source>Theme</source>
         <translation>主题</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsGeneralPage.qml" line="116"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsGeneralPage.qml" line="120"/>
         <source>Window</source>
         <translation>窗口</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsGeneralPage.qml" line="135"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsGeneralPage.qml" line="139"/>
         <source>Custom Window Decorations</source>
         <translation>自定义窗口装饰</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsGeneralPage.qml" line="158"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsGeneralPage.qml" line="164"/>
         <source>Window decoration changes apply after restarting %1.</source>
         <translation>窗口装饰更改将在重启 %1 后生效。</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsGeneralPage.qml" line="167"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsGeneralPage.qml" line="173"/>
         <source>Files</source>
         <translation>文件</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsGeneralPage.qml" line="183"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsGeneralPage.qml" line="189"/>
         <source>Workspace Folder</source>
         <translation>工作区文件夹</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsGeneralPage.qml" line="214"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsGeneralPage.qml" line="224"/>
         <source>API &amp; Plugins</source>
         <translation>API 与插件</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsGeneralPage.qml" line="230"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsGeneralPage.qml" line="240"/>
         <source>Enable API Server</source>
         <translation>启用 API 服务器</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsGeneralPage.qml" line="255"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsGeneralPage.qml" line="267"/>
         <source>API Server Port</source>
         <translation>API 服务器端口</translation>
     </message>
@@ -30680,22 +30690,22 @@ Add absolute addresses above to poll the controller.</source>
         <translation type="vanished">启用 API 服务器（端口 7777）</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsGeneralPage.qml" line="280"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsGeneralPage.qml" line="294"/>
         <source>Allow External API Connections</source>
         <translation>允许外部 API 连接</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsGeneralPage.qml" line="305"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsGeneralPage.qml" line="321"/>
         <source>API Access Token</source>
         <translation>API 访问令牌</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsGeneralPage.qml" line="335"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsGeneralPage.qml" line="355"/>
         <source>Export Protobuf File</source>
         <translation>导出 Protobuf 文件</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsGeneralPage.qml" line="337"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsGeneralPage.qml" line="359"/>
         <source>Export…</source>
         <translation>导出…</translation>
     </message>
@@ -30713,62 +30723,62 @@ Add absolute addresses above to poll the controller.</source>
         <translation>字体系列</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsLayoutPage.qml" line="95"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsLayoutPage.qml" line="97"/>
         <source>Font Size</source>
         <translation>字体大小</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsLayoutPage.qml" line="105"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsLayoutPage.qml" line="109"/>
         <source>Small</source>
         <translation>小</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsLayoutPage.qml" line="105"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsLayoutPage.qml" line="109"/>
         <source>Normal</source>
         <translation>正常</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsLayoutPage.qml" line="105"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsLayoutPage.qml" line="109"/>
         <source>Large</source>
         <translation>大</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsLayoutPage.qml" line="105"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsLayoutPage.qml" line="109"/>
         <source>Extra Large</source>
         <translation>超大</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsLayoutPage.qml" line="105"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsLayoutPage.qml" line="109"/>
         <source>Custom</source>
         <translation>自定义</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsLayoutPage.qml" line="166"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsLayoutPage.qml" line="172"/>
         <source>Layout</source>
         <translation>布局</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsLayoutPage.qml" line="181"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsLayoutPage.qml" line="187"/>
         <source>Layout Margin</source>
         <translation>布局边距</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsLayoutPage.qml" line="206"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsLayoutPage.qml" line="214"/>
         <source>Layout Spacing</source>
         <translation>布局间距</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsLayoutPage.qml" line="231"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsLayoutPage.qml" line="241"/>
         <source>Show Actions Panel</source>
         <translation>显示操作面板</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsLayoutPage.qml" line="247"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsLayoutPage.qml" line="259"/>
         <source>Auto-Hide Toolbar</source>
         <translation>自动隐藏工具栏</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsLayoutPage.qml" line="270"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsLayoutPage.qml" line="284"/>
         <source>Show Alignment Guides</source>
         <translation>显示对齐参考线</translation>
     </message>
@@ -30786,22 +30796,22 @@ Add absolute addresses above to poll the controller.</source>
         <translation>系统通知</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsNotificationsPage.qml" line="96"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsNotificationsPage.qml" line="98"/>
         <source>Show Warning/Critical events as OS desktop notifications when Serial Studio is not the foreground window.</source>
         <translation>当 Serial Studio 不在前台窗口时,将警告/严重事件显示为操作系统桌面通知。</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsNotificationsPage.qml" line="106"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsNotificationsPage.qml" line="108"/>
         <source>Application Logs</source>
         <translation>应用程序日志</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsNotificationsPage.qml" line="121"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsNotificationsPage.qml" line="123"/>
         <source>Route Warnings to Notifications</source>
         <translation>将警告路由至通知</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsNotificationsPage.qml" line="142"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsNotificationsPage.qml" line="146"/>
         <source>Off by default — Qt and QML emit warnings frequently and enabling this can drown out real alarms. Critical messages are always routed regardless of this setting.</source>
         <translation>默认关闭 — QT 和 QML 频繁发出警告，启用此选项可能会淹没真正的警报。无论此设置如何，关键消息始终会被路由。</translation>
     </message>
@@ -30819,12 +30829,12 @@ Add absolute addresses above to poll the controller.</source>
         <translation>时间范围</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsPlottingPage.qml" line="125"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsPlottingPage.qml" line="127"/>
         <source>Point Count</source>
         <translation>点数</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsPlottingPage.qml" line="150"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsPlottingPage.qml" line="154"/>
         <source>UI Refresh Rate (Hz)</source>
         <translation>界面刷新率 (Hz)</translation>
     </message>
@@ -30917,87 +30927,87 @@ Add absolute addresses above to poll the controller.</source>
         <translation>所有文件 (*)</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsSoundsPage.qml" line="124"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsSoundsPage.qml" line="128"/>
         <source>Bundled sound</source>
         <translation>内置声音</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsSoundsPage.qml" line="145"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsSoundsPage.qml" line="151"/>
         <source>Browse for a WAV file</source>
         <translation>浏览 WAV 文件</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsSoundsPage.qml" line="156"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsSoundsPage.qml" line="164"/>
         <source>Play this sound</source>
         <translation>播放此声音</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsSoundsPage.qml" line="165"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsSoundsPage.qml" line="175"/>
         <source>Use the bundled sound</source>
         <translation>使用内置声音</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsSoundsPage.qml" line="225"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsSoundsPage.qml" line="235"/>
         <source>Output</source>
         <translation>输出</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsSoundsPage.qml" line="229"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsSoundsPage.qml" line="239"/>
         <source>Enable Sounds</source>
         <translation>启用声音</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsSoundsPage.qml" line="261"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsSoundsPage.qml" line="273"/>
         <source>Volume</source>
         <translation>音量</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsSoundsPage.qml" line="274"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsSoundsPage.qml" line="288"/>
         <source>Output Device</source>
         <translation>输出设备</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsSoundsPage.qml" line="290"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsSoundsPage.qml" line="306"/>
         <source>The selected device is not available; sounds play on the system default.</source>
         <translation>所选设备不可用;声音将在系统默认设备上播放。</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsSoundsPage.qml" line="293"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsSoundsPage.qml" line="309"/>
         <source>Alarms</source>
         <translation>报警</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsSoundsPage.qml" line="297"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsSoundsPage.qml" line="313"/>
         <source>Sequence (ISA-18.1)</source>
         <translation>序列（ISA-18.1）</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsSoundsPage.qml" line="301"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsSoundsPage.qml" line="319"/>
         <source>A-4 - Automatic reset, no lock-in</source>
         <translation>A-4 - 自动复位,无锁定</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsSoundsPage.qml" line="302"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsSoundsPage.qml" line="320"/>
         <source>A - Automatic reset, lock-in until acknowledged</source>
         <translation>A - 自动复位,锁定直至确认</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsSoundsPage.qml" line="303"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsSoundsPage.qml" line="321"/>
         <source>M-4 - Manual reset, no lock-in</source>
         <translation>M-4 - 手动复位,无锁定</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsSoundsPage.qml" line="304"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsSoundsPage.qml" line="322"/>
         <source>M - Manual reset, lock-in until acknowledged</source>
         <translation>M - 手动重置,锁定直至确认</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsSoundsPage.qml" line="305"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsSoundsPage.qml" line="323"/>
         <source>R-4 - Ringback, no lock-in</source>
         <translation>R-4 - 回铃音,不锁定</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsSoundsPage.qml" line="306"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsSoundsPage.qml" line="324"/>
         <source>R - Ringback, lock-in until acknowledged</source>
         <translation>R - 回铃音,锁定直至确认</translation>
     </message>
@@ -31014,27 +31024,27 @@ Add absolute addresses above to poll the controller.</source>
         <translation type="vanished">R - 回铃音</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsSoundsPage.qml" line="320"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsSoundsPage.qml" line="338"/>
         <source>Warning Repeat (ms)</source>
         <translation>警告重复间隔（毫秒）</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsSoundsPage.qml" line="333"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsSoundsPage.qml" line="353"/>
         <source>Caution Repeat (ms)</source>
         <translation>注意重复间隔（毫秒）</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsSoundsPage.qml" line="345"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsSoundsPage.qml" line="367"/>
         <source>Events</source>
         <translation>事件</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsSoundsPage.qml" line="375"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsSoundsPage.qml" line="399"/>
         <source>Test</source>
         <translation>测试</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsSoundsPage.qml" line="383"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsSoundsPage.qml" line="409"/>
         <source>Reset to Bundled Sounds</source>
         <translation>重置为内置声音</translation>
     </message>
@@ -31052,72 +31062,72 @@ Add absolute addresses above to poll the controller.</source>
         <translation>渲染后端</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="113"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="115"/>
         <source>Display Scaling</source>
         <translation>显示缩放</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="146"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="150"/>
         <source>Custom Scale (%)</source>
         <translation>自定义缩放比例 (%)</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="178"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="184"/>
         <source>HDR Output</source>
         <translation>HDR 输出</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="210"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="218"/>
         <source>System</source>
         <translation>系统</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="225"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="233"/>
         <source>SIMD Instruction Set</source>
         <translation>SIMD 指令集</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="255"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="265"/>
         <source>Reduce Motion</source>
         <translation>减少动画</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="279"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="291"/>
         <source>Apply Performance Hints</source>
         <translation>应用性能提示</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="302"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="316"/>
         <source>Keep Display Awake</source>
         <translation>保持显示器唤醒</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="331"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="347"/>
         <source>Performance hints raise process priority and opt out of OS power throttling. Changes take effect the next time Serial Studio starts.</source>
         <translation>性能提示会提高进程优先级并退出操作系统电源限制。更改将在下次启动 Serial Studio 时生效。</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="342"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="358"/>
         <source>Updates &amp; News</source>
         <translation>更新与新闻</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="358"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="374"/>
         <source>Automatically Check for Updates</source>
         <translation>自动检查更新</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="381"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="399"/>
         <source>Check for Extension Updates</source>
         <translation>检查扩展更新</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="405"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="425"/>
         <source>Install Extension Updates Automatically</source>
         <translation>自动安装扩展更新</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="435"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsStartupPage.qml" line="457"/>
         <source>Installed extensions and themes are checked when Serial Studio starts, together with application updates. Serial Studio asks before installing them unless automatic installation is enabled.</source>
         <translation>Serial Studio 启动时会检查已安装的扩展和主题以及应用程序更新。除非启用自动安装，否则 Serial Studio 会在安装前询问。</translation>
     </message>
@@ -31135,67 +31145,67 @@ Add absolute addresses above to poll the controller.</source>
         <translation>始终显示任务栏按钮</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsTaskbarPage.qml" line="99"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsTaskbarPage.qml" line="101"/>
         <source>Show Search Field</source>
         <translation>显示搜索字段</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsTaskbarPage.qml" line="123"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsTaskbarPage.qml" line="127"/>
         <source>Auto-hide Taskbar</source>
         <translation>自动隐藏任务栏</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsTaskbarPage.qml" line="150"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsTaskbarPage.qml" line="156"/>
         <source>Hide Delay (ms)</source>
         <translation>隐藏延迟 (ms)</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsTaskbarPage.qml" line="183"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsTaskbarPage.qml" line="191"/>
         <source>Pinned Buttons</source>
         <translation>固定按钮</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsTaskbarPage.qml" line="201"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsTaskbarPage.qml" line="209"/>
         <source>Drag a pinned button on the taskbar to reorder it.</source>
         <translation>在任务栏上拖动固定按钮以重新排序。</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsTaskbarPage.qml" line="222"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsTaskbarPage.qml" line="230"/>
         <source>Settings</source>
         <translation>设置</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsTaskbarPage.qml" line="223"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsTaskbarPage.qml" line="231"/>
         <source>Console</source>
         <translation>控制台</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsTaskbarPage.qml" line="224"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsTaskbarPage.qml" line="232"/>
         <source>Notifications</source>
         <translation>通知</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsTaskbarPage.qml" line="225"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsTaskbarPage.qml" line="233"/>
         <source>Clock</source>
         <translation>时钟</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsTaskbarPage.qml" line="226"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsTaskbarPage.qml" line="234"/>
         <source>Stopwatch</source>
         <translation>秒表</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsTaskbarPage.qml" line="227"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsTaskbarPage.qml" line="235"/>
         <source>Pause / Resume</source>
         <translation>暂停 / 恢复</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsTaskbarPage.qml" line="228"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsTaskbarPage.qml" line="236"/>
         <source>File Transmission</source>
         <translation>文件传输</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/Settings/SettingsTaskbarPage.qml" line="229"/>
+        <location filename="../../qml/Dialogs/Settings/SettingsTaskbarPage.qml" line="237"/>
         <source>AI Assistant</source>
         <translation>AI 助手</translation>
     </message>
@@ -31247,67 +31257,67 @@ Add absolute addresses above to poll the controller.</source>
         <translation>操作模式</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="220"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="222"/>
         <source>Console Only (No Parsing)</source>
         <translation>仅控制台(不解析)</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="222"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="224"/>
         <source>Shows incoming data as text or hex. Nothing is parsed or plotted.</source>
         <translation>将传入数据显示为文本或十六进制。不进行任何解析或绘图。</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="232"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="236"/>
         <source>Quick Plot (Comma Separated Values)</source>
         <translation>快速绘图(逗号分隔值)</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="235"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="239"/>
         <source>Plots one line per sample with values separated by commas, for example 12.5,30.1,0.98 followed by a newline.</source>
         <translation>每行绘制一个样本，值之间用逗号分隔，例如 12.5,30.1,0.98，后跟换行符。</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="252"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="258"/>
         <source>Parse via Project File</source>
         <translation>通过项目文件解析</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="255"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="261"/>
         <source>Builds the dashboard from a project made in the Project Editor.</source>
         <translation>从项目编辑器中创建的项目构建仪表板。</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="272"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="280"/>
         <source>Change Project File (%1)</source>
         <translation>更改项目文件 (%1)</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="273"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="281"/>
         <source>Select Project File</source>
         <translation>选择项目文件</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="288"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="296"/>
         <source>Data Export</source>
         <translation>数据导出</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="312"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="322"/>
         <source>CSV Spreadsheet</source>
         <translation>CSV 电子表格</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="332"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="344"/>
         <source>Historian Database</source>
         <translation>历史记录器数据库</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="412"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="430"/>
         <source>Connection: %1</source>
         <translation>连接：%1</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="507"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="525"/>
         <source>Each device has its own connection settings. Configure them in the Project Editor under Devices.</source>
         <translation>每个设备都有自己的连接设置。在项目编辑器的"数据源"选项卡中配置它们。</translation>
     </message>
@@ -31320,12 +31330,12 @@ Add absolute addresses above to poll the controller.</source>
         <translation type="vanished">会话记录</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="351"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="365"/>
         <source>MDF4 Recording</source>
         <translation>MDF4 记录</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="367"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="383"/>
         <source>Console Log</source>
         <translation>控制台日志</translation>
     </message>
@@ -31366,12 +31376,12 @@ Add absolute addresses above to poll the controller.</source>
         <translation type="vanished">I/O 接口:%1</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="481"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="499"/>
         <source>Multi-Device Project</source>
         <translation>多设备项目</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="494"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="512"/>
         <source>This project streams data from %1 independent devices.</source>
         <translation>此项目从 %1 个独立设备流式传输数据。</translation>
     </message>
@@ -31380,7 +31390,7 @@ Add absolute addresses above to poll the controller.</source>
         <translation type="vanished">每个设备都有自己的连接设置。在项目编辑器的"数据源"选项卡中配置它们。</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="526"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="546"/>
         <source>Open Project Editor</source>
         <translation>打开项目编辑器</translation>
     </message>
@@ -31392,7 +31402,7 @@ Add absolute addresses above to poll the controller.</source>
         <translation type="vanished">新建快捷方式</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="224"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="227"/>
         <source>Choose an Icon</source>
         <translation>选择图标</translation>
     </message>
@@ -31401,193 +31411,193 @@ Add absolute addresses above to poll the controller.</source>
         <translation type="vanished">保存快捷方式</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="22"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="25"/>
         <source>New Deployment</source>
         <translation>新建部署</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="58"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="61"/>
         <source>%1 B</source>
         <translation>%1 B</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="61"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="64"/>
         <source>%1 KB</source>
         <translation>%1 KB</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="63"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="66"/>
         <source>%1 MB</source>
         <translation>%1 MB</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="175"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="178"/>
         <source>Save Deployment Package</source>
         <translation>保存部署包</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="179"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="182"/>
         <source>Serial Studio Deployment Package (*.ssdeploy)</source>
         <translation>Serial Studio 部署包 (*.ssdeploy)</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="192"/>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="240"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="195"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="243"/>
         <source>Save Deployment</source>
         <translation>保存部署</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="210"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="213"/>
         <source>Add Files</source>
         <translation>添加文件</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="213"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="216"/>
         <source>Images (*.png *.jpg *.jpeg *.bmp *.gif *.svg *.webp)</source>
         <translation>图像 (*.png *.jpg *.jpeg *.bmp *.gif *.svg *.webp)</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="214"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="217"/>
         <source>All files (*)</source>
         <translation>所有文件 (*)</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="327"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="330"/>
         <source>General</source>
         <translation>常规</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="333"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="336"/>
         <source>Taskbar</source>
         <translation>任务栏</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="339"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="342"/>
         <source>Logging</source>
         <translation>日志记录</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="345"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="348"/>
         <source>Contents</source>
         <translation>内容</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="404"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="407"/>
         <source>Output</source>
         <translation>输出</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="419"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="422"/>
         <source>Format</source>
         <translation>格式化</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="428"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="431"/>
         <source>Deployment package (.ssdeploy)</source>
         <translation>部署包 (.ssdeploy)</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="429"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="432"/>
         <source>Shortcut to the project file</source>
         <translation>项目文件的快捷方式</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="466"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="469"/>
         <source>Desktop Shortcut</source>
         <translation>桌面快捷方式</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="486"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="489"/>
         <source>Identity</source>
         <translation>标识</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="501"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="504"/>
         <source>Name</source>
         <translation>名称</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="513"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="516"/>
         <source>Icon</source>
         <translation>图标</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="549"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="552"/>
         <source>Click to choose an icon</source>
         <translation>点击以选择图标</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="651"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="654"/>
         <source>Opens straight to the live dashboard, with no toolbar, no setup pane, and no way to view or export the project. Serial Studio quits when the device disconnects.</source>
         <translation>直接打开实时仪表板，不显示工具栏、设置窗格，且无法查看或导出项目。设备断开连接时 Serial Studio 退出。</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="654"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="657"/>
         <source>Opens the project straight to the live dashboard, with no toolbar or setup pane. Serial Studio quits when the device disconnects.</source>
         <translation>直接打开项目到实时仪表板，不显示工具栏或设置窗格。设备断开连接时 Serial Studio 退出。</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1024"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1027"/>
         <source>Carried Files</source>
         <translation>附带文件</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1033"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1036"/>
         <source>%1 in total</source>
         <translation>共 %1 个</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1067"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1070"/>
         <source>Remove</source>
         <translation>移除</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1088"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1091"/>
         <source>Add images a Canvas script loads at run time.</source>
         <translation>添加 Canvas 脚本在运行时加载的图像。</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1092"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1095"/>
         <source>Add Files…</source>
         <translation>添加文件…</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1104"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1107"/>
         <source>Missing Files</source>
         <translation>缺失文件</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1141"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1144"/>
         <source>Export is blocked until these files exist.</source>
         <translation>导出被阻止，直到这些文件存在。</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1149"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1152"/>
         <source>External Dependencies</source>
         <translation>外部依赖</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1186"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1189"/>
         <source>The target machine must provide these.</source>
         <translation>目标机器必须提供这些。</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1195"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1198"/>
         <source>Credentials and Private Keys</source>
         <translation>凭证和私钥</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1226"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1229"/>
         <source>Packages are encoded, not encrypted. Anyone with the file can recover the items you include.</source>
         <translation>包已编码但未加密。任何拥有该文件的人都可以恢复您包含的项目。</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1260"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1263"/>
         <source>Saved %1</source>
         <translation>已保存 %1</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1270"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1273"/>
         <source>Open Package</source>
         <translation>打开包</translation>
     </message>
@@ -31596,28 +31606,28 @@ Add absolute addresses above to poll the controller.</source>
         <translation type="vanished">名称:</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="508"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="511"/>
         <source>Deployment Name</source>
         <translation>部署名称</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="590"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="593"/>
         <source>Theme</source>
         <translation>主题</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="598"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="601"/>
         <source>Same as Serial Studio</source>
         <translation>与 Serial Studio 相同</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="621"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="624"/>
         <source>Actions Panel</source>
         <translation>操作面板</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="633"/>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="863"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="636"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="866"/>
         <source>File Transmission</source>
         <translation>文件传输</translation>
     </message>
@@ -31626,87 +31636,87 @@ Add absolute addresses above to poll the controller.</source>
         <translation type="vanished">双击此部署可直接进入该项目的实时仪表板。没有工具栏或设置面板,只有数据,并且 Serial Studio 会在设备断开连接后立即退出。</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="698"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="701"/>
         <source>Visibility</source>
         <translation>可见性</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="713"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="716"/>
         <source>Mode</source>
         <translation>模式</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="720"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="723"/>
         <source>Always shown</source>
         <translation>始终显示</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="721"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="724"/>
         <source>Auto-hide</source>
         <translation>自动隐藏</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="722"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="725"/>
         <source>Hidden</source>
         <translation>隐藏</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="730"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="733"/>
         <source>Search Bar</source>
         <translation>搜索栏</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="752"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="755"/>
         <source>Hiding the taskbar removes window minimize/maximize/close buttons and forces auto-layout, so the dashboard always fills the available area.</source>
         <translation>隐藏任务栏会移除窗口最小化/最大化/关闭按钮并强制自动布局,使仪表板始终填充可用区域。</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="756"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="759"/>
         <source>The taskbar slides in when the user moves the cursor near the bottom edge.</source>
         <translation>当用户将光标移至底部边缘附近时,任务栏会滑入。</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="758"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="761"/>
         <source>The taskbar is permanently visible at the bottom of the dashboard.</source>
         <translation>任务栏在仪表板底部永久可见。</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="771"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="774"/>
         <source>Pinned Buttons</source>
         <translation>固定按钮</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="788"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="791"/>
         <source>Console</source>
         <translation>控制台</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="803"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="806"/>
         <source>Notifications</source>
         <translation>通知</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="818"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="821"/>
         <source>Clock</source>
         <translation>时钟</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="833"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="836"/>
         <source>Stopwatch</source>
         <translation>秒表</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="848"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="851"/>
         <source>Pause</source>
         <translation>暂停</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="951"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="954"/>
         <source>Historian</source>
         <translation>历史记录器</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="979"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="982"/>
         <source>Recordings are saved in the Serial Studio workspace folder</source>
         <translation>录制内容保存在 Serial Studio 工作区文件夹中</translation>
     </message>
@@ -31715,27 +31725,27 @@ Add absolute addresses above to poll the controller.</source>
         <translation type="vanished">快捷方式名称</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="555"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="558"/>
         <source>Change Icon…</source>
         <translation>更改图标…</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="436"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="439"/>
         <source>Project</source>
         <translation>项目</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="446"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="449"/>
         <source>Choose a project file to begin</source>
         <translation>选择项目文件以开始</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="575"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="578"/>
         <source>Behavior</source>
         <translation>行为</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="610"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="613"/>
         <source>Fullscreen</source>
         <translation>全屏</translation>
     </message>
@@ -31756,17 +31766,17 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
 启用"嵌入项目"可将项目嵌入快捷方式中,即使原始文件被移动或删除,快捷方式仍可正常工作。</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="914"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="917"/>
         <source>Recorders</source>
         <translation>记录器</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="929"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="932"/>
         <source>CSV File</source>
         <translation>CSV 文件</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="940"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="943"/>
         <source>MDF4 File</source>
         <translation>MDF4 文件</translation>
     </message>
@@ -31775,7 +31785,7 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
         <translation type="vanished">会话数据库</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="962"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="965"/>
         <source>Console Log</source>
         <translation>控制台日志</translation>
     </message>
@@ -31784,17 +31794,17 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
         <translation type="vanished">记录保存到各模块的默认位置。</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1282"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1285"/>
         <source>Cancel</source>
         <translation>取消</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1282"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1285"/>
         <source>Close</source>
         <translation>关闭</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1287"/>
+        <location filename="../../qml/Dialogs/ShortcutGenerator.qml" line="1290"/>
         <source>Save</source>
         <translation>保存</translation>
     </message>
@@ -31999,27 +32009,27 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
 <context>
     <name>StartMenu</name>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="338"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="344"/>
         <source>Workspaces</source>
         <translation>工作区</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="476"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="484"/>
         <source>Actions</source>
         <translation>操作</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="500"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="508"/>
         <source>No Actions Available</source>
         <translation>无可用操作</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="530"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="540"/>
         <source>Plugins</source>
         <translation>插件</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="579"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="589"/>
         <source>No Plugins Installed</source>
         <translation>未安装插件</translation>
     </message>
@@ -32044,7 +32054,7 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
         <translation type="vanished">工具</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="773"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="787"/>
         <source>No Tools Available</source>
         <translation>无可用工具</translation>
     </message>
@@ -32057,17 +32067,17 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
         <translation type="vanished">退出</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="874"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="888"/>
         <source>Delete</source>
         <translation>删除</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="875"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="889"/>
         <source>Hide</source>
         <translation>隐藏</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="427"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="433"/>
         <source>New Workspace…</source>
         <translation>新建工作区…</translation>
     </message>
@@ -32092,22 +32102,22 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
         <translation type="vanished">AI 助手</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="413"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="419"/>
         <source>Show "%1"</source>
         <translation>显示"%1"</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="418"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="424"/>
         <source>Show All Hidden Workspaces</source>
         <translation>显示所有隐藏的工作区</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="441"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="447"/>
         <source>No Workspaces Available</source>
         <translation>无可用工作区</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="569"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="579"/>
         <source>Manage Plugins…</source>
         <translation>管理插件…</translation>
     </message>
@@ -32136,7 +32146,7 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
         <translation type="vanished">会话数据库</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="697"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="709"/>
         <source>No Export Formats Available</source>
         <translation>无可用导出格式</translation>
     </message>
@@ -32153,7 +32163,7 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
         <translation type="vanished">偏好设置</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="863"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/StartMenu.qml" line="877"/>
         <source>Edit…</source>
         <translation>编辑…</translation>
     </message>
@@ -32432,7 +32442,7 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
         <translation type="vanished">开始菜单</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="222"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="224"/>
         <source>Menu</source>
         <translation>菜单</translation>
     </message>
@@ -32441,42 +32451,42 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
         <translation type="vanished">搜索…</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="585"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="593"/>
         <source>Settings</source>
         <translation>设置</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="586"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="594"/>
         <source>Console</source>
         <translation>控制台</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="587"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="595"/>
         <source>Notifications</source>
         <translation>通知</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="588"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="596"/>
         <source>Clock</source>
         <translation>时钟</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="589"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="597"/>
         <source>Stopwatch</source>
         <translation>秒表</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="591"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="599"/>
         <source>AI Assistant</source>
         <translation>AI 助手</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="592"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="600"/>
         <source>Resume</source>
         <translation>恢复</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="592"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="600"/>
         <source>Pause</source>
         <translation>暂停</translation>
     </message>
@@ -32489,77 +32499,77 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
         <translation type="vanished">无可用工作区</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="260"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="264"/>
         <source>Search… (%1)</source>
         <translation>搜索… (%1)</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="943"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="952"/>
         <source>Data is arriving faster than scripts can process it; some frames are being thinned. See the problem center for details.</source>
         <translation>数据到达速度超过脚本处理能力;部分帧正在被精简。请查看问题中心以获取详情。</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="967"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="976"/>
         <source>Unfreeze Dashboard</source>
         <translation>解冻仪表板</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="968"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="977"/>
         <source>Freeze Dashboard</source>
         <translation>冻结仪表板</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1012"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1021"/>
         <source>MQTT: Connected to %1</source>
         <translation>MQTT：已连接到 %1</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1013"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1022"/>
         <source>MQTT: Not connected</source>
         <translation>MQTT：未连接</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1041"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1050"/>
         <source>MQTT Publisher</source>
         <translation>MQTT 发布者</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1051"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1060"/>
         <source>Status:</source>
         <translation>状态:</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1059"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1068"/>
         <source>Connected</source>
         <translation>已连接</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1060"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1069"/>
         <source>Disconnected</source>
         <translation>已断开</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1067"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1076"/>
         <source>Broker:</source>
         <translation>代理:</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1080"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1089"/>
         <source>Mode:</source>
         <translation>模式:</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1093"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1102"/>
         <source>Messages sent:</source>
         <translation>已发送消息:</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1107"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1118"/>
         <source>Open MQTT Settings</source>
         <translation>打开 MQTT 设置</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="590"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="598"/>
         <source>File Transmission</source>
         <translation>文件传输</translation>
     </message>
@@ -32568,7 +32578,7 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
         <translation type="vanished">搜索控件…</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1171"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/Taskbar.qml" line="1182"/>
         <source>Remove from Workspace</source>
         <translation>从工作区移除</translation>
     </message>
@@ -32587,17 +32597,17 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
     </message>
     <message>
         <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="192"/>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="254"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="256"/>
         <source>Clear</source>
         <translation>清除</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="269"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="273"/>
         <source>Find</source>
         <translation>查找</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="297"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="301"/>
         <source>Collapse</source>
         <translation>折叠</translation>
     </message>
@@ -32610,57 +32620,57 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
         <translation type="vanished">将控制台输出记录到文件</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="417"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="431"/>
         <source>Settings</source>
         <translation>设置</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="420"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="434"/>
         <source>Console settings</source>
         <translation>控制台设置</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="625"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="653"/>
         <source>Find in console</source>
         <translation>在控制台中查找</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="662"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="690"/>
         <source>%1 of %2</source>
         <translation>%1 / %2</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="663"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="691"/>
         <source>No results</source>
         <translation>无结果</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="675"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="705"/>
         <source>Match case</source>
         <translation>区分大小写</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="690"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="722"/>
         <source>Previous match</source>
         <translation>上一个匹配项</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="701"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="735"/>
         <source>Next match</source>
         <translation>下一个匹配项</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="711"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="747"/>
         <source>Close search</source>
         <translation>关闭搜索</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="758"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="796"/>
         <source>Send a file to the connected device</source>
         <translation>向已连接设备发送文件</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="274"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="278"/>
         <source>Search console output</source>
         <translation>搜索控制台输出</translation>
     </message>
@@ -32670,118 +32680,118 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
         <translation>实用工具</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="301"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="305"/>
         <source>Collapse repeated lines into a single entry</source>
         <translation>将重复行折叠为单个条目</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="314"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="320"/>
         <source>Annotations</source>
         <translation>注释</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="321"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="327"/>
         <source>Label the incoming bytes with a decoder and inspect them</source>
         <translation>使用解码器标记传入字节并检查它们</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="344"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="352"/>
         <source>Resume</source>
         <translation>恢复</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="344"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="352"/>
         <source>Pause</source>
         <translation>暂停</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="349"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="357"/>
         <source>Resume console updates</source>
         <translation>恢复控制台更新</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="350"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="358"/>
         <source>Freeze the console display (data keeps logging)</source>
         <translation>冻结控制台显示(数据继续记录)</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="369"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="377"/>
         <source>Format</source>
         <translation>格式化</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="377"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="387"/>
         <source>Text</source>
         <translation>文本</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="381"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="391"/>
         <source>Plain text display mode</source>
         <translation>纯文本显示模式</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="392"/>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="930"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="404"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="976"/>
         <source>Hex</source>
         <translation>十六进制</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="396"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="408"/>
         <source>Hex display mode</source>
         <translation>Hex 显示模式</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="500"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="522"/>
         <source>Scrollback Lines</source>
         <translation>回滚行数</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="529"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="553"/>
         <source>Cyclic Send Interval (ms)</source>
         <translation>循环发送间隔 (ms)</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="799"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="841"/>
         <source>Command library (history, pins and actions)</source>
         <translation>命令库（历史记录、引脚和操作）</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="823"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="867"/>
         <source>Send Data to Device</source>
         <translation>发送数据到设备</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="991"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="1043"/>
         <source>Stop cyclic send</source>
         <translation>停止循环发送</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="992"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="1044"/>
         <source>Repeat the current command every %1 ms</source>
         <translation>每 %1 ms 重复当前命令</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="1013"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="1067"/>
         <source>Send data to the device</source>
         <translation>发送数据到设备</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="451"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="467"/>
         <source>Show Timestamp</source>
         <translation>显示时间戳</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="459"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="477"/>
         <source>Echo</source>
         <translation>回显</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="476"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="496"/>
         <source>Emulate VT-100</source>
         <translation>模拟 VT-100</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="489"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="511"/>
         <source>ANSI Colors</source>
         <translation>ANSI 颜色</translation>
     </message>
@@ -32790,7 +32800,7 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
         <translation type="vanished">显示：%1</translation>
     </message>
     <message>
-        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="258"/>
+        <location filename="../../qml/Widgets/Dashboard/Terminal.qml" line="260"/>
         <source>Clear console output</source>
         <translation>清空控制台输出</translation>
     </message>
@@ -33285,23 +33295,23 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
         <translation>远程仪表板</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="258"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="259"/>
         <source>Manage the remote dashboard connection</source>
         <translation>管理远程仪表板连接</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="301"/>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="311"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="303"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="313"/>
         <source>Disconnect</source>
         <translation>断开连接</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="301"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="303"/>
         <source>Connect</source>
         <translation>连接</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="301"/>
+        <location filename="../../qml/MainWindow/Panes/Toolbar.qml" line="303"/>
         <source>Connecting…</source>
         <translation>正在连接…</translation>
     </message>
@@ -33411,72 +33421,72 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
 <context>
     <name>TransmitCodeDialog</name>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/TransmitCodeDialog.qml" line="41"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/TransmitCodeDialog.qml" line="43"/>
         <source>Transmit Function Editor</source>
         <translation>传输函数编辑器</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/TransmitCodeDialog.qml" line="159"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/TransmitCodeDialog.qml" line="161"/>
         <source>Select Template</source>
         <translation>选择模板</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/TransmitCodeDialog.qml" line="171"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/TransmitCodeDialog.qml" line="173"/>
         <source>Import</source>
         <translation>导入</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/TransmitCodeDialog.qml" line="177"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/TransmitCodeDialog.qml" line="179"/>
         <source>Import a transmit function from a .js file</source>
         <translation>从 .js 文件导入传输函数</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/TransmitCodeDialog.qml" line="183"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/TransmitCodeDialog.qml" line="185"/>
         <source>Validate</source>
         <translation>验证</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/TransmitCodeDialog.qml" line="188"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/TransmitCodeDialog.qml" line="190"/>
         <source>Verify that the script compiles and defines transmit(value)</source>
         <translation>验证脚本是否正确编译并定义 transmit(value)</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/TransmitCodeDialog.qml" line="226"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/TransmitCodeDialog.qml" line="228"/>
         <source>Produced Bytes</source>
         <translation>生成的字节</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/TransmitCodeDialog.qml" line="248"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/TransmitCodeDialog.qml" line="250"/>
         <source>Interact with the control to see its output</source>
         <translation>与控件交互以查看其输出</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/TransmitCodeDialog.qml" line="276"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/TransmitCodeDialog.qml" line="278"/>
         <source>%1 bytes, from the last version that compiled</source>
         <translation>%1 字节,来自上次编译成功的版本</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/TransmitCodeDialog.qml" line="277"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/TransmitCodeDialog.qml" line="279"/>
         <source>%1 bytes</source>
         <translation>%1 字节</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/TransmitCodeDialog.qml" line="299"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/TransmitCodeDialog.qml" line="301"/>
         <source>Save</source>
         <translation>保存</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/TransmitCodeDialog.qml" line="302"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/TransmitCodeDialog.qml" line="304"/>
         <source>Validate and store the transmit function</source>
         <translation>验证并存储传输函数</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/TransmitCodeDialog.qml" line="311"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/TransmitCodeDialog.qml" line="313"/>
         <source>Close</source>
         <translation>关闭</translation>
     </message>
     <message>
-        <location filename="../../qml/ProjectEditor/Dialogs/TransmitCodeDialog.qml" line="314"/>
+        <location filename="../../qml/ProjectEditor/Dialogs/TransmitCodeDialog.qml" line="316"/>
         <source>Close without storing this edit</source>
         <translation>关闭而不存储此编辑</translation>
     </message>
@@ -33484,7 +33494,7 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
 <context>
     <name>TriggerDialog</name>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="50"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="52"/>
         <source>Trigger Settings</source>
         <translation>触发设置</translation>
     </message>
@@ -33497,7 +33507,7 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
         <translation type="vanished">锁定重复信号,类似示波器的自动按钮。每次扫描从波形的同一点开始,使其保持静止而不是滚动。</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="188"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="190"/>
         <source>Trigger</source>
         <translation>触发</translation>
     </message>
@@ -33506,57 +33516,57 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
         <translation type="vanished">模式：</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="125"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="127"/>
         <source>Mode</source>
         <translation>模式</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="150"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="152"/>
         <source>Auto</source>
         <translation>自动</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="150"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="152"/>
         <source>Normal</source>
         <translation>正常</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="150"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="152"/>
         <source>Single</source>
         <translation>单次</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="173"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="175"/>
         <source>Auto free-runs when nothing crosses the level.</source>
         <translation>自动模式在无信号越过电平时自由运行。</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="174"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="176"/>
         <source>Normal waits for a crossing.</source>
         <translation>正常模式等待越过电平。</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="175"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="177"/>
         <source>Single captures one sweep, then stops.</source>
         <translation>单次模式捕获一次扫描后停止。</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="258"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="260"/>
         <source>Slope:</source>
         <translation>斜率：</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="290"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="292"/>
         <source>Trigger on a downward crossing</source>
         <translation>在下降沿越过时触发</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="336"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="338"/>
         <source>Timebase:</source>
         <translation>时基：</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="407"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="409"/>
         <source>Leave timebase empty to use the plot's time range; lower it to zoom in on a fast signal. Holdoff ignores new triggers for a moment after each.</source>
         <translation>时基留空则使用绘图的时间范围;降低时基可放大快速信号。保持时间在每次触发后忽略新触发一段时间。</translation>
     </message>
@@ -33565,7 +33575,7 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
         <translation type="vanished">信号:</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="246"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="248"/>
         <source>Value to cross</source>
         <translation>交叉值</translation>
     </message>
@@ -33574,17 +33584,17 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
         <translation type="vanished">边沿：</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="271"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="273"/>
         <source>Rising</source>
         <translation>上升沿</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="275"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="277"/>
         <source>Trigger on an upward crossing</source>
         <translation>在上升沿越过时触发</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="286"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="288"/>
         <source>Falling</source>
         <translation>下降沿</translation>
     </message>
@@ -33593,7 +33603,7 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
         <translation type="vanished">每当信号按所选方向穿过电平时开始新的扫描。自动模式在未找到交叉点时也会自由运行。</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="309"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="311"/>
         <source>Timing</source>
         <translation>时序</translation>
     </message>
@@ -33602,23 +33612,23 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
         <translation type="vanished">时基 (ms):</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="349"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="351"/>
         <source>Match time range</source>
         <translation>匹配时间范围</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="363"/>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="394"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="365"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="396"/>
         <source>ms</source>
         <translation>ms</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="369"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="371"/>
         <source>Holdoff:</source>
         <translation>保持时间：</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="382"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="384"/>
         <source>0</source>
         <translation>0</translation>
     </message>
@@ -33627,17 +33637,17 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
         <translation type="vanished">时基设置一次扫描显示的时间长度;留空则使用绘图的时间范围。降低时基可放大快速信号。保持时间在每次触发后忽略新触发一段时间。</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="422"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="424"/>
         <source>Capture Next</source>
         <translation>捕获下一个</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="424"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="426"/>
         <source>Arm for one more single-shot capture</source>
         <translation>触发下一次单次捕获</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="233"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="235"/>
         <source>Level:</source>
         <translation>电平：</translation>
     </message>
@@ -33654,7 +33664,7 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
         <translation type="vanished">保持时间</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="212"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="214"/>
         <source>Source:</source>
         <translation>源：</translation>
     </message>
@@ -33663,7 +33673,7 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
         <translation type="vanished">重新触发</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="437"/>
+        <location filename="../../qml/Dialogs/TriggerDialog.qml" line="439"/>
         <source>Close</source>
         <translation>关闭</translation>
     </message>
@@ -33681,42 +33691,42 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
         <translation>串口</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="98"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="100"/>
         <source>Baud Rate</source>
         <translation>波特率</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="183"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="187"/>
         <source>Data Bits</source>
         <translation>数据位</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="203"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="209"/>
         <source>Parity</source>
         <translation>校验位</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="225"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="233"/>
         <source>Stop Bits</source>
         <translation>停止位</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="246"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="256"/>
         <source>Flow Control</source>
         <translation>流控制</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="276"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="288"/>
         <source>Auto Reconnect</source>
         <translation>自动重连</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="294"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="308"/>
         <source>Send DTR Signal</source>
         <translation>发送 DTR 信号</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="303"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UART.qml" line="319"/>
         <source>Raises the DTR line when the port opens. Many boards (for example Arduino) reset when DTR changes; turn it off to connect without a reset.</source>
         <translation>端口打开时拉高 DTR 线。许多开发板（例如 Arduino）在 DTR 改变时会重置；关闭此选项可在不重置的情况下连接。</translation>
     </message>
@@ -33914,7 +33924,7 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
         <translation>USB 设备</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="80"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="82"/>
         <source>Transfer Mode</source>
         <translation>传输模式</translation>
     </message>
@@ -33923,32 +33933,32 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
         <translation type="vanished">批量流</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="90"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="94"/>
         <source>Advanced (Bulk + Control)</source>
         <translation>高级(批量 + 控制)</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="91"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="95"/>
         <source>Isochronous</source>
         <translation>同步</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="266"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="276"/>
         <source>Connect to USB devices using bulk, control, or isochronous transfers. Suitable for data loggers, custom firmware devices, and USB instruments.</source>
         <translation>使用批量、控制或同步传输连接到 USB 设备。适用于数据记录器、自定义固件设备和 USB 仪器。</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="275"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="285"/>
         <source>USB specifications (USB.org)</source>
         <translation>USB 规范 (USB.org)</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="127"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="131"/>
         <source>IN Endpoint</source>
         <translation>IN 端点</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="89"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="93"/>
         <source>Bulk/Interrupt Stream</source>
         <translation>批量/中断流</translation>
     </message>
@@ -33961,37 +33971,37 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
         <translation type="vanished">这将在批量传输之外启用控制传输。发送不正确的控制请求可能会导致连接的硬件崩溃或损坏。仅在了解相关操作的情况下启用此功能。</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="163"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="169"/>
         <source>OUT Endpoint</source>
         <translation>OUT 端点</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="199"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="207"/>
         <source>Max Packet Size</source>
         <translation>最大数据包大小</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="309"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="319"/>
         <source>No compatible data endpoints were found for this transfer mode. Try another transfer mode. Devices that speak a dedicated protocol (e.g. CAN or Modbus adapters) should be connected through their own driver instead.</source>
         <translation>未找到与此传输模式兼容的数据端点。请尝试其他传输模式。使用专用协议的设备(例如 CAN 或 Modbus 适配器)应通过其自身的驱动程序连接。</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="350"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="360"/>
         <source>Control Transfers Enabled</source>
         <translation>已启用控制传输</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="359"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="369"/>
         <source>Sending incorrect control requests may crash or damage connected hardware. Use with caution.</source>
         <translation>发送不正确的控制请求可能会导致连接的硬件崩溃或损坏。请谨慎使用。</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="366"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="376"/>
         <source>Learn about USB control transfers</source>
         <translation>了解 USB 控制传输</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="400"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/USB.qml" line="410"/>
         <source>Packet size should match the maximum transfer size reported by the endpoint. Typical values: 192 B (FS audio), 1024 B (HS).</source>
         <translation>数据包大小应与端点报告的最大传输大小匹配。典型值：192 B（FS 音频）、1024 B（HS）。</translation>
     </message>
@@ -34042,57 +34052,57 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
         <translation>请求类型</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UsbControlComposer.qml" line="88"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UsbControlComposer.qml" line="90"/>
         <source>Request</source>
         <translation>请求</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UsbControlComposer.qml" line="98"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UsbControlComposer.qml" line="102"/>
         <source>wValue</source>
         <translation>wValue</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UsbControlComposer.qml" line="109"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UsbControlComposer.qml" line="115"/>
         <source>wIndex</source>
         <translation>wIndex</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UsbControlComposer.qml" line="120"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UsbControlComposer.qml" line="128"/>
         <source>Direction</source>
         <translation>方向</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UsbControlComposer.qml" line="124"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UsbControlComposer.qml" line="132"/>
         <source>IN · device → host</source>
         <translation>IN · 设备 → 主机</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UsbControlComposer.qml" line="124"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UsbControlComposer.qml" line="132"/>
         <source>OUT · host → device</source>
         <translation>OUT · 主机 → 设备</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UsbControlComposer.qml" line="129"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UsbControlComposer.qml" line="137"/>
         <source>Data</source>
         <translation>数据</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UsbControlComposer.qml" line="141"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UsbControlComposer.qml" line="151"/>
         <source>Read Length</source>
         <translation>读取长度</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UsbControlComposer.qml" line="158"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UsbControlComposer.qml" line="172"/>
         <source>Send Control Transfer</source>
         <translation>发送控制传输</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UsbControlComposer.qml" line="165"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UsbControlComposer.qml" line="179"/>
         <source>Sending…</source>
         <translation>正在发送…</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UsbControlComposer.qml" line="193"/>
+        <location filename="../../qml/MainWindow/Panes/SetupPanes/Drivers/UsbControlComposer.qml" line="209"/>
         <source>Transfer result appears here.</source>
         <translation>传输结果将显示在此处。</translation>
     </message>
@@ -34579,47 +34589,47 @@ I understand that when it ends, I'll need to buy a license or build the GPLv3 ve
         <translation type="vanished">从工作区移除</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/WidgetDelegate.qml" line="168"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/WidgetDelegate.qml" line="172"/>
         <source>Rename Widget…</source>
         <translation>重命名控件…</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/WidgetDelegate.qml" line="181"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/WidgetDelegate.qml" line="185"/>
         <source>Freeze Title</source>
         <translation>冻结标题</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/WidgetDelegate.qml" line="187"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/WidgetDelegate.qml" line="193"/>
         <source>Title Bar</source>
         <translation>标题栏</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/WidgetDelegate.qml" line="195"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/WidgetDelegate.qml" line="203"/>
         <source>Painted Title</source>
         <translation>绘制标题</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/WidgetDelegate.qml" line="205"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/WidgetDelegate.qml" line="215"/>
         <source>Hidden</source>
         <translation>隐藏</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/WidgetDelegate.qml" line="217"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/WidgetDelegate.qml" line="229"/>
         <source>Widget Settings…</source>
         <translation>控件设置…</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/WidgetDelegate.qml" line="232"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/WidgetDelegate.qml" line="246"/>
         <source>Open in External Window</source>
         <translation>在外部窗口中打开</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/WidgetDelegate.qml" line="437"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/WidgetDelegate.qml" line="451"/>
         <source>The widget could not be created.</source>
         <translation>无法创建控件。</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/WidgetDelegate.qml" line="720"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/WidgetDelegate.qml" line="734"/>
         <source>Device Disconnected</source>
         <translation>设备已断开连接</translation>
     </message>
@@ -34913,42 +34923,42 @@ I understand that when it ends, I'll need to buy a license or build the GPLv3 ve
 <context>
     <name>WorkspaceDialog</name>
     <message>
-        <location filename="../../qml/Dialogs/WorkspaceDialog.qml" line="51"/>
+        <location filename="../../qml/Dialogs/WorkspaceDialog.qml" line="53"/>
         <source>Edit Workspace</source>
         <translation>编辑工作区</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/WorkspaceDialog.qml" line="52"/>
+        <location filename="../../qml/Dialogs/WorkspaceDialog.qml" line="54"/>
         <source>New Workspace</source>
         <translation>新建工作区</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/WorkspaceDialog.qml" line="176"/>
+        <location filename="../../qml/Dialogs/WorkspaceDialog.qml" line="178"/>
         <source>Name:</source>
         <translation>名称:</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/WorkspaceDialog.qml" line="185"/>
+        <location filename="../../qml/Dialogs/WorkspaceDialog.qml" line="187"/>
         <source>My Workspace</source>
         <translation>我的工作区</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/WorkspaceDialog.qml" line="200"/>
+        <location filename="../../qml/Dialogs/WorkspaceDialog.qml" line="202"/>
         <source>Select widgets to include:</source>
         <translation>选择要包含的控件:</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/WorkspaceDialog.qml" line="208"/>
+        <location filename="../../qml/Dialogs/WorkspaceDialog.qml" line="210"/>
         <source>Filter widgets…</source>
         <translation>筛选控件…</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/WorkspaceDialog.qml" line="318"/>
+        <location filename="../../qml/Dialogs/WorkspaceDialog.qml" line="320"/>
         <source>Cancel</source>
         <translation>取消</translation>
     </message>
     <message>
-        <location filename="../../qml/Dialogs/WorkspaceDialog.qml" line="325"/>
+        <location filename="../../qml/Dialogs/WorkspaceDialog.qml" line="327"/>
         <source>OK</source>
         <translation>确定</translation>
     </message>
@@ -35376,6 +35386,48 @@ I understand that when it ends, I'll need to buy a license or build the GPLv3 ve
     <message>
         <source>No workspaces.</source>
         <translation type="vanished">无工作区。</translation>
+    </message>
+</context>
+<context>
+    <name>bad</name>
+    <message>
+        <location filename="../../../scripts/tests/fixtures/qml-control-unnamed/bad.qml" line="8"/>
+        <source>Baud Rate</source>
+        <translation>波特率</translation>
+    </message>
+    <message>
+        <location filename="../../../scripts/tests/fixtures/qml-control-unnamed-advisory/bad.qml" line="8"/>
+        <source>Apply</source>
+        <translation>应用</translation>
+    </message>
+    <message>
+        <location filename="../../../scripts/tests/fixtures/qml-objectname-literal/bad.qml" line="8"/>
+        <location filename="../../../scripts/tests/fixtures/qml-objectname-literal/bad.qml" line="9"/>
+        <source>Connect</source>
+        <translation>连接</translation>
+    </message>
+</context>
+<context>
+    <name>good</name>
+    <message>
+        <location filename="../../../scripts/tests/fixtures/qml-control-unnamed/good.qml" line="8"/>
+        <source>Baud Rate</source>
+        <translation>波特率</translation>
+    </message>
+    <message>
+        <location filename="../../../scripts/tests/fixtures/qml-control-unnamed-advisory/good.qml" line="9"/>
+        <source>Apply</source>
+        <translation>应用</translation>
+    </message>
+    <message>
+        <location filename="../../../scripts/tests/fixtures/qml-objectname-literal/good.qml" line="11"/>
+        <source>Connect</source>
+        <translation>连接</translation>
+    </message>
+    <message>
+        <location filename="../../../scripts/tests/fixtures/qml-objectname-literal/good.qml" line="16"/>
+        <source>Close</source>
+        <translation>关闭</translation>
     </message>
 </context>
 </TS>
