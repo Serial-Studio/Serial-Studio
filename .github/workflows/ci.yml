@@ -2047,6 +2047,13 @@ jobs:
       run: python3 scripts/code-verify.py --dup-census --check
 
     #
+    # The mistakes ledger closes a row only with a mechanical check; a prose-only row is open
+    # debt, and this fails when the open count grows past scripts/ledger-baseline.json
+    #
+    - name: '🔒 Ratchet the mistakes ledger'
+      run: python3 scripts/ledger-verify.py --check
+
+    #
     # Spec 0077: every Core::Bus topic has a publisher and a subscriber, no token names a topic
     # Messages.h does not declare, and no bus token sits in a hotpath translation unit
     #

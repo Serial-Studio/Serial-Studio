@@ -430,6 +430,14 @@ def test_clang_format_is_pinned_and_gated():
     assert "sanitize-commit.py --check-format" in runs, "no CI clang-format gate"
 
 
+def test_the_ledger_ratchet_is_gated():
+    """A prose-only ledger row is open debt; CI fails when the open count grows."""
+    runs = " ".join(str(step.get("run", "")) for _, step in _all_steps(CI_YML))
+    assert "ledger-verify.py --check" in runs, "no CI ledger ratchet"
+    baseline = REPO / "scripts" / "ledger-baseline.json"
+    assert baseline.is_file(), "scripts/ledger-baseline.json must be checked in"
+
+
 # --------------------------------------------------------------------------------------------
 # xfail policy (L14)
 # --------------------------------------------------------------------------------------------
