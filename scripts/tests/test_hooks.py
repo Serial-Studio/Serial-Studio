@@ -159,9 +159,10 @@ def test_hooks_never_aimed_at_real_repo(run_hook, project):
         assert Path(root).resolve() != REPO
 
 
-def _canary(run_hook, name):
-    """Run the canary hook on fixture `name`; return stdout."""
+def _canary(run_hook, name, **extra):
+    """Run the canary hook on fixture `name` with any extra event fields; return stdout."""
     event = {"transcript_path": str(FIXTURES / name), "session_id": "s1"}
+    event.update(extra)
     code, out, _ = run_hook("canary-check.py", event)
     assert code == 0
     return out
@@ -193,6 +194,33 @@ def test_canary_mutated(run_hook):
 def test_canary_missing(run_hook):
     """No canary line at all raises CANARY MISSING."""
     out = _canary(run_hook, "canary-missing.jsonl")
+    assert "CANARY MISSING" in _json(out)["systemMessage"]
+
+
+def _healthy_text():
+    """The canary-bearing final message of the healthy fixture, as the event would carry it."""
+    last = (
+        (FIXTURES / "canary-healthy.jsonl")
+        .read_text(encoding="utf-8")
+        .strip()
+        .splitlines()[-1]
+    )
+    return json.loads(last)["message"]["content"][0]["text"]
+
+
+def test_canary_event_text(run_hook):
+    """The event's last_assistant_message is judged, not a transcript that has not flushed it."""
+    out = _canary(
+        run_hook, "canary-missing.jsonl", last_assistant_message=_healthy_text()
+    )
+    assert out == ""
+
+
+def test_canary_event_text_missing(run_hook):
+    """A final message without the canary warns even when the transcript's last entry has one."""
+    out = _canary(
+        run_hook, "canary-healthy.jsonl", last_assistant_message="Nothing at the end."
+    )
     assert "CANARY MISSING" in _json(out)["systemMessage"]
 
 
@@ -520,3 +548,24 @@ def test_claim_stop_hook_active(run_hook):
 def test_claim_env_off(run_hook):
     """SS_CLAIM_CHECK=off disables the hook."""
     assert _claim(run_hook, "env-off", env={"SS_CLAIM_CHECK": "off"}) == ""
+
+
+def test_claim_hidden_claim(run_hook):
+    """A zero-width or soft-hyphen character inside the claim word does not hide the claim."""
+    _warns(_claim(run_hook, "hidden-claim"), uncredited=False)
+
+
+def test_claim_final_message(run_hook):
+    """The event's last_assistant_message is the claim's text, not a lagging transcript entry."""
+    out = _claim(
+        run_hook, "final-message", last_assistant_message="Done. All tests pass."
+    )
+    _warns(out, uncredited=False)
+
+
+def test_claim_event_text_preferred(run_hook):
+    """A final message without a claim is silent even when an earlier flushed entry claimed."""
+    assert (
+        _claim(run_hook, "edit-no-verify", last_assistant_message="Still looking.")
+        == ""
+    )

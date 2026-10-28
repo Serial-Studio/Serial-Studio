@@ -161,6 +161,18 @@ MANIFEST = (
         "if False:",
         "test_claim_env_off",
     ),
+    (
+        "hidden-readings",
+        "return [text, removed, spaced]",
+        "return [text]",
+        "test_claim_hidden_claim",
+    ),
+    (
+        "final-message",
+        "return final if isinstance(final, str) and final.strip() else None",
+        "return None",
+        "test_claim_final_message",
+    ),
 )
 
 

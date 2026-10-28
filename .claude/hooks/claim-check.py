@@ -34,8 +34,19 @@ Design choices specific to this repo:
   - Warn only, never block: a block re-invokes the model, and canary-check.py
     already settled that a Stop hook here never spends tokens. The escape
     hatch is SS_CLAIM_CHECK=off.
-  - Retry before deciding, same flush race as canary-check.py: the final
-    assistant entry can land a few hundred ms after Stop fires.
+  - The final text is the Stop event's last_assistant_message. The transcript
+    is written asynchronously, and on most turns its last flushed assistant
+    entry is the sentence before the first edit, so reading the final text
+    there judged the wrong message (PrimeFoldTools/Andon advisory,
+    2026-10-28). The transcript stays the source for edits and evidence; the
+    retry stays for a harness that omits the field, same flush race as
+    canary-check.py.
+  - Claims are matched on up to three readings of the text: as written, with
+    format (Cf) and control characters removed, and with each read as a
+    space. The first reading with a claim wins, so a form feed inside "is
+    done" still reads as written, while a zero-width character inside "done"
+    no longer hides the claim (same advisory). Text without such characters
+    is scanned once.
   - Fail-open everywhere: any internal error exits 0 silently.
   - The plain forms that register are listed in doc/claude/scripts.md
     ("Creditable verification forms"); the warning names the nearest run that
@@ -50,6 +61,7 @@ import os
 import re
 import sys
 import time
+import unicodedata
 
 
 
@@ -121,6 +133,7 @@ CLAIM_PATTERNS = (
     re.compile(r"\bverified\s+end[\s-]to[\s-]end\b", re.IGNORECASE),
 )
 FENCE_RE = re.compile(r"```.*?```", re.DOTALL)
+KEPT_CONTROLS = "\n\t"
 
 
 def load_entries(transcript_path: str) -> list[dict]:
@@ -346,8 +359,33 @@ def _ends_in_question(text: str, end: int) -> bool:
     return False
 
 
+def _hidden(char: str) -> bool:
+    """A format (Cf) or control character other than newline and tab: invisible on screen."""
+    return unicodedata.category(char) in ("Cf", "Cc") and char not in KEPT_CONTROLS
+
+
+def readings(text: str) -> list[str]:
+    """The text as written, then with hidden characters removed, then each read as a space."""
+    if not any(_hidden(char) for char in text):
+        return [text]
+    removed = "".join(char for char in text if not _hidden(char))
+    spaced = "".join(" " if _hidden(char) else char for char in text)
+    return [text, removed, spaced]
+
+
 def find_claims(text: str) -> list[str]:
-    """Completion phrases in the assistant's own prose, minus quotes, code and questions."""
+    """Completion phrases in the assistant's own prose, minus quotes, code and questions.
+
+    The first of up to three readings of the text that holds a claim decides (see readings)."""
+    for reading in readings(text):
+        found = _claims_in(reading)
+        if found:
+            return found
+    return []
+
+
+def _claims_in(text: str) -> list[str]:
+    """Claims in one reading of the text."""
     text = FENCE_RE.sub("", text)
     found, seen = [], set()
     for pattern in CLAIM_PATTERNS:
@@ -365,9 +403,9 @@ def find_claims(text: str) -> list[str]:
     return found[:MAX_LISTED]
 
 
-def verdict(turn: list[dict]) -> str | None:
-    """None when silent; otherwise the warning text."""
-    text = last_assistant_text(turn)
+def verdict(turn: list[dict], final_text: str | None = None) -> str | None:
+    """None when silent; otherwise the warning text. The event's text outranks the transcript."""
+    text = final_text if final_text is not None else last_assistant_text(turn)
     if text is None:
         return None
     claims = find_claims(text)
@@ -403,16 +441,24 @@ def session_entries(entries: list[dict], session_id: str) -> list[dict]:
     return kept
 
 
-def check(transcript_path: str, session_id: str = "") -> str | None:
-    """Read the transcript, waiting briefly for the final assistant entry to land."""
+def final_text(event: dict) -> str | None:
+    """The Stop event's last_assistant_message when it is a non-empty string, else None."""
+    final = event.get("last_assistant_message")
+    return final if isinstance(final, str) and final.strip() else None
+
+
+def check(
+    transcript_path: str, session_id: str = "", final: str | None = None
+) -> str | None:
+    """Read the transcript for the turn; without the event's final text, wait briefly for it."""
     turn: list[dict] = []
     for attempt in range(RETRY_ATTEMPTS):
         turn = turn_entries(session_entries(load_entries(transcript_path), session_id))
-        if last_assistant_text(turn) is not None:
+        if final is not None or last_assistant_text(turn) is not None:
             break
         if attempt < RETRY_ATTEMPTS - 1:
             time.sleep(RETRY_DELAY_S)
-    return verdict(turn)
+    return verdict(turn, final)
 
 
 def main() -> None:
@@ -424,7 +470,9 @@ def main() -> None:
             sys.exit(0)
         transcript_path = event.get("transcript_path")
         if transcript_path:
-            message = check(str(transcript_path), str(event.get("session_id") or ""))
+            message = check(
+                str(transcript_path), str(event.get("session_id") or ""), final_text(event)
+            )
             if message is not None:
                 print(json.dumps({"systemMessage": message}))
     except SystemExit:

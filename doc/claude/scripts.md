@@ -74,6 +74,13 @@ The done-claim hook (`.claude/hooks/claim-check.py`) credits a verification run 
 command is in a plain form it can read without guessing. A run in any other shape is not
 credited, so the claim that it passed is treated as unverified.
 
+The text it judges is the Stop event's `last_assistant_message`; the transcript is written
+asynchronously and on most turns has not flushed the final message when Stop fires, so it is
+read only for the turn's edits and evidence. A claim is matched on up to three readings of that
+text (as written, format and control characters removed, each read as a space), so a zero-width
+character inside "done" no longer hides it. Both came from PrimeFoldTools/Andon's advisory of
+2026-10-28; the canary hook reads its final text the same way.
+
 Accepted forms:
 
 - `python3 scripts/<verifier>.py ...`, where `code-verify.py` must carry `--check`.

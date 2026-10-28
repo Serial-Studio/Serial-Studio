@@ -27,12 +27,15 @@ truncated prompt, attention drift), not that one fact was forgotten on its
 own; which value drifted still says which rule lost its hold.
 
 Design choices specific to this repo:
-  - Retry before warning: the Stop event can fire before the final assistant
-    message is flushed to the transcript (observed on macOS, 2026-07-14 - the
-    hook read the file ~300 ms before the canary-bearing entry landed and
-    reported MISSING on a healthy turn). A bad verdict is re-read a few times
-    with a short sleep; a flush race resolves in milliseconds, while a truly
-    missing canary stays missing, so only the failure path pays the delay.
+  - The final text is the Stop event's last_assistant_message, which the
+    harness fills from memory. The transcript is written asynchronously and
+    can lag it (observed on macOS, 2026-07-14 - the hook read the file ~300 ms
+    before the canary-bearing entry landed and reported MISSING on a healthy
+    turn; PrimeFoldTools/Andon's 2026-10-28 advisory showed the same race on
+    the done-claim hook). A harness that omits the field falls back to the
+    transcript, re-reading a bad verdict a few times with a short sleep: a
+    flush race resolves in milliseconds, while a truly missing canary stays
+    missing, so only the failure path pays the delay.
   - Fail-open everywhere: any internal error exits 0 silently, matching the
     other hooks. A broken probe must never block real work.
   - Warn only, never block ("decision": "block" would re-invoke the model and
@@ -154,17 +157,20 @@ def check(transcript_path: str) -> str | None:
 def main() -> None:
     try:
         event = json.load(sys.stdin)
+        final = event.get("last_assistant_message")
         transcript_path = event.get("transcript_path")
-        if transcript_path:
-            message = None
+        message = None
+        if isinstance(final, str) and final.strip():
+            message = verdict(final)
+        elif transcript_path:
             for attempt in range(RETRY_ATTEMPTS):
                 message = check(str(transcript_path))
                 if message is None:
                     break
                 if attempt < RETRY_ATTEMPTS - 1:
                     time.sleep(RETRY_DELAY_S)
-            if message is not None:
-                print(json.dumps({"systemMessage": message}))
+        if message is not None:
+            print(json.dumps({"systemMessage": message}))
     except Exception:
         pass
     sys.exit(0)
