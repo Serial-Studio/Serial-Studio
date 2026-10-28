@@ -44,7 +44,7 @@ name: Test Suite
 #
 
 env:
-  VERSION: "4.2.0"
+  VERSION: "4.2.1"
   UNIXNAME: "serial-studio-pro"
   EXECUTABLE: "Serial-Studio-Pro"
   APPLICATION: "Serial Studio Pro"
