@@ -57,6 +57,12 @@
 		<color type="primary" scheme_preference="dark">#244263</color>
 	</branding>
 	<releases>
+    <release version="4.2.1" date="2026-10-28">
+      <url>https://github.com/Serial-Studio/Serial-Studio/releases/tag/v4.2.1</url>
+		  <description>
+			  <p>Maintenance release: the universal macOS build runs on Intel Macs again, Linux audio opens PulseAudio and PipeWire before ALSA, and API clients gain a consent-gated UI automation surface.</p>
+		  </description>
+		</release>
     <release version="4.2.0" date="2026-10-16">
       <url>https://github.com/Serial-Studio/Serial-Studio/releases/tag/v4.2.0</url>
 		  <description>
