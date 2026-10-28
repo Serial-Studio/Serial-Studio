@@ -1,7 +1,8 @@
 ---
 spec: 0104-consolidation-quarter
 title: 4.3.0 consolidation quarter
-status: draft        # draft -> approved -> in-progress -> done | shelved
+status: approved     # draft -> approved -> in-progress -> done | shelved
+approved: 2026-10-28 # tracks, targets, share and exit rule; open questions decided
 created: 2026-10-27
 author: Alex Spataru
 ---
@@ -9,8 +10,8 @@ author: Alex Spataru
 # Spec 0104 — 4.3.0 Consolidation Quarter
 
 > **Phase 1 of 4 — the WHAT and the WHY.** No implementation detail; no file paths, no
-> class names, no signal wiring (that is `plan.md`). Gate: do not start `/ss-plan` until
-> a human marks this `approved`.
+> class names, no signal wiring (that is `plan.md`). Approved 2026-10-28; `/ss-plan` may
+> start when the maintainer asks for it.
 
 > **Umbrella spec.** Like spec 0030, this is a program, not a single feature: four tracks
 > with numeric exit targets, run in parallel with ordinary feature work at a fixed share of
@@ -57,9 +58,10 @@ from landing. This spec is about the debt already in the tree.
 - The mistakes ledger, the spec archive and the open-issue list each say what is true: a row
   is enforced or gone, a spec is done or shelved, an issue is fixed, declined or scheduled.
 - The maintenance surface stops growing for one quarter: first-party line count at the end is
-  not higher than at the start, while feature work continues at a fixed share.
+  within 5% of the start, while feature work continues at a fixed share.
 - The quarter ends on measured criteria, reviewed at the end of January 2027, never on a
-  calendar date alone.
+  calendar date alone; 4.3.0 is the release that marks the exit, and 4.2.x point releases
+  keep shipping fixes on cadence until then.
 
 ## Non-Goals
 
@@ -77,10 +79,11 @@ from landing. This spec is about the debt already in the tree.
 Numbers are measured on 2026-10-27 at master `be6066d59`; a target is a value the existing
 gate reads at the end of the quarter.
 
-1. **R1 — Fixed share.** Consolidation receives half of each calendar week's engineering
-   time, and the share is auditable from the commit log: in every month of the quarter at
-   least half of the non-merge commits carry a consolidation spec reference or a
-   consolidation scope. A month that misses the share is named in the January review.
+1. **R1 — Fixed share.** Consolidation receives two-thirds of each week's engineering time
+   in November 2026, while the artifact proof and 4.2.1 land, and half from December on. The
+   share is auditable from the commit log: in November at least two-thirds, and in every
+   later month at least half, of the non-merge commits carry a consolidation spec reference
+   or a consolidation scope. A month that misses the share is named in the January review.
 2. **R2 — Ship-artifact proof.** Every CI package leg launches the artifact it uploads, from
    the uploaded file and not from the build tree, and runs the in-app self-test from it: the
    Linux x64 and arm64 AppImages, the universal macOS disk image on both slices, and the
@@ -107,9 +110,10 @@ gate reads at the end of the quarter.
    quarter as done or shelved with a dated note; no spec sits in-progress for more than 30
    days without a commit referencing it.
 10. **R10 — AI-facing material does not grow.** The always-loaded word budget and the one-hop
-    document total both end the quarter lower than on 2026-10-27, and a newcomer can read the
-    system's shape from one architecture overview of at most 3,000 words without opening the
-    AI-facing tree.
+    document total both end the quarter lower than on 2026-10-27, the one-hop total becomes a
+    hard gate that fails on growth and is re-seeded downward only (as the always-loaded budget
+    already is), and a newcomer can read the system's shape from one architecture overview of
+    at most 3,000 words without opening the AI-facing tree.
 11. **R11 — Test-tier debt.** Skipped and expected-to-fail tests 36 → at most 10; each
     survivor names an upstream bug or an environmental reason, as the test policy already
     requires.
@@ -118,10 +122,15 @@ gate reads at the end of the quarter.
     maintainer reply.
 13. **R13 — Delete budget.** The dead-code candidate list from the 2026 comment cleanup is
     resolved (each candidate removed or kept with a reason), and first-party C++ plus QML
-    lines at the quarter's end are not higher than 446,632.
+    lines at the January review are at most 468,963, five percent above the 446,632 of
+    2026-10-27, because splits move lines and only deletion removes them while features keep
+    landing at half share.
 14. **R14 — Behavior preserved.** A consolidation change never alters user-visible behavior;
     the pytest integration, security and performance suites and the C++ unit tier pass before
     and after each one, and the hotpath gate's nine tiers hold their thresholds.
+15. **R15 — Exit release.** 4.3.0 ships when AC1 through AC14 hold on master, and not before;
+    4.2.x point releases continue on their own cadence for fixes in the meantime, 4.2.1 first
+    (R3).
 
 ## Acceptance Criteria
 
@@ -144,18 +153,21 @@ gate reads at the end of the quarter.
 - [ ] **AC8** — No spec under the archive carries `in-progress`, `draft` or `approved` older
       than 30 days without a referencing commit; the count of non-done specs from 2026-10-27
       is zero (R9).
-- [ ] **AC9** — The context-budget check reports both words totals lower than the 2026-10-27
-      baseline, and the architecture overview exists at or under 3,000 words (R10).
+- [ ] **AC9** — The context-budget check reports both word totals lower than the 2026-10-27
+      baseline, fails on growth of either, and the architecture overview exists at or under
+      3,000 words (R10).
 - [ ] **AC10** — The skip and xfail marker count across all test tiers is at most 10 and the
       test-policy check passes (R11).
 - [ ] **AC11** — The issue tracker shows zero open issues without a maintainer reply in the
       last 90 days (R12).
-- [ ] **AC12** — The monthly first-party line count, measured the way the 2026-10-27 history
-      audit measured it, is at or below 446,632 at the January review (R13).
-- [ ] **AC13** — Every month of the quarter, at least half of the non-merge commits reference
-      a consolidation spec or scope (R1).
+- [ ] **AC12** — The first-party line count, measured the way the 2026-10-27 history audit
+      measured it, is at or below 468,963 at the January review (R13).
+- [ ] **AC13** — In November 2026 at least two-thirds, and in every later month at least half,
+      of the non-merge commits reference a consolidation spec or scope (R1).
 - [ ] **AC14** — The throughput gate and every pytest and ctest tier pass on the January
       review's master (R14).
+- [ ] **AC15** — The 4.3.0 tag points at a master where AC1 through AC14 hold, and every tag
+      between 4.2.0 and 4.3.0 is a 4.2.x point release (R15).
 
 ## Constraints & Invariants
 
@@ -170,8 +182,9 @@ gate reads at the end of the quarter.
 - Security-sensitive surfaces (licensing, machine identity, API auth and consent) are out of
   scope for mechanical splitting or deduplication; a change there needs its own spec and is
   named in chat with its failure modes first.
-- Feature work on its own share is unaffected by this spec except for R13: a feature that
-  adds lines is balanced by consolidation that removes them within the same month.
+- Feature work on its own share is unaffected by this spec except for R13: the five percent
+  allowance is the whole quarter's, so a feature-heavy month is balanced by deletion before
+  the review, not ignored.
 - Trust Contract: foreign working-tree files are never touched; nothing is committed without
   per-turn permission.
 
@@ -192,12 +205,9 @@ gate reads at the end of the quarter.
 
 ## Open Questions
 
-- Is half the right share for R1, or should the first month run higher while the artifact
-  proof (R2) and 4.2.1 (R3) land?
-- R7 asks for 802 → 600 singleton sites rather than halving, because the July campaign took
-  three months to halve the previous count; is 600 the right number for one quarter?
-- Is R13 (no net line growth with features continuing) realistic, or should the budget be
-  per-month with a stated allowance for feature lines?
-- Should 4.3.0 ship when the criteria are met, or on its own cadence with the criteria as
-  release notes rather than gates?
-- Should the one-hop document total (advisory today) become a hard gate as part of R10?
+None open. The draft's five questions were decided by the maintainer on 2026-10-28 and are
+folded into the requirements above: the share is two-thirds in November and half after (R1);
+the singleton target stays at 600 because halving took three months last time (R7); the
+line budget allows five percent net growth by the review rather than net zero (R13); 4.3.0
+marks the exit and 4.2.x point releases continue (R15); the one-hop document total becomes
+a downward-only hard gate (R10).
