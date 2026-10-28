@@ -23,6 +23,7 @@
 
 #include <QObject>
 #include <QQuickItem>
+#include <QSet>
 #include <QVariantList>
 #include <QVector>
 
@@ -96,10 +97,16 @@ class Taskbar : public QQuickItem {
              READ layoutScope
              WRITE setLayoutScope
              NOTIFY layoutScopeChanged)
+  Q_PROPERTY(bool viewShown
+             READ viewShown
+             WRITE setViewShown
+             NOTIFY viewShownChanged)
   // clang-format on
 
 signals:
   void statesChanged();
+  void popOutsChanged();
+  void viewShownChanged();
   void fullModelChanged();
   void searchDismissed();
   void highlightWidget(int windowId);
@@ -122,6 +129,7 @@ public:
 
   [[nodiscard]] int activeGroupId() const;
   [[nodiscard]] int activeGroupIndex() const;
+  [[nodiscard]] bool viewShown() const;
   [[nodiscard]] bool independentWorkspace() const;
   [[nodiscard]] QString layoutScope() const;
   [[nodiscard]] QString searchFilter() const;
@@ -149,9 +157,13 @@ public:
   Q_INVOKABLE [[nodiscard]] int workspaceContainingWidget(int windowId) const;
 
   [[nodiscard]] QVector<int> taskbarWindowIds() const;
+  [[nodiscard]] QList<int> shownWindowIds() const;
+  [[nodiscard]] const QSet<int>& popOuts() const;
 
 public slots:
   void saveLayout();
+  void setViewShown(bool shown);
+  void setPopOutOpen(int windowId, bool open);
   void dismissSearch();
   void setSearchFilter(const QString& filter);
   void setActiveGroupId(int groupId);
@@ -222,10 +234,12 @@ private:
   bool m_batchUpdateInProgress;
   bool m_restoringLayout;
   bool m_independentWorkspace;
+  bool m_viewShown;
   QString m_layoutScope;
 
   QQuickItem* m_activeWindow;
   UI::WindowManager* m_windowManager;
+  QSet<int> m_popOuts;
   QMap<QQuickItem*, int> m_windowIDs;
   QMap<QQuickItem*, QMetaObject::Connection> m_windowConnections;
 

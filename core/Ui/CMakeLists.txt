@@ -100,6 +100,7 @@ qt_add_library(
   UI/Dashboard/DashboardWiring.cpp
   UI/Dashboard/WidgetMapBuilder.cpp
   UI/AlarmMonitor.cpp
+  UI/WidgetVisibility.cpp
   UI/Alarms/AlarmAnnunciator.cpp
   UI/Alarms/AnnunciatorChecker.cpp
   UI/Alarms/AnnunciatorSequence.cpp
@@ -222,6 +223,7 @@ qt_add_library(
   UI/DashboardWidget.h
   UI/AlarmDeadband.h
   UI/AlarmMonitor.h
+  UI/WidgetVisibility.h
   UI/Alarms/AlarmAnnunciator.h
   UI/Alarms/AnnunciatorChecker.h
   UI/Alarms/AnnunciatorSequence.h

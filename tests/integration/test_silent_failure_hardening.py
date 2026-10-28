@@ -56,12 +56,18 @@ def _findings(api_client) -> list:
 
 
 def _load_band_project(
-    api_client, datasets=None, transforms=None, widget="gauge", suppressed=False
+    api_client,
+    datasets=None,
+    transforms=None,
+    widget="gauge",
+    suppressed=False,
+    while_visible=False,
 ) -> None:
     """Builds a one-group network project; datasets is a list of titles (frame
     index 1..N), transforms an optional {index: (code, language)} map, widget
     the dataset widget id ("" for none), suppressed whether every dataset
-    carries Suppress Alarms."""
+    carries Suppress Alarms, while_visible whether every dataset carries Alarms
+    only while visible."""
     datasets = datasets or ["EGT"]
     transforms = transforms or {}
 
@@ -89,6 +95,8 @@ def _load_band_project(
 
         if suppressed:
             fields["suppressAlarms"] = True
+        if while_visible:
+            fields["alarmsWhileVisible"] = True
 
         api_client.update_dataset(0, i, **fields)
         time.sleep(0.1)
@@ -386,6 +394,21 @@ def test_disabled_finding_ignores_suppressed_bands(api_client, clean_state):
 
     api_client.update_dataset(0, 0, suppressAlarms=False)
     time.sleep(0.5)
+    assert "alarms.disabled" in _finding_codes(api_client)
+
+
+@pytest.mark.integration
+@pytest.mark.project
+def test_disabled_finding_counts_visible_only_bands(api_client, clean_state):
+    _fresh(api_client)
+    if _state(api_client)["enabled"]:
+        pytest.skip("master enable is on and no API can switch it off")
+
+    _load_band_project(api_client, while_visible=True)
+    api_client.command("project.workspace.setCustomizeMode", {"enabled": True})
+    empty = api_client.command("project.workspace.add", {"title": "Empty"})["id"]
+    api_client.command("ui.window.setActiveGroup", {"groupId": empty})
+    time.sleep(1.0)
     assert "alarms.disabled" in _finding_codes(api_client)
 
 

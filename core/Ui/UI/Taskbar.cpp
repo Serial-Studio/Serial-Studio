@@ -91,6 +91,7 @@ UI::Taskbar::Taskbar(QQuickItem* parent)
   , m_batchUpdateInProgress(false)
   , m_restoringLayout(false)
   , m_independentWorkspace(false)
+  , m_viewShown(true)
   , m_activeWindow(nullptr)
   , m_windowManager(nullptr)
   , m_fullModel(new TaskbarModel(this))
@@ -203,6 +204,24 @@ int UI::Taskbar::activeGroupId() const
 int UI::Taskbar::activeGroupIndex() const
 {
   return m_workspaces.indexForGroupId(m_activeGroupId);
+}
+
+/**
+ * @brief Whether the view this taskbar belongs to is on screen: QML binds it from the window's
+ *        shown pane and minimized state, since C++ sees neither (spec 0105). Defaults to true so a
+ *        view that never binds it behaves as before.
+ */
+bool UI::Taskbar::viewShown() const
+{
+  return m_viewShown;
+}
+
+/**
+ * @brief The pop-out widget windows this taskbar's canvas reported open (spec 0105).
+ */
+const QSet<int>& UI::Taskbar::popOuts() const
+{
+  return m_popOuts;
 }
 
 /**
@@ -326,6 +345,27 @@ QVector<int> UI::Taskbar::taskbarWindowIds() const
     const int wid = row->data(TaskbarModel::WindowIdRole).toInt();
     if (wid >= 0)
       ids.append(wid);
+  }
+
+  return ids;
+}
+
+/**
+ * @brief The windows of the active workspace whose state is normal: the registered windows and
+ *        their model rows, which setActiveGroupId repopulates per workspace, so a hidden
+ *        workspace's widgets never appear here (spec 0105).
+ */
+QList<int> UI::Taskbar::shownWindowIds() const
+{
+  QList<int> ids;
+  ids.reserve(m_windowIDs.size());
+  for (auto it = m_windowIDs.cbegin(); it != m_windowIDs.cend(); ++it) {
+    const auto* item = findItemByWindowId(it.value());
+    if (!item)
+      continue;
+
+    if (item->data(TaskbarModel::WindowStateRole).toInt() == TaskbarModel::WindowNormal)
+      ids.append(it.value());
   }
 
   return ids;
@@ -809,6 +849,34 @@ void UI::Taskbar::setWindowState(const int id, const UI::TaskbarModel::WindowSta
 
   if (m_windowIDs.count() >= m_taskbarButtons->rowCount() && m_windowManager)
     m_windowManager->triggerLayoutUpdate();
+}
+
+/**
+ * @brief Records whether the view that owns this taskbar is on screen (spec 0105).
+ */
+void UI::Taskbar::setViewShown(const bool shown)
+{
+  if (m_viewShown == shown)
+    return;
+
+  m_viewShown = shown;
+  Q_EMIT viewShownChanged();
+}
+
+/**
+ * @brief Records a pop-out widget window opening or closing on this taskbar's canvas; a pop-out
+ *        counts as on screen for as long as it is open (spec 0105).
+ */
+void UI::Taskbar::setPopOutOpen(const int windowId, const bool open)
+{
+  const bool changed = open ? !m_popOuts.contains(windowId) : m_popOuts.remove(windowId);
+  if (!changed)
+    return;
+
+  if (open)
+    m_popOuts.insert(windowId);
+
+  Q_EMIT popOutsChanged();
 }
 
 /**

@@ -40,7 +40,8 @@
     "FftBallisticsRelease",
     "ExtremeHold",
     "SuppressAlarms",
-    "AlarmDeadband"
+    "AlarmDeadband",
+    "AlarmsWhileVisible"
   ],
   "struct": {
     "type": "DataModel::Dataset",
@@ -664,6 +665,7 @@
           "WgtMax",
           "ExtremeHold",
           "SuppressAlarms",
+          "AlarmsWhileVisible",
           "AlarmDeadband"
         ]
       },
@@ -1598,6 +1600,31 @@
       "api": {
         "expose": true,
         "name": "suppressAlarms",
+        "rebuildTree": true
+      }
+    },
+    {
+      "id": "AlarmsWhileVisible",
+      "field": "alarmsWhileVisible",
+      "jsonKey": "AlarmsWhileVisible",
+      "formId": "kDatasetView_AlarmsWhileVisible",
+      "type": "bool",
+      "default": false,
+      "scope": "document",
+      "persist": "whenTrue",
+      "section": "widget",
+      "widget": "CheckBox",
+      "label": "Alarms only while visible",
+      "description": "Notify, raise an alarm point and sound for the bands only while a widget showing this dataset is on screen; Suppress Alarms still wins",
+      "visibleWhen": "alarmBandsDrawn",
+      "undo": {
+        "label": "Edit Dataset",
+        "coalesce": false
+      },
+      "rebuildTree": true,
+      "api": {
+        "expose": true,
+        "name": "alarmsWhileVisible",
         "rebuildTree": true
       }
     },

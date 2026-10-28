@@ -33,6 +33,7 @@
 #include "DataModel/WidgetResolution.h"
 #include "UI/AlarmDeadband.h"
 #include "UI/Dashboard.h"
+#include "UI/WidgetVisibility.h"
 
 //--------------------------------------------------------------------------------------------------
 // Tunables
@@ -47,7 +48,14 @@ static constexpr qint64 kMinNotifyIntervalMs = 3000;
 /**
  * @brief Constructs the AlarmMonitor.
  */
-UI::AlarmMonitor::AlarmMonitor() : m_dashboard(nullptr), m_notificationCenter(nullptr) {}
+UI::AlarmMonitor::AlarmMonitor()
+  : m_dashboard(nullptr), m_notificationCenter(nullptr), m_visibility(nullptr)
+{}
+
+/**
+ * @brief Out of line so the owned WidgetVisibility is complete where it is destroyed.
+ */
+UI::AlarmMonitor::~AlarmMonitor() = default;
 
 /**
  * @brief Retrieves the singleton instance of the AlarmMonitor.
@@ -59,9 +67,12 @@ UI::AlarmMonitor& UI::AlarmMonitor::instance()
 }
 
 /**
- * @brief Wires the monitor to the Dashboard's layout and data-update signals.
+ * @brief Wires the monitor to the Dashboard's layout and data-update signals and builds the
+ *        visibility fold the opted-in datasets are gated on, over the taskbars @p registry lists
+ *        (spec 0105). A --headless run has no taskbars, so an opted-in dataset is hidden there by
+ *        the rule's own terms; the re-record root never calls this at all.
  */
-void UI::AlarmMonitor::setupExternalConnections()
+void UI::AlarmMonitor::setupExternalConnections(UISessionRegistry& registry)
 {
   m_dashboard          = &UI::Dashboard::instance();
   m_notificationCenter = &DataModel::pipelineModules().notifications;
@@ -70,6 +81,10 @@ void UI::AlarmMonitor::setupExternalConnections()
   connect(&dashboard, &UI::Dashboard::widgetCountChanged, this, &AlarmMonitor::rebuildTrackers);
   connect(&dashboard, &UI::Dashboard::dataReset, this, &AlarmMonitor::rebuildTrackers);
   connect(&dashboard, &UI::Dashboard::updated, this, &AlarmMonitor::evaluateAlarms);
+
+  m_visibility = std::make_unique<WidgetVisibility>(dashboard, registry);
+  connect(
+    m_visibility.get(), &WidgetVisibility::shownChanged, this, &AlarmMonitor::applyVisibility);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -103,6 +118,9 @@ void UI::AlarmMonitor::rebuildTrackers()
     tracker.hint          = -1;
     tracker.lastFiredBand = -1;
     tracker.initialized   = false;
+    tracker.whileVisible  = dataset.alarmsWhileVisible;
+    tracker.shown         = !m_visibility || m_visibility->isShown(it.key());
+    tracker.revealPending = false;
     tracker.rangeMin      = qMin(dataset.wgtMin, dataset.wgtMax);
     tracker.rangeMax      = qMax(dataset.wgtMin, dataset.wgtMax);
     tracker.deadband      = qMax(0.0, dataset.alarmDeadband);
@@ -133,14 +151,16 @@ void UI::AlarmMonitor::rebuildTrackers()
 }
 
 /**
- * @brief Whether a tracker exists for @p uniqueId; the annunciator reaps the band points whose
- *        dataset this stops answering for.
+ * @brief Whether @p uniqueId alarms right now: a tracker exists and, for a dataset that opted
+ *        into Alarms only while visible, a widget showing it is on screen (the runtime home of
+ *        SerialStudio::datasetAlarmsNow); the annunciator reaps the band points whose dataset this
+ *        stops answering for.
  */
 bool UI::AlarmMonitor::tracks(int uniqueId) const noexcept
 {
   for (const auto& tracker : m_trackers)
     if (tracker.uniqueId == uniqueId)
-      return true;
+      return !tracker.whileVisible || tracker.shown;
 
   return false;
 }
@@ -162,6 +182,9 @@ void UI::AlarmMonitor::evaluateAlarms()
 
   const auto& datasets = m_dashboard->datasets();
   for (auto& tracker : m_trackers) {
+    if (tracker.whileVisible && !tracker.shown)
+      continue;
+
     const auto it = datasets.constFind(tracker.uniqueId);
     if (it == datasets.cend())
       continue;
@@ -171,6 +194,58 @@ void UI::AlarmMonitor::evaluateAlarms()
       continue;
 
     processValue(tracker, dataset.numericValue);
+  }
+}
+
+/**
+ * @brief Applies a change of the shown set to the opted-in trackers (spec 0105 R4): a hidden one
+ *        stops being tracked, so the annunciator reaps its point through trackersRebuilt, and
+ *        forgets its band; a revealed one is evaluated at once from the dataset's current value
+ *        as a band entry under the usual cooldown, whose stamps survive the hide on purpose.
+ */
+void UI::AlarmMonitor::applyVisibility()
+{
+  SS_ASSERT(m_dashboard != nullptr, return);
+  SS_ASSERT(m_visibility != nullptr, return);
+
+  bool changed = false;
+  std::vector<size_t> revealed;
+  for (size_t i = 0; i < m_trackers.size(); ++i) {
+    auto& tracker = m_trackers[i];
+    if (!tracker.whileVisible)
+      continue;
+
+    const bool shown = m_visibility->isShown(tracker.uniqueId);
+    if (shown == tracker.shown)
+      continue;
+
+    changed       = true;
+    tracker.shown = shown;
+    if (shown) {
+      tracker.revealPending = true;
+      revealed.push_back(i);
+      continue;
+    }
+
+    tracker.initialized   = false;
+    tracker.revealPending = false;
+    tracker.hint          = -1;
+    tracker.lastFiredBand = -1;
+  }
+
+  if (!changed)
+    return;
+
+  Q_EMIT trackersRebuilt();
+
+  const auto& datasets = m_dashboard->datasets();
+  for (const size_t i : revealed) {
+    auto& tracker = m_trackers[i];
+    const auto it = datasets.constFind(tracker.uniqueId);
+    if (it == datasets.cend() || !it->isNumeric || !std::isfinite(it->numericValue))
+      continue;
+
+    processValue(tracker, it->numericValue);
   }
 }
 
@@ -218,11 +293,10 @@ int UI::AlarmMonitor::resolveBand(const Tracker& tracker, double value) noexcept
 }
 
 /**
- * @brief Posts a notification on transition into a Warning or Critical band; the value is first
- *        clamped to the widget range widened to the band extents, then resolved through the
- *        deadband hold. Every band change, baseline capture included, is emitted as
- *        bandTransition (spec 0087) ahead of the notification cooldown, so a rebuilt tracker
- *        re-seeds its point without a notification.
+ * @brief Posts a notification on transition into a Warning or Critical band after clamping the
+ *        value to the widget range widened to the band extents and the deadband hold. Every band
+ *        change is emitted as bandTransition (spec 0087) ahead of the cooldown: a rebuilt tracker
+ *        re-seeds silently, a revealed one seeds and then notifies (spec 0105: reveal = entry).
  */
 void UI::AlarmMonitor::processValue(Tracker& tracker, double value)
 {
@@ -235,25 +309,20 @@ void UI::AlarmMonitor::processValue(Tracker& tracker, double value)
   if (idx >= 0)
     tracker.hint = idx;
 
-  if (!tracker.initialized) {
-    tracker.initialized    = true;
-    tracker.lastFiredBand  = idx;
-    const int seedSeverity = idx < 0 ? -1 : tracker.bands[idx].severity;
-    const QString seedLbl  = idx < 0 ? QString() : tracker.bands[idx].label;
-    const QString seedSnd  = idx < 0 ? QString() : tracker.bands[idx].sound;
-    Q_EMIT bandTransition(tracker.uniqueId, seedSeverity, tracker.title, seedLbl, seedSnd, value);
-    return;
-  }
-
-  if (idx == tracker.lastFiredBand)
+  const bool seeding = !tracker.initialized;
+  if (!seeding && idx == tracker.lastFiredBand)
     return;
 
+  tracker.initialized   = true;
   tracker.lastFiredBand = idx;
   const int severity    = idx < 0 ? -1 : tracker.bands[idx].severity;
   const QString label   = idx < 0 ? QString() : tracker.bands[idx].label;
   const QString sound   = idx < 0 ? QString() : tracker.bands[idx].sound;
   Q_EMIT bandTransition(tracker.uniqueId, severity, tracker.title, label, sound, value);
-  if (idx < 0)
+
+  const bool reveal     = tracker.revealPending;
+  tracker.revealPending = false;
+  if (idx < 0 || (seeding && !reveal))
     return;
 
   const auto& band = tracker.bands[idx];

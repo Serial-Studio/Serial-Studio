@@ -43,4 +43,7 @@ namespace SerialStudio {
                                             const DataModel::Group& group);
 [[nodiscard]] bool datasetRaisesBandAlarms(const DataModel::Dataset& dataset,
                                            const DataModel::Group& group);
+[[nodiscard]] bool datasetAlarmsNow(const DataModel::Dataset& dataset,
+                                    const DataModel::Group& group,
+                                    bool shown);
 }  // namespace SerialStudio

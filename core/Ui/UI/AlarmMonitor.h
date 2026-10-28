@@ -22,6 +22,7 @@
 #pragma once
 
 #include <array>
+#include <memory>
 #include <QObject>
 #include <QString>
 #include <vector>
@@ -32,10 +33,14 @@ class NotificationCenter;
 
 namespace UI {
 class Dashboard;
+class UISessionRegistry;
+class WidgetVisibility;
 
 /**
  * @brief Dataset-level alarm-band tracker for datasets whose bands a widget draws, unless
- *        suppressed (spec 0093); notifies whether or not that widget is on screen.
+ *        suppressed (spec 0093); notifies whether or not that widget is on screen, except for a
+ *        dataset that opted into Alarms only while visible, which alarms only while
+ *        WidgetVisibility reports a widget showing it on screen (spec 0105).
  */
 class AlarmMonitor : public QObject {
   Q_OBJECT
@@ -51,6 +56,7 @@ signals:
 
 private:
   explicit AlarmMonitor();
+  ~AlarmMonitor() override;
   AlarmMonitor(AlarmMonitor&&)                 = delete;
   AlarmMonitor(const AlarmMonitor&)            = delete;
   AlarmMonitor& operator=(AlarmMonitor&&)      = delete;
@@ -61,11 +67,12 @@ public:
 
   [[nodiscard]] bool tracks(int uniqueId) const noexcept;
 
-  void setupExternalConnections();
+  void setupExternalConnections(UISessionRegistry& registry);
 
 private slots:
   void rebuildTrackers();
   void evaluateAlarms();
+  void applyVisibility();
 
 private:
   struct Band {
@@ -81,6 +88,9 @@ private:
     int hint;
     int lastFiredBand;
     bool initialized;
+    bool whileVisible;
+    bool shown;
+    bool revealPending;
     double rangeMin;
     double rangeMax;
     double deadband;
@@ -97,5 +107,6 @@ private:
   std::vector<Tracker> m_trackers;
   Dashboard* m_dashboard;
   DataModel::NotificationCenter* m_notificationCenter;
+  std::unique_ptr<WidgetVisibility> m_visibility;
 };
 }  // namespace UI

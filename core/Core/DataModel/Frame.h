@@ -351,18 +351,19 @@ struct alignas(8) Dataset {
   bool extremeHold     = false;  ///< Show min/max hold markers on analog widgets
   bool enabled         = true;   ///< False excludes the dataset from frame building (editor-only)
   bool suppressAlarms  = false;  ///< Bands stay drawn but never notify, raise a point or sound
-  double fftMin        = 0;      ///< Minimum value (for FFT)
-  double fftMax        = 0;      ///< Maximum value (for FFT)
-  double pltMin        = 0;      ///< Minimum value (for plots)
-  double pltMax        = 0;      ///< Maximum value (for plots)
-  double wgtMin        = 0;      ///< Minimum value (for widgets)
-  double wgtMax        = 0;      ///< Maximum value (for widgets)
-  double alarmDeadband = 0;      ///< Hysteresis before the active alarm band releases (0 = none)
-  double ledHigh       = 80;     ///< LED activation threshold
-  qint64 displaySampleMs = 0;    ///< Transient GUI receipt time; never serialized
-  double numericValue    = 0;    ///< Parsed numeric value after transforms
-  double rawNumericValue = 0;    ///< Parsed numeric value before transforms
-  int displayTickCount   = 5;    ///< Preferred major-tick count on analog widgets (0 = auto)
+  bool alarmsWhileVisible = false;  ///< Bands alarm only while a widget showing this is on screen
+  double fftMin           = 0;      ///< Minimum value (for FFT)
+  double fftMax           = 0;      ///< Maximum value (for FFT)
+  double pltMin           = 0;      ///< Minimum value (for plots)
+  double pltMax           = 0;      ///< Maximum value (for plots)
+  double wgtMin           = 0;      ///< Minimum value (for widgets)
+  double wgtMax           = 0;      ///< Maximum value (for widgets)
+  double alarmDeadband    = 0;      ///< Hysteresis before the active alarm band releases (0 = none)
+  double ledHigh          = 80;     ///< LED activation threshold
+  qint64 displaySampleMs  = 0;      ///< Transient GUI receipt time; never serialized
+  double numericValue     = 0;      ///< Parsed numeric value after transforms
+  double rawNumericValue  = 0;      ///< Parsed numeric value before transforms
+  int displayTickCount    = 5;      ///< Preferred major-tick count on analog widgets (0 = auto)
   int decimalPoints = -1;  ///< Fixed value-display decimals; overrides displayFormat (-1 = auto)
   QString value;           ///< Raw string value after transforms
   QString rawValue;        ///< Raw string value before transforms

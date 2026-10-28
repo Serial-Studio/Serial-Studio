@@ -307,7 +307,12 @@ BANDS = [
 
 
 def _load_band_project(
-    api_client, widget="gauge", hidden=False, bar_panel=False, suppressed=False
+    api_client,
+    widget="gauge",
+    hidden=False,
+    bar_panel=False,
+    suppressed=False,
+    while_visible=False,
 ) -> None:
     api_client.create_new_project(title="Alarm bands")
     time.sleep(0.3)
@@ -331,6 +336,8 @@ def _load_band_project(
     )
     if suppressed:
         fields["suppressAlarms"] = True
+    if while_visible:
+        fields["alarmsWhileVisible"] = True
 
     api_client.update_dataset(0, 0, **fields)
     time.sleep(0.2)
@@ -559,3 +566,229 @@ def test_suppress_alarms_round_trips_through_export(api_client, clean_state):
     plain = api_client.command("project.exportJson")["config"]
     assert "alarmBands" in _egt_of(plain)
     assert all("suppressAlarms" not in d for d in _datasets_of(plain))
+
+
+# ---------------------------------------------------------------------------
+# Spec 0105 — alarms only while visible
+# ---------------------------------------------------------------------------
+
+
+def _group_unique_id(api_client, title: str) -> int:
+    for group in api_client.command("project.group.list")["groups"]:
+        if group.get("title") == title:
+            return group["uniqueId"]
+
+    raise AssertionError(f"no group titled {title}")
+
+
+def _show(api_client, workspace_id: int, settle: float = 1.0) -> None:
+    api_client.command("ui.window.setActiveGroup", {"groupId": workspace_id})
+    time.sleep(settle)
+
+
+def _window_ids(api_client) -> list:
+    states = api_client.command("ui.window.listWindowStates")
+    rows = (
+        states
+        if isinstance(states, list)
+        else next((v for v in states.values() if isinstance(v, list)), [])
+    )
+    return [row["id"] for row in rows if isinstance(row, dict) and "id" in row]
+
+
+def _load_two_workspace_project(api_client, **band_kwargs) -> tuple:
+    """Workspace A shows a second group's datagrid, workspace B the EGT gauge, and A
+    is active, so the EGT dataset stays hidden until a test switches to B. The main
+    window shows the dashboard while a device is connected, which is what makes B's
+    tab count as on screen."""
+    _load_band_project(api_client, **band_kwargs)
+    api_client.command(
+        "project.group.add", {"title": "Other", "widgetType": GROUP_DATA_GRID}
+    )
+    time.sleep(0.2)
+    api_client.command("project.dataset.add", {"groupId": 1, "options": 0})
+    time.sleep(0.1)
+    api_client.update_dataset(1, 0, title="Spare")
+    time.sleep(0.2)
+
+    api_client.command("project.workspace.setCustomizeMode", {"enabled": True})
+    time.sleep(0.2)
+    engine = _group_unique_id(api_client, "Engine")
+    other = _group_unique_id(api_client, "Other")
+    a = api_client.command("project.workspace.add", {"title": "A"})["id"]
+    b = api_client.command("project.workspace.add", {"title": "B"})["id"]
+    api_client.command(
+        "project.workspace.addWidget",
+        {"workspaceId": a, "groupId": other, "widgetType": "datagrid"},
+    )
+    api_client.command(
+        "project.workspace.addWidget",
+        {"workspaceId": b, "groupId": engine, "widgetType": "gauge", "datasetId": 0},
+    )
+    time.sleep(0.5)
+    _show(api_client, a)
+    return a, b
+
+
+@pytest.mark.integration
+@pytest.mark.project
+@pytest.mark.network
+def test_visible_only_gauge_on_hidden_workspace_raises_no_point(
+    api_client, device_simulator, clean_state
+):
+    _fresh(api_client)
+    _load_two_workspace_project(api_client, while_visible=True)
+    _band_run(api_client, device_simulator)
+
+    assert _point(_state(api_client), "EGT") == {}
+    assert _band_events(api_client) == []
+
+
+@pytest.mark.integration
+@pytest.mark.project
+@pytest.mark.network
+def test_plain_gauge_on_hidden_workspace_still_raises_point(
+    api_client, device_simulator, clean_state
+):
+    _fresh(api_client)
+    _load_two_workspace_project(api_client)
+    _band_run(api_client, device_simulator)
+
+    point = _point(_state(api_client), "EGT")
+    assert point.get("kind") == "band"
+    assert point.get("priority") == 2
+
+
+@pytest.mark.integration
+@pytest.mark.project
+@pytest.mark.network
+def test_switching_to_the_workspace_raises_and_leaving_removes(
+    api_client, device_simulator, clean_state
+):
+    _fresh(api_client)
+    a, b = _load_two_workspace_project(api_client, while_visible=True)
+    _band_run(api_client, device_simulator)
+    assert _point(_state(api_client), "EGT") == {}
+
+    _show(api_client, b)
+    point = _point(_state(api_client), "EGT")
+    assert point.get("kind") == "band"
+    assert point.get("priority") == 2
+    assert point.get("state") == "alert"
+
+    _show(api_client, a)
+    assert _point(_state(api_client), "EGT") == {}
+
+
+@pytest.mark.integration
+@pytest.mark.project
+@pytest.mark.network
+def test_minimizing_the_widget_removes_the_point(
+    api_client, device_simulator, clean_state
+):
+    _fresh(api_client)
+    _, b = _load_two_workspace_project(api_client, while_visible=True)
+    _band_run(api_client, device_simulator)
+    _show(api_client, b)
+    assert _point(_state(api_client), "EGT").get("kind") == "band"
+
+    ids = _window_ids(api_client)
+    assert len(ids) == 1
+    api_client.command("ui.window.setWindowState", {"id": ids[0], "state": 1})
+    time.sleep(1.0)
+    assert _point(_state(api_client), "EGT") == {}
+
+    api_client.command("ui.window.setWindowState", {"id": ids[0], "state": 0})
+    time.sleep(1.0)
+    assert _point(_state(api_client), "EGT").get("kind") == "band"
+
+
+@pytest.mark.integration
+@pytest.mark.project
+@pytest.mark.network
+def test_reveal_after_acknowledge_is_a_fresh_point(
+    api_client, device_simulator, clean_state
+):
+    _fresh(api_client)
+    a, b = _load_two_workspace_project(api_client, while_visible=True)
+    _band_run(api_client, device_simulator)
+
+    _show(api_client, b)
+    assert _point(_state(api_client), "EGT").get("state") == "alert"
+    api_client.command("alarms.acknowledge")
+    time.sleep(0.2)
+    assert _point(_state(api_client), "EGT").get("state") != "alert"
+    notified = len(_band_events(api_client))
+
+    _show(api_client, a, settle=3.5)
+    assert _point(_state(api_client), "EGT") == {}
+    _show(api_client, b)
+    assert _point(_state(api_client), "EGT").get("state") == "alert"
+    if notified:
+        assert len(_band_events(api_client)) == notified + 1
+
+    _show(api_client, a, settle=0.4)
+    _show(api_client, b, settle=0.6)
+    assert _point(_state(api_client), "EGT").get("kind") == "band"
+    if notified:
+        assert len(_band_events(api_client)) == notified + 1
+
+
+@pytest.mark.integration
+@pytest.mark.project
+@pytest.mark.network
+def test_toggling_the_option_live_follows_the_next_rebuild(
+    api_client, device_simulator, clean_state
+):
+    _fresh(api_client)
+    _load_two_workspace_project(api_client)
+    _band_run(api_client, device_simulator)
+    assert _point(_state(api_client), "EGT").get("kind") == "band"
+
+    api_client.update_dataset(0, 0, alarmsWhileVisible=True)
+    time.sleep(0.5)
+    _send(device_simulator, [900.0, 950.0, 960.0])
+    time.sleep(1.5)
+    assert _point(_state(api_client), "EGT") == {}
+
+    api_client.update_dataset(0, 0, alarmsWhileVisible=False)
+    time.sleep(0.5)
+    _send(device_simulator, [900.0, 950.0, 960.0])
+    time.sleep(1.5)
+    assert _point(_state(api_client), "EGT").get("kind") == "band"
+
+
+@pytest.mark.integration
+@pytest.mark.project
+@pytest.mark.network
+def test_suppress_wins_over_visible_only(api_client, device_simulator, clean_state):
+    _fresh(api_client)
+    _, b = _load_two_workspace_project(api_client, while_visible=True, suppressed=True)
+    _band_run(api_client, device_simulator)
+    assert _point(_state(api_client), "EGT") == {}
+
+    _show(api_client, b)
+    assert _point(_state(api_client), "EGT") == {}
+    assert _band_events(api_client) == []
+
+
+@pytest.mark.integration
+@pytest.mark.project
+def test_alarms_while_visible_round_trips_through_export(api_client, clean_state):
+    _fresh(api_client)
+    _load_band_project(api_client, while_visible=True)
+
+    exported = api_client.command("project.exportJson")["config"]
+    assert _egt_of(exported).get("alarmsWhileVisible") is True
+
+    api_client.create_new_project(title="Round trip")
+    time.sleep(0.3)
+    api_client.load_project_from_json(exported)
+    time.sleep(0.5)
+
+    reloaded = api_client.command("project.exportJson")["config"]
+    assert _egt_of(reloaded).get("alarmsWhileVisible") is True
+
+    _load_band_project(api_client)
+    plain = api_client.command("project.exportJson")["config"]
+    assert all("alarmsWhileVisible" not in d for d in _datasets_of(plain))

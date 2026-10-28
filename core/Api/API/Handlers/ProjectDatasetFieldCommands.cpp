@@ -131,7 +131,9 @@ void API::Handlers::ProjectDatasetFieldCommands::registerAlarmCommands()
                    "a bar, gauge or meter widget or is an LED-panel member (and is not hidden "
                    "from the dashboard), or belongs to a bar-panel group; on any other dataset "
                    "they are stored and ignored, and this call still returns them. A dataset "
-                   "with suppressAlarms set still draws its bands but never notifies or alarms."),
+                   "with suppressAlarms set still draws its bands but never notifies or alarms; "
+                   "one with alarmsWhileVisible set alarms only while a widget showing it is on "
+                   "screen (suppressAlarms wins)."),
     makeSchema({
       {  QString(Keys::GroupId),QStringLiteral("integer"),QStringLiteral("Owning group id")                  },
       {QString(Keys::DatasetId),
@@ -156,7 +158,9 @@ void API::Handlers::ProjectDatasetFieldCommands::registerAlarmCommands()
                    "only when the dataset has a bar, gauge or meter widget or is an LED-panel "
                    "member (and is not hidden from the dashboard), or belongs to a bar-panel "
                    "group, and suppressAlarms is false; bands on any other dataset are stored "
-                   "but never notify or alarm, and a suppressed dataset still draws them.\n"
+                   "but never notify or alarm, and a suppressed dataset still draws them. A "
+                   "dataset with alarmsWhileVisible set alarms only while a widget showing it "
+                   "is on screen, and a reveal into a band counts as entering it.\n"
                    "Pass an empty array to clear all alarms."),
     makeSchema({
       {                     QString(Keys::GroupId),QStringLiteral("integer"),QStringLiteral("Owning group id")                             },

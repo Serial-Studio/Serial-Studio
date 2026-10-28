@@ -756,6 +756,20 @@ void DataModel::ProjectEditor::buildWidgetRangeRows(CustomModel* model,
   }
 
   if (PropertyHooks::alarmBandsDrawn(dataset, m_projectModelRef)) {
+    auto* item_alarms_while_visible = new QStandardItem();
+    item_alarms_while_visible->setEditable(true);
+    item_alarms_while_visible->setData(true, Active);
+    item_alarms_while_visible->setData(CheckBox, WidgetType);
+    item_alarms_while_visible->setData(dataset.alarmsWhileVisible, EditableValue);
+    item_alarms_while_visible->setData(kDatasetView_AlarmsWhileVisible, ParameterType);
+    item_alarms_while_visible->setData(tr("Alarms only while visible"), ParameterName);
+    item_alarms_while_visible->setData(tr("Notify, raise an alarm point and sound for the bands "
+                                          "only while a widget showing this dataset is on screen; "
+                                          "Suppress Alarms still wins"), ParameterDescription);
+    model->appendRow(item_alarms_while_visible);
+  }
+
+  if (PropertyHooks::alarmBandsDrawn(dataset, m_projectModelRef)) {
     auto* item_alarm_deadband = new QStandardItem();
     item_alarm_deadband->setEditable(true);
     item_alarm_deadband->setData(true, Active);
@@ -974,6 +988,9 @@ static bool applyDatasetFlagEdit(int formId, const QVariant& value, DataModel::D
     case kDatasetView_SuppressAlarms:
       d.suppressAlarms = value.toBool();
       return true;
+    case kDatasetView_AlarmsWhileVisible:
+      d.alarmsWhileVisible = value.toBool();
+      return true;
     case kDatasetView_LED:
       d.led = value.toBool();
       return true;
@@ -1049,6 +1066,8 @@ static bool datasetRowVisible(int formId,
     case kDatasetView_WaterfallYAxis:
       return PropertyHooks::waterfallEnabled(d, pm);
     case kDatasetView_SuppressAlarms:
+      return PropertyHooks::alarmBandsDrawn(d, pm);
+    case kDatasetView_AlarmsWhileVisible:
       return PropertyHooks::alarmBandsDrawn(d, pm);
     case kDatasetView_AlarmDeadband:
       return PropertyHooks::alarmBandsDrawn(d, pm);
@@ -1137,6 +1156,8 @@ QVariant Registry::datasetFormValue(int formId,
       return d.extremeHold;
     case kDatasetView_SuppressAlarms:
       return d.suppressAlarms;
+    case kDatasetView_AlarmsWhileVisible:
+      return d.alarmsWhileVisible;
     case kDatasetView_AlarmDeadband:
       return d.alarmDeadband;
     case kDatasetView_LED:

@@ -407,6 +407,14 @@ static QString applyDatasetFlagFields3(DataModel::Dataset& d,
                                        bool& rebuildTree,
                                        QSet<QString>& consumed)
 {
+  const auto key_alarms_while_visible = takeDatasetField(
+    params, consumed,
+    {Keys::AlarmsWhileVisible});
+  if (!key_alarms_while_visible.isEmpty()) {
+    d.alarmsWhileVisible = params.value(key_alarms_while_visible).toBool();
+    rebuildTree = true;
+  }
+
   const auto key_led = takeDatasetField(params, consumed, {Keys::LED});
   if (!key_led.isEmpty()) {
     d.led = params.value(key_led).toBool();
@@ -726,6 +734,12 @@ static void datasetSchemaPart3(QJsonObject& props)
                                      "Keep the bands on the widget but never notify, raise an "
                                      "alarm point or sound for them",
                                      QJsonArray()));
+  props.insert(Keys::AlarmsWhileVisible,
+               datasetSchemaProperty("boolean",
+                                     "Notify, raise an alarm point and sound for the bands only "
+                                     "while a widget showing this dataset is on screen; Suppress "
+                                     "Alarms still wins",
+                                     QJsonArray()));
   props.insert(Keys::AlarmDeadband,
                datasetSchemaProperty("number",
                                      "Hysteresis in the dataset's units: the active band holds "
@@ -737,11 +751,6 @@ static void datasetSchemaPart3(QJsonObject& props)
                datasetSchemaProperty("boolean",
                                      "Enable visual status monitoring using an LED display",
                                      QJsonArray()));
-  props.insert(Keys::LedHigh,
-               datasetSchemaProperty("number",
-                                     "LED lights up when value meets or exceeds this threshold; "
-                                     "define alarm bands for multi-state colors",
-                                     QJsonArray()));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -751,6 +760,11 @@ static void datasetSchemaPart3(QJsonObject& props)
  */
 static void datasetSchemaPart4(QJsonObject& props)
 {
+  props.insert(Keys::LedHigh,
+               datasetSchemaProperty("number",
+                                     "LED lights up when value meets or exceeds this threshold; "
+                                     "define alarm bands for multi-state colors",
+                                     QJsonArray()));
   props.insert(Keys::Overview,
                datasetSchemaProperty("boolean",
                                      "Show this dataset in the project overview panel",

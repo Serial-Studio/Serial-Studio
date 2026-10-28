@@ -45,8 +45,10 @@ public:
 
   [[nodiscard]] Taskbar* primaryTaskbar() const;
   [[nodiscard]] WindowManager* primaryWindowManager() const;
+  [[nodiscard]] const QList<Taskbar*>& taskbars() const;
 
 signals:
+  void taskbarsChanged();
   void taskbarAvailable();
   void taskbarUnavailable();
   void windowManagerAvailable();

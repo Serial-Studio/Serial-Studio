@@ -2790,6 +2790,11 @@ Patch any subset of dataset fields by group id and dataset id. Changing `transfo
   only when `alarmBands` is not present
 - `suppressAlarms` (bool, optional): Keeps the dataset's bands drawn but stops its band
   notifications, alarm points and sounds
+- `alarmsWhileVisible` (bool, optional): The dataset's bands notify, raise an alarm point and
+  sound only while a widget showing it is on screen (the active tab of a dashboard window that
+  is not minimized, the widget not minimized or closed, or an open pop-out); revealing it while
+  the value sits in a band counts as entering the band, hiding it removes the point.
+  `suppressAlarms` wins when both are set
 - `alarmDeadband` (number, optional, `>= 0`): Hysteresis in the dataset's units; the active band
   holds until the value leaves it by more than this, and a step into a more severe band is never
   delayed (0 = none)
@@ -2993,7 +2998,7 @@ Get a dataset's coloured alarm bands.
   "rangeMax": 100
 }
 ```
-`rangeMin`/`rangeMax` are the dataset's `wgtMin`/`wgtMax`, returned so callers can validate band ranges before writing them back. An empty project (no bands configured) returns an empty `alarmBands` array. Bands are drawn, notified, and alarmed only when the dataset has a Bar, Gauge, or Meter widget or is an LED Panel member (and is not hidden from the dashboard), or belongs to a Bar Panel group. On any other dataset they are stored and ignored, and this call still returns them. A dataset with `suppressAlarms` set still draws its bands but never notifies or alarms.
+`rangeMin`/`rangeMax` are the dataset's `wgtMin`/`wgtMax`, returned so callers can validate band ranges before writing them back. An empty project (no bands configured) returns an empty `alarmBands` array. Bands are drawn, notified, and alarmed only when the dataset has a Bar, Gauge, or Meter widget or is an LED Panel member (and is not hidden from the dashboard), or belongs to a Bar Panel group. On any other dataset they are stored and ignored, and this call still returns them. A dataset with `suppressAlarms` set still draws its bands but never notifies or alarms; one with `alarmsWhileVisible` set alarms only while a widget showing it is on screen (`suppressAlarms` wins).
 
 #### 🟢 `project.dataset.setAlarmBands`
 Atomically replace a dataset's alarm-band array.
@@ -3009,7 +3014,7 @@ Atomically replace a dataset's alarm-band array.
   - `label` (string, optional): Band name, shown in band-edge notifications
   - `blink` (bool, optional): LED panels flash the LED while the band is active
 
-Bands may have gaps and may overlap; rendering paints them in array order behind the value indicator. Severity of Warning or higher triggers a notification and an alarm point when the value enters the band (3-second per-dataset cooldown suppresses repeat spam), whether or not the widget is on screen. That happens only when the dataset's bands are applicable (see [Alarm bands](Widget-Reference.md#alarm-bands)) and its `suppressAlarms` is off. Bands written to any other dataset are stored but never notify or alarm, and a suppressed dataset still draws them. Pass an empty array to clear all alarms.
+Bands may have gaps and may overlap; rendering paints them in array order behind the value indicator. Severity of Warning or higher triggers a notification and an alarm point when the value enters the band (3-second per-dataset cooldown suppresses repeat spam), whether or not the widget is on screen. That happens only when the dataset's bands are applicable (see [Alarm bands](Widget-Reference.md#alarm-bands)) and its `suppressAlarms` is off. Bands written to any other dataset are stored but never notify or alarm, and a suppressed dataset still draws them. A dataset with `alarmsWhileVisible` set alarms only while a widget showing it is on screen: a reveal into a band counts as entering it, hiding removes the point, and `alarms.state` lists no point for it while hidden. Pass an empty array to clear all alarms.
 
 **Returns:**
 ```json

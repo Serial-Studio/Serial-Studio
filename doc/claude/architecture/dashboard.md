@@ -121,7 +121,18 @@ so cached pointers would dangle. Consequences:
   taskbar bell follows every edit path within a second, offline ones included: the Alarm Bands
   dialog and multi-selection commits emit no `groupsChanged`, so a signal hook would miss them.
 - Notifications fire whether or not an applicable dataset's widget is on screen (outside the
-  active workspace, minimised, popped out).
+  active workspace, minimised, popped out), unless the dataset has `alarmsWhileVisible` on
+  (spec 0105). Then `UI::WidgetVisibility` (owned by the monitor, built in
+  `setupExternalConnections` with the `UISessionRegistry` the root injects) folds the shown
+  dataset set from every `UI::Taskbar`: its `viewShown` (QML binds the main window's Dashboard
+  pane and minimized state, or the external window's), `shownWindowIds()` (the active
+  workspace's normal-state windows) and `popOuts()` (reported by the main canvas), each window
+  id resolved through `Dashboard::widgetMap()` / `widgetSlot()`, group widgets fanning out to
+  their members; one deferred recompute per burst. `SerialStudio::datasetAlarmsNow(dataset,
+  group, shown)` is the rule's text and `AlarmMonitor::tracks(id)` its runtime home: a hidden
+  marked tracker is not tracked (the existing reap removes its point) and `applyVisibility`
+  re-arms a revealed one and evaluates it at once as a fresh band entry under the cooldown.
+  Never read `alarmsWhileVisible` or ask a taskbar for visibility anywhere else.
 - `Bar` / `Gauge` / `Meter` / `LEDPanel` are display-only band consumers; do not re-add
   per-widget `NotificationCenter` posts (that double-fires when a dataset is both a band
   widget and `led: true`).

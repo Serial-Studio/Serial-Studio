@@ -63,6 +63,8 @@ void UI::UISessionRegistry::registerTaskbar(Taskbar* t)
   m_taskbars.append(t);
   if (wasEmpty)
     Q_EMIT taskbarAvailable();
+
+  Q_EMIT taskbarsChanged();
 }
 
 /**
@@ -75,6 +77,8 @@ void UI::UISessionRegistry::unregisterTaskbar(Taskbar* t)
 
   if (m_taskbars.isEmpty())
     Q_EMIT taskbarUnavailable();
+
+  Q_EMIT taskbarsChanged();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -140,4 +144,13 @@ UI::Taskbar* UI::UISessionRegistry::primaryTaskbar() const
 UI::WindowManager* UI::UISessionRegistry::primaryWindowManager() const
 {
   return m_windowManagers.isEmpty() ? nullptr : m_windowManagers.constLast();
+}
+
+/**
+ * @brief Every live taskbar, main and external, in registration order; UI::WidgetVisibility walks
+ *        it for the workspaces on screen (spec 0105).
+ */
+const QList<UI::Taskbar*>& UI::UISessionRegistry::taskbars() const
+{
+  return m_taskbars;
 }

@@ -59,9 +59,17 @@ Item {
   function openWorkspaceSwitcher()   { _mainLayout.openWorkspaceSwitcher() }
 
   //
+  // Whether this pane is on screen (the window's shown view and not minimized); the taskbar
+  // carries it to the alarm side, which gates opted-in datasets on it (spec 0105)
+  //
+  property bool dashboardShown: true
+
+  //
   // Taskbar helper
   //
-  property SS_UI.TaskBar taskBar: SS_UI.TaskBar {}
+  property SS_UI.TaskBar taskBar: SS_UI.TaskBar {
+    viewShown: root.dashboardShown
+  }
 
   //
   // Main dashboard's palette model + open request, surfaced to the main window's single palette.
@@ -167,6 +175,7 @@ Item {
         if (idx !== -1)
           extWindows.splice(idx, 1)
 
+        win.unloadLayout()
         win.destroy()
         root.syncExternalWindows()
         root.updateExternalFullscreen()
@@ -313,6 +322,14 @@ Item {
       property int targetWorkspace: -1
 
       //
+      // Loader teardown clears the subtree's binding contexts before deleteLater; destroy() alone
+      // leaves the picker and start menu re-evaluating against a dying window manager and model
+      //
+      function unloadLayout() {
+        _extLayout.active = false
+      }
+
+      //
       // Re-asserts the saved workspace until it lands (model may settle late on load)
       //
       Timer {
@@ -341,6 +358,8 @@ Item {
       property SS_UI.TaskBar extTaskBar: SS_UI.TaskBar {
         independentWorkspace: true
         layoutScope: _extWindow.windowId
+        viewShown: _extWindow.visible
+                   && _extWindow.visibility !== Window.Minimized
       }
 
       //
@@ -439,13 +458,19 @@ Item {
         palette.placeholderText: Cpp_ThemeManager.colors["placeholder_text"]
         palette.highlightedText: Cpp_ThemeManager.colors["highlighted_text"]
 
-        DbItems.DashboardLayout {
+        Loader {
+          id: _extLayout
+
+          active: true
           anchors.fill: parent
-          isExternalWindow: true
-          hostWindow: _extWindow
-          taskBar: _extWindow.extTaskBar
-          onExternalWindowClicked: root.openExternalWindow()
-          onWidgetWindowRequested: (windowId) => _mainLayout.openWidgetWindow(windowId)
+          sourceComponent: DbItems.DashboardLayout {
+            anchors.fill: parent
+            isExternalWindow: true
+            hostWindow: _extWindow
+            taskBar: _extWindow.extTaskBar
+            onExternalWindowClicked: root.openExternalWindow()
+            onWidgetWindowRequested: (windowId) => _mainLayout.openWidgetWindow(windowId)
+          }
         }
       }
 

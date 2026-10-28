@@ -187,7 +187,10 @@ any dataset in a `barpanel` group. On any other dataset, a plot-only one
 included, they are stored and ignored, so give the dataset one of those widgets
 when the user asks for an alarm. Set `suppressAlarms: true` to keep a dataset's
 bands drawn without notifications or sound, for a zone the user wants to see
-but not hear. Set `alarmDeadband` (dataset units, `>= 0`) when a value hovers
+but not hear. Set `alarmsWhileVisible: true` on the datasets of a profile that
+shares one project with other profiles, each on its own workspace, so they
+alarm only while their workspace is on screen; it never replaces
+`suppressAlarms`, which wins when both are set. Set `alarmDeadband` (dataset units, `>= 0`) when a value hovers
 around a threshold: the active band holds until the value leaves it by that
 margin, and a step into a more severe band is never delayed.
 

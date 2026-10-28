@@ -94,9 +94,11 @@ Item {
 
     win.stayOnTop = Qt.binding(function() { return root.widgetsStayOnTop })
     externalWidgetWindows[windowId] = win
+    root.taskBar.setPopOutOpen(windowId, true)
     win.externalWidgetRequested.connect(root.openExternalWidgetWindow)
     win.closing.connect(function() {
       const toolType = SerialStudioHelpers.isDashboardTool(win.stableType) ? win.stableType : -1
+      root.taskBar.setPopOutOpen(windowId, false)
       delete root.externalWidgetWindows[windowId]
       win.destroy()
       if (root.persistExternalWindows && !app.quitting) {

@@ -689,7 +689,10 @@ Widgets.SmartWindow {
             width: parent ? parent.width : 0
             height: parent ? parent.height : 0
 
-            sourceComponent: Panes.Dashboard {}
+            sourceComponent: Panes.Dashboard {
+              dashboardShown: root.dashboardVisible
+                              && root.visibility !== Window.Minimized
+            }
           }
         ]
       }

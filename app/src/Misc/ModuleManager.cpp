@@ -131,6 +131,7 @@
 #include "UI/SerialStudioHelpers.h"
 #include "UI/Taskbar.h"
 #include "UI/TaskbarSettings.h"
+#include "UI/UISessionRegistry.h"
 #include "UI/WidgetExtensions.h"
 #include "UI/Widgets/Accelerometer.h"
 #include "UI/Widgets/Bar.h"
@@ -956,13 +957,14 @@ void Misc::ModuleManager::releaseAnnunciator()
 /**
  * @brief Builds and wires the annunciator in the GUI root: the band monitor and the console
  *        recorder are the two Ui singletons it observes, captured here so the census stays flat
- *        (spec 0087).
+ *        (spec 0087); the monitor takes the session registry the same way, for the taskbars its
+ *        visibility fold walks (spec 0105).
  */
 void Misc::ModuleManager::wireAnnunciator(bool headless, Misc::ProblemCenter& problemCenter)
 {
   auto& alarmMonitor  = UI::AlarmMonitor::instance();
   auto& consoleExport = Console::Export::instance();
-  alarmMonitor.setupExternalConnections();
+  alarmMonitor.setupExternalConnections(UI::UISessionRegistry::instance());
   consoleExport.setupExternalConnections();
   constructAnnunciator(SessionContext::current(), &problemCenter);
   s_annunciator->setupExternalConnections(headless, &alarmMonitor, &consoleExport);

@@ -42,6 +42,8 @@ private slots:
   void rule();
   void raises_data();
   void raises();
+  void alarmsNow_data();
+  void alarmsNow();
 };
 
 /**
@@ -176,6 +178,75 @@ void AlarmBandApplicabilityTest::raises()
 
   QCOMPARE(SerialStudio::datasetRendersAlarmBands(dataset, group), drawn);
   QCOMPARE(SerialStudio::datasetRaisesBandAlarms(dataset, group), alarms);
+}
+
+/**
+ * @brief One row per runtime shape (spec 0105): group widget, dataset widget, plot, suppressed,
+ *        Alarms only while visible, on screen, and whether the dataset alarms right now.
+ */
+void AlarmBandApplicabilityTest::alarmsNow_data()
+{
+  QTest::addColumn<QString>("groupWidget");
+  QTest::addColumn<QString>("datasetWidget");
+  QTest::addColumn<bool>("plot");
+  QTest::addColumn<bool>("suppressed");
+  QTest::addColumn<bool>("whileVisible");
+  QTest::addColumn<bool>("shown");
+  QTest::addColumn<bool>("alarms");
+
+  const QString none;
+  const auto gauge    = QStringLiteral("gauge");
+  const auto barPanel = QStringLiteral("barpanel");
+
+  QTest::newRow("visible-only gauge shown")
+    << none << gauge << false << false << true << true << true;
+  QTest::newRow("visible-only gauge hidden")
+    << none << gauge << false << false << true << false << false;
+  QTest::newRow("plain gauge shown") << none << gauge << false << false << false << true << true;
+  QTest::newRow("plain gauge hidden") << none << gauge << false << false << false << false << true;
+
+  QTest::newRow("suppressed visible-only gauge shown")
+    << none << gauge << false << true << true << true << false;
+  QTest::newRow("suppressed plain gauge hidden")
+    << none << gauge << false << true << false << false << false;
+
+  QTest::newRow("visible-only plot only shown")
+    << none << none << true << false << true << true << false;
+  QTest::newRow("visible-only bar panel member shown")
+    << barPanel << none << false << false << true << true << true;
+  QTest::newRow("visible-only bar panel member hidden")
+    << barPanel << none << false << false << true << false << false;
+}
+
+/**
+ * @brief Visibility gates only a dataset that opted in; suppression and applicability still win.
+ */
+void AlarmBandApplicabilityTest::alarmsNow()
+{
+  QFETCH(QString, groupWidget);
+  QFETCH(QString, datasetWidget);
+  QFETCH(bool, plot);
+  QFETCH(bool, suppressed);
+  QFETCH(bool, whileVisible);
+  QFETCH(bool, shown);
+  QFETCH(bool, alarms);
+
+  DataModel::Group group;
+  group.widget = groupWidget;
+
+  DataModel::Dataset dataset;
+  dataset.widget             = datasetWidget;
+  dataset.plt                = plot;
+  dataset.suppressAlarms     = suppressed;
+  dataset.alarmsWhileVisible = whileVisible;
+
+  DataModel::AlarmBand band;
+  band.min      = 800;
+  band.max      = 1000;
+  band.severity = DataModel::AlarmSeverity::Critical;
+  dataset.alarmBands.push_back(band);
+
+  QCOMPARE(SerialStudio::datasetAlarmsNow(dataset, group, shown), alarms);
 }
 
 QTEST_APPLESS_MAIN(AlarmBandApplicabilityTest)

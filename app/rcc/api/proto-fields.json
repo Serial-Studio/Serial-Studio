@@ -2112,6 +2112,7 @@
     "project.dataset.update": {
       "fields": {
         "alarmDeadband": 43,
+        "alarmsWhileVisible": 44,
         "alias": 4,
         "color": 5,
         "datasetId": 2,
@@ -2155,7 +2156,7 @@
         "xAxisId": 40
       },
       "reserved": [],
-      "next": 44
+      "next": 45
     },
     "project.dryRun.endToEnd": {
       "fields": {

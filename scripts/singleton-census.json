@@ -1,10 +1,10 @@
 {
   "spec": "0039-session-context",
   "regenerate": "python scripts/code-verify.py --singleton-census --accept",
-  "total": 802,
+  "total": 803,
   "files": 200,
   "buckets": {
-    "root": 210,
+    "root": 211,
     "accessor": 71,
     "ctor-capture": 62,
     "deferred": 6,
@@ -33,8 +33,8 @@
     "DataModel::FrameParser": 14,
     "Misc::ExtensionManager": 14,
     "Misc::ProblemCenter": 14,
+    "UI::UISessionRegistry": 14,
     "Misc::CommonFonts": 13,
-    "UI::UISessionRegistry": 13,
     "CSV::Player": 12,
     "ConnectionManager": 12,
     "API::CommandRegistry": 11,
@@ -217,6 +217,17 @@
         "loose": 0
       }
     },
+    "app/src/main.cpp": {
+      "total": 6,
+      "buckets": {
+        "root": 6,
+        "accessor": 0,
+        "ctor-capture": 0,
+        "deferred": 0,
+        "static-cache": 0,
+        "loose": 0
+      }
+    },
     "app/src/Misc/CLI.cpp": {
       "total": 28,
       "buckets": {
@@ -229,20 +240,9 @@
       }
     },
     "app/src/Misc/ModuleManager.cpp": {
-      "total": 204,
+      "total": 205,
       "buckets": {
-        "root": 204,
-        "accessor": 0,
-        "ctor-capture": 0,
-        "deferred": 0,
-        "static-cache": 0,
-        "loose": 0
-      }
-    },
-    "app/src/main.cpp": {
-      "total": 6,
-      "buckets": {
-        "root": 6,
+        "root": 205,
         "accessor": 0,
         "ctor-capture": 0,
         "deferred": 0,
@@ -305,6 +305,17 @@
         "loose": 0
       }
     },
+    "core/Api/API/Handlers/ControlScriptHandler.cpp": {
+      "total": 1,
+      "buckets": {
+        "root": 0,
+        "accessor": 0,
+        "ctor-capture": 0,
+        "deferred": 0,
+        "static-cache": 1,
+        "loose": 0
+      }
+    },
     "core/Api/API/Handlers/CSVExportHandler.cpp": {
       "total": 1,
       "buckets": {
@@ -324,17 +335,6 @@
         "ctor-capture": 0,
         "deferred": 0,
         "static-cache": 2,
-        "loose": 0
-      }
-    },
-    "core/Api/API/Handlers/ControlScriptHandler.cpp": {
-      "total": 1,
-      "buckets": {
-        "root": 0,
-        "accessor": 0,
-        "ctor-capture": 0,
-        "deferred": 0,
-        "static-cache": 1,
         "loose": 0
       }
     },
@@ -371,17 +371,6 @@
         "loose": 0
       }
     },
-    "core/Api/API/Handlers/IOManagerHandler.cpp": {
-      "total": 3,
-      "buckets": {
-        "root": 0,
-        "accessor": 0,
-        "ctor-capture": 0,
-        "deferred": 0,
-        "static-cache": 3,
-        "loose": 0
-      }
-    },
     "core/Api/API/Handlers/Iec104Handler.cpp": {
       "total": 1,
       "buckets": {
@@ -401,6 +390,17 @@
         "ctor-capture": 0,
         "deferred": 0,
         "static-cache": 1,
+        "loose": 0
+      }
+    },
+    "core/Api/API/Handlers/IOManagerHandler.cpp": {
+      "total": 3,
+      "buckets": {
+        "root": 0,
+        "accessor": 0,
+        "ctor-capture": 0,
+        "deferred": 0,
+        "static-cache": 3,
         "loose": 0
       }
     },
@@ -1834,17 +1834,6 @@
         "loose": 0
       }
     },
-    "core/Ui/ProjectEditor/EditorWiring.cpp": {
-      "total": 1,
-      "buckets": {
-        "root": 0,
-        "accessor": 0,
-        "ctor-capture": 0,
-        "deferred": 0,
-        "static-cache": 1,
-        "loose": 0
-      }
-    },
     "core/Ui/ProjectEditor/Editors/ControlScriptEditor.cpp": {
       "total": 1,
       "buckets": {
@@ -1919,6 +1908,17 @@
         "ctor-capture": 0,
         "deferred": 0,
         "static-cache": 3,
+        "loose": 0
+      }
+    },
+    "core/Ui/ProjectEditor/EditorWiring.cpp": {
+      "total": 1,
+      "buckets": {
+        "root": 0,
+        "accessor": 0,
+        "ctor-capture": 0,
+        "deferred": 0,
+        "static-cache": 1,
         "loose": 0
       }
     },

@@ -223,3 +223,19 @@ bool SerialStudio::datasetRaisesBandAlarms(const DataModel::Dataset& dataset,
 
   return datasetRendersAlarmBands(dataset, group);
 }
+
+/**
+ * @brief Whether @p dataset alarms right now: its bands raise alarms (datasetRaisesBandAlarms)
+ *        and, when it opts into Alarms only while visible, a widget showing it is on screen
+ *        (spec 0105). UI::AlarmMonitor::tracks applies this answer; rebuild and visibility-change
+ *        rate only.
+ */
+bool SerialStudio::datasetAlarmsNow(const DataModel::Dataset& dataset,
+                                    const DataModel::Group& group,
+                                    const bool shown)
+{
+  if (dataset.alarmsWhileVisible && !shown)
+    return false;
+
+  return datasetRaisesBandAlarms(dataset, group);
+}

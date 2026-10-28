@@ -103,6 +103,7 @@ inline constexpr KeyView Overview("overviewDisplay");
 inline constexpr KeyView AlarmEnabled("alarmEnabled");
 inline constexpr KeyView AlarmBands("alarmBands");
 inline constexpr KeyView SuppressAlarms("suppressAlarms");
+inline constexpr KeyView AlarmsWhileVisible("alarmsWhileVisible");
 inline constexpr KeyView AlarmDeadband("alarmDeadband");
 inline constexpr KeyView Color("color");
 inline constexpr KeyView Alias("alias");
