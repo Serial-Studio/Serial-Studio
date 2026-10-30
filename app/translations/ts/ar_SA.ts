@@ -4256,6 +4256,11 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
         <translation>فتح توثيق المؤرخ</translation>
     </message>
     <message>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="358"/>
+        <source>Switch to Quick Plot mode (auto-detected line format)</source>
+        <translation>التبديل إلى وضع الرسم السريع (تنسيق السطر المكتشف تلقائياً)</translation>
+    </message>
+    <message>
         <source>Edit Painter Code</source>
         <translation type="vanished">تحرير كود الرسام</translation>
     </message>
@@ -5115,9 +5120,8 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
         <translation>التبديل إلى وضع ملف المشروع (التحليل عبر مشروع)</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="358"/>
         <source>Switch to Quick Plot mode (comma-separated values)</source>
-        <translation>التبديل إلى وضع الرسم السريع (قيم مفصولة بفواصل)</translation>
+        <translation type="vanished">التبديل إلى وضع الرسم السريع (قيم مفصولة بفواصل)</translation>
     </message>
     <message>
         <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="359"/>
@@ -6231,7 +6235,7 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
 <context>
     <name>Dashboard</name>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard.qml" line="294"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard.qml" line="303"/>
         <source>Dashboard %1</source>
         <translation>لوحة القيادة %1</translation>
     </message>
@@ -6263,36 +6267,36 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
 <context>
     <name>DashboardCanvas</name>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="332"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="334"/>
         <source>Set Wallpaper…</source>
         <translation>تعيين خلفية…</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="338"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="340"/>
         <source>Clear Wallpaper</source>
         <translation>مسح الخلفية</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="348"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="350"/>
         <source>Tile Windows</source>
         <translation>ترتيب النوافذ</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="358"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="360"/>
         <source>Show Grid</source>
         <translation>إظهار الشبكة</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="365"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="367"/>
         <source>Grid Size</source>
         <translation>حجم الشبكة</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="370"/>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="377"/>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="384"/>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="391"/>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="398"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="372"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="379"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="386"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="393"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="400"/>
         <source>%1 px</source>
         <translation>%1 بكسل</translation>
     </message>
@@ -6305,17 +6309,17 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
         <translation type="vanished">الودجات الاحتياطية نشطة. اشترِ ترخيصًا للحصول على الوظائف الكاملة.</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="807"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="809"/>
         <source>Empty Workspace</source>
         <translation>مساحة العمل فارغة</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="821"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="823"/>
         <source>Use the search bar to find and add widgets, or right-click a widget in another workspace to add it here.</source>
         <translation>استخدم شريط البحث للعثور على الودجات وإضافتها، أو انقر بزر الماوس الأيمن على ودجة في مساحة عمل أخرى لإضافتها هنا.</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="838"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="840"/>
         <source>Search Widgets</source>
         <translation>البحث عن الودجات</translation>
     </message>
@@ -7140,12 +7144,12 @@ v
 <context>
     <name>DataModel::FrameBuilder</name>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/FrameBuilder.cpp" line="2343"/>
+        <location filename="../../../core/Pipeline/DataModel/FrameBuilder.cpp" line="2351"/>
         <source>JavaScript transform exceeded budget</source>
         <translation>تم تجاوز حد تحويل JavaScript</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/FrameBuilder.cpp" line="2344"/>
+        <location filename="../../../core/Pipeline/DataModel/FrameBuilder.cpp" line="2352"/>
         <source>A dataset transform took longer than %1 ms; remaining datasets in the frame fell back to raw values until the next frame. Profile or simplify the transform code.</source>
         <translation>استغرق تحويل مجموعة بيانات وقتًا أطول من %1 مللي ثانية؛ تم استخدام القيم الخام للمجموعات المتبقية في الإطار حتى الإطار التالي. قم بتحليل أو تبسيط كود التحويل.</translation>
     </message>
@@ -7158,7 +7162,7 @@ v
         <translation type="vanished">أحد المستهلكين في المسار (لوحة البيانات، تصدير CSV/MDF4، قاعدة بيانات الجلسات، أو مشترك API) لا يفرغ الإطارات بالسرعة الكافية. يقوم Serial Studio بالتحول إلى تخصيصات لكل إطار حتى يتم تصفية التراكم. قم بإيقاف مستهلك ثقيل أو خفّض معدل البيانات.</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/FrameBuilder.cpp" line="326"/>
+        <location filename="../../../core/Pipeline/DataModel/FrameBuilder.cpp" line="325"/>
         <source>Block pool exhausted</source>
         <translation>تم استنفاد مخزن الكتل</translation>
     </message>
@@ -7167,7 +7171,7 @@ v
         <translation type="vanished">مستهلك لاحق (لوحة المعلومات، تصدير CSV/MDF4، قاعدة بيانات الجلسة، أو مشترك API) لا يستنزف بسرعة كافية، لذا يتم إسقاط البيانات من العرض ومن أي تسجيل نشط. عطّل مستهلكًا ثقيلًا أو قلل معدل البيانات.</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/FrameBuilder.cpp" line="328"/>
+        <location filename="../../../core/Pipeline/DataModel/FrameBuilder.cpp" line="327"/>
         <source>A downstream consumer (dashboard, CSV/MDF4 export, historian, or API subscriber) is not draining fast enough, so data is being dropped from the display and from any active recording. Disable a heavy consumer or reduce the data rate.</source>
         <translation>مستهلك لاحق (لوحة المعلومات، تصدير CSV/MDF4، المؤرخ، أو مشترك API) لا يستنزف البيانات بسرعة كافية، لذا يتم إسقاط البيانات من العرض ومن أي تسجيل نشط. قم بتعطيل مستهلك ثقيل أو تقليل معدل البيانات.</translation>
     </message>
@@ -8702,12 +8706,22 @@ Add %4 dataset(s) using the template's defaults?</source>
         <translation>الاحتفاظ بالنطاقات على الأداة ولكن عدم إرسال إخطار أو رفع نقطة إنذار أو تشغيل صوت لها</translation>
     </message>
     <message>
+        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="765"/>
+        <source>Alarms only while visible</source>
+        <translation>الإنذارات فقط أثناء الرؤية</translation>
+    </message>
+    <message>
         <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="766"/>
+        <source>Notify, raise an alarm point and sound for the bands only while a widget showing this dataset is on screen; Suppress Alarms still wins</source>
+        <translation>إرسال إخطار ورفع نقطة إنذار وتشغيل صوت للنطاقات فقط أثناء ظهور أداة تعرض هذا مجموعة البيانات على الشاشة؛ كتم الإنذارات لا يزال يسود</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="780"/>
         <source>Alarm Deadband</source>
         <translation>نطاق الإنذار الميت</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="767"/>
+        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="781"/>
         <source>Hysteresis in the dataset's units: the active band holds until the value leaves it by this much, so a reading hovering on a threshold does not re-alarm on every frame (0 = none)</source>
         <translation>التباطؤ بوحدات مجموعة البيانات: تحتفظ النطاق النشط حتى تترك القيمة بهذا المقدار، لذا فإن القراءة التي تحوم حول حد معين لا تعيد تشغيل الإنذار في كل إطار (0 = بلا)</translation>
     </message>
@@ -8911,22 +8925,22 @@ Add %4 dataset(s) using the template's defaults?</source>
         <translation type="vanished">يُفعّل تنبيهاً بصرياً عندما تتجاوز القيمة هذا الحد</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="785"/>
+        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="799"/>
         <source>LED Display Settings</source>
         <translation>إعدادات شاشة LED</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="798"/>
+        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="812"/>
         <source>Show in LED Panel</source>
         <translation>إظهار في لوحة LED</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="799"/>
+        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="813"/>
         <source>Enable visual status monitoring using an LED display</source>
         <translation>تفعيل مراقبة الحالة البصرية باستخدام شاشة LED</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="812"/>
+        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="826"/>
         <source>LED On Threshold (required)</source>
         <translation>حد تشغيل LED (مطلوب)</translation>
     </message>
@@ -9395,7 +9409,7 @@ Add %4 dataset(s) using the template's defaults?</source>
         <translation type="vanished">تشغيل</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="813"/>
+        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="827"/>
         <source>LED lights up when value meets or exceeds this threshold; define alarm bands for multi-state colors</source>
         <translation>يضيء LED عندما تساوي القيمة هذا الحد أو تتجاوزه؛ حدد نطاقات الإنذار لألوان متعددة الحالات</translation>
     </message>
@@ -9648,32 +9662,32 @@ Add %4 dataset(s) using the template's defaults?</source>
         <translation>كلمة المرور التي أدخلتها لا تطابق الكلمة المحفوظة في ملف المشروع.</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="447"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="450"/>
         <source>Save Quick Plot as Project</source>
         <translation>حفظ الرسم البياني السريع كمشروع</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="448"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="451"/>
         <source>Quick Plot Project</source>
         <translation>مشروع الرسم السريع</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="505"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="508"/>
         <source>New Project</source>
         <translation>مشروع جديد</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="679"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="682"/>
         <source>Change Alarm Sounds</source>
         <translation>تغيير أصوات الإنذار</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1053"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1056"/>
         <source>Edit Control Loop</source>
         <translation>تحرير حلقة التحكم</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1199"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1202"/>
         <source>Fast mode runs Lua parsers and transforms through the JIT compiler (up to ~40x faster), but the runaway-script watchdog and the Safe-mode memory budget cannot operate: a script stuck in an infinite loop will stall its device until you disconnect, and one that keeps allocating will grow without limit.
 
 Enable it only for scripts you trust and have tested in Safe mode first.</source>
@@ -9694,12 +9708,12 @@ Enable it only for scripts you trust and have tested in Safe mode first.</source
         <translation type="vanished">العينات</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="647"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="650"/>
         <source>Change MQTT Publisher</source>
         <translation>تغيير ناشر MQTT</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="663"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="666"/>
         <source>Change InfluxDB Sink</source>
         <translation>تغيير مصب InfluxDB</translation>
     </message>
@@ -9712,7 +9726,7 @@ Enable it only for scripts you trust and have tested in Safe mode first.</source
         <translation type="vanished">عنوان العرض (فارغ يستعيد الأصلي):</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1037"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1040"/>
         <source>Change Project Title</source>
         <translation>تغيير عنوان المشروع</translation>
     </message>
@@ -9721,42 +9735,42 @@ Enable it only for scripts you trust and have tested in Safe mode first.</source
         <translation type="vanished">تحرير سكريبت التحكم</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1072"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1075"/>
         <source>Edit Shared Library</source>
         <translation>تحرير المكتبة المشتركة</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1089"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1092"/>
         <source>Edit JavaScript Library</source>
         <translation>تحرير مكتبة JavaScript</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1105"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1108"/>
         <source>Change Point Count</source>
         <translation>تغيير عدد النقاط</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1123"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1126"/>
         <source>Change Plot Time Range</source>
         <translation>تغيير نطاق وقت الرسم البياني</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1145"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1148"/>
         <source>Toggle Freeze</source>
         <translation>تبديل التجميد</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1160"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1163"/>
         <source>Toggle Change-Driven Transforms</source>
         <translation>تبديل التحويلات المدفوعة بالتغيير</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1177"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1180"/>
         <source>Toggle Fast Lua Execution</source>
         <translation>تبديل التنفيذ السريع لـ Lua</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1198"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1201"/>
         <source>Enable Fast Lua Execution?</source>
         <translation>تمكين التنفيذ السريع لـ Lua؟</translation>
     </message>
@@ -9769,37 +9783,37 @@ Enable it only for scripts you trust and have tested in Safe mode first.</source
 قم بتمكينه فقط للبرامج النصية التي تثق بها وقمت باختبارها في الوضع الآمن أولاً.</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1205"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1208"/>
         <source>Fast Lua Execution</source>
         <translation>التنفيذ السريع لـ Lua</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1234"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1237"/>
         <source>Change Frame Start Sequence</source>
         <translation>تغيير تسلسل بداية الإطار</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1253"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1256"/>
         <source>Change Frame End Sequence</source>
         <translation>تغيير تسلسل نهاية الإطار</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1272"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1275"/>
         <source>Change Checksum</source>
         <translation>تغيير المجموع الاختباري</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1291"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1294"/>
         <source>Change Frame Detection</source>
         <translation>تغيير كشف الإطار</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1310"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1313"/>
         <source>Change Decoder</source>
         <translation>تغيير وحدة فك الترميز</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1329"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1332"/>
         <source>Toggle Hex Delimiters</source>
         <translation>تبديل المحددات السداسية عشرية</translation>
     </message>
@@ -9888,17 +9902,17 @@ Enable it only for scripts you trust and have tested in Safe mode first.</source
         <translation type="vanished">حفظ مشروع Serial Studio</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="449"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="452"/>
         <source>Serial Studio Project Files (*.ssproj)</source>
         <translation>ملفات مشروع Serial Studio (*.ssproj)</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="864"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="867"/>
         <source>Untitled Project</source>
         <translation>مشروع بدون عنوان</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="882"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="885"/>
         <source>Device A</source>
         <translation>الجهاز A</translation>
     </message>
@@ -10597,34 +10611,34 @@ Reload it?</source>
 <context>
     <name>DataModel::QuickPlotBuilder</name>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/FrameBuilder/QuickPlotBuilder.cpp" line="90"/>
+        <location filename="../../../core/Pipeline/DataModel/FrameBuilder/QuickPlotBuilder.cpp" line="183"/>
         <source>Device A</source>
         <translation>الجهاز أ</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/FrameBuilder/QuickPlotBuilder.cpp" line="127"/>
-        <location filename="../../../core/Pipeline/DataModel/FrameBuilder/QuickPlotBuilder.cpp" line="285"/>
+        <location filename="../../../core/Pipeline/DataModel/FrameBuilder/QuickPlotBuilder.cpp" line="279"/>
+        <location filename="../../../core/Pipeline/DataModel/FrameBuilder/QuickPlotBuilder.cpp" line="467"/>
         <source>Channel %1</source>
         <translation>القناة %1</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/FrameBuilder/QuickPlotBuilder.cpp" line="136"/>
-        <location filename="../../../core/Pipeline/DataModel/FrameBuilder/QuickPlotBuilder.cpp" line="301"/>
+        <location filename="../../../core/Pipeline/DataModel/FrameBuilder/QuickPlotBuilder.cpp" line="227"/>
+        <location filename="../../../core/Pipeline/DataModel/FrameBuilder/QuickPlotBuilder.cpp" line="483"/>
         <source>Quick Plot</source>
         <translation>رسم بياني سريع</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/FrameBuilder/QuickPlotBuilder.cpp" line="143"/>
+        <location filename="../../../core/Pipeline/DataModel/FrameBuilder/QuickPlotBuilder.cpp" line="234"/>
         <source>Quick Plot Data</source>
         <translation>بيانات الرسم البياني السريع</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/FrameBuilder/QuickPlotBuilder.cpp" line="155"/>
+        <location filename="../../../core/Pipeline/DataModel/FrameBuilder/QuickPlotBuilder.cpp" line="246"/>
         <source>Multi-Plot</source>
         <translation>رسم بياني متعدد</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/FrameBuilder/QuickPlotBuilder.cpp" line="296"/>
+        <location filename="../../../core/Pipeline/DataModel/FrameBuilder/QuickPlotBuilder.cpp" line="478"/>
         <source>Audio Input</source>
         <translation>إدخال الصوت</translation>
     </message>
@@ -20623,17 +20637,17 @@ To reuse this seat on another device, email alex@serial-studio.com with your dev
         <translation>مشروع فارغ</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/MainWindow.qml" line="743"/>
+        <location filename="../../qml/MainWindow/MainWindow.qml" line="746"/>
         <source>Serial Studio</source>
         <translation>Serial Studio</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/MainWindow.qml" line="751"/>
+        <location filename="../../qml/MainWindow/MainWindow.qml" line="754"/>
         <source>Waiting for data…</source>
         <translation>في انتظار البيانات…</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/MainWindow.qml" line="752"/>
+        <location filename="../../qml/MainWindow/MainWindow.qml" line="755"/>
         <source>Connecting to device…</source>
         <translation>جارٍ الاتصال بالجهاز…</translation>
     </message>
@@ -20642,7 +20656,7 @@ To reuse this seat on another device, email alex@serial-studio.com with your dev
         <translation type="vanished">التطبيق</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/MainWindow.qml" line="785"/>
+        <location filename="../../qml/MainWindow/MainWindow.qml" line="788"/>
         <source>Command Palette</source>
         <translation>لوحة الأوامر</translation>
     </message>
@@ -22681,6 +22695,7 @@ Add groups above to poll multiple register types.</source>
     </message>
     <message>
         <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/TextJsonData.cpp" line="150"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/TextLineValues.cpp" line="359"/>
         <source>Fields (in channel order)</source>
         <translation>الحقول (حسب ترتيب القناة)</translation>
     </message>
@@ -22714,6 +22729,41 @@ Add groups above to poll multiple register types.</source>
     <message>
         <source>CAN messages with their signal bit layouts and scaling. Written by the DBC importer.</source>
         <translation type="vanished">رسائل CAN مع تخطيطات بتات الإشارات والقياس الخاصة بها. مكتوبة بواسطة مستورد DBC.</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/TextLineValues.cpp" line="323"/>
+        <source>Format</source>
+        <translation>تنسيق</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/TextLineValues.cpp" line="324"/>
+        <source>Delimited values on one line, or a one-line JSON object whose numeric leaves are the fields.</source>
+        <translation>قيم مفصولة على سطر واحد، أو كائن JSON على سطر واحد تكون أوراقه الرقمية هي الحقول.</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/TextLineValues.cpp" line="334"/>
+        <source>Separator</source>
+        <translation>الفاصل</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/TextLineValues.cpp" line="335"/>
+        <source>What separates the values of a delimited line; space means any run of spaces.</source>
+        <translation>ما يفصل قيم السطر المفصول؛ المسافة تعني أي تسلسل من المسافات.</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/TextLineValues.cpp" line="351"/>
+        <source>Decimal comma</source>
+        <translation>الفاصلة العشرية</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/TextLineValues.cpp" line="352"/>
+        <source>Reads 23,5 as 23.5 (semicolon or space separated lines).</source>
+        <translation>يقرأ 23,5 كـ 23.5 (أسطر مفصولة بفاصلة منقوطة أو مسافة).</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/TextLineValues.cpp" line="360"/>
+        <source>Comma-separated field names or JSON paths such as temp, hum or imu.ax, acc[0]. Leave empty for positional values.</source>
+        <translation>أسماء الحقول المفصولة بفواصل أو مسارات JSON مثل temp, hum أو imu.ax, acc[0]. اترك فارغاً للقيم الموضعية.</translation>
     </message>
 </context>
 <context>
@@ -26628,16 +26678,20 @@ Reload it?</source>
     </message>
     <message>
         <location filename="../../../core/Ui/Console/WelcomeText.cpp" line="145"/>
-        <source>Data is arriving, but no complete frame was detected. Check the line ending or frame delimiters and the Operation Mode. Problem Center shows what the link reports.</source>
-        <translation>البيانات تصل، لكن لم يتم الكشف عن إطار كامل. تحقق من نهاية السطر أو محددات الإطار وطريقة التشغيل. يعرض مركز المشاكل ما يبلغ عنه الارتباط.</translation>
+        <source>Data is arriving, but no complete frame was detected. Check the line ending or frame delimiters and the Operation Mode. Problem Center shows what the link reports. In Quick Plot, a line such as 23.5,60 or temp:23.5, hum:60 is enough.</source>
+        <translation>البيانات تصل، لكن لم يتم الكشف عن إطار كامل. تحقق من نهاية السطر أو محددات الإطار وطريقة التشغيل. يعرض مركز المشاكل ما يبلغ عنه الارتباط. في وضع الرسم السريع، سطر مثل 23.5,60 أو temp:23.5, hum:60 كافٍ.</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ModuleManager.cpp" line="278"/>
+        <source>Data is arriving, but no complete frame was detected. Check the line ending or frame delimiters and the Operation Mode. Problem Center shows what the link reports.</source>
+        <translation type="vanished">البيانات تصل، لكن لم يتم الكشف عن إطار كامل. تحقق من نهاية السطر أو محددات الإطار وطريقة التشغيل. يعرض مركز المشاكل ما يبلغ عنه الارتباط.</translation>
+    </message>
+    <message>
+        <location filename="../../src/Misc/ModuleManager.cpp" line="279"/>
         <source>Critical</source>
         <translation>حرج</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ModuleManager.cpp" line="278"/>
+        <location filename="../../src/Misc/ModuleManager.cpp" line="279"/>
         <source>Warning</source>
         <translation>تحذير</translation>
     </message>
@@ -27638,12 +27692,12 @@ function parse(%1) { ... }
         <translation>إخطارات من التحويلات</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/QuickPlotProject.cpp" line="47"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/QuickPlotProject.cpp" line="139"/>
         <source>Device A</source>
         <translation>الجهاز A</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/QuickPlotProject.cpp" line="115"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/QuickPlotProject.cpp" line="215"/>
         <source>Quick Plot Project</source>
         <translation>مشروع الرسم السريع</translation>
     </message>
@@ -30707,57 +30761,65 @@ Add absolute addresses above to poll the controller.</source>
         <translation>عرض البيانات الواردة كنص أو سادس عشري. لا يتم تحليل أو رسم أي شيء.</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="236"/>
         <source>Quick Plot (Comma Separated Values)</source>
-        <translation>رسم سريع (قيم مفصولة بفواصل)</translation>
+        <translation type="vanished">رسم سريع (قيم مفصولة بفواصل)</translation>
+    </message>
+    <message>
+        <source>Plots one line per sample with values separated by commas, for example 12.5,30.1,0.98 followed by a newline.</source>
+        <translation type="vanished">رسم سطر واحد لكل عينة مع قيم مفصولة بفواصل، على سبيل المثال 12.5,30.1,0.98 متبوعة بسطر جديد.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="236"/>
+        <source>Quick Plot (Auto-Detected Format)</source>
+        <translation>رسم بياني سريع (تنسيق مكتشف تلقائياً)</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Setup.qml" line="239"/>
-        <source>Plots one line per sample with values separated by commas, for example 12.5,30.1,0.98 followed by a newline.</source>
-        <translation>رسم سطر واحد لكل عينة مع قيم مفصولة بفواصل، على سبيل المثال 12.5,30.1,0.98 متبوعة بسطر جديد.</translation>
+        <source>Plots one line per sample and detects the format from the first numeric line: values separated by commas, semicolons, tabs or spaces (12.5, 30.1, 0.98), named values (temp:23.5, hum:60), units after a number (23.5°C), or a one-line JSON object ({"t":23.5,"h":60}).</source>
+        <translation>يرسم سطراً واحداً لكل عينة ويكتشف التنسيق من السطر الرقمي الأول: قيم مفصولة بفواصل أو فواصل منقوطة أو علامات جدولة أو مسافات (12.5, 30.1, 0.98)، قيم مسماة (temp:23.5, hum:60)، وحدات بعد رقم (23.5°C)، أو كائن JSON في سطر واحد ({"t":23.5,"h":60}).</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="258"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="261"/>
         <source>Parse via Project File</source>
         <translation>تحليل عبر ملف المشروع</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="261"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="264"/>
         <source>Builds the dashboard from a project made in the Project Editor.</source>
         <translation>بناء لوحة التحكم من مشروع تم إنشاؤه في محرر المشروع.</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="280"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="283"/>
         <source>Change Project File (%1)</source>
         <translation>تغيير ملف المشروع (%1)</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="281"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="284"/>
         <source>Select Project File</source>
         <translation>تحديد ملف المشروع</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="296"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="299"/>
         <source>Data Export</source>
         <translation>تصدير البيانات</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="322"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="325"/>
         <source>CSV Spreadsheet</source>
         <translation>جدول بيانات CSV</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="344"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="347"/>
         <source>Historian Database</source>
         <translation>قاعدة بيانات المؤرخ</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="430"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="433"/>
         <source>Connection: %1</source>
         <translation>الاتصال: %1</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="525"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="528"/>
         <source>Each device has its own connection settings. Configure them in the Project Editor under Devices.</source>
         <translation>لكل جهاز إعدادات اتصال خاصة به. يمكن تكوينها في محرر المشروع ضمن علامة تبويب الأجهزة.</translation>
     </message>
@@ -30770,12 +30832,12 @@ Add absolute addresses above to poll the controller.</source>
         <translation type="vanished">تسجيل الجلسة</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="365"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="368"/>
         <source>MDF4 Recording</source>
         <translation>تسجيل MDF4</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="383"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="386"/>
         <source>Console Log</source>
         <translation>سجل وحدة التحكم</translation>
     </message>
@@ -30784,12 +30846,12 @@ Add absolute addresses above to poll the controller.</source>
         <translation type="vanished">واجهة الإدخال/الإخراج: %1</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="499"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="502"/>
         <source>Multi-Device Project</source>
         <translation>مشروع متعدد الأجهزة</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="512"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="515"/>
         <source>This project streams data from %1 independent devices.</source>
         <translation>يبث هذا المشروع البيانات من %1 جهاز مستقل.</translation>
     </message>
@@ -30798,7 +30860,7 @@ Add absolute addresses above to poll the controller.</source>
         <translation type="vanished">لكل جهاز إعدادات اتصال خاصة به. يمكن تكوينها في محرر المشروع ضمن علامة تبويب المصادر.</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="546"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="549"/>
         <source>Open Project Editor</source>
         <translation>فتح محرر المشروع</translation>
     </message>
@@ -33106,27 +33168,27 @@ Add absolute addresses above to poll the controller.</source>
 <context>
     <name>UI::AlarmMonitor</name>
     <message>
-        <location filename="../../../core/Ui/UI/AlarmMonitor.cpp" line="271"/>
+        <location filename="../../../core/Ui/UI/AlarmMonitor.cpp" line="340"/>
         <source>Alarm</source>
         <translation>إنذار</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/AlarmMonitor.cpp" line="272"/>
+        <location filename="../../../core/Ui/UI/AlarmMonitor.cpp" line="341"/>
         <source>critical</source>
         <translation>حرج</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/AlarmMonitor.cpp" line="272"/>
+        <location filename="../../../core/Ui/UI/AlarmMonitor.cpp" line="341"/>
         <source>warning</source>
         <translation>تحذير</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/AlarmMonitor.cpp" line="276"/>
+        <location filename="../../../core/Ui/UI/AlarmMonitor.cpp" line="345"/>
         <source>Value %1%2 entered the %3 band (%4–%5).</source>
         <translation>دخلت القيمة %1%2 نطاق %3 (%4–%5).</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/AlarmMonitor.cpp" line="282"/>
+        <location filename="../../../core/Ui/UI/AlarmMonitor.cpp" line="351"/>
         <source>Alarms</source>
         <translation>الإنذارات</translation>
     </message>

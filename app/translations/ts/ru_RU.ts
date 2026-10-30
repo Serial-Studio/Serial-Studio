@@ -4268,6 +4268,11 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
         <translation>Открыть документацию по историку</translation>
     </message>
     <message>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="358"/>
+        <source>Switch to Quick Plot mode (auto-detected line format)</source>
+        <translation>Переключиться в режим Быстрого Графика (автоматически определённый формат строки)</translation>
+    </message>
+    <message>
         <source>Edit Painter Code</source>
         <translation type="vanished">Изменить Код Painter</translation>
     </message>
@@ -5127,9 +5132,8 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
         <translation>Переключиться в режим Файла Проекта (разбор через проект)</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="358"/>
         <source>Switch to Quick Plot mode (comma-separated values)</source>
-        <translation>Переключиться в режим Быстрого Графика (значения через запятую)</translation>
+        <translation type="vanished">Переключиться в режим Быстрого Графика (значения через запятую)</translation>
     </message>
     <message>
         <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="359"/>
@@ -6243,7 +6247,7 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
 <context>
     <name>Dashboard</name>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard.qml" line="294"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard.qml" line="303"/>
         <source>Dashboard %1</source>
         <translation>Панель %1</translation>
     </message>
@@ -6275,36 +6279,36 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
 <context>
     <name>DashboardCanvas</name>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="332"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="334"/>
         <source>Set Wallpaper…</source>
         <translation>Установить Обои…</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="338"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="340"/>
         <source>Clear Wallpaper</source>
         <translation>Очистить Обои</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="348"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="350"/>
         <source>Tile Windows</source>
         <translation>Расположить Окна</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="358"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="360"/>
         <source>Show Grid</source>
         <translation>Показать Сетку</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="365"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="367"/>
         <source>Grid Size</source>
         <translation>Размер Сетки</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="370"/>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="377"/>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="384"/>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="391"/>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="398"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="372"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="379"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="386"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="393"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="400"/>
         <source>%1 px</source>
         <translation>%1 пикс.</translation>
     </message>
@@ -6317,17 +6321,17 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
         <translation type="vanished">Активны резервные виджеты. Приобретите лицензию для полной функциональности.</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="807"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="809"/>
         <source>Empty Workspace</source>
         <translation>Пустое Рабочее Пространство</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="821"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="823"/>
         <source>Use the search bar to find and add widgets, or right-click a widget in another workspace to add it here.</source>
         <translation>Используйте строку поиска для поиска и добавления виджетов или щёлкните правой кнопкой мыши по виджету в другом рабочем пространстве, чтобы добавить его сюда.</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="838"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="840"/>
         <source>Search Widgets</source>
         <translation>Поиск Виджетов</translation>
     </message>
@@ -7216,7 +7220,7 @@ v
 <context>
     <name>DataModel::FrameBuilder</name>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/FrameBuilder.cpp" line="328"/>
+        <location filename="../../../core/Pipeline/DataModel/FrameBuilder.cpp" line="327"/>
         <source>A downstream consumer (dashboard, CSV/MDF4 export, historian, or API subscriber) is not draining fast enough, so data is being dropped from the display and from any active recording. Disable a heavy consumer or reduce the data rate.</source>
         <translation>Нижестоящий потребитель (панель, экспорт CSV/MDF4, историк или подписчик API) не успевает обрабатывать данные, поэтому данные отбрасываются из отображения и из активной записи. Отключите ресурсоёмкий потребитель или снизьте скорость передачи данных.</translation>
     </message>
@@ -7237,7 +7241,7 @@ v
         <translation type="vanished">Быстрый График</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/FrameBuilder.cpp" line="326"/>
+        <location filename="../../../core/Pipeline/DataModel/FrameBuilder.cpp" line="325"/>
         <source>Block pool exhausted</source>
         <translation>Пул блоков исчерпан</translation>
     </message>
@@ -7246,12 +7250,12 @@ v
         <translation type="vanished">Потребитель данных (панель, экспорт CSV/MDF4, база данных сеанса или подписчик API) не успевает обрабатывать данные, поэтому данные теряются при отображении и записи. Отключите ресурсоёмкий компонент или снизьте скорость передачи данных.</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/FrameBuilder.cpp" line="2343"/>
+        <location filename="../../../core/Pipeline/DataModel/FrameBuilder.cpp" line="2351"/>
         <source>JavaScript transform exceeded budget</source>
         <translation>Превышен лимит преобразования JavaScript</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/FrameBuilder.cpp" line="2344"/>
+        <location filename="../../../core/Pipeline/DataModel/FrameBuilder.cpp" line="2352"/>
         <source>A dataset transform took longer than %1 ms; remaining datasets in the frame fell back to raw values until the next frame. Profile or simplify the transform code.</source>
         <translation>Преобразование набора данных заняло больше %1 мс; остальные наборы данных в кадре были возвращены в исходном виде до следующего кадра. Проанализируйте или упростите код преобразования.</translation>
     </message>
@@ -8786,12 +8790,22 @@ Add %4 dataset(s) using the template's defaults?</source>
         <translation>Оставить полосы на виджете, но никогда не уведомлять, не создавать точку тревоги и не издавать звук для них</translation>
     </message>
     <message>
+        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="765"/>
+        <source>Alarms only while visible</source>
+        <translation>Тревоги только при видимости</translation>
+    </message>
+    <message>
         <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="766"/>
+        <source>Notify, raise an alarm point and sound for the bands only while a widget showing this dataset is on screen; Suppress Alarms still wins</source>
+        <translation>Уведомлять, создавать точку тревоги и издавать звук для полос только при видимости виджета с этим набором данных на экране; Подавление тревог имеет приоритет</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="780"/>
         <source>Alarm Deadband</source>
         <translation>Мертвая Зона Сигнализации</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="767"/>
+        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="781"/>
         <source>Hysteresis in the dataset's units: the active band holds until the value leaves it by this much, so a reading hovering on a threshold does not re-alarm on every frame (0 = none)</source>
         <translation>Гистерезис в единицах набора данных: активная полоса сохраняется до тех пор, пока значение не выйдет из неё на эту величину, поэтому показание, колеблющееся на пороге, не вызывает повторную сигнализацию на каждом кадре (0 = нет)</translation>
     </message>
@@ -8845,7 +8859,7 @@ Add %4 dataset(s) using the template's defaults?</source>
         <translation type="vanished">Вкл</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="813"/>
+        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="827"/>
         <source>LED lights up when value meets or exceeds this threshold; define alarm bands for multi-state colors</source>
         <translation>LED загорается, когда значение достигает или превышает этот порог; определите диапазоны сигнализации для многоцветных состояний</translation>
     </message>
@@ -9126,22 +9140,22 @@ Add %4 dataset(s) using the template's defaults?</source>
         <translation type="vanished">Запускает визуальную сигнализацию при превышении этого порога</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="785"/>
+        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="799"/>
         <source>LED Display Settings</source>
         <translation>Настройки LED-Дисплея</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="798"/>
+        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="812"/>
         <source>Show in LED Panel</source>
         <translation>Показывать на LED-Панели</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="799"/>
+        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="813"/>
         <source>Enable visual status monitoring using an LED display</source>
         <translation>Включает визуальный мониторинг состояния с помощью LED-дисплея</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="812"/>
+        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="826"/>
         <source>LED On Threshold (required)</source>
         <translation>Порог Включения LED (обязательно)</translation>
     </message>
@@ -9692,27 +9706,27 @@ Add %4 dataset(s) using the template's defaults?</source>
         <translation>Введённый пароль не совпадает с паролем, сохранённым в файле проекта.</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="447"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="450"/>
         <source>Save Quick Plot as Project</source>
         <translation>Сохранить Быстрый График как Проект</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="448"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="451"/>
         <source>Quick Plot Project</source>
         <translation>Проект Быстрого Графика</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="505"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="508"/>
         <source>New Project</source>
         <translation>Новый Проект</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1053"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1056"/>
         <source>Edit Control Loop</source>
         <translation>Редактировать Цикл Управления</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1199"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1202"/>
         <source>Fast mode runs Lua parsers and transforms through the JIT compiler (up to ~40x faster), but the runaway-script watchdog and the Safe-mode memory budget cannot operate: a script stuck in an infinite loop will stall its device until you disconnect, and one that keeps allocating will grow without limit.
 
 Enable it only for scripts you trust and have tested in Safe mode first.</source>
@@ -9725,12 +9739,12 @@ Enable it only for scripts you trust and have tested in Safe mode first.</source
         <translation type="vanished">Образцы</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="647"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="650"/>
         <source>Change MQTT Publisher</source>
         <translation>Изменить Издателя MQTT</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="663"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="666"/>
         <source>Change InfluxDB Sink</source>
         <translation>Изменить Приёмник Influxdb</translation>
     </message>
@@ -9743,12 +9757,12 @@ Enable it only for scripts you trust and have tested in Safe mode first.</source
         <translation type="vanished">Отображаемый заголовок (пусто восстанавливает оригинал):</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="679"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="682"/>
         <source>Change Alarm Sounds</source>
         <translation>Изменить Звуки Тревог</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1037"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1040"/>
         <source>Change Project Title</source>
         <translation>Изменить Название Проекта</translation>
     </message>
@@ -9757,42 +9771,42 @@ Enable it only for scripts you trust and have tested in Safe mode first.</source
         <translation type="vanished">Редактировать Скрипт Управления</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1072"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1075"/>
         <source>Edit Shared Library</source>
         <translation>Редактировать Общую Библиотеку</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1089"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1092"/>
         <source>Edit JavaScript Library</source>
         <translation>Редактировать Библиотеку Javascript</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1105"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1108"/>
         <source>Change Point Count</source>
         <translation>Изменить Количество Точек</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1123"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1126"/>
         <source>Change Plot Time Range</source>
         <translation>Изменить Диапазон Времени Графика</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1145"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1148"/>
         <source>Toggle Freeze</source>
         <translation>Переключить Заморозку</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1160"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1163"/>
         <source>Toggle Change-Driven Transforms</source>
         <translation>Переключить Преобразования по Изменению</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1177"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1180"/>
         <source>Toggle Fast Lua Execution</source>
         <translation>Переключить Быстрое Выполнение Lua</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1198"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1201"/>
         <source>Enable Fast Lua Execution?</source>
         <translation>Включить Быстрое Выполнение Lua?</translation>
     </message>
@@ -9813,37 +9827,37 @@ Enable it only for scripts you trust and have tested in Safe mode first.</source
 Включайте только для проверенных скриптов, протестированных в безопасном режиме.</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1205"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1208"/>
         <source>Fast Lua Execution</source>
         <translation>Быстрое Выполнение Lua</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1234"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1237"/>
         <source>Change Frame Start Sequence</source>
         <translation>Изменить Начальную Последовательность Кадра</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1253"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1256"/>
         <source>Change Frame End Sequence</source>
         <translation>Изменить Конечную Последовательность Кадра</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1272"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1275"/>
         <source>Change Checksum</source>
         <translation>Изменить Контрольную Сумму</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1291"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1294"/>
         <source>Change Frame Detection</source>
         <translation>Изменить Обнаружение Кадров</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1310"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1313"/>
         <source>Change Decoder</source>
         <translation>Изменить Декодер</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1329"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1332"/>
         <source>Toggle Hex Delimiters</source>
         <translation>Переключить Шестнадцатеричные Разделители</translation>
     </message>
@@ -9984,17 +9998,17 @@ Enable it only for scripts you trust and have tested in Safe mode first.</source
         <translation type="vanished">Сохранить Проект Serial Studio</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="449"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="452"/>
         <source>Serial Studio Project Files (*.ssproj)</source>
         <translation>Файлы Проектов Serial Studio (*.ssproj)</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="864"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="867"/>
         <source>Untitled Project</source>
         <translation>Проект Без Названия</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="882"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="885"/>
         <source>Device A</source>
         <translation>Устройство A</translation>
     </message>
@@ -10693,34 +10707,34 @@ Reload it?</source>
 <context>
     <name>DataModel::QuickPlotBuilder</name>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/FrameBuilder/QuickPlotBuilder.cpp" line="90"/>
+        <location filename="../../../core/Pipeline/DataModel/FrameBuilder/QuickPlotBuilder.cpp" line="183"/>
         <source>Device A</source>
         <translation>Устройство A</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/FrameBuilder/QuickPlotBuilder.cpp" line="127"/>
-        <location filename="../../../core/Pipeline/DataModel/FrameBuilder/QuickPlotBuilder.cpp" line="285"/>
+        <location filename="../../../core/Pipeline/DataModel/FrameBuilder/QuickPlotBuilder.cpp" line="279"/>
+        <location filename="../../../core/Pipeline/DataModel/FrameBuilder/QuickPlotBuilder.cpp" line="467"/>
         <source>Channel %1</source>
         <translation>Канал %1</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/FrameBuilder/QuickPlotBuilder.cpp" line="136"/>
-        <location filename="../../../core/Pipeline/DataModel/FrameBuilder/QuickPlotBuilder.cpp" line="301"/>
+        <location filename="../../../core/Pipeline/DataModel/FrameBuilder/QuickPlotBuilder.cpp" line="227"/>
+        <location filename="../../../core/Pipeline/DataModel/FrameBuilder/QuickPlotBuilder.cpp" line="483"/>
         <source>Quick Plot</source>
         <translation>Быстрый График</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/FrameBuilder/QuickPlotBuilder.cpp" line="143"/>
+        <location filename="../../../core/Pipeline/DataModel/FrameBuilder/QuickPlotBuilder.cpp" line="234"/>
         <source>Quick Plot Data</source>
         <translation>Данные Быстрого Графика</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/FrameBuilder/QuickPlotBuilder.cpp" line="155"/>
+        <location filename="../../../core/Pipeline/DataModel/FrameBuilder/QuickPlotBuilder.cpp" line="246"/>
         <source>Multi-Plot</source>
         <translation>Множественный График</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/FrameBuilder/QuickPlotBuilder.cpp" line="296"/>
+        <location filename="../../../core/Pipeline/DataModel/FrameBuilder/QuickPlotBuilder.cpp" line="478"/>
         <source>Audio Input</source>
         <translation>Аудиовход</translation>
     </message>
@@ -21118,17 +21132,17 @@ Please provide the necessary credentials.</source>
         <translation>Пустой Проект</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/MainWindow.qml" line="743"/>
+        <location filename="../../qml/MainWindow/MainWindow.qml" line="746"/>
         <source>Serial Studio</source>
         <translation>Serial Studio</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/MainWindow.qml" line="751"/>
+        <location filename="../../qml/MainWindow/MainWindow.qml" line="754"/>
         <source>Waiting for data…</source>
         <translation>Ожидание данных…</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/MainWindow.qml" line="752"/>
+        <location filename="../../qml/MainWindow/MainWindow.qml" line="755"/>
         <source>Connecting to device…</source>
         <translation>Подключение к устройству…</translation>
     </message>
@@ -21137,7 +21151,7 @@ Please provide the necessary credentials.</source>
         <translation type="vanished">Приложение</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/MainWindow.qml" line="785"/>
+        <location filename="../../qml/MainWindow/MainWindow.qml" line="788"/>
         <source>Command Palette</source>
         <translation>Палитра Команд</translation>
     </message>
@@ -23188,6 +23202,7 @@ Add groups above to poll multiple register types.</source>
     </message>
     <message>
         <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/TextJsonData.cpp" line="150"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/TextLineValues.cpp" line="359"/>
         <source>Fields (in channel order)</source>
         <translation>Поля (в порядке каналов)</translation>
     </message>
@@ -23221,6 +23236,41 @@ Add groups above to poll multiple register types.</source>
     <message>
         <source>CAN messages with their signal bit layouts and scaling. Written by the DBC importer.</source>
         <translation type="vanished">Сообщения CAN с их побитовыми раскладками сигналов и масштабированием. Создаются импортером DBC.</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/TextLineValues.cpp" line="323"/>
+        <source>Format</source>
+        <translation>Форматировать</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/TextLineValues.cpp" line="324"/>
+        <source>Delimited values on one line, or a one-line JSON object whose numeric leaves are the fields.</source>
+        <translation>Значения, разделённые на одной строке, или однострочный объект JSON, чьи числовые листья являются полями.</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/TextLineValues.cpp" line="334"/>
+        <source>Separator</source>
+        <translation>Разделитель</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/TextLineValues.cpp" line="335"/>
+        <source>What separates the values of a delimited line; space means any run of spaces.</source>
+        <translation>Что разделяет значения разделённой строки; пробел означает любую последовательность пробелов.</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/TextLineValues.cpp" line="351"/>
+        <source>Decimal comma</source>
+        <translation>Десятичная запятая</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/TextLineValues.cpp" line="352"/>
+        <source>Reads 23,5 as 23.5 (semicolon or space separated lines).</source>
+        <translation>Читает 23,5 как 23.5 (строки, разделённые точкой с запятой или пробелом).</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/TextLineValues.cpp" line="360"/>
+        <source>Comma-separated field names or JSON paths such as temp, hum or imu.ax, acc[0]. Leave empty for positional values.</source>
+        <translation>Имена полей, разделённые запятыми, или пути JSON, такие как temp, hum или imu.ax, acc[0]. Оставьте пустым для позиционных значений.</translation>
     </message>
 </context>
 <context>
@@ -27148,8 +27198,12 @@ Reload it?</source>
     </message>
     <message>
         <location filename="../../../core/Ui/Console/WelcomeText.cpp" line="145"/>
+        <source>Data is arriving, but no complete frame was detected. Check the line ending or frame delimiters and the Operation Mode. Problem Center shows what the link reports. In Quick Plot, a line such as 23.5,60 or temp:23.5, hum:60 is enough.</source>
+        <translation>Данные поступают, но полный кадр не обнаружен. Проверьте завершение строки или разделители кадров и режим работы. Центр решения проблем показывает, что сообщает канал связи. В режиме Быстрого Графика достаточно строки вроде 23.5,60 или temp:23.5, hum:60.</translation>
+    </message>
+    <message>
         <source>Data is arriving, but no complete frame was detected. Check the line ending or frame delimiters and the Operation Mode. Problem Center shows what the link reports.</source>
-        <translation>Данные поступают, но полный кадр не обнаружен. Проверьте завершение строки или разделители кадров и режим работы. Центр решения проблем показывает, что сообщает канал связи.</translation>
+        <translation type="vanished">Данные поступают, но полный кадр не обнаружен. Проверьте завершение строки или разделители кадров и режим работы. Центр решения проблем показывает, что сообщает канал связи.</translation>
     </message>
     <message>
         <location filename="../../src/Licensing/Trial.cpp" line="248"/>
@@ -27489,12 +27543,12 @@ function parse(%1) { ... }
 Параметр разделителя больше не требуется.</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ModuleManager.cpp" line="278"/>
+        <location filename="../../src/Misc/ModuleManager.cpp" line="279"/>
         <source>Critical</source>
         <translation>Критическая</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ModuleManager.cpp" line="278"/>
+        <location filename="../../src/Misc/ModuleManager.cpp" line="279"/>
         <source>Warning</source>
         <translation>Предупреждение</translation>
     </message>
@@ -28152,12 +28206,12 @@ function parse(%1) { ... }
         <translation>Уведомления от преобразований</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/QuickPlotProject.cpp" line="47"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/QuickPlotProject.cpp" line="139"/>
         <source>Device A</source>
         <translation>Устройство A</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/QuickPlotProject.cpp" line="115"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/QuickPlotProject.cpp" line="215"/>
         <source>Quick Plot Project</source>
         <translation>Проект Быстрого Графика</translation>
     </message>
@@ -31275,57 +31329,65 @@ Add absolute addresses above to poll the controller.</source>
         <translation>Показывает входящие данные как текст или шестнадцатеричный код. Ничего не анализируется и не отображается на графиках.</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="236"/>
         <source>Quick Plot (Comma Separated Values)</source>
-        <translation>Быстрый График (Значения, Разделённые Запятыми)</translation>
+        <translation type="vanished">Быстрый График (Значения, Разделённые Запятыми)</translation>
+    </message>
+    <message>
+        <source>Plots one line per sample with values separated by commas, for example 12.5,30.1,0.98 followed by a newline.</source>
+        <translation type="vanished">Строит график с одной линией на выборку со значениями, разделёнными запятыми, например 12.5,30.1,0.98, за которыми следует новая строка.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="236"/>
+        <source>Quick Plot (Auto-Detected Format)</source>
+        <translation>Быстрый График (Автоматически Определяемый Формат)</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Setup.qml" line="239"/>
-        <source>Plots one line per sample with values separated by commas, for example 12.5,30.1,0.98 followed by a newline.</source>
-        <translation>Строит график с одной линией на выборку со значениями, разделёнными запятыми, например 12.5,30.1,0.98, за которыми следует новая строка.</translation>
+        <source>Plots one line per sample and detects the format from the first numeric line: values separated by commas, semicolons, tabs or spaces (12.5, 30.1, 0.98), named values (temp:23.5, hum:60), units after a number (23.5°C), or a one-line JSON object ({"t":23.5,"h":60}).</source>
+        <translation>Строит график одной строки на выборку и определяет формат из первой числовой строки: значения, разделённые запятыми, точками с запятой, табуляциями или пробелами (12.5, 30.1, 0.98), именованные значения (temp:23.5, hum:60), единицы измерения после числа (23.5°C) или однострочный объект JSON ({"t":23.5,"h":60}).</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="258"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="261"/>
         <source>Parse via Project File</source>
         <translation>Разбор через Файл Проекта</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="261"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="264"/>
         <source>Builds the dashboard from a project made in the Project Editor.</source>
         <translation>Строит панель управления из проекта, созданного в Редакторе Проектов.</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="280"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="283"/>
         <source>Change Project File (%1)</source>
         <translation>Изменить Файл Проекта (%1)</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="281"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="284"/>
         <source>Select Project File</source>
         <translation>Выберите Файл Проекта</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="296"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="299"/>
         <source>Data Export</source>
         <translation>Экспорт Данных</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="322"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="325"/>
         <source>CSV Spreadsheet</source>
         <translation>Таблица CSV</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="344"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="347"/>
         <source>Historian Database</source>
         <translation>База Данных Историка</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="430"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="433"/>
         <source>Connection: %1</source>
         <translation>Подключение: %1</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="525"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="528"/>
         <source>Each device has its own connection settings. Configure them in the Project Editor under Devices.</source>
         <translation>Каждое устройство имеет собственные настройки подключения. Настройте их в Редакторе Проектов на вкладке Устройства.</translation>
     </message>
@@ -31338,12 +31400,12 @@ Add absolute addresses above to poll the controller.</source>
         <translation type="vanished">Запись Сеанса</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="365"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="368"/>
         <source>MDF4 Recording</source>
         <translation>Запись MDF4</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="383"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="386"/>
         <source>Console Log</source>
         <translation>Журнал Консоли</translation>
     </message>
@@ -31384,12 +31446,12 @@ Add absolute addresses above to poll the controller.</source>
         <translation type="vanished">Интерфейс Ввода-вывода: %1</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="499"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="502"/>
         <source>Multi-Device Project</source>
         <translation>Многоустройственный Проект</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="512"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="515"/>
         <source>This project streams data from %1 independent devices.</source>
         <translation>Этот проект передаёт данные от %1 независимых устройств.</translation>
     </message>
@@ -31398,7 +31460,7 @@ Add absolute addresses above to poll the controller.</source>
         <translation type="vanished">Каждое устройство имеет собственные настройки подключения. Настройте их в Редакторе Проектов на вкладке Источники.</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="546"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="549"/>
         <source>Open Project Editor</source>
         <translation>Открыть Редактор Проектов</translation>
     </message>
@@ -33742,27 +33804,27 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
 <context>
     <name>UI::AlarmMonitor</name>
     <message>
-        <location filename="../../../core/Ui/UI/AlarmMonitor.cpp" line="271"/>
+        <location filename="../../../core/Ui/UI/AlarmMonitor.cpp" line="340"/>
         <source>Alarm</source>
         <translation>Сигнализация</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/AlarmMonitor.cpp" line="272"/>
+        <location filename="../../../core/Ui/UI/AlarmMonitor.cpp" line="341"/>
         <source>critical</source>
         <translation>критический</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/AlarmMonitor.cpp" line="272"/>
+        <location filename="../../../core/Ui/UI/AlarmMonitor.cpp" line="341"/>
         <source>warning</source>
         <translation>предупреждение</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/AlarmMonitor.cpp" line="276"/>
+        <location filename="../../../core/Ui/UI/AlarmMonitor.cpp" line="345"/>
         <source>Value %1%2 entered the %3 band (%4–%5).</source>
         <translation>Значение %1%2 вошло в %3 диапазон (%4–%5).</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/AlarmMonitor.cpp" line="282"/>
+        <location filename="../../../core/Ui/UI/AlarmMonitor.cpp" line="351"/>
         <source>Alarms</source>
         <translation>Сигнализации</translation>
     </message>

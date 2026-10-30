@@ -4268,6 +4268,11 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
         <translation>ヒストリアンのドキュメントを開く</translation>
     </message>
     <message>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="358"/>
+        <source>Switch to Quick Plot mode (auto-detected line format)</source>
+        <translation>クイックプロットモードに切り替え（自動検出行形式）</translation>
+    </message>
+    <message>
         <source>Edit Painter Code</source>
         <translation type="vanished">Painterコードを編集</translation>
     </message>
@@ -5127,9 +5132,8 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
         <translation>プロジェクトファイルモードに切り替え（プロジェクト経由で解析）</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="358"/>
         <source>Switch to Quick Plot mode (comma-separated values)</source>
-        <translation>クイックプロットモードに切り替え（カンマ区切り値）</translation>
+        <translation type="vanished">クイックプロットモードに切り替え（カンマ区切り値）</translation>
     </message>
     <message>
         <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="359"/>
@@ -6243,7 +6247,7 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
 <context>
     <name>Dashboard</name>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard.qml" line="294"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard.qml" line="303"/>
         <source>Dashboard %1</source>
         <translation>ダッシュボード %1</translation>
     </message>
@@ -6275,36 +6279,36 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
 <context>
     <name>DashboardCanvas</name>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="332"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="334"/>
         <source>Set Wallpaper…</source>
         <translation>壁紙を設定…</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="338"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="340"/>
         <source>Clear Wallpaper</source>
         <translation>壁紙をクリア</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="348"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="350"/>
         <source>Tile Windows</source>
         <translation>ウィンドウをタイル表示</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="358"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="360"/>
         <source>Show Grid</source>
         <translation>グリッドを表示</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="365"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="367"/>
         <source>Grid Size</source>
         <translation>グリッドサイズ</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="370"/>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="377"/>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="384"/>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="391"/>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="398"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="372"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="379"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="386"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="393"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="400"/>
         <source>%1 px</source>
         <translation>%1 px</translation>
     </message>
@@ -6317,17 +6321,17 @@ Only enable this on trusted networks. Untrusted clients may read live data or se
         <translation type="vanished">フォールバックウィジェットが有効です。完全な機能を使用するにはライセンスを購入してください。</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="807"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="809"/>
         <source>Empty Workspace</source>
         <translation>空のワークスペース</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="821"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="823"/>
         <source>Use the search bar to find and add widgets, or right-click a widget in another workspace to add it here.</source>
         <translation>検索バーを使用してウィジェットを検索・追加するか、別のワークスペースのウィジェットを右クリックしてここに追加してください。</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="838"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="840"/>
         <source>Search Widgets</source>
         <translation>ウィジェットを検索</translation>
     </message>
@@ -7216,7 +7220,7 @@ v
 <context>
     <name>DataModel::FrameBuilder</name>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/FrameBuilder.cpp" line="328"/>
+        <location filename="../../../core/Pipeline/DataModel/FrameBuilder.cpp" line="327"/>
         <source>A downstream consumer (dashboard, CSV/MDF4 export, historian, or API subscriber) is not draining fast enough, so data is being dropped from the display and from any active recording. Disable a heavy consumer or reduce the data rate.</source>
         <translation>ダウンストリームコンシューマー(ダッシュボード、CSV/MDF4エクスポート、ヒストリアン、またはAPIサブスクライバー)のドレイン速度が不足しているため、表示およびアクティブな記録からデータがドロップされています。負荷の高いコンシューマーを無効にするか、データレートを削減してください。</translation>
     </message>
@@ -7237,7 +7241,7 @@ v
         <translation type="vanished">クイックプロット</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/FrameBuilder.cpp" line="326"/>
+        <location filename="../../../core/Pipeline/DataModel/FrameBuilder.cpp" line="325"/>
         <source>Block pool exhausted</source>
         <translation>ブロックプールが枯渇しました</translation>
     </message>
@@ -7246,12 +7250,12 @@ v
         <translation type="vanished">ダウンストリームの処理（ダッシュボード、CSV/MDF4エクスポート、セッションDB、またはAPIサブスクライバー）が十分な速度でデータを消費できていないため、表示および記録中のデータがドロップされています。負荷の高い処理を無効にするか、データレートを下げてください。</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/FrameBuilder.cpp" line="2343"/>
+        <location filename="../../../core/Pipeline/DataModel/FrameBuilder.cpp" line="2351"/>
         <source>JavaScript transform exceeded budget</source>
         <translation>JavaScript変換の上限を超えました</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/FrameBuilder.cpp" line="2344"/>
+        <location filename="../../../core/Pipeline/DataModel/FrameBuilder.cpp" line="2352"/>
         <source>A dataset transform took longer than %1 ms; remaining datasets in the frame fell back to raw values until the next frame. Profile or simplify the transform code.</source>
         <translation>データセット変換が%1ミリ秒以上かかりました。フレーム内の残りのデータセットは次のフレームまで生データにフォールバックしました。変換コードのプロファイルまたは簡素化を検討してください。</translation>
     </message>
@@ -8786,12 +8790,22 @@ Add %4 dataset(s) using the template's defaults?</source>
         <translation>バンドをウィジェットに保持しますが、通知、アラームポイント、またはサウンドは発生させません</translation>
     </message>
     <message>
+        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="765"/>
+        <source>Alarms only while visible</source>
+        <translation>表示中のみアラーム</translation>
+    </message>
+    <message>
         <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="766"/>
+        <source>Notify, raise an alarm point and sound for the bands only while a widget showing this dataset is on screen; Suppress Alarms still wins</source>
+        <translation>ウィジェットにこのデータセットを表示している場合のみ、通知、アラームポイント、およびサウンドを発生させます。アラーム抑制が優先されます</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="780"/>
         <source>Alarm Deadband</source>
         <translation>アラーム デッドバンド</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="767"/>
+        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="781"/>
         <source>Hysteresis in the dataset's units: the active band holds until the value leaves it by this much, so a reading hovering on a threshold does not re-alarm on every frame (0 = none)</source>
         <translation>データセットの単位でのヒステリシス: アクティブ バンドは値がこの量だけ離れるまで保持されるため、閾値上で変動する読み取り値はフレームごとに再アラームされません (0 = なし)</translation>
     </message>
@@ -8845,7 +8859,7 @@ Add %4 dataset(s) using the template's defaults?</source>
         <translation type="vanished">On</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="813"/>
+        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="827"/>
         <source>LED lights up when value meets or exceeds this threshold; define alarm bands for multi-state colors</source>
         <translation>値がこのしきい値以上になるとLEDが点灯します。複数状態の色を定義するにはアラーム範囲を設定してください</translation>
     </message>
@@ -9126,22 +9140,22 @@ Add %4 dataset(s) using the template's defaults?</source>
         <translation type="vanished">値がこのしきい値を超えたときに視覚的なアラームをトリガー</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="785"/>
+        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="799"/>
         <source>LED Display Settings</source>
         <translation>LEDディスプレイ設定</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="798"/>
+        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="812"/>
         <source>Show in LED Panel</source>
         <translation>LEDパネルに表示</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="799"/>
+        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="813"/>
         <source>Enable visual status monitoring using an LED display</source>
         <translation>LEDディスプレイを使用した視覚的なステータス監視を有効化</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="812"/>
+        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="826"/>
         <source>LED On Threshold (required)</source>
         <translation>LED点灯しきい値（必須）</translation>
     </message>
@@ -9692,27 +9706,27 @@ Add %4 dataset(s) using the template's defaults?</source>
         <translation>入力されたパスワードがプロジェクトファイルに保存されているものと一致しません。</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="447"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="450"/>
         <source>Save Quick Plot as Project</source>
         <translation>クイックプロットをプロジェクトとして保存</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="448"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="451"/>
         <source>Quick Plot Project</source>
         <translation>クイックプロットプロジェクト</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="505"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="508"/>
         <source>New Project</source>
         <translation>新規プロジェクト</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1053"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1056"/>
         <source>Edit Control Loop</source>
         <translation>制御ループを編集</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1199"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1202"/>
         <source>Fast mode runs Lua parsers and transforms through the JIT compiler (up to ~40x faster), but the runaway-script watchdog and the Safe-mode memory budget cannot operate: a script stuck in an infinite loop will stall its device until you disconnect, and one that keeps allocating will grow without limit.
 
 Enable it only for scripts you trust and have tested in Safe mode first.</source>
@@ -9725,12 +9739,12 @@ Enable it only for scripts you trust and have tested in Safe mode first.</source
         <translation type="vanished">サンプル</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="647"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="650"/>
         <source>Change MQTT Publisher</source>
         <translation>MQTT パブリッシャーを変更</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="663"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="666"/>
         <source>Change InfluxDB Sink</source>
         <translation>InfluxDB シンクを変更</translation>
     </message>
@@ -9743,12 +9757,12 @@ Enable it only for scripts you trust and have tested in Safe mode first.</source
         <translation type="vanished">表示タイトル（空欄で元に戻す）：</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="679"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="682"/>
         <source>Change Alarm Sounds</source>
         <translation>アラームサウンドを変更</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1037"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1040"/>
         <source>Change Project Title</source>
         <translation>プロジェクトタイトルを変更</translation>
     </message>
@@ -9757,42 +9771,42 @@ Enable it only for scripts you trust and have tested in Safe mode first.</source
         <translation type="vanished">制御スクリプトを編集</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1072"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1075"/>
         <source>Edit Shared Library</source>
         <translation>共有ライブラリを編集</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1089"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1092"/>
         <source>Edit JavaScript Library</source>
         <translation>JavaScriptライブラリを編集</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1105"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1108"/>
         <source>Change Point Count</source>
         <translation>ポイント数を変更</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1123"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1126"/>
         <source>Change Plot Time Range</source>
         <translation>プロット時間範囲を変更</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1145"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1148"/>
         <source>Toggle Freeze</source>
         <translation>フリーズを切り替え</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1160"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1163"/>
         <source>Toggle Change-Driven Transforms</source>
         <translation>変更駆動型変換を切り替え</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1177"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1180"/>
         <source>Toggle Fast Lua Execution</source>
         <translation>高速Lua実行の切り替え</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1198"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1201"/>
         <source>Enable Fast Lua Execution?</source>
         <translation>高速Lua実行を有効にしますか？</translation>
     </message>
@@ -9813,37 +9827,37 @@ Enable it only for scripts you trust and have tested in Safe mode first.</source
 安全モードでテスト済みの信頼できるスクリプトにのみ有効にしてください。</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1205"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1208"/>
         <source>Fast Lua Execution</source>
         <translation>高速Lua実行</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1234"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1237"/>
         <source>Change Frame Start Sequence</source>
         <translation>フレーム開始シーケンスを変更</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1253"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1256"/>
         <source>Change Frame End Sequence</source>
         <translation>フレーム終了シーケンスを変更</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1272"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1275"/>
         <source>Change Checksum</source>
         <translation>チェックサムを変更</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1291"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1294"/>
         <source>Change Frame Detection</source>
         <translation>フレーム検出を変更</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1310"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1313"/>
         <source>Change Decoder</source>
         <translation>デコーダを変更</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1329"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1332"/>
         <source>Toggle Hex Delimiters</source>
         <translation>16進デリミタを切り替え</translation>
     </message>
@@ -9984,17 +9998,17 @@ Enable it only for scripts you trust and have tested in Safe mode first.</source
         <translation type="vanished">Serial Studioプロジェクトを保存</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="449"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="452"/>
         <source>Serial Studio Project Files (*.ssproj)</source>
         <translation>Serial Studioプロジェクトファイル (*.ssproj)</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="864"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="867"/>
         <source>Untitled Project</source>
         <translation>無題のプロジェクト</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="882"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="885"/>
         <source>Device A</source>
         <translation>デバイス A</translation>
     </message>
@@ -10693,34 +10707,34 @@ Reload it?</source>
 <context>
     <name>DataModel::QuickPlotBuilder</name>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/FrameBuilder/QuickPlotBuilder.cpp" line="90"/>
+        <location filename="../../../core/Pipeline/DataModel/FrameBuilder/QuickPlotBuilder.cpp" line="183"/>
         <source>Device A</source>
         <translation>デバイス A</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/FrameBuilder/QuickPlotBuilder.cpp" line="127"/>
-        <location filename="../../../core/Pipeline/DataModel/FrameBuilder/QuickPlotBuilder.cpp" line="285"/>
+        <location filename="../../../core/Pipeline/DataModel/FrameBuilder/QuickPlotBuilder.cpp" line="279"/>
+        <location filename="../../../core/Pipeline/DataModel/FrameBuilder/QuickPlotBuilder.cpp" line="467"/>
         <source>Channel %1</source>
         <translation>チャンネル %1</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/FrameBuilder/QuickPlotBuilder.cpp" line="136"/>
-        <location filename="../../../core/Pipeline/DataModel/FrameBuilder/QuickPlotBuilder.cpp" line="301"/>
+        <location filename="../../../core/Pipeline/DataModel/FrameBuilder/QuickPlotBuilder.cpp" line="227"/>
+        <location filename="../../../core/Pipeline/DataModel/FrameBuilder/QuickPlotBuilder.cpp" line="483"/>
         <source>Quick Plot</source>
         <translation>クイックプロット</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/FrameBuilder/QuickPlotBuilder.cpp" line="143"/>
+        <location filename="../../../core/Pipeline/DataModel/FrameBuilder/QuickPlotBuilder.cpp" line="234"/>
         <source>Quick Plot Data</source>
         <translation>クイックプロットデータ</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/FrameBuilder/QuickPlotBuilder.cpp" line="155"/>
+        <location filename="../../../core/Pipeline/DataModel/FrameBuilder/QuickPlotBuilder.cpp" line="246"/>
         <source>Multi-Plot</source>
         <translation>マルチプロット</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/FrameBuilder/QuickPlotBuilder.cpp" line="296"/>
+        <location filename="../../../core/Pipeline/DataModel/FrameBuilder/QuickPlotBuilder.cpp" line="478"/>
         <source>Audio Input</source>
         <translation>オーディオ入力</translation>
     </message>
@@ -21116,17 +21130,17 @@ Please provide the necessary credentials.</source>
         <translation>空のプロジェクト</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/MainWindow.qml" line="743"/>
+        <location filename="../../qml/MainWindow/MainWindow.qml" line="746"/>
         <source>Serial Studio</source>
         <translation>Serial Studio</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/MainWindow.qml" line="751"/>
+        <location filename="../../qml/MainWindow/MainWindow.qml" line="754"/>
         <source>Waiting for data…</source>
         <translation>データ待機中…</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/MainWindow.qml" line="752"/>
+        <location filename="../../qml/MainWindow/MainWindow.qml" line="755"/>
         <source>Connecting to device…</source>
         <translation>デバイスに接続中…</translation>
     </message>
@@ -21135,7 +21149,7 @@ Please provide the necessary credentials.</source>
         <translation type="vanished">アプリケーション</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/MainWindow.qml" line="785"/>
+        <location filename="../../qml/MainWindow/MainWindow.qml" line="788"/>
         <source>Command Palette</source>
         <translation>コマンドパレット</translation>
     </message>
@@ -23186,6 +23200,7 @@ Add groups above to poll multiple register types.</source>
     </message>
     <message>
         <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/TextJsonData.cpp" line="150"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/TextLineValues.cpp" line="359"/>
         <source>Fields (in channel order)</source>
         <translation>フィールド(チャンネル順)</translation>
     </message>
@@ -23219,6 +23234,41 @@ Add groups above to poll multiple register types.</source>
     <message>
         <source>CAN messages with their signal bit layouts and scaling. Written by the DBC importer.</source>
         <translation type="vanished">信号のビットレイアウトとスケーリングを含むCANメッセージ。DBCインポーターによって書き込まれます。</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/TextLineValues.cpp" line="323"/>
+        <source>Format</source>
+        <translation>フォーマット</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/TextLineValues.cpp" line="324"/>
+        <source>Delimited values on one line, or a one-line JSON object whose numeric leaves are the fields.</source>
+        <translation>1行の区切り値、または数値の葉がフィールドである1行のJSONオブジェクト</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/TextLineValues.cpp" line="334"/>
+        <source>Separator</source>
+        <translation>区切り文字</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/TextLineValues.cpp" line="335"/>
+        <source>What separates the values of a delimited line; space means any run of spaces.</source>
+        <translation>区切り行の値を分離するもの。スペースは任意の連続したスペースを意味します</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/TextLineValues.cpp" line="351"/>
+        <source>Decimal comma</source>
+        <translation>小数点コンマ</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/TextLineValues.cpp" line="352"/>
+        <source>Reads 23,5 as 23.5 (semicolon or space separated lines).</source>
+        <translation>23,5を23.5として読み込みます（セミコロンまたはスペース区切り行）</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/TextLineValues.cpp" line="360"/>
+        <source>Comma-separated field names or JSON paths such as temp, hum or imu.ax, acc[0]. Leave empty for positional values.</source>
+        <translation>カンマ区切りフィールド名またはJSONパス（temp、humまたはimu.ax、acc[0]など）。位置指定値の場合は空のままにします</translation>
     </message>
 </context>
 <context>
@@ -27144,8 +27194,12 @@ Reload it?</source>
     </message>
     <message>
         <location filename="../../../core/Ui/Console/WelcomeText.cpp" line="145"/>
+        <source>Data is arriving, but no complete frame was detected. Check the line ending or frame delimiters and the Operation Mode. Problem Center shows what the link reports. In Quick Plot, a line such as 23.5,60 or temp:23.5, hum:60 is enough.</source>
+        <translation>データは到着していますが、完全なフレームが検出されていません。行末またはフレームデリミタと動作モードを確認してください。問題センターにリンクが報告する内容が表示されます。クイックプロットでは、23.5,60またはtemp:23.5, hum:60のような行で十分です</translation>
+    </message>
+    <message>
         <source>Data is arriving, but no complete frame was detected. Check the line ending or frame delimiters and the Operation Mode. Problem Center shows what the link reports.</source>
-        <translation>データは到着していますが、完全なフレームが検出されていません。行末またはフレームデリミタと動作モードを確認してください。問題センターにリンクが報告する内容が表示されます。</translation>
+        <translation type="vanished">データは到着していますが、完全なフレームが検出されていません。行末またはフレームデリミタと動作モードを確認してください。問題センターにリンクが報告する内容が表示されます。</translation>
     </message>
     <message>
         <location filename="../../src/Licensing/Trial.cpp" line="248"/>
@@ -27485,12 +27539,12 @@ function parse(%1) { ... }
 セパレータパラメータは不要になりました。</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ModuleManager.cpp" line="278"/>
+        <location filename="../../src/Misc/ModuleManager.cpp" line="279"/>
         <source>Critical</source>
         <translation>重大</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ModuleManager.cpp" line="278"/>
+        <location filename="../../src/Misc/ModuleManager.cpp" line="279"/>
         <source>Warning</source>
         <translation>警告</translation>
     </message>
@@ -28144,12 +28198,12 @@ function parse(%1) { ... }
         <translation>トランスフォームからの通知</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/QuickPlotProject.cpp" line="47"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/QuickPlotProject.cpp" line="139"/>
         <source>Device A</source>
         <translation>デバイス A</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/QuickPlotProject.cpp" line="115"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/QuickPlotProject.cpp" line="215"/>
         <source>Quick Plot Project</source>
         <translation>クイックプロットプロジェクト</translation>
     </message>
@@ -31267,57 +31321,65 @@ Add absolute addresses above to poll the controller.</source>
         <translation>受信データをテキストまたは16進数で表示します。解析またはプロットは行われません。</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="236"/>
         <source>Quick Plot (Comma Separated Values)</source>
-        <translation>クイックプロット（カンマ区切り値）</translation>
+        <translation type="vanished">クイックプロット（カンマ区切り値）</translation>
+    </message>
+    <message>
+        <source>Plots one line per sample with values separated by commas, for example 12.5,30.1,0.98 followed by a newline.</source>
+        <translation type="vanished">1行に1サンプルをプロットし、値はコンマで区切られます。例：12.5,30.1,0.98 の後に改行が続きます。</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="236"/>
+        <source>Quick Plot (Auto-Detected Format)</source>
+        <translation>クイックプロット（自動検出フォーマット）</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Setup.qml" line="239"/>
-        <source>Plots one line per sample with values separated by commas, for example 12.5,30.1,0.98 followed by a newline.</source>
-        <translation>1行に1サンプルをプロットし、値はコンマで区切られます。例：12.5,30.1,0.98 の後に改行が続きます。</translation>
+        <source>Plots one line per sample and detects the format from the first numeric line: values separated by commas, semicolons, tabs or spaces (12.5, 30.1, 0.98), named values (temp:23.5, hum:60), units after a number (23.5°C), or a one-line JSON object ({"t":23.5,"h":60}).</source>
+        <translation>サンプルごとに1行をプロットし、最初の数値行からフォーマットを検出します：カンマ、セミコロン、タブ、またはスペースで区切られた値（12.5, 30.1, 0.98）、名前付き値（temp:23.5, hum:60）、数値の後の単位（23.5°C）、または1行のJSONオブジェクト（{"t":23.5,"h":60}）。</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="258"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="261"/>
         <source>Parse via Project File</source>
         <translation>プロジェクトファイル経由で解析</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="261"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="264"/>
         <source>Builds the dashboard from a project made in the Project Editor.</source>
         <translation>プロジェクトエディタで作成されたプロジェクトからダッシュボードを構築します。</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="280"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="283"/>
         <source>Change Project File (%1)</source>
         <translation>プロジェクトファイルを変更（%1）</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="281"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="284"/>
         <source>Select Project File</source>
         <translation>プロジェクトファイルを選択</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="296"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="299"/>
         <source>Data Export</source>
         <translation>データエクスポート</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="322"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="325"/>
         <source>CSV Spreadsheet</source>
         <translation>CSVスプレッドシート</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="344"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="347"/>
         <source>Historian Database</source>
         <translation>ヒストリアンデータベース</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="430"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="433"/>
         <source>Connection: %1</source>
         <translation>接続：%1</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="525"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="528"/>
         <source>Each device has its own connection settings. Configure them in the Project Editor under Devices.</source>
         <translation>各デバイスには独自の接続設定があります。プロジェクトエディタの「デバイス」タブで設定してください。</translation>
     </message>
@@ -31330,12 +31392,12 @@ Add absolute addresses above to poll the controller.</source>
         <translation type="vanished">セッション記録</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="365"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="368"/>
         <source>MDF4 Recording</source>
         <translation>MDF4記録</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="383"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="386"/>
         <source>Console Log</source>
         <translation>コンソールログ</translation>
     </message>
@@ -31376,12 +31438,12 @@ Add absolute addresses above to poll the controller.</source>
         <translation type="vanished">I/Oインターフェース：%1</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="499"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="502"/>
         <source>Multi-Device Project</source>
         <translation>マルチデバイスプロジェクト</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="512"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="515"/>
         <source>This project streams data from %1 independent devices.</source>
         <translation>このプロジェクトは %1 台の独立したデバイスからデータをストリーミングします。</translation>
     </message>
@@ -31390,7 +31452,7 @@ Add absolute addresses above to poll the controller.</source>
         <translation type="vanished">各デバイスには独自の接続設定があります。プロジェクトエディタの「ソース」タブで設定してください。</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="546"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="549"/>
         <source>Open Project Editor</source>
         <translation>プロジェクトエディタを開く</translation>
     </message>
@@ -33734,27 +33796,27 @@ Turn on Embed Project to bake the project into the shortcut, so it keeps working
 <context>
     <name>UI::AlarmMonitor</name>
     <message>
-        <location filename="../../../core/Ui/UI/AlarmMonitor.cpp" line="271"/>
+        <location filename="../../../core/Ui/UI/AlarmMonitor.cpp" line="340"/>
         <source>Alarm</source>
         <translation>アラーム</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/AlarmMonitor.cpp" line="272"/>
+        <location filename="../../../core/Ui/UI/AlarmMonitor.cpp" line="341"/>
         <source>critical</source>
         <translation>重大</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/AlarmMonitor.cpp" line="272"/>
+        <location filename="../../../core/Ui/UI/AlarmMonitor.cpp" line="341"/>
         <source>warning</source>
         <translation>警告</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/AlarmMonitor.cpp" line="276"/>
+        <location filename="../../../core/Ui/UI/AlarmMonitor.cpp" line="345"/>
         <source>Value %1%2 entered the %3 band (%4–%5).</source>
         <translation>値 %1%2 が%3帯域 (%4–%5) に入りました。</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/AlarmMonitor.cpp" line="282"/>
+        <location filename="../../../core/Ui/UI/AlarmMonitor.cpp" line="351"/>
         <source>Alarms</source>
         <translation>アラーム</translation>
     </message>

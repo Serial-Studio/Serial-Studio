@@ -4268,6 +4268,11 @@ Aktivera endast detta i betrodda nätverk. Ej betrodda klienter kan läsa liveda
         <translation>Öppna dokumentationen för historikfunktionen</translation>
     </message>
     <message>
+        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="358"/>
+        <source>Switch to Quick Plot mode (auto-detected line format)</source>
+        <translation>Växla till läget Snabbdiagram (automatiskt identifierat radformat)</translation>
+    </message>
+    <message>
         <source>Edit Painter Code</source>
         <translation type="vanished">Redigera Painter-kod</translation>
     </message>
@@ -5127,9 +5132,8 @@ Aktivera endast detta i betrodda nätverk. Ej betrodda klienter kan läsa liveda
         <translation>Växla till läget Projektfil (parsning via ett projekt)</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="358"/>
         <source>Switch to Quick Plot mode (comma-separated values)</source>
-        <translation>Växla till läget Snabbdiagram (kommaseparerade värden)</translation>
+        <translation type="vanished">Växla till läget Snabbdiagram (kommaseparerade värden)</translation>
     </message>
     <message>
         <location filename="../../../core/Ui/UI/CommandStrings.cpp" line="359"/>
@@ -6243,7 +6247,7 @@ Aktivera endast detta i betrodda nätverk. Ej betrodda klienter kan läsa liveda
 <context>
     <name>Dashboard</name>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard.qml" line="294"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard.qml" line="303"/>
         <source>Dashboard %1</source>
         <translation>Instrumentpanel %1</translation>
     </message>
@@ -6275,36 +6279,36 @@ Aktivera endast detta i betrodda nätverk. Ej betrodda klienter kan läsa liveda
 <context>
     <name>DashboardCanvas</name>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="332"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="334"/>
         <source>Set Wallpaper…</source>
         <translation>Ställ In Bakgrundsbild…</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="338"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="340"/>
         <source>Clear Wallpaper</source>
         <translation>Rensa Bakgrundsbild</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="348"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="350"/>
         <source>Tile Windows</source>
         <translation>Ordna Fönster</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="358"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="360"/>
         <source>Show Grid</source>
         <translation>Visa Rutnät</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="365"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="367"/>
         <source>Grid Size</source>
         <translation>Rutnätsstorlek</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="370"/>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="377"/>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="384"/>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="391"/>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="398"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="372"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="379"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="386"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="393"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="400"/>
         <source>%1 px</source>
         <translation>%1 px</translation>
     </message>
@@ -6317,17 +6321,17 @@ Aktivera endast detta i betrodda nätverk. Ej betrodda klienter kan läsa liveda
         <translation type="vanished">Reservwidgetar är aktiva. Köp en licens för full funktionalitet.</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="807"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="809"/>
         <source>Empty Workspace</source>
         <translation>Tom Arbetsyta</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="821"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="823"/>
         <source>Use the search bar to find and add widgets, or right-click a widget in another workspace to add it here.</source>
         <translation>Använd sökfältet för att hitta och lägga till widgetar, eller högerklicka på en widget i en annan arbetsyta för att lägga till den här.</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="838"/>
+        <location filename="../../qml/MainWindow/Panes/Dashboard/DashboardCanvas.qml" line="840"/>
         <source>Search Widgets</source>
         <translation>Sök Widgetar</translation>
     </message>
@@ -7216,7 +7220,7 @@ v
 <context>
     <name>DataModel::FrameBuilder</name>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/FrameBuilder.cpp" line="328"/>
+        <location filename="../../../core/Pipeline/DataModel/FrameBuilder.cpp" line="327"/>
         <source>A downstream consumer (dashboard, CSV/MDF4 export, historian, or API subscriber) is not draining fast enough, so data is being dropped from the display and from any active recording. Disable a heavy consumer or reduce the data rate.</source>
         <translation>En nedströmskonsument (instrumentpanel, CSV/MDF4-export, historikfunktion eller API-prenumerant) hinner inte dränera tillräckligt snabbt, så data tappas från visningen och från eventuell aktiv inspelning. Inaktivera en tung konsument eller minska datahastigheten.</translation>
     </message>
@@ -7237,7 +7241,7 @@ v
         <translation type="vanished">Snabbdiagram</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/FrameBuilder.cpp" line="326"/>
+        <location filename="../../../core/Pipeline/DataModel/FrameBuilder.cpp" line="325"/>
         <source>Block pool exhausted</source>
         <translation>Block-poolen är uttömd</translation>
     </message>
@@ -7246,12 +7250,12 @@ v
         <translation type="vanished">En nedströmskonsument (instrumentpanel, CSV/MDF4-export, sessions-DB eller API-prenumerant) dränerar inte tillräckligt snabbt, så data tappas bort från visningen och från eventuell aktiv inspelning. Inaktivera en tung konsument eller minska datahastigheten.</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/FrameBuilder.cpp" line="2343"/>
+        <location filename="../../../core/Pipeline/DataModel/FrameBuilder.cpp" line="2351"/>
         <source>JavaScript transform exceeded budget</source>
         <translation>JavaScript-transform överskred budgeten</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/FrameBuilder.cpp" line="2344"/>
+        <location filename="../../../core/Pipeline/DataModel/FrameBuilder.cpp" line="2352"/>
         <source>A dataset transform took longer than %1 ms; remaining datasets in the frame fell back to raw values until the next frame. Profile or simplify the transform code.</source>
         <translation>En datasettransform tog längre än %1 ms; återstående dataset i framen föll tillbaka till råvärden tills nästa frame. Profilera eller förenkla transformkoden.</translation>
     </message>
@@ -8786,12 +8790,22 @@ Lägg till %4 dataset med mallens standardvärden?</translation>
         <translation>Behåll banden på widgeten men meddela aldrig, höj aldrig en larmpunkt eller ljud för dem</translation>
     </message>
     <message>
+        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="765"/>
+        <source>Alarms only while visible</source>
+        <translation>Larm endast när synlig</translation>
+    </message>
+    <message>
         <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="766"/>
+        <source>Notify, raise an alarm point and sound for the bands only while a widget showing this dataset is on screen; Suppress Alarms still wins</source>
+        <translation>Meddela, höj en larmpunkt och ljud för banden endast när en widget som visar denna dataset är synlig på skärmen; Undertryck larm vinner fortfarande</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="780"/>
         <source>Alarm Deadband</source>
         <translation>Larmtolerans</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="767"/>
+        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="781"/>
         <source>Hysteresis in the dataset's units: the active band holds until the value leaves it by this much, so a reading hovering on a threshold does not re-alarm on every frame (0 = none)</source>
         <translation>Hysteresomfång i datasetets enheter: det aktiva bandet kvarstår tills värdet lämnar det med detta värde, så en avläsning som svävar på ett tröskelvärde utlöser inte larm på varje frame (0 = ingen)</translation>
     </message>
@@ -8845,7 +8859,7 @@ Lägg till %4 dataset med mallens standardvärden?</translation>
         <translation type="vanished">På</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="813"/>
+        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="827"/>
         <source>LED lights up when value meets or exceeds this threshold; define alarm bands for multi-state colors</source>
         <translation>LED lyser när värdet når eller överskrider detta tröskelvärde; definiera larmband för flertillståndsfärger</translation>
     </message>
@@ -9126,22 +9140,22 @@ Lägg till %4 dataset med mallens standardvärden?</translation>
         <translation type="vanished">Utlöser ett visuellt larm när värdet överskrider detta tröskelvärde</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="785"/>
+        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="799"/>
         <source>LED Display Settings</source>
         <translation>Inställningar för LED-display</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="798"/>
+        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="812"/>
         <source>Show in LED Panel</source>
         <translation>Visa i LED-Panel</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="799"/>
+        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="813"/>
         <source>Enable visual status monitoring using an LED display</source>
         <translation>Aktivera visuell statusövervakning med en LED-display</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="812"/>
+        <location filename="../../../core/Ui/ProjectEditor/Generated/DatasetForm.cpp" line="826"/>
         <source>LED On Threshold (required)</source>
         <translation>LED-tröskelvärde för På (obligatoriskt)</translation>
     </message>
@@ -9692,27 +9706,27 @@ Lägg till %4 dataset med mallens standardvärden?</translation>
         <translation>Lösenordet du angav stämmer inte överens med det som finns lagrat i projektfilen.</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="447"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="450"/>
         <source>Save Quick Plot as Project</source>
         <translation>Spara Snabbdiagram som Projekt</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="448"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="451"/>
         <source>Quick Plot Project</source>
         <translation>Snabbdiagramprojekt</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="505"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="508"/>
         <source>New Project</source>
         <translation>Nytt Projekt</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1053"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1056"/>
         <source>Edit Control Loop</source>
         <translation>Redigera Kontrollslinga</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1199"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1202"/>
         <source>Fast mode runs Lua parsers and transforms through the JIT compiler (up to ~40x faster), but the runaway-script watchdog and the Safe-mode memory budget cannot operate: a script stuck in an infinite loop will stall its device until you disconnect, and one that keeps allocating will grow without limit.
 
 Enable it only for scripts you trust and have tested in Safe mode first.</source>
@@ -9725,12 +9739,12 @@ Aktivera det endast för skript du litar på och har testat i Safe-läge först.
         <translation type="vanished">Sampel</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="647"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="650"/>
         <source>Change MQTT Publisher</source>
         <translation>Ändra MQTT-utgivare</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="663"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="666"/>
         <source>Change InfluxDB Sink</source>
         <translation>Ändra Influxdb-mottagare</translation>
     </message>
@@ -9743,12 +9757,12 @@ Aktivera det endast för skript du litar på och har testat i Safe-läge först.
         <translation type="vanished">Visningsrubrik (tom återställer originalet):</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="679"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="682"/>
         <source>Change Alarm Sounds</source>
         <translation>Ändra Larmljud</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1037"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1040"/>
         <source>Change Project Title</source>
         <translation>Ändra Projekttitel</translation>
     </message>
@@ -9757,42 +9771,42 @@ Aktivera det endast för skript du litar på och har testat i Safe-läge först.
         <translation type="vanished">Redigera Kontrollskript</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1072"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1075"/>
         <source>Edit Shared Library</source>
         <translation>Redigera Delat Bibliotek</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1089"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1092"/>
         <source>Edit JavaScript Library</source>
         <translation>Redigera Javascript-bibliotek</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1105"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1108"/>
         <source>Change Point Count</source>
         <translation>Ändra Punktantal</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1123"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1126"/>
         <source>Change Plot Time Range</source>
         <translation>Ändra Plottens Tidsintervall</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1145"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1148"/>
         <source>Toggle Freeze</source>
         <translation>Växla Frys</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1160"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1163"/>
         <source>Toggle Change-Driven Transforms</source>
         <translation>Växla Ändrings-drivna Transformationer</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1177"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1180"/>
         <source>Toggle Fast Lua Execution</source>
         <translation>Växla Snabb Lua-körning</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1198"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1201"/>
         <source>Enable Fast Lua Execution?</source>
         <translation>Aktivera Snabb Lua-körning?</translation>
     </message>
@@ -9813,37 +9827,37 @@ Enable it only for scripts you trust and have tested in Safe mode first.</source
 Aktivera endast för skript du litar på och har testat i säkert läge först.</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1205"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1208"/>
         <source>Fast Lua Execution</source>
         <translation>Snabb Lua-körning</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1234"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1237"/>
         <source>Change Frame Start Sequence</source>
         <translation>Ändra Ramstartsekvens</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1253"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1256"/>
         <source>Change Frame End Sequence</source>
         <translation>Ändra Ramslutsekvens</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1272"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1275"/>
         <source>Change Checksum</source>
         <translation>Ändra Checksumma</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1291"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1294"/>
         <source>Change Frame Detection</source>
         <translation>Ändra Ramdetektering</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1310"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1313"/>
         <source>Change Decoder</source>
         <translation>Ändra Avkodare</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1329"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="1332"/>
         <source>Toggle Hex Delimiters</source>
         <translation>Växla Hexadecimala Avgränsare</translation>
     </message>
@@ -9984,17 +9998,17 @@ Aktivera endast för skript du litar på och har testat i säkert läge först.<
         <translation type="vanished">Spara Serial Studio-projekt</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="449"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="452"/>
         <source>Serial Studio Project Files (*.ssproj)</source>
         <translation>Serial Studio-projektfiler (*.ssproj)</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="864"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="867"/>
         <source>Untitled Project</source>
         <translation>Namnlöst Projekt</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="882"/>
+        <location filename="../../../core/Pipeline/DataModel/ProjectModel.cpp" line="885"/>
         <source>Device A</source>
         <translation>Enhet A</translation>
     </message>
@@ -10693,34 +10707,34 @@ Läs in den igen?</translation>
 <context>
     <name>DataModel::QuickPlotBuilder</name>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/FrameBuilder/QuickPlotBuilder.cpp" line="90"/>
+        <location filename="../../../core/Pipeline/DataModel/FrameBuilder/QuickPlotBuilder.cpp" line="183"/>
         <source>Device A</source>
         <translation>Enhet A</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/FrameBuilder/QuickPlotBuilder.cpp" line="127"/>
-        <location filename="../../../core/Pipeline/DataModel/FrameBuilder/QuickPlotBuilder.cpp" line="285"/>
+        <location filename="../../../core/Pipeline/DataModel/FrameBuilder/QuickPlotBuilder.cpp" line="279"/>
+        <location filename="../../../core/Pipeline/DataModel/FrameBuilder/QuickPlotBuilder.cpp" line="467"/>
         <source>Channel %1</source>
         <translation>Kanal %1</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/FrameBuilder/QuickPlotBuilder.cpp" line="136"/>
-        <location filename="../../../core/Pipeline/DataModel/FrameBuilder/QuickPlotBuilder.cpp" line="301"/>
+        <location filename="../../../core/Pipeline/DataModel/FrameBuilder/QuickPlotBuilder.cpp" line="227"/>
+        <location filename="../../../core/Pipeline/DataModel/FrameBuilder/QuickPlotBuilder.cpp" line="483"/>
         <source>Quick Plot</source>
         <translation>Snabbdiagram</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/FrameBuilder/QuickPlotBuilder.cpp" line="143"/>
+        <location filename="../../../core/Pipeline/DataModel/FrameBuilder/QuickPlotBuilder.cpp" line="234"/>
         <source>Quick Plot Data</source>
         <translation>Snabbdiagramdata</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/FrameBuilder/QuickPlotBuilder.cpp" line="155"/>
+        <location filename="../../../core/Pipeline/DataModel/FrameBuilder/QuickPlotBuilder.cpp" line="246"/>
         <source>Multi-Plot</source>
         <translation>Flerplott</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/FrameBuilder/QuickPlotBuilder.cpp" line="296"/>
+        <location filename="../../../core/Pipeline/DataModel/FrameBuilder/QuickPlotBuilder.cpp" line="478"/>
         <source>Audio Input</source>
         <translation>Ljudingång</translation>
     </message>
@@ -21117,17 +21131,17 @@ Ange nödvändiga inloggningsuppgifter.</translation>
         <translation>Tomt Projekt</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/MainWindow.qml" line="743"/>
+        <location filename="../../qml/MainWindow/MainWindow.qml" line="746"/>
         <source>Serial Studio</source>
         <translation>Serial Studio</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/MainWindow.qml" line="751"/>
+        <location filename="../../qml/MainWindow/MainWindow.qml" line="754"/>
         <source>Waiting for data…</source>
         <translation>Väntar på data…</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/MainWindow.qml" line="752"/>
+        <location filename="../../qml/MainWindow/MainWindow.qml" line="755"/>
         <source>Connecting to device…</source>
         <translation>Ansluter till enhet…</translation>
     </message>
@@ -21136,7 +21150,7 @@ Ange nödvändiga inloggningsuppgifter.</translation>
         <translation type="vanished">Applikation</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/MainWindow.qml" line="785"/>
+        <location filename="../../qml/MainWindow/MainWindow.qml" line="788"/>
         <source>Command Palette</source>
         <translation>Kommandopalett</translation>
     </message>
@@ -23187,6 +23201,7 @@ Lägg till grupper ovan för att avläsa flera registertyper.</translation>
     </message>
     <message>
         <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/TextJsonData.cpp" line="150"/>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/TextLineValues.cpp" line="359"/>
         <source>Fields (in channel order)</source>
         <translation>Fält (i kanalordning)</translation>
     </message>
@@ -23220,6 +23235,41 @@ Lägg till grupper ovan för att avläsa flera registertyper.</translation>
     <message>
         <source>CAN messages with their signal bit layouts and scaling. Written by the DBC importer.</source>
         <translation type="vanished">CAN-meddelanden med sina signalbitlayouter och skalning. Skrivna av DBC-importeraren.</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/TextLineValues.cpp" line="323"/>
+        <source>Format</source>
+        <translation>Formatera</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/TextLineValues.cpp" line="324"/>
+        <source>Delimited values on one line, or a one-line JSON object whose numeric leaves are the fields.</source>
+        <translation>Avgränsade värden på en rad, eller ett JSON-objekt på en rad vars numeriska löv är fälten.</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/TextLineValues.cpp" line="334"/>
+        <source>Separator</source>
+        <translation>Separator</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/TextLineValues.cpp" line="335"/>
+        <source>What separates the values of a delimited line; space means any run of spaces.</source>
+        <translation>Vad som skiljer värdena på en avgränsad rad; mellanslag betyder valfri sekvens av mellanslag.</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/TextLineValues.cpp" line="351"/>
+        <source>Decimal comma</source>
+        <translation>Decimalkomma</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/TextLineValues.cpp" line="352"/>
+        <source>Reads 23,5 as 23.5 (semicolon or space separated lines).</source>
+        <translation>Läser 23,5 som 23.5 (semikolon eller mellanslag separerade rader).</translation>
+    </message>
+    <message>
+        <location filename="../../../core/Pipeline/DataModel/Scripting/NativeTemplates/TextLineValues.cpp" line="360"/>
+        <source>Comma-separated field names or JSON paths such as temp, hum or imu.ax, acc[0]. Leave empty for positional values.</source>
+        <translation>Kommaseparerade fältnamn eller JSON-sökvägar såsom temp, hum eller imu.ax, acc[0]. Lämna tomt för positionella värden.</translation>
     </message>
 </context>
 <context>
@@ -27146,8 +27196,12 @@ Läs in den igen?</translation>
     </message>
     <message>
         <location filename="../../../core/Ui/Console/WelcomeText.cpp" line="145"/>
+        <source>Data is arriving, but no complete frame was detected. Check the line ending or frame delimiters and the Operation Mode. Problem Center shows what the link reports. In Quick Plot, a line such as 23.5,60 or temp:23.5, hum:60 is enough.</source>
+        <translation>Data anländer, men ingen fullständig frame upptäcktes. Kontrollera radslut eller frame-avgränsare och driftläget. Problemcentret visar vad länken rapporterar. I Snabbdiagramläge räcker en rad såsom 23.5,60 eller temp:23.5, hum:60.</translation>
+    </message>
+    <message>
         <source>Data is arriving, but no complete frame was detected. Check the line ending or frame delimiters and the Operation Mode. Problem Center shows what the link reports.</source>
-        <translation>Data anländer, men ingen fullständig frame upptäcktes. Kontrollera radslut eller frame-avgränsare och driftläget. Problemcentret visar vad länken rapporterar.</translation>
+        <translation type="vanished">Data anländer, men ingen fullständig frame upptäcktes. Kontrollera radslut eller frame-avgränsare och driftläget. Problemcentret visar vad länken rapporterar.</translation>
     </message>
     <message>
         <location filename="../../src/Licensing/Trial.cpp" line="248"/>
@@ -27487,12 +27541,12 @@ function parse(%1) { ... }
 Separatorparametern behövs inte längre.</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ModuleManager.cpp" line="278"/>
+        <location filename="../../src/Misc/ModuleManager.cpp" line="279"/>
         <source>Critical</source>
         <translation>Kritiskt</translation>
     </message>
     <message>
-        <location filename="../../src/Misc/ModuleManager.cpp" line="278"/>
+        <location filename="../../src/Misc/ModuleManager.cpp" line="279"/>
         <source>Warning</source>
         <translation>Varning</translation>
     </message>
@@ -28148,12 +28202,12 @@ Separatorparametern behövs inte längre.</translation>
         <translation>Aviseringar från transformeringar</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/QuickPlotProject.cpp" line="47"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/QuickPlotProject.cpp" line="139"/>
         <source>Device A</source>
         <translation>Enhet A</translation>
     </message>
     <message>
-        <location filename="../../../core/Pipeline/DataModel/Project/QuickPlotProject.cpp" line="115"/>
+        <location filename="../../../core/Pipeline/DataModel/Project/QuickPlotProject.cpp" line="215"/>
         <source>Quick Plot Project</source>
         <translation>Snabbdiagramprojekt</translation>
     </message>
@@ -31271,57 +31325,65 @@ Lägg till absoluta adresser ovan för att polla styrenheten.</translation>
         <translation>Visar inkommande data som text eller hex. Ingenting tolkas eller plottas.</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="236"/>
         <source>Quick Plot (Comma Separated Values)</source>
-        <translation>Snabbdiagram (Kommaseparerade Värden)</translation>
+        <translation type="vanished">Snabbdiagram (Kommaseparerade Värden)</translation>
+    </message>
+    <message>
+        <source>Plots one line per sample with values separated by commas, for example 12.5,30.1,0.98 followed by a newline.</source>
+        <translation type="vanished">Plottar en rad per exempel med värden separerade av kommatecken, till exempel 12,5,30,1,0,98 följt av en radbrytning.</translation>
+    </message>
+    <message>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="236"/>
+        <source>Quick Plot (Auto-Detected Format)</source>
+        <translation>Snabbdiagram (Automatiskt Identifierat Format)</translation>
     </message>
     <message>
         <location filename="../../qml/MainWindow/Panes/Setup.qml" line="239"/>
-        <source>Plots one line per sample with values separated by commas, for example 12.5,30.1,0.98 followed by a newline.</source>
-        <translation>Plottar en rad per exempel med värden separerade av kommatecken, till exempel 12,5,30,1,0,98 följt av en radbrytning.</translation>
+        <source>Plots one line per sample and detects the format from the first numeric line: values separated by commas, semicolons, tabs or spaces (12.5, 30.1, 0.98), named values (temp:23.5, hum:60), units after a number (23.5°C), or a one-line JSON object ({"t":23.5,"h":60}).</source>
+        <translation>Plottar en rad per sampel och identifierar formatet från den första numeriska raden: värden åtskilda av kommatecken, semikolon, tabulatorer eller mellanslag (12,5, 30,1, 0,98), namngivna värden (temp:23,5, hum:60), enheter efter ett tal (23,5°C), eller ett JSON-objekt på en rad ({"t":23.5,"h":60}).</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="258"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="261"/>
         <source>Parse via Project File</source>
         <translation>Tolka via Projektfil</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="261"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="264"/>
         <source>Builds the dashboard from a project made in the Project Editor.</source>
         <translation>Bygger instrumentpanelen från ett projekt som skapats i Projektredigeraren.</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="280"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="283"/>
         <source>Change Project File (%1)</source>
         <translation>Ändra Projektfil (%1)</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="281"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="284"/>
         <source>Select Project File</source>
         <translation>Välj Projektfil</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="296"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="299"/>
         <source>Data Export</source>
         <translation>Dataexport</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="322"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="325"/>
         <source>CSV Spreadsheet</source>
         <translation>CSV-kalkylblad</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="344"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="347"/>
         <source>Historian Database</source>
         <translation>Historikdatabas</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="430"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="433"/>
         <source>Connection: %1</source>
         <translation>Anslutning: %1</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="525"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="528"/>
         <source>Each device has its own connection settings. Configure them in the Project Editor under Devices.</source>
         <translation>Varje enhet har sina egna anslutningsinställningar. Konfigurera dem i Projektredigeraren under Enheter.</translation>
     </message>
@@ -31334,12 +31396,12 @@ Lägg till absoluta adresser ovan för att polla styrenheten.</translation>
         <translation type="vanished">Sessionsinspelning</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="365"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="368"/>
         <source>MDF4 Recording</source>
         <translation>MDF4-inspelning</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="383"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="386"/>
         <source>Console Log</source>
         <translation>Konsolllogg</translation>
     </message>
@@ -31380,12 +31442,12 @@ Lägg till absoluta adresser ovan för att polla styrenheten.</translation>
         <translation type="vanished">I/o-gränssnitt: %1</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="499"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="502"/>
         <source>Multi-Device Project</source>
         <translation>Flerenhets-projekt</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="512"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="515"/>
         <source>This project streams data from %1 independent devices.</source>
         <translation>Detta projekt strömmar data från %1 oberoende enheter.</translation>
     </message>
@@ -31394,7 +31456,7 @@ Lägg till absoluta adresser ovan för att polla styrenheten.</translation>
         <translation type="vanished">Varje enhet har sina egna anslutningsinställningar. Konfigurera dem i Projektredigeraren under fliken Källor.</translation>
     </message>
     <message>
-        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="546"/>
+        <location filename="../../qml/MainWindow/Panes/Setup.qml" line="549"/>
         <source>Open Project Editor</source>
         <translation>Öppna Projektredigeraren</translation>
     </message>
@@ -33738,27 +33800,27 @@ Aktivera Bädda in Projekt för att baka in projektet i genvägen, så att den f
 <context>
     <name>UI::AlarmMonitor</name>
     <message>
-        <location filename="../../../core/Ui/UI/AlarmMonitor.cpp" line="271"/>
+        <location filename="../../../core/Ui/UI/AlarmMonitor.cpp" line="340"/>
         <source>Alarm</source>
         <translation>Larm</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/AlarmMonitor.cpp" line="272"/>
+        <location filename="../../../core/Ui/UI/AlarmMonitor.cpp" line="341"/>
         <source>critical</source>
         <translation>kritiskt</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/AlarmMonitor.cpp" line="272"/>
+        <location filename="../../../core/Ui/UI/AlarmMonitor.cpp" line="341"/>
         <source>warning</source>
         <translation>varning</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/AlarmMonitor.cpp" line="276"/>
+        <location filename="../../../core/Ui/UI/AlarmMonitor.cpp" line="345"/>
         <source>Value %1%2 entered the %3 band (%4–%5).</source>
         <translation>Värde %1%2 gick in i %3-bandet (%4–%5).</translation>
     </message>
     <message>
-        <location filename="../../../core/Ui/UI/AlarmMonitor.cpp" line="282"/>
+        <location filename="../../../core/Ui/UI/AlarmMonitor.cpp" line="351"/>
         <source>Alarms</source>
         <translation>Larm</translation>
     </message>
