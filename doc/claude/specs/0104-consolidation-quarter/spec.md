@@ -1,8 +1,9 @@
 ---
 spec: 0104-consolidation-quarter
 title: 4.3.0 consolidation quarter
-status: approved     # draft -> approved -> in-progress -> done | shelved
+status: in-progress  # draft -> approved -> in-progress -> done | shelved
 approved: 2026-10-28 # tracks, targets, share and exit rule; open questions decided
+started: 2026-10-30  # plan and tasks approved; children are born from the tasks tracker
 created: 2026-10-27
 author: Alex Spataru
 ---
@@ -77,7 +78,10 @@ from landing. This spec is about the debt already in the tree.
 ## Requirements
 
 Numbers are measured on 2026-10-27 at master `be6066d59`; a target is a value the existing
-gate reads at the end of the quarter.
+gate reads at the end of the quarter. Where no gate existed on that date (suppression sites,
+bare suppressions, static skip markers, non-done specs) the origin is the value the new
+census reads on the commit that creates it, under the grammar `plan.md` pins; the singleton
+census reads 803, which replaces the audit's 802 (amended 2026-10-30).
 
 1. **R1 — Fixed share.** Consolidation receives two-thirds of each week's engineering time
    in November 2026, while the artifact proof and 4.2.1 land, and half from December on. The
@@ -88,19 +92,25 @@ gate reads at the end of the quarter.
    the uploaded file and not from the build tree, and runs the in-app self-test from it: the
    Linux x64 and arm64 AppImages, the universal macOS disk image on both slices, and the
    installed Windows MSI. A self-test failure fails the job before the artifact is published.
-3. **R3 — 4.2.1.** A 4.2.1 release ships with the Intel fix through the proven path of R2,
-   and issue #392 is answered and closed by the reporter's confirmation or after 30 days.
+3. **R3 — 4.2.1.** 4.2.1 shipped on 2026-10-28 with all nine assets and issue #392 closed on
+   2026-10-29, both before R2 existed (amended 2026-10-30). The maintainer runs the
+   published 4.2.1 disk image's x86_64 slice once under Rosetta with the self-test and
+   records the result in this spec; the first tag after R2 lands is the first release whose
+   artifacts pass through the proven path.
 4. **R4 — Translation-unit excess to zero.** No first-party C++ file exceeds 1,500 lines
    (excess 2,641 → 0, files over the limit 11 → 0). Each split keeps the facade-plus-members
    shape the repo already uses and keeps every test passing.
 5. **R5 — Duplicated windows halved.** Shared 10-line windows 1,730 → at most 865, with the
-   dashboard widget QML family addressed first (the six heaviest pairs). A deduplicated widget
+   dashboard widget QML family addressed first (the six heaviest pairs), then the Project
+   Editor folder views and the `CommandCapabilities`/`SealedPolicy` pair: the dashboard
+   family holds 939 of the 1,730 windows and cannot reach 865 alone (amended 2026-10-30). A
+   deduplicated widget
    renders identically before and after, checked by the existing QML self-test suite plus a
    screenshot comparison the maintainer runs once per widget.
 6. **R6 — Suppressions reasoned or removed.** Lint suppression sites 171 → at most 86, and
    every remaining site carries a one-clause reason on the suppression line; bare
    suppressions (152 today) reach zero.
-7. **R7 — Singleton reach down.** Singleton reach sites 802 → at most 600, with
+7. **R7 — Singleton reach down.** Singleton reach sites 803 → at most 600, with
    cross-library reaches staying at zero.
 8. **R8 — Ledger closed down.** Open mistakes-ledger rows 51 → at most 20. Each row that
    leaves the open set is either codified by a check that exists in the tree, or deleted in a
@@ -108,7 +118,10 @@ gate reads at the end of the quarter.
    only downward.
 9. **R9 — Spec archive reconciled.** Every spec not marked done on 2026-10-27 ends the
    quarter as done or shelved with a dated note; no spec sits in-progress for more than 30
-   days without a commit referencing it.
+   days without a commit referencing it. On 2026-10-30 that is 15 live specs (12
+   in-progress, 1 draft, 2 approved) plus two directories with no `spec.md` at all, `0021`
+   and `0056`, which each get a one-paragraph `spec.md` with a terminal status (amended
+   2026-10-30).
 10. **R10 — AI-facing material does not grow.** The always-loaded word budget and the one-hop
     document total both end the quarter lower than on 2026-10-27, the one-hop total becomes a
     hard gate that fails on growth and is re-seeded downward only (as the always-loaded budget
@@ -148,8 +161,11 @@ gate reads at the end of the quarter.
 - [ ] **AC6** — Each of the four package jobs in CI contains a step that runs the uploaded
       artifact's self-test, pinned by the workflow test suite, and the macOS step runs both
       slices (R2).
-- [ ] **AC7** — Release 4.2.1 is tagged and its macOS artifact passed AC6; issue #392 is
-      closed (R3).
+- [x] **AC7a** — Release 4.2.1 is tagged and issue #392 is closed (done 2026-10-28 and
+      2026-10-29).
+- [ ] **AC7b** — The published 4.2.1 macOS artifact's x86_64 slice passed a manual
+      self-test recorded in this spec, and the first release tagged after AC6 holds has every
+      artifact pass AC6 (R3).
 - [ ] **AC8** — No spec under the archive carries `in-progress`, `draft` or `approved` older
       than 30 days without a referencing commit; the count of non-done specs from 2026-10-27
       is zero (R9).
