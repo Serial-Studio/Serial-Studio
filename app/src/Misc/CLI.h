@@ -96,7 +96,7 @@ struct CliOptions {
   };
   QCommandLineOption quickPlotOpt{
     {"q", "quick-plot"},
-    "Enables quick plot mode (auto-detect CSV data)"
+    "Enables quick plot mode (auto-detected line format)"
   };
   QCommandLineOption profileOpt{
     "profile", "Opens the project under the named workspace profile (see --project)", "name"};

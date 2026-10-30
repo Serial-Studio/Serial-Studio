@@ -3683,7 +3683,7 @@ Compile and execute frame parser code against raw stream bytes, driving the full
 - `frameEnd` (string, optional): End delimiter. Hex when `hexadecimalDelimiters` is true.
 - `hexadecimalDelimiters` (bool, optional): Parse `frameStart`/`frameEnd` as hex bytes. Default: false.
 - `checksumAlgorithm` (string, optional): Checksum name to validate trailing bytes. Default: none.
-- `operationMode` (int, optional): 0=ProjectFile (default; runs decoder + parser), 2=QuickPlot (line extractor, comma-split, parser bypassed). 1=ConsoleOnly is invalid for this command.
+- `operationMode` (int, optional): 0=ProjectFile (default; runs decoder + parser), 2=QuickPlot (line extractor, auto-detected field split, parser bypassed). 1=ConsoleOnly is invalid for this command.
 
 **Returns:**
 ```json

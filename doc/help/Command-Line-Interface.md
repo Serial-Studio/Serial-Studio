@@ -21,7 +21,7 @@ Options marked **(Pro)** are available only in commercial builds.
 | `--dump-api-schema` | `file` | Write the API command registry (name, description, parameter schema per command) to a JSON file and exit. Input for SDK generators. |
 | `-p`, `--project` | `file` | Load the specified project file. |
 | `--profile` | `name` | Open the project under the named [workspace profile](Project-Editor.md#workspace-profiles) instead of asking which one to show. |
-| `-q`, `--quick-plot` | | Enable quick-plot mode (auto-detect CSV data). |
+| `-q`, `--quick-plot` | | Enable quick-plot mode (auto-detected line format). |
 | `-t`, `--fps` | `Hz` | Set the visualization refresh rate. |
 | `-n`, `--points` | `count` | Set the number of data points per plot. |
 | `--exit-after` | `seconds` | Quit gracefully after the given number of seconds (CI runs, PGO training). |

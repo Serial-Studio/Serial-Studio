@@ -541,7 +541,7 @@
       "id": "mode.quickPlot",
       "title": "Quick Plot Mode",
       "icon": "widgets/plot",
-      "tooltip": "Switch to Quick Plot mode (comma-separated values)",
+      "tooltip": "Switch to Quick Plot mode (auto-detected line format)",
       "kind": "toggle",
       "category": "mode",
       "contexts": [

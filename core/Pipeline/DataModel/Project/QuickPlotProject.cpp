@@ -21,8 +21,10 @@
 
 #include "DataModel/Project/QuickPlotProject.h"
 
+#include <algorithm>
 #include <QJsonArray>
 #include <QObject>
+#include <QStringList>
 
 #include "Core/DataModel/FrameKeys.h"
 #include "Core/SerialStudio.h"
@@ -34,12 +36,102 @@
 static constexpr size_t kMaxQuickPlotGroups = 8;
 
 /**
+ * @brief True when the "delimited" comma source reproduces the stream: unwrapped positional comma
+ *        values with no decimal comma and no unit on any dataset. Every other shape needs
+ *        line_values, which shares Quick Plot's tokenizer.
+ */
+[[nodiscard]] static bool plainCommaStream(const DataModel::LineFormat& format,
+                                           const std::vector<DataModel::Group>& groups)
+{
+  SS_ASSERT(!groups.empty(), return false);
+  SS_ASSERT(format.separator == ',' || format.separator == ';' || format.separator == '\t'
+              || format.separator == ' ' || format.separator == '\0',
+            return false);
+  if (format.kind != DataModel::LineFormatKind::Delimited || format.separator != ','
+      || format.decimalComma || format.named || format.wrapper)
+    return false;
+
+  for (const auto& group : groups)
+    for (const auto& dataset : group.datasets)
+      if (!dataset.units.isEmpty())
+        return false;
+
+  return true;
+}
+
+/**
+ * @brief The line_values separator option for a tokenizer separator byte; a single-field stream
+ *        splits on commas, which its lines never contain.
+ */
+[[nodiscard]] static QString separatorName(const char separator)
+{
+  switch (separator) {
+    case ';':
+      return QStringLiteral("semicolon");
+    case '\t':
+      return QStringLiteral("tab");
+    case ' ':
+      return QStringLiteral("space");
+    default:
+      return QStringLiteral("comma");
+  }
+}
+
+/**
+ * @brief The keyed parser's field order: the data grid's dataset titles by frame index, so a wire
+ *        name or JSON path maps back to the channel it created and a positional slot keeps its
+ * place.
+ */
+[[nodiscard]] static QString fieldList(const DataModel::Group& datagrid)
+{
+  SS_ASSERT(!datagrid.datasets.empty(), return QString());
+  SS_ASSERT(datagrid.datasets.size() <= static_cast<size_t>(DataModel::kMaxLineFields),
+            return QString());
+
+  std::vector<const DataModel::Dataset*> ordered;
+  ordered.reserve(datagrid.datasets.size());
+  for (const auto& dataset : datagrid.datasets)
+    ordered.push_back(&dataset);
+
+  std::sort(ordered.begin(), ordered.end(), [](const auto* a, const auto* b) {
+    return a->index < b->index;
+  });
+
+  QStringList names;
+  names.reserve(static_cast<int>(ordered.size()));
+  for (const auto* dataset : ordered)
+    names.append(dataset->title);
+
+  return names.join(QLatin1Char(','));
+}
+
+/**
+ * @brief The line_values parameters that pin the detected format (spec 0106 R12).
+ */
+[[nodiscard]] static QJsonObject lineValuesParams(const DataModel::LineFormat& format,
+                                                  const std::vector<DataModel::Group>& groups)
+{
+  SS_ASSERT(!groups.empty(), return QJsonObject());
+  const bool json = format.kind == DataModel::LineFormatKind::Json;
+
+  QJsonObject params;
+  params[QStringLiteral("format")]    = json ? QStringLiteral("json") : QStringLiteral("delimited");
+  params[QStringLiteral("separator")] = separatorName(format.separator);
+  params[QStringLiteral("decimalComma")] = format.decimalComma;
+  params[QStringLiteral("fields")]       = format.named ? fieldList(groups.front()) : QString();
+  return params;
+}
+
+/**
  * @brief The device Quick Plot reads from, expressed as a project source: newline-terminated
- *        plain text split on commas by the Built-In "delimited" template. Trimming fields absorbs
- *        the CR of CRLF lines, since a project source carries a single end delimiter.
+ *        plain text parsed by the Built-In template that reproduces the detected format, the
+ *        "delimited" comma split for a plain comma stream and "line_values" otherwise (spec 0106
+ *        R12). Trimming absorbs the CR of CRLF lines; a project source has one end delimiter.
  */
 [[nodiscard]] static DataModel::Source quickPlotSource(const int busType,
-                                                       const QJsonObject& connectionSettings)
+                                                       const QJsonObject& connectionSettings,
+                                                       const DataModel::LineFormat& format,
+                                                       const std::vector<DataModel::Group>& groups)
 {
   DataModel::Source source;
   source.sourceId            = 0;
@@ -49,14 +141,20 @@ static constexpr size_t kMaxQuickPlotGroups = 8;
   source.frameDetection      = static_cast<int>(SerialStudio::EndDelimiterOnly);
   source.decoderMethod       = static_cast<int>(SerialStudio::PlainText);
   source.frameParserLanguage = static_cast<int>(SerialStudio::Native);
-  source.frameParserTemplate = QStringLiteral("delimited");
   source.connectionSettings  = connectionSettings;
-  source.frameParserParams   = QJsonObject{
-    { QStringLiteral("separator"), QStringLiteral(",")},
-    { QStringLiteral("quoteChar"),           QString()},
-    {QStringLiteral("trimFields"),                true},
-    { QStringLiteral("skipEmpty"),               false}
-  };
+  if (plainCommaStream(format, groups)) {
+    source.frameParserTemplate = QStringLiteral("delimited");
+    source.frameParserParams   = QJsonObject{
+      { QStringLiteral("separator"), QStringLiteral(",")},
+      { QStringLiteral("quoteChar"),           QString()},
+      {QStringLiteral("trimFields"),                true},
+      { QStringLiteral("skipEmpty"),               false}
+    };
+    return source;
+  }
+
+  source.frameParserTemplate = QStringLiteral("line_values");
+  source.frameParserParams   = lineValuesParams(format, groups);
   return source;
 }
 
@@ -97,11 +195,13 @@ static constexpr size_t kMaxQuickPlotGroups = 8;
 
 /**
  * @brief Assembles the project document for @p quickPlotGroups on a @p busType device that
- *        reconnects with @p connectionSettings.
+ *        reconnects with @p connectionSettings and parses with the @p format the live lane
+ * detected.
  */
 QJsonObject DataModel::QuickPlotProject::build(const std::vector<Group>& quickPlotGroups,
                                                const int busType,
-                                               const QJsonObject& connectionSettings)
+                                               const QJsonObject& connectionSettings,
+                                               const LineFormat& format)
 {
   SS_ASSERT(!quickPlotGroups.empty(), return QJsonObject());
   SS_ASSERT(quickPlotGroups.size() <= kMaxQuickPlotGroups, return QJsonObject());
@@ -114,8 +214,8 @@ QJsonObject DataModel::QuickPlotProject::build(const std::vector<Group>& quickPl
   QJsonObject project;
   project[Keys::Title]   = QObject::tr("Quick Plot Project");
   project[Keys::Actions] = QJsonArray();
-  project[Keys::Sources] =
-    QJsonArray{DataModel::serialize(quickPlotSource(busType, connectionSettings))};
+  project[Keys::Sources] = QJsonArray{
+    DataModel::serialize(quickPlotSource(busType, connectionSettings, format, quickPlotGroups))};
   project[Keys::Groups]              = groups;
   project[Keys::CustomizeWorkspaces] = false;
   return project;

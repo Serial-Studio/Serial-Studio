@@ -46,12 +46,12 @@ The frame builder turns each complete frame into a structured record of groups a
 
 ### Quick Plot mode
 
-1. Split the frame string on commas.
+1. Split the line under the detected format (comma, semicolon, tab, space, name:value or JSON).
 2. If the first row is all non-numeric, treat it as column headers.
 3. Auto-generate a Data Grid group and a Multi-Plot group.
 4. Assign values to auto-created datasets.
 
-No project file needed. This mode targets rapid prototyping with CSV-formatted serial output.
+No project file needed. This mode targets rapid prototyping with line-formatted serial output.
 
 ### Project File mode
 

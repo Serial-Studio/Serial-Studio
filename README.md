@@ -25,7 +25,7 @@ Runs on Windows, macOS, Linux, and Raspberry Pi.
 
 **Visualize data.** 17 widgets in the GPL build: line plots, gauges, bar charts, meters, GPS maps, FFT spectrum, accelerometer, gyroscope, compass, data grids, LED panels, terminal, multi-channel plots, web view, bar panel, plus a Clock and Stopwatch utility widget pair. Bar, Gauge, Compass, and Meter each render as a two-page swipe view (page 0 is the analog face, page 1 is a large digital readout), so a single tile shows both the trend at a glance and the exact value. Pro adds 3D Plot, Waterfall (spectrogram), Image View (live camera), the Canvas widget, and output widgets (buttons, sliders, knobs, an Output Panel, and a Notification Log). Canvas is a JavaScript `paint(ctx, w, h)` callback with a Canvas2D-style API and 18 templates: oscilloscope, polar plot, artificial horizon, audio VU, dial gauge, heatmap, sparklines, vector field, XY scope, and others.
 
-**Build dashboards.** The Project Editor defines groups, datasets, and widgets through forms. Or skip the project file: print CSV from your device and Quick Plot draws it. Custom workspaces (Pro) split big projects into tabs with a searchable taskbar.
+**Build dashboards.** The Project Editor defines groups, datasets, and widgets through forms. Or skip the project file: print numbers from your device, one line per sample, and Quick Plot draws them. Custom workspaces (Pro) split big projects into tabs with a searchable taskbar.
 
 **Parse and transform data.** Frame parsers come in three flavors: Built-In templates (compiled C++ parsers you configure through a form, no code, the default for new projects), JavaScript, and Lua (LuaJIT 2.1, 5.1 syntax with compatibility shims). 28 script templates cover MAVLink, NMEA 0183/2000, UBX, SiRF, RTCM, MessagePack, TLV, COBS, SLIP, JSON, XML, YAML, INI, Modbus, and others. Per-dataset transforms (EMA, scaling, calibration, unit conversion) run every frame as short JS or Lua snippets. Variables act as a shared bus so transforms can derive computed datasets from each other. Transforms and Variables are Pro.
 
@@ -88,7 +88,7 @@ All Linux packages (AppImage, DEB, RPM, x64 and ARM64) bundle their own glibc, s
 ### How it works
 
 - **Project file mode (recommended):** Define your data format and dashboard in the Project Editor, using structured forms for groups, datasets, and widgets.
-- **Quick plot mode:** Drop in comma-separated values from Arduino and get an instant plot.
+- **Quick plot mode:** Print one line of values per sample from Arduino and get an instant plot.
 - **Console only mode:** Use Serial Studio as a plain terminal without any dashboard.
 
 ### At a glance
@@ -143,7 +143,7 @@ A first connection takes about five minutes.
 
 ### 3. Visualize
 
-- **Quick plot mode:** send comma-separated values and watch them plot live.
+- **Quick plot mode:** send one line of values per sample (comma, semicolon, tab or space separated, or name:value pairs) and watch them plot live.
 - **Project mode:** build a custom dashboard in the Project Editor, complete with gauges, maps, and more.
 - **Examples:** browse [`/examples`](./examples) for Arduino sketches, ESP32 code, and Python scripts.
 

@@ -306,7 +306,7 @@ Serial Studio works in three modes:
 
 **2. Quick Plot mode (easiest).**
 
-- Send comma-separated values: `23.5,67.2,1013.25\n`.
+- Send one line of values per sample, separated by comma, semicolon, tab or space (`23.5,67.2,1013.25\n`), or name:value pairs (`temp:23.5`).
 - Serial Studio shows plots automatically.
 
 **3. Project File mode (recommended).**
@@ -433,8 +433,8 @@ See [Dataset Value Transforms](Dataset-Transforms.md) for the full guide.
 
 **Quick Plot mode:**
 
-- Make sure you're sending comma-separated values: `val1,val2,val3\n`.
-- Every line should have the same number of values.
+- Make sure each line is numbers, one line per sample (`val1,val2,val3\n`); a text-only line is ignored.
+- Named values (`temp:23.5`) keep their channel even when a line omits one.
 - End each frame with a newline (`\n`) or a carriage return (`\r`).
 
 **Project File mode:**

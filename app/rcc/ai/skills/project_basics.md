@@ -112,9 +112,12 @@ The dashboard has three operation modes (`AppState::operationMode`):
 - **1 = ConsoleOnly**: terminal-only. Frame parser bypassed; raw bytes
   go straight to the console. No dashboard. Good for raw-protocol
   debugging.
-- **2 = QuickPlot**: line-based input (CR/LF/CRLF), comma-separated,
-  auto-generates groups/datasets/widgets. No project file. Good for
-  one-shot prototyping.
+- **2 = QuickPlot**: line-based input (CR/LF/CRLF); the line format is detected
+  from the first numeric line (comma, semicolon, tab or space separated values,
+  name:value pairs, unit suffixes, one-line JSON; a /* */ wrapper is removed; text
+  lines are ignored). Auto-generates groups, datasets and widgets. No project file
+  until Save as Project, which writes one with the matching Built-In template.
+  Good for one-shot prototyping.
 
 Mode is sticky (persisted to QSettings). Switch with
 `dashboard.setOperationMode{mode}`, which applies at once. Loading,

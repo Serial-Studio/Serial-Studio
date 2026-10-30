@@ -233,11 +233,14 @@ Widgets.Pane {
         Layout.leftMargin: -6
         enabled: app.ioEnabled
         Layout.maximumHeight: 18
-        text: qsTr("Quick Plot (Comma Separated Values)")
+        text: qsTr("Quick Plot (Auto-Detected Format)")
         ToolTip.delay: 500
         ToolTip.visible: hovered
-        ToolTip.text: qsTr("Plots one line per sample with values separated by commas, "
-                           + "for example 12.5,30.1,0.98 followed by a newline.")
+        ToolTip.text: qsTr("Plots one line per sample and detects the format from the first numeric "
+                           + "line: values separated by commas, semicolons, tabs or spaces "
+                           + "(12.5, 30.1, 0.98), named values (temp:23.5, hum:60), units after "
+                           + "a number (23.5\u00B0C), or a one-line JSON object "
+                           + "({\"t\":23.5,\"h\":60}).")
         opacity: enabled ? 1 : 0.5
         Layout.maximumWidth: root.maxItemWidth
         checked: Cpp_AppState.operationMode === SerialStudio.QuickPlot

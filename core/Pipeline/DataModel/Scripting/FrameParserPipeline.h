@@ -91,7 +91,9 @@ void decodeAndParseFrame(const QByteArray& rawFrame,
                          QList<QStringList>& outChannels);
 
 /**
- * @brief QuickPlot comma split: one channel row per frame, no script engine involved.
+ * @brief Quick Plot preview split for the dry-run API (spec 0106): detects the line's format and
+ *        returns its raw fields as one row, a JSON line as path:value cells; a text line falls
+ *        back to the comma split.
  */
 void splitQuickPlotChannels(const QByteArray& rawFrame, QList<QStringList>& outChannels);
 

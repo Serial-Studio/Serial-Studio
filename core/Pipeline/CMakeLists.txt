@@ -55,6 +55,8 @@ qt_add_library(
   DataModel/Scripting/FrameParser.cpp
   DataModel/Scripting/ParserTemplateCatalog.cpp
   DataModel/Scripting/ReplayRowCodec.cpp
+  DataModel/Scripting/LineFormat.cpp
+  DataModel/Scripting/JsonLeafScanner.cpp
   DataModel/Scripting/ScriptDeviceWait.cpp
   DataModel/Scripting/ScriptResult.cpp
   DataModel/Scripting/ScriptCells.cpp
@@ -101,6 +103,7 @@ qt_add_library(
   DataModel/Scripting/NativeTemplates/BinaryModbus.cpp
   DataModel/Scripting/NativeTemplates/BinaryMessagePack.cpp
   DataModel/Scripting/NativeTemplates/TextDelimited.cpp
+  DataModel/Scripting/NativeTemplates/TextLineValues.cpp
   DataModel/Scripting/NativeTemplates/TextFixedWidth.cpp
   DataModel/Scripting/NativeTemplates/TextKeyValue.cpp
   DataModel/Scripting/NativeTemplates/TextIniConfig.cpp
@@ -150,6 +153,7 @@ qt_add_library(
   DataModel/FrameBuilder/ShortFrameWatch.cpp
   DataModel/FrameBuilder/LatestFrameTap.cpp
   DataModel/FrameBuilder/QuickPlotBuilder.cpp
+  DataModel/FrameBuilder/QuickPlotFormatState.cpp
   DataModel/FrameBuilder/TableSnapshotChannel.cpp
   DataModel/FrameBuilder/TableScriptBridge.cpp
   DataModel/FrameBuilder/TransformCompiler.cpp
@@ -172,6 +176,8 @@ qt_add_library(
   DataModel/Scripting/FrameParser.h
   DataModel/Scripting/ParserTemplateCatalog.h
   DataModel/Scripting/ReplayRowCodec.h
+  DataModel/Scripting/LineFormat.h
+  DataModel/Scripting/JsonLeafScanner.h
   DataModel/Scripting/ScriptDeviceWait.h
   DataModel/Scripting/ScriptFrameShaping.h
   DataModel/Scripting/ScriptResult.h
@@ -226,6 +232,7 @@ qt_add_library(
   DataModel/Scripting/NativeTemplates/BinaryModbus.h
   DataModel/Scripting/NativeTemplates/BinaryMessagePack.h
   DataModel/Scripting/NativeTemplates/TextDelimited.h
+  DataModel/Scripting/NativeTemplates/TextLineValues.h
   DataModel/Scripting/NativeTemplates/TextFixedWidth.h
   DataModel/Scripting/NativeTemplates/TextKeyValue.h
   DataModel/Scripting/NativeTemplates/TextIniConfig.h
@@ -281,6 +288,7 @@ qt_add_library(
   DataModel/FrameBuilder/ShortFrameWatch.h
   DataModel/FrameBuilder/LatestFrameTap.h
   DataModel/FrameBuilder/QuickPlotBuilder.h
+  DataModel/FrameBuilder/QuickPlotFormatState.h
   DataModel/FrameBuilder/TableSnapshotChannel.h
   DataModel/FrameBuilder/TableScriptBridge.h
   DataModel/FrameBuilder/TransformCompiler.h

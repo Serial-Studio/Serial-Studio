@@ -7,7 +7,7 @@ Serial Studio has three parsing modes that determine how incoming data is interp
 The three modes, in order of increasing complexity:
 
 1. **Console Only.** No parsing, no dashboard. Raw bytes stream to the terminal so you can inspect what your device is sending.
-2. **Quick Plot.** Automatic CSV plotting with zero configuration.
+2. **Quick Plot.** Automatic plotting of text lines (CSV, name:value pairs, JSON and similar) with zero configuration.
 3. **Project File.** A `.ssproj` project file on the host defines the dashboard, and the device sends raw values (CSV, binary, or anything a frame parser can decode).
 
 The diagram below compares data flow through each mode side by side.
@@ -18,7 +18,7 @@ flowchart LR
         C1["Raw Bytes"] --> C2["Terminal"]
     end
     subgraph QP["Quick Plot"]
-        Q1["CSV"] --> Q2["Auto Dashboard"]
+        Q1["Lines"] --> Q2["Auto Dashboard"]
     end
     subgraph PF["Project File"]
         P1["Any Format"] --> P2["Custom Dashboard"]
@@ -65,20 +65,31 @@ Once you've confirmed the data looks sane, switch to Quick Plot or Project File 
 
 ### Selection
 
-Pick the "Quick Plot (Comma Separated Values)" option under Operation Mode in the Setup panel.
+Pick the "Quick Plot (Auto-Detected Format)" option under Operation Mode in the Setup panel.
 
 ### How it works
 
 - **Frame detection.** Line-based. Each line of text terminated by CR, LF, or CRLF is one frame.
-- **Data format.** Comma-separated numeric values. Each value maps to one channel.
-- **CSV delimiter.** Comma only. Other delimiters aren't supported in this mode.
-- **Header detection.** If the first received row is all non-numeric strings, those strings become channel labels on the dashboard. The check re-arms after every connect and stops at the first numeric frame: a device that starts sending numeric data before you press Connect skips the header row entirely and loses its labels.
+- **Data format.** Detected from the first qualifying line, one where at least half the fields are numbers (or name:value pairs with numbers). Each value maps to one channel.
+- **Accepted shapes.**
+  - Values separated by commas, semicolons, tabs or runs of spaces: `23.5,60,1013`, `23.5;60;1013`, `23.5 60 1013`.
+  - A decimal comma under semicolon or space separation: `23,5;60`.
+  - Named values written `name:value` or `name=value`, with optional spaces after the delimiter: `temp: 23.5, hum: 60`. The names title the channels.
+  - A unit after a number: `23.5degC`, `1013hPa`, `45%`. The unit becomes the channel's unit and is stripped from the value.
+  - A one-line JSON object: `{"t":23.5,"h":60}`. Nested objects are flattened to dotted names (`imu.ax`) and arrays to indexed names (`acc[0]`). Strings, booleans and nulls are ignored.
+  - A line wrapped in `/*` and `*/` is parsed as its contents.
+- **Fixed per connection.** Once detected, the format stays fixed. It is re-evaluated only when a line has no numeric field under the fixed format but another format fits, for example boot chatter `uptime=1234` followed by `temp=23.5,hum=60`.
+- **Text lines.** A line with no numeric field (such as `WiFi connected`) never touches the dashboard. It still appears in the console.
+- **Header detection.** For a positional stream, an all-text line received before the first data line provides the channel titles, provided it has the same number of fields as that data line. Boot chatter with a different field count is ignored. Names on data lines take precedence, so a device already streaming `name:value` pairs when you press Connect keeps its labels.
+- **Named streams.** Channels are keyed by name. A name missing from a line leaves that channel without a sample for that frame (plots show a gap, the Data Grid keeps the last value), and a new name appends a channel. Positional streams rebuild the dashboard when the field count changes.
 
-When a connection is established, Serial Studio reads each line, splits on commas, and creates a dashboard with:
+When a connection is established, Serial Studio reads each line, detects the format, and creates a dashboard with:
 
 - A Data Grid widget showing all current values.
 - A Multi-Plot widget overlaying all channels on a single time-series chart.
 - Individual per-channel plots.
+
+Units are shown wherever the dashboard shows units.
 
 No project file required. No JavaScript parsing involved.
 
@@ -93,14 +104,24 @@ Temperature,Pressure,Humidity
 
 The first line sets channel labels. Later lines are plotted in real time.
 
+Named values need no header row:
+
+```
+temp: 23.5, hum: 60
+temp: 23.6, hum: 59
+```
+
+To keep the stream after the session, use **Save as Project** on the dashboard. The saved project's Built-In parser uses the Delimited text template for plain comma streams and the Line values template otherwise. In a saved project a missing named field repeats the previous value, unlike the live session.
+
 ### Limitations
 
-- Comma is the only supported delimiter.
 - No custom widgets (gauges, bars, compass, GPS map, FFT, and so on).
 - No alarm thresholds.
-- No per-channel configuration (units, ranges, scaling).
+- No per-channel configuration beyond title and unit (no ranges or scaling).
 - No JavaScript frame parsing.
 - No multi-source support.
+- No manual format override. Use Save as Project for anything the detector cannot settle.
+- No binary or hex input.
 
 ### When to use it
 
@@ -219,7 +240,7 @@ Project File mode is the right choice for any application that needs custom widg
 | Just want to see what bytes the device is sending            | Console Only |
 | Debugging a garbled stream, unknown baud rate, wrong wiring  | Console Only |
 | Sending AT commands or a text CLI to a modem / module        | Console Only |
-| Arduino or ESP32 sending CSV numbers for quick debugging     | Quick Plot |
+| Arduino or ESP32 printing numbers, one line per sample     | Quick Plot |
 | Rapid prototyping or classroom demo                          | Quick Plot |
 | Need gauges, bars, compass, GPS map, FFT, or alarms          | Project File |
 | Custom binary protocol with length-prefixed packets          | Project File + Binary decoder + Lua/JS parser |
@@ -233,7 +254,7 @@ Project File mode is the right choice for any application that needs custom widg
 | Setup effort                | None                | None             | Create project in editor      |
 | Dashboard                   | No                  | Auto             | Custom                        |
 | Frame detection             | None (raw stream)   | Line-based (auto)| Configurable per source       |
-| CSV delimiter               | N/A                 | Comma only       | Any (via parser script)       |
+| Line format                 | N/A                 | Detected (comma, semicolon, tab, space, name:value, JSON) | Any (via parser script) |
 | Frame parser (Built-In/Lua/JS) | No               | No               | Yes                           |
 | Dataset value transforms    | No                  | No               | Yes                           |
 | Custom widgets              | No                  | No (plots only)  | Yes (project-defined)         |
@@ -247,7 +268,7 @@ Project File mode is the right choice for any application that needs custom widg
 
 If you're hooking up a new device and don't yet know what it sends, start in **Console Only** mode. Connect, watch the raw bytes, confirm the baud rate and framing make sense.
 
-Once you can see clean comma-separated numbers in the console, switch to **Quick Plot**. You'll get a dashboard with one plot per CSV field in seconds, with no configuration.
+Once you can see clean numbers one line per sample in the console, switch to **Quick Plot**. You'll get a dashboard with one plot per field in seconds, with no configuration.
 
 Once you need more control (specific widget types, unit labels, alarm thresholds, a custom dashboard layout, binary protocol parsing, or multiple concurrent devices), move to **Project File** mode. Open the Project Editor, define your groups and datasets, save a `.ssproj` file, and load it from the Setup panel. This is the recommended mode for most real-world projects.
 

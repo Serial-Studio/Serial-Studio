@@ -932,57 +932,6 @@ def test_frame_builder_uses_shared_seam_not_inline_decoder_switch():
     ), "Player playback must reuse the shared replay splitter."
 
 
-def test_frame_builder_quick_plot_uses_shared_splitter():
-    """parseQuickPlotFrame relies on the shared splitter, so dialog / dryRun split bytes
-    the same way the live QuickPlot mode does.
-
-    retire when: a ctest splits the same QuickPlot frame through the builder and through
-    the pipeline runner and compares the rows.
-    """
-    text = _read("core/Pipeline/DataModel/FrameBuilder.cpp")
-
-    body = re.search(
-        r"void DataModel::FrameBuilder::parseQuickPlotFrame\([\s\S]*?\n\}",
-        text,
-    )
-    assert body is not None
-    snippet = body.group(0)
-
-    assert "splitQuickPlotChannels(" in snippet
-    # The retired inline helper must not have been added back.
-    assert "parseCsvValues" not in text
-
-
-def test_frame_parser_pipeline_dispatches_quick_plot_branch():
-    """Both runners comma-split on QuickPlot and invoke the parser only in the other
-    modes: compiling an engine for QuickPlot is what made the dryRun diverge.
-
-    retire when: an integration case dry-runs a QuickPlot frame with a deliberately
-    broken parser and asserts the rows still come out.
-    """
-    text = _read("core/Pipeline/DataModel/Scripting/FrameParserPipeline.cpp")
-
-    helper = re.search(
-        r"DataModel::PipelineFrame buildPipelineFrame\([\s\S]*?\n\}",
-        text,
-    )
-    assert helper is not None
-    assert re.search(
-        r"operationMode == SerialStudio::QuickPlot\)[\s\S]{0,120}?splitQuickPlotChannels\(",
-        helper.group(0),
-    ), "QuickPlot must short-circuit to the shared splitter"
-
-    code_runner = re.search(
-        r"DataModel::PipelineResult DataModel::runFrameParserPipelineWithCode\([\s\S]*?\n\}",
-        text,
-    )
-    assert code_runner is not None
-    assert re.search(
-        r"\w+ = \(spec\.operationMode != SerialStudio::QuickPlot\);",
-        code_runner.group(0),
-    ), "the dryRun runner must skip engine compilation for QuickPlot"
-
-
 # ----------------------------------------------------------------------------------
 # R10 -- dryRun + dispatcher require bytes; parser-only fallback is gone
 #

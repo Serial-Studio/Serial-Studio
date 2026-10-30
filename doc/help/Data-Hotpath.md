@@ -103,8 +103,8 @@ object. That `Frame` is a reused per-source staging buffer, not the object publi
    the order, plus shared variables from [Variables](Variables.md). See
    [Dataset Value Transforms](Dataset-Transforms.md).
 
-In Quick Plot mode, steps 1 and 2 are replaced by a built-in line splitter that treats commas
-as the field separator. In Console-Only mode, the FrameBuilder stage is a no-op: bytes go
+In Quick Plot mode, steps 1 and 2 are replaced by a built-in line tokenizer that detects the
+separator and named fields once per connection. In Console-Only mode, the FrameBuilder stage is a no-op: bytes go
 straight to the terminal via `DeviceManager::rawDataReceived`.
 
 When a single captured chunk expands into N logical frames, FrameBuilder timestamps them at

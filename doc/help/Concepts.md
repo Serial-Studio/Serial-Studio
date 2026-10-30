@@ -23,7 +23,7 @@ flowchart LR
 | Step | What it is | Where you set it |
 |------|------------|------------------|
 | **Device** | Where the bytes come from: a serial port, a network socket, Bluetooth LE, or one of the Pro connections such as Modbus or CAN Bus. The **Connection** selector picks the kind. See [Devices](Devices.md). | Device Setup panel |
-| **Operation Mode** | How incoming data is treated: **Console Only** shows raw bytes, **Quick Plot** plots comma-separated lines, **Project File** uses a project. See [Operation Modes](Operation-Modes.md). | Device Setup panel |
+| **Operation Mode** | How incoming data is treated: **Console Only** shows raw bytes, **Quick Plot** plots lines of numbers in a detected format, **Project File** uses a project. See [Operation Modes](Operation-Modes.md). | Device Setup panel |
 | **Frame** | One complete message from the device. Frame detection decides where a frame starts and ends: End Delimiter Only, Start Delimiter Only, Start + End Delimiter, or No Delimiters. In Quick Plot a frame is one line. | Project Editor, device page |
 | **Decoder** | How the frame's bytes become text before parsing: Plain Text (UTF8), Hexadecimal, Base64, or Binary (Direct) for binary parsers. | Project Editor, device page |
 | **Frame parser** | Turns a frame into an ordered list of values. It is the Built-In parser (configured, no code), a JavaScript `parse(frame)` function, or a Lua one. See [Frame Parser Reference](Frame-Parser.md). | Project Editor, frame parser page |

@@ -19,8 +19,7 @@
 - **Never build — but always syntax-check.** Never invoke `cmake`/`jom` or produce build
   artifacts — the developer builds the app themselves. The ONE sanctioned compiler use
   (2026-10-04) is `scripts/syntax-check.py` (clang `-fsyntax-only` via the newest compile
-  database under `build/`): run it on every C++ file you edit, every time — lint checks
-  shape, only the compiler checks truth (types, includes, reachability), and every
+  database under `build/`): run it on every C++ file you edit, every time — lint checks shape, only the compiler checks truth, and every
   AI batch-edit failure of 2026-10 was compiler-class and lint-invisible. A hook runs it
   per edit; a SKIP (stale database) means the claim "it compiles" is unverified — say so.
 - **Runtime experiments are sanctioned.** Ground truth beats on-paper reasoning: drive a
@@ -29,9 +28,8 @@
   (`--selftest`, `--benchmark-hotpath`) against an existing build dir; prototype ideas as
   throwaway Node/Python sims in the scratchpad. Launching the GUI app and compiling stay
   the user's.
-- **Sample the running app before theorizing about a GUI stall.** Never reason a freeze,
-  stutter, or ignored resize out of the source — `sample <pid>` in the background while the user
-  reproduces. Recipe, known stack signatures, and the 2026-08-13 incident:
+- **Sample the running app before theorizing about a GUI stall.** Never reason a freeze, stutter or ignored resize out of the source: `sample <pid>` in the
+  background while the user reproduces. Recipe, stack signatures and the 2026-08-13 incident:
   [doc/claude/common-mistakes.md](doc/claude/common-mistakes.md) "Diagnosing a GUI Stall".
 - **Update CLAUDE.md** for any architectural change that future me would otherwise miss.
 - **`scripts/` is the style contract.** When in doubt, run it; don't restate it here.
@@ -90,8 +88,8 @@ text and the incidents behind each rule:
 ## Delegation & Cost — Advisor Economics
 
 Quality concentrates in planning and review; bulk token generation doesn't need the strong
-model. Anthropic's advisor-tool measurements and the spec-0069 post-mortem agree on the
-shape: the main session advises, cheaper executors type.
+model. Anthropic's advisor-tool measurements and the spec-0069 post-mortem agree: the main session
+advises, cheaper executors type.
 
 - **The main session plans, reviews, and integrates; mechanical execution is delegated.**
   Applying an approved brief, repetitive multi-file sweeps, test-writing against a fixed
@@ -104,16 +102,14 @@ shape: the main session advises, cheaper executors type.
   doesn't type.
 - **Briefs and reports are budgeted.** A per-component brief fits half a page: files,
   the invariants that bind, one acceptance check. Subagents return conclusions, never
-  file dumps. Measured result: hard output caps cut advice volume ~7x with no detectable
-  quality loss — unbounded high-tier prose is the dominant avoidable cost, so cap first
+  file dumps. Measured: hard output caps cut advice volume ~7x with no detectable quality loss, so cap first
   and raise only on evidence.
 - **Searches fan out, conclusions come back.** Multi-file exploration runs in read-only
-  search subagents; the main context receives the answer, not the excerpts. This also
-  keeps the cached prompt prefix stable.
-- **No process tax on trivial work.** Mandating a consult/plan step on tasks whose first
-  action needs no planning measured net-zero quality gain at pure cost. Keep the
-  "skip for trivial" escape hatches, and never write a rule that both mandates and
-  restrains the same mechanism — conflicting steering is worse than either alone.
+  search subagents; the main context receives the answer, not the excerpts, which also keeps the cached
+  prompt prefix stable.
+- **No process tax on trivial work.** A mandated consult/plan step on tasks whose first action needs no
+  planning measured net-zero quality gain at pure cost. Keep the "skip for trivial" escape
+  hatches; never write a rule that both mandates and restrains one mechanism.
 
 ## Scripts
 
@@ -139,9 +135,9 @@ layering the same way. Baselines, fences and anchor mechanics:
 
 ## Tests
 
-Python/pytest suite under `tests/`. Full catalog — per-file coverage, fixtures, markers, the
-delay/operation-mode tables, the C++ ctest tier, the `--selftest` in-app tier —
-lives in [tests/README.md](tests/README.md); read it before writing a test. What binds you:
+Python/pytest suite under `tests/`. The full catalog (per-file coverage, fixtures, markers, the
+C++ ctest tier, the `--selftest` in-app tier) lives in [tests/README.md](tests/README.md); read it
+before writing a test. What binds you:
 
 - **You don't build or launch the app, but you may drive a running one.** Integration,
   security, and performance tests drive a running Serial Studio over TCP — they need the app
@@ -187,16 +183,15 @@ descriptor, no user code). Per-dataset value transforms in JS or Lua, with one s
 language per project and per-dataset `params` (spec 0083). Pro features: Output
 widgets, Modbus, CAN Bus, OPC UA, S7comm, EtherNet/IP, IEC 60870-5-104, Sparkplug B, MDF4,
 3D, ImageView, Waterfall, file-transfer protocols (X/Y/ZMODEM), Modbus map importer,
-Historian (per-session SQLite recording; "Session Database" pre-2026-08), InfluxDB 2.x sink
-(`core/Storage/InfluxDB/`, line protocol per published block).
+Historian (per-session SQLite recording), InfluxDB 2.x sink (`core/Storage/InfluxDB/`, line
+protocol per block).
 Aural alerts (spec 0087, every build): an ISA-18.1 annunciator (`UI::Alarms::AlarmAnnunciator`,
 root-owned, `Cpp_UI_Alarms`, `alarms.*` API) with IEC 60601-1-8 WAV signatures played by
 `IO::Audio::SoundPlayer` on a raw miniaudio device.
-User-facing renames of 2026-08-19 — internal identifiers unchanged: Historian (was Session
-Database; `Sessions::` namespace, `sessions.*` API, "Session Databases" folder stay), Variables
-(was Shared Memory; registers → variables in UI/docs, `RegisterDef`/`registers` JSON stay),
-Computed Dataset (was Virtual Dataset; `virtual_` field + `"Virtual"` JSON key stay), Canvas
-Widget (was Painter; `"painter"` widget key, `project.painter.*` API, Painter* classes stay).
+User-facing renames of 2026-08-19, internal identifiers unchanged: Historian (was Session
+Database; `Sessions::`, `sessions.*`, the "Session Databases" folder stay), Variables (was Shared
+Memory; `RegisterDef`/`registers` stay), Computed Dataset (was Virtual Dataset; `virtual_` and
+`"Virtual"` stay), Canvas Widget (was Painter; `"painter"`, `project.painter.*`, Painter* stay).
 In doc/help the hotpath is called the "acquisition pipeline" — code, benchmarks, and internal
 docs keep "hotpath". The code base is seven static libraries under `core/`, every one a
 STRICT layer since spec 0077 (`SerialStudioCore` and `SerialStudioProtocols` with prefixed
@@ -244,8 +239,7 @@ rules only steer an edit if *named at the point of action*, so:
 - **Diverge by naming.** Design/review work sketches named alternatives before recommending
   (the human still gets one recommendation, per working-relationship.md). At least one
   alternative must violate an assumed constraint — then check whether that constraint
-  actually binds: wrong answers usually hide in premises, not derivations. Wide design
-  spaces may fan out a judge-panel workflow of independent attempts.
+  actually binds: wrong answers usually hide in premises, not derivations. Wide design spaces may fan out a judge-panel workflow.
 - **Externalize long state.** Write intermediate state into durable artifacts (spec/plan/
   tasks files, a chat checklist); re-name only what binds the current edit.
 
@@ -268,7 +262,7 @@ including the spec-0055 block caps, the time-ring/plot-clock rules, and the kern
   spins a nested `QEventLoop` that fires the display tick and re-enters the calling script.
   `DataModel::readTableView` / `writeTableStore` (`DataTable.h`) hold the ONE routing rule, and
   both the JS bridge and the Lua closures go through them. **No `lua_*` call may run inside a
-  routed lambda.** Any new GUI-callable script API follows the same rule — see
+  routed lambda.** Any new GUI-callable script API follows the same rule:
   [doc/claude/architecture/scripting.md](doc/claude/architecture/scripting.md) "Data Tables".
 - **`FrameReader` and `CircularBuffer` are pipeline-thread / SPSC. Never add mutexes.** Recreate
   via `resetFrameReader()` / `reconfigure()`. Enforced: code-verify:spsc-lock.
@@ -382,6 +376,7 @@ The hazard column names what breaks silently; the doc holds the rule.
 | A new API command, or anything that serializes the project or a live frame outward (spec 0096) | [io.md](doc/claude/architecture/io.md) "Sealed Sessions" | A process opened from a `.ssdeploy` package is sealed one-way (`Core::Runtime::sealed()`). A new command needs a classification in `API::SealedPolicy`, and an unclassified name is refused (Enforced: ctest:tst_sealed_policy_registry). A new exit for the project or a live frame consults the seal and strips through `DataModel::stripSealedContent`, or it hands the package's script source to any API client (Enforced: ctest:tst_sealed_strip). |
 | Anything under `core/` or a source that could move there (spec 0076) | [directory-map.md](doc/claude/directory-map.md) "core/" | A library never includes `app/src`; a moved `Q_OBJECT` header listed in both a library and the executable mocs twice; every `.h`/`.cpp` pair lives in one target; a relative include must resolve in exactly one root; an upward include beyond `scripts/layer-baseline.json` fails CI; the bus is never on the per-frame path. |
 | The driving surface (spec 0101): `core/Ui/UI/Automation/`, `AutomationHandler`, an `objectName` under `app/qml`, or the `DrivesUi` consent | [automation.md](doc/claude/architecture/automation.md) | A control is addressed by its `objectName` and nothing else: a translated or theme-derived name breaks every client, an unnamed control is invisible, and click/key sit behind a consent no other consent unlocks. Roles lean on Qt internal class names pinned by `tst_ui_automation`; re-verify per Qt bump. |
+| Quick Plot parsing: `LineFormat`, `QuickPlotFormatState`, `QuickPlotBuilder`, `line_values`, Save as Project (spec 0106) | [dataflow.md](doc/claude/architecture/dataflow.md) "The Quick Plot Lane" | ONE tokenizer serves the live lane and the saved project; a second splitter diverges them. Detection runs once per connect, never during replay or audio; missing or text fields are NaN, skipped by every ring. |
 
 ## Code Style — Essentials
 

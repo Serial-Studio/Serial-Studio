@@ -28,6 +28,7 @@
 #include "Core/DataModel/FrameKeys.h"
 #include "Core/DataModel/FrameSupport.h"
 #include "Core/SerialStudio.h"
+#include "Core/SSAssert.h"
 #include "DataModel/Project/QuickPlotProject.h"
 
 // Save as Project (spec 0100 R8/R9): a live Quick Plot structure becomes a project that reads the
@@ -85,6 +86,40 @@ static std::vector<DataModel::Group> readGroups(const QJsonObject& project)
   return groups;
 }
 
+/**
+ * @brief The format of an unwrapped positional comma stream, the one the plain template covers.
+ */
+[[nodiscard]] static DataModel::LineFormat plainComma()
+{
+  return DataModel::LineFormat{};
+}
+
+/**
+ * @brief Builds the project for @p groups and @p format and reads its single source back.
+ */
+[[nodiscard]] static DataModel::Source buildSource(const std::vector<DataModel::Group>& groups,
+                                                   const DataModel::LineFormat& format)
+{
+  const auto project = DataModel::QuickPlotProject::build(
+    groups, static_cast<int>(SerialStudio::BusType::UART), QJsonObject(), format);
+
+  DataModel::Source source;
+  const auto sources = project.value(Keys::Sources).toArray();
+  SS_ASSERT_LOG(!sources.isEmpty());
+  if (!sources.isEmpty())
+    DataModel::read(source, sources.first().toObject());
+
+  return source;
+}
+
+/**
+ * @brief The string parameter @p key of a generated source's template parameters.
+ */
+[[nodiscard]] static QString param(const DataModel::Source& source, const QString& key)
+{
+  return source.frameParserParams.value(key).toString();
+}
+
 //--------------------------------------------------------------------------------------------------
 // Test class
 //--------------------------------------------------------------------------------------------------
@@ -105,6 +140,12 @@ private slots:
   void projectNeedsNoPro();
   void audioFftSettingsCarryOver();
   void emptyStructureYieldsNothing();
+  void semicolonDecimalCommaEmitsLineValues();
+  void namedStreamEmitsFieldOrder();
+  void jsonStreamEmitsPaths();
+  void unitsForceLineValues();
+  void wrapperForcesLineValues();
+  void spaceSeparatorName();
 };
 
 /**
@@ -121,8 +162,11 @@ void QuickPlotProjectTest::initTestCase()
  */
 void QuickPlotProjectTest::sourceKeepsQuickPlotFraming()
 {
-  const auto project = DataModel::QuickPlotProject::build(
-    quickPlotGroups({"a", "b"}), static_cast<int>(SerialStudio::BusType::UART), QJsonObject());
+  const auto project =
+    DataModel::QuickPlotProject::build(quickPlotGroups({"a", "b"}),
+                                       static_cast<int>(SerialStudio::BusType::UART),
+                                       QJsonObject(),
+                                       plainComma());
 
   const auto sources = project.value(Keys::Sources).toArray();
   QCOMPARE(sources.size(), 1);
@@ -142,8 +186,11 @@ void QuickPlotProjectTest::sourceKeepsQuickPlotFraming()
  */
 void QuickPlotProjectTest::sourceUsesTheFreeCommaParser()
 {
-  const auto project = DataModel::QuickPlotProject::build(
-    quickPlotGroups({"a"}), static_cast<int>(SerialStudio::BusType::UART), QJsonObject());
+  const auto project =
+    DataModel::QuickPlotProject::build(quickPlotGroups({"a"}),
+                                       static_cast<int>(SerialStudio::BusType::UART),
+                                       QJsonObject(),
+                                       plainComma());
 
   DataModel::Source source;
   QVERIFY(DataModel::read(source, project.value(Keys::Sources).toArray().first().toObject()));
@@ -163,7 +210,7 @@ void QuickPlotProjectTest::sourceCarriesTheConnectionSettings()
     {QStringLiteral("baudRate"), 115200}
   };
   const auto project = DataModel::QuickPlotProject::build(
-    quickPlotGroups({"a"}), static_cast<int>(SerialStudio::BusType::UART), settings);
+    quickPlotGroups({"a"}), static_cast<int>(SerialStudio::BusType::UART), settings, plainComma());
 
   DataModel::Source source;
   QVERIFY(DataModel::read(source, project.value(Keys::Sources).toArray().first().toObject()));
@@ -176,8 +223,11 @@ void QuickPlotProjectTest::sourceCarriesTheConnectionSettings()
 void QuickPlotProjectTest::groupsKeepTitlesIndicesAndPlots()
 {
   const QStringList titles{"Temperature", "Humidity", "Pressure"};
-  const auto groups = readGroups(DataModel::QuickPlotProject::build(
-    quickPlotGroups(titles), static_cast<int>(SerialStudio::BusType::UART), QJsonObject()));
+  const auto groups =
+    readGroups(DataModel::QuickPlotProject::build(quickPlotGroups(titles),
+                                                  static_cast<int>(SerialStudio::BusType::UART),
+                                                  QJsonObject(),
+                                                  plainComma()));
 
   QCOMPARE(groups.size(), size_t(2));
   QCOMPARE(groups[0].widget, QStringLiteral("datagrid"));
@@ -197,8 +247,11 @@ void QuickPlotProjectTest::groupsKeepTitlesIndicesAndPlots()
  */
 void QuickPlotProjectTest::liveValuesAndRuntimeIdsAreDropped()
 {
-  const auto groups = readGroups(DataModel::QuickPlotProject::build(
-    quickPlotGroups({"a"}), static_cast<int>(SerialStudio::BusType::UART), QJsonObject()));
+  const auto groups =
+    readGroups(DataModel::QuickPlotProject::build(quickPlotGroups({"a"}),
+                                                  static_cast<int>(SerialStudio::BusType::UART),
+                                                  QJsonObject(),
+                                                  plainComma()));
 
   QVERIFY(!groups.empty());
   QVERIFY(groups[0].uniqueId != 900000);
@@ -211,8 +264,11 @@ void QuickPlotProjectTest::liveValuesAndRuntimeIdsAreDropped()
  */
 void QuickPlotProjectTest::projectNeedsNoPro()
 {
-  const auto groups = readGroups(DataModel::QuickPlotProject::build(
-    quickPlotGroups({"a", "b"}), static_cast<int>(SerialStudio::BusType::UART), QJsonObject()));
+  const auto groups =
+    readGroups(DataModel::QuickPlotProject::build(quickPlotGroups({"a", "b"}),
+                                                  static_cast<int>(SerialStudio::BusType::UART),
+                                                  QJsonObject(),
+                                                  plainComma()));
 
   const auto summary = SerialStudio::proContentSummary(groups, 0);
   QCOMPARE(summary.transforms, 0);
@@ -236,7 +292,7 @@ void QuickPlotProjectTest::audioFftSettingsCarryOver()
   live[0].datasets[0].pltMax          = 1.0;
 
   const auto groups = readGroups(DataModel::QuickPlotProject::build(
-    live, static_cast<int>(SerialStudio::BusType::UART), QJsonObject()));
+    live, static_cast<int>(SerialStudio::BusType::UART), QJsonObject(), plainComma()));
 
   QVERIFY(!groups.empty());
   const auto& dataset = groups[0].datasets[0];
@@ -253,8 +309,95 @@ void QuickPlotProjectTest::audioFftSettingsCarryOver()
 void QuickPlotProjectTest::emptyStructureYieldsNothing()
 {
   const auto project = DataModel::QuickPlotProject::build(
-    {}, static_cast<int>(SerialStudio::BusType::UART), QJsonObject());
+    {}, static_cast<int>(SerialStudio::BusType::UART), QJsonObject(), plainComma());
   QVERIFY(project.isEmpty());
+}
+
+/**
+ * @brief A semicolon stream with decimal commas needs line_values to read it back.
+ */
+void QuickPlotProjectTest::semicolonDecimalCommaEmitsLineValues()
+{
+  DataModel::LineFormat format;
+  format.separator    = ';';
+  format.decimalComma = true;
+  const auto source   = buildSource(quickPlotGroups({"a", "b"}), format);
+
+  QCOMPARE(source.frameParserTemplate, QStringLiteral("line_values"));
+  QCOMPARE(param(source, "format"), QStringLiteral("delimited"));
+  QCOMPARE(param(source, "separator"), QStringLiteral("semicolon"));
+  QCOMPARE(source.frameParserParams.value(QStringLiteral("decimalComma")).toBool(), true);
+  QCOMPARE(param(source, "fields"), QString());
+}
+
+/**
+ * @brief A named stream pins the field order to the data grid's titles.
+ */
+void QuickPlotProjectTest::namedStreamEmitsFieldOrder()
+{
+  DataModel::LineFormat format;
+  format.named      = true;
+  const auto source = buildSource(quickPlotGroups({"temp", "hum"}), format);
+
+  QCOMPARE(source.frameParserTemplate, QStringLiteral("line_values"));
+  QCOMPARE(param(source, "separator"), QStringLiteral("comma"));
+  QCOMPARE(param(source, "fields"), QStringLiteral("temp,hum"));
+}
+
+/**
+ * @brief A JSON stream pins the leaf paths, in index order.
+ */
+void QuickPlotProjectTest::jsonStreamEmitsPaths()
+{
+  DataModel::LineFormat format;
+  format.kind       = DataModel::LineFormatKind::Json;
+  format.named      = true;
+  const auto source = buildSource(quickPlotGroups({"imu.ax", "imu.g[0]", "t"}), format);
+
+  QCOMPARE(source.frameParserTemplate, QStringLiteral("line_values"));
+  QCOMPARE(param(source, "format"), QStringLiteral("json"));
+  QCOMPARE(param(source, "fields"), QStringLiteral("imu.ax,imu.g[0],t"));
+}
+
+/**
+ * @brief A dataset unit cannot ride the plain template, so it forces line_values.
+ */
+void QuickPlotProjectTest::unitsForceLineValues()
+{
+  auto groups                 = quickPlotGroups({"a", "b"});
+  groups[0].datasets[0].units = QStringLiteral("V");
+  const auto source           = buildSource(groups, plainComma());
+
+  QCOMPARE(source.frameParserTemplate, QStringLiteral("line_values"));
+  QCOMPARE(param(source, "fields"), QString());
+  QCOMPARE(param(source, "separator"), QStringLiteral("comma"));
+}
+
+/**
+ * @brief A wrapped line cannot ride the plain template, so it forces line_values.
+ */
+void QuickPlotProjectTest::wrapperForcesLineValues()
+{
+  DataModel::LineFormat format;
+  format.wrapper    = true;
+  const auto source = buildSource(quickPlotGroups({"a"}), format);
+
+  QCOMPARE(source.frameParserTemplate, QStringLiteral("line_values"));
+}
+
+/**
+ * @brief Space and tab separators get their option names.
+ */
+void QuickPlotProjectTest::spaceSeparatorName()
+{
+  DataModel::LineFormat format;
+  format.separator = ' ';
+  QCOMPARE(param(buildSource(quickPlotGroups({"a", "b"}), format), "separator"),
+           QStringLiteral("space"));
+
+  format.separator = '\t';
+  QCOMPARE(param(buildSource(quickPlotGroups({"a", "b"}), format), "separator"),
+           QStringLiteral("tab"));
 }
 
 QTEST_APPLESS_MAIN(QuickPlotProjectTest)

@@ -104,7 +104,7 @@ A dashboard-level event — Info, Warning, or Critical — posted from frame par
 
 ## Operation mode
 
-How a connection treats incoming data: **Console Only** (no parsing), **Quick Plot** (auto-plot comma-separated values), or **Project File** (parse with a `.ssproj`). See [Operation Modes](Operation-Modes.md).
+How a connection treats incoming data: **Console Only** (no parsing), **Quick Plot** (auto-plot one line of values per sample in a detected format), or **Project File** (parse with a `.ssproj`). See [Operation Modes](Operation-Modes.md).
 
 ## Plugin
 
@@ -124,7 +124,7 @@ The JSON document that defines a dashboard: frame detection, groups, datasets, w
 
 ## Quick Plot
 
-The zero-configuration mode that treats each line as a frame and each comma-separated field as a dataset, auto-creating one plot per field. See [Operation Modes](Operation-Modes.md).
+The zero-configuration mode that treats each line as a frame and each field of the line as a dataset, auto-creating one plot per field. See [Operation Modes](Operation-Modes.md).
 
 ## Setup panel
 

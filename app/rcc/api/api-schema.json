@@ -4677,7 +4677,7 @@
                 "type": "integer"
             },
             "operationMode": {
-                "description": "0=ProjectFile (default; runs decoder + parser), 2=QuickPlot (line extractor, comma-split, parser is bypassed). 1=ConsoleOnly is invalid for dryRun.",
+                "description": "0=ProjectFile (default; runs decoder + parser), 2=QuickPlot (line extractor, auto-detected field split, parser is bypassed). 1=ConsoleOnly is invalid for dryRun.",
                 "type": "integer"
             }
         },

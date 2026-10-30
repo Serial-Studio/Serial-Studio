@@ -428,10 +428,13 @@ bool DataModel::ProjectModel::saveQuickPlotAsProject()
   if (modules.appState.operationMode() != SerialStudio::QuickPlot || !m_persistence.askSave())
     return false;
 
+  LineFormat format;
   std::vector<Group> groups;
   auto& frameBuilder = modules.frameBuilder;
-  frameBuilder.invokeOnBuilderThreadBlocking(
-    [&] { groups = frameBuilder.quickPlotFrame().groups; });
+  frameBuilder.invokeOnBuilderThreadBlocking([&] {
+    groups = frameBuilder.quickPlotFrame().groups;
+    format = frameBuilder.quickPlotFormat();
+  });
   if (groups.empty())
     return false;
 
@@ -439,7 +442,7 @@ bool DataModel::ProjectModel::saveQuickPlotAsProject()
   const int busType = driver ? driver->busType : static_cast<int>(SerialStudio::BusType::UART);
 
   const auto project =
-    QuickPlotProject::build(groups, busType, driver ? driver->settings : QJsonObject());
+    QuickPlotProject::build(groups, busType, driver ? driver->settings : QJsonObject(), format);
   if (project.isEmpty())
     return false;
 

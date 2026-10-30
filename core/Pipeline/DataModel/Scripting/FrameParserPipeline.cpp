@@ -29,6 +29,7 @@
 #include "DataModel/Scripting/FrameParser.h"
 #include "DataModel/Scripting/IScriptEngine.h"
 #include "DataModel/Scripting/JsScriptEngine.h"
+#include "DataModel/Scripting/LineFormat.h"
 #include "DataModel/Scripting/LuaScriptEngine.h"
 #include "IO/FrameReader.h"
 
@@ -166,7 +167,9 @@ void DataModel::decodeAndParseFrame(const QByteArray& rawFrame,
 }
 
 /**
- * @brief Comma split (whitespace stripped) producing one channel row per frame.
+ * @brief Quick Plot preview split for the dry-run API (spec 0106): detects the line's format and
+ *        returns its raw fields as one row, a JSON line as path:value cells; a text line falls
+ *        back to the comma split.
  */
 void DataModel::splitQuickPlotChannels(const QByteArray& rawFrame, QList<QStringList>& outChannels)
 {
@@ -174,34 +177,29 @@ void DataModel::splitQuickPlotChannels(const QByteArray& rawFrame, QList<QString
   if (rawFrame.isEmpty())
     return;
 
-  QStringList row;
-  row.reserve(16);
-
-  const char* raw      = rawFrame.constData();
-  const int dataLength = rawFrame.size();
-  int start            = 0;
-  for (int i = 0; i <= dataLength; ++i) {
-    if (i == dataLength || raw[i] == ',') {
-      int s = start;
-      int e = i;
-      while (s < e && (raw[s] == ' ' || raw[s] == '\t' || raw[s] == '\r' || raw[s] == '\n'))
-        ++s;
-      while (
-        e > s
-        && (raw[e - 1] == ' ' || raw[e - 1] == '\t' || raw[e - 1] == '\r' || raw[e - 1] == '\n'))
-        --e;
-
-      if (e > s)
-        row.append(QString::fromUtf8(raw + s, e - s));
-      else
-        row.append(QString());
-
-      start = i + 1;
-    }
+  LineFormat format;
+  LineFields fields;
+  if (!detectLineFormat(rawFrame, format, fields)) {
+    format = LineFormat();
+    (void)tokenizeLine(rawFrame, format, fields);
   }
 
-  if (!row.isEmpty())
-    outChannels.append(std::move(row));
+  SS_ASSERT(fields.count >= 0, return);
+  SS_ASSERT(kMaxLineFields >= fields.count, return);
+  if (fields.count == 0)
+    return;
+
+  QStringList row;
+  row.reserve(static_cast<int>(fields.count));
+  for (qsizetype i = 0; i < fields.count; ++i) {
+    const auto& field = fields.items[static_cast<size_t>(i)];
+    if (format.kind == LineFormatKind::Json)
+      row.append(QString::fromUtf8(field.name) + QLatin1Char(':') + QString::fromUtf8(field.value));
+    else
+      row.append(QString::fromUtf8(field.token));
+  }
+
+  outChannels.append(std::move(row));
 }
 
 //--------------------------------------------------------------------------------------------------

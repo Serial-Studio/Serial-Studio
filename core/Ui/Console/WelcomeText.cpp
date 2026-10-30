@@ -144,6 +144,7 @@ QString Console::noDataHint(const bool bytesReceived)
 
   return QObject::tr("Data is arriving, but no complete frame was detected. Check the line "
                      "ending or frame delimiters and the Operation Mode. Problem Center shows "
-                     "what the link reports.")
+                     "what the link reports. In Quick Plot, a line such as 23.5,60 or "
+                     "temp:23.5, hum:60 is enough.")
        + QStringLiteral("\n");
 }

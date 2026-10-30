@@ -133,6 +133,7 @@ public:
 
   [[nodiscard]] const DataModel::Frame& frame() const noexcept;
   [[nodiscard]] const DataModel::Frame& quickPlotFrame() const noexcept;
+  [[nodiscard]] const DataModel::LineFormat& quickPlotFormat() const noexcept;
   [[nodiscard]] const DataModel::DataTableStore& tableStore() const noexcept;
   [[nodiscard]] DataModel::DataTableStore& tableStore() noexcept;
   [[nodiscard]] const LatestFrameInfo* latestFrame(int sourceId) const noexcept;
@@ -275,7 +276,6 @@ private:
 
   Core::Bus::MessageBus& m_bus;
   DataModel::CachedFlagChecker m_flagChecker;
-  int m_quickPlotChannels;
   bool m_parseBudgetEnabled;
   bool m_lastConnectedState;
   bool m_lastPausedState;

@@ -83,7 +83,7 @@ The Operation Mode group has three options that pick the [operation mode](Operat
 | Option | What it does |
 |--------|--------------|
 | **Console Only** | Raw bytes go straight to the terminal. No widgets, no parsing. |
-| **Quick Plot** | Auto-builds a dashboard from comma-separated numbers. |
+| **Quick Plot** | Auto-builds a dashboard from lines of numbers in a detected format. |
 | **Project File** | Uses a `.ssproj` project to parse frames and build a custom dashboard. Disabled while connected or while a file player is open. |
 
 ### Connection

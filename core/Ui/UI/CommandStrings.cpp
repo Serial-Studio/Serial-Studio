@@ -355,7 +355,7 @@
   QT_TRANSLATE_NOOP("Commands", "Stopwatch"),
   QT_TRANSLATE_NOOP("Commands", "Switch to Console Only mode (no parsing)"),
   QT_TRANSLATE_NOOP("Commands", "Switch to Project File mode (parse via a project)"),
-  QT_TRANSLATE_NOOP("Commands", "Switch to Quick Plot mode (comma-separated values)"),
+  QT_TRANSLATE_NOOP("Commands", "Switch to Quick Plot mode (auto-detected line format)"),
   QT_TRANSLATE_NOOP("Commands", "Table"),
   QT_TRANSLATE_NOOP("Commands", "Test Alarm Sounds"),
   QT_TRANSLATE_NOOP("Commands", "Text Field"),

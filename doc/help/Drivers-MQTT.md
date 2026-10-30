@@ -65,7 +65,7 @@ For step-by-step instructions, see the [Protocol Setup Guides, MQTT section](Pro
 
 The driver is transport-only. It does not decode the payload; it hands the bytes to the project's frame parser:
 
-- **Quick Plot mode** expects comma-separated numeric values (`23.5,48.2,1013.25\n`). Each MQTT message should be a complete line.
+- **Quick Plot mode** expects one line of numeric values per message in any of its detected formats (`23.5,48.2,1013.25\n`). Each MQTT message should be a complete line.
 - **Project File mode** expects whatever the project's JavaScript or Lua parser is written to accept. JSON, CSV, fixed-byte structs, and binary protocols all work the same as on any other driver.
 - **Console Only mode** displays the payload as-is in the terminal.
 

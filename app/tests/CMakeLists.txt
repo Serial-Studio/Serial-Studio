@@ -389,6 +389,49 @@ ss_add_unit_test(tst_quickplot_project
 )
 
 #
+# Quick Plot line grammar (spec 0106): separator and decimal-comma detection, name:value pairs,
+# units, the comment wrapper, the number grammar and the order-preserving JSON leaf scanner.
+#
+ss_add_unit_test(tst_line_format
+  SOURCES tst_line_format.cpp
+          ${SS_CORE_SRC}/Pipeline/DataModel/Scripting/LineFormat.cpp
+          ${SS_CORE_SRC}/Pipeline/DataModel/Scripting/JsonLeafScanner.cpp
+  LIBS    Qt6::Core
+          SerialStudio::Core
+)
+
+#
+# Quick Plot format state (spec 0106): the 35-stream corpus of outcomes, channel titles, units and
+# values, the rebuild budget, the replay pin and the reset.
+#
+ss_add_unit_test(tst_quickplot_format_state
+  SOURCES tst_quickplot_format_state.cpp
+          ${SS_CORE_SRC}/Pipeline/DataModel/Scripting/LineFormat.cpp
+          ${SS_CORE_SRC}/Pipeline/DataModel/Scripting/JsonLeafScanner.cpp
+          ${SS_CORE_SRC}/Pipeline/DataModel/FrameBuilder/QuickPlotFormatState.cpp
+  LIBS    Qt6::Core
+          SerialStudio::Core
+)
+
+#
+# Quick Plot to project round trip (spec 0106 AC5): the saved project parses a line to the values
+# the live lane showed.
+#
+ss_add_unit_test(tst_quickplot_roundtrip
+  SOURCES tst_quickplot_roundtrip.cpp
+          ${SS_CORE_SRC}/Pipeline/DataModel/Scripting/LineFormat.cpp
+          ${SS_CORE_SRC}/Pipeline/DataModel/Scripting/JsonLeafScanner.cpp
+          ${SS_CORE_SRC}/Pipeline/DataModel/FrameBuilder/QuickPlotFormatState.cpp
+          ${SS_CORE_SRC}/Pipeline/DataModel/Project/QuickPlotProject.cpp
+          ${SS_CORE_SRC}/Pipeline/DataModel/Scripting/NativeTemplates/NativeTemplate.cpp
+          ${SS_CORE_SRC}/Pipeline/DataModel/Scripting/NativeTemplates/NativeTemplateSupport.cpp
+          ${SS_CORE_SRC}/Pipeline/DataModel/Scripting/NativeTemplates/TextDelimited.cpp
+          ${SS_CORE_SRC}/Pipeline/DataModel/Scripting/NativeTemplates/TextLineValues.cpp
+  LIBS    Qt6::Core
+          SerialStudio::Core
+)
+
+#
 # Group widget requirements (spec 0100 R15/R16): the one rule the group editor warning and the
 # Problem Center finding share, matched to the tags the dashboard widgets bind by.
 #

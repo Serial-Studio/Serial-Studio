@@ -658,7 +658,7 @@ template
 - **Industrial:** PLC with serial/Modbus output
 
 ### Step 3: Select Serial Studio Mode
-- **Quick Plot:** For simple comma-separated values
+- **Quick Plot:** For simple lines of values
 - **Project File:** For custom dashboards with multiple widgets
 - **Console Only:** Raw terminal view for protocol bring-up and debugging
 

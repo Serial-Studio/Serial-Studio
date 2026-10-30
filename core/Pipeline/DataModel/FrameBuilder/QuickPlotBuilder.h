@@ -21,19 +21,24 @@
 
 #pragma once
 
+#include <array>
+#include <QByteArray>
+#include <QByteArrayView>
 #include <QCoreApplication>
+#include <QString>
 #include <QStringList>
 
 #include "Core/DataModel/Frame.h"
 #include "Core/SerialStudio.h"
+#include "DataModel/FrameBuilder/QuickPlotFormatState.h"
 
 namespace DataModel {
 
 /**
- * @brief Owns the synthetic Quick Plot frame and the header state it titles channels from.
- *        Structure only: the frame is rebuilt on a channel-count change, an audio channel
- *        layout announcement, or a header row, never per frame. Per-frame value writes and
- *        block staging stay in the frame builder, which reaches the frame through frame().
+ * @brief Owns the synthetic Quick Plot frame, the format state that titles its channels, and the
+ *        per-line field scratch. Structure is rebuilt only on a Rebuild outcome, an audio layout
+ *        announcement or a header registration, never per frame; applyFields writes one line's
+ *        values in place and the frame builder stages the result through frame().
  */
 class QuickPlotBuilder {
   Q_DECLARE_TR_FUNCTIONS(DataModel::QuickPlotBuilder)
@@ -49,18 +54,35 @@ public:
 
   [[nodiscard]] DataModel::Frame& frame() noexcept { return m_frame; }
 
+  [[nodiscard]] const LineFormat& format() const noexcept { return m_state.format(); }
+
+  [[nodiscard]] qsizetype tokenSpans(const QByteArrayView*& spans) noexcept;
+  [[nodiscard]] QuickPlotLineOutcome observeReplayRow(QByteArrayView row);
+  [[nodiscard]] QuickPlotLineOutcome observe(QByteArrayView line);
+
   void setHeaders(const QStringList& headers);
-  void build(const QStringList& channels);
   void buildAudio(const QStringList& channels);
+  void pinPositional(int count);
+  void applyFields();
+  void build();
+  void reset();
 
 private:
   [[nodiscard]] DataModel::Source makeSource() const;
+  [[nodiscard]] QString channelTitle(int index) const;
+  void applyField(DataModel::Dataset& dataset, int fieldIndex);
+  void mapFieldsToChannels() noexcept;
 
 private:
   const SerialStudio::OperationMode& m_operationMode;
   bool m_hasHeader;
   QStringList m_channelNames;
+  QByteArray m_replayScratch;
   DataModel::Frame m_frame;
+  LineFields m_fields;
+  QuickPlotFormatState m_state;
+  std::array<int, kMaxLineFields> m_fieldOfChannel;
+  std::array<QByteArrayView, kMaxLineFields> m_tokenSpans;
 };
 
 }  // namespace DataModel

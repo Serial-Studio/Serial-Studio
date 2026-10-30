@@ -26,6 +26,7 @@
 #include "DataModel/Scripting/NativeTemplates/TextIniConfig.h"
 #include "DataModel/Scripting/NativeTemplates/TextJsonData.h"
 #include "DataModel/Scripting/NativeTemplates/TextKeyValue.h"
+#include "DataModel/Scripting/NativeTemplates/TextLineValues.h"
 #include "DataModel/Scripting/NativeTemplates/TextNmea0183.h"
 #include "DataModel/Scripting/NativeTemplates/TextUrlEncoded.h"
 #include "DataModel/Scripting/NativeTemplates/TextXmlData.h"
@@ -43,6 +44,7 @@
 QList<const DataModel::INativeTemplate*> DataModel::textNativeTemplates()
 {
   return {&delimitedTextTemplate(),
+          &lineValuesTemplate(),
           &fixedWidthTemplate(),
           &keyValueTemplate(),
           &iniConfigTemplate(),

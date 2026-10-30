@@ -208,7 +208,7 @@ QString API::EnumLabels::operationModeLabel(int value)
     case SerialStudio::ConsoleOnly:
       return QStringLiteral("Console Only (raw terminal, no dashboard)");
     case SerialStudio::QuickPlot:
-      return QStringLiteral("Quick Plot (auto CSV plotting)");
+      return QStringLiteral("Quick Plot (auto-detected format)");
   }
   return QStringLiteral("Unknown");
 }

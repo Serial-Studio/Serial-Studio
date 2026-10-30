@@ -355,7 +355,7 @@ void TstEnumLabels::operationModeFullSweep_data()
                                << QStringLiteral("Console Only (raw terminal, no dashboard)");
   QTest::newRow("QuickPlot") << static_cast<int>(SerialStudio::QuickPlot)
                              << QStringLiteral("quick-plot")
-                             << QStringLiteral("Quick Plot (auto CSV plotting)");
+                             << QStringLiteral("Quick Plot (auto-detected format)");
 }
 
 /**

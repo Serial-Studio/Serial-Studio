@@ -77,8 +77,9 @@ static void write_rendered_strings(const UI::ValuePush& push, const double value
 
 /**
  * @brief Appends the newest @p count samples of @p column into a sample ring, dropping whatever
- *        the ring could not have kept anyway. Bounded twice over: by the block's sample cap and
- *        by the ring's capacity, so a 4096-sample block into a 1000-point plot costs 1000 stores.
+ *        the ring could not have kept anyway (bounded by the block cap and the ring capacity). A
+ *        non-finite sample, a channel with no value on that frame (spec 0106), is skipped as the
+ *        time rings already do, so an FFT input never sees a NaN.
  */
 static void push_ring_tail(DSP::AxisData& ring,
                            const DataModel::BlockColumn& column,
@@ -87,7 +88,8 @@ static void push_ring_tail(DSP::AxisData& ring,
   const std::size_t capacity = ring.capacity();
   const std::size_t first    = (count > capacity) ? (count - capacity) : 0;
   for (std::size_t i = first; i < count; ++i)
-    ring.push(column.values[i]);
+    if (std::isfinite(column.values[i]))
+      ring.push(column.values[i]);
 }
 
 //--------------------------------------------------------------------------------------------------

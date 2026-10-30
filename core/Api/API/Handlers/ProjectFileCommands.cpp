@@ -856,10 +856,11 @@ static QJsonObject buildSnapshotExplanations(const DataModel::ProjectModel& pm,
                              "no dashboard. Dataset/group config is inert until you switch to "
                              "ProjectFile or QuickPlot via project.frameParser.update.");
   } else if (operationMode == SerialStudio::QuickPlot) {
-    summary = QStringLiteral("Quick Plot mode: auto CSV plotting on CR/LF/CRLF delimiters. "
-                             "Frame parser code and most project config are bypassed -- "
-                             "Quick Plot generates datasets from comma-separated fields on "
-                             "each line.");
+    summary = QStringLiteral("Quick Plot mode: one line per sample on CR/LF/CRLF delimiters. The "
+                             "line format is detected from the first numeric line (comma, "
+                             "semicolon, tab or space separated values, name:value pairs, "
+                             "unit suffixes, one-line JSON) and datasets are generated from "
+                             "its fields.");
   } else {
     summary =
       QStringLiteral("Project File mode: %1 source(s), %2 group(s), %3 dataset(s), "

@@ -124,6 +124,44 @@ memory-budget machinery around it:
 `frameChanged` signal either.
 <!-- claim-verify on -->
 
+### The Quick Plot Lane (spec 0106)
+
+Quick Plot has no project: `FrameBuilder::parseQuickPlotFrame` hands each line to
+`DataModel::QuickPlotBuilder`, which owns the lane's state and field scratch, and stages the result
+through the same `BlockStager` as the project lanes. ONE tokenizer serves both the live lane and the
+`line_values` Built-In template: `DataModel::LineFormat` (`core/Pipeline/DataModel/Scripting/LineFormat.h`)
+detects a line's shape (separator comma, semicolon, tab or runs of spaces, a decimal comma,
+`name:value` pairs, unit suffixes, a slash-star wrapper) and tokenizes it into bounded
+`QByteArrayView` fields; `JsonLeafScanner` flattens a one-line JSON object into numeric leaves in
+text order (`QJsonObject` sorts keys, so it is never used on this path). Save as Project
+(`QuickPlotProject::build`) emits `delimited` for an unwrapped plain comma stream and `line_values`
+with the detected format otherwise, so the saved project parses what the dashboard showed by
+construction. A second splitter anywhere on that path makes the two diverge.
+
+- **State machine (`QuickPlotFormatState`).** Unestablished: a line qualifies when at least half
+  its fields are numeric; the first qualifying line fixes the format and builds the channel
+  registry (names or positions, plus the unit read once); a non-qualifying line is the header
+  candidate, accepted at establishment only when it is all text with the same field count.
+  Established: `observe` returns `Text` (no numeric field, stage nothing), `Rebuild` (a new name or
+  JSON path, a positional field-count change, or the ONE re-evaluation that fires when the fixed
+  format yields no number but a fresh detection qualifies) or `Apply`. Detection never runs per
+  line otherwise, and the caller rebuilds only through `invalidateFramePool()` + `build()`.
+- **Values.** `QuickPlotBuilder::applyFields` writes dataset strings in place and never allocates.
+  A present text field writes its text with `isNumeric` false and NaN; a missing field writes ONLY
+  NaN and leaves the flag and text as they were, because `!isNumeric && !value.isEmpty()` is the
+  multi-plot's text-channel test and the data grid re-formats on a flag or text change, so the gap
+  neither hides a curve nor re-renders a row. The time rings and `push_ring_tail` skip the NaN. A
+  text line in a positional comma stream used to be a one-field frame that rebuilt the dashboard
+  twice; it now stages nothing.
+- **Replay and audio pin.** `m_playerOpen` routes rows through `observeReplayRow` (the RFC-4180
+  cells under the byte-level `toDouble` grammar) and the audio template through `pinPositional`;
+  a pinned state never detects, so playback behavior is unchanged.
+- **Asserts.** The lane's TUs are outside the `hotpath-assert-scope` allowlist and use
+  `SS_ASSERT` with a recovery; `FrameBuilder.cpp` keeps `SS_ASSERT_HOTPATH`.
+- **Tests.** `tst_line_format` (grammar and scanner), `tst_quickplot_format_state` (the 35-stream
+  corpus, 4 rebuilds), `tst_quickplot_roundtrip` (saved project equals live parse),
+  `tst_quickplot_project` (which template Save as Project emits).
+
 ### The Session Boundary (spec 0075 A2)
 
 Recording sinks close on **`FrameBuilder::sessionBoundary(bool connected, bool paused)`**, not on

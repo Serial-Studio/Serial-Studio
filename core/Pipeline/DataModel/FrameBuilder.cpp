@@ -132,7 +132,6 @@ DataModel::FrameBuilder* DataModel::FrameBuilder::s_instance = nullptr;
 DataModel::FrameBuilder::FrameBuilder(Core::Bus::MessageBus& bus)
   : m_bus(bus)
   , m_flagChecker(this)
-  , m_quickPlotChannels(-1)
   , m_parseBudgetEnabled(true)
   , m_lastConnectedState(false)
   , m_lastPausedState(false)
@@ -502,6 +501,15 @@ void DataModel::FrameBuilder::setParseBudgetEnabled(bool enabled)
 const DataModel::Frame& DataModel::FrameBuilder::quickPlotFrame() const noexcept
 {
   return m_quickPlot.frame();
+}
+
+/**
+ * @brief The Quick Plot lane's detected format; Save as Project reads it in the same blocking
+ *        hop as the frame (spec 0106 R12).
+ */
+const DataModel::LineFormat& DataModel::FrameBuilder::quickPlotFormat() const noexcept
+{
+  return m_quickPlot.format();
 }
 
 /**
@@ -1058,8 +1066,8 @@ void DataModel::FrameBuilder::onOperationModeChanged()
   const auto mode       = pipeline.operationMode();
   SS_ASSERT(mode >= SerialStudio::ProjectFile && mode <= SerialStudio::QuickPlot, return);
 
-  m_operationMode     = mode;
-  m_quickPlotChannels = -1;
+  m_operationMode = mode;
+  m_quickPlot.reset();
   m_sourceFrames.clear();
   m_sourceFrameCounters.clear();
   m_republishGate.clear();
@@ -1130,8 +1138,8 @@ void DataModel::FrameBuilder::publishQuickPlotAudioTemplate(int channels)
     channelValues.append(QStringLiteral("0"));
 
   invalidateFramePool();
+  m_quickPlot.pinPositional(channels);
   m_quickPlot.buildAudio(channelValues);
-  m_quickPlotChannels = channels;
 
   const auto& quickPlotFrame = m_quickPlot.frame();
   if (!quickPlotFrame.groups.empty())
@@ -1433,7 +1441,7 @@ void DataModel::FrameBuilder::onConnectedChanged()
     return;
 
   m_lastConnectedState = nowConnected;
-  m_quickPlotChannels  = -1;
+  m_quickPlot.reset();
 
   emitSessionBoundary();
 
@@ -2553,7 +2561,10 @@ SS_HOT void DataModel::FrameBuilder::applyDatasetValuesCells(DataModel::Frame& f
 }
 
 /**
- * @brief Parses and updates the Quick Plot frame with incoming CSV values.
+ * @brief Parses one Quick Plot line (spec 0106): the builder detects the format once per connect
+ *        and classifies every line; text lines and header candidates stage nothing, a changed
+ *        channel set rebuilds the structure first, and an accepted line's values are staged with
+ *        the driver's timestamp. Replay rows take the pinned positional adapter.
  */
 void DataModel::FrameBuilder::parseQuickPlotFrame(const IO::CapturedDataPtr& data)
 {
@@ -2561,62 +2572,30 @@ void DataModel::FrameBuilder::parseQuickPlotFrame(const IO::CapturedDataPtr& dat
   SS_ASSERT_HOTPATH(!data->data.isEmpty());
   SS_ASSERT_HOTPATH(m_operationMode == SerialStudio::QuickPlot);
 
-  QList<QStringList> splitRows;
-  if (m_playerOpen) [[unlikely]]
-    DataModel::splitReplayChannels(data->data, splitRows);
-  else
-    DataModel::splitQuickPlotChannels(data->data, splitRows);
+  const QByteArrayView line(data->data);
+  const auto outcome =
+    m_playerOpen ? m_quickPlot.observeReplayRow(line) : m_quickPlot.observe(line);
 
-  static const QStringList kNoChannels;
-  const QStringList& channels = splitRows.isEmpty() ? kNoChannels : splitRows.constFirst();
+  if (m_captureLatestFrame) [[unlikely]] {
+    const QByteArrayView* spans = nullptr;
+    const qsizetype count       = std::min(m_quickPlot.tokenSpans(spans), kMaxSpanFields);
+    if (count > 0)
+      captureLatestChannelSpans(0, spans, count);
+  }
 
-  const int channelCount = channels.size();
-  if (channelCount <= 0)
+  if (outcome == QuickPlotLineOutcome::Text || outcome == QuickPlotLineOutcome::Header)
     return;
 
-  if (m_captureLatestFrame) [[unlikely]]
-    captureLatestChannels(0, channels);
-
-  if (m_quickPlotChannels == -1) {
-    bool allNonNumeric = true;
-    for (const auto& channel : std::as_const(channels)) {
-      bool isNumeric = false;
-      (void)SerialStudio::toDouble(channel, &isNumeric);
-      if (!isNumeric)
-        continue;
-
-      allNonNumeric = false;
-      break;
-    }
-
-    if (allNonNumeric) {
-      m_quickPlot.setHeaders(channels);
-      return;
-    }
-  }
-
-  if (channelCount != m_quickPlotChannels) [[unlikely]] {
+  if (outcome == QuickPlotLineOutcome::Rebuild) [[unlikely]] {
     invalidateFramePool();
-    m_quickPlot.build(channels);
-    m_quickPlotChannels = channelCount;
+    m_quickPlot.build();
   }
 
-  auto& quickPlotFrame    = m_quickPlot.frame();
-  const auto* channelData = channels.constData();
-  const size_t groupCount = quickPlotFrame.groups.size();
-  for (size_t g = 0; g < groupCount; ++g) {
-    auto& group               = quickPlotFrame.groups[g];
-    const size_t datasetCount = group.datasets.size();
-    for (size_t d = 0; d < datasetCount; ++d) {
-      auto& dataset = group.datasets[d];
-      const int idx = dataset.index;
-      if (idx > 0 && idx <= channelCount) [[likely]] {
-        dataset.value        = channelData[idx - 1];
-        dataset.numericValue = SerialStudio::toDouble(dataset.value, &dataset.isNumeric);
-      }
-    }
-  }
+  auto& quickPlotFrame = m_quickPlot.frame();
+  if (quickPlotFrame.groups.empty()) [[unlikely]]
+    return;
 
+  m_quickPlot.applyFields();
   m_stager.stage(quickPlotFrame.sourceId, quickPlotFrame, data->timestamp);
 }
 

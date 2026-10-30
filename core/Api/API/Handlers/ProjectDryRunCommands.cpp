@@ -171,8 +171,8 @@ void API::Handlers::ProjectDryRunCommands::registerFrameParserDryRunCommands()
        {QStringLiteral("operationMode"),
         QStringLiteral("integer"),
         QStringLiteral("0=ProjectFile (default; runs decoder + parser), 2=QuickPlot (line "
-                       "extractor, comma-split, parser is bypassed). 1=ConsoleOnly is invalid "
-                       "for dryRun.")}}),
+                       "extractor, auto-detected field split, parser is bypassed). 1=ConsoleOnly "
+                       "is invalid for dryRun.")}}),
     &frameParserDryRun);
 
   registry.registerCommand(

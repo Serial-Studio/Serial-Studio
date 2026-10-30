@@ -10,7 +10,7 @@ Serial Studio is a cross-platform telemetry dashboard for visualizing real-time 
 - **15+ widget types.** Plot, Multi-Plot, FFT Plot, Bar, Gauge, Compass, Meter, Gyroscope, Accelerometer, GPS Map, Data Grid, LED Panel, Terminal, 3D Plot (Pro), Image View (Pro), plus Clock and Stopwatch utility widgets. The Plot widget can take its X axis from another dataset for XY/scatter plots. Bar, Gauge, Meter, and Compass each ship as a two-page swipe view (analog face + large digital readout) so the same tile shows both a quick-glance summary and the exact numeric value.
 - **Export.** Save sessions to CSV, or to MDF4 and the Historian (both Pro), for offline analysis.
 - **Performance.** Built with Qt 6 and C++20, aimed at 256 kHz+ data rates.
-- **Three operation modes.** Console Only for inspecting the raw stream, Quick Plot for instant CSV visualization, and Project File for fully customized dashboards.
+- **Three operation modes.** Console Only for inspecting the raw stream, Quick Plot for instant visualization of text lines, and Project File for fully customized dashboards.
 
 It handles the visualization layer for a range of cases: reading temperature from an Arduino, monitoring a CAN Bus in a vehicle, or building a ground station for a rocket.
 
@@ -104,7 +104,7 @@ You can resize the Device Setup panel by dragging its left edge to give the Dash
 
 ## Your first connection: Quick Plot mode
 
-This is the fastest way to get data on screen. The example uses an Arduino, but the approach works with any device that sends comma-separated values over a serial port.
+This is the fastest way to get data on screen. The example uses an Arduino, but the approach works with any device that prints numbers, one line per sample, over a serial port.
 
 ### Step 1: prepare your device
 
@@ -115,26 +115,32 @@ void setup() {
   Serial.begin(115200);
   pinMode(A0, INPUT);
   pinMode(A1, INPUT);
-  pinMode(A2, INPUT);
 }
 
 void loop() {
-  Serial.print(analogRead(A0));
-  Serial.print(",");
-  Serial.print(analogRead(A1));
-  Serial.print(",");
-  Serial.print(analogRead(A2));
-  Serial.print("\n");
+  float t = analogRead(A0) * 0.1;
+  float h = analogRead(A1) / 10.0;
+  Serial.print("temp:");
+  Serial.print(t);
+  Serial.print(", hum:");
+  Serial.println(h);
   delay(20);
 }
 ```
 
-The only requirement is that your device sends comma-separated numeric values terminated by a newline (`\n`, `\r`, or `\r\n`). For example: `512,1023,300\n`.
+The requirement is that your device prints numbers, one line per sample, ended by a newline (`\n`, `\r`, or `\r\n`). Serial Studio detects the line format from the first line: `temp:23.5, hum:60`. Names such as `temp` and `hum` title the channels.
+
+Plain comma-separated values work too, with an optional header row of the same width before the first data line:
+
+```
+Temperature,Pressure,Humidity
+23.5,1013.2,45.0
+```
 
 ### Step 2: configure Serial Studio
 
 1. Open Serial Studio.
-2. In the Device Setup panel on the right, set **Operation Mode** to **Quick Plot (Comma Separated Values)**.
+2. In the Device Setup panel on the right, set **Operation Mode** to **Quick Plot (Auto-Detected Format)**.
 3. Set **Connection** to **UART**.
 4. Pick your device's port in **COM Port** on Windows or **Serial Port** elsewhere (for example `COM3` on Windows, `/dev/ttyUSB0` on Linux, `/dev/cu.usbmodem*` on macOS).
 5. Set the baud rate to `115200` (it has to match the value in your Arduino sketch).
@@ -143,9 +149,9 @@ The only requirement is that your device sends comma-separated numeric values te
 
 Click the **Connect** button in the toolbar. Then:
 
-1. The Console panel displays raw incoming CSV data.
+1. The Console panel displays the raw incoming lines.
 2. After a moment, Serial Studio detects valid frames and switches to the Dashboard.
-3. The Dashboard shows a Data Grid with your current values and a Multi-Plot with one line per CSV field.
+3. The Dashboard shows a Data Grid with your current values and a Multi-Plot with one line per field.
 
 That's all. No project file, no JSON, just connect and visualize.
 
@@ -187,7 +193,7 @@ No dashboard, no CSV export, no parsing. Once the stream looks correct, switch t
 
 ## Choosing an operation mode
 
-Start with Quick Plot if your device prints comma-separated lines, move to Project File when you want your own widgets, labels, and units, and use Console Only to inspect a stream you do not understand yet. [Operation Modes](Operation-Modes.md) compares the three in detail.
+Start with Quick Plot if your device prints numbers one line per sample, move to Project File when you want your own widgets, labels, and units, and use Console Only to inspect a stream you do not understand yet. [Operation Modes](Operation-Modes.md) compares the three in detail.
 
 ## Common first-time issues
 
@@ -208,7 +214,7 @@ The [Problem Center](Problem-Center.md) (the **Problem Center** button in the to
 
 ### Console shows data but no dashboard
 
-- In Quick Plot mode, make sure the device sends comma-separated numeric values terminated by a newline. Non-numeric text (other than numbers, commas, and whitespace) blocks parsing.
+- In Quick Plot mode, make sure the device prints numbers, one line per sample. A text-only line is ignored by the dashboard, and a field that is not a number shows as text in the Data Grid and is not plotted.
 - In Project File mode, check that your frame delimiters match what the device sends. Switch to Console Only mode to inspect the raw stream, then come back once you know the framing.
 - If nothing parses, try Console Only first. If the raw bytes look wrong there, it's a connection/baud/wiring problem, not a parsing problem.
 

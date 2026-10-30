@@ -31,7 +31,7 @@ pip install numpy nidaqmx
 ## Serial Studio setup
 
 1. **Configure the connection:**
-   - In the **Setup** pane, under **Operation Mode**, select **Quick Plot (Comma Separated Values)**.
+   - In the **Setup** pane, under **Operation Mode**, select **Quick Plot (Auto-Detected Format)**.
    - Go to **Setup** → **Connection** → **Network Socket**.
    - Set **Socket Type** to `UDP`.
    - Set **Local Port** to `9000`.
